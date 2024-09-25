@@ -1,16 +1,11 @@
 import { useMemo, useContext } from 'react';
-import { LoaderFunction, useLoaderData } from 'react-router-dom';
 
-import AuthenticityTokensManager from '../AuthenticityTokensContext';
+import { AuthenticityTokensContext } from '../AuthenticityTokensContext';
 import PermissionsPrompt from './PermissionsPrompt';
 import AuthenticationModalContext from '../Authentication/AuthenticationModalContext';
 import usePageTitle from '../usePageTitle';
-import {
-  OAuthAuthorizationPromptQueryData,
-  OAuthAuthorizationPromptQueryDocument,
-  OAuthAuthorizationPromptQueryVariables,
-} from './queries.generated';
-import { client } from '../useIntercodeApolloClient';
+import { OAuthAuthorizationPromptQueryDocument } from './queries.generated';
+import { Route } from './+types/AuthorizationPrompt';
 
 type AuthorizationParams = {
   client_id?: string;
@@ -28,24 +23,24 @@ type PreAuth = AuthorizationParams & {
   scope: string;
 };
 
-export const loader: LoaderFunction = async ({ request }) => {
+export async function loader({ request, context }: Route.LoaderArgs) {
   const url = new URL(request.url);
   const preAuthParamsJSON = JSON.stringify(
     [...url.searchParams].reduce((object, [field, value]) => ({ ...object, [field]: value }), {}),
   );
 
-  const { data } = await client.query<OAuthAuthorizationPromptQueryData, OAuthAuthorizationPromptQueryVariables>({
+  const { data } = await context.client.query({
     query: OAuthAuthorizationPromptQueryDocument,
     variables: { queryParams: preAuthParamsJSON },
   });
 
   return data;
-};
+}
 
-function AuthorizationPrompt() {
-  const data = useLoaderData() as OAuthAuthorizationPromptQueryData;
+function AuthorizationPrompt({ loaderData: data }: Route.ComponentProps) {
   const preAuth = useMemo(() => JSON.parse(data.oauthPreAuth) as PreAuth, [data]);
   const scopes = useMemo(() => preAuth.scope.split(' '), [preAuth]);
+  const manager = useContext(AuthenticityTokensContext);
 
   const authorizationParams: AuthorizationParams | null = useMemo(
     () =>
@@ -107,16 +102,12 @@ function AuthorizationPrompt() {
     form.submit();
   };
 
-  const grantAuthorization = () => {
-    buildAndSubmitForm('POST', AuthenticityTokensManager.instance.tokens.grantAuthorization ?? '', authorizationParams);
+  const grantAuthorization = async () => {
+    buildAndSubmitForm('POST', (await manager.getTokens()).grantAuthorization ?? '', authorizationParams);
   };
 
   const denyAuthorization = async () => {
-    buildAndSubmitForm(
-      'DELETE',
-      AuthenticityTokensManager.instance.tokens.denyAuthorization ?? '',
-      authorizationParams,
-    );
+    buildAndSubmitForm('DELETE', (await manager.getTokens()).denyAuthorization ?? '', authorizationParams);
   };
 
   return (
@@ -159,4 +150,4 @@ function AuthorizationPrompt() {
   );
 }
 
-export const Component = AuthorizationPrompt;
+export default AuthorizationPrompt;

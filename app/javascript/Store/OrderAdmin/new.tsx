@@ -7,4 +7,4 @@ function NewOrderRoute() {
   return <NewOrderModal close={() => navigate('..')} visible />;
 }
 
-export const Component = NewOrderRoute;
+export default NewOrderRoute;

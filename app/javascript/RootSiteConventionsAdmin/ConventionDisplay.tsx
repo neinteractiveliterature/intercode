@@ -1,41 +1,36 @@
-import { ActionFunction, json, Link, LoaderFunction, Outlet, useFetcher, useLoaderData } from 'react-router-dom';
+import { Link, Outlet, useFetcher, data } from 'react-router';
 import { ErrorDisplay, useConfirm } from '@neinteractiveliterature/litform';
 
 import ConventionFormHeader from '../ConventionAdmin/ConventionFormHeader';
 import usePageTitle from '../usePageTitle';
 import humanize from '../humanize';
-import { client } from '../useIntercodeApolloClient';
-import {
-  ConventionDisplayQueryData,
-  ConventionDisplayQueryDocument,
-  ConventionDisplayQueryVariables,
-} from './queries.generated';
+import { ConventionDisplayQueryDocument } from './queries.generated';
 import { SetConventionCanceledDocument } from './mutations.generated';
+import { Route } from './+types/ConventionDisplay';
 
-export const action: ActionFunction = async ({ params: { id }, request }) => {
+export async function action({ params: { id }, request, context }: Route.ActionArgs) {
   try {
     const formData = await request.formData();
     const canceled = formData.get('canceled')?.toString() === 'true';
-    const { data } = await client.mutate({
+    const result = await context.client.mutate({
       mutation: SetConventionCanceledDocument,
       variables: { id, canceled },
     });
-    return json(data);
+    return data(result.data);
   } catch (error) {
     return error;
   }
-};
+}
 
-export const loader: LoaderFunction = async ({ params: { id } }) => {
-  const { data } = await client.query<ConventionDisplayQueryData, ConventionDisplayQueryVariables>({
+export async function loader({ params: { id }, context }: Route.LoaderArgs) {
+  const { data } = await context.client.query({
     query: ConventionDisplayQueryDocument,
-    variables: { id: id ?? '' },
+    variables: { id },
   });
   return data;
-};
+}
 
-function ConventionDisplay() {
-  const data = useLoaderData() as ConventionDisplayQueryData;
+function ConventionDisplay({ loaderData: data }: Route.ComponentProps) {
   const confirm = useConfirm();
   const fetcher = useFetcher();
 
@@ -115,4 +110,4 @@ function ConventionDisplay() {
   );
 }
 
-export const Component = ConventionDisplay;
+export default ConventionDisplay;

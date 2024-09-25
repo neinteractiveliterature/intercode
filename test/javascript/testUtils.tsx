@@ -1,7 +1,7 @@
 import { Suspense, useMemo, useState } from 'react';
 import { MockedProvider, MockedProviderProps } from '@apollo/client/testing';
 import { render, queries, Queries, RenderOptions, RenderResult, waitFor } from '@testing-library/react';
-import { createMemoryRouter, RouterProvider } from 'react-router-dom';
+import { createMemoryRouter, RouterProvider } from 'react-router';
 import { i18n } from 'i18next';
 import { I18nextProvider } from 'react-i18next';
 import type { Stripe } from '@stripe/stripe-js';
@@ -63,7 +63,7 @@ function TestWrapper({
         <LazyStripeContext.Provider value={lazyStripeProviderValue}>
           <Confirm>
             <I18nextProvider i18n={i18nInstance}>
-              <RouterProvider router={router} future={{ v7_startTransition: true }} />
+              <RouterProvider router={router} />
             </I18nextProvider>
           </Confirm>
         </LazyStripeContext.Provider>

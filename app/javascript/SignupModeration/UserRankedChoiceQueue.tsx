@@ -1,27 +1,17 @@
-import { LoaderFunction, useLoaderData } from 'react-router';
 import UserSignupQueue from '../EventsApp/MySignupQueue/UserSignupQueue';
 import UserConProfileSignupsCard from '../EventsApp/SignupAdmin/UserConProfileSignupsCard';
-import {
-  SignupModerationAttendeeRankedChoicesQueryData,
-  SignupModerationAttendeeRankedChoicesQueryDocument,
-  SignupModerationAttendeeRankedChoicesQueryVariables,
-} from './queries.generated';
-import { client } from '../useIntercodeApolloClient';
+import { SignupModerationAttendeeRankedChoicesQueryDocument } from './queries.generated';
+import { Route } from './+types/UserRankedChoiceQueue';
 
-export const loader: LoaderFunction = async ({ params: { userConProfileId } }) => {
-  const { data } = await client.query<
-    SignupModerationAttendeeRankedChoicesQueryData,
-    SignupModerationAttendeeRankedChoicesQueryVariables
-  >({
+export async function loader({ params: { userConProfileId }, context }: Route.LoaderArgs) {
+  const { data } = await context.client.query({
     query: SignupModerationAttendeeRankedChoicesQueryDocument,
     variables: { userConProfileId: userConProfileId ?? '' },
   });
   return data;
-};
+}
 
-function UserRankedChoiceQueue() {
-  const data = useLoaderData() as SignupModerationAttendeeRankedChoicesQueryData;
-
+function UserRankedChoiceQueue({ loaderData: data }: Route.ComponentProps): JSX.Element {
   return (
     <>
       <h3>{data.convention.user_con_profile.name_without_nickname}</h3>
@@ -47,4 +37,4 @@ function UserRankedChoiceQueue() {
   );
 }
 
-export const Component = UserRankedChoiceQueue;
+export default UserRankedChoiceQueue;

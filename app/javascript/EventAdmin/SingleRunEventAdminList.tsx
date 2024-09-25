@@ -1,22 +1,16 @@
-import { Link, useSubmit } from 'react-router-dom';
+import { Link, useSubmit } from 'react-router';
 import { ErrorDisplay, useConfirm } from '@neinteractiveliterature/litform';
 
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
 import { timespanFromRun } from '../TimespanUtils';
 import usePageTitle from '../usePageTitle';
-import useEventAdminCategory from './useEventAdminCategory';
 import { timezoneNameForConvention } from '../TimeUtils';
 import { useFormatRunTimespan } from '../EventsApp/runTimeFormatting';
 import { useTranslation } from 'react-i18next';
-import { useEventAdminEventsLoader } from './loaders';
+import { CategorySpecificEventAdminComponentProps } from './CategorySpecificEventAdmin';
 
-export type SingleRunEventAdminListProps = {
-  eventCategoryId: string;
-};
-
-export default function SingleRunEventAdminList({ eventCategoryId }: SingleRunEventAdminListProps) {
-  const data = useEventAdminEventsLoader();
-  const [eventCategory, sortedEvents] = useEventAdminCategory(data, eventCategoryId);
+export default function SingleRunEventAdminList({ data }: CategorySpecificEventAdminComponentProps) {
+  const eventCategory = data.convention.event_category;
   const formatRunTimespan = useFormatRunTimespan();
   const { t } = useTranslation();
   const submit = useSubmit();
@@ -25,15 +19,11 @@ export default function SingleRunEventAdminList({ eventCategoryId }: SingleRunEv
 
   usePageTitle(
     t('admin.events.eventListPageTitle', {
-      categoryName: eventCategory?.name,
+      categoryName: eventCategory.name,
     }),
   );
 
-  if (!eventCategory) {
-    return <></>;
-  }
-
-  const eventRows = sortedEvents.map((event) => {
+  const eventRows = data.convention.event_category.events_paginated.entries.map((event) => {
     const run = event.runs[0];
     let timespan;
     if (run) {

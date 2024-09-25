@@ -1,28 +1,17 @@
-import { LoaderFunction, useLoaderData } from 'react-router';
-import NewConventionModal, { NewConventionModalProps } from './NewConventionModal';
-import { client } from 'useIntercodeApolloClient';
-import {
-  ConventionDisplayQueryDocument,
-  NewConventionModalQueryData,
-  NewConventionModalQueryDocument,
-} from './queries.generated';
+import NewConventionModal from './NewConventionModal';
+import { ConventionDisplayQueryDocument, NewConventionModalQueryDocument } from './queries.generated';
+import { Route } from './+types/clone';
 
-type LoaderResult = {
-  data: NewConventionModalQueryData;
-  cloneConvention: NonNullable<NewConventionModalProps['cloneConvention']>;
-};
-
-export const loader: LoaderFunction = async ({ params: { id } }) => {
+export async function loader({ params: { id }, context }: Route.LoaderArgs) {
   const [{ data: conventionData }, { data }] = await Promise.all([
-    client.query({ query: ConventionDisplayQueryDocument, variables: { id } }),
-    client.query({ query: NewConventionModalQueryDocument }),
+    context.client.query({ query: ConventionDisplayQueryDocument, variables: { id } }),
+    context.client.query({ query: NewConventionModalQueryDocument }),
   ]);
-  return { data, cloneConvention: conventionData.convention } satisfies LoaderResult;
-};
+  return { data, cloneConvention: conventionData.convention };
+}
 
-function CloneConventionRoute() {
-  const { data, cloneConvention } = useLoaderData() as LoaderResult;
+function CloneConventionRoute({ loaderData: { data, cloneConvention } }: Route.ComponentProps) {
   return <NewConventionModal data={data} cloneConvention={cloneConvention} />;
 }
 
-export const Component = CloneConventionRoute;
+export default CloneConventionRoute;

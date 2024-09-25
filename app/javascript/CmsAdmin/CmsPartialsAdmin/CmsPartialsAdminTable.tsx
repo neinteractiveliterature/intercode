@@ -1,9 +1,9 @@
 import { useMemo } from 'react';
-import { Link, useSubmit } from 'react-router-dom';
+import { Link, useSubmit } from 'react-router';
 import { ErrorDisplay, sortByLocaleString, useConfirm } from '@neinteractiveliterature/litform';
 
 import usePageTitle from '../../usePageTitle';
-import { useCmsPartialsAdminLoader } from './loaders';
+import { useCmsPartialsAdminLoader } from './route';
 
 function CmsPartialsAdminTable() {
   const data = useCmsPartialsAdminLoader();
@@ -71,4 +71,4 @@ function CmsPartialsAdminTable() {
   );
 }
 
-export const Component = CmsPartialsAdminTable;
+export default CmsPartialsAdminTable;

@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { Link, To } from 'react-router-dom';
+import { Link, To } from 'react-router';
 
 type BreadcrumbItemRegularProps = {
   active?: boolean;

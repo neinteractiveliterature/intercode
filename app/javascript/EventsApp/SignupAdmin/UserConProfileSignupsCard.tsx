@@ -1,5 +1,5 @@
 import { useMemo, useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import sortBy from 'lodash/sortBy';
 import { DateTime } from 'luxon';
@@ -13,8 +13,7 @@ import AppRootContext from '../../AppRootContext';
 import { UserConProfileSignupsQueryData, UserConProfileSignupsQueryDocument } from './queries.generated';
 import { joinReact } from '../../RenderingUtils';
 import { useFormatRunTimespan } from '../runTimeFormatting';
-import { useSuspenseQuery } from '@apollo/client';
-import { client } from '../../useIntercodeApolloClient';
+import { useApolloClient, useSuspenseQuery } from '@apollo/client';
 import { WithdrawAllUserConProfileSignupsDocument } from './mutations.generated';
 
 function filterAndSortSignups(signups: UserConProfileSignupsQueryData['convention']['user_con_profile']['signups']) {
@@ -37,6 +36,7 @@ export default function UserConProfileSignupsCard({
   const { timezoneName } = useContext(AppRootContext);
   const confirm = useConfirm();
   const formatRunTimespan = useFormatRunTimespan();
+  const client = useApolloClient();
 
   const signups = useMemo(
     () => filterAndSortSignups(data.convention.user_con_profile.signups),

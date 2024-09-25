@@ -22,10 +22,10 @@ import EventListFilterableFormItemDropdown from './EventCatalog/EventList/EventL
 import useReactRouterReactTable from '../Tables/useReactRouterReactTable';
 import { buildFieldFilterCodecs, FilterCodecs } from '../Tables/FilterUtils';
 import { reactTableFiltersToTableResultsFilters } from '../Tables/TableUtils';
-import { LoaderFunction, useLoaderData } from 'react-router';
-import { client } from '../useIntercodeApolloClient';
-import { conventionDayLoader, ConventionDayLoaderResult } from './conventionDayUrls';
 import styles from 'styles/schedule_grid.module.scss';
+import { conventionDayLoader } from './conventionDayUrls';
+import { Route } from './+types/ScheduleApp';
+import Timespan from 'Timespan';
 
 const filterCodecs = buildFieldFilterCodecs({
   form_items: FilterCodecs.json,
@@ -95,24 +95,22 @@ function ScheduleViewDropdown({ viewSelected, scheduleView, configs }: ScheduleV
   );
 }
 
-type LoaderResult = ConventionDayLoaderResult & { data: ScheduleGridConventionDataQueryData };
-
-export const loader: LoaderFunction = async ({ params, request }) => {
+export const loader = async ({ params, request, context }: Route.LoaderArgs) => {
+  const client = context.client;
   const [conventionDayLoaderResult, { data }] = await Promise.all([
-    conventionDayLoader({ params, request }),
+    conventionDayLoader({ params, request, context }),
     await client.query<ScheduleGridConventionDataQueryData>({
       query: ScheduleGridConventionDataQueryDocument,
     }),
   ]);
   if (conventionDayLoaderResult instanceof Response) {
-    return conventionDayLoaderResult;
+    throw conventionDayLoaderResult;
   }
 
-  return { ...conventionDayLoaderResult, data } satisfies LoaderResult;
+  return { conventionDayLoaderResult, data };
 };
 
-function ScheduleApp(): JSX.Element {
-  const { data } = useLoaderData() as LoaderResult;
+function ScheduleApp({ loaderData: { data, conventionDayLoaderResult } }: Route.ComponentProps): JSX.Element {
   const { myProfile, currentAbility, conventionTimespan, siteMode, navigationBarRef } = useContext(AppRootContext);
   const { t } = useTranslation();
   const { choiceSetValue, choiceSetChanged } = usePersonalScheduleFilters({
@@ -120,6 +118,10 @@ function ScheduleApp(): JSX.Element {
     signedIn: myProfile != null,
   });
   const scheduleGridNavigationBarRef = useRef<HTMLDivElement>(null);
+  const timespan = useMemo(
+    () => Timespan.deserialize(conventionDayLoaderResult.matchingTimespan),
+    [conventionDayLoaderResult.matchingTimespan],
+  );
 
   const configs = useMemo(
     () =>
@@ -208,6 +210,7 @@ function ScheduleApp(): JSX.Element {
           convention={data.convention}
           filters={effectiveFilters}
           currentAbilityCanCreateCmsPartials={data.currentAbility.can_create_cms_partials}
+          timespan={timespan}
         />
       );
     }
@@ -290,4 +293,4 @@ function ScheduleApp(): JSX.Element {
   );
 }
 
-export const Component = ScheduleApp;
+export default ScheduleApp;

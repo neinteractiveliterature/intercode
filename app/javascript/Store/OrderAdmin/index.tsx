@@ -15,48 +15,48 @@ import { AdminOrdersQueryData, AdminOrdersQueryDocument } from './queries.genera
 import ReactTableWithTheWorks from 'Tables/ReactTableWithTheWorks';
 import { useAppDateTimeFormat } from 'TimeUtils';
 import { useTranslation } from 'react-i18next';
-import { ActionFunction, json, Outlet, useNavigate } from 'react-router';
-import { Link } from 'react-router-dom';
+import { data, Outlet, useNavigate } from 'react-router';
+import { Link } from 'react-router';
 import { CreateOrderDocument, CreateOrderMutationVariables } from './mutations.generated';
-import { client } from 'useIntercodeApolloClient';
 import { CreateCouponApplicationDocument } from 'Store/mutations.generated';
+import { Route } from './+types/index';
 
 export type CreateOrderActionInput = {
   createOrderVariables: CreateOrderMutationVariables;
   couponCodes: string[];
 };
 
-export const action: ActionFunction = async ({ request }) => {
+export async function action({ request, context }: Route.ActionArgs) {
   try {
     const { createOrderVariables, couponCodes } = (await request.json()) as CreateOrderActionInput;
 
-    const { data } = await client.mutate({
+    const result = await context.client.mutate({
       mutation: CreateOrderDocument,
       variables: createOrderVariables,
     });
 
-    if (!data) {
+    if (!result.data) {
       return;
     }
 
     await Promise.all(
       couponCodes.map((code) =>
-        client.mutate({
+        context.client.mutate({
           mutation: CreateCouponApplicationDocument,
           variables: {
-            orderId: data.createOrder.order.id,
+            orderId: result.data!.createOrder.order.id,
             couponCode: code,
           },
         }),
       ),
     );
 
-    await client.resetStore();
-    return json(data);
+    await context.client.resetStore();
+    return data(result.data);
   } catch (error) {
     return error;
   }
-};
+}
 
 type OrderType = AdminOrdersQueryData['convention']['orders_paginated']['entries'][0];
 
@@ -187,4 +187,4 @@ function OrderAdmin(): JSX.Element {
   );
 }
 
-export const Component = OrderAdmin;
+export default OrderAdmin;

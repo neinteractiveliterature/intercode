@@ -1,44 +1,13 @@
-import { useState, useContext } from 'react';
+import { useState, useContext, useRef } from 'react';
 
 import * as React from 'react';
-import { useNavigate } from 'react-router-dom';
+import { useFetcher, useNavigate, useNavigation } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { BootstrapFormInput, BootstrapFormCheckbox, ErrorDisplay } from '@neinteractiveliterature/litform';
+import { BootstrapFormInput, BootstrapFormCheckbox, ErrorDisplay, useToast } from '@neinteractiveliterature/litform';
+import { Info as SignInInfo } from './+types/sign_in';
 
 import AuthenticationModalContext from './AuthenticationModalContext';
-import useAsyncFunction from '../useAsyncFunction';
-import useAfterSessionChange from './useAfterSessionChange';
-import AuthenticityTokensManager from '../AuthenticityTokensContext';
 import errorReporting from 'ErrorReporting';
-
-async function signIn(authenticityToken: string, email: string, password: string, rememberMe: boolean) {
-  const formData = new FormData();
-  formData.append('user[email]', email);
-  formData.append('user[password]', password);
-  if (rememberMe) {
-    formData.append('user[remember_me]', '1');
-  }
-
-  const response = await fetch('/users/sign_in', {
-    method: 'POST',
-    body: formData,
-    credentials: 'include',
-    headers: {
-      Accept: 'application/json',
-      'X-CSRF-Token': authenticityToken,
-    },
-  });
-
-  if (!response.ok) {
-    if (response.headers.get('Content-type')?.startsWith('application/json')) {
-      throw new Error((await response.json()).error || response.statusText);
-    }
-
-    throw new Error((await response.text()) || response.statusText);
-  }
-
-  return response.url;
-}
 
 function SignInForm(): JSX.Element {
   const { t } = useTranslation();
@@ -53,33 +22,44 @@ function SignInForm(): JSX.Element {
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
-  const afterSessionChange = useAfterSessionChange();
+  const fetcher = useFetcher<SignInInfo['actionData']>();
+  const toast = useToast();
+  const formRef = useRef<HTMLFormElement>(null);
+  const error = fetcher.data instanceof Error ? fetcher.data : undefined;
+  const navigation = useNavigation();
+  const busy = fetcher.state !== 'idle' || navigation.state !== 'idle';
 
   const onSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
-    const { signIn: authenticityToken } = AuthenticityTokensManager.instance.tokens;
+    await fetcher.submit(formRef.current, { action: '/users/sign_in', method: 'POST' });
+  };
 
-    if (!authenticityToken) {
-      throw new Error('No authenticity token received from server');
-    }
-
-    try {
-      const location = await signIn(authenticityToken, email, password, rememberMe);
-      await afterSessionChange(afterSignInPath || location, {
+  React.useEffect(() => {
+    const afterSignIn = async (destinationString: string) => {
+      const destination = new URL(destinationString, window.location.href);
+      toast({
         title: 'Login',
         body: 'Logged in successfully!',
         autoDismissAfter: 1000 * 60,
       });
-    } catch (e) {
-      if (!e.message.match(/invalid email or password/i)) {
-        errorReporting().error(e);
-      }
 
-      // we're doing suppressError below specifically so that we can not capture invalid email
-      // or password errors
-      throw e;
+      await navigate(destination.pathname + destination.search);
+      closeModal();
+    };
+
+    if (fetcher.data instanceof Error) {
+      if (!fetcher.data.message.match(/invalid email or password/i)) {
+        errorReporting().error(fetcher.data);
+      }
+      return;
     }
-  };
+
+    if (typeof fetcher.data !== 'string') {
+      return;
+    }
+
+    afterSignIn(fetcher.data);
+  }, [afterSignInPath, toast, closeModal, navigate, fetcher.data]);
 
   const onCancel = (event: React.SyntheticEvent) => {
     event.preventDefault();
@@ -92,43 +72,43 @@ function SignInForm(): JSX.Element {
     }
   };
 
-  const [submit, submitError, submitInProgress] = useAsyncFunction(onSubmit, {
-    suppressError: true,
-  });
-
   return (
     <>
-      <form onSubmit={submit}>
+      <form onSubmit={onSubmit} ref={formRef}>
         <div className="modal-header bg-light align-items-center">
           <div className="lead flex-grow-1">{t('authentication.signInForm.header')}</div>
         </div>
 
         <div className="modal-body">
           <BootstrapFormInput
+            name="user[email]"
             type="email"
             label={t('authentication.signInForm.emailLabel')}
             value={email}
             onTextChange={setEmail}
-            disabled={submitInProgress}
+            disabled={busy}
           />
 
           <BootstrapFormInput
+            name="user[password]"
             type="password"
             label={t('authentication.signInForm.passwordLabel')}
             value={password}
             onTextChange={setPassword}
-            disabled={submitInProgress}
+            disabled={busy}
           />
 
           <BootstrapFormCheckbox
+            name="user[remember_me]"
             type="checkbox"
+            value="1"
             label={t('authentication.signInForm.rememberMeLabel')}
             checked={rememberMe}
             onCheckedChange={setRememberMe}
-            disabled={submitInProgress}
+            disabled={busy}
           />
 
-          <ErrorDisplay stringError={(submitError || {}).message} />
+          <ErrorDisplay stringError={error?.message} />
         </div>
 
         <div className="modal-footer bg-light">
@@ -153,13 +133,13 @@ function SignInForm(): JSX.Element {
             </button>
           </div>
           <div>
-            <button type="button" className="btn btn-secondary me-2" disabled={submitInProgress} onClick={onCancel}>
+            <button type="button" className="btn btn-secondary me-2" disabled={busy} onClick={onCancel}>
               {t('buttons.cancel')}
             </button>
             <input
               type="submit"
               className="btn btn-primary"
-              disabled={submitInProgress}
+              disabled={busy}
               value={t('authentication.signInForm.logInButton').toString()}
               aria-label={t('authentication.signInForm.logInButton')}
             />

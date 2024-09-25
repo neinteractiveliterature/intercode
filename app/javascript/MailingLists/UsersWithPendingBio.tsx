@@ -1,16 +1,14 @@
 import TabbedMailingList from './TabbedMailingList';
 import usePageTitle from '../usePageTitle';
-import { UsersWithPendingBioQueryData, UsersWithPendingBioQueryDocument } from './queries.generated';
-import { client } from '../useIntercodeApolloClient';
-import { LoaderFunction, useLoaderData } from 'react-router';
+import { UsersWithPendingBioQueryDocument } from './queries.generated';
+import { Route } from './+types/UsersWithPendingBio';
 
-export const loader: LoaderFunction = async () => {
-  const { data } = await client.query<UsersWithPendingBioQueryData>({ query: UsersWithPendingBioQueryDocument });
+export async function loader({ context }: Route.LoaderArgs) {
+  const { data } = await context.client.query({ query: UsersWithPendingBioQueryDocument });
   return data;
-};
+}
 
-function UsersWithPendingBio() {
-  const data = useLoaderData() as UsersWithPendingBioQueryData;
+function UsersWithPendingBio({ loaderData: data }: Route.ComponentProps) {
   usePageTitle('Users with pending bio');
 
   return (
@@ -26,4 +24,4 @@ function UsersWithPendingBio() {
   );
 }
 
-export const Component = UsersWithPendingBio;
+export default UsersWithPendingBio;

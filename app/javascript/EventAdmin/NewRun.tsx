@@ -1,17 +1,17 @@
 import { useState } from 'react';
-import { useNavigate, LoaderFunction, useLoaderData, ActionFunction, redirect } from 'react-router-dom';
+import { useNavigate, redirect } from 'react-router';
 
 import EditRunModal, { EditingRun } from './EditRunModal';
-import { EventAdminEventsQueryData, EventAdminEventsQueryDocument, RunFieldsFragmentDoc } from './queries.generated';
-import { client } from '../useIntercodeApolloClient';
+import { NewRunQueryDocument, RunFieldsFragmentDoc } from './queries.generated';
 import { CreateRunDocument } from './mutations.generated';
 import { buildRunInputFromFormData } from './buildRunInputFromFormData';
 import { Event } from '../graphqlTypes.generated';
+import { Route } from './+types/NewRun';
 
-export const action: ActionFunction = async ({ params: { eventCategoryId, eventId }, request }) => {
+export async function action({ params: { eventCategoryId, eventId }, request, context }: Route.ActionArgs) {
   try {
     const formData = await request.formData();
-    await client.mutate({
+    await context.client.mutate({
       mutation: CreateRunDocument,
       variables: {
         input: {
@@ -36,50 +36,35 @@ export const action: ActionFunction = async ({ params: { eventCategoryId, eventI
   } catch (error) {
     return error;
   }
+}
+
+const initialRun: EditingRun = {
+  __typename: 'Run',
+  id: '',
+  starts_at: undefined,
+  title_suffix: undefined,
+  schedule_note: undefined,
+  rooms: [],
+  room_names: [],
 };
 
-type LoaderResult = {
-  initialRun: EditingRun;
-  event: EventAdminEventsQueryData['convention']['events'][number];
-  convention: EventAdminEventsQueryData['convention'];
-};
-
-export const loader: LoaderFunction = async ({ params: { eventId } }) => {
-  const {
-    data: { convention },
-  } = await client.query<EventAdminEventsQueryData>({ query: EventAdminEventsQueryDocument });
-  const events = convention.events;
-  const event = events.find((e) => e.id.toString() === eventId);
+export async function loader({ params: { eventId }, context }: Route.LoaderArgs) {
+  const { data } = await context.client.query({ query: NewRunQueryDocument, variables: { eventId } });
+  const convention = data.convention;
+  const event = convention.event;
 
   if (!event) {
-    return new Response(null, { status: 404 });
+    throw new Response(null, { status: 404 });
   }
 
-  const initialRun: EditingRun = {
-    __typename: 'Run',
-    id: '',
-    my_signups: [],
-    my_signup_requests: [],
-    my_signup_ranked_choices: [],
-    starts_at: undefined,
-    title_suffix: undefined,
-    schedule_note: undefined,
-    rooms: [],
-    room_names: [],
-    confirmed_signup_count: 0,
-    not_counted_signup_count: 0,
-    grouped_signup_counts: [],
-  };
+  return { event, convention };
+}
 
-  return { initialRun, event, convention } as LoaderResult;
-};
-
-function NewRun(): JSX.Element {
+function NewRun({ loaderData: { event, convention } }: Route.ComponentProps): JSX.Element {
   const navigate = useNavigate();
-  const { event, initialRun, convention } = useLoaderData() as LoaderResult;
 
   const cancelEditing = () => {
-    navigate('../../../..', { replace: true });
+    navigate('../..', { replace: true });
   };
 
   const [run, setRun] = useState(initialRun);
@@ -96,4 +81,4 @@ function NewRun(): JSX.Element {
   );
 }
 
-export const Component = NewRun;
+export default NewRun;

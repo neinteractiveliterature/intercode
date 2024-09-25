@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react';
-import { LoaderFunction, useFetcher, useLoaderData, useNavigate } from 'react-router-dom';
+import { useFetcher, useNavigate } from 'react-router';
 
 import useEventForm, { EventForm } from '../../EventAdmin/useEventForm';
 import EditEvent from '../../BuiltInForms/EditEvent';
@@ -16,8 +16,9 @@ import FourOhFourPage from '../../FourOhFourPage';
 import { AuthorizationError } from '../../Authentication/useAuthorizationRequired';
 import buildEventUrl from '../buildEventUrl';
 import { ImageAttachmentConfig } from '../../BuiltInFormControls/MarkdownInput';
-import { client } from '../../useIntercodeApolloClient';
 import { StandaloneUpdateEventDocument } from './mutations.generated';
+import { Route } from './+types';
+import { useApolloClient } from '@apollo/client';
 
 export type StandaloneEditEventFormProps = {
   initialEvent: WithFormResponse<StandaloneEditEventQueryData['convention']['event']>;
@@ -44,6 +45,7 @@ function StandaloneEditEventForm({
     }),
     [fetcher, initialEvent.images],
   );
+  const client = useApolloClient();
 
   const [eventFormProps, { event, validateForm }] = useEventForm({
     convention,
@@ -62,7 +64,7 @@ function StandaloneEditEventForm({
         },
       },
     });
-  }, [event]);
+  }, [event, client]);
 
   return (
     <EditEvent
@@ -87,17 +89,15 @@ function StandaloneEditEventForm({
   );
 }
 
-export const loader: LoaderFunction = async ({ params: { eventId } }) => {
-  const { data } = await client.query<StandaloneEditEventQueryData, StandaloneEditEventQueryVariables>({
+export const loader = async ({ params: { eventId }, context }: Route.LoaderArgs) => {
+  const { data } = await context.client.query<StandaloneEditEventQueryData, StandaloneEditEventQueryVariables>({
     query: StandaloneEditEventQueryDocument,
     variables: { eventId: eventId ?? '' },
   });
   return data;
 };
 
-function StandaloneEditEvent(): JSX.Element {
-  const data = useLoaderData() as StandaloneEditEventQueryData;
-
+function StandaloneEditEvent({ loaderData: data }: Route.ComponentProps): JSX.Element {
   const initialEvent = useMemo(() => deserializeFormResponse(data.convention.event), [data]);
 
   usePageTitle(`Editing “${initialEvent?.title}”`);
@@ -121,4 +121,4 @@ function StandaloneEditEvent(): JSX.Element {
   );
 }
 
-export const Component = StandaloneEditEvent;
+export default StandaloneEditEvent;

@@ -2,18 +2,18 @@ import { useMemo, useState, useEffect, useContext } from 'react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { DateTime } from 'luxon';
-import { BootstrapFormInput, FormGroupWithLabel } from '@neinteractiveliterature/litform';
+import { BootstrapFormInput, FormGroupWithLabel, LoadingIndicator } from '@neinteractiveliterature/litform';
 
 import ConventionDaySelect from '../BuiltInFormControls/ConventionDaySelect';
 import TimeSelect from '../BuiltInFormControls/TimeSelect';
 import { timespanFromConvention, getConventionDayTimespans } from '../TimespanUtils';
-import ProspectiveRunSchedule from '../EventAdmin/ProspectiveRunSchedule';
+import ProspectiveRunSchedule, { ProspectiveRunScheduleProps } from '../EventAdmin/ProspectiveRunSchedule';
 import RoomSelect, { RoomForSelect } from '../BuiltInFormControls/RoomSelect';
 import AppRootContext from '../AppRootContext';
-import { EventAdminEventsQueryData } from '../EventAdmin/queries.generated';
 import { Run } from '../graphqlTypes.generated';
 import { useAppDateTimeFormat } from '../TimeUtils';
 import Timespan from '../Timespan';
+import { EventFieldsFragment } from 'EventAdmin/queries.generated';
 
 export type RunForRunFormFields = Pick<Run, '__typename' | 'title_suffix' | 'schedule_note'> & {
   id: string;
@@ -27,8 +27,10 @@ type WithStartsAt<RunType extends RunForRunFormFields> = Omit<RunType, 'starts_a
 
 export type RunFormFieldsProps<RunType extends RunForRunFormFields> = {
   run: RunType;
-  convention: EventAdminEventsQueryData['convention'];
-  event: EventAdminEventsQueryData['convention']['events'][0];
+  convention: ProspectiveRunScheduleProps['convention'] & {
+    rooms: RoomForSelect[];
+  };
+  event: EventFieldsFragment;
   onChange: React.Dispatch<React.SetStateAction<RunType>>;
 };
 
@@ -134,11 +136,16 @@ function RunFormFields<RunType extends RunForRunFormFields>({
           />
         )}
       </FormGroupWithLabel>
-      <ProspectiveRunSchedule
-        day={day ?? undefined}
-        runs={runsForProspectiveRunSchedule}
-        event={eventForProspectiveRunSchedule}
-      />
+      {day && (
+        <React.Suspense fallback={<LoadingIndicator />}>
+          <ProspectiveRunSchedule
+            day={day}
+            runs={runsForProspectiveRunSchedule}
+            event={eventForProspectiveRunSchedule}
+            convention={convention}
+          />
+        </React.Suspense>
+      )}
       <BootstrapFormInput
         name="title_suffix"
         label={t('events.edit.titleSuffixLabel')}

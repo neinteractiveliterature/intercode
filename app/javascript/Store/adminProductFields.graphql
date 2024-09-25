@@ -1,5 +1,3 @@
- 
-
 #import "./pricingStructureFields.graphql"
 
 fragment AdminProductFields on Product {

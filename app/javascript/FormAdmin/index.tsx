@@ -1,4 +1,4 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router';
 
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 import { Suspense } from 'react';
@@ -25,4 +25,4 @@ function FormAdmin(): JSX.Element {
   );
 }
 
-export const Component = FormAdmin;
+export default FormAdmin;

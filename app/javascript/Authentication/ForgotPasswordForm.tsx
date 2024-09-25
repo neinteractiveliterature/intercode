@@ -4,64 +4,19 @@ import { useTranslation, Trans } from 'react-i18next';
 import { BootstrapFormInput, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import AuthenticationModalContext from './AuthenticationModalContext';
-import useAsyncFunction from '../useAsyncFunction';
-import humanize from '../humanize';
-import AuthenticityTokensManager from '../AuthenticityTokensContext';
-
-function parseRailsErrorHash(errors: Record<string, string[]> | undefined) {
-  if (!errors) {
-    return undefined;
-  }
-
-  return Object.entries(errors)
-    .flatMap(([key, keyErrors]) => keyErrors.map((keyError) => `${humanize(key)} ${keyError}`))
-    .join(', ');
-}
-
-async function resetPassword(authenticityToken: string, email: string) {
-  const formData = new FormData();
-  formData.append('user[email]', email);
-
-  const response = await fetch('/users/password', {
-    method: 'POST',
-    body: formData,
-    credentials: 'include',
-    headers: {
-      Accept: 'application/json',
-      'X-CSRF-Token': authenticityToken,
-    },
-  });
-
-  const responseJson = await response.json();
-
-  if (!response.ok) {
-    throw new Error(responseJson.error ?? parseRailsErrorHash(responseJson.errors) ?? response.statusText);
-  }
-
-  return responseJson;
-}
+import { useFetcher } from 'react-router';
 
 function ForgotPasswordForm(): JSX.Element {
   const { t } = useTranslation();
   const { close: closeModal, setCurrentView } = useContext(AuthenticationModalContext);
-  const authenticityToken = AuthenticityTokensManager.instance.tokens.resetPassword;
   const [email, setEmail] = useState('');
-  const [success, setSuccess] = useState(false);
-  const [resetPasswordAsync, resetPasswordError, resetPasswordInProgress] = useAsyncFunction(resetPassword);
-
-  const onSubmit = async (event: React.SyntheticEvent) => {
-    event.preventDefault();
-    if (!authenticityToken) {
-      throw new Error('No authenticity token received from server');
-    }
-
-    await resetPasswordAsync(authenticityToken, email);
-    setSuccess(true);
-  };
+  const fetcher = useFetcher();
+  const error = fetcher.data instanceof Error ? fetcher.data : undefined;
+  const success = fetcher.data && !error;
 
   return (
     <>
-      <form onSubmit={onSubmit}>
+      <fetcher.Form action="/password/reset" method="POST">
         <div className="modal-header bg-light align-items-center">
           <div className="lead flex-grow-1">{t('authentication.forgotPasswordForm.header')}</div>
         </div>
@@ -82,11 +37,11 @@ function ForgotPasswordForm(): JSX.Element {
               label={t('authentication.forgotPasswordForm.emailLabel')}
               value={email}
               onTextChange={setEmail}
-              disabled={resetPasswordInProgress}
+              disabled={fetcher.state !== 'idle'}
             />
           )}
 
-          <ErrorDisplay stringError={(resetPasswordError || {}).message} />
+          <ErrorDisplay stringError={error?.message} />
         </div>
 
         <div className="modal-footer bg-light">
@@ -114,7 +69,7 @@ function ForgotPasswordForm(): JSX.Element {
             <button
               type="button"
               className="btn btn-secondary me-2"
-              disabled={resetPasswordInProgress}
+              disabled={fetcher.state !== 'idle'}
               onClick={closeModal}
             >
               {success ? t('buttons.ok') : t('buttons.cancel')}
@@ -123,14 +78,14 @@ function ForgotPasswordForm(): JSX.Element {
               <input
                 type="submit"
                 className="btn btn-primary"
-                disabled={resetPasswordInProgress}
+                disabled={fetcher.state !== 'idle'}
                 value={t('authentication.forgotPassword.sendInstructionsButton').toString()}
                 aria-label={t('authentication.forgotPassword.sendInstructionsButton')}
               />
             )}
           </div>
         </div>
-      </form>
+      </fetcher.Form>
     </>
   );
 }

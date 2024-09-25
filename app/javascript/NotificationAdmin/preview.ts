@@ -1,20 +1,20 @@
-import { ActionFunction, json } from 'react-router';
-import { client } from 'useIntercodeApolloClient';
+import { data } from 'react-router';
 import { SendNotificationPreviewDocument } from './mutations.generated';
+import { Route } from './+types/preview';
 
-export const action: ActionFunction = async ({ params: { eventKey }, request }) => {
+export async function action({ params: { eventKey }, request, context }: Route.ActionArgs) {
   try {
     const formData = await request.formData();
     const email = formData.get('email')?.toString() === 'true';
     const sms = formData.get('sms')?.toString() === 'true';
 
-    const { data } = await client.mutate({
+    const result = await context.client.mutate({
       mutation: SendNotificationPreviewDocument,
       variables: { email, eventKey, sms },
     });
 
-    return json(data);
+    return data(result.data);
   } catch (error) {
     return error;
   }
-};
+}

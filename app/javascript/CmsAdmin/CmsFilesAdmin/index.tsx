@@ -5,22 +5,23 @@ import { useTranslation } from 'react-i18next';
 import FilePreview from './FilePreview';
 import usePageTitle from '../../usePageTitle';
 import InPlaceEditor from '../../BuiltInFormControls/InPlaceEditor';
-import { CmsFilesAdminQueryData, CmsFilesAdminQueryDocument } from './queries.generated';
+import { CmsFilesAdminQueryDocument } from './queries.generated';
 import { useCallback } from 'react';
 import FileUploadForm from '../../BuiltInForms/FileUploadForm';
-import { Blob } from '@rails/activestorage';
-import { ActionFunction, LoaderFunction, redirect, useLoaderData } from 'react-router';
-import { client } from '../../useIntercodeApolloClient';
+import type { Blob } from '@rails/activestorage';
+import { redirect } from 'react-router';
 import { CreateCmsFileDocument, DeleteCmsFileDocument, RenameCmsFileDocument } from './mutations.generated';
-import { useSubmit } from 'react-router-dom';
+import { useSubmit } from 'react-router';
+import { Route } from './+types/index';
 
-export const action: ActionFunction = async ({ request }) => {
+export async function action({ request, context }: Route.ActionArgs) {
+  console.log(request);
   const formData = await request.formData();
 
   try {
     if (request.method === 'DELETE') {
       const id = formData.get('id')?.toString() ?? '';
-      await client.mutate({
+      await context.client.mutate({
         mutation: DeleteCmsFileDocument,
         variables: { id },
         refetchQueries: [{ query: CmsFilesAdminQueryDocument }],
@@ -29,7 +30,7 @@ export const action: ActionFunction = async ({ request }) => {
     } else if (request.method === 'PATCH') {
       const id = formData.get('id')?.toString() ?? '';
       const filename = formData.get('filename')?.toString() ?? '';
-      await client.mutate({
+      await context.client.mutate({
         mutation: RenameCmsFileDocument,
         variables: { id, filename },
         refetchQueries: [{ query: CmsFilesAdminQueryDocument }],
@@ -37,7 +38,7 @@ export const action: ActionFunction = async ({ request }) => {
       });
     } else if (request.method === 'POST') {
       const signedBlobId = formData.get('signedBlobId')?.toString() ?? '';
-      await client.mutate({
+      await context.client.mutate({
         mutation: CreateCmsFileDocument,
         variables: { signedBlobId },
         refetchQueries: [{ query: CmsFilesAdminQueryDocument }],
@@ -51,15 +52,14 @@ export const action: ActionFunction = async ({ request }) => {
   }
 
   return redirect('/cms_files');
-};
+}
 
-export const loader: LoaderFunction = async () => {
-  const { data } = await client.query<CmsFilesAdminQueryData>({ query: CmsFilesAdminQueryDocument });
+export async function loader({ context }: Route.LoaderArgs) {
+  const { data } = await context.client.query({ query: CmsFilesAdminQueryDocument });
   return data;
-};
+}
 
-function CmsFilesAdmin(): JSX.Element {
-  const data = useLoaderData() as CmsFilesAdminQueryData;
+function CmsFilesAdmin({ loaderData: data }: Route.ComponentProps): JSX.Element {
   const confirm = useConfirm();
   const { t } = useTranslation();
   const submit = useSubmit();
@@ -136,4 +136,4 @@ function CmsFilesAdmin(): JSX.Element {
   );
 }
 
-export const Component = CmsFilesAdmin;
+export default CmsFilesAdmin;

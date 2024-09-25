@@ -3,16 +3,10 @@ import Timespan, { FiniteTimespan } from '../Timespan';
 import WhosFreeForm from './WhosFreeForm';
 import usePageTitle from '../usePageTitle';
 import { WhosFreeQueryData, WhosFreeQueryDocument } from './queries.generated';
-import { LoaderFunction, useLoaderData } from 'react-router';
-import { client } from '../useIntercodeApolloClient';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router';
+import { Route } from './+types/WhosFree';
 
-type LoaderResult = {
-  timespan?: FiniteTimespan;
-  data?: WhosFreeQueryData;
-};
-
-export const loader: LoaderFunction = async ({ request }) => {
+export async function loader({ context, request }: Route.LoaderArgs) {
   const url = new URL(request.url);
   const start = url.searchParams.get('start');
   const finish = url.searchParams.get('finish');
@@ -22,18 +16,18 @@ export const loader: LoaderFunction = async ({ request }) => {
     try {
       timespan = Timespan.finiteFromStrings(start, finish);
     } catch {
-      return {} satisfies LoaderResult;
+      return {};
     }
 
-    const { data } = await client.query({
+    const { data } = await context.client.query({
       query: WhosFreeQueryDocument,
       variables: { start: timespan.start.toISO(), finish: timespan.finish.toISO() },
     });
-    return { timespan, data } satisfies LoaderResult;
+    return { timespan, data };
   }
 
-  return {} satisfies LoaderResult;
-};
+  return {};
+}
 
 function WhosFreeResults({ data }: { data: WhosFreeQueryData }) {
   return (
@@ -45,8 +39,7 @@ function WhosFreeResults({ data }: { data: WhosFreeQueryData }) {
   );
 }
 
-function WhosFree(): JSX.Element {
-  const { data } = useLoaderData() as LoaderResult;
+function WhosFree({ loaderData: data }: Route.ComponentProps): JSX.Element {
   const [, setSearchParams] = useSearchParams();
 
   usePageTitle('Who’s free');
@@ -57,9 +50,9 @@ function WhosFree(): JSX.Element {
       <WhosFreeForm
         onSubmit={({ start, finish }) => setSearchParams({ start: start.toISO() ?? '', finish: finish.toISO() ?? '' })}
       />
-      {data && <WhosFreeResults data={data} />}
+      {data.data && <WhosFreeResults data={data.data} />}
     </>
   );
 }
 
-export const Component = WhosFree;
+export default WhosFree;

@@ -1,8 +1,8 @@
-import { Link, useLocation, useParams, useRouteLoaderData } from 'react-router-dom';
+import { Link, useLocation, useParams, useRouteLoaderData } from 'react-router';
 
 import MethodDoc from './MethodDoc';
-import { NamedRoute } from '../AppRouter';
-import { LiquidDocsLoaderResult } from './loader';
+import { NamedRoute } from '../routes';
+import { LiquidDocsLoaderResult } from './route';
 import FourOhFourPage from '../FourOhFourPage';
 
 function FilterDoc(): JSX.Element {
@@ -42,4 +42,4 @@ function FilterDoc(): JSX.Element {
   );
 }
 
-export const Component = FilterDoc;
+export default FilterDoc;

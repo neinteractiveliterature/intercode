@@ -12,8 +12,8 @@ import {
 } from './queries.generated';
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
 import { Outlet, useNavigate } from 'react-router';
-import { Link } from 'react-router-dom';
 import { useMemo } from 'react';
+import { Link } from 'react-router';
 
 type EmailRouteType = RootSiteEmailRoutesAdminTableQueryData['email_routes_paginated']['entries'][0];
 
@@ -93,4 +93,4 @@ function RootSiteEmailRoutesAdminTable(): JSX.Element {
   );
 }
 
-export const Component = RootSiteEmailRoutesAdminTable;
+export default RootSiteEmailRoutesAdminTable;

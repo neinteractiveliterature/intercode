@@ -4,28 +4,29 @@ import { ApolloError } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import { Link, useFetcher } from 'react-router-dom';
-import { ActionFunction, json, useNavigate } from 'react-router';
-import { client } from '../../../useIntercodeApolloClient';
+import { Link, useFetcher } from 'react-router';
+import { data, useNavigate } from 'react-router';
 import { ChangeSignupBucketDocument } from '../mutations.generated';
 import BucketInput from '../BucketInput';
-import { useSingleSignupLoader } from '../loaders';
+import { useSingleSignupLoader } from './route';
+import { Route } from './+types/change_bucket';
 
-export const action: ActionFunction = async ({ request, params: { id } }) => {
+export async function action({ context, request, params: { id } }: Route.ActionArgs) {
+  const client = context.client;
   try {
     const formData = await request.formData();
-    const { data } = await client.mutate({
+    const result = await client.mutate({
       mutation: ChangeSignupBucketDocument,
       variables: {
         signupId: id ?? '',
         bucketKey: formData.get('bucket_key')?.toString(),
       },
     });
-    return json(data);
+    return data(result.data);
   } catch (error) {
     return error;
   }
-};
+}
 
 function ChangeBucketModal(): JSX.Element {
   const data = useSingleSignupLoader();
@@ -99,4 +100,4 @@ function ChangeBucketModal(): JSX.Element {
   );
 }
 
-export const Component = ChangeBucketModal;
+export default ChangeBucketModal;

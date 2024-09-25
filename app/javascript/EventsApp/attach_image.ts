@@ -1,11 +1,11 @@
-import { ActionFunction, json } from 'react-router';
-import { client } from '../useIntercodeApolloClient';
+import { data } from 'react-router';
 import { AttachImageToEventDocument } from '../EventAdmin/mutations.generated';
+import { Route } from './+types/attach_image';
 
-export const action: ActionFunction = async ({ params: { eventId }, request }) => {
+export const action = async ({ params: { eventId }, request, context }: Route.ActionArgs) => {
   try {
     const formData = await request.formData();
-    const { data } = await client.mutate({
+    const result = await context.client.mutate({
       mutation: AttachImageToEventDocument,
       variables: {
         id: eventId ?? '',
@@ -13,7 +13,7 @@ export const action: ActionFunction = async ({ params: { eventId }, request }) =
       },
     });
 
-    return json(data);
+    return data(result.data);
   } catch (error) {
     return error;
   }

@@ -1,16 +1,14 @@
-import React, { useEffect, useMemo, useState } from 'react';
-import { LoaderFunction, useLoaderData } from 'react-router';
-import parseCmsContent, { CMS_COMPONENT_MAP } from './parseCmsContent';
+import { useEffect, useMemo, useState } from 'react';
+import { CMS_COMPONENT_MAP, parseCmsContent } from './parseCmsContent';
 import OutletWithLoading from './OutletWithLoading';
 import NavigationBar from './NavigationBar';
-import { ScriptTag } from './parsePageContent';
-import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
-import { Helmet } from 'react-helmet-async';
-import { client } from './useIntercodeApolloClient';
-import { AppRootLayoutQueryData, AppRootLayoutQueryDocument } from './appRootQueries.generated';
+import { AppRootLayoutQueryDocument } from './appRootQueries.generated';
+import RouteErrorBoundary from 'RouteErrorBoundary';
+import { Route } from './+types/AppRootLayout';
+import { createPortal } from 'react-dom';
 
 // Avoid unnecessary layout checks when moving between pages that can't change layout
-function normalizePathForLayout(path: string) {
+export function normalizePathForLayout(path: string) {
   if (path.startsWith('/pages/') || path === '/') {
     return path;
   }
@@ -26,7 +24,8 @@ function normalizePathForLayout(path: string) {
   return '/non_cms_path'; // arbitrary path that's not a CMS page
 }
 
-export const loader: LoaderFunction = async ({ request }) => {
+export const loader = async ({ request, context }: Route.LoaderArgs) => {
+  const client = context!.client;
   const url = new URL(request.url);
   const { data } = await client.query({
     query: AppRootLayoutQueryDocument,
@@ -35,37 +34,20 @@ export const loader: LoaderFunction = async ({ request }) => {
   return data;
 };
 
-function AppRootLayout() {
+export const errorElement = RouteErrorBoundary;
+
+function AppRootLayout({ loaderData: data }: Route.ComponentProps) {
   const [cachedCmsLayoutId, setCachedCmsLayoutId] = useState<string>();
   const [layoutChanged, setLayoutChanged] = useState(false);
-  const data = useLoaderData() as AppRootLayoutQueryData;
 
   const parsedCmsContent = useMemo(() => {
     return parseCmsContent(data.cmsParentByRequestHost.effectiveCmsLayout.content_html ?? '', {
       ...CMS_COMPONENT_MAP,
+      AppRoot: OutletWithLoading,
       AppRouter: OutletWithLoading,
       NavigationBar,
     });
   }, [data.cmsParentByRequestHost.effectiveCmsLayout.content_html]);
-
-  const [headComponentsWithoutScriptTags, headScriptTags] = useMemo(() => {
-    if (parsedCmsContent?.headComponents == null) {
-      return [[], []];
-    }
-
-    const nonScriptTags: React.ReactNode[] = [];
-    const scriptTags: React.ReactNode[] = [];
-
-    React.Children.forEach(parsedCmsContent.headComponents, (child) => {
-      if (React.isValidElement(child) && child.type === ScriptTag) {
-        scriptTags.push(child);
-      } else {
-        nonScriptTags.push(child);
-      }
-    });
-
-    return [nonScriptTags, scriptTags];
-  }, [parsedCmsContent?.headComponents]);
 
   useEffect(() => {
     if (cachedCmsLayoutId !== data.cmsParentByRequestHost.effectiveCmsLayout.id) {
@@ -83,17 +65,12 @@ function AppRootLayout() {
     return <></>;
   }
 
-  if (!parsedCmsContent?.bodyComponents) {
-    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
-  }
-
   return (
     <>
-      <Helmet>{headComponentsWithoutScriptTags}</Helmet>
-      {headScriptTags}
-      {parsedCmsContent?.bodyComponents}
+      {createPortal(parsedCmsContent.headComponents, document.head)}
+      {parsedCmsContent.bodyComponents}
     </>
   );
 }
 
-export const Component = AppRootLayout;
+export default AppRootLayout;

@@ -1,20 +1,20 @@
-import { ActionFunction, json } from 'react-router';
+import { data } from 'react-router';
 import { DeleteCouponApplicationDocument } from 'Store/mutations.generated';
-import { client } from 'useIntercodeApolloClient';
+import { Route } from './+types/$couponApplicationId';
 
-export const action: ActionFunction = async ({ params: { id }, request }) => {
+export async function action({ params: { id }, request, context }: Route.ActionArgs) {
   try {
     if (request.method === 'DELETE') {
-      const { data } = await client.mutate({
+      const result = await context.client.mutate({
         mutation: DeleteCouponApplicationDocument,
         variables: { id },
       });
-      await client.resetStore();
-      return json(data);
+      await context.client.resetStore();
+      return data(result.data);
     } else {
       return new Response(null, { status: 404 });
     }
   } catch (error) {
     return error;
   }
-};
+}

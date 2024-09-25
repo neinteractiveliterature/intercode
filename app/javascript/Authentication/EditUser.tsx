@@ -3,75 +3,67 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { BootstrapFormInput, LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import { LoaderFunction, Navigate, useLoaderData } from 'react-router-dom';
+import { Navigate, redirect, useNavigation } from 'react-router';
 import PasswordConfirmationInput from './PasswordConfirmationInput';
-import useAsyncFunction from '../useAsyncFunction';
 import AccountFormContent from './AccountFormContent';
 import UserFormFields, { UserFormState } from './UserFormFields';
 import usePageTitle from '../usePageTitle';
-import { EditUserQueryData, EditUserQueryDocument } from './queries.generated';
+import { EditUserQueryDocument } from './queries.generated';
 import humanize from '../humanize';
-import AuthenticityTokensManager from '../AuthenticityTokensContext';
-import { client } from '../useIntercodeApolloClient';
 import PasswordInputWithStrengthCheck from './PasswordInputWithStrengthCheck';
+import { Route } from './+types/EditUser';
+import { Form } from 'react-router';
+import { getBackendBaseUrl } from 'getBackendBaseUrl';
 
-async function updateUser(
-  authenticityToken: string,
-  formState: UserFormState,
-  password: string,
-  passwordConfirmation: string,
-  currentPassword: string,
-) {
-  const formData = new FormData();
-  formData.append('user[first_name]', formState.first_name ?? '');
-  formData.append('user[last_name]', formState.last_name ?? '');
-  formData.append('user[email]', formState.email ?? '');
-  if (password.length > 0) {
-    formData.append('user[password]', password);
-  }
-  if (passwordConfirmation.length > 0) {
-    formData.append('user[password_confirmation]', passwordConfirmation);
-  }
-  formData.append('user[current_password]', currentPassword);
+export async function action({ context, request }: Route.ActionArgs) {
+  const formData = await request.formData();
+  const tokens = await context.authenticityTokensManager.getTokens();
+  const url = new URL('/users', getBackendBaseUrl());
 
-  const response = await fetch('/users', {
+  const response = await context.fetch(url, {
     method: 'PATCH',
     body: formData,
     credentials: 'include',
     headers: {
       Accept: 'application/json',
-      'X-CSRF-Token': authenticityToken,
+      Cookie: request.headers.get('cookie') ?? '',
+      'X-CSRF-Token': tokens.updateUser ?? '',
     },
   });
 
   if (!response.ok) {
     const responseJson = await response.json();
     if (responseJson.errors) {
-      throw new Error(
+      return new Error(
         Object.entries(responseJson.errors)
           .map(([key, error]) => `${humanize(key)} ${error}`)
           .join(', '),
       );
     }
 
-    throw new Error(responseJson.error);
+    return new Error(responseJson.error);
   }
+
+  await context.client.resetStore();
+
+  return redirect('/');
 }
 
-export const loader: LoaderFunction = async () => {
-  const { data } = await client.query<EditUserQueryData>({ query: EditUserQueryDocument });
+export async function loader({ context }: Route.LoaderArgs) {
+  const { data } = await context.client.query({ query: EditUserQueryDocument });
   return data;
-};
+}
 
-function EditUserForm() {
-  const { currentUser: initialFormState } = useLoaderData() as EditUserQueryData;
+function EditUserForm({
+  loaderData: { currentUser: initialFormState },
+  actionData: updateUserError,
+}: Route.ComponentProps) {
   const { t } = useTranslation();
-  const authenticityToken = AuthenticityTokensManager.instance.tokens.updateUser;
   const [formState, setFormState] = useState<UserFormState | undefined>(initialFormState ?? undefined);
+  const navigation = useNavigation();
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const [currentPassword, setCurrentPassword] = useState('');
-  const [updateUserAsync, updateUserError, updateUserInProgress] = useAsyncFunction(updateUser);
   const passwordFieldId = useId();
   usePageTitle('Update Your Account');
 
@@ -79,25 +71,11 @@ function EditUserForm() {
     return <Navigate to="/" replace />;
   }
 
-  const onSubmit = async (event: React.SyntheticEvent) => {
-    event.preventDefault();
-
-    if (!formState) {
-      return;
-    }
-    if (!authenticityToken) {
-      throw new Error('No authenticity token received from server');
-    }
-
-    await updateUserAsync(authenticityToken, formState, password, passwordConfirmation, currentPassword);
-    window.location.href = '/';
-  };
-
   return (
     <>
       <h1 className="mb-4">{t('authentication.editUser.header')}</h1>
       <AccountFormContent />
-      <form onSubmit={onSubmit} className="card">
+      <Form method="PATCH" className="card">
         <div className="card-header">{t('authentication.editUser.accountDataHeader')}</div>
 
         <div className="card-body">
@@ -106,17 +84,24 @@ function EditUserForm() {
             <label className="form-label" htmlFor={passwordFieldId}>
               {t('authentication.editUser.passwordLabel')}
             </label>
-            <Suspense fallback={<LoadingIndicator iconSet="bootstrap-icons" />}>
-              <PasswordInputWithStrengthCheck id={passwordFieldId} value={password} onChange={setPassword} />
+            <Suspense fallback={<LoadingIndicator />}>
+              <PasswordInputWithStrengthCheck
+                id={passwordFieldId}
+                name="user[password]"
+                value={password}
+                onChange={setPassword}
+              />
             </Suspense>
             <small className="form-text text-muted">{t('authentication.editUser.passwordHelpText')}</small>
           </div>
           <PasswordConfirmationInput
+            name="user[password_confirmation]"
             password={password}
             value={passwordConfirmation}
             onChange={setPasswordConfirmation}
           />
           <BootstrapFormInput
+            name="user[current_password]"
             label={t('authentication.editUser.currentPasswordLabel')}
             helpText={t('authentication.editUser.currentPasswordHelpText')}
             type="password"
@@ -124,7 +109,7 @@ function EditUserForm() {
             onTextChange={setCurrentPassword}
           />
 
-          <ErrorDisplay stringError={(updateUserError || {}).message} />
+          <ErrorDisplay stringError={updateUserError?.message} />
         </div>
 
         <div className="card-footer text-end">
@@ -132,15 +117,15 @@ function EditUserForm() {
             <input
               type="submit"
               className="btn btn-primary"
-              disabled={updateUserInProgress}
+              disabled={navigation.state !== 'idle'}
               value={t('authentication.editUser.updateAccountButton').toString()}
               aria-label={t('authentication.editUser.updateAccountButton')}
             />
           </div>
         </div>
-      </form>
+      </Form>
     </>
   );
 }
 
-export const Component = EditUserForm;
+export default EditUserForm;

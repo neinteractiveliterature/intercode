@@ -1,26 +1,18 @@
 import { useState, useEffect } from 'react';
-import {
-  ActionFunction,
-  Form,
-  LoaderFunction,
-  redirect,
-  useActionData,
-  useLoaderData,
-  useNavigation,
-} from 'react-router-dom';
+import { Form, redirect, useActionData, useNavigation } from 'react-router';
 import { ErrorDisplay, usePropertySetters } from '@neinteractiveliterature/litform';
 
 import LiquidInput from '../BuiltInFormControls/LiquidInput';
 import { NotificationAdminQueryData, NotificationAdminQueryDocument } from './queries.generated';
-import { client } from '../useIntercodeApolloClient';
 import { ApolloError } from '@apollo/client';
 import { UpdateNotificationTemplateDocument } from './mutations.generated';
 import NotificationDestinationsConfig from './NotificationDestinationsConfig';
 import { useTranslation } from 'react-i18next';
 import { useChangeSet } from 'ChangeSet';
 import { NotificationDestinationInput, NotificationEventKey } from 'graphqlTypes.generated';
+import { Route } from './+types/NotificationConfiguration';
 
-export const action: ActionFunction = async ({ params: { eventKey }, request }) => {
+export async function action({ params: { eventKey }, request, context }: Route.ActionArgs) {
   try {
     const formData = await request.formData();
     const addDestinations = JSON.parse(
@@ -28,7 +20,7 @@ export const action: ActionFunction = async ({ params: { eventKey }, request }) 
     ) as NotificationAdminQueryData['convention']['notification_templates'][number]['notification_destinations'];
     const removeDestinationIds = JSON.parse(formData.get('remove_destination_ids')?.toString() ?? '[]') as string[];
 
-    await client.mutate({
+    await context.client.mutate({
       mutation: UpdateNotificationTemplateDocument,
       variables: {
         eventKey: eventKey as NotificationEventKey,
@@ -57,7 +49,7 @@ export const action: ActionFunction = async ({ params: { eventKey }, request }) 
   } catch (error) {
     return error;
   }
-};
+}
 
 type LoaderResult = {
   event: NotificationAdminQueryData['notificationEvents'][number];
@@ -66,9 +58,9 @@ type LoaderResult = {
   eventCategories: NotificationAdminQueryData['convention']['event_categories'];
 };
 
-export const loader: LoaderFunction = async ({ params }) => {
+export async function loader({ params, context }: Route.LoaderArgs) {
   const { eventKey } = params;
-  const { data } = await client.query({ query: NotificationAdminQueryDocument });
+  const { data } = await context.client.query({ query: NotificationAdminQueryDocument });
   const initialNotificationTemplate = data.convention.notification_templates.find((t) => t.event_key === eventKey);
 
   if (!initialNotificationTemplate) {
@@ -85,11 +77,11 @@ export const loader: LoaderFunction = async ({ params }) => {
     staffPositions: data.convention.staff_positions,
     eventCategories: data.convention.event_categories,
   } satisfies LoaderResult;
-};
+}
 
-function NotificationConfigurationForm() {
+function NotificationConfigurationForm({ loaderData }: Route.ComponentProps): JSX.Element {
   const { t } = useTranslation();
-  const { event, initialNotificationTemplate, staffPositions, eventCategories } = useLoaderData() as LoaderResult;
+  const { event, initialNotificationTemplate, staffPositions, eventCategories } = loaderData;
   const navigation = useNavigation();
   const data = useActionData();
   const updateError = data instanceof Error ? data : undefined;
@@ -200,4 +192,4 @@ function NotificationConfigurationForm() {
   );
 }
 
-export const Component = NotificationConfigurationForm;
+export default NotificationConfigurationForm;

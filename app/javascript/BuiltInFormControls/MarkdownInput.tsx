@@ -12,11 +12,11 @@ import { markdown } from '@codemirror/lang-markdown';
 import { ComponentProps, useMemo } from 'react';
 import { Extension } from '@codemirror/state';
 
-import parsePageContent from '../parsePageContent';
+import { parseContent } from '../parsePageContent';
 import { PreviewMarkdownQueryData, PreviewMarkdownQueryDocument } from './previewQueries.generated';
 import { ActiveStorageAttachment } from '../graphqlTypes.generated';
 import AddFileModal from './AddFileModal';
-import { Blob } from '@rails/activestorage';
+import type { Blob } from '@rails/activestorage';
 import MenuIcon from '../NavigationBar/MenuIcon';
 
 type AttachImageModalProps = {
@@ -90,7 +90,7 @@ function MarkdownInput({ eventId, eventProposalId, imageAttachmentConfig, ...pro
             fetchPolicy: 'no-cache',
           });
 
-          return parsePageContent(response.data?.cmsParent.previewMarkdown ?? '').bodyComponents;
+          return parseContent(response.data?.cmsParent.previewMarkdown ?? '').bodyComponents;
         }}
         extraNavControls={
           <>

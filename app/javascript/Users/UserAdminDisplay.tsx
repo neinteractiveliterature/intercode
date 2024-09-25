@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
 import reverse from 'lodash/reverse';
 import sortBy from 'lodash/sortBy';
-import { LoaderFunction, useLoaderData } from 'react-router-dom';
 
 import usePageTitle from '../usePageTitle';
 import { UserAdminQueryData, UserAdminQueryDocument } from './queries.generated';
@@ -9,7 +8,7 @@ import { timespanFromConvention } from '../TimespanUtils';
 import { useAppDateTimeFormat } from '../TimeUtils';
 import humanize from '../humanize';
 import { useTranslation } from 'react-i18next';
-import { client } from '../useIntercodeApolloClient';
+import { Route } from './+types/UserAdminDisplay';
 
 function sortByConventionDate(profiles: UserAdminQueryData['user']['user_con_profiles']) {
   return reverse(sortBy(profiles, (profile) => profile.convention.starts_at));
@@ -21,10 +20,10 @@ function buildProfileUrl(profile: UserAdminQueryData['user']['user_con_profiles'
   return profileUrl.toString();
 }
 
-export const loader: LoaderFunction = async ({ params: { id } }) => {
-  const { data } = await client.query<UserAdminQueryData>({ query: UserAdminQueryDocument, variables: { id } });
+export async function loader({ params: { id }, context }: Route.LoaderArgs) {
+  const { data } = await context.client.query({ query: UserAdminQueryDocument, variables: { id } });
   return data;
-};
+}
 
 function renderProfileConventionYear(
   profile: UserAdminQueryData['user']['user_con_profiles'][number],
@@ -34,8 +33,7 @@ function renderProfileConventionYear(
   return start ? format(start, 'year') : null;
 }
 
-export const Component = function UserAdminDisplay() {
-  const data = useLoaderData() as UserAdminQueryData;
+export default function UserAdminDisplay({ loaderData: data }: Route.ComponentProps) {
   const { t } = useTranslation();
   usePageTitle(data.user.name);
   const format = useAppDateTimeFormat();
@@ -107,4 +105,4 @@ export const Component = function UserAdminDisplay() {
       <div className="col-lg-3">{/* this.renderUserAdminSection(data) */}</div>
     </div>
   );
-};
+}

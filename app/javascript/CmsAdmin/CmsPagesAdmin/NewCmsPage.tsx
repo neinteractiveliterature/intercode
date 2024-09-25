@@ -1,20 +1,20 @@
 import { useState } from 'react';
 import { ApolloError } from '@apollo/client';
-import { ActionFunction, Form, redirect, useActionData, useNavigation } from 'react-router-dom';
+import { Form, redirect, useNavigation } from 'react-router';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { buildPageInputFromFormData } from './buildPageInput';
 import CmsPageForm, { PageFormFields } from './CmsPageForm';
 import usePageTitle from '../../usePageTitle';
 import { CreatePageDocument } from './mutations.generated';
-import { useCmsPagesAdminLoader } from './loaders';
-import { client } from '../../useIntercodeApolloClient';
+import { Route } from './+types/NewCmsPage';
+import { useCmsPagesAdminLoader } from './route';
 
-export const action: ActionFunction = async ({ request }) => {
+export async function action({ request, context }: Route.ActionArgs) {
   const formData = await request.formData();
 
   try {
-    await client.mutate({
+    await context.client.mutate({
       mutation: CreatePageDocument,
       variables: {
         page: buildPageInputFromFormData(formData),
@@ -23,18 +23,17 @@ export const action: ActionFunction = async ({ request }) => {
   } catch (e) {
     return e;
   }
-  await client.resetStore();
+  await context.client.resetStore();
 
   return redirect('/cms_pages');
-};
+}
 
-function NewCmsPage() {
+function NewCmsPage({ actionData: createError }: Route.ComponentProps) {
   const data = useCmsPagesAdminLoader();
   const [page, setPage] = useState<PageFormFields>({
     hidden_from_search: false,
   });
   const navigation = useNavigation();
-  const createError = useActionData();
   const createInProgress = navigation.state !== 'idle';
 
   usePageTitle('New page');
@@ -42,7 +41,12 @@ function NewCmsPage() {
   return (
     <>
       <Form action="." method="POST">
-        <CmsPageForm page={page} onChange={setPage} cmsLayouts={data.cmsParent.cmsLayouts} cmsParent={data.cmsParent} />
+        <CmsPageForm
+          page={page}
+          onChange={setPage}
+          cmsLayouts={data.cmsParent.cmsLayouts}
+          defaultLayout={data.cmsParent.defaultLayout}
+        />
 
         <ErrorDisplay graphQLError={createError as ApolloError} />
 
@@ -58,4 +62,4 @@ function NewCmsPage() {
   );
 }
 
-export const Component = NewCmsPage;
+export default NewCmsPage;

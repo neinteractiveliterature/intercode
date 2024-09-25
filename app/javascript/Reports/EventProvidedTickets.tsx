@@ -6,8 +6,7 @@ import { sortByLocaleString, titleSort, useTabs, TabList, TabBody } from '@neint
 
 import usePageTitle from '../usePageTitle';
 import { EventProvidedTicketsQueryData, EventProvidedTicketsQueryDocument } from './queries.generated';
-import { LoaderFunction, useLoaderData } from 'react-router';
-import { client } from '../useIntercodeApolloClient';
+import { Route } from './+types/EventProvidedTickets';
 
 function EventProvidedTicketsByEvent({ data }: { data: EventProvidedTicketsQueryData }) {
   const sortedRows = titleSort(
@@ -66,13 +65,14 @@ function EventProvidedTicketsByUser({ data }: { data: EventProvidedTicketsQueryD
   );
 }
 
-export const loader: LoaderFunction = async () => {
-  const { data } = await client.query<EventProvidedTicketsQueryData>({ query: EventProvidedTicketsQueryDocument });
+export async function loader({ context }: Route.LoaderArgs) {
+  const { data } = await context.client.query({
+    query: EventProvidedTicketsQueryDocument,
+  });
   return data;
-};
+}
 
-function EventProvidedTickets() {
-  const data = useLoaderData() as EventProvidedTicketsQueryData;
+function EventProvidedTickets({ loaderData: data }: Route.ComponentProps) {
   const tabProps = useTabs([
     {
       id: 'by-event',
@@ -112,4 +112,4 @@ function EventProvidedTickets() {
   );
 }
 
-export const Component = EventProvidedTickets;
+export default EventProvidedTickets;

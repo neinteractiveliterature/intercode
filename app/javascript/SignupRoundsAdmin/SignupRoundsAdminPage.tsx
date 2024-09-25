@@ -8,16 +8,14 @@ import usePageTitle from '../usePageTitle';
 import MaximumEventSignupsPreview from './MaximumEventSignupsPreview';
 import SignupRoundScheduleTable from './SignupRoundScheduleTable';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
-import { LoaderFunction, useLoaderData } from 'react-router';
-import { client } from '../useIntercodeApolloClient';
+import { Route } from './+types/SignupRoundsAdminPage';
 
-export const loader: LoaderFunction = async () => {
-  const { data } = await client.query<SignupRoundsAdminQueryData>({ query: SignupRoundsAdminQueryDocument });
+export async function loader({ context }: Route.LoaderArgs) {
+  const { data } = await context.client.query<SignupRoundsAdminQueryData>({ query: SignupRoundsAdminQueryDocument });
   return data;
-};
+}
 
-function SignupRoundsAdminPage() {
-  const data = useLoaderData() as SignupRoundsAdminQueryData;
+function SignupRoundsAdminPage({ loaderData: data }: Route.ComponentProps): JSX.Element {
   const { t } = useTranslation();
   const { timezoneName } = useContext(AppRootContext);
   const { convention } = data;
@@ -55,4 +53,4 @@ function SignupRoundsAdminPage() {
   );
 }
 
-export const Component = SignupRoundsAdminPage;
+export default SignupRoundsAdminPage;

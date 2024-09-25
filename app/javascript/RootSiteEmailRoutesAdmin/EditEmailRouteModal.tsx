@@ -6,40 +6,40 @@ import { useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 import EmailRouteForm from './EmailRouteForm';
 import buildEmailRouteInput from './buildEmailRouteInput';
 import { RootSiteSingleEmailRouteQueryData, RootSiteSingleEmailRouteQueryDocument } from './queries.generated';
-import { ActionFunction, LoaderFunction, redirect, useLoaderData } from 'react-router';
-import { client } from 'useIntercodeApolloClient';
+import { redirect, useLoaderData } from 'react-router';
 import { DeleteEmailRouteDocument, UpdateEmailRouteDocument } from './mutations.generated';
 import { EmailRouteInput } from 'graphqlTypes.generated';
-import { Link, useFetcher } from 'react-router-dom';
+import { Link, useFetcher } from 'react-router';
+import { Route } from './+types/EditEmailRouteModal';
 
-export const action: ActionFunction = async ({ params: { id }, request }) => {
+export async function action({ params: { id }, request, context }: Route.ActionArgs) {
   try {
     if (request.method === 'DELETE') {
-      await client.mutate({
+      await context.client.mutate({
         mutation: DeleteEmailRouteDocument,
         variables: { id },
       });
-      await client.resetStore();
+      await context.client.resetStore();
       return redirect('..');
     } else if (request.method === 'PATCH') {
       const emailRoute = (await request.json()) as EmailRouteInput;
-      await client.mutate({
+      await context.client.mutate({
         mutation: UpdateEmailRouteDocument,
         variables: { id, emailRoute },
       });
       return redirect('..');
     } else {
-      return new Response(null, { status: 404 });
+      throw new Response(null, { status: 404 });
     }
   } catch (error) {
     return error;
   }
-};
+}
 
-export const loader: LoaderFunction = async ({ params: { id } }) => {
-  const { data } = await client.query({ query: RootSiteSingleEmailRouteQueryDocument, variables: { id } });
+export async function loader({ params: { id }, context }: Route.LoaderArgs) {
+  const { data } = await context.client.query({ query: RootSiteSingleEmailRouteQueryDocument, variables: { id } });
   return data;
-};
+}
 
 function EditEmailRouteModal(): JSX.Element {
   const data = useLoaderData() as RootSiteSingleEmailRouteQueryData;
@@ -100,4 +100,4 @@ function EditEmailRouteModal(): JSX.Element {
   );
 }
 
-export const Component = EditEmailRouteModal;
+export default EditEmailRouteModal;

@@ -1,16 +1,16 @@
 import { useState } from 'react';
-import { useNavigate, LoaderFunction, useLoaderData, ActionFunction, redirect } from 'react-router-dom';
+import { useNavigate, redirect } from 'react-router';
 
 import EditRunModal, { EditingRun } from './EditRunModal';
-import { EventAdminEventsQueryData, EventAdminEventsQueryDocument } from './queries.generated';
-import { client } from '../useIntercodeApolloClient';
 import { UpdateRunDocument } from './mutations.generated';
 import { buildRunInputFromFormData } from './buildRunInputFromFormData';
+import { Route } from './+types/EditRun';
+import { EditRunQueryDocument } from './queries.generated';
 
-export const action: ActionFunction = async ({ params: { eventCategoryId, runId }, request }) => {
+export async function action({ params: { eventCategoryId, runId }, request, context }: Route.ActionArgs) {
   try {
     const formData = await request.formData();
-    await client.mutate({
+    await context.client.mutate({
       mutation: UpdateRunDocument,
       variables: {
         input: {
@@ -23,35 +23,27 @@ export const action: ActionFunction = async ({ params: { eventCategoryId, runId 
   } catch (error) {
     return error;
   }
-};
+}
 
-type LoaderResult = {
-  initialRun: EditingRun;
-  event: EventAdminEventsQueryData['convention']['events'][number];
-  convention: EventAdminEventsQueryData['convention'];
-};
-
-export const loader: LoaderFunction = async ({ params: { eventId, runId } }) => {
+export async function loader({ params: { runId }, context }: Route.LoaderArgs) {
   const {
     data: { convention },
-  } = await client.query<EventAdminEventsQueryData>({ query: EventAdminEventsQueryDocument });
-  const events = convention.events;
-  const event = events.find((e) => e.id.toString() === eventId);
-  const initialRun = event?.runs.find((r) => r.id === runId) as EditingRun;
+  } = await context.client.query({ query: EditRunQueryDocument, variables: { runId } });
+  const initialRun = convention.run as EditingRun;
+  const event = convention.run.event;
 
-  if (event && initialRun) {
-    return { event, initialRun, convention } satisfies LoaderResult;
+  if (initialRun) {
+    return { initialRun, convention, event };
   } else {
-    return new Response(null, { status: 404 });
+    throw new Response(null, { status: 404 });
   }
-};
+}
 
-function EditRun(): JSX.Element {
+function EditRun({ loaderData: { initialRun, convention, event } }: Route.ComponentProps): JSX.Element {
   const navigate = useNavigate();
-  const { event, initialRun, convention } = useLoaderData() as LoaderResult;
 
   const cancelEditing = () => {
-    navigate('../../../..', { replace: true });
+    navigate(`/admin_events/${event.event_category.id}`, { replace: true });
   };
 
   const [run, setRun] = useState(initialRun);
@@ -68,4 +60,4 @@ function EditRun(): JSX.Element {
   );
 }
 
-export const Component = EditRun;
+export default EditRun;

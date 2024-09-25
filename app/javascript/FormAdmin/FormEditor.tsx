@@ -1,15 +1,5 @@
 import { useMemo } from 'react';
-import {
-  ActionFunction,
-  json,
-  Link,
-  LoaderFunction,
-  Navigate,
-  Outlet,
-  useFetcher,
-  useLoaderData,
-  useParams,
-} from 'react-router-dom';
+import { data, Link, Navigate, Outlet, useFetcher } from 'react-router';
 import sortBy from 'lodash/sortBy';
 import flatMap from 'lodash/flatMap';
 import { notEmpty } from '@neinteractiveliterature/litform';
@@ -19,40 +9,38 @@ import FormTypes from '../../../config/form_types.json';
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
 import { parseTypedFormItemObject } from './FormItemUtils';
 import usePageTitle from '../usePageTitle';
-import { FormEditorQueryData, FormEditorQueryDocument, FormEditorQueryVariables } from './queries.generated';
+import { FormEditorQueryDocument } from './queries.generated';
 import { useTranslation } from 'react-i18next';
-import { client } from '../useIntercodeApolloClient';
 import { UpdateFormDocument } from './mutations.generated';
 import styles from 'styles/form_editor.module.scss';
+import { Route } from './+types/FormEditor';
 
-export const loader: LoaderFunction = async ({ params: { id } }) => {
-  const { data } = await client.query<FormEditorQueryData, FormEditorQueryVariables>({
+export async function loader({ params: { id }, context }: Route.LoaderArgs) {
+  const { data } = await context.client.query({
     query: FormEditorQueryDocument,
     variables: { id: id ?? '' },
   });
   return data;
-};
+}
 
-export const action: ActionFunction = async ({ params: { id }, request }) => {
+export async function action({ params: { id }, request, context }: Route.ActionArgs) {
   try {
     const formData = await request.formData();
-    const { data } = await client.mutate({
+    const result = await context.client.mutate({
       mutation: UpdateFormDocument,
       variables: { id: id ?? '', form: { title: formData.get('title')?.toString() } },
     });
-    return json(data);
+    return data(result.data);
   } catch (error) {
     return error;
   }
-};
+}
 
-function FormEditor(): JSX.Element {
-  const params = useParams<{ id: string; sectionId?: string; itemId?: string }>();
+function FormEditor({ loaderData: data, params }: Route.ComponentProps): JSX.Element {
   if (params.id == null) {
     throw new Error('id not found in URL params');
   }
   const { t } = useTranslation();
-  const data = useLoaderData() as FormEditorQueryData;
   const fetcher = useFetcher();
 
   const form: FormEditorForm = useMemo(() => {
@@ -128,4 +116,4 @@ function FormEditor(): JSX.Element {
   );
 }
 
-export const Component = FormEditor;
+export default FormEditor;

@@ -73,7 +73,7 @@ class Types::EventType < Types::BaseObject
   field :participant_communications, String, null: true
   field :private_signup_list, Boolean, null: true
   field :short_blurb, String, null: true
-  field :status, String, null: true
+  field :status, Types::EventStatusType, null: true
   field :ticket_types, [Types::TicketTypeType], null: false
   field :title, String, null: true
   field :url, String, null: true

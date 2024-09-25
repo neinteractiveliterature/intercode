@@ -1,30 +1,31 @@
-import { ActionFunction, json, useNavigate } from 'react-router';
-import { client } from '../../../useIntercodeApolloClient';
+import { data, useNavigate } from 'react-router';
 import { ForceConfirmSignupDocument } from '../mutations.generated';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useFetcher } from 'react-router-dom';
-import { useSingleSignupLoader } from '../loaders';
+import { Link, useFetcher } from 'react-router';
 import BucketInput from '../BucketInput';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 import { ApolloError } from '@apollo/client';
 import Modal from 'react-bootstrap4-modal';
+import { useSingleSignupLoader } from './route';
+import { Route } from './+types/force_confirm';
 
-export const action: ActionFunction = async ({ request, params: { id } }) => {
+export async function action({ context, request, params: { id } }: Route.ActionArgs) {
+  const client = context!.client;
   try {
     const formData = await request.formData();
-    const { data } = await client.mutate({
+    const result = await client.mutate({
       mutation: ForceConfirmSignupDocument,
       variables: {
         signupId: id ?? '',
         bucketKey: formData.get('bucket_key')?.toString(),
       },
     });
-    return json(data);
+    return data(result.data);
   } catch (error) {
     return error;
   }
-};
+}
 
 function ForceConfirmSignupModal(): JSX.Element {
   const data = useSingleSignupLoader();
@@ -89,4 +90,4 @@ function ForceConfirmSignupModal(): JSX.Element {
   );
 }
 
-export const Component = ForceConfirmSignupModal;
+export default ForceConfirmSignupModal;

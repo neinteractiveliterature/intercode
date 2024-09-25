@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ActionFunction, Form, redirect, useActionData, useNavigation } from 'react-router-dom';
+import { Form, redirect, useNavigation } from 'react-router';
 import { ApolloError } from '@apollo/client';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -8,13 +8,13 @@ import CmsLayoutForm from './CmsLayoutForm';
 import usePageTitle from '../../usePageTitle';
 import { CmsLayout } from '../../graphqlTypes.generated';
 import { CreateLayoutDocument } from './mutations.generated';
-import { client } from '../../useIntercodeApolloClient';
+import { Route } from './+types/NewCmsLayout';
 
-export const action: ActionFunction = async ({ request }) => {
+export async function action({ request, context }: Route.ActionArgs) {
   const formData = await request.formData();
 
   try {
-    await client.mutate({
+    await context.client.mutate({
       mutation: CreateLayoutDocument,
       variables: {
         cmsLayout: buildLayoutInputFromFormData(formData),
@@ -23,14 +23,13 @@ export const action: ActionFunction = async ({ request }) => {
   } catch (e) {
     return e;
   }
-  await client.resetStore();
+  await context.client.resetStore();
 
   return redirect('/cms_layouts');
-};
+}
 
-function NewCmsLayout(): JSX.Element {
+function NewCmsLayout({ actionData: createError }: Route.ComponentProps): JSX.Element {
   const [layout, setLayout] = useState<Pick<CmsLayout, 'name' | 'admin_notes' | 'navbar_classes' | 'content'>>({});
-  const createError = useActionData();
   const navigation = useNavigation();
 
   usePageTitle('New Layout');
@@ -52,4 +51,4 @@ function NewCmsLayout(): JSX.Element {
   );
 }
 
-export const Component = NewCmsLayout;
+export default NewCmsLayout;

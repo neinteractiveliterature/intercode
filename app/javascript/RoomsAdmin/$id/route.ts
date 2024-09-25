@@ -1,15 +1,15 @@
 import { Room } from 'graphqlTypes.generated';
-import { ActionFunction, json } from 'react-router';
+import { redirect } from 'react-router';
 import { DeleteRoomDocument, UpdateRoomDocument } from 'RoomsAdmin/mutations.generated';
 import invariant from 'tiny-invariant';
-import { client } from 'useIntercodeApolloClient';
+import { Route } from './+types/route';
 
-export const action: ActionFunction = async ({ request, params: { id } }) => {
+export async function action({ request, params: { id }, context }: Route.ActionArgs) {
   invariant(id != null);
 
   try {
     if (request.method === 'DELETE') {
-      const { data } = await client.mutate({
+      await context.client.mutate({
         mutation: DeleteRoomDocument,
         variables: { input: { id } },
         update: (cache) => {
@@ -19,18 +19,18 @@ export const action: ActionFunction = async ({ request, params: { id } }) => {
           });
         },
       });
-      return json(data);
+      return redirect('..');
     } else if (request.method === 'PATCH') {
       const formData = await request.formData();
-      const { data } = await client.mutate({
+      await context.client.mutate({
         mutation: UpdateRoomDocument,
         variables: { input: { id, room: { name: formData.get('name')?.toString() } } },
       });
-      return json(data);
+      return redirect('..');
     } else {
       return new Response(null, { status: 404 });
     }
   } catch (error) {
     return error;
   }
-};
+}

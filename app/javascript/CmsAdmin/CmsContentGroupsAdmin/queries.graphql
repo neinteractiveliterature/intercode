@@ -1,7 +1,6 @@
 #import "../../Permissions/fragments.graphql"
 
 fragment CmsContentFields on CmsContent {
-   
   __typename
 
   ... on Page {
@@ -65,6 +64,26 @@ query CmsContentGroupsAdminQuery {
 
   currentAbility {
     can_create_cms_content_groups
+  }
+}
+
+query CmsContentGroupAdminQuery($id: ID!) {
+  convention: conventionByRequestHostIfPresent {
+    id
+    name
+
+    staff_positions {
+      id
+      name
+    }
+  }
+
+  cmsParent: cmsParentByRequestHost {
+    id
+    cmsContentGroup(id: $id) {
+      id
+      ...CmsContentGroupFields
+    }
   }
 }
 

@@ -1,17 +1,17 @@
 import { useState, useMemo } from 'react';
-import { Link, useParams, useSubmit } from 'react-router-dom';
+import { Link, useParams, useSubmit } from 'react-router';
 import { ApolloError } from '@apollo/client';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import RunFormFields, { RunForRunFormFields } from '../BuiltInForms/RunFormFields';
 import useEventFormWithCategorySelection, { EventFormWithCategorySelection } from './useEventFormWithCategorySelection';
 import usePageTitle from '../usePageTitle';
-import { EventAdminEventsQueryData } from './queries.generated';
 import { buildEventInput } from './InputBuilders';
 import { Event, FormItemRole, SchedulingUi } from '../graphqlTypes.generated';
 import { ImageAttachmentConfig } from '../BuiltInFormControls/MarkdownInput';
-import { useEventAdminEventsLoader } from './loaders';
 import { CreateEventOptions } from './create';
+import { EventAdminRootQueryData, EventAdminRootQueryDocument } from './queries.generated';
+import { Route } from './+types/NewEvent';
 
 type NewEventFormResponseAttrs = {
   length_seconds?: number | null;
@@ -19,7 +19,7 @@ type NewEventFormResponseAttrs = {
   title?: string | null;
 };
 
-type EventCategoryType = NonNullable<EventAdminEventsQueryData['convention']>['event_categories'][0];
+type EventCategoryType = NonNullable<EventAdminRootQueryData['convention']>['event_categories'][0];
 
 type NewEventFormEvent = Pick<Event, 'id' | '__typename'> & {
   event_category?: EventCategoryType | null;
@@ -34,8 +34,12 @@ function runIsCreatable(run: RunForRunFormFields): run is Omit<RunForRunFormFiel
   return run.starts_at != null;
 }
 
-function NewEvent() {
-  const data = useEventAdminEventsLoader();
+export async function loader({ context }: Route.LoaderArgs) {
+  const { data } = await context.client.query({ query: EventAdminRootQueryDocument });
+  return data;
+}
+
+function NewEvent({ loaderData: data }: Route.ComponentProps) {
   const convention = data.convention;
   const submit = useSubmit();
   const { eventCategoryId: eventCategoryIdParam } = useParams<{ eventCategoryId: string }>();
@@ -93,7 +97,7 @@ function NewEvent() {
       event_category: eventCategory,
     };
 
-    let payload: CreateEventOptions;
+    let payload: Omit<CreateEventOptions, 'client'>;
     if (eventCategory.scheduling_ui === SchedulingUi.SingleRun) {
       payload = {
         event: eventForBuildEventInput,
@@ -174,4 +178,4 @@ function NewEvent() {
   );
 }
 
-export const Component = NewEvent;
+export default NewEvent;

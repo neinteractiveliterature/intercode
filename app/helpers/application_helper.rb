@@ -27,22 +27,9 @@ module ApplicationHelper
       end
   end
 
-  def application_entry_path
-    Rails.env.development? ? "/app/javascript/packs/applicationEntry.ts" : "/packs/application.js"
-  end
-
   def url_with_possible_host(path, host)
     return path if host.blank?
 
     "#{request.scheme}://#{host}#{path}"
-  end
-
-  def browser_warning
-    return nil if request.cookies["suppressBrowserWarning"] == "true"
-
-    presenter = BrowserWarningPresenter.new(request.user_agent)
-    return nil if presenter.supported?
-
-    presenter.render
   end
 end

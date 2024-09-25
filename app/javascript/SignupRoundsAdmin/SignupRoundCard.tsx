@@ -14,7 +14,7 @@ import AppRootContext from '../AppRootContext';
 import { describeTimespan } from '../TimespanUtils';
 import { useAppDateTimeFormat } from '../TimeUtils';
 import { DateTime } from 'luxon';
-import { Link, useFetcher } from 'react-router-dom';
+import { Link, useFetcher } from 'react-router';
 import { describeSignupRound } from './describeSignupRound';
 
 type SignupRoundCardProps = {

@@ -1,10 +1,10 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router';
 
 import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 import LeafBreadcrumbItem from '../Breadcrumbs/LeafBreadcrumbItem';
 import NamedRouteBreadcrumbItem from '../Breadcrumbs/NamedRouteBreadcrumbItem';
-import { NamedRoute } from '../AppRouter';
+import { NamedRoute } from '../routes';
 
 function StaffPositionAdmin(): JSX.Element {
   const authorizationWarning = useAuthorizationRequired('can_manage_staff_positions');
@@ -32,4 +32,4 @@ function StaffPositionAdmin(): JSX.Element {
   );
 }
 
-export const Component = StaffPositionAdmin;
+export default StaffPositionAdmin;

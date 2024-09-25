@@ -1,12 +1,12 @@
-import { ActionFunction, redirect } from 'react-router';
-import { client } from 'useIntercodeApolloClient';
+import { redirect } from 'react-router';
 import { RevokeAuthorizedApplicationDocument } from './mutations.generated';
 import { AuthorizedApplication } from 'graphqlTypes.generated';
+import { Route } from './+types/$uid';
 
-export const action: ActionFunction = async ({ params: { uid }, request }) => {
+export async function action({ params: { uid }, request, context }: Route.ActionArgs) {
   try {
     if (request.method === 'DELETE') {
-      await client.mutate({
+      await context.client.mutate({
         mutation: RevokeAuthorizedApplicationDocument,
         variables: { uid },
         update: (cache) => {
@@ -23,4 +23,4 @@ export const action: ActionFunction = async ({ params: { uid }, request }) => {
   } catch (error) {
     return error;
   }
-};
+}

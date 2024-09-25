@@ -6,18 +6,17 @@ import { ErrorDisplay, useGraphQLConfirm, sortByLocaleString } from '@neinteract
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
 import usePageTitle from '../usePageTitle';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
-import { RoomsAdminQueryData, RoomsAdminQueryDocument } from './queries.generated';
+import { RoomsAdminQueryDocument } from './queries.generated';
 import { useTranslation } from 'react-i18next';
-import { ActionFunction, LoaderFunction, useActionData, useLoaderData } from 'react-router';
-import { client } from '../useIntercodeApolloClient';
-import { useSubmit } from 'react-router-dom';
+import { useSubmit } from 'react-router';
 import { CreateRoomDocument } from './mutations.generated';
+import { Route } from './+types/index';
 
-export const action: ActionFunction = async ({ request }) => {
+export async function action({ request, context }: Route.ActionArgs) {
   try {
     if (request.method === 'POST') {
       const formData = await request.formData();
-      const { data } = await client.mutate({
+      const { data } = await context.client.mutate({
         mutation: CreateRoomDocument,
         variables: {
           input: { room: { name: formData.get('name')?.toString() } },
@@ -32,20 +31,18 @@ export const action: ActionFunction = async ({ request }) => {
   } catch (error) {
     return error;
   }
-};
+}
 
-export const loader: LoaderFunction = async () => {
-  const { data } = await client.query<RoomsAdminQueryData>({ query: RoomsAdminQueryDocument });
+export async function loader({ context }: Route.LoaderArgs) {
+  const { data } = await context.client.query({ query: RoomsAdminQueryDocument });
   return data;
-};
+}
 
-function RoomsAdmin() {
-  const data = useLoaderData() as RoomsAdminQueryData;
+function RoomsAdmin({ loaderData: data, actionData }: Route.ComponentProps) {
   const authorizationWarning = useAuthorizationRequired('can_manage_rooms');
   const confirm = useGraphQLConfirm();
   const { t } = useTranslation();
   const submit = useSubmit();
-  const actionData = useActionData();
   const error = actionData instanceof Error ? actionData : undefined;
 
   const [creatingRoomName, setCreatingRoomName] = useState('');
@@ -145,4 +142,4 @@ function RoomsAdmin() {
   );
 }
 
-export const Component = RoomsAdmin;
+export default RoomsAdmin;

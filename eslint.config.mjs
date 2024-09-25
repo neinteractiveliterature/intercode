@@ -18,11 +18,7 @@ import { FlatCompat } from '@eslint/eslintrc';
 const __filename = fileURLToPath(import.meta.url);
 // eslint-disable-next-line no-underscore-dangle
 const __dirname = path.dirname(__filename);
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: js.configs.recommended,
-  allConfig: js.configs.all,
-});
+const compat = new FlatCompat({ baseDirectory: __dirname });
 const gitignorePath = path.resolve(__dirname, '.gitignore');
 
 export default typescriptEslint.config(
@@ -42,10 +38,22 @@ export default typescriptEslint.config(
     ],
   },
   js.configs.recommended,
+  // TODO: figure out how to turn on recommendedTypeChecked
+  typescriptEslint.configs.recommended,
+  {
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+  },
   reactPlugin.configs.flat.recommended,
   reactPlugin.configs.flat['jsx-runtime'],
+  jsxA11Y.flatConfigs.recommended,
   ...compat.extends('plugin:react-hooks/recommended'),
-  typescriptEslint.configs.recommended,
+  vitest.configs.recommended,
+  vitest.configs.env,
   {
     files: ['app/javascript/**/*.tsx'],
     .../** @type {import('typescript-eslint').InfiniteDepthConfigWithExtends} */ (i18Next.configs['flat/recommended']),
@@ -56,7 +64,7 @@ export default typescriptEslint.config(
           mode: 'all',
           callees: { include: ['usePageTitle'] },
           'object-properties': {
-            exclude: ['id', 'accessor', 'defaultVisibleColumns', '__typename', 'payment_options', 'path'],
+            exclude: ['id', 'accessor', 'defaultVisibleColumns', '__typename', 'payment_options', 'path', 'rel'],
           },
           'jsx-attributes': {
             include: ['title', 'aria-label', 'caption', 'placeholder', 'label', 'helpText', 'stringError', 'alt'],
@@ -68,7 +76,6 @@ export default typescriptEslint.config(
   },
   {
     plugins: {
-      vitest,
       'jsx-a11y': jsxA11Y,
     },
 
@@ -78,19 +85,10 @@ export default typescriptEslint.config(
         ...globals.browser,
         ...Object.fromEntries(Object.entries(globals.jquery).map(([key]) => [key, 'off'])),
         ...globals.node,
-        ...vitest.environments.env.globals,
       },
 
       ecmaVersion: 6,
       sourceType: 'module',
-
-      parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
-        },
-
-        extraFileExtensions: ['.graphql'],
-      },
     },
 
     settings: {
@@ -108,8 +106,6 @@ export default typescriptEslint.config(
     },
 
     rules: {
-      ...vitest.configs.recommended.rules,
-
       camelcase: 'off',
       'vitest/no-disabled-tests': 'warn',
       'vitest/no-focused-tests': 'error',
@@ -212,8 +208,6 @@ export default typescriptEslint.config(
 
     languageOptions: {
       parser: graphqlEslint.parser,
-      ecmaVersion: 5,
-      sourceType: 'script',
     },
 
     rules: {
@@ -236,8 +230,6 @@ export default typescriptEslint.config(
 
     languageOptions: {
       parser: graphqlEslint.parser,
-      ecmaVersion: 5,
-      sourceType: 'script',
     },
 
     rules: {

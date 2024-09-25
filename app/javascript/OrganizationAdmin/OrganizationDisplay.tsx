@@ -1,12 +1,11 @@
-import { Link, Navigate, useFetcher, useRouteLoaderData } from 'react-router-dom';
+import { Link, Navigate, useFetcher } from 'react-router';
 import { ErrorDisplay, useConfirm } from '@neinteractiveliterature/litform';
 import capitalize from 'lodash/capitalize';
 
 import PermissionNames from '../../../config/permission_names.json';
 import usePageTitle from '../usePageTitle';
 import { DropdownMenu } from '../UIComponents/DropdownMenu';
-import { NamedRoute } from '../AppRouter';
-import { SingleOrganizationLoaderResult } from './loaders';
+import { useOrganizationLoaderData } from './$id';
 
 const OrganizationRolePermissions =
   PermissionNames.find((group) => group.role_type === 'OrganizationRole')?.permissions ?? [];
@@ -17,7 +16,7 @@ function getOrganizationRolePermissionName(permissionName: string) {
 }
 
 function OrganizationDisplay() {
-  const organization = useRouteLoaderData(NamedRoute.Organization) as SingleOrganizationLoaderResult;
+  const { organization } = useOrganizationLoaderData();
   const confirm = useConfirm();
   const deleteFetcher = useFetcher();
 
@@ -100,4 +99,4 @@ function OrganizationDisplay() {
   );
 }
 
-export const Component = OrganizationDisplay;
+export default OrganizationDisplay;

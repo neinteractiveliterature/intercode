@@ -4,7 +4,7 @@ import { useContext, useMemo } from 'react';
 import { parseSignupRounds } from '../../SignupRoundUtils';
 import { DateTime } from 'luxon';
 import AppRootContext from '../../AppRootContext';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import humanize from '../../humanize';
 import classNames from 'classnames';
 import { MySignupQueueQueryData } from './queries.generated';

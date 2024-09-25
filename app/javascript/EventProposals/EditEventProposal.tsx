@@ -1,22 +1,21 @@
-import { Navigate, useNavigate, Link, LoaderFunction, useLoaderData, useSubmit } from 'react-router-dom';
+import { Navigate, useNavigate, Link, useSubmit } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { ErrorDisplay, useConfirm } from '@neinteractiveliterature/litform';
 
 import EventProposalForm from './EventProposalForm';
 import usePageTitle from '../usePageTitle';
-import { EventProposalQueryData, EventProposalQueryDocument, EventProposalQueryVariables } from './queries.generated';
-import { client } from '../useIntercodeApolloClient';
+import { EventProposalQueryDocument } from './queries.generated';
+import { Route } from './+types/EditEventProposal';
 
-export const loader: LoaderFunction = async ({ params: { id } }) => {
-  const { data } = await client.query<EventProposalQueryData, EventProposalQueryVariables>({
+export async function loader({ params: { id }, context }: Route.LoaderArgs) {
+  const { data } = await context.client.query({
     query: EventProposalQueryDocument,
-    variables: { eventProposalId: id ?? '' },
+    variables: { eventProposalId: id },
   });
   return data;
-};
+}
 
-function EditEventProposal() {
-  const data = useLoaderData() as EventProposalQueryData;
+function EditEventProposal({ loaderData: data }: Route.ComponentProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const confirm = useConfirm();
@@ -81,4 +80,4 @@ function EditEventProposal() {
   );
 }
 
-export const Component = EditEventProposal;
+export default EditEventProposal;

@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { NavLink, useLocation, Outlet } from 'react-router-dom';
+import { NavLink, useLocation, Outlet, useRouteLoaderData } from 'react-router';
 import classNames from 'classnames';
 import { useLitformPopperWithAutoClosing } from '@neinteractiveliterature/litform';
 
@@ -7,10 +7,20 @@ import sortEventCategories from './sortEventCategories';
 import buildEventCategoryUrl from './buildEventCategoryUrl';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 import humanize from '../humanize';
-import { useEventAdminEventsLoader } from './loaders';
+import { Route } from './+types/index';
+import { EventAdminRootQueryDocument } from './queries.generated';
+import { NamedRoute } from 'routes';
 
-function EventAdmin() {
-  const data = useEventAdminEventsLoader();
+export async function loader({ context }: Route.LoaderArgs) {
+  const { data } = await context.client.query({ query: EventAdminRootQueryDocument });
+  return data;
+}
+
+export function useEventAdminRootLoaderData() {
+  return useRouteLoaderData(NamedRoute.EventAdmin) as Route.ComponentProps['loaderData'];
+}
+
+function EventAdmin({ loaderData: data }: Route.ComponentProps) {
   const authorizationWarning = useAuthorizationRequired('can_manage_runs');
   const location = useLocation();
 
@@ -74,4 +84,4 @@ function EventAdmin() {
   );
 }
 
-export const Component = EventAdmin;
+export default EventAdmin;

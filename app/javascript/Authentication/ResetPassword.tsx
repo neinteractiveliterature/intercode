@@ -1,84 +1,77 @@
 import { useState, useMemo, Suspense, useId } from 'react';
 import * as React from 'react';
-import { useLocation } from 'react-router-dom';
+import { Form, redirect, useLocation } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import PasswordConfirmationInput from './PasswordConfirmationInput';
-import useAsyncFunction from '../useAsyncFunction';
-import AuthenticityTokensManager from '../AuthenticityTokensContext';
 import PasswordInputWithStrengthCheck from './PasswordInputWithStrengthCheck';
+import { Route } from './+types/ResetPassword';
+import { getBackendBaseUrl } from 'getBackendBaseUrl';
 
-async function changePassword(
-  authenticityToken: string,
-  resetPasswordToken: string,
-  password: string,
-  passwordConfirmation: string,
-) {
-  const formData = new FormData();
-  formData.append('user[reset_password_token]', resetPasswordToken);
-  formData.append('user[password]', password);
-  formData.append('user[password_confirmation]', passwordConfirmation);
+export async function action({ request, context }: Route.ActionArgs) {
+  const formData = await request.formData();
+  const tokens = await context.authenticityTokensManager.getTokens();
 
-  const response = await fetch('/users/password', {
+  const response = await context.fetch(new URL('/users/password', getBackendBaseUrl()), {
     method: 'PUT',
     body: formData,
     credentials: 'include',
     headers: {
       Accept: 'application/json',
-      'X-CSRF-Token': authenticityToken,
+      Cookie: request.headers.get('cookie') ?? '',
+      'X-CSRF-Token': tokens.changePassword ?? '',
     },
   });
 
   if (!response.ok) {
-    throw new Error((await response.json()).error);
+    return new Error((await response.json()).error);
   }
+
+  await context.client.resetStore();
+
+  return redirect('/');
 }
 
-function ResetPassword(): JSX.Element {
+function ResetPassword({ actionData: resetPasswordError }: Route.ComponentProps): JSX.Element {
   const { t } = useTranslation();
   const location = useLocation();
   const resetPasswordToken = useMemo(
     () => new URLSearchParams(location.search).get('reset_password_token') ?? '',
     [location.search],
   );
-  const authenticityToken = AuthenticityTokensManager.instance.tokens.changePassword;
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const passwordId = useId();
-  const [changePasswordAsync, changePasswordError] = useAsyncFunction(changePassword);
-
-  const onSubmit = async (event: React.SyntheticEvent) => {
-    event.preventDefault();
-    if (!authenticityToken) {
-      throw new Error('No authenticity token received from server');
-    }
-
-    await changePasswordAsync(authenticityToken, resetPasswordToken, password, passwordConfirmation);
-    window.location.href = '/';
-  };
 
   return (
     <>
       <h1 className="mb-4">{t('authentication.resetPassword.header')}</h1>
-      <form onSubmit={onSubmit}>
+      <Form method="PATCH">
         <div className="card">
           <div className="card-body">
             <div className="mb-3">
               <label className="form-label" htmlFor={passwordId}>
                 {t('authentication.resetPassword.passwordLabel')}
               </label>
-              <Suspense fallback={<LoadingIndicator iconSet="bootstrap-icons" />}>
-                <PasswordInputWithStrengthCheck value={password} onChange={setPassword} id={passwordId} />
+              <Suspense fallback={<LoadingIndicator />}>
+                <PasswordInputWithStrengthCheck
+                  name="user[password]"
+                  value={password}
+                  onChange={setPassword}
+                  id={passwordId}
+                />
               </Suspense>
             </div>
             <PasswordConfirmationInput
+              name="user[password_confirmation]"
               value={passwordConfirmation}
               onChange={setPasswordConfirmation}
               password={password}
             />
+            <input type="hidden" name="user[reset_password_token]" value={resetPasswordToken} />
 
-            <ErrorDisplay stringError={(changePasswordError || {}).message} />
+            <ErrorDisplay stringError={resetPasswordError?.message} />
           </div>
 
           <div className="card-footer text-end">
@@ -90,9 +83,9 @@ function ResetPassword(): JSX.Element {
             />
           </div>
         </div>
-      </form>
+      </Form>
     </>
   );
 }
 
-export const Component = ResetPassword;
+export default ResetPassword;

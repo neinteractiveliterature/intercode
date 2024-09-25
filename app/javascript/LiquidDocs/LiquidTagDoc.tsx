@@ -1,8 +1,8 @@
-import { Link, useLocation, useParams } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router';
 
 import LiquidTagDocHeader from './LiquidTagDocHeader';
 import TagDoc from './TagDoc';
-import { useLiquidDocs } from './loader';
+import { useLiquidDocs } from './route';
 import FourOhFourPage from '../FourOhFourPage';
 
 function LiquidTagDoc(): JSX.Element {
@@ -47,4 +47,4 @@ function LiquidTagDoc(): JSX.Element {
   );
 }
 
-export const Component = LiquidTagDoc;
+export default LiquidTagDoc;

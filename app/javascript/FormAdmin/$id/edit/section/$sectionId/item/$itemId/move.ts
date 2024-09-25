@@ -1,11 +1,11 @@
 import { buildOptimisticArrayForMove } from '@neinteractiveliterature/litform';
-import { ActionFunction, replace } from 'react-router';
-import { client } from 'useIntercodeApolloClient';
+import { replace } from 'react-router';
 import invariant from 'tiny-invariant';
 import { FormEditorQueryDocument } from 'FormAdmin/queries.generated';
 import { MoveFormItemDocument } from 'FormAdmin/mutations.generated';
+import { Route } from './+types/move';
 
-export const action: ActionFunction = async ({ params: { id, sectionId, itemId }, request }) => {
+export async function action({ params: { id, sectionId, itemId }, request, context }: Route.ActionArgs) {
   try {
     const formData = await request.formData();
     const destinationSectionId = formData.get('destination_section_id')?.toString();
@@ -18,7 +18,7 @@ export const action: ActionFunction = async ({ params: { id, sectionId, itemId }
       const destinationIndex = Number.parseInt(formData.get('destination_index')?.toString() ?? '');
       invariant(destinationIndex != null && !Number.isNaN(destinationIndex));
 
-      const queryData = client.cache.readQuery({
+      const queryData = context.client.cache.readQuery({
         query: FormEditorQueryDocument,
         variables: { id: id },
       });
@@ -41,7 +41,7 @@ export const action: ActionFunction = async ({ params: { id, sectionId, itemId }
         },
       } as const;
 
-      const { data } = await client.mutate({
+      const { data } = await context.client.mutate({
         mutation: MoveFormItemDocument,
         variables: {
           id: itemId,
@@ -53,7 +53,7 @@ export const action: ActionFunction = async ({ params: { id, sectionId, itemId }
 
       return data;
     } else {
-      await client.mutate({
+      await context.client.mutate({
         mutation: MoveFormItemDocument,
         variables: {
           id: itemId,
@@ -68,4 +68,4 @@ export const action: ActionFunction = async ({ params: { id, sectionId, itemId }
   } catch (error) {
     return error;
   }
-};
+}

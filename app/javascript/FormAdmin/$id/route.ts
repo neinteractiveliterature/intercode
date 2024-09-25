@@ -1,12 +1,12 @@
-import { ActionFunction, redirect } from 'react-router';
-import { client } from '../../useIntercodeApolloClient';
+import { redirect } from 'react-router';
 import { DeleteFormDocument } from '../mutations.generated';
 import { Form } from '../../graphqlTypes.generated';
+import { Route } from './+types/route';
 
-export const action: ActionFunction = async ({ params: { id }, request }) => {
+export async function action({ params: { id }, request, context }: Route.ActionArgs) {
   try {
     if (request.method === 'DELETE') {
-      await client.mutate({
+      await context.client.mutate({
         mutation: DeleteFormDocument,
         variables: {
           id,
@@ -25,4 +25,4 @@ export const action: ActionFunction = async ({ params: { id }, request }) => {
   } catch (error) {
     return error;
   }
-};
+}

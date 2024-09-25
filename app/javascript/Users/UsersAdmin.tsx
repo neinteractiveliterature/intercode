@@ -1,13 +1,19 @@
-import { Outlet, useRouteLoaderData } from 'react-router-dom';
+import { Outlet, useRouteLoaderData } from 'react-router';
 
 import { useTranslation } from 'react-i18next';
-import { NamedRoute } from '../AppRouter';
+import { NamedRoute } from '../routes';
 import { UserAdminQueryData } from './queries.generated';
 import NamedRouteBreadcrumbItem from '../Breadcrumbs/NamedRouteBreadcrumbItem';
+import useAuthorizationRequired from 'Authentication/useAuthorizationRequired';
 
 function UsersAdmin(): JSX.Element {
   const { t } = useTranslation();
   const singleUserData = useRouteLoaderData(NamedRoute.UserAdminDisplay) as UserAdminQueryData;
+  const replacementContent = useAuthorizationRequired('can_read_users');
+
+  if (replacementContent) {
+    return replacementContent;
+  }
 
   return (
     <>
@@ -26,4 +32,4 @@ function UsersAdmin(): JSX.Element {
   );
 }
 
-export const Component = UsersAdmin;
+export default UsersAdmin;

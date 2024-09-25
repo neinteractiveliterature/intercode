@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import { Link, LoaderFunction, useLoaderData } from 'react-router-dom';
+import { Link } from 'react-router';
 import { useTranslation, Trans } from 'react-i18next';
 
 import UserConProfileSignupsCard from '../EventsApp/SignupAdmin/UserConProfileSignupsCard';
@@ -7,24 +7,16 @@ import AdminCaption from '../FormPresenter/ItemDisplays/AdminCaption';
 import FormItemDisplay from '../FormPresenter/ItemDisplays/FormItemDisplay';
 import usePageTitle from '../usePageTitle';
 import Gravatar from '../Gravatar';
-import { MyProfileQueryData, MyProfileQueryDocument } from './queries.generated';
+import { MyProfileQueryDocument } from './queries.generated';
 import { getSortedParsedFormItems } from '../Models/Form';
 import AdminWarning from '../UIComponents/AdminWarning';
 import { ConventionForTimespanUtils } from '../TimespanUtils';
-import { client } from '../useIntercodeApolloClient';
-import { TypedFormItem } from '../FormAdmin/FormItemUtils';
+import { Route } from './+types/MyProfileDisplay';
 
-type LoaderResult = {
-  formResponse: Record<string, unknown>;
-  formItems: TypedFormItem[];
-  convention: MyProfileQueryData['convention'];
-  myProfile: NonNullable<MyProfileQueryData['convention']['my_profile']>;
-};
-
-export const loader: LoaderFunction = async () => {
-  const { data } = await client.query<MyProfileQueryData>({ query: MyProfileQueryDocument });
+export async function loader({ context }: Route.LoaderArgs) {
+  const { data } = await context.client.query({ query: MyProfileQueryDocument });
   if (!data.convention.my_profile) {
-    return new Response(null, { status: 404 });
+    throw new Response(null, { status: 404 });
   }
   const formResponse = JSON.parse(data.convention.my_profile.form_response_attrs_json ?? '{}');
   const formItems = getSortedParsedFormItems(data.convention.user_con_profile_form);
@@ -34,12 +26,13 @@ export const loader: LoaderFunction = async () => {
     formItems,
     myProfile: data.convention.my_profile,
     convention: data.convention,
-  } satisfies LoaderResult;
-};
+  };
+}
 
-function MyProfileDisplay(): JSX.Element {
+function MyProfileDisplay({
+  loaderData: { formResponse, formItems, myProfile, convention },
+}: Route.ComponentProps): JSX.Element {
   const { t } = useTranslation();
-  const { formResponse, formItems, myProfile, convention } = useLoaderData() as LoaderResult;
 
   usePageTitle(t('myProfile.display.pageTitle'));
 
@@ -135,4 +128,4 @@ function MyProfileDisplay(): JSX.Element {
   );
 }
 
-export const Component = MyProfileDisplay;
+export default MyProfileDisplay;

@@ -1,28 +1,21 @@
 import { useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import usePageTitle from '../usePageTitle';
-import { EventAdminEventsQueryData, EventAdminEventsQueryDocument } from './queries.generated';
-import { LoaderFunction, useLoaderData } from 'react-router';
-import { client } from '../useIntercodeApolloClient';
-import { useSubmit } from 'react-router-dom';
+import { useSubmit } from 'react-router';
+import { Route } from './+types/DroppedEventAdmin';
+import { DroppedEventsAdminQueryDocument } from './queries.generated';
 
-export const loader: LoaderFunction = async () => {
-  const { data } = await client.query({ query: EventAdminEventsQueryDocument });
+export async function loader({ context }: Route.LoaderArgs) {
+  const { data } = await context.client.query({ query: DroppedEventsAdminQueryDocument });
   return data;
-};
+}
 
-function DroppedEventAdmin(): JSX.Element {
-  const data = useLoaderData() as EventAdminEventsQueryData;
+function DroppedEventAdmin({ loaderData: data }: Route.ComponentProps): JSX.Element {
   const confirm = useConfirm();
   const submit = useSubmit();
+  const droppedEvents = data.convention.events_paginated.entries;
 
   usePageTitle('Dropped Events');
-
-  const droppedEvents = data.convention.events.filter((event) => {
-    const eventCategory = data.convention.event_categories.find((c) => c.id === event.event_category.id);
-    return event.status === 'dropped' && eventCategory?.scheduling_ui !== 'single_run';
-  });
-  droppedEvents.sort((a, b) => (a.title ?? '').localeCompare(b.title ?? '', undefined, { sensitivity: 'base' }));
 
   if (droppedEvents.length === 0) {
     return (
@@ -47,7 +40,7 @@ function DroppedEventAdmin(): JSX.Element {
                 submit(
                   {},
                   {
-                    action: `/admin_events/${droppedEvent.event_category.id}/${droppedEvent.id}/restore`,
+                    action: `/admin_events/${droppedEvent.event_category.id}/events/${droppedEvent.id}/restore`,
                     method: 'POST',
                   },
                 ),
@@ -70,4 +63,4 @@ function DroppedEventAdmin(): JSX.Element {
   );
 }
 
-export const Component = DroppedEventAdmin;
+export default DroppedEventAdmin;

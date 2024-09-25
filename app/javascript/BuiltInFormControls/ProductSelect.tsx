@@ -1,5 +1,5 @@
 import Select, { Props as SelectProps } from 'react-select';
-// eslint-disable-next-line no-restricted-imports
+
 import { DocumentNode, useQuery } from '@apollo/client';
 import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 

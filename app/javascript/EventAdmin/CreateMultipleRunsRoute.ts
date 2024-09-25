@@ -1,9 +1,9 @@
-import { ActionFunction, json } from 'react-router';
+import { data } from 'react-router';
 import { RunInput } from '../graphqlTypes.generated';
-import { client } from '../useIntercodeApolloClient';
 import { CreateMultipleRunsDocument } from './mutations.generated';
+import { Route } from './+types/CreateMultipleRunsRoute';
 
-export const action: ActionFunction = async ({ request, params: { eventId } }) => {
+export async function action({ request, params: { eventId }, context }: Route.ActionArgs) {
   try {
     const requestJson = await request.json();
     const timespanStarts: string[] = requestJson.starts_at;
@@ -14,16 +14,16 @@ export const action: ActionFunction = async ({ request, params: { eventId } }) =
       roomIds: roomIds,
     }));
 
-    const { data } = await client.mutate({
+    const result = await context.client.mutate({
       mutation: CreateMultipleRunsDocument,
       variables: {
         input: { eventId, runs },
       },
     });
-    await client.resetStore();
+    await context.client.resetStore();
 
-    return json(data);
+    return data(result.data);
   } catch (error) {
     return error;
   }
-};
+}

@@ -1,30 +1,24 @@
 import { useContext } from 'react';
-import { LoaderFunction, replace, useLoaderData } from 'react-router-dom';
+import { replace } from 'react-router';
 import { DateTime } from 'luxon';
 
 import formatMoney from '../formatMoney';
 import usePageTitle from '../usePageTitle';
 import AppRootContext from '../AppRootContext';
-import { MyTicketDisplayQueryData, MyTicketDisplayQueryDocument } from './queries.generated';
+import { MyTicketDisplayQueryDocument } from './queries.generated';
 import { useAppDateTimeFormat } from '../TimeUtils';
-import { client } from '../useIntercodeApolloClient';
+import { Route } from './+types/MyTicketDisplay';
 
-type LoaderResult = {
-  convention: MyTicketDisplayQueryData['convention'];
-  ticket: NonNullable<NonNullable<MyTicketDisplayQueryData['convention']['my_profile']>['ticket']>;
-};
-
-export const loader: LoaderFunction = async () => {
-  const { data } = await client.query<MyTicketDisplayQueryData>({ query: MyTicketDisplayQueryDocument });
+export async function loader({ context }: Route.LoaderArgs) {
+  const { data } = await context.client.query({ query: MyTicketDisplayQueryDocument });
   if (!data.convention.my_profile?.ticket) {
-    return replace('new');
+    throw replace('new');
   }
 
-  return { convention: data.convention, ticket: data.convention.my_profile.ticket } satisfies LoaderResult;
-};
+  return { convention: data.convention, ticket: data.convention.my_profile.ticket };
+}
 
-function MyTicketDisplay() {
-  const { convention, ticket } = useLoaderData() as LoaderResult;
+function MyTicketDisplay({ loaderData: { convention, ticket } }: Route.ComponentProps) {
   const format = useAppDateTimeFormat();
   const { timezoneName } = useContext(AppRootContext);
 
@@ -84,4 +78,4 @@ function MyTicketDisplay() {
   );
 }
 
-export const Component = MyTicketDisplay;
+export default MyTicketDisplay;

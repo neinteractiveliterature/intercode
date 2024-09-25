@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ActionFunction, redirect, useFetcher } from 'react-router-dom';
+import { redirect, useFetcher } from 'react-router';
 import { ApolloError } from '@apollo/client';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -7,15 +7,15 @@ import StaffPositionForm, { EditingStaffPosition } from './StaffPositionForm';
 import usePageTitle from '../usePageTitle';
 import buildStaffPositionInput from './buildStaffPositionInput';
 import { StaffPositionsQueryDocument } from './queries.generated';
-import { client } from '../useIntercodeApolloClient';
 import { StaffPositionInput } from 'graphqlTypes.generated';
 import { CreateStaffPositionDocument } from './mutations.generated';
+import { Route } from './+types/NewStaffPosition';
 
-export const action: ActionFunction = async ({ request }) => {
+export async function action({ request, context }: Route.ActionArgs) {
   try {
     if (request.method === 'POST') {
       const staffPosition = (await request.json()) as StaffPositionInput;
-      const { data } = await client.mutate({
+      const { data } = await context.client.mutate({
         mutation: CreateStaffPositionDocument,
         variables: { input: { staff_position: staffPosition } },
         refetchQueries: [{ query: StaffPositionsQueryDocument }],
@@ -28,7 +28,7 @@ export const action: ActionFunction = async ({ request }) => {
   } catch (error) {
     return error;
   }
-};
+}
 
 function NewStaffPosition(): JSX.Element {
   const fetcher = useFetcher();
@@ -64,4 +64,4 @@ function NewStaffPosition(): JSX.Element {
   );
 }
 
-export const Component = NewStaffPosition;
+export default NewStaffPosition;

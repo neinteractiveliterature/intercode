@@ -14,21 +14,31 @@ fragment OrganizationRoleFields on OrganizationRole {
   }
 }
 
-query OrganizationAdminOrganizationsQuery {
-  organizations {
+fragment OrganizationFields on Organization {
+  id
+  name
+  current_ability_can_manage_access
+
+  conventions {
     id
     name
-    current_ability_can_manage_access
+    starts_at
+  }
 
-    conventions {
-      id
-      name
-      starts_at
-    }
+  organization_roles {
+    id
+    ...OrganizationRoleFields
+  }
+}
 
-    organization_roles {
-      id
-      ...OrganizationRoleFields
-    }
+query OrganizationAdminOrganizationsQuery {
+  organizations {
+    ...OrganizationFields
+  }
+}
+
+query OrganizationAdminOrganizationQuery($id: ID!) {
+  organization(id: $id) {
+    ...OrganizationFields
   }
 }

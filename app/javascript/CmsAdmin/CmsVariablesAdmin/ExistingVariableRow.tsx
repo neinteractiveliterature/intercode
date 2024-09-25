@@ -3,27 +3,27 @@ import { useConfirm, ErrorDisplay, LoadingIndicator } from '@neinteractivelitera
 
 import CommitableInput from '../../BuiltInFormControls/CommitableInput';
 import { CmsVariablesQueryData } from './queries.generated';
-import { useActionData, useFetcher } from 'react-router-dom';
+import { useFetcher } from 'react-router';
 
 export type ExistingVariableRowProps = {
   variable: CmsVariablesQueryData['cmsParent']['cmsVariables'][0];
 };
 
 function ExistingVariableRow({ variable }: ExistingVariableRowProps): JSX.Element {
-  const error = useActionData();
   const confirm = useConfirm();
   const deleteFetcher = useFetcher();
   const updateFetcher = useFetcher();
+  const error = deleteFetcher.data ?? updateFetcher.data;
 
-  const commitVariable = (value: string) => {
-    updateFetcher.submit(
+  const commitVariable = async (value: string) => {
+    await updateFetcher.submit(
       { value_json: value },
       { action: `./${variable.key}`, method: 'PATCH', preventScrollReset: true },
     );
   };
 
-  const deleteConfirmed = () => {
-    deleteFetcher.submit({}, { action: `./${variable.key}`, method: 'DELETE' });
+  const deleteConfirmed = async () => {
+    await deleteFetcher.submit({}, { action: `./${variable.key}`, method: 'DELETE' });
   };
 
   return (

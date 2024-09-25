@@ -11,7 +11,6 @@ class StringInput implements Input {
     return this.string.slice(from);
   }
 
-   
   get lineChunks() {
     return false;
   }
@@ -95,7 +94,7 @@ export function printTree(
           output += `: ${colorize(JSON.stringify(input.read(node.from, node.to)), Color.Green)}`;
         }
       }
-       
+
       if (!isLeaf) continue;
     }
     for (;;) {
@@ -113,6 +112,5 @@ export function logTree(
   input: Input | string,
   options: { from?: number; to?: number; start?: number; includeParents?: boolean } = {},
 ): void {
-   
   console.log(printTree(tree, input, options));
 }

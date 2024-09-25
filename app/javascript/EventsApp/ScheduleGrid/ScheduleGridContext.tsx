@@ -4,13 +4,13 @@ import { useApolloClient, useQuery } from '@apollo/client';
 import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
 import ConventionDayTabContainer from './ConventionDayTabContainer';
-import Schedule from './Schedule';
+import Schedule, { ScheduleEvent } from './Schedule';
 import { timespanFromConvention, getConventionDayTimespans, ConventionForTimespanUtils } from '../../TimespanUtils';
 import useCachedLoadableValue from '../../useCachedLoadableValue';
 import ScheduleGridSkeleton from './ScheduleGridSkeleton';
 import AppRootContext from '../../AppRootContext';
 import { ScheduleGridConfig } from './ScheduleGridConfig';
-import { CmsPartialBlockName, EventFiltersInput, TimezoneMode } from '../../graphqlTypes.generated';
+import { CmsPartialBlockName, Convention, EventFiltersInput, TimezoneMode } from '../../graphqlTypes.generated';
 import {
   ScheduleGridConventionDataQueryData,
   ScheduleGridEventFragment,
@@ -18,8 +18,6 @@ import {
 } from './queries.generated';
 import { FiniteTimespan } from '../../Timespan';
 import useMergeCategoriesIntoEvents from '../useMergeCategoriesIntoEvents';
-import { useLoaderData } from 'react-router';
-import { ConventionDayLoaderResult } from '../conventionDayUrls';
 import BlockPartial from 'UIComponents/BlockPartial';
 
 const IS_MOBILE = ['iOS', 'Android OS'].includes(detect()?.os ?? '');
@@ -99,9 +97,13 @@ function checkRunDetailsVisibity(
   return visibleSpecs.some((spec) => runDetailsVisibilitySpecsMatch(spec, visibilitySpec));
 }
 
+export type ScheduleGridProviderConvention = Pick<Convention, 'id' | 'timezone_mode'> & {
+  event_categories: ScheduleEvent['event_category'][];
+};
+
 export function useScheduleGridProvider(
   config: ScheduleGridConfig | undefined,
-  convention: ScheduleGridConventionDataQueryData['convention'] | undefined,
+  convention: ScheduleGridProviderConvention | undefined,
   events: ScheduleGridEventFragment[] | undefined,
   myRatingFilter?: number[],
   hideConflicts?: boolean,
@@ -280,6 +282,7 @@ export type ScheduleGridProviderProps = {
   fetchFormItemIdentifiers: string[];
   myRatingFilter?: number[];
   hideConflicts: boolean;
+  timespan: FiniteTimespan;
   filters?: EventFiltersInput;
   currentAbilityCanCreateCmsPartials: boolean;
 };
@@ -293,12 +296,12 @@ export function ScheduleGridProvider({
   convention,
   filters,
   currentAbilityCanCreateCmsPartials,
+  timespan,
 }: ScheduleGridProviderProps): JSX.Element {
   const { timezoneName } = useContext(AppRootContext);
   const filtersContextValue = { myRatingFilter, hideConflicts };
   const prefetchAll = IS_MOBILE;
   const client = useApolloClient();
-  const { matchingTimespan: timespan } = useLoaderData() as ConventionDayLoaderResult;
 
   const prefetchTimespan = useCallback(
     (timespan: FiniteTimespan) =>

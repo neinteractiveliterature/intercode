@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState, useMemo } from 'react';
 import { components, DropdownIndicatorProps, GroupBase, MenuProps } from 'react-select';
 import AsyncSelect from 'react-select/async';
 import debounce from 'debounce-promise';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { CSSTransition } from 'react-transition-group';
 import { Search, ExactWordIndexStrategy, StemmingTokenizer, SimpleTokenizer } from 'js-search';
 import { stemmer } from 'porter-stemmer';
@@ -15,8 +15,8 @@ import { useAdminNavigationItems } from './AdminNavigationSection';
 import { useEventsNavigationItems } from './EventsNavigationSection';
 import { GeneratedNavigationItem } from './GeneratedNavigationSection';
 import { SelectInstance } from 'react-select';
-import { client } from '../useIntercodeApolloClient';
 import searchStyles from 'styles/search.module.scss';
+import { useApolloClient } from '@apollo/client';
 
 type NavigationItemSearchDocument = GeneratedNavigationItem & {
   id: string;
@@ -106,6 +106,7 @@ function SiteSearch({ visible, setVisible, visibilityChangeComplete }: SiteSearc
   const [value, setValue] = useState(null);
   const adminNavigationItems = useAdminNavigationItems();
   const eventsNavigationItems = useEventsNavigationItems();
+  const client = useApolloClient();
 
   const navigationItemsWithId = useMemo(
     () =>

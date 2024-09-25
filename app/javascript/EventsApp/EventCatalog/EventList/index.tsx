@@ -26,10 +26,9 @@ import { CommonConventionDataQueryData, CommonConventionDataQueryDocument } from
 import { getFilterableFormItems } from '../../useFilterableFormItems';
 import useMergeCategoriesIntoEvents from '../../useMergeCategoriesIntoEvents';
 import EventCatalogNavTabs from '../EventCatalogNavTabs';
-import { LoaderFunction, useLoaderData } from 'react-router';
-import { client } from '../../../useIntercodeApolloClient';
 import { FetchMoreFunction } from '@apollo/client/react/hooks/useSuspenseQuery';
 import { ResultOf, VariablesOf } from '@graphql-typed-document-node/core';
+import { Route } from './+types';
 
 const PAGE_SIZE = 20;
 
@@ -72,19 +71,15 @@ const fetchMoreEvents = async (
   }
 };
 
-type LoaderResult = {
-  convention: CommonConventionDataQueryData['convention'];
-  filterableFormItems: ReturnType<typeof getFilterableFormItems>;
-};
-
-export const loader: LoaderFunction = async () => {
-  const { data } = await client.query<CommonConventionDataQueryData>({ query: CommonConventionDataQueryDocument });
+export const loader = async ({ context }: Route.LoaderArgs) => {
+  const { data } = await context.client.query<CommonConventionDataQueryData>({
+    query: CommonConventionDataQueryDocument,
+  });
   const filterableFormItems = getFilterableFormItems(data.convention);
-  return { convention: data.convention, filterableFormItems } satisfies LoaderResult;
+  return { convention: data.convention, filterableFormItems };
 };
 
-function EventList(): JSX.Element {
-  const { filterableFormItems, convention } = useLoaderData() as LoaderResult;
+function EventList({ loaderData: { filterableFormItems, convention } }: Route.ComponentProps): JSX.Element {
   const { sortBy, filters, updateSearch } = useReactRouterReactTable({
     ...filterCodecs,
   });
@@ -272,4 +267,4 @@ function EventList(): JSX.Element {
   );
 }
 
-export const Component = EventList;
+export default EventList;

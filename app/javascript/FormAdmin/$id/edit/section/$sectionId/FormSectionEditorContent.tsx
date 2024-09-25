@@ -3,7 +3,7 @@ import { useArrayBasicSortableHandlers, useMatchWidthStyle } from '@neinteractiv
 import { closestCorners, DndContext, DragOverlay } from '@dnd-kit/core';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 
-import { useFetcher } from 'react-router-dom';
+import { useFetcher } from 'react-router';
 import { FormEditorContext } from 'FormAdmin/FormEditorContexts';
 import { useSortableDndSensors } from 'SortableUtils';
 import InPlaceEditor from 'BuiltInFormControls/InPlaceEditor';

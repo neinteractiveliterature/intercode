@@ -1,15 +1,24 @@
 import CmsPageForm from './CmsPageForm';
 import usePageTitle from '../../usePageTitle';
-import { singleCmsPageAdminLoader, SingleCmsPageAdminLoaderResult } from './loaders';
-import { useLoaderData } from 'react-router';
+import { Route } from './+types/ViewCmsPageSource';
+import { CmsPageAdminQueryDocument } from './queries.generated';
 
-export const loader = singleCmsPageAdminLoader;
-
-function ViewCmsPageSource() {
-  const { page, data } = useLoaderData() as SingleCmsPageAdminLoaderResult;
-  usePageTitle(`View “${page.name}” Source`);
-
-  return <CmsPageForm page={page} cmsLayouts={data.cmsParent.cmsLayouts} cmsParent={data.cmsParent} readOnly />;
+export async function loader({ context, params: { id } }: Route.LoaderArgs) {
+  const { data } = await context.client.query({ query: CmsPageAdminQueryDocument, variables: { id } });
+  return data;
 }
 
-export const Component = ViewCmsPageSource;
+function ViewCmsPageSource({ loaderData: data }: Route.ComponentProps) {
+  usePageTitle(`View “${data.cmsParent.cmsPage.name}” Source`);
+
+  return (
+    <CmsPageForm
+      page={data.cmsParent.cmsPage}
+      cmsLayouts={data.cmsParent.cmsLayouts}
+      defaultLayout={data.cmsParent.defaultLayout}
+      readOnly
+    />
+  );
+}
+
+export default ViewCmsPageSource;

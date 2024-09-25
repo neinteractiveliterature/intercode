@@ -1,6 +1,6 @@
 import { useContext, useMemo } from 'react';
 import { CellContext, Column, createColumnHelper } from '@tanstack/react-table';
-import { useNavigate, useParams, useRouteLoaderData, useRevalidator } from 'react-router-dom';
+import { useNavigate, useParams, useRevalidator, useRouteLoaderData } from 'react-router';
 import { Trans, useTranslation } from 'react-i18next';
 import { DateTime } from 'luxon';
 
@@ -26,11 +26,11 @@ import buildEventUrl from '../buildEventUrl';
 import { SignupState } from '../../graphqlTypes.generated';
 import EnumTypes from '../../enumTypes.json';
 import AppRootContext from '../../AppRootContext';
-import { NamedRoute } from '../../AppRouter';
 import { useGraphQLConfirm } from '@neinteractiveliterature/litform';
 import { useApolloClient } from '@apollo/client';
 import { FreezeBucketAssignmentsDocument } from './mutations.generated';
 import SignupStateCell from '../../Tables/SignupStateCell';
+import { NamedRoute } from '../../routes';
 
 const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({
   state: FilterCodecs.stringArray,
@@ -256,4 +256,4 @@ function RunSignupsTable(): JSX.Element {
   );
 }
 
-export const Component = RunSignupsTable;
+export default RunSignupsTable;

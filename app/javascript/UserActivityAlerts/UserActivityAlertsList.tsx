@@ -1,10 +1,10 @@
 import * as React from 'react';
-import { Link, useRouteLoaderData } from 'react-router-dom';
+import { Link } from 'react-router';
 
 import usePageTitle from '../usePageTitle';
-import { UserActivityAlertsAdminQueryData } from './queries.generated';
+import { UserActivityAlertsAdminQueryData, UserActivityAlertsAdminQueryDocument } from './queries.generated';
 import humanize from '../humanize';
-import { NamedRoute } from '../AppRouter';
+import { Route } from './+types/UserActivityAlertsList';
 
 function renderCriteriaList(criteria: React.ReactNode[], defaultText: React.ReactNode) {
   if (criteria.length > 0) {
@@ -83,8 +83,14 @@ function renderAlertNotificationDestinations(
   return renderCriteriaList(destinations, 'No destinations');
 }
 
-function UserActivityAlertsList() {
-  const data = useRouteLoaderData(NamedRoute.UserActivityAlerts) as UserActivityAlertsAdminQueryData;
+export async function loader({ context }: Route.LoaderArgs) {
+  const { data } = await context.client.query({
+    query: UserActivityAlertsAdminQueryDocument,
+  });
+  return data;
+}
+
+function UserActivityAlertsList({ loaderData: data }: Route.ComponentProps) {
   usePageTitle('User activity alerts');
 
   return (
@@ -129,4 +135,4 @@ function UserActivityAlertsList() {
   );
 }
 
-export const Component = UserActivityAlertsList;
+export default UserActivityAlertsList;

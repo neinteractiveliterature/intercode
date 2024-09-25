@@ -16,7 +16,6 @@ describe('Timespan', () => {
 
   it('checks that finish is after start', () => {
     expect(() => {
-       
       new Timespan(DateTime.fromISO('2010-01-02T00:00:00Z'), DateTime.fromISO('2010-01-01T00:00:00Z'));
     }).toThrow('Start cannot be after finish');
   });

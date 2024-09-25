@@ -3,7 +3,7 @@ import findClass from './findClass';
 import findMethodReturnClass from './findMethodReturnClass';
 import { YardMethod, YardTag } from './DocData';
 import humanize from '../humanize';
-import { useLiquidDocs } from './loader';
+import { useLiquidDocs } from './route';
 
 export type BaseTagDocProps = {
   tag: YardTag;

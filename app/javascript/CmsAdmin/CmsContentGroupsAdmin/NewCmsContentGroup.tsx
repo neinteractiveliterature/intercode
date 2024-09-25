@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import * as React from 'react';
-import { ActionFunction, redirect, useActionData, useNavigation, useSubmit } from 'react-router-dom';
+import { redirect, useNavigation, useSubmit } from 'react-router';
 import { ApolloError } from '@apollo/client';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -10,14 +10,14 @@ import usePageTitle from '../../usePageTitle';
 import CmsContentGroupFormFields from './CmsContentGroupFormFields';
 import { CmsContentGroupsAdminQueryData } from './queries.generated';
 import { CmsContentTypeIndicator, CreateCmsContentGroupInput } from '../../graphqlTypes.generated';
-import { useCmsContentGroupsAdminLoader } from './loaders';
 import { CreateContentGroupDocument } from './mutations.generated';
-import { client } from '../../useIntercodeApolloClient';
+import { useCmsContentGroupsAdminLoader } from './route';
+import { Route } from './+types/NewCmsContentGroup';
 
-export const action: ActionFunction = async ({ request }) => {
+export async function action({ request, context }: Route.ActionArgs) {
   const variables = (await request.json()) as CreateCmsContentGroupInput;
   try {
-    await client.mutate({
+    await context.client.mutate({
       mutation: CreateContentGroupDocument,
       variables: {
         cmsContentGroup: variables.cms_content_group,
@@ -27,12 +27,12 @@ export const action: ActionFunction = async ({ request }) => {
   } catch (e) {
     return e;
   }
-  await client.resetStore();
+  await context.client.resetStore();
 
   return redirect('/cms_content_groups');
-};
+}
 
-function NewCmsContentGroup(): JSX.Element {
+function NewCmsContentGroup({ actionData: createError }: Route.ComponentProps): JSX.Element {
   const data = useCmsContentGroupsAdminLoader();
   const [contentGroup, setContentGroup] = useState<
     Omit<CmsContentGroupsAdminQueryData['cmsParent']['cmsContentGroups'][0], 'id'>
@@ -48,7 +48,6 @@ function NewCmsContentGroup(): JSX.Element {
     useChangeSet<CmsContentGroupsAdminQueryData['cmsParent']['cmsContentGroups'][0]['permissions'][0]>();
   const navigation = useNavigation();
   const createInProgress = navigation.state !== 'idle';
-  const createError = useActionData();
   const submit = useSubmit();
 
   usePageTitle('New Content Group');
@@ -96,4 +95,4 @@ function NewCmsContentGroup(): JSX.Element {
   );
 }
 
-export const Component = NewCmsContentGroup;
+export default NewCmsContentGroup;

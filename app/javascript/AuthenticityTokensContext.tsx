@@ -1,4 +1,5 @@
-import { useEffect, useRef } from 'react';
+import { getBackendBaseUrl } from 'getBackendBaseUrl';
+import { createContext } from 'react';
 
 export type AuthenticityTokens = {
   graphql?: string;
@@ -14,18 +15,14 @@ export type AuthenticityTokens = {
 };
 
 export default class AuthenticityTokensManager {
-  static instance: AuthenticityTokensManager;
+  tokens?: AuthenticityTokens;
+  url: URL;
+  fetcher: typeof fetch;
 
-  tokens: AuthenticityTokens;
-
-  constructor(tokens: AuthenticityTokens) {
-    if (AuthenticityTokensManager.instance) {
-      throw new Error(
-        "Please don't initialize AuthenticityTokensManager directly, instead use AuthenticityTokensManager.instance",
-      );
-    }
-
+  constructor(fetcher: typeof fetch, tokens: AuthenticityTokens | undefined, url: URL) {
     this.tokens = tokens;
+    this.url = url;
+    this.fetcher = fetcher;
   }
 
   setTokens(tokens: AuthenticityTokens) {
@@ -45,30 +42,42 @@ export default class AuthenticityTokensManager {
   }
 
   async refresh() {
-    const response = await fetch('/authenticity_tokens', {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-      },
-    });
-
+    const response = await fetchAuthenticityTokens(this.fetcher, this.url);
     const json = await response.json();
 
     this.setTokens(json);
-    return this.tokens;
+    return this.tokens!;
+  }
+
+  async getTokens() {
+    if (this.tokens) {
+      return this.tokens;
+    }
+
+    return await this.refresh();
   }
 }
 
-AuthenticityTokensManager.instance = new AuthenticityTokensManager({});
+export async function fetchAuthenticityTokens(
+  fetcher: typeof fetch,
+  url: URL,
+  headers?: HeadersInit,
+): Promise<Response> {
+  const response = await fetcher(url, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      ...headers,
+    },
+  });
 
-export function useInitializeAuthenticityTokens(initialTokens: AuthenticityTokens) {
-  const initializedRef = useRef(false);
-
-  useEffect(() => {
-    if (!initializedRef.current) {
-      AuthenticityTokensManager.instance.setTokens(initialTokens);
-      AuthenticityTokensManager.instance.refresh();
-      initializedRef.current = true;
-    }
-  }, [initialTokens]);
+  return response;
 }
+
+export function getAuthenticityTokensURL(): URL {
+  return new URL('/authenticity_tokens', getBackendBaseUrl());
+}
+
+export const AuthenticityTokensContext = createContext<AuthenticityTokensManager>(
+  new AuthenticityTokensManager(fetch, undefined, getAuthenticityTokensURL()),
+);

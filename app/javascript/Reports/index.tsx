@@ -1,18 +1,17 @@
-import { Link, LoaderFunction, useLoaderData } from 'react-router-dom';
+import { Link } from 'react-router';
 
 import usePageTitle from '../usePageTitle';
-import { ReportsMenuQueryData, ReportsMenuQueryDocument } from './queries.generated';
-import { client } from '../useIntercodeApolloClient';
+import { ReportsMenuQueryDocument } from './queries.generated';
 import { useTranslation } from 'react-i18next';
+import { Route } from './+types/index';
 
-export const loader: LoaderFunction = async () => {
-  const { data } = await client.query<ReportsMenuQueryData>({ query: ReportsMenuQueryDocument });
+export async function loader({ context }: Route.LoaderArgs) {
+  const { data } = await context.client.query({ query: ReportsMenuQueryDocument });
   return data;
-};
+}
 
-function ReportsMenu() {
+function ReportsMenu({ loaderData: data }: Route.ComponentProps) {
   const { t } = useTranslation();
-  const data = useLoaderData() as ReportsMenuQueryData;
   usePageTitle(t('navigation.admin.reports'));
 
   return (
@@ -81,4 +80,4 @@ function ReportsMenu() {
   );
 }
 
-export const Component = ReportsMenu;
+export default ReportsMenu;

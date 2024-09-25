@@ -1,21 +1,21 @@
 import { useState } from 'react';
 import { ApolloError } from '@apollo/client';
-import { ActionFunction, Form, redirect, useActionData, useNavigation } from 'react-router-dom';
+import { Form, redirect, useActionData, useNavigation } from 'react-router';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import EventCategoryForm, { EventCategoryForForm } from './EventCategoryForm';
 import usePageTitle from '../usePageTitle';
 import { EventCategoryFieldsFragmentDoc } from './queries.generated';
-import { useEventCategoryAdminLoader } from './loaders';
-import { client } from '../useIntercodeApolloClient';
 import { CreateEventCategoryDocument } from './mutations.generated';
 import { buildEventCategoryFromFormData } from './buildEventCategoryInput';
 import { Convention } from '../graphqlTypes.generated';
+import { Route } from './+types/NewEventCategory';
+import { useEventCategoryAdminLoader } from './route';
 
-export const action: ActionFunction = async ({ request }) => {
+export async function action({ request, context }: Route.ActionArgs) {
   try {
     const formData = await request.formData();
-    await client.mutate({
+    await context.client.mutate({
       mutation: CreateEventCategoryDocument,
       variables: {
         eventCategory: buildEventCategoryFromFormData(formData),
@@ -37,7 +37,7 @@ export const action: ActionFunction = async ({ request }) => {
   } catch (error) {
     return error;
   }
-};
+}
 
 function NewEventCategory(): JSX.Element {
   const data = useEventCategoryAdminLoader();
@@ -83,4 +83,4 @@ function NewEventCategory(): JSX.Element {
   );
 }
 
-export const Component = NewEventCategory;
+export default NewEventCategory;

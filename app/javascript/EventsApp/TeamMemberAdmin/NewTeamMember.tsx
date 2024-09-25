@@ -1,5 +1,5 @@
 import { useId, useState } from 'react';
-import { ActionFunction, Form, redirect, useNavigation } from 'react-router-dom';
+import { ActionFunction, Form, redirect, useNavigation } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 import capitalize from 'lodash/capitalize';
@@ -13,13 +13,13 @@ import {
   TeamMemberUserConProfilesQueryDocument,
 } from './queries.generated';
 import { ReceiveSignupEmail } from '../../graphqlTypes.generated';
-import { useTeamMembersLoader } from './loader';
-import { client } from '../../useIntercodeApolloClient';
 import { CreateTeamMemberDocument } from './mutations.generated';
+import { Route } from './+types/NewTeamMember';
+import { useTeamMembersLoader } from '.';
 
-export const action: ActionFunction = async ({ params: { eventId }, request }) => {
+export async function action({ params: { eventId }, request, context }: Route.ActionArgs) {
   const formData = await request.formData();
-  await client.mutate({
+  await context.client.mutate({
     mutation: CreateTeamMemberDocument,
     variables: {
       input: {
@@ -32,7 +32,7 @@ export const action: ActionFunction = async ({ params: { eventId }, request }) =
     awaitRefetchQueries: true,
   });
   return redirect(`/events/${eventId}/team_members`);
-};
+}
 
 function NewTeamMember(): JSX.Element {
   const navigation = useNavigation();
@@ -114,4 +114,4 @@ function NewTeamMember(): JSX.Element {
   );
 }
 
-export const Component = NewTeamMember;
+export default NewTeamMember;

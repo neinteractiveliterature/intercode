@@ -1,14 +1,12 @@
-import { TicketType, TicketTypeInput } from 'graphqlTypes.generated';
-import { ActionFunction, json } from 'react-router';
-import invariant from 'tiny-invariant';
-import { client } from 'useIntercodeApolloClient';
-import { DeleteTicketTypeDocument, UpdateTicketTypeDocument } from './mutations.generated';
+import { TicketType } from 'graphqlTypes.generated';
+import { data } from 'react-router';
+import { DeleteTicketTypeDocument } from './mutations.generated';
+import { Route } from './+types/$id';
 
-export const action: ActionFunction = async ({ params: { id }, request }) => {
-  invariant(id != null);
+export const action = async ({ params: { id }, request, context }: Route.ActionArgs) => {
   try {
     if (request.method === 'DELETE') {
-      const { data } = await client.mutate({
+      const result = await context.client.mutate({
         mutation: DeleteTicketTypeDocument,
         variables: { input: { id } },
         update: (cache) => {
@@ -18,14 +16,7 @@ export const action: ActionFunction = async ({ params: { id }, request }) => {
           });
         },
       });
-      return json(data);
-    } else if (request.method === 'PATCH') {
-      const ticketType = (await request.json()) as TicketTypeInput;
-      const { data } = await client.mutate({
-        mutation: UpdateTicketTypeDocument,
-        variables: { input: { ticket_type: ticketType } },
-      });
-      return json(data);
+      return data(result.data);
     } else {
       return new Response(null, { status: 404 });
     }

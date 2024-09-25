@@ -1,13 +1,13 @@
-import { ActionFunction, LoaderFunction, redirect, useLoaderData } from 'react-router';
+import { redirect } from 'react-router';
 import NewConventionModal from './NewConventionModal';
-import { client } from 'useIntercodeApolloClient';
-import { NewConventionModalQueryData, NewConventionModalQueryDocument } from './queries.generated';
+import { NewConventionModalQueryDocument } from './queries.generated';
 import { CreateConventionDocument } from './mutations.generated';
+import { Route } from './+types/new';
 
-export const action: ActionFunction = async ({ request }) => {
+export async function action({ request, context }: Route.ActionArgs) {
   try {
     const variables = await request.json();
-    const { data } = await client.mutate({
+    const { data } = await context.client.mutate({
       mutation: CreateConventionDocument,
       variables,
     });
@@ -16,16 +16,15 @@ export const action: ActionFunction = async ({ request }) => {
   } catch (error) {
     return error;
   }
-};
+}
 
-export const loader: LoaderFunction = async () => {
-  const { data } = await client.query({ query: NewConventionModalQueryDocument });
+export async function loader({ context }: Route.LoaderArgs) {
+  const { data } = await context.client.query({ query: NewConventionModalQueryDocument });
   return data;
-};
+}
 
-function NewConventionRoute() {
-  const data = useLoaderData() as NewConventionModalQueryData;
+function NewConventionRoute({ loaderData: data }: Route.ComponentProps) {
   return <NewConventionModal data={data} />;
 }
 
-export const Component = NewConventionRoute;
+export default NewConventionRoute;

@@ -1,8 +1,8 @@
-import { Link, useSubmit } from 'react-router-dom';
+import { Link, useSubmit } from 'react-router';
 import { ErrorDisplay, useConfirm } from '@neinteractiveliterature/litform';
 
 import usePageTitle from '../../usePageTitle';
-import { useCmsGraphqlQueriesAdminLoader } from './loaders';
+import { useCmsGraphqlQueriesAdminLoader } from './route';
 
 function CmsGraphqlQueriesAdminTable(): JSX.Element {
   const data = useCmsGraphqlQueriesAdminLoader();
@@ -68,4 +68,4 @@ function CmsGraphqlQueriesAdminTable(): JSX.Element {
   );
 }
 
-export const Component = CmsGraphqlQueriesAdminTable;
+export default CmsGraphqlQueriesAdminTable;

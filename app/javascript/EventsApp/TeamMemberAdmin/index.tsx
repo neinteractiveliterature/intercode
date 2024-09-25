@@ -1,14 +1,26 @@
 import { Suspense, useMemo } from 'react';
-import { useParams, Outlet } from 'react-router-dom';
+import { Outlet, useRouteLoaderData } from 'react-router';
 import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
-import { useTeamMembersLoader } from './loader';
 import NamedRouteBreadcrumbItem from '../../Breadcrumbs/NamedRouteBreadcrumbItem';
+import { Route } from './+types/index';
+import { TeamMembersQueryDocument } from './queries.generated';
+import { NamedRoute } from 'routes';
+import capitalize from 'lodash/capitalize';
 
-function TeamMemberAdmin(): JSX.Element {
-  const data = useTeamMembersLoader();
-  const teamMemberId = useParams<{ teamMemberId: string }>().teamMemberId;
+export async function loader({ params: { eventId }, context }: Route.LoaderArgs) {
+  const { data } = await context.client.query({
+    query: TeamMembersQueryDocument,
+    variables: { eventId: eventId ?? '' },
+  });
+  return data;
+}
 
+export function useTeamMembersLoader() {
+  return useRouteLoaderData(NamedRoute.TeamMembers) as Route.ComponentProps['loaderData'];
+}
+
+function TeamMemberAdmin({ loaderData: data, params: { teamMemberId } }: Route.ComponentProps): JSX.Element {
   const teamMember = useMemo(() => {
     if (!teamMemberId) {
       return null;
@@ -25,7 +37,7 @@ function TeamMemberAdmin(): JSX.Element {
         <ol className="breadcrumb">
           <NamedRouteBreadcrumbItem routeId="Event">{event.title}</NamedRouteBreadcrumbItem>
           <NamedRouteBreadcrumbItem routeId={['TeamMembers', 'TeamMembersIndex']}>
-            {event.event_category.teamMemberNamePlural}
+            {capitalize(event.event_category.teamMemberNamePlural)}
           </NamedRouteBreadcrumbItem>
           <NamedRouteBreadcrumbItem routeId="NewTeamMember">
             {'Add '}
@@ -44,4 +56,4 @@ function TeamMemberAdmin(): JSX.Element {
   );
 }
 
-export const Component = TeamMemberAdmin;
+export default TeamMemberAdmin;

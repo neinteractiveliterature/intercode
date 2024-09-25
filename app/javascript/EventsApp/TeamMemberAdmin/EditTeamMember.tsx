@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ActionFunction, Form, redirect, useLoaderData, useNavigation } from 'react-router-dom';
+import { Form, redirect, useNavigation } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import capitalize from 'lodash/capitalize';
 
@@ -7,15 +7,19 @@ import TeamMemberForm, { buildTeamMemberInputFromFormData } from './TeamMemberFo
 import usePageTitle from '../../usePageTitle';
 import { TeamMembersQueryData, TeamMembersQueryDocument } from './queries.generated';
 import FourOhFourPage from '../../FourOhFourPage';
-import { singleTeamMemberLoader, SingleTeamMemberLoaderResult } from './loader';
-import { client } from '../../useIntercodeApolloClient';
 import { DeleteTeamMemberDocument, UpdateTeamMemberDocument } from './mutations.generated';
+import { Route } from './+types/EditTeamMember';
+import { loader as indexLoader } from './index';
+import { findById } from 'findById';
 
-export const loader = singleTeamMemberLoader;
+export async function loader({ params, context, request }: Route.LoaderArgs) {
+  const data = await indexLoader({ params, context, request });
+  return { data, teamMember: findById(data.convention.event.team_members, params.teamMemberId) };
+}
 
-export const action: ActionFunction = async ({ params: { eventId, teamMemberId }, request }) => {
+export const action = async ({ params: { eventId, teamMemberId }, request, context }: Route.ActionArgs) => {
   if (request.method === 'DELETE') {
-    await client.mutate({
+    await context.client.mutate({
       mutation: DeleteTeamMemberDocument,
       variables: {
         input: {
@@ -28,7 +32,7 @@ export const action: ActionFunction = async ({ params: { eventId, teamMemberId }
   } else {
     const formData = await request.formData();
 
-    await client.mutate({
+    await context.client.mutate({
       mutation: UpdateTeamMemberDocument,
       variables: {
         input: {
@@ -42,9 +46,8 @@ export const action: ActionFunction = async ({ params: { eventId, teamMemberId }
   return redirect(`/events/${eventId}/team_members`);
 };
 
-function EditTeamMember(): JSX.Element {
+function EditTeamMember({ loaderData: { data, teamMember: initialTeamMember } }: Route.ComponentProps): JSX.Element {
   const navigation = useNavigation();
-  const { data, teamMember: initialTeamMember } = useLoaderData() as SingleTeamMemberLoaderResult;
   const event = data.convention.event;
   const { t } = useTranslation();
   const [teamMember, setTeamMember] = useState(initialTeamMember);
@@ -104,4 +107,4 @@ function EditTeamMember(): JSX.Element {
   );
 }
 
-export const Component = EditTeamMember;
+export default EditTeamMember;

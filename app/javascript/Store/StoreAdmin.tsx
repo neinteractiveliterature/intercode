@@ -1,4 +1,4 @@
-import { NavLink, Outlet } from 'react-router-dom';
+import { NavLink, Outlet } from 'react-router';
 
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 import { useTranslation } from 'react-i18next';
@@ -39,4 +39,4 @@ function StoreAdmin(): JSX.Element {
   );
 }
 
-export const Component = StoreAdmin;
+export default StoreAdmin;

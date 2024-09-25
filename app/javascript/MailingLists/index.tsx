@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 import { useContext } from 'react';
 import AppRootContext from '../AppRootContext';
@@ -37,4 +37,4 @@ function MailingListsMenu() {
   );
 }
 
-export const Component = MailingListsMenu;
+export default MailingListsMenu;
