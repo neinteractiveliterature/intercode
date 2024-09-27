@@ -39,7 +39,7 @@ services:
       DEVELOPMENT_DATABASE_URL: postgresql://postgres:postgres@postgres/intercode_development
       TEST_DATABASE_URL: postgresql://postgres:postgres@postgres/intercode_test
   postgres:
-    image: postgres:16
+    image: postgres:17
     expose:
       - '5432'
     environment:
