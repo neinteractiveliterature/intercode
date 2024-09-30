@@ -21,14 +21,14 @@ import {
   PreviewNotifierLiquidQueryDocument,
   PreviewLiquidQueryDocument,
 } from './previewQueries.generated';
-import parseCmsContent from '../parseCmsContent';
-import parsePageContent from '../parsePageContent';
+import { parseCmsContent } from '../parseCmsContent';
+import { parseContent } from '../parsePageContent';
 import AddFileModal from './AddFileModal';
 import { ActiveStorageAttachment } from '../graphqlTypes.generated';
 import { CmsFilesAdminQueryDocument } from '../CmsAdmin/CmsFilesAdmin/queries.generated';
 import { Blob } from '@rails/activestorage';
 import { useFetcher } from 'react-router-dom';
-import { NamedRoute } from '../AppRouter';
+import { NamedRoute } from '../appRoutes';
 
 export type CreateCmsFileModalProps = {
   visible: boolean;
@@ -109,7 +109,7 @@ function LiquidInput(props: LiquidInputProps): JSX.Element {
             fetchPolicy: 'no-cache',
           });
 
-          return parsePageContent(response.data?.convention.previewLiquid ?? '', {}).bodyComponents;
+          return parseContent(response.data?.convention.previewLiquid ?? '', {}).bodyComponents;
         }
 
         const response = await client.query<PreviewLiquidQueryData>({
