@@ -3,7 +3,6 @@ import { LoaderFunction, useLoaderData, useNavigate } from 'react-router-dom';
 import ProductOrderForm from './ProductOrderForm';
 import SignInButton from '../Authentication/SignInButton';
 import usePageTitle from '../usePageTitle';
-import parseCmsContent from '../parseCmsContent';
 import {
   OrderFormProductQueryData,
   OrderFormProductQueryDocument,
@@ -11,6 +10,7 @@ import {
 } from './queries.generated';
 import { client } from '../useIntercodeApolloClient';
 import { UserPricingStructureDescription } from './describePricingStructure';
+import { parseCmsContent } from 'parseCmsContent';
 
 export const loader: LoaderFunction = async ({ params: { id } }) => {
   const { data } = await client.query<OrderFormProductQueryData, OrderFormProductQueryVariables>({

@@ -351,6 +351,7 @@ export type CmsGraphqlQueryInput = {
 export type CmsLayout = {
   __typename: 'CmsLayout';
   admin_notes?: Maybe<Scalars['String']['output']>;
+  app_root_content: Scalars['String']['output'];
   content?: Maybe<Scalars['String']['output']>;
   content_html?: Maybe<Scalars['String']['output']>;
   content_html_with_placeholders?: Maybe<Scalars['String']['output']>;
@@ -359,6 +360,11 @@ export type CmsLayout = {
   id: Scalars['ID']['output'];
   name?: Maybe<Scalars['String']['output']>;
   navbar_classes?: Maybe<Scalars['String']['output']>;
+};
+
+
+export type CmsLayoutApp_Root_ContentArgs = {
+  path: Scalars['String']['input'];
 };
 
 
