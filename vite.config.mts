@@ -1,10 +1,13 @@
-import { defineConfig, Plugin, ViteDevServer } from 'vite';
+import { defineConfig, Plugin, ProxyOptions, ViteDevServer } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import { vitePlugin as remix } from '@remix-run/dev';
 import { fileURLToPath } from 'url';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import { globalDefines } from './globalDefines.mts';
 import morgan from 'morgan';
+import { envOnlyMacros } from 'vite-env-only';
+import { proxyPaths, backendUrl } from './app/javascript/proxyConfig';
+import { appRoutes } from './app/javascript/appRoutes';
 
 export function absolutePath(relativePath: string) {
   return fileURLToPath(new URL(relativePath, import.meta.url));
@@ -22,18 +25,37 @@ function morganPlugin(): Plugin {
   };
 }
 
+function getProxyConfig() {
+  return [...proxyPaths].reduce<Record<string, ProxyOptions>>(
+    (memo, path) => ({
+      ...memo,
+      [path]: {
+        target: backendUrl,
+      },
+    }),
+    {},
+  );
+}
+
 export default defineConfig({
   plugins: [
     tsconfigPaths(),
     morganPlugin(),
     nodePolyfills(),
+    envOnlyMacros(),
     !process.env.VITEST &&
       remix({
         appDirectory: absolutePath('./app/javascript'),
+        future: {
+          v3_fetcherPersist: true,
+          v3_relativeSplatPath: true,
+          v3_throwAbortReason: true,
+        },
+        routes: appRoutes,
       }),
   ],
   ssr: {
-    noExternal: ['@neinteractiveliterature/litform', '@apollo/client'],
+    noExternal: ['@neinteractiveliterature/litform', '@apollo/client', 'react-helmet-async'],
   },
   resolve: {
     mainFields: ['module'],
@@ -116,8 +138,7 @@ export default defineConfig({
     warmup: {
       clientFiles: [absolutePath('./app/javascript/packs/applicationEntry.ts')],
     },
-    // downgrade to HTTP 1.1 to work around https://github.com/remix-run/remix/issues/7867
-    proxy: {},
+    proxy: getProxyConfig(),
   },
   preview: {
     port: 3135,

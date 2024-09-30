@@ -6,7 +6,7 @@ import EventProposalStatusUpdater from './EventProposalStatusUpdater';
 import usePageTitle from '../usePageTitle';
 import { EventProposalAdminNotesQueryDocument, EventProposalQueryWithOwnerQueryData } from './queries.generated';
 import humanize from '../humanize';
-import { NamedRoute } from '../AppRouter';
+import { NamedRoute } from '../appRoutes';
 import { ApolloError, useSuspenseQuery } from '@apollo/client';
 
 export type EventProposalAdminNotesProps = {

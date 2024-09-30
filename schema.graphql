@@ -272,6 +272,7 @@ input CmsGraphqlQueryInput {
 
 type CmsLayout {
   admin_notes: String
+  app_root_content(path: String!): String!
   content: String
   content_html(path: String): String
   content_html_with_placeholders(path: String): String

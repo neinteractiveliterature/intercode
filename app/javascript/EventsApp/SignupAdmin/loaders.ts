@@ -8,7 +8,7 @@ import {
   SignupAdminEventQueryVariables,
 } from './queries.generated';
 import { client } from '../../useIntercodeApolloClient';
-import { NamedRoute } from '../../AppRouter';
+import { NamedRoute } from '../../appRoutes';
 
 export const signupAdminEventLoader: LoaderFunction = async ({ params: { eventId } }) => {
   const { data } = await client.query<SignupAdminEventQueryData, SignupAdminEventQueryVariables>({
