@@ -1,5 +1,5 @@
 import { useSuspenseQuery } from '@apollo/client';
-import parsePageContent from '../../parsePageContent';
+import { parseContent } from '../../parsePageContent';
 import Spoiler from '../../Spoiler';
 import { FormResponse } from '../useFormResponse';
 import { PreviewMarkdownQueryDocument } from '../../BuiltInFormControls/previewQueries.generated';
@@ -9,7 +9,7 @@ export type MarkdownDisplayProps = {
 };
 
 export default function MarkdownDisplay({ renderedMarkdown }: MarkdownDisplayProps): JSX.Element {
-  return <>{parsePageContent(renderedMarkdown ?? '', { Spoiler }).bodyComponents}</>;
+  return <>{parseContent(renderedMarkdown ?? '', { Spoiler }).bodyComponents}</>;
 }
 
 export type UnrenderedMarkdownDisplayProps = {

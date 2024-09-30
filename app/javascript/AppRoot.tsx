@@ -1,9 +1,9 @@
 import { Suspense, useMemo, useState, useEffect, useContext } from 'react';
-import { useLocation, useNavigate, useLoaderData, Outlet, ScrollRestoration, useNavigation } from 'react-router-dom';
+import { useLocation, useNavigate, useLoaderData, Outlet, useNavigation, LoaderFunction } from 'react-router-dom';
 import { Settings } from 'luxon';
 import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
-import { AppRootQueryData } from './appRootQueries.generated';
+import { AppRootQueryData, AppRootQueryDocument } from './appRootQueries.generated';
 import AppRootContext, { AppRootContextValue } from './AppRootContext';
 import { timezoneNameForConvention } from './TimeUtils';
 import getI18n from './setupI18Next';
@@ -11,9 +11,18 @@ import { timespanFromConvention } from './TimespanUtils';
 import { LazyStripeContext } from './LazyStripe';
 import { Stripe } from '@stripe/stripe-js';
 import AuthenticationModalContext from './Authentication/AuthenticationModalContext';
-import { GraphQLNotAuthenticatedErrorEvent } from './useIntercodeApolloClient';
+import { buildServerApolloClient, GraphQLNotAuthenticatedErrorEvent } from './useIntercodeApolloClient';
 import { reloadOnAppEntrypointHeadersMismatch } from './checkAppEntrypointHeadersMatch';
 import { initErrorReporting } from 'ErrorReporting';
+import RouteErrorBoundary from 'RouteErrorBoundary';
+
+export const loader: LoaderFunction = async ({ request }) => {
+  const client = buildServerApolloClient(request);
+  const { data } = await client.query({ query: AppRootQueryDocument });
+  return data;
+};
+
+export const errorElement = RouteErrorBoundary;
 
 export function buildAppRootContextValue(data: AppRootQueryData): AppRootContextValue {
   return {
@@ -120,7 +129,6 @@ function AppRoot(): JSX.Element {
           >
             <PageLoadingIndicator visible={navigation.state === 'loading'} />
           </div>
-          <ScrollRestoration />
           <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
             <Outlet />
           </Suspense>

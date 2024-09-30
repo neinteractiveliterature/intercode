@@ -15,7 +15,7 @@
     "skipLibCheck": true,
     "maxNodeModuleJsDepth": 10,
     "baseUrl": "./app/javascript",
-    "types": ["vitest/globals", "vite/client"]
+    "types": ["vitest/globals", "vite/client", "@remix-run/node"]
   },
   "include": [
     "./app/javascript/",

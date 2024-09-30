@@ -4,7 +4,7 @@ import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrum
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 import LeafBreadcrumbItem from '../Breadcrumbs/LeafBreadcrumbItem';
 import NamedRouteBreadcrumbItem from '../Breadcrumbs/NamedRouteBreadcrumbItem';
-import { NamedRoute } from '../AppRouter';
+import { NamedRoute } from '../appRoutes';
 
 function StaffPositionAdmin(): JSX.Element {
   const authorizationWarning = useAuthorizationRequired('can_manage_staff_positions');

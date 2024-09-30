@@ -27,7 +27,7 @@ import buildEventUrl from '../buildEventUrl';
 import { SignupState } from '../../graphqlTypes.generated';
 import EnumTypes from '../../enumTypes.json';
 import AppRootContext from '../../AppRootContext';
-import { NamedRoute } from '../../AppRouter';
+import { NamedRoute } from '../../appRoutes';
 
 const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({
   state: FilterCodecs.stringArray,

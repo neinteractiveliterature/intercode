@@ -1,7 +1,7 @@
 import { Link, useLocation, useParams, useRouteLoaderData } from 'react-router-dom';
 
 import MethodDoc from './MethodDoc';
-import { NamedRoute } from '../AppRouter';
+import { NamedRoute } from '../appRoutes';
 import { LiquidDocsLoaderResult } from './loader';
 import FourOhFourPage from '../FourOhFourPage';
 

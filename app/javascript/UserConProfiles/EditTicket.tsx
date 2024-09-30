@@ -6,7 +6,7 @@ import TicketForm from './TicketForm';
 import usePageTitle from '../usePageTitle';
 import { UserConProfileAdminQueryData } from './queries.generated';
 import { TicketInput } from '../graphqlTypes.generated';
-import { NamedRoute } from '../AppRouter';
+import { NamedRoute } from '../appRoutes';
 import { client } from 'useIntercodeApolloClient';
 import { UpdateTicketDocument } from './mutations.generated';
 import { ApolloError } from '@apollo/client';

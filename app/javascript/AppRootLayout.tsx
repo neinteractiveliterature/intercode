@@ -1,16 +1,15 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { LoaderFunction, useLoaderData } from 'react-router';
-import parseCmsContent, { CMS_COMPONENT_MAP } from './parseCmsContent';
+import { CMS_COMPONENT_MAP, parseCmsContent } from './parseCmsContent';
 import OutletWithLoading from './OutletWithLoading';
 import NavigationBar from './NavigationBar';
-import { ScriptTag } from './parsePageContent';
 import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
-import { Helmet } from 'react-helmet-async';
-import { client } from './useIntercodeApolloClient';
-import { AppRootLayoutQueryData, AppRootLayoutQueryDocument } from './appRootQueries.generated';
+import { buildServerApolloClient } from './useIntercodeApolloClient';
+import { AppRootContentQueryData, AppRootContentQueryDocument } from './appRootQueries.generated';
+import RouteErrorBoundary from 'RouteErrorBoundary';
 
 // Avoid unnecessary layout checks when moving between pages that can't change layout
-function normalizePathForLayout(path: string) {
+export function normalizePathForLayout(path: string) {
   if (path.startsWith('/pages/') || path === '/') {
     return path;
   }
@@ -27,54 +26,40 @@ function normalizePathForLayout(path: string) {
 }
 
 export const loader: LoaderFunction = async ({ request }) => {
+  const client = buildServerApolloClient(request);
   const url = new URL(request.url);
   const { data } = await client.query({
-    query: AppRootLayoutQueryDocument,
-    variables: { path: normalizePathForLayout(url.pathname) },
+    query: AppRootContentQueryDocument,
+    variables: { domain: url.hostname, path: normalizePathForLayout(url.pathname) },
   });
   return data;
 };
 
+export const errorElement = RouteErrorBoundary;
+
 function AppRootLayout() {
   const [cachedCmsLayoutId, setCachedCmsLayoutId] = useState<string>();
   const [layoutChanged, setLayoutChanged] = useState(false);
-  const data = useLoaderData() as AppRootLayoutQueryData;
+  const data = useLoaderData() as AppRootContentQueryData;
+
+  console.log(data);
 
   const parsedCmsContent = useMemo(() => {
-    return parseCmsContent(data.cmsParentByRequestHost.effectiveCmsLayout.content_html ?? '', {
+    return parseCmsContent(data.cmsParentByDomain.effectiveCmsLayout.app_root_content ?? '', {
       ...CMS_COMPONENT_MAP,
-      AppRouter: OutletWithLoading,
+      AppRoot: OutletWithLoading,
       NavigationBar,
     });
-  }, [data.cmsParentByRequestHost.effectiveCmsLayout.content_html]);
-
-  const [headComponentsWithoutScriptTags, headScriptTags] = useMemo(() => {
-    if (parsedCmsContent?.headComponents == null) {
-      return [[], []];
-    }
-
-    const nonScriptTags: React.ReactNode[] = [];
-    const scriptTags: React.ReactNode[] = [];
-
-    React.Children.forEach(parsedCmsContent.headComponents, (child) => {
-      if (React.isValidElement(child) && child.type === ScriptTag) {
-        scriptTags.push(child);
-      } else {
-        nonScriptTags.push(child);
-      }
-    });
-
-    return [nonScriptTags, scriptTags];
-  }, [parsedCmsContent?.headComponents]);
+  }, [data.cmsParentByDomain.effectiveCmsLayout.app_root_content]);
 
   useEffect(() => {
-    if (cachedCmsLayoutId !== data.cmsParentByRequestHost.effectiveCmsLayout.id) {
+    if (cachedCmsLayoutId !== data.cmsParentByDomain.effectiveCmsLayout.id) {
       if (cachedCmsLayoutId) {
         // if the layout changed we need a full page reload to rerender the <head>
         setLayoutChanged(true);
         window.location.reload();
       } else {
-        setCachedCmsLayoutId(data.cmsParentByRequestHost.effectiveCmsLayout.id);
+        setCachedCmsLayoutId(data.cmsParentByDomain.effectiveCmsLayout.id);
       }
     }
   }, [cachedCmsLayoutId, data]);
@@ -87,13 +72,7 @@ function AppRootLayout() {
     return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
   }
 
-  return (
-    <>
-      <Helmet>{headComponentsWithoutScriptTags}</Helmet>
-      {headScriptTags}
-      {parsedCmsContent?.bodyComponents}
-    </>
-  );
+  return <>{parsedCmsContent?.bodyComponents}</>;
 }
 
-export const Component = AppRootLayout;
+export default AppRootLayout;

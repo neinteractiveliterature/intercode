@@ -3,9 +3,9 @@ import { useNavigate, useLocation, LoaderFunction, useLoaderData } from 'react-r
 
 import usePageTitle from '../usePageTitle';
 import { lazyWithAppEntrypointHeadersCheck } from '../checkAppEntrypointHeadersMatch';
-import parseCmsContent from '../parseCmsContent';
+import { parseCmsContent } from '../parseCmsContent';
 import { CmsPageQueryData, CmsPageQueryDocument, CmsPageQueryVariables } from './queries.generated';
-import { client } from '../useIntercodeApolloClient';
+import { buildServerApolloClient } from '../useIntercodeApolloClient';
 
 const PageAdminDropdown = lazyWithAppEntrypointHeadersCheck(() => import('./PageAdminDropdown'));
 
@@ -15,6 +15,7 @@ export type CmsPageProps = {
 };
 
 export const loader: LoaderFunction = async ({ request }) => {
+  const client = buildServerApolloClient(request);
   const slug = new URL(request.url).pathname.replace(/^\/pages\//, '').replace(/\/$/, '');
   let variables: CmsPageQueryVariables;
   if (slug.trim().length > 0) {
@@ -84,4 +85,4 @@ function CmsPage(): JSX.Element {
   );
 }
 
-export const Component = CmsPage;
+export default CmsPage;
