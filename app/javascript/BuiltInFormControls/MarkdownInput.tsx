@@ -13,7 +13,7 @@ import { markdown } from '@codemirror/lang-markdown';
 import { useMemo } from 'react';
 import { Extension } from '@codemirror/state';
 
-import parsePageContent from '../parsePageContent';
+import { parseContent } from '../parsePageContent';
 import { PreviewMarkdownQueryData, PreviewMarkdownQueryDocument } from './previewQueries.generated';
 import { ActiveStorageAttachment } from '../graphqlTypes.generated';
 import AddFileModal from './AddFileModal';
@@ -91,7 +91,7 @@ function MarkdownInput({ eventId, eventProposalId, imageAttachmentConfig, ...pro
             fetchPolicy: 'no-cache',
           });
 
-          return parsePageContent(response.data?.cmsParent.previewMarkdown ?? '').bodyComponents;
+          return parseContent(response.data?.cmsParent.previewMarkdown ?? '').bodyComponents;
         }}
         extraNavControls={
           <>

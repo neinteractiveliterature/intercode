@@ -26,11 +26,11 @@ import buildEventUrl from '../buildEventUrl';
 import { SignupState } from '../../graphqlTypes.generated';
 import EnumTypes from '../../enumTypes.json';
 import AppRootContext from '../../AppRootContext';
-import { NamedRoute } from '../../AppRouter';
 import { useGraphQLConfirm } from '@neinteractiveliterature/litform';
 import { useApolloClient } from '@apollo/client';
 import { FreezeBucketAssignmentsDocument } from './mutations.generated';
 import SignupStateCell from '../../Tables/SignupStateCell';
+import { NamedRoute } from '../../appRoutes';
 
 const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({
   state: FilterCodecs.stringArray,

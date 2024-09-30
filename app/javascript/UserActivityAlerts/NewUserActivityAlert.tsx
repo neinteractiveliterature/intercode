@@ -9,7 +9,7 @@ import UserActivityAlertForm from './UserActivityAlertForm';
 import usePageTitle from '../usePageTitle';
 import { UserActivityAlertFieldsFragmentDoc, UserActivityAlertsAdminQueryData } from './queries.generated';
 import { CreateUserActivityAlertDocument, CreateUserActivityAlertMutationVariables } from './mutations.generated';
-import { NamedRoute } from '../AppRouter';
+import { NamedRoute } from '../appRoutes';
 import { client } from 'useIntercodeApolloClient';
 import { Convention } from 'graphqlTypes.generated';
 

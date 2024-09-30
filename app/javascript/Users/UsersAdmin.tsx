@@ -1,7 +1,7 @@
 import { Outlet, useRouteLoaderData } from 'react-router-dom';
 
 import { useTranslation } from 'react-i18next';
-import { NamedRoute } from '../AppRouter';
+import { NamedRoute } from '../appRoutes';
 import { UserAdminQueryData } from './queries.generated';
 import NamedRouteBreadcrumbItem from '../Breadcrumbs/NamedRouteBreadcrumbItem';
 

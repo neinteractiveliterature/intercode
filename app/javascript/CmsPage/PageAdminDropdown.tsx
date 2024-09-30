@@ -5,8 +5,7 @@ import { useGraphQLConfirm } from '@neinteractiveliterature/litform';
 import MenuIcon from '../NavigationBar/MenuIcon';
 import { DropdownMenu } from '../UIComponents/DropdownMenu';
 import { PageAdminDropdownQueryData, PageAdminDropdownQueryDocument } from './queries.generated';
-import { useSuspenseQuery } from '@apollo/client';
-import { client } from '../useIntercodeApolloClient';
+import { useApolloClient, useSuspenseQuery } from '@apollo/client';
 import { DeletePageDocument } from '../CmsAdmin/CmsPagesAdmin/mutations.generated';
 
 export type PageAdminDropdownProps = {
@@ -36,12 +35,13 @@ export default function PageAdminDropdown({ showEdit, showDelete, pageId }: Page
   const confirm = useGraphQLConfirm();
   const { data } = useSuspenseQuery(PageAdminDropdownQueryDocument, { variables: { id: pageId } });
   const location = useLocation();
+  const client = useApolloClient();
 
   const deleteConfirmed = useCallback(async () => {
     await client.mutate({ mutation: DeletePageDocument, variables: { id: pageId } });
     navigate('/cms_pages', { replace: true });
     await client.resetStore();
-  }, [pageId, navigate]);
+  }, [pageId, navigate, client]);
 
   const { cmsParent } = data;
   const { cmsPage } = cmsParent;

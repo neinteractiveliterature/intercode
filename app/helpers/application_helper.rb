@@ -36,13 +36,4 @@ module ApplicationHelper
 
     "#{request.scheme}://#{host}#{path}"
   end
-
-  def browser_warning
-    return nil if request.cookies["suppressBrowserWarning"] == "true"
-
-    presenter = BrowserWarningPresenter.new(request.user_agent)
-    return nil if presenter.supported?
-
-    presenter.render
-  end
 end

@@ -13,7 +13,7 @@ import {
   EventAdminSingleEventQueryDocument,
 } from './queries.generated';
 import { ImageAttachmentConfig } from '../BuiltInFormControls/MarkdownInput';
-import { NamedRoute } from '../AppRouter';
+import { NamedRoute } from '../appRoutes';
 import { client } from '../useIntercodeApolloClient';
 import { UpdateEventOptions } from './$id';
 

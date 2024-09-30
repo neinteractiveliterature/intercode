@@ -1,7 +1,7 @@
 import { LoaderFunction, useRouteLoaderData } from 'react-router';
 import { client } from '../../useIntercodeApolloClient';
 import { CmsGraphqlQueriesQueryData, CmsGraphqlQueriesQueryDocument } from './queries.generated';
-import { NamedRoute } from '../../AppRouter';
+import { NamedRoute } from '../../appRoutes';
 
 export const cmsGraphqlQueriesAdminLoader: LoaderFunction = async () => {
   const { data } = await client.query<CmsGraphqlQueriesQueryData>({ query: CmsGraphqlQueriesQueryDocument });

@@ -11,7 +11,7 @@ import {
 } from './queries.generated';
 import { client } from '../useIntercodeApolloClient';
 import { loadDocData, YardClass, YardDocs, YardMethod } from './DocData';
-import { NamedRoute } from '../AppRouter';
+import { NamedRoute } from '../appRoutes';
 import findLiquidTagName from './findLiquidTagName';
 
 export type LiquidDocsLoaderResultCommonFields = {
