@@ -62,6 +62,16 @@ class ApplicationController < ActionController::Base
   end
   helper_method :app_component_props
 
+  def browser_warning
+    return nil if request.cookies["suppressBrowserWarning"] == "true"
+
+    presenter = BrowserWarningPresenter.new(request.user_agent)
+    return nil if presenter.supported?
+
+    presenter.render
+  end
+  helper_method :browser_warning
+
   protected
 
   def pundit_user
