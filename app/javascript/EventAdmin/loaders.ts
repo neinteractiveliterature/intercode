@@ -1,7 +1,7 @@
 import { LoaderFunction, useRouteLoaderData } from 'react-router';
 import { client } from '../useIntercodeApolloClient';
 import { EventAdminEventsQueryData, EventAdminEventsQueryDocument } from './queries.generated';
-import { NamedRoute } from '../AppRouter';
+import { NamedRoute } from '../appRoutes';
 
 export const eventAdminEventsLoader: LoaderFunction = async () => {
   const { data } = await client.query<EventAdminEventsQueryData>({ query: EventAdminEventsQueryDocument });

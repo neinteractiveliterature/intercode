@@ -1,5 +1,5 @@
 import { useQuery } from '@apollo/client';
-import parseCmsContent from '../parseCmsContent';
+import { parseCmsContent } from '../parseCmsContent';
 import { AccountFormContentQueryDocument } from './queries.generated';
 
 function AccountFormContent(): JSX.Element {

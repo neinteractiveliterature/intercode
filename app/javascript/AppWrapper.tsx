@@ -1,7 +1,7 @@
 import { Suspense, useCallback, useRef, useEffect, ReactNode, useState, useMemo } from 'react';
 import * as React from 'react';
-import { ApolloProvider, DataProxy } from '@apollo/client';
-import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
+import { DataProxy } from '@apollo/client';
+import { Outlet } from 'react-router-dom';
 import { i18n } from 'i18next';
 import { I18nextProvider } from 'react-i18next';
 import {
@@ -14,7 +14,6 @@ import {
   ErrorDisplay,
   ToastProvider,
 } from '@neinteractiveliterature/litform';
-import ReactHelmetAsync from 'react-helmet-async';
 
 import AuthenticationModalContext, {
   useAuthenticationModalProvider,
@@ -27,10 +26,6 @@ import AuthenticityTokensManager, {
 import MapboxContext, { useMapboxContext } from './MapboxContext';
 import getI18n from './setupI18Next';
 import RailsDirectUploadsContext from './RailsDirectUploadsContext';
-import { appRootRoutes } from './AppRouter';
-import { client } from './useIntercodeApolloClient';
-
-const { HelmetProvider } = ReactHelmetAsync;
 
 function I18NextWrapper({ children }: { children: (i18nInstance: i18n) => ReactNode }) {
   const [i18nInstance, seti18nInstance] = useState<i18n>();
@@ -94,35 +89,31 @@ export function ProviderStack(props: AppWrapperProps) {
   return (
     <React.StrictMode>
       <Confirm>
-        <ApolloProvider client={client}>
-          <HelmetProvider>
-            {/* TODO bring this back when we re-add prompting getUserConfirmation={getUserConfirmation}> */}
-            <RailsDirectUploadsContext.Provider value={railsDirectUploadsContextValue}>
-              <MapboxContext.Provider value={mapboxContextValue}>
-                <AuthenticationModalContext.Provider value={authenticationModalContextValue}>
-                  <>
-                    {!unauthenticatedError && (
-                      <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
-                        <I18NextWrapper>
-                          {(i18nInstance) => (
-                            <AlertProvider okText={i18nInstance.t('buttons.ok', 'OK')}>
-                              <ToastProvider>
-                                <ErrorBoundary placement="replace" errorType="plain">
-                                  <Outlet />
-                                </ErrorBoundary>
-                              </ToastProvider>
-                            </AlertProvider>
-                          )}
-                        </I18NextWrapper>
-                      </Suspense>
-                    )}
-                    <AuthenticationModal />
-                  </>
-                </AuthenticationModalContext.Provider>
-              </MapboxContext.Provider>
-            </RailsDirectUploadsContext.Provider>
-          </HelmetProvider>
-        </ApolloProvider>
+        {/* TODO bring this back when we re-add prompting getUserConfirmation={getUserConfirmation}> */}
+        <RailsDirectUploadsContext.Provider value={railsDirectUploadsContextValue}>
+          <MapboxContext.Provider value={mapboxContextValue}>
+            <AuthenticationModalContext.Provider value={authenticationModalContextValue}>
+              <>
+                {!unauthenticatedError && (
+                  <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
+                    <I18NextWrapper>
+                      {(i18nInstance) => (
+                        <AlertProvider okText={i18nInstance.t('buttons.ok', 'OK')}>
+                          <ToastProvider>
+                            <ErrorBoundary placement="replace" errorType="plain">
+                              <Outlet />
+                            </ErrorBoundary>
+                          </ToastProvider>
+                        </AlertProvider>
+                      )}
+                    </I18NextWrapper>
+                  </Suspense>
+                )}
+                <AuthenticationModal />
+              </>
+            </AuthenticationModalContext.Provider>
+          </MapboxContext.Provider>
+        </RailsDirectUploadsContext.Provider>
       </Confirm>
     </React.StrictMode>
   );
@@ -138,54 +129,54 @@ export type AppWrapperProps = {
   stripePublishableKey: string;
 };
 
-function AppWrapper<P extends JSX.IntrinsicAttributes>(
-  WrappedComponent: React.ComponentType<P>,
-): React.ComponentType<P> {
-  function Wrapper(props: P & AppWrapperProps) {
-    const router = useMemo(
-      () =>
-        createBrowserRouter(
-          [
-            {
-              element: <ProviderStack {...props} />,
-              children: appRootRoutes,
-            },
-          ],
-          {
-            future: {
-              v7_relativeSplatPath: true,
-              v7_normalizeFormMethod: true,
-              v7_partialHydration: true,
-              v7_skipActionErrorRevalidation: true,
-              v7_fetcherPersist: true,
-            },
-          },
-        ),
-      [props],
-    );
+// function AppWrapper<P extends JSX.IntrinsicAttributes>(
+//   WrappedComponent: React.ComponentType<P>,
+// ): React.ComponentType<P> {
+//   function Wrapper(props: P & AppWrapperProps) {
+//     const router = useMemo(
+//       () =>
+//         createBrowserRouter(
+//           [
+//             {
+//               element: <ProviderStack {...props} />,
+//               children: appRootRoutes,
+//             },
+//           ],
+//           {
+//             future: {
+//               v7_relativeSplatPath: true,
+//               v7_normalizeFormMethod: true,
+//               v7_partialHydration: true,
+//               v7_skipActionErrorRevalidation: true,
+//               v7_fetcherPersist: true,
+//             },
+//           },
+//         ),
+//       [props],
+//     );
 
-    // TODO bring this back when we re-add prompting
-    // const getUserConfirmation = useCallback(
-    //   (message: ReactNode, callback: (confirmed: boolean) => void) => {
-    //     confirm({
-    //       prompt: message,
-    //       action: () => callback(true),
-    //       onCancel: () => callback(false),
-    //     });
-    //   },
-    //   [confirm],
-    // );
+//     // TODO bring this back when we re-add prompting
+//     // const getUserConfirmation = useCallback(
+//     //   (message: ReactNode, callback: (confirmed: boolean) => void) => {
+//     //     confirm({
+//     //       prompt: message,
+//     //       action: () => callback(true),
+//     //       onCancel: () => callback(false),
+//     //     });
+//     //   },
+//     //   [confirm],
+//     // );
 
-    return <RouterProvider router={router} future={{ v7_startTransition: true }} />;
-  }
+//     return <RouterProvider router={router} future={{ v7_startTransition: true }} />;
+//   }
 
-  // eslint-disable-next-line i18next/no-literal-string
-  const wrappedComponentDisplayName = WrappedComponent.displayName || WrappedComponent.name || 'Component';
+//   // eslint-disable-next-line i18next/no-literal-string
+//   const wrappedComponentDisplayName = WrappedComponent.displayName || WrappedComponent.name || 'Component';
 
-  // eslint-disable-next-line i18next/no-literal-string
-  Wrapper.displayName = `AppWrapper(${wrappedComponentDisplayName})`;
+//   // eslint-disable-next-line i18next/no-literal-string
+//   Wrapper.displayName = `AppWrapper(${wrappedComponentDisplayName})`;
 
-  return Wrapper;
-}
+//   return Wrapper;
+// }
 
-export default AppWrapper;
+// export default AppWrapper;
