@@ -132,3 +132,13 @@ query AppRootLayoutQuery($path: String!) {
     }
   }
 }
+
+query AppRootContentQuery($domain: String!, $path: String!) {
+  cmsParentByDomain(domain: $domain) {
+    id
+    effectiveCmsLayout(path: $path) {
+      id
+      app_root_content(path: $path)
+    }
+  }
+}

@@ -12,7 +12,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import parseCmsContent from '../parseCmsContent';
+import { parseCmsContent } from '../parseCmsContent';
 import useLoginRequired from '../Authentication/useLoginRequired';
 import { ClickwrapAgreementQueryData, ClickwrapAgreementQueryDocument } from './queries.generated';
 import AuthenticityTokensManager from '../AuthenticityTokensContext';

@@ -15,7 +15,7 @@ import { useAdminNavigationItems } from './AdminNavigationSection';
 import { useEventsNavigationItems } from './EventsNavigationSection';
 import { GeneratedNavigationItem } from './GeneratedNavigationSection';
 import { SelectInstance } from 'react-select';
-import { client } from '../useIntercodeApolloClient';
+import { useApolloClient } from '@apollo/client';
 
 type NavigationItemSearchDocument = GeneratedNavigationItem & {
   id: string;
@@ -99,6 +99,7 @@ function SiteSearch({ visible, setVisible, visibilityChangeComplete }: SiteSearc
   const [value, setValue] = useState(null);
   const adminNavigationItems = useAdminNavigationItems();
   const eventsNavigationItems = useEventsNavigationItems();
+  const client = useApolloClient();
 
   const navigationItemsWithId = useMemo(
     () =>
