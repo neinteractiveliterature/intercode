@@ -7,7 +7,6 @@ import {
   InMemoryCache,
   NormalizedCacheObject,
   split,
-  createHttpLink,
 } from '@apollo/client';
 import { BatchHttpLink } from '@apollo/client/link/batch-http';
 import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
@@ -109,14 +108,6 @@ export function buildIntercodeApolloLink(uri: URL): ApolloLink {
   return ApolloLink.from([AuthHeadersLink, AddTimezoneLink, ErrorHandlerLink, terminatingLink]);
 }
 
-export function buildServerApolloLink(uri: URL, headers: Record<string, string>): ApolloLink {
-  return createHttpLink({
-    uri: uri.toString(),
-    credentials: 'same-origin',
-    headers,
-  });
-}
-
 export function useIntercodeApolloLink(uri: URL): ApolloLink {
   const link = useMemo(() => buildIntercodeApolloLink(uri), [uri]);
 
@@ -167,18 +158,4 @@ export function getClientURL(): URL {
 
 export function buildBrowserApolloClient() {
   return buildIntercodeApolloClient(buildIntercodeApolloLink(getClientURL()));
-}
-
-export function buildServerApolloHeaders(req: Request) {
-  return {
-    cookie: req.headers.get('cookie') ?? '',
-    host: new URL(req.url).hostname,
-    'user-agent': 'IntercodeSSR/1.0',
-  };
-}
-
-export function buildServerApolloClient(req: Request) {
-  return buildIntercodeApolloClient(buildServerApolloLink(getClientURL(), buildServerApolloHeaders(req)), {
-    ssrMode: true,
-  });
 }
