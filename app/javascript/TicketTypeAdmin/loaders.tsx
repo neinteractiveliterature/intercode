@@ -1,4 +1,4 @@
-import { buildServerApolloClient } from 'useIntercodeApolloClient';
+import { buildServerApolloClient } from 'serverApolloClient.server';
 import {
   AdminTicketTypesQueryData,
   AdminTicketTypesQueryDocument,

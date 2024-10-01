@@ -57,6 +57,9 @@ export default defineConfig({
   ssr: {
     noExternal: ['@neinteractiveliterature/litform', '@apollo/client', 'react-helmet-async'],
   },
+  optimizeDeps: {
+    exclude: ['node-fetch'],
+  },
   resolve: {
     mainFields: ['module'],
   },
