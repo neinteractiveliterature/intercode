@@ -11,9 +11,10 @@ import { timespanFromConvention } from './TimespanUtils';
 import { LazyStripeContext } from './LazyStripe';
 import { Stripe } from '@stripe/stripe-js';
 import AuthenticationModalContext from './Authentication/AuthenticationModalContext';
-import { buildServerApolloClient, GraphQLNotAuthenticatedErrorEvent } from './useIntercodeApolloClient';
+import { GraphQLNotAuthenticatedErrorEvent } from './useIntercodeApolloClient';
 import { reloadOnAppEntrypointHeadersMismatch } from './checkAppEntrypointHeadersMatch';
 import RouteErrorBoundary from 'RouteErrorBoundary';
+import { buildServerApolloClient } from 'serverApolloClient.server';
 
 export const loader: LoaderFunction = async ({ request }) => {
   const client = buildServerApolloClient(request);

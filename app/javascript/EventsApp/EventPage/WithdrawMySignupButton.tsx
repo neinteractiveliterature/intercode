@@ -3,8 +3,8 @@ import { useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import WithdrawSignupButton, { WithdrawSignupButtonProps } from './WithdrawSignupButton';
 import { EventPageQueryData } from './queries.generated';
-import { client } from '../../useIntercodeApolloClient';
 import { WithdrawMySignupDocument } from './mutations.generated';
+import { useApolloClient } from '@apollo/client';
 
 export type WithdrawMySignupButtonProps = Omit<WithdrawSignupButtonProps, 'withdrawSignup'> & {
   run: EventPageQueryData['convention']['event']['runs'][0];
@@ -20,6 +20,7 @@ function WithdrawMySignupButton({
 }: WithdrawMySignupButtonProps): JSX.Element {
   const { t } = useTranslation();
   const confirm = useConfirm();
+  const client = useApolloClient();
   const withdrawSignup = () =>
     confirm({
       prompt: t('events.withdrawPrompt.selfServiceSignup', {
