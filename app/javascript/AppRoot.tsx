@@ -14,6 +14,8 @@ import AuthenticationModalContext from './Authentication/AuthenticationModalCont
 import { GraphQLNotAuthenticatedErrorEvent } from './useIntercodeApolloClient';
 import { reloadOnAppEntrypointHeadersMismatch } from './checkAppEntrypointHeadersMatch';
 import { initErrorReporting } from 'ErrorReporting';
+import RouteErrorBoundary from 'RouteErrorBoundary';
+import { buildServerApolloClient } from 'serverApolloClient.server';
 
 export function buildAppRootContextValue(
   data: AppRootQueryData,
