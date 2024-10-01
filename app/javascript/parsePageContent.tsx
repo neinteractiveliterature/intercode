@@ -52,9 +52,10 @@ function nodeIsElement(node: Node, nodeObject: typeof Node): node is Element {
 export type ScriptTagProps = {
   url: string | null;
   content: string | null;
+  type: HTMLScriptElement['type'] | null;
 };
 
-export function ScriptTag({ url, content }: ScriptTagProps) {
+export function ScriptTag({ url, content, type }: ScriptTagProps) {
   const ref = React.useRef<HTMLMetaElement>(null);
   useLayoutEffect(() => {
     if (!ref.current) {
@@ -62,6 +63,9 @@ export function ScriptTag({ url, content }: ScriptTagProps) {
     }
 
     const script = document.createElement('script');
+    if (type != null) {
+      script.type = type;
+    }
 
     if (url != null) {
       script.src = url;
@@ -72,13 +76,15 @@ export function ScriptTag({ url, content }: ScriptTagProps) {
       script.textContent = content;
     }
 
+    console.log({ url, content });
+
     const originalSpan = ref.current;
     ref.current.replaceWith(script);
 
     return () => {
       script.replaceWith(originalSpan);
     };
-  }, [url, content]);
+  }, [url, content, type]);
 
   return <meta ref={ref} />;
 }
@@ -215,7 +221,14 @@ function processDefaultNode(
   }
 
   if (nodeIsElement(node, nodeObject) && node.tagName.toLowerCase() === 'script') {
-    return <ScriptTagWrapper key={index} url={node.getAttribute('src')} content={node.textContent} />;
+    return (
+      <ScriptTagWrapper
+        key={index}
+        url={node.getAttribute('src')}
+        content={node.textContent}
+        type={node.getAttribute('type')}
+      />
+    );
   }
 
   if (voidElementTags.includes(node.nodeName)) {
