@@ -6,7 +6,7 @@ import { lazyWithAppEntrypointHeadersCheck } from '../checkAppEntrypointHeadersM
 import { parseCmsContent } from '../parseCmsContent';
 import { CmsPageQueryData, CmsPageQueryDocument, CmsPageQueryVariables } from './queries.generated';
 import pageAdminDropdownStyles from '../styles/page_admin_dropdown.module.scss';
-import { buildServerApolloClient } from '../useIntercodeApolloClient';
+import { buildServerApolloClient } from '../serverApolloClient.server';
 
 const PageAdminDropdown = lazyWithAppEntrypointHeadersCheck(() => import('./PageAdminDropdown'));
 

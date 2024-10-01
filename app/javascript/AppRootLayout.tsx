@@ -4,9 +4,9 @@ import { CMS_COMPONENT_MAP, parseCmsContent } from './parseCmsContent';
 import OutletWithLoading from './OutletWithLoading';
 import NavigationBar from './NavigationBar';
 import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
-import { buildServerApolloClient } from './useIntercodeApolloClient';
 import { AppRootContentQueryData, AppRootContentQueryDocument } from './appRootQueries.generated';
 import RouteErrorBoundary from 'RouteErrorBoundary';
+import { buildServerApolloClient } from 'serverApolloClient.server';
 
 // Avoid unnecessary layout checks when moving between pages that can't change layout
 export function normalizePathForLayout(path: string) {
@@ -41,8 +41,6 @@ function AppRootLayout() {
   const [cachedCmsLayoutId, setCachedCmsLayoutId] = useState<string>();
   const [layoutChanged, setLayoutChanged] = useState(false);
   const data = useLoaderData() as AppRootContentQueryData;
-
-  console.log(data);
 
   const parsedCmsContent = useMemo(() => {
     return parseCmsContent(data.cmsParentByDomain.effectiveCmsLayout.app_root_content ?? '', {
