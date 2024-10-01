@@ -3,8 +3,7 @@ import { LoaderFunction, useLoaderData } from 'react-router';
 import { CMS_COMPONENT_MAP, parseCmsContent } from './parseCmsContent';
 import OutletWithLoading from './OutletWithLoading';
 import NavigationBar from './NavigationBar';
-import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
-import { AppRootContentQueryData, AppRootContentQueryDocument } from './appRootQueries.generated';
+import { AppRootLayoutQueryData, AppRootLayoutQueryDocument } from './appRootQueries.generated';
 import RouteErrorBoundary from 'RouteErrorBoundary';
 import { buildServerApolloClient } from 'serverApolloClient.server';
 
@@ -29,8 +28,8 @@ export const loader: LoaderFunction = async ({ request }) => {
   const client = buildServerApolloClient(request);
   const url = new URL(request.url);
   const { data } = await client.query({
-    query: AppRootContentQueryDocument,
-    variables: { domain: url.hostname, path: normalizePathForLayout(url.pathname) },
+    query: AppRootLayoutQueryDocument,
+    variables: { path: normalizePathForLayout(url.pathname) },
   });
   return data;
 };
@@ -40,24 +39,27 @@ export const errorElement = RouteErrorBoundary;
 function AppRootLayout() {
   const [cachedCmsLayoutId, setCachedCmsLayoutId] = useState<string>();
   const [layoutChanged, setLayoutChanged] = useState(false);
-  const data = useLoaderData() as AppRootContentQueryData;
+  const data = useLoaderData() as AppRootLayoutQueryData;
 
   const parsedCmsContent = useMemo(() => {
-    return parseCmsContent(data.cmsParentByDomain.effectiveCmsLayout.app_root_content ?? '', {
+    return parseCmsContent(data.cmsParentByRequestHost.effectiveCmsLayout.content_html ?? '', {
       ...CMS_COMPONENT_MAP,
       AppRoot: OutletWithLoading,
+      AppRouter: OutletWithLoading,
       NavigationBar,
     });
-  }, [data.cmsParentByDomain.effectiveCmsLayout.app_root_content]);
+  }, [data.cmsParentByRequestHost.effectiveCmsLayout.content_html]);
+
+  console.log(parsedCmsContent.bodyComponents);
 
   useEffect(() => {
-    if (cachedCmsLayoutId !== data.cmsParentByDomain.effectiveCmsLayout.id) {
+    if (cachedCmsLayoutId !== data.cmsParentByRequestHost.effectiveCmsLayout.id) {
       if (cachedCmsLayoutId) {
         // if the layout changed we need a full page reload to rerender the <head>
         setLayoutChanged(true);
         window.location.reload();
       } else {
-        setCachedCmsLayoutId(data.cmsParentByDomain.effectiveCmsLayout.id);
+        setCachedCmsLayoutId(data.cmsParentByRequestHost.effectiveCmsLayout.id);
       }
     }
   }, [cachedCmsLayoutId, data]);
@@ -66,11 +68,7 @@ function AppRootLayout() {
     return <></>;
   }
 
-  if (!parsedCmsContent?.bodyComponents) {
-    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
-  }
-
-  return <>{parsedCmsContent?.bodyComponents}</>;
+  return <>{parsedCmsContent.bodyComponents}</>;
 }
 
 export default AppRootLayout;
