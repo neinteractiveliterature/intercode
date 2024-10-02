@@ -33,95 +33,7 @@ import { departmentAdminLoader } from './DepartmentAdmin/loaders';
 import { eventCategoryAdminLoader } from './EventCategoryAdmin/loaders';
 import { eventAdminEventsLoader } from './EventAdmin/loaders';
 import RouteErrorBoundary from 'RouteErrorBoundary';
-
-export type AppRootContextRouteGuardProps = {
-  guard: (context: AppRootContextValue) => boolean;
-};
-
-export function AppRootContextRouteGuard({ guard }: AppRootContextRouteGuardProps) {
-  const context = useContext(AppRootContext);
-
-  if (guard(context)) {
-    return <Outlet />;
-  } else {
-    return <FourOhFourPage />;
-  }
-}
-
-function LoginRequiredRouteGuard() {
-  const loginRequired = useLoginRequired();
-  if (loginRequired) {
-    return <></>;
-  }
-
-  return <Outlet />;
-}
-
-type AuthorizationRequiredRouteGuardProps = {
-  abilities: AbilityName[];
-};
-
-function AuthorizationRequiredRouteGuard({ abilities }: AuthorizationRequiredRouteGuardProps) {
-  const authorizationWarning = useAuthorizationRequired(...abilities);
-
-  if (authorizationWarning) return authorizationWarning;
-
-  return <Outlet />;
-}
-
-const eventAdminRootRedirect: LoaderFunction = async () => {
-  const { data } = await client.query({ query: EventAdminEventsQueryDocument });
-  if (!data.convention) {
-    return new Response(null, { status: 404 });
-  }
-
-  if (data.convention.site_mode === SiteMode.SingleEvent) {
-    if (data.convention.events.length === 0) {
-      return redirect('./new');
-    } else {
-      return redirect(`./${data.convention.events[0].id}/edit`);
-    }
-  }
-
-  const firstEventCategory = data.convention.event_categories[0];
-  if (!firstEventCategory) {
-    return new Response(null, { status: 404 });
-  }
-
-  return redirect(buildEventCategoryUrl(firstEventCategory));
-};
-
-function EventPageGuard() {
-  const { siteMode } = useContext(AppRootContext);
-  const navigate = useNavigate();
-
-  if (siteMode === SiteMode.SingleEvent) {
-    navigate('/', { replace: true });
-    return <></>;
-  } else {
-    return <Outlet />;
-  }
-}
-
-function EditEventGuard() {
-  const { siteMode } = useContext(AppRootContext);
-  const navigate = useNavigate();
-
-  if (siteMode === SiteMode.SingleEvent) {
-    navigate('/admin_events', { replace: true });
-    return <></>;
-  } else {
-    return <LoginRequiredRouteGuard />;
-  }
-}
-
-function NonCMSPageWrapper() {
-  return (
-    <div className="non-cms-page">
-      <Outlet />
-    </div>
-  );
-}
+import { NonCMSPageWrapper } from 'NonCMSPageWrapper';
 
 export const appRootRoutes: RouteObject[] = [
   {
@@ -1151,9 +1063,6 @@ export const appRootRoutes: RouteObject[] = [
                   { path: '/users/password/edit', lazy: () => import('./Authentication/ResetPassword') },
                 ],
               },
-              { path: '/pages/*', lazy: () => import('./CmsPage') },
-              { index: true, lazy: () => import('./CmsPage') },
-              { path: '*', element: <FourOhFourPage /> },
             ],
           },
         ],
