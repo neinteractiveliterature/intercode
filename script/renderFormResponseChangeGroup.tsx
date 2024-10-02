@@ -10,6 +10,7 @@ import FormItemChangeGroup from '../app/javascript/FormPresenter/ItemChangeDispl
 import AppRootContext, { appRootContextDefaultValue } from '../app/javascript/AppRootContext';
 import { timezoneNameForConvention } from '../app/javascript/TimeUtils';
 import getI18n from '../app/javascript/setupI18Next';
+import { stdout } from 'process';
 
 SourceMapSupport.install();
 
@@ -17,7 +18,7 @@ const props = JSON.parse(process.argv[2]);
 async function render() {
   const i18n = await getI18n();
 
-  ReactDOMServer.renderToStaticNodeStream(
+  const stream = ReactDOMServer.renderToPipeableStream(
     <AppRootContext.Provider
       value={{
         ...appRootContextDefaultValue,
@@ -29,7 +30,12 @@ async function render() {
         <FormItemChangeGroup {...props} />
       </I18nextProvider>
     </AppRootContext.Provider>,
-  ).pipe(process.stdout);
+    {
+      onAllReady: () => {
+        stream.pipe(stdout);
+      },
+    },
+  );
 }
 
 render();

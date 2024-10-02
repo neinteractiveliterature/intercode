@@ -67,6 +67,7 @@ RUN useradd -ms $(which bash) www
 RUN mkdir /opt/node && \
   cd /opt/node && \
   curl https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-$(echo ${TARGETARCH} | sed 's/amd64/x64/').tar.xz | tar xJ --strip-components=1
+ENV PATH="/opt/node/bin:$PATH"
 
 # Set up flyctl
 RUN curl -L https://fly.io/install.sh | sh
