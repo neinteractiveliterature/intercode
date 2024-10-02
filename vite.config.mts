@@ -2,7 +2,7 @@ import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import { fileURLToPath } from 'url';
-import { execSync } from 'child_process';
+import { globalDefines } from './globalDefines.mts';
 
 export function absolutePath(relativePath: string) {
   return fileURLToPath(new URL(relativePath, import.meta.url));
@@ -13,9 +13,7 @@ export default defineConfig({
   resolve: {
     mainFields: ['module'],
   },
-  define: {
-    COMMIT_HASH: JSON.stringify(execSync('git rev-parse --short HEAD').toString()),
-  },
+  define: globalDefines,
   experimental: {
     renderBuiltUrl: (filename, { hostType }) => {
       if (hostType !== 'js' || filename === 'setPublicPath.ts') {
