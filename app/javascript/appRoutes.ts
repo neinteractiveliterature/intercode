@@ -51,6 +51,7 @@ export enum NamedRoute {
   EventAdmin = 'EventAdmin',
   RootSiteConventionsAdmin = 'RootSiteConventionAdmin',
   RootSiteConventionsAdminTable = 'RootSiteConventionsAdminTable',
+  RootPage = 'RootPage',
 }
 
 export type RouteName = keyof typeof NamedRoute & string;
@@ -58,8 +59,20 @@ export type RouteName = keyof typeof NamedRoute & string;
 export const appRoutes = (defineRoutes: DefineRoutesFunction) => {
   return defineRoutes((route) => {
     route(undefined, 'AppRoot.tsx', () => {
+      // TODO Form editor routes
+      // TODO Liquid docs routes
       route(undefined, 'AppRootLayout.tsx', () => {
-        route(undefined, 'CmsPage/index.tsx', { index: true });
+        route(undefined, 'NonCMSPageWrapper.tsx', () => {
+          route(undefined, 'RouteGuards/MultiEventConventionRouteGuard.tsx', () => {});
+          route('events', 'EventsApp/route.tsx', () => {
+            route(':eventId', 'EventsApp/$eventId.tsx', { id: NamedRoute.Event}, () => {
+              route(undefined')
+            })
+          });
+        });
+        route('/pages/*', 'CmsPage/index.tsx');
+        route(undefined, 'CmsPage/index.tsx', { index: true, id: NamedRoute.RootPage });
+        route('*', 'FourOhFourPage.tsx');
       });
     });
   });
