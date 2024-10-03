@@ -45,7 +45,7 @@
     "@neinteractiveliterature/litform": "0.30.0",
     "@popperjs/core": "^2.11.8",
     "@rails/activestorage": "7.2.100",
-    "@sentry/browser": "^8.7.0",
+    "@sentry/browser": "^8.33.0",
     "@stripe/react-stripe-js": "2.8.0",
     "@stripe/stripe-js": "4.5.0",
     "@testing-library/react": "16.0.1",
