@@ -54,7 +54,7 @@
     "@types/diff": "5.2.2",
     "@types/file-saver": "2.0.7",
     "@types/js-search": "1.4.4",
-    "@types/lodash": "4.17.9",
+    "@types/lodash": "4.17.10",
     "@types/luxon": "3.4.2",
     "@types/mapbox-gl": "1.13.10",
     "@types/minimist": "1.2.5",
