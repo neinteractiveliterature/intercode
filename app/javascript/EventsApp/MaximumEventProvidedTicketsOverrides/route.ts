@@ -1,4 +1,4 @@
-import { ActionFunction } from 'react-router';
+import { ActionFunction, json } from 'react-router';
 import { client } from '../../useIntercodeApolloClient';
 import { CreateMaximumEventProvidedTicketsOverrideDocument } from '../../EventAdmin/mutations.generated';
 
@@ -6,7 +6,7 @@ export const action: ActionFunction = async ({ request, params: { eventId } }) =
   try {
     if (request.method === 'POST') {
       const formData = await request.formData();
-      await client.mutate({
+      const { data } = await client.mutate({
         mutation: CreateMaximumEventProvidedTicketsOverrideDocument,
         variables: {
           input: {
@@ -24,6 +24,8 @@ export const action: ActionFunction = async ({ request, params: { eventId } }) =
           });
         },
       });
+
+      return json(data);
     } else {
       return new Response(null, { status: 404 });
     }
