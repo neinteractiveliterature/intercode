@@ -6,27 +6,41 @@ import capitalize from 'lodash/capitalize';
 import { getProvidableTicketTypes } from './ProvideTicketUtils';
 import ProvidableTicketTypeSelection from './ProvidableTicketTypeSelection';
 import TicketingStatusDescription from './TicketingStatusDescription';
-import { ActionFunction, Form, redirect, useLoaderData, useNavigate, useNavigation, useParams } from 'react-router-dom';
+import {
+  ActionFunction,
+  redirect,
+  useFetcher,
+  useLoaderData,
+  useNavigate,
+  useNavigation,
+  useParams,
+} from 'react-router-dom';
 import { singleTeamMemberLoader, SingleTeamMemberLoaderResult } from './loader';
 import { client } from '../../useIntercodeApolloClient';
 import { ProvideEventTicketDocument } from './mutations.generated';
 import { TeamMembersQueryDocument } from './queries.generated';
+import { ErrorDisplay } from '@neinteractiveliterature/litform';
+import { ApolloError } from '@apollo/client';
 
 export const loader = singleTeamMemberLoader;
 
 export const action: ActionFunction = async ({ params: { eventId }, request }) => {
-  const formData = await request.formData();
-  await client.mutate({
-    mutation: ProvideEventTicketDocument,
-    variables: {
-      eventId,
-      userConProfileId: formData.get('userConProfileId'),
-      ticketTypeId: formData.get('ticketTypeId'),
-    },
-    refetchQueries: [{ query: TeamMembersQueryDocument, variables: { eventId: eventId } }],
-    awaitRefetchQueries: true,
-  });
-  return redirect(`/events/${eventId}/team_members`);
+  try {
+    const formData = await request.formData();
+    await client.mutate({
+      mutation: ProvideEventTicketDocument,
+      variables: {
+        eventId,
+        userConProfileId: formData.get('userConProfileId'),
+        ticketTypeId: formData.get('ticketTypeId'),
+      },
+      refetchQueries: [{ query: TeamMembersQueryDocument, variables: { eventId: eventId } }],
+      awaitRefetchQueries: true,
+    });
+    return redirect(`/events/${eventId}/team_members`);
+  } catch (error) {
+    return error;
+  }
 };
 
 function ProvideTicketModal(): JSX.Element {
@@ -36,6 +50,8 @@ function ProvideTicketModal(): JSX.Element {
   const navigation = useNavigation();
   const navigate = useNavigate();
   const { eventId } = useParams();
+  const fetcher = useFetcher();
+  const error = fetcher.data instanceof Error ? fetcher.data : undefined;
 
   const { convention } = data;
 
@@ -50,7 +66,7 @@ function ProvideTicketModal(): JSX.Element {
 
   return (
     <Modal visible>
-      <Form action="." method="POST">
+      <fetcher.Form action="." method="POST">
         <div className="modal-header">{capitalize(convention.ticketNamePlural)}</div>
         <div className="modal-body">
           {teamMember ? (
@@ -72,7 +88,7 @@ function ProvideTicketModal(): JSX.Element {
             </>
           ) : null}
 
-          {/* <ErrorDisplay graphQLError={error as ApolloError} /> */}
+          <ErrorDisplay graphQLError={error as ApolloError} />
         </div>
         <div className="modal-footer">
           {teamMember && teamMember.user_con_profile.ticket ? (
@@ -92,7 +108,7 @@ function ProvideTicketModal(): JSX.Element {
             </>
           )}
         </div>
-      </Form>
+      </fetcher.Form>
     </Modal>
   );
 }
