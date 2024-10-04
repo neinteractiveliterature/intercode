@@ -46,7 +46,7 @@
     "@popperjs/core": "^2.11.8",
     "@rails/activestorage": "7.2.100",
     "@sentry/browser": "^8.7.0",
-    "@stripe/react-stripe-js": "2.8.0",
+    "@stripe/react-stripe-js": "2.8.1",
     "@stripe/stripe-js": "4.6.0",
     "@testing-library/react": "16.0.1",
     "@types/bytes": "3.1.4",
