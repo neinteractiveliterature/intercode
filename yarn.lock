@@ -6096,10 +6096,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stripe/stripe-js@npm:4.6.0":
-  version: 4.6.0
-  resolution: "@stripe/stripe-js@npm:4.6.0"
-  checksum: 10c0/a6dd8fde98b81b039d7b41f122dd81c5aa6567fcfeef8a84f6a01c3ac53648ec84234bb92cda49b02df31705fb27db73c87658f99d5080f19892d6c0b7a93fc0
+"@stripe/stripe-js@npm:4.7.0":
+  version: 4.7.0
+  resolution: "@stripe/stripe-js@npm:4.7.0"
+  checksum: 10c0/e018f462dc0846c31a58063d9439923cdce2404d06514bebed5810a350f2993708bf22a901c2ea34097251bf2b5262a64229d52a23ce34a8bf542aeaf0562198
   languageName: node
   linkType: hard
 
@@ -20403,7 +20403,7 @@ __metadata:
     "@rollup/plugin-swc": "npm:^0.4.0"
     "@sentry/browser": "npm:^8.7.0"
     "@stripe/react-stripe-js": "npm:2.8.1"
-    "@stripe/stripe-js": "npm:4.6.0"
+    "@stripe/stripe-js": "npm:4.7.0"
     "@swc/core": "npm:^1.7.26"
     "@testing-library/dom": "npm:^10.1.0"
     "@testing-library/jest-dom": "npm:6.5.0"
