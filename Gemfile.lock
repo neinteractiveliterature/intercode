@@ -563,7 +563,7 @@ GEM
     sentry-ruby (5.19.0)
       bigdecimal
       concurrent-ruby (~> 1.0, >= 1.0.2)
-    sequel (5.84.0)
+    sequel (5.85.0)
       bigdecimal
     set (1.0.3)
     shoryuken (6.2.1)
