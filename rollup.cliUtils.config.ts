@@ -2,10 +2,10 @@ import { defineConfig } from 'rollup';
 import swc from '@rollup/plugin-swc';
 import commonjs from '@rollup/plugin-commonjs';
 import nodeResolve from '@rollup/plugin-node-resolve';
-import replace from 'rollup-plugin-replace';
+import replace from '@rollup/plugin-replace';
 import { globalDefines } from './globalDefines.mts';
 
-const replaceConfig = Object.entries(globalDefines).reduce(
+const replaceConfig = Object.entries(globalDefines).reduce<Record<string, string>>(
   (memo, [key, value]) => ({
     ...memo,
     [`import.meta.env.${key}`]: value,
@@ -14,7 +14,12 @@ const replaceConfig = Object.entries(globalDefines).reduce(
 );
 
 export default defineConfig({
-  plugins: [replace(replaceConfig), commonjs(), nodeResolve({ extensions: ['.ts', '.tsx', '.js', '.jsx'] }), swc()],
+  plugins: [
+    replace({ ...replaceConfig, preventAssignment: true }),
+    commonjs(),
+    nodeResolve({ extensions: ['.ts', '.tsx', '.js', '.jsx'] }),
+    swc(),
+  ],
   input: {
     diffTranslations: './script/diffTranslations.ts',
     mergeTranslations: './script/mergeTranslations.ts',
