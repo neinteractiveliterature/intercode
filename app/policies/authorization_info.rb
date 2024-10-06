@@ -8,6 +8,8 @@ class AuthorizationInfo
     Queries::UserConProfileQueryManager
   ].freeze
 
+  SCOPE_ALIASES = { email: :public, profile: :read_profile }.freeze
+
   module QueryMethods
     METHODS = AuthorizationInfo::QUERY_MANAGER_CLASSES.flat_map(&:query_methods)
     delegate(*METHODS, to: :authorization_info)
@@ -34,11 +36,7 @@ class AuthorizationInfo
     @user = user
     @assumed_identity_from_profile = assumed_identity_from_profile
     @doorkeeper_token = doorkeeper_token
-    possible_query_manager_params = {
-      user: user,
-      known_user_con_profiles: known_user_con_profiles,
-      authorization_info: self
-    }
+    possible_query_manager_params = { user:, known_user_con_profiles:, authorization_info: self }
 
     QUERY_MANAGER_CLASSES.each do |query_manager_class|
       instance_variable_name = query_manager_class.name.demodulize.underscore.to_sym
@@ -54,13 +52,17 @@ class AuthorizationInfo
   end
 
   def oauth_scope?(scope)
-    raise ArgumentError, "Invalid scope: #{scope}" unless Doorkeeper.configuration.scopes.include?(scope.to_s)
+    resolved_scope = SCOPE_ALIASES[scope.to_sym] || scope.to_sym
 
-    doorkeeper_token.nil? || doorkeeper_token.scopes.exists?(scope)
+    unless Doorkeeper.configuration.scopes.include?(resolved_scope.to_s)
+      raise ArgumentError, "Invalid scope: #{resolved_scope}"
+    end
+
+    doorkeeper_token.nil? || doorkeeper_token.scopes.exists?(resolved_scope)
   end
 
-  def oauth_scoped_disjunction(&block)
-    Queries::OAuthScopedDisjunction.evaluate(self, &block)
+  def oauth_scoped_disjunction(&)
+    Queries::OAuthScopedDisjunction.evaluate(self, &)
   end
 
   def actual_user

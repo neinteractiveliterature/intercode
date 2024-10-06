@@ -985,6 +985,7 @@
       "readPublic": "Read-only access to public data"
     },
     "permissions": {
+      "email": "Access your public data, and public data about conventions you are signed up for",
       "manage_conventions": "Update conventions you manage",
       "manage_email_routing": "Update sitewide email routing rules",
       "manage_events": "Update events and event proposals you manage",
@@ -992,6 +993,7 @@
       "manage_profile": "Update your personal profile data",
       "manage_signups": "Sign you up and withdraw you from events",
       "openid": "Authenticate you using your account",
+      "profile": "Access your personal profile data",
       "public": "Access your public data, and public data about conventions you are signed up for",
       "read_conventions": "Access privileged data about the conventions you manage (e.g. user profiles)",
       "read_email_routing": "Read sitewide email routing rules",
