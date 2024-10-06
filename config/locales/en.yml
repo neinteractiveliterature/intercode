@@ -41,6 +41,8 @@ en:
         title: Authorized applications
     scopes:
       public: 'Access your public data, and public data about conventions you are signed up for'
+      email: 'Access your public data, and public data about conventions you are signed up for'
+      profile: 'Access your personal profile data'
       read_profile: 'Access your personal profile data'
       read_signups: 'Access data about your signups'
       read_events: 'Access data about the events and event proposals you manage'

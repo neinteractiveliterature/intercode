@@ -135,7 +135,7 @@ function AuthorizationPrompt() {
 
           <p>
             This will allow {preAuth?.client_name} to access{' '}
-            {scopes?.includes('read_profile')
+            {scopes?.includes('read_profile') || scopes?.includes('profile')
               ? 'all information in your convention profiles'
               : 'the public information in your convention profiles'}{' '}
             as well as information about events you can access.
