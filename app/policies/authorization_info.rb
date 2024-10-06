@@ -52,7 +52,7 @@ class AuthorizationInfo
   end
 
   def oauth_scope?(scope)
-    resolved_scope = SCOPE_ALIASES[scope.to_sym] if SCOPE_ALIASES.key?(scope.to_sym)
+    resolved_scope = SCOPE_ALIASES[scope.to_sym] || scope.to_sym
 
     unless Doorkeeper.configuration.scopes.include?(resolved_scope.to_s)
       raise ArgumentError, "Invalid scope: #{resolved_scope}"
