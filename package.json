@@ -188,7 +188,7 @@
     "@vitest/coverage-v8": "^2.1.1",
     "@vitest/ui": "^2.1.1",
     "core-js-compat": "3.38.1",
-    "eslint": "9.11.1",
+    "eslint": "9.12.0",
     "eslint-config-airbnb": "19.0.4",
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-config-airbnb-typescript": "18.0.0",
