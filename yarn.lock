@@ -7337,7 +7337,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@typescript-eslint/utils@npm:8.8.0":
+"@typescript-eslint/utils@npm:8.8.0, @typescript-eslint/utils@npm:^8.8.0":
   version: 8.8.0
   resolution: "@typescript-eslint/utils@npm:8.8.0"
   dependencies:
@@ -20385,6 +20385,7 @@ __metadata:
     "@types/zxcvbn": "npm:4.4.5"
     "@typescript-eslint/eslint-plugin": "npm:8.8.0"
     "@typescript-eslint/parser": "npm:8.8.0"
+    "@typescript-eslint/utils": "npm:^8.8.0"
     "@vitejs/plugin-react-swc": "npm:^3.7.0"
     "@vitest/coverage-v8": "npm:^2.1.1"
     "@vitest/eslint-plugin": "npm:^1.0.1"
