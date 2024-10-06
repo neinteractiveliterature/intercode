@@ -1,5 +1,5 @@
 import { fixupConfigRules, fixupPluginRules, includeIgnoreFile } from '@eslint/compat';
-import vitest from 'eslint-plugin-vitest';
+import vitest from '@vitest/eslint-plugin';
 import jsxA11Y from 'eslint-plugin-jsx-a11y';
 import reactHooks from 'eslint-plugin-react-hooks';
 import i18Next from 'eslint-plugin-i18next';
