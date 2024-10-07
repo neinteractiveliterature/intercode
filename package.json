@@ -183,8 +183,8 @@
     "@types/rails__activestorage": "7.1.1",
     "@types/react-dom": "18.3.0",
     "@types/react-transition-group": "4.4.11",
-    "@typescript-eslint/eslint-plugin": "8.8.0",
-    "@typescript-eslint/parser": "8.8.0",
+    "@typescript-eslint/eslint-plugin": "8.8.1",
+    "@typescript-eslint/parser": "8.8.1",
     "@typescript-eslint/utils": "^8.8.0",
     "@vitejs/plugin-react-swc": "^3.7.0",
     "@vitest/coverage-v8": "^2.1.1",
@@ -224,7 +224,7 @@
     "vitest": "^2.1.1"
   },
   "resolutions": {
-    "@typescript-eslint/parser": "8.8.0"
+    "@typescript-eslint/parser": "8.8.1"
   },
   "graphdoc": {
     "logo": "<h1 style=\"font-family: Helvetica, Arial; letter-spacing: -4px; font-size: 60px; font-weight: bold;\">Intercode</h1>"
