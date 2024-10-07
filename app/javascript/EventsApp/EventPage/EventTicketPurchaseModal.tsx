@@ -36,7 +36,9 @@ export default function EventTicketPurchaseModal({
   const [orderEntry, setOrderEntry] = useState<{ id: string; order: OrderPaymentModalContentsProps['order'] }>();
   const humanizeTime = useHumanizeTime();
   const expiresAt = useISODateTimeInAppZone(signup?.expires_at ?? '');
-  const { data, error } = useSuspenseQuery(CurrentPendingOrderPaymentIntentClientSecretQueryDocument);
+  const { data, error } = useSuspenseQuery(CurrentPendingOrderPaymentIntentClientSecretQueryDocument, {
+    errorPolicy: 'ignore',
+  });
 
   const cancel = async () => {
     if (orderEntry) {
@@ -73,7 +75,7 @@ export default function EventTicketPurchaseModal({
         )}
         {orderEntry ? (
           <LazyStripeElementsContainer
-            options={{ clientSecret: data.convention.my_profile?.current_pending_order?.payment_intent_client_secret }}
+            options={{ clientSecret: data?.convention.my_profile?.current_pending_order?.payment_intent_client_secret }}
           >
             <OrderPaymentModalContents onCancel={cancelAsync} onComplete={complete} order={orderEntry.order} />
           </LazyStripeElementsContainer>
