@@ -240,14 +240,16 @@ function RunCard({
           </div>
         )}
       </div>
-      <EventTicketPurchaseModal
-        visible={eventTicketPurchaseModal.visible}
-        close={eventTicketPurchaseModal.close}
-        eventTitle={event.title ?? ''}
-        availableProducts={event.ticket_types.flatMap((ticketType) => ticketType.providing_products)}
-        run={eventTicketPurchaseModal.state?.run}
-        signup={eventTicketPurchaseModal.state?.signup}
-      />
+      {eventTicketPurchaseModal.visible && (
+        <EventTicketPurchaseModal
+          visible
+          close={eventTicketPurchaseModal.close}
+          eventTitle={event.title ?? ''}
+          availableProducts={event.ticket_types.flatMap((ticketType) => ticketType.providing_products)}
+          run={eventTicketPurchaseModal.state?.run}
+          signup={eventTicketPurchaseModal.state?.signup}
+        />
+      )}
     </>
   );
 }
