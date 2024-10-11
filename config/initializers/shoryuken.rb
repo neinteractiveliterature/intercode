@@ -71,9 +71,13 @@ end
 
 class SentryReporter
   def call(_worker_instance, queue, _sqs_msg, body)
-    Sentry.with_scope do |scope|
-      scope.set_tags(job: body["job_class"], queue: queue)
-      scope.set_extras(message: body)
+    if Sentry.initialized?
+      Sentry.with_scope do |scope|
+        scope.set_tags(job: body["job_class"], queue: queue)
+        scope.set_extras(message: body)
+        yield
+      end
+    else
       yield
     end
   end
