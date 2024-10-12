@@ -10,6 +10,7 @@ import RegistrationPolicyItemEditor from 'FormAdmin/ItemEditors/RegistrationPoli
 import StaticTextEditor from 'FormAdmin/ItemEditors/StaticTextEditor';
 import TimeblockPreferenceEditor from 'FormAdmin/ItemEditors/TimeblockPreferenceEditor';
 import TimespanEditor from 'FormAdmin/ItemEditors/TimespanEditor';
+import errorReporting from 'ErrorReporting';
 
 function FormItemEditorContent(): JSX.Element {
   const { formItem, setFormItem } = useContext(FormItemEditorContext);
@@ -35,7 +36,7 @@ function FormItemEditorContent(): JSX.Element {
       return <TimespanEditor formItem={formItem} setFormItem={setFormItem} />;
     default:
       assertNever(formItem, true);
-      Rollbar?.warn(`Unknown form item type: ${formItem.item_type}`);
+      errorReporting().warning(`Unknown form item type: ${formItem.item_type}`);
       return <></>;
   }
 }

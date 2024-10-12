@@ -1,5 +1,3 @@
-/* global Rollbar */
-
 import { useState, useContext } from 'react';
 
 import * as React from 'react';
@@ -11,6 +9,7 @@ import AuthenticationModalContext from './AuthenticationModalContext';
 import useAsyncFunction from '../useAsyncFunction';
 import useAfterSessionChange from './useAfterSessionChange';
 import AuthenticityTokensManager from '../AuthenticityTokensContext';
+import errorReporting from 'ErrorReporting';
 
 async function signIn(authenticityToken: string, email: string, password: string, rememberMe: boolean) {
   const formData = new FormData();
@@ -73,12 +72,10 @@ function SignInForm(): JSX.Element {
       });
     } catch (e) {
       if (!e.message.match(/invalid email or password/i)) {
-        if (typeof Rollbar !== 'undefined') {
-          Rollbar.error(e);
-        }
+        errorReporting().error(e);
       }
 
-      // we're doing suppressError below specifically so that we can not Rollbar invalid email
+      // we're doing suppressError below specifically so that we can not capture invalid email
       // or password errors
       throw e;
     }

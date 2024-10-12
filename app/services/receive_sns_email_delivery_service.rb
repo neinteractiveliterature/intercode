@@ -33,8 +33,11 @@ class ReceiveSnsEmailDeliveryService < CivilService::Service
       return success
     end
 
-    Rollbar.scoped(context: { recipients: recipients, message_id: message_id }) do
-      ReceiveEmailService.new(recipients: recipients, load_email: -> { email }, message_id: message_id).call
+    begin
+      ReceiveEmailService.new(recipients:, load_email: -> { email }, message_id:).call
+    rescue StandardError => e
+      ErrorReporting.error(e, recipients:, message_id:)
+      raise e
     end
   end
 

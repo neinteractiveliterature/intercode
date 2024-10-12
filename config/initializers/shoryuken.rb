@@ -69,17 +69,11 @@ class ShoryukenJSONLogging
   end
 end
 
-class SentryReporter
+class ErrorReporter
   def call(_worker_instance, queue, _sqs_msg, body)
-    if Sentry.initialized?
-      Sentry.with_scope do |scope|
-        scope.set_tags(job: body["job_class"], queue: queue)
-        scope.set_extras(message: body)
-        yield
-      end
-    else
-      yield
-    end
+    yield
+  rescue StandardError => e
+    ErrorReporting.error(e, tags: { job: body["job_class"], queue: }, message: body)
   end
 end
 

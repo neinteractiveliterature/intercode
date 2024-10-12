@@ -4,9 +4,9 @@ class StripeWebhooksController < ApplicationController
 
   def account
     begin
-      event = construct_event(ENV['STRIPE_ACCOUNT_ENDPOINT_SECRET'])
+      event = construct_event(ENV.fetch('STRIPE_ACCOUNT_ENDPOINT_SECRET', nil))
     rescue JSON::ParserError => e
-      Rollbar.warn(e)
+      ErrorReporting.warn(e)
       head :not_acceptable
       return
     end
@@ -14,7 +14,7 @@ class StripeWebhooksController < ApplicationController
     # case event.type
     # This is where handlers would go if we had any yet
     # else
-    Rollbar.warn("Unhandled event type for account webhook listener: #{event.type}")
+    ErrorReporting.warn("Unhandled event type for account webhook listener: #{event.type}")
 
     # end
 
@@ -23,9 +23,9 @@ class StripeWebhooksController < ApplicationController
 
   def connect
     begin
-      event = construct_event(ENV['STRIPE_CONNECT_ENDPOINT_SECRET'])
+      event = construct_event(ENV.fetch('STRIPE_CONNECT_ENDPOINT_SECRET', nil))
     rescue JSON::ParserError => e
-      Rollbar.warn(e)
+      ErrorReporting.warn(e)
       head :not_acceptable
       return
     end
@@ -54,11 +54,11 @@ class StripeWebhooksController < ApplicationController
       conventions = Convention.where(stripe_account_id: account.id)
       conventions.each do |convention|
         if convention && !convention.stripe_account_ready_to_charge
-          ConnectStripeAccountService.new(convention: convention, account: account).call!
+          ConnectStripeAccountService.new(convention:, account:).call!
         end
       end
     else
-      Rollbar.warn("Unhandled event type for Connect webhook listener: #{event.type}")
+      ErrorReporting.warn("Unhandled event type for Connect webhook listener: #{event.type}")
     end
   end
 end

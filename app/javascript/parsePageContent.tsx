@@ -11,6 +11,7 @@ import SignInButton from './Authentication/SignInButton';
 import SignOutButton from './Authentication/SignOutButton';
 import SignUpButton from './Authentication/SignUpButton';
 import Spoiler from './Spoiler';
+import errorReporting from 'ErrorReporting';
 
 export type ComponentMap = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -142,10 +143,7 @@ function jsxAttributesFromHTMLAttributes(node: Element, attributes: Attr[]) {
     try {
       testingNode.setAttribute(key, attribute.value ?? attribute.name);
     } catch {
-      if (typeof Rollbar !== 'undefined') {
-        Rollbar.warn(`Invalid attribute ${key} for ${node.tagName} while parsing CMS content`);
-      }
-
+      errorReporting().warning(`Invalid attribute ${key} for ${node.tagName} while parsing CMS content`);
       return result;
     }
 

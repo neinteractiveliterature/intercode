@@ -13,6 +13,7 @@ import { ScheduleGridConventionDataQueryData, ScheduleGridEventFragment } from '
 import { timespanFromRun } from '../../TimespanUtils';
 import { timeIsOnTheHour } from '../../TimeUtils';
 import { SchedulingUi } from '../../graphqlTypes.generated';
+import errorReporting from 'ErrorReporting';
 
 function expandTimespanToNearestHour(timespan: FiniteTimespan) {
   const start = timespan.start.set({ minute: 0, second: 0, millisecond: 0 });
@@ -286,7 +287,7 @@ export default class Schedule {
     if (this.hideConflicts) {
       const runTimespan = this.getRunTimespan(runId);
       if (!runTimespan) {
-        Rollbar?.warn(`shouldShowRun: tried to find run ${runId} but it wasn't in the schedule`);
+        errorReporting().warning(`shouldShowRun: tried to find run ${runId} but it wasn't in the schedule`);
         return false;
       }
       const hasConflict = this.myConflictingRuns

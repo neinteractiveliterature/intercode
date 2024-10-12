@@ -17,6 +17,7 @@ import { CreateSignupRankedChoiceDocument, CreateSignupRequestDocument } from '.
 import { useRevalidator } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { client } from '../../useIntercodeApolloClient';
+import errorReporting from 'ErrorReporting';
 
 export type CreateModeratedSignupModalProps = {
   visible: boolean;
@@ -58,7 +59,7 @@ export default function CreateModeratedSignupModal({
 
   const confirmClicked = async () => {
     if (!signupOption) {
-      Rollbar?.error('CreateModeratedSignupModal: signupOption is null!');
+      errorReporting().error('CreateModeratedSignupModal: signupOption is null!');
       throw new Error(
         `Signup option not found in CreateModeratedSignupModal. This is probably a bug; we've been notified automatically and will look at it as soon as possible.`,
       );

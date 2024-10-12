@@ -125,7 +125,7 @@ class IntercodeSchema < GraphQL::Schema
   end
 
   rescue_from CivilService::ServiceFailure do |err, _obj, _args, _ctx, _field|
-    Rollbar.error(err)
+    ErrorReporting.error(err)
     IntercodeSchema.log_error(err)
     raise GraphQL::ExecutionError.new(
             err.result.errors.full_messages.join(", "),
@@ -137,7 +137,7 @@ class IntercodeSchema < GraphQL::Schema
 
   # Catch-all for unhandled errors
   rescue_from StandardError do |err, _obj, _args, _ctx, _field|
-    Rollbar.error(err)
+    ErrorReporting.error(err)
     IntercodeSchema.log_error(err)
     raise GraphQL::ExecutionError.new(err.message, extensions: { backtrace: err.backtrace })
   end
