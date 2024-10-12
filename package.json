@@ -121,6 +121,7 @@
     "postcss-loader": "8.1.1",
     "prop-types": "15.8.1",
     "punycode": "2.3.1",
+    "qs": "^6.13.0",
     "react": "18.3.1",
     "react-bootstrap4-modal": "2.0.0",
     "react-color": "2.19.3",
@@ -182,6 +183,7 @@
     "@types/md5": "^2",
     "@types/node": "20.16.11",
     "@types/punycode": "2.1.4",
+    "@types/qs": "^6",
     "@types/rails__activestorage": "7.1.1",
     "@types/react-dom": "18.3.1",
     "@types/react-transition-group": "4.4.11",
@@ -222,6 +224,7 @@
     "typescript": "5.6.3",
     "vite": "^5.0.0",
     "vite-bundle-visualizer": "^1.2.1",
+    "vite-plugin-node-polyfills": "^0.22.0",
     "vite-tsconfig-paths": "^5.0.1",
     "vitest": "^2.1.1"
   },

@@ -7,32 +7,8 @@ Rollbar.configure do |config|
   # Only enable in production environment
   config.enabled = false unless Rails.env.production?
 
-  capistrano_revision_path = File.expand_path("REVISION", Rails.root)
-  rollbar_code_version = ENV.fetch("RENDER_GIT_COMMIT", nil)
-  rollbar_code_version ||= (File.read(capistrano_revision_path).strip if File.exist?(capistrano_revision_path))
-
   # Mask the least significant bits of the IP
   config.anonymize_user_ip = true
-
-  if ENV.fetch("ROLLBAR_CLIENT_ACCESS_TOKEN", nil) && !Rails.env.test?
-    config.js_enabled = true
-    config.js_options = {
-      accessToken: ENV.fetch("ROLLBAR_CLIENT_ACCESS_TOKEN", nil),
-      captureUncaught: true,
-      captureUnhandledRejections: true,
-      captureIp: "anonymous",
-      payload: {
-        environment: Rails.env.to_s,
-        client: {
-          javascript: {
-            source_map_enabled: true,
-            code_version: rollbar_code_version,
-            guess_uncaught_frames: true
-          }
-        }
-      }
-    }
-  end
 
   # By default, Rollbar will try to call the `current_user` controller method
   # to fetch the logged-in user object, and then call that object's `id`,
