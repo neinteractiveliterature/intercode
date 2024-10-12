@@ -3,14 +3,17 @@ Rails.application.config.to_prepare do
   require 'intercode/liquid/filters'
 end
 
-# In development and test mode, expose the actual exception to developers if there is one
-if Rails.env.development? || Rails.env.test?
-  Liquid::Template.default_exception_renderer = ->(exception) do
+Liquid::Template.default_exception_renderer = ->(exception) do
+  # In development and test mode, expose the actual exception to developers if there is one
+  if Rails.env.local?
     if exception.is_a?(Liquid::InternalError)
       "Liquid error: #{ERB::Util.html_escape exception.cause.message}"
     else
       exception
     end
+  else
+    ErrorReporting.error(exception)
+    "Liquid error: internal"
   end
 end
 
