@@ -76,7 +76,7 @@ class CmsRenderingContext
         )
     doc.to_s.html_safe
   rescue StandardError => e
-    Rollbar.warn(e)
+    ErrorReporting.warn(e)
     Rails.logger.warn e
     render_layout_content(cms_layout, liquid_assigns_for_single_page_app(cms_layout).merge(assigns))
   end

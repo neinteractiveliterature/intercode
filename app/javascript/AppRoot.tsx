@@ -13,6 +13,7 @@ import { Stripe } from '@stripe/stripe-js';
 import AuthenticationModalContext from './Authentication/AuthenticationModalContext';
 import { GraphQLNotAuthenticatedErrorEvent } from './useIntercodeApolloClient';
 import { reloadOnAppEntrypointHeadersMismatch } from './checkAppEntrypointHeadersMatch';
+import { initErrorReporting } from 'ErrorReporting';
 
 export function buildAppRootContextValue(data: AppRootQueryData): AppRootContextValue {
   return {
@@ -56,15 +57,7 @@ function AppRoot(): JSX.Element {
   const [stripePromise, setStripePromise] = useState<Promise<Stripe | null> | null>(null);
 
   useEffect(() => {
-    if (typeof Rollbar !== 'undefined') {
-      Rollbar.configure({
-        payload: {
-          person: {
-            id: data?.currentUser?.id,
-          },
-        },
-      });
-    }
+    initErrorReporting(data.currentUser?.id);
   }, [data?.currentUser?.id]);
 
   useEffect(() => {

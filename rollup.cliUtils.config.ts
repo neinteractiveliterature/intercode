@@ -17,7 +17,13 @@ export default defineConfig({
   plugins: [
     replace({ ...replaceConfig, preventAssignment: true }),
     commonjs(),
-    nodeResolve({ extensions: ['.ts', '.tsx', '.js', '.jsx'] }),
+    nodeResolve({
+      extensions: ['.ts', '.tsx', '.js', '.jsx'],
+      resolveOnly(module) {
+        // commonjs plugin isn't liking the rollbar package, which we don't need in the CLI utils anyway
+        return module !== 'rollbar';
+      },
+    }),
     swc(),
   ],
   input: {

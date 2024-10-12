@@ -16,6 +16,7 @@ import { FormEditorQueryData, FormEditorFormItemFieldsFragment, FormEditorQueryD
 import { TimeblockDefinition, TimeblockOmission, UnparsedTimeblockPreference } from '../FormPresenter/TimeblockTypes';
 import FormTypes from '../../../config/form_types.json';
 import { ArrayWithGeneratedIds, ArrayWithoutGeneratedIds } from '../GeneratedIdUtils';
+import errorReporting from 'ErrorReporting';
 
 // In order from lowest to highest rank.  Higher roles always include lower roles
 // Must be updated in sync with ROLE_VALUES in form_item.rb
@@ -336,10 +337,7 @@ export function parseTypedFormItemObject(formItem: CommonFormItemFieldsFragment)
       return typedFormItem;
     default:
       assertNever(typedFormItem, true);
-      if (typeof Rollbar !== 'undefined') {
-        // @ts-expect-error This is deliberately unreachable, but we want a Rollbar if this happens
-        Rollbar.warn(`Form item ${parsedFormItem.id} has unknown type ${formItem.item_type}, ignoring`);
-      }
+      errorReporting().warning(`Form item ${parsedFormItem.id} has unknown type ${formItem.item_type}, ignoring`);
       return undefined;
   }
 }

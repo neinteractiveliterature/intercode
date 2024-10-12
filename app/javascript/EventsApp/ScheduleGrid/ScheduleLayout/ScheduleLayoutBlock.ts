@@ -5,6 +5,7 @@ import Timespan, { FiniteTimespan } from '../../../Timespan';
 import type Schedule from '../Schedule';
 import type { ScheduleEvent } from '../Schedule';
 import ColumnReservationSet from './ColumnReservationSet';
+import errorReporting from 'ErrorReporting';
 
 const MIN_LENGTH = 30 * 60 * 1000; // 30 minutes in milliseconds
 
@@ -63,14 +64,14 @@ class ScheduleLayoutBlock {
 
         const fakeRun = this.schedule.getRun(this.hiddenEventsFakeRunId);
         if (fakeRun == null) {
-          Rollbar?.warn(
+          errorReporting().warning(
             `Attempted to add run ${runId} to fake run ${this.hiddenEventsFakeRunId} but the fake run wasn't in the schedule`,
           );
           return;
         }
         const fakeEvent = this.schedule.getEvent(fakeRun.event_id);
         if (fakeEvent == null) {
-          Rollbar?.warn(
+          errorReporting().warning(
             `Attempted to add run ${runId} to fake event ${fakeRun.event_id} but the fake event wasn't in the schedule`,
           );
           return;

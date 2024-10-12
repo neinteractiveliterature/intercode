@@ -6,6 +6,7 @@ import SignupCountData from '../SignupCountData';
 import RunDetails from './RunDetails';
 import RunDisplay from './RunDisplay';
 import ScheduleLayoutBlock, { RunDimensions, ScheduleLayoutResult } from './ScheduleLayout/ScheduleLayoutBlock';
+import errorReporting from 'ErrorReporting';
 
 export type ScheduleGridEventRunProps = {
   runDimensions: RunDimensions;
@@ -53,7 +54,7 @@ function ScheduleGridEventRun({
 
   if (event == null || run == null || signupCountData == null) {
     // if run is null, event is definitely null (and signupCountData is derived from the run)
-    Rollbar?.warn(
+    errorReporting().warning(
       `ScheduleGridEventRun: tried to render run ${runDimensions.runId} but ${
         run == null ? 'run and event were null' : 'event was null'
       }`,

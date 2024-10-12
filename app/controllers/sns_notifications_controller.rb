@@ -26,8 +26,7 @@ class SnsNotificationsController < ApplicationController
       ReceiveSnsEmailDeliveryJob.perform_later(message)
     else
       warning_message = "Unhandled SNS notificationType: #{message["notificationType"]}"
-      Rails.logger.warn(warning_message)
-      Rollbar.warn(warning_message, message: message)
+      ErrorReporting.warn(warning_message, message:)
     end
   end
 
@@ -54,8 +53,7 @@ class SnsNotificationsController < ApplicationController
     )
     true
   rescue Aws::SNS::Errors::ServiceError => e
-    Rails.logger.error(e.message)
-    Rollbar.error(e)
+    ErrorReporting.error(e)
     false
   end
 end

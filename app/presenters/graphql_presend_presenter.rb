@@ -38,7 +38,7 @@ class GraphqlPresendPresenter
           query: query[:operation].to_query_string,
           operation_name: query[:operation].name,
           variables: query[:variables],
-          context: context
+          context:
         }
       end
 
@@ -48,7 +48,7 @@ class GraphqlPresendPresenter
       .map { |(query, result)| { query: query[:operation].to_document, variables: query[:variables], **result } }
   rescue StandardError => e
     # errors in GraphQL pre-sending aren't fatal, but we want to know they happened
-    Rollbar.warn(e)
+    ErrorReporting.warn(e)
     []
   end
 
@@ -57,7 +57,7 @@ class GraphqlPresendPresenter
   def cms_root_queries
     queries = [
       { operation: CMS_PAGE_QUERY, variables: { rootPage: true } },
-      { operation: APP_ROOT_QUERY, variables: { path: path } }
+      { operation: APP_ROOT_QUERY, variables: { path: } }
     ]
     queries << { operation: PAGE_ADMIN_DROPDOWN_QUERY, variables: { id: cms_parent.root_page_id.to_s } } if cms_admin?
     queries
@@ -65,11 +65,11 @@ class GraphqlPresendPresenter
 
   def cms_page_queries(slug)
     queries = [
-      { operation: CMS_PAGE_QUERY, variables: { slug: slug } },
-      { operation: APP_ROOT_QUERY, variables: { path: path } }
+      { operation: CMS_PAGE_QUERY, variables: { slug: } },
+      { operation: APP_ROOT_QUERY, variables: { path: } }
     ]
     if cms_admin?
-      page = cms_parent.pages.find_by(slug: slug)
+      page = cms_parent.pages.find_by(slug:)
       queries << { operation: PAGE_ADMIN_DROPDOWN_QUERY, variables: { id: page.id.to_s } }
     end
     queries
