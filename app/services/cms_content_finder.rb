@@ -37,8 +37,8 @@ class CmsContentFinder
     @cms_rendering_contexts_by_path[path] ||=
       CmsRenderingContext.new(
         cms_parent: convention || RootSite.instance,
-        controller: controller,
-        timezone: timezone,
+        controller:,
+        timezone:,
         assigns: {
           'user' => user,
           'convention' => convention,

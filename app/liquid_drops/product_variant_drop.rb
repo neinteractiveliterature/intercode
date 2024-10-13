@@ -27,7 +27,7 @@ class ProductVariantDrop < Liquid::Drop
 
   # @return [String] The URL of this variant's image, if present
   def image_url
-    return unless product.image
+    return unless product.image && @context.registers['controller']
     @context.registers['controller'].cdn_upload_url(product.image)
   end
 
