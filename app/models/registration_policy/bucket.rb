@@ -102,7 +102,10 @@ class RegistrationPolicy::Bucket
   end
 
   def ==(other)
-    attributes == other&.attributes
+    case other
+    when RegistrationPolicy::BucketDrop then self == other.bucket
+    else attributes == other&.attributes
+    end
   end
 
   delegate :hash, to: :attributes

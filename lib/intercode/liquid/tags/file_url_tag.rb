@@ -13,6 +13,8 @@ module Intercode
         end
 
         def render(context)
+          return unless context.registers['controller']
+
           cache = context.registers[:cached_files] || {}
           cms_file = cache[filename]
           if cms_file
@@ -23,7 +25,7 @@ module Intercode
             attachment =
               ActiveStorage::Attachment
                 .joins(:blob)
-                .where(active_storage_blobs: { filename: filename }, record: CmsFile.where(parent: parent))
+                .where(active_storage_blobs: { filename: }, record: CmsFile.where(parent:))
                 .first
             return "Error: file #{filename} not found" unless attachment
           end

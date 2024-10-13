@@ -49,6 +49,9 @@ class TicketTypeDrop < Liquid::Drop
   def price
     pricing_schedule = pricing_schedule_for_ticket_type(ticket_type)
     pricing_schedule.value_at(Time.zone.now)&.format
+  rescue StandardError
+    # If the pricing schedule doesn't have a value for the current time, just return nil
+    nil
   end
 
   # @return [String] The price this ticket type will next change to, if there is an upcoming change
