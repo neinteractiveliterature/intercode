@@ -103,7 +103,7 @@ class RegistrationPolicy::Bucket
 
   def ==(other)
     case other
-    when BucketDrop then self == other.bucket
+    when RegistrationPolicy::BucketDrop then self == other.bucket
     else attributes == other&.attributes
     end
   end
