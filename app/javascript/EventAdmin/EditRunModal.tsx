@@ -6,7 +6,7 @@ import { useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 import RunFormFields from '../BuiltInForms/RunFormFields';
 import { EventAdminEventsQueryData, EventFieldsFragment, RunFieldsFragment } from './queries.generated';
 import { useTranslation } from 'react-i18next';
-import { Form, FormProps, useParams, useSubmit } from 'react-router-dom';
+import { Form, FormProps, useParams, useSubmit } from 'react-router';
 
 export type EditingRun = Omit<RunFieldsFragment, 'starts_at'> & {
   starts_at?: RunFieldsFragment['starts_at'];

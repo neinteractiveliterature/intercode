@@ -1,5 +1,5 @@
 import { useMemo, useContext } from 'react';
-import { LoaderFunction, useLoaderData } from 'react-router-dom';
+import { LoaderFunction, useLoaderData } from 'react-router';
 
 import AuthenticityTokensManager from '../AuthenticityTokensContext';
 import PermissionsPrompt from './PermissionsPrompt';

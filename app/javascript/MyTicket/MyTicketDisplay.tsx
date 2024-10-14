@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { LoaderFunction, replace, useLoaderData } from 'react-router-dom';
+import { LoaderFunction, replace, useLoaderData } from 'react-router';
 import { DateTime } from 'luxon';
 
 import formatMoney from '../formatMoney';

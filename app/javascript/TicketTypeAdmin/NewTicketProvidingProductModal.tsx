@@ -11,7 +11,7 @@ import EditPricingStructureModal, {
 } from '../Store/ProductAdmin/EditPricingStructureModal';
 import { buildBlankProduct } from './TicketTypesList';
 import AppRootContext from '../AppRootContext';
-import { useFetcher } from 'react-router-dom';
+import { useFetcher } from 'react-router';
 import { ApolloError } from '@apollo/client';
 import { buildProductFormData } from 'Store/buildProductInput';
 

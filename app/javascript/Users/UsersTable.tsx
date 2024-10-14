@@ -1,5 +1,5 @@
-import { Outlet, useNavigate } from 'react-router-dom';
 import { createColumnHelper } from '@tanstack/react-table';
+import { Outlet, useNavigate } from 'react-router';
 
 import { buildFieldFilterCodecs } from '../Tables/FilterUtils';
 import EmailCell from '../Tables/EmailCell';

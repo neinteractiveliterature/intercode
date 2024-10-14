@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { LoaderFunction, replace, useLoaderData, useNavigate } from 'react-router-dom';
+import { LoaderFunction, replace, useLoaderData, useNavigate } from 'react-router';
 import AppRootContext from '../AppRootContext';
 import useLoginRequired from '../Authentication/useLoginRequired';
 import usePageTitle from '../usePageTitle';
