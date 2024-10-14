@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { useSuspenseQuery } from '@apollo/client';
 import { DateTime } from 'luxon';
 import { useModal, useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';

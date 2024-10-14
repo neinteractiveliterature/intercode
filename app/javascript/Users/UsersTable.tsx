@@ -1,4 +1,4 @@
-import { Outlet, useNavigate } from 'react-router-dom';
+import { Outlet, useNavigate } from 'react-router';
 import { Column } from 'react-table';
 
 import { buildFieldFilterCodecs } from '../Tables/FilterUtils';

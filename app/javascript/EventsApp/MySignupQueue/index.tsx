@@ -1,7 +1,7 @@
 import { Trans, useTranslation } from 'react-i18next';
 import { MySignupQueueQueryData, MySignupQueueQueryDocument } from './queries.generated';
 import { useContext } from 'react';
-import { Link, LoaderFunction, useLoaderData } from 'react-router-dom';
+import { Link, LoaderFunction, useLoaderData } from 'react-router';
 import RankedChoiceUserSettings from './RankedChoiceUserSettings';
 import UserConProfileSignupsCard from '../SignupAdmin/UserConProfileSignupsCard';
 import AppRootContext from '../../AppRootContext';

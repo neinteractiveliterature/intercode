@@ -1,5 +1,5 @@
 import { Fragment, useMemo, useContext, ReactNode } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { SortingRule } from 'react-table';
 import { DateTime } from 'luxon';
 import { notEmpty } from '@neinteractiveliterature/litform';
@@ -246,11 +246,7 @@ function EventCard({ convention, event, sortBy, canReadSchedule }: EventCardProp
             : null}
         </div>
 
-        <div
-          className="card-body"
-           
-          dangerouslySetInnerHTML={{ __html: event.short_blurb_html ?? '' }}
-        />
+        <div className="card-body" dangerouslySetInnerHTML={{ __html: event.short_blurb_html ?? '' }} />
       </div>
     </>
   );

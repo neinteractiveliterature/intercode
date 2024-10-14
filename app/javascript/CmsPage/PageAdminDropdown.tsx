@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { Link, useLocation, useNavigate } from 'react-router-dom';
+import { Link, useLocation, useNavigate } from 'react-router';
 import { useGraphQLConfirm } from '@neinteractiveliterature/litform';
 
 import MenuIcon from '../NavigationBar/MenuIcon';

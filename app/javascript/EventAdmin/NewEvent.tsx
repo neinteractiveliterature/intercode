@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { Link, useParams, useSubmit } from 'react-router-dom';
+import { Link, useParams, useSubmit } from 'react-router';
 import { ApolloError } from '@apollo/client';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 

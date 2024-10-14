@@ -5,7 +5,7 @@ import { ErrorDisplay, LoadingIndicator, useGraphQLConfirm } from '@neinteractiv
 import { InternalRefetchQueriesInclude, useMutation } from '@apollo/client';
 import RankedChoicePriorityIndicator from './RankedChoicePriorityIndicator';
 import buildEventUrl from '../buildEventUrl';
-import { Link, useRevalidator } from 'react-router-dom';
+import { Link, useRevalidator } from 'react-router';
 import { useAppDateTimeFormat } from '../../TimeUtils';
 import { DateTime } from 'luxon';
 import classNames from 'classnames';

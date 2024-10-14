@@ -4,7 +4,7 @@ import { ApolloError } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import { Link, useFetcher } from 'react-router-dom';
+import { Link, useFetcher } from 'react-router';
 import { ActionFunction, json, useNavigate } from 'react-router';
 import { client } from '../../../useIntercodeApolloClient';
 import { ChangeSignupBucketDocument } from '../mutations.generated';
