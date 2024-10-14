@@ -1,6 +1,6 @@
 import { useTranslation } from 'react-i18next';
 import { LoaderFunction, useLoaderData, useNavigate } from 'react-router';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import usePageTitle from '../usePageTitle';
 import EventProposalForm from './EventProposalForm';
 import { EventProposalQueryData, EventProposalQueryDocument, EventProposalQueryVariables } from './queries.generated';

@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { CouponInput } from 'graphqlTypes.generated';
 import { ActionFunction, redirect } from 'react-router';
 import { client } from 'useIntercodeApolloClient';
-import { Link, useFetcher } from 'react-router-dom';
+import { Link, useFetcher } from 'react-router';
 
 export const action: ActionFunction = async ({ request }) => {
   try {

@@ -1,5 +1,5 @@
 import { Suspense, useMemo, useState } from 'react';
-import { ActionFunction, Link, replace, useFetcher, useParams, useRouteLoaderData } from 'react-router-dom';
+import { ActionFunction, Link, replace, useFetcher, useParams, useRouteLoaderData } from 'react-router';
 import {
   useConfirm,
   useModal,

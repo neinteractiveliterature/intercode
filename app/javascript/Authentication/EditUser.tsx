@@ -3,7 +3,7 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { BootstrapFormInput, LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import { LoaderFunction, Navigate, useLoaderData } from 'react-router-dom';
+import { LoaderFunction, Navigate, useLoaderData } from 'react-router';
 import PasswordConfirmationInput from './PasswordConfirmationInput';
 import useAsyncFunction from '../useAsyncFunction';
 import AccountFormContent from './AccountFormContent';

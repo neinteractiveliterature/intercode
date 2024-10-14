@@ -4,7 +4,7 @@ import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { CmsVariablesQueryData } from './queries.generated';
 import { useTranslation } from 'react-i18next';
-import { useActionData, useFetcher, useNavigation } from 'react-router-dom';
+import { useActionData, useFetcher, useNavigation } from 'react-router';
 
 export type AddingVariable = Omit<CmsVariablesQueryData['cmsParent']['cmsVariables'][0], 'id'> & {
   generatedId: number;

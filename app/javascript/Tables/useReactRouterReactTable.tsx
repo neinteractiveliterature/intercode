@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router';
 import { Filters, SortingRule } from 'react-table';
 
 import { FieldFilterCodecs } from './FilterUtils';
@@ -64,8 +64,8 @@ export default function useReactRouterReactTable<RowType extends Record<string, 
 
       return {
         page: page ?? defaultState?.page ?? 0,
-        filters: filters.length > 0 ? filters : defaultState?.filters ?? [],
-        sortBy: sortBy.length > 0 ? sortBy : defaultState?.sortBy ?? [],
+        filters: filters.length > 0 ? filters : (defaultState?.filters ?? []),
+        sortBy: sortBy.length > 0 ? sortBy : (defaultState?.sortBy ?? []),
       };
     },
     [decode, defaultState],

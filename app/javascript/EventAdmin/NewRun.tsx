@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, LoaderFunction, useLoaderData, ActionFunction, redirect } from 'react-router-dom';
+import { useNavigate, LoaderFunction, useLoaderData, ActionFunction, redirect } from 'react-router';
 
 import EditRunModal, { EditingRun } from './EditRunModal';
 import { EventAdminEventsQueryData, EventAdminEventsQueryDocument, RunFieldsFragmentDoc } from './queries.generated';

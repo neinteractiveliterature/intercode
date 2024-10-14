@@ -1,4 +1,4 @@
-import { Link, useFetcher, useRouteLoaderData } from 'react-router-dom';
+import { Link, useFetcher, useRouteLoaderData } from 'react-router';
 
 import AdminNotes from '../BuiltInFormControls/AdminNotes';
 import EventProposalDisplay from './EventProposalDisplay';

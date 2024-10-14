@@ -10,7 +10,7 @@ import { ActionFunction, redirect } from 'react-router';
 import { client } from 'useIntercodeApolloClient';
 import { CreateEmailRouteDocument } from './mutations.generated';
 import { EmailRouteInput } from 'graphqlTypes.generated';
-import { useFetcher } from 'react-router-dom';
+import { useFetcher } from 'react-router';
 
 export const action: ActionFunction = async ({ request }) => {
   try {
