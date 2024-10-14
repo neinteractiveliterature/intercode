@@ -1,6 +1,6 @@
 import { useState, useMemo, Suspense, useId } from 'react';
 import * as React from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 

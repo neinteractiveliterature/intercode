@@ -3,7 +3,7 @@ import { useConfirm, ErrorDisplay, LoadingIndicator } from '@neinteractivelitera
 
 import CommitableInput from '../../BuiltInFormControls/CommitableInput';
 import { CmsVariablesQueryData } from './queries.generated';
-import { useActionData, useFetcher } from 'react-router-dom';
+import { useActionData, useFetcher } from 'react-router';
 
 export type ExistingVariableRowProps = {
   variable: CmsVariablesQueryData['cmsParent']['cmsVariables'][0];

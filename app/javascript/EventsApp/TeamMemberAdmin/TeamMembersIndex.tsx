@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Link, Outlet, useNavigate, useSubmit } from 'react-router-dom';
+import { Link, Outlet, useNavigate, useSubmit } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { ErrorDisplay, useConfirm, sortByLocaleString } from '@neinteractiveliterature/litform';
 import capitalize from 'lodash/capitalize';

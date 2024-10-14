@@ -1,4 +1,4 @@
-import { Link, LoaderFunction, useLoaderData } from 'react-router-dom';
+import { Link, LoaderFunction, useLoaderData } from 'react-router';
 
 import usePageTitle from '../usePageTitle';
 import { ReportsMenuQueryData, ReportsMenuQueryDocument } from './queries.generated';

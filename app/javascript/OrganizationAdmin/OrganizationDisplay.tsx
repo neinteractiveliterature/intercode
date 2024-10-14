@@ -1,4 +1,4 @@
-import { Link, Navigate, useFetcher, useRouteLoaderData } from 'react-router-dom';
+import { Link, Navigate, useFetcher, useRouteLoaderData } from 'react-router';
 import { ErrorDisplay, useConfirm } from '@neinteractiveliterature/litform';
 import capitalize from 'lodash/capitalize';
 

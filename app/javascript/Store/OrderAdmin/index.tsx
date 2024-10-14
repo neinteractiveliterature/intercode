@@ -17,7 +17,7 @@ import { useAppDateTimeFormat } from 'TimeUtils';
 import { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
 import { ActionFunction, json, Outlet, useNavigate } from 'react-router';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { CreateOrderDocument, CreateOrderMutationVariables } from './mutations.generated';
 import { client } from 'useIntercodeApolloClient';
 import { CreateCouponApplicationDocument } from 'Store/mutations.generated';

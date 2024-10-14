@@ -1,4 +1,4 @@
-import { LoaderFunction, useRouteLoaderData } from 'react-router-dom';
+import { LoaderFunction, useRouteLoaderData } from 'react-router';
 import keyBy from 'lodash/keyBy';
 
 import {

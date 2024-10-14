@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { RouteObject, replace, Outlet, LoaderFunction, redirect, useNavigate } from 'react-router-dom';
+import { RouteObject, replace, Outlet, LoaderFunction, redirect, useNavigate } from 'react-router';
 
 import FourOhFourPage from './FourOhFourPage';
 import { SignupAutomationMode, SignupMode, SiteMode, TicketMode } from './graphqlTypes.generated';

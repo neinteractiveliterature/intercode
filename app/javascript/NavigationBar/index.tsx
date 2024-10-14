@@ -1,7 +1,7 @@
 import { memo, useContext, useMemo, useRef, useEffect, useState } from 'react';
 import classNames from 'classnames';
 import sortBy from 'lodash/sortBy';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 import { useTranslation } from 'react-i18next';
 
 import AppRootContext, { AppRootContextValue } from '../AppRootContext';

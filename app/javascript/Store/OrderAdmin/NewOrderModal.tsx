@@ -19,7 +19,7 @@ import AppRootContext from 'AppRootContext';
 import AdminOrderForm from './AdminOrderForm';
 import AdminOrderEntriesTable from './AdminOrderEntriesTable';
 import { CreateOrderMutationVariables } from './mutations.generated';
-import { useFetcher } from 'react-router-dom';
+import { useFetcher } from 'react-router';
 import { CreateOrderActionInput } from '.';
 
 export type CreatingOrder = Omit<OrderInput, 'payment_amount'> & {

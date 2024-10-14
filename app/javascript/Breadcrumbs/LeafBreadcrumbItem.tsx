@@ -1,5 +1,5 @@
 import { ReactNode } from 'react';
-import { To } from 'react-router-dom';
+import { To } from 'react-router';
 
 import RouteActivatedBreadcrumbItem from './RouteActivatedBreadcrumbItem';
 

@@ -1,5 +1,5 @@
 import { useContext, useCallback, useRef, useId } from 'react';
-import { useFetcher } from 'react-router-dom';
+import { useFetcher } from 'react-router';
 import { useArrayBasicSortableHandlers } from '@neinteractiveliterature/litform';
 
 import { DndContext, DragOverlay } from '@dnd-kit/core';

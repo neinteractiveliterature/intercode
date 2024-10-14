@@ -1,5 +1,5 @@
 import { useContext, useMemo } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router';
 import { Column, CellProps, FilterProps } from 'react-table';
 import { useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';

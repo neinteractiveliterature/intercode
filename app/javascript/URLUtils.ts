@@ -1,4 +1,4 @@
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 import isEqual from 'lodash/isEqual';
 import fromPairs from 'lodash/fromPairs';
 
