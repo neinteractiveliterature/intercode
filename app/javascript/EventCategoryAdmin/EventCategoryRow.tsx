@@ -1,4 +1,4 @@
-import { Link, useSubmit } from 'react-router-dom';
+import { Link, useSubmit } from 'react-router';
 import { ErrorDisplay, useConfirm, ButtonWithTooltip } from '@neinteractiveliterature/litform';
 
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';

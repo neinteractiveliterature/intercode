@@ -10,7 +10,7 @@ import {
   useLoaderData,
   useNavigation,
   useSearchParams,
-} from 'react-router-dom';
+} from 'react-router';
 import { buildPageInputFromFormData } from './buildPageInput';
 import CmsPageForm from './CmsPageForm';
 import usePageTitle from '../../usePageTitle';

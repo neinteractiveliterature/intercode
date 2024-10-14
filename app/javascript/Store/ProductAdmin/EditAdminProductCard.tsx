@@ -7,7 +7,7 @@ import { EditingProduct } from './EditingProductTypes';
 import { hasRealId } from '../../GeneratedIdUtils';
 import EditProductForm from './EditProductForm';
 import { useTranslation } from 'react-i18next';
-import { useFetcher } from 'react-router-dom';
+import { useFetcher } from 'react-router';
 import { AdminProductsQueryData } from './queries.generated';
 
 export type EditAdminProductCardProps = {

@@ -1,6 +1,6 @@
 import React, { useMemo, useCallback } from 'react';
 import { ColumnDef, TableState } from '@tanstack/react-table';
-import { useLocation, useSearchParams } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router';
 import { notEmpty } from '@neinteractiveliterature/litform';
 
 export function columnVisibilityToVisibleColumnIds(columnVisibility: TableState['columnVisibility']): Set<string> {

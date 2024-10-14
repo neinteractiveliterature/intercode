@@ -9,7 +9,7 @@ import UserConProfileSelect from 'BuiltInFormControls/UserConProfileSelect';
 import EnumTypes from 'enumTypes.json';
 import { Order, OrderStatus, UserConProfile } from 'graphqlTypes.generated';
 import { Trans, useTranslation } from 'react-i18next';
-import { useFetcher } from 'react-router-dom';
+import { useFetcher } from 'react-router';
 
 const ORDER_STATUS_CHOICES = EnumTypes.OrderStatus.enumValues
   .map((enumValue) => ({ label: enumValue.name, value: enumValue.name }))

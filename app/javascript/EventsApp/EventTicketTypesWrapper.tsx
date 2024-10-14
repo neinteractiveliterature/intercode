@@ -1,5 +1,5 @@
 import { useContext, useMemo } from 'react';
-import { Outlet, useLoaderData, useParams } from 'react-router-dom';
+import { Outlet, useLoaderData, useParams } from 'react-router';
 
 import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
 import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';

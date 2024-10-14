@@ -4,7 +4,7 @@ import PermissionsPrompt from './PermissionsPrompt';
 import { OAuthAuthorizedApplicationsQueryData, OAuthAuthorizedApplicationsQueryDocument } from './queries.generated';
 import { LoaderFunction, useLoaderData } from 'react-router';
 import { client } from '../useIntercodeApolloClient';
-import { useFetcher } from 'react-router-dom';
+import { useFetcher } from 'react-router';
 
 export const loader: LoaderFunction = async () => {
   const { data } = await client.query<OAuthAuthorizedApplicationsQueryData>({

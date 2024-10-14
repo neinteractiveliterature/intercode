@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { NavLink, useParams, Navigate } from 'react-router-dom';
+import { NavLink, useParams, Navigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 
 import FormItemChangeGroup from './FormItemChangeGroup';

@@ -1,4 +1,4 @@
-import { Link, useLocation, useParams } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router';
 
 import LiquidTagDocHeader from './LiquidTagDocHeader';
 import TagDoc from './TagDoc';

@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
-import { useLocation } from 'react-router-dom';
 import { ColumnFiltersState } from '@tanstack/react-table';
+import { useLocation } from 'react-router';
 import { parseIntOrNull } from '@neinteractiveliterature/litform';
 
 import ChoiceSetFilter from '../../Tables/ChoiceSetFilter';

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ActionFunction, Link, LoaderFunction, useFetcher, useLoaderData, useMatch } from 'react-router-dom';
+import { ActionFunction, Link, LoaderFunction, SubmitTarget, useFetcher, useLoaderData, useMatch } from 'react-router';
 import md5 from 'md5';
 import { useTranslation, Trans } from 'react-i18next';
 import { BooleanInput, LoadingIndicator } from '@neinteractiveliterature/litform';
@@ -18,7 +18,6 @@ import { WithFormResponse } from '../Models/deserializeFormResponse';
 import { parseResponseErrors } from '../parseResponseErrors';
 import { client } from '../useIntercodeApolloClient';
 import { UpdateUserConProfileDocument } from '../UserConProfiles/mutations.generated';
-import { SubmitTarget } from 'react-router-dom/dist/dom';
 
 export const action: ActionFunction = async ({ request }) => {
   const profile = (await request.json()) as LoaderResult['initialUserConProfile'];

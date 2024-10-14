@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import reverse from 'lodash/reverse';
 import sortBy from 'lodash/sortBy';
-import { LoaderFunction, useLoaderData } from 'react-router-dom';
+import { LoaderFunction, useLoaderData } from 'react-router';
 
 import usePageTitle from '../usePageTitle';
 import { UserAdminQueryData, UserAdminQueryDocument } from './queries.generated';

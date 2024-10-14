@@ -1,5 +1,5 @@
 import { useState, useCallback } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 import { ChoiceSet } from '@neinteractiveliterature/litform';
 
 import { DropdownMenu } from '../../../UIComponents/DropdownMenu';

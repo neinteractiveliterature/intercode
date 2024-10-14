@@ -1,4 +1,4 @@
-import { Outlet, useRouteLoaderData } from 'react-router-dom';
+import { Outlet, useRouteLoaderData } from 'react-router';
 
 import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';

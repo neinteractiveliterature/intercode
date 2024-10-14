@@ -6,7 +6,7 @@ import {
   useNavigation,
   useRouteLoaderData,
   useSubmit,
-} from 'react-router-dom';
+} from 'react-router';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import useOrganizationRoleForm from './useOrganizationRoleForm';

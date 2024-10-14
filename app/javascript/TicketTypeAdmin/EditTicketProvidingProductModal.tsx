@@ -8,7 +8,7 @@ import EditPricingStructureModal, {
   PricingStructureModalContext,
   PricingStructureModalState,
 } from '../Store/ProductAdmin/EditPricingStructureModal';
-import { useFetcher } from 'react-router-dom';
+import { useFetcher } from 'react-router';
 import { buildProductFormData } from 'Store/buildProductInput';
 import { ApolloError } from '@apollo/client';
 

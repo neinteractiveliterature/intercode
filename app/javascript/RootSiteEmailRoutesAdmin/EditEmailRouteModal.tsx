@@ -10,7 +10,7 @@ import { ActionFunction, LoaderFunction, redirect, useLoaderData } from 'react-r
 import { client } from 'useIntercodeApolloClient';
 import { DeleteEmailRouteDocument, UpdateEmailRouteDocument } from './mutations.generated';
 import { EmailRouteInput } from 'graphqlTypes.generated';
-import { Link, useFetcher } from 'react-router-dom';
+import { Link, useFetcher } from 'react-router';
 
 export const action: ActionFunction = async ({ params: { id }, request }) => {
   try {
