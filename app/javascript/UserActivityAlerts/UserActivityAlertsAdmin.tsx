@@ -1,4 +1,4 @@
-import { useMatches, Outlet, LoaderFunction } from 'react-router-dom';
+import { useMatches, Outlet, LoaderFunction } from 'react-router';
 
 import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';

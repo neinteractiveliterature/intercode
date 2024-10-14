@@ -1,6 +1,6 @@
 import { useCallback, useContext } from 'react';
 import classNames from 'classnames';
-import { ActionFunction, json, Link, Outlet, useSubmit } from 'react-router-dom';
+import { ActionFunction, json, Link, Outlet, useSubmit } from 'react-router';
 import { Trans, useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
 import { DateTime } from 'luxon';

@@ -1,13 +1,12 @@
 import { defineConfig, Plugin, ProxyOptions, ViteDevServer } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
-import { vitePlugin as remix } from '@remix-run/dev';
+import { reactRouter } from '@react-router/dev/vite';
 import { fileURLToPath } from 'url';
-import { nodePolyfills } from 'vite-plugin-node-polyfills';
+// import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import { globalDefines } from './globalDefines.mts';
 import morgan from 'morgan';
 import { envOnlyMacros } from 'vite-env-only';
 import { proxyPaths, backendUrl } from './app/javascript/proxyConfig';
-import { appRoutes } from './app/javascript/appRoutes';
 
 export function absolutePath(relativePath: string) {
   return fileURLToPath(new URL(relativePath, import.meta.url));
@@ -41,17 +40,12 @@ export default defineConfig({
   plugins: [
     tsconfigPaths(),
     morganPlugin(),
-    nodePolyfills(),
+    // nodePolyfills(),
     envOnlyMacros(),
     !process.env.VITEST &&
-      remix({
+      reactRouter({
         appDirectory: absolutePath('./app/javascript'),
-        future: {
-          v3_fetcherPersist: true,
-          v3_relativeSplatPath: true,
-          v3_throwAbortReason: true,
-        },
-        routes: appRoutes,
+        future: {},
       }),
   ],
   ssr: {
@@ -107,7 +101,7 @@ export default defineConfig({
           i18next: ['i18next', 'react-i18next'],
           lodash: ['lodash'],
           luxon: ['luxon'],
-          reactRouter: ['react-router', 'react-router-dom'],
+          reactRouter: ['react-router'],
         },
       },
     },

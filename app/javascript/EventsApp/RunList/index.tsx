@@ -3,7 +3,7 @@ import sortBy from 'lodash/sortBy';
 import { DateTime } from 'luxon';
 import React, { RefObject, useCallback, useContext, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { useLocation, useNavigate, useParams } from 'react-router-dom';
+import { useLocation, useNavigate, useParams } from 'react-router';
 import { Waypoint } from 'react-waypoint';
 
 import AppRootContext from '../../AppRootContext';

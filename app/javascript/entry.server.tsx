@@ -1,8 +1,7 @@
 import { PassThrough } from 'node:stream';
 
-import type { EntryContext } from '@remix-run/node';
-import { createReadableStreamFromReadable } from '@remix-run/node';
-import { RemixServer } from '@remix-run/react';
+import { createReadableStreamFromReadable } from '@react-router/node';
+import { EntryContext, ServerRouter } from 'react-router';
 import { isbot } from 'isbot';
 import { renderToPipeableStream } from 'react-dom/server';
 import AuthenticityTokensManager from 'AuthenticityTokensContext';
@@ -30,7 +29,7 @@ function handleBotRequest(
 ) {
   return new Promise((resolve, reject) => {
     const { pipe, abort } = renderToPipeableStream(
-      <RemixServer context={remixContext} url={request.url} abortDelay={ABORT_DELAY} />,
+      <ServerRouter context={remixContext} url={request.url} abortDelay={ABORT_DELAY} />,
       {
         onAllReady() {
           const body = new PassThrough();
@@ -68,7 +67,7 @@ function handleBrowserRequest(
 ) {
   return new Promise((resolve, reject) => {
     const { pipe, abort } = renderToPipeableStream(
-      <RemixServer context={remixContext} url={request.url} abortDelay={ABORT_DELAY} />,
+      <ServerRouter context={remixContext} url={request.url} abortDelay={ABORT_DELAY} />,
       {
         onShellReady() {
           const body = new PassThrough();

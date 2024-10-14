@@ -6970,6 +6970,112 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@react-router/dev@npm:7.0.0-pre.1":
+  version: 7.0.0-pre.1
+  resolution: "@react-router/dev@npm:7.0.0-pre.1"
+  dependencies:
+    "@babel/core": "npm:^7.21.8"
+    "@babel/generator": "npm:^7.21.5"
+    "@babel/parser": "npm:^7.21.8"
+    "@babel/plugin-syntax-decorators": "npm:^7.22.10"
+    "@babel/plugin-syntax-jsx": "npm:^7.21.4"
+    "@babel/preset-typescript": "npm:^7.21.5"
+    "@babel/traverse": "npm:^7.23.2"
+    "@babel/types": "npm:^7.22.5"
+    "@npmcli/package-json": "npm:^4.0.1"
+    "@react-router/node": "npm:7.0.0-pre.1"
+    arg: "npm:^5.0.1"
+    babel-dead-code-elimination: "npm:^1.0.6"
+    chalk: "npm:^4.1.2"
+    chokidar: "npm:^4.0.0"
+    dedent: "npm:^1.5.3"
+    es-module-lexer: "npm:^1.3.1"
+    exit-hook: "npm:2.2.1"
+    fs-extra: "npm:^10.0.0"
+    gunzip-maybe: "npm:^1.4.2"
+    jsesc: "npm:3.0.2"
+    lodash: "npm:^4.17.21"
+    pathe: "npm:^1.1.2"
+    picocolors: "npm:^1.0.0"
+    picomatch: "npm:^2.3.1"
+    prettier: "npm:^2.7.1"
+    react-refresh: "npm:^0.14.0"
+    semver: "npm:^7.3.7"
+    set-cookie-parser: "npm:^2.6.0"
+    valibot: "npm:^0.41.0"
+    vite-node: "npm:^1.6.0"
+  peerDependencies:
+    "@react-router/serve": ^7.0.0-pre.1
+    react-router: ^7.0.0-pre.1
+    typescript: ^5.1.0
+    vite: ^5.1.0
+    wrangler: ^3.28.2
+  peerDependenciesMeta:
+    "@react-router/serve":
+      optional: true
+    typescript:
+      optional: true
+    wrangler:
+      optional: true
+  bin:
+    react-router: bin.js
+  checksum: 10c0/71e32fe1a14626c789e0b175476f8abec8043b6c1a70ed0b8c79680926abc77fbf0bcf33b056446ddfc5f81cb3292d624db5d605c082588a4a547ce7c23365c0
+  languageName: node
+  linkType: hard
+
+"@react-router/express@npm:7.0.0-pre.1":
+  version: 7.0.0-pre.1
+  resolution: "@react-router/express@npm:7.0.0-pre.1"
+  dependencies:
+    "@react-router/node": "npm:7.0.0-pre.1"
+  peerDependencies:
+    express: ^4.17.1
+    react-router: 7.0.0-pre.1
+    typescript: ^5.1.0
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 10c0/7b54b975185fb979b2e04994dcdad1b1276a14102deeb066a6669c4c0bb7d84f973e2c1ad35d2d3bbb4beacc7d44dde20317db36d24702c0871c9e699acf2d37
+  languageName: node
+  linkType: hard
+
+"@react-router/node@npm:7.0.0-pre.1":
+  version: 7.0.0-pre.1
+  resolution: "@react-router/node@npm:7.0.0-pre.1"
+  dependencies:
+    "@web3-storage/multipart-parser": "npm:^1.0.0"
+    source-map-support: "npm:^0.5.21"
+    stream-slice: "npm:^0.1.2"
+    undici: "npm:^6.19.2"
+  peerDependencies:
+    react-router: 7.0.0-pre.1
+    typescript: ^5.1.0
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 10c0/7ee6b907dae942fe601c068cfa8257b344c44c06ef093bb988e394faeb47dacfa45e182d60fe57c731506b63f93c428ff1294016ee4b63cf2054fb00e1df31a5
+  languageName: node
+  linkType: hard
+
+"@react-router/serve@npm:7.0.0-pre.1":
+  version: 7.0.0-pre.1
+  resolution: "@react-router/serve@npm:7.0.0-pre.1"
+  dependencies:
+    "@react-router/express": "npm:7.0.0-pre.1"
+    "@react-router/node": "npm:7.0.0-pre.1"
+    compression: "npm:^1.7.4"
+    express: "npm:^4.19.2"
+    get-port: "npm:5.1.1"
+    morgan: "npm:^1.10.0"
+    source-map-support: "npm:^0.5.21"
+  peerDependencies:
+    react-router: 7.0.0-pre.1
+  bin:
+    react-router-serve: bin.js
+  checksum: 10c0/603309fb0ef034e62bf6664f3d7c86c588525067d0a23fdd5a3e9e53ddae5e0037be80b59c62d0ce47b1ac72c19dcc604d33aed09091307d6ae5acd10b0f351c
+  languageName: node
+  linkType: hard
+
 "@remix-run/dev@npm:^2.12.1":
   version: 2.12.1
   resolution: "@remix-run/dev@npm:2.12.1"
@@ -7107,13 +7213,6 @@ __metadata:
   version: 1.19.2
   resolution: "@remix-run/router@npm:1.19.2"
   checksum: 10c0/ac7fc813350686705f2c29219e70e1e299d9a8e3b301e9e81f7e84f578c40c6462b590cf0d78863bac40dbc325b68c71ae070f4a1465793d1d1971b619618295
-  languageName: node
-  linkType: hard
-
-"@remix-run/router@npm:1.23.0":
-  version: 1.23.0
-  resolution: "@remix-run/router@npm:1.23.0"
-  checksum: 10c0/eaef5cb46a1e413f7d1019a75990808307e08e53a39d4cf69c339432ddc03143d725decef3d6b9b5071b898da07f72a4a57c4e73f787005fcf10162973d8d7d7
   languageName: node
   linkType: hard
 
@@ -23455,19 +23554,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-router-dom@npm:6.30.0":
-  version: 6.30.0
-  resolution: "react-router-dom@npm:6.30.0"
-  dependencies:
-    "@remix-run/router": "npm:1.23.0"
-    react-router: "npm:6.30.0"
-  peerDependencies:
-    react: ">=16.8"
-    react-dom: ">=16.8"
-  checksum: 10c0/262954ba894d6a241ceda5f61098f7d6a292d0018a6ebb9c9c67425b7deb6e59b6191a9233a03d38e287e60f7ac3702e9e84c8e20b39a6487698fe088b71e27a
-  languageName: node
-  linkType: hard
-
 "react-router-dom@npm:^5.3.4":
   version: 5.3.4
   resolution: "react-router-dom@npm:5.3.4"
@@ -23515,14 +23601,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-router@npm:6.30.0":
-  version: 6.30.0
-  resolution: "react-router@npm:6.30.0"
+"react-router@npm:7.0.0-pre.1":
+  version: 7.0.0-pre.1
+  resolution: "react-router@npm:7.0.0-pre.1"
   dependencies:
-    "@remix-run/router": "npm:1.23.0"
+    "@types/cookie": "npm:^0.6.0"
+    "@web3-storage/multipart-parser": "npm:^1.0.0"
+    cookie: "npm:^0.6.0"
+    react-router: "npm:7.0.0-pre.1"
+    set-cookie-parser: "npm:^2.6.0"
+    source-map: "npm:^0.7.3"
+    turbo-stream: "npm:2.4.0"
   peerDependencies:
-    react: ">=16.8"
-  checksum: 10c0/e6f20cf5c47ec057a057a4cfb9a55983d0a5b4b3314d20e07f0a70e59e004f51778d4dac415aee1e4e64db69cc4cd72e5acf8fd60dcf07d909895b8863b0b023
+    react: ">=18"
+    react-dom: ">=18"
+  peerDependenciesMeta:
+    react-dom:
+      optional: true
+  checksum: 10c0/cdb893bc31323c31dcdd4a58eb869e9a46eb546209771b1df4d46a962109c67c9f4976c07c0c77f88eee53b47dcc9274464317b6bf7c69fbf13fff11414e1cb4
   languageName: node
   linkType: hard
 
@@ -23572,6 +23668,15 @@ __metadata:
     "@types/react":
       optional: true
   checksum: 10c0/6d66f3bdb65e1ec79089f80314da97c9a005087a04ee034255a5de129a4c0d9fd0bf99fa7bf642781ac2dc745ca687aae3de082bd8afdd0d117bc953241e15ad
+  languageName: node
+  linkType: hard
+
+"react-table@npm:7.8.0":
+  version: 7.8.0
+  resolution: "react-table@npm:7.8.0"
+  peerDependencies:
+    react: ^16.8.3 || ^17.0.0-0 || ^18.0.0
+  checksum: 10c0/592938cb331331a4b10a67e881458ccf590c16639e2781a0329ca0803bad92991c9b9a2a3b1db1dce0de9ad325195fc5b38e1ea13813f8a55a35c94dc194757a
   languageName: node
   linkType: hard
 
@@ -24503,6 +24608,9 @@ __metadata:
     "@popperjs/core": "npm:^2.11.8"
     "@prettier/plugin-ruby": "npm:4.0.4"
     "@rails/activestorage": "npm:8.0.200"
+    "@react-router/dev": "npm:7.0.0-pre.1"
+    "@react-router/node": "npm:7.0.0-pre.1"
+    "@react-router/serve": "npm:7.0.0-pre.1"
     "@remix-run/dev": "npm:^2.12.1"
     "@remix-run/node": "npm:^2.12.1"
     "@remix-run/react": "npm:^2.12.1"
@@ -24640,9 +24748,9 @@ __metadata:
     react-i18next: "npm:15.4.1"
     react-onclickoutside: "npm:6.13.1"
     react-popper: "npm:2.3.0"
-    react-router: "npm:6.30.0"
-    react-router-dom: "npm:6.30.0"
+    react-router: "npm:7.0.0-pre.1"
     react-select: "npm:5.10.1"
+    react-table: "npm:7.8.0"
     react-test-renderer: "npm:18.3.1"
     react-transition-group: "npm:4.4.5"
     react-waypoint: "npm:10.3.0"
@@ -26958,6 +27066,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"undici@npm:^6.19.2":
+  version: 6.20.0
+  resolution: "undici@npm:6.20.0"
+  checksum: 10c0/b74a6e4dcdfc3a6e7f5eab77c24f598c5a8664091797dc4940f86e1ed27e5dc9bef390aa1ecf53f20c7ec0e8809bc3d1518a8c3c560fa5972a6a325d628765be
+  languageName: node
+  linkType: hard
+
 "unicode-canonical-property-names-ecmascript@npm:^2.0.0":
   version: 2.0.0
   resolution: "unicode-canonical-property-names-ecmascript@npm:2.0.0"
@@ -27532,6 +27647,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"valibot@npm:^0.41.0":
+  version: 0.41.0
+  resolution: "valibot@npm:0.41.0"
+  peerDependencies:
+    typescript: ">=5"
+  peerDependenciesMeta:
+    typescript:
+      optional: true
+  checksum: 10c0/60485ac1235a83b09590cfb011d0ea17f0810ebe413132380b98bf3dfac7236205e22f2ca2a4c4b356c2324e450c119a39a3753b79764e2c113bb91d46ec4598
+  languageName: node
+  linkType: hard
+
 "validate-npm-package-license@npm:^3.0.4":
   version: 3.0.4
   resolution: "validate-npm-package-license@npm:3.0.4"
@@ -27669,7 +27796,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite-node@npm:^1.2.0":
+"vite-node@npm:^1.2.0, vite-node@npm:^1.6.0":
   version: 1.6.0
   resolution: "vite-node@npm:1.6.0"
   dependencies:

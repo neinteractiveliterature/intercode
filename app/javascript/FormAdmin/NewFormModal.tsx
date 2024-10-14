@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Modal } from 'react-bootstrap4-modal';
-import { useFetcher } from 'react-router-dom';
+import { useFetcher } from 'react-router';
 import { ApolloError } from '@apollo/client';
 import { BootstrapFormInput, BootstrapFormSelect, ErrorDisplay } from '@neinteractiveliterature/litform';
 

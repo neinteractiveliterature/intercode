@@ -1,5 +1,5 @@
 import { ProviderStack } from 'AppWrapper';
-import { Links, Meta, Scripts, ScrollRestoration } from '@remix-run/react';
+import { Links, Meta, Scripts, ScrollRestoration } from 'react-router';
 import { LoaderFunction, useLoaderData } from 'react-router';
 import { buildBrowserApolloClient } from 'useIntercodeApolloClient';
 import { AppRootContentQueryDocument } from 'appRootQueries.generated';

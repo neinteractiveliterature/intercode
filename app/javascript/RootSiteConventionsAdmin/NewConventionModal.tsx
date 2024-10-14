@@ -1,7 +1,7 @@
 import { useState, useMemo } from 'react';
 import { Modal } from 'react-bootstrap4-modal';
 import { ApolloError } from '@apollo/client';
-import { Link, useFetcher } from 'react-router-dom';
+import { Link, useFetcher } from 'react-router';
 import { DateTime } from 'luxon';
 import {
   BootstrapFormInput,

@@ -14,7 +14,7 @@ import {
   useNavigate,
   useNavigation,
   useParams,
-} from 'react-router-dom';
+} from 'react-router';
 import { singleTeamMemberLoader, SingleTeamMemberLoaderResult } from './loader';
 import { client } from '../../useIntercodeApolloClient';
 import { ProvideEventTicketDocument } from './mutations.generated';

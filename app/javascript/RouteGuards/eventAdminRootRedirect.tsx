@@ -1,4 +1,4 @@
-import { redirect } from '@remix-run/react';
+import { redirect } from 'react-router';
 import buildEventCategoryUrl from 'EventAdmin/buildEventCategoryUrl';
 import { EventAdminEventsQueryDocument } from 'EventAdmin/queries.generated';
 import { SiteMode } from 'graphqlTypes.generated';

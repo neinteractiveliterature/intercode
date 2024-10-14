@@ -1,5 +1,5 @@
 import { useState, useCallback, useContext, useMemo } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import sortBy from 'lodash/sortBy';
 import { DateTime, Duration } from 'luxon';
 import { TFunction } from 'i18next';

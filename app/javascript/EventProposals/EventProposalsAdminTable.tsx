@@ -1,5 +1,5 @@
-import { Link, useNavigate } from 'react-router-dom';
 import { CellContext, Column, createColumnHelper } from '@tanstack/react-table';
+import { Link, useNavigate } from 'react-router';
 
 import ChoiceSetFilter from '../Tables/ChoiceSetFilter';
 import { buildFieldFilterCodecs, FilterCodecs } from '../Tables/FilterUtils';

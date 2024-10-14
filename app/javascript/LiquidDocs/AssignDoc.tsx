@@ -1,4 +1,4 @@
-import { Link, useLocation, useParams } from 'react-router-dom';
+import { Link, useLocation, useParams } from 'react-router';
 
 import AssignDocHeader from './AssignDocHeader';
 import findClass from './findClass';

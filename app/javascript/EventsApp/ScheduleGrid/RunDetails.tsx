@@ -1,6 +1,6 @@
 import { useContext, useMemo } from 'react';
 import * as React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { Placement } from '@popperjs/core';
 import { usePopper } from 'react-popper';
 import { useTranslation } from 'react-i18next';

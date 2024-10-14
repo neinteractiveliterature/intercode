@@ -8,7 +8,7 @@ import { DateTime } from 'luxon';
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
 import { useAppDateTimeFormat } from '../TimeUtils';
 import { useGraphQLConfirm } from '@neinteractiveliterature/litform';
-import { useFetcher } from 'react-router-dom';
+import { useFetcher } from 'react-router';
 import CreateNewSignupRoundForm from './CreateNewSignupRoundForm';
 
 export type SignupRoundScheduleTableProps = {

@@ -4,7 +4,7 @@ import usePageTitle from '../usePageTitle';
 import { EventAdminEventsQueryData, EventAdminEventsQueryDocument } from './queries.generated';
 import { LoaderFunction, useLoaderData } from 'react-router';
 import { client } from '../useIntercodeApolloClient';
-import { useSubmit } from 'react-router-dom';
+import { useSubmit } from 'react-router';
 
 export const loader: LoaderFunction = async () => {
   const { data } = await client.query({ query: EventAdminEventsQueryDocument });

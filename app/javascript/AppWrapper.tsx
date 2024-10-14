@@ -1,7 +1,7 @@
 import { Suspense, useCallback, useRef, useEffect, ReactNode, useState, useMemo } from 'react';
 import * as React from 'react';
 import { DataProxy } from '@apollo/client';
-import { Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router';
 import { i18n } from 'i18next';
 import { I18nextProvider } from 'react-i18next';
 import {

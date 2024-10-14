@@ -1,7 +1,7 @@
 import { Suspense, useMemo, useState } from 'react';
 import { MockedProvider, MockedProviderProps } from '@apollo/client/testing';
 import { render, queries, Queries, RenderOptions, RenderResult, waitFor } from '@testing-library/react';
-import { createMemoryRouter, RouterProvider } from 'react-router-dom';
+import { createMemoryRouter, RouterProvider } from 'react-router';
 import { i18n } from 'i18next';
 import { I18nextProvider } from 'react-i18next';
 import type { Stripe } from '@stripe/stripe-js';

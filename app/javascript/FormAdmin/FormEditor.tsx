@@ -9,7 +9,7 @@ import {
   useFetcher,
   useLoaderData,
   useParams,
-} from 'react-router-dom';
+} from 'react-router';
 import sortBy from 'lodash/sortBy';
 import flatMap from 'lodash/flatMap';
 import { notEmpty } from '@neinteractiveliterature/litform';
