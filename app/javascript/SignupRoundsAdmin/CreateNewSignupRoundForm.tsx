@@ -3,7 +3,7 @@ import { useContext, useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import AppRootContext from '../AppRootContext';
 import { MaximumEventSignupsValue } from '../SignupRoundUtils';
-import { useFetcher } from 'react-router-dom';
+import { useFetcher } from 'react-router';
 import { ErrorDisplay, FormGroupWithLabel } from '@neinteractiveliterature/litform';
 import DateTimeInput from '../BuiltInFormControls/DateTimeInput';
 import MaximumEventSignupsInput from './MaximumEventSignupsInput';

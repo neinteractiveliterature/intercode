@@ -1,4 +1,4 @@
-import { LoaderFunction, useRouteLoaderData } from 'react-router-dom';
+import { LoaderFunction, useRouteLoaderData } from 'react-router';
 import { TeamMembersQueryData, TeamMembersQueryDocument } from './queries.generated';
 import { client } from '../../useIntercodeApolloClient';
 import { NamedRoute } from '../../appRoutes';

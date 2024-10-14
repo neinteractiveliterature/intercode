@@ -1,5 +1,5 @@
 import { useId, useState } from 'react';
-import { ActionFunction, Form, redirect, useNavigation } from 'react-router-dom';
+import { ActionFunction, Form, redirect, useNavigation } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 import capitalize from 'lodash/capitalize';

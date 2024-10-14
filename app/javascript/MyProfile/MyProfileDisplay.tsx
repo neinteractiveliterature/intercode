@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import { Link, LoaderFunction, useLoaderData } from 'react-router-dom';
+import { Link, LoaderFunction, useLoaderData } from 'react-router';
 import { useTranslation, Trans } from 'react-i18next';
 
 import UserConProfileSignupsCard from '../EventsApp/SignupAdmin/UserConProfileSignupsCard';

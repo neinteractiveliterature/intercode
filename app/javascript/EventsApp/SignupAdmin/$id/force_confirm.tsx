@@ -3,7 +3,7 @@ import { client } from '../../../useIntercodeApolloClient';
 import { ForceConfirmSignupDocument } from '../mutations.generated';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Link, useFetcher } from 'react-router-dom';
+import { Link, useFetcher } from 'react-router';
 import { useSingleSignupLoader } from '../loaders';
 import BucketInput from '../BucketInput';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';

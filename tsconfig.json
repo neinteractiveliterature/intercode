@@ -16,7 +16,7 @@
     "maxNodeModuleJsDepth": 10,
     "baseUrl": "./app/javascript",
     "plugins": [{ "name": "typescript-plugin-css-modules" }],
-    "types": ["vitest/globals", "vite/client", "@remix-run/node"]
+    "types": ["vitest/globals", "vite/client", "@react-router/node"]
   },
   "include": [
     "./app/javascript/",

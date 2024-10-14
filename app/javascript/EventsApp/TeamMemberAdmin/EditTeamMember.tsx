@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ActionFunction, Form, redirect, useLoaderData, useNavigation } from 'react-router-dom';
+import { ActionFunction, Form, redirect, useLoaderData, useNavigation } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import capitalize from 'lodash/capitalize';
 

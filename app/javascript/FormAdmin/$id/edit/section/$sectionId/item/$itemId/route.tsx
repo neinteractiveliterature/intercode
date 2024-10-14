@@ -1,6 +1,6 @@
 import { useContext, useMemo, useState, useCallback } from 'react';
 import { useApolloClient, ApolloError } from '@apollo/client';
-import { ActionFunction, redirect, useFetcher, useParams } from 'react-router-dom';
+import { ActionFunction, redirect, useFetcher, useParams } from 'react-router';
 // TODO: uncomment this when re-adding Prompt support below
 // import isEqual from 'lodash/isEqual';
 import { useDebouncedState, ErrorDisplay } from '@neinteractiveliterature/litform';

@@ -1,5 +1,5 @@
 import { useMemo, useEffect, Suspense, useRef } from 'react';
-import { useNavigate, useLocation, LoaderFunction, useLoaderData } from 'react-router-dom';
+import { useNavigate, useLocation, LoaderFunction, useLoaderData } from 'react-router';
 
 import usePageTitle from '../usePageTitle';
 import { lazyWithAppEntrypointHeadersCheck } from '../checkAppEntrypointHeadersMatch';

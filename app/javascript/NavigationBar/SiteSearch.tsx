@@ -2,7 +2,7 @@ import { useCallback, useEffect, useRef, useState, useMemo } from 'react';
 import { components, DropdownIndicatorProps, GroupBase, MenuProps } from 'react-select';
 import AsyncSelect from 'react-select/async';
 import debounce from 'debounce-promise';
-import { useNavigate } from 'react-router-dom';
+import { useNavigate } from 'react-router';
 import { CSSTransition } from 'react-transition-group';
 import { Search, ExactWordIndexStrategy, StemmingTokenizer, SimpleTokenizer } from 'js-search';
 import { stemmer } from 'porter-stemmer';

@@ -1,4 +1,4 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router';
 import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';

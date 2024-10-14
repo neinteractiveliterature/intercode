@@ -8,7 +8,7 @@ import usePageTitle from '../usePageTitle';
 import { RootSiteAdminQueryData, RootSiteAdminQueryDocument } from './queries.generated';
 import { ActionFunction, json, LoaderFunction, useActionData, useLoaderData, useNavigation } from 'react-router';
 import { client } from '../useIntercodeApolloClient';
-import { Form } from 'react-router-dom';
+import { Form } from 'react-router';
 import { UpdateRootSiteDocument } from './mutations.generated';
 
 export const action: ActionFunction = async ({ request }) => {

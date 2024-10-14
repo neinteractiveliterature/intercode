@@ -1,4 +1,4 @@
-import { DefineRoutesFunction } from '@react-router/dev/dist/config/routes';
+import { index, layout, route } from '@react-router/dev/routes';
 
 export enum NamedRoute {
   AdminEditEventProposal = 'AdminEditEventProposal',
@@ -56,24 +56,20 @@ export enum NamedRoute {
 
 export type RouteName = keyof typeof NamedRoute & string;
 
-export const appRoutes = (defineRoutes: DefineRoutesFunction) => {
-  return defineRoutes((route) => {
-    route(undefined, 'AppRoot.tsx', () => {
-      // TODO Form editor routes
-      // TODO Liquid docs routes
-      route(undefined, 'AppRootLayout.tsx', () => {
-        route(undefined, 'NonCMSPageWrapper.tsx', () => {
-          route(undefined, 'RouteGuards/MultiEventConventionRouteGuard.tsx', () => {});
-          route('events', 'EventsApp/route.tsx', () => {
-            route(':eventId', 'EventsApp/$eventId.tsx', { id: NamedRoute.Event }, () => {
-              route(undefined);
-            });
-          });
-        });
-        route('/pages/*', 'CmsPage/index.tsx');
-        route(undefined, 'CmsPage/index.tsx', { index: true, id: NamedRoute.RootPage });
-        route('*', 'FourOhFourPage.tsx');
-      });
-    });
-  });
-};
+export const routes = [
+  layout('AppRoot.tsx', [
+    // TODO Form editor routes
+    // TODO Liquid docs routes
+    layout('AppRootLayout.tsx', [
+      layout('NonCMSPageWrapper.tsx', [
+        layout('RouteGuards/MultiEventConventionRouteGuard.tsx', []),
+        route('events', 'EventsApp/route.tsx', [
+          route(':eventId', 'EventsApp/$eventId.tsx', { id: NamedRoute.Event }, []),
+        ]),
+      ]),
+      route('/pages/*', 'CmsPage/index.tsx'),
+      index('CmsPage/index.tsx', { id: NamedRoute.RootPage }),
+      route('*', 'FourOhFourPage.tsx'),
+    ]),
+  ]),
+];

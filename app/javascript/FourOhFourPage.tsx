@@ -1,4 +1,4 @@
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 import { Trans } from 'react-i18next';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any

@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Link, useParams, useSubmit } from 'react-router-dom';
+import { Link, useParams, useSubmit } from 'react-router';
 import classnames from 'classnames';
 import { useConfirm, ButtonWithTooltip, ErrorDisplay } from '@neinteractiveliterature/litform';
 import { useSortable } from '@dnd-kit/sortable';
