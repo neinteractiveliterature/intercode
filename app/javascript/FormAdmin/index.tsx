@@ -1,4 +1,4 @@
-import { Outlet } from 'react-router-dom';
+import { Outlet } from 'react-router';
 
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 import { Suspense } from 'react';

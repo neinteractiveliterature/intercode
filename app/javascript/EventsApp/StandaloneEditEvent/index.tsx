@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react';
-import { LoaderFunction, useFetcher, useLoaderData, useNavigate } from 'react-router-dom';
+import { LoaderFunction, useFetcher, useLoaderData, useNavigate } from 'react-router';
 
 import useEventForm, { EventForm } from '../../EventAdmin/useEventForm';
 import EditEvent from '../../BuiltInForms/EditEvent';

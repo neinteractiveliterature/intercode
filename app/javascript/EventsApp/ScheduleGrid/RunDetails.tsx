@@ -1,6 +1,6 @@
 import { useContext, useMemo } from 'react';
 import * as React from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { useApolloClient } from '@apollo/client';
 import { Placement } from '@popperjs/core';
 import { usePopper } from 'react-popper';
@@ -193,11 +193,7 @@ const RunDetails = React.forwardRef<HTMLDivElement, RunDetailsProps>(function Ru
             <>{t('schedule.goToEvent')} &raquo;</>
           </Link>
 
-          <div
-            className="small"
-             
-            dangerouslySetInnerHTML={{ __html: event.short_blurb_html ?? '' }}
-          />
+          <div className="small" dangerouslySetInnerHTML={{ __html: event.short_blurb_html ?? '' }} />
         </div>
       </div>
     </div>

@@ -1,5 +1,5 @@
 import { Suspense, useMemo } from 'react';
-import { useParams, Outlet } from 'react-router-dom';
+import { useParams, Outlet } from 'react-router';
 import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
 import { useTeamMembersLoader } from './loader';

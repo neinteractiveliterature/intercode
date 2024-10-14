@@ -10,7 +10,7 @@ import { RoomsAdminQueryData, RoomsAdminQueryDocument } from './queries.generate
 import { useTranslation } from 'react-i18next';
 import { ActionFunction, LoaderFunction, useActionData, useLoaderData } from 'react-router';
 import { client } from '../useIntercodeApolloClient';
-import { useSubmit } from 'react-router-dom';
+import { useSubmit } from 'react-router';
 import { CreateRoomDocument } from './mutations.generated';
 
 export const action: ActionFunction = async ({ request }) => {

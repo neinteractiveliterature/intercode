@@ -1,5 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 import { Filters } from 'react-table';
 import { parseIntOrNull } from '@neinteractiveliterature/litform';
 

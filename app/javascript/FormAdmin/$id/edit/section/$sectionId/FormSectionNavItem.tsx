@@ -1,4 +1,4 @@
-import { NavLink, useParams, useSubmit } from 'react-router-dom';
+import { NavLink, useParams, useSubmit } from 'react-router';
 import { useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { useSortable } from '@dnd-kit/sortable';

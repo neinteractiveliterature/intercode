@@ -5,7 +5,7 @@ import AdminProductVariantsTable from './AdminProductVariantsTable';
 import { EditingProductWithRealId } from './EditingProductTypes';
 import { useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
-import { useFetcher } from 'react-router-dom';
+import { useFetcher } from 'react-router';
 import { AdminPricingStructureDescription } from 'Store/describePricingStructure';
 import { AdminProductsQueryData } from './queries.generated';
 

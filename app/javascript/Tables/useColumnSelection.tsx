@@ -1,7 +1,7 @@
 import { useMemo, useCallback } from 'react';
 import { Column } from 'react-table';
 import uniq from 'lodash/uniq';
-import { useLocation, useSearchParams } from 'react-router-dom';
+import { useLocation, useSearchParams } from 'react-router';
 import { notEmpty } from '@neinteractiveliterature/litform';
 
 export type UseColumnSelectionOptions<RowType extends Record<string, unknown>> = {

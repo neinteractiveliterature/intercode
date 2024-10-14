@@ -1,5 +1,5 @@
 import { ApolloError } from '@apollo/client';
-import { ActionFunction, LoaderFunction, redirect, useFetcher, useLoaderData } from 'react-router-dom';
+import { ActionFunction, LoaderFunction, redirect, useFetcher, useLoaderData } from 'react-router';
 import { useTabs, TabList, TabBody, notEmpty, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';

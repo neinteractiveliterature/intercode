@@ -11,7 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
 import { useCallback } from 'react';
 import { Outlet, useNavigate } from 'react-router';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 type CouponType = AdminCouponsQueryData['convention']['coupons_paginated']['entries'][0];
 
