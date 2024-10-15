@@ -446,7 +446,7 @@ GEM
       activesupport (>= 3.0.0)
     racc (1.8.1)
     racc (1.8.1-java)
-    rack (2.2.9)
+    rack (2.2.10)
     rack-mini-profiler (3.3.1)
       rack (>= 1.2.0)
     rack-session (1.0.2)
