@@ -1,11 +1,12 @@
 import { useMemo, useEffect, Suspense, useRef } from 'react';
-import { useNavigate, useLocation, LoaderFunction, useLoaderData } from 'react-router';
+import { useNavigate, useLocation } from 'react-router';
 
 import usePageTitle from '../usePageTitle';
 import { lazyWithAppEntrypointHeadersCheck } from '../checkAppEntrypointHeadersMatch';
 import { parseCmsContent } from '../parseCmsContent';
 import { CmsPageQueryData, CmsPageQueryDocument, CmsPageQueryVariables } from './queries.generated';
 import { buildServerApolloClient } from '../serverApolloClient.server';
+import * as Route from './+types.index';
 
 const PageAdminDropdown = lazyWithAppEntrypointHeadersCheck(() => import('./PageAdminDropdown'));
 
@@ -14,7 +15,7 @@ export type CmsPageProps = {
   rootPage?: boolean;
 };
 
-export const loader: LoaderFunction = async ({ request }) => {
+export const loader = async ({ request }: Route.LoaderArgs) => {
   const client = buildServerApolloClient(request);
   const slug = new URL(request.url).pathname.replace(/^\/pages\//, '').replace(/\/$/, '');
   let variables: CmsPageQueryVariables;
@@ -30,8 +31,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   return data;
 };
 
-function CmsPage(): JSX.Element {
-  const data = useLoaderData() as CmsPageQueryData;
+function CmsPage({ loaderData: data }: Route.ComponentProps): JSX.Element {
   const navigate = useNavigate();
   const location = useLocation();
   const lastHash = useRef('');
