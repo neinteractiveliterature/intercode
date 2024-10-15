@@ -1,5 +1,5 @@
 import { useMemo, useCallback, useContext } from 'react';
-import { ApolloCache } from '@apollo/client';
+import { ApolloCache, useApolloClient } from '@apollo/client';
 import { useTranslation, Trans } from 'react-i18next';
 import { useModal, useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -18,7 +18,6 @@ import {
   WithdrawMySignupDocument,
   WithdrawSignupRequestDocument,
 } from './mutations.generated';
-import { client } from '../../useIntercodeApolloClient';
 import { useRevalidator } from 'react-router';
 
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -109,6 +108,7 @@ function EventPageRunCard({
   const mySignup = run.my_signups.find((signup) => signup.state !== 'withdrawn');
   const myPendingSignupRequest = run.my_signup_requests.find((signupRequest) => signupRequest.state === 'pending');
   const revalidator = useRevalidator();
+  const client = useApolloClient();
 
   const currentRound = useMemo(() => {
     const parsedRounds = parseSignupRounds(signupRounds);

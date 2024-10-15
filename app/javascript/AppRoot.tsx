@@ -1,5 +1,5 @@
 import { Suspense, useMemo, useState, useEffect, useContext } from 'react';
-import { useLocation, useNavigate, useLoaderData, Outlet, useNavigation, LoaderFunction } from 'react-router';
+import { useLocation, useNavigate, Outlet, useNavigation } from 'react-router';
 import { Settings } from 'luxon';
 import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
@@ -16,8 +16,9 @@ import { reloadOnAppEntrypointHeadersMismatch } from './checkAppEntrypointHeader
 import { initErrorReporting } from 'ErrorReporting';
 import RouteErrorBoundary from 'RouteErrorBoundary';
 import { buildServerApolloClient } from 'serverApolloClient.server';
+import * as Route from './+types.AppRoot';
 
-export const loader: LoaderFunction = async ({ request }) => {
+export const loader = async ({ request }: Route.LoaderArgs) => {
   const client = buildServerApolloClient(request);
   const { data } = await client.query({ query: AppRootQueryDocument });
   return data;
@@ -57,10 +58,9 @@ export function buildAppRootContextValue(data: AppRootQueryData): AppRootContext
   };
 }
 
-function AppRoot(): JSX.Element {
+function AppRoot({ loaderData: data }: Route.ComponentProps): JSX.Element {
   const location = useLocation();
   const navigate = useNavigate();
-  const data = useLoaderData() as AppRootQueryData;
   const authenticationModal = useContext(AuthenticationModalContext);
   const navigation = useNavigation();
 
