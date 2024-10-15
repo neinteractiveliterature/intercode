@@ -3,7 +3,7 @@ import { useLocation, useNavigate, useLoaderData, Outlet, useNavigation, LoaderF
 import { Settings } from 'luxon';
 import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
-import { AppRootQueryData } from './appRootQueries.generated';
+import { AppRootQueryData, AppRootQueryDocument } from './appRootQueries.generated';
 import AppRootContext, { AppRootContextValue } from './AppRootContext';
 import { timezoneNameForConvention } from './TimeUtils';
 import getI18n from './setupI18Next';
@@ -16,6 +16,15 @@ import { reloadOnAppEntrypointHeadersMismatch } from './checkAppEntrypointHeader
 import { initErrorReporting } from 'ErrorReporting';
 import RouteErrorBoundary from 'RouteErrorBoundary';
 import { buildServerApolloClient } from 'serverApolloClient.server';
+import * as Route from './+types.AppRoot';
+
+export const loader = async ({ request }: Route.LoaderArgs) => {
+  const client = buildServerApolloClient(request);
+  const { data } = await client.query({ query: AppRootQueryDocument });
+  return data;
+};
+
+export const errorElement = RouteErrorBoundary;
 
 export function buildAppRootContextValue(
   data: AppRootQueryData,
@@ -53,10 +62,9 @@ export function buildAppRootContextValue(
   };
 }
 
-function AppRoot(): JSX.Element {
+function AppRoot({ loaderData: data }: Route.ComponentProps): JSX.Element {
   const location = useLocation();
   const navigate = useNavigate();
-  const data = useLoaderData() as AppRootQueryData;
   const authenticationModal = useContext(AuthenticationModalContext);
   const navigation = useNavigation();
   const navigationBarRef = useRef<HTMLElement>(null);

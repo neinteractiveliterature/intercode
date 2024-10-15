@@ -15,13 +15,18 @@
     "skipLibCheck": true,
     "maxNodeModuleJsDepth": 10,
     "baseUrl": "./app/javascript",
-    "plugins": [{ "name": "typescript-plugin-css-modules" }],
-    "types": ["vitest/globals", "vite/client", "@react-router/node"]
+    "paths": {
+      "~/*": ["./app/*"]
+    },
+    "rootDirs": ["./app/javascript", "./.react-router/types/app"],
+    "types": ["vitest/globals", "vite/client", "@react-router/node"],
+    "plugins": [{ "name": "typescript-plugin-css-modules" }, { "name": "@react-router/dev" }]
   },
   "include": [
     "./app/javascript/",
     "./script",
     "./test/javascript/",
+    ".react-router/types/**/*",
     "buildTimezoneData.js",
     "graphql.config.js",
     "i18next-parser-english.config.cjs",
