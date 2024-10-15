@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
-import { LoaderFunction, useLoaderData } from 'react-router';
 import { CMS_COMPONENT_MAP, parseCmsContent } from './parseCmsContent';
 import OutletWithLoading from './OutletWithLoading';
 import NavigationBar from './NavigationBar';
-import { AppRootLayoutQueryData, AppRootLayoutQueryDocument } from './appRootQueries.generated';
+import { AppRootLayoutQueryDocument } from './appRootQueries.generated';
 import RouteErrorBoundary from 'RouteErrorBoundary';
 import { buildServerApolloClient } from 'serverApolloClient.server';
+import * as Route from './+types.AppRootLayout';
 
 // Avoid unnecessary layout checks when moving between pages that can't change layout
 export function normalizePathForLayout(path: string) {
@@ -24,7 +24,7 @@ export function normalizePathForLayout(path: string) {
   return '/non_cms_path'; // arbitrary path that's not a CMS page
 }
 
-export const loader: LoaderFunction = async ({ request }) => {
+export const loader = async ({ request }: Route.LoaderArgs) => {
   const client = buildServerApolloClient(request);
   const url = new URL(request.url);
   const { data } = await client.query({
@@ -36,10 +36,9 @@ export const loader: LoaderFunction = async ({ request }) => {
 
 export const errorElement = RouteErrorBoundary;
 
-function AppRootLayout() {
+function AppRootLayout({ loaderData: data }: Route.ComponentProps) {
   const [cachedCmsLayoutId, setCachedCmsLayoutId] = useState<string>();
   const [layoutChanged, setLayoutChanged] = useState(false);
-  const data = useLoaderData() as AppRootLayoutQueryData;
 
   const parsedCmsContent = useMemo(() => {
     return parseCmsContent(data.cmsParentByRequestHost.effectiveCmsLayout.content_html ?? '', {
@@ -49,8 +48,6 @@ function AppRootLayout() {
       NavigationBar,
     });
   }, [data.cmsParentByRequestHost.effectiveCmsLayout.content_html]);
-
-  console.log(parsedCmsContent.bodyComponents);
 
   useEffect(() => {
     if (cachedCmsLayoutId !== data.cmsParentByRequestHost.effectiveCmsLayout.id) {
