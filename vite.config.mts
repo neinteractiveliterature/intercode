@@ -6,7 +6,7 @@ import { fileURLToPath } from 'url';
 import { globalDefines } from './globalDefines.mts';
 import morgan from 'morgan';
 import { envOnlyMacros } from 'vite-env-only';
-import { proxyPaths, backendUrl } from './app/javascript/proxyConfig';
+import { proxyPaths, getBackendUrl } from './app/javascript/proxyConfig';
 
 export function absolutePath(relativePath: string) {
   return fileURLToPath(new URL(relativePath, import.meta.url));
@@ -25,6 +25,13 @@ function morganPlugin(): Plugin {
 }
 
 function getProxyConfig() {
+  let backendUrl: URL;
+  try {
+    backendUrl = getBackendUrl();
+  } catch {
+    return undefined;
+  }
+
   return [...proxyPaths].reduce<Record<string, ProxyOptions>>(
     (memo, path) => ({
       ...memo,
@@ -74,7 +81,6 @@ export default defineConfig({
       // hopefully can remove this eventually
       treeshake: false,
       input: {
-        application: absolutePath('./app/javascript/packs/applicationEntry.ts'),
         'application-styles': absolutePath('./app/javascript/packs/applicationStyles.ts'),
         ...(process.env.NODE_ENV === 'production'
           ? {}
@@ -131,9 +137,6 @@ export default defineConfig({
       key: absolutePath('./dev_certificate.key'),
       cert: absolutePath('./dev_certificate.crt'),
       ca: absolutePath('./dev_ca.crt'),
-    },
-    warmup: {
-      clientFiles: [absolutePath('./app/javascript/packs/applicationEntry.ts')],
     },
     proxy: getProxyConfig(),
   },
