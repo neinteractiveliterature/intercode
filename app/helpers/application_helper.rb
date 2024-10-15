@@ -27,10 +27,6 @@ module ApplicationHelper
       end
   end
 
-  def application_entry_path
-    Rails.env.development? ? "/app/javascript/packs/applicationEntry.ts" : "/packs/application.js"
-  end
-
   def url_with_possible_host(path, host)
     return path if host.blank?
 

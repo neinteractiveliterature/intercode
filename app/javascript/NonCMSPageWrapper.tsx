@@ -1,6 +1,6 @@
 import { Outlet } from 'react-router';
 
-export function NonCMSPageWrapper() {
+export default function NonCMSPageWrapper() {
   return (
     <div className="non-cms-page">
       <Outlet />

@@ -64,7 +64,11 @@ export const routes = [
       layout('NonCMSPageWrapper.tsx', [
         layout('RouteGuards/MultiEventConventionRouteGuard.tsx', []),
         route('events', 'EventsApp/route.tsx', [
-          route(':eventId', 'EventsApp/$eventId.tsx', { id: NamedRoute.Event }, []),
+          route(':eventId', 'EventsApp/$eventId.tsx', { id: NamedRoute.Event }, [
+            layout('RouteGuards/EventPageGuard.tsx', [
+              index('EventsApp/EventPage/index.tsx', { id: NamedRoute.EventPage }),
+            ]),
+          ]),
         ]),
       ]),
       route('/pages/*', 'CmsPage/index.tsx'),

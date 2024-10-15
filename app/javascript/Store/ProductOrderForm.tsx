@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { ApolloError, useSuspenseQuery } from '@apollo/client';
+import { ApolloError, useApolloClient, useSuspenseQuery } from '@apollo/client';
 import {
   LoadingIndicator,
   ErrorDisplay,
@@ -16,7 +16,6 @@ import { Money, PayWhatYouWantValue, PricingStrategy } from '../graphqlTypes.gen
 import { Trans, useTranslation } from 'react-i18next';
 import MoneyInput from './MoneyInput';
 import buildMoneyInput from './buildMoneyInput';
-import { client } from '../useIntercodeApolloClient';
 import { PayWhatYouWantRangeDescription } from './describePricingStructure';
 import {
   AddOrderEntryToCurrentPendingOrderDocument,
@@ -44,6 +43,7 @@ export default function ProductOrderForm({ productId, onAddedToCart, runId }: Pr
   const payWhatYouWantValue =
     product.pricing_structure.value.__typename === 'PayWhatYouWantValue' ? product.pricing_structure.value : undefined;
   const confirm = useConfirm();
+  const client = useApolloClient();
 
   const dataComplete = useMemo(
     () =>

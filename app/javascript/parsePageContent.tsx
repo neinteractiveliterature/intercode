@@ -77,8 +77,6 @@ export function ScriptTag({ url, content, type }: ScriptTagProps) {
       script.textContent = content;
     }
 
-    console.log({ url, content });
-
     const originalSpan = ref.current;
     ref.current.replaceWith(script);
 
