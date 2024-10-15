@@ -11,17 +11,6 @@
     window.rollbarClientAccessToken = <%=raw ENV['ROLLBAR_CLIENT_ACCESS_TOKEN'].to_json %>;
   <% end -%>
 </script>
-<% if Rails.env.development? %>
-  <script type="module">
-    import RefreshRuntime from <%=raw url_with_possible_host("/@react-refresh", ENV['ASSETS_HOST']).to_json %>
-    RefreshRuntime.injectIntoGlobalHook(window)
-    window.$RefreshReg$ = () => {}
-    window.$RefreshSig$ = () => (type) => type
-    window.__vite_plugin_react_preamble_installed__ = true
-  </script>
-  <%= javascript_include_tag url_with_possible_host("/@vite/client", ENV['ASSETS_HOST']), type: 'module' %>
-<% end %>
-<%= javascript_include_tag url_with_possible_host(application_entry_path, ENV['ASSETS_HOST']), defer: true, type: 'module' %>
 <meta content="width=device-width, initial-scale=1" name="viewport"/>
 <meta property="og:url" content="<%= request.url %>">
 <% if convention&.open_graph_image&.attachment -%>

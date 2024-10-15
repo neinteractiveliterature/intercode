@@ -1,2 +1,10 @@
 export const proxyPaths = new Set(['/graphql', '/authenticity_tokens']);
-export const backendUrl = new URL('/', process.env.INTERCODE_BACKEND);
+
+let backendUrl: URL | undefined;
+export function getBackendUrl() {
+  if (!backendUrl) {
+    backendUrl = new URL('/', process.env.INTERCODE_BACKEND);
+  }
+
+  return backendUrl;
+}
