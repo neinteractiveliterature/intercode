@@ -110,8 +110,8 @@ function RecurringEventSection({ event, convention }: RecurringEventSectionProps
         </div>
 
         <div>
-          <Link className="btn btn-outline-primary" to={`/admin_events/${event.id}/edit`}>
-            Edit
+          <Link className="btn btn-outline-primary" to={`./events/${event.id}/edit`}>
+            {t('buttons.edit')}
           </Link>
         </div>
       </div>
