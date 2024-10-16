@@ -175,7 +175,7 @@
     "@rollup/plugin-swc": "^0.4.0",
     "@swc/core": "^1.7.26",
     "@testing-library/dom": "^10.1.0",
-    "@testing-library/jest-dom": "6.5.0",
+    "@testing-library/jest-dom": "6.6.1",
     "@testing-library/react-hooks": "8.0.1",
     "@testing-library/user-event": "^14.5.2",
     "@types/bootstrap": "5.2.10",
