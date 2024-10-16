@@ -79,27 +79,33 @@ function ProspectiveRunScheduleEventRun({
 
     return schedule.getEvent(run.event_id);
   }, [schedule, run]);
+  const runIsProspectiveRun = useMemo(() => isProspectiveRun(run), [run]);
 
   const runStyle = useMemo(
     () =>
       getRunStyle({
         event: event ?? {},
         eventCategory: convention.event_categories.find((c) => c.id === event?.event_category.id) ?? {},
-        signupStatus: isProspectiveRun(run) ? SignupStatus.Confirmed : null,
+        signupStatus: runIsProspectiveRun ? SignupStatus.Confirmed : null,
         config: SCHEDULE_GRID_CONFIG,
         signupCountData: FAKE_SIGNUP_COUNT_DATA,
         disableDetailsPopup: true,
         runDimensions,
         layoutResult,
       }),
-    [convention, runDimensions, layoutResult, event, run],
+    [convention, runDimensions, layoutResult, event, runIsProspectiveRun],
   );
 
   useEffect(() => {
-    if (isProspectiveRun(run) && runRef.current) {
+    if (runIsProspectiveRun && runRef.current) {
       runRef.current.scrollIntoView({ behavior: 'smooth', block: 'nearest', inline: 'center' });
     }
-  }, [run, runDimensions]);
+  }, [
+    runIsProspectiveRun,
+    runDimensions.laneIndex,
+    runDimensions.timeAxisSizePercent,
+    runDimensions.timeAxisStartPercent,
+  ]);
 
   if (!event) {
     return null;
@@ -110,7 +116,7 @@ function ProspectiveRunScheduleEventRun({
       ref={runRef}
       className={getRunClassName({
         event,
-        signupStatus: isProspectiveRun(run) ? SignupStatus.Confirmed : undefined,
+        signupStatus: runIsProspectiveRun ? SignupStatus.Confirmed : undefined,
         config: SCHEDULE_GRID_CONFIG,
         signupCountData: FAKE_SIGNUP_COUNT_DATA,
         unlimited: !event.registration_policy?.slots_limited,
@@ -118,8 +124,8 @@ function ProspectiveRunScheduleEventRun({
       })}
       style={{
         ...runStyle,
-        borderStyle: isProspectiveRun(run) ? 'dashed' : 'auto',
-        fontWeight: isProspectiveRun(run) ? 'bold' : undefined,
+        borderStyle: runIsProspectiveRun ? 'dashed' : 'auto',
+        fontWeight: runIsProspectiveRun ? 'bold' : undefined,
       }}
     >
       <div className="schedule-grid-event-content">
