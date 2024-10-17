@@ -143,7 +143,7 @@
     "require-from-string": "2.0.2",
     "resolve-url-loader": "5.0.0",
     "rollbar": "^2.26.4",
-    "sass": "1.79.5",
+    "sass": "1.80.1",
     "sass-loader": "16.0.2",
     "source-map-support": "0.5.21",
     "stream-browserify": "3.0.0",
