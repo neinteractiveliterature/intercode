@@ -63,7 +63,7 @@ function buildBucketSignupOption(
 ): SignupOption {
   return {
     key: bucket.key,
-    label: hideLabel ? undefined : bucket.name ?? undefined,
+    label: hideLabel ? undefined : (bucket.name ?? undefined),
     buttonClass: `btn-outline-bucket-color-${(index % 9) + 1}`,
     bucket,
     helpText: bucket.description ?? undefined,
@@ -175,6 +175,15 @@ function allSignupOptions(
   const noPreferencePendingRankedChoices = myPendingRankedChoices.filter(
     (request) => request.requested_bucket_key == null,
   );
+  const limitedAnythingBuckets = buckets.filter((bucket) => bucket.anything && bucket.slots_limited);
+  const limitedAnythingBucketsCapacity = limitedAnythingBuckets.reduce(
+    (total, bucket) => total + (bucket.total_slots ?? 0),
+    0,
+  );
+  const limitedAnythingBucketsSignupCount = signupCounts.sumSignupCounts({
+    bucket_key: limitedAnythingBuckets.map((bucket) => bucket.key),
+    state: SignupState.Confirmed,
+  });
 
   return [
     ...buckets
@@ -195,8 +204,9 @@ function allSignupOptions(
           action = 'ADD_TO_QUEUE';
         } else if (
           bucket.slots_limited &&
-          signupCounts.sumSignupCounts({ bucket_key: bucket.key, state: SignupState.Confirmed }) >=
-            (bucket.total_slots ?? 0)
+          signupCounts.sumSignupCounts({ bucket_key: bucket.key, state: SignupState.Confirmed }) +
+            limitedAnythingBucketsSignupCount >=
+            (bucket.total_slots ?? 0) + limitedAnythingBucketsCapacity
         ) {
           action = 'WAITLIST';
         }

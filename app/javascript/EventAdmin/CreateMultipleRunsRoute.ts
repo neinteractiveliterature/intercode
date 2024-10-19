@@ -1,35 +1,28 @@
-import { ActionFunction } from 'react-router';
+import { ActionFunction, json } from 'react-router';
 import { RunInput } from '../graphqlTypes.generated';
 import { client } from '../useIntercodeApolloClient';
 import { CreateMultipleRunsDocument } from './mutations.generated';
 
 export const action: ActionFunction = async ({ request, params: { eventId } }) => {
   try {
-    const formData = await request.formData();
-    const timespanStarts = formData.getAll('starts_at').map((value) => value.toString());
-    const roomIds = formData.getAll('room_id').map((value) => value.toString());
+    const requestJson = await request.json();
+    const timespanStarts: string[] = requestJson.starts_at;
+    const roomIds: string[] = requestJson.room_id;
 
     const runs: RunInput[] = timespanStarts.map((start) => ({
       starts_at: start,
       roomIds: roomIds,
     }));
 
-    await client.mutate({
+    const { data } = await client.mutate({
       mutation: CreateMultipleRunsDocument,
       variables: {
         input: { eventId, runs },
       },
-      update: (cache) => {
-        cache.modify({
-          id: cache.identify({ __typename: 'Event', id: eventId }),
-          fields(value, { INVALIDATE }) {
-            return INVALIDATE;
-          },
-        });
-      },
     });
+    await client.resetStore();
 
-    return new Response(null, { status: 200 });
+    return json(data);
   } catch (error) {
     return error;
   }

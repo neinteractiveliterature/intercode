@@ -1,4 +1,4 @@
-import { useState, useMemo, useContext, ReactNode } from 'react';
+import { useState, useMemo, useContext, ReactNode, useEffect } from 'react';
 import { Modal } from 'react-bootstrap4-modal';
 import { ApolloError } from '@apollo/client';
 import { DateTime } from 'luxon';
@@ -59,6 +59,21 @@ function ScheduleMultipleRunsModal({
   );
   const { t } = useTranslation();
   const fetcher = useFetcher();
+  const [lastFetcherData, setLastFetcherData] = useState();
+  const error = fetcher.data instanceof Error ? fetcher.data : undefined;
+
+  useEffect(() => {
+    if (fetcher.state === 'idle' && fetcher.data && !(fetcher.data instanceof Error)) {
+      setLastFetcherData(fetcher.data);
+    }
+  }, [fetcher.data, fetcher.state]);
+
+  useEffect(() => {
+    if (lastFetcherData) {
+      setLastFetcherData(undefined);
+      onFinish();
+    }
+  }, [lastFetcherData, onFinish]);
 
   const timespan = useMemo(() => {
     if (!day || !start || !finish || !timeIsComplete(start) || !timeIsComplete(finish)) {
@@ -119,7 +134,11 @@ function ScheduleMultipleRunsModal({
         starts_at: nonConflictingTimespansWithinRange.map((timespan) => timespan.start.toISO()),
         room_id: rooms.map((room) => room.id),
       },
-      { action: `/admin_events/${event.event_category.id}/events/${event.id}/runs/create_multiple`, method: 'POST' },
+      {
+        action: `/admin_events/${event.event_category.id}/events/${event.id}/runs/create_multiple`,
+        method: 'POST',
+        encType: 'application/json',
+      },
     );
     onFinish();
   };
@@ -216,7 +235,7 @@ function ScheduleMultipleRunsModal({
             event={eventForProspectiveRunSchedule}
           />
 
-          <ErrorDisplay graphQLError={fetcher.data as ApolloError} />
+          <ErrorDisplay graphQLError={error as ApolloError} />
         </div>
         <div className="modal-footer">
           <div className="d-flex w-100">
