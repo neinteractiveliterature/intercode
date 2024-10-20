@@ -94,18 +94,21 @@ export const AuthHeadersLink = new ApolloLink((operation: Operation, next: NextL
   return next(operation);
 });
 
-export function buildIntercodeApolloLink(uri: URL): ApolloLink {
+export function buildTerminatingApolloLink(options: BatchHttpLink.Options): ApolloLink {
   // adapted from https://github.com/jaydenseric/apollo-upload-client/issues/63#issuecomment-392501449
-  const terminatingLink = split(
-    isUpload,
-    createUploadLink({ uri: uri.toString(), fetch }),
-    new BatchHttpLink({
+  return split(isUpload, createUploadLink(options), new BatchHttpLink(options));
+}
+
+export function buildIntercodeApolloLink(uri: URL): ApolloLink {
+  return ApolloLink.from([
+    AuthHeadersLink,
+    AddTimezoneLink,
+    ErrorHandlerLink,
+    buildTerminatingApolloLink({
       uri: uri.toString(),
       fetch,
     }),
-  );
-
-  return ApolloLink.from([AuthHeadersLink, AddTimezoneLink, ErrorHandlerLink, terminatingLink]);
+  ]);
 }
 
 export function useIntercodeApolloLink(uri: URL): ApolloLink {

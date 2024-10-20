@@ -9,18 +9,17 @@ import LongFormEventDetails from './LongFormEventDetails';
 import RateEventControl from '../../EventRatings/RateEventControl';
 import AppRootContext from '../../AppRootContext';
 import useRateEvent from '../../EventRatings/useRateEvent';
-import { EventPageQueryData, EventPageQueryDocument, EventPageQueryVariables } from './queries.generated';
+import { EventPageQueryDocument } from './queries.generated';
 import useSectionizedFormItems from './useSectionizedFormItems';
 import FormItemDisplay from '../../FormPresenter/ItemDisplays/FormItemDisplay';
 import { valueIsPresent } from './valueIsPresent';
 import buildEventUrl from '../buildEventUrl';
-import { buildServerApolloClient } from 'serverApolloClient.server';
 import * as Route from './+types.index';
 
-export const loader = async ({ request, params: { eventId } }: Route.LoaderArgs) => {
-  const client = buildServerApolloClient(request);
+export const loader = async ({ params: { eventId }, context }: Route.LoaderArgs) => {
+  const client = context!.client;
 
-  const { data } = await client.query<EventPageQueryData, EventPageQueryVariables>({
+  const { data } = await client.query({
     query: EventPageQueryDocument,
     variables: { eventId: eventId ?? '' },
   });

@@ -3,10 +3,10 @@ import buildEventCategoryUrl from 'EventAdmin/buildEventCategoryUrl';
 import { EventAdminEventsQueryDocument } from 'EventAdmin/queries.generated';
 import { SiteMode } from 'graphqlTypes.generated';
 import { LoaderFunction } from 'react-router';
-import { buildServerApolloClient } from 'serverApolloClient.server';
+import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
 
-const eventAdminRootRedirect: LoaderFunction = async ({ request }) => {
-  const client = buildServerApolloClient(request);
+const eventAdminRootRedirect: LoaderFunction = async ({ context }) => {
+  const client = context!.client as ApolloClient<NormalizedCacheObject>;
   const { data } = await client.query({ query: EventAdminEventsQueryDocument });
   if (!data.convention) {
     return new Response(null, { status: 404 });

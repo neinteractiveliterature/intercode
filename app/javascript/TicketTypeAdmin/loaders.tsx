@@ -1,4 +1,3 @@
-import { buildServerApolloClient } from 'serverApolloClient.server';
 import {
   AdminTicketTypesQueryData,
   AdminTicketTypesQueryDocument,
@@ -7,6 +6,7 @@ import {
   EventTicketTypesQueryVariables,
 } from './queries.generated';
 import { LoaderFunction } from 'react-router';
+import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
 
 export type TicketTypeLoaderResult = {
   parent: AdminTicketTypesQueryData['convention'] | EventTicketTypesQueryData['convention']['event'];
@@ -15,14 +15,14 @@ export type TicketTypeLoaderResult = {
     | EventTicketTypesQueryData['convention']['event']['ticket_types'];
 };
 
-export const adminTicketTypesLoader: LoaderFunction = async ({ request }) => {
-  const client = buildServerApolloClient(request);
+export const adminTicketTypesLoader: LoaderFunction = async ({ context }) => {
+  const client = context!.client as ApolloClient<NormalizedCacheObject>;
   const { data } = await client.query<AdminTicketTypesQueryData>({ query: AdminTicketTypesQueryDocument });
   return { parent: data.convention, ticketTypes: data.convention.ticket_types } as TicketTypeLoaderResult;
 };
 
-export const eventTicketTypesLoader: LoaderFunction = async ({ request, params: { eventId } }) => {
-  const client = buildServerApolloClient(request);
+export const eventTicketTypesLoader: LoaderFunction = async ({ context, params: { eventId } }) => {
+  const client = context!.client as ApolloClient<NormalizedCacheObject>;
   const { data } = await client.query<EventTicketTypesQueryData, EventTicketTypesQueryVariables>({
     query: EventTicketTypesQueryDocument,
     variables: { id: eventId ?? '' },

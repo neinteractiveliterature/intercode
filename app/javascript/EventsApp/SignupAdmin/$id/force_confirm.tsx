@@ -7,11 +7,10 @@ import BucketInput from '../BucketInput';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 import { ApolloError } from '@apollo/client';
 import Modal from 'react-bootstrap4-modal';
-import { buildServerApolloClient } from 'serverApolloClient.server';
 import { useSingleSignupLoader } from './route';
 
-export const action: ActionFunction = async ({ request, params: { id } }) => {
-  const client = buildServerApolloClient(request);
+export const action: ActionFunction = async ({ context, request, params: { id } }) => {
+  const client = context!.client;
   try {
     const formData = await request.formData();
     const { data } = await client.mutate({

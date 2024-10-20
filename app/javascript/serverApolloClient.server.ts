@@ -1,30 +1,29 @@
-import { ApolloLink, createHttpLink } from '@apollo/client';
-import { buildIntercodeApolloClient, getClientURL } from 'useIntercodeApolloClient';
+import { ApolloLink } from '@apollo/client';
+import { buildIntercodeApolloClient, buildTerminatingApolloLink, getClientURL } from 'useIntercodeApolloClient';
 import nodeFetch from 'node-fetch';
-import { clientOnly$, serverOnly$ } from 'vite-env-only/macros';
-
-const isomorphicFetch = serverOnly$(nodeFetch) ?? clientOnly$(fetch) ?? fetch;
 
 export function buildServerApolloLink(uri: URL, headers: Record<string, string>): ApolloLink {
-  return createHttpLink({
+  return buildTerminatingApolloLink({
     uri: uri.toString(),
     credentials: 'same-origin',
     headers,
     // host header setting doesn't work with the default fetch implementation
-    fetch: isomorphicFetch as typeof fetch,
+    fetch: nodeFetch as unknown as typeof fetch,
   });
 }
 
-export function buildServerApolloHeaders(req: Request) {
+export type BuildServerApolloClientOptions = { cookie: string | undefined; hostname: string };
+
+export function buildServerApolloHeaders({ cookie, hostname }: BuildServerApolloClientOptions) {
   return {
-    cookie: req.headers.get('cookie') ?? '',
-    host: new URL(req.url).hostname,
+    cookie: cookie ?? '',
+    host: hostname,
     'user-agent': 'IntercodeBFF/1.0',
   };
 }
 
-export function buildServerApolloClient(req: Request) {
-  return buildIntercodeApolloClient(buildServerApolloLink(getClientURL(), buildServerApolloHeaders(req)), {
+export function buildServerApolloClient(options: BuildServerApolloClientOptions) {
+  return buildIntercodeApolloClient(buildServerApolloLink(getClientURL(), buildServerApolloHeaders(options)), {
     ssrMode: true,
   });
 }

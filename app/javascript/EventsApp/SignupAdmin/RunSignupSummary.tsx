@@ -8,9 +8,7 @@ import usePageTitle from '../../usePageTitle';
 import Gravatar from '../../Gravatar';
 import { RunSignupSummaryQueryData, RunSignupSummaryQueryDocument } from './queries.generated';
 import humanize from '../../humanize';
-import { LoaderFunction } from 'react-router';
 import * as Route from './+types.RunSignupSummary';
-import { buildServerApolloClient } from 'serverApolloClient.server';
 
 type EventType = RunSignupSummaryQueryData['convention']['event'];
 type SignupType = EventType['run']['signups_paginated']['entries'][0];
@@ -53,8 +51,8 @@ export type RunSignupSummaryProps = {
   eventPath: string;
 };
 
-export const loader: LoaderFunction = async ({ params: { eventId, runId }, request }: Route.LoaderArgs) => {
-  const client = buildServerApolloClient(request);
+export const loader = async ({ params: { eventId, runId }, context }: Route.LoaderArgs) => {
+  const client = context!.client;
   const { data } = await client.query({
     query: RunSignupSummaryQueryDocument,
     variables: { eventId: eventId ?? '', runId: runId ?? '' },

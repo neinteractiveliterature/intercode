@@ -6,7 +6,6 @@ import { lazyWithAppEntrypointHeadersCheck } from '../checkAppEntrypointHeadersM
 import { parseCmsContent } from '../parseCmsContent';
 import { CmsPageQueryData, CmsPageQueryDocument, CmsPageQueryVariables } from './queries.generated';
 import pageAdminDropdownStyles from '../styles/page_admin_dropdown.module.scss';
-import { buildServerApolloClient } from '../serverApolloClient.server';
 import * as Route from './+types.index';
 
 const PageAdminDropdown = lazyWithAppEntrypointHeadersCheck(() => import('./PageAdminDropdown'));
@@ -16,8 +15,8 @@ export type CmsPageProps = {
   rootPage?: boolean;
 };
 
-export const loader = async ({ request }: Route.LoaderArgs) => {
-  const client = buildServerApolloClient(request);
+export const loader = async ({ request, context }: Route.LoaderArgs) => {
+  const client = context!.client;
   const slug = new URL(request.url).pathname.replace(/^\/pages\//, '').replace(/\/$/, '');
   let variables: CmsPageQueryVariables;
   if (slug.trim().length > 0) {

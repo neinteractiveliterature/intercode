@@ -1,6 +1,5 @@
 import { ProviderStack } from 'AppWrapper';
 import { Links, Meta, Scripts, ScrollRestoration } from 'react-router';
-import { LoaderFunction, useLoaderData } from 'react-router';
 import { buildBrowserApolloClient } from 'useIntercodeApolloClient';
 import { AppRootContentQueryDocument } from 'appRootQueries.generated';
 import { normalizePathForLayout } from 'AppRootLayout';
@@ -8,16 +7,12 @@ import { parseContent } from 'parsePageContent';
 import RouteErrorBoundary from 'RouteErrorBoundary';
 import { useMemo } from 'react';
 import { ApolloProvider } from '@apollo/client';
-import { buildServerApolloClient } from 'serverApolloClient.server';
+import * as Route from './+types.root';
 
 import('styles/application.scss');
 
-type LoaderResult = {
-  contentHTML: string;
-};
-
-export const loader: LoaderFunction = async ({ request }) => {
-  const client = buildServerApolloClient(request);
+export const loader = async ({ request, context }: Route.LoaderArgs) => {
+  const client = context!.client;
   const url = new URL(request.url);
   const { data } = await client.query({
     query: AppRootContentQueryDocument,
@@ -25,7 +20,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   });
   const contentHTML = data.cmsParentByDomain.effectiveCmsLayout.app_root_content;
 
-  return { contentHTML } satisfies LoaderResult;
+  return { contentHTML };
 };
 
 export const errorElement = <RouteErrorBoundary />;
@@ -46,8 +41,7 @@ const RootComponentMap = {
   AppRoot: RootProviderStack,
 };
 
-export default function Root() {
-  const { contentHTML } = useLoaderData() as LoaderResult;
+export default function Root({ loaderData: { contentHTML } }: Route.ComponentProps) {
   const content = useMemo(() => parseContent(contentHTML, RootComponentMap), [contentHTML]);
   const client = useMemo(() => buildBrowserApolloClient(), []);
 
