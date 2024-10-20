@@ -1,15 +1,13 @@
 import { useCallback, useContext } from 'react';
 import classNames from 'classnames';
-import { ActionFunction, json, Link, Outlet, useSubmit } from 'react-router';
+import { json, Link, Outlet, useRouteLoaderData, useSubmit } from 'react-router';
 import { Trans, useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
 import { DateTime } from 'luxon';
 import { useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 import snakeCase from 'lodash/snakeCase';
-import { AdminSignupQueryData, SignupFieldsFragment } from '../queries.generated';
-import { client } from '../../../useIntercodeApolloClient';
+import { AdminSignupQueryData, AdminSignupQueryDocument, SignupFieldsFragment } from '../queries.generated';
 import { UpdateSignupCountedDocument } from '../mutations.generated';
-import { useSingleSignupLoader } from '../loaders';
 import AppRootContext from '../../../AppRootContext';
 import { useFormatRunTimespan } from '../../runTimeFormatting';
 import usePageTitle from '../../../usePageTitle';
@@ -18,6 +16,9 @@ import { ageAsOf } from '../../../TimeUtils';
 import Timespan from '../../../Timespan';
 import { getSignupStateLabel } from '../../../Tables/SignupStateCell';
 import humanize from '../../../humanize';
+import { buildServerApolloClient } from 'serverApolloClient.server';
+import * as Route from './+types.route';
+import { NamedRoute } from 'appRoutes';
 
 function cityState(userConProfile: SignupFieldsFragment['user_con_profile']) {
   return [userConProfile.city, userConProfile.state].filter((item) => item && item.trim() !== '').join(', ');
@@ -94,7 +95,17 @@ export type EditSignupProps = {
   teamMembersUrl: string;
 };
 
-export const action: ActionFunction = async ({ request, params: { id } }) => {
+export const loader = async ({ request, params: { id } }: Route.LoaderArgs) => {
+  const client = buildServerApolloClient(request);
+  const { data } = await client.query({
+    query: AdminSignupQueryDocument,
+    variables: { id: id ?? '' },
+  });
+  return data;
+};
+
+export const action = async ({ request, params: { id } }: Route.ActionArgs) => {
+  const client = buildServerApolloClient(request);
   const formData = await request.formData();
   const { data } = await client.mutate({
     mutation: UpdateSignupCountedDocument,
@@ -106,8 +117,11 @@ export const action: ActionFunction = async ({ request, params: { id } }) => {
   return json(data);
 };
 
-function EditSignup({ teamMembersUrl }: EditSignupProps): JSX.Element {
-  const data = useSingleSignupLoader();
+export function useSingleSignupLoader() {
+  return useRouteLoaderData(NamedRoute.EditSignup) as Route.LoaderData;
+}
+
+function EditSignup({ loaderData: data }: Route.ComponentProps): JSX.Element {
   const { timezoneName, ticketName } = useContext(AppRootContext);
   const confirm = useConfirm();
   const { t } = useTranslation();
@@ -304,7 +318,7 @@ function EditSignup({ teamMembersUrl }: EditSignupProps): JSX.Element {
               {humanize(snakeCase(run.event.event_category.team_member_name))}:
               <strong>{teamMember ? ' yes' : ' no'}</strong>
             </div>
-            <Link to={teamMembersUrl} className="btn btn-link">
+            <Link to="../../../team_members" className="btn btn-link">
               Go to {run.event.event_category.teamMemberNamePlural}
             </Link>
           </li>
@@ -330,4 +344,4 @@ function EditSignup({ teamMembersUrl }: EditSignupProps): JSX.Element {
   );
 }
 
-export const Component = EditSignup;
+export default EditSignup;

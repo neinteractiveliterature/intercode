@@ -1,16 +1,17 @@
 import { ActionFunction, json, useNavigate } from 'react-router';
-import { client } from '../../../useIntercodeApolloClient';
 import { ForceConfirmSignupDocument } from '../mutations.generated';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { Link, useFetcher } from 'react-router';
-import { useSingleSignupLoader } from '../loaders';
 import BucketInput from '../BucketInput';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 import { ApolloError } from '@apollo/client';
 import Modal from 'react-bootstrap4-modal';
+import { buildServerApolloClient } from 'serverApolloClient.server';
+import { useSingleSignupLoader } from './route';
 
 export const action: ActionFunction = async ({ request, params: { id } }) => {
+  const client = buildServerApolloClient(request);
   try {
     const formData = await request.formData();
     const { data } = await client.mutate({

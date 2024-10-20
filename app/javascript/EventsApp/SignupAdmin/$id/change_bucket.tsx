@@ -6,12 +6,13 @@ import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { Link, useFetcher } from 'react-router';
 import { ActionFunction, json, useNavigate } from 'react-router';
-import { client } from '../../../useIntercodeApolloClient';
 import { ChangeSignupBucketDocument } from '../mutations.generated';
 import BucketInput from '../BucketInput';
-import { useSingleSignupLoader } from '../loaders';
+import { useSingleSignupLoader } from './route';
+import { buildServerApolloClient } from 'serverApolloClient.server';
 
 export const action: ActionFunction = async ({ request, params: { id } }) => {
+  const client = buildServerApolloClient(request);
   try {
     const formData = await request.formData();
     const { data } = await client.mutate({
