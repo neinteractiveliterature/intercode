@@ -15,11 +15,10 @@ import { GraphQLNotAuthenticatedErrorEvent } from './useIntercodeApolloClient';
 import { reloadOnAppEntrypointHeadersMismatch } from './checkAppEntrypointHeadersMatch';
 import { initErrorReporting } from 'ErrorReporting';
 import RouteErrorBoundary from 'RouteErrorBoundary';
-import { buildServerApolloClient } from 'serverApolloClient.server';
 import * as Route from './+types.AppRoot';
 
-export const loader = async ({ request }: Route.LoaderArgs) => {
-  const client = buildServerApolloClient(request);
+export const loader = async ({ context }: Route.LoaderArgs) => {
+  const client = context!.client;
   const { data } = await client.query({ query: AppRootQueryDocument });
   return data;
 };
