@@ -16,7 +16,6 @@ import { ageAsOf } from '../../../TimeUtils';
 import Timespan from '../../../Timespan';
 import { getSignupStateLabel } from '../../../Tables/SignupStateCell';
 import humanize from '../../../humanize';
-import { buildServerApolloClient } from 'serverApolloClient.server';
 import * as Route from './+types.route';
 import { NamedRoute } from 'appRoutes';
 
@@ -95,8 +94,8 @@ export type EditSignupProps = {
   teamMembersUrl: string;
 };
 
-export const loader = async ({ request, params: { id } }: Route.LoaderArgs) => {
-  const client = buildServerApolloClient(request);
+export const loader = async ({ context, params: { id } }: Route.LoaderArgs) => {
+  const client = context!.client;
   const { data } = await client.query({
     query: AdminSignupQueryDocument,
     variables: { id: id ?? '' },
@@ -104,8 +103,8 @@ export const loader = async ({ request, params: { id } }: Route.LoaderArgs) => {
   return data;
 };
 
-export const action = async ({ request, params: { id } }: Route.ActionArgs) => {
-  const client = buildServerApolloClient(request);
+export const action = async ({ context, request, params: { id } }: Route.ActionArgs) => {
+  const client = context!.client;
   const formData = await request.formData();
   const { data } = await client.mutate({
     mutation: UpdateSignupCountedDocument,

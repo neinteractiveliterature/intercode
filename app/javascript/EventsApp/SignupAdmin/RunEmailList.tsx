@@ -5,14 +5,9 @@ import snakeCase from 'lodash/snakeCase';
 import ChoiceSetFilter from '../../Tables/ChoiceSetFilter';
 import EmailList from '../../UIComponents/EmailList';
 import usePageTitle from '../../usePageTitle';
-import {
-  RunSignupsTableSignupsQueryData,
-  RunSignupsTableSignupsQueryDocument,
-  RunSignupsTableSignupsQueryVariables,
-} from './queries.generated';
+import { RunSignupsTableSignupsQueryData, RunSignupsTableSignupsQueryDocument } from './queries.generated';
 import humanize from '../../humanize';
 import { Navigate, useParams } from 'react-router';
-import { buildServerApolloClient } from 'serverApolloClient.server';
 import * as Route from './+types.RunEmailList';
 
 function getEmails({ data, includes }: { data: RunSignupsTableSignupsQueryData; includes: string[] }) {
@@ -49,9 +44,9 @@ function getEmails({ data, includes }: { data: RunSignupsTableSignupsQueryData; 
   }));
 }
 
-export const loader = async ({ params: { runId, eventId }, request }: Route.LoaderArgs) => {
-  const client = buildServerApolloClient(request);
-  const { data } = await client.query<RunSignupsTableSignupsQueryData, RunSignupsTableSignupsQueryVariables>({
+export const loader = async ({ params: { runId, eventId }, context }: Route.LoaderArgs) => {
+  const client = context!.client;
+  const { data } = await client.query({
     query: RunSignupsTableSignupsQueryDocument,
     variables: {
       eventId: eventId ?? '',
