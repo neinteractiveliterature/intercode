@@ -216,4 +216,4 @@ function RunSignupsTable(): JSX.Element {
   );
 }
 
-export const Component = RunSignupsTable;
+export default RunSignupsTable;

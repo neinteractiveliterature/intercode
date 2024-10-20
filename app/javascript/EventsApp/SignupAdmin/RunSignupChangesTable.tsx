@@ -105,4 +105,4 @@ function RunSignupChangesTable(): JSX.Element {
   );
 }
 
-export const Component = RunSignupChangesTable;
+export default RunSignupChangesTable;
