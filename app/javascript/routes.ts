@@ -67,6 +67,26 @@ export const routes = [
           route(':eventId', 'EventsApp/$eventId.tsx', { id: NamedRoute.Event }, [
             layout('RouteGuards/EventPageGuard.tsx', [
               index('EventsApp/EventPage/index.tsx', { id: NamedRoute.EventPage }),
+              route('runs/:runId', 'EventsApp/SignupAdmin/RunHeader.tsx', [
+                route('admin_signups', 'EventsApp/SignupAdmin/route.ts', { id: NamedRoute.SignupAdmin }, [
+                  route('', 'EventsApp/SignupAdmin/SignupsIndex.tsx', [
+                    index('EventsApp/SignupAdmin/RunSignupsTable.tsx', { id: NamedRoute.RunSignupsTable }),
+                    route('emails/:separator', 'EventsApp/SignupAdmin/RunEmailList.tsx', {
+                      id: NamedRoute.RunEmailList,
+                    }),
+                    route('signup_changes', 'EventsApp/SignupAdmin/RunSignupChangesTable.tsx', {
+                      id: NamedRoute.RunSignupChangesTable,
+                    }),
+                  ]),
+                  route(':id', 'EventsApp/SignupAdmin/$id/route.tsx', { id: NamedRoute.EditSignup }, [
+                    route('change_bucket', 'EventsApp/SignupAdmin/$id/change_bucket.tsx'),
+                    route('force_confirm', 'EventsApp/SignupAdmin/$id/force_confirm.tsx'),
+                  ]),
+                ]),
+                route('signup_summary', 'EventsApp/SignupAdmin/RunSignupSummary.tsx', {
+                  id: NamedRoute.RunSignupSummary,
+                }),
+              ]),
             ]),
           ]),
         ]),
