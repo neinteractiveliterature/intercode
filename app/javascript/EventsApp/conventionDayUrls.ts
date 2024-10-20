@@ -11,8 +11,7 @@ import { AppRootQueryData, AppRootQueryDocument } from '../appRootQueries.genera
 import { buildAppRootContextValue } from '../AppRoot';
 import getI18n from '../setupI18Next';
 import { getConventionDayTimespans } from '../TimespanUtils';
-import { replace } from 'react-router';
-import { buildServerApolloClient } from 'serverApolloClient.server';
+import { AppLoadContext, replace } from 'react-router';
 
 function conventionDayUrlPortionFormat(
   siteMode: SiteMode | undefined,
@@ -73,8 +72,8 @@ export async function redirectToFirstDay({
   }
 }
 
-export async function conventionDayLoader({ params, request }: { params: { day?: string }; request: Request }) {
-  const client = buildServerApolloClient(request);
+export async function conventionDayLoader({ params, context }: { params: { day?: string }; context?: AppLoadContext }) {
+  const client = context!.client;
   const { data } = await client.query<AppRootQueryData>({ query: AppRootQueryDocument });
   const { conventionTimespan, timezoneName, siteMode } = buildAppRootContextValue(data, { current: null });
   const { t } = await getI18n();
