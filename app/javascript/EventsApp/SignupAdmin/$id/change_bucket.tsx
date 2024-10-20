@@ -9,10 +9,9 @@ import { ActionFunction, json, useNavigate } from 'react-router';
 import { ChangeSignupBucketDocument } from '../mutations.generated';
 import BucketInput from '../BucketInput';
 import { useSingleSignupLoader } from './route';
-import { buildServerApolloClient } from 'serverApolloClient.server';
 
-export const action: ActionFunction = async ({ request, params: { id } }) => {
-  const client = buildServerApolloClient(request);
+export const action: ActionFunction = async ({ context, request, params: { id } }) => {
+  const client = context!.client;
   try {
     const formData = await request.formData();
     const { data } = await client.mutate({
