@@ -3,26 +3,23 @@ import { useTranslation } from 'react-i18next';
 
 import { timespanFromRun } from '../../TimespanUtils';
 import AppRootContext from '../../AppRootContext';
-import {
-  RunHeaderRunInfoQueryData,
-  RunHeaderRunInfoQueryDocument,
-  RunHeaderRunInfoQueryVariables,
-} from './queries.generated';
+import { RunHeaderRunInfoQueryDocument } from './queries.generated';
 import { useFormatRunTimespan } from '../runTimeFormatting';
-import { LoaderFunction, Outlet, useLoaderData } from 'react-router';
-import { client } from '../../useIntercodeApolloClient';
+import { Outlet } from 'react-router';
 import NamedRouteBreadcrumbItem from '../../Breadcrumbs/NamedRouteBreadcrumbItem';
+import { buildServerApolloClient } from 'serverApolloClient.server';
+import * as Route from './+types.RunHeader';
 
-export const loader: LoaderFunction = async ({ params: { eventId, runId } }) => {
-  const { data } = await client.query<RunHeaderRunInfoQueryData, RunHeaderRunInfoQueryVariables>({
+export const loader = async ({ request, params: { eventId, runId } }: Route.LoaderArgs) => {
+  const client = buildServerApolloClient(request);
+  const { data } = await client.query({
     query: RunHeaderRunInfoQueryDocument,
     variables: { eventId: eventId ?? '', runId: runId ?? '' },
   });
   return data;
 };
 
-function RunHeader(): JSX.Element {
-  const data = useLoaderData() as RunHeaderRunInfoQueryData;
+function RunHeader({ loaderData: data }: Route.ComponentProps): JSX.Element {
   const { t } = useTranslation();
   const { timezoneName } = useContext(AppRootContext);
   const formatRunTimespan = useFormatRunTimespan();
@@ -82,4 +79,4 @@ function RunHeader(): JSX.Element {
   );
 }
 
-export const Component = RunHeader;
+export default RunHeader;
