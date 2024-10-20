@@ -6,14 +6,11 @@ import snakeCase from 'lodash/snakeCase';
 import { findBucket, formatSignupState } from './SignupUtils';
 import usePageTitle from '../../usePageTitle';
 import Gravatar from '../../Gravatar';
-import {
-  RunSignupSummaryQueryData,
-  RunSignupSummaryQueryDocument,
-  RunSignupSummaryQueryVariables,
-} from './queries.generated';
+import { RunSignupSummaryQueryData, RunSignupSummaryQueryDocument } from './queries.generated';
 import humanize from '../../humanize';
-import { LoaderFunction, useLoaderData } from 'react-router';
-import { client } from '../../useIntercodeApolloClient';
+import { LoaderFunction } from 'react-router';
+import * as Route from './+types.RunSignupSummary';
+import { buildServerApolloClient } from 'serverApolloClient.server';
 
 type EventType = RunSignupSummaryQueryData['convention']['event'];
 type SignupType = EventType['run']['signups_paginated']['entries'][0];
@@ -56,16 +53,16 @@ export type RunSignupSummaryProps = {
   eventPath: string;
 };
 
-export const loader: LoaderFunction = async ({ params: { eventId, runId } }) => {
-  const { data } = await client.query<RunSignupSummaryQueryData, RunSignupSummaryQueryVariables>({
+export const loader: LoaderFunction = async ({ params: { eventId, runId }, request }: Route.LoaderArgs) => {
+  const client = buildServerApolloClient(request);
+  const { data } = await client.query({
     query: RunSignupSummaryQueryDocument,
     variables: { eventId: eventId ?? '', runId: runId ?? '' },
   });
   return data;
 };
 
-function RunSignupSummary(): JSX.Element {
-  const data = useLoaderData() as RunSignupSummaryQueryData;
+function RunSignupSummary({ loaderData: data }: Route.ComponentProps): JSX.Element {
   const { t } = useTranslation();
 
   const signupSummaryTitle = t('events.signupSummary.title');
@@ -152,4 +149,4 @@ function RunSignupSummary(): JSX.Element {
   );
 }
 
-export const Component = RunSignupSummary;
+export default RunSignupSummary;

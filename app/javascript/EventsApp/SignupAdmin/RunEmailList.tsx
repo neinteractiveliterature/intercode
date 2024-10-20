@@ -11,8 +11,9 @@ import {
   RunSignupsTableSignupsQueryVariables,
 } from './queries.generated';
 import humanize from '../../humanize';
-import { LoaderFunction, Navigate, useLoaderData, useParams } from 'react-router';
-import { client } from '../../useIntercodeApolloClient';
+import { Navigate, useParams } from 'react-router';
+import { buildServerApolloClient } from 'serverApolloClient.server';
+import * as Route from './+types.RunEmailList';
 
 function getEmails({ data, includes }: { data: RunSignupsTableSignupsQueryData; includes: string[] }) {
   const teamMemberUserConProfileIds = data.convention.event.team_members.map(
@@ -48,7 +49,8 @@ function getEmails({ data, includes }: { data: RunSignupsTableSignupsQueryData; 
   }));
 }
 
-export const loader: LoaderFunction = async ({ params: { runId, eventId } }) => {
+export const loader = async ({ params: { runId, eventId }, request }: Route.LoaderArgs) => {
+  const client = buildServerApolloClient(request);
   const { data } = await client.query<RunSignupsTableSignupsQueryData, RunSignupsTableSignupsQueryVariables>({
     query: RunSignupsTableSignupsQueryDocument,
     variables: {
@@ -64,8 +66,7 @@ export const loader: LoaderFunction = async ({ params: { runId, eventId } }) => 
   return data;
 };
 
-function RunEmailList() {
-  const data = useLoaderData() as RunSignupsTableSignupsQueryData;
+function RunEmailList({ loaderData: data }: Route.ComponentProps) {
   const { separator } = useParams();
   const { t } = useTranslation();
   const [includes, setIncludes] = useState(() => [
@@ -145,4 +146,4 @@ function RunEmailList() {
   );
 }
 
-export const Component = RunEmailList;
+export default RunEmailList;
