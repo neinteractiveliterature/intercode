@@ -7,11 +7,10 @@ import { RunHeaderRunInfoQueryDocument } from './queries.generated';
 import { useFormatRunTimespan } from '../runTimeFormatting';
 import { Outlet } from 'react-router';
 import NamedRouteBreadcrumbItem from '../../Breadcrumbs/NamedRouteBreadcrumbItem';
-import { buildServerApolloClient } from 'serverApolloClient.server';
 import * as Route from './+types.RunHeader';
 
-export const loader = async ({ request, params: { eventId, runId } }: Route.LoaderArgs) => {
-  const client = buildServerApolloClient(request);
+export const loader = async ({ context, params: { eventId, runId } }: Route.LoaderArgs) => {
+  const client = context!.client;
   const { data } = await client.query({
     query: RunHeaderRunInfoQueryDocument,
     variables: { eventId: eventId ?? '', runId: runId ?? '' },

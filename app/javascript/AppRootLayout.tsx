@@ -4,7 +4,6 @@ import OutletWithLoading from './OutletWithLoading';
 import NavigationBar from './NavigationBar';
 import { AppRootLayoutQueryDocument } from './appRootQueries.generated';
 import RouteErrorBoundary from 'RouteErrorBoundary';
-import { buildServerApolloClient } from 'serverApolloClient.server';
 import * as Route from './+types.AppRootLayout';
 
 // Avoid unnecessary layout checks when moving between pages that can't change layout
@@ -24,8 +23,8 @@ export function normalizePathForLayout(path: string) {
   return '/non_cms_path'; // arbitrary path that's not a CMS page
 }
 
-export const loader = async ({ request }: Route.LoaderArgs) => {
-  const client = buildServerApolloClient(request);
+export const loader = async ({ request, context }: Route.LoaderArgs) => {
+  const client = context!.client;
   const url = new URL(request.url);
   const { data } = await client.query({
     query: AppRootLayoutQueryDocument,
