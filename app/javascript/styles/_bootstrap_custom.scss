@@ -1,3 +1,5 @@
+@use "sass:map";
+
 $navbar-inverse-color: rgba(white, 0.85);
 $navbar-inverse-hover-color: white;
 $enable-responsive-font-sizes: true;
@@ -40,7 +42,7 @@ $info: #17a2b8;
 // Reset and dependencies
 @import 'bootstrap/scss/bootstrap';
 
-$theme-colors: map-merge($theme-colors, $custom-colors);
+$theme-colors: map.merge($theme-colors, $custom-colors);
 
 // Port Bootstrap 4 link behavior to Bootstrap 5
 a,

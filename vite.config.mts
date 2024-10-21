@@ -74,6 +74,15 @@ export default defineConfig({
       }
     },
   },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        // can't get import to work until Bootstrap supports it
+        silenceDeprecations: ['import', 'legacy-js-api'],
+        quietDeps: true,
+      },
+    },
+  },
   build: {
     copyPublicDir: false,
     rollupOptions: {
