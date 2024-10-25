@@ -93,7 +93,7 @@ Shoryuken.configure_server do |config|
 
   config.server_middleware do |chain|
     chain.add ShoryukenJSONLogging if ENV["JSON_LOGGING"]
-    chain.add SentryReporter
+    chain.add ErrorReporter
   end
 
   # Don't spam the logs.  Counterintuitively this is telling AWS SDK what level to send its logs at, not what level to
