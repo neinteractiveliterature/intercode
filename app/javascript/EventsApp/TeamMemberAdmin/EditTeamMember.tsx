@@ -28,8 +28,8 @@ export const action: ActionFunction = async ({ params: { eventId, teamMemberId }
   } else {
     const formData = await request.formData();
 
-    await client.query({
-      query: UpdateTeamMemberDocument,
+    await client.mutate({
+      mutation: UpdateTeamMemberDocument,
       variables: {
         input: {
           id: teamMemberId,
