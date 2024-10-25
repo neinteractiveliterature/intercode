@@ -70,14 +70,6 @@ function ProviderStack(props: AppWrapperProps) {
   }, [openSignIn]);
   const mapboxContextValue = useMapboxContext({ mapboxAccessToken });
 
-  // useEffect(() => {
-  //   if (queryData && Array.isArray(queryData)) {
-  //     for (const query of queryData) {
-  //       client.writeQuery(query);
-  //     }
-  //   }
-  // }, [queryData]);
-
   const railsDirectUploadsContextValue = useMemo(
     () => ({
       railsDirectUploadsUrl: props.railsDirectUploadsUrl,
@@ -135,6 +127,8 @@ function AppWrapper<P extends JSX.IntrinsicAttributes>(
   WrappedComponent: React.ComponentType<P>,
 ): React.ComponentType<P> {
   function Wrapper(props: P & AppWrapperProps) {
+    const { queryData } = props;
+
     const router = useMemo(
       () =>
         createBrowserRouter(
@@ -168,6 +162,18 @@ function AppWrapper<P extends JSX.IntrinsicAttributes>(
     //   },
     //   [confirm],
     // );
+
+    useEffect(() => {
+      if (queryData && Array.isArray(queryData)) {
+        for (const query of queryData) {
+          try {
+            client.writeQuery(query);
+          } catch {
+            // don't blow up if we get a malformed query
+          }
+        }
+      }
+    }, [queryData]);
 
     return (
       <React.StrictMode>
