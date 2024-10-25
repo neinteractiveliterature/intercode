@@ -87,7 +87,6 @@ const RunDetails = React.forwardRef<HTMLDivElement, RunDetailsProps>(function Ru
 
   const ratingChanged = async (rating: number) => {
     await rateEvent(event.id, rating);
-    await apolloClient.resetStore();
   };
 
   return (
@@ -193,11 +192,7 @@ const RunDetails = React.forwardRef<HTMLDivElement, RunDetailsProps>(function Ru
             <>{t('schedule.goToEvent')} &raquo;</>
           </Link>
 
-          <div
-            className="small"
-             
-            dangerouslySetInnerHTML={{ __html: event.short_blurb_html ?? '' }}
-          />
+          <div className="small" dangerouslySetInnerHTML={{ __html: event.short_blurb_html ?? '' }} />
         </div>
       </div>
     </div>
