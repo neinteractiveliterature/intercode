@@ -1,5 +1,5 @@
 import classNames from 'classnames';
-import { useCallback, useContext, useMemo, useState } from 'react';
+import { useCallback, useContext, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
 
@@ -112,12 +112,13 @@ export const loader: LoaderFunction = async ({ params, request }) => {
 
 function ScheduleApp(): JSX.Element {
   const { data } = useLoaderData() as LoaderResult;
-  const { myProfile, currentAbility, conventionTimespan, siteMode } = useContext(AppRootContext);
+  const { myProfile, currentAbility, conventionTimespan, siteMode, navigationBarRef } = useContext(AppRootContext);
   const { t } = useTranslation();
   const { choiceSetValue, choiceSetChanged } = usePersonalScheduleFilters({
     showPersonalFilters: true,
     signedIn: myProfile != null,
   });
+  const scheduleGridNavigationBarRef = useRef<HTMLDivElement>(null);
 
   const configs = useMemo(
     () =>
@@ -169,6 +170,23 @@ function ScheduleApp(): JSX.Element {
     [filterableFormItems],
   );
 
+  const [navigationBarTop, setNavigationBarTop] = useState(0);
+
+  useLayoutEffect(() => {
+    const globalNavbar = navigationBarRef.current;
+    if (globalNavbar == null) {
+      return;
+    }
+
+    const resizeObserver = new ResizeObserver((entries) => {
+      setNavigationBarTop(entries[0].contentRect.bottom);
+    });
+
+    resizeObserver.observe(globalNavbar);
+
+    return () => resizeObserver.disconnect();
+  }, [navigationBarRef]);
+
   const renderSchedule = () => {
     if (scheduleView === 'list') {
       return (
@@ -176,6 +194,7 @@ function ScheduleApp(): JSX.Element {
           fetchFormItemIdentifiers={fetchFormItemIdentifiers}
           convention={data.convention}
           filters={effectiveFilters}
+          scheduleGridNavigationBarRef={scheduleGridNavigationBarRef}
         />
       );
     }
@@ -196,6 +215,7 @@ function ScheduleApp(): JSX.Element {
 
   if (authorizationRequired) {
     if (scheduleGridConfig?.showExtendedCounts && currentAbility.can_read_schedule) {
+      // eslint-disable-next-line i18next/no-literal-string
       const authorizedView = configs.find((config) => !config.showExtendedCounts)?.key ?? 'list';
       setScheduleView(authorizedView);
       return <></>;
@@ -211,16 +231,17 @@ function ScheduleApp(): JSX.Element {
 
   return (
     <>
-      <nav aria-label="breadcrumb">
+      <nav aria-label={t('general.breadcrumbAriaLabel')}>
         <ol className="breadcrumb">
           <li className="breadcrumb-item active" aria-current="page">
             {t('navigation.events.eventSchedule')}
           </li>
         </ol>
       </nav>
-      <div className="schedule-grid-navigation-bar mb-3">
-        <div className="bg-light p-1 d-flex">
-          <div className="flex-grow-1 d-flex">
+      <div className="schedule-grid-navigation-bar mb-3" style={{ top: `${navigationBarTop}px` }}>
+        {/* We set the ref to the inner content element of the navbar because height overflow isn't working right on the sticky */}
+        <div className="bg-light p-1 d-flex flex-wrap" ref={scheduleGridNavigationBarRef}>
+          <div className="flex-grow-1 d-flex flex-wrap">
             {configs.length > 0 && (
               <ScheduleViewDropdown viewSelected={viewSelected} scheduleView={scheduleView} configs={configs} />
             )}

@@ -1,7 +1,7 @@
 import flatMap from 'lodash/flatMap';
 import sortBy from 'lodash/sortBy';
 import { DateTime } from 'luxon';
-import React, { useCallback, useContext, useLayoutEffect, useMemo, useRef } from 'react';
+import React, { RefObject, useCallback, useContext, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, useParams } from 'react-router-dom';
 import { Waypoint } from 'react-waypoint';
@@ -39,14 +39,20 @@ function isElementInViewport(el: HTMLElement) {
 export type RunListProps = {
   convention: ScheduleGridConventionDataQueryData['convention'];
   fetchFormItemIdentifiers: string[];
+  scheduleGridNavigationBarRef: RefObject<HTMLDivElement>;
   filters?: EventFiltersInput;
 };
 
-export default function RunList({ fetchFormItemIdentifiers, filters, convention }: RunListProps) {
+export default function RunList({
+  fetchFormItemIdentifiers,
+  filters,
+  convention,
+  scheduleGridNavigationBarRef,
+}: RunListProps) {
   const { data } = useSuspenseQuery(ScheduleGridEventsQueryDocument, {
     variables: { filters, fetchFormItemIdentifiers },
   });
-  const { timezoneName, myProfile } = useContext(AppRootContext);
+  const { timezoneName, myProfile, navigationBarRef } = useContext(AppRootContext);
   const format = useAppDateTimeFormat();
   const { ratingFilter, hideConflicts } = usePersonalScheduleFilters({
     showPersonalFilters: true,
@@ -56,8 +62,10 @@ export default function RunList({ fetchFormItemIdentifiers, filters, convention 
   const conventionDayUrlPortion = useConventionDayUrlPortion();
   const conventionDayHeaders = useRef(new Map<string, HTMLElement>());
   const location = useLocation();
-  const conventionDay = useParams<{ conventionDay: string }>().conventionDay;
+  const conventionDayFromParams = useParams<{ conventionDay: string }>().conventionDay;
   const { t } = useTranslation();
+  // just use the initial convention day while this page is showing, don't re-scroll
+  const [conventionDay] = useState(conventionDayFromParams);
 
   usePageTitle(`${t('navigation.events.eventSchedule')} (${t('schedule.views.listView')})`);
 
@@ -70,6 +78,25 @@ export default function RunList({ fetchFormItemIdentifiers, filters, convention 
       }
     }
   }, [conventionDay]);
+
+  const [dayHeaderTop, setDayHeaderTop] = useState(0);
+
+  useLayoutEffect(() => {
+    const globalNavbar = navigationBarRef.current;
+    const navbar = scheduleGridNavigationBarRef.current;
+    if (globalNavbar == null || navbar == null) {
+      return;
+    }
+
+    const resizeObserver = new ResizeObserver((entries) => {
+      setDayHeaderTop(globalNavbar.getBoundingClientRect().height + entries[0].target.getBoundingClientRect().height);
+    });
+
+    resizeObserver.observe(navbar);
+    resizeObserver.observe(globalNavbar);
+
+    return () => resizeObserver.disconnect();
+  }, [scheduleGridNavigationBarRef, navigationBarRef]);
 
   const eventsWithCategories = useMergeCategoriesIntoEvents(convention?.event_categories ?? [], data.convention.events);
 
@@ -166,7 +193,9 @@ export default function RunList({ fetchFormItemIdentifiers, filters, convention 
 
   const enteredRunGroup = useCallback(
     (runGroup: RunGroup) => {
-      navigate(`/events/schedule/${conventionDayUrlPortion(runGroup.dayStart)}${location.search}`);
+      navigate(`/events/schedule/${conventionDayUrlPortion(runGroup.dayStart)}${location.search}`, {
+        preventScrollReset: true,
+      });
     },
     [navigate, location.search, conventionDayUrlPortion],
   );
@@ -184,6 +213,7 @@ export default function RunList({ fetchFormItemIdentifiers, filters, convention 
                 conventionDayHeaders.current.delete(conventionDayUrlPortion(dayStart));
               }
             }}
+            style={{ top: `${dayHeaderTop}px` }}
           >
             <h3 className="pb-1">{format(dayStart, 'longWeekdayDate')}</h3>
           </div>

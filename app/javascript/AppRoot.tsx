@@ -1,4 +1,4 @@
-import { Suspense, useMemo, useState, useEffect, useContext } from 'react';
+import { Suspense, useMemo, useState, useEffect, useContext, RefObject, useRef } from 'react';
 import { useLocation, useNavigate, useLoaderData, Outlet, ScrollRestoration, useNavigation } from 'react-router-dom';
 import { Settings } from 'luxon';
 import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
@@ -15,7 +15,10 @@ import { GraphQLNotAuthenticatedErrorEvent } from './useIntercodeApolloClient';
 import { reloadOnAppEntrypointHeadersMismatch } from './checkAppEntrypointHeadersMatch';
 import { initErrorReporting } from 'ErrorReporting';
 
-export function buildAppRootContextValue(data: AppRootQueryData): AppRootContextValue {
+export function buildAppRootContextValue(
+  data: AppRootQueryData,
+  navigationBarRef: RefObject<HTMLElement>,
+): AppRootContextValue {
   return {
     assumedIdentityFromProfile: data.assumedIdentityFromProfile,
     cmsNavigationItems: data.cmsParentByRequestHost.cmsNavigationItems,
@@ -33,6 +36,7 @@ export function buildAppRootContextValue(data: AppRootQueryData): AppRootContext
     // eslint-disable-next-line i18next/no-literal-string
     language: data.convention?.language ?? 'en',
     myProfile: data.convention?.my_profile,
+    navigationBarRef,
     rootSiteName: data.rootSite?.site_name,
     siteMode: data.convention?.site_mode,
     signupMode: data.convention?.signup_mode,
@@ -53,6 +57,7 @@ function AppRoot(): JSX.Element {
   const data = useLoaderData() as AppRootQueryData;
   const authenticationModal = useContext(AuthenticationModalContext);
   const navigation = useNavigation();
+  const navigationBarRef = useRef<HTMLElement>(null);
 
   const [stripePromise, setStripePromise] = useState<Promise<Stripe | null> | null>(null);
 
@@ -64,7 +69,7 @@ function AppRoot(): JSX.Element {
     reloadOnAppEntrypointHeadersMismatch();
   }, [location.pathname]);
 
-  const appRootContextValue = useMemo(() => buildAppRootContextValue(data), [data]);
+  const appRootContextValue = useMemo(() => buildAppRootContextValue(data, navigationBarRef), [data]);
 
   useEffect(() => {
     if (

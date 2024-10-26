@@ -9,15 +9,7 @@ $signed-up-event-background-color: rgba(0, 0, 0, 0.4);
 
 .schedule-grid-navigation-bar {
   position: sticky;
-  top: 50px;
   z-index: 1020;
-
-  // = 1.5rem for the button content
-  //   + (0.375rem * 2) for the button padding
-  //   + (0.25rem * 2) for the bar padding
-  //   + 1rem for the container padding
-  height: 3.75rem;
-
   background-color: white;
   border-bottom: 1px $nav-tabs-border-color solid;
   padding-top: 1rem;
@@ -25,7 +17,6 @@ $signed-up-event-background-color: rgba(0, 0, 0, 0.4);
 
 .schedule-list-day-header {
   position: sticky;
-  top: calc(50px + 3.75rem); // .schedule-grid-navigation-bar top + height
   background-color: white;
   z-index: 1010;
   padding-top: 0.5rem;

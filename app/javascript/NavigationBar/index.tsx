@@ -28,7 +28,7 @@ type NavigationBarContentProps = {
 function NavigationBarContent({ navbarClasses, rootItems }: NavigationBarContentProps) {
   const { t } = useTranslation();
   const location = useLocation();
-  const { conventionName, conventionCanceled, rootSiteName, siteMode, ticketsAvailableForPurchase } =
+  const { conventionName, conventionCanceled, navigationBarRef, rootSiteName, siteMode, ticketsAvailableForPurchase } =
     useContext(AppRootContext);
   const collapseRef = useRef<HTMLDivElement>(null);
   const { collapsed, collapseProps, setCollapsed, toggleCollapsed } = useCollapse(collapseRef);
@@ -49,7 +49,11 @@ function NavigationBarContent({ navbarClasses, rootItems }: NavigationBarContent
         hideNavItems,
       }}
     >
-      <nav className={classNames('navbar', 'd-block', navbarClasses, { 'pb-0': conventionCanceled })} role="navigation">
+      <nav
+        className={classNames('navbar', 'd-block', navbarClasses, { 'pb-0': conventionCanceled })}
+        role="navigation"
+        ref={navigationBarRef}
+      >
         <div className="container">
           <NavigationBrand item={{ label: conventionName || rootSiteName }} />
           <div
