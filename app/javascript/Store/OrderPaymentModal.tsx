@@ -1,6 +1,6 @@
-import { useState, useCallback, useMemo, useContext } from 'react';
+import { useState, useCallback, useMemo, useContext, useEffect } from 'react';
 import { Modal } from 'react-bootstrap4-modal';
-import { ApolloError, useSuspenseQuery } from '@apollo/client';
+import { ApolloError, useApolloClient } from '@apollo/client';
 import { LinkAuthenticationElement, PaymentElement } from '@stripe/react-stripe-js';
 import { ErrorDisplay, MultipleChoiceInput } from '@neinteractiveliterature/litform';
 
@@ -125,7 +125,31 @@ export type OrderPaymentModalProps = Omit<OrderPaymentModalContentsProps, 'order
 };
 
 function OrderPaymentModal({ visible, onCancel, onComplete, order }: OrderPaymentModalProps): JSX.Element {
-  const { data, error } = useSuspenseQuery(CurrentPendingOrderPaymentIntentClientSecretQueryDocument);
+  const [paymentIntentClientSecret, setPaymentIntentClientSecret] = useState<string>();
+  const [error, setError] = useState<ApolloError>();
+  const client = useApolloClient();
+
+  useEffect(() => {
+    const refreshPaymentIntentClientSecret = async () => {
+      try {
+        const result = await client.query({
+          query: CurrentPendingOrderPaymentIntentClientSecretQueryDocument,
+          fetchPolicy: 'no-cache',
+        });
+        setPaymentIntentClientSecret(
+          result.data.convention.my_profile?.current_pending_order?.payment_intent_client_secret,
+        );
+      } catch (error) {
+        setError(error);
+      }
+    };
+
+    setPaymentIntentClientSecret(undefined);
+
+    if (order != null && order.total_price.fractional > 0) {
+      refreshPaymentIntentClientSecret();
+    }
+  }, [order, order?.total_price, order?.order_entries, client]);
 
   if (error) {
     return <ErrorDisplay graphQLError={error} />;
@@ -133,10 +157,8 @@ function OrderPaymentModal({ visible, onCancel, onComplete, order }: OrderPaymen
 
   return (
     <Modal visible={visible && order != null} dialogClassName="modal-lg">
-      {visible && order != null && (
-        <LazyStripeElementsContainer
-          options={{ clientSecret: data.convention.my_profile?.current_pending_order?.payment_intent_client_secret }}
-        >
+      {visible && paymentIntentClientSecret && order != null && (
+        <LazyStripeElementsContainer options={{ clientSecret: paymentIntentClientSecret }}>
           <OrderPaymentModalContents onCancel={onCancel} onComplete={onComplete} order={order} />
         </LazyStripeElementsContainer>
       )}
