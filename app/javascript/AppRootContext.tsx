@@ -1,4 +1,4 @@
-import { createContext } from 'react';
+import { createContext, RefObject } from 'react';
 import { SignupAutomationMode, SignupMode, SiteMode, TicketMode } from './graphqlTypes.generated';
 import { AppRootQueryData } from './appRootQueries.generated';
 import type Timespan from './Timespan';
@@ -19,6 +19,7 @@ export type AppRootContextValue = {
   hasOAuthApplications: boolean;
   language: string;
   myProfile?: NonNullable<AppRootQueryData['convention']>['my_profile'];
+  navigationBarRef: RefObject<HTMLElement>;
   rootSiteName?: string | null;
   signupMode?: SignupMode;
   signupAutomationMode?: SignupAutomationMode;
@@ -74,6 +75,7 @@ export const appRootContextDefaultValue: AppRootContextValue = {
   hasOAuthApplications: false,
   language: 'en',
   myProfile: null,
+  navigationBarRef: { current: null },
   rootSiteName: null,
   siteMode: undefined,
   signupMode: undefined,
