@@ -128,28 +128,31 @@ function AppWrapper<P extends JSX.IntrinsicAttributes>(
 ): React.ComponentType<P> {
   function Wrapper(props: P & AppWrapperProps) {
     const { queryData } = props;
+    const [queryPreloadComplete, setQueryPreloadComplete] = useState(false);
 
-    const router = useMemo(
-      () =>
-        createBrowserRouter(
-          [
-            {
-              element: <ProviderStack {...props} />,
-              children: appRootRoutes,
-            },
-          ],
+    const router = useMemo(() => {
+      if (!queryPreloadComplete) {
+        return undefined;
+      }
+
+      return createBrowserRouter(
+        [
           {
-            future: {
-              v7_relativeSplatPath: true,
-              v7_normalizeFormMethod: true,
-              v7_partialHydration: true,
-              v7_skipActionErrorRevalidation: true,
-              v7_fetcherPersist: true,
-            },
+            element: <ProviderStack {...props} />,
+            children: appRootRoutes,
           },
-        ),
-      [props],
-    );
+        ],
+        {
+          future: {
+            v7_relativeSplatPath: true,
+            v7_normalizeFormMethod: true,
+            v7_partialHydration: true,
+            v7_skipActionErrorRevalidation: true,
+            v7_fetcherPersist: true,
+          },
+        },
+      );
+    }, [props, queryPreloadComplete]);
 
     // TODO bring this back when we re-add prompting
     // const getUserConfirmation = useCallback(
@@ -173,11 +176,13 @@ function AppWrapper<P extends JSX.IntrinsicAttributes>(
           }
         }
       }
+
+      setQueryPreloadComplete(true);
     }, [queryData]);
 
     return (
       <React.StrictMode>
-        <RouterProvider router={router} future={{ v7_startTransition: true }} />
+        {router && <RouterProvider router={router} future={{ v7_startTransition: true }} />}
       </React.StrictMode>
     );
   }
