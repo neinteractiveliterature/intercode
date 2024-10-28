@@ -1,8 +1,14 @@
 class GraphqlPresendPresenter
   attr_reader :controller, :cms_parent, :path, :context
 
-  APP_ROOT_QUERY, CMS_PAGE_QUERY, COMMON_CONVENTION_DATA_QUERY, PAGE_ADMIN_DROPDOWN_QUERY =
-    GraphqlOperation.by_name("AppRootQuery", "CmsPageQuery", "CommonConventionDataQuery", "PageAdminDropdownQuery")
+  APP_ROOT_QUERY, APP_ROOT_LAYOUT_QUERY, CMS_PAGE_QUERY, COMMON_CONVENTION_DATA_QUERY, PAGE_ADMIN_DROPDOWN_QUERY =
+    GraphqlOperation.by_name(
+      "AppRootQuery",
+      "AppRootLayoutQuery",
+      "CmsPageQuery",
+      "CommonConventionDataQuery",
+      "PageAdminDropdownQuery"
+    )
 
   def initialize(controller:, cms_parent:)
     @controller = controller
@@ -57,17 +63,15 @@ class GraphqlPresendPresenter
   def cms_root_queries
     queries = [
       { operation: CMS_PAGE_QUERY, variables: { rootPage: true } },
-      { operation: APP_ROOT_QUERY, variables: { path: } }
+      app_root_query,
+      app_root_layout_query(path:)
     ]
     queries << { operation: PAGE_ADMIN_DROPDOWN_QUERY, variables: { id: cms_parent.root_page_id.to_s } } if cms_admin?
     queries
   end
 
   def cms_page_queries(slug)
-    queries = [
-      { operation: CMS_PAGE_QUERY, variables: { slug: } },
-      { operation: APP_ROOT_QUERY, variables: { path: } }
-    ]
+    queries = [{ operation: CMS_PAGE_QUERY, variables: { slug: } }, app_root_query, app_root_layout_query(path:)]
     if cms_admin?
       page = cms_parent.pages.find_by(slug:)
       queries << { operation: PAGE_ADMIN_DROPDOWN_QUERY, variables: { id: page.id.to_s } }
@@ -75,11 +79,15 @@ class GraphqlPresendPresenter
     queries
   end
 
-  def non_cms_app_root_query
-    { operation: APP_ROOT_QUERY, variables: { path: "/non_cms_path" } }
+  def app_root_query
+    { operation: APP_ROOT_QUERY, variables: {} }
+  end
+
+  def app_root_layout_query(path:)
+    { operation: APP_ROOT_LAYOUT_QUERY, variables: { path: } }
   end
 
   def events_app_queries
-    [non_cms_app_root_query, { operation: COMMON_CONVENTION_DATA_QUERY }]
+    [app_root_query, app_root_layout_query(path: "/non_cms_path"), { operation: COMMON_CONVENTION_DATA_QUERY }]
   end
 end
