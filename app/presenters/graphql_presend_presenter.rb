@@ -33,7 +33,7 @@ class GraphqlPresendPresenter
       when %r{\A/events}
         events_app_queries
       else
-        [non_cms_app_root_query]
+        [app_root_query, app_root_layout_query(path: "/non_cms_path")]
       end
   end
 
