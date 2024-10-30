@@ -1,8 +1,5 @@
-import { useContext } from 'react';
 import { GroupBase } from 'react-select';
 import AsyncSelect, { AsyncProps } from 'react-select/async';
-
-import MapboxContext from '../MapboxContext';
 
 type MapboxAPIFeature = {
   id: string;
@@ -18,7 +15,7 @@ export type LocationSelectProps = Omit<
 >;
 
 function LocationSelect({ ...props }: LocationSelectProps): JSX.Element {
-  const { mapboxAccessToken } = useContext(MapboxContext);
+  // const { mapboxAccessToken } = useContext(MapboxContext);
   const loadOptions = async (inputValue: string) => {
     const uri = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
       inputValue,

@@ -21,7 +21,6 @@ import AuthenticationModalContext, {
 } from './Authentication/AuthenticationModalContext';
 import AuthenticationModal from './Authentication/AuthenticationModal';
 import AuthenticityTokensManager, { useInitializeAuthenticityTokens } from './AuthenticityTokensContext';
-import MapboxContext, { useMapboxContext } from './MapboxContext';
 import getI18n from './setupI18Next';
 import RailsDirectUploadsContext from './RailsDirectUploadsContext';
 import { appRootRoutes } from './AppRouter';
@@ -68,7 +67,6 @@ function ProviderStack(props: AppWrapperProps) {
   useEffect(() => {
     onUnauthenticatedRef.current = openSignIn;
   }, [openSignIn]);
-  const mapboxContextValue = useMapboxContext({ mapboxAccessToken });
 
   const railsDirectUploadsContextValue = useMemo(
     () => ({
@@ -83,28 +81,26 @@ function ProviderStack(props: AppWrapperProps) {
       <HelmetProvider>
         {/* TODO bring this back when we re-add prompting getUserConfirmation={getUserConfirmation}> */}
         <RailsDirectUploadsContext.Provider value={railsDirectUploadsContextValue}>
-          <MapboxContext.Provider value={mapboxContextValue}>
-            <AuthenticationModalContext.Provider value={authenticationModalContextValue}>
-              <>
-                {!unauthenticatedError && (
-                  <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
-                    <I18NextWrapper>
-                      {(i18nInstance) => (
-                        <AlertProvider okText={i18nInstance.t('buttons.ok', 'OK')}>
-                          <ToastProvider>
-                            <ErrorBoundary placement="replace" errorType="plain">
-                              <Outlet />
-                            </ErrorBoundary>
-                          </ToastProvider>
-                        </AlertProvider>
-                      )}
-                    </I18NextWrapper>
-                  </Suspense>
-                )}
-                <AuthenticationModal />
-              </>
-            </AuthenticationModalContext.Provider>
-          </MapboxContext.Provider>
+          <AuthenticationModalContext.Provider value={authenticationModalContextValue}>
+            <>
+              {!unauthenticatedError && (
+                <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
+                  <I18NextWrapper>
+                    {(i18nInstance) => (
+                      <AlertProvider okText={i18nInstance.t('buttons.ok', 'OK')}>
+                        <ToastProvider>
+                          <ErrorBoundary placement="replace" errorType="plain">
+                            <Outlet />
+                          </ErrorBoundary>
+                        </ToastProvider>
+                      </AlertProvider>
+                    )}
+                  </I18NextWrapper>
+                </Suspense>
+              )}
+              <AuthenticationModal />
+            </>
+          </AuthenticationModalContext.Provider>
         </RailsDirectUploadsContext.Provider>
       </HelmetProvider>
     </ApolloProvider>

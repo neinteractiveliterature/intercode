@@ -1,4 +1,4 @@
-import { useContext, useId, useMemo } from 'react';
+import { useId, useMemo } from 'react';
 import * as React from 'react';
 import {
   BootstrapFormInput,
@@ -10,13 +10,13 @@ import {
 import DateTimeInput from '../BuiltInFormControls/DateTimeInput';
 import TimezoneSelect from '../BuiltInFormControls/TimezoneSelect';
 import LocationSelect from '../Maps/LocationSelect';
-import MapboxMap from '../Maps/MapboxMap';
-import MapboxContext from '../MapboxContext';
 import EnumTypes from '../enumTypes.json';
 import { timezoneNameForConvention } from '../TimeUtils';
 import ConventionLanguageInput from './ConventionLanguageInput';
 import type { ConventionFormConvention } from './ConventionForm';
 import { SiteMode, TimezoneMode } from '../graphqlTypes.generated';
+import OpenLayersMap, { fromLonLat } from 'Maps/OpenLayersMap';
+import ConventionLocationMap from 'Maps/ConventionLocationMap';
 
 export type ConventionFormGeneralSectionProps = {
   convention: ConventionFormConvention;
@@ -29,7 +29,6 @@ function ConventionFormGeneralSection({
   setConvention,
   disabled,
 }: ConventionFormGeneralSectionProps): JSX.Element {
-  const { mapboxAccessToken } = useContext(MapboxContext);
   const [
     setName,
     setSiteMode,
@@ -162,7 +161,8 @@ function ConventionFormGeneralSection({
                 />
                 {conventionLocation && (
                   <div className="mt-2">
-                    <MapboxMap center={conventionLocation.center} markerLocation={conventionLocation.center} />
+                    <ConventionLocationMap location={convention.location} />
+                    {/* <MapboxMap center={conventionLocation.center} markerLocation={conventionLocation.center} /> */}
                   </div>
                 )}
               </>
