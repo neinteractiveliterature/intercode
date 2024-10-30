@@ -1,5 +1,5 @@
 import { Suspense, useMemo, useState, useEffect, useContext, RefObject, useRef } from 'react';
-import { useLocation, useNavigate, useLoaderData, Outlet, ScrollRestoration, useNavigation } from 'react-router-dom';
+import { useLocation, useNavigate, useLoaderData, Outlet, useNavigation } from 'react-router-dom';
 import { Settings } from 'luxon';
 import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
@@ -125,7 +125,8 @@ function AppRoot(): JSX.Element {
           >
             <PageLoadingIndicator visible={navigation.state === 'loading'} />
           </div>
-          <ScrollRestoration />
+          {/* Disabling ScrollRestoration for now because it's breaking hash links within the same page (reproducible with Mac Chrome) */}
+          {/* <ScrollRestoration /> */}
           <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
             <Outlet />
           </Suspense>
