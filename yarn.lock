@@ -6843,10 +6843,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/diff@npm:5.2.3":
-  version: 5.2.3
-  resolution: "@types/diff@npm:5.2.3"
-  checksum: 10c0/dd2e99e272a7023f3e5c71099599553c7d6c9a6b9d67f202b593b8d59b0528361eba39a8674ab18eba76217b6bad8f1a09417a9a571daaf7c0f49d67d4f305e2
+"@types/diff@npm:6.0.0":
+  version: 6.0.0
+  resolution: "@types/diff@npm:6.0.0"
+  checksum: 10c0/229325cd8039de546dc370d63d62eaf5774122a616eb09cd446d479181e58e941c2983303d23ebcb405109b1b2653ab3bbfcf63a24f827e976e98c8eb83dd34f
   languageName: node
   linkType: hard
 
@@ -20624,7 +20624,7 @@ __metadata:
     "@types/bootstrap": "npm:5.2.10"
     "@types/bytes": "npm:3.1.4"
     "@types/debounce-promise": "npm:3.1.9"
-    "@types/diff": "npm:5.2.3"
+    "@types/diff": "npm:6.0.0"
     "@types/events": "npm:3.0.3"
     "@types/file-saver": "npm:2.0.7"
     "@types/js-search": "npm:1.4.4"
