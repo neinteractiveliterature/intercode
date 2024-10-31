@@ -7107,12 +7107,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:20.17.4":
-  version: 20.17.4
-  resolution: "@types/node@npm:20.17.4"
+"@types/node@npm:*, @types/node@npm:20.17.5":
+  version: 20.17.5
+  resolution: "@types/node@npm:20.17.5"
   dependencies:
     undici-types: "npm:~6.19.2"
-  checksum: 10c0/ce6e0a75bbc6b292db4c3bb72884f588753d8751699a3f4a60d5ba4ec1f0fa3d3f08547eacfaf9de517831960c1d6ca3430a28493b5d13b8beacb76e912da35c
+  checksum: 10c0/6e6bf7f84365a2ee95a369c48cdb47a93aae2b5029d19660183ba944d7bdbc193e54167076d64a3a11ff28e307b84c90eda350edf8e2029195d1fc27ae6055f4
   languageName: node
   linkType: hard
 
@@ -20633,7 +20633,7 @@ __metadata:
     "@types/mapbox-gl": "npm:1.13.10"
     "@types/md5": "npm:^2"
     "@types/minimist": "npm:1.2.5"
-    "@types/node": "npm:20.17.4"
+    "@types/node": "npm:20.17.5"
     "@types/punycode": "npm:2.1.4"
     "@types/qs": "npm:^6"
     "@types/rails__activestorage": "npm:7.1.1"
