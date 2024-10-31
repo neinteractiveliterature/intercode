@@ -80,7 +80,7 @@
     "cadmus-navbar-admin": "6.0.0",
     "caniuse-lite": "1.0.30001675",
     "classnames": "2.5.1",
-    "core-js": "3.38.1",
+    "core-js": "3.39.0",
     "crypto-browserify": "3.12.1",
     "cssnano": "7.0.6",
     "csv-stringify": "^6.5.1",
