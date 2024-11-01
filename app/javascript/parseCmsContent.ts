@@ -5,11 +5,11 @@ import CookieConsent from './UIComponents/CookieConsent';
 const AddToCalendarDropdown = lazyWithAppEntrypointHeadersCheck(
   () => import('./EventsApp/SignupAdmin/AddToCalendarDropdown'),
 );
+const ConventionLocationMap = lazyWithAppEntrypointHeadersCheck(() => import('./Maps/ConventionLocationMap'));
 const EventAdminMenu = lazyWithAppEntrypointHeadersCheck(() => import('./EventsApp/EventPage/EventAdminMenu'));
 const LongFormEventDetails = lazyWithAppEntrypointHeadersCheck(
   () => import('./EventsApp/EventPage/LongFormEventDetails'),
 );
-const MapboxMap = lazyWithAppEntrypointHeadersCheck(() => import('./Maps/MapboxMap'));
 const MaximumEventSignupsPreview = lazyWithAppEntrypointHeadersCheck(
   () => import(/* webpackChunkName: 'scheduled-value-preview' */ './SignupRoundsAdmin/MaximumEventSignupsPreview'),
 );
@@ -27,10 +27,10 @@ const WithdrawMySignupButton = lazyWithAppEntrypointHeadersCheck(
 export const CMS_COMPONENT_MAP: ComponentMap = {
   ...DEFAULT_COMPONENT_MAP,
   AddToCalendarDropdown,
+  ConventionLocationMap,
   CookieConsent,
   EventAdminMenu,
   LongFormEventDetails,
-  MapboxMap,
   ProposeEventButton,
   RunsSection,
   MaximumEventSignupsPreview,

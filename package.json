@@ -54,6 +54,7 @@
     "@types/debounce-promise": "3.1.9",
     "@types/diff": "6.0.0",
     "@types/file-saver": "2.0.7",
+    "@types/geojson": "^7946.0.14",
     "@types/js-search": "1.4.4",
     "@types/lodash": "4.17.13",
     "@types/luxon": "3.4.2",

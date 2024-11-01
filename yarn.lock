@@ -6839,6 +6839,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/geojson@npm:^7946.0.14":
+  version: 7946.0.14
+  resolution: "@types/geojson@npm:7946.0.14"
+  checksum: 10c0/54f3997708fa2970c03eeb31f7e4540a0eb6387b15e9f8a60513a1409c23cafec8d618525404573468b59c6fecbfd053724b3327f7fca416729c26271d799f55
+  languageName: node
+  linkType: hard
+
 "@types/gtag.js@npm:^0.0.12":
   version: 0.0.12
   resolution: "@types/gtag.js@npm:0.0.12"
@@ -20574,6 +20581,7 @@ __metadata:
     "@types/diff": "npm:6.0.0"
     "@types/events": "npm:3.0.3"
     "@types/file-saver": "npm:2.0.7"
+    "@types/geojson": "npm:^7946.0.14"
     "@types/js-search": "npm:1.4.4"
     "@types/lodash": "npm:4.17.13"
     "@types/luxon": "npm:3.4.2"

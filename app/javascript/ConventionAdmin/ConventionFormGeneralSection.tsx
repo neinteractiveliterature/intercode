@@ -15,8 +15,11 @@ import { timezoneNameForConvention } from '../TimeUtils';
 import ConventionLanguageInput from './ConventionLanguageInput';
 import type { ConventionFormConvention } from './ConventionForm';
 import { SiteMode, TimezoneMode } from '../graphqlTypes.generated';
-import OpenLayersMap, { fromLonLat } from 'Maps/OpenLayersMap';
 import ConventionLocationMap from 'Maps/ConventionLocationMap';
+import { PhotonBackend } from 'Maps/geocodingBackends/photon';
+import { GeoJSONGeocodingResult } from 'Maps/geoJSONUtils';
+
+const geocodingBackend = new PhotonBackend();
 
 export type ConventionFormGeneralSectionProps = {
   convention: ConventionFormConvention;
@@ -76,17 +79,14 @@ function ConventionFormGeneralSection({
   ));
 
   const conventionLocation = useMemo(
-    () => (convention.location ? JSON.parse(convention.location) : null),
+    () => (convention.location ? new GeoJSONGeocodingResult(JSON.parse(convention.location)) : null),
     [convention.location],
   );
 
-  const locationSelectChanged = async (newValue: { center: [number, number] } | undefined) => {
-    setLocation(newValue ? JSON.stringify(newValue) : null);
-    if (newValue?.center) {
-      const uri = `https://api.mapbox.com/v4/examples.4ze9z6tv/tilequery/${newValue.center[0]},${newValue.center[1]}.json?access_token=${mapboxAccessToken}`;
-      const response = await fetch(uri);
-      const json = await response.json();
-      const tzid = json.features[0]?.properties?.TZID;
+  const locationSelectChanged = async (newValue: GeoJSONGeocodingResult | undefined) => {
+    setLocation(newValue ? JSON.stringify(newValue.toGeoJSONFeature()) : null);
+    if (newValue) {
+      const tzid = await geocodingBackend.getTimezoneId(newValue);
       if (tzid) {
         setTimezoneName(tzid);
       }
@@ -156,13 +156,13 @@ function ConventionFormGeneralSection({
                   onChange={(value) => {
                     locationSelectChanged(value ?? undefined);
                   }}
+                  backend={geocodingBackend}
                   isDisabled={disabled}
                   isClearable
                 />
                 {conventionLocation && (
                   <div className="mt-2">
                     <ConventionLocationMap location={convention.location} />
-                    {/* <MapboxMap center={conventionLocation.center} markerLocation={conventionLocation.center} /> */}
                   </div>
                 )}
               </>
