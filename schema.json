@@ -4882,7 +4882,7 @@
             },
             {
               "name": "location",
-              "description": "The physical location of the convention, in Mapbox format.",
+              "description": "The physical location of the convention, in GeoJSON format.",
               "type": {
                 "kind": "SCALAR",
                 "name": "Json",
@@ -6685,7 +6685,7 @@
             },
             {
               "name": "location",
-              "description": "The physical location of this convention, in Mapbox format.",
+              "description": "The physical location of this convention, in GeoJSON format.",
               "type": {
                 "kind": "SCALAR",
                 "name": "Json",

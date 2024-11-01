@@ -1,49 +1,33 @@
-import { useContext } from 'react';
+import { Feature } from 'geojson';
+import { ReactNode } from 'react';
 import { GroupBase } from 'react-select';
 import AsyncSelect, { AsyncProps } from 'react-select/async';
 
-import MapboxContext from '../MapboxContext';
+export interface GeocodingResult {
+  getId(): string;
+  getCoordinates(): number[];
+  formatLabel(): ReactNode;
+  toGeoJSONFeature(): Feature;
+}
 
-type MapboxAPIFeature = {
-  id: string;
-  place_type: string[];
-  place_name: string;
-  center: [number, number];
-  text: string;
+export interface GeocodingBackend<Result extends GeocodingResult> {
+  search(query: string): Promise<Result[]>;
+  getTimezoneId(result: Result): Promise<string | undefined>;
+}
+
+export type LocationSelectProps<Result extends GeocodingResult> = Omit<
+  AsyncProps<Result, false, GroupBase<Result>>,
+  'loadOptions' | 'formatOptionLabel' | 'getOptionValue'
+> & {
+  backend: GeocodingBackend<Result>;
 };
 
-export type LocationSelectProps = Omit<
-  AsyncProps<MapboxAPIFeature, false, GroupBase<MapboxAPIFeature>>,
-  'loadOptions' | 'formatOptionLabel' | 'getOptionValue'
->;
-
-function LocationSelect({ ...props }: LocationSelectProps): JSX.Element {
-  const { mapboxAccessToken } = useContext(MapboxContext);
-  const loadOptions = async (inputValue: string) => {
-    const uri = `https://api.mapbox.com/geocoding/v5/mapbox.places/${encodeURIComponent(
-      inputValue,
-    )}.json?access_token=${mapboxAccessToken}`;
-    const results = await fetch(uri);
-    const json = await results.json();
-    return json.features as MapboxAPIFeature[];
-  };
-
+function LocationSelect<Result extends GeocodingResult>({ ...props }: LocationSelectProps<Result>): JSX.Element {
   return (
-    <AsyncSelect<MapboxAPIFeature>
-      loadOptions={loadOptions}
-      formatOptionLabel={(option) => {
-        if (option.place_type.length === 1 && option.place_type[0] === 'address') {
-          return option.place_name;
-        }
-
-        return (
-          <>
-            {option.text}{' '}
-            <small className="text-muted">{option.place_name.replace(option.text, '').replace(/^,/, '').trim()}</small>
-          </>
-        );
-      }}
-      getOptionValue={(option) => option.id}
+    <AsyncSelect<Result>
+      loadOptions={(query) => props.backend.search(query)}
+      formatOptionLabel={(option) => option.formatLabel()}
+      getOptionValue={(option) => option.getId()}
       {...props}
     />
   );

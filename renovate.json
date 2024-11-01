@@ -20,10 +20,6 @@
       "enabled": false
     },
     {
-      "matchPackageNames": ["mapbox-gl", "@types/mapbox-gl"],
-      "allowedVersions": "< 2"
-    },
-    {
       "matchPackageNames": ["typescript"],
       "allowedVersions": "!/4.8.4/"
     },

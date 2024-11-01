@@ -888,7 +888,7 @@ type Convention implements CmsParent {
   liquidAssigns: [LiquidAssign!]!
 
   """
-  The physical location of the convention, in Mapbox format.
+  The physical location of the convention, in GeoJSON format.
   """
   location: Json
 
@@ -1470,7 +1470,7 @@ input ConventionInput {
   language: String
 
   """
-  The physical location of this convention, in Mapbox format.
+  The physical location of this convention, in GeoJSON format.
   """
   location: Json
 
