@@ -40,7 +40,7 @@ class Types::ConventionInputType < Types::BaseInputObject
     description "The language code to use for localized content in this site (e.g. 'en' for English, 'es' for Spanish)."
   end
   argument :location, Types::JSON, required: false do
-    description "The physical location of this convention, in Mapbox format."
+    description "The physical location of this convention, in GeoJSON format."
   end
   argument :maximum_event_signups,
            Types::ScheduledValueInputType,

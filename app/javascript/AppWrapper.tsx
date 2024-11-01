@@ -48,7 +48,7 @@ function I18NextWrapper({ children }: { children: (i18nInstance: i18n) => ReactN
 }
 
 function ProviderStack(props: AppWrapperProps) {
-  const { authenticityTokens, mapboxAccessToken, recaptchaSiteKey } = props;
+  const { authenticityTokens, recaptchaSiteKey } = props;
   // TODO bring this back when we re-add prompting
   // const confirm = useConfirm();
   useInitializeAuthenticityTokens(authenticityTokens);
@@ -111,7 +111,6 @@ export type AppWrapperProps = {
   authenticityTokens: {
     graphql: string;
   };
-  mapboxAccessToken: string;
   queryData?: DataProxy.WriteQueryOptions<unknown, unknown>[];
   railsDefaultActiveStorageServiceName: string;
   railsDirectUploadsUrl: string;
