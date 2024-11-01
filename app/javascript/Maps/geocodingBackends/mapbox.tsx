@@ -74,6 +74,7 @@ export class MapboxBackend implements GeocodingBackend<MapboxGeocodingResult> {
 
   async getTimezoneId(result: MapboxGeocodingResult): Promise<string | undefined> {
     const coordinates = result.getCoordinates();
+    // eslint-disable-next-line i18next/no-literal-string
     const uri = `https://api.mapbox.com/v4/examples.4ze9z6tv/tilequery/${coordinates[0]},${coordinates[1]}.json?access_token=${this.mapboxAccessToken}`;
     const response = await fetch(uri);
     const json = await response.json();
