@@ -175,6 +175,10 @@ function jsxAttributesFromHTMLAttributes(node: Element, attributes: Attr[], docu
       return { ...result, [key]: createStyleJsonFromString(attribute.value) };
     }
 
+    if (key === 'onload') {
+      return { ...result, onLoad: () => eval(attribute.value) };
+    }
+
     try {
       testingNode.setAttribute(key, attribute.value ?? attribute.name);
     } catch {
@@ -225,6 +229,12 @@ function processDefaultNode(
         type={node.getAttribute('type')}
       />
     );
+  }
+
+  if (nodeIsElement(node, nodeObject) && node.tagName.toLowerCase() === 'style') {
+    const attributeProps = jsxAttributesFromHTMLAttributes(node, [...node.attributes], document);
+
+    return <style key={index} {...attributeProps} dangerouslySetInnerHTML={{ __html: node.textContent ?? '' }} />;
   }
 
   if (voidElementTags.includes(node.nodeName)) {
