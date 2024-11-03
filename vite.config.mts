@@ -47,7 +47,6 @@ export default defineConfig({
   plugins: [
     tsconfigPaths(),
     morganPlugin(),
-    // nodePolyfills(),
     envOnlyMacros(),
     !process.env.VITEST &&
       reactRouter({
