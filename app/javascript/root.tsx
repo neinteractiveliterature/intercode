@@ -9,11 +9,6 @@ import { useMemo } from 'react';
 import { ApolloProvider } from '@apollo/client';
 import * as Route from './+types.root';
 import applicationStylesUrl from 'styles/application.scss?url';
-import { clientOnly$ } from 'vite-env-only/macros';
-
-clientOnly$(() => {
-  import('bootstrap');
-});
 
 export const loader = async ({ request, context }: Route.LoaderArgs) => {
   const client = context!.client;
