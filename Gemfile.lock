@@ -320,8 +320,8 @@ GEM
       reline (>= 0.4.2)
     jar-dependencies (0.4.1)
     jmespath (1.6.2)
-    json (2.7.5)
-    json (2.7.5-java)
+    json (2.7.6)
+    json (2.7.6-java)
     json-jwt (1.16.7)
       activesupport (>= 4.2)
       aes_key_wrap
