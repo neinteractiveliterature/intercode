@@ -1,5 +1,5 @@
 import { ProviderStack } from 'AppWrapper';
-import { Links, Meta, Scripts, ScrollRestoration } from 'react-router';
+import { Links, LinksFunction, Meta, Scripts, ScrollRestoration } from 'react-router';
 import { buildBrowserApolloClient } from 'useIntercodeApolloClient';
 import { AppRootContentQueryDocument } from 'appRootQueries.generated';
 import { normalizePathForLayout } from 'AppRootLayout';
@@ -8,8 +8,12 @@ import RouteErrorBoundary from 'RouteErrorBoundary';
 import { useMemo } from 'react';
 import { ApolloProvider } from '@apollo/client';
 import * as Route from './+types.root';
+import applicationStylesUrl from 'styles/application.scss?url';
+import { clientOnly$ } from 'vite-env-only/macros';
 
-import('styles/application.scss');
+clientOnly$(() => {
+  import('bootstrap');
+});
 
 export const loader = async ({ request, context }: Route.LoaderArgs) => {
   const client = context!.client;
@@ -24,6 +28,8 @@ export const loader = async ({ request, context }: Route.LoaderArgs) => {
 };
 
 export const errorElement = <RouteErrorBoundary />;
+
+export const links: LinksFunction = () => [{ rel: 'stylesheet', href: applicationStylesUrl }];
 
 function RootProviderStack() {
   return (
@@ -48,9 +54,9 @@ export default function Root({ loaderData: { contentHTML } }: Route.ComponentPro
   return (
     <html lang="en">
       <head>
-        {content.headComponents}
         <Links />
         <Meta />
+        {content.headComponents}
       </head>
       <body>
         <ApolloProvider client={client}>{content.bodyComponents}</ApolloProvider>
