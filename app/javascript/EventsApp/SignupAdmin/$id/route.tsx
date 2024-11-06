@@ -1,6 +1,6 @@
 import { useCallback, useContext } from 'react';
 import classNames from 'classnames';
-import { json, Link, Outlet, useRouteLoaderData, useSubmit } from 'react-router';
+import { data, Link, Outlet, useRouteLoaderData, useSubmit } from 'react-router';
 import { Trans, useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
 import { DateTime } from 'luxon';
@@ -104,16 +104,16 @@ export const loader = async ({ context, params: { id } }: Route.LoaderArgs) => {
 };
 
 export const action = async ({ context, request, params: { id } }: Route.ActionArgs) => {
-  const client = context!.client;
+  const client = context.client;
   const formData = await request.formData();
-  const { data } = await client.mutate({
+  const result = await client.mutate({
     mutation: UpdateSignupCountedDocument,
     variables: {
       signupId: id,
       counted: formData.get('counted')?.toString() === 'true',
     },
   });
-  return json(data);
+  return data(result.data);
 };
 
 export function useSingleSignupLoader() {

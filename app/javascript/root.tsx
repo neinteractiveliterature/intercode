@@ -1,5 +1,5 @@
 import { ProviderStack } from 'AppWrapper';
-import { Links, LinksFunction, Meta, Scripts, ScrollRestoration } from 'react-router';
+import { Links, LinksFunction, Meta, Scripts } from 'react-router';
 import { buildBrowserApolloClient } from 'useIntercodeApolloClient';
 import { AppRootContentQueryDocument } from 'appRootQueries.generated';
 import { normalizePathForLayout } from 'AppRootLayout';
@@ -11,7 +11,7 @@ import * as Route from './+types.root';
 import applicationStylesUrl from 'styles/application.scss?url';
 
 export const loader = async ({ request, context }: Route.LoaderArgs) => {
-  const client = context!.client;
+  const client = context.client;
   const url = new URL(request.url);
   const { data } = await client.query({
     query: AppRootContentQueryDocument,
