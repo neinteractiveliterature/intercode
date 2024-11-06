@@ -101,7 +101,7 @@ class ConventionDrop < Liquid::Drop
 
   # @return [Array<EventDrop>] Events at the convention
   def events
-    @events ||= convention.events.includes(:runs, team_members: :user_con_profile).to_a
+    @events ||= convention.events.active.includes(:runs, team_members: :user_con_profile).to_a
   end
 
   # @return [EventsCreatedSinceDrop] A structure that lets you access just the events created since
@@ -128,7 +128,7 @@ class ConventionDrop < Liquid::Drop
 
   # @return [Array<RunDrop>] Event runs at the convention
   def runs
-    @events ||= convention.runs.includes(:event).to_a
+    @events ||= convention.runs.joins(:event).where(events: { status: "active" }).includes(:event).to_a
   end
 
   # @return [Array<EventCategoryDrop>] Event categories at the convention

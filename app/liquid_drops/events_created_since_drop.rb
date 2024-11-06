@@ -17,7 +17,8 @@ class EventsCreatedSinceDrop < Liquid::Drop
     return invoke_drop(DateTime.iso8601(date)) if date.is_a?(String)
     convention
       .events
-      .where('created_at >= ?', date)
+      .active
+      .where(created_at: date..)
       .includes(:event_category, :runs, team_members: :user_con_profile)
       .to_a
   end

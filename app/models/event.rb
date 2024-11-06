@@ -167,7 +167,7 @@ class Event < ApplicationRecord
       SQL
 
   scope :with_rating_for_user_con_profile,
-        ->(user_con_profile, rating) {
+        ->(user_con_profile, rating) do
           if user_con_profile
             rating_array = rating.is_a?(Array) ? rating : [rating]
             joins_rating_for_user_con_profile(user_con_profile).where(
@@ -177,10 +177,10 @@ class Event < ApplicationRecord
           else
             self
           end
-        }
+        end
 
   scope :order_by_rating_for_user_con_profile,
-        ->(user_con_profile, direction = nil) {
+        ->(user_con_profile, direction = nil) do
           if user_con_profile
             joins_rating_for_user_con_profile(user_con_profile).order(
               Arel.sql("COALESCE(event_ratings.rating, 0) #{direction || "DESC"}")
@@ -188,10 +188,12 @@ class Event < ApplicationRecord
           else
             self
           end
-        }
+        end
 
   scope :with_runs_between,
         ->(convention, start, finish) { where(id: convention.runs.between(start, finish).select(:event_id)) }
+
+  scope :active, -> { where(status: "active") }
 
   serialize :registration_policy, coder: ActiveModelCoder.new("RegistrationPolicy")
 
