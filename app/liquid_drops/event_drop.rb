@@ -57,7 +57,7 @@ class EventDrop < Liquid::Drop
 
   # @return [ActiveSupport::TimeWithZone] The time at which the earliest run of this event starts
   def first_run_starts_at
-    event.runs.min_by(&:starts_at).starts_at
+    event.runs.min_by(&:starts_at)&.starts_at
   end
 
   # @deprecated Please use event_category.name instead.  (Note that the name field on
