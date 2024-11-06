@@ -1742,9 +1742,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/lang-markdown@npm:6.3.0":
-  version: 6.3.0
-  resolution: "@codemirror/lang-markdown@npm:6.3.0"
+"@codemirror/lang-markdown@npm:6.3.1":
+  version: 6.3.1
+  resolution: "@codemirror/lang-markdown@npm:6.3.1"
   dependencies:
     "@codemirror/autocomplete": "npm:^6.7.1"
     "@codemirror/lang-html": "npm:^6.0.0"
@@ -1753,7 +1753,7 @@ __metadata:
     "@codemirror/view": "npm:^6.0.0"
     "@lezer/common": "npm:^1.2.1"
     "@lezer/markdown": "npm:^1.0.0"
-  checksum: 10c0/983a412d568b9d88fd1197d57f51b4cedea09889cc7635d1911424931c3000a0ad8d7267429c3144e2148de13055d2456d5d543fee6267822191a65661752971
+  checksum: 10c0/0e76804a4b596e26e0265cb71e4fee1fa47af64162af622d731d72301e288a98d698468680121ec3cd34042f0fd4a6cafcf6a36e33f1d181d40a1154020dc440
   languageName: node
   linkType: hard
 
@@ -20401,7 +20401,7 @@ __metadata:
     "@breezehr/currency-codes": "npm:^2.2.1"
     "@codemirror/lang-html": "npm:6.4.9"
     "@codemirror/lang-json": "npm:6.0.1"
-    "@codemirror/lang-markdown": "npm:6.3.0"
+    "@codemirror/lang-markdown": "npm:6.3.1"
     "@codemirror/language": "npm:6.10.3"
     "@codemirror/state": "npm:6.4.1"
     "@codemirror/view": "npm:6.34.2"
