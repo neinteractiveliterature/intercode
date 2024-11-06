@@ -1,19 +1,10 @@
 import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
 import { createRequestHandler } from '@react-router/express';
-import { installGlobals } from '@react-router/node';
 import express from 'express';
 import { readFileSync } from 'node:fs';
 import http from 'node:http';
 import https from 'node:https';
 import { buildServerApolloClient } from 'serverApolloClient.server.js';
-
-installGlobals();
-
-declare module 'react-router' {
-  interface AppLoadContext {
-    client: ApolloClient<NormalizedCacheObject>;
-  }
-}
 
 async function createServer() {
   const viteDevServer =
