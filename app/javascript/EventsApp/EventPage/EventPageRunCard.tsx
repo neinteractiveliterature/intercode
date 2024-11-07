@@ -128,6 +128,11 @@ function EventPageRunCard({
         });
 
         await client.resetStore();
+        revalidator.revalidate();
+        window.requestAnimationFrame(async () => {
+          await client.resetStore();
+          revalidator.revalidate();
+        });
       } else {
         const response = await client.mutate({
           mutation: CreateMySignupDocument,
@@ -144,8 +149,11 @@ function EventPageRunCard({
           },
         });
 
-        await client.resetStore();
         revalidator.revalidate();
+        window.requestAnimationFrame(async () => {
+          await client.resetStore();
+          revalidator.revalidate();
+        });
         return response.data?.createMySignup.signup;
       }
     },
