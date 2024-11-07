@@ -61,13 +61,11 @@ class AutoscaleServersService < CivilService::Service
         # we're in the pre-signup phase, always have redundant instances ready
         MIN_INSTANCES_FOR_SIGNUP_OPENING
       end
+    elsif time >= start_time + SIGNUP_OPENING_DECAY_TIME
+      MIN_INSTANCES_FOR_SIGNUP_OPENING
     else
-      if time >= start_time + SIGNUP_OPENING_DECAY_TIME
-        MIN_INSTANCES_FOR_SIGNUP_OPENING
-      else
-        decay_amount = (time - start_time) / SIGNUP_OPENING_DECAY_TIME
-        smooth_decay(decay_amount, target, MIN_INSTANCES_FOR_SIGNUP_OPENING)
-      end
+      decay_amount = (time - start_time) / SIGNUP_OPENING_DECAY_TIME
+      smooth_decay(decay_amount, target, MIN_INSTANCES_FOR_SIGNUP_OPENING)
     end
   end
 
@@ -91,7 +89,7 @@ class AutoscaleServersService < CivilService::Service
         apply_throttle_for_target(target, start_time, time)
       end
 
-    [[MIN_INSTANCES, *scaling_targets].max, MAX_INSTANCES].min.ceil
+    scaling_targets.max.clamp(MIN_INSTANCES, MAX_INSTANCES).ceil
   end
 
   private
