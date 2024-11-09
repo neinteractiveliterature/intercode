@@ -17,10 +17,10 @@
       ]
     },
     {
-      "name": "Webpack",
-      "description": "webpack-dev-server",
+      "name": "Vite",
+      "description": "Vite dev server",
       "enabled": true,
-      "terminals": [{ "name": "webpack", "path": ".", "cmd": ["yarn run start"], "num": 0 }]
+      "terminals": [{ "name": "vite", "path": ".", "cmd": ["yarn run start"], "num": 0 }]
     }
   ]
 }
