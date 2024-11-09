@@ -42,16 +42,20 @@ const localesVersion = import.meta.env.COMMIT_HASH;
 
 const initOptions: InitOptions<ChainedBackendOptions> = {
   backend: {
-    backends: [LocalStorageBackend, CodeSplitLoaderBackend],
+    backends: [...(import.meta.env.PROD ? [LocalStorageBackend] : []), CodeSplitLoaderBackend],
     backendOptions: [
-      {
-        // 1 day
-        expirationTime: 24 * 60 * 60 * 1000,
-        versions: {
-          en: localesVersion,
-          es: localesVersion,
-        },
-      },
+      ...(import.meta.env.PROD
+        ? [
+            {
+              // 1 day
+              expirationTime: 24 * 60 * 60 * 1000,
+              versions: {
+                en: localesVersion,
+                es: localesVersion,
+              },
+            },
+          ]
+        : []),
       {},
     ],
   },

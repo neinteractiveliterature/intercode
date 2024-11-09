@@ -30,17 +30,29 @@ module Intercode
         end
 
         def component_name(_context)
-          'WithdrawMySignupButton'
+          "WithdrawMySignupButton"
         end
 
-        def props(context)
+        def props(context) # rubocop:disable Metrics/MethodLength
+          signup = context[signup_variable_name]
+          signup_rounds = signup.event.convention.signup_rounds
+
           {
             event: {
-              title: context[signup_variable_name].event.title
+              title: signup.event.title
             },
             run: {
-              id: context[signup_variable_name].run.id
+              id: signup.run.id
             },
+            signup: {
+              id: signup.id,
+              state: signup.state,
+              counted: signup.counted
+            },
+            signupRounds:
+              signup_rounds.map do |round|
+                { start: round.start&.rfc3339, maximum_event_signups: round.maximum_event_signups }
+              end,
             buttonText: button_text,
             buttonClass: button_class,
             reloadOnSuccess: true
@@ -51,4 +63,4 @@ module Intercode
   end
 end
 
-Liquid::Template.register_tag('withdraw_user_signup_button', Intercode::Liquid::Tags::WithdrawUserSignupButton)
+Liquid::Template.register_tag("withdraw_user_signup_button", Intercode::Liquid::Tags::WithdrawUserSignupButton)
