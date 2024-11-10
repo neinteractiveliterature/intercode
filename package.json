@@ -120,7 +120,7 @@
     "punycode": "2.3.1",
     "qs": "^6.13.0",
     "react": "18.3.1",
-    "react-bootstrap4-modal": "3.0.6",
+    "react-bootstrap4-modal": "3.0.7",
     "react-color": "2.19.3",
     "react-cookie-consent": "9.0.0",
     "react-dom": "18.3.1",

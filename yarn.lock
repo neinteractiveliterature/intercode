@@ -19173,14 +19173,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-bootstrap4-modal@npm:3.0.6":
-  version: 3.0.6
-  resolution: "react-bootstrap4-modal@npm:3.0.6"
+"react-bootstrap4-modal@npm:3.0.7":
+  version: 3.0.7
+  resolution: "react-bootstrap4-modal@npm:3.0.7"
   dependencies:
     classnames: "npm:^2.3.1"
   peerDependencies:
     react: ^18.0
-  checksum: 10c0/81ceb13c564a23565381e7120b92d0956390b1b3a06db5133ae525697b211357b6d37a0b9af405c7c997b115535e94bb590729abd1532103f200d75e38b55bc7
+  checksum: 10c0/ac8712230d0447f6d0b4fb879e1d8c806efc2c0d69dd62036c5ee2c9114a7dd5d1eca824b8635aba895e50ce5ea1219a35755bf8612db4d84c0b271538c642b6
   languageName: node
   linkType: hard
 
@@ -20559,7 +20559,7 @@ __metadata:
     punycode: "npm:2.3.1"
     qs: "npm:^6.13.0"
     react: "npm:18.3.1"
-    react-bootstrap4-modal: "npm:3.0.6"
+    react-bootstrap4-modal: "npm:3.0.7"
     react-color: "npm:2.19.3"
     react-cookie-consent: "npm:9.0.0"
     react-dom: "npm:18.3.1"
