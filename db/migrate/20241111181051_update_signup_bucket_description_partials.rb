@@ -240,7 +240,18 @@ class UpdateSignupBucketDescriptionPartials < ActiveRecord::Migration[7.2]
       <strong>
         <a href="{{ signup.event_url | absolute_url }}">{{ signup.event.title }}</a>
       </strong>
-      {% render "signup_bucket_description" signup:signup %}
+      {% if signup.state != 'confirmed' %}
+        &nbsp;[{{ signup.state | capitalize }}]
+      {% endif %}
+      {% if signup.team_member? %}
+        &nbsp;[{{ signup.event.team_member_name }}]
+      {% elsif signup.bucket.name %}
+        {% if signup.bucket.name != 'Signups' %}
+          {% if signup.bucket.name != 'Interested' %}
+            &nbsp;[{{ signup.bucket.name }}]
+          {% endif %}
+        {% endif %}
+      {% endif %}
     </div>
   </li>
   LIQUID
@@ -265,19 +276,19 @@ class UpdateSignupBucketDescriptionPartials < ActiveRecord::Migration[7.2]
     },
     "notification_templates" => {
       "standard" => {
-        "signup_confirmation" => {
+        "signups/signup_confirmation" => {
           "body_html" => STANDARD_PREVIOUS_SIGNUP_CONFIRMATION_BODY_HTML,
           "body_text" => STANDARD_PREVIOUS_SIGNUP_CONFIRMATION_BODY_TEXT
         }
       },
       "smoke_and_mirrors" => {
-        "signup_confirmation" => {
+        "signups/signup_confirmation" => {
           "body_html" => STANDARD_PREVIOUS_SIGNUP_CONFIRMATION_BODY_HTML,
           "body_text" => STANDARD_PREVIOUS_SIGNUP_CONFIRMATION_BODY_TEXT
         }
       },
       "wanderlust" => {
-        "signup_confirmation" => {
+        "signups/signup_confirmation" => {
           "body_html" => STANDARD_PREVIOUS_SIGNUP_CONFIRMATION_BODY_HTML,
           "body_text" => STANDARD_PREVIOUS_SIGNUP_CONFIRMATION_BODY_TEXT
         }
@@ -331,7 +342,7 @@ class UpdateSignupBucketDescriptionPartials < ActiveRecord::Migration[7.2]
         CmsContentLoaders::NotificationTemplates.new(
           cms_parent: convention,
           content_set:,
-          content_identifiers: %w[signup_confirmation],
+          content_identifiers: %w[signups/signup_confirmation],
           conflict_policy: notification_template_conflict_policy
         )
       notification_template_loader.call!

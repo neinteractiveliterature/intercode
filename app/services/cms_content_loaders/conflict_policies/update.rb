@@ -38,12 +38,11 @@ class CmsContentLoaders::ConflictPolicies::Update < CmsContentLoaders::ConflictP
     previous_content = previous_content_for(existing_item.identifier)
 
     modified_keys = []
-    previous_content.each do |key, value|
-      existing_value = existing_item.model&.public_send(key)
+    previous_content.stringify_keys.each do |key, previous_value|
+      existing_value = existing_item.model&.public_send(key)&.strip
+      new_value = attrs.stringify_keys[key]&.strip
 
-      if existing_value != value && existing_value != attrs[key]
-        modified_keys << key
-      end
+      modified_keys << key if existing_value != previous_value&.strip && existing_value != new_value
     end
 
     if modified_keys.any?
@@ -51,7 +50,7 @@ class CmsContentLoaders::ConflictPolicies::Update < CmsContentLoaders::ConflictP
         existing_item:,
         new_item:,
         attrs:,
-        reason: "#{modified_keys.to_sentence} #{modified_keys.size == 1 ? 'has' : 'have'} been modified"
+        reason: "#{modified_keys.to_sentence} #{modified_keys.size == 1 ? "has" : "have"} been modified"
       )
       :skip
     else
