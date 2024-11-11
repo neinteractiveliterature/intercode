@@ -1,0 +1,28 @@
+---
+admin_notes: ''
+invariant: false
+---
+{% assign events = convention.events_created_since[convention.maximum_event_signups.current_value_change] | sort: "created_at" | reverse %}
+{% if events.size > 0 %}
+  {% capture newgames_content %}
+    {% for event in events %}
+      {% if event.runs.size == 0 %}
+        {% continue %}
+      {% endif %}
+      {% assign hosts = event.team_member_user_con_profiles |map: 'name_without_nickname' %}
+      {% render 'event_list_entry', event:event, hosts:hosts %}
+    {% endfor %}
+  {% endcapture %}
+
+  {% assign newgames_content_stripped = (newgames_content | strip) %}
+    {% if newgames_content_stripped != '' %}
+      <h3 class="my-h4">New Events added to the Schedule</h3>
+      <div class='list-group'>
+        {{ newgames_content_stripped }}
+      </div>
+  {% else %}
+      <p> No new events have been scheduled yet, stay tuned!</p>    
+  {% endif %}
+{% else %}
+  <p> No new events have been added yet, stay tuned!</p>    
+{% endif %}

@@ -1,0 +1,94 @@
+---
+name: Main Landing Page
+admin_notes: This is the root page of the website
+skip_clickwrap_agreement: false
+hidden_from_search: false
+---
+{% include 'conintro' %}
+
+{% render 'vax_check', user_con_profile:user_con_profile, convention:convention %}
+
+{% render 'badgecheck', user_con_profile:user_con_profile, convention:convention %}
+
+{% capture sidebar_content %}
+  {% render 'user_resources', user_con_profile:user_con_profile %}
+  {% render 'user_signup_list', user_con_profile:user_con_profile, convention:convention %}
+  {% render 'user_team_member_events', user_con_profile:user_con_profile %}
+  {% render 'user_event_proposals', user_con_profile:user_con_profile %}
+  {% render 'discord_button', user_con_profile:user_con_profile, discord_invite:discord_invite, css_color_3:css_color_3 %}
+{% endcapture %}
+{% assign sidebar_content_stripped = (sidebar_content | strip) %}
+
+<div class="row my-2">
+  
+  {% if sidebar_content_stripped != '' %}
+    <div class="col-lg-6 order-lg-1">
+      {{ sidebar_content_stripped }}
+    </div>
+  {% endif %}
+  
+  <div class="{% if sidebar_content_stripped != '' %}col-lg-6{% else %}col-md-12{% endif %}">
+    <section class="my-4">
+      <ul class="nav nav-tabs" id="myTab" role="tablist">
+        {% if show_games_with_openings %}
+          <li class="nav-item">
+            <a class="nav-link active" id="games-with-openings-tab" data-bs-toggle="tab" href="#games-with-openings" role="tab" aria-controls="games-with-openings" aria-selected="true">
+              Larps with openings
+            </a>
+          </li>
+        {% endif %}
+        
+        {% if show_run_list == 'new' %}
+          <li class="nav-item">
+            <a class="nav-link {% unless show_games_with_openings %}active{% endunless%}" id="new-games-tab" data-bs-toggle="tab" href="#new-games" role="tab" aria-controls="new-games" aria-selected="{% unless show_games_with_openings %}true{%else%}false{% endunless%}">
+              New Events
+            </a>
+          </li>
+        {% else %}
+          <li class="nav-item">
+            <a class="nav-link {% unless show_games_with_openings %}active{% endunless%}" id="events-link-tab" data-bs-toggle="tab" href="#events-link" role="tab" aria-controls="events-link" aria-selected="{% unless show_games_with_openings %}true{%else%}false{% endunless%}">
+              All Events
+            </a>
+          </li>
+        {% endif %}
+        
+        {% if convention.show_schedule == 'yes' %}
+          <li class="nav-item">
+            <a class="nav-link" id="social-events-tab" data-bs-toggle="tab" href="#social-events" role="tab" aria-controls="social-events" aria-selected="false">
+              Social Events
+            </a>
+          </li>
+        {% endif %}
+      </ul>
+    <div class="tab-content my-3" id="myTabContent">
+      {% if show_games_with_openings' %}
+        <div class="tab-pane fade show active border-bottom" id="games-with-openings" role="tabpanel" aria-labelledby="games-with-openings-tab">
+          {% render 'runs_with_openings', convention:convention %}
+        </div>
+      {% endif %}
+      {% if show_run_list == 'new' %}
+        <div class="tab-pane fade{% unless show_games_with_openings %} show active{% endunless%}" id="new-games" role="tabpanel" aria-labelledby="new-games-tab">
+          {% render 'new_events_list', convention:convention %}
+        </div>
+      {% elsif convention.show_schedule == 'yes' %}
+      <div class="tab-pane fade{% unless show_games_with_openings %} show active{% endunless%} my-3 border-bottom" id="events-link" role="tabpanel" aria-labelledby="events-link-tab">
+          Check out <a href="/events/schedule">the convention schedule!</a>
+        </div>
+      {% else %}
+        <div class="tab-pane fade{% unless show_games_with_openings %} show active{% endunless%} my-3 border-bottom" id="events-link" role="tabpanel" aria-labelledby="events-link-tab">
+          Check out <a href="/events">the events list!</a>
+        </div>
+      {% endif %}
+      {% if convention.show_schedule == 'yes' %}
+      <div class="tab-pane fade my-3" id="social-events" role="tabpanel" aria-labelledby="social-events-tab">
+        {% render 'social_events', convention:convention %}
+      </div>
+      {% endif %}
+    </div>  
+    <div class="my-2 pt-2">
+      <h3>Convention News</h3>
+      {% render '0-news', convention:convention %}
+      <a href="{% page_url news %}">All News</a>
+    </div> 
+    </section>
+</div>

@@ -1,0 +1,380 @@
+{
+  "title": "Larp event form",
+  "form_type": "event",
+  "sections": [
+    {
+      "title": "Event Properties",
+      "section_items": [
+        {
+          "item_type": "free_text",
+          "identifier": "title",
+          "public_description": "Title",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 1,
+          "caption": "Title",
+          "required": true
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "author",
+          "public_description": "Author(s)",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 1,
+          "caption": "Author(s)",
+          "required": true
+        },
+        {
+          "item_type": "event_email",
+          "identifier": "event_email",
+          "admin_description": "Event email",
+          "public_description": "Event email",
+          "visibility": "normal",
+          "writeability": "normal",
+          "required": true
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "organization",
+          "public_description": "Organization",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 1,
+          "caption": "Organization"
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "url",
+          "public_description": "Homepage",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 1,
+          "format": "text",
+          "caption": "Event or Organization Homepage URL",
+          "free_text_type": "url"
+        },
+        {
+          "item_type": "registration_policy",
+          "identifier": "registration_policy",
+          "visibility": "normal",
+          "writeability": "normal",
+          "presets": [
+            {
+              "name": "Unlimited slots",
+              "policy": {
+                "buckets": [
+                  {
+                    "key": "unlimited",
+                    "name": "Signups",
+                    "description": "Signups for this event",
+                    "slots_limited": false
+                  }
+                ]
+              }
+            },
+            {
+              "name": "Limited slots",
+              "policy": {
+                "buckets": [
+                  {
+                    "key": "signups",
+                    "name": "Signups",
+                    "description": "Signups for this event",
+                    "slots_limited": true
+                  }
+                ]
+              }
+            },
+            {
+              "name": "Limited slots for larps with NPCs",
+              "policy": {
+                "buckets": [
+                  {
+                    "key": "pcs",
+                    "name": "PC",
+                    "description": "Player characters",
+                    "slots_limited": true,
+                    "expose_attendees": true
+                  },
+                  {
+                    "key": "npcs",
+                    "name": "NPC",
+                    "description": "Non-player characters",
+                    "not_counted": true,
+                    "slots_limited": true,
+                    "expose_attendees": true
+                  }
+                ],
+                "prevent_no_preference_signups": true
+              }
+            },
+            {
+              "name": "Limited slots for horde larps",
+              "policy": {
+                "buckets": [
+                  {
+                    "key": "cast",
+                    "name": "Cast",
+                    "description": "Players who will have one character for the entire game",
+                    "slots_limited": true
+                  },
+                  {
+                    "key": "horde",
+                    "name": "Horde",
+                    "description": "Players who will be playing multiple characters over the course of the game",
+                    "slots_limited": true
+                  }
+                ]
+              }
+            },
+            {
+              "name": "Limited slots by gender (classic Intercon-style)",
+              "policy": {
+                "buckets": [
+                  {
+                    "key": "female",
+                    "name": "Female role",
+                    "description": "Female characters",
+                    "slots_limited": true
+                  },
+                  {
+                    "key": "male",
+                    "name": "Male role",
+                    "description": "Male characters",
+                    "slots_limited": true
+                  },
+                  {
+                    "key": "flex",
+                    "name": "Flex",
+                    "anything": true,
+                    "description": "Characters that are not strictly defined as male or female",
+                    "slots_limited": true
+                  }
+                ]
+              }
+            }
+          ],
+          "required": true,
+          "allow_custom": true
+        },
+        {
+          "item_type": "multiple_choice",
+          "identifier": "can_play_concurrently",
+          "visibility": "normal",
+          "writeability": "normal",
+          "style": "radio_horizontal",
+          "caption": "Can this event be played concurrently with other events?",
+          "choices": [
+            {
+              "value": "true",
+              "caption": "Yes"
+            },
+            {
+              "value": "false",
+              "caption": "No"
+            }
+          ]
+        },
+        {
+          "item_type": "multiple_choice",
+          "identifier": "replayable",
+          "public_description": "Can be replayed?",
+          "visibility": "normal",
+          "writeability": "normal",
+          "style": "radio_horizontal",
+          "caption": "Can this event be replayed, if you've already played it before?",
+          "choices": [
+            {
+              "value": "true",
+              "caption": "Yes"
+            },
+            {
+              "value": "false",
+              "caption": "No"
+            }
+          ]
+        },
+        {
+          "item_type": "timespan",
+          "identifier": "length_seconds",
+          "public_description": "Event length",
+          "visibility": "normal",
+          "writeability": "normal",
+          "caption": "Event Length",
+          "required": true
+        },
+        {
+          "item_type": "multiple_choice",
+          "identifier": "mask_policy",
+          "public_description": "Mask policy",
+          "visibility": "normal",
+          "writeability": "normal",
+          "style": "radio_vertical",
+          "caption": "**Mask policy**",
+          "choices": [
+            {
+              "value": "required",
+              "caption": "Masks are required for all attendees"
+            },
+            {
+              "value": "required_unless_eating",
+              "caption": "Masks are required for all attendees unless actively eating"
+            },
+            {
+              "value": "request",
+              "caption": "Mask policy will be the strictest requested on casting surveys"
+            },
+            {
+              "value": "optional",
+              "caption": "Masks are optional, but attendees are still welcome to mask"
+            }
+          ],
+          "required": true
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "description",
+          "admin_description": "Full Description",
+          "public_description": "Description",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 15,
+          "format": "markdown",
+          "caption": "**Description** for use on the {{ convention.name }} website. This information will be displayed on the page users see for the game. The description should be at least a couple of paragraphs, but can be as long as you like.<br>The game description is used to promote your game and attract players who will enjoy it. Be reasonably clear on where and when the game is set, and what the game is about. Let your players know what can they expect to be doing during the LARP, and make them excited to play your game! (We can offer suggestions if you would like advice on this.)<br><small class=\"text-muted\">You must use Markdown for formatting. [A quick primer on Markdown syntax is available here. <i class='bi-box-arrow-up-right' aria-hidden='true'></i>](https://en.support.wordpress.com/markdown-quick-reference/)</small>\n",
+          "required": true
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "short_blurb",
+          "admin_description": "Short Blurb",
+          "public_description": "Short Blurb",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 4,
+          "format": "markdown",
+          "caption": "A **Short Blurb** (50 words or less) for the game to be used for the List of Events page and the\nconvention program. Information in the Short Blurb must also be present in the (full) description above!<br><small class=\"text-muted\">You must use Markdown for formatting. [A quick primer on Markdown syntax is available here. <i class='bi-box-arrow-up-right' aria-hidden='true'></i>](https://en.support.wordpress.com/markdown-quick-reference/)</small>",
+          "required": true
+        },
+        {
+          "item_type": "static_text",
+          "visibility": "normal",
+          "writeability": "normal",
+          "style": "normal",
+          "content": "**Content Warnings**<br>Per NEIL policy, game descriptions must include either a content warning or an explicit statement that no content warnings are applicable. For more information, see the [NEIL policies <i class='bi-box-arrow-up-right' aria-hidden='true'></i>](http://interactiveliterature.org/NEIL/communityPolicies.html#contentWarningsPolicy) page."
+        },
+        {
+          "item_type": "multiple_choice",
+          "identifier": "content_warnings_selector",
+          "admin_description": "Content Warning Picklist",
+          "public_description": "Common Content Flags",
+          "visibility": "normal",
+          "writeability": "normal",
+          "other": false,
+          "style": "checkbox_vertical",
+          "caption": "<b>Specific Content Advisories</b>\n<br>Please indicate which of these common categories of content are contained in your game",
+          "choices": [
+            {
+              "value": "content_bigotry",
+              "caption": "Depictions of bigotry"
+            },
+            {
+              "value": "content_abuse",
+              "caption": "Depictions of abuse"
+            },
+            {
+              "value": "content_violence",
+              "caption": "Realistic simulations or descriptions of violence"
+            },
+            {
+              "value": "content_rape",
+              "caption": "Content involving rape"
+            },
+            {
+              "value": "content_minorities_targeted",
+              "caption": "Humor targeting minorities and other marginalized groups"
+            },
+            {
+              "value": "content_religion",
+              "caption": "Disrespect of real-world religions"
+            },
+            {
+              "value": "content_sex",
+              "caption": "Depictions of sexual acts"
+            },
+            {
+              "value": "content_noise",
+              "caption": "Use of loud noises"
+            },
+            {
+              "value": "content_light",
+              "caption": "Use of flashing lights, or absence of light"
+            },
+            {
+              "value": "content_accessability",
+              "caption": "Physical requirements that might affect accessibility"
+            },
+            {
+              "value": "content_gender",
+              "caption": "Casting without regard to gender preferences"
+            },
+            {
+              "value": "content_none",
+              "caption": "No specific content advisory"
+            },
+            {
+              "value": "content_no_response",
+              "caption": "GMs chose not to respond"
+            }
+          ],
+          "required": true
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "content_warnings",
+          "admin_description": "Player Visible Content Warnings",
+          "public_description": "Custom Content Advisories",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 4,
+          "format": "markdown",
+          "caption": "**Custom Content Advisories or Warnings**<br>\nPlease expand upon any of the above selections, and/or any other content advisories or warnings you wish to mention or provide the above opt-out text.",
+          "required": true
+        },
+        {
+          "item_type": "age_restrictions",
+          "identifier": "age_restrictions",
+          "admin_description": "Player Visible Age Restrictions",
+          "public_description": "Age Restrictions",
+          "visibility": "normal",
+          "writeability": "normal",
+          "caption": "**Age Restrictions**<br>Please include the preferred ages of players for your larp. Examples are \"Players must be 18 or older\", or \"players under 16 must check with the GMs before playing\", to \"children at least [age] years old are welcome in this game\".",
+          "required": true
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "participant_communications",
+          "admin_description": "Participant Communications",
+          "public_description": "Participant Communications",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 4,
+          "format": "markdown",
+          "caption": "**Player Communications**<br>How will you distribute game information to your players? Will you be using a casting form? Will\ncharacter roles be cast and distributed before the convention or on site, or will characters be\ndeveloped as part of the game?<br>Please use this space to let your players know what to expect.\n",
+          "required": true
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "physical_restrictions",
+          "admin_description": "Physical Restrictions",
+          "public_description": "Physical Restrictions",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 4,
+          "format": "markdown",
+          "caption": "**Physical and Accessibility Restrictions**<br>\nAre there any physical restrictions or accessability concerns imposed by your larp? For example, live boffer combat, confined sets, lound souds, standing for long periods, etc. If so, please explain and consider if this needs to be mentioned in the event descriptions."
+        }
+      ]
+    }
+  ]
+}

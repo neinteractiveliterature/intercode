@@ -1,0 +1,35 @@
+---
+admin_notes: ''
+---
+query getEventsByCategory($categoryIds: [Int!]!) {
+  convention: conventionByRequestHost {
+    events_paginated(filters: {category: $categoryIds}, sort: {field: "first_scheduled_run_start", desc:false}) {
+      entries {
+        id
+        title
+        length_seconds
+        event_category {
+          name
+          team_member_name
+        }
+        runs {
+          id
+          starts_at
+          ends_at
+          rooms {
+            id
+            name
+          }
+        }
+        team_members {
+          id
+          display: display_team_member
+          user_con_profile {
+            id
+            name_without_nickname
+          }
+        }
+      }
+    }
+  }
+}

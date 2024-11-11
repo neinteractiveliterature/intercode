@@ -6120,6 +6120,8 @@ ALTER TABLE ONLY public.cms_files_pages
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20241111203124'),
+('20241111181051'),
 ('20241031190016'),
 ('20240916155847'),
 ('20240807155222'),

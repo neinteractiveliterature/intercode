@@ -1,0 +1,23 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {{ content_for_head }}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Anton&family=Open+Sans:ital,wght@0,400;0,700;1,400;1,700&family=Roboto+Condensed:ital,wght@0,400;0,700;1,400;1,700&display=swap" rel="stylesheet">
+    {% include "site-css" %}
+    <script type="text/javascript">
+        window.setTimeout(function () { window.location.reload(); }, 60 * 1000);
+    </script>
+    <style type="text/css">
+      body {
+        background: {{css_background_color}};
+      }
+    </style>
+  </head>
+  <body>
+    <div class="container-fluid" style="flex-grow: 1">
+      {{ content_for_layout }}
+    </div>
+  </body>
+</html>

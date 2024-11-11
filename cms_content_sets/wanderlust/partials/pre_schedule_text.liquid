@@ -1,0 +1,17 @@
+---
+admin_notes: This goes above the schedule grids
+invariant: false
+---
+{% unless convention.show_schedule == 'yes' %}
+<div class="alert alert-warning">
+  <div class="d-flex align-items-center">
+    <div class="h1 mb-0 me-3">
+      <i class="bi-exclamation-triangle-fill"></i>
+    </div>
+    <div class="flex-grow-1">
+      NOTE: This is not the final schedule. We expect to add more games and events before the convention. 
+      Games and events that are already on the schedule may change rooms to address conflicts.
+    </div>
+  </div>
+</div>
+{% endunless %}

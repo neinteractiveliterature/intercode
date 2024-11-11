@@ -1,0 +1,74 @@
+---
+name: Social Events at Intercon
+admin_notes: ''
+skip_clickwrap_agreement: false
+hidden_from_search: false
+---
+{% assign hospitality = convention.staff_positions_by_name.social_coordinator %}
+{% assign all_categories = convention.event_categories %}
+{% assign social_event = (all_categories | where: "name", "Social event") %}
+{% assign meetup = (all_categories | where: "name", "Meetup") %}
+{% assign hospitality_categories = (social_event | concat: meetup) %}
+{% assign hospitality_category_ids_urlencoded = (hospitality_categories | map: "id" | join: "%2C") %}
+
+<header class="mb-4">
+  <h1 class="mb-0">Social Events at {{ convention.name }}</h1>
+  <p class="lead">Intercon is more than just larps!  We also have a number of social events where you can meet and mingle with your fellow players and GMs.</p>
+</header>
+
+<div class="row mt-4">
+  <div class="col-md-8">
+    <section>    
+      <h3 class="mt-0">I'd like to host a social event or meetup!</h3>
+  
+      {% new_event_proposal_button "Propose an event" btn btn-outline-primary mb-2 %}
+
+      <p>Great!  Please click the button above to fill out the proposal form.  If you have more than one event you're interested in hosting, you'll need to fill out the form multiple times (similar to how larp proposals work).</p>
+
+      <p>Once you've filled out the form, we'll get back to you via email to let you know we've received it and give you some information on what you can expect.</p>
+      
+      <h2 class="mt-2"><a name="annual">Con-Sponsored Social Events</a></h2>
+
+      <h3 class="mt-2"><a name="friday">Thursday Welcome Party!</a></h3>
+<p>We are looking for people to join us for an adventure! We are now featuring a Thursday dinnertime Welcome Party to kick off the start of the con before evening games begin! Come join us for snacks and community!
+      
+      <h3 class="mt-2"><a name="friday">Friday Night Tavern Night! Saturday Night Lounge Party!</a></h3>
+      <p>Friday after most games wrap up at midnight, we host a party in con space, open and welcomed to all! The theme of this year's party is a Tavern Night with con-provided pizza, a bar setup (opening earlier), and bards are welcomed to bring their instruments! On Saturday, attendees (masks required) are welcomed to unwind in a cool lounge setting with board games and fun!
+      </p>
+
+      <h3 class="mt-2"><a name="saturday">Friday and Saturday Night Dances!</a></h3>
+      <p>After most games wrap up at midnight, on Friday and Saturday night, WE DANCE! Friday night's danced will be mask-required and Saturday night's will be mask-optional. Both nights will feature exceptional DJs!</p>
+
+      <h3 class="mt-2"><a name="friday">Lunch and Dinner Meetups!</a></h3>
+      <p>Feeling that Wanderlust and want to join fellow attendees for meals? Whether you know everyone already or are looking to make new friends, your lunch and dinner spot is saved! Come to the marked table in consuite with your lunch, meet friends, and enjoy the themed activities! There's a Druids Luncheon (Friday lunch), Rogues Dinner (Friday dinner), Warriors Luncheon (Saturday lunch), and Wizards Dinner (Saturday dinner)!
+      </p>
+
+      <h3 class="mt-2"><a name="friday">Sundae Night Social!</a></h3>
+      <p>Every year, we close the convention with one more social! Join us Sunday (sundae) night for our anual ice cream party, in the con suite!
+      </p>
+
+      There are many more, attendee-run social events too! Check out the full list! Propose your own to add to it! HYPE!
+    </section>
+    
+  </div>
+  
+  <div class="col-md-4">
+    <div class="mb-4 d-flex flex-column justify-content-stretch">
+      {% new_event_proposal_button "Propose an event" btn btn-primary btn-lg mb-2 w-100 %}
+      <a href="/events/?filters.category={{ hospitality_category_ids_urlencoded }}" class="btn btn-outline-primary btn-lg">List of social events</a>
+    </div>
+    <div class="card bg-light">
+      <div class="card-header">Contact information</div>
+      <div class="card-body">
+        <strong>{{ hospitality.name }}</strong>
+        <ul class="list-unstyled">
+          {% for user_con_profile in hospitality.user_con_profiles %}
+            <li>{{ user_con_profile.name_without_nickname }}</li>
+          {% endfor %}
+        </ul>
+        
+        <p class="mb-0">{{ hospitality.email | email_link }}</p>
+      </div>
+    </div>
+  </div>
+</div>

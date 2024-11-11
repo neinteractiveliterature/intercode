@@ -1,0 +1,53 @@
+---
+admin_notes: ''
+invariant: false
+---
+{% assign run_availabilities = convention.run_availabilities_with_counted_slots %}
+{% assign larp_availability = run_availabilities | where: "event_category_name", "Larp" | sort: "starts_at" %}
+{% assign npc_availabilities = convention.run_availabilities_with_not_counted_slots %}
+{% assign npclarp_availability = npc_availabilities | where: "event_category_name", "Larp" | sort: "starts_at" %}
+{% assign now_posix = "now" | date: "%s" | plus: 0 %}
+
+
+{% if larp_availability.size > 0 || npclarp_availability.size > 0 %}
+  <section class="my-4">
+    <h4 class="my-h4">There's still openings in all these great games!</h4>
+    {% if larp_availability.size > 0 %}
+      <h5>Player Character Signups</h5>
+      <ul>
+        {% assign displayed_any_larps = false %}
+        {% for availability in larp_availability %}
+          {% assign ends_at_posix = availability.run.ends_at | date: "%s" | plus: 0 %}
+          {% assign starts_at_plus_30_min_posix = availability.run.starts_at | date: "%s" | plus: 1800 %}
+          {% if starts_at_plus_30_min_posix > now_posix and ends_at_posix > now_posix %}
+            {% assign displayed_any_larps = true %}
+            <li><a href="{{ availability.run.event.url }}">{{ availability.run.event.title }}</a>: {{ availability.run.starts_at | date: "%a %l:%M%P" }} - {{ availability.bucket_availabilities_with_counted_slots | map: "bucket" | map: "name" | to_sentence }}</li>
+          {% endif %}
+        {% endfor %}
+     {% unless displayed_any_larps %}
+      <li><em>Sorry, all the games with available slots have already ended.</em></li>
+    {% endunless %}
+      </ul>
+    {% endif %}
+
+    {% if npclarp_availability.size > 0 %}
+      <h5>NPC or Unlimited Signups</h5>
+      <ul>
+        {% assign displayed_any_larps = false %}
+        {% for availability in npclarp_availability %}
+          {% assign ends_at_posix = availability.run.ends_at | date: "%s" | plus: 0 %}
+          {% assign starts_at_plus_30_min_posix = availability.run.starts_at | date: "%s" | plus: 1800 %}
+          {% if starts_at_plus_30_min_posix > now_posix and ends_at_posix > now_posix %}
+            {% assign displayed_any_larps = true %}
+            <li><a href="{{ availability.run.event.url }}">{{ availability.run.event.title }}</a>: {{ availability.run.starts_at | date: "%a %l:%M%P" }} - {{ availability.bucket_availabilities_with_not_counted_slots | map: "bucket" | map: "name" | to_sentence }}</li>
+          {% endif %}
+        {% endfor %}
+     {% unless displayed_any_larps %}
+      <li><em>Sorry, all the games with available slots have already ended.</em></li>
+    {% endunless %}
+        
+      </ul>
+    {% endif %}
+
+  </section>
+{% endif %}

@@ -1,0 +1,237 @@
+{
+  "title": "User con profile form",
+  "form_type": "user_con_profile",
+  "sections": [
+    {
+      "title": "Your {{ convention.name }} profile",
+      "section_items": [
+        {
+          "item_type": "static_text",
+          "visibility": "normal",
+          "writeability": "normal",
+          "style": "normal",
+          "content": "<div class=\"mb-4\">Your contact information will be made available to {{ convention.name }} staff and the organizers of the events you sign up for. Supplying the contact information is optional. If you have concerns about sharing this information, <strong>please do not enter it</strong>. But if you do not provide it, organizers may not be able to send you event-related materials.</div>"
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "first_name",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 1,
+          "caption": "First name"
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "last_name",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 1,
+          "caption": "Last name"
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "nickname",
+          "admin_description": "Badge Name",
+          "public_description": "Badge Name",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 1,
+          "caption": "Badge Name\n<br><small>This will be printed on your badge instead of your name, if provided</small>"
+        },
+        {
+          "item_type": "date",
+          "identifier": "birth_date",
+          "admin_description": "Birth date",
+          "visibility": "normal",
+          "writeability": "normal",
+          "caption": "<p class=\"m-0\">Birth date<br>\n<small>Note: Specifying your birth date is optional. But if you choose not to, you may not be able to sign up for age-restricted games.</small></p>"
+        },
+        {
+          "item_type": "multiple_choice",
+          "identifier": "pronouns",
+          "visibility": "normal",
+          "writeability": "normal",
+          "other": true,
+          "style": "radio_vertical",
+          "caption": "Pronouns",
+          "choices": [
+            {
+              "value": "She/Her/Hers",
+              "caption": "She/Her/Hers"
+            },
+            {
+              "value": "He/Him/His",
+              "caption": "He/Him/His"
+            },
+            {
+              "value": "They/Them/Theirs",
+              "caption": "They/Them/Theirs"
+            },
+            {
+              "value": "Don't use pronouns, use my name",
+              "caption": "Don't use pronouns, use my name"
+            }
+          ]
+        },
+        {
+          "item_type": "static_text",
+          "visibility": "normal",
+          "writeability": "normal",
+          "style": "normal",
+          "content": "<div class=\"card bg-light my-4\"><div class=\"card-body\"><ul class=\"list-unstyled\"><li>Email: {{ user.email }}</li><li>Password: <em>not shown</em></li></ul><p class=\"m-0\"><strong>To change your account email address or password, <a href=\"/users/edit\">edit your site account</a>.</strong></p></div></div>"
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "discord_id",
+          "admin_description": "Discord ID",
+          "public_description": "Discord ID",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 1,
+          "format": "plain",
+          "caption": "Discord ID/Username"
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "mobile_phone",
+          "admin_description": "Phone",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 1,
+          "format": "plain",
+          "caption": "Phone<br/>\n<small class=\"text-muted\">Include country code for phone numbers outside US or Canada</small>",
+          "free_text_type": "tel"
+        },
+        {
+          "item_type": "multiple_choice",
+          "identifier": "allow_sms",
+          "admin_description": "Receive site texts?",
+          "default_value": "true",
+          "visibility": "normal",
+          "writeability": "normal",
+          "style": "radio_vertical",
+          "caption": "Receive text message notifications close to or during the convention when you get into events off a waitlist, or when signups in events you’re running change?",
+          "choices": [
+            {
+              "value": "true",
+              "caption": "Receive texts"
+            },
+            {
+              "value": "false",
+              "caption": "Don't receive texts"
+            }
+          ]
+        },
+        {
+          "item_type": "multiple_choice",
+          "identifier": "receive_whos_free_emails",
+          "admin_description": "Receive emails about openings when I'm free?",
+          "default_value": "true",
+          "visibility": "normal",
+          "writeability": "normal",
+          "style": "radio_vertical",
+          "caption": "Closer to the convention, {{ convention.name }} may notify attendees who are free in particular time slots, to promote events that need signups in order to run.  These notifications are to help avoid having to cancel events, and we encourage attendees to receive them, but you may choose to opt out if you wish.",
+          "choices": [
+            {
+              "value": "true",
+              "caption": "Receive notifications about events that need signups"
+            },
+            {
+              "value": "false",
+              "caption": "Opt out of these notifications"
+            }
+          ]
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "address",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 2,
+          "caption": "Street address"
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "city",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 1,
+          "caption": "City"
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "state",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 1,
+          "caption": "State/province"
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "zipcode",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 1,
+          "caption": "ZIP/postal code"
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "country",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 1,
+          "caption": "Country"
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "how_heard",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 1,
+          "caption": "How did you hear about {{ convention.name }}?"
+        },
+        {
+          "item_type": "multiple_choice",
+          "identifier": "mailing_lists",
+          "default_value": [
+            "intercon"
+          ],
+          "visibility": "normal",
+          "writeability": "normal",
+          "style": "checkbox_vertical",
+          "caption": "I would like to receive email about:",
+          "choices": [
+            {
+              "value": "intercon",
+              "caption": "Intercon"
+            },
+            {
+              "value": "nelco",
+              "caption": "NELCO"
+            },
+            {
+              "value": "neil_other",
+              "caption": "Other NEIL initiatives"
+            }
+          ]
+        },
+        {
+          "item_type": "multiple_choice",
+          "identifier": "vaccination_status",
+          "admin_description": "Vaccination Status",
+          "public_description": "Vaccination Status",
+          "visibility": "normal",
+          "writeability": "admin",
+          "style": "checkbox_vertical",
+          "caption": "COVID-19 Vaccination Status (Read-only)\n",
+          "choices": [
+            {
+              "value": "Verified",
+              "caption": "Verified"
+            }
+          ]
+        }
+      ]
+    }
+  ]
+}

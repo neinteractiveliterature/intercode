@@ -18,23 +18,23 @@ class CmsContentStorageAdapters::Base
   end
 
   def subdir
-    raise NotImplementedError, 'CmsContentStorageAdapters::Base subclasses must implement #subdir'
+    raise NotImplementedError, "CmsContentStorageAdapters::Base subclasses must implement #subdir"
   end
 
   def identifier_attribute
-    raise NotImplementedError, 'CmsContentStorageAdapters::Base subclasses must implement #identifier_attribute'
+    raise NotImplementedError, "CmsContentStorageAdapters::Base subclasses must implement #identifier_attribute"
   end
 
   def cms_parent_association
-    raise NotImplementedError, 'CmsContentStorageAdapters::Base subclasses must implement #cms_parent_association'
+    raise NotImplementedError, "CmsContentStorageAdapters::Base subclasses must implement #cms_parent_association"
   end
 
   def identifier_for_path(_content_set, _path)
-    raise NotImplementedError, 'CmsContentStorageAdapters::Base subclasses must implement #identifier_for_path'
+    raise NotImplementedError, "CmsContentStorageAdapters::Base subclasses must implement #identifier_for_path"
   end
 
   def path_for_identifier(_content_set, _path)
-    raise NotImplementedError, 'CmsContentStorageAdapters::Base subclasses must implement #path_for_identifier'
+    raise NotImplementedError, "CmsContentStorageAdapters::Base subclasses must implement #path_for_identifier"
   end
 
   def identifier_for_model(model)
@@ -42,19 +42,19 @@ class CmsContentStorageAdapters::Base
   end
 
   def read_item_attrs(_item)
-    raise NotImplementedError, 'CmsContentStorageAdapters::Base subclasses must implement #read_item_attrs'
+    raise NotImplementedError, "CmsContentStorageAdapters::Base subclasses must implement #read_item_attrs"
   end
 
   def serialize_item(_item, _io)
-    raise NotImplementedError, 'CmsContentStorageAdapters::Base subclasses must implement #serialize_item'
+    raise NotImplementedError, "CmsContentStorageAdapters::Base subclasses must implement #serialize_item"
   end
 
   def filename_pattern
-    '*'
+    "*"
   end
 
   def own_paths_from_disk_for_cms_content_set(content_set)
-    Dir[content_set.content_path(subdir, '**', filename_pattern)]
+    Dir[content_set.content_path(subdir, "**", filename_pattern)]
   end
 
   def own_items_from_disk_for_cms_content_set(content_set)
@@ -93,6 +93,16 @@ class CmsContentStorageAdapters::Base
     end
   end
 
+  def item_from_database(identifier)
+    model = cms_parent_association.find_by(identifier_attribute => identifier)
+    ItemInfo.new(
+      content_set: cms_content_set,
+      path: path_for_identifier(cms_content_set, identifier),
+      identifier:,
+      model:
+    )
+  end
+
   def merge_items(item_lists)
     item_lists_by_identifier = item_lists.map { |item_list| item_list.index_by(&:identifier) }
     item_lists_by_identifier.inject(&:merge).values
@@ -101,7 +111,7 @@ class CmsContentStorageAdapters::Base
   def basename_without_extension(path, extension)
     root_relative_path = Pathname.new(path).relative_path_from(CmsContentSet.root_path)
     base_path = File.join(root_relative_path.each_filename.to_a.slice(2..-1))
-    base_path.gsub(/#{Regexp.escape extension}\z/, '')
+    base_path.gsub(/#{Regexp.escape extension}\z/, "")
   end
 
   def parse_content_with_yaml_frontmatter(raw)

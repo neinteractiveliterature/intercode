@@ -1,0 +1,58 @@
+---
+admin_notes: ''
+invariant: false
+---
+<div class="row flex-column flex-lg-row align-items-center my-3" style="clear: both">
+  
+  <div class="col-lg pt-2 order-last">
+    <h1 class='display-4 d-none d-lg-block con-font'>
+      {{convention.name}}:  <span class="theme-title"><a class="text-secondary" href="{% page_url theme %}">{{con_theme}}</a></span>
+    </h1>
+    <h2 class='display-5 con-font'>
+      {% assign startMonth = convention.starts_at | date: "%m" %}
+      {% assign endMonth = convention.ends_at | date: "%m" %}
+ 
+      {% if startMonth == endMonth %}
+        <span class="d-lg-none">{{ convention.starts_at | date: "%b %d" }}-{{convention.ends_at|date: "%d, %Y"}}</span>
+        <span class="d-none d-lg-inline">{{ convention.starts_at | date: "%B %d" }}-{{convention.ends_at|date: "%d, %Y"}}</span>
+      {% else %}
+        <span class="d-xl-none">{{ convention.starts_at | date: "%b %d" }} to {{convention.ends_at|date: "%b %d, %Y"}}</span>
+        <span class="d-none d-xl-inline">{{ convention.starts_at | date: "%B %d" }} to {{convention.ends_at|date: "%B %d, %Y"}}</span>
+      {% endif %}
+    </h2>
+    <h2 class='display-5 con-font'>
+      <a class="text-secondary" href="{% page_url hotel %}">Warwick, RI</a>
+    </h2>
+
+    <p class="lead">
+      Welcome to {{convention.name}}, the premiere multi-genre <a href="{% page_url aboutlarp %}">Live Action Role Playing</a> (LARP) convention in the world.  
+    </p>
+    <p>  
+      {{convention.name}} is the  <a href="http://www.interactiveliterature.org/NEIL/interconConventions.html" rel="noopener" target="_blank">{{convention_number}}</a> Intercon in the greater Boston area, and we're so excited for this year! We can do or be anything with larp. If you love to larp, or you've always wanted to try Larping, then we welcome you to come join us at {{convention.name}}. Come join the Intercon Community!
+    </p>
+    <div class="row my-2">
+      <div class="col">
+      {% render 'attendee_count', user_con_profile:user_con_profile, convention:convention%}
+      </div>
+    </div>
+
+    {% unless user_con_profile %}
+      <p class="lead my-2">
+        <a class='btn btn-primary' href='/users/sign_in'>Log In or Sign Up</a>
+      </p>
+    {% endunless %}
+  </div>
+  
+   <div class="col-9 col-lg-4 text-center order-first">
+    <a href="{% page_url theme %}" class="con-logo-roundrect mb-4 mx-2">
+      <img 
+        srcset="{% file_url "Intercon-w-logo-480.png" %} 480w, {% file_url "Intercon-w-logo-800.png" %} 800w" 
+        sizes="(max-width: 640px) 480px, 800px"
+        src="{% file_url "Intercon-w-logo-800.png" %}"
+        alt="{{ convention.name }}: {{ con_theme }}"
+        class="rounded mx-auto d-block"
+      >
+    </a>
+    {% render 'countdown', convention:convention%} 
+  </div>
+</div>

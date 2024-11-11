@@ -1,0 +1,63 @@
+---
+invariant: false
+---
+{% assign eventEnd = signup.ends_at | date: '%s' %}
+{% assign eventDiff = eventEnd | minus: nowTimestamp %}
+
+<li class="list-group-item d-flex align-items-center">
+  <div class="flex-grow-1">
+    <div>
+      <strong>
+        {{ signup.starts_at | date: "%a %l:%M%P" }} - {{ signup.ends_at | date: "%l:%M%P" }}:
+        {{ signup.run.room_names | join: ', ' }}
+      </strong>
+      <br>
+      <span>
+        {% if signup.state == 'waitlisted' %}
+          <i class="bi-hourglass-split" aria-hidden="true"></i>
+        {% elsif signup.team_member? %}
+          {% case signup.event.event_category.name %}
+            {% when "Con services" %}
+              <i class="bi-gear-fill" aria-hidden="true"></i>
+            {% when "Volunteer event" %}
+              <i class="bi-gear-fill" aria-hidden="true"></i>
+            {% when "Larp" %}
+              <i class="bi-megaphone-fill" aria-hidden="true"></i>
+            {% when "Moderated discussion" %}
+              <i class="bi-megaphone-fill" aria-hidden="true"></i>
+            {% when "Panel" %}
+              <i class="bi-megaphone-fill" aria-hidden="true"></i>
+            {% when "Presentation" %}
+              <i class="bi-megaphone-fill" aria-hidden="true"></i>
+            {% when "Town hall" %}
+              <i class="bi-megaphone-fill" aria-hidden="true"></i>
+            {% when "Workshop" %}
+              <i class="bi-megaphone-fill" aria-hidden="true"></i>
+            {% when "Party" %}
+              <i class="bi-chat-fill" aria-hidden="true"></i>
+            {% when "Social event" %}
+              <i class="bi-chat-fill" aria-hidden="true"></i>
+            {% when "Meetup" %}
+              <i class="bi-chat-fill" aria-hidden="true"></i>
+            {% else %}
+              <i class="bi-people-fill" aria-hidden="true"></i>
+          {% endcase%}
+        {% elsif signup.bucket.name %}
+          <i class="bi-person-circle" aria-hidden="true"></i>
+        {% endif %}
+      </span>
+      &nbsp;{{ signup.event.event_category.name | replace: "_", " " | humanize}}:&nbsp;
+      <strong>
+        <a href="{{ signup.event_url }}">{{ signup.event.title }} </a>
+      </strong>
+      {% render "signup_bucket_description" signup:signup %}
+    </div>
+  </div>
+  <div>
+    {% if eventDiff > 0 %}
+      {% withdraw_user_signup_button signup "Withdraw" btn-outline-danger btn-sm %}
+    {% else %}
+    Past Event
+    {% endif %}
+  </div>
+</li>

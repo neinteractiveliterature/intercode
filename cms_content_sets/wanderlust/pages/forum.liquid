@@ -1,0 +1,60 @@
+---
+name: Forum@Intercon
+admin_notes: ''
+skip_clickwrap_agreement: false
+hidden_from_search: false
+---
+{% assign all_categories = convention.event_categories %}
+{% assign brainstorming_session = (all_categories | where: "name", "Brainstorming session") %}
+{% assign moderated_discussion = (all_categories | where: "name", "Moderated discussion") %}
+{% assign panel = (all_categories | where: "name", "Panel") %}
+{% assign presentation = (all_categories | where: "name", "Presentation") %}
+{% assign workshop = (all_categories | where: "name", "Workshop") %}
+{% assign forum_categories = (brainstorming_session | concat: moderated_discussion | concat: panel | concat: presentation | concat: workshop) %}
+{% assign forum_category_ids_urlencoded = (forum_categories | map: "id" | join: "%2C") %}
+
+<header class="mb-4">
+  <h1 class="mb-0">Forum@{{ convention.name }}</h1>
+  <div class="lead">A dual-track LARP conference at Intercon</div>
+</header>
+
+<div class="row">
+  <div class="col-md-8">
+    <p>Forum@Intercon is dual-track LARP conference that takes place during Intercon.  The sessions include workshops, moderated discussions, presentations, and panel discussions.</p>
+
+    <p>Forum@Intercon was previously known by many names, including "panels," "precon," and "Thursday Thing."</p>
+
+    <section class="mt-4">    
+      <h3>I'd like to lead a session at Forum@{{ convention.name }}!</h3>
+  
+      {% new_event_proposal_button "Propose a session" btn btn-outline-primary mb-2 %}
+
+      <p>Great!  Please click the button above to fill out the proposal form.  If you have more than one session you're interested in leading, you'll need to fill out the form multiple times (similar to how LARP proposals work).</p>
+
+      <p>Once you've filled out the form, we'll get back to you via email to let you know we've received it and give you some information on what you can expect.</p>
+    </section>
+    
+  </div>
+  
+  <div class="col-md-4">
+    <div class="mb-4 d-flex flex-column justify-content-stretch">
+      {% new_event_proposal_button "Propose an session" btn btn-primary btn-lg mb-2 w-100 %}
+      <a href="/events/?filters.category={{ forum_category_ids_urlencoded }}" class="btn btn-outline-primary btn-lg">List of sessions</a>
+    </div>
+    <div class="card bg-light">
+      <div class="card-header">Contact information</div>
+      <div class="card-body">
+        {% assign staff_position = convention.staff_positions_by_name.forum_intercon_coordinator %}
+        
+        <strong>{{ staff_position.name }}</strong>
+        <ul class="list-unstyled">
+          {% for user_con_profile in staff_position.user_con_profiles %}
+            <li>{{ user_con_profile.name_without_nickname }}</li>
+          {% endfor %}
+        </ul>
+        
+        <p class="mb-0">{{ staff_position.email | email_link }}</p>
+      </div>
+    </div>
+  </div>
+</div>

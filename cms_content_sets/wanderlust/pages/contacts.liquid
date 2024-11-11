@@ -1,0 +1,40 @@
+---
+name: Convention Contacts
+admin_notes: ''
+skip_clickwrap_agreement: false
+hidden_from_search: false
+---
+<h1 class="my-3">Convention Contacts</h1>
+
+<p>The following people are in charge of various aspects of {{ convention.name }}:</p>
+
+{% assign staff_positions = convention.staff_positions | sort_natural:'name' %}
+<div class='table-responsive'>
+<table class="table">
+  <thead>
+    <tr>
+      <th>Position</th>
+      <th>People</th>
+      <th>Contact email</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for staff_position in staff_positions %}
+      {% assign user_con_profiles = staff_position.user_con_profiles | sort_natural:'name_inverted' %}
+      {% assign user_con_profiles_size = user_con_profiles|size %}
+      <tr>
+        <td><a href="{% page_url role-descriptions %}#{{ staff_position.name | downcase | remove: " "|remove: "-deputy"}}">{{ staff_position.name }}</a></td>
+        <td>
+          <ul class="list-unstyled my-1">
+            {% for user_con_profile in user_con_profiles %}
+              <li class='my-1'><img class="me-3" style="border-radius:20px" src="{{ user_con_profile.gravatar_url }}?s=40&r=pg&d=mm" alt="{{ user_con_profile.bio_name}}'s Icon">
+{{ user_con_profile.name_without_nickname }}</li>
+            {% endfor %}
+          </ul>
+        </td>
+        <td>{{staff_position.email_link}}</a></td>
+      </tr>
+    {% endfor %}
+  </tbody>
+</table>
+</div>

@@ -1,0 +1,135 @@
+---
+name: Game Signup FAQ
+admin_notes: REVIEW
+skip_clickwrap_agreement: false
+hidden_from_search: false
+---
+{% assign gm_coordinator = convention.staff_positions_by_name.gm_coordinator %}
+{% assign web_team = convention.staff_positions_by_name.web_team %}
+<h1 class="my-3">Game Signup FAQ</h1>
+
+<div class="row">
+  <div class="col-md-3">
+    <ul class="section-nav sticky-top" style="top:72px">
+      <li class="toc-entry menu-header" style='display:none'>
+        <h4>Game Signup FAQ</h4>
+      </li>
+      <li class="toc-entry"><a href="#overview">Overview</a></li>
+      <li class="toc-entry"><a href="#dates">Signup Dates</a></li>
+      <li class="toc-entry"><a href="#tips">Tips for Signup</a>
+        <ul>
+          <li class="toc-entry"><a href="#pay">Pay in Advance</a></li>
+          <li class="toc-entry"><a href="#plan">Make a Plan</a></li>
+          <li class="toc-entry"><a href="#bucket">Know Which Bucket You Want</a>
+          <ul>
+            <li class="toc-entry"><a href="#bucket-flex">The Flex Bucket</a>
+            <li class="toc-entry"><a href="#bucket-np">No Preference</a>
+          
+          </ul>
+          </li>
+          <li class="toc-entry"><a href="#signin">Stay Signed In</a></li>
+          <li class="toc-entry"><a href="#norefresh">No Need to Refresh</a></li>
+          <li class="toc-entry"><a href="#stickaround">Stick Around</a></li>
+        </ul>
+      </li>
+      <li class="toc-entry"><a href="#problems">Having Problems?</a></li>
+    </ul>
+  </div>
+<div class='col'>
+<h2 class='my-3'><a name='overview'>Overview</a></h2>
+<p>
+  Intercon lets you sign up for games before the convention.  Since games have limited space, our goal with this process is to allow as many people as possible to play in the games they prefer.
+</p>
+
+<p>
+  Game signup is separate from convention registration. By registering and paying for Intercon, you are entitled to sign up for as many games as you like, provided they are not running concurrently.  Furthermore, you <strong>do not</strong> need to have provided Intercon with proof of up-to-date vaccination to sign up for games - we check vaccination status closer to the con.
+</p>
+
+<p>
+  Individual game signups usually begin in November, but will be announced in an email newsletter, which is sent to everyone who has registered. You must be paid up in order to sign up for games.
+</p>
+
+<p>There are four rounds of signups. Signups usually open at 7pm Eastern; each round is six days later than the last.</p>
+<div class="alert text-bg-warning">As of October 2024, this is under review, but a new fourth round has been added for {{convention.name}}</div>
+<ul>
+	<li>In the first round, you may sign up for one game</li>
+	<li>In the second round, you may sign up for a second game</li>
+	<li>In the third round, you may sign up for a third game</li>
+    <li>In the fourth round, you may sign up for a fourth game</li>
+	<li>In the final round, you may sign up for as many games as you like</li>
+</ul>
+<hr>
+<h2 class='my-3'><a name='dates'>Signup Dates</a></h2>
+<p>
+  For {{convention.name}}, these are the likely signup dates:
+</p>
+{% include 'signup_schedule'%}
+<hr>
+<h2 class='my-3'><a name='tips'>Tips for Signup</a></h2>
+
+<h3 class="my-2"><a name='pay'>Pay In Advance</a></h3>
+
+<p>Have you paid for Intercon?  If not, you won't be able to sign up for games, so please make sure to log in and pay for the con before signups open!  (Or if you're a GM, make sure you've set yourself up to be comped for your game.  You can email the {{gm_coordinator.name_with_email_link}} if you're not sure how.)</p>
+
+
+<h3 class="my-2"><a name='plan'>Make a Plan</a></h3>
+
+<p>Signups tend to go pretty fast once we open the floodgates!  It pays to plan ahead, not only for which game you'd like to sign up for, but for one or two backup options in case your first choice fills too fast.</p>
+
+<h3 class="my-2"><a name='bucket'>Know Which Bucket You Want</a></h3>
+
+<p>
+  Intercon allows games to split up their signups into "buckets" of character types.  Many games divide their buckets by character gender (e.g. "Female Role" and "Male Role" buckets).  Other games use "Cast" and "Horde", or anything else the game's GMs decide.
+</p>
+<p>
+  On the web page for a game, you'll see a button for each bucket in the game.  For example, if the game has buckets for "PC" and "NPC", you'll see buttons for "Sign up - PC" and "Sign up - NPC".  Click on whichever one you'd like to sign up for.
+</p>
+<p>
+  Some games don't use buckets, and instead either choose roles for players later in the process or have players create their own characters.  This type of game will just have a single "Sign up" button on its page.
+</p>
+<p>
+We expect GMs to honor your signup bucket selection when it comes to casting.  If you have any questions or concerns, please email the {{convention.staff_positions_by_name.attendee_coordinator.name_with_email_link}}.
+</p>
+  
+<h4 class="my-2"><a name='bucket-flex'>The Flex Bucket</a></h4>
+<p>
+  Some games may have a "Flex" bucket, which shows up in the list of buckets of character types. The Flex bucket represents characters which can be <strong>any one of the other buckets above it</strong>.  For example, a larp might have 6 robot characters, 3 human characters, and 7 characters that could be played as either a robot or a human.  Those 7 characters would make up the flex bucket.
+ </p>
+<p>
+  Games that have a flex bucket don't have a signup button <strong>specifically</strong> for the flex bucket (in other words, there is no "Sign up - Flex" button).  That's because ultimately, all the characters in the flex bucket will end up as one of the other buckets.  In the example above, all 7 characters in the flex bucket are either robots or humans - we just don't know which each one of them is yet.
+</p>
+<p>
+  Because of that, we still ask you about your preference between the different buckets when you sign up.  We keep a record of what button you clicked on, even if you end up in the flex bucket.  We show the GMs which button you clicked, and we expect them to honor your stated bucket preferences.
+</p>
+
+<p>One important thing to note is that, because of this, if a game has every slot of the specific bucket you want showing as filled, but there's still empty space in the flex bucket, you can go ahead and sign up directly for the bucket you want, and that will assign your signup to that bucket, using a character from the flex bucket.
+</p>
+  
+<h4 class="my-2"><a name='bucket-np'>No Preference</a></h4>
+<p>
+  Many games offer a "Sign up - No preference" button in addition to the other signup buttons.  If you don't have a preference between the buckets in the game, this button is for you.  In our above example, let's say you're fine playing a human or a robot and you don't really care which you play as long as you get to be in the game.  If that's the case, click this button, and we'll record that you didn't have a preference and show that to the GMs.
+</p>
+<p>
+  If a game has a flex bucket (see the section above), clicking "Sign up - No preference" <strong>does not guarantee you a spot in the flex bucket.</strong>  Clicking that button means that you have no preference about which bucket you're in.  You might even be moved between buckets to make room for players who clicked buttons to sign up for specific buckets.  (We'll never drop you from the game, but if you clicked "Sign up - No preference" we might move you around within the buckets.)
+</p>
+<p>
+  One exception is games that have NPCs.  If a game has NPCs, "Sign up - No preference" usually means "I want to be a PC, but I don't care which type of PC."  If that's the case, the game page will indicate that by placing the ‘Sign up - NPC’ button below the ‘Sign up - No Preference’ button and  visually separating it from other "Sign up" buttons.  If you click "Sign up - No preference" for a game like this, you won't be slotted into an NPC role, but might be slotted into any of the other buckets.
+</p>
+  
+<h3 class="my-2"><a name='signin'>Stay Signed In</a></h3>
+
+<p>Years ago, you had to sign out of the web site and sign back in once signups opened.  Those days are long gone!  You can just stay signed in on any page of the site you like.</p>
+
+<h3 class="my-2"><a name='norefresh'>No Need to Refresh</a></h3>
+
+<p>There's no need to refresh the game page for the game you want to sign up for when signups begin, you can simply click on the signup button, and the site will process the request appropriately.</p>
+
+<h3 class="my-2"><a name='stickaround'>Stick around</a></h3>
+
+<p>The best place to be on the Intercon site when signups open is on the page of your first choice game.  When it gets close to signup round opening time, start clicking on the button for the signup bucket you want.  If you click too early, you'll get an error saying that registration isn't open yet &mdash; that's fine, just keep hitting the button until signups open.  (It's ok, our mighty web server can handle it.)</p>
+<hr>
+<h2 class="my-3"><a name='problems'>Having Problems?</a></h2>
+
+<p>If you have any trouble signing up, please email the {{ web_team.name_with_email_link }}.  We'll be on the lookout for emails during the signup rush and will try to get things fixed up as quickly as possible.</p>
+</div>
+</div>

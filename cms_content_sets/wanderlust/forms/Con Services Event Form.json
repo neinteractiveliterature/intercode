@@ -1,0 +1,66 @@
+{
+  "title": "Con Services Event Form",
+  "form_type": "event",
+  "sections": [
+    {
+      "title": "Event Properties",
+      "section_items": [
+        {
+          "item_type": "free_text",
+          "identifier": "title",
+          "public_description": "Title",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 1,
+          "caption": "Title",
+          "required": true
+        },
+        {
+          "item_type": "timespan",
+          "identifier": "length_seconds",
+          "visibility": "normal",
+          "writeability": "normal",
+          "caption": "Event Length",
+          "required": true
+        },
+        {
+          "item_type": "multiple_choice",
+          "identifier": "mask_policy",
+          "public_description": "Mask Policy",
+          "default_value": "required",
+          "visibility": "normal",
+          "writeability": "normal",
+          "style": "radio_vertical",
+          "caption": "**Mask policy**",
+          "choices": [
+            {
+              "value": "required",
+              "caption": "Masks are required for all attendees"
+            },
+            {
+              "value": "required_unless_eating",
+              "caption": "Masks are required for all attendees unless actively eating"
+            },
+            {
+              "value": "optional",
+              "caption": "Masks are optional, but attendees are still welcome to mask"
+            }
+          ],
+          "required": true
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "description",
+          "admin_description": "Full Description",
+          "public_description": "Description",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 15,
+          "format": "markdown",
+          "caption": "**Description** for use on the {{ convention.name }} website. This information will be displayed on the page users see for the game. The description should be at least a couple of paragraphs, but can be as long as you like.<br>The game description is used to promote your game and attract players who will enjoy it. Be reasonably clear on where and when the game is set, and what the game is about. Let your players know what can they expect to be doing during the LARP, and make them excited to play your game! (We can offer suggestions if you would like advice on this.)<br><small class=\"text-muted\">You must use Markdown for formatting. [A quick primer on Markdown syntax is available here. <i class='bi-box-arrow-up-right' aria-hidden='true'></i>](https://en.support.wordpress.com/markdown-quick-reference/)</small>\n",
+          "required": true
+        }
+      ]
+    }
+  ]
+}

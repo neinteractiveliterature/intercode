@@ -1,0 +1,42 @@
+---
+admin_notes: ''
+invariant: false
+---
+{% assign positionslist = display_user_con_profile.staff_positions | map: "name" %}
+
+{% if display_user_con_profile.privileges contains 'Proposal Committee' %}
+  {% assign privslist = "Proposal Committee" |split: ", " %}
+  {% assign positionslist = positionslist | concat:privslist %}
+{% endif %}
+
+{% if display_user_con_profile.privileges contains 'Con Com' %}
+  {% assign privslist = "Con Com" |split: ", " %}
+  {% assign positionslist = positionslist | concat:privslist %}
+{% endif %}
+
+{% assign positions = positionslist |join: ', ' %}
+{% assign team_member_event_names = display_user_con_profile.team_members | map:'event' | map:'title' | join:', ' %}
+<hr>
+<div id="user-{{ display_user_con_profile.id }}">
+  <div class="media d-flex align-items-start mb-3">
+    {% include 'gravatar80' %}
+    <div class="media-body">
+      <h5 class="mt-0"><a>{{ display_user_con_profile.bio_name }}</a></h5>
+      <ul class="list-unstyled">
+        {% unless team_member_event_names == blank %}
+          <li>GM/Organizer for: {{ team_member_event_names }}</li>
+        {% endunless %}
+
+        {% unless positions == blank%}
+          <li>{{ positions }}</li>
+        {% endunless %}
+      </ul>
+
+      {{ display_user_con_profile.bio_html }}
+
+      {% if display_user_con_profile.id == user_con_profile.id %}
+        <div class="mt-2"><a href="/my_profile/edit_bio" class="btn btn-primary btn-sm">Edit bio</a></div>
+      {% endif %}
+    </div>
+  </div>
+</div>

@@ -21,14 +21,7 @@ body_text: |-
 
   Your new signup:
   {{ signup.starts_at | date: "%a %l:%M%P" }} - {{ signup.ends_at | date: "%l:%M%P" }}: {{ signup.run.room_names | join: ', ' }}
-  {{ signup.event.event_category.name | replace: "_", " " | humanize}}: {{ signup.event.title }}
-  {%- if signup.state != 'confirmed' %} [{{ signup.state | capitalize }}]{% endif -%}
-  {%- if signup.team_member? %} [{{ signup.event.team_member_name }}]
-  {%- elsif signup.bucket.name -%}
-    {%- if signup.bucket.name != 'Signups' -%}
-      {%- if signup.bucket.name != 'Interested' %} [{{ signup.bucket.name }}]{% endif -%}
-    {%- endif -%}
-  {%- endif %}
+  {{ signup.event.event_category.name | replace: "_", " " | humanize}}: {{ signup.event.title }}{% render "signup_bucket_description" signup:signup %}
   {{ signup.event_url | absolute_url }}
 ---
 {% assign run = signup.run %}
@@ -56,17 +49,6 @@ body_text: |-
     <strong>
       <a href="{{ signup.event_url | absolute_url }}">{{ signup.event.title }}</a>
     </strong>
-    {% if signup.state != 'confirmed' %}
-      &nbsp;[{{ signup.state | capitalize }}]
-    {% endif %}
-    {% if signup.team_member? %}
-      &nbsp;[{{ signup.event.team_member_name }}]
-    {% elsif signup.bucket.name %}
-      {% if signup.bucket.name != 'Signups' %}
-        {% if signup.bucket.name != 'Interested' %}
-          &nbsp;[{{ signup.bucket.name }}]
-        {% endif %}
-      {% endif %}
-    {% endif %}
+    {% render "signup_bucket_description" signup:signup %}
   </div>
 </li>

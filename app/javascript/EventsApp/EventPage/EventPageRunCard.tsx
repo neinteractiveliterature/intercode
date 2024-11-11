@@ -1,6 +1,6 @@
 import { useMemo, useCallback, useContext } from 'react';
 import { ApolloCache } from '@apollo/client';
-import { useTranslation, Trans } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import { useModal, useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import RunCard from './RunCard';
@@ -8,21 +8,16 @@ import buildSignupOptions, { SignupOption } from './buildSignupOptions';
 import AppRootContext from '../../AppRootContext';
 import CreateModeratedSignupModal from './CreateModeratedSignupModal';
 import { EventPageQueryData, EventPageQueryDocument, EventPageQueryVariables } from './queries.generated';
-import { SignupAutomationMode, SignupMode, SignupRankedChoiceState } from '../../graphqlTypes.generated';
+import { SignupMode, SignupRankedChoiceState } from '../../graphqlTypes.generated';
 import SignupCountData from '../SignupCountData';
-import { parseSignupRounds } from '../../SignupRoundUtils';
-import { DateTime } from 'luxon';
 import {
   CreateMySignupDocument,
   CreateSignupRankedChoiceDocument,
-  WithdrawMySignupDocument,
   WithdrawSignupRequestDocument,
 } from './mutations.generated';
 import { client } from '../../useIntercodeApolloClient';
 import { useRevalidator } from 'react-router';
-
-// eslint-disable-next-line @typescript-eslint/no-explicit-any
-type TI = any;
+import { useWithdrawMySignupModal } from './WithdrawMySignupModal';
 
 function updateCacheAfterSignup(
   cache: ApolloCache<unknown>,
@@ -85,7 +80,7 @@ function EventPageRunCard({
   addToQueue,
 }: EventPageRunCardProps): JSX.Element {
   const { t } = useTranslation();
-  const { signupMode, signupAutomationMode } = useContext(AppRootContext);
+  const { signupMode } = useContext(AppRootContext);
   const myPendingRankedChoices = useMemo(
     () => run.my_signup_ranked_choices.filter((choice) => choice.state === SignupRankedChoiceState.Pending),
     [run.my_signup_ranked_choices],
@@ -109,12 +104,7 @@ function EventPageRunCard({
   const mySignup = run.my_signups.find((signup) => signup.state !== 'withdrawn');
   const myPendingSignupRequest = run.my_signup_requests.find((signupRequest) => signupRequest.state === 'pending');
   const revalidator = useRevalidator();
-
-  const currentRound = useMemo(() => {
-    const parsedRounds = parseSignupRounds(signupRounds);
-    const now = DateTime.local();
-    return parsedRounds.find((round) => round.timespan.includesTime(now));
-  }, [signupRounds]);
+  const withdrawMySignupModal = useWithdrawMySignupModal();
 
   const selfServiceSignup = useCallback(
     async (signupOption: SignupOption) => {
@@ -160,44 +150,6 @@ function EventPageRunCard({
     [event, run, revalidator],
   );
 
-  const withdrawPrompt = useMemo(() => {
-    if (mySignup && !mySignup.counted) {
-      return t('events.withdrawPrompt.notCounted', { eventTitle: event.title });
-    } else if (
-      signupAutomationMode === SignupAutomationMode.RankedChoice &&
-      typeof currentRound?.maximum_event_signups === 'number'
-    ) {
-      return t('events.withdrawPrompt.duringLimitedRankedChoiceSignupRoundCounted', { eventTitle: event.title });
-    } else if (signupMode === 'moderated') {
-      return (
-        <Trans i18nKey="events.withdrawPrompt.moderatedSignup" values={{ eventTitle: event.title }}>
-          <p>
-            <strong>
-              If you’re thinking of signing up for a different event instead, please go to that event’s page and request
-              to sign up for it.
-            </strong>{' '}
-            If the request is accepted, you’ll automatically be withdrawn from this event.
-          </p>
-          <p className="mb-0">Are you sure you want to withdraw from {{ eventTitle: event.title } as TI}?</p>
-        </Trans>
-      );
-    } else {
-      return t('events.withdrawPrompt.selfServiceSignup', { eventTitle: event.title });
-    }
-  }, [event.title, mySignup, signupMode, signupAutomationMode, t, currentRound?.maximum_event_signups]);
-
-  const withdraw = useCallback(async () => {
-    confirm({
-      prompt: withdrawPrompt,
-      action: async () => {
-        await client.mutate({ mutation: WithdrawMySignupDocument, variables: { runId: run.id } });
-        await client.resetStore();
-        revalidator.revalidate();
-      },
-      renderError: (error) => <ErrorDisplay graphQLError={error} />,
-    });
-  }, [confirm, withdrawPrompt, run.id, revalidator]);
-
   const createSignup = (signupOption: SignupOption) => {
     if (signupMode === SignupMode.SelfService || signupOption.action === 'ADD_TO_QUEUE' || signupOption.teamMember) {
       return selfServiceSignup(signupOption);
@@ -240,7 +192,11 @@ function EventPageRunCard({
         signupOptions={signupOptions}
         showViewSignups
         createSignup={createSignup}
-        withdrawSignup={withdraw}
+        withdrawSignup={() => {
+          if (mySignup) {
+            withdrawMySignupModal.openModal({ signup: mySignup, event, run, signupRounds });
+          }
+        }}
         withdrawPendingSignupRequest={withdrawPendingSignupRequest}
       />
 
@@ -253,6 +209,8 @@ function EventPageRunCard({
           run={run}
         />
       )}
+
+      <withdrawMySignupModal.Component />
     </div>
   );
 }

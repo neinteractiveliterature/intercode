@@ -1,0 +1,27 @@
+---
+invariant: false
+---
+<a class='list-group-item list-group-item-action flex-column align-items-start' href='/events/{{event.id}}'>
+  <div class="d-flex w-100 justify-content-between">
+    <h5 class="mb-1">{{event.title}}</h5>
+    <small>{{event.event_category.name | replace: "_", " " | humanize}}</small>
+  </div>
+  <div class="d-flex w-100 justify-content-between mb-1">
+    <span>
+      <strong>{{event.event_category.team_member_name|humanize}}(s):</strong>
+      {{hosts| join: ', '}}
+    </span>
+    {% if event.runs.size == 0 %}
+      <span> Not Scheduled Yet </span>
+    {% else %}      
+      {% assign runs = "" |split: ", " %}
+      {% for run in event.runs %}
+        {% assign runlist = run.starts_at | date: "%a %l:%M%P"|split: ", " %}
+        {% assign runs = runs | concat: runlist %}
+      {% endfor %}
+      <span>
+        {{runs | join: ', '}}      
+      </span>
+    {% endif %}
+  </div>
+</a>

@@ -1,6 +1,6 @@
 class CmsContentStorageAdapters::CmsPartials < CmsContentStorageAdapters::Base
   def subdir
-    'partials'
+    "partials"
   end
 
   def cms_parent_association
@@ -8,19 +8,19 @@ class CmsContentStorageAdapters::CmsPartials < CmsContentStorageAdapters::Base
   end
 
   def identifier_attribute
-    'name'
+    "name"
   end
 
   def filename_pattern
-    '*.liquid'
+    "*.liquid"
   end
 
   def identifier_for_path(_content_set, path)
-    basename_without_extension(path, '.liquid')
+    basename_without_extension(path, ".liquid")
   end
 
   def path_for_identifier(content_set, identifier)
-    content_set.content_path(File.join('partials', "#{identifier}.liquid"))
+    content_set.content_path(File.join("partials", "#{identifier}.liquid"))
   end
 
   def read_item_attrs(item)
@@ -30,7 +30,11 @@ class CmsContentStorageAdapters::CmsPartials < CmsContentStorageAdapters::Base
   def serialize_item(item, io)
     write_content_with_yaml_frontmatter(
       item.model.content.gsub("\r\n", "\n"),
-      item.model.attributes.except('content', 'id', 'parent_id', 'parent_type', 'created_at', 'updated_at').compact,
+      item
+        .model
+        .attributes
+        .except("content", "id", "parent_id", "parent_type", "created_at", "updated_at", "name")
+        .compact,
       io
     )
   end

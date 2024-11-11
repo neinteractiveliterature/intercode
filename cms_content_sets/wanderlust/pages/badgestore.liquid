@@ -1,0 +1,36 @@
+---
+name: Badge Store
+admin_notes: ''
+skip_clickwrap_agreement: false
+hidden_from_search: true
+---
+{% assign products = convention.available_products|sort: "name" %}
+<h1 class="my-3">{{convention.name}} Products</h1>
+
+<div class="alert alert-warning col-md-10 offset-md-1" role="alert">
+  <i class="bi-exclamation-triangle-fill" aria-hidden="true"></i> The deadline for all orders is {{shirt_order_deadline}}.
+</div>
+<div class="container mt-3">
+  <div class="row ">
+    <div class="card-deck d-flex align-items-stretch">
+      {% for product in products %}
+        {% unless product.name contains 'Staff' or product.provides_ticket_type %}
+          <div class="card mb-4" style="min-width: 18rem; ">
+            
+            <div class="card-body">
+              <h5 class="card-title">{{product.name}}</h5>
+              <p class="card-text">{{product.description}}</p>
+              </div>
+
+              <div class="card-footer">
+                <span class="align-middle" style="font-size:1.6em">{{product.price}}</span>
+                <a role="button" class="btn btn-primary float-end" href="{{product.url}}">Purchase</a>
+            </div>
+          </div>
+        {% endunless %}
+      {% endfor %}
+    </div>
+  </div>
+</div>
+
+ 

@@ -1,0 +1,27 @@
+---
+admin_notes: ''
+invariant: false
+---
+{% assign team_member_events = user_con_profile.team_member_events %}
+
+{% if team_member_events.size > 0 %}
+  <section class="card bg-info text-white my-4">
+    <div class="card-header">Events I'm Running</div>
+
+    <ul class="list-group list-group-flush text-dark">
+      {% for event in team_member_events %}
+        <li class="list-group-item d-flex justify-content-between align-items-baseline">
+          <div>
+             {{ event.event_category.name | replace: "_", " " | humanize}}:&nbsp;
+            <a href="{{ event.url }}">{{ event.title }}</a>
+          </div>
+          <div>
+            <a href="{{ event.url }}/edit" class="btn btn-secondary btn-sm">
+              Edit
+            </a>
+          </div>
+        </li>
+      {% endfor %}
+    </ul>
+  </section>
+{% endif %}

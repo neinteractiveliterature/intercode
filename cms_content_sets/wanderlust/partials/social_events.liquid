@@ -1,0 +1,19 @@
+---
+admin_notes: ''
+invariant: false
+---
+{% assign_graphql_result result = getMeetups()  %}
+{% assign meetups =  result.convention.events_paginated.entries %}
+<h3 class="my-h4">Meetups and Parties at {{convention.name}}</h3>
+<div class=list-group>
+{% for meetup in meetups %}
+  {% assign hosts = '' | split: ' ' %}
+  {% for host in meetup.team_members %}
+    {% assign name = host.user_con_profile.name_without_nickname | split: '_' %}
+    {% assign hosts = hosts | concat: name %}
+  {% endfor %}
+  {% render 'event_list_entry', event:meetup, hosts:hosts %}
+{% endfor %}
+</div>
+
+

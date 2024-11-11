@@ -1,0 +1,258 @@
+{
+  "title": "Brainstorming session proposal form",
+  "form_type": "event_proposal",
+  "sections": [
+    {
+      "title": "Event Information",
+      "section_items": [
+        {
+          "item_type": "static_text",
+          "visibility": "normal",
+          "writeability": "normal",
+          "style": "subhead",
+          "content": "This will be shown on the Public description of the event."
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "title",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 1,
+          "caption": "Session Title",
+          "required": true
+        },
+        {
+          "item_type": "event_email",
+          "identifier": "event_email",
+          "admin_description": "Event email",
+          "visibility": "normal",
+          "writeability": "normal",
+          "required": true
+        },
+        {
+          "item_type": "timespan",
+          "identifier": "length_seconds",
+          "public_description": "Event length",
+          "visibility": "normal",
+          "writeability": "normal",
+          "caption": "Event Length",
+          "required": true
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "description",
+          "admin_description": "Full Description",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 15,
+          "format": "markdown",
+          "caption": "**Description** for use on the {{ convention.name }} website. This information will be displayed on the page users see for the event. The description should be at least a couple of paragraphs, but can be as long as you like. This description is used to promote your session and attract attendees who will enjoy it.<br><small class=\"text-muted\">You must use Markdown for formatting. [A quick primer on Markdown syntax is available here. <i class='bi-box-arrow-up-right' aria-hidden='true'></i>](https://en.support.wordpress.com/markdown-quick-reference/)</small>\n",
+          "required": true
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "short_blurb",
+          "admin_description": "Short Blurb",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 4,
+          "format": "markdown",
+          "caption": "A **Short Blurb** (50 words or less) for the event to be used for the List of Events page and the\nconvention program. Information in the Short Blurb must also be present in the (full) description above!<br><small class=\"text-muted\">You must use Markdown for formatting. [A quick primer on Markdown syntax is available here. <i class='bi-box-arrow-up-right' aria-hidden='true'></i>](https://en.support.wordpress.com/markdown-quick-reference/)</small>",
+          "required": true
+        }
+      ]
+    },
+    {
+      "title": "Participant Counts",
+      "section_items": [
+        {
+          "item_type": "static_text",
+          "visibility": "normal",
+          "writeability": "normal",
+          "style": "subhead",
+          "content": "This will be shown on the Public description of the event."
+        },
+        {
+          "item_type": "static_text",
+          "visibility": "normal",
+          "writeability": "normal",
+          "style": "normal",
+          "content": "{% include \"forum_registration_policy_instructions\" %}"
+        },
+        {
+          "item_type": "registration_policy",
+          "identifier": "registration_policy",
+          "admin_description": "Participant Slots",
+          "visibility": "normal",
+          "writeability": "normal",
+          "presets": [
+            {
+              "name": "Unlimited Interested Attendees",
+              "policy": {
+                "buckets": [
+                  {
+                    "key": "interested",
+                    "name": "Interested",
+                    "description": "I'm interested in attending! This will add this event to your con schedule. It will not count against the maximum signups allowed at this time, and will not prevent you from signing up for other events happening at the same time.",
+                    "not_counted": true,
+                    "slots_limited": false
+                  }
+                ]
+              }
+            },
+            {
+              "name": "Limited Participants",
+              "policy": {
+                "buckets": [
+                  {
+                    "key": "participant",
+                    "name": "Participant",
+                    "description": "Sign up to participate in this session. This will add this event to your con schedule. It will not count against the maximum signups allowed at this time, and will not prevent you from signing up for other events happening at the same time.",
+                    "not_counted": true,
+                    "slots_limited": true
+                  }
+                ]
+              }
+            }
+          ],
+          "required": true,
+          "allow_custom": true
+        }
+      ]
+    },
+    {
+      "title": "Other Event Information",
+      "section_items": [
+        {
+          "item_type": "static_text",
+          "visibility": "normal",
+          "writeability": "normal",
+          "style": "subhead",
+          "content": "This information will only be used by the Forum@Intercon staff."
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "central_question",
+          "admin_description": "What is the question you're hoping to answer in this brainstorming session?",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 4,
+          "caption": "What is the question you're hoping to answer in this brainstorming session?  (This should hopefully be also included in the public description of the session; if it's not, please go back and add it.)",
+          "required": true
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "how_answer",
+          "admin_description": "What kind of information would help you answer this question?",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 4,
+          "caption": "What kind of information would help you answer this question?\n\n(For example, if you were holding a brainstorming session on ideas for a new campaign larp, you might want to know what sorts of things people would like to see but aren't available, and you might also want to know what's likely to influence them to sign up for a larp or not to.)",
+          "required": true
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "other_staff_info",
+          "admin_description": "Other Info for the Staff",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 4,
+          "caption": "Please enter any additional information you wish to tell the Forum@Intercon staff.<br>This information will be shown only to the staff and will not be available publicly."
+        }
+      ]
+    },
+    {
+      "title": "Scheduling Information",
+      "section_items": [
+        {
+          "item_type": "static_text",
+          "visibility": "normal",
+          "writeability": "normal",
+          "style": "subhead",
+          "content": "This information will only be used by the Forum@Intercon staff."
+        },
+        {
+          "item_type": "static_text",
+          "visibility": "normal",
+          "writeability": "normal",
+          "style": "normal",
+          "content": "<div class=\"alert alert-success mt-4\"><strong>New for Intercon T:</strong> we'll be offering Forum session slots throughout the weekend in addition to Thursday and Friday.  We'll prioritize filling Thursday and Friday, but also hope to have Forum content available during afternoon and evening weekend slots.</div>"
+        },
+        {
+          "item_type": "timeblock_preference",
+          "identifier": "timeblock_preferences",
+          "admin_description": "Timeblock Preferences",
+          "visibility": "normal",
+          "writeability": "normal",
+          "caption": "Please pick your top three preferences for when you'd like to run your event. Please also mark all times when you will not be available to run your event.",
+          "timeblocks": [
+            {
+              "label": "Morning",
+              "start": {
+                "hour": 9
+              },
+              "finish": {
+                "hour": 13
+              }
+            },
+            {
+              "label": "Afternoon",
+              "start": {
+                "hour": 14
+              },
+              "finish": {
+                "hour": 18
+              }
+            },
+            {
+              "label": "Evening",
+              "start": {
+                "hour": 20
+              },
+              "finish": {
+                "hour": 24
+              }
+            }
+          ],
+          "omit_timeblocks": [
+            {
+              "date": "2025-02-27",
+              "label": "Morning"
+            },
+            {
+              "date": "2025-02-27",
+              "label": "Afternoon"
+            }
+          ]
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "scheduling_constraints",
+          "admin_description": "Scheduling Constraints",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 4,
+          "caption": "If there are scheduling constraints on your event (for example, if are you proposing another event), or there are times your event cannot be scheduled, please discuss them here."
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "space_requirements",
+          "admin_description": "Space Requirements",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 2,
+          "caption": "Please list any **Space Requirements** for your event."
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "sound_requirements",
+          "admin_description": "Sound Requirements",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 2,
+          "caption": "Please list any **Sound Requirements** for your event.  If your event is going to be loud, or is going to run better in a quieter area, please let us know.  We run in shared space, with rooms near by each other, so perfect sound isolation is impossible, but we want to arrange events to not interfere with each other."
+        }
+      ]
+    }
+  ]
+}
