@@ -5,8 +5,17 @@ admin_notes: Given a signup, describes its state to the user who owns it
 {%- if signup.team_member? %} [{{ signup.event.team_member_name }}]
 {%- elsif signup.bucket.name -%}
   {%- if signup.bucket.name != 'Signups' -%}
-    {%- if signup.bucket.name != 'Interested' %} [{{ signup.bucket.name }}
-      {%- if signup.bucket.name != signup.requested_bucket.name %} (requested {{ signup.requested_bucket.name}}){% endif -%}
+    {%- if signup.bucket.name != 'Interested' %} [
+      {%- if signup.requested_bucket -%}
+        {%- if signup.bucket.anything -%}
+          {{ signup.requested_bucket.name }}
+        {%- else -%}
+          {{ signup.bucket.name }}
+          {%- if signup.bucket.name != signup.requested_bucket.name %} (requested {{ signup.requested_bucket.name}}){% endif -%}
+        {%- endif -%}
+      {%- else -%}
+        No preference
+      {%- endif -%}
     ]
     {%- endif -%}
   {%- endif -%}
