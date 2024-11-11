@@ -12,12 +12,7 @@
           </div>
           <div class="col">
             <a href="{{ signup.event_url }}">{{ signup.event.title }}</a>
-            {% if signup.state != 'confirmed' %}
-              [{{ signup.state | capitalize }}]
-            {% endif %}
-            {% if signup.team_member? %}
-              [{{ signup.event.team_member_name }}]
-            {% endif %}
+            {% render "signup_bucket_description" signup:signup %}
           </div>
 
           <div>

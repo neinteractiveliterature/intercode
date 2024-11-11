@@ -50,18 +50,7 @@ invariant: false
       <strong>
         <a href="{{ signup.event_url }}">{{ signup.event.title }} </a>
       </strong>
-      {% if signup.state != 'confirmed' %}
-        &nbsp;[{{ signup.state | capitalize }}]
-      {% endif %}
-      {% if signup.team_member? %}
-        &nbsp;[{{ signup.event.team_member_name }}]
-      {% elsif signup.bucket.name %}
-        {% if signup.bucket.name != 'Signups' %}
-          {% if signup.bucket.name != 'Interested' %}
-            &nbsp;[{{ signup.bucket.name }}]
-          {% endif %}
-        {% endif %}
-      {% endif %}
+      {% render "signup_bucket_description" signup:signup %}
     </div>
   </div>
   <div>

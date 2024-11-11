@@ -38,8 +38,6 @@ class CmsContentLoaders::Base < CivilService::Service
     if existing_content_identifiers.include?(item.identifier)
       conflict_action = conflict_action_for(item, attrs)
 
-      puts "#{item.identifier}: #{conflict_action}"
-
       case conflict_action
       when :skip
         return :skip
@@ -52,8 +50,6 @@ class CmsContentLoaders::Base < CivilService::Service
         ensure_no_conflict_for(item.identifier)
         raise ActiveModel::ValidationError, self
       end
-    else
-      puts "#{item.identifier}: no conflict"
     end
 
     create_item(item, attrs)
