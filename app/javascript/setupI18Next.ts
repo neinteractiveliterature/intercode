@@ -1,6 +1,6 @@
 import i18next, { BackendModule, i18n, InitOptions, ResourceKey } from 'i18next';
 import ChainedBackend, { ChainedBackendOptions } from 'i18next-chained-backend';
-import LocalStorageBackend from 'i18next-localstorage-backend';
+// import LocalStorageBackend from 'i18next-localstorage-backend';
 import { DateTime } from 'luxon';
 import { initReactI18next } from 'react-i18next';
 import { DateTimeFormatKey } from './DateTimeFormats';
@@ -38,24 +38,25 @@ const CodeSplitLoaderBackend: BackendModule<Record<string, never>> = {
   },
 };
 
-const localesVersion = import.meta.env.COMMIT_HASH;
+// const localesVersion = import.meta.env.COMMIT_HASH;
 
 const initOptions: InitOptions<ChainedBackendOptions> = {
   backend: {
-    backends: [...(import.meta.env.PROD ? [LocalStorageBackend] : []), CodeSplitLoaderBackend],
+    // backends: [...(import.meta.env.PROD ? [LocalStorageBackend] : []), CodeSplitLoaderBackend],
+    backends: [CodeSplitLoaderBackend],
     backendOptions: [
-      ...(import.meta.env.PROD
-        ? [
-            {
-              // 1 day
-              expirationTime: 24 * 60 * 60 * 1000,
-              versions: {
-                en: localesVersion,
-                es: localesVersion,
-              },
-            },
-          ]
-        : []),
+      // ...(import.meta.env.PROD
+      //   ? [
+      //       {
+      //         // 1 day
+      //         expirationTime: 24 * 60 * 60 * 1000,
+      //         versions: {
+      //           en: localesVersion,
+      //           es: localesVersion,
+      //         },
+      //       },
+      //     ]
+      //   : []),
       {},
     ],
   },
