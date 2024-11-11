@@ -32,7 +32,7 @@ class ExportCmsContentSetService < CivilService::Service
     success
   end
 
-  def export_content_from_adapter(storage_adapter)
+  def export_content_from_adapter(storage_adapter) # rubocop:disable Metrics/MethodLength
     inherited_items =
       storage_adapter.merge_items(
         inherited_content_sets.map do |inherited_content_set|
