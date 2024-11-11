@@ -5,7 +5,7 @@ class ExportCmsContentSetService < CivilService::Service
   validates_presence_of :convention, :content_set_name
   validate :ensure_no_conflicting_folder
 
-  def initialize(convention:, content_set_name:, inherit: ['standard'])
+  def initialize(convention:, content_set_name:, inherit: ["standard"])
     @convention = convention
     @content_set_name = content_set_name
     @content_set = CmsContentSet.new(name: content_set_name)
@@ -24,9 +24,9 @@ class ExportCmsContentSetService < CivilService::Service
       CmsContentStorageAdapters::Pages,
       CmsContentStorageAdapters::CmsPartials,
       CmsContentStorageAdapters::NotificationTemplates,
-      CmsContentStorageAdapters::CmsFiles,
       CmsContentStorageAdapters::CmsGraphqlQueries,
-      CmsContentStorageAdapters::Forms
+      CmsContentStorageAdapters::Forms,
+      CmsContentStorageAdapters::CmsFiles
     ].each { |adapter_class| export_content_from_adapter(adapter_class.new(convention, content_set)) }
 
     success
@@ -34,46 +34,49 @@ class ExportCmsContentSetService < CivilService::Service
 
   def export_content_from_adapter(storage_adapter)
     inherited_items =
-      storage_adapter
-        .merge_items(
-          inherited_content_sets.map do |inherited_content_set|
-            storage_adapter.class.new(storage_adapter.cms_parent, inherited_content_set).all_items_from_disk
-          end
-        )
-        .index_by(&:identifier)
+      storage_adapter.merge_items(
+        inherited_content_sets.map do |inherited_content_set|
+          storage_adapter.class.new(storage_adapter.cms_parent, inherited_content_set).all_items_from_disk
+        end
+      ).index_by(&:identifier)
 
     storage_adapter.all_items_from_database.each do |item|
+      next unless item.model
       inherited_item = inherited_items[item.identifier]
 
       if inherited_item
-        own_content = StringIO.new.tap { |io| storage_adapter.serialize_item(item, io) }.string
-        inherited_content = File.read(inherited_item.path)
-        next if own_content == inherited_content
+        inherited_attrs = storage_adapter.read_item_attrs(inherited_item).stringify_keys.transform_values(&:strip)
+        own_attrs = item.model.attributes.slice(*inherited_attrs.keys).stringify_keys.transform_values(&:strip)
 
-        export_item(item) { |io| io.write(own_content) }
-      else
-        export_item(item) { |io| storage_adapter.serialize_item(item, io) }
+        if own_attrs == inherited_attrs
+          Rails.logger.info(
+            "#{storage_adapter.subdir}: No changes from inherited version of #{inherited_item.identifier}"
+          )
+          next
+        end
       end
+
+      export_item(item) { |io| storage_adapter.serialize_item(item, io) }
     end
   end
 
   def export_metadata
-    File.open(File.expand_path('metadata.yml', content_set.root_path), 'w') do |f|
+    File.open(File.expand_path("metadata.yml", content_set.root_path), "w") do |f|
       metadata = {
-        'inherit' => inherit,
-        'navigation_items' => serialize_root_navigation_items,
-        'root_page_slug' => convention.root_page&.slug,
-        'default_layout_name' => convention.default_layout&.name,
-        'variables' => serialize_variables
+        "inherit" => inherit,
+        "navigation_items" => serialize_root_navigation_items,
+        "root_page_slug" => convention.root_page&.slug,
+        "default_layout_name" => convention.default_layout&.name,
+        "variables" => serialize_variables
       }.compact
 
       f.write(YAML.dump(metadata))
     end
   end
 
-  def export_item(item, &block)
+  def export_item(item, &)
     FileUtils.mkdir_p(File.dirname(item.path))
-    File.open(item.path, 'wb', &block)
+    File.open(item.path, "wb", &)
   end
 
   def serialize_root_navigation_items
@@ -83,10 +86,10 @@ class ExportCmsContentSetService < CivilService::Service
   def serialize_navigation_items(items)
     items.map do |item|
       {
-        'item_type' => item.item_type,
-        'title' => item.title,
-        'page_slug' => item.page&.slug,
-        'navigation_links' => serialize_navigation_items(item.navigation_links.order(:position)).presence
+        "item_type" => item.item_type,
+        "title" => item.title,
+        "page_slug" => item.page&.slug,
+        "navigation_links" => serialize_navigation_items(item.navigation_links.order(:position)).presence
       }.compact
     end
   end
