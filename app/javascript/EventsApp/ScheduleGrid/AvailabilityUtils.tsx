@@ -22,12 +22,21 @@ export function calculateAvailability(
 ): ScheduleEventAvailability {
   let totalSlots = 0;
   let signupCount = 0;
+
   if (event.registration_policy?.total_slots != null && event.registration_policy?.total_slots > 0) {
     signupCount = signupCountData.getConfirmedLimitedSignupCount(event);
     totalSlots = event.registration_policy?.total_slots ?? 0;
   } else if (event.registration_policy?.only_uncounted) {
-    signupCount = signupCountData.getNotCountedConfirmedSignupCount();
     totalSlots = event.registration_policy?.total_slots_including_not_counted ?? 0;
+
+    const limitedBuckets = event.registration_policy.buckets.filter((bucket) => bucket.slots_limited);
+    if (limitedBuckets.length === 0 || limitedBuckets.length === event.registration_policy.buckets.length) {
+      signupCount = signupCountData.getNotCountedConfirmedSignupCount();
+    } else {
+      signupCount = signupCountData.sumSignupCounts({
+        bucket_key: limitedBuckets.map((bucket) => bucket.key),
+      });
+    }
   }
 
   return {

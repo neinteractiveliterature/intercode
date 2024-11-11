@@ -1,7 +1,6 @@
 import { useContext, useMemo } from 'react';
 import * as React from 'react';
 import { Link } from 'react-router-dom';
-import { useApolloClient } from '@apollo/client';
 import { Placement } from '@popperjs/core';
 import { usePopper } from 'react-popper';
 import { useTranslation } from 'react-i18next';
@@ -40,7 +39,6 @@ const RunDetails = React.forwardRef<HTMLDivElement, RunDetailsProps>(function Ru
   const { t } = useTranslation();
   const { myProfile, conventionTimespan, siteMode, convention } = useContext(AppRootContext);
   const rateEvent = useRateEvent();
-  const apolloClient = useApolloClient();
   const formatRunTimespan = useFormatRunTimespan();
   const format = useAppDateTimeFormat();
 
