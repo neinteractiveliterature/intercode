@@ -1,0 +1,32 @@
+---
+admin_notes: ''
+invariant: false
+---
+{% assign con_end_date = convention.ends_at | date: '%s' %}
+<div class='table-responsive'>
+<table class='table table-striped'>
+  <thead>
+    <tr>
+     <th>Date</th>
+     <th>Maximum Signups</th>
+    </tr>
+  </thead>
+  <tbody>
+    {% for timespan in convention.maximum_event_signups.timespans %}
+      {% assign ts_date = timespan.start | date: '%s' %}
+      {% unless timespan.value == 'not_yet'  or ts_date >= con_end_date%}
+        <tr>
+          <td>{{timespan.short_description_without_value}}</td>
+          {% if timespan.value == 'not_now' %}
+            <td>Site Frozen, No Signups Allowed</td>
+          {% elsif timespan.value == 'unlimited' %}
+            <td>Unlimited Signups</td>
+          {% else %}
+            <td>{{timespan.value}}</td>
+          {% endif %}
+        </tr>
+      {% endunless %}
+    {% endfor %}
+  </tbody>
+</table>
+</div>

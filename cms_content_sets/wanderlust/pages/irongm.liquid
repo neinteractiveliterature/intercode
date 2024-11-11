@@ -1,0 +1,275 @@
+---
+name: The NEIL Iron GM Competition Overview
+admin_notes: ''
+skip_clickwrap_agreement: false
+hidden_from_search: false
+---
+{% assign iron_gm = convention.staff_positions_by_name.iron_gm_coordinator %}
+<h1 class="my-3">Iron GM {{convention.starts_at | date: '%Y'}} - A LARP Writing Contest!</h1>
+<div class="row">
+  <div class="col-md-3">
+    <ul class="section-nav sticky-top" style="top:72px">
+      <li class="toc-entry menu-header" style='display:none'>
+        <h4>Iron GM {{convention.starts_at | date: '%Y'}}</h4>
+      </li>
+      <li class="toc-entry"><a href="#prizes">Prizes</a></li>
+      <li class="toc-entry"><a href="#overview">Overview</a></li>
+      <li class="toc-entry"><a href="#writing">Contest Rules</a>
+        <ul>
+            <li class="toc-entry"><a href="#entering-registration">Contest Registration</a>
+              <ul>
+            <li class="toc-entry"><a href="#entering-signingup">Signing Up</a></li>
+          </ul></li>
+          <li class="toc-entry"><a href="#writing">Writing</a>
+          <ul>
+            <li class="toc-entry"><a href="#writing-teams">Writing Teams</a></li>
+            <li class="toc-entry"><a href="#writing-process">Writing Process</a></li>
+          </ul></li>
+        <li class="toc-entry"><a href="#running">Running</a>
+          <ul>
+            <li class="toc-entry"><a href="#running-printing">Printing</a></li>
+            <li class="toc-entry"><a href="#running-materials">Materials</a></li>
+            <li class="toc-entry"><a href="#running-space">Game Space</a></li>
+  
+          </ul></li>
+          <li class="toc-entry"><a href="#judging">Judging</a>
+            <ul>
+              <li class="toc-entry"><a href="#judging-readers">Readers</a></li>
+             <li class="toc-entry"><a href="#judging-players">Players</a></li>
+              <li class="toc-entry"><a href="#judging-scoring">Scoring</a></li>
+            </ul></li>
+
+        <li class="toc-entry"><a href="#publishing">Publishing</a></li>
+    </ul>
+  </li>
+  </ul>
+  </div>
+  <div class="col">
+
+<h2 class="my-3"><a name="registration">Team registration is OPEN!</a></h2>
+
+<h2 class="my-3"><a name="prizes">Prizes</a></h2>
+<ul class="list-unstyled">
+  <li>First Prize - $250<li>
+  <li>Second Prize - $150<li>
+  <li>Third Prize - $100</li>
+</p>
+</ul>
+<hr>
+<h2 class="my-3"><a name="overview">Overview</a></h2>
+<p>
+    Iron GM will be running at Intercon W! The competition will run from 8pm Friday January 10th to 8pm Saturday January 11th EST. 
+If you are interested in writing a game, sign up at <a href="https://forms.gle/2w78zChc75tRUhNP6" target="_blank" rel="noopener noreferrer">https://forms.gle/2w78zChc75tRUhNP6</a> by midnight December 31st. 
+</p>
+<p>
+  Iron GM is a LARP writing contest where teams of writers create games over 24 hours. Games are reviewed by a team of readers, and then the writers run them at Intercon where they are scored by players. Running at Intercon is required in order to be eligible for prizes, but anyone can sign up to write just for fun.
+</p>
+<p>
+  GM teams write a two-hour game, scalable for 5-12 players, based on three secret ingredients and one secret prop in 24 hours on a designated weekend prior to Intercon. The secret items are revealed to the GMs at the start of the writing period and to players at the start of playing (players may opt out if they wish to be surprised at the end of game). As an example, Intercon V's challenge was using a genre of Mystery, the theme of Community, the element of Meddling Gods/Supernatural Forces, with an additional secret prop of kaleidoscope glasses.
+</p>
+<p>
+  The goal is to have a complete game that can be run by any other GM team without major revisions. 
+</p>
+<p>
+  The dates for the 24-hour game-writing portion are 8pm Friday January 10th to 8pm Saturday January 11th EST. Can’t make those dates? Need a time adjustment? Can’t start on a Friday? Contact {{iron_gm.email_link}} – we are excited to work with you to find an alternative time!
+</p>
+<p>
+  The finished games will be run by the GM teams (or members of their teams) and played by Intercon attendees on Sunday, March 2nd 2025.
+</p>
+<p>
+  The games are judged on LARP craft, playability, enjoyability, and the integration of the secret ingredients. The winning GM teams receive prizes and bragging rights. (See more detailed rules below.)
+</p>
+<p>
+  We also deeply appreciate anyone willing to read and give constructive criticism or to play the games at the convention. Feedback from readers and players also helps decide which team will win the cash prize!  If you are interested in reading games, please fill out the form here: <a href="https://forms.gle/S22AvY4YHcT7nniz5" target="_blank" rel="noopener noreferrer">https://forms.gle/S22AvY4YHcT7nniz5</a>.
+</p>
+    
+<p>If you are interested in playing games, you can sign up for Iron  GM game slot on the Intercon website (or just come by on Sunday -- we almost always have openings for more players!
+</p>
+<p>
+  We don’t know what the games will be like yet, but we do know that the teams will have put a lot of creativity and effort into the finished product. We’re really excited every year to see what they come up with. So come join us: get a team together to write, or sign up to play.
+</p>
+{% assign num_igmc = iron_gm.user_con_profiles | size %}
+{% if num_igmc != 0 %}
+  <p>
+    This year, the {{iron_gm.name}} {% if num_igmc == 1 %}is{% else %}are{% endif %} {{iron_gm.user_con_profiles|map:'name_without_nickname'|to_sentence}}
+  </p>
+{% endif %}
+<p>
+  Contact us with any questions at {{iron_gm.email_link}}</a>.
+</p>
+
+<p>
+  Please, review the Rules below before signing up.
+</p>
+<hr>
+<h2 class="my-3"><a name="rules">Contest Rules</a></h3>
+<p>The contest and adherence to the rules below are overseen by the {{iron_gm.name}}. All inquiries and comments can be addressed to the {{iron_gm.name}} at {{iron_gm.email_link}}</a>. The {{iron_gm.name}} will make themselves available by Google chat and email during the writing process and at the convention.</p>
+
+<h3 class="my-2"><a name="entering-registration">Registration</a></h3>
+
+<p>Team registration for Iron GM will open soon. There is space for 6 competing teams. These spaces are on a first come first serve basis. Additional teams are welcome to sign up and write; if any of the first 6 teams is not able to finish their game or run it at Intercon, writing teams who signed up  later will be given the opportunity to compete by running their game at Intercon.
+</p>
+    
+<p>Players may register at any point after general game registration opens.</p>
+
+<h4 class="my-2"><a name="entering-signingup">Signing Up an Iron GM Team</a></h4>
+<p>Sign ups for teams are now open! See the top of this page for a link.
+ If you have questions or problems, or are looking for a group to join, please email the {{iron_gm.name}} at {{iron_gm.email_link}}.</p>
+
+<h3 class="my-3"><a name="writing">Writing</a></h3>
+<h4 class="my-2"><a name="writing-teams">Writing Teams</a></h4>
+<p>
+  Teams may consist of between 2 and 5 people. Individuals may enter the contest, but given the 24 hour limit on writing, doing so places single person teams at a disadvantage.  Part of the fun of the writing is the collaboration process.
+</p>
+<p>
+  Teams are asked to provide a team name and the names of the members of each team and their e-mail addresses.</p>
+    <p>The following people are not eligible to compete in the contest (although they may write for fun, read or play the games): NEIL board members or their immediate families, NEIL board advisors or their immediate families, the {{iron_gm.name}} or their immediate family.</p>
+
+<h4 class="my-2"><a name="writing-process">Writing Process</a></h4>
+<p>
+  No writing may be done before 8:00 PM Eastern Time on the first day of the contest, which marks the start of the Writing Phase. If a team has arranged an alternative writing time, no writing may be done before their alternative start time.
+</p>
+<p>
+  At 8:00 PM Eastern Time on the day of the contest, or at a team's alternative start time, the {{iron_gm.name}} will email the secret ingredients to all the teams, and will subsequently be available online to answer any questions they may have.
+</p>
+<p>
+  The secret ingredients will include a Genre, a Theme, an Element, and a Prop. (i.e. High Fantasy, Inner Conflict, The Philosopher’s Stone, and a cooking timer) All of the secret ingredients should be used in the game, but writers should feel free to have fun with them and interpret them in their own way. The prop can be used in any way, literally or otherwise, for plot, set dressing, or mechanics.
+</p>
+<p>
+<strong> (new) Iron GM is a competition for people. By participating, teams agree that human team members are creating the materials and are not using ChatGPT or other large language models in any way. Teams are welcome to use tools like randomizers or spell checkers, but should NOT use any tool to generate writing, even if that writing is later edited. Any team doing so forfeits any reward in the competition.</strong>
+</p>
+<p>
+Each team must write a game that can be run in two hours, and can be played by as few as 5 and as many as 12 players (and any number in between). A "game" must contain at least the following components (plus anything else the authors deem necessary). These must be provided in MSWord (.doc/.docx) or Adobe Acrobat (.pdf) format, and be printed on standard 8.5"x11" paper:
+</p>
+
+<ul>
+<li>
+  A one-paragraph blurb describing your game
+</li>
+<li>
+  <strong>(updated) A statement of what age range the game is appropriate for. Games must be appropriate for players 18+. Writers may choose to make their games appropriate for younger players. </strong>
+</li>
+<li>
+  <strong>(new) A statement of how long after the start time additional players can join the game (if at all). </strong>
+</li>
+<li>
+  12 character sheets, or equivalent character creation instructions
+</li>
+<li>
+  Runtime instructions, including specifications for how to scale to fit a cast of any size from 5 to 11
+</li>
+<li>
+  Any rulesheets or world background information (sometimes called blue sheets) needed for players to understand the game
+</li>
+<li>
+  Printing instructions, including how many copies of each sheet is required (Does everyone get a rules sheet? A background sheet? How many copies of gm information needs to be printed?)
+</li>
+<li>
+  Distribution/envelope-stuffing instructions (Which characters get which sheets? Are there paper props that go in with certain characters? What are they? Have you included those pre written in your paperwork?)
+</li>
+<li>
+  A plot reference book - This is a reference document used for information on the characters, settings, and other elements. It should outline briefly various plots, characters, and built-in gametime events, as well as instructions on running any mechanics. These components should make it possible for a team of GMs unfamiliar with the game to download it and run it without any additional development or writing.
+</li>
+<li>
+  <a href="https://interactiveliterature.org/NEIL/communityPolicies.html">Content warnings</a>
+</li>
+</ul>
+<p>
+  The game must comply with all Intercon GM Policies, listed on <a href="{% page_url gmpolicies %}">this page</a>.
+</p>
+
+<p>
+All written game materials must be submitted by 8:00 PM Eastern Time on the second day of the contest. Late submissions will still be accepted, but be penalized during scoring.
+</p>
+
+<h3 class="my-2"><a name="running">Running</a></h3>
+<p>
+Games will be run at Intercon, on Sunday.
+</p>
+<p>
+Games must run for two hours, including any pregame player prep and post-game wrap-up. GMs will be given some extra time during the con to set up/tear down their games, but they will only have access to the players for two hours.
+</p>
+<p>
+GMs will not have access to their player list before game. All casting must be done at game-start. The game can be run by any GM team as long as it involves at least one member of a registered competing team and no members of another team or anyone not eligible to participate in the contest.
+</p>
+<p>
+Game slots will be assigned at random; GMs can request slots, but must be prepared to run their game in any of the scheduled slots. The Iron GM Coordinator does not guarantee any preferred time will be available. GMs will be notified of which slot they are in as early as possible, so that they can sign up for games in the other slot if they so desire. GMs should not sign up to play another team's game.
+</p>
+
+<h4 class="my-2"><a name="running-printing">Printing</a></h4>
+<p>
+  Before the convention, the teams should follow the printing instructions to print, stuff and prepare their game. If this is a problem for your team, please contact the contest organizer and arrangements can be made.
+</p>
+<p>
+The character sheets and bluesheets and any other printing to be done on paper should be printed on regular weight (20lb) paper only. This paper may be any color you wish. The printing itself, however, must be all in black. For example, you may have blue sheets be on blue paper and character sheets be on yellow, but the actual words on the page must all be black. Images may be used on printed material, but they must either be of your own design or free-use images (please contact us if you have questions or concerns about this). Stipulations on color likewise apply to printing on index cards.
+</p>
+<h4 class="my-2"><a name="running-materials">Materials</a></h4>
+<p>
+The following materials may be included in the game; please include a list of any materials required in the plot reference book. GMs are expected to provide these materials. If this would be a hardship, contact {{iron_gm.name}} at least one week prior to the convention to arrange an alternative. 
+</p>
+<ul>
+<li>Enough blank name badges for one each for all the players and GMs</li>
+<li>12 large envelopes</li>
+<li>A reasonable number of index cards (contact the contest organizer with any questions about what is reasonable)</li>
+<li>A reasonable number of letter-sized envelopes (contact the contest organizer with any questions about what is reasonable)</li>
+<li>Two decks of playing cards</li>
+<li>12 six-sided dice</li>
+<li>A box of pens</li>
+<li>A sharpie</li>
+<li>Mounting Putty (for mounting paper to the wall) </li>
+<li>A pair of scissors</li>
+</ul>
+<p>
+In addition, up to $25 worth of other items may be brought for use in the game. If included, list those items in the plot reference book as well..
+</p>
+
+<h4 class="my-2"><a name="running-space">Game Space</a></h4>
+<p>
+The games will be taking place in small function spaces.  The following furniture will be available to you:</p>
+<ul>
+<li>At least 20 chairs</li>
+<li>At least two 5' round tables</li>
+</ul>
+
+
+<h3 class="my-2"><a name="judging">Judging</a></h3>
+<p>
+Games will be judged as follows:
+</p>
+<h4 class="my-2"><a name="judging-readers">Readers</a></h4>
+<p>
+The game materials (as submitted at the end of the Writing Phase) will be read by a blind panel, and evaluated on completeness, compliance with the contest rules, readiness for boxing, and writing. If you are interested in being a reader, please contact the Iron GM Coordinator.
+</p>
+<p>
+At this stage the game materials should contain all the writing necessary for the game to be run by any group of GMs. All components mentioned above should be present and complete.
+</p>
+<p>
+Writing will be judged on basic grammar, spelling, and punctuation, not style. Please proofread your game materials before submitting. Writing materials will also be judged on cohesiveness of the game.
+</p><p>
+For each of these categories, the game will be judged either "complete" or "incomplete," with points awarded for each "complete." Readers will also be allowed to pick one favorite game to award a small number of extra points to.
+</p>
+<h4 class="my-2"><a name="judging-players">Players</a></h4>
+<p>
+Players will be asked to fill out a questionnaire after the game in which they will rate the game on the usability and style of the written materials, on their experience of their characters, on the use of the secret ingredients, on runtime GMing quality, on the fit between plot and mechanics, and their overall enjoyment of the game. Please see the questionnaire form for exact questions.
+</p>
+<p>
+The questionnaires will be distributed when the games are run, and available both on paper and digitally. Questionnaires will be returned after the game ends, and then scored.
+</p>
+<p>
+As part of this evaluation, players may choose to learn the secret ingredients before or after they play. Players, writers, and readers are asked not to otherwise share the secret ingredients until after the last Iron GM game ends.
+</p>
+<h4 class="my-2"><a name="scoring">Scoring Procedures</a></h4>
+<p>The scoring procedures consist of tallying the reader scores with the player scores, and determining the winner based on the most points earned.</p>
+<p>
+If any contestant plays in any other team's Iron GM game, the player and their team are then disqualified from the Iron GM Competition. They may still run their game.
+</p>
+<p>
+The prizes will be awarded as follows: the team with the highest score will get $250, the team with the second highest score will get $150 and the team with the third highest score will get $100. The prize money will be given to the main entrant, who will be responsible for splitting it among the team.
+</p>
+<h3 class="my-2"><a name="publishing">Publishing</a></h3>
+<p>
+With permission of the authors, games will be available to the public after the results of the contest are announced. Permission will not be solicited until after the results are announced; it is not a necessary condition to win.
+</p>
+
+</div>
+</div>

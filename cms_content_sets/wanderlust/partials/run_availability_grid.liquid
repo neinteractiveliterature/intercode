@@ -1,0 +1,71 @@
+---
+invariant: false
+---
+{% assign run_availabilities = convention.run_availabilities_with_any_slots %}
+{% assign larp_availability = run_availabilities | where: "event_category_name", "Larp" %}
+{% assign now_posix = "now" | date: "%s" | plus: 0 %}
+{% if larp_availability.size > 0 %}    
+  <div class="run-availability-grid">
+    {% for availability in larp_availability %}
+      {% assign ends_at_posix = availability.run.ends_at | date: "%s" | plus: 0 %}
+      {% if ends_at_posix > now_posix %}
+        {% assign displayed_any_larps = "yes" %}
+        {% assign day = availability.run.starts_at | date: "%s" | minus : 14400 | date: "%A" %}
+        {% if day != prev_day %}
+          <div class="run-availability-grid-header lead text-white">
+            {{ day }}
+          </div>
+        {% endif %}
+        {% assign prev_day = day %}
+
+        <div class="run-availability-grid-card p-2 rounded bg-light border">
+          <div class="col-4 col-lg ps-0 pe-2">
+            <a href="{{ availability.run.event.url }}" class="font-weight-bold">{{ availability.run.event.title }}</a> 
+            <small class="text-nowrap">({{ availability.run.starts_at | date: "%-l:%M%P" }}-{{ availability.run.ends_at | date: "%-l:%M%P" }})</small>
+          </div>
+          <div class="col-8 col-lg px-0">
+            {% for bucket_availability in availability.bucket_availabilities_with_counted_slots %}
+              <span class="rounded px-2 my-1 d-inline-block bg-info text-light">
+                <span class="d-flex align-items-center">
+                  <span class="me-1">
+                    {{ bucket_availability.bucket.name }}
+                  </span>
+                  <span class="badge badge-light">
+                    {% if bucket_availability.bucket.slots_limited %}
+                      {{ bucket_availability.available_slots }}
+                    {% else %}
+                      Unlimited
+                    {% endif %}
+                  </span>
+                </span>
+              </span>
+            {% endfor %}
+
+            {% for bucket_availability in availability.bucket_availabilities_with_not_counted_slots %}
+              <span class="rounded px-2 my-1 d-inline-block bg-secondary text-light">
+                <span class="d-flex align-items-center">
+                  <span class="me-1">
+                    {{ bucket_availability.bucket.name }}
+                  </span>
+                  <span class="badge badge-light">
+                    {% if bucket_availability.bucket.slots_limited %}
+                      {{ bucket_availability.available_slots }}
+                    {% else %}
+                      Unlimited
+                    {% endif %}
+                  </span>
+                </span>
+              </span>
+            {% endfor %}
+          </div>
+        </div>
+      {% endif %}
+    {% endfor %}
+
+    {% unless displayed_any_larps %}
+      <p><em>Sorry, all the games with available slots have already ended.  We hope to see you at next year's con.</em></p>
+    {% endunless %}
+  </div>
+{% else %}
+  <p><em>Sorry, there are no games with available slots.</em></p>
+{% endif %}

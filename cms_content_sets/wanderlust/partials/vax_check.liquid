@@ -1,0 +1,30 @@
+---
+invariant: false
+---
+{% if user_con_profile %}
+  {% if user_con_profile.form_response.vaccination_status == nil or user_con_profile.form_response.vaccination_status.size == 0 %}
+    <div class="alert alert-danger" role="alert">
+      <div class="d-flex align-items-center">
+        <div class="d-none d-lg-block me-3">
+          <i class="bi-shield-fill-exclamation h4"></i>
+        </div>
+        <div>
+          <!--COVID-19 Vaccine verification is not yet live for {{convention.name}}.
+           When we know if there will be a fall 2024 booster, we will open verification at that time.  You can view the <a href="{% page_url covid %}">COVID FAQ</a> for additional information about the steps that {{convention.name}} is taking to keep everyone safe! -->
+          You have not yet verified your COVID-19 Vaccine status with {{convention.name}} and will not be able to <b>attend</b> until you do.  You can email us a photo of your Vaccine proof at {{convention.staff_positions_by_name.covid_verification.email_link }} or see <a href="{% page_url covid %}">our COVID FAQ</a> for more options.
+        </div>
+      </div>
+    </div>
+  {% else %}
+      <div class="alert alert-success" role="alert">
+        <div class="d-flex align-items-center">
+          <div class="d-none d-lg-block me-3">
+            <i class="bi-shield-fill-check h4"></i>
+          </div>
+          <div>
+            You have documented your COVID-19 Vaccine status with {{convention.name}} and will be able to <b>attend</b>.  We look forward to seeing you!
+          </div>
+        </div>
+      </div>
+    {% endif %}
+{% endif %}

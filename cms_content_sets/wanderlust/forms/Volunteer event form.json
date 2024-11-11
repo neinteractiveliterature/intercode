@@ -1,0 +1,223 @@
+{
+  "title": "Volunteer event form",
+  "form_type": "event",
+  "sections": [
+    {
+      "title": "Event Properties",
+      "section_items": [
+        {
+          "item_type": "free_text",
+          "identifier": "title",
+          "public_description": "Title",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 1,
+          "caption": "Title",
+          "required": true
+        },
+        {
+          "item_type": "event_email",
+          "identifier": "event_email",
+          "admin_description": "Event email",
+          "public_description": "Event email",
+          "visibility": "normal",
+          "writeability": "normal",
+          "required": true
+        },
+        {
+          "item_type": "registration_policy",
+          "identifier": "registration_policy",
+          "visibility": "normal",
+          "writeability": "normal",
+          "presets": [
+            {
+              "name": "Unlimited slots",
+              "policy": {
+                "buckets": [
+                  {
+                    "key": "unlimited",
+                    "name": "Signups",
+                    "description": "Signups for this event",
+                    "slots_limited": false
+                  }
+                ]
+              }
+            },
+            {
+              "name": "Limited slots",
+              "policy": {
+                "buckets": [
+                  {
+                    "key": "signups",
+                    "name": "Signups",
+                    "description": "Signups for this event",
+                    "slots_limited": true
+                  }
+                ]
+              }
+            },
+            {
+              "name": "Limited slots for larps with NPCs",
+              "policy": {
+                "buckets": [
+                  {
+                    "key": "pcs",
+                    "name": "PC",
+                    "description": "Player characters",
+                    "slots_limited": true,
+                    "expose_attendees": true
+                  },
+                  {
+                    "key": "npcs",
+                    "name": "NPC",
+                    "description": "Non-player characters",
+                    "not_counted": true,
+                    "slots_limited": true,
+                    "expose_attendees": true
+                  }
+                ],
+                "prevent_no_preference_signups": true
+              }
+            },
+            {
+              "name": "Limited slots for horde larps",
+              "policy": {
+                "buckets": [
+                  {
+                    "key": "cast",
+                    "name": "Cast",
+                    "description": "Players who will have one character for the entire game",
+                    "slots_limited": true
+                  },
+                  {
+                    "key": "horde",
+                    "name": "Horde",
+                    "description": "Players who will be playing multiple characters over the course of the game",
+                    "slots_limited": true
+                  }
+                ]
+              }
+            },
+            {
+              "name": "Limited slots by gender (classic Intercon-style)",
+              "policy": {
+                "buckets": [
+                  {
+                    "key": "female",
+                    "name": "Female role",
+                    "description": "Female characters",
+                    "slots_limited": true
+                  },
+                  {
+                    "key": "male",
+                    "name": "Male role",
+                    "description": "Male characters",
+                    "slots_limited": true
+                  },
+                  {
+                    "key": "flex",
+                    "name": "Flex",
+                    "anything": true,
+                    "description": "Characters that are not strictly defined as male or female",
+                    "slots_limited": true
+                  }
+                ]
+              }
+            }
+          ],
+          "required": true,
+          "allow_custom": true
+        },
+        {
+          "item_type": "timespan",
+          "identifier": "length_seconds",
+          "visibility": "normal",
+          "writeability": "normal",
+          "caption": "Length of Each Run",
+          "required": true
+        },
+        {
+          "item_type": "multiple_choice",
+          "identifier": "mask_policy",
+          "public_description": "Mask Policy",
+          "default_value": "required",
+          "visibility": "normal",
+          "writeability": "normal",
+          "style": "radio_vertical",
+          "caption": "**Mask policy**",
+          "choices": [
+            {
+              "value": "required",
+              "caption": "Masks are required for all attendees"
+            }
+          ]
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "description",
+          "admin_description": "Full Description",
+          "public_description": "Description",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 15,
+          "format": "markdown",
+          "caption": "**Description** for use on the {{ convention.name }} website. This information will be displayed on the page users see for the game. The description should be at least a couple of paragraphs, but can be as long as you like.<br>The game description is used to promote your game and attract players who will enjoy it. Be reasonably clear on where and when the game is set, and what the game is about. Let your players know what can they expect to be doing during the LARP, and make them excited to play your game! (We can offer suggestions if you would like advice on this.)<br><small class=\"text-muted\">You must use Markdown for formatting. [A quick primer on Markdown syntax is available here. <i class='bi-box-arrow-up-right' aria-hidden='true'></i>](https://en.support.wordpress.com/markdown-quick-reference/)</small>\n",
+          "required": true
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "short_blurb",
+          "admin_description": "Short Blurb",
+          "public_description": "Short Blurb",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 4,
+          "format": "markdown",
+          "caption": "A **Short Blurb** (50 words or less) for the game to be used for the List of Events page and the\nconvention program. Information in the Short Blurb must also be present in the (full) description above!<br><small class=\"text-muted\">You must use Markdown for formatting. [A quick primer on Markdown syntax is available here. <i class='bi-box-arrow-up-right' aria-hidden='true'></i>](https://en.support.wordpress.com/markdown-quick-reference/)</small>",
+          "required": true
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "content_warnings",
+          "admin_description": "Player Visible Content Warnings",
+          "public_description": "Content Warnings",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 4,
+          "format": "markdown",
+          "caption": "**Content Warnings**<br>Per NEIL policy, game descriptions must include either a content warning or an explicit statement that no content warnings are applicable. For more information, see the [NEIL policies <i class='bi-box-arrow-up-right' aria-hidden='true'></i>](http://interactiveliterature.org/NEIL/communityPolicies.html#contentWarningsPolicy) page.<br>Please provide a content warning for your game.",
+          "required": false
+        },
+        {
+          "item_type": "age_restrictions",
+          "identifier": "age_restrictions",
+          "admin_description": "Player Visible Age Restrictions",
+          "public_description": "Age Restrictions",
+          "visibility": "normal",
+          "writeability": "normal",
+          "caption": "**Age Restrictions**<br>Please include the preferred ages of players for your larp. Examples are \"Players must be 18 or older\", or \"players under 16 must check with the GMs before playing\", to \"children at least [age] years old are welcome in this game\".",
+          "required": false
+        },
+        {
+          "item_type": "multiple_choice",
+          "identifier": "can_play_concurrently",
+          "visibility": "normal",
+          "writeability": "normal",
+          "style": "radio_horizontal",
+          "caption": "Can this event be attended concurrently with other events?",
+          "choices": [
+            {
+              "value": "true",
+              "caption": "Yes"
+            },
+            {
+              "value": "false",
+              "caption": "No"
+            }
+          ],
+          "required": false
+        }
+      ]
+    }
+  ]
+}

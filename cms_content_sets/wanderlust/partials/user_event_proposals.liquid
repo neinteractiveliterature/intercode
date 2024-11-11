@@ -1,0 +1,62 @@
+---
+admin_notes: ''
+invariant: false
+---
+{% assign event_proposals = user_con_profile.event_proposals | sort: "created_at" %}
+
+{% assign event_proposals_count = 0 %}
+{% for event_proposal in event_proposals %}
+  {% if event_proposal.status != 'accepted' or show_all_proposals == true %}
+    {% assign event_proposals_count = event_proposals_count| plus: 1 %}
+  {% endif %}
+{% endfor %}
+
+{% unless event_proposals_count == 0 %}
+  <div class="card bg-purple text-white mb-4">
+    <div class="card-header d-flex justify-content-between align-items-center">
+      <div>
+        My Event Proposals
+      </div>
+      {% new_event_proposal_button "Propose another event" btn btn-outline-light btn-sm %}
+    </div>
+    <ul class="list-group list-group-flush text-dark">
+      {% for event_proposal in event_proposals %}
+        {% if event_proposal.status != 'accepted' or show_all_proposals == true%}
+          <li class="list-group-item d-flex justify-content-between align-items-baseline">
+            <div>
+              <strong>
+                {% if event_proposal.title %}
+                  {{ event_proposal.title }}
+                {% else %}
+                  Untitled
+                {% endif %}
+              </strong>
+
+              ({{ event_proposal.status }})
+            </div>
+            {% if event_proposal.status == 'draft' %}
+              <a href="{{ event_proposal.edit_url }}" class="btn btn-primary btn-sm">
+                Continue
+              </a>
+
+            {% elsif event_proposal.status == 'proposed' or event_proposal.status == 'reviewing' %}
+              <a href="{{ event_proposal.edit_url }}" class="btn btn-secondary btn-sm">
+                Edit Proposal
+              </a>
+            {% elsif event_proposal.status == 'accepted' %}
+              <div class="btn-toolbar">
+                <a href="{{ event_proposal.event.url }}" class="btn btn-secondary btn-sm">
+                  View Event
+                </a>
+
+                <a href="{{ event_proposal.edit_url }}" class="btn btn-secondary btn-sm ms-2">
+                  Edit Event
+                </a>
+              </div>
+            {% endif %}
+          </li>
+        {% endif %}
+      {% endfor %}
+    </ul>
+  </div>
+{% endunless %}

@@ -1,0 +1,41 @@
+---
+name: Open Roles
+skip_clickwrap_agreement: true
+hidden_from_search: false
+---
+{% assign gm_coordinator = convention.staff_positions_by_name.gm_coordinator %}
+{% assign ops_coordinator = convention.staff_positions_by_name.operations_coordinator %}
+<h1 class="my-3">Open Positions</h1>
+<p class='lead'>Do you want to help make Intercon awesome? We're still looking for volunteers to fill these important roles.</p>
+
+<h3 class="my-2">Deputy Operations Coordinator</h3>
+<p>The primary responsibility of the Deputy Operations Coordinator takes place at Intercon itself. They are responsible for:</p>
+<ul><li>Opening and closing the Ops desk</li>
+  <li>Staffing Ops on one day of the con (Thursday, Friday, Saturday, or Sunday; you do not necessarily need to be present for the full day, but will have to be available to cover as needed)</li>
+  <li>Checking people in to the con</li>
+  <li>Following incident reporting policy in the event that an attendee needs to report an incident</li>
+  <li>Managing con supplies and suite keys, including checking them out to GMs</li></ul>
+
+<p>If interested and available, the Deputy Operations Coordinator can take on some pre- and post-con responsibilities as well, including:</p>
+<ul><li>Helping the Ops chair to coordinate orders of shirts, patches, and any other swag</li>
+  <li>Assisting with transportation of Ops supplies between storage unit and hotel</li>
+  <li>Coordinating with Safety coordinator to ensure that incident reporting policy exists</li>
+  <li>Doing a print run at Staples for con booklets, flyers, etc.</li></ul>
+
+<p>All of the pre-/post-con responsibilities are strictly voluntary and would be performed in collaboration with the Operations Coordinator.</p>
+
+<p>Additional documentation is available on these; please feel free to contact the Operations Coordinator, {{ ops_coordinator.user_con_profiles[0].name_without_nickname }}, at {{ops_coordinator.email_link}} if you have any questions or need further clarification.</p>
+
+<h3 class="my-2">Deputy GM Coordinator</h3>
+<p>The GM Coordinator is the primary contact for people running games for information, either asking questions or for receiving information related to running games at the con. The GM Coordinator is looking for a volunteer to be a deputy for this position. The deputy GM Coordinator would :</p>
+<ul><li>Observe, read email, and learn more about how the GM Coordinator role works</li>
+  <li>Assist the GM Coordinator, {{ gm_coordinator.user_con_profiles[0].name_without_nickname }}, with pre-con logistics as needed</li></ul>
+
+<p>If you're interested in filling this role, please reach out to the GM Coordinator at {{gm_coordinator.email_link}}.</p>
+
+<h3 class="my-2">Operations Crew</h3>
+<p>The Intercon Operations Crew takes care of ensuring the cogs of the con keep on turning. Whether it's checking people in to the con, helping players find games, or any of the dozens of other things that come up, Ops needs volunteers like you to make it happen. Volunteering for Ops shifts is a valuable use of your time and effort. To volunteer, go to the <a href="/events/5043-ops">Ops event page</a> and click on the time slot(s) for which you want to volunteer.</p>
+
+<p>Please note that we're especially looking for volunteers in the hour before and the hour after each game slot starts, and most especially in those times on Friday afternoon and Saturday morning. You can still sign up for shifts outside of those slots, and we'll still welcome the company, but there may not be as much to do.</p>
+  
+<p>For information on what volunteering entails, email {{ops_coordinator.email_link}}.</p>

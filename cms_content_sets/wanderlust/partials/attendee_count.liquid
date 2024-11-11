@@ -1,0 +1,12 @@
+---
+invariant: false
+---
+{% if user_con_profile %}
+  {% assign concom = false %}
+  {% assign positions = user_con_profile.staff_positions |map: 'name'  %}
+  {% if positions contains 'Con Com' %}
+    <section class="my-2">
+      Total attending {{ convention.name}}: <strong>{{ convention.ticket_counts_by_type.total }}</strong>
+    </section>
+  {% endif %}
+{% endif %}

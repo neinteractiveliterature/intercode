@@ -1,0 +1,26 @@
+---
+admin_notes: ''
+invariant: false
+---
+{% assign events = convention.events_created_since[convention.maximum_event_signups.current_value_change] | sort: "created_at" | reverse %}
+{% assign events = convention.events_created_since['2024-10-24'] | sort: "first_run_starts_at" %}
+{% if events.size > 0 %}
+  <section class="my-4">
+    <h3 class="my-h4">New Events added to the Schedule</h3>
+
+    <ul style='padding-left:10px'>
+      {% for event in events %}
+        <li >{{event.event_category.name | replace: "_", " " | humanize}}:&nbsp;
+          <a href="{{ event.url }}">{{ event.title }}</a> run by
+          {{event.team_member_user_con_profiles |map: 'name_without_nickname' |join: ', '}} - 
+          {% assign runs = "" |split: ", " %}
+          {% for run in event.runs %}
+            {% assign runlist = run.starts_at | date: "%a %l:%M%P"|split: ", " %}
+            {% assign runs = runs | concat: runlist %}
+          {% endfor %}
+          {{runs | join: ', '}}
+        </li>
+      {% endfor %}
+    </ul>
+  </section>
+{% endif %}

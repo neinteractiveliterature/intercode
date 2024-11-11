@@ -1,0 +1,48 @@
+---
+name: Game Comps Table - old
+admin_notes: ''
+skip_clickwrap_agreement: false
+hidden_from_search: false
+---
+{% assign max_hours = 8 %}
+{% assign max_players = 45 %}
+{% assign comp_ph = 60 %}
+<h1 class="my-3">Game Comps Table</h1>
+<div class='alert text-bg-warning'>This is subject to change for Intercon W</div>
+<div class="table-responsive">
+  <table class='table table-bordered table-sm'>
+  <tr>
+    <th class="text-end">Players</th>
+    {% for i in (1..max_hours) %}
+      <th class="text-center">{{i}} Hours</th>
+    {% endfor %}
+  </tr>
+  {% for j in (1..max_players) %}
+    <tr>
+      <th class="text-end">{{ j }}</th>
+        {% for i in (1..max_hours) %}
+          {% assign comps = j | times: i | divided_by: comp_ph|floor| plus: 1 %}
+          {% assign bg = ''%}
+          {% case comps %}
+          {% when 1 %}
+            {% assign bg = 'table-light'%}
+          {% when 2 %}
+            {% assign bg = 'table-info'%}
+          {% when 3 %}
+            {% assign bg = 'table-warning'%}
+          {% when 4 %}
+            {% assign bg = 'table-success'%}
+          {% when 5 %}
+            {% assign bg = 'table-secondary'%}
+          {% when 6 %}
+            {% assign bg = 'table-light'%}
+          {% when 7 %}
+            {% assign bg = 'table-info'%}
+          {% endcase %}
+
+          <td class="{{bg}} text-center">{{ comps }}</td>
+        {% endfor %}
+      </tr>
+    {% endfor %}
+  </table>
+</div>

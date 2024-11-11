@@ -1,0 +1,29 @@
+---
+admin_notes: ''
+---
+query getBioEligibleUserConProfiles {
+  convention: conventionByRequestHost {
+    id
+    bio_eligible_user_con_profiles {
+      id
+      name_inverted
+      name_without_nickname
+      gravatar_url
+      bio_name
+      bio_html
+      
+      staff_positions {
+        id
+        name
+      }
+      
+      team_members {
+        id
+        event {
+          id
+          title
+        }
+      }
+    }
+  }
+}

@@ -1,0 +1,163 @@
+---
+name: Hotel Information
+admin_notes: ''
+skip_clickwrap_agreement: false
+hidden_from_search: false
+---
+{% assign hotel_liaison = convention.staff_positions_by_name.hotel_liaison %}
+<h1 class="my-3">Hotel Information</h1>
+<div class="row">
+ <div class='col order-md-1'>
+   <div class="card">
+    <div class="card-header">
+      <p>
+        <h5 class="text-center"><a href="http://www.crownehotelwarwick.com" target="_blank">Crowne Plaza Providence-Warwick</a></h5>
+      </p>
+      <p class="text-center">
+        801 Greenwich Ave
+        <br>Warwick, RI 02886
+      </p>
+    </div>
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item">
+          <h5 class='card-title'> Details </h5>
+          <dl class="row">
+            <dt class="col-md-6">Phone:</dt>
+            <dd class="col-md-6"><a href="tel:+14017326000">(401) 732-6000</a></dd>
+            <dt class="col-md-6">Block code:</dt>
+            <dd class="col-sm-6">{{hotel_block_code}}</dd>
+            <dt class="col-md-6">Checkin<span class="d-inline d-md-none d-lg-inline"> time</span>:</dt>
+            <dd class="col-md-6">3:00 PM</dd>
+            <dt class="col-md-6">Checkout<span class="d-inline d-md-none d-lg-inline"> time</span>:</dt>
+            <dd class="col-md-6">11:00 AM</dd>
+            <dt class="col-md-6">King bed<span class="d-inline d-md-none d-lg-inline"> rate</span>:</dt>
+            <dd class="col-md-6">${{hotel_king_rate}}/night</dd>
+            <dt class="col-md-6"><span class="d-inline d-md-none d-lg-inline">Two </span>Queen beds<span class="d-inline d-md-none d-xl-inline"> rate</span>:</dt>
+            <dd class="col-md-6">${{hotel_double_rate}}/night</dd>
+          </dl>
+        </li>
+        <li class="list-group-item">
+          <h5 class="card-title">
+            How to make a reservation for Intercon
+          </h5>
+          <p>
+            It's easy! Call the Crowne Plaza at  <nobr>(401) 732-6000</nobr> or use their website, providing the above room block code.
+          </p>
+        </li>
+        <li class="list-group-item">
+          <p>
+            The above rates cover up to 4 people per room. 
+            If you make a reservation for more than 4 people, you may be charged additional fees at the discretion of the hotel.
+          </p>
+          <p>
+            If you would prefer a quiet room (floors 4-5), or an active room (floor 6), please mention that when you make your reservation.
+          </p>
+        </li>
+        <li class="list-group-item">
+	  <p>
+            <b>Note:</b> It is <a href="#whyReserve">very important</a> that
+            you make the reservation as part of the Intercon group!
+            </p>
+<p>The convention runs from 
+  {% assign startMonth = convention.starts_at | date: "%m" %}
+    {% assign endMonth = convention.ends_at | date: "%m" %}
+    
+    {{ convention.starts_at | date: "%A %d-%b-%Y" }} to {{convention.ends_at|date: "%A %d-%b-%Y"}}.
+    
+            If there are any problems or questions, please
+            feel free to send email to our {{ hotel_liaison.name_with_email_link}}.
+          </p>
+          </li>
+        </ul> 
+     </div>
+  </div>
+  <div class="col-md-7">
+    <p>
+      Intercon takes place at the <a href="http://www.crownehotelwarwick.com/" target="_blank">Crowne Plaza</a> in Warwick, Rhode Island!
+    </p>
+    <p>
+      The Crowne Plaza is <a href="https://goo.gl/maps/GbEtaHyedfQ2" target="_blank">conveniently located</a> just off Route 95 and 295 in Warwick, and there is a shuttle bus from nearby T. F. Green airport and commuter rail station.
+    </p>
+    <p>
+      We've put together a <a href="{% page_url hotel/faq %}">Hotel FAQ</a> with images of all the function spaces to answer many of your questions, which will be updated as we gather more information.
+    </p>
+    <p>
+      We encourage you to review the <a href="{% page_url hotel/layout %}">conference space layout</a>.
+    </p>
+    <p class='text-center'>
+      <img class='img-fluid' src="{% file_url "crowneplaza.jpg" %}" border="0">
+    </p>
+   
+    <p>
+      The hotel allows up to four people to occupy a room. 
+    </p>
+    <p>
+      ADA-accessible rooms are available on request.  The Crowne Plaza is a non-smoking hotel.
+    </p>
+    <p>
+      In 2020, the hotel renovated all guest rooms.  <a href="{% page_url hotel/renovation %}">See their flyer</a>.
+    </p>
+    <p>
+      All rooms include:
+    </p>
+    <ul>
+      <li>Alarm clock / radio</li>
+      <li>In-room coffee maker</li>
+      <li>Minifridge</li>
+      <li>Hair Dryer</li>
+      <li>Iron and ironing board</li>
+      <li>Television with cable channels and video check-out</li>
+      <li>Complimentary high speed Internet</li>
+    </ul>
+    <p>The hotel also has additional guest services:
+    </p>
+    <ul>
+      <li>Complimentary shuttle to T.F. Green Airport</li>
+      <li>Business amenities including fax, copier, and personal computer</li>
+      <li>Printing and photocopying services</li>
+      <li>Laundry and dry cleaning</li>
+      <li>24 hour room service</li>
+      <li>Wake up service</li>
+      <li>Indoor heated swimming pool with fitness room</li>
+      <li>Cribs</li>
+      <li>Microwaves available in the common areas on the second and fifth floors</li>
+    </ul>
+  </div>
+ 
+</div>
+
+<div class='row'>
+  <div class='col'>
+    <h4 class='my-2'>
+      <a name="earlyAndLate">Early Arrival and Late Departure</a>
+    </h4>
+    <p>
+      Should you arrive on Friday before checkin, or for the remainder of
+      the con after Sunday checkout, Intercon and Hotel Staff can provide
+      a secure area for your belongings.
+    </p>
+    <h4  class='my-2'>
+      <a name='issues'>Hotel Issues and Questions</a>
+    </h4>
+    <p>
+      If there are any problems or questions before the con,
+      please contact our {{ hotel_liaison.name_with_email_link}}. The
+      Hotel Liaison will also be available at the con to solve any problems.
+      Please let the Ops Desk know of any issues; they will know where the
+      Hotel Liaison is at any given time. We are very good at expediting
+      solutions with the hotel, so it's best if you come find us to help out
+      first.
+    </p>  
+    
+    <div class="card border-info">
+      <h5 class="card-header">
+        <a name="whyReserve">Why reserve in the Intercon block?</a>
+      </h5>
+      <div class="card-body">
+        <p class="card-text">
+We know it may be possible to get a slightly cheaper hotel rate by booking outside the Intercon room block.  If you want to do that, we totally understand!  But we'd really appreciate it if you could reserve a room within the block, because we've made a guarantee to the hotel for a number of room nights. In addition, each room night booked reduces Intercon's function space cost, which lets us improve the convention in many ways, and helps fund the other cool LARP-related things we do.
+        </p>
+      </div>
+    </div>
+  </div>
+</div>

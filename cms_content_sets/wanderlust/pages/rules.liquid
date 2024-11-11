@@ -1,0 +1,220 @@
+---
+name: Convention Rules
+admin_notes: ''
+skip_clickwrap_agreement: true
+hidden_from_search: false
+---
+{% assign con_chair = convention.staff_positions_by_name.con_chair %}
+{% assign ops_lead = convention.staff_positions_by_name.operations_coordinator %}
+{% assign safety = convention.staff_positions_by_name.safety_coordinator %}
+{% assign registrar = convention.staff_positions_by_name.registrar %}
+{% assign attendees = convention.staff_positions_by_name.attendee_coordinator %}
+{% assign vaccination = convention.staff_positions_by_name.covid_verification %}
+
+<h1 class="my-3">New England Intercon Rules and Code of Conduct</h1>
+<div class="row">
+  <div class="col-md-3">
+    <ul class="section-nav sticky-top" style="top:72px">
+      <li class="toc-entry menu-header" style='display:none'>
+        <h4>Intercon Rules</h4>
+      </li>
+      <li class="toc-entry"><a href="#policies">Convention Policies</a>
+        <ul>
+          <li class="toc-entry"><a href="#policies-gameregistration">Game Registration</a></li>
+          <li class="toc-entry"><a href="#policies-communication">Player Communication Policy</a></li>
+          <li class="toc-entry"><a href="#policies-harassment">Harassment Policy</a>
+          <ul>
+            <li class="toc-entry"><a href="#policies-harassment-emergencynumbers">Emergency Numbers</a></li>
+          </ul></li>
+          <li class="toc-entry"><a href="#policies-covid">COVID Policy</a>
+          <li class="toc-entry"><a href="#policies-weapons">Weapons Policy</a></li>
+          <li class="toc-entry"><a href="#policies-violations">Policy Violations</a></li>
+          <li class="toc-entry"><a href="#policies-withdrawing">Withdrawing</a></li>
+          <li class="toc-entry"><a href="#policies-children">Children</a></li>
+          <li class="toc-entry"><a href="#policies-pets">Pet Policy</a></li>
+          <li class="toc-entry"><a href="#policies-photos">Photo Policy</a></li>
+          <li class="toc-entry"><a href="#policies-gm">GM Benefits and Policies</a></li>
+        </ul></li>
+      <li class="toc-entry"><a href="#hotel">Hotel Rules</a>
+      <ul>
+        <li class="toc-entry"><a href="#hotel-staying">Staying at the Hotel</a></li>
+        <li class="toc-entry"><a href="#hotel-smoking">Smoking</a></li>
+		<li class="toc-entry"><a href="#hotel-guests">Respect Non-Attendee Hotel Guests</a></li>
+        <li class="toc-entry"><a href="#hotel-alcohol">Alcohol</a></li>
+        <li class="toc-entry"><a href="#hotel-signs">Posting Signs</a></li>
+      </ul></li>
+      <li class="toc-entry"><a href="#contacting">Contacting Staff</a></li>
+      <li class="toc-entry"><a href="#fun">Have Fun</a></li>
+</ul>
+</div>
+<div class='col'>
+
+<h2 class="my-3"><a name='policies'>Convention Policies</a></h2>
+
+<h3 class="my-2"><a name='policies-gameregistration'>Game Registration Policy</a></h3>
+<p>Intercon follows a strict first come, first serve policy when it comes to game registrations.  We expect GMs to honor your signup bucket selection when it comes to casting.</p>
+
+<p>The only exceptions to this policy are age-related or legal restrictions.  Some games have age restrictions due to content or boffer combat, and the GMs have worked with the Convention staff to get approval for these restrictions.  In these cases, it will be clear from the game description.</p>
+
+<h3 class="my-2"><a name='policies-communication'>Player Communication Policy</a></h3>
+<p>
+  If you have questions about a game, for example content warnings or accessibility concerns, please reach out to the GMs or the {{attendees.name_with_email_link}} at your earliest convenience, in advance of signups if possible.
+</p>
+<p>
+  Many games are tightly plotted or depend on pre-convention communication from the players who have signed up for the game. In these cases, non-responsive players can make it harder to ensure that everyone in the game has a great time.  We recommend that GMs start early and reach out to players well before the convention.
+</p>
+  <p>
+If the GMs have made a good faith effort to contact a player and have not received any response for over two weeks, they can ask the GM Coordinator to attempt to get in touch with the player on their behalf. If at one month prior to the convention, the convention staff are not able to reach the player themselves, they will work with the GM to modify any game registrations as needed.
+ </p>
+ <p>
+If you know in advance that you cannot make a game, please let the GMs or Operations Staff know, so that the GMs can make proper arrangements.  If you are more than 10 minutes late for a game, you may be recast at the GMs' discretion.
+</p>
+
+
+<h3 class="my-2"><a name='policies-harassment'>Harassment Policy</a></h3>
+<p>
+Intercon is dedicated to providing a harassment-free convention experience for everyone, regardless of gender, gender identity and expression, sexual orientation, disability, physical appearance, body size, race, age, or religion, or any other factor. We do not tolerate harassment of convention attendees in any form. Convention attendees violating these rules may be sanctioned or expelled from the convention without a refund at the discretion of the convention organizers.</p>
+<p>
+Harassment includes, but is not limited to, offensive verbal comments related to gender, gender identity and expression, sexual orientation, disability, physical appearance, body size, race, age, or religion. It also includes display of sexual images in public spaces, deliberate intimidation, stalking, following, harassing photography or recording, sustained disruption of games or other events, inappropriate physical contact, unwelcome sexual attention, bathroom policing, and unwelcome simulated combat using realistic or non-realistic weapon props. Participants asked to stop any harassing behavior are expected to comply immediately.</p>
+<p>
+If a participant engages in harassing behavior, the convention organizers may take any action they deem appropriate, including warning the offender or expulsion from the convention with no refund. If you are being harassed, notice that someone else is being harassed, or have any other concerns, please contact a member of the convention Safety Staff immediately. Convention Safety Staff can be identified by their convention badge, which will say "Safety Staff" under their name, and, if they are on duty, by an Intercon Safety Staff button.</p>
+<p>
+Convention Safety Staff will be happy to help participants contact Hotel security or local law enforcement if desired, provide escorts, or otherwise assist those experiencing harassment to feel safe for the duration of the convention. Safety Staff will never pressure anyone into making an official report.  We value your safety, privacy, and comfort while at Intercon.</p>
+<p>
+Questions about this policy should be directed to {{con_chair.email_link}}</a>. At con, you can contact convention staff by calling the Safety Staff 24-hour hotline number at 313-SAFETY-4, or by coming to the Operations desk during Ops hours, or emailing {{safety.email_link}}</a>.
+</p>
+
+<h4 class="my-2"><a name='policies-harassment-emergencynumbers'>Emergency Numbers</a></h4>
+<dl class="row">
+<dt class="col-md-7">Convention Safety 24-Hour Hotline</dt>
+  <dd class="col-md-5">313.SAFETY.4</dd>
+<dt class="col-md-7">Hotel Security/Front Desk</dt>
+  <dd class="col-md-5">Hotel Phone: Dial 0<br>or: 401.732.6000</dd>
+<dt class="col-md-7">Warwick Police</dt>
+  <dd class="col-md-5">401.468.4200</dd>
+<dt class="col-md-7">Rhode Island Domestic Violence Hotline</dt>
+  <dd class="col-md-5">800.494.8100</dd>
+<dt class="col-md-7">Boston Area Rape Crisis Center 24 hour hotline</dt>
+  <dd class="col-md-5">800.841.8371</dd>
+<dt class="col-md-7">Medical (or other) emergency</dt>
+  <dd class="col-md-5">911</dd>
+<dt class="col-md-7">Apponaug Cab Service</dt>
+  <dd class="col-md-5">401.249.0523</dd>
+<dt class="col-md-7">American Cab</dt>
+  <dd class="col-md-5">401.487.2111</dd>
+</dl>
+<h3 class="my-2"><a name='policies-covid'>COVID Policy</a></h3>
+<p>Intercon and NEIL require everyone attending {{ convention.name }} to provide proof of full vaccination against COVID-19 as defined by the CDC, including booster(s).  This proof can be given in advance, via email (to {{vaccination.email_link}}), zoom sessions, or similar, by January 1, {{convention.starts_at|date: "%Y"}}. No exemptions will be granted, including for medical or religious reasons, and this policy applies to everyone entering convention space as an attendee, the same as our Badge policy.</p>
+<p>Proof of full vaccination will be accepted in the form of:
+  <ul>
+    <li>Emailing a scanned or photographed vaccine card or letter to {{vaccination.email_link}}
+ - records will be deleted within 30 days of receipt</li>
+    <li>Holding up card on a video chat (schedule forthcoming)</li>
+    <li>Having provided the same level of proof to another NEIL event prior</li>
+    </li>
+  </ul>
+</p>
+<p>Please see the full COVID FAQ page for complete information on our policies and requirements. </p>
+
+
+
+<h3 class="my-2"><a name='policies-weapons'>Weapons Policy</a></h3>
+<p>
+Intercon understands that costumes sometimes include weapons, and some boffer games have simulated combat with boffer weapons, but the safety and comfort of our attendees and other occupants of the hotel must be paramount. In the context of this policy, "weapon prop" or "weapon-like prop" refers to any prop that looks like a weapon, including but not limited to swords, knives, guns, bats, clubs, claws, arrows, etc.</p>
+<p>
+Any realistic-looking weapon prop must be peace-bonded and not wieldable. Swords must be secured in their sheaths with string, zip-ties, or some other method that actually prevents them from being drawn. If you need help peace-bonding your weapon prop, you may bring it to Ops. If con staff concludes that your realistic-looking weapon prop cannot be peace-bonded, you will be asked to return the prop to your hotel room or vehicle and leave it there for the duration of the convention.</p>
+<p>
+Wieldable weapon props must be obviously fake and approved by the GMs. In games that use boffer combat, only props approved for boffer combat by the GMs may be used for this purpose. In other games, combat may be acted out as well as being simulated with non-physical methods ONLY with the explicit permission of all parties involved. Please note that explicit permission to act out a combat does not automatically imply permission to touch another player or to contact another player with your weapon prop.</p>
+<p>
+Outside of games, any non-realistic weapon props must either be peace-bonded or carried in a non-threatening manner (sheathed, pointed at the floor, or put away). (Realistic weapon props must be peace-bonded at all times, as detailed above).</p>
+<p>
+Non-prop weapons are not allowed at Intercon.</p>
+<p>
+No realistic-looking gun props without orange safety tips are allowed at con under any circumstances.</p>
+<p>
+Violation of any of these rules is grounds for immediate expulsion from the con, without refund. If you have any questions about acceptable weapon props, ask at the Operations desk or contact the Con Chair or the Operations coordinator.</p>
+
+<h3 class="my-2"><a name='policies-violations'>Violations</a></h3>
+<p>Anyone found violating any of these policies may be subject to ejection from Intercon without refund.  Intercon reserves the right to expel anyone for any reason, with or without warning.</p>
+
+<h3 class="my-2"><a name='policies-withdrawing'>Withdrawing from the Con</a></h3>
+<p>To withdraw from the Con, email the {{con_chair.name_with_email_link}} and {{registrar.name_with_email_link}}.</p>
+<p>If you withdraw from the Con before January 1st of the year of the convention, you are eligible for a full refund.  Withdrawals within 30 days of the Convention are eligible for a refund or membership in next year's Con at the discretion of the ConChair.</p>
+
+<h3 class="my-2"><a name='policies-children'>Children at Intercon</a></h3>
+<p>All attendees at the convention should be badged for security reasons.</p>
+<ul>
+  <li>Children under 5 are free to attend.</li>
+  <li>Children 5 - 14 who will not be playing games: $5 to cover costs.</li>
+  <li>Children under 14 who will be playing games : $20 to represent the limited selection of larps. ($10 at the door)</li>
+  <li>Children 14 and over: <a href="{% page_url pricing %}">normal price</a>.
+</ul>
+<p>We strongly recommend looking at the list of games for suitability before deciding to purchase a games badge.  The games available each year can vary quite a lot.  To arrange payment for child badges, please contact the {{registrar.name_with_email_link}}.</p>
+<p>Any child under 14 at Intercon must be accompanied by a responsible adult. Minors over 14 but under 18 must have a responsible adult present at the convention, but do not always need to be accompanied by them. Everyone under 18 must have contact information for their responsible adult on them or left at Ops. Intercon cannot be responsible for your children.</p>
+<h3 class="my-2"><a name='policies-pets'>Pets at Intercon</a></h3>
+ <p> While the hotel is pet-friendly, Intercon itself has a no-pet policy. Trained service animals are, of course, welcome in Intercon spaces. However, we ask, although this is not a requirement, that you give your GMs an advance note that you will be bringing your service dog into the gaming space so that they can inform all their players to expect the presence of the animal and behave accordingly.
+</p>
+  
+<h3 class="my-2"><a name='policies-photos'>Photography Policy</a></h3>
+<p>Prior to taking or sharing images or video of attendees taken during NEIL events,(such as {{convention.name}}) participants and organizers of NEIL events must get permission of the subjects or provide them explicit opt out opportunities.</p>
+
+<h3 class="my-2"><a name='policies-gm'>GM Benefits, Policies and Services</a></h3>
+<p><a href="{%page_url gmpolicies %}">The GM policies</a>, which cover running larps at Intercon, are available as a separate document.</p>
+<hr>
+<h2 class="my-3"><a name='hotel'>Hotel Rules</a></h2>
+
+<h3 class="my-2"><a name='hotel-staying'>Staying at the Crowne Plaza</a></h3>
+<p>
+Each hotel room should have no more than four occupants. Sleeping in public
+areas of the hotel or in the convention areas is forbidden by the hotel
+management.
+</p>
+
+<h3 class="my-2"><a name='hotel-smoking'>No Smoking in Hotel and Convention Area</a></h3>
+<p>
+Per the Board of Health, smoking is not allowed in any public area of the hotel.
+If you wish to smoke, please go to a designated public smoking area (outside).
+</p>
+
+<h3 class="my-2"><a name='hotel-guests'>Respect Non-Attendee Hotel Guests</a></h3>
+<p>
+Remember there are non convention-going guests staying at the hotel. All major game activity should take place in the conference area, not the hotel area, although quiet game activity may occur inside player rooms (not in the halls) during the day. The hotel area should be specifically considered quiet space after 10pm, and no game activity should take place there after that time, except in hotel suites designated by the convention for certain LARPs. Players in those LARPs are encouraged to be mindful of other hotel guests and keep activity within those hotel suites.
+</p>
+
+<h3 class="my-2"><a name='hotel-alcohol'>Alcohol Policy</a></h3>
+<p>Because of the hotel's liquor license and strict Rhode Island state law, alcohol in function spaces may only be served by a bartender from the hotel. Players and GMs may not bring their own alcohol into the function space.  If a GM would like to have a real bar for their game, we can make arrangements with the hotel in advance.</p>
+
+<p>Players, GMs, or Games found in violation of this policy will be asked to remove the alcohol from the function space immediately. If they do not comply, they will be asked to leave the hotel.  If the GMs opt to have a bartender, the bartender will validate that the players are of legal drinking age.</p>
+
+<h3 class="my-2"><a name='hotel-signs'>Posting Signs</a></h3>
+<p>
+You may only attach something to the walls, doors, columns, pillars, etc. if you use mounting putty, which will leave no residue and will not damage the paint or varnish. The convention has a limited amount of putty available which it can loan as needed.
+</p>
+<hr>
+<h2 class="my-3"><a name='contacting'>Contacting Staff</a></h2>
+<p>
+Please report to Safety Staff, Ops Staff or the Con Chair any incident in which a
+member of the convention ignores the rules of the convention stated
+above. New England Interactive Literature reserves the right to revoke,
+without refund, the membership of anyone for any just cause.
+</p>
+<p>Safety staff can be contacted via the 24-hour hotline at 313-SAFETY-4. An Ops
+Staff member can always be found at the Ops desk during regular Operations
+hours. If the hotel observes a guest violating any of the above rules,
+the hotel reserves the right to have that guest removed from the property
+without refund.
+</p>
+<p>
+  To find email addresses for all department heads at Intercon, please see the <a href="{% page_url contacts %}">Contacts page</a>.
+</p>
+<p>
+New England Interactive Literature is not responsible for any lost or
+stolen property.
+</p>
+<h2 class="my-3"><a name='fun'>Have Fun!</a></h2>
+<p>
+Have a good time! Have a great time! Have a grand time! Just have fun!
+</p>
+
+</div>
+</div>

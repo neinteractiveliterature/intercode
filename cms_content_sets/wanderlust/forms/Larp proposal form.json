@@ -1,0 +1,623 @@
+{
+  "title": "Larp proposal form",
+  "form_type": "event_proposal",
+  "sections": [
+    {
+      "title": "Larp Information",
+      "section_items": [
+        {
+          "item_type": "static_text",
+          "visibility": "normal",
+          "writeability": "normal",
+          "style": "subhead",
+          "content": "This will be shown on the Public description of the event."
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "title",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 1,
+          "caption": "Event Title",
+          "required": true
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "authors",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 1,
+          "caption": "Author(s)",
+          "required": true
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "organization",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 1,
+          "caption": "Organization"
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "url",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 1,
+          "caption": "Event or Organization Homepage URL"
+        },
+        {
+          "item_type": "event_email",
+          "identifier": "event_email",
+          "admin_description": "Event email",
+          "visibility": "normal",
+          "writeability": "normal",
+          "required": true
+        },
+        {
+          "item_type": "timespan",
+          "identifier": "length_seconds",
+          "visibility": "normal",
+          "writeability": "normal",
+          "caption": "**Event Length**\n<br>Please note that events longer than 6 hours will be harder to schedule, except on Sunday.",
+          "required": true
+        },
+        {
+          "item_type": "multiple_choice",
+          "identifier": "mask_policy",
+          "public_description": "Mask policy",
+          "visibility": "normal",
+          "writeability": "normal",
+          "style": "radio_vertical",
+          "caption": "**Mask policy**",
+          "choices": [
+            {
+              "value": "required",
+              "caption": "Masks are required for all attendees"
+            },
+            {
+              "value": "required_unless_eating",
+              "caption": "Masks are required for all attendees unless actively eating"
+            },
+            {
+              "value": "request",
+              "caption": "Mask policy will be the strictest requested on casting surveys"
+            },
+            {
+              "value": "optional",
+              "caption": "Masks are optional, but attendees are still welcome to mask"
+            }
+          ],
+          "required": true
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "description",
+          "admin_description": "Full Description",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 15,
+          "format": "markdown",
+          "caption": "**Description** for use on the {{ convention.name }} website. This information will be displayed on the page users see for the event. The description should be at least a couple of paragraphs, but can be as long as you like.<br>This description is used to promote your larp and attract players who will enjoy it. Be reasonably clear on where and when the larp is set, and what the larp is about. Let your players know what they can expect to be doing during the larp, and make them excited to play your larp! (We can offer suggestions if you would like advice on this.)<br><small class=\"text-muted\">You must use Markdown for formatting. [A quick primer on Markdown syntax is available here. <i class='bi-box-arrow-up-right' aria-hidden='true'></i>](https://en.support.wordpress.com/markdown-quick-reference/)</small>\n",
+          "required": true
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "short_blurb",
+          "admin_description": "Short Blurb",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 4,
+          "format": "markdown",
+          "caption": "A **Short Blurb** (50 words or less) for the event to be used for the List of Events page and the\nconvention program. Information in the Short Blurb must also be present in the (full) description above!<br><small class=\"text-muted\">You must use Markdown for formatting. [A quick primer on Markdown syntax is available here. <i class='bi-box-arrow-up-right' aria-hidden='true'></i>](https://en.support.wordpress.com/markdown-quick-reference/)</small>",
+          "required": true
+        },
+        {
+          "item_type": "multiple_choice",
+          "identifier": "replayable",
+          "admin_description": "Is this event replayable?",
+          "visibility": "normal",
+          "writeability": "normal",
+          "style": "radio_horizontal",
+          "caption": "**Replayability**<br>Is this event playable by people who have played it before?  Please note that this is advisory, and Intercon will not enforce this by removing players who have already played this larp.  This should only be set to \"No\" if the experience of playing this larp would be notibly degraded upon replay, i.e. for larps deeply based around secrets.",
+          "choices": [
+            {
+              "value": "true",
+              "caption": "Yes"
+            },
+            {
+              "value": "false",
+              "caption": "No"
+            },
+            {
+              "value": "ask",
+              "caption": "Ask First"
+            }
+          ]
+        }
+      ]
+    },
+    {
+      "title": "Character Counts",
+      "section_items": [
+        {
+          "item_type": "static_text",
+          "visibility": "normal",
+          "writeability": "normal",
+          "style": "subhead",
+          "content": "This will be shown on the Public description of the event."
+        },
+        {
+          "item_type": "static_text",
+          "visibility": "normal",
+          "writeability": "normal",
+          "style": "normal",
+          "content": "{% include \"proposal_form_registration_policy_instructions\" %}"
+        },
+        {
+          "item_type": "registration_policy",
+          "identifier": "registration_policy",
+          "admin_description": "Character Slots",
+          "visibility": "normal",
+          "writeability": "normal",
+          "presets": [
+            {
+              "name": "Unlimited slots",
+              "policy": {
+                "buckets": [
+                  {
+                    "key": "unlimited",
+                    "name": "Signups",
+                    "description": "Signups for this event",
+                    "slots_limited": false
+                  }
+                ]
+              }
+            },
+            {
+              "name": "Limited slots",
+              "policy": {
+                "buckets": [
+                  {
+                    "key": "signups",
+                    "name": "Signups",
+                    "description": "Signups for this event",
+                    "slots_limited": true
+                  }
+                ]
+              }
+            },
+            {
+              "name": "Limited slots for larps with NPCs",
+              "policy": {
+                "buckets": [
+                  {
+                    "key": "pcs",
+                    "name": "PC",
+                    "description": "Player characters",
+                    "slots_limited": true,
+                    "expose_attendees": true
+                  },
+                  {
+                    "key": "npcs",
+                    "name": "NPC",
+                    "description": "Non-player characters",
+                    "not_counted": true,
+                    "slots_limited": true,
+                    "expose_attendees": true
+                  }
+                ],
+                "prevent_no_preference_signups": true
+              }
+            },
+            {
+              "name": "Limited slots for horde larps",
+              "policy": {
+                "buckets": [
+                  {
+                    "key": "cast",
+                    "name": "Cast",
+                    "description": "Players who will have one character for the entire game",
+                    "slots_limited": true
+                  },
+                  {
+                    "key": "horde",
+                    "name": "Horde",
+                    "description": "Players who will be playing multiple characters over the course of the game",
+                    "slots_limited": true
+                  }
+                ]
+              }
+            },
+            {
+              "name": "Limited slots by gender (classic Intercon-style)",
+              "policy": {
+                "buckets": [
+                  {
+                    "key": "female",
+                    "name": "Female role",
+                    "description": "Female characters",
+                    "slots_limited": true
+                  },
+                  {
+                    "key": "male",
+                    "name": "Male role",
+                    "description": "Male characters",
+                    "slots_limited": true
+                  },
+                  {
+                    "key": "flex",
+                    "name": "Flex",
+                    "anything": true,
+                    "description": "Characters that are not strictly defined as male or female",
+                    "slots_limited": true
+                  }
+                ]
+              }
+            }
+          ],
+          "required": true,
+          "allow_custom": true
+        }
+      ]
+    },
+    {
+      "title": "Player Information",
+      "section_items": [
+        {
+          "item_type": "static_text",
+          "visibility": "normal",
+          "writeability": "normal",
+          "style": "subhead",
+          "content": "This will be shown on the Public description of the event."
+        },
+        {
+          "item_type": "static_text",
+          "visibility": "normal",
+          "writeability": "normal",
+          "style": "normal",
+          "content": "{{convention.name}} appeals to a diverse group of players of all ages, ethnicities, belief systems, sexual orientations, physical capabilities, experience, etc. Authors can write interesting larps that might not be suitable for all audiences. In order for the con staff to balance these potentially opposing requirements, please answer the following questions:<br><br>"
+        },
+        {
+          "item_type": "age_restrictions",
+          "identifier": "age_restrictions",
+          "admin_description": "Player Visible Age Restrictions",
+          "visibility": "normal",
+          "writeability": "normal",
+          "caption": "**Age Restrictions**<br>Please include the acceptable ages of players for your larp. Examples are \"Players must be 18 or older\", or \"players under 16 must check with the GMs before playing\", to \"children at least [age] years old are welcome in this larp\".",
+          "required": true
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "player_communications",
+          "admin_description": "Player Communications",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 4,
+          "format": "markdown",
+          "caption": "**Player Communications**<br>How will you distribute larp information to your players? Will you be using a casting form? Will character roles be cast and distributed before the convention or on site, or will characters be developed as part of the larp? Approximately how much reading can a player expect to do for this larp?<br>Please use this space to let your players know what to expect.",
+          "required": true
+        },
+        {
+          "item_type": "static_text",
+          "visibility": "normal",
+          "writeability": "normal",
+          "style": "normal",
+          "content": "<span class=\"lead\">Content Advisories or Warnings</span><br>Per NEIL policy, larp descriptions must either include content warnings about potentially difficult or upsetting content that players can expect to interact with OR the explicit statement that \"The GMs of this LARP have chosen not to include a content warning. If you have any questions about the content in this LARP, please contact the email provided. Otherwise, player discretion is advised.\" <p>For more information, see the [NEIL policies <i class='bi-box-arrow-up-right' aria-hidden='true'></i>](http://interactiveliterature.org/NEIL/communityPolicies.html#contentWarningsPolicy) page"
+        },
+        {
+          "item_type": "multiple_choice",
+          "identifier": "content_warnings_selector",
+          "admin_description": "Content Warning Picklist",
+          "public_description": "Common Content Flags",
+          "visibility": "normal",
+          "writeability": "normal",
+          "style": "checkbox_vertical",
+          "caption": "<b>Specific Content Advisories</b>\n<br>Please indicate which of these common categories of content are contained in your game",
+          "choices": [
+            {
+              "value": "content_bigotry",
+              "caption": "Depictions of bigotry"
+            },
+            {
+              "value": "content_abuse",
+              "caption": "Depictions of abuse"
+            },
+            {
+              "value": "content_violence",
+              "caption": "Realistic simulations or descriptions of violence"
+            },
+            {
+              "value": "content_rape",
+              "caption": "Content involving rape"
+            },
+            {
+              "value": "content_minorities_targeted",
+              "caption": "Humor targeting minorities and other marginalized groups"
+            },
+            {
+              "value": "content_religion",
+              "caption": "Disrespect of real-world religions"
+            },
+            {
+              "value": "content_sex",
+              "caption": "Depictions of sexual acts"
+            },
+            {
+              "value": "content_noise",
+              "caption": "Use of loud noises"
+            },
+            {
+              "value": "content_light",
+              "caption": "Use of flashing lights, or absence of light"
+            },
+            {
+              "value": "content_accessability",
+              "caption": "Physical requirements that might affect accessibility"
+            },
+            {
+              "value": "content_gender",
+              "caption": "Casting without regard to gender preferences"
+            },
+            {
+              "value": "content_none",
+              "caption": "None of the above"
+            },
+            {
+              "value": "content_no_response",
+              "caption": "GMs chose not to respond"
+            }
+          ],
+          "required": true
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "content_warnings",
+          "admin_description": "Player Visible Content Warnings",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 4,
+          "format": "markdown",
+          "caption": "**Custom Content Advisories or Warnings**<br>\nPlease expand upon any of the above selections, and/or any other content advisories or warnings you wish to mention or provide the above opt-out text.",
+          "required": true
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "physical_restrictions",
+          "admin_description": "Physical Restrictions",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 4,
+          "caption": "**Physical and Accessibility Restrictions**<br>\nAre there any physical restrictions or accessibility concerns imposed by your larp? For example, live boffer combat, confined sets, loud sounds, standing for long periods, etc. If so, please explain and consider if this needs to be mentioned in the event descriptions."
+        }
+      ]
+    },
+    {
+      "title": "GM/Author Information",
+      "section_items": [
+        {
+          "item_type": "static_text",
+          "visibility": "normal",
+          "writeability": "normal",
+          "style": "subhead",
+          "content": "This information will only be used by the Proposals Committee."
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "gms",
+          "admin_description": "GMs for the larp",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 2,
+          "caption": "**GMs for your larp.**<br>Note that the GMs listed here are only for the purpose of evaluating your proposal. If your proposal is accepted, you'll be able to select GMs from the users registered for  {{ convention.name }}."
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "other_games",
+          "admin_description": "Other larps from the team",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 4,
+          "caption": "What other larps have you written or run? Where and when were they run?"
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "run_before",
+          "admin_description": "Has this larp run before?",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 1,
+          "caption": "{{ convention.name }} is looking for larps that are new and larps that have run before, either at a\nconvention, or elsewhere.<br>If this larp has run before, where was that?\n"
+        }
+      ]
+    },
+    {
+      "title": "Scheduling Information",
+      "section_items": [
+        {
+          "item_type": "static_text",
+          "visibility": "normal",
+          "writeability": "normal",
+          "style": "subhead",
+          "content": "This information will only be used by the Proposals Committee."
+        },
+        {
+          "item_type": "static_text",
+          "visibility": "normal",
+          "writeability": "normal",
+          "style": "normal",
+          "content": "The con can schedule your event into one (or more) of the time slots available over the weekend. In an effort to optimize the space available and to provide the greatest number of player slots in prime time periods, minimum size requirements will be in effect on Saturday afternoon, Saturday evening, and Friday evening for most rooms. Smaller larps (fewer than 10 players) and boffer-style larps (or other larps) which require large space needs may be accepted on a conditional basis during these time periods until after initial scheduling takes place. The more flexibility you can provide in your scheduling options, the greater the ability to have the game accepted and scheduled. Sunday, morning, midnight, and Thursday slots are encouraged. "
+        },
+        {
+          "item_type": "timeblock_preference",
+          "identifier": "timeblock_preferences",
+          "admin_description": "Timeblock Preferences",
+          "visibility": "normal",
+          "writeability": "normal",
+          "caption": "Please pick your top preferences for when you'd like to run your larp. Please also mark all times when you will not be available to run your larp",
+          "timeblocks": [
+            {
+              "label": "Morning",
+              "start": {
+                "hour": 9
+              },
+              "finish": {
+                "hour": 13
+              }
+            },
+            {
+              "label": "Afternoon",
+              "start": {
+                "hour": 14
+              },
+              "finish": {
+                "hour": 18
+              }
+            },
+            {
+              "label": "Evening",
+              "start": {
+                "hour": 20
+              },
+              "finish": {
+                "hour": 24
+              }
+            },
+            {
+              "label": "After Midnight",
+              "start": {
+                "hour": 24
+              },
+              "finish": {
+                "hour": 26,
+                "minute": 0
+              }
+            }
+          ],
+          "omit_timeblocks": [
+            {
+              "date": "2025-02-27",
+              "label": "Morning"
+            },
+            {
+              "date": "2025-02-27",
+              "label": "Afternoon"
+            },
+            {
+              "date": "2025-03-02",
+              "label": "Evening"
+            }
+          ]
+        },
+        {
+          "item_type": "multiple_choice",
+          "identifier": "can_play_concurrently",
+          "admin_description": "Can Play Concurrently?",
+          "default_value": "false",
+          "visibility": "normal",
+          "writeability": "normal",
+          "style": "radio_horizontal",
+          "caption": "Can players play in your larp and another event at the same time?",
+          "choices": [
+            {
+              "value": "true",
+              "caption": "Yes"
+            },
+            {
+              "value": "false",
+              "caption": "No"
+            }
+          ],
+          "required": true
+        },
+        {
+          "item_type": "multiple_choice",
+          "identifier": "multiple_runs",
+          "admin_description": "Can Do Multiple Runs?",
+          "default_value": "false",
+          "visibility": "normal",
+          "writeability": "normal",
+          "style": "radio_horizontal",
+          "caption": "Are you willing to hold this event more than once at this convention?",
+          "choices": [
+            {
+              "value": "true",
+              "caption": "Yes"
+            },
+            {
+              "value": "false",
+              "caption": "No"
+            }
+          ],
+          "required": true
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "scheduling_constraints",
+          "admin_description": "Scheduling Constraints",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 4,
+          "caption": "If you are willing to hold the larp more than once, please discuss your preferences below.<br>In addition, if there are scheduling constraints on your larp (for example, if are you proposing another event), or there are times your larp cannot be scheduled, please discuss them as well."
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "space_requirements",
+          "admin_description": "Space Requirements",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 2,
+          "caption": "Please list any **Space Requirements** for your event.\n<br>We can typically guarantee one function space room per game. If you need more than that, we may be able to make it work, depending on the size of your game, and when during the convention it is scheduled.  Running on Sunday is more likely to be able to provide multiple rooms.  If you need other physical features of your space (high ceilings, a sink, etc) please list them here."
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "sound_requirements",
+          "admin_description": "Sound Requirements",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 2,
+          "caption": "Please list any **Sound Requirements** for your event.  If your event is going to be loud, or is going to run better in a quieter area, please let us know.  We run in shared space, with rooms near by each other, so perfect sound isolation is impossible, but we want to arrange games to not interfere with each other."
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "setup_teardown",
+          "admin_description": "Setup/Teardown requirements",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 4,
+          "caption": "Are there any special <b>Setup or Teardown Requirements</b> for this event? For example, do you need extra time to set up or tear down a complex set? (Requests for standard furniture will be handled separately closer to the convention. Intercon can not provide unusual setup materials for your event. Please reference [the GM Policies <i class='bi-box-arrow-up-right' aria-hidden='true'></i>]({% page_url gmpolicies %}#FurnitureService) for available items )"
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "setup_time",
+          "admin_description": "Setup Time",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 1,
+          "format": "text",
+          "caption": "How much time do you need to **set up** your larp before the event can begin?",
+          "free_text_type": "text"
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "cleanup_time",
+          "admin_description": "Cleanup Time",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 1,
+          "format": "plain",
+          "caption": "How much time do you need to **clean up** your larp after the event is over?"
+        },
+        {
+          "item_type": "free_text",
+          "identifier": "other_committee_info",
+          "admin_description": "Other Info for the Committee",
+          "visibility": "normal",
+          "writeability": "normal",
+          "lines": 4,
+          "caption": "<b>Any other information you wish to tell the Proposals Committee that would help them evaluate and provide feedback for your larp?</b> <br>This may include information that is not player-facing. This information will be shown only to the Proposals Committee."
+        }
+      ]
+    }
+  ]
+}

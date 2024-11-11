@@ -1,0 +1,73 @@
+---
+subject: |-
+  [{{ convention.name }}: {{ signup.event.title }}]
+  {%- if signup.state == "waitlisted" %} Waitlist
+  {%- else -%}
+    {%- if signup.team_member? %} {{ signup.event.team_member_name }}
+    {%- elsif signup.bucket.name -%}
+      {%- if signup.bucket.name != 'Signups' -%}
+        {%- if signup.bucket.name != 'Interested' %} {{ signup.bucket.name }}{% endif -%}
+      {%- endif -%}
+    {%- endif %} Signup
+  {%- endif -%}
+body_text: |-
+  {%- assign run = signup.run -%}
+  {% if signup.state == "waitlisted"%}Waitlist{% else %}Signup{% endif %} confirmation for {% include 'run_description' %}
+
+  This message is to confirm that you've successfully
+  {%- if signup.state == "waitlisted" %} joined the waitlist for
+  {%- else %} signed up for
+  {%- endif %} {% include 'run_description' %}.
+
+  Your new signup:
+  {{ signup.starts_at | date: "%a %l:%M%P" }} - {{ signup.ends_at | date: "%l:%M%P" }}: {{ signup.run.room_names | join: ', ' }}
+  {{ signup.event.event_category.name | replace: "_", " " | humanize}}: {{ signup.event.title }}
+  {%- if signup.state != 'confirmed' %} [{{ signup.state | capitalize }}]{% endif -%}
+  {%- if signup.team_member? %} [{{ signup.event.team_member_name }}]
+  {%- elsif signup.bucket.name -%}
+    {%- if signup.bucket.name != 'Signups' -%}
+      {%- if signup.bucket.name != 'Interested' %} [{{ signup.bucket.name }}]{% endif -%}
+    {%- endif -%}
+  {%- endif %}
+  {{ signup.event_url | absolute_url }}
+---
+
+{% assign run = signup.run %}
+<h1>{% if signup.state == "waitlisted"%}Waitlist{% else %}Signup{% endif %} confirmation for {% include 'run_description' %}</h1>
+
+<p>
+  This message is to confirm that you've successfully
+  {%- if signup.state == "waitlisted" %} joined the waitlist for
+  {%- else %} signed up for
+  {%- endif %}
+  {% include 'run_description' %}.
+</p>
+
+<div style="border: 1px black solid; border-radius: 5px;">
+  <div style="background-color: black; padding: 10px; color: white; font-weight: bold;">
+    Your new signup
+  </div>
+  <div style="padding: 10px;">
+    <strong>
+      {{ signup.starts_at | date: "%a %l:%M%P" }} - {{ signup.ends_at | date: "%l:%M%P" }}:
+      {{ signup.run.room_names | join: ', ' }}
+    </strong>
+    <br>
+    {{ signup.event.event_category.name | replace: "_", " " | humanize}}:&nbsp;
+    <strong>
+      <a href="{{ signup.event_url | absolute_url }}">{{ signup.event.title }}</a>
+    </strong>
+    {% if signup.state != 'confirmed' %}
+      &nbsp;[{{ signup.state | capitalize }}]
+    {% endif %}
+    {% if signup.team_member? %}
+      &nbsp;[{{ signup.event.team_member_name }}]
+    {% elsif signup.bucket.name %}
+      {% if signup.bucket.name != 'Signups' %}
+        {% if signup.bucket.name != 'Interested' %}
+          &nbsp;[{{ signup.bucket.name }}]
+        {% endif %}
+      {% endif %}
+    {% endif %}
+  </div>
+</li>

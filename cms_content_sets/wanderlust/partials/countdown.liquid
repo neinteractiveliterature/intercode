@@ -1,0 +1,33 @@
+---
+invariant: false
+---
+{% assign nowTimestamp = 'now' | date: '%s' %}
+{% assign conventionStart = convention.starts_at | date: '%Y-%m-%d'| date: '%s' %}
+{% assign conventionStartTime = convention.starts_at| date: '%s' %}
+{% assign conventionEnd = convention.ends_at | date: '%s' %}
+{% assign diffSeconds = conventionStart | minus: nowTimestamp %}
+{% assign diffSecondsStart = conventionStartTime | minus: nowTimestamp %}
+{% assign diffSecondsEnd = conventionEnd | minus: nowTimestamp %}
+{% assign diffDays = diffSeconds | divided_by: 3600 | divided_by: 24 %}
+
+{% capture countdown_content %}
+  {% if diffDays > 0 %}
+    {{ diffDays }} days until {{convention.name}}!
+  {% elsif diffSecondsStart > 0 %}
+    {{convention.name}} is today!
+  {% elsif diffSecondsEnd > 0 %}
+    {{convention.name}} is happening now!
+  {% else %}
+    {{convention.name}} is over, see you next year!
+  {% endif %}
+{% endcapture %}
+
+<div id="countdown" class="card countdown text-white mt-2 mb-3 mt-lg-0 mb-lg-0 mx-1 d-none d-lg-block bg-purple" onload="showConf()">
+  <div class="card-body text-center py-2" >
+    {{countdown_content}}
+  </div>
+</div>
+<div class="d-lg-none text-center">
+   {{countdown_content}}
+</div>
+

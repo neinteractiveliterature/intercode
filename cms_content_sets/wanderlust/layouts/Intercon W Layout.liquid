@@ -1,0 +1,75 @@
+---
+navbar_classes: fixed-top navbar-expand-md mb-4 intercon-menubar navbar-dark
+admin_notes: ''
+---
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {{ content_for_head }}
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Advent+Pro:ital,wght@0,400;0,700;1,400;1,700&family=Lato:ital,wght@0,400;0,700;1,400;1,700&family=Poiret+One&display=swap" rel="stylesheet">
+    {% include "site-css" %}
+  </head>
+  <body>
+    <div id="center-column" class="background-content d-flex flex-column">
+      <div class="container bg-white flex-grow-1"></div>
+    </div>
+    <div class="overall d-flex flex-column">
+      {{ content_for_navbar }}
+      <div id="spacer" style="height: 70px"></div>
+
+      <div id='mainContent' class="container bg-white" style="flex-grow: 1">
+        {{ content_for_layout }}
+      </div>
+      
+      <div class="container bg-medium-gray d-none d-sm-block d-xs-block p-2 pt-4 footer">
+        {% include 'copyright' %}
+      </div>
+    </div>
+    <script>
+      function watchMenu(){
+        const elem = document.querySelector('.menu-header');
+        if (elem){
+          window.onscroll=function(){changeMenu()}
+        }
+      }
+      
+      function changeMenu(){
+        const elem = document.querySelector('.menu-header');
+        if (!elem) { return; }
+        const scrollBarPosition = window.pageYOffset | document.body.scrollTop;
+        if(scrollBarPosition < 72) {
+          elem.style.display = 'none';
+        } else {
+          elem.style.display = 'block';
+        }
+      }   
+
+      function addObserver(){
+        // Select the node that will be observed for mutations
+        var targetNode = document.querySelector('#mainContent');
+        if(!targetNode){
+          return setTimeout(addObserver, 100);
+        }
+        
+        // Options for the observer (which mutations to observe)
+        var config = { attributes: true, childList: true };
+        // Create an observer instance linked to the callback function
+        var observer = new MutationObserver(watchMenu);
+        // Start observing the target node for configured mutations
+        observer.observe(targetNode, config);
+      }
+  
+      function ready(fn) {
+        if (document.readyState != 'loading'){
+          fn();
+        } else {
+          document.addEventListener('DOMContentLoaded', fn);
+        }
+      }
+      
+      ready(addObserver);
+    </script>
+  </body>
+</html>

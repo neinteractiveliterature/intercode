@@ -1,0 +1,107 @@
+---
+inherit:
+- standard
+navigation_items:
+- item_type: section
+  title: Programming
+  navigation_links:
+  - item_type: link
+    title: Iron GM
+    page_slug: irongm
+  - item_type: link
+    title: Forum@Intercon
+    page_slug: forum
+  - item_type: link
+    title: Boardgames
+    page_slug: boardgames
+  - item_type: link
+    title: Social Events
+    page_slug: social
+  - item_type: link
+    title: Vendors
+    page_slug: vendors-at-intercon
+- item_type: section
+  title: Resources
+  navigation_links:
+  - item_type: link
+    title: Intercon for Beginners
+    page_slug: beginners
+  - item_type: link
+    title: Larp Glossary
+    page_slug: glossary
+  - item_type: link
+    title: Signing Up for Games
+    page_slug: signupfaq
+  - item_type: link
+    title: GM Benefits and Policies
+    page_slug: gmpolicies
+  - item_type: link
+    title: GM Accessibility Guide
+    page_slug: accessibility/gm
+  - item_type: link
+    title: Vending at Intercon
+    page_slug: vending-at-intercon
+  - item_type: link
+    title: Statement - Challenging Content
+    page_slug: statements/challenging-content
+  - item_type: link
+    title: Statement - Queer/Polyamorous Content
+    page_slug: statements/queer-content
+- item_type: section
+  title: About
+  navigation_links:
+  - item_type: link
+    title: Convention Rules
+    page_slug: rules
+  - item_type: link
+    title: Convention Contacts
+    page_slug: contacts
+  - item_type: link
+    title: What Does It Cost?
+    page_slug: pricing
+  - item_type: link
+    title: Hotel Info
+    page_slug: hotel
+  - item_type: link
+    title: Food at Intercon
+    page_slug: food
+  - item_type: link
+    title: Accessibility
+    page_slug: acessibility
+  - item_type: link
+    title: Staff Role Descriptions
+    page_slug: role-descriptions
+  - item_type: link
+    title: Staff and GM Bios
+    page_slug: bios
+  - item_type: link
+    title: Volunteering
+    page_slug: volunteering
+  - item_type: link
+    title: Intercon Calendar
+    page_slug: calendar
+- item_type: link
+  title: COVID FAQ
+  page_slug: covid
+root_page_slug: root
+default_layout_name: Intercon W Layout
+variables:
+  con_theme: Wanderlust
+  con_title: Wanderlust
+  convention_number: twenty-sixth
+  css_background_color: rgba(203, 195, 133, 0.3)
+  css_background_color_2: rgba(135, 156, 125, 0.99)
+  css_backup: rgba(203, 195, 133, 1)
+  css_color_1: "#fbd499"
+  css_color_2: "#f6c25d"
+  css_color_3: "#a52b36"
+  css_header_text_color: "#a52b36"
+  discord_invite: YZ2VyFGrtD
+  hotel_block_code: LAR
+  hotel_double_rate: 157
+  hotel_king_rate: 157
+  propcom_form: https://docs.google.com/forms/d/e/1FAIpQLSe1aCqgtJPYb-VFZJNoF-XDGFi0HDs54gDBqwcH-SNmWGQnmg/viewform
+  shirt_order_deadline: January 19th, 2025
+  show_games_with_openings: false
+  show_run_list: new
+  vendor_deadline: January 26th, 2025

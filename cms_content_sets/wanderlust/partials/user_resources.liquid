@@ -1,0 +1,46 @@
+---
+admin_notes: ''
+invariant: false
+---
+{% assign gm = false %}
+{% assign propcom = false %}
+{% assign concom = false %}
+
+{% if user_con_profile %}
+  {% assign positions = user_con_profile.staff_positions |map: 'name'  %}
+  {% if user_con_profile.event_proposals != empty or 
+      user_con_profile.team_member_events != empty or 
+      user_con_profile.privileges contains 'Con Com') %}
+    {% assign gm = true %}
+  {% endif %}
+
+  {% if positions contains 'Game Proposals Committee' or 
+      user_con_profile.privileges contains 'Staff' or
+      user_con_profile.privileges contains 'Site Admin' or
+      user_con_profile.privileges contains 'GM Liaison' %}
+    {% assign propcom = true %}
+  {% endif %}
+
+  {% if positions contains 'Con Com' %}
+    {% assign concom = true %}
+  {% endif %}
+{% endif %}
+
+{% if gm or propcom or concom %}
+  <div class="card border-purple my-4">
+    <div class="card-header bg-purple text-white">Convention Resources</div>
+    <div class='card-body'>
+      <ul class="list-unstyled mb-0">
+        {% if gm %}
+          <li><i class="bi-file-earmark-text-fill" aria-hidden="true"></i> <a href="{% page_url gmpolicies %}">GM Benefits, Policies and Services</a></li>
+        {% endif %}
+        {% if propcom %}
+          <li><i class="bi-file-earmark-text-fill" aria-hidden="true"></i> <a href="{% page_url propcom %}">Proposal Committee Procedures</a></li>
+        {% endif %}
+        {% if concom %}
+        <li><i class="bi-folder" aria-hidden="true"></i> <a href="https://drive.google.com/drive/folders/1cw0RHoDGbtoy2i0YtU1aD3U-ww3rOcNN?usp=sharing" target="_blank">NEIL Google Drive</a></li>
+        {% endif %}
+      </ul>
+    </div>
+  </div>
+{% endif %}

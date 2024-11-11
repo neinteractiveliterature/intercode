@@ -1,0 +1,88 @@
+---
+name: New Proposal
+admin_notes: ''
+skip_clickwrap_agreement: false
+hidden_from_search: false
+---
+{% assign proposal_chair = convention.staff_positions_by_name.game_proposals_chair %}
+
+<div class="row">
+  <div class="col-md-7">
+    <h1>Propose an Event for <span class="text-nowrap">{{ convention.name }}</span></h1>
+    <p>Intercon is looking for a diverse selection of larps, in as many different styles and genres as we can find! But we're not just looking for established authors &mdash; we also encourage authors who are new to Intercon or new to larp writing. Whether it's a new game or one that's been run before, we're interested in what you have to propose.</p>
+    <p>
+
+    <p>We're also looking for a varied and interesting set of content for <a href="{% page_url forum %}">Forum@Intercon</a> and <a href="{% page_url social %}">Social Events</a> to offer diverse programming all weekend long, in addition to LARPs! These are our tracks of discussions, presentations, panels, and workshops, and as well as social and special interest meetups and parties!</p>
+
+    {% if convention.accepting_proposals %}
+      <div class="d-flex flex-wrap justify-content-center my-4">
+        {% new_event_proposal_button "Propose an event!" btn btn-primary m-2 %}
+      </div>
+
+      <p>Please fill out the proposal form with as much information as possible. This is the best way to help us evaluate your proposal quickly!</p>
+
+    <div class="col-md-10 offset-md-1">
+<!--
+      <div class="card mb-4 text-white bg-info">
+      <div class="card-header">
+        <h5 class="m-0">Limited Space Available</h5>
+      </div>
+      
+      <div class="card-body">
+<i>Updated October 26, 2022</i>       
+<p>Please be aware that, at this time, we have very limited space available to add new larps to our schedule. While we do still have space for games of various sizes, especially a small number of larger ones, we'd like to ensure that we have enough slots in games based on demand around mask requirements.  Therefore, we won't be accepting additional new games until we see how signups go, and then we will pull from the proposals based on demand.</p>
+      </div>
+    </div>
+      -->
+    </div>
+    {% else %}
+      <p>{{ convention.name }} is not currently accepting event proposals.</p>
+    {% endif %}
+
+    <section class="mt-4">
+      {% assign show_all_proposals = true %}
+      {% include 'user_event_proposals' %}
+    </section>
+  </div>
+  
+  <div class="col-md-5">
+    <div class="card mb-4">
+      <div class="card-header">
+        <h5 class="m-0">Proposal Deadlines</h5>
+      </div>
+      
+      <div class="card-body">
+        <p>Intercon solicits and reviews proposals for events on a rolling basis all through the year. That said, there are some reasons to get your proposal in as early as possible:</p>
+        
+        <ul class="mb-0">
+          <li>Events are scheduled in order to maximize efficient use of space. After size, proposal order will be considered. </li>
+          <li>Your event gets more publicity by being on the site when the schedule is first published! The first round of registration this year is on {{ convention.maximum_event_signups.timespans[1].start | date: "%B %e, %Y" }}, and the initial schedule will be published some time in October; late proposals may not be on that initial schedule.</li>
+        </ul>
+      </div>
+    </div>
+
+    <div class="card">
+      <div class="card-header">
+        <h5 class="m-0">Space Limitations for Larps</h5>
+      </div>
+
+      <div class="card-body">
+        <p class="mb-0">We are dedicated to providing diverse programming, including smaller games and boffer style games, in all time periods throughout the entire weekend. However, in an effort to optimize the space available and to provide the greatest number of player slots in prime time periods, minimum size requirements will be in effect on Saturday afternoon, Saturday evening, and Friday evening for most rooms. Smaller larps (fewer than 10 players) and boffer-style larps (or other larps) which require large space needs may be accepted on a conditional basis during these time periods until after initial scheduling takes place. Morning, Sunday, Thursday, and Midnight time periods will be easier to schedule for small games and boffer style games.  Also, if you are willing to run your small game in part of a larger space alongside a second game, please indicate on your form.</p>
+      </div>
+    </div>
+    
+    <div class="card mt-4">
+      <div class="card-header">
+        <h5 class="m-0">More Information</h5>
+      </div>
+      
+      <ul class="list-group list-group-flush">
+        <li class="list-group-item"><a href="{% page_url proposalfollowup %}">What happens when I submit my proposal?</a></li>
+        <li class="list-group-item"><a href="{% page_url proposalfaq %}">Larp Proposal FAQ</a></li>
+        <li class="list-group-item"><a href="{% page_url hotel/faq %}">Hotel FAQ</a></li>
+        <li class="list-group-item"><a href="{% page_url gmpolicies %}">Con GM Policies and Services</a></li>
+        <li class="list-group-item">Questions? Contact our {{proposal_chair.name_with_email_link}}, {{ proposal_chair.user_con_profiles[0].name }}.</li>
+      </ul>
+    </div>
+  </div>
+</div>

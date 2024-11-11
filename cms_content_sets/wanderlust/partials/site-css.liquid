@@ -1,0 +1,205 @@
+---
+admin_notes: ''
+invariant: true
+---
+ <style type="text/css">
+      body {
+        background: linear-gradient(90deg, {{css_background_color}} 0%, {{css_background_color_2}} 50%, {{css_background_color}} 100%);
+        background-image: 
+          linear-gradient(90deg, {{css_background_color}} 0%, {{css_background_color_2}} 25%,{{css_background_color_2}} 75%, {{css_background_color}} 100%),
+          url("{% file_url intercon-w-leaf-background-3.jpg %}");
+        background-attachment: fixed;
+        background-position: -40px 72px;
+
+      }
+     #mainContent, .footer{
+         
+        box-shadow: 0 0 10px 5px rgba(0,0,0,0.4);
+        clip-path: inset(0px -750px 0px -750px);
+     }
+
+      .navbar-dark .nav-link {
+        color: hsla(0,0%, 100%, 1)
+      }
+      .navbar-dark .btn-primary, .navbar-dark .btn-primary:hover, .navbar-dark .btn-primary:active {
+        background-color: {{css_color_3}};
+        border-color: {{css_color_3}};
+      }
+      .navbar-dark .btn-primary:hover {
+        text-decoration:underline;
+      }
+      
+      body, .popover {
+        font-family: 'Lato', sans-serif;
+      }
+   
+      .navbar-brand, .con-font{
+        font-family:  'Poiret One', sans-serif;
+        letter-spacing: .05rem;
+      }
+      
+      h1, h2, h3, h4, .blockquote, .font-heading {
+        font-family:  'Poiret One', sans-serif;
+      }
+   
+      h1 {
+        font-weight:700;
+        font-size: 3rem;
+      }
+   
+      h2 {
+        font-size: 2.5rem;
+        font-weight:700;
+      }
+
+      .bg-purple {
+        background-color: {{css_color_3}};
+        --bs-bg-opacity:1 ;
+      }
+      .border-purple {
+        --bs-border-opacity: 1;
+        border-color: {{css_color_3}};
+      }
+      
+      .intercon-menubar {
+        font-family: 'Lato', sans-serif;
+        background:  {{css_color_2}};
+        background: -webkit-linear-gradient(to right, {{css_color_1}}, {{css_color_2}});
+        background: linear-gradient(to bottom right, {{css_color_1}}, {{css_color_2}});
+        -webkit-box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.4);
+        -moz-box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.4);
+        box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.4);
+      }
+   .intercon-menubar .nav-link, .intercon-menubar .navbar-brand, .intercon-menubar .navbar-toggler{
+        color: {{css_header_text_color}};
+   }
+   .intercon-menubar a.btn{
+     background-color: {{css_color_3}};
+     border-color: {{css_color_3}};
+   }
+   
+      .countdown {
+        font-family: 'Lato', sans-serif;
+        background:  {{css_color_3}};
+        -webkit-box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.4);
+        -moz-box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.4);
+        box-shadow: 0px 3px 7px 0px rgba(0,0,0,0.4);
+      }
+   
+      .con-logo-circle {
+        display: inline-block; 
+        border-radius: 50%; 
+        background: linear-gradient(rgb(67, 51, 91) 45%, rgba(67, 51, 91, 0.647) 100%); 
+        padding: 20px; 
+        overflow: hidden;
+        transition: box-shadow 0.2s ease-in-out .05s;
+      }
+
+       .con-logo-roundrect {
+            display: inline-block;
+       }
+      
+      a.con-logo-circle:hover, .con-logo-roundrect:hover {
+        box-shadow: 0 0 6px {{css_color_3}}; 
+      }
+   
+      .con-logo-circle img {
+        width: 100%;
+        max-width: 300px;
+        aspect-ratio: 1 / 1;
+      }
+
+      .con-logo-roundrect img {
+        width: 100%;
+        max-width: 480px;
+      }
+   
+      .background-content {
+        position: fixed;
+        width: 100%;
+        height: 100vh;
+        z-index: -1000;
+        display: flex;
+      }
+   
+      /* CSS hax so that hash-targeted elements don't get hidden under the fixed navbar.  First line of defense: scroll-margin-top.  This doens't always work (c.f. Safari and scrollIntoView) */
+      *[id], a[name] {
+        scroll-snap-margin-top: 82px;
+        scroll-margin-top: 82px;
+      }
+   
+      /* For other browsers, undo the scroll-margin-top thing and use a ::before hack to put in some margin.  This doesn't work for elements rendered in React components that are hash-targeted on navigation changes, but for anything else it works. */
+      :target::before {
+        scroll-snap-margin-top: 0;
+        scroll-margin-top: 0;
+        content: "";
+        display: block;
+        height: 82px; /* fixed header height*/
+        margin: -82px 0 0; /* negative fixed header height */
+      }
+      
+      .theme-title {
+        font-weight:300;
+        font-size:80;
+      }
+      
+      .bg-medium-gray {
+        background-color:#eee;
+      }
+      .section-nav {
+        padding-left: 0;
+        font-size:90%;
+      }
+      .toc-entry {
+        display: block;
+      }
+      .section-nav ul {
+        padding-left: 1rem;
+      }
+      .toc-entry a {
+        display: block;
+        padding: .125rem 1.5rem;
+        color: #99979c;
+      }
+       .toc-entry h4 {
+        display: block;
+        padding: .125rem 1.5rem;
+        color: #99979c;
+      }
+      .news-item:not(:first-child){
+        border-top:1px solid #eee
+      }
+    @media only screen and (min-width: 576px){
+        .overall {
+          min-height:100vh
+        }
+        .section-nav {
+          border-right: 1px solid #eee;
+          max-height: 90vh; 
+          overflow-y: auto;
+          border-bottom: none;
+        }
+     }
+    @media only screen and (min-width: 992px){
+        #user_signups_inner {
+          max-height:5499px;  
+          overflow-y:auto;
+        }
+      }
+      
+      @media only screen and (max-width: 575px){
+        .section-nav {
+          border-bottom: 1px solid #eee;
+        }
+        
+        .section-nav li a{
+          margin-bottom:10px;
+        }
+        .theme-title {
+          font-size:60%;
+        }
+        
+      }
+   
+   
+</style>

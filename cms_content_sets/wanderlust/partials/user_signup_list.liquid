@@ -1,0 +1,57 @@
+---
+admin_notes: ''
+invariant: false
+---
+{% assign nowTimestamp = 'now' | date: '%s' %}
+{% assign conventionStart = convention.starts_at| date: '%s' %}
+{% assign conventionEnd = convention.ends_at | date: '%s' %}
+{% assign diffSecondsStart = conventionStart | minus: nowTimestamp %}
+{% assign diffSecondsEnd = conventionEnd | minus: nowTimestamp %}
+{% assign signups = user_con_profile.signups | sort: "starts_at" %}
+
+{% if signups.size > 0 %}
+  <section class="card bg-purple text-white my-4">
+    <div class="card-header">My Schedule
+      <div class="float-end">
+        {% add_to_calendar_dropdown user_con_profile.ical_secret btn btn-outline-light %}
+      </div>
+    </div>
+    <div id="user_signups_inner">
+      <!--style='max-height:499px; overflow-y:auto' -->
+    <ul class="list-group list-group-flush text-dark">
+      {% if diffSecondsStart < 0 and diffSecondsEnd > 0 %}
+        {% assign has_old_events = false %}
+        {% capture old_events %}
+          {% for signup in signups %}
+            {% assign eventEnd = signup.ends_at | date: '%s' %}
+            {% assign eventDiff = eventEnd | minus: nowTimestamp %}
+            {% if eventDiff <= 0 %}
+              {% render 'user_signup', signup:signup %}
+              {% assign has_old_events = true %}
+            {% endif %}
+          {% endfor %}
+        {% endcapture %}
+      {% if has_old_events%}
+      <button class="btn btn-primary" type="button" data-bs-toggle="collapse" data-bs-target="#old-events" aria-expanded="false" aria-controls="pastEvents">
+    Show / Hide Past Events
+  </button>
+      <div id='old-events' class="collapse">
+        {{old_events}}
+      </div>
+      {% endif %}
+        {% for signup in signups %}
+          {% assign eventEnd = signup.ends_at | date: '%s' %}
+          {% assign eventDiff = eventEnd | minus: nowTimestamp %}
+          {% if eventDiff > 0 %}
+            {% render 'user_signup', signup:signup %}
+          {% endif %}
+        {% endfor %}
+      {% else %}
+        {% for signup in signups %}
+          {% render 'user_signup', signup:signup%}
+        {% endfor %}
+      {% endif %}
+      </div>
+    </ul>
+  </section>
+{% endif %}

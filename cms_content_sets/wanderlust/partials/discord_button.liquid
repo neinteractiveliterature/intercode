@@ -1,0 +1,10 @@
+---
+invariant: false
+---
+{% if user_con_profile %} 
+  <div class="border border-primary rounded text-bg-dark" style="padding: 1.25rem 0.75rem; padding-top: 0.6rem;">
+    <img src="{% file_url Discord-Logo+Wordmark-Color.svg %}" alt="Discord logo" style="max-width: 9rem">
+    <p class="small">Intercon has a Discord server so attendees can chat before, during, and after the con. <br>Please join us there!</p>
+    <a class="btn text-white" style="background-color:{{css_color_3}}" href="https://discord.gg/{{discord_invite}}" target="_blank">Join the Intercon Discord Server!</a>
+  </div>
+{% endif %}

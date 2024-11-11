@@ -1,0 +1,77 @@
+---
+name: Convention Pricing
+admin_notes: ''
+skip_clickwrap_agreement: true
+hidden_from_search: false
+---
+<h1 class='my-3'>Convention Pricing</h1>
+
+{% if convention.ended %}
+  <div class="alert alert-warning">
+    {{ convention.name }} is over.  The following was the price schedule for {{ convention.name }}:
+  </div>
+{% endif %}
+<div class="row">
+  <div class="col-md-6">
+    {% for ticket_type in convention.ticket_types %}
+      {% if ticket_type.publicly_available %}
+        <section class="card" >
+          <div class="card-header">
+            {{ ticket_type.description }}
+          </div>
+          <div class="card-body">
+            <p>
+              Current price: {{ ticket_type.price }}
+              {% if ticket_type.pricing_schedule.next_value_change %}
+                <br>
+                {{ ticket_type.pricing_schedule.next_value.format }}
+                starting {{ ticket_type.pricing_schedule.next_value_change | date: "%b %d, %Y"}}
+              {% endif %}
+            </p>
+
+            <ul class="list-unstyled">
+              {% for timespan in ticket_type.pricing_schedule.timespans %}
+                <li>
+                  <small><strong>{{ timespan.value }}</strong> {{ timespan.short_description_without_value }}</small>
+                </li>
+              {% endfor %}
+            </ul>
+          </div>
+        </section>
+      {% endif %}
+    {% endfor %}
+  </div>
+</div>
+
+<div class="row mt-3">
+  <div class="col">
+    <div class="card">
+      <div class="card-header">
+        Why does it get cheaper closer to the convention?
+      </div>
+      <div class="card-body">
+        <p>
+Intercon uses a sliding pricing model, where our rates first increase and then drop as the convention approaches. This is because initial signups for playing in games happens across four weeks in October or November. After this period many games are full, and signing up for the con after that point in time is generally less desirable. We have adopted a pricing model that encourages people to sign up who learn about the con late, or who find themselves able to attend after all.
+        </p>
+        <p>
+This way, players are charged less for fewer options, and GMs are benefitted by drawing in these extra players, even if only for that one game that interests them. It is better for everyone when games have a full complement of players, and this approach helps that to happen.
+        </p>
+        </div>
+     </div>
+   </div>
+</div>
+  
+<div class="row mt-3">
+  <div class="col">
+    <div class="card">
+      <div class="card-header">
+        What about Child rates?
+      </div>
+      <div class="card-body">
+        <p>
+  We do charge less for children to attend, because we recognize that we do not typically offer a full set of activities sutable for children.  The full children's policy and pricing can be found in our <a href="{% page_url rules%}#policies-children">Convention Rules</a>.
+        </p>
+      </div>
+    </div>
+  </div>
+ </div>
