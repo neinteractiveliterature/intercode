@@ -22,6 +22,7 @@ class CloneConventionService < CivilService::Service
           stripe_account_id
           clickwrap_agreement
           hidden
+          cms_content_set_name
         ]
       )
     ).merge(new_convention_attributes.symbolize_keys)

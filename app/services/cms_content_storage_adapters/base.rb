@@ -105,7 +105,7 @@ class CmsContentStorageAdapters::Base
 
   def merge_items(item_lists)
     item_lists_by_identifier = item_lists.map { |item_list| item_list.index_by(&:identifier) }
-    item_lists_by_identifier.inject(&:merge).values
+    item_lists_by_identifier.inject(&:merge)&.values || []
   end
 
   def basename_without_extension(path, extension)

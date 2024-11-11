@@ -7,6 +7,7 @@
 #  accepting_proposals            :boolean
 #  canceled                       :boolean          default(FALSE), not null
 #  clickwrap_agreement            :text
+#  cms_content_set_name           :text             not null
 #  default_currency_code          :string
 #  domain                         :string           not null
 #  email_from                     :text             not null

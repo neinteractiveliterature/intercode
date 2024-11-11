@@ -1,0 +1,26 @@
+---
+name: All Conventions + Demos
+skip_clickwrap_agreement: false
+hidden_from_search: false
+---
+{% assign conventions_sorted = conventions | sort:'starts_at' %}
+{% assign conventions_sorted_reverse = conventions_sorted|reverse %}
+{% assign now = "now" | date: "%Y-%m-%d %H:%M" %}
+
+<h1 class="my-3">Upcoming Conventions</h1>
+<ul class="list-group col-md-8">
+  {% for convention in conventions_sorted %}
+    {% if now < convention.ends_at %}
+        {% include 'convention_li'%}
+    {% endif %}
+  {% endfor %}
+</ul>
+
+<h1 class="my-3">Past Conventions</h1>
+<ul class="list-group col-md-8">
+ {% for convention in conventions_sorted_reverse %}
+  {% if now > convention.ends_at %}
+      {% include 'convention_li'%}
+  {% endif %}
+{% endfor %}
+</ul>

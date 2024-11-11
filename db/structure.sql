@@ -1203,7 +1203,8 @@ CREATE TABLE public.conventions (
     open_graph_image text,
     favicon text,
     default_currency_code character varying,
-    signup_automation_mode character varying
+    signup_automation_mode character varying,
+    cms_content_set_name text NOT NULL
 );
 
 
@@ -2423,7 +2424,8 @@ CREATE TABLE public.root_sites (
     site_name text,
     root_page_id bigint,
     default_layout_id bigint,
-    disable_captcha boolean DEFAULT false NOT NULL
+    disable_captcha boolean DEFAULT false NOT NULL,
+    cms_content_set_name text NOT NULL
 );
 
 
@@ -6121,6 +6123,7 @@ SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
 ('20241111212526'),
+('20241111204810'),
 ('20241111203124'),
 ('20241111181051'),
 ('20241031190016'),

@@ -4,11 +4,12 @@
 #
 # Table name: root_sites
 #
-#  id                :bigint           not null, primary key
-#  disable_captcha   :boolean          default(FALSE), not null
-#  site_name         :text
-#  default_layout_id :bigint
-#  root_page_id      :bigint
+#  id                   :bigint           not null, primary key
+#  cms_content_set_name :text             not null
+#  disable_captcha      :boolean          default(FALSE), not null
+#  site_name            :text
+#  default_layout_id    :bigint
+#  root_page_id         :bigint
 #
 # Indexes
 #
@@ -23,8 +24,8 @@
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
 
 class RootSite < ApplicationRecord
-  belongs_to :root_page, class_name: 'Page'
-  belongs_to :default_layout, class_name: 'CmsLayout'
+  belongs_to :root_page, class_name: "Page"
+  belongs_to :default_layout, class_name: "CmsLayout"
 
   def self.instance
     RootSite.first
@@ -60,6 +61,14 @@ class RootSite < ApplicationRecord
 
   def cms_graphql_queries
     CmsGraphqlQuery.global
+  end
+
+  def notification_templates
+    NotificationTemplate.none
+  end
+
+  def forms
+    Form.none
   end
 
   def host

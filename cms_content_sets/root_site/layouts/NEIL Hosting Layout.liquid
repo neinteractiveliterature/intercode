@@ -1,0 +1,35 @@
+---
+navbar_classes: navbar-fixed-top navbar-expand-md mb-4 navbar-light bg-light
+admin_notes: ''
+---
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    {{ content_for_head }}
+    <link href="https://fonts.googleapis.com/css?family=Exo:400,700,700i" rel="stylesheet">
+    <style type="text/css">
+      body {
+        font-family: Exo;
+      }
+      
+      .overall {
+        min-height: 100vh;
+      }
+    </style>
+    <link rel="icon" 
+      type="image/png" 
+      href="{% file_url "neilSquare.png" %}">
+  </head>
+  <body>
+    <div class="overall d-flex flex-column">
+      {{ content_for_navbar }}
+
+      <div class="container" style="flex-grow: 1">
+        {{ content_for_layout }}
+      </div>
+      <div class="bg-light d-none d-sm-block d-xs-block p-2 mt-4">
+        {% include 'copyright' %}
+      </div>
+    </div>
+  </body>
+</html>

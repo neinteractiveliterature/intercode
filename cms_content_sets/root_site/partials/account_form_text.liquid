@@ -1,0 +1,21 @@
+---
+admin_notes: ''
+invariant: false
+---
+{% assign conlist = '' |split: '' %}
+{% assign cons = conventions | sort: "starts_at" | reverse %}
+{% for con in cons %}
+  {% unless con.name contains '[demo]' %}
+    {% assign name = con.name| split: '_%' %}
+    {% assign conlist = conlist | concat: name %}
+  {% endunless %}
+{% endfor %}
+<div class="alert alert-info my-4 p-0 overflow-hidden shadow-sm">
+  <div class="text-end bg-white p-1">
+    <img src="{% file_url neilhosting-plain.svg %}" style="width: 150px;" alt="NEIL Hosting">
+  </div>
+  <div class="p-3">
+    <p {% if user %}class="mb-0"{% endif %}>This account is shared between all NEIL Intercon conventions and NELCOs, as well as <a href="//www.neilhosting.net/pages/all-conventions" target="_blank" rel="noopener noreferrer">many other events that use NEIL Hosting</a>.  Only the organizers of the events you actually sign in to have access to your personal information.</p>
+    {% unless user %} <p class="mb-0">If you've attended any of these events, <a class="btn btn-link p-0" href="/users/sign_in">please log in instead</a>.</p>{% endunless %}</div>
+  </div>
+ 

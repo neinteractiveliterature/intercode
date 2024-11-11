@@ -21,6 +21,7 @@ class Mutations::CreateConvention < Mutations::BaseMutation
     if convention.maximum_event_signups
       convention_data["maximum_event_signups"] = process_scheduled_value_input(convention.maximum_event_signups)
     end
+    convention_data["cms_content_set_name"] = cms_content_set_name if cms_content_set_name
 
     if clone_convention_id
       source_convention = Convention.find(clone_convention_id)

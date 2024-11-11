@@ -1,0 +1,28 @@
+---
+admin_notes: ''
+invariant: false
+---
+{% assign startMonth = convention.starts_at | date: "%m" %}
+{% assign endMonth = convention.ends_at | date: "%m" %}
+{% assign startDay = convention.starts_at | date: "%d" %}
+{% assign endDay = convention.ends_at | date: "%d" %}
+<a class="list-group-item list-group-item-action" href="{{ convention.url }}">
+  <div class="d-flex w-100 justify-content-between">
+    <h5 class="mb-1">{{ convention.name }}</h5>
+    <small>{{convention.organization.name}}</small>
+  </div>
+  <p class="mb-1">
+    {% if startMonth == endMonth %}
+      {% if startDay == endDay %}
+       <span class="d-lg-none">{{ convention.starts_at | date: "%b %d, %Y" }}</span>
+        <span class="d-none d-lg-inline">{{ convention.starts_at | date: "%B %d, %Y" }}</span>
+      {% else %}
+        <span class="d-lg-none">{{ convention.starts_at | date: "%b %d" }} to {{convention.ends_at|date: "%d, %Y"}}</span>
+        <span class="d-none d-lg-inline">{{ convention.starts_at | date: "%B %d" }} to {{convention.ends_at|date: "%d, %Y"}}</span>
+      {% endif %}
+    {% else %}
+      <span class="d-lg-none">{{ convention.starts_at | date: "%b %d" }} to {{convention.ends_at|date: "%b %d, %Y"}}</span>
+      <span class="d-none d-lg-inline">{{ convention.starts_at | date: "%B %d" }} to {{convention.ends_at|date: "%B %d, %Y"}}</span>
+    {% endif %}      
+  </p>
+</a>

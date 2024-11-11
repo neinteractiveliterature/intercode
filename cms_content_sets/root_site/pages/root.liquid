@@ -1,0 +1,78 @@
+---
+name: Main page
+admin_notes: ''
+skip_clickwrap_agreement: false
+hidden_from_search: false
+---
+{% assign conventions_sorted = conventions | sort:'starts_at' %}
+{% assign conventions_sorted_reverse = conventions_sorted|reverse %}
+{% assign now = "now" | date: "%Y-%m-%d %H:%M" %}
+
+<div class="text-center mb-5">
+  <img src="{% file_url neilhosting-plain.svg %}" alt="NEIL Hosting" class="img-fluid">
+</div>
+
+<div class="row mb-4">
+  <div class="col-md-8">
+    <div class="card">
+      <div class="card-header lead">
+        Upcoming Conventions
+      </div>
+      <ul class="list-group list-group-flush">
+        {% for convention in conventions_sorted %}
+          {% if now < convention.ends_at %}
+            {% unless convention.name contains "[demo]" or convention.canceled %}
+              {% include 'convention_li'%}
+            {% endunless%}
+          {% endif %}
+        {% endfor %}
+      </ul>
+      <div class="card-footer">
+        <a href="{% page_url all-conventions %}" class="btn btn-secondary">
+          All conventions →
+        </a>
+      </div>
+    </div>
+  </div>
+  <div class="col-md-4 mt-4 mt-md-0">
+    <div class="card mb-4">
+      <div class="card-header lead">
+        Hosting available
+      </div>
+      <div class="card-body">
+        NEIL Hosting is now available for all larp conventions!  We provide a modern, battle-tested platform for convention registration and site hosting.
+      </div>
+      <div class="card-footer">
+        <a href="{% page_url host-with-us %}" class="btn btn-secondary">
+          Host with us →
+        </a>
+      </div>
+    </div>
+    <div class="card mb-4">
+      <div class="card-header lead">
+        Documentation
+      </div>
+      <div class="card-body">
+        We're working on a documentation site for Intercode, including a user guide and a GraphQL API reference.  It's a work in progress.
+      </div>
+      <div class="card-footer">
+        <a href="https://intercode.interactiveliterature.org/docs/intro" class="btn btn-secondary">
+          Read the docs →
+        </a>
+      </div>
+    </div>
+    <div class="card mb-4">
+      <div class="card-header lead">
+        Intercode Blog
+      </div>
+      <div class="card-body">
+        We're constantly making improvements to our platform which are available to all conventions hosted by us as soon as they are deployed.  For larger changes, we publish a blog so you can keep appraised of changes.
+      </div>
+      <div class="card-footer">
+        <a href="https://intercode.interactiveliterature.org/blog" class="btn btn-secondary">
+          Go to the blog →
+        </a>
+      </div>
+    </div>
+  </div>
+</div>
