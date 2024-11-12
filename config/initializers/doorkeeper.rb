@@ -235,7 +235,7 @@ Doorkeeper::JWT.configure do
 
   # Optionally set additional headers for the JWT. See
   # https://tools.ietf.org/html/rfc7515#section-4.1
-  token_headers { |_opts| { kid: Doorkeeper::OpenidConnect.signing_key.kid } }
+  token_headers { |_opts| { kid: Doorkeeper::OpenidConnect.signing_key["kid"] } }
 
   # Use the application secret specified in the access grant token. Defaults to
   # `false`. If you specify `use_application_secret true`, both `secret_key` and
