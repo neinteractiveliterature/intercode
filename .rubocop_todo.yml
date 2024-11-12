@@ -651,8 +651,6 @@ Style/RedundantParentheses:
 Style/RedundantRegexpEscape:
   Exclude:
     - 'db/migrate/20200124155649_add_mobile_phone_to_user_con_profiles.rb'
-    - 'lib/intercode/import/intercode1/html_converter.rb'
-    - 'lib/intercode/import/intercode1/tables/rooms.rb'
     - 'lib/intercode/import/markdownifier.rb'
     - 'lib/intercode/liquid/tags/new_event_proposal_button.rb'
     - 'lib/intercode/liquid/tags/withdraw_user_signup_button.rb'

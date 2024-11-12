@@ -1,5 +1,3 @@
-require 'reverse_markdown'
-
 class Intercode::Import::Markdownifier
   attr_reader :logger
 
@@ -23,6 +21,7 @@ class Intercode::Import::Markdownifier
     cleaned_html = parsed_html.to_html
 
     begin
+      require "reverse_markdown"
       ReverseMarkdown.convert(cleaned_html)
     rescue StandardError => e
       logger.warn("Error converting #{cleaned_html.inspect} to Markdown: #{e.message}")
@@ -35,9 +34,9 @@ class Intercode::Import::Markdownifier
   # destructively edits a Nokogiri tree!
   def convert_youtube_links(parsed_html)
     parsed_html
-      .css('object > param[name=movie][value*=youtube]')
+      .css("object > param[name=movie][value*=youtube]")
       .each do |movie_param|
-        m = %r{www\.youtube\.com\/v\/([A-Za-z0-9_-]+)}.match(movie_param['value'])
+        m = %r{www\.youtube\.com\/v\/([A-Za-z0-9_-]+)}.match(movie_param["value"])
         movie_param.parent.add_previous_sibling("{% youtube #{m[1]} %}")
         movie_param.parent.remove
       end

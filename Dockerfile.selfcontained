@@ -16,7 +16,7 @@ RUN apt-get install -y libvips42 git build-essential shared-mime-info nodejs lib
 RUN npm install -g yarn
 
 COPY --chown=www:www Gemfile Gemfile.lock .ruby-version /usr/src/intercode/
-RUN bundle config set without 'development test intercode1_import' \
+RUN bundle config set without 'development test' \
   && bundle install -j4 \
   && echo 'Running bundle clean --force' \
   && bundle clean --force \

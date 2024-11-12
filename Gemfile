@@ -90,16 +90,17 @@ gem "tzinfo-data"
 gem "browser"
 gem "positioning"
 gem "stackprof"
-
-gem "faker", group: "development", require: false
+gem "oj", "~> 3.16.0"
+gem "term-ansicolor"
 
 gem "rollbar"
-gem "oj", "~> 3.16.0"
+gem "sentry-ruby", "~> 5.17"
+gem "sentry-rails", "~> 5.17"
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", ">= 1.1.0", require: false
 
-gem "parallel", groups: %i[development intercode1_import]
+gem "parallel", groups: %i[development]
 
 # Production profiling
 group :skylight do
@@ -155,18 +156,14 @@ group :development do
 
   # Type profiling for IDEs
   gem "typeprof"
+
+  # Used for generating developer DB dump
+  gem "faker", require: false
 end
 
 group :development, :test do
   gem "pry-rails"
   gem "pry-remote"
-end
-
-group :intercode1_import do
-  gem "sequel"
-  gem "term-ansicolor"
-  gem "reverse_markdown"
-  gem "mysql2", "~> 0.5.3"
 end
 
 group :test do
@@ -181,6 +178,3 @@ group :test do
   # Not sure if we actually need it or not, but adding this for now to unbreak controller tests
   gem "rails-controller-testing"
 end
-
-gem "sentry-ruby", "~> 5.17"
-gem "sentry-rails", "~> 5.17"

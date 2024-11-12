@@ -385,7 +385,6 @@ GEM
     msgpack (1.7.2)
     msgpack (1.7.2-java)
     multi_json (1.15.0)
-    mysql2 (0.5.6)
     nats-pure (2.4.0)
       concurrent-ruby (~> 1.0)
     net-http (0.4.1)
@@ -528,8 +527,6 @@ GEM
     responders (3.1.1)
       actionpack (>= 5.2)
       railties (>= 5.2)
-    reverse_markdown (3.0.0)
-      nokogiri
     rexml (3.3.9)
     rollbar (3.6.0)
     rouge (3.26.1)
@@ -576,8 +573,6 @@ GEM
     sentry-ruby (5.21.0)
       bigdecimal
       concurrent-ruby (~> 1.0, >= 1.0.2)
-    sequel (5.86.0)
-      bigdecimal
     set (1.0.3)
     shoryuken (6.2.1)
       aws-sdk-core (>= 2)
@@ -720,7 +715,6 @@ DEPENDENCIES
   minitest-reporters
   minitest-spec-rails
   money-rails
-  mysql2 (~> 0.5.3)
   oj (~> 3.16.0)
   parallel
   pg
@@ -741,7 +735,6 @@ DEPENDENCIES
   rbtrace
   recaptcha
   redcarpet
-  reverse_markdown
   rollbar
   rubocop (= 1.68.0)
   rubocop-factory_bot
@@ -754,7 +747,6 @@ DEPENDENCIES
   scheduled_value (~> 1.4.0)
   sentry-rails (~> 5.17)
   sentry-ruby (~> 5.17)
-  sequel
   shoryuken
   simplecov
   simplecov-cobertura
