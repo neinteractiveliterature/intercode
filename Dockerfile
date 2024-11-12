@@ -62,6 +62,14 @@ ENV NODE_ENV production
 ENV REVISION ${REVISION}
 
 USER root
+# openssh-server: needed for heroku exec
+# iproute2, curl: generally useful network utilities that don't take much space
+# python3, xz-utils: node dependencies
+# libvips43, poppler-utils: activestorage dependencies
+# libjemalloc2: more efficient memory allocation in Ruby and Node
+# shared-mime-info: Rails dependency
+# libpq5: pg gem dependency
+# mariadb-client: dependency for Intercode 1 import
 RUN apt-get update && apt-get install -y --no-install-recommends openssh-server iproute2 curl python3 libvips42 poppler-utils xz-utils libjemalloc2 shared-mime-info libpq5 mariadb-client && rm -rf /var/lib/apt/lists/*
 RUN useradd -ms $(which bash) www
 RUN mkdir /opt/node && \
