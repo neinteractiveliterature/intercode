@@ -6,13 +6,14 @@ import { useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 import RunFormFields from '../BuiltInForms/RunFormFields';
 import { EventAdminEventsQueryData, EventFieldsFragment, RunFieldsFragment } from './queries.generated';
 import { useTranslation } from 'react-i18next';
-import { useParams, useSubmit } from 'react-router-dom';
+import { Form, FormProps, useParams, useSubmit } from 'react-router-dom';
 
 export type EditingRun = Omit<RunFieldsFragment, 'starts_at'> & {
   starts_at?: RunFieldsFragment['starts_at'];
 };
 
 export type EditRunModalProps = {
+  formProps: FormProps;
   convention: EventAdminEventsQueryData['convention'];
   run: EditingRun;
   event: EventFieldsFragment;
@@ -20,7 +21,14 @@ export type EditRunModalProps = {
   onCancel: () => void;
 };
 
-function EditRunModal({ convention, run, event, editingRunChanged, onCancel }: EditRunModalProps): JSX.Element {
+function EditRunModal({
+  convention,
+  run,
+  event,
+  editingRunChanged,
+  onCancel,
+  formProps,
+}: EditRunModalProps): JSX.Element {
   const { t } = useTranslation();
   const confirm = useConfirm();
   const submit = useSubmit();
@@ -43,8 +51,8 @@ function EditRunModal({ convention, run, event, editingRunChanged, onCancel }: E
   }, [event, run]);
 
   return (
-    <div>
-      <Modal visible={run != null && !confirm.visible} dialogClassName="modal-xl">
+    <Modal visible={run != null && !confirm.visible} dialogClassName="modal-xl">
+      <Form {...formProps}>
         <div className="modal-header">
           <h5 className="modal-title">{title}</h5>
         </div>
@@ -82,8 +90,8 @@ function EditRunModal({ convention, run, event, editingRunChanged, onCancel }: E
             </div>
           </div>
         </div>
-      </Modal>
-    </div>
+      </Form>
+    </Modal>
   );
 }
 

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useNavigate, LoaderFunction, useLoaderData, Form, ActionFunction, redirect } from 'react-router-dom';
+import { useNavigate, LoaderFunction, useLoaderData, ActionFunction, redirect } from 'react-router-dom';
 
 import EditRunModal, { EditingRun } from './EditRunModal';
 import { EventAdminEventsQueryData, EventAdminEventsQueryDocument } from './queries.generated';
@@ -57,15 +57,14 @@ function EditRun(): JSX.Element {
   const [run, setRun] = useState(initialRun);
 
   return (
-    <Form action="." method="PATCH">
-      <EditRunModal
-        convention={convention}
-        editingRunChanged={setRun}
-        event={event}
-        onCancel={cancelEditing}
-        run={run}
-      />
-    </Form>
+    <EditRunModal
+      formProps={{ action: '.', method: 'PATCH' }}
+      convention={convention}
+      editingRunChanged={setRun}
+      event={event}
+      onCancel={cancelEditing}
+      run={run}
+    />
   );
 }
 
