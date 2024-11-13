@@ -17,6 +17,7 @@ strategy = "bluegreen"
 [env]
 ASSETS_HOST = "assets.neilhosting.net"
 AUTOSCALE_MIN_INSTANCES = "2"
+AUTOSCALE_MAX_INSTANCES = "10"
 CLOUDWATCH_LOG_GROUP = "intercode2_production"
 DEFAULT_CURRENCY = "USD"
 HEROKU_APP_NAME = "intercode"
