@@ -39,6 +39,7 @@ export default function EventTicketPurchaseModal({
   const { data, error } = useSuspenseQuery(CurrentPendingOrderPaymentIntentClientSecretQueryDocument, {
     errorPolicy: 'ignore',
   });
+  const [checkOutError, setCheckOutError] = useState<Error>();
 
   const cancel = async () => {
     if (orderEntry) {
@@ -77,7 +78,12 @@ export default function EventTicketPurchaseModal({
           <LazyStripeElementsContainer
             options={{ clientSecret: data?.convention.my_profile?.current_pending_order?.payment_intent_client_secret }}
           >
-            <OrderPaymentModalContents onCancel={cancelAsync} onComplete={complete} order={orderEntry.order} />
+            <OrderPaymentModalContents
+              onCancel={cancelAsync}
+              onComplete={complete}
+              onError={(error) => setCheckOutError(error)}
+              order={orderEntry.order}
+            />
           </LazyStripeElementsContainer>
         ) : (
           <TicketPurchaseForm run={run} availableProducts={availableProducts} onAddedToCart={setOrderEntry} />
@@ -90,6 +96,7 @@ export default function EventTicketPurchaseModal({
           </button>
         )}
         <ErrorDisplay graphQLError={cancelError as ApolloError | null} />
+        <ErrorDisplay graphQLError={checkOutError as ApolloError | null} />
       </div>
     </Modal>
   );

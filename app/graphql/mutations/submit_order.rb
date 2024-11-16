@@ -20,6 +20,12 @@ class Mutations::SubmitOrder < Mutations::BaseMutation
     result = service.call
 
     if result.failure?
+      begin
+        service.payment_intent.cancel
+      rescue StandardError => e
+        ErrorReporting.report(:error, e)
+      end
+
       err = result.exception || CivilService::ServiceFailure.new(service, result)
       raise GraphQL::ExecutionError, err.message if result.card_error
       raise err, err.message, err.backtrace
