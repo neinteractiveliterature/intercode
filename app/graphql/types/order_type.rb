@@ -30,6 +30,7 @@ class Types::OrderType < Types::BaseObject
       Stripe::PaymentIntent.create(
         {
           amount: object.total_price.fractional,
+          capture_method: "manual",
           currency: object.total_price.currency,
           description: "#{description} for #{convention.name}",
           statement_descriptor_suffix: SubmitOrderService.statement_descriptor_suffix(convention),

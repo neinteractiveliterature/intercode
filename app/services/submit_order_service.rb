@@ -25,6 +25,11 @@ class SubmitOrderService < CivilService::Service
     @payment_intent_id = payment_intent_id
   end
 
+  def payment_intent
+    @payment_intent ||=
+      Stripe::PaymentIntent.retrieve({ id: payment_intent_id }, { stripe_account: convention.stripe_account_id })
+  end
+
   private
 
   def inner_call
@@ -41,14 +46,10 @@ class SubmitOrderService < CivilService::Service
     success
   end
 
-  def update_order_from_payment_intent
-    pi =
-      Stripe::PaymentIntent.retrieve(
-        { id: payment_intent_id, expand: ["latest_charge"] },
-        { stripe_account: convention.stripe_account_id }
-      )
-    if pi.status == "succeeded"
-      charge = pi.latest_charge
+  def update_order_from_payment_intent # rubocop:disable Metrics/AbcSize
+    payment_intent.capture
+    if payment_intent.status == "succeeded"
+      charge = Stripe::Charge.retrieve(payment_intent.latest_charge, { stripe_account: convention.stripe_account_id })
       order.update!(
         status: "paid",
         payment_amount: order.total_price,

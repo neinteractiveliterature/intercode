@@ -1,4 +1,4 @@
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { LoaderFunction, useFetcher, useLoaderData, useNavigate } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
 import { useModal, useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
@@ -25,6 +25,7 @@ function Cart() {
   const error = fetcher.data instanceof Error ? fetcher.data : undefined;
   const checkOutModal = useModal();
   const confirm = useConfirm();
+  const [checkOutError, setCheckOutError] = useState<Error>();
 
   usePageTitle('Cart');
 
@@ -108,7 +109,14 @@ function Cart() {
         removeFromCart={removeFromCart}
         changeQuantity={(entry: OrderEntryType, quantity: number) => changeQuantity(entry.id, quantity)}
         checkOutButton={
-          <button type="button" className="btn btn-primary mt-2" onClick={checkOutModal.open}>
+          <button
+            type="button"
+            className="btn btn-primary mt-2"
+            onClick={() => {
+              setCheckOutError(undefined);
+              checkOutModal.open();
+            }}
+          >
             <i className="bi-cart-fill" /> Check out
           </button>
         }
@@ -116,12 +124,20 @@ function Cart() {
         deleteCouponApplication={deleteCouponApplication}
       />
 
-      <OrderPaymentModal
-        visible={checkOutModal.visible}
-        onCancel={checkOutModal.close}
-        order={data.convention.my_profile?.current_pending_order ?? undefined}
-        onComplete={checkOutComplete}
-      />
+      <ErrorDisplay graphQLError={checkOutError as ApolloError} />
+
+      {checkOutModal.visible && (
+        <OrderPaymentModal
+          visible
+          onCancel={checkOutModal.close}
+          order={data.convention.my_profile?.current_pending_order ?? undefined}
+          onComplete={checkOutComplete}
+          onError={(error) => {
+            checkOutModal.close();
+            setCheckOutError(error);
+          }}
+        />
+      )}
     </div>
   );
 }

@@ -1,6 +1,6 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { DateTime } from 'luxon';
-import { useModal } from '@neinteractiveliterature/litform';
+import { ErrorDisplay, useModal } from '@neinteractiveliterature/litform';
 import { ModalData } from '@neinteractiveliterature/litform/lib/useModal';
 
 import OrderPaymentModal from './OrderPaymentModal';
@@ -13,6 +13,7 @@ import { useAppDateTimeFormat } from '../TimeUtils';
 import { useTranslation } from 'react-i18next';
 import { LoaderFunction, useLoaderData } from 'react-router';
 import { client } from '../useIntercodeApolloClient';
+import { ApolloError } from '@apollo/client';
 
 type OrderType = NonNullable<OrderHistoryQueryData['convention']['my_profile']>['orders'][0];
 type PaymentModalState = {
@@ -187,6 +188,7 @@ export const loader: LoaderFunction = async () => {
 function OrderHistory() {
   const data = useLoaderData() as OrderHistoryQueryData;
   const paymentModal = useModal<PaymentModalState>();
+  const [error, setError] = useState<Error>();
 
   usePageTitle('My order history');
   useLoginRequired();
@@ -202,13 +204,21 @@ function OrderHistory() {
             <OrderHistoryOrder key={order.id} convention={data.convention} order={order} paymentModal={paymentModal} />
           ))}
 
-          <OrderPaymentModal
-            visible={paymentModal.visible}
-            onCancel={paymentModal.close}
-            order={paymentModal.state?.order}
-            onComplete={paymentModal.close}
-          />
+          {paymentModal.visible && (
+            <OrderPaymentModal
+              visible
+              onCancel={paymentModal.close}
+              order={paymentModal.state?.order}
+              onComplete={paymentModal.close}
+              onError={(error) => {
+                setError(error);
+                paymentModal.close();
+              }}
+            />
+          )}
         </ul>
+
+        <ErrorDisplay graphQLError={error as ApolloError} />
       </>
     );
   }
