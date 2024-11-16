@@ -76,24 +76,21 @@ class SubmitOrderServiceTest < ActiveSupport::TestCase
 
   def build_payment_intent(status: "succeeded")
     Stripe::PaymentIntent.construct_from(
-      {
-        id: "pi_12345",
-        amount: 100,
-        currency: "usd",
-        payment_method: "tok_12345",
-        status:,
-        latest_charge: {
-          id: "ch_12345",
-          created: Time.now.to_i
-        }
-      }
+      { id: "pi_12345", amount: 100, currency: "usd", payment_method: "tok_12345", status:, latest_charge: "ch_12345" }
     )
   end
 
   def mocking_payment_intent(**args, &)
     payment_intent = build_payment_intent(**args)
+    charge = Stripe::Charge.construct_from(id: payment_intent.latest_charge, created: Time.now.to_i)
     Stripe::PaymentIntent.stub :retrieve, payment_intent do
-      yield payment_intent
+      Stripe::Charge.stub :retrieve, charge do
+        payment_intent.stub :capture, payment_intent.latest_charge do
+          payment_intent.stub :cancel, true do
+            yield payment_intent
+          end
+        end
+      end
     end
   end
 end
