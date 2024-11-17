@@ -254,12 +254,13 @@ jobs:
         id: slack
         uses: slackapi/slack-github-action@v2.0.0
         with:
-          channel-id: ${{ secrets.SlackCISuccessNotificationChannelID }}
-          slack-message: |
-            Draft release ${{ steps.release-drafter.outputs.name }} updated:
+          method: chat.postMessage
+          token: ${{ secrets.SLACKTOKEN }}
+          payload: |
+            channel: ${{ secrets.SlackCISuccessNotificationChannelID }}
+            text: |
+              Draft release ${{ steps.release-drafter.outputs.name }} updated:
 
-            - ${{ join(github.event.commits.*.message, '%0A- ') }}
+              - ${{ join(github.event.commits.*.message, '%0A- ') }}
 
-            To release Intercode to production, visit: ${{ steps.release-drafter.outputs.html_url }}
-        env:
-          SLACK_BOT_TOKEN: ${{ secrets.SlackToken }}
+             To release Intercode to production, visit: ${{ steps.release-drafter.outputs.html_url }}
