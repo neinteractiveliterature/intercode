@@ -5716,7 +5716,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/plugin-commonjs@npm:^28.0.0":
+"@rollup/plugin-commonjs@npm:^28.0.1":
   version: 28.0.1
   resolution: "@rollup/plugin-commonjs@npm:28.0.1"
   dependencies:
@@ -5752,7 +5752,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/plugin-node-resolve@npm:^15.2.3":
+"@rollup/plugin-node-resolve@npm:^15.3.0":
   version: 15.3.0
   resolution: "@rollup/plugin-node-resolve@npm:15.3.0"
   dependencies:
@@ -6349,7 +6349,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@swc/core@npm:^1.7.26":
+"@swc/core@npm:^1.7.26, @swc/core@npm:^1.9.2":
   version: 1.9.2
   resolution: "@swc/core@npm:1.9.2"
   dependencies:
@@ -7389,7 +7389,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vitejs/plugin-react-swc@npm:^3.7.0":
+"@vitejs/plugin-react-swc@npm:^3.7.1":
   version: 3.7.1
   resolution: "@vitejs/plugin-react-swc@npm:3.7.1"
   dependencies:
@@ -7400,7 +7400,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vitest/coverage-v8@npm:^2.1.1":
+"@vitest/coverage-v8@npm:^2.1.5":
   version: 2.1.5
   resolution: "@vitest/coverage-v8@npm:2.1.5"
   dependencies:
@@ -7426,7 +7426,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vitest/eslint-plugin@npm:^1.0.1":
+"@vitest/eslint-plugin@npm:^1.1.10":
   version: 1.1.10
   resolution: "@vitest/eslint-plugin@npm:1.1.10"
   peerDependencies:
@@ -7513,7 +7513,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vitest/ui@npm:^2.1.1":
+"@vitest/ui@npm:^2.1.5":
   version: 2.1.5
   resolution: "@vitest/ui@npm:2.1.5"
   dependencies:
@@ -10870,8 +10870,8 @@ __metadata:
     clsx: "npm:2.1.1"
     entities: "npm:5.0.0"
     file-loader: "npm:6.2.0"
-    graphql: "npm:^16.8.2"
-    graphql-config: "npm:^5.0.3"
+    graphql: "npm:^16.9.0"
+    graphql-config: "npm:^5.1.3"
     lodash: "npm:4.17.21"
     prism-react-renderer: "npm:2.4.0"
     react: "npm:18.3.1"
@@ -13148,7 +13148,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-config@npm:^5.0.3, graphql-config@npm:^5.1.1":
+"graphql-config@npm:^5.1.1, graphql-config@npm:^5.1.3":
   version: 5.1.3
   resolution: "graphql-config@npm:5.1.3"
   dependencies:
@@ -13249,17 +13249,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql@npm:16.8.1":
-  version: 16.8.1
-  resolution: "graphql@npm:16.8.1"
-  checksum: 10c0/129c318156b466f440914de80dbf7bc67d17f776f2a088a40cb0da611d19a97c224b1c6d2b13cbcbc6e5776e45ed7468b8432f9c3536724e079b44f1a3d57a8a
-  languageName: node
-  linkType: hard
-
-"graphql@npm:^16.8.2":
-  version: 16.8.2
-  resolution: "graphql@npm:16.8.2"
-  checksum: 10c0/921a6321c4efe2540fd5a752093c1542f96cd10b3907b1a8044819f054e6e8a6bca78d93a8eada065a07dfd4e53d89eef99ebdced2c372453e05480e12d8652e
+"graphql@npm:16.9.0, graphql@npm:^16.9.0":
+  version: 16.9.0
+  resolution: "graphql@npm:16.9.0"
+  checksum: 10c0/a8850f077ff767377237d1f8b1da2ec70aeb7623cdf1dfc9e1c7ae93accc0c8149c85abe68923be9871a2934b1bce5a2496f846d4d56e1cfb03eaaa7ddba9b6a
   languageName: node
   linkType: hard
 
@@ -20327,7 +20320,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rollup@npm:^4.20.0, rollup@npm:^4.22.4":
+"rollup@npm:^4.20.0, rollup@npm:^4.27.2":
   version: 4.27.2
   resolution: "rollup@npm:4.27.2"
   dependencies:
@@ -20433,15 +20426,15 @@ __metadata:
     "@popperjs/core": "npm:^2.11.8"
     "@prettier/plugin-ruby": "npm:4.0.4"
     "@rails/activestorage": "npm:7.2.200"
-    "@rollup/plugin-commonjs": "npm:^28.0.0"
-    "@rollup/plugin-node-resolve": "npm:^15.2.3"
+    "@rollup/plugin-commonjs": "npm:^28.0.1"
+    "@rollup/plugin-node-resolve": "npm:^15.3.0"
     "@rollup/plugin-replace": "npm:^6.0.1"
     "@rollup/plugin-swc": "npm:^0.4.0"
     "@sentry/browser": "npm:^8.7.0"
     "@sentry/types": "npm:^8.34.0"
     "@stripe/react-stripe-js": "npm:2.9.0"
     "@stripe/stripe-js": "npm:4.10.0"
-    "@swc/core": "npm:^1.7.26"
+    "@swc/core": "npm:^1.9.2"
     "@testing-library/dom": "npm:^10.1.0"
     "@testing-library/jest-dom": "npm:6.6.3"
     "@testing-library/react": "npm:16.0.1"
@@ -20478,10 +20471,10 @@ __metadata:
     "@typescript-eslint/eslint-plugin": "npm:8.14.0"
     "@typescript-eslint/parser": "npm:8.14.0"
     "@typescript-eslint/utils": "npm:^8.8.0"
-    "@vitejs/plugin-react-swc": "npm:^3.7.0"
-    "@vitest/coverage-v8": "npm:^2.1.1"
-    "@vitest/eslint-plugin": "npm:^1.0.1"
-    "@vitest/ui": "npm:^2.1.1"
+    "@vitejs/plugin-react-swc": "npm:^3.7.1"
+    "@vitest/coverage-v8": "npm:^2.1.5"
+    "@vitest/eslint-plugin": "npm:^1.1.10"
+    "@vitest/ui": "npm:^2.1.5"
     apollo-upload-client: "npm:18.0.1"
     array-to-sentence: "npm:2.0.0"
     assert-never: "npm:1.3.0"
@@ -20520,7 +20513,7 @@ __metadata:
     font-awesome: "npm:4.7.0"
     globals: "npm:^15.8.0"
     graphiql: "npm:3.7.2"
-    graphql: "npm:16.8.1"
+    graphql: "npm:16.9.0"
     graphql-anywhere: "npm:4.2.8"
     graphql-tag: "npm:2.12.6"
     graphql-ws: "npm:5.16.0"
@@ -20571,7 +20564,7 @@ __metadata:
     regenerator-runtime: "npm:0.14.1"
     require-from-string: "npm:2.0.2"
     rollbar: "npm:^2.26.4"
-    rollup: "npm:^4.22.4"
+    rollup: "npm:^4.27.2"
     rollup-plugin-executable: "npm:^1.6.3"
     rollup-plugin-executable-output: "npm:^1.3.0"
     rollup-plugin-shebang-bin: "npm:^0.0.7"
@@ -20586,11 +20579,11 @@ __metadata:
     typescript: "npm:5.6.3"
     tzdata: "npm:1.0.42"
     uuid: "npm:10.0.0"
-    vite: "npm:^5.0.0"
+    vite: "npm:^5.4.11"
     vite-bundle-visualizer: "npm:^1.2.1"
     vite-plugin-node-polyfills: "npm:^0.22.0"
-    vite-tsconfig-paths: "npm:^5.0.1"
-    vitest: "npm:^2.1.1"
+    vite-tsconfig-paths: "npm:^5.1.2"
+    vitest: "npm:^2.1.5"
     zxcvbn: "npm:4.4.2"
   languageName: unknown
   linkType: soft
@@ -23054,7 +23047,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite-tsconfig-paths@npm:^5.0.1":
+"vite-tsconfig-paths@npm:^5.1.2":
   version: 5.1.2
   resolution: "vite-tsconfig-paths@npm:5.1.2"
   dependencies:
@@ -23070,7 +23063,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vite@npm:^5.0.0":
+"vite@npm:^5.0.0, vite@npm:^5.4.11":
   version: 5.4.11
   resolution: "vite@npm:5.4.11"
   dependencies:
@@ -23113,7 +23106,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vitest@npm:^2.1.1":
+"vitest@npm:^2.1.5":
   version: 2.1.5
   resolution: "vitest@npm:2.1.5"
   dependencies:
