@@ -69,9 +69,7 @@ class ProvideOrderEntryTicketService < CivilService::Service
   end
 
   def check_convention_maximum
-    return unless convention.maximum_tickets
-    ticket_count = convention.tickets.counts_towards_convention_maximum.count
-    return unless ticket_count >= convention.maximum_tickets
+    return unless convention.reached_maximum_tickets?
 
     errors.add :base, "We're sorry, but #{convention.name} is currently sold out."
   end

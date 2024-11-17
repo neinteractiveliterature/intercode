@@ -161,9 +161,15 @@ class Convention < ApplicationRecord
     maximum_event_signups.value_at(Time.zone.now) == "not_now"
   end
 
+  def reached_maximum_tickets?
+    return false unless maximum_tickets
+    tickets.counts_towards_convention_maximum.count >= maximum_tickets
+  end
+
   def tickets_available_for_purchase?
     return false if ended?
     return false if ticket_mode == "disabled"
+    return false if reached_maximum_tickets?
 
     products.ticket_providing.available.any? { |product| product.pricing_structure.price(time: Time.zone.now) }
   end
