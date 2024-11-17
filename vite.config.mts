@@ -27,6 +27,9 @@ export default defineConfig({
   build: {
     copyPublicDir: false,
     rollupOptions: {
+      // tree shaking is causing empty GraphQL document constants as of Rollup 4.27,
+      // hopefully can remove this eventually
+      treeshake: false,
       input: {
         application: absolutePath('./app/javascript/packs/applicationEntry.ts'),
         'application-styles': absolutePath('./app/javascript/packs/applicationStyles.ts'),

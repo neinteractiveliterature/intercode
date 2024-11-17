@@ -7,13 +7,17 @@ import humanize from '../humanize';
 
 function TicketPurchaseNavigationItem(): JSX.Element {
   const { t } = useTranslation();
-  const { myProfile, ticketName, ticketTypes } = useContext(AppRootContext);
+  const { myProfile, ticketName, ticketTypes, ticketsAvailableForPurchase } = useContext(AppRootContext);
 
   if (!ticketTypes) {
     return <></>;
   }
 
   if (!myProfile || myProfile.ticket) {
+    return <></>;
+  }
+
+  if (!ticketsAvailableForPurchase) {
     return <></>;
   }
 
