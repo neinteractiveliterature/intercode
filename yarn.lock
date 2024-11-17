@@ -6970,9 +6970,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-router/dev@npm:7.0.0-pre.4":
-  version: 7.0.0-pre.4
-  resolution: "@react-router/dev@npm:7.0.0-pre.4"
+"@react-router/dev@npm:7.0.0-pre.5":
+  version: 7.0.0-pre.5
+  resolution: "@react-router/dev@npm:7.0.0-pre.5"
   dependencies:
     "@babel/core": "npm:^7.21.8"
     "@babel/generator": "npm:^7.21.5"
@@ -6983,10 +6983,9 @@ __metadata:
     "@babel/traverse": "npm:^7.23.2"
     "@babel/types": "npm:^7.22.5"
     "@npmcli/package-json": "npm:^4.0.1"
-    "@react-router/node": "npm:7.0.0-pre.4"
+    "@react-router/node": "npm:7.0.0-pre.5"
     arg: "npm:^5.0.1"
     babel-dead-code-elimination: "npm:^1.0.6"
-    chalk: "npm:^4.1.2"
     chokidar: "npm:^4.0.0"
     dedent: "npm:^1.5.3"
     es-module-lexer: "npm:^1.3.1"
@@ -6996,7 +6995,7 @@ __metadata:
     jsesc: "npm:3.0.2"
     lodash: "npm:^4.17.21"
     pathe: "npm:^1.1.2"
-    picocolors: "npm:^1.0.0"
+    picocolors: "npm:^1.1.1"
     picomatch: "npm:^2.3.1"
     prettier: "npm:^2.7.1"
     react-refresh: "npm:^0.14.0"
@@ -7005,8 +7004,8 @@ __metadata:
     valibot: "npm:^0.41.0"
     vite-node: "npm:^1.6.0"
   peerDependencies:
-    "@react-router/serve": ^7.0.0-pre.4
-    react-router: ^7.0.0-pre.4
+    "@react-router/serve": ^7.0.0-pre.5
+    react-router: ^7.0.0-pre.5
     typescript: ^5.1.0
     vite: ^5.1.0
     wrangler: ^3.28.2
@@ -7019,7 +7018,7 @@ __metadata:
       optional: true
   bin:
     react-router: bin.js
-  checksum: 10c0/800768cbd28193649ac4871783ed1e11766ffbddb4d8b8b100a39226b6d0e9131febfdd74e05ce6d4fa02c59d282cc3b8a03e6bd1632a2a2b024557bfb9b0c27
+  checksum: 10c0/e49e994570c0ee84cd65e2e0f28a4acfaac37549257b7cfd1295ecbb8472c29119579bb602ec9bda8ecd87539ba7b06e993ec55a9a684523faf228d814cb363c
   languageName: node
   linkType: hard
 
@@ -7039,19 +7038,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-router/express@npm:7.0.0-pre.4":
-  version: 7.0.0-pre.4
-  resolution: "@react-router/express@npm:7.0.0-pre.4"
+"@react-router/express@npm:7.0.0-pre.5":
+  version: 7.0.0-pre.5
+  resolution: "@react-router/express@npm:7.0.0-pre.5"
   dependencies:
-    "@react-router/node": "npm:7.0.0-pre.4"
+    "@react-router/node": "npm:7.0.0-pre.5"
   peerDependencies:
     express: ^4.17.1
-    react-router: 7.0.0-pre.4
+    react-router: 7.0.0-pre.5
     typescript: ^5.1.0
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10c0/67585c360dc61da5c9ca4399f60c58644cf3e811e676ba681d98e6d743d3da4fa7ce0062685cc8c45e3585bbdad36513a520b9e821a70a9cb5f7a0a272a869e1
+  checksum: 10c0/1c7000dd250ee76c05c3cfad8520a18f0d2c6ba63deaf86e12007031c4db109ff304771b9eebb9368a836f9fca380f991f3f45d505fa042e8057bca11ee18a62
   languageName: node
   linkType: hard
 
@@ -7073,21 +7072,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-router/node@npm:7.0.0-pre.4":
-  version: 7.0.0-pre.4
-  resolution: "@react-router/node@npm:7.0.0-pre.4"
+"@react-router/node@npm:7.0.0-pre.5":
+  version: 7.0.0-pre.5
+  resolution: "@react-router/node@npm:7.0.0-pre.5"
   dependencies:
     "@web3-storage/multipart-parser": "npm:^1.0.0"
     source-map-support: "npm:^0.5.21"
     stream-slice: "npm:^0.1.2"
     undici: "npm:^6.19.2"
   peerDependencies:
-    react-router: 7.0.0-pre.4
+    react-router: 7.0.0-pre.5
     typescript: ^5.1.0
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10c0/14b84af073ca80bf1974e446ec08623b0dbfa0f100660e41595ab071ac0c63c61e0d0c36dddaa35255bf1f3bca0eb5da874cd3f9d153b1e35211d6048df09ab5
+  checksum: 10c0/434e664d0dc2c3be7c12b5d3e32ade23d1495530ad569af6f0832e0b8775d63eb6f5f18af742a04671ea6f6cdb1d25413a55fbb5f83b74542b5a5626a7f16896
   languageName: node
   linkType: hard
 
@@ -23688,9 +23687,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-router@npm:7.0.0-pre.4":
-  version: 7.0.0-pre.4
-  resolution: "react-router@npm:7.0.0-pre.4"
+"react-router@npm:7.0.0-pre.5":
+  version: 7.0.0-pre.5
+  resolution: "react-router@npm:7.0.0-pre.5"
   dependencies:
     "@types/cookie": "npm:^0.6.0"
     "@web3-storage/multipart-parser": "npm:^1.0.0"
@@ -23704,7 +23703,7 @@ __metadata:
   peerDependenciesMeta:
     react-dom:
       optional: true
-  checksum: 10c0/4226791e69a401bc1f3aa9b68e0e2da552d60cfc000eeda31f39a47ef27980751a0b52679780b32bbe35c521c363246215e3d496e7cedbf386549259988ba0e8
+  checksum: 10c0/0d11bfa5f55130eb4100468da54a3fcc3f7b682101cf329106f747a57199418a717f1969d37f2aa1a2d5324923ed7220e61f9a747c46a138c960aad38938b18d
   languageName: node
   linkType: hard
 
@@ -24694,9 +24693,9 @@ __metadata:
     "@popperjs/core": "npm:^2.11.8"
     "@prettier/plugin-ruby": "npm:4.0.4"
     "@rails/activestorage": "npm:8.0.200"
-    "@react-router/dev": "npm:7.0.0-pre.4"
-    "@react-router/express": "npm:7.0.0-pre.4"
-    "@react-router/node": "npm:7.0.0-pre.4"
+    "@react-router/dev": "npm:7.0.0-pre.5"
+    "@react-router/express": "npm:7.0.0-pre.5"
+    "@react-router/node": "npm:7.0.0-pre.5"
     "@react-router/serve": "npm:7.0.0-pre.1"
     "@remix-run/dev": "npm:^2.12.1"
     "@remix-run/node": "npm:^2.12.1"
@@ -24837,7 +24836,7 @@ __metadata:
     react-i18next: "npm:15.4.1"
     react-onclickoutside: "npm:6.13.1"
     react-popper: "npm:2.3.0"
-    react-router: "npm:7.0.0-pre.4"
+    react-router: "npm:7.0.0-pre.5"
     react-select: "npm:5.10.1"
     react-table: "npm:7.8.0"
     react-test-renderer: "npm:18.3.1"
