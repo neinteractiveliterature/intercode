@@ -254,8 +254,8 @@ jobs:
         id: slack-post
         run: |
           echo "text<<END_OF_SLACK_MESSAGE" >> "$GITHUB_OUTPUT"
-          echo "Draft release ${{ steps.release-drafter.outputs.name }} updated:\n" >> "$GITHUB_OUTPUT"
-          echo "- ${{ join(github.event.commits.*.message, '\n- ') }}\n" >> "$GITHUB_OUTPUT"
+          echo -e "Draft release ${{ steps.release-drafter.outputs.name }} updated:\n" >> "$GITHUB_OUTPUT"
+          echo -e "- ${{ join(github.event.commits.*.message, '\n- ') }}\n" >> "$GITHUB_OUTPUT"
           echo "To release Intercode to production, visit: ${{ steps.release-drafter.outputs.html_url }}" >> "$GITHUB_OUTPUT"
           echo END_OF_SLACK_MESSAGE >> "$GITHUB_OUTPUT"
       - name: Post about drafted release to Slack
