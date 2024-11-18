@@ -4,6 +4,7 @@ on:
   push:
     branches:
       - main
+      - fix-slack-api-action-take-2
   pull_request: {}
 
 concurrency:
@@ -263,4 +264,4 @@ jobs:
 
               - ${{ join(github.event.commits.*.message, '%0A- ') }}
 
-             To release Intercode to production, visit: ${{ steps.release-drafter.outputs.html_url }}
+              To release Intercode to production, visit: ${{ steps.release-drafter.outputs.html_url }}
