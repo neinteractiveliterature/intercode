@@ -263,4 +263,4 @@ jobs:
 
               - ${{ join(github.event.commits.*.message, '%0A- ') }}
 
-             To release Intercode to production, visit: ${{ steps.release-drafter.outputs.html_url }}
+              To release Intercode to production, visit: ${{ steps.release-drafter.outputs.html_url }}
