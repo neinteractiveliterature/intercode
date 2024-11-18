@@ -250,6 +250,14 @@ jobs:
           config-name: release-drafter.yml
         env:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
+      - name: Format Slack post
+        id: slack-post
+        run: |
+          echo "text<<END_OF_SLACK_MESSAGE" >> "$GITHUB_OUTPUT"
+          echo "Draft release ${{ steps.release-drafter.outputs.name }} updated:\n" >> "$GITHUB_OUTPUT"
+          echo "- ${{ join(github.event.commits.*.message, '\n- ') }}\n" >> "$GITHUB_OUTPUT"
+          echo "To release Intercode to production, visit: ${{ steps.release-drafter.outputs.html_url }}" >> "$GITHUB_OUTPUT"
+          echo END_OF_SLACK_MESSAGE >> "$GITHUB_OUTPUT"
       - name: Post about drafted release to Slack
         id: slack
         uses: slackapi/slack-github-action@v2.0.0
@@ -258,9 +266,4 @@ jobs:
           token: ${{ secrets.SLACKTOKEN }}
           payload: |
             channel: ${{ secrets.SlackCISuccessNotificationChannelID }}
-            text: |
-              Draft release ${{ steps.release-drafter.outputs.name }} updated:
-
-              - ${{ join(github.event.commits.*.message, '%0A- ') }}
-
-              To release Intercode to production, visit: ${{ steps.release-drafter.outputs.html_url }}
+            text: ${{ toJson(steps.slack-post.outputs.text) }}
