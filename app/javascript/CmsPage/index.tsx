@@ -6,7 +6,7 @@ import { lazyWithAppEntrypointHeadersCheck } from '../checkAppEntrypointHeadersM
 import { parseCmsContent } from '../parseCmsContent';
 import { CmsPageQueryData, CmsPageQueryDocument, CmsPageQueryVariables } from './queries.generated';
 import pageAdminDropdownStyles from '../styles/page_admin_dropdown.module.scss';
-import * as Route from './+types.index';
+import { Route } from './+types/index';
 
 const PageAdminDropdown = lazyWithAppEntrypointHeadersCheck(() => import('./PageAdminDropdown'));
 
