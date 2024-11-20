@@ -56,7 +56,7 @@ export default typescriptEslint.config(
           mode: 'all',
           callees: { include: ['usePageTitle'] },
           'object-properties': {
-            exclude: ['id', 'accessor', 'defaultVisibleColumns', '__typename', 'payment_options', 'path'],
+            exclude: ['id', 'accessor', 'defaultVisibleColumns', '__typename', 'payment_options', 'path', 'rel'],
           },
           'jsx-attributes': {
             include: ['title', 'aria-label', 'caption', 'placeholder', 'label', 'helpText', 'stringError', 'alt'],

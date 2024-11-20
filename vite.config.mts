@@ -44,16 +44,7 @@ function getProxyConfig() {
 }
 
 export default defineConfig({
-  plugins: [
-    tsconfigPaths(),
-    morganPlugin(),
-    envOnlyMacros(),
-    !process.env.VITEST &&
-      reactRouter({
-        appDirectory: absolutePath('./app/javascript'),
-        future: {},
-      }),
-  ],
+  plugins: [tsconfigPaths(), morganPlugin(), envOnlyMacros(), !process.env.VITEST && reactRouter()],
   ssr: {
     noExternal: ['@neinteractiveliterature/litform', '@apollo/client', 'react-helmet-async'],
   },

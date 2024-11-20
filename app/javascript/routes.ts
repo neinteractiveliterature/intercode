@@ -56,7 +56,7 @@ export enum NamedRoute {
 
 export type RouteName = keyof typeof NamedRoute & string;
 
-export const routes = [
+export default [
   layout('AppRoot.tsx', [
     // TODO Form editor routes
     // TODO Liquid docs routes
