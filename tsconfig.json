@@ -18,7 +18,7 @@
     "paths": {
       "~/*": ["./app/*"]
     },
-    "rootDirs": ["./app/javascript", "./.react-router/types/javascript"],
+    "rootDirs": ["./app/javascript", "./.react-router/types/app/javascript"],
     "types": ["vitest/globals", "vite/client", "@react-router/node"],
     "plugins": [{ "name": "typescript-plugin-css-modules" }, { "name": "@react-router/dev" }]
   },
