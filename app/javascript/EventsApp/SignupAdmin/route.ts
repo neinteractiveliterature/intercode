@@ -1,4 +1,4 @@
-import * as Route from './+types.route';
+import { Route } from './+types/route';
 import { SignupAdminEventQueryDocument } from './queries.generated';
 
 export const loader = async ({ params: { eventId }, context }: Route.LoaderArgs) => {

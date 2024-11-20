@@ -15,7 +15,7 @@ import { GraphQLNotAuthenticatedErrorEvent } from './useIntercodeApolloClient';
 import { reloadOnAppEntrypointHeadersMismatch } from './checkAppEntrypointHeadersMatch';
 import { initErrorReporting } from 'ErrorReporting';
 import RouteErrorBoundary from 'RouteErrorBoundary';
-import * as Route from './+types.AppRoot';
+import { Route } from './+types/AppRoot';
 
 export const loader = async ({ context }: Route.LoaderArgs) => {
   const client = context!.client;

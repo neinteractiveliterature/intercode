@@ -16,7 +16,7 @@ import { ageAsOf } from '../../../TimeUtils';
 import Timespan from '../../../Timespan';
 import { getSignupStateLabel } from '../../../Tables/SignupStateCell';
 import humanize from '../../../humanize';
-import * as Route from './+types.route';
+import { Route, Info } from './+types/route';
 import { NamedRoute } from 'appRoutes';
 
 function cityState(userConProfile: SignupFieldsFragment['user_con_profile']) {
@@ -117,7 +117,7 @@ export const action = async ({ context, request, params: { id } }: Route.ActionA
 };
 
 export function useSingleSignupLoader() {
-  return useRouteLoaderData(NamedRoute.EditSignup) as Route.LoaderData;
+  return useRouteLoaderData(NamedRoute.EditSignup) as Info['loaderData'];
 }
 
 function EditSignup({ loaderData: data }: Route.ComponentProps): JSX.Element {

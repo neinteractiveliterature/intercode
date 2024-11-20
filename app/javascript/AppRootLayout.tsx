@@ -4,7 +4,7 @@ import OutletWithLoading from './OutletWithLoading';
 import NavigationBar from './NavigationBar';
 import { AppRootLayoutQueryDocument } from './appRootQueries.generated';
 import RouteErrorBoundary from 'RouteErrorBoundary';
-import * as Route from './+types.AppRootLayout';
+import { Route } from './+types/AppRootLayout';
 
 // Avoid unnecessary layout checks when moving between pages that can't change layout
 export function normalizePathForLayout(path: string) {

@@ -14,7 +14,7 @@ import useSectionizedFormItems from './useSectionizedFormItems';
 import FormItemDisplay from '../../FormPresenter/ItemDisplays/FormItemDisplay';
 import { valueIsPresent } from './valueIsPresent';
 import buildEventUrl from '../buildEventUrl';
-import * as Route from './+types.index';
+import { Route } from './+types/index';
 
 export const loader = async ({ params: { eventId }, context }: Route.LoaderArgs) => {
   const client = context!.client;

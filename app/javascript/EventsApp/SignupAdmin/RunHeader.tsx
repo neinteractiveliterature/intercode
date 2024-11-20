@@ -7,7 +7,7 @@ import { RunHeaderRunInfoQueryDocument } from './queries.generated';
 import { useFormatRunTimespan } from '../runTimeFormatting';
 import { Outlet } from 'react-router';
 import NamedRouteBreadcrumbItem from '../../Breadcrumbs/NamedRouteBreadcrumbItem';
-import * as Route from './+types.RunHeader';
+import { Route } from './+types/RunHeader';
 
 export const loader = async ({ context, params: { eventId, runId } }: Route.LoaderArgs) => {
   const client = context!.client;

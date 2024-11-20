@@ -8,7 +8,7 @@ import usePageTitle from '../../usePageTitle';
 import { RunSignupsTableSignupsQueryData, RunSignupsTableSignupsQueryDocument } from './queries.generated';
 import humanize from '../../humanize';
 import { Navigate, useParams } from 'react-router';
-import * as Route from './+types.RunEmailList';
+import { Route } from './+types/RunEmailList';
 
 function getEmails({ data, includes }: { data: RunSignupsTableSignupsQueryData; includes: string[] }) {
   const teamMemberUserConProfileIds = data.convention.event.team_members.map(

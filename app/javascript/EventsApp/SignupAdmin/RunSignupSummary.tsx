@@ -8,7 +8,7 @@ import usePageTitle from '../../usePageTitle';
 import Gravatar from '../../Gravatar';
 import { RunSignupSummaryQueryData, RunSignupSummaryQueryDocument } from './queries.generated';
 import humanize from '../../humanize';
-import * as Route from './+types.RunSignupSummary';
+import { Route } from './+types/RunSignupSummary';
 
 type EventType = RunSignupSummaryQueryData['convention']['event'];
 type SignupType = EventType['run']['signups_paginated']['entries'][0];
