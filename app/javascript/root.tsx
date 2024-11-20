@@ -7,7 +7,7 @@ import { parseContent } from 'parsePageContent';
 import RouteErrorBoundary from 'RouteErrorBoundary';
 import { useMemo } from 'react';
 import { ApolloProvider } from '@apollo/client';
-import * as Route from './+types.root';
+import { Route } from './+types/root';
 import applicationStylesUrl from 'styles/application.scss?url';
 
 export const loader = async ({ request, context }: Route.LoaderArgs) => {
