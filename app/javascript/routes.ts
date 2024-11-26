@@ -71,6 +71,9 @@ export default [
             route('table', 'EventsApp/EventCatalog/EventTable/index.tsx'),
             index('EventsApp/EventCatalog/EventList/index.tsx'),
           ]),
+          layout('RouteGuards/RankedChoiceRouteGuard.tsx', [
+            route('my-signup-queue', 'EventsApp/MySignupQueue/index.tsx'),
+          ]),
           route(':eventId', 'EventsApp/$eventId.tsx', { id: NamedRoute.Event }, [
             layout('RouteGuards/EventPageGuard.tsx', [
               index('EventsApp/EventPage/index.tsx', { id: NamedRoute.EventPage }),
