@@ -159,4 +159,4 @@ function AuthorizationPrompt() {
   );
 }
 
-export const Component = AuthorizationPrompt;
+export default AuthorizationPrompt;

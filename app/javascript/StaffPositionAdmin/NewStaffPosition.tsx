@@ -64,4 +64,4 @@ function NewStaffPosition(): JSX.Element {
   );
 }
 
-export const Component = NewStaffPosition;
+export default NewStaffPosition;

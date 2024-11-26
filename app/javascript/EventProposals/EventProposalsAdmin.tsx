@@ -4,7 +4,7 @@ import { useTranslation } from 'react-i18next';
 import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 import { EventProposalQueryWithOwnerQueryData } from './queries.generated';
-import { NamedRoute } from '../appRoutes';
+import { NamedRoute } from '../routes';
 import NamedRouteBreadcrumbItem from '../Breadcrumbs/NamedRouteBreadcrumbItem';
 
 function SingleProposalBreadcrumbs() {
@@ -53,4 +53,4 @@ function EventProposalsAdmin(): JSX.Element {
   );
 }
 
-export const Component = EventProposalsAdmin;
+export default EventProposalsAdmin;

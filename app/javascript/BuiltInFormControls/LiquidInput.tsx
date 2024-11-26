@@ -29,7 +29,7 @@ import { ActiveStorageAttachment } from '../graphqlTypes.generated';
 import { CmsFilesAdminQueryDocument } from '../CmsAdmin/CmsFilesAdmin/queries.generated';
 import { Blob } from '@rails/activestorage';
 import { useFetcher } from 'react-router';
-import { NamedRoute } from '../appRoutes';
+import { NamedRoute } from '../routes';
 
 export type CreateCmsFileModalProps = {
   visible: boolean;

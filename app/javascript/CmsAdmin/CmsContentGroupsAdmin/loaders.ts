@@ -1,7 +1,7 @@
 import { LoaderFunction, useRouteLoaderData } from 'react-router';
 import { client } from '../../useIntercodeApolloClient';
 import { CmsContentGroupsAdminQueryData, CmsContentGroupsAdminQueryDocument } from './queries.generated';
-import { NamedRoute } from '../../appRoutes';
+import { NamedRoute } from '../../routes';
 
 export const cmsContentGroupsAdminLoader: LoaderFunction = async () => {
   const { data } = await client.query<CmsContentGroupsAdminQueryData>({ query: CmsContentGroupsAdminQueryDocument });

@@ -39,4 +39,4 @@ function StoreAdmin(): JSX.Element {
   );
 }
 
-export const Component = StoreAdmin;
+export default StoreAdmin;

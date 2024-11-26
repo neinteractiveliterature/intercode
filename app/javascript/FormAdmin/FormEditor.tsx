@@ -128,4 +128,4 @@ function FormEditor(): JSX.Element {
   );
 }
 
-export const Component = FormEditor;
+export default FormEditor;

@@ -1,4 +1,4 @@
-import { index, layout, route } from '@react-router/dev/routes';
+import { index, layout, route, prefix } from '@react-router/dev/routes';
 
 export enum NamedRoute {
   AdminEditEventProposal = 'AdminEditEventProposal',
@@ -62,8 +62,15 @@ export default [
     // TODO Liquid docs routes
     layout('AppRootLayout.tsx', [
       layout('NonCMSPageWrapper.tsx', [
-        layout('RouteGuards/MultiEventConventionRouteGuard.tsx', []),
-        route('events', 'EventsApp/route.tsx', [
+        layout('RouteGuards/MultiEventConventionRouteGuard.tsx', { id: 'RootMultiEventGuard' }, []),
+        ...prefix('events', [
+          layout('RouteGuards/MultiEventConventionRouteGuard.tsx', { id: 'EventsMultiEventGuard' }, [
+            route('schedule', 'EventsApp/schedule.tsx', [route(':day', 'EventsApp/ScheduleApp.tsx')]),
+            route('schedule_by_room/*', 'EventsApp/schedule_by_room.tsx'),
+            route('schedule_with_counts/*', 'EventsApp/schedule_with_counts.tsx'),
+            route('table', 'EventsApp/EventCatalog/EventTable/index.tsx'),
+            index('EventsApp/EventCatalog/EventList/index.tsx'),
+          ]),
           route(':eventId', 'EventsApp/$eventId.tsx', { id: NamedRoute.Event }, [
             layout('RouteGuards/EventPageGuard.tsx', [
               index('EventsApp/EventPage/index.tsx', { id: NamedRoute.EventPage }),

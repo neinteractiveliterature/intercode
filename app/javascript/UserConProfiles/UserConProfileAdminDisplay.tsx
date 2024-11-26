@@ -21,7 +21,7 @@ import humanize from '../humanize';
 import Modal from 'react-bootstrap4-modal';
 import useAsyncFunction from '../useAsyncFunction';
 import { Trans, useTranslation } from 'react-i18next';
-import { NamedRoute } from '../appRoutes';
+import { NamedRoute } from '../routes';
 import { client } from 'useIntercodeApolloClient';
 import { DeleteUserConProfileDocument } from './mutations.generated';
 import invariant from 'tiny-invariant';
@@ -293,4 +293,4 @@ function UserConProfileAdminDisplay(): JSX.Element {
   );
 }
 
-export const Component = UserConProfileAdminDisplay;
+export default UserConProfileAdminDisplay;

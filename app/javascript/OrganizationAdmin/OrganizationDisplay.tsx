@@ -5,7 +5,7 @@ import capitalize from 'lodash/capitalize';
 import PermissionNames from '../../../config/permission_names.json';
 import usePageTitle from '../usePageTitle';
 import { DropdownMenu } from '../UIComponents/DropdownMenu';
-import { NamedRoute } from '../appRoutes';
+import { NamedRoute } from '../routes';
 import { SingleOrganizationLoaderResult } from './loaders';
 
 const OrganizationRolePermissions =
@@ -100,4 +100,4 @@ function OrganizationDisplay() {
   );
 }
 
-export const Component = OrganizationDisplay;
+export default OrganizationDisplay;

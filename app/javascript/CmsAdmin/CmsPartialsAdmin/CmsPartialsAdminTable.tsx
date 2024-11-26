@@ -71,4 +71,4 @@ function CmsPartialsAdminTable() {
   );
 }
 
-export const Component = CmsPartialsAdminTable;
+export default CmsPartialsAdminTable;

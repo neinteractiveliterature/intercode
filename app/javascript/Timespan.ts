@@ -1,6 +1,5 @@
- 
 import { TFunction } from 'i18next';
-import { DateTime, DateTimeUnit, Duration, DurationLike, DurationUnit } from 'luxon';
+import { DateTime, DateTimeUnit, Duration, DurationLike, DurationUnit, IANAZone } from 'luxon';
 import { chooseAmong, preferNull, notEmpty } from '@neinteractiveliterature/litform';
 
 import {
@@ -31,11 +30,44 @@ export interface FiniteTimespan extends Timespan {
   expand(amount: DurationLike): FiniteTimespan;
   expandStart(amount: DurationLike): FiniteTimespan;
   expandFinish(amount: DurationLike): FiniteTimespan;
+  serialize(): SerializedFiniteTimespan;
 }
 
 export function isFinite(timespan: Timespan): timespan is FiniteTimespan {
   return timespan.start != null && timespan.finish != null;
 }
+
+export type SerializedDateTime = {
+  iso: string;
+  zoneName: string | null;
+};
+
+export function serializeDateTime(dt: DateTime): SerializedDateTime {
+  const iso = dt.toISO();
+  if (!iso) {
+    throw new Error(`Invalid DateTime: ${dt.invalidExplanation}`);
+  }
+
+  return {
+    iso,
+    zoneName: dt.zoneName,
+  };
+}
+
+export function deserializeDateTime(ser: SerializedDateTime): DateTime {
+  const options = ser.zoneName ? { zone: IANAZone.create(ser.zoneName) } : {};
+  return DateTime.fromISO(ser.iso, options);
+}
+
+export type SerializedTimespan = {
+  start: SerializedDateTime | null | undefined;
+  finish: SerializedDateTime | null | undefined;
+};
+
+export type SerializedFiniteTimespan = {
+  start: SerializedDateTime;
+  finish: SerializedDateTime;
+};
 
 export class InfiniteTimespanError extends Error {}
 
@@ -63,6 +95,14 @@ class Timespan {
     return new Timespan(start, finish);
   }
 
+  static deserialize(ser: SerializedFiniteTimespan): FiniteTimespan;
+  static deserialize(ser: SerializedTimespan): Timespan {
+    return new Timespan(
+      ser.start ? deserializeDateTime(ser.start) : undefined,
+      ser.finish ? deserializeDateTime(ser.finish) : undefined,
+    );
+  }
+
   constructor(start?: DateTime | null, finish?: DateTime | null) {
     if (start && finish && start > finish) {
       throw new Error('Start cannot be after finish');
@@ -78,6 +118,13 @@ class Timespan {
 
     this.start = start;
     this.finish = finish;
+  }
+
+  serialize(): SerializedTimespan {
+    return {
+      start: this.start ? serializeDateTime(this.start) : undefined,
+      finish: this.finish ? serializeDateTime(this.finish) : undefined,
+    };
   }
 
   tz(timezoneName: string): Timespan {

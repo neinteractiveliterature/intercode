@@ -44,4 +44,4 @@ function TeamMemberAdmin(): JSX.Element {
   );
 }
 
-export const Component = TeamMemberAdmin;
+export default TeamMemberAdmin;
