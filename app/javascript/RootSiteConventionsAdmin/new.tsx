@@ -28,4 +28,4 @@ function NewConventionRoute() {
   return <NewConventionModal data={data} />;
 }
 
-export const Component = NewConventionRoute;
+export default NewConventionRoute;

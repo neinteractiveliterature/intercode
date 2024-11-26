@@ -9,7 +9,7 @@ import UserActivityAlertForm from './UserActivityAlertForm';
 import usePageTitle from '../usePageTitle';
 import { UserActivityAlertFieldsFragmentDoc, UserActivityAlertsAdminQueryData } from './queries.generated';
 import { CreateUserActivityAlertDocument, CreateUserActivityAlertMutationVariables } from './mutations.generated';
-import { NamedRoute } from '../appRoutes';
+import { NamedRoute } from '../routes';
 import { client } from 'useIntercodeApolloClient';
 import { Convention } from 'graphqlTypes.generated';
 
@@ -114,4 +114,4 @@ function NewUserActivityAlert() {
   );
 }
 
-export const Component = NewUserActivityAlert;
+export default NewUserActivityAlert;

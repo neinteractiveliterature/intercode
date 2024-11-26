@@ -6,7 +6,7 @@ import EventProposalStatusUpdater from './EventProposalStatusUpdater';
 import usePageTitle from '../usePageTitle';
 import { EventProposalAdminNotesQueryDocument, EventProposalQueryWithOwnerQueryData } from './queries.generated';
 import humanize from '../humanize';
-import { NamedRoute } from '../appRoutes';
+import { NamedRoute } from '../routes';
 import { ApolloError, useSuspenseQuery } from '@apollo/client';
 
 export type EventProposalAdminNotesProps = {
@@ -86,4 +86,4 @@ function EventProposalAdminDisplay() {
   );
 }
 
-export const Component = EventProposalAdminDisplay;
+export default EventProposalAdminDisplay;

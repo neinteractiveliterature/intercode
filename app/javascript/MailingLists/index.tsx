@@ -37,4 +37,4 @@ function MailingListsMenu() {
   );
 }
 
-export const Component = MailingListsMenu;
+export default MailingListsMenu;

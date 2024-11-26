@@ -58,4 +58,4 @@ function NewCmsPage() {
   );
 }
 
-export const Component = NewCmsPage;
+export default NewCmsPage;

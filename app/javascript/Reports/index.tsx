@@ -81,4 +81,4 @@ function ReportsMenu() {
   );
 }
 
-export const Component = ReportsMenu;
+export default ReportsMenu;

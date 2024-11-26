@@ -53,4 +53,4 @@ function EventTicketTypesWrapper(): JSX.Element {
   );
 }
 
-export const Component = EventTicketTypesWrapper;
+export default EventTicketTypesWrapper;

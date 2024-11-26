@@ -66,4 +66,4 @@ function CreateSignup(): JSX.Element {
   );
 }
 
-export const Component = CreateSignup;
+export default CreateSignup;

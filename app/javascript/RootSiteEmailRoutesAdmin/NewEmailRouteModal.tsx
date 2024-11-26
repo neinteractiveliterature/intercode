@@ -69,4 +69,4 @@ function NewEmailRouteModal(): JSX.Element {
   );
 }
 
-export const Component = NewEmailRouteModal;
+export default NewEmailRouteModal;

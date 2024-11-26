@@ -64,4 +64,4 @@ function DepartmentAdminIndex() {
   );
 }
 
-export const Component = DepartmentAdminIndex;
+export default DepartmentAdminIndex;

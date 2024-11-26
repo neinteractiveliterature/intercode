@@ -1,7 +1,7 @@
 import { Outlet, useRouteLoaderData } from 'react-router';
 
 import { useTranslation } from 'react-i18next';
-import { NamedRoute } from '../appRoutes';
+import { NamedRoute } from '../routes';
 import { UserAdminQueryData } from './queries.generated';
 import NamedRouteBreadcrumbItem from '../Breadcrumbs/NamedRouteBreadcrumbItem';
 
@@ -26,4 +26,4 @@ function UsersAdmin(): JSX.Element {
   );
 }
 
-export const Component = UsersAdmin;
+export default UsersAdmin;

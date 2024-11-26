@@ -58,4 +58,4 @@ function EditCmsLayout() {
   );
 }
 
-export const Component = EditCmsLayout;
+export default EditCmsLayout;

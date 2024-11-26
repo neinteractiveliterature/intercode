@@ -187,4 +187,4 @@ function OrderAdmin(): JSX.Element {
   );
 }
 
-export const Component = OrderAdmin;
+export default OrderAdmin;
