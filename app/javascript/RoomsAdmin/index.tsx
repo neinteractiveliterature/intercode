@@ -145,4 +145,4 @@ function RoomsAdmin() {
   );
 }
 
-export const Component = RoomsAdmin;
+export default RoomsAdmin;

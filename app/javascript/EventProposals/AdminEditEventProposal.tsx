@@ -43,4 +43,4 @@ function AdminEditEventProposal() {
   );
 }
 
-export const Component = AdminEditEventProposal;
+export default AdminEditEventProposal;

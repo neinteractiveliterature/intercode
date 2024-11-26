@@ -58,4 +58,4 @@ function EventHistory() {
   );
 }
 
-export const Component = EventHistory;
+export default EventHistory;

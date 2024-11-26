@@ -15,4 +15,4 @@ function NavigationItemsAdmin(): JSX.Element {
   return <CadmusNavbarAdminApp client={navbarAdminClient} />;
 }
 
-export const Component = NavigationItemsAdmin;
+export default NavigationItemsAdmin;

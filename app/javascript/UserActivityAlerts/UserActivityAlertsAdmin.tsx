@@ -5,7 +5,7 @@ import useAuthorizationRequired from '../Authentication/useAuthorizationRequired
 import LeafBreadcrumbItem from '../Breadcrumbs/LeafBreadcrumbItem';
 import { useTranslation } from 'react-i18next';
 import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
-import { NamedRoute } from '../appRoutes';
+import { NamedRoute } from '../routes';
 import { client } from '../useIntercodeApolloClient';
 import { UserActivityAlertsAdminQueryData, UserActivityAlertsAdminQueryDocument } from './queries.generated';
 
@@ -43,4 +43,4 @@ function UserActivityAlertsAdmin(): JSX.Element {
   );
 }
 
-export const Component = UserActivityAlertsAdmin;
+export default UserActivityAlertsAdmin;

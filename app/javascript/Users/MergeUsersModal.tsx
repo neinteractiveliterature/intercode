@@ -246,4 +246,4 @@ function MergeUsersModal(): JSX.Element {
   );
 }
 
-export const Component = MergeUsersModal;
+export default MergeUsersModal;

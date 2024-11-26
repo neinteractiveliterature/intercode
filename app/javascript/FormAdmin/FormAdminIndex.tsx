@@ -113,4 +113,4 @@ function FormAdminIndex() {
   );
 }
 
-export const Component = FormAdminIndex;
+export default FormAdminIndex;

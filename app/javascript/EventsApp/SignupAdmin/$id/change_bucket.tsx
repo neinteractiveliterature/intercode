@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { Link, useFetcher } from 'react-router';
-import { ActionFunction, json, useNavigate } from 'react-router';
+import { ActionFunction, data, useNavigate } from 'react-router';
 import { ChangeSignupBucketDocument } from '../mutations.generated';
 import BucketInput from '../BucketInput';
 import { useSingleSignupLoader } from './route';
@@ -14,14 +14,14 @@ export const action: ActionFunction = async ({ context, request, params: { id } 
   const client = context!.client;
   try {
     const formData = await request.formData();
-    const { data } = await client.mutate({
+    const result = await client.mutate({
       mutation: ChangeSignupBucketDocument,
       variables: {
         signupId: id ?? '',
         bucketKey: formData.get('bucket_key')?.toString(),
       },
     });
-    return json(data);
+    return data(result.data);
   } catch (error) {
     return error;
   }
@@ -99,4 +99,4 @@ function ChangeBucketModal(): JSX.Element {
   );
 }
 
-export const Component = ChangeBucketModal;
+export default ChangeBucketModal;

@@ -100,4 +100,4 @@ function EditEmailRouteModal(): JSX.Element {
   );
 }
 
-export const Component = EditEmailRouteModal;
+export default EditEmailRouteModal;
