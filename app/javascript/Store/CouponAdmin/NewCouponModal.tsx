@@ -66,4 +66,4 @@ function NewCouponModal(): JSX.Element {
   );
 }
 
-export const Component = NewCouponModal;
+export default NewCouponModal;

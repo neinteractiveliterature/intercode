@@ -68,4 +68,4 @@ function EditRun(): JSX.Element {
   );
 }
 
-export const Component = EditRun;
+export default EditRun;

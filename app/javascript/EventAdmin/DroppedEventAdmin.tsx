@@ -70,4 +70,4 @@ function DroppedEventAdmin(): JSX.Element {
   );
 }
 
-export const Component = DroppedEventAdmin;
+export default DroppedEventAdmin;

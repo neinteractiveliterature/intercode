@@ -12,13 +12,13 @@ import { useAppDateTimeFormat } from '../../TimeUtils';
 import { usePersonalScheduleFilters } from './PersonalScheduleFiltersBar';
 import { ScheduleGridConventionDataQueryData } from './queries.generated';
 import { EventFiltersInput } from '../../graphqlTypes.generated';
-import { useLoaderData } from 'react-router';
-import { ConventionDayLoaderResult } from '../conventionDayUrls';
+import { FiniteTimespan } from 'Timespan';
 
 export type ScheduleGridAppProps = {
   configKey: string;
   fetchFormItemIdentifiers: string[];
   convention: ScheduleGridConventionDataQueryData['convention'];
+  timespan: FiniteTimespan;
   filters?: EventFiltersInput;
 };
 
@@ -27,6 +27,7 @@ function ScheduleGridApp({
   convention,
   fetchFormItemIdentifiers,
   filters,
+  timespan,
 }: ScheduleGridAppProps): JSX.Element {
   const { t } = useTranslation();
   const { myProfile, timezoneName, language } = useContext(AppRootContext);
@@ -36,7 +37,6 @@ function ScheduleGridApp({
     showPersonalFilters: config?.showPersonalFilters ?? false,
     signedIn: myProfile != null,
   });
-  const { matchingTimespan: timespan } = useLoaderData() as ConventionDayLoaderResult;
 
   if (!config) {
     return <ErrorDisplay stringError={t('schedule.gridConfigNotFound', { configKey })} />;
@@ -51,6 +51,7 @@ function ScheduleGridApp({
         myRatingFilter={myProfile ? ratingFilter : undefined}
         hideConflicts={myProfile ? hideConflicts : false}
         filters={filters}
+        timespan={timespan}
       >
         <div className="mb-4">
           <div className="m-0 p-2 border-bottom">

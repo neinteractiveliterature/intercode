@@ -55,4 +55,4 @@ function EditDepartment() {
   );
 }
 
-export const Component = EditDepartment;
+export default EditDepartment;

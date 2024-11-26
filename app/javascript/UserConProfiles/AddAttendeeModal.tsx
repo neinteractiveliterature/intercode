@@ -108,4 +108,4 @@ function AddAttendeeModal(): JSX.Element {
   );
 }
 
-export const Component = AddAttendeeModal;
+export default AddAttendeeModal;

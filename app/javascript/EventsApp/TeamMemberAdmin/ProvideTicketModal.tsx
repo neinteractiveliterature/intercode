@@ -113,4 +113,4 @@ function ProvideTicketModal(): JSX.Element {
   );
 }
 
-export const Component = ProvideTicketModal;
+export default ProvideTicketModal;

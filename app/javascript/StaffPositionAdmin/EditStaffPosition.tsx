@@ -63,4 +63,4 @@ function EditStaffPosition() {
   );
 }
 
-export const Component = EditStaffPosition;
+export default EditStaffPosition;

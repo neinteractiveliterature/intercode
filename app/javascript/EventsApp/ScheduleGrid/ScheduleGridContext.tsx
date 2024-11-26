@@ -18,8 +18,6 @@ import {
 } from './queries.generated';
 import { FiniteTimespan } from '../../Timespan';
 import useMergeCategoriesIntoEvents from '../useMergeCategoriesIntoEvents';
-import { useLoaderData } from 'react-router';
-import { ConventionDayLoaderResult } from '../conventionDayUrls';
 
 const IS_MOBILE = ['iOS', 'Android OS'].includes(detect()?.os ?? '');
 
@@ -279,6 +277,7 @@ export type ScheduleGridProviderProps = {
   fetchFormItemIdentifiers: string[];
   myRatingFilter?: number[];
   hideConflicts: boolean;
+  timespan: FiniteTimespan;
   filters?: EventFiltersInput;
 };
 
@@ -290,12 +289,12 @@ export function ScheduleGridProvider({
   hideConflicts,
   convention,
   filters,
+  timespan,
 }: ScheduleGridProviderProps): JSX.Element {
   const { timezoneName } = useContext(AppRootContext);
   const filtersContextValue = { myRatingFilter, hideConflicts };
   const prefetchAll = IS_MOBILE;
   const client = useApolloClient();
-  const { matchingTimespan: timespan } = useLoaderData() as ConventionDayLoaderResult;
 
   const prefetchTimespan = useCallback(
     (timespan: FiniteTimespan) =>
