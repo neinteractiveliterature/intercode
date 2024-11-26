@@ -1,4 +1,3 @@
-import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
 import { createRequestHandler } from '@react-router/express';
 import express from 'express';
 import { readFileSync } from 'node:fs';
