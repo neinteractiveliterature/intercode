@@ -9,7 +9,11 @@ class RunAvailabilityPresenter
     end
 
     def confirmed_count
-      signup_count_presenter.signup_count(bucket_key: bucket.key, state: "confirmed", counted: true)
+      if bucket.counted?
+        signup_count_presenter.signup_count(bucket_key: bucket.key, state: "confirmed", counted: true)
+      else
+        signup_count_presenter.signup_count(bucket_key: bucket.key, state: "confirmed")
+      end
     end
 
     def available_slots
