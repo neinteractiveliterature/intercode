@@ -104,4 +104,4 @@ function EditTeamMember(): JSX.Element {
   );
 }
 
-export const Component = EditTeamMember;
+export default EditTeamMember;

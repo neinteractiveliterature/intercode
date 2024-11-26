@@ -74,4 +74,4 @@ function EventAdmin() {
   );
 }
 
-export const Component = EventAdmin;
+export default EventAdmin;

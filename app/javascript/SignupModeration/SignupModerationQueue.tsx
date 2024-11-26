@@ -387,4 +387,4 @@ function SignupModerationQueue(): JSX.Element {
   );
 }
 
-export const Component = SignupModerationQueue;
+export default SignupModerationQueue;

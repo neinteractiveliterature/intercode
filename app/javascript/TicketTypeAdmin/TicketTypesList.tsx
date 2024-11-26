@@ -11,7 +11,7 @@ import { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
 import AppRootContext from '../AppRootContext';
 import { PricingStrategy, Product } from '../graphqlTypes.generated';
-import { ModalData } from '@neinteractiveliterature/litform/dist/useModal';
+import type { ModalData } from '@neinteractiveliterature/litform/dist/types/useModal';
 import NewTicketProvidingProductModal from './NewTicketProvidingProductModal';
 import EditTicketProvidingProductModal, {
   EditTicketProvidingProductModalProps,
@@ -251,4 +251,4 @@ function TicketTypesList() {
   );
 }
 
-export const Component = TicketTypesList;
+export default TicketTypesList;

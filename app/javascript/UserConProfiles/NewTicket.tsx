@@ -5,7 +5,7 @@ import TicketForm from './TicketForm';
 import usePageTitle from '../usePageTitle';
 import { UserConProfileAdminQueryData, UserConProfileAdminTicketFieldsFragmentDoc } from './queries.generated';
 import { TicketInput } from '../graphqlTypes.generated';
-import { NamedRoute } from '../appRoutes';
+import { NamedRoute } from '../routes';
 import { client } from 'useIntercodeApolloClient';
 import { CreateTicketDocument, CreateTicketMutationVariables } from './mutations.generated';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
@@ -87,4 +87,4 @@ function NewTicket() {
   );
 }
 
-export const Component = NewTicket;
+export default NewTicket;

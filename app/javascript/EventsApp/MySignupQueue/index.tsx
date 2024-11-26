@@ -76,4 +76,4 @@ function MySignupQueue() {
   );
 }
 
-export const Component = MySignupQueue;
+export default MySignupQueue;

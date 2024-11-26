@@ -30,7 +30,7 @@ import AppRootContext from '../../AppRootContext';
 import { useGraphQLConfirm } from '@neinteractiveliterature/litform';
 import { useApolloClient } from '@apollo/client';
 import { FreezeBucketAssignmentsDocument } from './mutations.generated';
-import { NamedRoute } from '../../appRoutes';
+import { NamedRoute } from '../../routes';
 
 const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({
   state: FilterCodecs.stringArray,

@@ -123,4 +123,4 @@ function AssignDoc(): JSX.Element {
   );
 }
 
-export const Component = AssignDoc;
+export default AssignDoc;

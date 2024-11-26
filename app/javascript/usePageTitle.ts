@@ -1,4 +1,4 @@
-import { notEmpty } from '@neinteractiveliterature/litform/lib/ValueUtils';
+import { notEmpty } from '@neinteractiveliterature/litform';
 import { useEffect, useContext } from 'react';
 
 import AppRootContext from './AppRootContext';

@@ -13,7 +13,7 @@ import {
   EventAdminSingleEventQueryDocument,
 } from './queries.generated';
 import { ImageAttachmentConfig } from '../BuiltInFormControls/MarkdownInput';
-import { NamedRoute } from '../appRoutes';
+import { NamedRoute } from '../routes';
 import { client } from '../useIntercodeApolloClient';
 import { UpdateEventOptions } from './$id';
 
@@ -131,4 +131,4 @@ function EventAdminEditEvent() {
   );
 }
 
-export const Component = EventAdminEditEvent;
+export default EventAdminEditEvent;

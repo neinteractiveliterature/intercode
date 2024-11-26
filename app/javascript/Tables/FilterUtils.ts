@@ -1,5 +1,5 @@
 import { parseIntOrNull, parseFloatOrNull } from '@neinteractiveliterature/litform';
-import { notEmpty } from '@neinteractiveliterature/litform/lib/ValueUtils';
+import { notEmpty } from '@neinteractiveliterature/litform';
 
 export function encodeStringArray(value?: string[] | null): string | null {
   const encoded = (value || []).join(',');

@@ -1,4 +1,4 @@
-import { BootstrapFormCheckbox, ErrorDisplay } from '@neinteractiveliterature/litform/dist';
+import { BootstrapFormCheckbox, ErrorDisplay } from '@neinteractiveliterature/litform';
 import useModal from '@neinteractiveliterature/litform/lib/useModal';
 import { Fragment, useContext, useEffect, useMemo, useState } from 'react';
 import Modal from 'react-bootstrap4-modal';
@@ -147,4 +147,4 @@ function NotificationAdminIndex(): JSX.Element {
   );
 }
 
-export const Component = NotificationAdminIndex;
+export default NotificationAdminIndex;
