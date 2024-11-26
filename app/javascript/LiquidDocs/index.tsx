@@ -44,4 +44,4 @@ function LiquidDocs(): JSX.Element {
   );
 }
 
-export const Component = LiquidDocs;
+export default LiquidDocs;

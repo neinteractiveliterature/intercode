@@ -83,4 +83,4 @@ function NewEventCategory(): JSX.Element {
   );
 }
 
-export const Component = NewEventCategory;
+export default NewEventCategory;

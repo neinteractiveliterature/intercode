@@ -1,7 +1,7 @@
 import { LoaderFunction, useRouteLoaderData } from 'react-router';
 import { TeamMembersQueryData, TeamMembersQueryDocument } from './queries.generated';
 import { client } from '../../useIntercodeApolloClient';
-import { NamedRoute } from '../../appRoutes';
+import { NamedRoute } from '../../routes';
 
 export const teamMembersLoader: LoaderFunction = async ({ params: { eventId } }) => {
   const { data } = await client.query({ query: TeamMembersQueryDocument, variables: { eventId: eventId ?? '' } });

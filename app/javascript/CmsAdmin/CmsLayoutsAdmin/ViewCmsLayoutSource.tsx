@@ -11,4 +11,4 @@ function ViewCmsLayoutSource() {
   return <CmsLayoutForm layout={value} readOnly />;
 }
 
-export const Component = ViewCmsLayoutSource;
+export default ViewCmsLayoutSource;

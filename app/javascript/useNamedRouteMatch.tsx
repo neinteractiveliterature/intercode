@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { Params, useMatches, useParams, generatePath } from 'react-router';
-import { RouteName } from './appRoutes';
+import { RouteName } from './routes';
 import isEqual from 'lodash/isEqual';
 
 export function useNamedRouteMatch(routeId: RouteName | RouteName[], params?: Params) {

@@ -36,4 +36,4 @@ function SignupModeration(): JSX.Element {
   );
 }
 
-export const Component = SignupModeration;
+export default SignupModeration;

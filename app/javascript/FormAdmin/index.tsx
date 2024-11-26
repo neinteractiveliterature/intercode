@@ -25,4 +25,4 @@ function FormAdmin(): JSX.Element {
   );
 }
 
-export const Component = FormAdmin;
+export default FormAdmin;

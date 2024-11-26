@@ -62,4 +62,4 @@ function WhosFree(): JSX.Element {
   );
 }
 
-export const Component = WhosFree;
+export default WhosFree;

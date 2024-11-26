@@ -111,4 +111,4 @@ function CouponAdminTable(): JSX.Element {
   );
 }
 
-export const Component = CouponAdminTable;
+export default CouponAdminTable;

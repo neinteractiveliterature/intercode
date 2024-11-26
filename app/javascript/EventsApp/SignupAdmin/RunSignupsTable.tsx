@@ -30,7 +30,7 @@ import { useGraphQLConfirm } from '@neinteractiveliterature/litform';
 import { useApolloClient } from '@apollo/client';
 import { FreezeBucketAssignmentsDocument } from './mutations.generated';
 import SignupStateCell from '../../Tables/SignupStateCell';
-import { NamedRoute } from '../../appRoutes';
+import { NamedRoute } from '../../routes';
 
 const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({
   state: FilterCodecs.stringArray,

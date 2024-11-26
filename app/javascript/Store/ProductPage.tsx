@@ -59,4 +59,4 @@ function ProductPage() {
   );
 }
 
-export const Component = ProductPage;
+export default ProductPage;

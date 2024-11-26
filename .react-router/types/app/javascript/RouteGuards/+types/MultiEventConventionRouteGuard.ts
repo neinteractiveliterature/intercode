@@ -12,7 +12,7 @@ type Module = typeof import("../MultiEventConventionRouteGuard")
 
 export type Info = {
   parents: [Parent0, Parent1, Parent2, Parent3],
-  id: "RouteGuards/MultiEventConventionRouteGuard"
+  id: "EventsMultiEventGuard"
   file: "RouteGuards/MultiEventConventionRouteGuard.tsx"
   path: "undefined"
   params: {}
@@ -28,6 +28,9 @@ export namespace Route {
   export type MetaArgs = T.CreateMetaArgs<Info>
   export type MetaDescriptors = T.MetaDescriptors
   export type MetaFunction = (args: MetaArgs) => MetaDescriptors
+
+  export type HeadersArgs = T.HeadersArgs
+  export type HeadersFunction = (args: HeadersArgs) => Headers | HeadersInit
 
   export type LoaderArgs = T.CreateServerLoaderArgs<Info>
   export type ClientLoaderArgs = T.CreateClientLoaderArgs<Info>

@@ -1,7 +1,7 @@
 import { DateTime } from 'luxon';
 import { DateTimeFormatKey } from '../DateTimeFormats';
 import { SiteMode } from '../graphqlTypes.generated';
-import Timespan, { FiniteTimespan } from '../Timespan';
+import Timespan, { FiniteTimespan, SerializedFiniteTimespan } from '../Timespan';
 import { TFunction } from 'i18next';
 import { appDateTimeFormat } from '../TimeUtils';
 import { useTranslation } from 'react-i18next';
@@ -12,6 +12,7 @@ import { buildAppRootContextValue } from '../AppRoot';
 import getI18n from '../setupI18Next';
 import { getConventionDayTimespans } from '../TimespanUtils';
 import { AppLoadContext, replace } from 'react-router';
+import mapValues from 'lodash/mapValues';
 
 function conventionDayUrlPortionFormat(
   siteMode: SiteMode | undefined,
@@ -45,17 +46,20 @@ export function useConventionDayUrlPortion(): (dayStart: DateTime) => string {
 }
 
 export type ConventionDayLoaderResult = {
-  conventionDayTimespans: FiniteTimespan[];
-  conventionDayTimespansByUrlPortion: { [urlPortion: string]: FiniteTimespan };
+  conventionDayTimespans: SerializedFiniteTimespan[];
+  conventionDayTimespansByUrlPortion: { [urlPortion: string]: SerializedFiniteTimespan };
   urlPortionsByTimespanStart: { [start: string]: string };
-  matchingTimespan: FiniteTimespan;
+  matchingTimespan: SerializedFiniteTimespan;
 };
 
 export async function redirectToFirstDay({
   conventionDayTimespans,
   urlPortionsByTimespanStart,
   request,
-}: Pick<ConventionDayLoaderResult, 'conventionDayTimespans' | 'urlPortionsByTimespanStart'> & { request: Request }) {
+}: Pick<ConventionDayLoaderResult, 'urlPortionsByTimespanStart'> & {
+  conventionDayTimespans: FiniteTimespan[];
+  request: Request;
+}) {
   const timespanStart = conventionDayTimespans[0]?.start.toISO();
   const urlPortion = timespanStart ? urlPortionsByTimespanStart[timespanStart] : undefined;
   const destination = urlPortion ? `/events/schedule/${urlPortion}` : undefined;
@@ -72,7 +76,15 @@ export async function redirectToFirstDay({
   }
 }
 
-export async function conventionDayLoader({ params, context }: { params: { day?: string }; context?: AppLoadContext }) {
+export async function conventionDayLoader({
+  params,
+  request,
+  context,
+}: {
+  params: { day?: string };
+  request: Request;
+  context?: AppLoadContext;
+}) {
   const client = context!.client;
   const { data } = await client.query<AppRootQueryData>({ query: AppRootQueryDocument });
   const { conventionTimespan, timezoneName, siteMode } = buildAppRootContextValue(data, { current: null });
@@ -112,9 +124,9 @@ export async function conventionDayLoader({ params, context }: { params: { day?:
   }
 
   return {
-    conventionDayTimespans,
-    matchingTimespan,
+    conventionDayTimespans: conventionDayTimespans.map((ts) => ts.serialize()),
+    matchingTimespan: matchingTimespan.serialize(),
     urlPortionsByTimespanStart,
-    conventionDayTimespansByUrlPortion,
+    conventionDayTimespansByUrlPortion: mapValues(conventionDayTimespansByUrlPortion, (ts) => ts.serialize()),
   } satisfies ConventionDayLoaderResult;
 }

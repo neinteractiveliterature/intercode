@@ -121,4 +121,4 @@ function StandaloneEditEvent(): JSX.Element {
   );
 }
 
-export const Component = StandaloneEditEvent;
+export default StandaloneEditEvent;

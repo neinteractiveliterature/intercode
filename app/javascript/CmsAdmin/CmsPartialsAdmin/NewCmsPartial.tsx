@@ -54,4 +54,4 @@ function NewCmsPartial(): JSX.Element {
   );
 }
 
-export const Component = NewCmsPartial;
+export default NewCmsPartial;

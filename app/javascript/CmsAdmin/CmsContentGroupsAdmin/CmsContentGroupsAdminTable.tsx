@@ -63,4 +63,4 @@ function CmsContentGroupsAdminTable() {
   );
 }
 
-export const Component = CmsContentGroupsAdminTable;
+export default CmsContentGroupsAdminTable;

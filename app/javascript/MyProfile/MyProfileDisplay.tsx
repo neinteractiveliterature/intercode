@@ -135,4 +135,4 @@ function MyProfileDisplay(): JSX.Element {
   );
 }
 
-export const Component = MyProfileDisplay;
+export default MyProfileDisplay;

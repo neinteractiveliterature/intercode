@@ -18,4 +18,4 @@ function ViewCmsContentGroup(): JSX.Element {
   );
 }
 
-export const Component = ViewCmsContentGroup;
+export default ViewCmsContentGroup;

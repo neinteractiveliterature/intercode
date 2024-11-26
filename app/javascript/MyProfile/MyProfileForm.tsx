@@ -223,4 +223,4 @@ function MyProfileForm() {
   );
 }
 
-export const Component = MyProfileForm;
+export default MyProfileForm;

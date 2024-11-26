@@ -61,4 +61,4 @@ function AuthorizedApplications() {
   );
 }
 
-export const Component = AuthorizedApplications;
+export default AuthorizedApplications;

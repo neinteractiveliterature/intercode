@@ -85,4 +85,4 @@ function ClickwrapAgreement() {
   );
 }
 
-export const Component = ClickwrapAgreement;
+export default ClickwrapAgreement;

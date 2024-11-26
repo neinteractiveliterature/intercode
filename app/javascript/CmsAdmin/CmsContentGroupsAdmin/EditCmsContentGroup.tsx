@@ -98,4 +98,4 @@ function EditCmsContentGroupForm() {
   );
 }
 
-export const Component = EditCmsContentGroupForm;
+export default EditCmsContentGroupForm;

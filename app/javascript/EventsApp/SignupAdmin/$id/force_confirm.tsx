@@ -1,4 +1,4 @@
-import { ActionFunction, json, useNavigate } from 'react-router';
+import { ActionFunction, data, useNavigate } from 'react-router';
 import { ForceConfirmSignupDocument } from '../mutations.generated';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -13,14 +13,14 @@ export const action: ActionFunction = async ({ context, request, params: { id } 
   const client = context!.client;
   try {
     const formData = await request.formData();
-    const { data } = await client.mutate({
+    const result = await client.mutate({
       mutation: ForceConfirmSignupDocument,
       variables: {
         signupId: id ?? '',
         bucketKey: formData.get('bucket_key')?.toString(),
       },
     });
-    return json(data);
+    return data(result.data);
   } catch (error) {
     return error;
   }
@@ -89,4 +89,4 @@ function ForceConfirmSignupModal(): JSX.Element {
   );
 }
 
-export const Component = ForceConfirmSignupModal;
+export default ForceConfirmSignupModal;

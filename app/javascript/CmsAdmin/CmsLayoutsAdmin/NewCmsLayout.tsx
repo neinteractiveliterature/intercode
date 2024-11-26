@@ -52,4 +52,4 @@ function NewCmsLayout(): JSX.Element {
   );
 }
 
-export const Component = NewCmsLayout;
+export default NewCmsLayout;

@@ -2209,7 +2209,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/view@npm:6.36.5, @codemirror/view@npm:^6.0.0, @codemirror/view@npm:^6.17.0, @codemirror/view@npm:^6.23.0, @codemirror/view@npm:^6.27.0":
+"@codemirror/view@npm:6.36.5, @codemirror/view@npm:^6.0.0, @codemirror/view@npm:^6.17.0, @codemirror/view@npm:^6.23.0":
   version: 6.36.5
   resolution: "@codemirror/view@npm:6.36.5"
   dependencies:
@@ -2217,6 +2217,17 @@ __metadata:
     style-mod: "npm:^4.1.0"
     w3c-keyname: "npm:^2.2.4"
   checksum: 10c0/013dc47cb4dde111f4f0818f7c3ee5e4f505359f26d891ca5bbc839a674da8ac201b4d091c5ad73a889f950d4aeb402f2b4c7fcf1e075cc15a3138792dd9e3f0
+  languageName: node
+  linkType: hard
+
+"@codemirror/view@npm:^6.27.0":
+  version: 6.35.0
+  resolution: "@codemirror/view@npm:6.35.0"
+  dependencies:
+    "@codemirror/state": "npm:^6.4.0"
+    style-mod: "npm:^4.1.0"
+    w3c-keyname: "npm:^2.2.4"
+  checksum: 10c0/39b85e3ac266cb30a28c98a9ecf1cde34cdd160c243fe54a673b744990d72bb7758c1f557b7df25153c84e03ed9e989d7392a00e776533a731cb79fb0dca894e
   languageName: node
   linkType: hard
 
@@ -6621,9 +6632,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-router/dev@npm:7.0.0-pre.6":
-  version: 7.0.0-pre.6
-  resolution: "@react-router/dev@npm:7.0.0-pre.6"
+"@react-router/dev@npm:7.0.1":
+  version: 7.0.1
+  resolution: "@react-router/dev@npm:7.0.1"
   dependencies:
     "@babel/core": "npm:^7.21.8"
     "@babel/generator": "npm:^7.21.5"
@@ -6634,7 +6645,7 @@ __metadata:
     "@babel/traverse": "npm:^7.23.2"
     "@babel/types": "npm:^7.22.5"
     "@npmcli/package-json": "npm:^4.0.1"
-    "@react-router/node": "npm:7.0.0-pre.6"
+    "@react-router/node": "npm:7.0.1"
     arg: "npm:^5.0.1"
     babel-dead-code-elimination: "npm:^1.0.6"
     chokidar: "npm:^4.0.0"
@@ -6655,8 +6666,8 @@ __metadata:
     valibot: "npm:^0.41.0"
     vite-node: "npm:^1.6.0"
   peerDependencies:
-    "@react-router/serve": ^7.0.0-pre.6
-    react-router: ^7.0.0-pre.6
+    "@react-router/serve": ^7.0.1
+    react-router: ^7.0.1
     typescript: ^5.1.0
     vite: ^5.1.0
     wrangler: ^3.28.2
@@ -6669,7 +6680,7 @@ __metadata:
       optional: true
   bin:
     react-router: bin.js
-  checksum: 10c0/7b31b8111aefa44f6d7af26c792875d61852b907f7187d20ed65d0b35b47466f2747bf2f06f17d1e56e4927ea5b1275a276e27f87bd683ac1848d3786618739b
+  checksum: 10c0/aacc7bf1eeaafdcd5b730994c3830159124e159b0dc7f694cfc1a2190df41f2bbf7750cf3c17b09525ecb5227673b14649db05952b73fae3bc64e1ed22f1c5af
   languageName: node
   linkType: hard
 
@@ -6689,19 +6700,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-router/express@npm:7.0.0-pre.6":
-  version: 7.0.0-pre.6
-  resolution: "@react-router/express@npm:7.0.0-pre.6"
+"@react-router/express@npm:7.0.1":
+  version: 7.0.1
+  resolution: "@react-router/express@npm:7.0.1"
   dependencies:
-    "@react-router/node": "npm:7.0.0-pre.6"
+    "@react-router/node": "npm:7.0.1"
   peerDependencies:
     express: ^4.17.1
-    react-router: 7.0.0-pre.6
+    react-router: 7.0.1
     typescript: ^5.1.0
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10c0/0bfdd7b5f1b29bce5928794b58d915c756fe4f1d61ea76741eb86dc748fc65c8fa27f558503c4726562456a081f8891a38471c2c96e4ef091830bca0a5589009
+  checksum: 10c0/148e02177c8dac5a78e190e3829b7c207d05cc5ef01e0da4a6ea7693298ab79dfdee7c4cd3e353b1dfd9ca0be782fce404614e21d7200a685d819e0214fe19bd
   languageName: node
   linkType: hard
 
@@ -6723,21 +6734,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@react-router/node@npm:7.0.0-pre.6":
-  version: 7.0.0-pre.6
-  resolution: "@react-router/node@npm:7.0.0-pre.6"
+"@react-router/node@npm:7.0.1":
+  version: 7.0.1
+  resolution: "@react-router/node@npm:7.0.1"
   dependencies:
     "@mjackson/node-fetch-server": "npm:^0.2.0"
     source-map-support: "npm:^0.5.21"
     stream-slice: "npm:^0.1.2"
     undici: "npm:^6.19.2"
   peerDependencies:
-    react-router: 7.0.0-pre.6
+    react-router: 7.0.1
     typescript: ^5.1.0
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10c0/1f2537453eea3e9778062734be5e59d81df70bc944f4352cc2428fdbf2b441925f489eababc1f861dcd9ab9b0366538aaa15311ffc37d36b02b448b81ab0a670
+  checksum: 10c0/49fc3a47078275749a1ba387d8f788cb701989e265bcf434cfdd14f376e48a71166071c2ba78968bec56b73ed0cdff3f3cdeb9ebb0174306dd23cd1eb64e8741
   languageName: node
   linkType: hard
 
@@ -18810,7 +18821,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"mini-css-extract-plugin@npm:2.9.2, mini-css-extract-plugin@npm:^2.9.1":
+"mini-css-extract-plugin@npm:^2.9.1":
   version: 2.9.2
   resolution: "mini-css-extract-plugin@npm:2.9.2"
   dependencies:
@@ -22215,9 +22226,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-router@npm:7.0.0-pre.6":
-  version: 7.0.0-pre.6
-  resolution: "react-router@npm:7.0.0-pre.6"
+"react-router@npm:7.0.1":
+  version: 7.0.1
+  resolution: "react-router@npm:7.0.1"
   dependencies:
     "@types/cookie": "npm:^0.6.0"
     cookie: "npm:^1.0.1"
@@ -22229,7 +22240,7 @@ __metadata:
   peerDependenciesMeta:
     react-dom:
       optional: true
-  checksum: 10c0/36404a364f6de0d0a1d76774e42a0f1635c8f250dd52ac9b0a070487bea04fbbbbfd70946c4fc73e911c8c55c42dbdcbbf1ebc2e040b14cd54313260a419f6ec
+  checksum: 10c0/aac4c9989ae6b9cf989b5ddcda88f505ba0704a4e4b37ae04c819c2bd02f080361f9eb1793695e3ecf41080d91b79aee454c3163b586d1b19ceca13f6eacec0e
   languageName: node
   linkType: hard
 
@@ -23155,9 +23166,9 @@ __metadata:
     "@popperjs/core": "npm:^2.11.8"
     "@prettier/plugin-ruby": "npm:4.0.4"
     "@rails/activestorage": "npm:8.0.200"
-    "@react-router/dev": "npm:7.0.0-pre.6"
-    "@react-router/express": "npm:7.0.0-pre.6"
-    "@react-router/node": "npm:7.0.0-pre.6"
+    "@react-router/dev": "npm:7.0.1"
+    "@react-router/express": "npm:7.0.1"
+    "@react-router/node": "npm:7.0.1"
     "@react-router/serve": "npm:7.0.0-pre.1"
     "@remix-run/node": "npm:^2.12.1"
     "@remix-run/react": "npm:^2.12.1"
@@ -23271,7 +23282,6 @@ __metadata:
     lodash: "npm:4.17.21"
     luxon: "npm:3.6.1"
     md5: "npm:2.3.0"
-    mini-css-extract-plugin: "npm:2.9.2"
     minimist: "npm:1.2.8"
     morgan: "npm:^1.10.0"
     node-fetch: "npm:^3.3.2"
@@ -23297,7 +23307,7 @@ __metadata:
     react-i18next: "npm:15.4.1"
     react-onclickoutside: "npm:6.13.1"
     react-popper: "npm:2.3.0"
-    react-router: "npm:7.0.0-pre.6"
+    react-router: "npm:7.0.1"
     react-select: "npm:5.10.1"
     react-table: "npm:7.8.0"
     react-test-renderer: "npm:18.3.1"

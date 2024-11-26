@@ -147,4 +147,4 @@ function NotificationAdminIndex(): JSX.Element {
   );
 }
 
-export const Component = NotificationAdminIndex;
+export default NotificationAdminIndex;

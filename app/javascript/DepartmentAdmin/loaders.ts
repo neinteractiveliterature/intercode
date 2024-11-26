@@ -1,7 +1,7 @@
 import { LoaderFunction, useRouteLoaderData } from 'react-router';
 import { client } from '../useIntercodeApolloClient';
 import { DepartmentAdminQueryData, DepartmentAdminQueryDocument } from './queries.generated';
-import { NamedRoute } from '../appRoutes';
+import { NamedRoute } from '../routes';
 
 export const departmentAdminLoader: LoaderFunction = async () => {
   const { data } = await client.query<DepartmentAdminQueryData>({ query: DepartmentAdminQueryDocument });

@@ -27,4 +27,4 @@ function AttendeesPage() {
   );
 }
 
-export const Component = AttendeesPage;
+export default AttendeesPage;

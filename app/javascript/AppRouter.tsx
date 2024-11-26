@@ -1,13 +1,7 @@
-import { useContext } from 'react';
-import { RouteObject, replace, Outlet, LoaderFunction, redirect, useNavigate } from 'react-router';
+import { RouteObject, replace, redirect } from 'react-router';
 
-import FourOhFourPage from './FourOhFourPage';
 import { SignupAutomationMode, SignupMode, SiteMode, TicketMode } from './graphqlTypes.generated';
-import AppRootContext, { AppRootContextValue } from './AppRootContext';
-import useAuthorizationRequired, { AbilityName } from './Authentication/useAuthorizationRequired';
-import { EventAdminEventsQueryDocument } from './EventAdmin/queries.generated';
 import { client } from './useIntercodeApolloClient';
-import buildEventCategoryUrl from './EventAdmin/buildEventCategoryUrl';
 import {
   adminSingleTicketTypeLoader,
   adminTicketTypesLoader,
@@ -15,7 +9,6 @@ import {
   eventTicketTypesLoader,
 } from './TicketTypeAdmin/loaders';
 import { organizationsLoader, singleOrganizationLoader } from './OrganizationAdmin/loaders';
-import useLoginRequired from './Authentication/useLoginRequired';
 import { eventProposalWithOwnerLoader } from './EventProposals/loaders';
 import { conventionDayLoader } from './EventsApp/conventionDayUrls';
 import { signupAdminEventLoader, singleSignupLoader } from './EventsApp/SignupAdmin/loaders';
@@ -34,6 +27,8 @@ import { eventCategoryAdminLoader } from './EventCategoryAdmin/loaders';
 import { eventAdminEventsLoader } from './EventAdmin/loaders';
 import RouteErrorBoundary from 'RouteErrorBoundary';
 import { NonCMSPageWrapper } from 'NonCMSPageWrapper';
+import { NamedRoute } from 'routes';
+import AppRootContextRouteGuard from 'RouteGuards/AppRouteContextRouteGuard';
 
 export const appRootRoutes: RouteObject[] = [
   {

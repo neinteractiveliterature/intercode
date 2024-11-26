@@ -2,7 +2,7 @@ import { Outlet, useRouteLoaderData } from 'react-router';
 
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 import NamedRouteBreadcrumbItem from '../Breadcrumbs/NamedRouteBreadcrumbItem';
-import { NamedRoute } from '../appRoutes';
+import { NamedRoute } from '../routes';
 import { ConventionDisplayQueryData } from './queries.generated';
 
 function RootSiteConventionsAdmin(): JSX.Element {
@@ -29,4 +29,4 @@ function RootSiteConventionsAdmin(): JSX.Element {
   );
 }
 
-export const Component = RootSiteConventionsAdmin;
+export default RootSiteConventionsAdmin;

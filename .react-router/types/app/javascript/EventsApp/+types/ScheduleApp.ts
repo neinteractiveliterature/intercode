@@ -1,5 +1,5 @@
 // React Router generated types for route:
-// EventsApp/route.tsx
+// EventsApp/ScheduleApp.tsx
 
 import type * as T from "react-router/route-module"
 
@@ -7,15 +7,17 @@ import type { Info as Parent0 } from "../../+types/root"
 import type { Info as Parent1 } from "../../+types/AppRoot"
 import type { Info as Parent2 } from "../../+types/AppRootLayout"
 import type { Info as Parent3 } from "../../+types/NonCMSPageWrapper"
+import type { Info as Parent4 } from "../../RouteGuards/+types/MultiEventConventionRouteGuard"
+import type { Info as Parent5 } from "./schedule"
 
-type Module = typeof import("../route")
+type Module = typeof import("../ScheduleApp")
 
 export type Info = {
-  parents: [Parent0, Parent1, Parent2, Parent3],
-  id: "EventsApp/route"
-  file: "EventsApp/route.tsx"
-  path: "events"
-  params: {}
+  parents: [Parent0, Parent1, Parent2, Parent3, Parent4, Parent5],
+  id: "EventsApp/ScheduleApp"
+  file: "EventsApp/ScheduleApp.tsx"
+  path: ":day"
+  params: {"day": string}
   module: Module
   loaderData: T.CreateLoaderData<Module>
   actionData: T.CreateActionData<Module>
@@ -28,6 +30,9 @@ export namespace Route {
   export type MetaArgs = T.CreateMetaArgs<Info>
   export type MetaDescriptors = T.MetaDescriptors
   export type MetaFunction = (args: MetaArgs) => MetaDescriptors
+
+  export type HeadersArgs = T.HeadersArgs
+  export type HeadersFunction = (args: HeadersArgs) => Headers | HeadersInit
 
   export type LoaderArgs = T.CreateServerLoaderArgs<Info>
   export type ClientLoaderArgs = T.CreateClientLoaderArgs<Info>

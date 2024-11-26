@@ -26,4 +26,4 @@ function UsersWithPendingBio() {
   );
 }
 
-export const Component = UsersWithPendingBio;
+export default UsersWithPendingBio;

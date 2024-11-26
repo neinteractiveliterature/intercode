@@ -17,7 +17,7 @@ import Timespan from '../../../Timespan';
 import { getSignupStateLabel } from '../../../Tables/SignupStateCell';
 import humanize from '../../../humanize';
 import { Route, Info } from './+types/route';
-import { NamedRoute } from 'appRoutes';
+import { NamedRoute } from 'routes';
 
 function cityState(userConProfile: SignupFieldsFragment['user_con_profile']) {
   return [userConProfile.city, userConProfile.state].filter((item) => item && item.trim() !== '').join(', ');

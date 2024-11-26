@@ -6,7 +6,7 @@ import TicketForm from './TicketForm';
 import usePageTitle from '../usePageTitle';
 import { UserConProfileAdminQueryData } from './queries.generated';
 import { TicketInput } from '../graphqlTypes.generated';
-import { NamedRoute } from '../appRoutes';
+import { NamedRoute } from '../routes';
 import { client } from 'useIntercodeApolloClient';
 import { UpdateTicketDocument } from './mutations.generated';
 import { ApolloError } from '@apollo/client';
@@ -78,4 +78,4 @@ function EditTicket() {
   );
 }
 
-export const Component = EditTicket;
+export default EditTicket;

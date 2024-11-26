@@ -95,4 +95,4 @@ function ResetPassword(): JSX.Element {
   );
 }
 
-export const Component = ResetPassword;
+export default ResetPassword;

@@ -100,4 +100,4 @@ function EditCouponModal(): JSX.Element {
   );
 }
 
-export const Component = EditCouponModal;
+export default EditCouponModal;
