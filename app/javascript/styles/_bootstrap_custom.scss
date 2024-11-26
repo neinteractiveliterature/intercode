@@ -8,9 +8,14 @@ $breadcrumb-padding-x: 1rem;
 $breadcrumb-padding-y: 0.75rem;
 $breadcrumb-border-radius: 0.25rem;
 
+$prefix: 'bs-';
+
+// People are having trouble seeing the checkboxes
+$form-check-input-border: var(--#{$prefix}border-width) solid var(--#{$prefix}gray);
+
 $custom-colors: (
   'intercode-blue': #3b5998,
-  'medium-light': #e0e1e2,
+  'medium-light': #5f6265,
 );
 
 .bg-intercode-blue {
