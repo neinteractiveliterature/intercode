@@ -33,6 +33,7 @@ function buildSingleBucketRegistrationPolicy(totalSlots?: number | null): Regist
         not_counted: false,
       },
     ],
+    freeze_no_preference_buckets: false,
     prevent_no_preference_signups: false,
   };
 }

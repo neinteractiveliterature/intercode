@@ -23,6 +23,7 @@ function RegistrationPolicyItemEditor({ formItem, setFormItem }: RegistrationPol
       policy: {
         __typename: 'RegistrationPolicy',
         prevent_no_preference_signups: false,
+        freeze_no_preference_buckets: false,
         buckets: [],
       },
     }),
