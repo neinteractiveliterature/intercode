@@ -53,6 +53,9 @@ en:
       manage_events: 'Update events and event proposals you manage'
       manage_conventions: 'Update conventions you manage'
       manage_organizations: 'Update privileged data about organizations on the site'
+  freeze_bucket_assignments:
+    errors:
+      event_must_have_single_run: "We currently only support freezing bucket assignments on events with a single run, but %{event_title} has %{count}."
   forms:
     hidden_text:
       confirmed_attendee: 'This information is only visible to confirmed attendees.'

@@ -9,5 +9,6 @@ class Types::SignupChangeActionType < Types::BaseEnum
   value "vacancy_fill"
   value "withdraw"
   value "accept_signup_ranked_choice"
+  value "freeze_bucket_assignments"
   value "unknown"
 end
