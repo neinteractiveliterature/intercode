@@ -37,7 +37,7 @@ class EventFreezeBucketAssignmentsService < CivilService::Service
   def anything_signups_with_preference
     @anything_signups_with_preference ||=
       event.runs.first.signups.filter do |signup|
-        signup.confirmed? && signup.bucket.anything? && !signup.no_preference?
+        signup.confirmed? && signup.bucket&.anything? && !signup.no_preference?
       end
   end
 

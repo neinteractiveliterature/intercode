@@ -56,3 +56,9 @@ mutation WithdrawAllUserConProfileSignups($userConProfileId: ID!) {
     }
   }
 }
+
+mutation FreezeBucketAssignments($eventId: ID!) {
+  freezeBucketAssignments(input: { id: $eventId }) {
+    clientMutationId
+  }
+}

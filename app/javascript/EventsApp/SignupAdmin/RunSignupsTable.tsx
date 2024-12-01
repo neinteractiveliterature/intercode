@@ -1,7 +1,7 @@
 import { useContext, useMemo } from 'react';
 import { Column, FilterProps, CellProps } from 'react-table';
-import { useNavigate, useParams, useRouteLoaderData } from 'react-router-dom';
-import { useTranslation } from 'react-i18next';
+import { useNavigate, useParams, useRouteLoaderData, useRevalidator } from 'react-router-dom';
+import { Trans, useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
 import { DateTime } from 'luxon';
 
@@ -28,6 +28,9 @@ import { SignupState } from '../../graphqlTypes.generated';
 import EnumTypes from '../../enumTypes.json';
 import AppRootContext from '../../AppRootContext';
 import { NamedRoute } from '../../AppRouter';
+import { useGraphQLConfirm } from '@neinteractiveliterature/litform';
+import { useApolloClient } from '@apollo/client';
+import { FreezeBucketAssignmentsDocument } from './mutations.generated';
 
 const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({
   state: FilterCodecs.stringArray,
@@ -172,6 +175,9 @@ function RunSignupsTable(): JSX.Element {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const getPossibleColumnsFunc = useMemo(() => () => getPossibleColumns(t), [t]);
+  const confirm = useGraphQLConfirm();
+  const client = useApolloClient();
+  const revalidator = useRevalidator();
 
   const {
     tableInstance,
@@ -203,7 +209,41 @@ function RunSignupsTable(): JSX.Element {
   return (
     <QueryDataContext.Provider value={queryData ?? {}}>
       <div className="mb-4">
-        <TableHeader {...tableHeaderProps} exportUrl={`/csv_exports/run_signups?run_id=${runId}`} />
+        <TableHeader
+          {...tableHeaderProps}
+          exportUrl={`/csv_exports/run_signups?run_id=${runId}`}
+          renderLeftContent={() => (
+            <span className="ms-2">
+              <button
+                className="btn btn-outline-secondary"
+                onClick={() =>
+                  confirm({
+                    prompt: (
+                      <Trans
+                        i18nKey="events.signupAdmin.freezeBucketAssignments.prompt"
+                        values={{ eventTitle: data.convention.event.title }}
+                        components={{
+                          ul: <ul />,
+                          li: <li />,
+                        }}
+                      />
+                    ),
+                    action: async () => {
+                      await client.mutate({
+                        mutation: FreezeBucketAssignmentsDocument,
+                        variables: { eventId: data.convention.event.id },
+                      });
+                      await client.resetStore();
+                      revalidator.revalidate();
+                    },
+                  })
+                }
+              >
+                <i className="bi bi-snow" /> {t('events.signupAdmin.freezeBucketAssignments.button')}
+              </button>
+            </span>
+          )}
+        />
         <ReactTableWithTheWorks
           tableInstance={tableInstance}
           loading={tableLoading}

@@ -15,7 +15,7 @@ class Mutations::FreezeBucketAssignments < Mutations::BaseMutation
   def resolve(**)
     old_registration_policy = event.registration_policy.dup
 
-    EventFreezeBucketAssignmentsService.new(event:, whodunit: user).call!
+    EventFreezeBucketAssignmentsService.new(event:, whodunit: current_user).call!
     event.reload
 
     log_form_response_changes(

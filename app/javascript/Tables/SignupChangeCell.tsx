@@ -26,6 +26,10 @@ export function describeAction(action: SignupChangeAction, t: TFunction): string
     return t('tables.signupChange.actions.changeRegistrationPolicy');
   }
 
+  if (action === 'freeze_bucket_assignments') {
+    return t('tables.signupChange.actions.freezeBucketAssignments');
+  }
+
   if (action === 'hold_expired') {
     return t('tables.signupChange.actions.holdExpired');
   }
