@@ -68,8 +68,17 @@ class RegistrationPolicy
     !prevent_no_preference_signups
   end
 
+  def freeze_no_preference_buckets
+    !!@freeze_no_preference_buckets
+  end
+  alias freeze_no_preference_buckets? freeze_no_preference_buckets
+
   def attributes
-    { buckets:, prevent_no_preference_signups: prevent_no_preference_signups? }
+    {
+      buckets:,
+      prevent_no_preference_signups: prevent_no_preference_signups?,
+      freeze_no_preference_buckets: freeze_no_preference_buckets?
+    }
   end
 
   def buckets=(buckets)
@@ -91,6 +100,10 @@ class RegistrationPolicy
     @prevent_no_preference_signups = !!value
   end
 
+  def freeze_no_preference_buckets=(value)
+    @freeze_no_preference_buckets = !!value
+  end
+
   def attributes=(attributes)
     attributes.each do |key, value|
       case key.to_sym
@@ -98,6 +111,8 @@ class RegistrationPolicy
         self.buckets = value
       when :prevent_no_preference_signups
         self.prevent_no_preference_signups = value
+      when :freeze_no_preference_buckets
+        self.freeze_no_preference_buckets = value
       when :__typename
         next
       else
@@ -120,6 +135,7 @@ class RegistrationPolicy
     return self == other.to_unsafe_h if other.is_a?(ActionController::Parameters)
     return false unless other.is_a?(RegistrationPolicy)
     return false unless prevent_no_preference_signups == other.prevent_no_preference_signups
+    return false unless freeze_no_preference_buckets == other.freeze_no_preference_buckets
     return false unless buckets.size == other.buckets.size
 
     buckets.all? { |bucket| bucket == other.bucket_with_key(bucket.key) }

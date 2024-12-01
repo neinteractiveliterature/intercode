@@ -733,6 +733,10 @@
         "header": "Force signup into run",
         "overfillWarning": "Caution: this operation ignores registration bucket capacity (and therefore can overfill the event run). Doing this may have unexpected effects if other attendees drop out of the event. Adjusting the event capacity after doing this is strongly recommended."
       },
+      "freezeBucketAssignments": {
+        "button": "Freeze bucket assignments",
+        "prompt": "<p>Are you sure you want to freeze bucket assignments for {{ eventTitle }}?  After doing this:</p><ul><li>No-preference signups will no longer be moved between buckets to fill space</li><li>At the time of freezing, any signups in a flex bucket who have a bucket preference will be moved into the bucket of their choice, and the buckets will be reconfigured to change the flex slots into non-flex slots in the target buckets</li></ul><p><strong>This cannot be undone.  Please be sure this is what you want before proceeding.</strong></p>"
+      },
       "history": {
         "bucketHeader": "Bucket",
         "changeHeader": "Change",
@@ -1328,6 +1332,7 @@
         "acceptSignupRequest": "accepted signup request",
         "adminCreateSignup": "admin-created signup",
         "changeRegistrationPolicy": "registration policy change",
+        "freezeBucketAssignments": "freeze bucket assignments",
         "holdExpired": "hold expired",
         "selfServiceSignup": "self-service signup",
         "ticketPurchase": "ticket purchase",

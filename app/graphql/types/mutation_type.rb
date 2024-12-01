@@ -95,6 +95,7 @@ class Types::MutationType < Types::BaseObject # rubocop:disable GraphQL/ObjectDe
   field :createEvent, null: false, mutation: Mutations::CreateEvent
   field :createFillerEvent, null: false, mutation: Mutations::CreateFillerEvent
   field :dropEvent, null: false, mutation: Mutations::DropEvent
+  field :freezeBucketAssignments, null: false, mutation: Mutations::FreezeBucketAssignments
   field :rateEvent, null: false, mutation: Mutations::RateEvent
   field :restoreDroppedEvent, null: false, mutation: Mutations::RestoreDroppedEvent
   field :updateEvent, null: false, mutation: Mutations::UpdateEvent

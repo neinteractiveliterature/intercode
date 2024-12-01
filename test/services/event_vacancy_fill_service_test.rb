@@ -92,6 +92,31 @@ class EventVacancyFillServiceTest < ActiveSupport::TestCase
     assert_equal "anything", anything_signup.reload.bucket_key
   end
 
+  it "does not move no-preference signups if the registration policy does not allow it" do
+    travel(-2.seconds) { no_pref_signup }
+    travel(-1.second) { anything_signup }
+    waitlist_signup
+    event.allow_registration_policy_change = true
+    frozen_policy = event.registration_policy.dup.tap { |p| p.assign_attributes(freeze_no_preference_buckets: true) }
+    event.update!(registration_policy: frozen_policy)
+
+    cats_result = EventVacancyFillService.new(the_run, "cats").call
+    assert cats_result.success?
+
+    assert_equal 0, cats_result.move_results.size
+
+    dogs_result = EventVacancyFillService.new(the_run, "dogs").call
+    assert dogs_result.success?
+
+    assert_equal 1, dogs_result.move_results.size
+    waitlist_move_result = dogs_result.move_results.first
+    assert_equal waitlist_signup.id, waitlist_move_result.signup_id
+    assert_equal "waitlisted", waitlist_move_result.prev_state
+    assert_nil waitlist_move_result.prev_bucket_key
+
+    assert_equal "dogs", waitlist_signup.reload.bucket_key
+  end
+
   it "handles waitlisted signups in strictly chronological order, regardless of no-pref status" do
     travel(-2.seconds) { anything_signup }
     travel(-1.second) { waitlist_no_pref_signup }

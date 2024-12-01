@@ -560,7 +560,7 @@
   "SignupChangeAction": {
     "kind": "ENUM",
     "name": "SignupChangeAction",
-    "description": null,
+    "description": "The action taken that caused a signup to change.",
     "interfaces": null,
     "possibleTypes": null,
     "fields": null,
@@ -616,6 +616,12 @@
       },
       {
         "name": "accept_signup_ranked_choice",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "freeze_bucket_assignments",
         "description": null,
         "isDeprecated": false,
         "deprecationReason": null

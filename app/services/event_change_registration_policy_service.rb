@@ -79,7 +79,7 @@ class EventChangeRegistrationPolicyService < CivilService::Service
       new_signup = signup.dup
       new_signup.assign_attributes(
         bucket_key: destination_bucket.key,
-        state: 'confirmed',
+        state: "confirmed",
         counted: destination_bucket.counted?
       )
       new_signups_by_signup_id[signup.id] = new_signup
@@ -87,8 +87,13 @@ class EventChangeRegistrationPolicyService < CivilService::Service
     end
 
     def build_move_result(signup, destination_bucket)
-      move_results_by_signup_id[signup.id] =
-        SignupMoveResult.new(signup.id, 'confirmed', destination_bucket.key, signup.state, signup.bucket_key)
+      move_results_by_signup_id[signup.id] = SignupMoveResult.new(
+        signup.id,
+        "confirmed",
+        destination_bucket.key,
+        signup.state,
+        signup.bucket_key
+      )
     end
 
     def move_signup(no_preference_bucket_finder, from_bucket)
@@ -134,7 +139,7 @@ class EventChangeRegistrationPolicyService < CivilService::Service
             new_signups_by_signup_id.values.count { |signup| signup.bucket_key == bucket.key && signup.counted? }
           "#{bucket.key}: #{signup_count}/#{bucket.total_slots}"
         end
-      log "Counts: [#{bucket_counts.join(' | ')}]"
+      log "Counts: [#{bucket_counts.join(" | ")}]"
       log
     end
   end
@@ -169,7 +174,7 @@ class EventChangeRegistrationPolicyService < CivilService::Service
       event.allow_registration_policy_change = true
       event.update!(registration_policy: new_registration_policy)
 
-      move_results.each { |move_result| move_result.signup.log_signup_change!(action: 'change_registration_policy') }
+      move_results.each { |move_result| move_result.signup.log_signup_change!(action: "change_registration_policy") }
     end
 
     notify_move_results
@@ -244,7 +249,7 @@ class EventChangeRegistrationPolicyService < CivilService::Service
   def all_signups
     @all_signups ||=
       Signup
-        .where.not(state: 'withdrawn')
+        .where.not(state: "withdrawn")
         .joins(:run)
         .includes(:user_con_profile)
         .where(runs: { event_id: event.id })
