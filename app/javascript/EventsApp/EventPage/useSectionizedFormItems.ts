@@ -14,7 +14,7 @@ function getSectionizedFormItems(formData: EventPageForm, formResponse: Record<s
       item.identifier !== 'title' &&
       item.public_description != null &&
       item.public_description.trim().length > 0 &&
-      formResponse[item.identifier],
+      (formResponse[item.identifier] || formResponse[item.identifier] === false),
   );
   const shortFormItems: TypedFormItem[] = [];
   const secretFormItems: TypedFormItem[] = [];
