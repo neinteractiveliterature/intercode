@@ -549,6 +549,7 @@ const commonInConventionRoutes: RouteObject[] = [
     lazy: () => import('./FormAdmin'),
     children: [
       { path: ':id/edit_advanced', id: NamedRoute.FormJSONEditor, lazy: () => import('./FormAdmin/FormJSONEditor') },
+      { path: ':id', lazy: () => import('./FormAdmin/$id/route') },
       { index: true, id: NamedRoute.FormAdminIndex, lazy: () => import('./FormAdmin/FormAdminIndex') },
     ],
   },
