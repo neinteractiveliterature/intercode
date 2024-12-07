@@ -3,18 +3,18 @@
 
 import type * as T from "react-router/route-module"
 
-import type { Info as Parent0 } from "./root"
-import type { Info as Parent1 } from "./AppRoot"
-import type { Info as Parent2 } from "./AppRootLayout"
+import type { Info as Parent0 } from "./root.js"
+import type { Info as Parent1 } from "./AppRoot.js"
+import type { Info as Parent2 } from "./AppRootLayout.js"
 
-type Module = typeof import("../NonCMSPageWrapper")
+type Module = typeof import("../NonCMSPageWrapper.js")
 
 export type Info = {
   parents: [Parent0, Parent1, Parent2],
   id: "NonCMSPageWrapper"
   file: "NonCMSPageWrapper.tsx"
   path: "undefined"
-  params: {}
+  params: {} & { [key: string]: string | undefined }
   module: Module
   loaderData: T.CreateLoaderData<Module>
   actionData: T.CreateActionData<Module>
