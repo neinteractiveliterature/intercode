@@ -17,6 +17,7 @@
 /stats.json
 *.tsbuildinfo
 /.cache
+/.react-router
 
 # Ignore Yarn stuff
 .yarn/*
