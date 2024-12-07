@@ -3,23 +3,23 @@
 
 import type * as T from "react-router/route-module"
 
-import type { Info as Parent0 } from "../../../+types/root"
-import type { Info as Parent1 } from "../../../+types/AppRoot"
-import type { Info as Parent2 } from "../../../+types/AppRootLayout"
-import type { Info as Parent3 } from "../../../+types/NonCMSPageWrapper"
-import type { Info as Parent4 } from "../../+types/$eventId"
-import type { Info as Parent5 } from "../../../RouteGuards/+types/EventPageGuard"
-import type { Info as Parent6 } from "./RunHeader"
-import type { Info as Parent7 } from "./route"
+import type { Info as Parent0 } from "../../../+types/root.js"
+import type { Info as Parent1 } from "../../../+types/AppRoot.js"
+import type { Info as Parent2 } from "../../../+types/AppRootLayout.js"
+import type { Info as Parent3 } from "../../../+types/NonCMSPageWrapper.js"
+import type { Info as Parent4 } from "../../+types/$eventId.js"
+import type { Info as Parent5 } from "../../../RouteGuards/+types/EventPageGuard.js"
+import type { Info as Parent6 } from "./RunHeader.js"
+import type { Info as Parent7 } from "./route.js"
 
-type Module = typeof import("../SignupsIndex")
+type Module = typeof import("../SignupsIndex.js")
 
 export type Info = {
   parents: [Parent0, Parent1, Parent2, Parent3, Parent4, Parent5, Parent6, Parent7],
   id: "EventsApp/SignupAdmin/SignupsIndex"
   file: "EventsApp/SignupAdmin/SignupsIndex.tsx"
   path: ""
-  params: {"eventId": string; "runId": string}
+  params: {"eventId": string; "runId": string} & { [key: string]: string | undefined }
   module: Module
   loaderData: T.CreateLoaderData<Module>
   actionData: T.CreateActionData<Module>

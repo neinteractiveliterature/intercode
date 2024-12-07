@@ -3,20 +3,20 @@
 
 import type * as T from "react-router/route-module"
 
-import type { Info as Parent0 } from "../../+types/root"
-import type { Info as Parent1 } from "../../+types/AppRoot"
-import type { Info as Parent2 } from "../../+types/AppRootLayout"
-import type { Info as Parent3 } from "../../+types/NonCMSPageWrapper"
-import type { Info as Parent4 } from "../../RouteGuards/+types/MultiEventConventionRouteGuard"
+import type { Info as Parent0 } from "../../+types/root.js"
+import type { Info as Parent1 } from "../../+types/AppRoot.js"
+import type { Info as Parent2 } from "../../+types/AppRootLayout.js"
+import type { Info as Parent3 } from "../../+types/NonCMSPageWrapper.js"
+import type { Info as Parent4 } from "../../RouteGuards/+types/MultiEventConventionRouteGuard.js"
 
-type Module = typeof import("../schedule_with_counts")
+type Module = typeof import("../schedule_with_counts.js")
 
 export type Info = {
   parents: [Parent0, Parent1, Parent2, Parent3, Parent4],
   id: "EventsApp/schedule_with_counts"
   file: "EventsApp/schedule_with_counts.tsx"
   path: "events/schedule_with_counts/*"
-  params: {"*": string}
+  params: {"*": string} & { [key: string]: string | undefined }
   module: Module
   loaderData: T.CreateLoaderData<Module>
   actionData: T.CreateActionData<Module>
