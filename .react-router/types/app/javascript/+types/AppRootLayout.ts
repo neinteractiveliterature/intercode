@@ -3,17 +3,17 @@
 
 import type * as T from "react-router/route-module"
 
-import type { Info as Parent0 } from "./root"
-import type { Info as Parent1 } from "./AppRoot"
+import type { Info as Parent0 } from "./root.js"
+import type { Info as Parent1 } from "./AppRoot.js"
 
-type Module = typeof import("../AppRootLayout")
+type Module = typeof import("../AppRootLayout.js")
 
 export type Info = {
   parents: [Parent0, Parent1],
   id: "AppRootLayout"
   file: "AppRootLayout.tsx"
   path: "undefined"
-  params: {}
+  params: {} & { [key: string]: string | undefined }
   module: Module
   loaderData: T.CreateLoaderData<Module>
   actionData: T.CreateActionData<Module>
