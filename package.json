@@ -50,7 +50,7 @@
     "@stripe/react-stripe-js": "2.9.0",
     "@stripe/stripe-js": "4.10.0",
     "@testing-library/react": "16.0.1",
-    "@types/bytes": "3.1.4",
+    "@types/bytes": "3.1.5",
     "@types/debounce-promise": "3.1.9",
     "@types/diff": "6.0.0",
     "@types/file-saver": "2.0.7",
