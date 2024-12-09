@@ -7078,10 +7078,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/bytes@npm:3.1.4":
-  version: 3.1.4
-  resolution: "@types/bytes@npm:3.1.4"
-  checksum: 10c0/4649550082e279f32a76a1dda31c3f88370eadfcd0b25fb7cbd22b22ffcc2be45ebe5486c14025acba0718247edb55e376255dcca6d759c833ce4c962e22b683
+"@types/bytes@npm:3.1.5":
+  version: 3.1.5
+  resolution: "@types/bytes@npm:3.1.5"
+  checksum: 10c0/5bed1b55a27d0c9c5160567d6df8f73830a95ffabbba735791c8888f83c5dcc9fc901f0b441ca50b07579c9c9ee4ef2b27a2259597182cee831b99b198846cc4
   languageName: node
   linkType: hard
 
@@ -21357,7 +21357,7 @@ __metadata:
     "@testing-library/react-hooks": "npm:8.0.1"
     "@testing-library/user-event": "npm:^14.5.2"
     "@types/bootstrap": "npm:5.2.10"
-    "@types/bytes": "npm:3.1.4"
+    "@types/bytes": "npm:3.1.5"
     "@types/debounce-promise": "npm:3.1.9"
     "@types/diff": "npm:6.0.0"
     "@types/events": "npm:3.0.3"
