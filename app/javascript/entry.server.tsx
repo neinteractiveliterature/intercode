@@ -4,11 +4,8 @@ import { createReadableStreamFromReadable } from '@react-router/node';
 import { EntryContext, ServerRouter } from 'react-router';
 import { isbot } from 'isbot';
 import { renderToPipeableStream } from 'react-dom/server';
-import AuthenticityTokensManager from 'AuthenticityTokensContext';
 
 const ABORT_DELAY = 5_000;
-
-AuthenticityTokensManager.instance.refresh();
 
 export default function handleRequest(
   request: Request,

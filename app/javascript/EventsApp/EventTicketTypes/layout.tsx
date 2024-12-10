@@ -1,13 +1,22 @@
 import { useContext, useMemo } from 'react';
-import { Outlet, useLoaderData, useParams } from 'react-router';
+import { Outlet, useParams } from 'react-router';
 
-import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
-import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
-import LeafBreadcrumbItem from '../Breadcrumbs/LeafBreadcrumbItem';
-import AppRootContext from '../AppRootContext';
+import BreadcrumbItem from 'Breadcrumbs/BreadcrumbItem';
+import RouteActivatedBreadcrumbItem from 'Breadcrumbs/RouteActivatedBreadcrumbItem';
+import LeafBreadcrumbItem from 'Breadcrumbs/LeafBreadcrumbItem';
+import AppRootContext from 'AppRootContext';
 import capitalize from 'lodash/capitalize';
-import { EventTicketTypesQueryData } from '../TicketTypeAdmin/queries.generated';
-import { TicketTypeLoaderResult } from '../TicketTypeAdmin/loaders';
+import { EventTicketTypesQueryData, EventTicketTypesQueryDocument } from 'TicketTypeAdmin/queries.generated';
+import { Route } from './+types/layout';
+
+export const loader = async ({ context, params: { eventId } }: Route.LoaderArgs) => {
+  const client = context!.client;
+  const { data } = await client.query({
+    query: EventTicketTypesQueryDocument,
+    variables: { id: eventId ?? '' },
+  });
+  return { parent: data.convention.event, ticketTypes: data.convention.event.ticket_types };
+};
 
 function SpecificTicketTypeBreadcrumbItem({ event }: { event: EventTicketTypesQueryData['convention']['event'] }) {
   const params = useParams<'id'>();
@@ -19,9 +28,8 @@ function SpecificTicketTypeBreadcrumbItem({ event }: { event: EventTicketTypesQu
   return <LeafBreadcrumbItem path="">{ticketType?.name}</LeafBreadcrumbItem>;
 }
 
-function EventTicketTypesWrapper(): JSX.Element {
+function EventTicketTypesWrapper({ loaderData: { parent } }: Route.ComponentProps): JSX.Element {
   const { ticketName } = useContext(AppRootContext);
-  const { parent } = useLoaderData() as TicketTypeLoaderResult;
   const { id } = useParams();
 
   const event = parent.__typename === 'Event' ? parent : undefined;
