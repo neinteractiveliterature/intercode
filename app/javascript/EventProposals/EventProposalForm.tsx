@@ -12,7 +12,7 @@ import { ConventionForFormItemDisplay } from '../FormPresenter/ItemDisplays/Form
 import { CommonFormFieldsFragment } from '../Models/commonFormFragments.generated';
 import { parseResponseErrors } from '../parseResponseErrors';
 import { ImageAttachmentConfig } from '../BuiltInFormControls/MarkdownInput';
-import { Blob } from '@rails/activestorage';
+import type { Blob } from '@rails/activestorage';
 import { client } from '../useIntercodeApolloClient';
 import {
   AttachImageToEventProposalDocument,

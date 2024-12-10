@@ -1,5 +1,5 @@
 import { useContext, useMemo } from 'react';
-import { Link, useFetcher, useLoaderData } from 'react-router';
+import { Link, useFetcher } from 'react-router';
 import { ErrorDisplay, useConfirm, useModal } from '@neinteractiveliterature/litform';
 import capitalize from 'lodash/capitalize';
 import { v4 as uuidv4 } from 'uuid';
@@ -209,8 +209,7 @@ function TicketTypeDisplay({
   );
 }
 
-function TicketTypesList() {
-  const { parent, ticketTypes } = useLoaderData() as TicketTypeLoaderResult;
+function TicketTypesList({ parent, ticketTypes }: TicketTypeLoaderResult) {
   const { t } = useTranslation();
   const { ticketName } = useContext(AppRootContext);
   const event = parent.__typename === 'Event' ? parent : undefined;
