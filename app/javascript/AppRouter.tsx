@@ -1,7 +1,6 @@
 import { RouteObject, replace, redirect } from 'react-router';
 
 import { SignupAutomationMode, SignupMode, SiteMode, TicketMode } from './graphqlTypes.generated';
-import { client } from './useIntercodeApolloClient';
 import {
   adminSingleTicketTypeLoader,
   adminTicketTypesLoader,
@@ -26,15 +25,20 @@ import { departmentAdminLoader } from './DepartmentAdmin/loaders';
 import { eventCategoryAdminLoader } from './EventCategoryAdmin/loaders';
 import { eventAdminEventsLoader } from './EventAdmin/loaders';
 import RouteErrorBoundary from 'RouteErrorBoundary';
-import { NonCMSPageWrapper } from 'NonCMSPageWrapper';
 import { NamedRoute } from 'routes';
 import AppRootContextRouteGuard from 'RouteGuards/AppRouteContextRouteGuard';
+import AuthorizationRequiredRouteGuard from 'RouteGuards/AuthorizationRequiredRouteGuard';
+import NonCMSPageWrapper from 'NonCMSPageWrapper';
+import eventAdminRootRedirect from 'RouteGuards/eventAdminRootRedirect';
+import EventPageGuard from 'RouteGuards/EventPageGuard';
+import LoginRequiredRouteGuard from 'RouteGuards/LoginRequiredRouteGuard';
+import EditEventGuard from 'RouteGuards/EditEventGuard';
 
 export const appRootRoutes: RouteObject[] = [
   {
     element: <AppRoot />,
     errorElement: <RouteErrorBoundary />,
-    loader: async () => {
+    loader: async ({ client }) => {
       const { data } = await client.query({ query: AppRootQueryDocument });
       return data;
     },

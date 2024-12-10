@@ -8,7 +8,7 @@ import InPlaceEditor from '../../BuiltInFormControls/InPlaceEditor';
 import { CmsFilesAdminQueryData, CmsFilesAdminQueryDocument } from './queries.generated';
 import { useCallback } from 'react';
 import FileUploadForm from '../../BuiltInForms/FileUploadForm';
-import { Blob } from '@rails/activestorage';
+import type { Blob } from '@rails/activestorage';
 import { ActionFunction, LoaderFunction, redirect, useLoaderData } from 'react-router';
 import { client } from '../../useIntercodeApolloClient';
 import { CreateCmsFileDocument, DeleteCmsFileDocument, RenameCmsFileDocument } from './mutations.generated';

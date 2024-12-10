@@ -7,7 +7,7 @@ import FilePreview from '../CmsAdmin/CmsFilesAdmin/FilePreview';
 import SelectWithLabel from './SelectWithLabel';
 import FileUploadForm from '../BuiltInForms/FileUploadForm';
 import { ActiveStorageAttachment } from '../graphqlTypes.generated';
-import { Blob } from '@rails/activestorage';
+import type { Blob } from '@rails/activestorage';
 import { useLazyQuery } from '@apollo/client';
 
 export type AddFileModalProps = {

@@ -7,7 +7,6 @@ import {
   liquid,
   useModal,
 } from '@neinteractiveliterature/litform';
-import type { CodeInputProps } from '@neinteractiveliterature/litform/lib/CodeInput';
 import { useTranslation } from 'react-i18next';
 import { markdown } from '@codemirror/lang-markdown';
 import { useMemo } from 'react';
@@ -17,8 +16,9 @@ import { parseContent } from '../parsePageContent';
 import { PreviewMarkdownQueryData, PreviewMarkdownQueryDocument } from './previewQueries.generated';
 import { ActiveStorageAttachment } from '../graphqlTypes.generated';
 import AddFileModal from './AddFileModal';
-import { Blob } from '@rails/activestorage';
+import type { Blob } from '@rails/activestorage';
 import MenuIcon from '../NavigationBar/MenuIcon';
+import { CodeInputProps } from '@neinteractiveliterature/litform/dist/types/CodeInput';
 
 type AttachImageModalProps = {
   visible: boolean;

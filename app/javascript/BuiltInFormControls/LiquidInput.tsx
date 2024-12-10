@@ -11,7 +11,7 @@ import {
   UseStandardCodeMirrorExtensionsOptions,
   liquid,
 } from '@neinteractiveliterature/litform';
-import { CodeInputProps } from '@neinteractiveliterature/litform/lib/CodeInput';
+import { CodeInputProps } from '@neinteractiveliterature/litform/dist/types/CodeInput';
 import { Extension } from '@codemirror/state';
 
 import MenuIcon from '../NavigationBar/MenuIcon';
@@ -26,7 +26,7 @@ import { parseContent } from '../parsePageContent';
 import AddFileModal from './AddFileModal';
 import { ActiveStorageAttachment } from '../graphqlTypes.generated';
 import { CmsFilesAdminQueryDocument } from '../CmsAdmin/CmsFilesAdmin/queries.generated';
-import { Blob } from '@rails/activestorage';
+import type { Blob } from '@rails/activestorage';
 import { useFetcher } from 'react-router';
 import { NamedRoute } from '../routes';
 
