@@ -85,6 +85,19 @@ export default [
                 index('EventsApp/EventTicketTypes/route.tsx'),
               ]),
             ]),
+            route('edit', 'RouteGuards/EditEventGuard.tsx', [index('EventsApp/StandaloneEditEvent/index.tsx')]),
+            route(
+              'maximum_event_provided_ticket_overrides',
+              'EventsApp/MaximumEventProvidedTicketsOverrides/route.ts',
+              [route(':id', 'EventsApp/MaximumEventProvidedTicketsOverrides/$id.ts')],
+            ),
+            route('team_members', 'EventsApp/TeamMemberAdmin/index.tsx', { id: NamedRoute.TeamMembers }, [
+              route('new', 'EventsApp/TeamMemberAdmin/NewTeamMember.tsx', { id: NamedRoute.NewTeamMember }),
+              route(':teamMemberId', 'EventsApp/TeamMemberAdmin/EditTeamMember.tsx', { id: NamedRoute.EditTeamMember }),
+              route('', 'EventsApp/TeamMemberAdmin/TeamMembersIndex.tsx', { id: NamedRoute.TeamMembersIndex }, [
+                route(':teamMemberId/provide_ticket', 'EventsApp/TeamMemberAdmin/ProvideTicketModal.tsx'),
+              ]),
+            ]),
             layout('RouteGuards/EventPageGuard.tsx', [
               index('EventsApp/EventPage/index.tsx', { id: NamedRoute.EventPage }),
               route('runs/:runId', 'EventsApp/SignupAdmin/RunHeader.tsx', [
