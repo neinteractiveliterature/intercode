@@ -51,6 +51,7 @@ function MaximumEventProvidedTicketsOverrideEditor({
     override_value: null,
   });
   const confirm = useConfirm();
+  const error = fetcher.data instanceof Error ? fetcher.data : undefined;
 
   const sortedOverrides = useMemo(
     () => sortByLocaleString(overrides, (o) => o.ticket_type?.description ?? ''),
@@ -98,7 +99,7 @@ function MaximumEventProvidedTicketsOverrideEditor({
       return;
     }
 
-    fetcher.submit(
+    await fetcher.submit(
       { ticket_type_id: addingOverride.ticket_type.id, override_value: addingOverride.override_value },
       { action: `/events/${eventId}/maximum_event_provided_ticket_overrides`, method: 'POST' },
     );
@@ -109,15 +110,15 @@ function MaximumEventProvidedTicketsOverrideEditor({
     });
   };
 
-  const existingOverrideValueDidChange = (id: string, overrideValue: string) => {
-    fetcher.submit(
+  const existingOverrideValueDidChange = async (id: string, overrideValue: string) => {
+    await fetcher.submit(
       { override_value: overrideValue },
       { action: `/events/${eventId}/maximum_event_provided_ticket_overrides/${id}`, method: 'PATCH' },
     );
   };
 
   const deleteOverrideConfirmed = async (override: MEPTOForEditor) => {
-    fetcher.submit(
+    await fetcher.submit(
       {},
       { action: `/events/${eventId}/maximum_event_provided_ticket_overrides/${override.id}`, method: 'DELETE' },
     );
@@ -218,7 +219,7 @@ function MaximumEventProvidedTicketsOverrideEditor({
             </tr>
           </tfoot>
         </table>
-        <ErrorDisplay graphQLError={fetcher.data as ApolloError | null} />
+        <ErrorDisplay graphQLError={error as ApolloError | null} />
       </div>
     </div>
   );

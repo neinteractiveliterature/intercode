@@ -1,7 +1,7 @@
 import AsyncSelect, { AsyncProps } from 'react-select/async';
 import { TypedDocumentNode, ResultOf, VariablesOf } from '@graphql-typed-document-node/core';
 import { GroupBase } from 'react-select';
-import { client } from '../useIntercodeApolloClient';
+import { useApolloClient } from '@apollo/client';
 
 // This will be a lot more useful once https://github.com/microsoft/TypeScript/issues/36981
 // is fixed
@@ -20,6 +20,8 @@ function GraphQLAsyncSelect<QueryType extends TypedDocumentNode, OptionType, IsM
   getVariables,
   ...otherProps
 }: GraphQLAsyncSelectProps<QueryType, OptionType, IsMulti>): JSX.Element {
+  const client = useApolloClient();
+
   const loadOptions = async (inputValue: string) => {
     try {
       const { data } = await client.query({ query, variables: getVariables(inputValue) });
