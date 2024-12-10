@@ -1,7 +1,7 @@
 import { TicketType } from 'graphqlTypes.generated';
 import { data } from 'react-router';
-import { DeleteTicketTypeDocument } from './mutations.generated';
 import { Route } from './+types/$id';
+import { DeleteTicketTypeDocument } from 'TicketTypeAdmin/mutations.generated';
 
 export const action = async ({ params: { id }, request, context }: Route.ActionArgs) => {
   try {

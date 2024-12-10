@@ -17,7 +17,7 @@ import { parseContent } from '../parsePageContent';
 import { PreviewMarkdownQueryData, PreviewMarkdownQueryDocument } from './previewQueries.generated';
 import { ActiveStorageAttachment } from '../graphqlTypes.generated';
 import AddFileModal from './AddFileModal';
-import { Blob } from '@rails/activestorage';
+import type { Blob } from '@rails/activestorage';
 import MenuIcon from '../NavigationBar/MenuIcon';
 
 type AttachImageModalProps = {

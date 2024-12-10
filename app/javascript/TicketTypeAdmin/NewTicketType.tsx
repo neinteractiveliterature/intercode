@@ -1,18 +1,17 @@
 import { useContext, useState } from 'react';
-import { ActionFunction, replace, useFetcher, useLoaderData } from 'react-router';
-import { ApolloError } from '@apollo/client';
+import { ActionFunction, replace, useFetcher } from 'react-router';
+import { ApolloClient, ApolloError } from '@apollo/client';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import buildTicketTypeInput from './buildTicketTypeInput';
 import TicketTypeForm, { EditingTicketType } from './TicketTypeForm';
 import usePageTitle from '../usePageTitle';
-import { TicketTypeAdmin_TicketTypeFieldsFragmentDoc } from './queries.generated';
 import AppRootContext from '../AppRootContext';
 import { TicketTypeLoaderResult } from './loaders';
 import { useTranslation } from 'react-i18next';
 import { Convention, TicketTypeInput } from 'graphqlTypes.generated';
-import { client } from 'useIntercodeApolloClient';
 import { CreateTicketTypeDocument } from './mutations.generated';
+import updateCacheAfterCreateTicketType from './updateCacheAfterCreateTicketType';
 
 type ActionInput = {
   ticketType: TicketTypeInput;
@@ -23,29 +22,20 @@ type ActionInput = {
 export const action: ActionFunction = async ({ request }) => {
   try {
     const { ticketType, eventId, conventionId } = (await request.json()) as ActionInput;
+    const client = new ApolloClient();
     await client.mutate({
       mutation: CreateTicketTypeDocument,
       variables: {
         input: { ticket_type: ticketType, eventId },
       },
-      update: (cache, result) => {
-        const ticketType = result.data?.createTicketType.ticket_type;
-        if (ticketType) {
-          const ref = cache.writeFragment({
-            fragment: TicketTypeAdmin_TicketTypeFieldsFragmentDoc,
-            fragmentName: 'TicketTypeAdmin_TicketTypeFields',
-            data: ticketType,
-          });
-          cache.modify<Convention | Event>({
-            id: cache.identify(
-              eventId ? { __typename: 'Event', id: eventId } : { __typename: 'Convention', id: conventionId },
-            ),
-            fields: {
-              ticket_types: (value) => [...value, ref],
-            },
-          });
-        }
-      },
+      update: updateCacheAfterCreateTicketType(eventId, conventionId, (cache, ref) => {
+        cache.modify<Convention>({
+          id: cache.identify({ __typename: 'Convention', id: conventionId }),
+          fields: {
+            ticket_types: (value) => [...value, ref],
+          },
+        });
+      }),
     });
 
     return replace('/ticket_types');
@@ -54,9 +44,8 @@ export const action: ActionFunction = async ({ request }) => {
   }
 };
 
-function NewTicketType() {
+function NewTicketType({ parent }: TicketTypeLoaderResult) {
   const { t } = useTranslation();
-  const { parent } = useLoaderData() as TicketTypeLoaderResult;
   const { convention, ticketName } = useContext(AppRootContext);
   const fetcher = useFetcher();
   const error = fetcher.data instanceof Error ? fetcher.data : undefined;

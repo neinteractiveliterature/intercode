@@ -5,31 +5,34 @@ import { ApolloError } from '@apollo/client';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 import useAsyncFunction from '../useAsyncFunction';
 import FileInputWithPreview from '../CmsAdmin/CmsFilesAdmin/FileInputWithPreview';
-import { DirectUpload, DirectUploadDelegate, Blob } from '@rails/activestorage';
+import type { DirectUploadDelegate, Blob } from '@rails/activestorage';
 import RailsDirectUploadsContext from '../RailsDirectUploadsContext';
 import classNames from 'classnames';
 import { Helmet } from 'react-helmet-async';
 import AuthenticityTokensManager from '../AuthenticityTokensContext';
 
 function uploadFile(file: File, directUploadURL: string, onProgress?: (event: ProgressEvent<XMLHttpRequest>) => void) {
-  return new Promise<Blob>((resolve, reject) => {
-    const delegate: DirectUploadDelegate = {
-      directUploadWillStoreFileWithXHR: (xhr) => {
-        if (onProgress) {
-          xhr.upload.addEventListener('progress', onProgress);
-        }
-      },
-    };
+  return import('@rails/activestorage').then(
+    ({ DirectUpload }) =>
+      new Promise<Blob>((resolve, reject) => {
+        const delegate: DirectUploadDelegate = {
+          directUploadWillStoreFileWithXHR: (xhr) => {
+            if (onProgress) {
+              xhr.upload.addEventListener('progress', onProgress);
+            }
+          },
+        };
 
-    const upload = new DirectUpload(file, directUploadURL, delegate);
-    upload.create((error, blob) => {
-      if (error) {
-        reject(error);
-      } else {
-        resolve(blob);
-      }
-    });
-  });
+        const upload = new DirectUpload(file, directUploadURL, delegate);
+        upload.create((error, blob) => {
+          if (error) {
+            reject(error);
+          } else {
+            resolve(blob);
+          }
+        });
+      }),
+  );
 }
 
 export type FileUploadFormProps = {

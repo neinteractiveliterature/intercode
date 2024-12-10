@@ -27,7 +27,7 @@ import { parseContent } from '../parsePageContent';
 import AddFileModal from './AddFileModal';
 import { ActiveStorageAttachment } from '../graphqlTypes.generated';
 import { CmsFilesAdminQueryDocument } from '../CmsAdmin/CmsFilesAdmin/queries.generated';
-import { Blob } from '@rails/activestorage';
+import type { Blob } from '@rails/activestorage';
 import { useFetcher } from 'react-router';
 import { NamedRoute } from '../routes';
 

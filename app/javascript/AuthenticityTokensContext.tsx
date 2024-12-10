@@ -47,21 +47,27 @@ export default class AuthenticityTokensManager {
   }
 
   async refresh() {
-    const response = await fetch(this.url, {
-      method: 'GET',
-      headers: {
-        Accept: 'application/json',
-      },
-    });
-
-    const json = await response.json();
+    const json = await fetchAuthenticityTokens(this.url);
 
     this.setTokens(json);
     return this.tokens;
   }
 }
 
-function getURL(): URL {
+export async function fetchAuthenticityTokens(url: URL, headers?: HeadersInit): Promise<AuthenticityTokens> {
+  const response = await fetch(url, {
+    method: 'GET',
+    headers: {
+      Accept: 'application/json',
+      ...headers,
+    },
+  });
+
+  const json = await response.json();
+  return json;
+}
+
+export function getAuthenticityTokensURL(): URL {
   if (typeof window !== 'undefined') {
     return new URL('/authenticity_tokens', window.location.href);
   } else {
@@ -69,7 +75,7 @@ function getURL(): URL {
   }
 }
 
-AuthenticityTokensManager.instance = new AuthenticityTokensManager({}, getURL());
+AuthenticityTokensManager.instance = new AuthenticityTokensManager({}, getAuthenticityTokensURL());
 
 export function useInitializeAuthenticityTokens(initialTokens: AuthenticityTokens) {
   const initializedRef = useRef(false);
