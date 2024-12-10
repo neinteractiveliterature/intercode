@@ -13,13 +13,13 @@ import {
   TeamMemberUserConProfilesQueryDocument,
 } from './queries.generated';
 import { ReceiveSignupEmail } from '../../graphqlTypes.generated';
-import { useTeamMembersLoader } from './loader';
-import { client } from '../../useIntercodeApolloClient';
 import { CreateTeamMemberDocument } from './mutations.generated';
+import { Route } from './+types/NewTeamMember';
+import { useTeamMembersLoader } from '.';
 
-export const action: ActionFunction = async ({ params: { eventId }, request }) => {
+export const action: ActionFunction = async ({ params: { eventId }, request, context }: Route.ActionArgs) => {
   const formData = await request.formData();
-  await client.mutate({
+  await context.client.mutate({
     mutation: CreateTeamMemberDocument,
     variables: {
       input: {

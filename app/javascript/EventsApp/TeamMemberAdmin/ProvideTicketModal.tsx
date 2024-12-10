@@ -6,28 +6,24 @@ import capitalize from 'lodash/capitalize';
 import { getProvidableTicketTypes } from './ProvideTicketUtils';
 import ProvidableTicketTypeSelection from './ProvidableTicketTypeSelection';
 import TicketingStatusDescription from './TicketingStatusDescription';
-import {
-  ActionFunction,
-  redirect,
-  useFetcher,
-  useLoaderData,
-  useNavigate,
-  useNavigation,
-  useParams,
-} from 'react-router';
-import { singleTeamMemberLoader, SingleTeamMemberLoaderResult } from './loader';
-import { client } from '../../useIntercodeApolloClient';
+import { redirect, useFetcher, useNavigate, useNavigation, useParams } from 'react-router';
 import { ProvideEventTicketDocument } from './mutations.generated';
 import { TeamMembersQueryDocument } from './queries.generated';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 import { ApolloError } from '@apollo/client';
+import { loader as indexLoader } from './index';
+import { Route } from './+types/ProvideTicketModal';
+import { findById } from 'findById';
 
-export const loader = singleTeamMemberLoader;
+export async function loader({ params, context, request }: Route.LoaderArgs) {
+  const data = await indexLoader({ params, context, request });
+  return { data, teamMember: findById(data.convention.event.team_members, params.teamMemberId) };
+}
 
-export const action: ActionFunction = async ({ params: { eventId }, request }) => {
+export const action = async ({ params: { eventId }, request, context }: Route.ActionArgs) => {
   try {
     const formData = await request.formData();
-    await client.mutate({
+    await context.client.mutate({
       mutation: ProvideEventTicketDocument,
       variables: {
         eventId,
@@ -43,8 +39,7 @@ export const action: ActionFunction = async ({ params: { eventId }, request }) =
   }
 };
 
-function ProvideTicketModal(): JSX.Element {
-  const { data, teamMember } = useLoaderData() as SingleTeamMemberLoaderResult;
+function ProvideTicketModal({ loaderData: { data, teamMember } }: Route.ComponentProps): JSX.Element {
   const { t } = useTranslation();
   const [ticketTypeId, setTicketTypeId] = useState<string>();
   const navigation = useNavigation();
