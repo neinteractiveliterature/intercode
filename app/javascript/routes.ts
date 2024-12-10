@@ -1,4 +1,4 @@
-import { index, layout, route, prefix } from '@react-router/dev/routes';
+import { index, layout, route, prefix, RouteConfig } from '@react-router/dev/routes';
 
 export enum NamedRoute {
   AdminEditEventProposal = 'AdminEditEventProposal',
@@ -62,7 +62,7 @@ export default [
     // TODO Liquid docs routes
     layout('AppRootLayout.tsx', [
       layout('NonCMSPageWrapper.tsx', [
-        layout('RouteGuards/MultiEventConventionRouteGuard.tsx', { id: 'RootMultiEventGuard' }, []),
+        route('convention/edit', 'ConventionAdmin/index.tsx'),
         ...prefix('events', [
           layout('RouteGuards/MultiEventConventionRouteGuard.tsx', { id: 'EventsMultiEventGuard' }, [
             route('schedule', 'EventsApp/schedule.tsx', [route(':day', 'EventsApp/ScheduleApp.tsx')]),
@@ -75,6 +75,16 @@ export default [
             route('my-signup-queue', 'EventsApp/MySignupQueue/index.tsx'),
           ]),
           route(':eventId', 'EventsApp/$eventId.tsx', { id: NamedRoute.Event }, [
+            route('attach_image', 'EventsApp/attach_image.ts'),
+            layout('RouteGuards/TicketPerEventPageGuard.tsx', [
+              route('ticket_types', 'EventsApp/EventTicketTypes/layout.tsx', [
+                route('new', 'EventsApp/EventTicketTypes/new.tsx'),
+                route(':id', 'EventsApp/EventTicketTypes/$id.ts', [
+                  route('edit', 'EventsApp/EventTicketTypes/edit.tsx'),
+                ]),
+                index('EventsApp/EventTicketTypes/route.tsx'),
+              ]),
+            ]),
             layout('RouteGuards/EventPageGuard.tsx', [
               index('EventsApp/EventPage/index.tsx', { id: NamedRoute.EventPage }),
               route('runs/:runId', 'EventsApp/SignupAdmin/RunHeader.tsx', [
@@ -100,10 +110,19 @@ export default [
             ]),
           ]),
         ]),
+        ...prefix('ticket_types', [
+          layout('RouteGuards/TicketRequiredForSignupRouteGuard.tsx', [
+            layout('RouteGuards/CanManageTicketTypesRouteGuard.tsx', [
+              route('new', 'TicketTypeAdmin/new.tsx'),
+              route(':id', 'TicketTypeAdmin/$id.ts', [route('edit', 'TicketTypeAdmin/edit.tsx')]),
+              index('TicketTypeAdmin/route.tsx'),
+            ]),
+          ]),
+        ]),
       ]),
       route('/pages/*', 'CmsPage/index.tsx'),
       index('CmsPage/index.tsx', { id: NamedRoute.RootPage }),
       route('*', 'FourOhFourPage.tsx'),
     ]),
   ]),
-];
+] satisfies RouteConfig;
