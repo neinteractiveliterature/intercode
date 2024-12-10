@@ -38,10 +38,12 @@ async function createServer() {
       build: viteDevServer
         ? () => viteDevServer.ssrLoadModule('virtual:react-router/server-build')
         : await import('./build/server/index.js'),
-      getLoadContext: (req) => {
+      getLoadContext: async (req, res) => {
+        const setCookie = (value: string) => res.setHeader('set-cookie', value);
         const client = buildServerApolloClient({
           cookie: req.headers.cookie,
           hostname: req.hostname,
+          setCookie,
         });
         return { client };
       },
