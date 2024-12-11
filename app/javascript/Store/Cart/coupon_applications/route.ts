@@ -1,10 +1,10 @@
-import { ActionFunction, json } from 'react-router';
+import { data } from 'react-router';
 import { CreateCouponApplicationDocument } from 'Store/mutations.generated';
 import invariant from 'tiny-invariant';
-import { client } from 'useIntercodeApolloClient';
 import { CartQueryDocument } from '../queries.generated';
+import { Route } from './+types/route';
 
-export const action: ActionFunction = async ({ request }) => {
+export async function action({ request, context }: Route.ActionArgs) {
   try {
     if (request.method === 'POST') {
       const formData = await request.formData();
@@ -12,17 +12,17 @@ export const action: ActionFunction = async ({ request }) => {
       const couponCode = formData.get('coupon_code')?.toString();
       invariant(orderId != null);
 
-      const { data } = await client.mutate({
+      const result = await context.client.mutate({
         mutation: CreateCouponApplicationDocument,
         variables: { orderId, couponCode },
         refetchQueries: [{ query: CartQueryDocument }],
         awaitRefetchQueries: true,
       });
-      return json(data);
+      return data(result.data);
     } else {
       return new Response(null, { status: 404 });
     }
   } catch (error) {
     return error;
   }
-};
+}
