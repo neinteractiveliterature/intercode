@@ -24,7 +24,7 @@ import { FormItem } from 'graphqlTypes.generated';
 import FormItemEditorContent from './FormItemEditorContent';
 import styles from 'styles/form_editor.module.scss';
 
-export const action: ActionFunction = async ({ request, params: { id, sectionId, itemId } }) => {
+export async function action({ request, params: { id, sectionId, itemId } }) {
   try {
     if (request.method === 'PATCH') {
       const json = await request.json();
@@ -56,7 +56,7 @@ export const action: ActionFunction = async ({ request, params: { id, sectionId,
   } catch (error) {
     return error;
   }
-};
+}
 
 function addGeneratedIdsToFormItem(formItem: TypedFormItem): FormEditorFormItem {
   return {

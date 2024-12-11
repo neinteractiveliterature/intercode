@@ -14,7 +14,7 @@ import { client } from '../../useIntercodeApolloClient';
 import { CreateCmsFileDocument, DeleteCmsFileDocument, RenameCmsFileDocument } from './mutations.generated';
 import { useSubmit } from 'react-router';
 
-export const action: ActionFunction = async ({ request }) => {
+export async function action({ request }) {
   const formData = await request.formData();
 
   try {
@@ -51,12 +51,12 @@ export const action: ActionFunction = async ({ request }) => {
   }
 
   return redirect('/cms_files');
-};
+}
 
-export const loader: LoaderFunction = async () => {
+export async function loader() {
   const { data } = await client.query<CmsFilesAdminQueryData>({ query: CmsFilesAdminQueryDocument });
   return data;
-};
+}
 
 function CmsFilesAdmin(): JSX.Element {
   const data = useLoaderData() as CmsFilesAdminQueryData;

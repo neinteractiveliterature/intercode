@@ -25,15 +25,15 @@ import { client } from '../useIntercodeApolloClient';
 import { UpdateFormDocument } from './mutations.generated';
 import styles from 'styles/form_editor.module.scss';
 
-export const loader: LoaderFunction = async ({ params: { id } }) => {
+export async function loader({ params: { id } }) {
   const { data } = await client.query<FormEditorQueryData, FormEditorQueryVariables>({
     query: FormEditorQueryDocument,
     variables: { id: id ?? '' },
   });
   return data;
-};
+}
 
-export const action: ActionFunction = async ({ params: { id }, request }) => {
+export async function action({ params: { id }, request }) {
   try {
     const formData = await request.formData();
     const { data } = await client.mutate({
@@ -44,7 +44,7 @@ export const action: ActionFunction = async ({ params: { id }, request }) => {
   } catch (error) {
     return error;
   }
-};
+}
 
 function FormEditor(): JSX.Element {
   const params = useParams<{ id: string; sectionId?: string; itemId?: string }>();

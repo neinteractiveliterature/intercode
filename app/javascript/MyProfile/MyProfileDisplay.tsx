@@ -21,7 +21,7 @@ type LoaderResult = {
   myProfile: NonNullable<MyProfileQueryData['convention']['my_profile']>;
 };
 
-export const loader: LoaderFunction = async () => {
+export async function loader() {
   const { data } = await client.query<MyProfileQueryData>({ query: MyProfileQueryDocument });
   if (!data.convention.my_profile) {
     return new Response(null, { status: 404 });
@@ -35,7 +35,7 @@ export const loader: LoaderFunction = async () => {
     myProfile: data.convention.my_profile,
     convention: data.convention,
   } satisfies LoaderResult;
-};
+}
 
 function MyProfileDisplay(): JSX.Element {
   const { t } = useTranslation();

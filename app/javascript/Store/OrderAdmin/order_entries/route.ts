@@ -1,27 +1,24 @@
-import { ActionFunction, json } from 'react-router';
-import invariant from 'tiny-invariant';
-import { client } from 'useIntercodeApolloClient';
+import { data } from 'react-router';
 import { AdminCreateOrderEntryDocument } from '../mutations.generated';
 import { OrderEntryInput } from 'graphqlTypes.generated';
+import { Route } from './+types/route';
 
-export const action: ActionFunction = async ({ request, params: { id } }) => {
-  invariant(id != null);
-
+export async function action({ request, params: { id }, context }: Route.ActionArgs) {
   try {
     if (request.method === 'POST') {
       const orderEntry = (await request.json()) as OrderEntryInput;
 
-      const { data } = await client.mutate({
+      const result = await context.client.mutate({
         mutation: AdminCreateOrderEntryDocument,
         variables: { input: { orderId: id, order_entry: orderEntry } },
       });
-      await client.resetStore();
+      await context.client.resetStore();
 
-      return json(data);
+      return data(result.data);
     } else {
       return new Response(null, { status: 404 });
     }
   } catch (error) {
     return error;
   }
-};
+}

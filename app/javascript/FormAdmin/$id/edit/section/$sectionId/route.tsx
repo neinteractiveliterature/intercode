@@ -10,7 +10,7 @@ import FormSectionEditorContent from './FormSectionEditorContent';
 import FormSectionEditorAddItemBar from './FormSectionEditorAddItemBar';
 import styles from 'styles/form_editor.module.scss';
 
-export const action: ActionFunction = async ({ request, params: { sectionId } }) => {
+export async function action({ request, params: { sectionId } }) {
   try {
     invariant(sectionId != null);
     if (request.method === 'PATCH') {
@@ -38,7 +38,7 @@ export const action: ActionFunction = async ({ request, params: { sectionId } })
   } catch (error) {
     return error;
   }
-};
+}
 
 function FormSectionEditorLayout(): JSX.Element {
   const { currentSection, convention } = useContext(FormEditorContext);

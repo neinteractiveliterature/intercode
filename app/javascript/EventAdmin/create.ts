@@ -79,7 +79,7 @@ async function createEvent({ event, eventCategory, run, signedImageBlobIds }: Cr
   return await createRegularEvent({ event, signedImageBlobIds });
 }
 
-export const action: ActionFunction = async ({ request }) => {
+export async function action({ request }) {
   try {
     const options = (await request.json()) as CreateEventOptions;
     await createEvent(options);
@@ -87,4 +87,4 @@ export const action: ActionFunction = async ({ request }) => {
   } catch (error) {
     return error;
   }
-};
+}

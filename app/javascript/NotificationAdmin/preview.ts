@@ -2,7 +2,7 @@ import { ActionFunction, json } from 'react-router';
 import { client } from 'useIntercodeApolloClient';
 import { SendNotificationPreviewDocument } from './mutations.generated';
 
-export const action: ActionFunction = async ({ params: { category, event }, request }) => {
+export async function action({ params: { category, event }, request }) {
   try {
     const formData = await request.formData();
     const email = formData.get('email')?.toString() === 'true';
@@ -17,4 +17,4 @@ export const action: ActionFunction = async ({ params: { category, event }, requ
   } catch (error) {
     return error;
   }
-};
+}

@@ -18,12 +18,12 @@ function describeFormUsers(form: FormAdminQueryData['convention']['forms'][0]) {
   ];
 }
 
-export const loader: LoaderFunction = async () => {
+export async function loader() {
   const { data } = await client.query<FormAdminQueryData>({ query: FormAdminQueryDocument });
   return data;
-};
+}
 
-export const action: ActionFunction = async ({ request }) => {
+export async function action({ request }) {
   try {
     const formData = await request.formData();
     const { data } = await client.mutate({
@@ -39,7 +39,7 @@ export const action: ActionFunction = async ({ request }) => {
   } catch (error) {
     return error;
   }
-};
+}
 
 function FormAdminIndex() {
   const data = useLoaderData() as FormAdminQueryData;

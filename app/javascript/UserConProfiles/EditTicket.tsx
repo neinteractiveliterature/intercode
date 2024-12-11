@@ -16,7 +16,7 @@ type ActionInput = {
   ticketInput: TicketInput;
 };
 
-export const action: ActionFunction = async ({ request, params: { id } }) => {
+export async function action({ request, params: { id } }) {
   try {
     const { ticketId, ticketInput } = (await request.json()) as ActionInput;
     await client.mutate({
@@ -27,7 +27,7 @@ export const action: ActionFunction = async ({ request, params: { id } }) => {
   } catch (error) {
     return error;
   }
-};
+}
 
 function EditTicket() {
   const data = useRouteLoaderData(NamedRoute.AdminUserConProfile) as UserConProfileAdminQueryData;

@@ -18,13 +18,13 @@ const EXCLUDE_FIELDS = new Set([
   'team_mailing_list_name',
 ]);
 
-export const loader: LoaderFunction = async ({ params: { id } }) => {
+export async function loader({ params: { id } }) {
   const { data } = await client.query<EventProposalHistoryQueryData, EventProposalHistoryQueryVariables>({
     query: EventProposalHistoryQueryDocument,
     variables: { id: id ?? '' },
   });
   return data;
-};
+}
 
 function EventProposalHistory() {
   const data = useLoaderData() as EventProposalHistoryQueryData;

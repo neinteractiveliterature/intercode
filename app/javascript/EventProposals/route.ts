@@ -2,7 +2,7 @@ import { ActionFunction, redirect } from 'react-router';
 import { client } from '../useIntercodeApolloClient';
 import { CreateEventProposalDocument } from './mutations.generated';
 
-export const action: ActionFunction = async ({ request }) => {
+export async function action({ request }) {
   try {
     if (request.method === 'POST') {
       const formData = await request.formData();
@@ -21,4 +21,4 @@ export const action: ActionFunction = async ({ request }) => {
   } catch (error) {
     return error;
   }
-};
+}

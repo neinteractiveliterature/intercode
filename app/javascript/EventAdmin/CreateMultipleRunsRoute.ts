@@ -3,7 +3,7 @@ import { RunInput } from '../graphqlTypes.generated';
 import { client } from '../useIntercodeApolloClient';
 import { CreateMultipleRunsDocument } from './mutations.generated';
 
-export const action: ActionFunction = async ({ request, params: { eventId } }) => {
+export async function action({ request, params: { eventId } }) {
   try {
     const requestJson = await request.json();
     const timespanStarts: string[] = requestJson.starts_at;
@@ -26,4 +26,4 @@ export const action: ActionFunction = async ({ request, params: { eventId } }) =
   } catch (error) {
     return error;
   }
-};
+}
