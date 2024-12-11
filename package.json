@@ -175,7 +175,7 @@
     "@types/bootstrap": "5.2.10",
     "@types/events": "3.0.3",
     "@types/md5": "^2",
-    "@types/node": "20.17.9",
+    "@types/node": "20.17.10",
     "@types/punycode": "2.1.4",
     "@types/qs": "^6",
     "@types/rails__activestorage": "7.1.1",
