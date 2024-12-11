@@ -4,14 +4,9 @@ import { useTranslation } from 'react-i18next';
 import FormResponseChangeHistory from '../../FormPresenter/ItemChangeDisplays/FormResponseChangeHistory';
 import RouteActivatedBreadcrumbItem from '../../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import BreadcrumbItem from '../../Breadcrumbs/BreadcrumbItem';
-import {
-  EventHistoryQueryData,
-  EventHistoryQueryDocument,
-  EventHistoryQueryVariables,
-} from './eventHistoryQuery.generated';
-import { LoaderFunction, useLoaderData } from 'react-router';
+import { EventHistoryQueryDocument } from './eventHistoryQuery.generated';
 import buildEventUrl from '../buildEventUrl';
-import { client } from '../../useIntercodeApolloClient';
+import { Route } from './+types/EventHistory';
 
 const EXCLUDE_FIELDS = new Set([
   'minimum_age',
@@ -21,16 +16,15 @@ const EXCLUDE_FIELDS = new Set([
   'team_mailing_list_name',
 ]);
 
-export const loader: LoaderFunction = async ({ params: { eventId } }) => {
-  const { data } = await client.query<EventHistoryQueryData, EventHistoryQueryVariables>({
+export const loader = async ({ params: { eventId }, context }: Route.LoaderArgs) => {
+  const { data } = await context.client.query({
     query: EventHistoryQueryDocument,
     variables: { id: eventId ?? '' },
   });
   return data;
 };
 
-function EventHistory() {
-  const data = useLoaderData() as EventHistoryQueryData;
+function EventHistory({ loaderData: data }: Route.ComponentProps) {
   const { t } = useTranslation();
 
   const changes = useMemo(
