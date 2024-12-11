@@ -7,6 +7,7 @@ export enum NamedRoute {
   AdminUserConProfile = 'AdminUserConProfile',
   CmsAdmin = 'CmsAdmin',
   CmsContentGroupsAdmin = 'CmsContentGroupsAdmin',
+  CmsFiles = 'CmsFiles',
   CmsGraphqlQueriesAdmin = 'CmsGraphqlQueriesAdmin',
   CmsLayoutsAdmin = 'CmsLayoutsAdmin',
   CmsPagesAdmin = 'CmsPagesAdmin',
@@ -20,6 +21,7 @@ export enum NamedRoute {
   EditTeamMember = 'EditTeamMember',
   EditUserActivityAlert = 'EditUserActivityAlert',
   Event = 'Event',
+  EventAdmin = 'EventAdmin',
   EventCategoryAdmin = 'EventCategoryAdmin',
   EventCategoryIndex = 'EventCategoryIndex',
   EventPage = 'EventPage',
@@ -35,7 +37,10 @@ export enum NamedRoute {
   Organization = 'Organization',
   OrganizationAdmin = 'OrganizationAdmin',
   OrganizationDisplay = 'OrganizationDisplay',
+  RootPage = 'RootPage',
   RootSiteConventionDisplay = 'RootSiteConventionDisplay',
+  RootSiteConventionsAdmin = 'RootSiteConventionAdmin',
+  RootSiteConventionsAdminTable = 'RootSiteConventionsAdminTable',
   RunEmailList = 'RunEmailList',
   RunSignupChangesTable = 'RunSignupChangesTable',
   RunSignupsTable = 'RunSignupsTable',
@@ -44,14 +49,9 @@ export enum NamedRoute {
   TeamMembers = 'TeamMembers',
   TeamMembersIndex = 'TeamMembersIndex',
   UserActivityAlerts = 'UserActivityAlerts',
-  CmsFiles = 'CmsFiles',
-  UserAdminDisplay = 'UserAdminDisplay',
   UserAdmin = 'UserAdmin',
+  UserAdminDisplay = 'UserAdminDisplay',
   UsersTable = 'UsersTable',
-  EventAdmin = 'EventAdmin',
-  RootSiteConventionsAdmin = 'RootSiteConventionAdmin',
-  RootSiteConventionsAdminTable = 'RootSiteConventionsAdminTable',
-  RootPage = 'RootPage',
 }
 
 export type RouteName = keyof typeof NamedRoute & string;
@@ -98,6 +98,7 @@ export default [
                 route(':teamMemberId/provide_ticket', 'EventsApp/TeamMemberAdmin/ProvideTicketModal.tsx'),
               ]),
             ]),
+            route('history/:changeGroupId?', 'EventsApp/EventPage/EventHistory.tsx'),
             layout('RouteGuards/EventPageGuard.tsx', [
               index('EventsApp/EventPage/index.tsx', { id: NamedRoute.EventPage }),
               route('runs/:runId', 'EventsApp/SignupAdmin/RunHeader.tsx', [
