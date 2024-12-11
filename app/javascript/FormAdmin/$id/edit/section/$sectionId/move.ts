@@ -5,7 +5,7 @@ import { ActionFunction } from 'react-router';
 import invariant from 'tiny-invariant';
 import { client } from 'useIntercodeApolloClient';
 
-export const action: ActionFunction = async ({ request, params: { id, sectionId } }) => {
+export async function action({ request, params: { id, sectionId } }) {
   try {
     const formData = await request.formData();
     const destinationIndex = Number.parseInt(formData.get('destination_index')?.toString() ?? '');
@@ -52,4 +52,4 @@ export const action: ActionFunction = async ({ request, params: { id, sectionId 
   } catch (error) {
     return error;
   }
-};
+}

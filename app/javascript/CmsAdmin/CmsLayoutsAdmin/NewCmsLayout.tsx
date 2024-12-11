@@ -10,7 +10,7 @@ import { CmsLayout } from '../../graphqlTypes.generated';
 import { CreateLayoutDocument } from './mutations.generated';
 import { client } from '../../useIntercodeApolloClient';
 
-export const action: ActionFunction = async ({ request }) => {
+export async function action({ request }) {
   const formData = await request.formData();
 
   try {
@@ -26,7 +26,7 @@ export const action: ActionFunction = async ({ request }) => {
   await client.resetStore();
 
   return redirect('/cms_layouts');
-};
+}
 
 function NewCmsLayout(): JSX.Element {
   const [layout, setLayout] = useState<Pick<CmsLayout, 'name' | 'admin_notes' | 'navbar_classes' | 'content'>>({});

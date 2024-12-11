@@ -63,12 +63,12 @@ function descriptionCell(
   );
 }
 
-export const loader: LoaderFunction = async () => {
+export async function loader() {
   const { data } = await client.query<AttendanceByPaymentAmountQueryData>({
     query: AttendanceByPaymentAmountQueryDocument,
   });
   return data;
-};
+}
 
 function AttendanceByPaymentAmount() {
   const data = useLoaderData() as AttendanceByPaymentAmountQueryData;

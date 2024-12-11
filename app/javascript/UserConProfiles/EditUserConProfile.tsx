@@ -11,7 +11,7 @@ import { client } from '../useIntercodeApolloClient';
 import { UpdateUserConProfileDocument } from './mutations.generated';
 import { UserConProfileInput } from 'graphqlTypes.generated';
 
-export const action: ActionFunction = async ({ request, params: { id } }) => {
+export async function action({ request, params: { id } }) {
   try {
     const userConProfile = (await request.json()) as UserConProfileInput;
     await client.mutate({
@@ -22,15 +22,15 @@ export const action: ActionFunction = async ({ request, params: { id } }) => {
   } catch (error) {
     return error;
   }
-};
+}
 
-export const loader: LoaderFunction = async ({ params: { id } }) => {
+export async function loader({ params: { id } }) {
   const { data } = await client.query<UserConProfileQueryData>({
     query: UserConProfileQueryDocument,
     variables: { id },
   });
   return data;
-};
+}
 
 function EditUserConProfile() {
   const data = useLoaderData() as UserConProfileQueryData;

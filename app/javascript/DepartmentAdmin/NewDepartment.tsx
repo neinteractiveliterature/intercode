@@ -10,7 +10,7 @@ import { ApolloError } from '@apollo/client';
 import { buildDepartmentInputFromFormData } from './buildDepartmentInput';
 import { DepartmentAdminQueryDocument } from './queries.generated';
 
-export const action: ActionFunction = async ({ request }) => {
+export async function action({ request }) {
   try {
     const formData = await request.formData();
     await client.mutate({
@@ -25,7 +25,7 @@ export const action: ActionFunction = async ({ request }) => {
   } catch (error) {
     return error;
   }
-};
+}
 
 function NewDepartment(): JSX.Element {
   const { t } = useTranslation();

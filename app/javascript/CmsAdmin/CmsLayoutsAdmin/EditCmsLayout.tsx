@@ -10,7 +10,7 @@ import { singleCmsLayoutAdminLoader, SingleCmsLayoutAdminLoaderResult } from './
 import { client } from '../../useIntercodeApolloClient';
 import { UpdateLayoutDocument } from './mutations.generated';
 
-export const action: ActionFunction = async ({ params: { id }, request }) => {
+export async function action({ params: { id }, request }) {
   const formData = await request.formData();
 
   try {
@@ -27,7 +27,7 @@ export const action: ActionFunction = async ({ params: { id }, request }) => {
   await client.resetStore();
 
   return redirect(formData.get('destination')?.toString() ?? '/cms_layouts');
-};
+}
 
 export const loader = singleCmsLayoutAdminLoader;
 

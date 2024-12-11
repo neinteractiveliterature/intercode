@@ -2,7 +2,7 @@ import { ActionFunction } from 'react-router';
 import { client } from '../../useIntercodeApolloClient';
 import { DeleteCmsVariableMutationDocument, SetCmsVariableMutationDocument } from './mutations.generated';
 
-export const action: ActionFunction = async ({ params: { key }, request }) => {
+export async function action({ params: { key }, request }) {
   const formData = await request.formData();
 
   try {
@@ -29,4 +29,4 @@ export const action: ActionFunction = async ({ params: { key }, request }) => {
   } catch (error) {
     return error;
   }
-};
+}

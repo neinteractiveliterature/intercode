@@ -4,7 +4,7 @@ import { DeleteEventCategoryDocument, UpdateEventCategoryDocument } from './muta
 import { buildEventCategoryFromFormData } from './buildEventCategoryInput';
 import { EventCategory } from '../graphqlTypes.generated';
 
-export const action: ActionFunction = async ({ request, params: { id } }) => {
+export async function action({ request, params: { id } }) {
   try {
     if (request.method === 'DELETE') {
       await client.mutate({
@@ -35,4 +35,4 @@ export const action: ActionFunction = async ({ request, params: { id } }) => {
   } catch (error) {
     return error;
   }
-};
+}

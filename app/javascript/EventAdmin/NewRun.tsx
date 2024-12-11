@@ -8,7 +8,7 @@ import { CreateRunDocument } from './mutations.generated';
 import { buildRunInputFromFormData } from './buildRunInputFromFormData';
 import { Event } from '../graphqlTypes.generated';
 
-export const action: ActionFunction = async ({ params: { eventCategoryId, eventId }, request }) => {
+export async function action({ params: { eventCategoryId, eventId }, request }) {
   try {
     const formData = await request.formData();
     await client.mutate({
@@ -36,7 +36,7 @@ export const action: ActionFunction = async ({ params: { eventCategoryId, eventI
   } catch (error) {
     return error;
   }
-};
+}
 
 type LoaderResult = {
   initialRun: EditingRun;
@@ -44,7 +44,7 @@ type LoaderResult = {
   convention: EventAdminEventsQueryData['convention'];
 };
 
-export const loader: LoaderFunction = async ({ params: { eventId } }) => {
+export async function loader({ params: { eventId } }) {
   const {
     data: { convention },
   } = await client.query<EventAdminEventsQueryData>({ query: EventAdminEventsQueryDocument });
@@ -72,7 +72,7 @@ export const loader: LoaderFunction = async ({ params: { eventId } }) => {
   };
 
   return { initialRun, event, convention } as LoaderResult;
-};
+}
 
 function NewRun(): JSX.Element {
   const navigate = useNavigate();

@@ -6,10 +6,10 @@ import { LoaderFunction, useLoaderData } from 'react-router';
 import { client } from '../useIntercodeApolloClient';
 import { useSubmit } from 'react-router';
 
-export const loader: LoaderFunction = async () => {
+export async function loader() {
   const { data } = await client.query({ query: EventAdminEventsQueryDocument });
   return data;
-};
+}
 
 function DroppedEventAdmin(): JSX.Element {
   const data = useLoaderData() as EventAdminEventsQueryData;

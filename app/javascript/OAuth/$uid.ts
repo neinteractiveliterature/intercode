@@ -3,7 +3,7 @@ import { client } from 'useIntercodeApolloClient';
 import { RevokeAuthorizedApplicationDocument } from './mutations.generated';
 import { AuthorizedApplication } from 'graphqlTypes.generated';
 
-export const action: ActionFunction = async ({ params: { uid }, request }) => {
+export async function action({ params: { uid }, request }) {
   try {
     if (request.method === 'DELETE') {
       await client.mutate({
@@ -23,4 +23,4 @@ export const action: ActionFunction = async ({ params: { uid }, request }) => {
   } catch (error) {
     return error;
   }
-};
+}

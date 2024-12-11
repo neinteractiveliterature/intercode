@@ -7,7 +7,7 @@ import { client } from '../useIntercodeApolloClient';
 import { UpdateRunDocument } from './mutations.generated';
 import { buildRunInputFromFormData } from './buildRunInputFromFormData';
 
-export const action: ActionFunction = async ({ params: { eventCategoryId, runId }, request }) => {
+export async function action({ params: { eventCategoryId, runId }, request }) {
   try {
     const formData = await request.formData();
     await client.mutate({
@@ -23,7 +23,7 @@ export const action: ActionFunction = async ({ params: { eventCategoryId, runId 
   } catch (error) {
     return error;
   }
-};
+}
 
 type LoaderResult = {
   initialRun: EditingRun;
@@ -31,7 +31,7 @@ type LoaderResult = {
   convention: EventAdminEventsQueryData['convention'];
 };
 
-export const loader: LoaderFunction = async ({ params: { eventId, runId } }) => {
+export async function loader({ params: { eventId, runId } }) {
   const {
     data: { convention },
   } = await client.query<EventAdminEventsQueryData>({ query: EventAdminEventsQueryDocument });
@@ -44,7 +44,7 @@ export const loader: LoaderFunction = async ({ params: { eventId, runId } }) => 
   } else {
     return new Response(null, { status: 404 });
   }
-};
+}
 
 function EditRun(): JSX.Element {
   const navigate = useNavigate();

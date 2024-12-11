@@ -180,10 +180,10 @@ function OrderHistoryOrder({ order, convention, paymentModal }: OrderHistoryOrde
   );
 }
 
-export const loader: LoaderFunction = async () => {
+export async function loader() {
   const { data } = await client.query<OrderHistoryQueryData>({ query: OrderHistoryQueryDocument });
   return data;
-};
+}
 
 function OrderHistory() {
   const data = useLoaderData() as OrderHistoryQueryData;

@@ -17,7 +17,7 @@ import { client } from '../useIntercodeApolloClient';
 import invariant from 'tiny-invariant';
 import { UserActivityAlert } from 'graphqlTypes.generated';
 
-export const action: ActionFunction = async ({ request, params: { id } }) => {
+export async function action({ request, params: { id } }) {
   invariant(id != null);
   try {
     if (request.method === 'DELETE') {
@@ -45,14 +45,14 @@ export const action: ActionFunction = async ({ request, params: { id } }) => {
   } catch (error) {
     return error;
   }
-};
+}
 
 type LoaderResult = {
   convention: UserActivityAlertsAdminQueryData['convention'];
   initialUserActivityAlert: UserActivityAlertsAdminQueryData['convention']['user_activity_alerts'][number];
 };
 
-export const loader: LoaderFunction = async ({ params: { id } }) => {
+export async function loader({ params: { id } }) {
   const { data } = await client.query<UserActivityAlertsAdminQueryData>({
     query: UserActivityAlertsAdminQueryDocument,
   });
@@ -62,7 +62,7 @@ export const loader: LoaderFunction = async ({ params: { id } }) => {
     return new Response(null, { status: 404 });
   }
   return { convention: data.convention, initialUserActivityAlert } as LoaderResult;
-};
+}
 
 function EditUserActivityAlertForm() {
   const { initialUserActivityAlert, convention } = useLoaderData() as LoaderResult;

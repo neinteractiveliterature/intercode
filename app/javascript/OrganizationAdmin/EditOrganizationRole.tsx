@@ -12,7 +12,7 @@ type LoaderResult = {
   initialOrganizationRole: OrganizationAdminOrganizationsQueryData['organizations'][number]['organization_roles'][number];
 };
 
-export const loader: LoaderFunction = async ({ params: { id, organizationRoleId }, ...args }) => {
+export async function loader({ params: { id, organizationRoleId }, ...args }) {
   const data = (await organizationsLoader({ params: {}, ...args })) as OrganizationAdminOrganizationsQueryData;
   const organization = data.organizations.find((org) => org.id === id);
   const initialOrganizationRole = organization?.organization_roles.find((role) => role.id === organizationRoleId);
@@ -22,7 +22,7 @@ export const loader: LoaderFunction = async ({ params: { id, organizationRoleId 
   }
 
   return { initialOrganizationRole, organization } satisfies LoaderResult;
-};
+}
 
 function EditOrganizationRoleForm() {
   const { organization, initialOrganizationRole } = useLoaderData() as LoaderResult;

@@ -3,7 +3,7 @@ import invariant from 'tiny-invariant';
 import { client } from '../../useIntercodeApolloClient';
 import { TransitionEventProposalDocument } from '../mutations.generated';
 
-export const action: ActionFunction = async ({ params: { id }, request }) => {
+export async function action({ params: { id }, request }) {
   try {
     invariant(id);
     const formData = await request.formData();
@@ -24,4 +24,4 @@ export const action: ActionFunction = async ({ params: { id }, request }) => {
   } catch (error) {
     return error;
   }
-};
+}

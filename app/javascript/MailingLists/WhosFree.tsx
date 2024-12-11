@@ -12,7 +12,7 @@ type LoaderResult = {
   data?: WhosFreeQueryData;
 };
 
-export const loader: LoaderFunction = async ({ request }) => {
+export async function loader({ request }) {
   const url = new URL(request.url);
   const start = url.searchParams.get('start');
   const finish = url.searchParams.get('finish');
@@ -33,7 +33,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   }
 
   return {} satisfies LoaderResult;
-};
+}
 
 function WhosFreeResults({ data }: { data: WhosFreeQueryData }) {
   return (

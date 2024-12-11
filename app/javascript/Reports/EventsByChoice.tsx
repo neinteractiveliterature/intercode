@@ -36,10 +36,10 @@ function renderChoiceCounts(choiceData: ProcessedChoiceCount) {
   );
 }
 
-export const loader: LoaderFunction = async () => {
+export async function loader() {
   const { data } = await client.query<EventsByChoiceQueryData>({ query: EventsByChoiceQueryDocument });
   return data;
-};
+}
 
 function EventsByChoice() {
   const data = useLoaderData() as EventsByChoiceQueryData;

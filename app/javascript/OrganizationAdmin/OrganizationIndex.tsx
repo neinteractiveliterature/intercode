@@ -21,12 +21,12 @@ function renderOrganizationConventions(organization: OrganizationAdminOrganizati
   return conventionNames.join(', ');
 }
 
-export const loader: LoaderFunction = async () => {
+export async function loader() {
   const { data } = await client.query<OrganizationAdminOrganizationsQueryData>({
     query: OrganizationAdminOrganizationsQueryDocument,
   });
   return data;
-};
+}
 
 function OrganizationIndex() {
   const data = useLoaderData() as OrganizationAdminOrganizationsQueryData;

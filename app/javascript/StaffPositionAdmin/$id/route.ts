@@ -3,7 +3,7 @@ import { ActionFunction, json } from 'react-router';
 import { DeleteStaffPositionDocument } from 'StaffPositionAdmin/mutations.generated';
 import { client } from 'useIntercodeApolloClient';
 
-export const action: ActionFunction = async ({ request, params: { id } }) => {
+export async function action({ request, params: { id } }) {
   try {
     if (request.method === 'DELETE') {
       const { data } = await client.mutate({
@@ -21,4 +21,4 @@ export const action: ActionFunction = async ({ request, params: { id } }) => {
   } catch (error) {
     return error;
   }
-};
+}

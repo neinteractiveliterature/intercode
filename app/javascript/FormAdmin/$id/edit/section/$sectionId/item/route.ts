@@ -4,7 +4,7 @@ import { client } from '../../../../../../useIntercodeApolloClient';
 import { CreateFormItemDocument } from '../../../../../mutations.generated';
 import { FormEditorFormItemFieldsFragmentDoc } from 'FormAdmin/queries.generated';
 
-export const action: ActionFunction = async ({ request, params: { sectionId } }) => {
+export async function action({ request, params: { sectionId } }) {
   try {
     if (request.method === 'POST') {
       const formItem = (await request.json()) as FormItemInput;
@@ -39,4 +39,4 @@ export const action: ActionFunction = async ({ request, params: { sectionId } })
   } catch (error) {
     return error;
   }
-};
+}

@@ -21,10 +21,10 @@ function buildProfileUrl(profile: UserAdminQueryData['user']['user_con_profiles'
   return profileUrl.toString();
 }
 
-export const loader: LoaderFunction = async ({ params: { id } }) => {
+export async function loader({ params: { id } }) {
   const { data } = await client.query<UserAdminQueryData>({ query: UserAdminQueryDocument, variables: { id } });
   return data;
-};
+}
 
 function renderProfileConventionYear(
   profile: UserAdminQueryData['user']['user_con_profiles'][number],

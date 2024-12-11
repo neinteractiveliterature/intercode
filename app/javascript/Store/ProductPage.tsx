@@ -12,13 +12,13 @@ import { client } from '../useIntercodeApolloClient';
 import { UserPricingStructureDescription } from './describePricingStructure';
 import { parseCmsContent } from 'parseCmsContent';
 
-export const loader: LoaderFunction = async ({ params: { id } }) => {
+export async function loader({ params: { id } }) {
   const { data } = await client.query<OrderFormProductQueryData, OrderFormProductQueryVariables>({
     query: OrderFormProductQueryDocument,
     variables: { productId: id ?? '' },
   });
   return data;
-};
+}
 
 function ProductPage() {
   const {

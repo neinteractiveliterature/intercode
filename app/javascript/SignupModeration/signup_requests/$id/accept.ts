@@ -2,7 +2,7 @@ import { ActionFunction } from 'react-router';
 import { client } from '../../../useIntercodeApolloClient';
 import { AcceptSignupRequestDocument } from '../../mutations.generated';
 
-export const action: ActionFunction = async ({ params: { id } }) => {
+export async function action({ params: { id } }) {
   try {
     return await client.mutate({
       mutation: AcceptSignupRequestDocument,
@@ -11,4 +11,4 @@ export const action: ActionFunction = async ({ params: { id } }) => {
   } catch (error) {
     return error;
   }
-};
+}

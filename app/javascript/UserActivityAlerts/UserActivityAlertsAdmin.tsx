@@ -9,12 +9,12 @@ import { NamedRoute } from '../routes';
 import { client } from '../useIntercodeApolloClient';
 import { UserActivityAlertsAdminQueryData, UserActivityAlertsAdminQueryDocument } from './queries.generated';
 
-export const loader: LoaderFunction = async () => {
+export async function loader() {
   const { data } = await client.query<UserActivityAlertsAdminQueryData>({
     query: UserActivityAlertsAdminQueryDocument,
   });
   return data;
-};
+}
 
 function UserActivityAlertsAdmin(): JSX.Element {
   const matches = useMatches();

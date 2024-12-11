@@ -35,7 +35,7 @@ function parseFormData(formData: FormData) {
   return formJSON;
 }
 
-export const action: ActionFunction = async ({ request, params }) => {
+export async function action({ request, params }) {
   try {
     if (request.method === 'POST') {
       const formData = await request.formData();
@@ -70,7 +70,7 @@ export const action: ActionFunction = async ({ request, params }) => {
   } catch (error) {
     return error;
   }
-};
+}
 
 type EditingFormJSONData = {
   title: string;
@@ -96,14 +96,14 @@ type LoaderResult = {
   data: FormAdminQueryData;
 };
 
-export const loader: LoaderFunction = async ({ params: { id } }) => {
+export async function loader({ params: { id } }) {
   const { data } = await client.query<FormAdminQueryData>({ query: FormAdminQueryDocument });
   const initialForm = data.convention.forms.find((form) => form.id === id);
   if (!initialForm) {
     throw new Response(null, { status: 404 });
   }
   return { data, initialForm } satisfies LoaderResult;
-};
+}
 
 function FormJSONEditor() {
   const { initialForm } = useLoaderData() as LoaderResult;

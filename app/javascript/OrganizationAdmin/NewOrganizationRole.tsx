@@ -22,7 +22,7 @@ import { ApolloError } from '@apollo/client';
 
 type ActionRequest = Omit<CreateOrganizationRoleMutationVariables, 'organizationId'>;
 
-export const action: ActionFunction = async ({ request, params: { id } }) => {
+export async function action({ request, params: { id } }) {
   try {
     if (request.method === 'POST') {
       invariant(id != null);
@@ -55,7 +55,7 @@ export const action: ActionFunction = async ({ request, params: { id } }) => {
   } catch (error) {
     return error;
   }
-};
+}
 
 function NewOrganizationRole() {
   const organization = useRouteLoaderData(NamedRoute.Organization) as SingleOrganizationLoaderResult;

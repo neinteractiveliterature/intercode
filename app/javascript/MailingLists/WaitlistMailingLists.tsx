@@ -9,10 +9,10 @@ import { useAppDateTimeFormat } from '../TimeUtils';
 import { client } from '../useIntercodeApolloClient';
 import { LoaderFunction, useLoaderData } from 'react-router';
 
-export const loader: LoaderFunction = async () => {
+export async function loader() {
   const { data } = await client.query<WaitlistMailingListsQueryData>({ query: WaitlistMailingListsQueryDocument });
   return data;
-};
+}
 
 function WaitlistMailingLists() {
   const data = useLoaderData() as WaitlistMailingListsQueryData;

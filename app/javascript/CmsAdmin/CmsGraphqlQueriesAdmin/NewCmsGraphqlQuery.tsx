@@ -11,7 +11,7 @@ import { CreateCmsGraphqlQueryDocument } from './mutations.generated';
 import { client } from '../../useIntercodeApolloClient';
 import { buildCmsGraphqlQueryInputFromFormData } from './buildCmsGraphqlQueryInput';
 
-export const action: ActionFunction = async ({ request }) => {
+export async function action({ request }) {
   const formData = await request.formData();
 
   try {
@@ -27,7 +27,7 @@ export const action: ActionFunction = async ({ request }) => {
   await client.resetStore();
 
   return redirect('/cms_graphql_queries');
-};
+}
 
 function NewCmsGraphqlQuery(): JSX.Element {
   const [query, setQuery] = useState({ identifier: '', admin_notes: '', query: '' });

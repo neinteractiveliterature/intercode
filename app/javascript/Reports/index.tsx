@@ -5,10 +5,10 @@ import { ReportsMenuQueryData, ReportsMenuQueryDocument } from './queries.genera
 import { client } from '../useIntercodeApolloClient';
 import { useTranslation } from 'react-i18next';
 
-export const loader: LoaderFunction = async () => {
+export async function loader() {
   const { data } = await client.query<ReportsMenuQueryData>({ query: ReportsMenuQueryDocument });
   return data;
-};
+}
 
 function ReportsMenu() {
   const { t } = useTranslation();

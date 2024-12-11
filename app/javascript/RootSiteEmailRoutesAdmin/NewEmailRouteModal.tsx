@@ -13,7 +13,7 @@ import { EmailRouteInput } from 'graphqlTypes.generated';
 import { useTranslation } from 'react-i18next';
 import { useFetcher } from 'react-router';
 
-export const action: ActionFunction = async ({ request }) => {
+export async function action({ request }) {
   try {
     if (request.method === 'POST') {
       const emailRoute = (await request.json()) as EmailRouteInput;
@@ -29,7 +29,7 @@ export const action: ActionFunction = async ({ request }) => {
   } catch (error) {
     return error;
   }
-};
+}
 
 function NewEmailRouteModal(): JSX.Element {
   const { t } = useTranslation();

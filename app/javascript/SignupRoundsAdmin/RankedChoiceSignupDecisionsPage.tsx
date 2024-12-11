@@ -242,10 +242,10 @@ function RankedChoiceSignupDecisionsTable({ signupRoundId }: RankedChoiceSignupD
   );
 }
 
-export const loader: LoaderFunction = async () => {
+export async function loader() {
   const { data } = await client.query<SignupRoundsAdminQueryData>({ query: SignupRoundsAdminQueryDocument });
   return data;
-};
+}
 
 function RankedChoiceSignupDecisionsPage() {
   const data = useLoaderData() as SignupRoundsAdminQueryData;

@@ -2,7 +2,7 @@ import { ActionFunction, data } from 'react-router';
 import { CreateMaximumEventProvidedTicketsOverrideDocument } from '../../EventAdmin/mutations.generated';
 import { Route } from './+types/route';
 
-export const action: ActionFunction = async ({ request, params: { eventId }, context }: Route.ActionArgs) => {
+export async function action({ request, params: { eventId }, context }: Route.ActionArgs) {
   try {
     if (request.method === 'POST') {
       const formData = await request.formData();
@@ -32,4 +32,4 @@ export const action: ActionFunction = async ({ request, params: { eventId }, con
   } catch (error) {
     return error;
   }
-};
+}

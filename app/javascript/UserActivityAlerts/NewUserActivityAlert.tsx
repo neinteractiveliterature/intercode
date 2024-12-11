@@ -13,7 +13,7 @@ import { NamedRoute } from '../routes';
 import { client } from 'useIntercodeApolloClient';
 import { Convention } from 'graphqlTypes.generated';
 
-export const action: ActionFunction = async ({ request }) => {
+export async function action({ request }) {
   try {
     if (request.method === 'POST') {
       const variables = (await request.json()) as CreateUserActivityAlertMutationVariables;
@@ -43,7 +43,7 @@ export const action: ActionFunction = async ({ request }) => {
   } catch (error) {
     return error;
   }
-};
+}
 
 function NewUserActivityAlert() {
   const data = useRouteLoaderData(NamedRoute.UserActivityAlerts) as UserActivityAlertsAdminQueryData;

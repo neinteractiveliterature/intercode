@@ -5,7 +5,7 @@ import invariant from 'tiny-invariant';
 import { FormEditorQueryDocument } from 'FormAdmin/queries.generated';
 import { MoveFormItemDocument } from 'FormAdmin/mutations.generated';
 
-export const action: ActionFunction = async ({ params: { id, sectionId, itemId }, request }) => {
+export async function action({ params: { id, sectionId, itemId }, request }) {
   try {
     const formData = await request.formData();
     const destinationSectionId = formData.get('destination_section_id')?.toString();
@@ -68,4 +68,4 @@ export const action: ActionFunction = async ({ params: { id, sectionId, itemId }
   } catch (error) {
     return error;
   }
-};
+}

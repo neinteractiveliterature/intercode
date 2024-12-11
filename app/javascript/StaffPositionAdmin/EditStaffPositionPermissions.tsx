@@ -19,7 +19,7 @@ import {
 
 type ActionInput = Omit<UpdateStaffPositionPermissionsMutationVariables, 'staffPositionId'>;
 
-export const action: ActionFunction = async ({ params: { id }, request }) => {
+export async function action({ params: { id }, request }) {
   try {
     const { grantPermissions, revokePermissions } = (await request.json()) as ActionInput;
     await client.mutate({
@@ -30,7 +30,7 @@ export const action: ActionFunction = async ({ params: { id }, request }) => {
   } catch (error) {
     return error;
   }
-};
+}
 
 const CmsContentGroupPermissionNames = getPermissionNamesForModelType(PermissionedModelTypeIndicator.CmsContentGroup);
 const EventCategoryPermissionNames = getPermissionNamesForModelType(PermissionedModelTypeIndicator.EventCategory);
@@ -41,7 +41,7 @@ type LoaderResult = {
   staffPosition: StaffPositionsQueryData['convention']['staff_positions'][number];
 };
 
-export const loader: LoaderFunction = async ({ params: { id } }) => {
+export async function loader({ params: { id } }) {
   const { data } = await client.query<StaffPositionsQueryData>({ query: StaffPositionsQueryDocument });
   const staffPosition = data.convention.staff_positions.find((staffPosition) => staffPosition.id === id);
   if (!staffPosition) {
@@ -49,7 +49,7 @@ export const loader: LoaderFunction = async ({ params: { id } }) => {
   }
 
   return { convention: data.convention, staffPosition } satisfies LoaderResult;
-};
+}
 
 function EditStaffPositionPermissions() {
   const { convention, staffPosition } = useLoaderData() as LoaderResult;

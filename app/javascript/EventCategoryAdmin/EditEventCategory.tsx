@@ -11,7 +11,7 @@ import { UpdateEventCategoryDocument } from './mutations.generated';
 import { buildEventCategoryFromFormData } from './buildEventCategoryInput';
 import { useTranslation } from 'react-i18next';
 
-export const action: ActionFunction = async ({ request, params: { id } }) => {
+export async function action({ request, params: { id } }) {
   try {
     const formData = await request.formData();
     await client.mutate({
@@ -25,7 +25,7 @@ export const action: ActionFunction = async ({ request, params: { id } }) => {
   } catch (error) {
     return error;
   }
-};
+}
 
 export const loader = singleEventCategoryAdminLoader;
 

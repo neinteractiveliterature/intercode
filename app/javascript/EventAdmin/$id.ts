@@ -71,7 +71,7 @@ async function updateEvent({ event, eventCategory, run }: UpdateEventOptions) {
   return await updateRegularEvent({ event });
 }
 
-export const action: ActionFunction = async ({ request }) => {
+export async function action({ request }) {
   try {
     const options = (await request.json()) as UpdateEventOptions;
     await updateEvent(options);
@@ -79,4 +79,4 @@ export const action: ActionFunction = async ({ request }) => {
   } catch (error) {
     return error;
   }
-};
+}

@@ -11,10 +11,10 @@ import useAuthorizationRequired from '../Authentication/useAuthorizationRequired
 import { LoaderFunction, useLoaderData } from 'react-router';
 import { client } from '../useIntercodeApolloClient';
 
-export const loader: LoaderFunction = async () => {
+export async function loader() {
   const { data } = await client.query<SignupRoundsAdminQueryData>({ query: SignupRoundsAdminQueryDocument });
   return data;
-};
+}
 
 function SignupRoundsAdminPage() {
   const data = useLoaderData() as SignupRoundsAdminQueryData;

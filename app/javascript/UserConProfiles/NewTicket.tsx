@@ -11,7 +11,7 @@ import { CreateTicketDocument, CreateTicketMutationVariables } from './mutations
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 import { ApolloError } from '@apollo/client';
 
-export const action: ActionFunction = async ({ request }) => {
+export async function action({ request }) {
   try {
     const variables = (await request.json()) as CreateTicketMutationVariables;
     await client.mutate({
@@ -38,7 +38,7 @@ export const action: ActionFunction = async ({ request }) => {
   } catch (error) {
     return error;
   }
-};
+}
 
 function NewTicket() {
   const data = useRouteLoaderData(NamedRoute.AdminUserConProfile) as UserConProfileAdminQueryData;

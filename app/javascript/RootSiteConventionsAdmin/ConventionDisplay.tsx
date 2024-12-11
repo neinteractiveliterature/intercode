@@ -12,7 +12,7 @@ import {
 } from './queries.generated';
 import { SetConventionCanceledDocument } from './mutations.generated';
 
-export const action: ActionFunction = async ({ params: { id }, request }) => {
+export async function action({ params: { id }, request }) {
   try {
     const formData = await request.formData();
     const canceled = formData.get('canceled')?.toString() === 'true';
@@ -24,15 +24,15 @@ export const action: ActionFunction = async ({ params: { id }, request }) => {
   } catch (error) {
     return error;
   }
-};
+}
 
-export const loader: LoaderFunction = async ({ params: { id } }) => {
+export async function loader({ params: { id } }) {
   const { data } = await client.query<ConventionDisplayQueryData, ConventionDisplayQueryVariables>({
     query: ConventionDisplayQueryDocument,
     variables: { id: id ?? '' },
   });
   return data;
-};
+}
 
 function ConventionDisplay() {
   const data = useLoaderData() as ConventionDisplayQueryData;

@@ -4,10 +4,10 @@ import { TeamMembersMailingListQueryData, TeamMembersMailingListQueryDocument } 
 import { client } from '../useIntercodeApolloClient';
 import { LoaderFunction, useLoaderData } from 'react-router';
 
-export const loader: LoaderFunction = async () => {
+export async function loader() {
   const { data } = await client.query<TeamMembersMailingListQueryData>({ query: TeamMembersMailingListQueryDocument });
   return data;
-};
+}
 
 function TeamMembers() {
   const data = useLoaderData() as TeamMembersMailingListQueryData;

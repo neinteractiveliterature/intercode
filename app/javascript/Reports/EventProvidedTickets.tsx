@@ -66,10 +66,10 @@ function EventProvidedTicketsByUser({ data }: { data: EventProvidedTicketsQueryD
   );
 }
 
-export const loader: LoaderFunction = async () => {
+export async function loader() {
   const { data } = await client.query<EventProvidedTicketsQueryData>({ query: EventProvidedTicketsQueryDocument });
   return data;
-};
+}
 
 function EventProvidedTickets() {
   const data = useLoaderData() as EventProvidedTicketsQueryData;

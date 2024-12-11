@@ -58,10 +58,10 @@ async function updateUser(
   }
 }
 
-export const loader: LoaderFunction = async () => {
+export async function loader() {
   const { data } = await client.query<EditUserQueryData>({ query: EditUserQueryDocument });
   return data;
-};
+}
 
 function EditUserForm() {
   const { currentUser: initialFormState } = useLoaderData() as EditUserQueryData;

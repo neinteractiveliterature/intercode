@@ -34,7 +34,7 @@ type ActionArgs = {
   winningProfileIds: Record<string, string>;
 };
 
-export const action: ActionFunction = async ({ request }) => {
+export async function action({ request }) {
   const { userIds, winningUserId, winningProfileIds } = (await request.json()) as ActionArgs;
   if (!userIds) {
     throw new Error(i18n.t('admin.users.merge.noUsers'));
@@ -62,15 +62,15 @@ export const action: ActionFunction = async ({ request }) => {
   }
 
   return redirect('..');
-};
+}
 
-export const loader: LoaderFunction = async ({ params: { ids } }) => {
+export async function loader({ params: { ids } }) {
   const { data } = await client.query({
     query: MergeUsersModalQueryDocument,
     variables: { ids: ids?.split(',') ?? [] },
   });
   return data;
-};
+}
 
 function MergeUsersModal(): JSX.Element {
   const data = useLoaderData() as MergeUsersModalQueryData;

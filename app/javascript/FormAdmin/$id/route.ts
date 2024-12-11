@@ -3,7 +3,7 @@ import { client } from '../../useIntercodeApolloClient';
 import { DeleteFormDocument } from '../mutations.generated';
 import { Form } from '../../graphqlTypes.generated';
 
-export const action: ActionFunction = async ({ params: { id }, request }) => {
+export async function action({ params: { id }, request }) {
   try {
     if (request.method === 'DELETE') {
       await client.mutate({
@@ -25,4 +25,4 @@ export const action: ActionFunction = async ({ params: { id }, request }) => {
   } catch (error) {
     return error;
   }
-};
+}

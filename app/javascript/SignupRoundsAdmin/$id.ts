@@ -4,7 +4,7 @@ import { DeleteSignupRoundDocument, UpdateSignupRoundDocument } from './mutation
 import { SignupRound } from '../graphqlTypes.generated';
 import { buildSignupRoundInputFromFormData } from './buildSignupRoundInput';
 
-export const action: ActionFunction = async ({ request, params: { id } }) => {
+export async function action({ request, params: { id } }) {
   try {
     if (request.method === 'DELETE') {
       await client.mutate({
@@ -29,4 +29,4 @@ export const action: ActionFunction = async ({ request, params: { id } }) => {
   }
 
   return redirect('..');
-};
+}

@@ -9,16 +9,16 @@ import { AdminCouponFieldsFragment } from './queries.generated';
 import { CreateCouponDocument } from './mutations.generated';
 import { useTranslation } from 'react-i18next';
 import { CouponInput } from 'graphqlTypes.generated';
-import { ActionFunction, redirect } from 'react-router';
-import { client } from 'useIntercodeApolloClient';
+import { redirect } from 'react-router';
 import { Link, useFetcher } from 'react-router';
+import { Route } from './+types/NewCouponModal';
 
-export const action: ActionFunction = async ({ request }) => {
+export async function action({ request, context }: Route.ActionArgs) {
   try {
     if (request.method === 'POST') {
       const coupon = (await request.json()) as CouponInput;
-      await client.mutate({ mutation: CreateCouponDocument, variables: { coupon } });
-      await client.resetStore();
+      await context.client.mutate({ mutation: CreateCouponDocument, variables: { coupon } });
+      await context.client.resetStore();
       return redirect('..');
     } else {
       return new Response(null, { status: 404 });
@@ -26,7 +26,7 @@ export const action: ActionFunction = async ({ request }) => {
   } catch (error) {
     return error;
   }
-};
+}
 
 function NewCouponModal(): JSX.Element {
   const { t } = useTranslation();

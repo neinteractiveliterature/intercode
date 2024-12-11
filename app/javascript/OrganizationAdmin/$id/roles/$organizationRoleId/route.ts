@@ -3,7 +3,7 @@ import { DeleteOrganizationRoleDocument, UpdateOrganizationRoleDocument } from '
 import { ActionFunction, json, redirect } from 'react-router';
 import { client } from 'useIntercodeApolloClient';
 
-export const action: ActionFunction = async ({ params: { id, organizationRoleId }, request }) => {
+export async function action({ params: { id, organizationRoleId }, request }) {
   try {
     if (request.method === 'DELETE') {
       const { data } = await client.mutate({
@@ -30,4 +30,4 @@ export const action: ActionFunction = async ({ params: { id, organizationRoleId 
   } catch (error) {
     return error;
   }
-};
+}

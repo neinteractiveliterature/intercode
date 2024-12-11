@@ -19,15 +19,15 @@ import useReactTableWithTheWorks from '../Tables/useReactTableWithTheWorks';
 import UserConProfileWithGravatarCell from '../Tables/UserConProfileWithGravatarCell';
 import TimestampCell from '../Tables/TimestampCell';
 import { useFormatRunTimespan } from '../EventsApp/runTimeFormatting';
-import { Link, LoaderFunction, useFetcher, useLoaderData } from 'react-router';
+import { Link, useFetcher, useLoaderData } from 'react-router';
 import { Trans, useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
 import { ParsedSignupRound, parseSignupRounds } from '../SignupRoundUtils';
 import { describeSignupRound } from '../SignupRoundsAdmin/describeSignupRound';
 import { describeDecision } from '../SignupRoundsAdmin/RankedChoiceSignupDecisionsPage';
 import { sortBy } from 'lodash';
-import { client } from '../useIntercodeApolloClient';
 import { ApolloError } from '@apollo/client';
+import Route from './+types/SignupModerationQueue';
 
 type SignupModerationContextValue = {
   acceptClicked: (signupRequest: SignupModerationSignupRequestFieldsFragment) => void;
@@ -263,8 +263,8 @@ function SignupRankedChoiceCell<TData, TValue extends SignupModerationSignupRequ
   );
 }
 
-export const loader: LoaderFunction = async () => {
-  const { data } = await client.query({ query: SignupModerationQueuePageQueryDocument });
+export const loader = async ({ context }: Route.LoaderArgs) => {
+  const { data } = await context.client.query({ query: SignupModerationQueuePageQueryDocument });
   return data;
 };
 

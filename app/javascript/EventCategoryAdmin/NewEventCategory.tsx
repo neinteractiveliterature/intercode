@@ -12,7 +12,7 @@ import { CreateEventCategoryDocument } from './mutations.generated';
 import { buildEventCategoryFromFormData } from './buildEventCategoryInput';
 import { Convention } from '../graphqlTypes.generated';
 
-export const action: ActionFunction = async ({ request }) => {
+export async function action({ request }) {
   try {
     const formData = await request.formData();
     await client.mutate({
@@ -37,7 +37,7 @@ export const action: ActionFunction = async ({ request }) => {
   } catch (error) {
     return error;
   }
-};
+}
 
 function NewEventCategory(): JSX.Element {
   const data = useEventCategoryAdminLoader();

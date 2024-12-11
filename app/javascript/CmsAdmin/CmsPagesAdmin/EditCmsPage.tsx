@@ -18,7 +18,7 @@ import { singleCmsPageAdminLoader, SingleCmsPageAdminLoaderResult } from './load
 import { UpdatePageDocument } from './mutations.generated';
 import { client } from '../../useIntercodeApolloClient';
 
-export const action: ActionFunction = async ({ params: { id }, request }) => {
+export async function action({ params: { id }, request }) {
   const formData = await request.formData();
 
   try {
@@ -35,7 +35,7 @@ export const action: ActionFunction = async ({ params: { id }, request }) => {
   await client.resetStore();
 
   return redirect(formData.get('destination')?.toString() ?? '/cms_pages');
-};
+}
 
 export const loader = singleCmsPageAdminLoader;
 

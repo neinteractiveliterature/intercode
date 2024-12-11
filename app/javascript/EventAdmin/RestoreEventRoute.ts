@@ -3,7 +3,7 @@ import { client } from '../useIntercodeApolloClient';
 import { RestoreDroppedEventDocument } from './mutations.generated';
 import { EventAdminEventsQueryDocument } from './queries.generated';
 
-export const action: ActionFunction = async ({ params: { eventId } }) => {
+export async function action({ params: { eventId } }) {
   try {
     await client.mutate({
       mutation: RestoreDroppedEventDocument,
@@ -19,4 +19,4 @@ export const action: ActionFunction = async ({ params: { eventId } }) => {
   } catch (error) {
     return error;
   }
-};
+}

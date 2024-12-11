@@ -9,7 +9,7 @@ import usePageTitle from '../../usePageTitle';
 import { client } from '../../useIntercodeApolloClient';
 import { CreatePartialDocument } from './mutations.generated';
 
-export const action: ActionFunction = async ({ request }) => {
+export async function action({ request }) {
   const formData = await request.formData();
 
   try {
@@ -25,7 +25,7 @@ export const action: ActionFunction = async ({ request }) => {
   await client.resetStore();
 
   return redirect('/cms_partials');
-};
+}
 
 function NewCmsPartial(): JSX.Element {
   const [partial, setPartial] = useState<CmsPartialFormFields>({});

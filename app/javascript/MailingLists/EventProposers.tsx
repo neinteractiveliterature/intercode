@@ -4,10 +4,10 @@ import { EventProposersQueryData, EventProposersQueryDocument } from './queries.
 import { client } from '../useIntercodeApolloClient';
 import { LoaderFunction, useLoaderData } from 'react-router';
 
-export const loader: LoaderFunction = async () => {
+export async function loader() {
   const { data } = await client.query<EventProposersQueryData>({ query: EventProposersQueryDocument });
   return data;
-};
+}
 
 function EventProposers() {
   const data = useLoaderData() as EventProposersQueryData;

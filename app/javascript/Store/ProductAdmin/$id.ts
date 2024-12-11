@@ -1,15 +1,15 @@
 import { Product } from 'graphqlTypes.generated';
-import { ActionFunction, json } from 'react-router';
+import { data } from 'react-router';
 import { parseProductFormData } from 'Store/buildProductInput';
 import invariant from 'tiny-invariant';
-import { client } from 'useIntercodeApolloClient';
 import { DeleteProductDocument, UpdateProductDocument } from './mutations.generated';
+import { Route } from './+types/$id';
 
-export const action: ActionFunction = async ({ params: { id }, request }) => {
+export async function action({ params: { id }, request, context }: Route.ActionArgs) {
   invariant(id != null);
   try {
     if (request.method === 'DELETE') {
-      const { data } = await client.mutate({
+      const result = await context.client.mutate({
         mutation: DeleteProductDocument,
         variables: { id },
         update: (cache) => {
@@ -19,18 +19,18 @@ export const action: ActionFunction = async ({ params: { id }, request }) => {
           });
         },
       });
-      return json(data);
+      return data(result.data);
     } else if (request.method === 'PATCH') {
       const product = parseProductFormData(await request.formData());
-      const { data } = await client.mutate({
+      const result = await context.client.mutate({
         mutation: UpdateProductDocument,
         variables: { id, product },
       });
-      return json(data);
+      return data(result.data);
     } else {
       return new Response(null, { status: 404 });
     }
   } catch (error) {
     return error;
   }
-};
+}

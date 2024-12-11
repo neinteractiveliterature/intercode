@@ -17,7 +17,7 @@ import { CreateTeamMemberDocument } from './mutations.generated';
 import { Route } from './+types/NewTeamMember';
 import { useTeamMembersLoader } from '.';
 
-export const action: ActionFunction = async ({ params: { eventId }, request, context }: Route.ActionArgs) => {
+export async function action({ params: { eventId }, request, context }: Route.ActionArgs) {
   const formData = await request.formData();
   await context.client.mutate({
     mutation: CreateTeamMemberDocument,
@@ -32,7 +32,7 @@ export const action: ActionFunction = async ({ params: { eventId }, request, con
     awaitRefetchQueries: true,
   });
   return redirect(`/events/${eventId}/team_members`);
-};
+}
 
 function NewTeamMember(): JSX.Element {
   const navigation = useNavigation();

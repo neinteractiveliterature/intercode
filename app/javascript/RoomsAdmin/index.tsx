@@ -13,7 +13,7 @@ import { client } from '../useIntercodeApolloClient';
 import { useSubmit } from 'react-router';
 import { CreateRoomDocument } from './mutations.generated';
 
-export const action: ActionFunction = async ({ request }) => {
+export async function action({ request }) {
   try {
     if (request.method === 'POST') {
       const formData = await request.formData();
@@ -32,12 +32,12 @@ export const action: ActionFunction = async ({ request }) => {
   } catch (error) {
     return error;
   }
-};
+}
 
-export const loader: LoaderFunction = async () => {
+export async function loader() {
   const { data } = await client.query<RoomsAdminQueryData>({ query: RoomsAdminQueryDocument });
   return data;
-};
+}
 
 function RoomsAdmin() {
   const data = useLoaderData() as RoomsAdminQueryData;

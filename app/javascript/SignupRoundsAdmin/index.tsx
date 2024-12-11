@@ -8,7 +8,7 @@ import { client } from '../useIntercodeApolloClient';
 import { CreateSignupRoundDocument } from './mutations.generated';
 import { SignupRoundsAdminQueryDocument } from './queries.generated';
 
-export const action: ActionFunction = async ({ request }) => {
+export async function action({ request }) {
   if (request.method === 'POST') {
     try {
       const formData = await request.formData();
@@ -32,7 +32,7 @@ export const action: ActionFunction = async ({ request }) => {
       return error;
     }
   }
-};
+}
 
 function SignupRoundsAdmin() {
   const { t } = useTranslation();
