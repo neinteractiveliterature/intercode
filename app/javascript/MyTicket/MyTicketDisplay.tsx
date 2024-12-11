@@ -14,14 +14,14 @@ type LoaderResult = {
   ticket: NonNullable<NonNullable<MyTicketDisplayQueryData['convention']['my_profile']>['ticket']>;
 };
 
-export const loader: LoaderFunction = async () => {
+export async function loader() {
   const { data } = await client.query<MyTicketDisplayQueryData>({ query: MyTicketDisplayQueryDocument });
   if (!data.convention.my_profile?.ticket) {
     return replace('new');
   }
 
   return { convention: data.convention, ticket: data.convention.my_profile.ticket } satisfies LoaderResult;
-};
+}
 
 function MyTicketDisplay() {
   const { convention, ticket } = useLoaderData() as LoaderResult;

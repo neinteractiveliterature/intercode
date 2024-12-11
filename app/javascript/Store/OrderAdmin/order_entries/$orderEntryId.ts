@@ -1,12 +1,12 @@
 import { OrderEntry, OrderEntryInput } from 'graphqlTypes.generated';
-import { ActionFunction, json } from 'react-router';
+import { data } from 'react-router';
 import { AdminDeleteOrderEntryDocument, AdminUpdateOrderEntryDocument } from 'Store/OrderAdmin/mutations.generated';
-import { client } from 'useIntercodeApolloClient';
+import { Route } from './+types/$orderEntryId';
 
-export const action: ActionFunction = async ({ params: { orderEntryId }, request }) => {
+export async function action({ params: { orderEntryId }, request, context }: Route.ActionArgs) {
   try {
     if (request.method === 'DELETE') {
-      const { data } = await client.mutate({
+      const result = await context.client.mutate({
         mutation: AdminDeleteOrderEntryDocument,
         variables: { input: { id: orderEntryId } },
         update: (cache) => {
@@ -16,20 +16,20 @@ export const action: ActionFunction = async ({ params: { orderEntryId }, request
           });
         },
       });
-      return json(data);
+      return data(result.data);
     } else if (request.method === 'PATCH') {
       const orderEntry = (await request.json()) as OrderEntryInput;
-      const { data } = await client.mutate({
+      const result = await context.client.mutate({
         mutation: AdminUpdateOrderEntryDocument,
         variables: {
           input: { id: orderEntryId, order_entry: orderEntry },
         },
       });
-      return json(data);
+      return data(result.data);
     } else {
       return new Response(null, { status: 404 });
     }
   } catch (error) {
     return error;
   }
-};
+}

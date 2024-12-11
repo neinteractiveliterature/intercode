@@ -27,7 +27,7 @@ import { DeleteUserConProfileDocument } from './mutations.generated';
 import invariant from 'tiny-invariant';
 import { UserConProfile } from 'graphqlTypes.generated';
 
-export const action: ActionFunction = async ({ request, params: { id } }) => {
+export async function action({ request, params: { id } }) {
   invariant(id != null);
   try {
     if (request.method === 'DELETE') {
@@ -48,7 +48,7 @@ export const action: ActionFunction = async ({ request, params: { id } }) => {
   } catch (error) {
     return error;
   }
-};
+}
 
 async function becomeUser(userConProfileId: string, justification: string) {
   const formData = new FormData();

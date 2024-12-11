@@ -6,13 +6,13 @@ import EventProposalForm from './EventProposalForm';
 import { EventProposalQueryData, EventProposalQueryDocument, EventProposalQueryVariables } from './queries.generated';
 import { client } from '../useIntercodeApolloClient';
 
-export const loader: LoaderFunction = async ({ params: { id } }) => {
+export async function loader({ params: { id } }) {
   const { data } = await client.query<EventProposalQueryData, EventProposalQueryVariables>({
     query: EventProposalQueryDocument,
     variables: { eventProposalId: id ?? '' },
   });
   return data;
-};
+}
 
 function AdminEditEventProposal() {
   const data = useLoaderData() as EventProposalQueryData;

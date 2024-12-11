@@ -8,7 +8,7 @@ import {
 } from './queries.generated';
 import { client } from '../useIntercodeApolloClient';
 
-export const loader: LoaderFunction = async ({ params: { userConProfileId } }) => {
+export async function loader({ params: { userConProfileId } }) {
   const { data } = await client.query<
     SignupModerationAttendeeRankedChoicesQueryData,
     SignupModerationAttendeeRankedChoicesQueryVariables
@@ -17,7 +17,7 @@ export const loader: LoaderFunction = async ({ params: { userConProfileId } }) =
     variables: { userConProfileId: userConProfileId ?? '' },
   });
   return data;
-};
+}
 
 function UserRankedChoiceQueue() {
   const data = useLoaderData() as SignupModerationAttendeeRankedChoicesQueryData;

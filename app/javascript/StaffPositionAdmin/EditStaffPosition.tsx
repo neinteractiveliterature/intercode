@@ -11,7 +11,7 @@ import { UpdateStaffPositionDocument } from './mutations.generated';
 import { client } from '../useIntercodeApolloClient';
 import { StaffPositionInput } from 'graphqlTypes.generated';
 
-export const action: ActionFunction = async ({ params: { id }, request }) => {
+export async function action({ params: { id }, request }) {
   try {
     const staffPosition = (await request.json()) as StaffPositionInput;
     await client.mutate({
@@ -22,13 +22,13 @@ export const action: ActionFunction = async ({ params: { id }, request }) => {
   } catch (error) {
     return error;
   }
-};
+}
 
 type LoaderResult = {
   initialStaffPosition: StaffPositionsQueryData['convention']['staff_positions'][number];
 };
 
-export const loader: LoaderFunction = async ({ params: { id } }) => {
+export async function loader({ params: { id } }) {
   const { data } = await client.query<StaffPositionsQueryData>({ query: StaffPositionsQueryDocument });
   const initialStaffPosition = data.convention.staff_positions.find((staffPosition) => staffPosition.id === id);
   if (!initialStaffPosition) {
@@ -36,7 +36,7 @@ export const loader: LoaderFunction = async ({ params: { id } }) => {
   }
 
   return { initialStaffPosition } satisfies LoaderResult;
-};
+}
 
 function EditStaffPosition() {
   const { initialStaffPosition } = useLoaderData() as LoaderResult;

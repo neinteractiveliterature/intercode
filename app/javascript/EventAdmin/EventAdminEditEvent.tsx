@@ -19,7 +19,7 @@ import { UpdateEventOptions } from './$id';
 
 type LoaderResult = WithFormResponse<EventAdminSingleEventQueryData['conventionByRequestHost']['event']>;
 
-export const loader: LoaderFunction = async ({ params: { eventId } }) => {
+export async function loader({ params: { eventId } }) {
   const {
     data: {
       conventionByRequestHost: { event: serializedEvent },
@@ -30,7 +30,7 @@ export const loader: LoaderFunction = async ({ params: { eventId } }) => {
   });
   const initialEvent = deserializeFormResponse(serializedEvent);
   return initialEvent satisfies LoaderResult;
-};
+}
 
 function EventAdminEditEvent() {
   const { convention, currentAbility } = useRouteLoaderData(NamedRoute.EventAdmin) as EventAdminEventsQueryData;

@@ -4,7 +4,7 @@ import { DeleteRoomDocument, UpdateRoomDocument } from 'RoomsAdmin/mutations.gen
 import invariant from 'tiny-invariant';
 import { client } from 'useIntercodeApolloClient';
 
-export const action: ActionFunction = async ({ request, params: { id } }) => {
+export async function action({ request, params: { id } }) {
   invariant(id != null);
 
   try {
@@ -33,4 +33,4 @@ export const action: ActionFunction = async ({ request, params: { id } }) => {
   } catch (error) {
     return error;
   }
-};
+}

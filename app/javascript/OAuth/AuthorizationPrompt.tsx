@@ -28,7 +28,7 @@ type PreAuth = AuthorizationParams & {
   scope: string;
 };
 
-export const loader: LoaderFunction = async ({ request }) => {
+export async function loader({ request }) {
   const url = new URL(request.url);
   const preAuthParamsJSON = JSON.stringify(
     [...url.searchParams].reduce((object, [field, value]) => ({ ...object, [field]: value }), {}),
@@ -40,7 +40,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   });
 
   return data;
-};
+}
 
 function AuthorizationPrompt() {
   const data = useLoaderData() as OAuthAuthorizationPromptQueryData;

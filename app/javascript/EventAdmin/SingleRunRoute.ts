@@ -2,7 +2,7 @@ import { ActionFunction, redirect } from 'react-router';
 import { client } from '../useIntercodeApolloClient';
 import { DeleteRunDocument } from './mutations.generated';
 
-export const action: ActionFunction = async ({ params: { eventCategoryId, eventId, runId }, request }) => {
+export async function action({ params: { eventCategoryId, eventId, runId }, request }) {
   try {
     if (request.method === 'DELETE') {
       await client.mutate({
@@ -34,4 +34,4 @@ export const action: ActionFunction = async ({ params: { eventCategoryId, eventI
   } catch (error) {
     return error;
   }
-};
+}

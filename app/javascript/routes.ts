@@ -62,6 +62,28 @@ export default [
     // TODO Liquid docs routes
     layout('AppRootLayout.tsx', [
       layout('NonCMSPageWrapper.tsx', [
+        route('admin_store', 'Store/StoreAdmin.tsx', [
+          route('products', 'Store/ProductAdmin/index.tsx', [route(':id', 'Store/ProductAdmin/$id.ts')]),
+          route('coupons', 'Store/CouponAdmin/CouponAdminTable.tsx', [
+            route(':id', 'Store/CouponAdmin/EditCouponModal.tsx'),
+            route('new', 'Store/CouponAdmin/NewCouponModal.tsx'),
+          ]),
+          route('orders', 'Store/OrderAdmin/index.tsx', [
+            route(':id', 'Store/OrderAdmin/$id.tsx', [
+              route('cancel', 'Store/OrderAdmin/cancel.ts'),
+              route('mark_paid', 'Store/OrderAdmin/mark_paid.ts'),
+              route('order_entries', 'Store/OrderAdmin/order_entries/route.ts', [
+                route(':orderEntryId', 'Store/OrderAdmin/order_entries/$orderEntryId.ts'),
+              ]),
+              route('coupon_applications', 'Store/OrderAdmin/coupon_applications/route.ts', [
+                route(':couponApplicationId', 'Store/OrderAdmin/coupon_applications/$couponApplicationId.ts'),
+              ]),
+            ]),
+            route('new', 'Store/OrderAdmin/new.tsx'),
+          ]),
+          route('order_summary', 'Store/OrderSummary.tsx'),
+          index('Store/OrderAdmin/route.ts'),
+        ]),
         route('cart', 'Store/Cart/index.tsx', [
           route('order_entries/:id', 'Store/Cart/order_entries/$id.ts'),
           route('coupon_applications', 'Store/Cart/coupon_applications/route.ts', [

@@ -1,4 +1,4 @@
-import { useState, useContext, useEffect } from 'react';
+import { useState, useContext } from 'react';
 import { ApolloError } from '@apollo/client';
 import { Modal } from 'react-bootstrap4-modal';
 import { v4 as uuidv4 } from 'uuid';
@@ -70,13 +70,7 @@ export default function NewOrderModal({ visible, close, initialOrder }: NewOrder
   const createOrderError = fetcher.data instanceof Error ? fetcher.data : undefined;
   const createOrderInProgress = fetcher.state !== 'idle';
 
-  useEffect(() => {
-    if (fetcher.state === 'idle' && fetcher.data && !createOrderError) {
-      close();
-    }
-  }, [fetcher.state, fetcher.data, createOrderError, close]);
-
-  const createOrder = () => {
+  const createOrder = async () => {
     const userConProfile = order.user_con_profile;
     const paymentAmount = order.payment_amount;
     if (!userConProfile || !paymentAmount) {
@@ -105,13 +99,15 @@ export default function NewOrderModal({ visible, close, initialOrder }: NewOrder
       })),
     };
 
-    fetcher.submit(
+    await fetcher.submit(
       {
         createOrderVariables,
         couponCodes: order.coupon_applications.map((app) => app.coupon.code),
       } satisfies CreateOrderActionInput,
       { action: '/admin_store/orders', method: 'POST', encType: 'application/json' },
     );
+
+    close();
   };
 
   const updateOrder = (attributes: Partial<CreatingOrder>) =>

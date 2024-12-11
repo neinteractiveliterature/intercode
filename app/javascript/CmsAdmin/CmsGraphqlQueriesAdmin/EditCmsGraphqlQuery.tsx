@@ -12,7 +12,7 @@ import { client } from '../../useIntercodeApolloClient';
 import { UpdateCmsGraphqlQueryDocument } from './mutations.generated';
 import { buildCmsGraphqlQueryInputFromFormData } from './buildCmsGraphqlQueryInput';
 
-export const action: ActionFunction = async ({ params: { id }, request }) => {
+export async function action({ params: { id }, request }) {
   const formData = await request.formData();
 
   try {
@@ -29,7 +29,7 @@ export const action: ActionFunction = async ({ params: { id }, request }) => {
   await client.resetStore();
 
   return redirect(formData.get('destination')?.toString() ?? '/cms_graphql_queries');
-};
+}
 
 export const loader = singleCmsGraphqlQueryAdminLoader;
 

@@ -8,10 +8,10 @@ import { CmsVariablesQueryData, CmsVariablesQueryDocument } from './queries.gene
 import { LoaderFunction, useLoaderData } from 'react-router';
 import { client } from '../../useIntercodeApolloClient';
 
-export const loader: LoaderFunction = async () => {
+export async function loader() {
   const { data } = await client.query<CmsVariablesQueryData>({ query: CmsVariablesQueryDocument });
   return data;
-};
+}
 
 function CmsVariablesAdmin(): JSX.Element {
   const data = useLoaderData() as CmsVariablesQueryData;
