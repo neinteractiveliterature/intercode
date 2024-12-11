@@ -61,7 +61,7 @@
     "@types/minimist": "1.2.5",
     "@types/react": "18.3.12",
     "@types/react-click-outside-hook": "1.0.3",
-    "@types/react-color": "3.0.12",
+    "@types/react-color": "3.0.13",
     "@types/react-google-recaptcha": "2.1.9",
     "@types/react-onclickoutside": "6.7.10",
     "@types/react-table": "7.7.20",
