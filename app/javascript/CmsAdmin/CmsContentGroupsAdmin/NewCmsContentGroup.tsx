@@ -14,7 +14,7 @@ import { useCmsContentGroupsAdminLoader } from './loaders';
 import { CreateContentGroupDocument } from './mutations.generated';
 import { client } from '../../useIntercodeApolloClient';
 
-export const action: ActionFunction = async ({ request }) => {
+export async function action({ request }) {
   const variables = (await request.json()) as CreateCmsContentGroupInput;
   try {
     await client.mutate({
@@ -30,7 +30,7 @@ export const action: ActionFunction = async ({ request }) => {
   await client.resetStore();
 
   return redirect('/cms_content_groups');
-};
+}
 
 function NewCmsContentGroup(): JSX.Element {
   const data = useCmsContentGroupsAdminLoader();

@@ -5,7 +5,7 @@ import {
 } from '../../EventAdmin/mutations.generated';
 import { Route } from './+types/$id';
 
-export const action: ActionFunction = async ({ request, params: { id }, context }: Route.ActionArgs) => {
+export async function action({ request, params: { id }, context }: Route.ActionArgs) {
   try {
     if (request.method === 'DELETE') {
       const result = await context.client.mutate({
@@ -43,4 +43,4 @@ export const action: ActionFunction = async ({ request, params: { id }, context 
   } catch (error) {
     return error;
   }
-};
+}

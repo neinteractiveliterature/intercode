@@ -4,7 +4,7 @@ import { ActionFunction, redirect } from 'react-router';
 import invariant from 'tiny-invariant';
 import { client } from 'useIntercodeApolloClient';
 
-export const action: ActionFunction = async ({ request, params: { id } }) => {
+export async function action({ request, params: { id } }) {
   try {
     invariant(id != null);
     if (request.method === 'POST') {
@@ -29,4 +29,4 @@ export const action: ActionFunction = async ({ request, params: { id } }) => {
   } catch (error) {
     return error;
   }
-};
+}

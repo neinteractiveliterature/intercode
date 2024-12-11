@@ -12,13 +12,13 @@ type LoaderResult = {
   cloneConvention: NonNullable<NewConventionModalProps['cloneConvention']>;
 };
 
-export const loader: LoaderFunction = async ({ params: { id } }) => {
+export async function loader({ params: { id } }) {
   const [{ data: conventionData }, { data }] = await Promise.all([
     client.query({ query: ConventionDisplayQueryDocument, variables: { id } }),
     client.query({ query: NewConventionModalQueryDocument }),
   ]);
   return { data, cloneConvention: conventionData.convention } satisfies LoaderResult;
-};
+}
 
 function CloneConventionRoute() {
   const { data, cloneConvention } = useLoaderData() as LoaderResult;

@@ -11,7 +11,7 @@ import { client } from '../useIntercodeApolloClient';
 import { StaffPositionInput } from 'graphqlTypes.generated';
 import { CreateStaffPositionDocument } from './mutations.generated';
 
-export const action: ActionFunction = async ({ request }) => {
+export async function action({ request }) {
   try {
     if (request.method === 'POST') {
       const staffPosition = (await request.json()) as StaffPositionInput;
@@ -28,7 +28,7 @@ export const action: ActionFunction = async ({ request }) => {
   } catch (error) {
     return error;
   }
-};
+}
 
 function NewStaffPosition(): JSX.Element {
   const fetcher = useFetcher();

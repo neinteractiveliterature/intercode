@@ -3,7 +3,7 @@ import { client } from '../useIntercodeApolloClient';
 import { UpdateEventAdminNotesDocument } from './mutations.generated';
 import { EventAdminEventsQueryDocument } from './queries.generated';
 
-export const action: ActionFunction = async ({ request, params: { eventId } }) => {
+export async function action({ request, params: { eventId } }) {
   try {
     const formData = await request.formData();
     await client.mutate({
@@ -19,4 +19,4 @@ export const action: ActionFunction = async ({ request, params: { eventId } }) =
   } catch (error) {
     return error;
   }
-};
+}

@@ -10,7 +10,7 @@ import { ChangeSignupBucketDocument } from '../mutations.generated';
 import BucketInput from '../BucketInput';
 import { useSingleSignupLoader } from './route';
 
-export const action: ActionFunction = async ({ context, request, params: { id } }) => {
+export async function action({ context, request, params: { id } }) {
   const client = context!.client;
   try {
     const formData = await request.formData();
@@ -25,7 +25,7 @@ export const action: ActionFunction = async ({ context, request, params: { id } 
   } catch (error) {
     return error;
   }
-};
+}
 
 function ChangeBucketModal(): JSX.Element {
   const data = useSingleSignupLoader();

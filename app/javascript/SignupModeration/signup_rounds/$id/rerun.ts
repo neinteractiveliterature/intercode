@@ -2,7 +2,7 @@ import { ActionFunction } from 'react-router';
 import { client } from '../../../useIntercodeApolloClient';
 import { RerunModeratedRankedChoiceSignupRoundDocument } from '../../mutations.generated';
 
-export const action: ActionFunction = async ({ params: { id } }) => {
+export async function action({ params: { id } }) {
   try {
     await client.mutate({
       mutation: RerunModeratedRankedChoiceSignupRoundDocument,
@@ -13,4 +13,4 @@ export const action: ActionFunction = async ({ params: { id } }) => {
   } catch (error) {
     return error;
   }
-};
+}

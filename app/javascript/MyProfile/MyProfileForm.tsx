@@ -19,7 +19,7 @@ import { parseResponseErrors } from '../parseResponseErrors';
 import { client } from '../useIntercodeApolloClient';
 import { UpdateUserConProfileDocument } from '../UserConProfiles/mutations.generated';
 
-export const action: ActionFunction = async ({ request }) => {
+export async function action({ request }) {
   const profile = (await request.json()) as LoaderResult['initialUserConProfile'];
 
   try {
@@ -43,7 +43,7 @@ export const action: ActionFunction = async ({ request }) => {
   } catch (e) {
     return parseResponseErrors(e, ['updateUserConProfile']);
   }
-};
+}
 
 type LoaderResult = {
   initialUserConProfile: WithFormResponse<NonNullable<MyProfileQueryData['convention']['my_profile']>>;
@@ -51,7 +51,7 @@ type LoaderResult = {
   form: CommonFormFieldsFragment;
 };
 
-export const loader: LoaderFunction = async () => {
+export async function loader() {
   const { data } = await client.query<MyProfileQueryData>({ query: MyProfileQueryDocument });
   const myProfile = data.convention.my_profile;
   if (!myProfile) {
@@ -64,7 +64,7 @@ export const loader: LoaderFunction = async () => {
     convention: formState.convention,
     form: formState.form,
   } satisfies LoaderResult;
-};
+}
 
 function MyProfileForm() {
   const { initialUserConProfile, convention, form } = useLoaderData() as LoaderResult;

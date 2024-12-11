@@ -9,7 +9,7 @@ import { UpdateDepartmentDocument } from './mutations.generated';
 import { DepartmentAdminQueryDocument } from './queries.generated';
 import { useTranslation } from 'react-i18next';
 
-export const action: ActionFunction = async ({ params: { id }, request }) => {
+export async function action({ params: { id }, request }) {
   try {
     const formData = await request.formData();
     await client.mutate({
@@ -25,7 +25,7 @@ export const action: ActionFunction = async ({ params: { id }, request }) => {
   } catch (error) {
     return error;
   }
-};
+}
 
 export const loader = singleDepartmentAdminLoader;
 

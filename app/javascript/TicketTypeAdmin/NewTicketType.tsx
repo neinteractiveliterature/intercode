@@ -19,7 +19,7 @@ type ActionInput = {
   eventId: string | null;
 };
 
-export const action: ActionFunction = async ({ request }) => {
+export async function action({ request }) {
   try {
     const { ticketType, eventId, conventionId } = (await request.json()) as ActionInput;
     const client = new ApolloClient();
@@ -42,7 +42,7 @@ export const action: ActionFunction = async ({ request }) => {
   } catch (error) {
     return error;
   }
-};
+}
 
 function NewTicketType({ parent }: TicketTypeLoaderResult) {
   const { t } = useTranslation();
