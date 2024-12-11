@@ -13,7 +13,7 @@ import { singleCmsContentGroupAdminLoader, SingleCmsContentGroupAdminLoaderResul
 import { client } from '../../useIntercodeApolloClient';
 import { UpdateContentGroupDocument, UpdateContentGroupMutationVariables } from './mutations.generated';
 
-export const action: ActionFunction = async ({ params: { id }, request }) => {
+export async function action({ params: { id }, request }) {
   const variables = (await request.json()) as Omit<UpdateContentGroupMutationVariables, 'id'>;
 
   try {
@@ -30,7 +30,7 @@ export const action: ActionFunction = async ({ params: { id }, request }) => {
   await client.resetStore();
 
   return redirect('/cms_content_groups');
-};
+}
 
 export const loader = singleCmsContentGroupAdminLoader;
 

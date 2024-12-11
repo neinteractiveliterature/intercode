@@ -6,12 +6,12 @@ import { LoaderFunction, useLoaderData } from 'react-router';
 import { client } from '../useIntercodeApolloClient';
 import { useFetcher } from 'react-router';
 
-export const loader: LoaderFunction = async () => {
+export async function loader() {
   const { data } = await client.query<OAuthAuthorizedApplicationsQueryData>({
     query: OAuthAuthorizedApplicationsQueryDocument,
   });
   return data;
-};
+}
 
 function AuthorizedApplications() {
   const data = useLoaderData() as OAuthAuthorizedApplicationsQueryData;

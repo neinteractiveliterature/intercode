@@ -4,7 +4,7 @@ import { client } from 'useIntercodeApolloClient';
 import { NewConventionModalQueryData, NewConventionModalQueryDocument } from './queries.generated';
 import { CreateConventionDocument } from './mutations.generated';
 
-export const action: ActionFunction = async ({ request }) => {
+export async function action({ request }) {
   try {
     const variables = await request.json();
     const { data } = await client.mutate({
@@ -16,12 +16,12 @@ export const action: ActionFunction = async ({ request }) => {
   } catch (error) {
     return error;
   }
-};
+}
 
-export const loader: LoaderFunction = async () => {
+export async function loader() {
   const { data } = await client.query({ query: NewConventionModalQueryDocument });
   return data;
-};
+}
 
 function NewConventionRoute() {
   const data = useLoaderData() as NewConventionModalQueryData;

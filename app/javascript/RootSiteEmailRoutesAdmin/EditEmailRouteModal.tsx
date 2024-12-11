@@ -12,7 +12,7 @@ import { DeleteEmailRouteDocument, UpdateEmailRouteDocument } from './mutations.
 import { EmailRouteInput } from 'graphqlTypes.generated';
 import { Link, useFetcher } from 'react-router';
 
-export const action: ActionFunction = async ({ params: { id }, request }) => {
+export async function action({ params: { id }, request }) {
   try {
     if (request.method === 'DELETE') {
       await client.mutate({
@@ -34,12 +34,12 @@ export const action: ActionFunction = async ({ params: { id }, request }) => {
   } catch (error) {
     return error;
   }
-};
+}
 
-export const loader: LoaderFunction = async ({ params: { id } }) => {
+export async function loader({ params: { id } }) {
   const { data } = await client.query({ query: RootSiteSingleEmailRouteQueryDocument, variables: { id } });
   return data;
-};
+}
 
 function EditEmailRouteModal(): JSX.Element {
   const data = useLoaderData() as RootSiteSingleEmailRouteQueryData;

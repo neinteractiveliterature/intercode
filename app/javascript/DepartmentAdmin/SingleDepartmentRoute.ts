@@ -3,7 +3,7 @@ import { client } from '../useIntercodeApolloClient';
 import { DeleteDepartmentDocument } from './mutations.generated';
 import { DepartmentAdminQueryDocument } from './queries.generated';
 
-export const action: ActionFunction = async ({ request, params: { id } }) => {
+export async function action({ request, params: { id } }) {
   if (request.method === 'DELETE') {
     await client.mutate({
       mutation: DeleteDepartmentDocument,
@@ -15,4 +15,4 @@ export const action: ActionFunction = async ({ request, params: { id } }) => {
   } else {
     return new Response(null, { status: 404 });
   }
-};
+}

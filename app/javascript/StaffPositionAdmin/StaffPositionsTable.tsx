@@ -148,10 +148,10 @@ function PermissionsDescription({ permissions }: PermissionsDescriptionProps) {
   );
 }
 
-export const loader: LoaderFunction = async () => {
+export async function loader() {
   const { data } = await client.query<StaffPositionsQueryData>({ query: StaffPositionsQueryDocument });
   return data;
-};
+}
 
 function StaffPositionsTable() {
   const data = useLoaderData() as StaffPositionsQueryData;
