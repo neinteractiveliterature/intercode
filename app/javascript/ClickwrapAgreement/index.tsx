@@ -1,46 +1,36 @@
 import { ApolloError } from '@apollo/client';
-import {
-  LoaderFunction,
-  useLoaderData,
-  replace,
-  ActionFunction,
-  redirect,
-  useSubmit,
-  useNavigation,
-  useActionData,
-} from 'react-router';
+import { replace, redirect, useSubmit, useNavigation, useActionData } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { parseCmsContent } from '../parseCmsContent';
 import useLoginRequired from '../Authentication/useLoginRequired';
-import { ClickwrapAgreementQueryData, ClickwrapAgreementQueryDocument } from './queries.generated';
+import { ClickwrapAgreementQueryDocument } from './queries.generated';
 import AuthenticityTokensManager from '../AuthenticityTokensContext';
-import { client } from '../useIntercodeApolloClient';
 import { AcceptClickwrapAgreementDocument } from './mutations.generated';
+import { Route } from './+types/index';
 
-export const action: ActionFunction = async () => {
+export async function action({ context }: Route.ActionArgs) {
   try {
-    await client.mutate({ mutation: AcceptClickwrapAgreementDocument });
+    await context.client.mutate({ mutation: AcceptClickwrapAgreementDocument });
     return redirect('/my_profile/setup');
   } catch (err) {
     await AuthenticityTokensManager.instance.refresh();
-    await client.resetStore();
+    await context.client.resetStore();
     return err;
   }
-};
+}
 
-export const loader: LoaderFunction = async () => {
-  const { data } = await client.query<ClickwrapAgreementQueryData>({ query: ClickwrapAgreementQueryDocument });
+export async function loader({ context }: Route.LoaderArgs) {
+  const { data } = await context.client.query({ query: ClickwrapAgreementQueryDocument });
   if (data.convention.my_profile?.accepted_clickwrap_agreement) {
-    return replace('/');
+    throw replace('/');
   }
 
   return data;
-};
+}
 
-function ClickwrapAgreement() {
-  const data = useLoaderData() as ClickwrapAgreementQueryData;
+function ClickwrapAgreement({ loaderData: data }: Route.ComponentProps) {
   const { t } = useTranslation();
   const loginRequired = useLoginRequired();
   const submit = useSubmit();

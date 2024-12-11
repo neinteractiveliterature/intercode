@@ -62,6 +62,13 @@ export default [
     // TODO Liquid docs routes
     layout('AppRootLayout.tsx', [
       layout('NonCMSPageWrapper.tsx', [
+        route('cart', 'Store/Cart/index.tsx', [
+          route('order_entries/:id', 'Store/Cart/order_entries/$id.ts'),
+          route('coupon_applications', 'Store/Cart/coupon_applications/route.ts', [
+            route(':id', 'Store/Cart/coupon_applications/$id.ts'),
+          ]),
+        ]),
+        route('clickwrap_agreement', 'ClickwrapAgreement/index.tsx'),
         route('convention/edit', 'ConventionAdmin/index.tsx'),
         ...prefix('events', [
           layout('RouteGuards/MultiEventConventionRouteGuard.tsx', { id: 'EventsMultiEventGuard' }, [
@@ -99,28 +106,28 @@ export default [
               ]),
             ]),
             route('history/:changeGroupId?', 'EventsApp/EventPage/EventHistory.tsx'),
+            route('runs/:runId', 'EventsApp/SignupAdmin/RunHeader.tsx', [
+              route('admin_signups', 'EventsApp/SignupAdmin/route.ts', { id: NamedRoute.SignupAdmin }, [
+                route('', 'EventsApp/SignupAdmin/SignupsIndex.tsx', [
+                  index('EventsApp/SignupAdmin/RunSignupsTable.tsx', { id: NamedRoute.RunSignupsTable }),
+                  route('emails/:separator', 'EventsApp/SignupAdmin/RunEmailList.tsx', {
+                    id: NamedRoute.RunEmailList,
+                  }),
+                  route('signup_changes', 'EventsApp/SignupAdmin/RunSignupChangesTable.tsx', {
+                    id: NamedRoute.RunSignupChangesTable,
+                  }),
+                ]),
+                route(':id', 'EventsApp/SignupAdmin/$id/route.tsx', { id: NamedRoute.EditSignup }, [
+                  route('change_bucket', 'EventsApp/SignupAdmin/$id/change_bucket.tsx'),
+                  route('force_confirm', 'EventsApp/SignupAdmin/$id/force_confirm.tsx'),
+                ]),
+              ]),
+              route('signup_summary', 'EventsApp/SignupAdmin/RunSignupSummary.tsx', {
+                id: NamedRoute.RunSignupSummary,
+              }),
+            ]),
             layout('RouteGuards/EventPageGuard.tsx', [
               index('EventsApp/EventPage/index.tsx', { id: NamedRoute.EventPage }),
-              route('runs/:runId', 'EventsApp/SignupAdmin/RunHeader.tsx', [
-                route('admin_signups', 'EventsApp/SignupAdmin/route.ts', { id: NamedRoute.SignupAdmin }, [
-                  route('', 'EventsApp/SignupAdmin/SignupsIndex.tsx', [
-                    index('EventsApp/SignupAdmin/RunSignupsTable.tsx', { id: NamedRoute.RunSignupsTable }),
-                    route('emails/:separator', 'EventsApp/SignupAdmin/RunEmailList.tsx', {
-                      id: NamedRoute.RunEmailList,
-                    }),
-                    route('signup_changes', 'EventsApp/SignupAdmin/RunSignupChangesTable.tsx', {
-                      id: NamedRoute.RunSignupChangesTable,
-                    }),
-                  ]),
-                  route(':id', 'EventsApp/SignupAdmin/$id/route.tsx', { id: NamedRoute.EditSignup }, [
-                    route('change_bucket', 'EventsApp/SignupAdmin/$id/change_bucket.tsx'),
-                    route('force_confirm', 'EventsApp/SignupAdmin/$id/force_confirm.tsx'),
-                  ]),
-                ]),
-                route('signup_summary', 'EventsApp/SignupAdmin/RunSignupSummary.tsx', {
-                  id: NamedRoute.RunSignupSummary,
-                }),
-              ]),
             ]),
           ]),
         ]),
