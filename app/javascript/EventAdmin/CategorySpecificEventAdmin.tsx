@@ -11,7 +11,7 @@ export const adminComponentsBySchedulingUi = {
   single_run: SingleRunEventAdminList,
 };
 
-export const loader: LoaderFunction = async ({ params: { eventCategoryId } }) => {
+export async function loader({ params: { eventCategoryId } }) {
   const { data } = await client.query<EventAdminEventsQueryData>({ query: EventAdminEventsQueryDocument });
 
   const eventCategoryIdIntPortion = Number.parseInt(eventCategoryId ?? '');
@@ -27,7 +27,7 @@ export const loader: LoaderFunction = async ({ params: { eventCategoryId } }) =>
   }
 
   return eventCategory;
-};
+}
 
 function CategorySpecificEventAdmin() {
   const eventCategory = useLoaderData() as EventAdminEventsQueryData['convention']['event_categories'][number];

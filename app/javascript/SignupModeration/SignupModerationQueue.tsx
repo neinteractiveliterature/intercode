@@ -291,10 +291,10 @@ function getPossibleColumns(
   ];
 }
 
-export const loader: LoaderFunction = async () => {
+export async function loader() {
   const { data } = await client.query({ query: SignupModerationQueuePageQueryDocument });
   return data;
-};
+}
 
 function SignupModerationQueue(): JSX.Element {
   const { t } = useTranslation();

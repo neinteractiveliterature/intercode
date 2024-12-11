@@ -9,8 +9,8 @@ import { AdminCouponsQueryData, AdminCouponsQueryDocument } from './queries.gene
 import ReactTableWithTheWorks from '../../Tables/ReactTableWithTheWorks';
 import { useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
-import { useCallback } from 'react';
-import { Outlet, useNavigate } from 'react-router';
+import { useCallback, useEffect } from 'react';
+import { Outlet, useLocation, useNavigate } from 'react-router';
 import { Link } from 'react-router';
 
 type CouponType = AdminCouponsQueryData['convention']['coupons_paginated']['entries'][0];
@@ -71,16 +71,22 @@ function getPossibleColumns(t: TFunction): Column<CouponType>[] {
 function CouponAdminTable(): JSX.Element {
   const { t } = useTranslation();
   const navigate = useNavigate();
+  const location = useLocation();
 
   const getPossibleColumnsWithTranslation = useCallback(() => getPossibleColumns(t), [t]);
 
-  const { tableHeaderProps, columnSelectionProps, tableInstance, loading } = useReactTableWithTheWorks({
+  const { tableHeaderProps, columnSelectionProps, tableInstance, loading, refetch } = useReactTableWithTheWorks({
     getData: ({ data }) => data?.convention.coupons_paginated.entries,
     getPages: ({ data }) => data?.convention.coupons_paginated.total_pages,
     getPossibleColumns: getPossibleColumnsWithTranslation,
     query: AdminCouponsQueryDocument,
     storageKeyPrefix: 'coupons',
   });
+
+  // force a table refetch when the modals close
+  useEffect(() => {
+    refetch();
+  }, [location, refetch]);
 
   return (
     <>

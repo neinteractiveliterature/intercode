@@ -9,7 +9,7 @@ import { ApolloError } from '@apollo/client';
 import Modal from 'react-bootstrap4-modal';
 import { useSingleSignupLoader } from './route';
 
-export const action: ActionFunction = async ({ context, request, params: { id } }) => {
+export async function action({ context, request, params: { id } }) {
   const client = context!.client;
   try {
     const formData = await request.formData();
@@ -24,7 +24,7 @@ export const action: ActionFunction = async ({ context, request, params: { id } 
   } catch (error) {
     return error;
   }
-};
+}
 
 function ForceConfirmSignupModal(): JSX.Element {
   const data = useSingleSignupLoader();

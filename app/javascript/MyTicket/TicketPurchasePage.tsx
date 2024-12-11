@@ -7,13 +7,13 @@ import { TicketPurchaseFormQueryData, TicketPurchaseFormQueryDocument } from './
 import TicketPurchaseForm from './TicketPurchaseForm';
 import { client } from '../useIntercodeApolloClient';
 
-export const loader: LoaderFunction = async () => {
+export async function loader() {
   const { data } = await client.query<TicketPurchaseFormQueryData>({ query: TicketPurchaseFormQueryDocument });
   if (data.convention.my_profile?.ticket) {
     return replace('/ticket');
   }
   return data;
-};
+}
 
 function TicketPurchasePage() {
   const data = useLoaderData() as TicketPurchaseFormQueryData;

@@ -11,7 +11,7 @@ import { client } from '../useIntercodeApolloClient';
 import { Form } from 'react-router';
 import { UpdateRootSiteDocument } from './mutations.generated';
 
-export const action: ActionFunction = async ({ request }) => {
+export async function action({ request }) {
   try {
     const formData = await request.formData();
     const { data } = await client.mutate({
@@ -26,7 +26,7 @@ export const action: ActionFunction = async ({ request }) => {
   } catch (error) {
     return error;
   }
-};
+}
 
 function useDirtyState<T>(initialState: T, setDirty: () => void) {
   const [value, setValue] = useState(initialState);
@@ -39,10 +39,10 @@ function useDirtyState<T>(initialState: T, setDirty: () => void) {
   ] as const;
 }
 
-export const loader: LoaderFunction = async () => {
+export async function loader() {
   const { data } = await client.query<RootSiteAdminQueryData>({ query: RootSiteAdminQueryDocument });
   return data;
-};
+}
 
 function EditRootSite() {
   const data = useLoaderData() as RootSiteAdminQueryData;

@@ -2,7 +2,7 @@ import { ActionFunction, redirect } from 'react-router';
 import { client } from '../useIntercodeApolloClient';
 import { DropEventDocument } from '../EventAdmin/mutations.generated';
 
-export const action: ActionFunction = async ({ params: { eventId }, request }) => {
+export async function action({ params: { eventId }, request }) {
   try {
     if (request.method === 'PATCH') {
       await client.mutate({
@@ -19,4 +19,4 @@ export const action: ActionFunction = async ({ params: { eventId }, request }) =
   } catch (error) {
     return error;
   }
-};
+}

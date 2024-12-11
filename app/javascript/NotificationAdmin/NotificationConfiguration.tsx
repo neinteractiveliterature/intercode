@@ -17,7 +17,7 @@ import { client } from '../useIntercodeApolloClient';
 import { ApolloError } from '@apollo/client';
 import { UpdateNotificationTemplateDocument } from './mutations.generated';
 
-export const action: ActionFunction = async ({ params: { category, event }, request }) => {
+export async function action({ params: { category, event }, request }) {
   try {
     const formData = await request.formData();
 
@@ -38,7 +38,7 @@ export const action: ActionFunction = async ({ params: { category, event }, requ
   } catch (error) {
     return error;
   }
-};
+}
 
 type LoaderResult = {
   category: (typeof NotificationsConfig)['categories'][number];
@@ -46,7 +46,7 @@ type LoaderResult = {
   initialNotificationTemplate: NotificationAdminQueryData['convention']['notification_templates'][number];
 };
 
-export const loader: LoaderFunction = async ({ params }) => {
+export async function loader({ params }) {
   const category = NotificationsConfig.categories.find((c) => c.key === params.category);
   const event = category?.events.find((e) => e.key === params.event);
   if (!category || !event) {
@@ -62,7 +62,7 @@ export const loader: LoaderFunction = async ({ params }) => {
   }
 
   return { category, event, initialNotificationTemplate } satisfies LoaderResult;
-};
+}
 
 function NotificationConfigurationForm() {
   const { category, event, initialNotificationTemplate } = useLoaderData() as LoaderResult;

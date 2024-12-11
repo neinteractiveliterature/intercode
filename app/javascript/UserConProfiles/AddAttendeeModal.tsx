@@ -12,7 +12,7 @@ import AppRootContext from 'AppRootContext';
 import { CreateUserConProfileDocument, CreateUserConProfileMutationVariables } from './mutations.generated';
 import { client } from 'useIntercodeApolloClient';
 
-export const action: ActionFunction = async ({ request }) => {
+export async function action({ request }) {
   try {
     const variables = (await request.json()) as CreateUserConProfileMutationVariables;
     await client.mutate({ mutation: CreateUserConProfileDocument, variables });
@@ -21,7 +21,7 @@ export const action: ActionFunction = async ({ request }) => {
   } catch (error) {
     return error;
   }
-};
+}
 
 type UserType = AddAttendeeUsersQueryData['users_paginated']['entries'][0];
 

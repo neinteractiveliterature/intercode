@@ -10,21 +10,21 @@ import EditPricingStructureModal, {
 } from './EditPricingStructureModal';
 import EditAdminProductCard from './EditAdminProductCard';
 import scrollToLocationHash from '../../scrollToLocationHash';
-import { AdminProductsQueryData, AdminProductsQueryDocument } from './queries.generated';
+import { AdminProductsQueryDocument } from './queries.generated';
 import { duplicateProductForEditing, EditingProduct } from './EditingProductTypes';
 import { getRealOrGeneratedId, realOrGeneratedIdsMatch } from '../../GeneratedIdUtils';
-import { ActionFunction, json, LoaderFunction, useLoaderData } from 'react-router';
-import { client } from '../../useIntercodeApolloClient';
+import { data } from 'react-router';
 import { Convention, TicketType } from 'graphqlTypes.generated';
 import { AdminProductFieldsFragmentDoc } from 'Store/adminProductFields.generated';
 import { parseProductFormData } from 'Store/buildProductInput';
 import { CreateProductDocument } from './mutations.generated';
+import { Route } from './+types/index';
 
-export const action: ActionFunction = async ({ request }) => {
+export async function action({ request, context }: Route.ActionArgs) {
   try {
     if (request.method === 'POST') {
       const product = parseProductFormData(await request.formData());
-      const { data } = await client.mutate({
+      const result = await context.client.mutate({
         mutation: CreateProductDocument,
         variables: { product },
         update: (cache, result) => {
@@ -52,14 +52,14 @@ export const action: ActionFunction = async ({ request }) => {
           }
         },
       });
-      return json(data);
+      return data(result.data);
     } else {
       return new Response(null, { status: 404 });
     }
   } catch (error) {
     return error;
   }
-};
+}
 
 function generateBlankProduct(): EditingProduct {
   return {
@@ -74,13 +74,12 @@ function generateBlankProduct(): EditingProduct {
   };
 }
 
-export const loader: LoaderFunction = async () => {
-  const { data } = await client.query<AdminProductsQueryData>({ query: AdminProductsQueryDocument });
+export async function loader({ context }: Route.LoaderArgs) {
+  const { data } = await context.client.query({ query: AdminProductsQueryDocument });
   return data;
-};
+}
 
-function ProductAdmin() {
-  const data = useLoaderData() as AdminProductsQueryData;
+function ProductAdmin({ loaderData: data }: Route.ComponentProps) {
   const [newProducts, setNewProducts] = useState<EditingProduct[]>([]);
   const [editingProductIds, setEditingProductIds] = useState<string[]>([]);
   const pricingStructureModal = useModal<PricingStructureModalState>();

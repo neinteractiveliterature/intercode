@@ -4,10 +4,10 @@ import { TicketedAttendeesQueryData, TicketedAttendeesQueryDocument } from './qu
 import { LoaderFunction, useLoaderData } from 'react-router';
 import { client } from '../useIntercodeApolloClient';
 
-export const loader: LoaderFunction = async () => {
+export async function loader() {
   const { data } = await client.query<TicketedAttendeesQueryData>({ query: TicketedAttendeesQueryDocument });
   return data;
-};
+}
 
 function TicketedAttendees() {
   const data = useLoaderData() as TicketedAttendeesQueryData;

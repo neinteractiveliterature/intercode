@@ -2,7 +2,7 @@ import { ActionFunction, redirect } from 'react-router';
 import { client } from '../../useIntercodeApolloClient';
 import { DeleteLayoutDocument } from './mutations.generated';
 
-export const action: ActionFunction = async ({ request, params: { id } }) => {
+export async function action({ request, params: { id } }) {
   if (request.method === 'DELETE') {
     await client.mutate({
       mutation: DeleteLayoutDocument,
@@ -16,4 +16,4 @@ export const action: ActionFunction = async ({ request, params: { id } }) => {
   }
 
   return new Response(null, { status: 404 });
-};
+}

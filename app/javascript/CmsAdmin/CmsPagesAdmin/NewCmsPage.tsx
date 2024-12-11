@@ -10,7 +10,7 @@ import { CreatePageDocument } from './mutations.generated';
 import { useCmsPagesAdminLoader } from './loaders';
 import { client } from '../../useIntercodeApolloClient';
 
-export const action: ActionFunction = async ({ request }) => {
+export async function action({ request }) {
   const formData = await request.formData();
 
   try {
@@ -26,7 +26,7 @@ export const action: ActionFunction = async ({ request }) => {
   await client.resetStore();
 
   return redirect('/cms_pages');
-};
+}
 
 function NewCmsPage() {
   const data = useCmsPagesAdminLoader();
