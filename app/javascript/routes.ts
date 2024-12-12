@@ -62,6 +62,14 @@ export default [
     // TODO Liquid docs routes
     layout('AppRootLayout.tsx', [
       layout('NonCMSPageWrapper.tsx', [
+        ...prefix('admin_notifications', [
+          layout('RouteGuards/CanUpdateNotificationTemplatesRouteGuard.tsx', [
+            route(':category/:event', 'NotificationAdmin/NotificationConfiguration.tsx', [
+              route('preview', 'NotificationAdmin/preview.ts'),
+            ]),
+            index('NotificationAdmin/NotificationAdminIndex.tsx'),
+          ]),
+        ]),
         route('admin_store', 'Store/StoreAdmin.tsx', [
           route('products', 'Store/ProductAdmin/index.tsx', [route(':id', 'Store/ProductAdmin/$id.ts')]),
           route('coupons', 'Store/CouponAdmin/CouponAdminTable.tsx', [
