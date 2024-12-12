@@ -62,6 +62,11 @@ export default [
     // TODO Liquid docs routes
     layout('AppRootLayout.tsx', [
       layout('NonCMSPageWrapper.tsx', [
+        route('admin_forms', 'FormAdmin/index.tsx', { id: NamedRoute.AdminForms }, [
+          route(':id/edit_advanced', 'FormAdmin/FormJSONEditor.tsx', { id: NamedRoute.FormJSONEditor }),
+          route(':id', 'FormAdmin/$id/route.ts'),
+          index('FormAdmin/FormAdminIndex.tsx', { id: NamedRoute.FormAdminIndex }),
+        ]),
         ...prefix('admin_notifications', [
           layout('RouteGuards/CanUpdateNotificationTemplatesRouteGuard.tsx', [
             route(':category/:event', 'NotificationAdmin/NotificationConfiguration.tsx', [
