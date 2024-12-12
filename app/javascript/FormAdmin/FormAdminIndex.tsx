@@ -1,14 +1,14 @@
 import { useMemo } from 'react';
-import { ActionFunction, Link, LoaderFunction, redirect, useLoaderData, useSubmit } from 'react-router';
+import { Link, redirect, useSubmit } from 'react-router';
 import { useModal, useConfirm, ErrorDisplay, sortByLocaleString } from '@neinteractiveliterature/litform';
 
 import usePageTitle from '../usePageTitle';
 import NewFormModal from './NewFormModal';
 import { FormAdminQueryData, FormAdminQueryDocument } from './queries.generated';
 import humanize from '../humanize';
-import { client } from '../useIntercodeApolloClient';
 import { CreateFormDocument } from './mutations.generated';
 import { FormType } from '../graphqlTypes.generated';
+import { Route } from './+types/FormAdminIndex';
 
 function describeFormUsers(form: FormAdminQueryData['convention']['forms'][0]) {
   return [
@@ -18,15 +18,15 @@ function describeFormUsers(form: FormAdminQueryData['convention']['forms'][0]) {
   ];
 }
 
-export async function loader() {
-  const { data } = await client.query<FormAdminQueryData>({ query: FormAdminQueryDocument });
+export async function loader({ context }: Route.LoaderArgs) {
+  const { data } = await context.client.query({ query: FormAdminQueryDocument });
   return data;
 }
 
-export async function action({ request }) {
+export async function action({ request, context }: Route.ActionArgs) {
   try {
     const formData = await request.formData();
-    const { data } = await client.mutate({
+    const { data } = await context.client.mutate({
       mutation: CreateFormDocument,
       variables: {
         form: {
@@ -41,8 +41,7 @@ export async function action({ request }) {
   }
 }
 
-function FormAdminIndex() {
-  const data = useLoaderData() as FormAdminQueryData;
+function FormAdminIndex({ loaderData: data }: Route.ComponentProps) {
   const confirm = useConfirm();
   const newFormModal = useModal();
   const sortedForms = useMemo(() => sortByLocaleString(data.convention.forms, (form) => form.title), [data]);
