@@ -1,27 +1,19 @@
 import { useState, useEffect } from 'react';
-import {
-  ActionFunction,
-  Form,
-  LoaderFunction,
-  redirect,
-  useActionData,
-  useLoaderData,
-  useNavigation,
-} from 'react-router';
+import { Form, redirect, useActionData, useNavigation } from 'react-router';
 import { ErrorDisplay, usePropertySetters } from '@neinteractiveliterature/litform';
 
 import NotificationsConfig from '../../../config/notifications.json';
 import LiquidInput from '../BuiltInFormControls/LiquidInput';
-import { NotificationAdminQueryData, NotificationAdminQueryDocument } from './queries.generated';
-import { client } from '../useIntercodeApolloClient';
+import { NotificationAdminQueryDocument } from './queries.generated';
 import { ApolloError } from '@apollo/client';
 import { UpdateNotificationTemplateDocument } from './mutations.generated';
+import { Route } from './+types/NotificationConfiguration';
 
-export async function action({ params: { category, event }, request }) {
+export async function action({ params: { category, event }, request, context }: Route.ActionArgs) {
   try {
     const formData = await request.formData();
 
-    await client.mutate({
+    await context.client.mutate({
       mutation: UpdateNotificationTemplateDocument,
       variables: {
         eventKey: `${category}/${event}`,
@@ -40,32 +32,27 @@ export async function action({ params: { category, event }, request }) {
   }
 }
 
-type LoaderResult = {
-  category: (typeof NotificationsConfig)['categories'][number];
-  event: (typeof NotificationsConfig)['categories'][number]['events'][number];
-  initialNotificationTemplate: NotificationAdminQueryData['convention']['notification_templates'][number];
-};
-
-export async function loader({ params }) {
+export async function loader({ params, context }: Route.LoaderArgs) {
   const category = NotificationsConfig.categories.find((c) => c.key === params.category);
   const event = category?.events.find((e) => e.key === params.event);
   if (!category || !event) {
-    return new Response(null, { status: 404 });
+    throw new Response(null, { status: 404 });
   }
 
-  const { data } = await client.query<NotificationAdminQueryData>({ query: NotificationAdminQueryDocument });
+  const { data } = await context.client.query({ query: NotificationAdminQueryDocument });
   const initialNotificationTemplate = data.convention.notification_templates.find(
     (t) => t.event_key === `${category.key}/${event.key}`,
   );
   if (!initialNotificationTemplate) {
-    return new Response(null, { status: 404 });
+    throw new Response(null, { status: 404 });
   }
 
-  return { category, event, initialNotificationTemplate } satisfies LoaderResult;
+  return { category, event, initialNotificationTemplate };
 }
 
-function NotificationConfigurationForm() {
-  const { category, event, initialNotificationTemplate } = useLoaderData() as LoaderResult;
+function NotificationConfigurationForm({
+  loaderData: { category, event, initialNotificationTemplate },
+}: Route.ComponentProps) {
   const navigation = useNavigation();
   const data = useActionData();
   const updateError = data instanceof Error ? data : undefined;
