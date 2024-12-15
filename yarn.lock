@@ -7488,10 +7488,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/rbush@npm:3.0.3":
-  version: 3.0.3
-  resolution: "@types/rbush@npm:3.0.3"
-  checksum: 10c0/a0c2425eb9cb43f442ef48d9d0221c006e0f7303c35f97d443c9832e7c824572b7206a68f9ffe486ba0789cc19600732c3412729211f0c1a5058e7b3f0fd937d
+"@types/rbush@npm:4.0.0":
+  version: 4.0.0
+  resolution: "@types/rbush@npm:4.0.0"
+  checksum: 10c0/15a4da94a2591aedf7915061ce07a85d99ba762b89b25f46dd8b8c09a3cd6087335839773ba99a5159d3db3e97a98856bc94c1eb8e0f93b89edc19bc608998c9
   languageName: node
   linkType: hard
 
@@ -13330,7 +13330,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"geotiff@npm:^2.0.7":
+"geotiff@npm:^2.1.3":
   version: 2.1.3
   resolution: "geotiff@npm:2.1.3"
   dependencies:
@@ -17864,17 +17864,17 @@ __metadata:
   linkType: hard
 
 "ol@npm:^10.2.1":
-  version: 10.2.1
-  resolution: "ol@npm:10.2.1"
+  version: 10.3.1
+  resolution: "ol@npm:10.3.1"
   dependencies:
-    "@types/rbush": "npm:3.0.3"
+    "@types/rbush": "npm:4.0.0"
     color-rgba: "npm:^3.0.0"
     color-space: "npm:^2.0.1"
     earcut: "npm:^3.0.0"
-    geotiff: "npm:^2.0.7"
+    geotiff: "npm:^2.1.3"
     pbf: "npm:4.0.1"
     rbush: "npm:^4.0.0"
-  checksum: 10c0/2095cedff8009c4bb8593195b5df21ffcbb6f5db1bec2bdc6669de4515206f1877cd6e5142cfe8763a2736d36b2e4f5e5c6843dabf07a55954bb52a564245f09
+  checksum: 10c0/5039a8117ddefbd0ccaed600b8975ae7963a3bc65e4c4fafcdb4bb2a7bc110e58237bd71ff1537857ac866fe9b7d2ae290b6f70d56f79497cf200cffd2c99f67
   languageName: node
   linkType: hard
 
