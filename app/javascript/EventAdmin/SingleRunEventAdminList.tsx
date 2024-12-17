@@ -8,14 +8,9 @@ import useEventAdminCategory from './useEventAdminCategory';
 import { timezoneNameForConvention } from '../TimeUtils';
 import { useFormatRunTimespan } from '../EventsApp/runTimeFormatting';
 import { useTranslation } from 'react-i18next';
-import { useEventAdminEventsLoader } from './loaders';
+import { CategorySpecificEventAdminComponentProps } from './CategorySpecificEventAdmin';
 
-export type SingleRunEventAdminListProps = {
-  eventCategoryId: string;
-};
-
-export default function SingleRunEventAdminList({ eventCategoryId }: SingleRunEventAdminListProps) {
-  const data = useEventAdminEventsLoader();
+export default function SingleRunEventAdminList({ eventCategoryId, data }: CategorySpecificEventAdminComponentProps) {
   const [eventCategory, sortedEvents] = useEventAdminCategory(data, eventCategoryId);
   const formatRunTimespan = useFormatRunTimespan();
   const { t } = useTranslation();
