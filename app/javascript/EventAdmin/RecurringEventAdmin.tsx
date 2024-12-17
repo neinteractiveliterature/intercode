@@ -4,14 +4,12 @@ import RecurringEventSection from './RecurringEventSection';
 import usePageTitle from '../usePageTitle';
 import useEventAdminCategory from './useEventAdminCategory';
 import { useTranslation } from 'react-i18next';
-import { useEventAdminEventsLoader } from './loaders';
+import { CategorySpecificEventAdminComponentProps } from './CategorySpecificEventAdmin';
 
-export type RecurringEventAdminProps = {
-  eventCategoryId: string;
-};
-
-export default function RecurringEventAdmin({ eventCategoryId }: RecurringEventAdminProps): JSX.Element {
-  const data = useEventAdminEventsLoader();
+export default function RecurringEventAdmin({
+  eventCategoryId,
+  data,
+}: CategorySpecificEventAdminComponentProps): JSX.Element {
   const [eventCategory, sortedEvents] = useEventAdminCategory(data, eventCategoryId);
   const { t } = useTranslation();
 

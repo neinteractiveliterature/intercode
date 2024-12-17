@@ -1,17 +1,17 @@
 import { useState } from 'react';
-import { useNavigate, LoaderFunction, useLoaderData, ActionFunction, redirect } from 'react-router';
+import { useNavigate, redirect } from 'react-router';
 
 import EditRunModal, { EditingRun } from './EditRunModal';
 import { EventAdminEventsQueryData, EventAdminEventsQueryDocument, RunFieldsFragmentDoc } from './queries.generated';
-import { client } from '../useIntercodeApolloClient';
 import { CreateRunDocument } from './mutations.generated';
 import { buildRunInputFromFormData } from './buildRunInputFromFormData';
 import { Event } from '../graphqlTypes.generated';
+import { Route } from './+types/NewRun';
 
-export async function action({ params: { eventCategoryId, eventId }, request }) {
+export async function action({ params: { eventCategoryId, eventId }, request, context }: Route.ActionArgs) {
   try {
     const formData = await request.formData();
-    await client.mutate({
+    await context.client.mutate({
       mutation: CreateRunDocument,
       variables: {
         input: {
@@ -38,45 +38,38 @@ export async function action({ params: { eventCategoryId, eventId }, request }) 
   }
 }
 
-type LoaderResult = {
-  initialRun: EditingRun;
-  event: EventAdminEventsQueryData['convention']['events'][number];
-  convention: EventAdminEventsQueryData['convention'];
+const initialRun: EditingRun = {
+  __typename: 'Run',
+  id: '',
+  my_signups: [],
+  my_signup_requests: [],
+  my_signup_ranked_choices: [],
+  starts_at: undefined,
+  title_suffix: undefined,
+  schedule_note: undefined,
+  rooms: [],
+  room_names: [],
+  confirmed_signup_count: 0,
+  not_counted_signup_count: 0,
+  grouped_signup_counts: [],
 };
 
-export async function loader({ params: { eventId } }) {
+export async function loader({ params: { eventId }, context }: Route.LoaderArgs) {
   const {
     data: { convention },
-  } = await client.query<EventAdminEventsQueryData>({ query: EventAdminEventsQueryDocument });
+  } = await context.client.query<EventAdminEventsQueryData>({ query: EventAdminEventsQueryDocument });
   const events = convention.events;
   const event = events.find((e) => e.id.toString() === eventId);
 
   if (!event) {
-    return new Response(null, { status: 404 });
+    throw new Response(null, { status: 404 });
   }
 
-  const initialRun: EditingRun = {
-    __typename: 'Run',
-    id: '',
-    my_signups: [],
-    my_signup_requests: [],
-    my_signup_ranked_choices: [],
-    starts_at: undefined,
-    title_suffix: undefined,
-    schedule_note: undefined,
-    rooms: [],
-    room_names: [],
-    confirmed_signup_count: 0,
-    not_counted_signup_count: 0,
-    grouped_signup_counts: [],
-  };
-
-  return { initialRun, event, convention } as LoaderResult;
+  return { event, convention };
 }
 
-function NewRun(): JSX.Element {
+function NewRun({ loaderData: { event, convention } }: Route.ComponentProps): JSX.Element {
   const navigate = useNavigate();
-  const { event, initialRun, convention } = useLoaderData() as LoaderResult;
 
   const cancelEditing = () => {
     navigate('../../../..', { replace: true });

@@ -138,6 +138,7 @@ function RunFormFields<RunType extends RunForRunFormFields>({
         day={day ?? undefined}
         runs={runsForProspectiveRunSchedule}
         event={eventForProspectiveRunSchedule}
+        convention={convention}
       />
       <BootstrapFormInput
         name="title_suffix"

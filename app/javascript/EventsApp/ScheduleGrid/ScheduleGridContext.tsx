@@ -4,13 +4,13 @@ import { useApolloClient, useQuery } from '@apollo/client';
 import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
 import ConventionDayTabContainer from './ConventionDayTabContainer';
-import Schedule from './Schedule';
+import Schedule, { ScheduleEvent } from './Schedule';
 import { timespanFromConvention, getConventionDayTimespans, ConventionForTimespanUtils } from '../../TimespanUtils';
 import useCachedLoadableValue from '../../useCachedLoadableValue';
 import ScheduleGridSkeleton from './ScheduleGridSkeleton';
 import AppRootContext from '../../AppRootContext';
 import { ScheduleGridConfig } from './ScheduleGridConfig';
-import { CmsPartialBlockName, EventFiltersInput, TimezoneMode } from '../../graphqlTypes.generated';
+import { CmsPartialBlockName, Convention, EventFiltersInput, TimezoneMode } from '../../graphqlTypes.generated';
 import {
   ScheduleGridConventionDataQueryData,
   ScheduleGridEventFragment,
@@ -97,9 +97,13 @@ function checkRunDetailsVisibity(
   return visibleSpecs.some((spec) => runDetailsVisibilitySpecsMatch(spec, visibilitySpec));
 }
 
+export type ScheduleGridProviderConvention = Pick<Convention, 'id' | 'timezone_mode'> & {
+  event_categories: ScheduleEvent['event_category'][];
+};
+
 export function useScheduleGridProvider(
   config: ScheduleGridConfig | undefined,
-  convention: ScheduleGridConventionDataQueryData['convention'] | undefined,
+  convention: ScheduleGridProviderConvention | undefined,
   events: ScheduleGridEventFragment[] | undefined,
   myRatingFilter?: number[],
   hideConflicts?: boolean,

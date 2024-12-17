@@ -2,11 +2,10 @@ import { redirect } from 'react-router';
 import buildEventCategoryUrl from 'EventAdmin/buildEventCategoryUrl';
 import { EventAdminEventsQueryDocument } from 'EventAdmin/queries.generated';
 import { SiteMode } from 'graphqlTypes.generated';
-import { LoaderFunction } from 'react-router';
-import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
+import { Route } from './+types/route';
 
-const eventAdminRootRedirect: LoaderFunction = async ({ context }) => {
-  const client = context!.client as ApolloClient<NormalizedCacheObject>;
+export async function loader({ context }: Route.LoaderArgs) {
+  const client = context.client;
   const { data } = await client.query({ query: EventAdminEventsQueryDocument });
   if (!data.convention) {
     return new Response(null, { status: 404 });
@@ -26,6 +25,4 @@ const eventAdminRootRedirect: LoaderFunction = async ({ context }) => {
   }
 
   return redirect(buildEventCategoryUrl(firstEventCategory));
-};
-
-export default eventAdminRootRedirect;
+}

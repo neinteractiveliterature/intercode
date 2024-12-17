@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { LoaderFunction, useFetcher, useLoaderData, useRouteLoaderData, useSubmit } from 'react-router';
+import { useFetcher, useLoaderData, useRouteLoaderData, useSubmit } from 'react-router';
 
 import useEventFormWithCategorySelection, { EventFormWithCategorySelection } from './useEventFormWithCategorySelection';
 import EditEvent from '../BuiltInForms/EditEvent';
@@ -14,17 +14,17 @@ import {
 } from './queries.generated';
 import { ImageAttachmentConfig } from '../BuiltInFormControls/MarkdownInput';
 import { NamedRoute } from '../routes';
-import { client } from '../useIntercodeApolloClient';
 import { UpdateEventOptions } from './$id';
+import { Route } from './+types/EventAdminEditEvent';
 
 type LoaderResult = WithFormResponse<EventAdminSingleEventQueryData['conventionByRequestHost']['event']>;
 
-export async function loader({ params: { eventId } }) {
+export async function loader({ params: { eventId }, context }: Route.LoaderArgs) {
   const {
     data: {
       conventionByRequestHost: { event: serializedEvent },
     },
-  } = await client.query({
+  } = await context.client.query({
     query: EventAdminSingleEventQueryDocument,
     variables: { eventId: eventId ?? '' },
   });
