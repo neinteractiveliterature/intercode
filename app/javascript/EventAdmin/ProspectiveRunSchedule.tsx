@@ -22,9 +22,9 @@ import { RunDimensions, ScheduleLayoutResult } from '../EventsApp/ScheduleGrid/S
 import { ScheduleGridConfig } from '../EventsApp/ScheduleGrid/ScheduleGridConfig';
 import { EventFieldsFragment, RunFieldsFragment } from './queries.generated';
 import { ScheduleGridEventFragment } from '../EventsApp/ScheduleGrid/queries.generated';
-import { ScheduleRun } from '../EventsApp/ScheduleGrid/Schedule';
-import { useEventAdminEventsLoader } from './loaders';
 import styles from 'styles/schedule_grid.module.scss';
+import { ScheduleEvent, ScheduleRun } from '../EventsApp/ScheduleGrid/Schedule';
+import { Convention } from 'graphqlTypes.generated';
 
 const SCHEDULE_GRID_CONFIG: ScheduleGridConfig = {
   key: 'con_schedule_by_room',
@@ -154,13 +154,21 @@ export type ProspectiveRunScheduleProps = {
     | 'my_signup_ranked_choices'
   >[];
   event: EventFieldsFragment;
+  convention: Pick<Convention, 'id' | 'starts_at' | 'ends_at' | 'timezone_mode'> & {
+    events: ScheduleGridEventFragment[];
+    event_categories: ScheduleEvent['event_category'][];
+  };
 };
 
-export default function ProspectiveRunSchedule({ day, runs, event }: ProspectiveRunScheduleProps): JSX.Element {
-  const data = useEventAdminEventsLoader();
+export default function ProspectiveRunSchedule({
+  day,
+  runs,
+  event,
+  convention,
+}: ProspectiveRunScheduleProps): JSX.Element {
   const { timezoneName } = useContext(AppRootContext);
 
-  const conventionTimespan = useMemo(() => timespanFromConvention(data.convention), [data]);
+  const conventionTimespan = useMemo(() => timespanFromConvention(convention), [convention]);
 
   const prospectiveRuns: ProspectiveRun[] = useMemo(
     () =>
@@ -184,8 +192,8 @@ export default function ProspectiveRunSchedule({ day, runs, event }: Prospective
     [runs, event.id],
   );
 
-  const eventsForSchedule: ScheduleGridEventFragment[] | undefined = useMemo(() => {
-    const filteredEvents = data.convention.events.map((e) => {
+  const eventsForSchedule: ScheduleGridEventFragment[] = useMemo(() => {
+    const filteredEvents = convention.events.map((e) => {
       if (e.id === event.id) {
         return {
           ...e,
@@ -212,7 +220,7 @@ export default function ProspectiveRunSchedule({ day, runs, event }: Prospective
     }
 
     return effectiveEvents;
-  }, [data, event, prospectiveRuns, runs]);
+  }, [convention, event, prospectiveRuns, runs]);
 
   const conventionDayTimespans = useMemo(
     () => (conventionTimespan?.isFinite() ? getConventionDayTimespans(conventionTimespan, timezoneName) : undefined),
@@ -229,7 +237,7 @@ export default function ProspectiveRunSchedule({ day, runs, event }: Prospective
 
   const scheduleGridProviderValue = useScheduleGridProvider(
     SCHEDULE_GRID_CONFIG,
-    data?.convention ?? undefined,
+    convention ?? undefined,
     eventsForSchedule,
   );
   const layout = useLayoutForTimespan(scheduleGridProviderValue.schedule, conventionDayTimespan);
@@ -258,7 +266,7 @@ export default function ProspectiveRunSchedule({ day, runs, event }: Prospective
                 rowHeader={options.rowHeader}
                 renderEventRun={({ layoutResult, runDimensions }) => (
                   <ProspectiveRunScheduleEventRun
-                    convention={data.convention}
+                    convention={convention}
                     layoutResult={layoutResult}
                     runDimensions={runDimensions}
                   />

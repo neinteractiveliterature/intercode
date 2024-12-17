@@ -1,18 +1,16 @@
 import { useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import usePageTitle from '../usePageTitle';
-import { EventAdminEventsQueryData, EventAdminEventsQueryDocument } from './queries.generated';
-import { LoaderFunction, useLoaderData } from 'react-router';
-import { client } from '../useIntercodeApolloClient';
+import { EventAdminEventsQueryDocument } from './queries.generated';
 import { useSubmit } from 'react-router';
+import { Route } from './+types/DroppedEventAdmin';
 
-export async function loader() {
-  const { data } = await client.query({ query: EventAdminEventsQueryDocument });
+export async function loader({ context }: Route.LoaderArgs) {
+  const { data } = await context.client.query({ query: EventAdminEventsQueryDocument });
   return data;
 }
 
-function DroppedEventAdmin(): JSX.Element {
-  const data = useLoaderData() as EventAdminEventsQueryData;
+function DroppedEventAdmin({ loaderData: data }: Route.ComponentProps): JSX.Element {
   const confirm = useConfirm();
   const submit = useSubmit();
 

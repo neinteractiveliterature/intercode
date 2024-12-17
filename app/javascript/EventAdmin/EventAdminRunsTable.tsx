@@ -4,14 +4,9 @@ import EventAdminRow from './EventAdminRow';
 import usePageTitle from '../usePageTitle';
 import useEventAdminCategory from './useEventAdminCategory';
 import { useTranslation } from 'react-i18next';
-import { useEventAdminEventsLoader } from './loaders';
+import { CategorySpecificEventAdminComponentProps } from './CategorySpecificEventAdmin';
 
-export type EventAdminRunsTableProps = {
-  eventCategoryId: string;
-};
-
-export default function EventAdminRunsTable({ eventCategoryId }: EventAdminRunsTableProps) {
-  const data = useEventAdminEventsLoader();
+export default function EventAdminRunsTable({ eventCategoryId, data }: CategorySpecificEventAdminComponentProps) {
   const [eventCategory, sortedEvents] = useEventAdminCategory(data, eventCategoryId);
   const { t } = useTranslation();
 
