@@ -1,41 +1,47 @@
-import { LoaderFunction, Outlet, useLoaderData } from 'react-router';
+import { Outlet } from 'react-router';
 import { EventAdminEventsQueryData, EventAdminEventsQueryDocument } from './queries.generated';
 import EventAdminRunsTable from './EventAdminRunsTable';
 import RecurringEventAdmin from './RecurringEventAdmin';
 import SingleRunEventAdminList from './SingleRunEventAdminList';
-import { client } from '../useIntercodeApolloClient';
+import { Route } from './+types/CategorySpecificEventAdmin';
+import { SchedulingUi } from 'graphqlTypes.generated';
 
-export const adminComponentsBySchedulingUi = {
+export type CategorySpecificEventAdminComponentProps = Route.ComponentProps['loaderData'] & {
+  eventCategoryId: string;
+};
+
+export const adminComponentsBySchedulingUi: Record<
+  SchedulingUi,
+  React.ComponentType<CategorySpecificEventAdminComponentProps>
+> = {
   regular: EventAdminRunsTable,
   recurring: RecurringEventAdmin,
   single_run: SingleRunEventAdminList,
 };
 
-export async function loader({ params: { eventCategoryId } }) {
-  const { data } = await client.query<EventAdminEventsQueryData>({ query: EventAdminEventsQueryDocument });
+export async function loader({ params: { eventCategoryId }, context }: Route.LoaderArgs) {
+  const { data } = await context.client.query<EventAdminEventsQueryData>({ query: EventAdminEventsQueryDocument });
 
   const eventCategoryIdIntPortion = Number.parseInt(eventCategoryId ?? '');
   if (Number.isNaN(eventCategoryIdIntPortion)) {
-    return new Response(null, { status: 404 });
+    throw new Response(null, { status: 404 });
   }
   const eventCategory = data.convention.event_categories.find(
     (category) => Number.parseInt(category.id) === eventCategoryIdIntPortion,
   );
 
   if (!eventCategory) {
-    return new Response(null, { status: 404 });
+    throw new Response(null, { status: 404 });
   }
 
-  return eventCategory;
+  return { data, eventCategory };
 }
 
-function CategorySpecificEventAdmin() {
-  const eventCategory = useLoaderData() as EventAdminEventsQueryData['convention']['event_categories'][number];
-
-  const AdminComponent = adminComponentsBySchedulingUi[eventCategory.scheduling_ui];
+function CategorySpecificEventAdmin({ loaderData: data }: Route.ComponentProps) {
+  const AdminComponent = adminComponentsBySchedulingUi[data.eventCategory.scheduling_ui];
   return (
     <>
-      <AdminComponent eventCategoryId={eventCategory.id} />
+      <AdminComponent eventCategoryId={data.eventCategory.id} {...data} />
       <Outlet />
     </>
   );

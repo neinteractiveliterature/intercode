@@ -1,17 +1,13 @@
 import { useMemo } from 'react';
-import { ScheduleGridConventionDataQueryData } from './ScheduleGrid/queries.generated';
+import { EventCategory } from 'graphqlTypes.generated';
+import { ScheduleEvent } from './ScheduleGrid/Schedule';
 
-type EventCategoryType = ScheduleGridConventionDataQueryData['convention']['event_categories'][number];
-
-export default function useMergeCategoriesIntoEvents<T extends { event_category: { id: string } }>(
-  eventCategories: EventCategoryType[],
-  events: T[],
-) {
+export default function useMergeCategoriesIntoEvents<
+  EventCategoryType extends ScheduleEvent['event_category'],
+  EventType extends { event_category: Pick<EventCategory, 'id'> },
+>(eventCategories: EventCategoryType[], events: EventType[]) {
   const eventCategoriesById = useMemo(() => {
-    const eventCategoriesById = new Map<
-      string,
-      ScheduleGridConventionDataQueryData['convention']['event_categories'][number]
-    >();
+    const eventCategoriesById = new Map<string, EventCategoryType>();
     eventCategories.forEach((category) => {
       eventCategoriesById.set(category.id, category);
     });
@@ -20,7 +16,6 @@ export default function useMergeCategoriesIntoEvents<T extends { event_category:
 
   const eventsWithCategories = useMemo(
     () =>
-       
       events?.map((event) => ({ ...event, event_category: eventCategoriesById.get(event.event_category.id)! })) ?? [],
     [events, eventCategoriesById],
   );
