@@ -1,19 +1,19 @@
-import { ActionFunction, Form, redirect, useActionData, useNavigation } from 'react-router';
+import { Form, redirect, useActionData, useNavigation } from 'react-router';
 
 import usePageTitle from '../usePageTitle';
 import DepartmentForm from './DepartmentForm';
-import { client } from '../useIntercodeApolloClient';
 import { CreateDepartmentDocument } from './mutations.generated';
 import { useTranslation } from 'react-i18next';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 import { ApolloError } from '@apollo/client';
 import { buildDepartmentInputFromFormData } from './buildDepartmentInput';
 import { DepartmentAdminQueryDocument } from './queries.generated';
+import { Route } from './+types/NewDepartment';
 
-export async function action({ request }) {
+export async function action({ request, context }: Route.ActionArgs) {
   try {
     const formData = await request.formData();
-    await client.mutate({
+    await context.client.mutate({
       mutation: CreateDepartmentDocument,
       variables: {
         department: buildDepartmentInputFromFormData(formData),

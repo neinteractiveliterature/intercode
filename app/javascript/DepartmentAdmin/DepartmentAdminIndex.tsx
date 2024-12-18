@@ -2,8 +2,8 @@ import { Link, useSubmit } from 'react-router';
 import { useGraphQLConfirm, sortByLocaleString } from '@neinteractiveliterature/litform';
 
 import usePageTitle from '../usePageTitle';
-import { useDepartmentAdminLoader } from './loaders';
 import { useTranslation } from 'react-i18next';
+import { useDepartmentAdminLoader } from './route';
 
 function DepartmentAdminIndex() {
   const data = useDepartmentAdminLoader();

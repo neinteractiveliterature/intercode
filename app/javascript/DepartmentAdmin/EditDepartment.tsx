@@ -1,18 +1,18 @@
-import { ActionFunction, Form, redirect, useLoaderData, useNavigation } from 'react-router';
+import { Form, redirect, useNavigation } from 'react-router';
 
 import usePageTitle from '../usePageTitle';
 import { buildDepartmentInputFromFormData } from './buildDepartmentInput';
 import DepartmentForm from './DepartmentForm';
-import { singleDepartmentAdminLoader, SingleDepartmentAdminLoaderResult } from './loaders';
-import { client } from '../useIntercodeApolloClient';
 import { UpdateDepartmentDocument } from './mutations.generated';
 import { DepartmentAdminQueryDocument } from './queries.generated';
 import { useTranslation } from 'react-i18next';
+import { Route } from './+types/EditDepartment';
+import { loader as routeLoader } from './route';
 
-export async function action({ params: { id }, request }) {
+export async function action({ params: { id }, request, context }: Route.ActionArgs) {
   try {
     const formData = await request.formData();
-    await client.mutate({
+    await context.client.mutate({
       mutation: UpdateDepartmentDocument,
       variables: {
         id,
@@ -27,10 +27,16 @@ export async function action({ params: { id }, request }) {
   }
 }
 
-export const loader = singleDepartmentAdminLoader;
+export async function loader({ context, params, request }: Route.LoaderArgs) {
+  const data = await routeLoader({ context, params, request });
+  const department = data.convention.departments.find((department) => department.id === params.id);
+  if (department == null) {
+    throw new Response('Not Found', { status: 404 });
+  }
+  return department;
+}
 
-function EditDepartment() {
-  const { department: initialDepartment } = useLoaderData() as SingleDepartmentAdminLoaderResult;
+function EditDepartment({ loaderData: initialDepartment }: Route.ComponentProps) {
   const navigation = useNavigation();
   const { t } = useTranslation();
 
