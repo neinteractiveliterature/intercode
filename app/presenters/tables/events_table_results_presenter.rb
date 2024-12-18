@@ -1,7 +1,16 @@
 # frozen_string_literal: true
 class Tables::EventsTableResultsPresenter < Tables::TableResultsPresenter
-  def self.for_convention(convention:, pundit_user:, filters: {}, sort: nil, visible_field_ids: nil)
-    scope = Pundit.policy_scope(pundit_user, convention.events.where(status: "active").includes(:convention))
+  def self.for_convention(
+    convention:,
+    pundit_user:,
+    filters: {},
+    sort: nil,
+    visible_field_ids: nil,
+    include_dropped: false
+  )
+    events_scope = convention.events
+    events_scope = events_scope.where(status: "active") unless include_dropped
+    scope = Pundit.policy_scope(pundit_user, events_scope.includes(:convention))
     new(
       base_scope: scope,
       convention: convention,
@@ -90,6 +99,10 @@ class Tables::EventsTableResultsPresenter < Tables::TableResultsPresenter
   end
 
   field :created_at, "Created at"
+
+  field :status, "Status" do
+    column_filter :status
+  end
 
   field :form_items, "Convention-specific form items" do
     def apply_filter(scope, value)

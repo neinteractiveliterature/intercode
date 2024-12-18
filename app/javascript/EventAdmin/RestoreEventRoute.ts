@@ -1,6 +1,5 @@
 import { redirect } from 'react-router';
 import { RestoreDroppedEventDocument } from './mutations.generated';
-import { EventAdminEventsQueryDocument } from './queries.generated';
 import { Route } from './+types/RestoreEventRoute';
 
 export async function action({ params: { eventId }, context }: Route.ActionArgs) {
@@ -12,9 +11,8 @@ export async function action({ params: { eventId }, context }: Route.ActionArgs)
           id: eventId ?? '',
         },
       },
-      refetchQueries: [{ query: EventAdminEventsQueryDocument }],
-      awaitRefetchQueries: true,
     });
+    await context.client.resetStore();
     return redirect('/admin_events/dropped_events');
   } catch (error) {
     return error;
