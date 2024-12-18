@@ -735,6 +735,8 @@ export type Convention = CmsParent & {
   event: Event;
   /** All the EventCategories in this convention. */
   event_categories: Array<EventCategory>;
+  /** Finds an EventCategory by ID in this convention. */
+  event_category: EventCategory;
   /**
    * If present, the site will automatically offer to set up forwarding email addresses for event teams under this
    * domain.
@@ -1071,6 +1073,19 @@ export type ConventionEvent_CategoriesArgs = {
  * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
  * them as "web site."
  */
+export type ConventionEvent_CategoryArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
 export type ConventionEvent_ProposalArgs = {
   id: Scalars['ID']['input'];
 };
@@ -1118,6 +1133,7 @@ export type ConventionEventsArgs = {
  */
 export type ConventionEvents_PaginatedArgs = {
   filters?: InputMaybe<EventFiltersInput>;
+  includeDropped?: InputMaybe<Scalars['Boolean']['input']>;
   page?: InputMaybe<Scalars['Int']['input']>;
   per_page?: InputMaybe<Scalars['Int']['input']>;
   sort?: InputMaybe<Array<SortInput>>;
@@ -2889,7 +2905,7 @@ export type Event = {
   short_blurb?: Maybe<Scalars['String']['output']>;
   short_blurb_html?: Maybe<Scalars['String']['output']>;
   slots_limited?: Maybe<Scalars['Boolean']['output']>;
-  status?: Maybe<Scalars['String']['output']>;
+  status?: Maybe<EventStatus>;
   team_members: Array<TeamMember>;
   ticket_types: Array<TicketType>;
   title?: Maybe<Scalars['String']['output']>;
@@ -2965,6 +2981,7 @@ export type EventFiltersInput = {
   category?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
   form_items?: InputMaybe<Scalars['JSON']['input']>;
   my_rating?: InputMaybe<Array<Scalars['Int']['input']>>;
+  status?: InputMaybe<EventStatus>;
   title?: InputMaybe<Scalars['String']['input']>;
   title_prefix?: InputMaybe<Scalars['String']['input']>;
 };
@@ -3041,6 +3058,12 @@ export type EventProvidedTicketList = {
   provided_by_event: Event;
   tickets: Array<Ticket>;
 };
+
+/** The current status of an event in the convention. */
+export enum EventStatus {
+  Active = 'active',
+  Dropped = 'dropped'
+}
 
 export type EventWithChoiceCounts = {
   __typename: 'EventWithChoiceCounts';

@@ -4567,6 +4567,39 @@
               ]
             },
             {
+              "name": "event_category",
+              "description": "Finds an EventCategory by ID in this convention.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "EventCategory",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": [
+                {
+                  "name": "id",
+                  "description": "The ID of the EventCategory to find.",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "ID",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ]
+            },
+            {
               "name": "event_mailing_list_domain",
               "description": "If present, the site will automatically offer to set up forwarding email addresses for event teams under this\ndomain.\n",
               "type": {
@@ -4823,6 +4856,18 @@
                         "ofType": null
                       }
                     }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                },
+                {
+                  "name": "includeDropped",
+                  "description": "If true, the results will include dropped events.  Only convention admins can see dropped events, so using\nthis may cause authorization errors.\n",
+                  "type": {
+                    "kind": "SCALAR",
+                    "name": "Boolean",
+                    "ofType": null
                   },
                   "defaultValue": null,
                   "isDeprecated": false,
@@ -15192,8 +15237,8 @@
               "name": "status",
               "description": null,
               "type": {
-                "kind": "SCALAR",
-                "name": "String",
+                "kind": "ENUM",
+                "name": "EventStatus",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -15805,6 +15850,18 @@
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "status",
+              "description": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "EventStatus",
                 "ofType": null
               },
               "defaultValue": null,
@@ -16527,6 +16584,29 @@
           ],
           "inputFields": null,
           "enumValues": null
+        },
+        {
+          "kind": "ENUM",
+          "name": "EventStatus",
+          "description": "The current status of an event in the convention.",
+          "interfaces": null,
+          "possibleTypes": null,
+          "fields": null,
+          "inputFields": null,
+          "enumValues": [
+            {
+              "name": "active",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "dropped",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ]
         },
         {
           "kind": "OBJECT",

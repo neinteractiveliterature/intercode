@@ -6,18 +6,19 @@ import { useTranslation } from 'react-i18next';
 import AdminNotes from '../BuiltInFormControls/AdminNotes';
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
 import AppRootContext from '../AppRootContext';
-import { ConventionFieldsFragment, EventFieldsFragment, RunFieldsFragment } from './queries.generated';
+import { EventFieldsFragment, RunFieldsFragment } from './queries.generated';
 import { timespanFromRun } from '../TimespanUtils';
 import getSortedRuns from '../EventsApp/EventCatalog/EventList/getSortedRuns';
 import { getDateTimeFormat } from '../TimeUtils';
 import { useFormatRunTimespan } from '../EventsApp/runTimeFormatting';
+import { EventCategory } from 'graphqlTypes.generated';
 
 export type EventAdminRowProps = {
   event: EventFieldsFragment;
-  convention: ConventionFieldsFragment;
+  eventCategory: Pick<EventCategory, 'name' | 'default_color' | 'full_color' | 'signed_up_color'>;
 };
 
-function EventAdminRow({ event, convention }: EventAdminRowProps): JSX.Element {
+function EventAdminRow({ event, eventCategory }: EventAdminRowProps): JSX.Element {
   const { t } = useTranslation();
   const { timezoneName } = useContext(AppRootContext);
   const [expanded, setExpanded] = useState(false);
@@ -25,10 +26,6 @@ function EventAdminRow({ event, convention }: EventAdminRowProps): JSX.Element {
   const adminNotesFetcher = useFetcher();
 
   const length = useMemo(() => Duration.fromObject({ seconds: event.length_seconds }), [event.length_seconds]);
-  const eventCategory = useMemo(
-    () => convention.event_categories.find((c) => c.id === event.event_category.id),
-    [convention.event_categories, event.event_category],
-  );
 
   const renderRun = (run: RunFieldsFragment) => {
     const timespan = timespanFromRun(timezoneName, event, run);

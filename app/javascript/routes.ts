@@ -68,19 +68,19 @@ export default [
             route('dropped_events', 'EventAdmin/DroppedEventAdmin.tsx'),
             route(':eventCategoryId', 'EventAdmin/$eventCategoryId.ts', [
               route('', 'EventAdmin/CategorySpecificEventAdmin.tsx', [
-                route('events', 'EventAdmin/create.ts', [
-                  index('EventAdmin/events/route.ts'),
-                  route(':eventId', 'EventAdmin/$id.ts', [
-                    route('admin_notes', 'EventAdmin/AdminNotesRoute.ts'),
-                    route('drop', 'EventAdmin/drop.ts'),
-                    route('edit', 'EventAdmin/EventAdminEditEvent.tsx'),
-                    route('restore', 'EventAdmin/RestoreEventRoute.ts'),
-                    route('runs', 'EventAdmin/runs/route.ts', [
-                      route(':runId', 'EventAdmin/SingleRunRoute.ts', [route('edit', 'EventAdmin/EditRun.tsx')]),
-                      route('create_multiple', 'EventAdmin/CreateMultipleRunsRoute.ts'),
-                      route('new', 'EventAdmin/NewRun.tsx'),
-                    ]),
-                  ]),
+                route('events/:eventId/runs', 'EventAdmin/runs/route.ts', [
+                  route(':runId', 'EventAdmin/SingleRunRoute.ts', [route('edit', 'EventAdmin/EditRun.tsx')]),
+                  route('create_multiple', 'EventAdmin/CreateMultipleRunsRoute.ts'),
+                  route('new', 'EventAdmin/NewRun.tsx'),
+                ]),
+              ]),
+              route('events', 'EventAdmin/create.ts', [
+                index('EventAdmin/events/route.ts'),
+                route(':eventId', 'EventAdmin/$id.ts', [
+                  route('admin_notes', 'EventAdmin/AdminNotesRoute.ts'),
+                  route('drop', 'EventAdmin/drop.ts'),
+                  route('edit', 'EventAdmin/EventAdminEditEvent.tsx'),
+                  route('restore', 'EventAdmin/RestoreEventRoute.ts'),
                 ]),
               ]),
             ]),

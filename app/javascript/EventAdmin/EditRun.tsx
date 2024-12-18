@@ -2,10 +2,10 @@ import { useState } from 'react';
 import { useNavigate, redirect } from 'react-router';
 
 import EditRunModal, { EditingRun } from './EditRunModal';
-import { EventAdminEventsQueryData, EventAdminEventsQueryDocument } from './queries.generated';
 import { UpdateRunDocument } from './mutations.generated';
 import { buildRunInputFromFormData } from './buildRunInputFromFormData';
 import { Route } from './+types/EditRun';
+import { EditRunQueryDocument } from './queries.generated';
 
 export async function action({ params: { eventCategoryId, runId }, request, context }: Route.ActionArgs) {
   try {
@@ -25,22 +25,21 @@ export async function action({ params: { eventCategoryId, runId }, request, cont
   }
 }
 
-export async function loader({ params: { eventId, runId }, context }: Route.LoaderArgs) {
+export async function loader({ params: { runId }, context }: Route.LoaderArgs) {
   const {
     data: { convention },
-  } = await context.client.query<EventAdminEventsQueryData>({ query: EventAdminEventsQueryDocument });
-  const events = convention.events;
-  const event = events.find((e) => e.id.toString() === eventId);
-  const initialRun = event?.runs.find((r) => r.id === runId) as EditingRun;
+  } = await context.client.query({ query: EditRunQueryDocument, variables: { runId } });
+  const initialRun = convention.run as EditingRun;
+  const event = convention.run.event;
 
-  if (event && initialRun) {
-    return { event, initialRun, convention };
+  if (initialRun) {
+    return { initialRun, convention, event };
   } else {
     throw new Response(null, { status: 404 });
   }
 }
 
-function EditRun({ loaderData: { event, initialRun, convention } }: Route.ComponentProps): JSX.Element {
+function EditRun({ loaderData: { initialRun, convention, event } }: Route.ComponentProps): JSX.Element {
   const navigate = useNavigate();
 
   const cancelEditing = () => {

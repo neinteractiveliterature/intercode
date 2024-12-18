@@ -45,36 +45,6 @@ fragment EventPageEventCategoryFields on EventCategory {
   }
 }
 
-fragment ConventionFields on Convention {
-  id
-  name
-  starts_at
-  ends_at
-  timezone_name
-  timezone_mode
-  event_mailing_list_domain
-  site_mode
-  signup_mode
-  signup_automation_mode
-
-  event_categories {
-    id
-    ...EventPageEventCategoryFields
-  }
-
-  rooms {
-    id
-    ...RoomFields
-  }
-
-  ticket_types {
-    id
-    ...TicketTypeFields
-  }
-  ticket_name
-  ticket_mode
-}
-
 fragment RunFields on Run {
   id
   starts_at
@@ -82,36 +52,9 @@ fragment RunFields on Run {
   title_suffix
   room_names
 
-  confirmed_signup_count
-  not_counted_signup_count
-
-  grouped_signup_counts {
-    bucket_key
-    count
-    counted
-    state
-    team_member
-  }
-
   rooms {
     id
     ...RoomFields
-  }
-
-  my_signups {
-    id
-    state
-  }
-
-  my_signup_requests {
-    id
-    state
-  }
-
-  my_signup_ranked_choices {
-    id
-    priority
-    state
   }
 }
 
@@ -175,29 +118,144 @@ fragment EventFields on Event {
 }
 
 query EventAdminSingleEventQuery($eventId: ID!) {
-  conventionByRequestHost {
+  currentAbility {
+    can_override_maximum_event_provided_tickets
+  }
+
+  convention: conventionByRequestHost {
     id
+    site_mode
+    ticket_mode
+    ticket_name
+    timezone_mode
+    timezone_name
+
     event(id: $eventId) {
       id
       form_response_attrs_json
       ...EventFields
     }
+
+    event_categories {
+      id
+      name
+      scheduling_ui
+
+      event_form {
+        ...CommonFormFields
+      }
+
+      event_proposal_form {
+        ...CommonFormFields
+      }
+    }
+
+    rooms {
+      ...RoomFields
+    }
+
+    ticket_types {
+      id
+      name
+      maximum_event_provided_tickets
+    }
   }
 }
 
-query EventAdminEventsQuery {
-  currentAbility {
-    can_override_maximum_event_provided_tickets
-    can_manage_runs
-  }
-
+query EventAdminRootQuery {
   convention: conventionByRequestHost {
     id
-    ...ConventionFields
+    site_mode
 
-    events(includeDropped: true) {
+    events_paginated(includeDropped: true, per_page: 1) {
+      total_entries
+      entries {
+        id
+      }
+    }
+
+    event_categories {
       id
+      ...EventPageEventCategoryFields
+    }
+  }
+}
+
+query CategorySpecificEventAdminQuery($eventCategoryId: ID!, $page: Int) {
+  convention: conventionByRequestHost {
+    id
+    timezone_mode
+    ticket_name
+
+    event_category(id: $eventCategoryId) {
+      id
+      ...EventPageEventCategoryFields
+
+      events_paginated(page: $page, per_page: 200, sort: [{ field: "title", desc: false }]) {
+        total_pages
+
+        entries {
+          ...EventFields
+        }
+      }
+    }
+  }
+}
+
+query DroppedEventsAdminQuery {
+  convention: conventionByRequestHost {
+    id
+    events_paginated(filters: { status: dropped }, includeDropped: true, sort: [{ field: "title", desc: false }]) {
+      total_pages
+
+      entries {
+        id
+        title
+
+        event_category {
+          id
+        }
+      }
+    }
+  }
+}
+
+query NewRunQuery($eventId: ID!) {
+  convention: conventionByRequestHost {
+    id
+    timezone_mode
+    timezone_name
+    starts_at
+    ends_at
+
+    event(id: $eventId) {
       ...EventFields
+    }
+
+    rooms {
+      ...RoomFields
+    }
+  }
+}
+
+query EditRunQuery($runId: ID!) {
+  convention: conventionByRequestHost {
+    id
+    timezone_mode
+    timezone_name
+    starts_at
+    ends_at
+
+    rooms {
+      ...RoomFields
+    }
+
+    run(id: $runId) {
+      ...RunFields
+
+      event {
+        ...EventFields
+      }
     }
   }
 }

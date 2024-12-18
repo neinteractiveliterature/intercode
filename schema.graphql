@@ -785,6 +785,16 @@ type Convention implements CmsParent {
   ): [EventCategory!]!
 
   """
+  Finds an EventCategory by ID in this convention.
+  """
+  event_category(
+    """
+    The ID of the EventCategory to find.
+    """
+    id: ID!
+  ): EventCategory!
+
+  """
   If present, the site will automatically offer to set up forwarding email addresses for event teams under this
   domain.
   """
@@ -860,6 +870,12 @@ type Convention implements CmsParent {
     Filters to restrict what items will appear in the result set.
     """
     filters: EventFiltersInput
+
+    """
+    If true, the results will include dropped events.  Only convention admins can see dropped events, so using
+    this may cause authorization errors.
+    """
+    includeDropped: Boolean
 
     """
     The page number to return from the result set.  Page numbers start with 1.
@@ -3645,7 +3661,7 @@ type Event {
   short_blurb: String
   short_blurb_html: String
   slots_limited: Boolean
-  status: String
+  status: EventStatus
   team_members: [TeamMember!]!
   ticket_types: [TicketType!]!
   title: String
@@ -3713,6 +3729,7 @@ input EventFiltersInput {
   category: [Int]
   form_items: JSON
   my_rating: [Int!]
+  status: EventStatus
   title: String
   title_prefix: String
 }
@@ -3786,6 +3803,14 @@ type EventProposalsPagination implements PaginationInterface {
 type EventProvidedTicketList {
   provided_by_event: Event!
   tickets: [Ticket!]!
+}
+
+"""
+The current status of an event in the convention.
+"""
+enum EventStatus {
+  active
+  dropped
 }
 
 type EventWithChoiceCounts {

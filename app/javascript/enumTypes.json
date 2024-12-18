@@ -80,6 +80,29 @@
       }
     ]
   },
+  "EventStatus": {
+    "kind": "ENUM",
+    "name": "EventStatus",
+    "description": "The current status of an event in the convention.",
+    "interfaces": null,
+    "possibleTypes": null,
+    "fields": null,
+    "inputFields": null,
+    "enumValues": [
+      {
+        "name": "active",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "dropped",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      }
+    ]
+  },
   "FormItemExposeIn": {
     "kind": "ENUM",
     "name": "FormItemExposeIn",

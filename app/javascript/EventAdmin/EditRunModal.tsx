@@ -4,7 +4,7 @@ import { Modal } from 'react-bootstrap4-modal';
 import { useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import RunFormFields from '../BuiltInForms/RunFormFields';
-import { EventAdminEventsQueryData, EventFieldsFragment, RunFieldsFragment } from './queries.generated';
+import { EditRunQueryData, EventFieldsFragment, NewRunQueryData, RunFieldsFragment } from './queries.generated';
 import { useTranslation } from 'react-i18next';
 import { Form, FormProps, useParams, useSubmit } from 'react-router';
 
@@ -14,10 +14,10 @@ export type EditingRun = Omit<RunFieldsFragment, 'starts_at'> & {
 
 export type EditRunModalProps = {
   formProps: FormProps;
-  convention: EventAdminEventsQueryData['convention'];
+  convention: NewRunQueryData['convention'] | EditRunQueryData['convention'];
   run: EditingRun;
   event: EventFieldsFragment;
-  editingRunChanged: React.Dispatch<RunFieldsFragment>;
+  editingRunChanged: React.Dispatch<EditingRun>;
   onCancel: () => void;
 };
 
