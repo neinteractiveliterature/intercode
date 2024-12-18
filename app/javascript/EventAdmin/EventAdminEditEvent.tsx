@@ -1,40 +1,28 @@
 import { useState, useMemo } from 'react';
-import { useFetcher, useLoaderData, useRouteLoaderData, useSubmit } from 'react-router';
+import { useFetcher, useSubmit } from 'react-router';
 
 import useEventFormWithCategorySelection, { EventFormWithCategorySelection } from './useEventFormWithCategorySelection';
 import EditEvent from '../BuiltInForms/EditEvent';
 import MaximumEventProvidedTicketsOverrideEditor from '../BuiltInFormControls/MaximumEventProvidedTicketsOverrideEditor';
 import usePageTitle from '../usePageTitle';
 import RunFormFields, { RunFormFieldsProps } from '../BuiltInForms/RunFormFields';
-import deserializeFormResponse, { WithFormResponse } from '../Models/deserializeFormResponse';
-import {
-  EventAdminEventsQueryData,
-  EventAdminSingleEventQueryData,
-  EventAdminSingleEventQueryDocument,
-} from './queries.generated';
+import deserializeFormResponse from '../Models/deserializeFormResponse';
+import { EventAdminSingleEventQueryDocument } from './queries.generated';
 import { ImageAttachmentConfig } from '../BuiltInFormControls/MarkdownInput';
-import { NamedRoute } from '../routes';
 import { UpdateEventOptions } from './$id';
 import { Route } from './+types/EventAdminEditEvent';
 
-type LoaderResult = WithFormResponse<EventAdminSingleEventQueryData['conventionByRequestHost']['event']>;
-
 export async function loader({ params: { eventId }, context }: Route.LoaderArgs) {
-  const {
-    data: {
-      conventionByRequestHost: { event: serializedEvent },
-    },
-  } = await context.client.query({
+  const { data } = await context.client.query({
     query: EventAdminSingleEventQueryDocument,
     variables: { eventId: eventId ?? '' },
   });
-  const initialEvent = deserializeFormResponse(serializedEvent);
-  return initialEvent satisfies LoaderResult;
+  const { convention, currentAbility } = data;
+  const initialEvent = deserializeFormResponse(convention.event);
+  return { initialEvent, convention, currentAbility };
 }
 
-function EventAdminEditEvent() {
-  const { convention, currentAbility } = useRouteLoaderData(NamedRoute.EventAdmin) as EventAdminEventsQueryData;
-  const initialEvent = useLoaderData() as LoaderResult;
+function EventAdminEditEvent({ loaderData: { initialEvent, convention, currentAbility } }: Route.ComponentProps) {
   const submit = useSubmit();
   const fetcher = useFetcher();
 
@@ -102,7 +90,7 @@ function EventAdminEditEvent() {
       validateForm={validateForm}
       updateEvent={() => {
         if (eventCategory) {
-          submit({ event, eventCategory, run } satisfies UpdateEventOptions, {
+          submit({ event, eventCategory, run } satisfies Omit<UpdateEventOptions, 'client'>, {
             method: 'PATCH',
             encType: 'application/json',
             action: `/admin_events/${eventCategory.id}/events/${event.id}`,

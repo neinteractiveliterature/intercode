@@ -1,9 +1,9 @@
 import { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
 import { MultipleChoiceInput } from '@neinteractiveliterature/litform';
-import { MultipleChoiceInputProps } from '@neinteractiveliterature/litform/lib/MultipleChoiceInput';
 
 import { SignupFieldsFragment } from './queries.generated';
+import { MultipleChoiceInputProps } from '@neinteractiveliterature/litform/dist/types/MultipleChoiceInput';
 
 type BucketType = NonNullable<SignupFieldsFragment['run']['event']['registration_policy']>['buckets'][0];
 
