@@ -1,4 +1,4 @@
-import { ActionFunction, data, useNavigate } from 'react-router';
+import { data, useNavigate } from 'react-router';
 import { ForceConfirmSignupDocument } from '../mutations.generated';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';
@@ -8,8 +8,9 @@ import { ErrorDisplay } from '@neinteractiveliterature/litform';
 import { ApolloError } from '@apollo/client';
 import Modal from 'react-bootstrap4-modal';
 import { useSingleSignupLoader } from './route';
+import { Route } from './+types/force_confirm';
 
-export async function action({ context, request, params: { id } }) {
+export async function action({ context, request, params: { id } }: Route.ActionArgs) {
   const client = context!.client;
   try {
     const formData = await request.formData();

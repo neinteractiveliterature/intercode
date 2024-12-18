@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { NavLink, useLocation, Outlet, useRouteLoaderData } from 'react-router';
+import { NavLink, useLocation, Outlet } from 'react-router';
 import classNames from 'classnames';
 import { useLitformPopperWithAutoClosing } from '@neinteractiveliterature/litform';
 
@@ -8,16 +8,11 @@ import buildEventCategoryUrl from './buildEventCategoryUrl';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 import humanize from '../humanize';
 import { Route } from './+types/index';
-import { EventAdminEventsQueryDocument } from './queries.generated';
-import { NamedRoute } from 'routes';
+import { EventAdminRootQueryDocument } from './queries.generated';
 
 export async function loader({ context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({ query: EventAdminEventsQueryDocument });
+  const { data } = await context.client.query({ query: EventAdminRootQueryDocument });
   return data;
-}
-
-export function useEventAdminLoaderData() {
-  return useRouteLoaderData(NamedRoute.EventAdmin) as Route.ComponentProps['loaderData'];
 }
 
 function EventAdmin({ loaderData: data }: Route.ComponentProps) {
