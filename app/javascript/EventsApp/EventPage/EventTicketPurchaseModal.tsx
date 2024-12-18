@@ -38,6 +38,7 @@ export default function EventTicketPurchaseModal({
   const { data, error } = useSuspenseQuery(CurrentPendingOrderPaymentIntentClientSecretQueryDocument, {
     errorPolicy: 'ignore',
   });
+  const [checkOutError, setCheckOutError] = useState<Error>();
   const client = useApolloClient();
 
   const cancel = async () => {
