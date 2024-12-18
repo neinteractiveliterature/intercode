@@ -2,7 +2,7 @@ import { useState } from 'react';
 import { useNavigate, redirect } from 'react-router';
 
 import EditRunModal, { EditingRun } from './EditRunModal';
-import { EventAdminEventsQueryData, EventAdminEventsQueryDocument, RunFieldsFragmentDoc } from './queries.generated';
+import { NewRunQueryDocument, RunFieldsFragmentDoc } from './queries.generated';
 import { CreateRunDocument } from './mutations.generated';
 import { buildRunInputFromFormData } from './buildRunInputFromFormData';
 import { Event } from '../graphqlTypes.generated';
@@ -41,25 +41,17 @@ export async function action({ params: { eventCategoryId, eventId }, request, co
 const initialRun: EditingRun = {
   __typename: 'Run',
   id: '',
-  my_signups: [],
-  my_signup_requests: [],
-  my_signup_ranked_choices: [],
   starts_at: undefined,
   title_suffix: undefined,
   schedule_note: undefined,
   rooms: [],
   room_names: [],
-  confirmed_signup_count: 0,
-  not_counted_signup_count: 0,
-  grouped_signup_counts: [],
 };
 
 export async function loader({ params: { eventId }, context }: Route.LoaderArgs) {
-  const {
-    data: { convention },
-  } = await context.client.query<EventAdminEventsQueryData>({ query: EventAdminEventsQueryDocument });
-  const events = convention.events;
-  const event = events.find((e) => e.id.toString() === eventId);
+  const { data } = await context.client.query({ query: NewRunQueryDocument, variables: { eventId } });
+  const convention = data.convention;
+  const event = convention.event;
 
   if (!event) {
     throw new Response(null, { status: 404 });
@@ -72,7 +64,7 @@ function NewRun({ loaderData: { event, convention } }: Route.ComponentProps): JS
   const navigate = useNavigate();
 
   const cancelEditing = () => {
-    navigate('../../../..', { replace: true });
+    navigate('../..', { replace: true });
   };
 
   const [run, setRun] = useState(initialRun);

@@ -2,20 +2,16 @@ import { Link } from 'react-router';
 
 import RecurringEventSection from './RecurringEventSection';
 import usePageTitle from '../usePageTitle';
-import useEventAdminCategory from './useEventAdminCategory';
 import { useTranslation } from 'react-i18next';
 import { CategorySpecificEventAdminComponentProps } from './CategorySpecificEventAdmin';
 
-export default function RecurringEventAdmin({
-  eventCategoryId,
-  data,
-}: CategorySpecificEventAdminComponentProps): JSX.Element {
-  const [eventCategory, sortedEvents] = useEventAdminCategory(data, eventCategoryId);
+export default function RecurringEventAdmin({ data }: CategorySpecificEventAdminComponentProps): JSX.Element {
   const { t } = useTranslation();
+  const eventCategory = data.convention.event_category;
 
   usePageTitle(
     t('admin.events.eventListPageTitle', {
-      categoryName: eventCategory?.name,
+      categoryName: eventCategory.name,
     }),
   );
 
@@ -27,7 +23,7 @@ export default function RecurringEventAdmin({
         })}
       </Link>
       <hr className="my-4" />
-      {sortedEvents.map((event) => (
+      {data.convention.event_category.events_paginated.entries.map((event) => (
         <RecurringEventSection convention={data.convention} event={event} key={event.id} />
       ))}
     </div>

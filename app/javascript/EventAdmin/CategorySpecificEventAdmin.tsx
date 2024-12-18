@@ -1,14 +1,13 @@
 import { Outlet } from 'react-router';
-import { EventAdminEventsQueryData, EventAdminEventsQueryDocument } from './queries.generated';
+import { CategorySpecificEventAdminQueryDocument } from './queries.generated';
 import EventAdminRunsTable from './EventAdminRunsTable';
 import RecurringEventAdmin from './RecurringEventAdmin';
 import SingleRunEventAdminList from './SingleRunEventAdminList';
 import { Route } from './+types/CategorySpecificEventAdmin';
 import { SchedulingUi } from 'graphqlTypes.generated';
+import range from 'lodash/range';
 
-export type CategorySpecificEventAdminComponentProps = Route.ComponentProps['loaderData'] & {
-  eventCategoryId: string;
-};
+export type CategorySpecificEventAdminComponentProps = { data: Route.ComponentProps['loaderData'] };
 
 export const adminComponentsBySchedulingUi: Record<
   SchedulingUi,
@@ -20,28 +19,55 @@ export const adminComponentsBySchedulingUi: Record<
 };
 
 export async function loader({ params: { eventCategoryId }, context }: Route.LoaderArgs) {
-  const { data } = await context.client.query<EventAdminEventsQueryData>({ query: EventAdminEventsQueryDocument });
-
   const eventCategoryIdIntPortion = Number.parseInt(eventCategoryId ?? '');
   if (Number.isNaN(eventCategoryIdIntPortion)) {
     throw new Response(null, { status: 404 });
   }
-  const eventCategory = data.convention.event_categories.find(
-    (category) => Number.parseInt(category.id) === eventCategoryIdIntPortion,
-  );
 
-  if (!eventCategory) {
-    throw new Response(null, { status: 404 });
+  const { data } = await context.client.query({
+    query: CategorySpecificEventAdminQueryDocument,
+    variables: { eventCategoryId },
+  });
+
+  if (data.convention.event_category.events_paginated.total_pages > 1) {
+    const pagesToFetch = range(2, data.convention.event_category.events_paginated.total_pages + 1);
+    const fetchedPages = await Promise.all(
+      pagesToFetch.map(async (page) => {
+        const { data } = await context.client.query({
+          query: CategorySpecificEventAdminQueryDocument,
+          variables: { eventCategoryId, page },
+        });
+
+        return data;
+      }),
+    );
+
+    return {
+      ...data,
+      convention: {
+        ...data.convention,
+        event_category: {
+          ...data.convention.event_category,
+          events_paginated: {
+            ...data.convention.event_category.events_paginated,
+            entries: [
+              ...data.convention.event_category.events_paginated.entries,
+              ...fetchedPages.flatMap((pageData) => pageData.convention.event_category.events_paginated.entries),
+            ],
+          },
+        },
+      },
+    };
+  } else {
+    return data;
   }
-
-  return { data, eventCategory };
 }
 
 function CategorySpecificEventAdmin({ loaderData: data }: Route.ComponentProps) {
-  const AdminComponent = adminComponentsBySchedulingUi[data.eventCategory.scheduling_ui];
+  const AdminComponent = adminComponentsBySchedulingUi[data.convention.event_category.scheduling_ui];
   return (
     <>
-      <AdminComponent eventCategoryId={data.eventCategory.id} {...data} />
+      <AdminComponent data={data} />
       <Outlet />
     </>
   );

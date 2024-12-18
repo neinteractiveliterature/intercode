@@ -7,7 +7,7 @@ export type StandaloneDropEventMutationVariables = Types.Exact<{
 }>;
 
 
-export type StandaloneDropEventMutationData = { __typename: 'Mutation', dropEvent: { __typename: 'DropEventPayload', event: { __typename: 'Event', id: string, status?: string | null } } };
+export type StandaloneDropEventMutationData = { __typename: 'Mutation', dropEvent: { __typename: 'DropEventPayload', event: { __typename: 'Event', id: string, status?: Types.EventStatus | null } } };
 
 export type StandaloneUpdateEventMutationVariables = Types.Exact<{
   input: Types.UpdateEventInput;

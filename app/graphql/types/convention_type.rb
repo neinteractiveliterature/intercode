@@ -64,6 +64,11 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
 
     description "All the EventCategories in this convention."
   end
+  field :event_category, Types::EventCategoryType, null: false do
+    description "Finds an EventCategory by ID in this convention."
+
+    argument :id, ID, required: true, description: "The ID of the EventCategory to find."
+  end
   field :event_mailing_list_domain, String, null: true do
     description <<~MARKDOWN
       If present, the site will automatically offer to set up forwarding email addresses for event teams under this
@@ -419,15 +424,27 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
     ).scoped
   end
 
-  pagination_field :events_paginated, Types::EventsPaginationType, Types::EventFiltersInputType
+  pagination_field :events_paginated, Types::EventsPaginationType, Types::EventFiltersInputType do
+    argument :include_dropped, Boolean, required: false do
+      description <<~MARKDOWN
+        If true, the results will include dropped events.  Only convention admins can see dropped events, so using
+        this may cause authorization errors.
+      MARKDOWN
+    end
+  end
 
-  def events_paginated(**args)
+  def events_paginated(include_dropped: false, **args)
     Tables::EventsTableResultsPresenter.for_convention(
       convention: object,
       pundit_user:,
       filters: args[:filters].to_h,
-      sort: args[:sort]
+      sort: args[:sort],
+      include_dropped:
     ).paginate(page: args[:page], per_page: args[:per_page])
+  end
+
+  def event_category(id:)
+    object.event_categories.find(id)
   end
 
   def favicon

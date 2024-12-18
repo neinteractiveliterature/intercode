@@ -5,13 +5,14 @@ import { useTranslation } from 'react-i18next';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { Link, useFetcher } from 'react-router';
-import { ActionFunction, data, useNavigate } from 'react-router';
+import { data, useNavigate } from 'react-router';
 import { ChangeSignupBucketDocument } from '../mutations.generated';
 import BucketInput from '../BucketInput';
 import { useSingleSignupLoader } from './route';
+import { Route } from './+types/change_bucket';
 
-export async function action({ context, request, params: { id } }) {
-  const client = context!.client;
+export async function action({ context, request, params: { id } }: Route.ActionArgs) {
+  const client = context.client;
   try {
     const formData = await request.formData();
     const result = await client.mutate({
