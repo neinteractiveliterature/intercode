@@ -62,6 +62,14 @@ export default [
     // TODO Liquid docs routes
     layout('AppRootLayout.tsx', [
       layout('NonCMSPageWrapper.tsx', [
+        route('admin_departments', 'DepartmentAdmin/route.tsx', { id: NamedRoute.DepartmentAdmin }, [
+          route(':id', 'DepartmentAdmin/SingleDepartmentRoute.ts', [
+            route('edit', 'DepartmentAdmin/EditDepartment.tsx'),
+            index('DepartmentAdmin/$id.ts'),
+          ]),
+          route('new', 'DepartmentAdmin/NewDepartment.tsx'),
+          index('DepartmentAdmin/DepartmentAdminIndex.tsx'),
+        ]),
         route('admin_events', 'EventAdmin/index.tsx', { id: NamedRoute.EventAdmin }, [
           index('EventAdmin/route.ts'),
           layout('RouteGuards/MultiEventConventionRouteGuard.tsx', { id: 'AdminEventsMultiEventGuard' }, [
