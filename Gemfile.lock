@@ -331,9 +331,9 @@ GEM
       reline (>= 0.4.2)
     jar-dependencies (0.5.1)
     jmespath (1.6.2)
-    json (2.9.0)
-    json (2.9.0-java)
-    jwt (2.8.2)
+    json (2.9.1)
+    json (2.9.1-java)
+    jwt (2.9.3)
       base64
     language_server-protocol (3.17.0.3)
     launchy (2.5.2)
@@ -392,7 +392,7 @@ GEM
     mysql2 (0.5.6)
     nats-pure (2.4.0)
       concurrent-ruby (~> 1.0)
-    net-http (0.5.0)
+    net-http (0.6.0)
       uri
     net-imap (0.5.1)
       date
@@ -641,7 +641,7 @@ GEM
       sync
     toml (0.3.0)
       parslet (>= 1.8.0, < 3.0.0)
-    twilio-ruby (7.3.7)
+    twilio-ruby (7.4.0)
       faraday (>= 0.9, < 3.0)
       jwt (>= 1.5, < 3.0)
       nokogiri (>= 1.6, < 2.0)
@@ -772,7 +772,7 @@ DEPENDENCIES
   syntax_tree-haml
   syntax_tree-rbs
   term-ansicolor
-  twilio-ruby (~> 7.3.0)
+  twilio-ruby (~> 7.4.0)
   typeprof
   tzinfo-data
   webrick
