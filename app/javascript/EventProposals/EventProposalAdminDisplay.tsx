@@ -1,13 +1,13 @@
-import { Link, useFetcher, useRouteLoaderData } from 'react-router';
+import { Link, useFetcher } from 'react-router';
 
 import AdminNotes from '../BuiltInFormControls/AdminNotes';
 import EventProposalDisplay from './EventProposalDisplay';
 import EventProposalStatusUpdater from './EventProposalStatusUpdater';
 import usePageTitle from '../usePageTitle';
-import { EventProposalAdminNotesQueryDocument, EventProposalQueryWithOwnerQueryData } from './queries.generated';
+import { EventProposalAdminNotesQueryDocument, EventProposalQueryWithOwnerDocument } from './queries.generated';
 import humanize from '../humanize';
-import { NamedRoute } from '../routes';
 import { ApolloError, useSuspenseQuery } from '@apollo/client';
+import { Route } from './+types/EventProposalAdminDisplay';
 
 export type EventProposalAdminNotesProps = {
   eventProposalId: string;
@@ -34,8 +34,15 @@ function EventProposalAdminNotes({ eventProposalId }: EventProposalAdminNotesPro
   );
 }
 
-function EventProposalAdminDisplay() {
-  const data = useRouteLoaderData(NamedRoute.AdminEventProposal) as EventProposalQueryWithOwnerQueryData;
+export async function loader({ context, params: { id } }: Route.LoaderArgs) {
+  const { data } = await context.client.query({
+    query: EventProposalQueryWithOwnerDocument,
+    variables: { eventProposalId: id ?? '' },
+  });
+  return data;
+}
+
+function EventProposalAdminDisplay({ loaderData: data }: Route.ComponentProps) {
   usePageTitle(data.convention.event_proposal.title);
 
   const eventProposalId = data.convention.event_proposal.id;

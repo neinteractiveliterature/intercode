@@ -1,21 +1,20 @@
 import { useTranslation } from 'react-i18next';
-import { LoaderFunction, useLoaderData, useNavigate } from 'react-router';
+import { useNavigate } from 'react-router';
 import { Link } from 'react-router';
 import usePageTitle from '../usePageTitle';
 import EventProposalForm from './EventProposalForm';
-import { EventProposalQueryData, EventProposalQueryDocument, EventProposalQueryVariables } from './queries.generated';
-import { client } from '../useIntercodeApolloClient';
+import { EventProposalQueryDocument } from './queries.generated';
+import { Route } from './+types/AdminEditEventProposal';
 
-export async function loader({ params: { id } }) {
-  const { data } = await client.query<EventProposalQueryData, EventProposalQueryVariables>({
+export async function loader({ params: { id }, context }: Route.LoaderArgs) {
+  const { data } = await context.client.query({
     query: EventProposalQueryDocument,
     variables: { eventProposalId: id ?? '' },
   });
   return data;
 }
 
-function AdminEditEventProposal() {
-  const data = useLoaderData() as EventProposalQueryData;
+function AdminEditEventProposal({ loaderData: data }: Route.ComponentProps) {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
