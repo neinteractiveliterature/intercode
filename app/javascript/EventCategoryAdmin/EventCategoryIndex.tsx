@@ -3,8 +3,8 @@ import { sortByLocaleString } from '@neinteractiveliterature/litform';
 
 import EventCategoryRow from './EventCategoryRow';
 import usePageTitle from '../usePageTitle';
-import { useEventCategoryAdminLoader } from './loaders';
 import { useTranslation } from 'react-i18next';
+import { useEventCategoryAdminLoader } from './route';
 
 function EventCategoryIndex() {
   const data = useEventCategoryAdminLoader();

@@ -147,6 +147,13 @@ export default [
           ]),
           route('clickwrap_agreement', 'ClickwrapAgreement/index.tsx'),
           route('convention/edit', 'ConventionAdmin/index.tsx'),
+          route('event_categories', 'EventCategoryAdmin/route.tsx', { id: NamedRoute.EventCategoryAdmin }, [
+            route('new', 'EventCategoryAdmin/NewEventCategory.tsx', { id: NamedRoute.NewEventCategory }),
+            route(':id', 'EventCategoryAdmin/$id.ts', [
+              route('edit', 'EventCategoryAdmin/EditEventCategory.tsx', { id: NamedRoute.EditEventCategory }),
+            ]),
+            index('EventCategoryAdmin/EventCategoryIndex.tsx', { id: NamedRoute.EventCategoryIndex }),
+          ]),
           ...prefix('events', [
             layout('RouteGuards/MultiEventConventionRouteGuard.tsx', { id: 'EventsMultiEventGuard' }, [
               route('schedule', 'EventsApp/schedule.tsx', [route(':day', 'EventsApp/ScheduleApp.tsx')]),
