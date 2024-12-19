@@ -1,6 +1,6 @@
 import { Fragment } from 'react';
 import { YardMethod } from './DocData';
-import { LiquidDocsLoaderResult } from './loader';
+import { LiquidDocsLoaderResult } from './route';
 
 export type AssignNameProps = {
   assign: LiquidDocsLoaderResult['sortedAssigns'][number] | YardMethod;

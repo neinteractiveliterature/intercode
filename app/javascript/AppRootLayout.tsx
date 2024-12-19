@@ -5,6 +5,7 @@ import NavigationBar from './NavigationBar';
 import { AppRootLayoutQueryDocument } from './appRootQueries.generated';
 import RouteErrorBoundary from 'RouteErrorBoundary';
 import { Route } from './+types/AppRootLayout';
+import { createPortal } from 'react-dom';
 
 // Avoid unnecessary layout checks when moving between pages that can't change layout
 export function normalizePathForLayout(path: string) {
@@ -64,7 +65,12 @@ function AppRootLayout({ loaderData: data }: Route.ComponentProps) {
     return <></>;
   }
 
-  return <>{parsedCmsContent.bodyComponents}</>;
+  return (
+    <>
+      {createPortal(parsedCmsContent.headComponents, document.head)}
+      {parsedCmsContent.bodyComponents}
+    </>
+  );
 }
 
 export default AppRootLayout;

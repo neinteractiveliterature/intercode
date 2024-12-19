@@ -4,9 +4,9 @@ import AssignDocHeader from './AssignDocHeader';
 import findClass from './findClass';
 import findMethodReturnClass from './findMethodReturnClass';
 import MethodDoc from './MethodDoc';
-import { LiquidDocsLoaderResult, useLiquidDocs } from './loader';
 import { YardClass } from './DocData';
 import FourOhFourPage from '../FourOhFourPage';
+import { LiquidDocsLoaderResult, useLiquidDocs } from './route';
 
 function getPathPartBaseName(pathPart: string): string {
   return pathPart.replace(/\[index\]$/, '');

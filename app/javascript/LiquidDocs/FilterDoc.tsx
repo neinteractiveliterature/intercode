@@ -2,7 +2,7 @@ import { Link, useLocation, useParams, useRouteLoaderData } from 'react-router';
 
 import MethodDoc from './MethodDoc';
 import { NamedRoute } from '../routes';
-import { LiquidDocsLoaderResult } from './loader';
+import { LiquidDocsLoaderResult } from './route';
 import FourOhFourPage from '../FourOhFourPage';
 
 function FilterDoc(): JSX.Element {

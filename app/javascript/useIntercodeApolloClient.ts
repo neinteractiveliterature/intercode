@@ -7,6 +7,7 @@ import {
   InMemoryCache,
   NormalizedCacheObject,
   split,
+  ApolloCache,
 } from '@apollo/client';
 import { BatchHttpLink } from '@apollo/client/link/batch-http';
 import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
@@ -117,37 +118,41 @@ export function useIntercodeApolloLink(uri: URL): ApolloLink {
   return link;
 }
 
+export function buildIntercodeApolloCache(): InMemoryCache {
+  return new InMemoryCache({
+    addTypename: true,
+    possibleTypes,
+    typePolicies: {
+      Ability: {
+        merge: true,
+      },
+      AuthorizedApplication: {
+        keyFields: ['uid'],
+      },
+      ConventionReports: {
+        merge: true,
+      },
+      Event: {
+        fields: {
+          rooms: { merge: true },
+          room_names: { merge: true },
+        },
+      },
+      RegistrationPolicy: {
+        merge: (existing, incoming) => incoming,
+      },
+    },
+  });
+}
+
 export function buildIntercodeApolloClient(
   link: ApolloLink,
-  options?: { ssrMode?: boolean },
+  options?: { ssrMode?: boolean; cache?: ApolloCache<NormalizedCacheObject> },
 ): ApolloClient<NormalizedCacheObject> {
   return new ApolloClient({
     link,
     ssrMode: options?.ssrMode,
-    cache: new InMemoryCache({
-      addTypename: true,
-      possibleTypes,
-      typePolicies: {
-        Ability: {
-          merge: true,
-        },
-        AuthorizedApplication: {
-          keyFields: ['uid'],
-        },
-        ConventionReports: {
-          merge: true,
-        },
-        Event: {
-          fields: {
-            rooms: { merge: true },
-            room_names: { merge: true },
-          },
-        },
-        RegistrationPolicy: {
-          merge: (existing, incoming) => incoming,
-        },
-      },
-    }),
+    cache: options?.cache ?? buildIntercodeApolloCache(),
   });
 }
 

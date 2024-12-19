@@ -43,7 +43,7 @@ function EditRun({ loaderData: { initialRun, convention, event } }: Route.Compon
   const navigate = useNavigate();
 
   const cancelEditing = () => {
-    navigate('../../../..', { replace: true });
+    navigate(`/admin_events/${event.event_category.id}`, { replace: true });
   };
 
   const [run, setRun] = useState(initialRun);

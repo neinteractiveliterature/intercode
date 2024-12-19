@@ -4,6 +4,7 @@ import { createCookieSessionStorage } from 'react-router'; // or cloudflare/deno
 export type SessionData = {
   csrfToken: string;
   tzName: string;
+  uuid: string;
 };
 
 export type SessionFlashData = Record<string, never>;

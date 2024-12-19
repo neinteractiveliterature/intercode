@@ -10540,6 +10540,16 @@ __metadata:
   languageName: node
   linkType: hard
 
+"buffer@npm:^6.0.3":
+  version: 6.0.3
+  resolution: "buffer@npm:6.0.3"
+  dependencies:
+    base64-js: "npm:^1.3.1"
+    ieee754: "npm:^1.2.1"
+  checksum: 10c0/2a905fbbcde73cc5d8bd18d1caa23715d5f83a5935867c2329f0ac06104204ba7947be098fe1317fbd8830e26090ff8e764f08cd14fefc977bb248c3487bcbd0
+  languageName: node
+  linkType: hard
+
 "builtin-status-codes@npm:^3.0.0":
   version: 3.0.0
   resolution: "builtin-status-codes@npm:3.0.0"
@@ -14350,6 +14360,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"filesize@npm:^10.1.6":
+  version: 10.1.6
+  resolution: "filesize@npm:10.1.6"
+  checksum: 10c0/9a196d64da4e947b8c0d294be09a3dfa7a634434a1fc5fb3465f1c9acc1237ea0363f245ba6e24477ea612754d942bc964d86e0e500905a72e9e0e17ae1bbdbc
+  languageName: node
+  linkType: hard
+
 "filesize@npm:^8.0.6":
   version: 8.0.7
   resolution: "filesize@npm:8.0.7"
@@ -16028,7 +16045,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"ieee754@npm:^1.1.13":
+"ieee754@npm:^1.1.13, ieee754@npm:^1.2.1":
   version: 1.2.1
   resolution: "ieee754@npm:1.2.1"
   checksum: 10c0/b0782ef5e0935b9f12883a2e2aa37baa75da6e66ce6515c168697b42160807d9330de9a32ec1ed73149aea02e0d822e572bca6f1e22bdcbd2149e13b050b17bb
@@ -19459,6 +19476,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"object-sizeof@npm:^2.6.5":
+  version: 2.6.5
+  resolution: "object-sizeof@npm:2.6.5"
+  dependencies:
+    buffer: "npm:^6.0.3"
+  checksum: 10c0/ae733fc7aaf8eb2446aa632a34a2a30c9535afdb1997a626bf8912e64893c1afa0e1e6a9153235c09c6e8d586100eeb6fe2d869a82dcee00144cb11efb229d8e
+  languageName: node
+  linkType: hard
+
 "object.assign@npm:^4.1.0, object.assign@npm:^4.1.2, object.assign@npm:^4.1.4, object.assign@npm:^4.1.7":
   version: 4.1.7
   resolution: "object.assign@npm:4.1.7"
@@ -21755,6 +21781,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"quick-lru@npm:^7.0.0":
+  version: 7.0.0
+  resolution: "quick-lru@npm:7.0.0"
+  checksum: 10c0/d46e3dc6d2f79f83d3dc852b32b3d9fcf5337bf5b4016122c1b729aa7bcd54dd79b2f3cb36b59a5a3f5c30443ecfbc9e7d400cfc30feedd8d58d3d4213d08a18
+  languageName: node
+  linkType: hard
+
 "quickselect@npm:^3.0.0":
   version: 3.0.0
   resolution: "quickselect@npm:3.0.0"
@@ -23261,6 +23294,7 @@ __metadata:
     express: "npm:^4.21.1"
     fast-diff: "npm:1.3.0"
     file-saver: "npm:2.0.5"
+    filesize: "npm:^10.1.6"
     font-awesome: "npm:4.7.0"
     globals: "npm:^16.0.0"
     graphiql: "npm:3.8.3"
@@ -23285,6 +23319,7 @@ __metadata:
     minimist: "npm:1.2.8"
     morgan: "npm:^1.10.0"
     node-fetch: "npm:^3.3.2"
+    object-sizeof: "npm:^2.6.5"
     ol: "npm:^10.2.1"
     path-browserify: "npm:1.0.1"
     path-complete-extname: "npm:1.0.0"
@@ -23296,6 +23331,7 @@ __metadata:
     prop-types: "npm:15.8.1"
     punycode: "npm:2.3.1"
     qs: "npm:^6.13.0"
+    quick-lru: "npm:^7.0.0"
     react: "npm:18.3.1"
     react-bootstrap4-modal: "npm:3.0.10"
     react-color: "npm:2.19.3"

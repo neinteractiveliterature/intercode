@@ -40,7 +40,7 @@ async function createServer() {
         : await import('./build/server/index.js'),
       getLoadContext: async (req, res) => {
         const setCookie = (value: string) => res.setHeader('set-cookie', value);
-        const client = buildServerApolloClient({
+        const client = await buildServerApolloClient({
           cookie: req.headers.cookie,
           hostname: req.hostname,
           setCookie,
