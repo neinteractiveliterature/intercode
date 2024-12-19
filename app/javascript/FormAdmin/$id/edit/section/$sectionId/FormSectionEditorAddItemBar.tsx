@@ -8,6 +8,7 @@ import { CreateFormItemMutationData } from 'FormAdmin/mutations.generated';
 import { buildFormItemInput, ParsedFormItem } from 'FormAdmin/FormItemUtils';
 import buildNewFormItem from 'FormAdmin/buildNewFormItem';
 import NewFormItemModal from './NewFormItemModal';
+import { useModal } from '@neinteractiveliterature/litform';
 
 type FormSectionEditorAddItemBarProps = {
   sectionBottomRef: React.RefObject<HTMLElement>;
