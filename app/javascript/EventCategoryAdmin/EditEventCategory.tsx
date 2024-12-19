@@ -1,20 +1,20 @@
 import { useState } from 'react';
-import { ActionFunction, Form, redirect, useActionData, useLoaderData, useNavigation } from 'react-router';
+import { Form, redirect, useActionData, useNavigation } from 'react-router';
 import { ApolloError } from '@apollo/client';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import EventCategoryForm from './EventCategoryForm';
 import usePageTitle from '../usePageTitle';
-import { singleEventCategoryAdminLoader, SingleEventCategoryAdminLoaderResult } from './loaders';
-import { client } from '../useIntercodeApolloClient';
 import { UpdateEventCategoryDocument } from './mutations.generated';
 import { buildEventCategoryFromFormData } from './buildEventCategoryInput';
 import { useTranslation } from 'react-i18next';
+import { Route } from './+types/EditEventCategory';
+import { loader as routeLoader } from './route';
 
-export async function action({ request, params: { id } }) {
+export async function action({ request, params: { id }, context }: Route.ActionArgs) {
   try {
     const formData = await request.formData();
-    await client.mutate({
+    await context.client.mutate({
       mutation: UpdateEventCategoryDocument,
       variables: {
         id,
@@ -27,13 +27,18 @@ export async function action({ request, params: { id } }) {
   }
 }
 
-export const loader = singleEventCategoryAdminLoader;
+export async function loader({ params, context, request }: Route.LoaderArgs) {
+  const data = await routeLoader({ params, context, request });
+  const { convention } = data;
+  const eventCategory = convention.event_categories.find((eventCategory) => eventCategory.id === params.id);
+  if (!eventCategory) {
+    throw new Response('Not Found', { status: 404 });
+  }
 
-function EditEventCategoryForm() {
-  const {
-    eventCategory: initialEventCategory,
-    data: { convention },
-  } = useLoaderData() as SingleEventCategoryAdminLoaderResult;
+  return { convention, initialEventCategory: eventCategory };
+}
+
+function EditEventCategoryForm({ loaderData: { initialEventCategory, convention } }: Route.ComponentProps) {
   const navigation = useNavigation();
   const updateError = useActionData();
   const { t } = useTranslation();
