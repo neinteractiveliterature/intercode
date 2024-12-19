@@ -1,5 +1,5 @@
 import { useCallback, useState, useMemo, ReactNode } from 'react';
-import { ApolloError, useSuspenseQuery } from '@apollo/client';
+import { ApolloError, useApolloClient, useSuspenseQuery } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -13,7 +13,6 @@ import { CommonFormFieldsFragment } from '../Models/commonFormFragments.generate
 import { parseResponseErrors } from '../parseResponseErrors';
 import { ImageAttachmentConfig } from '../BuiltInFormControls/MarkdownInput';
 import type { Blob } from '@rails/activestorage';
-import { client } from '../useIntercodeApolloClient';
 import {
   AttachImageToEventProposalDocument,
   SubmitEventProposalDocument,
@@ -42,6 +41,7 @@ function EventProposalFormInner({
   const [responseErrors, setResponseErrors] = useState({});
   const [submitError, setSubmitError] = useState<ApolloError>();
   const [updateError, setUpdateError] = useState<ApolloError>();
+  const client = useApolloClient();
 
   const imageAttachmentConfig = useMemo<ImageAttachmentConfig>(
     () => ({
@@ -52,7 +52,7 @@ function EventProposalFormInner({
         }),
       existingImages: eventProposal.images,
     }),
-    [eventProposal.id, eventProposal.images],
+    [client, eventProposal.id, eventProposal.images],
   );
 
   const responseValuesChanged = useCallback(
@@ -68,49 +68,55 @@ function EventProposalFormInner({
     [],
   );
 
-  const commitResponse = useCallback(async (proposal: typeof eventProposal) => {
-    try {
-      setResponseErrors({});
-      const promise = client.mutate({
-        mutation: UpdateEventProposalDocument,
-        variables: {
-          input: {
-            id: proposal.id,
-            event_proposal: {
-              form_response_attrs_json: JSON.stringify(proposal.form_response_attrs),
+  const commitResponse = useCallback(
+    async (proposal: typeof eventProposal) => {
+      try {
+        setResponseErrors({});
+        const promise = client.mutate({
+          mutation: UpdateEventProposalDocument,
+          variables: {
+            input: {
+              id: proposal.id,
+              event_proposal: {
+                form_response_attrs_json: JSON.stringify(proposal.form_response_attrs),
+              },
             },
           },
-        },
-      });
-      setUpdatePromise(promise);
-      await promise;
-    } catch (e) {
-      setUpdateError(e);
-      setResponseErrors(parseResponseErrors(e, ['updateEventProposal']));
-    } finally {
-      setUpdatePromise(undefined);
-    }
-  }, []);
+        });
+        setUpdatePromise(promise);
+        await promise;
+      } catch (e) {
+        setUpdateError(e);
+        setResponseErrors(parseResponseErrors(e, ['updateEventProposal']));
+      } finally {
+        setUpdatePromise(undefined);
+      }
+    },
+    [client],
+  );
   useAutocommitFormResponseOnChange(commitResponse, eventProposal);
 
-  const submitResponse = useCallback(async (proposal: typeof eventProposal) => {
-    try {
-      const promise = client.mutate({
-        mutation: SubmitEventProposalDocument,
-        variables: {
-          input: {
-            id: proposal.id,
+  const submitResponse = useCallback(
+    async (proposal: typeof eventProposal) => {
+      try {
+        const promise = client.mutate({
+          mutation: SubmitEventProposalDocument,
+          variables: {
+            input: {
+              id: proposal.id,
+            },
           },
-        },
-      });
-      setSubmitPromise(promise);
-      await promise;
-    } catch (e) {
-      setSubmitError(e);
-    } finally {
-      setSubmitPromise(undefined);
-    }
-  }, []);
+        });
+        setSubmitPromise(promise);
+        await promise;
+      } catch (e) {
+        setSubmitError(e);
+      } finally {
+        setSubmitPromise(undefined);
+      }
+    },
+    [client],
+  );
 
   const formSubmitted = useCallback(() => {
     if (afterSubmit) {
