@@ -154,6 +154,14 @@ export default [
             ]),
             index('EventCategoryAdmin/EventCategoryIndex.tsx', { id: NamedRoute.EventCategoryIndex }),
           ]),
+          ...prefix('event_proposals', [
+            route(':id', 'EventProposals/$id/route.ts', [
+              route('admin_notes', 'EventProposals/$id/admin_notes.ts'),
+              route('edit', 'EventProposals/EditEventProposal.tsx'),
+              route('transition', 'EventProposals/$id/transition.ts'),
+            ]),
+            index('EventProposals/route.ts'),
+          ]),
           ...prefix('events', [
             layout('RouteGuards/MultiEventConventionRouteGuard.tsx', { id: 'EventsMultiEventGuard' }, [
               route('schedule', 'EventsApp/schedule.tsx', [route(':day', 'EventsApp/ScheduleApp.tsx')]),
