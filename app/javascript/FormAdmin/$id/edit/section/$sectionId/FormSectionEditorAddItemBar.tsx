@@ -2,12 +2,12 @@ import { useCallback, useContext, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { useFetcher } from 'react-router';
-import useModal from '@neinteractiveliterature/litform/lib/useModal';
 import { FormEditorContext } from 'FormAdmin/FormEditorContexts';
 import { CreateFormItemMutationData } from 'FormAdmin/mutations.generated';
 import { buildFormItemInput, ParsedFormItem } from 'FormAdmin/FormItemUtils';
 import buildNewFormItem from 'FormAdmin/buildNewFormItem';
 import NewFormItemModal from './NewFormItemModal';
+import { useModal } from '@neinteractiveliterature/litform';
 
 type FormSectionEditorAddItemBarProps = {
   sectionBottomRef: React.RefObject<HTMLElement>;
