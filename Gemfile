@@ -1,7 +1,7 @@
 source "https://rubygems.org"
 
 ruby File.read(File.expand_path(".ruby-version", __dir__)).strip
-gem "rails", "7.2.2.1"
+gem "rails", "7.2.2"
 
 gem "pg"
 gem "puma"
@@ -16,7 +16,7 @@ gem "with_advisory_lock"
 gem "devise"
 gem "pundit"
 gem "recaptcha", require: "recaptcha/rails"
-gem "doorkeeper", "5.8.1"
+gem "doorkeeper", "5.7.1"
 gem "devise-doorkeeper"
 gem "devise-encryptable"
 gem "doorkeeper-jwt"
@@ -136,7 +136,7 @@ group :development do
   gem "debug"
 
   # Linting
-  gem "rubocop", "1.69.2"
+  gem "rubocop", "1.68.0"
   gem "rubocop-performance"
   gem "rubocop-rails"
   gem "rubocop-sequel"
