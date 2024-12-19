@@ -4,7 +4,7 @@ import { Link, useLocation } from 'react-router';
 import AssignDocHeader from './AssignDocHeader';
 import CompactAssignDocHeader from './CompactAssignDocHeader';
 import findClass from './findClass';
-import { LiquidDocsLoaderResult, useLiquidDocs } from './loader';
+import { LiquidDocsLoaderResult, useLiquidDocs } from './route';
 
 export type AssignDocLinkProps = {
   assign: LiquidDocsLoaderResult['sortedAssigns'][number];

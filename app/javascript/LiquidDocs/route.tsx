@@ -1,4 +1,4 @@
-import { LoaderFunction, useRouteLoaderData } from 'react-router';
+import { useRouteLoaderData } from 'react-router';
 import keyBy from 'lodash/keyBy';
 
 import {
@@ -9,10 +9,10 @@ import {
   NotifierLiquidAssignsQueryDocument,
   NotifierLiquidAssignsQueryVariables,
 } from './queries.generated';
-import { client } from '../useIntercodeApolloClient';
 import { loadDocData, YardClass, YardDocs, YardMethod } from './DocData';
 import { NamedRoute } from '../routes';
 import findLiquidTagName from './findLiquidTagName';
+import { Route } from './+types/route';
 
 export type LiquidDocsLoaderResultCommonFields = {
   assigns: Record<string, LiquidAssignsQueryData['cmsParent']['liquidAssigns'][number]>;
@@ -52,28 +52,28 @@ function extractCommonFields(
   return { assigns, filters, tags, sortedAssigns, sortedFilters, sortedTags, docData };
 }
 
-export const liquidDocsLoader: LoaderFunction = async ({ request }) => {
+export async function loader({ request, context }: Route.LoaderArgs): Promise<LiquidDocsLoaderResult> {
   const notifierEventKey = new URL(request.url).searchParams.get('notifier_event_key');
 
   if (notifierEventKey == null) {
     const [{ data }, docData] = await Promise.all([
-      client.query<LiquidAssignsQueryData, LiquidAssignsQueryVariables>({
+      context.client.query<LiquidAssignsQueryData, LiquidAssignsQueryVariables>({
         query: LiquidAssignsQueryDocument,
       }),
       loadDocData(),
     ]);
-    return { notifierEventKey, ...extractCommonFields(data, docData) } satisfies LiquidDocsLoaderResult;
+    return { notifierEventKey, ...extractCommonFields(data, docData) } satisfies GlobalLiquidDocsLoaderResult;
   } else {
     const [{ data }, docData] = await Promise.all([
-      client.query<NotifierLiquidAssignsQueryData, NotifierLiquidAssignsQueryVariables>({
+      context.client.query<NotifierLiquidAssignsQueryData, NotifierLiquidAssignsQueryVariables>({
         query: NotifierLiquidAssignsQueryDocument,
         variables: { eventKey: notifierEventKey },
       }),
       loadDocData(),
     ]);
-    return { notifierEventKey, ...extractCommonFields(data, docData) } satisfies LiquidDocsLoaderResult;
+    return { notifierEventKey, ...extractCommonFields(data, docData) } satisfies NotifierLiquidDocsLoaderResult;
   }
-};
+}
 
 export function useLiquidDocs() {
   return useRouteLoaderData(NamedRoute.LiquidDocs) as LiquidDocsLoaderResult;
