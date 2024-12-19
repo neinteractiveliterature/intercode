@@ -57,7 +57,19 @@ export type RouteName = keyof typeof NamedRoute & string;
 
 export default [
   layout('AppRoot.tsx', [
-    // TODO Form editor routes
+    route('admin_forms/:id/edit', 'FormAdmin/FormEditor.tsx', [
+      route('section', 'FormAdmin/$id/edit/section/route.ts', [
+        ...prefix(':sectionId', [
+          route('item', 'FormAdmin/$id/edit/section/$sectionId/item/route.ts', [
+            ...prefix(':itemId', [
+              route('move', 'FormAdmin/$id/edit/section/$sectionId/item/$itemId/move.ts'),
+              index('FormAdmin/$id/edit/section/$sectionId/item/$itemId/route.tsx'),
+            ]),
+          ]),
+          index('FormAdmin/$id/edit/section/$sectionId/route.tsx'),
+        ]),
+      ]),
+    ]),
     route('liquid_docs', 'LiquidDocs/route.tsx', { id: NamedRoute.LiquidDocs }, [
       route('assigns/:name', 'LiquidDocs/AssignDoc.tsx'),
       route('filters/:name', 'LiquidDocs/FilterDoc.tsx'),

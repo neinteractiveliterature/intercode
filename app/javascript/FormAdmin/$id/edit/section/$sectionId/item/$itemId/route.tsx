@@ -1,6 +1,6 @@
 import { useContext, useMemo, useState, useCallback } from 'react';
 import { useApolloClient, ApolloError } from '@apollo/client';
-import { ActionFunction, redirect, useFetcher, useParams } from 'react-router';
+import { redirect, useFetcher, useParams } from 'react-router';
 // TODO: uncomment this when re-adding Prompt support below
 // import isEqual from 'lodash/isEqual';
 import { useDebouncedState, ErrorDisplay } from '@neinteractiveliterature/litform';
@@ -18,17 +18,17 @@ import { FormEditorContext, FormEditorFormItem, FormItemEditorContext } from 'Fo
 import { PreviewFormItemQueryDocument } from 'FormAdmin/queries.generated';
 import FormItemTools from 'FormAdmin/FormItemTools';
 import FormItemInput from 'FormPresenter/ItemInputs/FormItemInput';
-import { client } from 'useIntercodeApolloClient';
 import { DeleteFormItemDocument, UpdateFormItemDocument } from 'FormAdmin/mutations.generated';
 import { FormItem } from 'graphqlTypes.generated';
 import FormItemEditorContent from './FormItemEditorContent';
 import styles from 'styles/form_editor.module.scss';
+import { Route } from './+types/route';
 
-export async function action({ request, params: { id, sectionId, itemId } }) {
+export async function action({ request, params: { id, sectionId, itemId }, context }: Route.ActionArgs) {
   try {
     if (request.method === 'PATCH') {
       const json = await request.json();
-      await client.mutate({
+      await context.client.mutate({
         mutation: UpdateFormItemDocument,
         variables: {
           id: itemId,
@@ -37,7 +37,7 @@ export async function action({ request, params: { id, sectionId, itemId } }) {
       });
       return redirect(`/admin_forms/${id}/edit/section/${sectionId}`);
     } else if (request.method === 'DELETE') {
-      await client.mutate({
+      await context.client.mutate({
         mutation: DeleteFormItemDocument,
         variables: {
           id: itemId,

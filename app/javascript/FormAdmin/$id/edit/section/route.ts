@@ -1,16 +1,16 @@
 import { CreateFormSectionDocument } from 'FormAdmin/mutations.generated';
 import { FormEditorQueryDocument } from 'FormAdmin/queries.generated';
-import { ActionFunction, redirect } from 'react-router';
+import { redirect } from 'react-router';
 import invariant from 'tiny-invariant';
-import { client } from 'useIntercodeApolloClient';
+import { Route } from './+types/route';
 
-export async function action({ request, params: { id } }) {
+export async function action({ request, params: { id }, context }: Route.ActionArgs) {
   try {
     invariant(id != null);
     if (request.method === 'POST') {
       const formData = await request.formData();
 
-      const { data } = await client.mutate({
+      const { data } = await context.client.mutate({
         mutation: CreateFormSectionDocument,
         variables: {
           formId: id,

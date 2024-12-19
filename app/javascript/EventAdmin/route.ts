@@ -3,6 +3,8 @@ import buildEventCategoryUrl from 'EventAdmin/buildEventCategoryUrl';
 import { SiteMode } from 'graphqlTypes.generated';
 import { Route } from './+types/route';
 import { EventAdminRootQueryDocument } from './queries.generated';
+import sortBy from 'lodash/sortBy';
+import sortEventCategories from './sortEventCategories';
 
 export async function loader({ context }: Route.LoaderArgs) {
   const client = context.client;
@@ -19,7 +21,7 @@ export async function loader({ context }: Route.LoaderArgs) {
     }
   }
 
-  const firstEventCategory = data.convention.event_categories[0];
+  const firstEventCategory = sortEventCategories(data.convention.event_categories)[0];
   if (!firstEventCategory) {
     return new Response(null, { status: 404 });
   }
