@@ -1,6 +1,5 @@
 import { useContext, useRef, useMemo } from 'react';
-import { ActionFunction, redirect } from 'react-router';
-import { client } from 'useIntercodeApolloClient';
+import { redirect } from 'react-router';
 import invariant from 'tiny-invariant';
 import { FormSection } from 'graphqlTypes.generated';
 import { DeleteFormSectionDocument, UpdateFormSectionDocument } from 'FormAdmin/mutations.generated';
@@ -9,20 +8,21 @@ import FormSectionNav from './FormSectionNav';
 import FormSectionEditorContent from './FormSectionEditorContent';
 import FormSectionEditorAddItemBar from './FormSectionEditorAddItemBar';
 import styles from 'styles/form_editor.module.scss';
+import { Route } from './+types/route';
 
-export async function action({ request, params: { sectionId } }) {
+export async function action({ request, params: { sectionId }, context }: Route.ActionArgs) {
   try {
     invariant(sectionId != null);
     if (request.method === 'PATCH') {
       const formData = await request.formData();
-      const { data } = await client.mutate({
+      const { data } = await context.client.mutate({
         mutation: UpdateFormSectionDocument,
         variables: { id: sectionId, formSection: { title: formData.get('title')?.toString() } },
       });
 
       return data;
     } else if (request.method === 'DELETE') {
-      await client.mutate({
+      await context.client.mutate({
         mutation: DeleteFormSectionDocument,
         variables: { id: sectionId },
         update: (cache) => {
