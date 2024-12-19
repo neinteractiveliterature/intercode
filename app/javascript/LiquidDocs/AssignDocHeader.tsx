@@ -1,6 +1,6 @@
 import AssignName from './AssignName';
 import findClass from './findClass';
-import { LiquidDocsLoaderResult, useLiquidDocs } from './loader';
+import { LiquidDocsLoaderResult, useLiquidDocs } from './route';
 
 export type AssignDocHeaderProps = {
   assign: LiquidDocsLoaderResult['sortedAssigns'][number];
