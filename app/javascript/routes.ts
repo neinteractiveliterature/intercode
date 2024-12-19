@@ -58,7 +58,12 @@ export type RouteName = keyof typeof NamedRoute & string;
 export default [
   layout('AppRoot.tsx', [
     // TODO Form editor routes
-    // TODO Liquid docs routes
+    route('liquid_docs', 'LiquidDocs/route.tsx', { id: NamedRoute.LiquidDocs }, [
+      route('assigns/:name', 'LiquidDocs/AssignDoc.tsx'),
+      route('filters/:name', 'LiquidDocs/FilterDoc.tsx'),
+      route('tags/:name', 'LiquidDocs/LiquidTagDoc.tsx'),
+      index('LiquidDocs/index.tsx'),
+    ]),
     layout('AppRootLayout.tsx', [
       layout('NonCMSPageWrapper.tsx', [
         layout('RouteGuards/ConventionRouteGuard.tsx', [

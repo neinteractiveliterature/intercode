@@ -2,7 +2,7 @@ import { Link, useLocation, useParams } from 'react-router';
 
 import LiquidTagDocHeader from './LiquidTagDocHeader';
 import TagDoc from './TagDoc';
-import { useLiquidDocs } from './loader';
+import { useLiquidDocs } from './route';
 import FourOhFourPage from '../FourOhFourPage';
 
 function LiquidTagDoc(): JSX.Element {
