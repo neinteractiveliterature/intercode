@@ -1,17 +1,15 @@
 import SignupSpyTable from './SignupSpyTable';
 import usePageTitle from '../usePageTitle';
-import { SignupCountsByStateQueryData, SignupCountsByStateQueryDocument } from './queries.generated';
+import { SignupCountsByStateQueryDocument } from './queries.generated';
 import { SignupState } from '../graphqlTypes.generated';
-import { LoaderFunction, useLoaderData } from 'react-router';
-import { client } from '../useIntercodeApolloClient';
+import { Route } from './+types/SignupSpy';
 
-export async function loader() {
-  const { data } = await client.query<SignupCountsByStateQueryData>({ query: SignupCountsByStateQueryDocument });
+export async function loader({ context }: Route.LoaderArgs) {
+  const { data } = await context.client.query({ query: SignupCountsByStateQueryDocument });
   return data;
 }
 
-function SignupSpy() {
-  const data = useLoaderData() as SignupCountsByStateQueryData;
+function SignupSpy({ loaderData: data }: Route.ComponentProps) {
   const getSignupCount = (state: SignupState) =>
     (
       data.convention.signup_counts_by_state.find((record) => record.state === state) || {
