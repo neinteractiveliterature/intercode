@@ -260,6 +260,13 @@ export default [
           ]),
           route('order_history', 'Store/OrderHistory.tsx'),
           route('products/:id', 'Store/ProductPage.tsx'),
+          route('reports', 'Reports/route.tsx', [
+            route('attendance_by_payment_amount', 'Reports/AttendanceByPaymentAmount.tsx'),
+            route('event_provided_tickets', 'Reports/EventProvidedTickets.tsx'),
+            route('events_by_choice', 'Reports/EventsByChoice.tsx'),
+            route('signup_spy', 'Reports/SignupSpy.tsx'),
+            index('Reports/index.tsx'),
+          ]),
           ...prefix('ticket_types', [
             layout('RouteGuards/TicketRequiredForSignupRouteGuard.tsx', [
               layout('RouteGuards/CanManageTicketTypesRouteGuard.tsx', [
