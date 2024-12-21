@@ -242,6 +242,15 @@ export default [
               ]),
             ]),
           ]),
+          route('mailing_lists', 'MailingLists/route.tsx', [
+            route('event_proposers', 'MailingLists/EventProposers.tsx'),
+            route('team_members', 'MailingLists/TeamMembers.tsx'),
+            route('ticketed_attendees', 'MailingLists/TicketedAttendees.tsx'),
+            route('users_with_pending_bio', 'MailingLists/UsersWithPendingBio.tsx'),
+            route('waitlists', 'MailingLists/WaitlistMailingLists.tsx'),
+            route('whos_free', 'MailingLists/WhosFree.tsx'),
+            index('MailingLists/index.tsx'),
+          ]),
           ...prefix('ticket_types', [
             layout('RouteGuards/TicketRequiredForSignupRouteGuard.tsx', [
               layout('RouteGuards/CanManageTicketTypesRouteGuard.tsx', [
