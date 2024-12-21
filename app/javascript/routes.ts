@@ -267,6 +267,7 @@ export default [
             route('signup_spy', 'Reports/SignupSpy.tsx'),
             index('Reports/index.tsx'),
           ]),
+          route('rooms', 'RoomsAdmin/index.tsx', [route(':id', 'RoomsAdmin/$id/route.ts')]),
           ...prefix('ticket_types', [
             layout('RouteGuards/TicketRequiredForSignupRouteGuard.tsx', [
               layout('RouteGuards/CanManageTicketTypesRouteGuard.tsx', [
