@@ -258,6 +258,8 @@ export default [
             route('setup', 'MyProfile/MyProfileForm.tsx', { id: NamedRoute.MyProfileSetup }),
             index('MyProfile/MyProfileDisplay.tsx'),
           ]),
+          route('order_history', 'Store/OrderHistory.tsx'),
+          route('products/:id', 'Store/ProductPage.tsx'),
           ...prefix('ticket_types', [
             layout('RouteGuards/TicketRequiredForSignupRouteGuard.tsx', [
               layout('RouteGuards/CanManageTicketTypesRouteGuard.tsx', [
