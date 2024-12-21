@@ -5,8 +5,7 @@ import usePageTitle from '../usePageTitle';
 import { AttendanceByPaymentAmountQueryData, AttendanceByPaymentAmountQueryDocument } from './queries.generated';
 import { Money, Product } from '../graphqlTypes.generated';
 import assertNever from 'assert-never';
-import { LoaderFunction, useLoaderData } from 'react-router';
-import { client } from '../useIntercodeApolloClient';
+import { Route } from './+types/AttendanceByPaymentAmount';
 
 type RowType =
   AttendanceByPaymentAmountQueryData['convention']['reports']['sales_count_by_product_and_payment_amount'][number];
@@ -63,15 +62,14 @@ function descriptionCell(
   );
 }
 
-export async function loader() {
-  const { data } = await client.query<AttendanceByPaymentAmountQueryData>({
+export async function loader({ context }: Route.LoaderArgs) {
+  const { data } = await context.client.query({
     query: AttendanceByPaymentAmountQueryDocument,
   });
   return data;
 }
 
-function AttendanceByPaymentAmount() {
-  const data = useLoaderData() as AttendanceByPaymentAmountQueryData;
+function AttendanceByPaymentAmount({ loaderData: data }: Route.ComponentProps) {
   usePageTitle('Attendance by payment amount');
 
   const sortedRows = [...data.convention.reports.sales_count_by_product_and_payment_amount].sort((a, b) => {

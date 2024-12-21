@@ -9,9 +9,8 @@ import capitalize from 'lodash/capitalize';
 import { titleSort } from '@neinteractiveliterature/litform';
 
 import usePageTitle from '../usePageTitle';
-import { EventsByChoiceQueryData, EventsByChoiceQueryDocument } from './queries.generated';
-import { LoaderFunction, useLoaderData } from 'react-router';
-import { client } from '../useIntercodeApolloClient';
+import { EventsByChoiceQueryDocument } from './queries.generated';
+import { Route } from './+types/EventsByChoice';
 
 type ProcessedChoiceCount = {
   confirmed?: number;
@@ -36,13 +35,12 @@ function renderChoiceCounts(choiceData: ProcessedChoiceCount) {
   );
 }
 
-export async function loader() {
-  const { data } = await client.query<EventsByChoiceQueryData>({ query: EventsByChoiceQueryDocument });
+export async function loader({ context }: Route.LoaderArgs) {
+  const { data } = await context.client.query({ query: EventsByChoiceQueryDocument });
   return data;
 }
 
-function EventsByChoice() {
-  const data = useLoaderData() as EventsByChoiceQueryData;
+function EventsByChoice({ loaderData: data }: Route.ComponentProps): JSX.Element {
   const choiceColumns = useMemo(() => {
     const choices = flatMap(data.convention.reports.events_by_choice, (eventByChoice) =>
       eventByChoice.choice_counts.map((choiceCount) => choiceCount.choice),
