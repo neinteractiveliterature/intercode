@@ -51,6 +51,7 @@ export enum NamedRoute {
   UserAdmin = 'UserAdmin',
   UserAdminDisplay = 'UserAdminDisplay',
   UsersTable = 'UsersTable',
+  MyProfileSetup = 'MyProfileSetup',
 }
 
 export type RouteName = keyof typeof NamedRoute & string;
@@ -250,6 +251,12 @@ export default [
             route('waitlists', 'MailingLists/WaitlistMailingLists.tsx'),
             route('whos_free', 'MailingLists/WhosFree.tsx'),
             index('MailingLists/index.tsx'),
+          ]),
+          route('my_profile', 'RouteGuards/LoginRequiredRouteGuard.tsx', [
+            route('edit_bio', 'MyProfile/edit_bio.ts'),
+            route('edit', 'MyProfile/MyProfileForm.tsx'),
+            route('setup', 'MyProfile/MyProfileForm.tsx', { id: NamedRoute.MyProfileSetup }),
+            index('MyProfile/MyProfileDisplay.tsx'),
           ]),
           ...prefix('ticket_types', [
             layout('RouteGuards/TicketRequiredForSignupRouteGuard.tsx', [
