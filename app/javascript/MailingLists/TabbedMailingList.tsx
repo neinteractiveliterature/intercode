@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { stringify as csvStringify } from 'csv-stringify/browser/esm/sync';
-import { saveAs } from 'file-saver';
+import FileSaver from 'file-saver';
 import { useTabs, TabBody, TabList } from '@neinteractiveliterature/litform';
 
 import EmailList from '../UIComponents/EmailList';
@@ -25,7 +25,7 @@ function TabbedMailingList({ emails, id, metadataFields, csvFilename }: TabbedMa
       }),
     ];
     const blob = new Blob([csvStringify(data)], { type: 'text/csv; charset=utf-8' });
-    saveAs(blob, csvFilename);
+    FileSaver.saveAs(blob, csvFilename);
   }, [csvFilename, emails, metadataFields]);
   const { t } = useTranslation();
 
