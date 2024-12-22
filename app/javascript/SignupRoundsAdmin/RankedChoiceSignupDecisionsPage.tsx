@@ -1,11 +1,9 @@
 import {
   SignupRoundRankedChoiceDecisionsTableQueryData,
   SignupRoundRankedChoiceDecisionsTableQueryDocument,
-  SignupRoundsAdminQueryData,
   SignupRoundsAdminQueryDocument,
 } from './queries.generated';
 import { useContext, useMemo } from 'react';
-import { LoaderFunction, useLoaderData, useParams } from 'react-router';
 import { describeSignupRound } from './describeSignupRound';
 import { parseSignupRounds } from '../SignupRoundUtils';
 import { useTranslation } from 'react-i18next';
@@ -26,7 +24,7 @@ import ChoiceSetFilter from '../Tables/ChoiceSetFilter';
 import { TFunction } from 'i18next';
 import assertNever from 'assert-never';
 import { FilterCodecs, buildFieldFilterCodecs } from '../Tables/FilterUtils';
-import { client } from '../useIntercodeApolloClient';
+import { Route } from './+types/RankedChoiceSignupDecisionsPage';
 
 export function describeDecision(decision: RankedChoiceDecisionValue, t: TFunction): string {
   if (decision === RankedChoiceDecisionValue.Signup) {
@@ -242,14 +240,12 @@ function RankedChoiceSignupDecisionsTable({ signupRoundId }: RankedChoiceSignupD
   );
 }
 
-export async function loader() {
-  const { data } = await client.query<SignupRoundsAdminQueryData>({ query: SignupRoundsAdminQueryDocument });
+export async function loader({ context }: Route.LoaderArgs) {
+  const { data } = await context.client.query({ query: SignupRoundsAdminQueryDocument });
   return data;
 }
 
-function RankedChoiceSignupDecisionsPage() {
-  const data = useLoaderData() as SignupRoundsAdminQueryData;
-  const { id } = useParams();
+function RankedChoiceSignupDecisionsPage({ loaderData: data, params: { id } }: Route.ComponentProps) {
   const { timezoneName } = useContext(AppRootContext);
   const { t } = useTranslation();
   const format = useAppDateTimeFormat();
