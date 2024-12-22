@@ -1,5 +1,5 @@
 import { Room } from 'graphqlTypes.generated';
-import { data } from 'react-router';
+import { redirect } from 'react-router';
 import { DeleteRoomDocument, UpdateRoomDocument } from 'RoomsAdmin/mutations.generated';
 import invariant from 'tiny-invariant';
 import { Route } from './+types/route';
@@ -9,7 +9,7 @@ export async function action({ request, params: { id }, context }: Route.ActionA
 
   try {
     if (request.method === 'DELETE') {
-      const result = await context.client.mutate({
+      await context.client.mutate({
         mutation: DeleteRoomDocument,
         variables: { input: { id } },
         update: (cache) => {
@@ -19,14 +19,14 @@ export async function action({ request, params: { id }, context }: Route.ActionA
           });
         },
       });
-      return data(result.data);
+      return redirect('..');
     } else if (request.method === 'PATCH') {
       const formData = await request.formData();
-      const result = await context.client.mutate({
+      await context.client.mutate({
         mutation: UpdateRoomDocument,
         variables: { input: { id, room: { name: formData.get('name')?.toString() } } },
       });
-      return data(result.data);
+      return redirect('..');
     } else {
       return new Response(null, { status: 404 });
     }

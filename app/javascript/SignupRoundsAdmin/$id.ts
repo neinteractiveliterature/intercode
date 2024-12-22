@@ -1,13 +1,13 @@
-import { ActionFunction, redirect } from 'react-router';
-import { client } from '../useIntercodeApolloClient';
+import { redirect } from 'react-router';
 import { DeleteSignupRoundDocument, UpdateSignupRoundDocument } from './mutations.generated';
 import { SignupRound } from '../graphqlTypes.generated';
 import { buildSignupRoundInputFromFormData } from './buildSignupRoundInput';
+import { Route } from './+types/$id';
 
-export async function action({ request, params: { id } }) {
+export async function action({ request, params: { id }, context }: Route.ActionArgs) {
   try {
     if (request.method === 'DELETE') {
-      await client.mutate({
+      await context.client.mutate({
         mutation: DeleteSignupRoundDocument,
         variables: { id },
         update: (cache) => {
@@ -19,7 +19,7 @@ export async function action({ request, params: { id } }) {
       });
     } else if (request.method === 'PATCH') {
       const formData = await request.formData();
-      await client.mutate({
+      await context.client.mutate({
         mutation: UpdateSignupRoundDocument,
         variables: { id, signupRound: buildSignupRoundInputFromFormData(formData) },
       });

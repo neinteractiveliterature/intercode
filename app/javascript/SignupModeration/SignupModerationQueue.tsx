@@ -19,15 +19,15 @@ import useReactTableWithTheWorks from '../Tables/useReactTableWithTheWorks';
 import UserConProfileWithGravatarCell from '../Tables/UserConProfileWithGravatarCell';
 import TimestampCell from '../Tables/TimestampCell';
 import { useFormatRunTimespan } from '../EventsApp/runTimeFormatting';
-import { Link, useFetcher, useLoaderData } from 'react-router';
+import { Link, useFetcher } from 'react-router';
 import { Trans, useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
 import { ParsedSignupRound, parseSignupRounds } from '../SignupRoundUtils';
 import { describeSignupRound } from '../SignupRoundsAdmin/describeSignupRound';
 import { describeDecision } from '../SignupRoundsAdmin/RankedChoiceSignupDecisionsPage';
-import { sortBy } from 'lodash';
+import sortBy from 'lodash/sortBy';
 import { ApolloError } from '@apollo/client';
-import Route from './+types/SignupModerationQueue';
+import { Route } from './+types/SignupModerationQueue';
 
 type SignupModerationContextValue = {
   acceptClicked: (signupRequest: SignupModerationSignupRequestFieldsFragment) => void;
@@ -268,9 +268,8 @@ export const loader = async ({ context }: Route.LoaderArgs) => {
   return data;
 };
 
-function SignupModerationQueue(): JSX.Element {
+function SignupModerationQueue({ loaderData: pageData }: Route.ComponentProps): JSX.Element {
   const { t } = useTranslation();
-  const pageData = useLoaderData() as SignupModerationQueuePageQueryData;
   const confirm = useConfirm();
   const fetcher = useFetcher();
   const error = fetcher.data instanceof Error ? fetcher.data : undefined;
@@ -386,7 +385,7 @@ function SignupModerationQueue(): JSX.Element {
           renderError: (acceptError) => <ErrorDisplay graphQLError={acceptError} />,
         }),
       rerunSignupRound: async (id: string) => {
-        fetcher.submit(null, {
+        await fetcher.submit(null, {
           action: `/signup_moderation/signup_rounds/${id}/rerun`,
           method: 'PATCH',
         });
