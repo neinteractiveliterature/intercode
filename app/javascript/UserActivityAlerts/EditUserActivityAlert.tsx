@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { ActionFunction, LoaderFunction, redirect, replace, useFetcher, useLoaderData } from 'react-router';
+import { redirect, replace, useFetcher } from 'react-router';
 import { ApolloError } from '@apollo/client';
 import { useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -7,21 +7,19 @@ import buildUserActivityAlertInput from './buildUserActivityAlertInput';
 import { useChangeSet } from '../ChangeSet';
 import UserActivityAlertForm from './UserActivityAlertForm';
 import usePageTitle from '../usePageTitle';
-import { UserActivityAlertsAdminQueryData, UserActivityAlertsAdminQueryDocument } from './queries.generated';
+import { UserActivityAlertsAdminQueryDocument } from './queries.generated';
 import {
   DeleteUserActivityAlertDocument,
   UpdateUserActivityAlertDocument,
   UpdateUserActivityAlertMutationVariables,
 } from './mutations.generated';
-import { client } from '../useIntercodeApolloClient';
-import invariant from 'tiny-invariant';
 import { UserActivityAlert } from 'graphqlTypes.generated';
+import { Route } from './+types/EditUserActivityAlert';
 
-export async function action({ request, params: { id } }) {
-  invariant(id != null);
+export async function action({ request, params: { id }, context }: Route.ActionArgs) {
   try {
     if (request.method === 'DELETE') {
-      await client.mutate({
+      await context.client.mutate({
         mutation: DeleteUserActivityAlertDocument,
         variables: { id },
         update: (cache) => {
@@ -34,7 +32,7 @@ export async function action({ request, params: { id } }) {
       return replace('/user_activity_alerts');
     } else if (request.method === 'PATCH') {
       const variables = (await request.json()) as Omit<UpdateUserActivityAlertMutationVariables, 'id'>;
-      await client.mutate({
+      await context.client.mutate({
         mutation: UpdateUserActivityAlertDocument,
         variables: { id, ...variables },
       });
@@ -47,26 +45,19 @@ export async function action({ request, params: { id } }) {
   }
 }
 
-type LoaderResult = {
-  convention: UserActivityAlertsAdminQueryData['convention'];
-  initialUserActivityAlert: UserActivityAlertsAdminQueryData['convention']['user_activity_alerts'][number];
-};
-
-export async function loader({ params: { id } }) {
-  const { data } = await client.query<UserActivityAlertsAdminQueryData>({
+export async function loader({ params: { id }, context }: Route.LoaderArgs) {
+  const { data } = await context.client.query({
     query: UserActivityAlertsAdminQueryDocument,
   });
 
   const initialUserActivityAlert = data.convention.user_activity_alerts.find((alert) => alert.id === id);
   if (!initialUserActivityAlert) {
-    return new Response(null, { status: 404 });
+    throw new Response(null, { status: 404 });
   }
-  return { convention: data.convention, initialUserActivityAlert } as LoaderResult;
+  return { convention: data.convention, initialUserActivityAlert };
 }
 
-function EditUserActivityAlertForm() {
-  const { initialUserActivityAlert, convention } = useLoaderData() as LoaderResult;
-
+function EditUserActivityAlertForm({ loaderData: { initialUserActivityAlert, convention } }: Route.ComponentProps) {
   usePageTitle('Editing user activity alert');
   const [userActivityAlert, setUserActivityAlert] = useState(initialUserActivityAlert);
   const [notificationDestinationChangeSet, addNotificationDestination, removeNotificationDestination] =
@@ -83,7 +74,7 @@ function EditUserActivityAlertForm() {
   );
   const confirm = useConfirm();
 
-  const saveClicked = () => {
+  const saveClicked = async () => {
     const variables: Omit<UpdateUserActivityAlertMutationVariables, 'id'> = {
       userActivityAlert: buildUserActivityAlertInput(userActivityAlert),
       addNotificationDestinations: notificationDestinationChangeSet.getAddValues().map((addValue) => {
@@ -97,11 +88,11 @@ function EditUserActivityAlertForm() {
       }),
       removeNotificationDestinationIds: notificationDestinationChangeSet.getRemoveIds(),
     };
-    fetcher.submit(variables, { method: 'PATCH', encType: 'application/json' });
+    await fetcher.submit(variables, { method: 'PATCH', encType: 'application/json' });
   };
 
-  const deleteClicked = () => {
-    fetcher.submit(null, { method: 'DELETE' });
+  const deleteClicked = async () => {
+    await fetcher.submit(null, { method: 'DELETE' });
   };
 
   return (
