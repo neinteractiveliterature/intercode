@@ -1,20 +1,20 @@
 import { useState } from 'react';
-import { ActionFunction, LoaderFunction, redirect, useFetcher, useLoaderData } from 'react-router';
+import { redirect, useFetcher } from 'react-router';
 import { ApolloError } from '@apollo/client';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import StaffPositionForm from './StaffPositionForm';
 import usePageTitle from '../usePageTitle';
 import buildStaffPositionInput from './buildStaffPositionInput';
-import { StaffPositionsQueryData, StaffPositionsQueryDocument } from './queries.generated';
+import { StaffPositionsQueryDocument } from './queries.generated';
 import { UpdateStaffPositionDocument } from './mutations.generated';
-import { client } from '../useIntercodeApolloClient';
 import { StaffPositionInput } from 'graphqlTypes.generated';
+import { Route } from './+types/EditStaffPosition';
 
-export async function action({ params: { id }, request }) {
+export async function action({ params: { id }, request, context }: Route.ActionArgs) {
   try {
     const staffPosition = (await request.json()) as StaffPositionInput;
-    await client.mutate({
+    await context.client.mutate({
       mutation: UpdateStaffPositionDocument,
       variables: { input: { id, staff_position: staffPosition } },
     });
@@ -24,22 +24,17 @@ export async function action({ params: { id }, request }) {
   }
 }
 
-type LoaderResult = {
-  initialStaffPosition: StaffPositionsQueryData['convention']['staff_positions'][number];
-};
-
-export async function loader({ params: { id } }) {
-  const { data } = await client.query<StaffPositionsQueryData>({ query: StaffPositionsQueryDocument });
+export async function loader({ params: { id }, context }: Route.LoaderArgs) {
+  const { data } = await context.client.query({ query: StaffPositionsQueryDocument });
   const initialStaffPosition = data.convention.staff_positions.find((staffPosition) => staffPosition.id === id);
   if (!initialStaffPosition) {
-    return new Response(null, { status: 404 });
+    throw new Response(null, { status: 404 });
   }
 
-  return { initialStaffPosition } satisfies LoaderResult;
+  return { initialStaffPosition };
 }
 
-function EditStaffPosition() {
-  const { initialStaffPosition } = useLoaderData() as LoaderResult;
+function EditStaffPosition({ loaderData: { initialStaffPosition } }: Route.ComponentProps) {
   const [staffPosition, setStaffPosition] = useState(initialStaffPosition);
   const fetcher = useFetcher();
   const updateError = fetcher.data instanceof Error ? fetcher.data : undefined;
