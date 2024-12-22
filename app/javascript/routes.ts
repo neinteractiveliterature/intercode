@@ -287,6 +287,16 @@ export default [
             ]),
             index('SignupRoundsAdmin/SignupRoundsAdminPage.tsx'),
           ]),
+          route('staff_positions', 'StaffPositionAdmin/index.tsx', [
+            route('new', 'StaffPositionAdmin/NewStaffPosition.tsx'),
+            route(':id', 'StaffPositionAdmin/$id/route.ts', [
+              route('edit', 'StaffPositionAdmin/EditStaffPosition.tsx', { id: NamedRoute.EditStaffPosition }),
+              route('edit_permissions', 'StaffPositionAdmin/EditStaffPositionPermissions.tsx', {
+                id: NamedRoute.EditStaffPositionPermissions,
+              }),
+            ]),
+            index('StaffPositionAdmin/StaffPositionsTable.tsx'),
+          ]),
           ...prefix('ticket_types', [
             layout('RouteGuards/TicketRequiredForSignupRouteGuard.tsx', [
               layout('RouteGuards/CanManageTicketTypesRouteGuard.tsx', [

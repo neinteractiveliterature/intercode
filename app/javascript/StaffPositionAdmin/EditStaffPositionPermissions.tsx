@@ -1,5 +1,5 @@
 import { ApolloError } from '@apollo/client';
-import { ActionFunction, LoaderFunction, redirect, useFetcher, useLoaderData } from 'react-router';
+import { redirect, useFetcher } from 'react-router';
 import { useTabs, TabList, TabBody, notEmpty, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
@@ -9,20 +9,20 @@ import ChangeSet, { useChangeSet } from '../ChangeSet';
 import usePageTitle from '../usePageTitle';
 import { getPermissionNamesForModelType, buildPermissionInput } from '../Permissions/PermissionUtils';
 import { PermissionedModelTypeIndicator } from '../graphqlTypes.generated';
-import { StaffPositionsQueryData, StaffPositionsQueryDocument } from './queries.generated';
+import { StaffPositionsQueryDocument } from './queries.generated';
 import { PermissionWithId } from '../Permissions/usePermissionsChangeSet';
-import { client } from '../useIntercodeApolloClient';
 import {
   UpdateStaffPositionPermissionsDocument,
   UpdateStaffPositionPermissionsMutationVariables,
 } from './mutations.generated';
+import { Route } from './+types/EditStaffPositionPermissions';
 
 type ActionInput = Omit<UpdateStaffPositionPermissionsMutationVariables, 'staffPositionId'>;
 
-export async function action({ params: { id }, request }) {
+export async function action({ params: { id }, request, context }: Route.ActionArgs) {
   try {
     const { grantPermissions, revokePermissions } = (await request.json()) as ActionInput;
-    await client.mutate({
+    await context.client.mutate({
       mutation: UpdateStaffPositionPermissionsDocument,
       variables: { staffPositionId: id, grantPermissions, revokePermissions },
     });
@@ -36,23 +36,17 @@ const CmsContentGroupPermissionNames = getPermissionNamesForModelType(Permission
 const EventCategoryPermissionNames = getPermissionNamesForModelType(PermissionedModelTypeIndicator.EventCategory);
 const ConventionPermissionNames = getPermissionNamesForModelType(PermissionedModelTypeIndicator.Convention);
 
-type LoaderResult = {
-  convention: StaffPositionsQueryData['convention'];
-  staffPosition: StaffPositionsQueryData['convention']['staff_positions'][number];
-};
-
-export async function loader({ params: { id } }) {
-  const { data } = await client.query<StaffPositionsQueryData>({ query: StaffPositionsQueryDocument });
+export async function loader({ params: { id }, context }: Route.LoaderArgs) {
+  const { data } = await context.client.query({ query: StaffPositionsQueryDocument });
   const staffPosition = data.convention.staff_positions.find((staffPosition) => staffPosition.id === id);
   if (!staffPosition) {
-    return new Response(null, { status: 404 });
+    throw new Response(null, { status: 404 });
   }
 
-  return { convention: data.convention, staffPosition } satisfies LoaderResult;
+  return { convention: data.convention, staffPosition };
 }
 
-function EditStaffPositionPermissions() {
-  const { convention, staffPosition } = useLoaderData() as LoaderResult;
+function EditStaffPositionPermissions({ loaderData: { convention, staffPosition } }: Route.ComponentProps) {
   const [conventionChangeSet, conventionAdd, conventionRemove, conventionReset] = useChangeSet<PermissionWithId>();
   const [eventCategoriesChangeSet, eventCategoriesAdd, eventCategoriesRemove] = useChangeSet<PermissionWithId>();
   const [contentGroupsChangeSet, contentGroupsAdd, contentGroupsRemove] = useChangeSet<PermissionWithId>();
