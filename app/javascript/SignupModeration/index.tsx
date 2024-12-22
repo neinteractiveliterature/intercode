@@ -3,14 +3,20 @@ import { RouteActivatedBootstrapNavLink } from '../UIComponents/BootstrapNavLink
 
 import { useContext } from 'react';
 import AppRootContext from '../AppRootContext';
-import { SignupAutomationMode } from '../graphqlTypes.generated';
+import { SignupAutomationMode, SignupMode } from '../graphqlTypes.generated';
 import { useTranslation } from 'react-i18next';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
+import FourOhFourPage from 'FourOhFourPage';
 
 function SignupModeration(): JSX.Element {
-  const { signupAutomationMode } = useContext(AppRootContext);
+  const { signupAutomationMode, signupMode } = useContext(AppRootContext);
   const { t } = useTranslation();
   const replacementContent = useAuthorizationRequired('can_manage_signups');
+
+  if (signupMode !== SignupMode.Moderated) {
+    return <FourOhFourPage />;
+  }
+
   if (replacementContent) {
     return replacementContent;
   }

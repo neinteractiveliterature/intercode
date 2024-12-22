@@ -268,6 +268,25 @@ export default [
             index('Reports/index.tsx'),
           ]),
           route('rooms', 'RoomsAdmin/index.tsx', [route(':id', 'RoomsAdmin/$id/route.ts')]),
+          route('signup_moderation', 'SignupModeration/index.tsx', [
+            route('create_signups', 'SignupModeration/CreateSignup.tsx'),
+            route('queue', 'SignupModeration/SignupModerationQueue.tsx'),
+            route('ranked_choice_queue', 'SignupModeration/RankedChoiceQueue.tsx', [
+              route(':userConProfileId', 'SignupModeration/UserRankedChoiceQueue.tsx'),
+            ]),
+            ...prefix('signup_requests/:id', [
+              route('accept', 'SignupModeration/signup_requests/$id/accept.ts'),
+              route('reject', 'SignupModeration/signup_requests/$id/reject.ts'),
+            ]),
+            route('signup_rounds/:id/rerun', 'SignupModeration/signup_rounds/$id/rerun.ts'),
+            index('SignupModeration/indexRedirect.ts'),
+          ]),
+          route('signup_rounds', 'SignupRoundsAdmin/index.tsx', [
+            route(':id', 'SignupRoundsAdmin/$id.ts', [
+              route('results', 'SignupRoundsAdmin/RankedChoiceSignupDecisionsPage.tsx'),
+            ]),
+            index('SignupRoundsAdmin/SignupRoundsAdminPage.tsx'),
+          ]),
           ...prefix('ticket_types', [
             layout('RouteGuards/TicketRequiredForSignupRouteGuard.tsx', [
               layout('RouteGuards/CanManageTicketTypesRouteGuard.tsx', [

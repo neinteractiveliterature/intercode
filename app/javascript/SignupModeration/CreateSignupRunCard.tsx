@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useSuspenseQuery } from '@apollo/client';
+import { useApolloClient, useSuspenseQuery } from '@apollo/client';
 import { ErrorDisplay, useConfirm, useAlert } from '@neinteractiveliterature/litform';
 
 import buildSignupOptions, { SignupOption } from '../EventsApp/EventPage/buildSignupOptions';
@@ -7,7 +7,6 @@ import RunCard from '../EventsApp/EventPage/RunCard';
 import SignupCountData from '../EventsApp/SignupCountData';
 import { SignupRankedChoiceState } from '../graphqlTypes.generated';
 import { CreateSignupRunCardQueryDocument } from './queries.generated';
-import { client } from '../useIntercodeApolloClient';
 import { CreateUserSignupDocument, WithdrawUserSignupDocument } from './mutations.generated';
 
 export type CreateSignupRunCardProps = {
@@ -24,6 +23,7 @@ export default function CreateSignupRunCard({
   const { data } = useSuspenseQuery(CreateSignupRunCardQueryDocument, { variables: { eventId, userConProfileId } });
   const confirm = useConfirm();
   const alert = useAlert();
+  const client = useApolloClient();
 
   const createSignup = async (signupOption: SignupOption) => {
     await client.mutate({

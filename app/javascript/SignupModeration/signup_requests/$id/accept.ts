@@ -1,10 +1,9 @@
-import { ActionFunction } from 'react-router';
-import { client } from '../../../useIntercodeApolloClient';
 import { AcceptSignupRequestDocument } from '../../mutations.generated';
+import { Route } from './+types/accept';
 
-export async function action({ params: { id } }) {
+export async function action({ params: { id }, context }: Route.ActionArgs) {
   try {
-    return await client.mutate({
+    return await context.client.mutate({
       mutation: AcceptSignupRequestDocument,
       variables: { id },
     });
