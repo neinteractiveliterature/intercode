@@ -1,22 +1,21 @@
 import { useContext } from 'react';
-import { LoaderFunction, replace, useLoaderData, useNavigate } from 'react-router';
+import { replace, useNavigate } from 'react-router';
 import AppRootContext from '../AppRootContext';
 import useLoginRequired from '../Authentication/useLoginRequired';
 import usePageTitle from '../usePageTitle';
-import { TicketPurchaseFormQueryData, TicketPurchaseFormQueryDocument } from './queries.generated';
+import { TicketPurchaseFormQueryDocument } from './queries.generated';
 import TicketPurchaseForm from './TicketPurchaseForm';
-import { client } from '../useIntercodeApolloClient';
+import { Route } from './+types/TicketPurchasePage';
 
-export async function loader() {
-  const { data } = await client.query<TicketPurchaseFormQueryData>({ query: TicketPurchaseFormQueryDocument });
+export async function loader({ context }: Route.LoaderArgs) {
+  const { data } = await context.client.query({ query: TicketPurchaseFormQueryDocument });
   if (data.convention.my_profile?.ticket) {
-    return replace('/ticket');
+    throw replace('/ticket');
   }
   return data;
 }
 
-function TicketPurchasePage() {
-  const data = useLoaderData() as TicketPurchaseFormQueryData;
+function TicketPurchasePage({ loaderData: data }: Route.ComponentProps) {
   const { ticketName } = useContext(AppRootContext);
   const navigate = useNavigate();
 

@@ -297,6 +297,7 @@ export default [
             ]),
             index('StaffPositionAdmin/StaffPositionsTable.tsx'),
           ]),
+          ...prefix('ticket', [route('new', 'MyTicket/TicketPurchasePage.tsx'), index('MyTicket/MyTicketDisplay.tsx')]),
           ...prefix('ticket_types', [
             layout('RouteGuards/TicketRequiredForSignupRouteGuard.tsx', [
               layout('RouteGuards/CanManageTicketTypesRouteGuard.tsx', [
@@ -306,6 +307,16 @@ export default [
               ]),
             ]),
           ]),
+          route(
+            'user_activity_alerts',
+            'UserActivityAlerts/UserActivityAlertsAdmin.tsx',
+            { id: NamedRoute.UserActivityAlerts },
+            [
+              route('new', 'UserActivityAlerts/NewUserActivityAlert.tsx'),
+              route(':id/edit', 'UserActivityAlerts/EditUserActivityAlert.tsx'),
+              index('UserActivityAlerts/UserActivityAlertsList.tsx'),
+            ],
+          ),
         ]),
       ]),
       route('/pages/*', 'CmsPage/index.tsx'),

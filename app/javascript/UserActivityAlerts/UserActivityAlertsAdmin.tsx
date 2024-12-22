@@ -1,4 +1,4 @@
-import { useMatches, Outlet, LoaderFunction } from 'react-router';
+import { useMatches, Outlet } from 'react-router';
 
 import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
@@ -6,15 +6,6 @@ import LeafBreadcrumbItem from '../Breadcrumbs/LeafBreadcrumbItem';
 import { useTranslation } from 'react-i18next';
 import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
 import { NamedRoute } from '../routes';
-import { client } from '../useIntercodeApolloClient';
-import { UserActivityAlertsAdminQueryData, UserActivityAlertsAdminQueryDocument } from './queries.generated';
-
-export async function loader() {
-  const { data } = await client.query<UserActivityAlertsAdminQueryData>({
-    query: UserActivityAlertsAdminQueryDocument,
-  });
-  return data;
-}
 
 function UserActivityAlertsAdmin(): JSX.Element {
   const matches = useMatches();

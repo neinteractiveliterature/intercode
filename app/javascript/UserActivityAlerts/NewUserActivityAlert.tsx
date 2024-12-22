@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { ActionFunction, redirect, useFetcher, useRouteLoaderData } from 'react-router';
+import { redirect, useFetcher } from 'react-router';
 import { ApolloError } from '@apollo/client';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -7,17 +7,20 @@ import buildUserActivityAlertInput from './buildUserActivityAlertInput';
 import { useChangeSet } from '../ChangeSet';
 import UserActivityAlertForm from './UserActivityAlertForm';
 import usePageTitle from '../usePageTitle';
-import { UserActivityAlertFieldsFragmentDoc, UserActivityAlertsAdminQueryData } from './queries.generated';
+import {
+  UserActivityAlertFieldsFragmentDoc,
+  UserActivityAlertsAdminQueryData,
+  UserActivityAlertsAdminQueryDocument,
+} from './queries.generated';
 import { CreateUserActivityAlertDocument, CreateUserActivityAlertMutationVariables } from './mutations.generated';
-import { NamedRoute } from '../routes';
-import { client } from 'useIntercodeApolloClient';
 import { Convention } from 'graphqlTypes.generated';
+import { Route } from './+types/NewUserActivityAlert';
 
-export async function action({ request }) {
+export async function action({ request, context }: Route.ActionArgs) {
   try {
     if (request.method === 'POST') {
       const variables = (await request.json()) as CreateUserActivityAlertMutationVariables;
-      await client.mutate({
+      await context.client.mutate({
         mutation: CreateUserActivityAlertDocument,
         variables,
         update: (cache, result) => {
@@ -45,8 +48,14 @@ export async function action({ request }) {
   }
 }
 
-function NewUserActivityAlert() {
-  const data = useRouteLoaderData(NamedRoute.UserActivityAlerts) as UserActivityAlertsAdminQueryData;
+export async function loader({ context }: Route.LoaderArgs) {
+  const { data } = await context.client.query({
+    query: UserActivityAlertsAdminQueryDocument,
+  });
+  return data;
+}
+
+function NewUserActivityAlert({ loaderData: data }: Route.ComponentProps) {
   usePageTitle('New user activity alert');
 
   const [userActivityAlert, setUserActivityAlert] = useState<
@@ -76,7 +85,7 @@ function NewUserActivityAlert() {
     [notificationDestinationChangeSet, userActivityAlert],
   );
 
-  const saveClicked = () => {
+  const saveClicked = async () => {
     const variables: CreateUserActivityAlertMutationVariables = {
       userActivityAlert: buildUserActivityAlertInput(userActivityAlert),
       notificationDestinations: notificationDestinationChangeSet.getAddValues().map((addValue) => {
@@ -89,7 +98,7 @@ function NewUserActivityAlert() {
         throw new Error('Notification destination must have either a staff position or user con profile');
       }),
     };
-    fetcher.submit(variables, { method: 'POST', encType: 'application/json' });
+    await fetcher.submit(variables, { method: 'POST', encType: 'application/json' });
   };
 
   return (
