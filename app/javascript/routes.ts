@@ -317,6 +317,17 @@ export default [
               index('UserActivityAlerts/UserActivityAlertsList.tsx'),
             ],
           ),
+          route('user_con_profiles', 'UserConProfiles/route.tsx', [
+            route(':id', 'UserConProfiles/userConProfileLoader.ts', { id: NamedRoute.AdminUserConProfile }, [
+              ...prefix('admin_ticket', [
+                route('edit', 'UserConProfiles/EditTicket.tsx'),
+                route('new', 'UserConProfiles/NewTicket.tsx'),
+              ]),
+              route('edit', 'UserConProfiles/EditUserConProfile.tsx'),
+              index('UserConProfiles/UserConProfileAdminDisplay.tsx'),
+            ]),
+            route('', 'UserConProfiles/AttendeesPage.tsx', [route('new', 'UserConProfiles/AddAttendeeModal.tsx')]),
+          ]),
         ]),
       ]),
       route('/pages/*', 'CmsPage/index.tsx'),

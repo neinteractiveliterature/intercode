@@ -1,20 +1,20 @@
 import { useCallback } from 'react';
-import { ActionFunction, redirect, useFetcher, useRouteLoaderData } from 'react-router';
+import { redirect, useFetcher } from 'react-router';
 
 import TicketForm from './TicketForm';
 import usePageTitle from '../usePageTitle';
-import { UserConProfileAdminQueryData, UserConProfileAdminTicketFieldsFragmentDoc } from './queries.generated';
+import { UserConProfileAdminTicketFieldsFragmentDoc } from './queries.generated';
 import { TicketInput } from '../graphqlTypes.generated';
-import { NamedRoute } from '../routes';
-import { client } from 'useIntercodeApolloClient';
 import { CreateTicketDocument, CreateTicketMutationVariables } from './mutations.generated';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 import { ApolloError } from '@apollo/client';
+import { Route } from './+types/NewTicket';
+import { useUserConProfileLoaderData } from './userConProfileLoader';
 
-export async function action({ request }) {
+export async function action({ request, context }: Route.ActionArgs) {
   try {
     const variables = (await request.json()) as CreateTicketMutationVariables;
-    await client.mutate({
+    await context.client.mutate({
       mutation: CreateTicketDocument,
       variables,
       update: (cache, result) => {
@@ -41,7 +41,7 @@ export async function action({ request }) {
 }
 
 function NewTicket() {
-  const data = useRouteLoaderData(NamedRoute.AdminUserConProfile) as UserConProfileAdminQueryData;
+  const data = useUserConProfileLoaderData();
   const fetcher = useFetcher();
   const error = fetcher.data instanceof Error ? fetcher.data : undefined;
 

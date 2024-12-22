@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
 import { Modal } from 'react-bootstrap4-modal';
-import { ActionFunction, redirect, useFetcher, useNavigate } from 'react-router';
+import { redirect, useFetcher, useNavigate } from 'react-router';
 import { ApolloError } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
@@ -10,13 +10,13 @@ import { AddAttendeeUsersQueryData, AddAttendeeUsersQueryDocument } from './quer
 import { FormResponse } from '../FormPresenter/useFormResponse';
 import AppRootContext from 'AppRootContext';
 import { CreateUserConProfileDocument, CreateUserConProfileMutationVariables } from './mutations.generated';
-import { client } from 'useIntercodeApolloClient';
+import { Route } from './+types/AddAttendeeModal';
 
-export async function action({ request }) {
+export async function action({ request, context }: Route.ActionArgs) {
   try {
     const variables = (await request.json()) as CreateUserConProfileMutationVariables;
-    await client.mutate({ mutation: CreateUserConProfileDocument, variables });
-    await client.resetStore();
+    await context.client.mutate({ mutation: CreateUserConProfileDocument, variables });
+    await context.client.resetStore();
     return redirect('..');
   } catch (error) {
     return error;
