@@ -358,6 +358,12 @@ export default [
           ]),
           index('OrganizationAdmin/OrganizationIndex.tsx'),
         ]),
+        route('users', 'Users/UsersAdmin.tsx', { id: NamedRoute.UserAdmin }, [
+          route(':id', 'Users/UserAdminDisplay.tsx', { id: NamedRoute.UserAdminDisplay }),
+          route('', 'Users/UsersTable.tsx', { id: NamedRoute.UsersTable }, [
+            route('merge/:ids', 'Users/MergeUsersModal.tsx'),
+          ]),
+        ]),
       ]),
       route('/pages/*', 'CmsPage/index.tsx'),
       index('CmsPage/index.tsx', { id: NamedRoute.RootPage }),

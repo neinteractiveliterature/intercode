@@ -4,10 +4,16 @@ import { useTranslation } from 'react-i18next';
 import { NamedRoute } from '../routes';
 import { UserAdminQueryData } from './queries.generated';
 import NamedRouteBreadcrumbItem from '../Breadcrumbs/NamedRouteBreadcrumbItem';
+import useAuthorizationRequired from 'Authentication/useAuthorizationRequired';
 
 function UsersAdmin(): JSX.Element {
   const { t } = useTranslation();
   const singleUserData = useRouteLoaderData(NamedRoute.UserAdminDisplay) as UserAdminQueryData;
+  const replacementContent = useAuthorizationRequired('can_read_users');
+
+  if (replacementContent) {
+    return replacementContent;
+  }
 
   return (
     <>

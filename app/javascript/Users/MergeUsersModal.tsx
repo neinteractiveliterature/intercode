@@ -9,20 +9,12 @@ import { ChoiceSet, ErrorDisplay } from '@neinteractiveliterature/litform';
 import { MergeUsersModalQueryData, MergeUsersModalQueryDocument } from './queries.generated';
 import humanize from '../humanize';
 import { Trans, useTranslation } from 'react-i18next';
-import {
-  ActionFunction,
-  LoaderFunction,
-  redirect,
-  useActionData,
-  useLoaderData,
-  useNavigate,
-  useNavigation,
-} from 'react-router';
-import { client } from '../useIntercodeApolloClient';
+import { redirect, useNavigate, useNavigation } from 'react-router';
 import { MergeUsersDocument } from './mutations.generated';
 import { i18n } from '../setupI18Next';
 import { ApolloError } from '@apollo/client';
 import { useSubmit } from 'react-router';
+import { Route } from './+types/MergeUsersModal';
 
 type UserType = MergeUsersModalQueryData['users'][0];
 type UserConProfileType = UserType['user_con_profiles'][0];
@@ -34,7 +26,7 @@ type ActionArgs = {
   winningProfileIds: Record<string, string>;
 };
 
-export async function action({ request }) {
+export async function action({ request, context }: Route.ActionArgs) {
   const { userIds, winningUserId, winningProfileIds } = (await request.json()) as ActionArgs;
   if (!userIds) {
     throw new Error(i18n.t('admin.users.merge.noUsers'));
@@ -44,7 +36,7 @@ export async function action({ request }) {
   }
 
   try {
-    await client.mutate({
+    await context.client.mutate({
       mutation: MergeUsersDocument,
       variables: {
         userIds: userIds,
@@ -64,21 +56,19 @@ export async function action({ request }) {
   return redirect('..');
 }
 
-export async function loader({ params: { ids } }) {
-  const { data } = await client.query({
+export async function loader({ params: { ids }, context }: Route.LoaderArgs) {
+  const { data } = await context.client.query({
     query: MergeUsersModalQueryDocument,
-    variables: { ids: ids?.split(',') ?? [] },
+    variables: { ids: ids.split(',') },
   });
   return data;
 }
 
-function MergeUsersModal(): JSX.Element {
-  const data = useLoaderData() as MergeUsersModalQueryData;
+function MergeUsersModal({ loaderData: data, actionData: mutationError }: Route.ComponentProps): JSX.Element {
   const [winningUserId, setWinningUserId] = useState<string>();
   const [winningProfileIds, setWinningProfileIds] = useState(new Map<string, string>());
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const mutationError = useActionData();
   const navigation = useNavigation();
   const submit = useSubmit();
 
