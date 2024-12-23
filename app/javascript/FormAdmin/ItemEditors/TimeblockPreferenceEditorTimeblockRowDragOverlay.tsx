@@ -32,7 +32,6 @@ function TimeblockPreferenceEditorTimeblockRowDragOverlay({
     }
 
     try {
-       
       getTimeblockTimespanForDisplay(timeblock);
     } catch (e) {
       return e.message;

@@ -1,7 +1,6 @@
 #import "../../Permissions/fragments.graphql"
 
 fragment CmsContentFields on CmsContent {
-   
   __typename
 
   ... on Page {

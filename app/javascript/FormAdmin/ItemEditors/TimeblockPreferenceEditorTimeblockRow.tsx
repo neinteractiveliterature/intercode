@@ -62,7 +62,6 @@ function TimeblockPreferenceEditorTimeblockRow({
     }
 
     try {
-       
       getTimeblockTimespanForDisplay(timeblock);
     } catch (e) {
       return e.message;

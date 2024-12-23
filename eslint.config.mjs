@@ -46,6 +46,8 @@ export default typescriptEslint.config(
   reactPlugin.configs.flat['jsx-runtime'],
   ...compat.extends('plugin:react-hooks/recommended'),
   typescriptEslint.configs.recommended,
+  vitest.configs.recommended,
+  vitest.configs.env,
   {
     files: ['app/javascript/**/*.tsx'],
     .../** @type {import('typescript-eslint').InfiniteDepthConfigWithExtends} */ (i18Next.configs['flat/recommended']),
@@ -68,7 +70,6 @@ export default typescriptEslint.config(
   },
   {
     plugins: {
-      vitest,
       'jsx-a11y': jsxA11Y,
     },
 
@@ -78,7 +79,6 @@ export default typescriptEslint.config(
         ...globals.browser,
         ...Object.fromEntries(Object.entries(globals.jquery).map(([key]) => [key, 'off'])),
         ...globals.node,
-        ...vitest.environments.env.globals,
       },
 
       ecmaVersion: 6,
@@ -108,8 +108,6 @@ export default typescriptEslint.config(
     },
 
     rules: {
-      ...vitest.configs.recommended.rules,
-
       camelcase: 'off',
       'vitest/no-disabled-tests': 'warn',
       'vitest/no-focused-tests': 'error',
@@ -212,8 +210,6 @@ export default typescriptEslint.config(
 
     languageOptions: {
       parser: graphqlEslint.parser,
-      ecmaVersion: 5,
-      sourceType: 'script',
     },
 
     rules: {
@@ -236,8 +232,6 @@ export default typescriptEslint.config(
 
     languageOptions: {
       parser: graphqlEslint.parser,
-      ecmaVersion: 5,
-      sourceType: 'script',
     },
 
     rules: {

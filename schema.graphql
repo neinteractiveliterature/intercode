@@ -11,7 +11,8 @@ type Ability {
   can_create_pages: Boolean!
   can_create_tickets: Boolean!
   can_create_user_con_profiles: Boolean!
-  can_delete_event(eventId: ID): Boolean! @deprecated(reason: "Deleting events is never allowed; this always returns false")
+  can_delete_event(eventId: ID): Boolean!
+    @deprecated(reason: "Deleting events is never allowed; this always returns false")
   can_delete_event_proposal(eventProposalId: ID): Boolean!
   can_delete_ticket(ticketId: ID): Boolean!
   can_delete_user_con_profile(userConProfileId: ID): Boolean!
@@ -1652,8 +1653,12 @@ type ConventionReports {
     """
     productIds: [ID!]
   ): Money!
-  ticket_count_by_type_and_payment_amount: [TicketCountByTypeAndPaymentAmount!]! @deprecated(reason: "This only takes ticket sales into account.  Please use the sales_count_by_product_and_payment_amount field instead.")
-  total_revenue: Money! @deprecated(reason: "This only takes ticket sales into account.  Please use the sum_revenue field instead.")
+  ticket_count_by_type_and_payment_amount: [TicketCountByTypeAndPaymentAmount!]!
+    @deprecated(
+      reason: "This only takes ticket sales into account.  Please use the sales_count_by_product_and_payment_amount field instead."
+    )
+  total_revenue: Money!
+    @deprecated(reason: "This only takes ticket sales into account.  Please use the sum_revenue field instead.")
 }
 
 type ConventionsPagination implements PaginationInterface {
@@ -3629,7 +3634,10 @@ type EmailRoutesPagination implements PaginationInterface {
 
 type Event {
   admin_notes: String
-  age_restrictions: String @deprecated(reason: "Has not worked correctly in a long time.  Please use form_response_attrs or form_response_attrs_json.")
+  age_restrictions: String
+    @deprecated(
+      reason: "Has not worked correctly in a long time.  Please use form_response_attrs or form_response_attrs_json."
+    )
   author: String
   can_play_concurrently: Boolean!
   con_mail_destination: String
@@ -3657,7 +3665,11 @@ type Event {
   provided_tickets: [Ticket!]!
   registration_policy: RegistrationPolicy
   run(id: ID): Run!
-  runs(excludeConflicts: Boolean @deprecated(reason: "This parameter hasn't actually worked for a long time"), finish: Date, start: Date): [Run!]!
+  runs(
+    excludeConflicts: Boolean @deprecated(reason: "This parameter hasn't actually worked for a long time")
+    finish: Date
+    start: Date
+  ): [Run!]!
   short_blurb: String
   short_blurb_html: String
   slots_limited: Boolean
@@ -6678,7 +6690,8 @@ type Run {
     """
     sort: [SortInput!]
   ): SignupChangesPagination!
-  signup_count_by_state_and_bucket_key_and_counted: Json! @deprecated(reason: "Please use grouped_signup_counts instead")
+  signup_count_by_state_and_bucket_key_and_counted: Json!
+    @deprecated(reason: "Please use grouped_signup_counts instead")
 
   """
   The signups for this run

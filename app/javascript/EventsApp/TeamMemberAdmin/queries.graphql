@@ -57,7 +57,7 @@ fragment TeamMemberFields on TeamMember {
 }
 
 # This fragment is used in ./mutations.graphql
- 
+
 fragment TeamMemberFieldsWithoutPersonalInfo on TeamMember {
   id
   display_team_member
