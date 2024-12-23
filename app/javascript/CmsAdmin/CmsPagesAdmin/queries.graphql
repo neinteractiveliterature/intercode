@@ -44,18 +44,27 @@ query CmsPagesAdminQuery {
       ...CmsPageAdminLayoutFields
     }
 
-    ... on RootSite {
-      root_site_default_layout: defaultLayout {
-        id
-        ...CmsPageAdminLayoutFields
-      }
+    defaultLayout {
+      id
+      ...CmsPageAdminLayoutFields
+    }
+  }
+}
+
+query CmsPageAdminQuery($id: ID!) {
+  cmsParent: cmsParentByRequestHost {
+    cmsPage(id: $id) {
+      ...CmsPageFields
     }
 
-    ... on Convention {
-      defaultLayout {
-        id
-        ...CmsPageAdminLayoutFields
-      }
+    cmsLayouts {
+      id
+      ...CmsPageAdminLayoutFields
+    }
+
+    defaultLayout {
+      id
+      ...CmsPageAdminLayoutFields
     }
   }
 }

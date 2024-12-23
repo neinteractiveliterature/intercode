@@ -12,7 +12,7 @@ import { EditorView } from '@codemirror/view';
 import LiquidInput from '../../BuiltInFormControls/LiquidInput';
 import SelectWithLabel from '../../BuiltInFormControls/SelectWithLabel';
 import { CmsLayout, Page } from '../../graphqlTypes.generated';
-import { CmsPagesAdminQueryData } from './queries.generated';
+import { CmsPageAdminLayoutFieldsFragment, CmsPagesAdminQueryData } from './queries.generated';
 import { useTranslation } from 'react-i18next';
 
 export type PageFormFields = Pick<
@@ -23,7 +23,7 @@ export type PageFormFields = Pick<
 export type CmsPageFormProps<T extends PageFormFields> = {
   page: T;
   onChange?: React.Dispatch<React.SetStateAction<T>>;
-  cmsParent: CmsPagesAdminQueryData['cmsParent'];
+  defaultLayout: CmsPageAdminLayoutFieldsFragment;
   cmsLayouts: CmsPagesAdminQueryData['cmsParent']['cmsLayouts'];
   readOnly?: boolean;
 };
@@ -31,7 +31,7 @@ export type CmsPageFormProps<T extends PageFormFields> = {
 function CmsPageForm<T extends PageFormFields>({
   page,
   onChange,
-  cmsParent,
+  defaultLayout,
   cmsLayouts,
   readOnly,
 }: CmsPageFormProps<T>): JSX.Element {
@@ -60,8 +60,6 @@ function CmsPageForm<T extends PageFormFields>({
   const extensions = React.useMemo(() => [EditorView.editable.of(!readOnly)], [readOnly]);
 
   const slugInputId = useId();
-  const defaultLayout =
-    cmsParent.__typename === 'RootSite' ? cmsParent.root_site_default_layout : cmsParent.defaultLayout;
 
   const cmsLayoutOptions = useMemo(
     () =>
