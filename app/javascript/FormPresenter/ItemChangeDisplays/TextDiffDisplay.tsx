@@ -40,7 +40,6 @@ function TextDiffDisplay({ before, after }: TextDiffDisplayProps): JSX.Element {
   return (
     <>
       {diff.map(({ value, added, removed }, index) => (
-         
         <EditDisplay value={value} added={added} removed={removed} key={index} />
       ))}
     </>

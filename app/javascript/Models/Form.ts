@@ -31,7 +31,7 @@ export function getFormItemsByIdentifier(form: CommonFormFieldsFragment): {
   const indexedSectionItems = form.form_sections.map((formSection) =>
     formSection.form_items
       .filter((formItem) => formItem.identifier != null)
-       
+
       .reduce((indexed, formItem) => ({ ...indexed, [formItem.identifier!]: formItem }), {}),
   );
 

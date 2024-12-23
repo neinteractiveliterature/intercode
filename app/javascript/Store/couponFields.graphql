@@ -1,5 +1,3 @@
- 
-
 fragment CouponFields on Coupon {
   id
   code
