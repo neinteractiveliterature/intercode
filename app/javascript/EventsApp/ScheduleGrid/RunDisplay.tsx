@@ -102,9 +102,7 @@ const RunDisplay = forwardRef<HTMLDivElement, RunDisplayProps>(function RunDispl
   };
 
   return (
-     
     <div
-       
       tabIndex={run.disableDetailsPopup ? undefined : 0}
       className={getRunClassName({
         event,

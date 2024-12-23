@@ -49,7 +49,6 @@ function ArrayEditor<T>({
 
       <ul className="list-group list-group-flush">
         {array.map((value, index) => (
-           
           <li className="list-group-item" key={index}>
             <div className="d-flex">
               <div className="flex-grow-1">{renderValue(value)}</div>
