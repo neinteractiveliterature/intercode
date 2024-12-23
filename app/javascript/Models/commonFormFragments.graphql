@@ -1,5 +1,3 @@
- 
-
 fragment CommonFormItemFields on FormItem {
   id
   position
