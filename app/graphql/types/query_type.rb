@@ -122,6 +122,13 @@ represented as a JSON object."
     MARKDOWN
   end
 
+  field :organization, Types::OrganizationType, null: false do
+    description <<~MARKDOWN
+    Finds an organization by ID.
+    MARKDOWN
+    argument :id, ID, required: true, description: "The ID of the organization to find."
+  end
+
   field :organizations, [Types::OrganizationType], null: false do
     description <<~MARKDOWN
     Returns all organizations in the database.
@@ -263,6 +270,10 @@ represented as a JSON object."
       )
     pre_auth.valid?
     pre_auth.as_json({})
+  end
+
+  def organization(id:)
+    Organization.find(id)
   end
 
   def organizations

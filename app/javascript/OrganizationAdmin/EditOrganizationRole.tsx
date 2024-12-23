@@ -1,31 +1,25 @@
-import { LoaderFunction, Navigate, useActionData, useLoaderData, useNavigation, useSubmit } from 'react-router';
+import { Navigate, useActionData, useNavigation, useSubmit } from 'react-router';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import useOrganizationRoleForm from './useOrganizationRoleForm';
 import usePageTitle from '../usePageTitle';
-import { OrganizationAdminOrganizationsQueryData } from './queries.generated';
-import { organizationsLoader } from './loaders';
+import { OrganizationAdminOrganizationQueryDocument } from './queries.generated';
 import { ApolloError } from '@apollo/client';
+import { Route } from './+types/EditOrganizationRole';
 
-type LoaderResult = {
-  organization: OrganizationAdminOrganizationsQueryData['organizations'][number];
-  initialOrganizationRole: OrganizationAdminOrganizationsQueryData['organizations'][number]['organization_roles'][number];
-};
-
-export async function loader({ params: { id, organizationRoleId }, ...args }) {
-  const data = (await organizationsLoader({ params: {}, ...args })) as OrganizationAdminOrganizationsQueryData;
-  const organization = data.organizations.find((org) => org.id === id);
+export async function loader({ params: { id, organizationRoleId }, context }: Route.LoaderArgs) {
+  const { data } = await context.client.query({ query: OrganizationAdminOrganizationQueryDocument, variables: { id } });
+  const organization = data.organization;
   const initialOrganizationRole = organization?.organization_roles.find((role) => role.id === organizationRoleId);
 
-  if (!organization || !initialOrganizationRole) {
-    return new Response(null, { status: 404 });
+  if (!initialOrganizationRole) {
+    throw new Response(null, { status: 404 });
   }
 
-  return { initialOrganizationRole, organization } satisfies LoaderResult;
+  return { initialOrganizationRole, organization };
 }
 
-function EditOrganizationRoleForm() {
-  const { organization, initialOrganizationRole } = useLoaderData() as LoaderResult;
+function EditOrganizationRoleForm({ loaderData: { organization, initialOrganizationRole } }: Route.ComponentProps) {
   const { renderForm, formState } = useOrganizationRoleForm(initialOrganizationRole);
   const submit = useSubmit();
   const actionData = useActionData();
