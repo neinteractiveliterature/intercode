@@ -1,13 +1,12 @@
-import { Outlet, useRouteLoaderData } from 'react-router';
+import { Outlet } from 'react-router';
 
 import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
-import { NamedRoute } from '../routes';
-import { SingleOrganizationLoaderResult } from './loaders';
 import NamedRouteBreadcrumbItem from '../Breadcrumbs/NamedRouteBreadcrumbItem';
+import { useOrganizationLoaderData } from './$id';
 
 function OrganizationAdmin(): JSX.Element {
-  const organization = useRouteLoaderData(NamedRoute.Organization) as SingleOrganizationLoaderResult | undefined;
+  const organization = useOrganizationLoaderData();
   const authorizationWarning = useAuthorizationRequired('can_read_organizations');
   if (authorizationWarning) return authorizationWarning;
 
@@ -21,7 +20,7 @@ function OrganizationAdmin(): JSX.Element {
         {organization && (
           <>
             <NamedRouteBreadcrumbItem routeId={['Organization', 'OrganizationDisplay']}>
-              {organization.name}
+              {organization.organization.name}
             </NamedRouteBreadcrumbItem>
 
             <NamedRouteBreadcrumbItem routeId="NewOrganizationRole">New organization role</NamedRouteBreadcrumbItem>
