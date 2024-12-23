@@ -330,6 +330,19 @@ export default [
           ]),
         ]),
       ]),
+      layout('RouteGuards/RootSiteRouteGuard.tsx', [
+        route('conventions', 'RootSiteConventionsAdmin/index.tsx', { id: NamedRoute.RootSiteConventionsAdmin }, [
+          route(':id', 'RootSiteConventionsAdmin/ConventionDisplay.tsx', { id: NamedRoute.RootSiteConventionDisplay }, [
+            route('clone', 'RootSiteConventionsAdmin/clone.tsx'),
+          ]),
+          route(
+            '',
+            'RootSiteConventionsAdmin/RootSiteConventionsAdminTable.tsx',
+            { id: NamedRoute.RootSiteConventionsAdminTable },
+            [route('new', 'RootSiteConventionsAdmin/new.tsx')],
+          ),
+        ]),
+      ]),
       route('/pages/*', 'CmsPage/index.tsx'),
       index('CmsPage/index.tsx', { id: NamedRoute.RootPage }),
       route('*', 'FourOhFourPage.tsx'),
