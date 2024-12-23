@@ -28,6 +28,7 @@
     "./test/javascript/",
     ".react-router/types/**/*",
     "buildTimezoneData.js",
+    "eslint.config.mjs",
     "graphql.config.js",
     "i18next-parser-english.config.cjs",
     "i18next-parser-non-english.config.cjs"
