@@ -1,13 +1,23 @@
-import { Outlet } from 'react-router';
+import { Outlet, useRouteLoaderData } from 'react-router';
 import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 import { Suspense } from 'react';
 import { BootstrapRRNavLink } from '../UIComponents/BootstrapNavLink';
-import { useCmsAdminBaseQueryLoader } from './loaders';
+import { NamedRoute } from 'routes';
+import { Route, Info } from './+types/index';
+import { CmsAdminBaseQueryDocument } from './queries.generated';
 
-function CmsAdmin(): JSX.Element {
-  const data = useCmsAdminBaseQueryLoader();
+export async function loader({ context }: Route.LoaderArgs) {
+  const { data } = await context.client.query({ query: CmsAdminBaseQueryDocument });
+  return data;
+}
+
+export function useCmsAdminBaseQueryLoader() {
+  return useRouteLoaderData(NamedRoute.CmsAdmin) as Info['loaderData'];
+}
+
+function CmsAdmin({ loaderData: data }: Route.ComponentProps): JSX.Element {
   const authorizationWarning = useAuthorizationRequired('can_manage_any_cms_content');
 
   if (authorizationWarning) return authorizationWarning;
