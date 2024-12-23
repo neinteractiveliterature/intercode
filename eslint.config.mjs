@@ -18,11 +18,7 @@ import { FlatCompat } from '@eslint/eslintrc';
 const __filename = fileURLToPath(import.meta.url);
 // eslint-disable-next-line no-underscore-dangle
 const __dirname = path.dirname(__filename);
-const compat = new FlatCompat({
-  baseDirectory: __dirname,
-  recommendedConfig: js.configs.recommended,
-  allConfig: js.configs.all,
-});
+const compat = new FlatCompat({ baseDirectory: __dirname });
 const gitignorePath = path.resolve(__dirname, '.gitignore');
 
 export default typescriptEslint.config(
@@ -42,10 +38,19 @@ export default typescriptEslint.config(
     ],
   },
   js.configs.recommended,
+  // TODO: figure out how to turn on recommendedTypeChecked
+  typescriptEslint.configs.recommended,
+  {
+    languageOptions: {
+      parserOptions: {
+        projectService: true,
+        tsconfigRootDir: import.meta.dirname,
+      },
+    },
+  },
   reactPlugin.configs.flat.recommended,
   reactPlugin.configs.flat['jsx-runtime'],
   ...compat.extends('plugin:react-hooks/recommended'),
-  typescriptEslint.configs.recommended,
   vitest.configs.recommended,
   vitest.configs.env,
   {
@@ -83,14 +88,6 @@ export default typescriptEslint.config(
 
       ecmaVersion: 6,
       sourceType: 'module',
-
-      parserOptions: {
-        ecmaFeatures: {
-          jsx: true,
-        },
-
-        extraFileExtensions: ['.graphql'],
-      },
     },
 
     settings: {
