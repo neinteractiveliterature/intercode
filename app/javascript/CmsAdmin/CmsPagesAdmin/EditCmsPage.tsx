@@ -2,27 +2,19 @@ import { useState } from 'react';
 import { ApolloError } from '@apollo/client';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import {
-  ActionFunction,
-  Form,
-  redirect,
-  useActionData,
-  useLoaderData,
-  useNavigation,
-  useSearchParams,
-} from 'react-router';
+import { Form, redirect, useNavigation, useSearchParams } from 'react-router';
 import { buildPageInputFromFormData } from './buildPageInput';
 import CmsPageForm from './CmsPageForm';
 import usePageTitle from '../../usePageTitle';
-import { singleCmsPageAdminLoader, SingleCmsPageAdminLoaderResult } from './loaders';
 import { UpdatePageDocument } from './mutations.generated';
-import { client } from '../../useIntercodeApolloClient';
+import { Route } from './+types/EditCmsPage';
+import { CmsPageAdminQueryDocument } from './queries.generated';
 
-export async function action({ params: { id }, request }) {
+export async function action({ params: { id }, request, context }: Route.ActionArgs) {
   const formData = await request.formData();
 
   try {
-    await client.mutate({
+    await context.client.mutate({
       mutation: UpdatePageDocument,
       variables: {
         id: id ?? '',
@@ -32,27 +24,34 @@ export async function action({ params: { id }, request }) {
   } catch (e) {
     return e;
   }
-  await client.resetStore();
+  await context.client.resetStore();
 
   return redirect(formData.get('destination')?.toString() ?? '/cms_pages');
 }
 
-export const loader = singleCmsPageAdminLoader;
+export async function loader({ context, params: { id } }: Route.LoaderArgs) {
+  const { data } = await context.client.query({ query: CmsPageAdminQueryDocument, variables: { id } });
+  return data;
+}
 
-function EditCmsPageForm() {
-  const { data, page: initialPage } = useLoaderData() as SingleCmsPageAdminLoaderResult;
+function EditCmsPageForm({ loaderData: data, actionData: updateError }: Route.ComponentProps) {
   const { cmsParent } = data;
+  const initialPage = cmsParent.cmsPage;
   const [page, setPage] = useState(initialPage);
   const [searchParams] = useSearchParams();
   const navigation = useNavigation();
-  const updateError = useActionData();
 
   usePageTitle(`Edit “${initialPage.name}”`);
 
   return (
     <>
       <Form method="PATCH" action=".">
-        <CmsPageForm page={page} onChange={setPage} cmsLayouts={cmsParent.cmsLayouts} cmsParent={cmsParent} />
+        <CmsPageForm
+          page={page}
+          onChange={setPage}
+          cmsLayouts={cmsParent.cmsLayouts}
+          defaultLayout={cmsParent.defaultLayout}
+        />
 
         <ErrorDisplay graphQLError={updateError as ApolloError} />
 

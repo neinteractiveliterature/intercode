@@ -365,6 +365,16 @@ export default [
           ]),
         ]),
       ]),
+      layout('CmsAdmin/index.tsx', { id: NamedRoute.CmsAdmin }, [
+        route('cms_pages', 'CmsAdmin/CmsPagesAdmin/route.ts', { id: NamedRoute.CmsPagesAdmin }, [
+          route(':id', 'CmsAdmin/CmsPagesAdmin/SinglePageRoute.tsx', [
+            route('edit', 'CmsAdmin/CmsPagesAdmin/EditCmsPage.tsx'),
+            route('view_source', 'CmsAdmin/CmsPagesAdmin/ViewCmsPageSource.tsx'),
+          ]),
+          route('new', 'CmsAdmin/CmsPagesAdmin/NewCmsPage.tsx'),
+          index('CmsAdmin/CmsPagesAdmin/CmsPagesAdminTable.tsx'),
+        ]),
+      ]),
       route('/pages/*', 'CmsPage/index.tsx'),
       index('CmsPage/index.tsx', { id: NamedRoute.RootPage }),
       route('*', 'FourOhFourPage.tsx'),
