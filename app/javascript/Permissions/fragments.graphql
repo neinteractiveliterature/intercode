@@ -1,7 +1,4 @@
- 
-
 fragment PermissionedModelFields on PermissionedModel {
-   
   __typename
 
   ... on CmsContentGroup {
@@ -22,7 +19,6 @@ fragment PermissionedModelFields on PermissionedModel {
 }
 
 fragment PermissionedRoleFields on PermissionedRole {
-   
   __typename
 
   ... on StaffPosition {
