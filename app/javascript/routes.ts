@@ -342,6 +342,10 @@ export default [
             [route('new', 'RootSiteConventionsAdmin/new.tsx')],
           ),
         ]),
+        route('email_routes', 'RootSiteEmailRoutesAdmin/index.tsx', [
+          route(':id', 'RootSiteEmailRoutesAdmin/EditEmailRouteModal.tsx'),
+          route('new', 'RootSiteEmailRoutesAdmin/NewEmailRouteModal.tsx'),
+        ]),
       ]),
       route('/pages/*', 'CmsPage/index.tsx'),
       index('CmsPage/index.tsx', { id: NamedRoute.RootPage }),
