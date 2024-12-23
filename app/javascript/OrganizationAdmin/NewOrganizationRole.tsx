@@ -1,34 +1,23 @@
-import {
-  ActionFunction,
-  Navigate,
-  redirect,
-  useActionData,
-  useNavigation,
-  useRouteLoaderData,
-  useSubmit,
-} from 'react-router';
+import { Navigate, redirect, useNavigation, useSubmit } from 'react-router';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import useOrganizationRoleForm from './useOrganizationRoleForm';
 import usePageTitle from '../usePageTitle';
 import { OrganizationRoleFieldsFragmentDoc } from './queries.generated';
-import { NamedRoute } from '../routes';
-import { SingleOrganizationLoaderResult } from './loaders';
-import invariant from 'tiny-invariant';
 import { CreateOrganizationRoleDocument, CreateOrganizationRoleMutationVariables } from './mutations.generated';
-import { client } from 'useIntercodeApolloClient';
 import { Organization } from 'graphqlTypes.generated';
 import { ApolloError } from '@apollo/client';
+import { Route } from './+types/NewOrganizationRole';
+import { useOrganizationLoaderData } from './$id';
 
 type ActionRequest = Omit<CreateOrganizationRoleMutationVariables, 'organizationId'>;
 
-export async function action({ request, params: { id } }) {
+export async function action({ request, params: { id }, context }: Route.ActionArgs) {
   try {
     if (request.method === 'POST') {
-      invariant(id != null);
       const variables = (await request.json()) as ActionRequest;
 
-      await client.mutate({
+      await context.client.mutate({
         mutation: CreateOrganizationRoleDocument,
         variables: {
           organizationId: id,
@@ -57,8 +46,8 @@ export async function action({ request, params: { id } }) {
   }
 }
 
-function NewOrganizationRole() {
-  const organization = useRouteLoaderData(NamedRoute.Organization) as SingleOrganizationLoaderResult;
+function NewOrganizationRole({ actionData }: Route.ComponentProps) {
+  const { organization } = useOrganizationLoaderData();
   const { renderForm, formState } = useOrganizationRoleForm({
     __typename: 'OrganizationRole',
     id: '',
@@ -67,7 +56,6 @@ function NewOrganizationRole() {
     permissions: [],
   });
   const submit = useSubmit();
-  const actionData = useActionData();
   const mutationError = actionData instanceof Error ? actionData : undefined;
   const mutationInProgress = useNavigation().state !== 'idle';
 

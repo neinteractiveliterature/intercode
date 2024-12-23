@@ -5787,6 +5787,16 @@ type Query {
   ): Json!
 
   """
+  Finds an organization by ID.
+  """
+  organization(
+    """
+    The ID of the organization to find.
+    """
+    id: ID!
+  ): Organization!
+
+  """
   Returns all organizations in the database.
   """
   organizations: [Organization!]!

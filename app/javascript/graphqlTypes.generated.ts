@@ -4762,6 +4762,8 @@ export type Query = {
    * this query will be deprecated.
    */
   oauthPreAuth: Scalars['Json']['output'];
+  /** Finds an organization by ID. */
+  organization: Organization;
   /** Returns all organizations in the database. */
   organizations: Array<Organization>;
   /** Returns the singleton RootSite object, which is a CMS parent. */
@@ -4818,6 +4820,11 @@ export type QueryEmail_Routes_PaginatedArgs = {
 
 export type QueryOauthPreAuthArgs = {
   queryParams: Scalars['Json']['input'];
+};
+
+
+export type QueryOrganizationArgs = {
+  id: Scalars['ID']['input'];
 };
 
 

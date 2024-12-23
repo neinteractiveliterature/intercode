@@ -346,6 +346,18 @@ export default [
           route(':id', 'RootSiteEmailRoutesAdmin/EditEmailRouteModal.tsx'),
           route('new', 'RootSiteEmailRoutesAdmin/NewEmailRouteModal.tsx'),
         ]),
+        route('organizations', 'OrganizationAdmin/index.tsx', { id: NamedRoute.OrganizationAdmin }, [
+          route(':id', 'OrganizationAdmin/$id.ts', { id: NamedRoute.Organization }, [
+            ...prefix('roles', [
+              route(':organizationRoleId', 'OrganizationAdmin/$id/roles/$organizationRoleId/route.ts', [
+                route('edit', 'OrganizationAdmin/EditOrganizationRole.tsx', { id: NamedRoute.EditOrganizationRole }),
+              ]),
+              route('new', 'OrganizationAdmin/NewOrganizationRole.tsx', { id: NamedRoute.NewOrganizationRole }),
+            ]),
+            index('OrganizationAdmin/OrganizationDisplay.tsx', { id: NamedRoute.OrganizationDisplay }),
+          ]),
+          index('OrganizationAdmin/OrganizationIndex.tsx'),
+        ]),
       ]),
       route('/pages/*', 'CmsPage/index.tsx'),
       index('CmsPage/index.tsx', { id: NamedRoute.RootPage }),

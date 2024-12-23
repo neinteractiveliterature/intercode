@@ -1,5 +1,5 @@
 import sortBy from 'lodash/sortBy';
-import { Link, LoaderFunction, useLoaderData } from 'react-router';
+import { Link } from 'react-router';
 import { sortByLocaleString } from '@neinteractiveliterature/litform';
 
 import usePageTitle from '../usePageTitle';
@@ -7,7 +7,7 @@ import {
   OrganizationAdminOrganizationsQueryData,
   OrganizationAdminOrganizationsQueryDocument,
 } from './queries.generated';
-import { client } from '../useIntercodeApolloClient';
+import { Route } from './+types/OrganizationIndex';
 
 function renderOrganizationConventions(organization: OrganizationAdminOrganizationsQueryData['organizations'][0]) {
   const sortedConventions = sortBy(organization.conventions, [(convention) => convention.starts_at]);
@@ -21,15 +21,12 @@ function renderOrganizationConventions(organization: OrganizationAdminOrganizati
   return conventionNames.join(', ');
 }
 
-export async function loader() {
-  const { data } = await client.query<OrganizationAdminOrganizationsQueryData>({
-    query: OrganizationAdminOrganizationsQueryDocument,
-  });
+export async function loader({ context }: Route.LoaderArgs) {
+  const { data } = await context.client.query({ query: OrganizationAdminOrganizationsQueryDocument });
   return data;
 }
 
-function OrganizationIndex() {
-  const data = useLoaderData() as OrganizationAdminOrganizationsQueryData;
+function OrganizationIndex({ loaderData: data }: Route.ComponentProps) {
   usePageTitle('Organizations');
 
   const sortedOrganizations = sortByLocaleString(data.organizations, (organization) => organization.name);
