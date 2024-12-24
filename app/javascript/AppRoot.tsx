@@ -1,5 +1,5 @@
 import { Suspense, useMemo, useState, useEffect, useContext, useRef, RefObject } from 'react';
-import { useLocation, useNavigate, useLoaderData, Outlet, useNavigation, LoaderFunction } from 'react-router';
+import { useLocation, useNavigate, Outlet, useNavigation } from 'react-router';
 import { Settings } from 'luxon';
 import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
@@ -16,12 +16,21 @@ import { reloadOnAppEntrypointHeadersMismatch } from './checkAppEntrypointHeader
 import { initErrorReporting } from 'ErrorReporting';
 import RouteErrorBoundary from 'RouteErrorBoundary';
 import { Route } from './+types/AppRoot';
+import { MetaDescriptors } from 'react-router/route-module';
 
 export const loader = async ({ context }: Route.LoaderArgs) => {
-  const client = context!.client;
-  const { data } = await client.query({ query: AppRootQueryDocument });
-  return data;
+  const client = context.client;
+  const [{ data }, authenticityTokens] = await Promise.all([
+    client.query({ query: AppRootQueryDocument }),
+    context.authenticityTokensManager.getTokens(),
+  ]);
+  return { data, authenticityTokens };
 };
+
+export function meta({ data }: Route.MetaArgs): MetaDescriptors {
+  // eslint-disable-next-line i18next/no-literal-string
+  return [{ name: 'csrf-token', content: data.authenticityTokens.railsDirectUploads }];
+}
 
 export const errorElement = RouteErrorBoundary;
 
@@ -61,7 +70,7 @@ export function buildAppRootContextValue(
   };
 }
 
-function AppRoot({ loaderData: data }: Route.ComponentProps): JSX.Element {
+function AppRoot({ loaderData: { data } }: Route.ComponentProps): JSX.Element {
   const location = useLocation();
   const navigate = useNavigate();
   const authenticationModal = useContext(AuthenticationModalContext);

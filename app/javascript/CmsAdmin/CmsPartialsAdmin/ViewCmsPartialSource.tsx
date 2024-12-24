@@ -1,12 +1,18 @@
 import CmsPartialForm from './CmsPartialForm';
 import usePageTitle from '../../usePageTitle';
-import { singleCmsPartialAdminLoader, SingleCmsPartialAdminLoaderResult } from './loaders';
-import { useLoaderData } from 'react-router';
+import { Route } from './+types/ViewCmsPartialSource';
+import { CmsPartialAdminQueryDocument } from './queries.generated';
 
-export const loader = singleCmsPartialAdminLoader;
+export async function loader({ context, params: { id } }: Route.LoaderArgs) {
+  const { data } = await context.client.query({ query: CmsPartialAdminQueryDocument, variables: { id } });
+  return data;
+}
 
-function ViewCmsPartialSource() {
-  const { partial } = useLoaderData() as SingleCmsPartialAdminLoaderResult;
+function ViewCmsPartialSource({
+  loaderData: {
+    cmsParent: { cmsPartial: partial },
+  },
+}: Route.ComponentProps) {
   usePageTitle(`Viewing “${partial.name}” Source`);
   return <CmsPartialForm partial={partial} readOnly />;
 }

@@ -25,3 +25,13 @@ query CmsPartialsAdminQuery {
     }
   }
 }
+
+query CmsPartialAdminQuery($id: ID!) {
+  cmsParent: cmsParentByRequestHost {
+    id
+    cmsPartial(id: $id) {
+      id
+      ...CmsPartialFields
+    }
+  }
+}

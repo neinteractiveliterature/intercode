@@ -1,8 +1,8 @@
 // app/sessions.ts
-import { createCookieSessionStorage } from 'react-router'; // or cloudflare/deno
+import { createCookieSessionStorage, Session } from 'react-router'; // or cloudflare/deno
+import { v4 } from 'uuid';
 
 export type SessionData = {
-  csrfToken: string;
   tzName: string;
   uuid: string;
 };
@@ -31,5 +31,16 @@ const { getSession, commitSession, destroySession } = createCookieSessionStorage
     // secure: true,
   },
 });
+
+export async function getSessionUuid(session: Session<SessionData, SessionFlashData>) {
+  const uuid = session.data.uuid ?? v4();
+
+  if (!session.data.uuid) {
+    session.set('uuid', uuid);
+    await commitSession(session);
+  }
+
+  return uuid;
+}
 
 export { getSession, commitSession, destroySession };
