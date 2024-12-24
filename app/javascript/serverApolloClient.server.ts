@@ -8,9 +8,8 @@ import {
 import nodeFetch from 'node-fetch';
 import { setContext } from '@apollo/client/link/context';
 import { Session } from 'react-router';
-import { commitSession, getSession, SessionData, SessionFlashData } from 'sessions';
-import { fetchAuthenticityTokens, getAuthenticityTokensURL } from 'AuthenticityTokensContext';
-import { v4 } from 'uuid';
+import { getSessionUuid, SessionData, SessionFlashData } from 'sessions';
+import AuthenticityTokensManager from 'AuthenticityTokensContext';
 import QuickLRU from 'quick-lru';
 import { parseIntOrNull } from '@neinteractiveliterature/litform';
 import sizeof from 'object-sizeof';
@@ -18,27 +17,18 @@ import { filesize } from 'filesize';
 
 declare module '@apollo/client' {
   interface DefaultContext {
-    session?: Session<SessionData, SessionFlashData>;
+    authenticityTokensManager: AuthenticityTokensManager;
   }
 }
 
-function buildServerSessionLink(session: Session, cookie: string, setCookie: (value: string) => void) {
+function buildServerAuthenticityTokensLink(authenticityTokensManager: AuthenticityTokensManager) {
   return setContext(async (operation, prevContext) => {
-    if (!session.data.csrfToken) {
-      const authenticityTokensUrl = getAuthenticityTokensURL();
-      const tokens = await fetchAuthenticityTokens(authenticityTokensUrl, { cookie });
-      if (tokens.graphql) {
-        session.set('csrfToken', tokens.graphql);
-      }
-      setCookie(await commitSession(session));
-    }
-
     return {
       ...prevContext,
-      session,
+      authenticityTokensManager,
       credentials: 'same-origin',
       headers: {
-        'X-CSRF-Token': session.data.csrfToken,
+        'X-CSRF-Token': (await authenticityTokensManager.getTokens()).graphql,
       },
     };
   });
@@ -47,10 +37,9 @@ function buildServerSessionLink(session: Session, cookie: string, setCookie: (va
 export function buildServerApolloLink(
   uri: URL,
   headers: Record<string, string>,
-  session: Session,
-  setCookie: (value: string) => void,
+  authenticityTokensManager: AuthenticityTokensManager,
 ): ApolloLink {
-  return buildServerSessionLink(session, headers.cookie, setCookie).concat(
+  return buildServerAuthenticityTokensLink(authenticityTokensManager).concat(
     buildTerminatingApolloLink({
       uri: uri.toString(),
       credentials: 'same-origin',
@@ -62,15 +51,16 @@ export function buildServerApolloLink(
 }
 
 export type BuildServerApolloClientOptions = {
+  session: Session<SessionData, SessionFlashData>;
+  authenticityTokensManager: AuthenticityTokensManager;
   cookie: string | undefined;
-  hostname: string;
-  setCookie: (value: string) => void;
+  hostname: string | undefined;
 };
 
 export function buildServerApolloHeaders({ cookie, hostname }: BuildServerApolloClientOptions) {
   return {
-    cookie: cookie ?? '',
-    host: hostname,
+    ...(cookie ? { cookie } : {}),
+    ...(hostname ? { host: hostname } : {}),
     'user-agent': 'IntercodeBFF/1.0',
   };
 }
@@ -97,19 +87,13 @@ function getCacheSize(cache: InMemoryCache) {
 }
 
 export async function buildServerApolloClient(options: BuildServerApolloClientOptions) {
-  const session = await getSession(options.cookie);
-  const uuid = session.data.uuid ?? v4();
-  const cache = getSessionCache(uuid);
+  const session = options.session;
+  const cache = getSessionCache(await getSessionUuid(session));
 
   console.log(`Cache size: ${filesize(getCacheSize(cache))}`);
 
-  if (!session.data.uuid) {
-    session.set('uuid', uuid);
-    options.setCookie(await commitSession(session));
-  }
-
   return buildIntercodeApolloClient(
-    buildServerApolloLink(getClientURL(), buildServerApolloHeaders(options), session, options.setCookie),
+    buildServerApolloLink(getClientURL(), buildServerApolloHeaders(options), options.authenticityTokensManager),
     {
       ssrMode: true,
       cache,

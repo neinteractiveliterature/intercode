@@ -1,7 +1,11 @@
 # frozen_string_literal: true
 module CmsParentImplementation
-  def cms_content_group(id: nil)
+  def cms_content_group(id:)
     object.cms_content_groups.find(id)
+  end
+
+  def cms_layout(id:)
+    object.cms_layouts.find(id)
   end
 
   def cms_page(id: nil, slug: nil, root_page: false)
@@ -12,6 +16,10 @@ module CmsParentImplementation
 
   def block_partial(name:)
     Types::CmsPartialBlockName.retrieve(name:, cms_parent: object)
+  end
+
+  def cms_partial(id:)
+    object.cms_partials.find(id)
   end
 
   def effective_cms_layout(path:)

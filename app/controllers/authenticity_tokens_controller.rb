@@ -6,18 +6,18 @@ class AuthenticityTokensController < ApplicationController
   def show
     render json: {
              graphql: graphql_authenticity_token,
-             changePassword: form_authenticity_token(form_options: { action: user_password_path, method: 'PUT' }),
+             changePassword: form_authenticity_token(form_options: { action: user_password_path, method: "PUT" }),
              denyAuthorization:
-               form_authenticity_token(form_options: { action: oauth_authorization_path, method: 'DELETE' }),
+               form_authenticity_token(form_options: { action: oauth_authorization_path, method: "DELETE" }),
              grantAuthorization:
-               form_authenticity_token(form_options: { action: oauth_authorization_path, method: 'POST' }),
+               form_authenticity_token(form_options: { action: oauth_authorization_path, method: "POST" }),
              railsDirectUploads:
-               form_authenticity_token(form_options: { action: rails_direct_uploads_path, method: 'POST' }),
-             resetPassword: form_authenticity_token(form_options: { action: user_password_path, method: 'POST' }),
-             signIn: form_authenticity_token(form_options: { action: user_session_path, method: 'POST' }),
-             signOut: form_authenticity_token(form_options: { action: destroy_user_session_path, method: 'DELETE' }),
-             signUp: form_authenticity_token(form_options: { action: user_registration_path, method: 'POST' }),
-             updateUser: form_authenticity_token(form_options: { action: user_registration_path, method: 'PATCH' })
+               form_authenticity_token(form_options: { action: rails_direct_uploads_path, method: "POST" }),
+             resetPassword: form_authenticity_token(form_options: { action: user_password_path, method: "POST" }),
+             signIn: form_authenticity_token(form_options: { action: user_session_path, method: "POST" }),
+             signOut: form_authenticity_token(form_options: { action: destroy_user_session_path, method: "DELETE" }),
+             signUp: form_authenticity_token(form_options: { action: user_registration_path, method: "POST" }),
+             updateUser: form_authenticity_token(form_options: { action: user_registration_path, method: "PATCH" })
            }
   end
 end
