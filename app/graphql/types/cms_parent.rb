@@ -73,10 +73,20 @@ module Types::CmsParent
   MARKDOWN
   end
 
+  field :cms_layout, Types::CmsLayoutType, null: false do
+    description "Finds a CMS layout by ID."
+    argument :id, ID, required: true, description: "The ID of the CMS layout to find."
+  end
+
   field :cms_partials, [Types::CmsPartialType], null: false do
     description <<~MARKDOWN
     Returns all CMS partials within the current domain.
   MARKDOWN
+  end
+
+  field :cms_partial, Types::CmsPartialType, null: false do
+    description "Finds a CMS partial by ID."
+    argument :id, ID, required: true, description: "The ID of the CMS partial to find."
   end
 
   field :cms_variables, [Types::CmsVariable], null: false do
