@@ -19,9 +19,10 @@ import AuthenticationModalContext, {
   useAuthenticationModalProvider,
 } from './Authentication/AuthenticationModalContext';
 import AuthenticationModal from './Authentication/AuthenticationModal';
-import AuthenticityTokensManager, {
+import {
   AuthenticityTokens,
-  useInitializeAuthenticityTokens,
+  AuthenticityTokensContext,
+  useInitializeAuthenticityTokensManager,
 } from './AuthenticityTokensContext';
 import getI18n from './setupI18Next';
 import RailsDirectUploadsContext from './RailsDirectUploadsContext';
@@ -51,7 +52,7 @@ export function ProviderStack(props: AppWrapperProps) {
   const { authenticityTokens, recaptchaSiteKey } = props;
   // TODO bring this back when we re-add prompting
   // const confirm = useConfirm();
-  useInitializeAuthenticityTokens(authenticityTokens);
+  const manager = useInitializeAuthenticityTokensManager(authenticityTokens);
   const authenticationModalContextValue = useAuthenticationModalProvider(recaptchaSiteKey);
   const {
     open: openAuthenticationModal,
@@ -60,9 +61,9 @@ export function ProviderStack(props: AppWrapperProps) {
   } = authenticationModalContextValue;
   const openSignIn = useCallback(async () => {
     setUnauthenticatedError(true);
-    await AuthenticityTokensManager.instance.refresh();
+    await manager.refresh();
     openAuthenticationModal({ currentView: 'signIn' });
-  }, [openAuthenticationModal, setUnauthenticatedError]);
+  }, [openAuthenticationModal, setUnauthenticatedError, manager]);
   const onUnauthenticatedRef = useRef(openSignIn);
   useEffect(() => {
     onUnauthenticatedRef.current = openSignIn;
@@ -78,112 +79,41 @@ export function ProviderStack(props: AppWrapperProps) {
 
   return (
     <React.StrictMode>
-      <Confirm>
-        {/* TODO bring this back when we re-add prompting getUserConfirmation={getUserConfirmation}> */}
-        <RailsDirectUploadsContext.Provider value={railsDirectUploadsContextValue}>
-          <AuthenticationModalContext.Provider value={authenticationModalContextValue}>
-            <>
-              {!unauthenticatedError && (
-                <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
-                  <I18NextWrapper>
-                    {(i18nInstance) => (
-                      <AlertProvider okText={i18nInstance.t('buttons.ok', 'OK')}>
-                        <ToastProvider>
-                          <ErrorBoundary placement="replace" errorType="plain">
-                            <Outlet />
-                          </ErrorBoundary>
-                        </ToastProvider>
-                      </AlertProvider>
-                    )}
-                  </I18NextWrapper>
-                </Suspense>
-              )}
-              <AuthenticationModal />
-            </>
-          </AuthenticationModalContext.Provider>
-        </RailsDirectUploadsContext.Provider>
-      </Confirm>
+      <AuthenticityTokensContext.Provider value={manager}>
+        <Confirm>
+          <RailsDirectUploadsContext.Provider value={railsDirectUploadsContextValue}>
+            {/* TODO bring this back when we re-add prompting getUserConfirmation={getUserConfirmation}> */}
+            <AuthenticationModalContext.Provider value={authenticationModalContextValue}>
+              <>
+                {!unauthenticatedError && (
+                  <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
+                    <I18NextWrapper>
+                      {(i18nInstance) => (
+                        <AlertProvider okText={i18nInstance.t('buttons.ok', 'OK')}>
+                          <ToastProvider>
+                            <ErrorBoundary placement="replace" errorType="plain">
+                              <Outlet />
+                            </ErrorBoundary>
+                          </ToastProvider>
+                        </AlertProvider>
+                      )}
+                    </I18NextWrapper>
+                  </Suspense>
+                )}
+                <AuthenticationModal />
+              </>
+            </AuthenticationModalContext.Provider>
+          </RailsDirectUploadsContext.Provider>
+        </Confirm>
+      </AuthenticityTokensContext.Provider>
     </React.StrictMode>
   );
 }
 
 export type AppWrapperProps = {
-  authenticityTokens: AuthenticityTokens;
+  authenticityTokens?: AuthenticityTokens;
   queryData?: DataProxy.WriteQueryOptions<unknown, unknown>[];
   railsDefaultActiveStorageServiceName: string;
   railsDirectUploadsUrl: string;
   recaptchaSiteKey: string;
-  stripePublishableKey: string;
 };
-
-// function AppWrapper<P extends JSX.IntrinsicAttributes>(
-//   WrappedComponent: React.ComponentType<P>,
-// ): React.ComponentType<P> {
-//   function Wrapper(props: P & AppWrapperProps) {
-//     const router = useMemo(
-//       () =>
-//         createBrowserRouter(
-//           [
-//             {
-//               element: <ProviderStack {...props} />,
-//               children: appRootRoutes,
-//             },
-//           ],
-//           {
-//             future: {
-//               v7_relativeSplatPath: true,
-//               v7_normalizeFormMethod: true,
-//               v7_partialHydration: true,
-//               v7_skipActionErrorRevalidation: true,
-//               v7_fetcherPersist: true,
-//             },
-//           },
-//         ),
-//       [props],
-//     );
-
-//     // TODO bring this back when we re-add prompting
-//     // const getUserConfirmation = useCallback(
-//     //   (message: ReactNode, callback: (confirmed: boolean) => void) => {
-//     //     confirm({
-//     //       prompt: message,
-//     //       action: () => callback(true),
-//     //       onCancel: () => callback(false),
-//     //     });
-//     //   },
-//     //   [confirm],
-//     // );
-
-//   useEffect(() => {
-//     if (queryData && Array.isArray(queryData)) {
-//       for (const query of queryData) {
-//         try {
-//           client.writeQuery(query);
-//         } catch {
-//           // don't blow up if we get a malformed query
-//         }
-//       }
-//     }
-
-//     setQueryPreloadComplete(true);
-//   }, [queryData]);
-
-//   if (!router) {
-//     return <></>;
-//   }
-
-//   return <RouterProvider router={router} future={{ v7_startTransition: true }} />;
-// }
-//     return <RouterProvider router={router} future={{ v7_startTransition: true }} />;
-//   }
-
-//   // eslint-disable-next-line i18next/no-literal-string
-//   const wrappedComponentDisplayName = WrappedComponent.displayName || WrappedComponent.name || 'Component';
-
-//   // eslint-disable-next-line i18next/no-literal-string
-//   Wrapper.displayName = `AppWrapper(${wrappedComponentDisplayName})`;
-
-//   return Wrapper;
-// }
-
-// export default AppWrapper;

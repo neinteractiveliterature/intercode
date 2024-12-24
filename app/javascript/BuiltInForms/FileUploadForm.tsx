@@ -8,31 +8,31 @@ import FileInputWithPreview from '../CmsAdmin/CmsFilesAdmin/FileInputWithPreview
 import type { DirectUploadDelegate, Blob } from '@rails/activestorage';
 import RailsDirectUploadsContext from '../RailsDirectUploadsContext';
 import classNames from 'classnames';
-import { Helmet } from 'react-helmet-async';
-import AuthenticityTokensManager from '../AuthenticityTokensContext';
 
-function uploadFile(file: File, directUploadURL: string, onProgress?: (event: ProgressEvent<XMLHttpRequest>) => void) {
-  return import('@rails/activestorage').then(
-    ({ DirectUpload }) =>
-      new Promise<Blob>((resolve, reject) => {
-        const delegate: DirectUploadDelegate = {
-          directUploadWillStoreFileWithXHR: (xhr) => {
-            if (onProgress) {
-              xhr.upload.addEventListener('progress', onProgress);
-            }
-          },
-        };
+async function uploadFile(
+  file: File,
+  directUploadURL: string,
+  onProgress?: (event: ProgressEvent<XMLHttpRequest>) => void,
+) {
+  const { DirectUpload } = await import('@rails/activestorage');
+  return await new Promise<Blob>((resolve, reject) => {
+    const delegate: DirectUploadDelegate = {
+      directUploadWillStoreFileWithXHR: (xhr_1) => {
+        if (onProgress) {
+          xhr_1.upload.addEventListener('progress', onProgress);
+        }
+      },
+    };
 
-        const upload = new DirectUpload(file, directUploadURL, delegate);
-        upload.create((error, blob) => {
-          if (error) {
-            reject(error);
-          } else {
-            resolve(blob);
-          }
-        });
-      }),
-  );
+    const upload = new DirectUpload(file, directUploadURL, delegate);
+    upload.create((error, blob) => {
+      if (error) {
+        reject(error);
+      } else {
+        resolve(blob);
+      }
+    });
+  });
 }
 
 export type FileUploadFormProps = {
@@ -46,7 +46,6 @@ function FileUploadForm({ onUpload }: FileUploadFormProps): JSX.Element {
   const [progressPercent, setProgressPercent] = useState<number>(0);
   const [progressIndeterminate, setProgressIndeterminate] = useState(false);
   const { railsDirectUploadsUrl } = useContext(RailsDirectUploadsContext);
-  const { railsDirectUploads: directUploadsAuthenticityToken } = AuthenticityTokensManager.instance.tokens;
 
   const onProgress = useCallback((event: ProgressEvent<XMLHttpRequest>) => {
     setProgressIndeterminate(!event.lengthComputable);
@@ -75,10 +74,6 @@ function FileUploadForm({ onUpload }: FileUploadFormProps): JSX.Element {
     <div className="card">
       <div className="card-header">{t('cms.fileUploadForm.title')}</div>
       <div className="card-body">
-        <Helmet>
-          {/* ActiveStorage JS requires us to put the csrf token in the head */}
-          <meta name="csrf-token" content={directUploadsAuthenticityToken} />
-        </Helmet>
         <FileInputWithPreview file={file} onChange={setFile} disabled={uploading} />
 
         <ErrorDisplay graphQLError={error as ApolloError} />

@@ -1,4 +1,4 @@
-import { useEffect, useRef } from 'react';
+import { createContext, useRef } from 'react';
 
 export type AuthenticityTokens = {
   graphql?: string;
@@ -14,18 +14,10 @@ export type AuthenticityTokens = {
 };
 
 export default class AuthenticityTokensManager {
-  static instance: AuthenticityTokensManager;
-
-  tokens: AuthenticityTokens;
+  tokens?: AuthenticityTokens;
   url: URL;
 
-  constructor(tokens: AuthenticityTokens, url: URL) {
-    if (AuthenticityTokensManager.instance) {
-      throw new Error(
-        "Please don't initialize AuthenticityTokensManager directly, instead use AuthenticityTokensManager.instance",
-      );
-    }
-
+  constructor(tokens: AuthenticityTokens | undefined, url: URL) {
     this.tokens = tokens;
     this.url = url;
   }
@@ -50,7 +42,15 @@ export default class AuthenticityTokensManager {
     const json = await fetchAuthenticityTokens(this.url);
 
     this.setTokens(json);
-    return this.tokens;
+    return this.tokens!;
+  }
+
+  async getTokens() {
+    if (this.tokens) {
+      return this.tokens;
+    }
+
+    return await this.refresh();
   }
 }
 
@@ -75,16 +75,11 @@ export function getAuthenticityTokensURL(): URL {
   }
 }
 
-AuthenticityTokensManager.instance = new AuthenticityTokensManager({}, getAuthenticityTokensURL());
+export const AuthenticityTokensContext = createContext<AuthenticityTokensManager>(
+  new AuthenticityTokensManager(undefined, getAuthenticityTokensURL()),
+);
 
-export function useInitializeAuthenticityTokens(initialTokens: AuthenticityTokens) {
-  const initializedRef = useRef(false);
-
-  useEffect(() => {
-    if (!initializedRef.current) {
-      AuthenticityTokensManager.instance.setTokens(initialTokens);
-      AuthenticityTokensManager.instance.refresh();
-      initializedRef.current = true;
-    }
-  }, [initialTokens]);
+export function useInitializeAuthenticityTokensManager(initialTokens?: AuthenticityTokens) {
+  const manager = useRef(new AuthenticityTokensManager(initialTokens, getAuthenticityTokensURL()));
+  return manager.current;
 }

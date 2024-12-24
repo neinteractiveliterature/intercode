@@ -366,6 +366,7 @@ export default [
         ]),
       ]),
       layout('CmsAdmin/index.tsx', { id: NamedRoute.CmsAdmin }, [
+        route('cms_files', 'CmsAdmin/CmsFilesAdmin/index.tsx', { id: NamedRoute.CmsFiles }),
         route('cms_pages', 'CmsAdmin/CmsPagesAdmin/route.ts', { id: NamedRoute.CmsPagesAdmin }, [
           route(':id', 'CmsAdmin/CmsPagesAdmin/SinglePageRoute.tsx', [
             route('edit', 'CmsAdmin/CmsPagesAdmin/EditCmsPage.tsx'),
@@ -373,6 +374,14 @@ export default [
           ]),
           route('new', 'CmsAdmin/CmsPagesAdmin/NewCmsPage.tsx'),
           index('CmsAdmin/CmsPagesAdmin/CmsPagesAdminTable.tsx'),
+        ]),
+        route('cms_partials', 'CmsAdmin/CmsPartialsAdmin/route.ts', { id: NamedRoute.CmsPartialsAdmin }, [
+          route(':id', 'CmsAdmin/CmsPartialsAdmin/SinglePartialRoute.tsx', [
+            route('edit', 'CmsAdmin/CmsPartialsAdmin/EditCmsPartial.tsx'),
+            route('view_source', 'CmsAdmin/CmsPartialsAdmin/ViewCmsPartialSource.tsx'),
+          ]),
+          route('new', 'CmsAdmin/CmsPartialsAdmin/NewCmsPartial.tsx'),
+          index('CmsAdmin/CmsPartialsAdmin/CmsPartialsAdminTable.tsx'),
         ]),
       ]),
       route('/pages/*', 'CmsPage/index.tsx'),

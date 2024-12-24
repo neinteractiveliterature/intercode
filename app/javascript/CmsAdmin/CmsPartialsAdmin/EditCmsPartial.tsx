@@ -1,20 +1,20 @@
 import { useState } from 'react';
 import { ApolloError } from '@apollo/client';
-import { ActionFunction, Form, redirect, useActionData, useLoaderData, useNavigation } from 'react-router';
+import { Form, redirect, useNavigation } from 'react-router';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { buildPartialInputFromFormData } from './buildPartialInput';
 import CmsPartialForm from './CmsPartialForm';
 import usePageTitle from '../../usePageTitle';
-import { singleCmsPartialAdminLoader, SingleCmsPartialAdminLoaderResult } from './loaders';
 import { UpdatePartialDocument } from './mutations.generated';
-import { client } from '../../useIntercodeApolloClient';
+import { Route } from './+types/EditCmsPartial';
+import { CmsPartialAdminQueryDocument } from './queries.generated';
 
-export async function action({ params: { id }, request }) {
+export async function action({ params: { id }, request, context }: Route.ActionArgs) {
   const formData = await request.formData();
 
   try {
-    await client.mutate({
+    await context.client.mutate({
       mutation: UpdatePartialDocument,
       variables: {
         id: id ?? '',
@@ -24,18 +24,24 @@ export async function action({ params: { id }, request }) {
   } catch (e) {
     return e;
   }
-  await client.resetStore();
+  await context.client.resetStore();
 
   return redirect(formData.get('destination')?.toString() ?? '/cms_partials');
 }
 
-export const loader = singleCmsPartialAdminLoader;
+export async function loader({ context, params: { id } }: Route.LoaderArgs) {
+  const { data } = await context.client.query({ query: CmsPartialAdminQueryDocument, variables: { id } });
+  return data;
+}
 
-function EditCmsPartialForm() {
-  const { partial: initialPartial } = useLoaderData() as SingleCmsPartialAdminLoaderResult;
+function EditCmsPartialForm({
+  loaderData: {
+    cmsParent: { cmsPartial: initialPartial },
+  },
+  actionData: updateError,
+}: Route.ComponentProps) {
   const [partial, setPartial] = useState(initialPartial);
   const navigation = useNavigation();
-  const updateError = useActionData();
 
   usePageTitle(`Editing “${initialPartial.name}”`);
 

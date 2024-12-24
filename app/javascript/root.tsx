@@ -5,24 +5,28 @@ import RouteErrorBoundary from 'RouteErrorBoundary';
 import { useMemo } from 'react';
 import { ApolloProvider } from '@apollo/client';
 import applicationStylesUrl from 'styles/application.scss?url';
+import { Route } from './+types/root';
+import { ClientConfiguration } from 'graphqlTypes.generated';
 
 export const errorElement = <RouteErrorBoundary />;
 
+export async function loader({ context }: Route.LoaderArgs) {
+  return context.clientConfigurationData;
+}
+
 export const links: LinksFunction = () => [{ rel: 'stylesheet', href: applicationStylesUrl }];
 
-function RootProviderStack() {
+function RootProviderStack({ clientConfiguration }: { clientConfiguration: ClientConfiguration }) {
   return (
     <ProviderStack
-      authenticityTokens={{}}
-      railsDefaultActiveStorageServiceName=""
-      railsDirectUploadsUrl=""
-      recaptchaSiteKey=""
-      stripePublishableKey=""
+      railsDefaultActiveStorageServiceName={clientConfiguration.rails_default_active_storage_service_name}
+      railsDirectUploadsUrl={clientConfiguration.rails_direct_uploads_url}
+      recaptchaSiteKey={clientConfiguration.recaptcha_site_key}
     />
   );
 }
 
-export default function Root() {
+export default function Root({ loaderData }: Route.ComponentProps) {
   const client = useMemo(() => buildBrowserApolloClient(), []);
 
   return (
@@ -33,7 +37,7 @@ export default function Root() {
       </head>
       <body>
         <ApolloProvider client={client}>
-          <RootProviderStack />
+          <RootProviderStack clientConfiguration={loaderData.clientConfiguration} />
         </ApolloProvider>
         <Scripts />
         {/* Disabling ScrollRestoration for now because it's breaking internal hash links in pages */}

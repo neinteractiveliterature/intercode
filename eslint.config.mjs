@@ -50,6 +50,7 @@ export default typescriptEslint.config(
   },
   reactPlugin.configs.flat.recommended,
   reactPlugin.configs.flat['jsx-runtime'],
+  jsxA11Y.flatConfigs.recommended,
   ...compat.extends('plugin:react-hooks/recommended'),
   vitest.configs.recommended,
   vitest.configs.env,
