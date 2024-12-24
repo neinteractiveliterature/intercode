@@ -10,6 +10,8 @@
     "target": "es6", // specify ECMAScript target version
     "allowJs": true, // allow a partial TypeScript and JavaScript codebase,
     "allowSyntheticDefaultImports": true,
+    "allowImportingTsExtensions": true,
+    "noEmit": true,
     "lib": ["DOM", "DOM.Iterable", "ES2023"],
     "noImplicitAny": true,
     "skipLibCheck": true,
@@ -31,6 +33,7 @@
     "eslint.config.mjs",
     "graphql.config.js",
     "i18next-parser-english.config.cjs",
-    "i18next-parser-non-english.config.cjs"
+    "i18next-parser-non-english.config.cjs",
+    "vite.config.mts"
   ]
 }
