@@ -6,7 +6,7 @@ import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform
 
 import PasswordConfirmationInput from './PasswordConfirmationInput';
 import useAsyncFunction from '../useAsyncFunction';
-import AuthenticityTokensManager from '../AuthenticityTokensContext';
+import { AuthenticityTokensContext } from '../AuthenticityTokensContext';
 import PasswordInputWithStrengthCheck from './PasswordInputWithStrengthCheck';
 
 async function changePassword(
@@ -42,7 +42,8 @@ function ResetPassword(): JSX.Element {
     () => new URLSearchParams(location.search).get('reset_password_token') ?? '',
     [location.search],
   );
-  const authenticityToken = AuthenticityTokensManager.instance.tokens.changePassword;
+  const manager = React.useContext(AuthenticityTokensContext);
+  const authenticityToken = manager.tokens?.changePassword;
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const passwordId = useId();
