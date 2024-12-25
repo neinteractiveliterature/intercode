@@ -1,23 +1,7 @@
 import * as React from 'react';
 
-import useAfterSessionChange from './useAfterSessionChange';
-import AuthenticityTokensManager from '../AuthenticityTokensContext';
-
-async function signOut(authenticityToken: string) {
-  const response = await fetch('/users/sign_out', {
-    method: 'DELETE',
-    credentials: 'include',
-    headers: {
-      // Accept: 'application/json',
-      'X-CSRF-Token': authenticityToken,
-    },
-  });
-
-  if (!response.ok) {
-    const responseJson = await response.json();
-    throw new Error(responseJson.error);
-  }
-}
+import { useSubmit } from 'react-router';
+import { useToast } from '@neinteractiveliterature/litform';
 
 export type SignOutButtonProps = {
   className?: string;
@@ -25,14 +9,13 @@ export type SignOutButtonProps = {
 };
 
 function SignOutButton({ className, caption }: SignOutButtonProps): JSX.Element {
-  const afterSessionChange = useAfterSessionChange();
+  const toast = useToast();
+  const submit = useSubmit();
 
   const onClick = async (event: React.SyntheticEvent) => {
-    const { signOut: authenticityToken } = AuthenticityTokensManager.instance.tokens;
-
     event.preventDefault();
-    await signOut(authenticityToken ?? '');
-    await afterSessionChange('/', {
+    await submit(null, { method: 'DELETE', action: '/users/sign_out' });
+    toast({
       title: 'Logout',
       body: 'Logged out.',
       autoDismissAfter: 1000 * 60,
