@@ -22,11 +22,13 @@ function UserFormFields({ formState, setFormState, showNameWarning }: UserFormFi
     <>
       <fieldset>
         <BootstrapFormInput
+          name="user[first_name]"
           label={t('authentication.userForm.firstNameLabel')}
           value={formState.first_name ?? ''}
           onTextChange={setFirstName}
         />
         <BootstrapFormInput
+          name="user[last_name]"
           label={t('authentication.userForm.lastNameLabel')}
           value={formState.last_name ?? ''}
           onTextChange={setLastName}
@@ -42,6 +44,7 @@ function UserFormFields({ formState, setFormState, showNameWarning }: UserFormFi
           </div>
         )}
         <BootstrapFormInput
+          name="user[email]"
           label={t('authentication.userForm.emailLabel')}
           type="email"
           value={formState.email ?? ''}

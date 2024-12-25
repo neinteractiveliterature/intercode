@@ -423,6 +423,16 @@ export default [
         ]),
         route('root_site', 'RootSiteAdmin/EditRootSite.tsx'),
       ]),
+      ...prefix('oauth', [
+        route('applications-embed', 'OAuthApplications/index.tsx'),
+        route('authorize', 'OAuth/AuthorizationPrompt.tsx'),
+        route('authorized_applications', 'OAuth/AuthorizedApplications.tsx', [route(':uid', 'OAuth/$uid.ts')]),
+      ]),
+      ...prefix('users', [
+        route('edit', 'Authentication/EditUser.tsx'),
+        route('password/edit', 'Authentication/ResetPassword.tsx'),
+        route('sign_out', 'Authentication/sign_out.ts'),
+      ]),
       route('/pages/*', 'CmsPage/index.tsx'),
       index('CmsPage/index.tsx', { id: NamedRoute.RootPage }),
       route('*', 'FourOhFourPage.tsx'),

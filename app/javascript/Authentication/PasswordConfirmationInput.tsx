@@ -6,11 +6,12 @@ import { BootstrapFormInput } from '@neinteractiveliterature/litform';
 
 export type PasswordConfirmationInputProps = {
   value: string;
+  name?: string;
   onChange: React.Dispatch<string>;
   password: string;
 };
 
-function PasswordConfirmationInput({ value, onChange, password }: PasswordConfirmationInputProps): JSX.Element {
+function PasswordConfirmationInput({ value, name, onChange, password }: PasswordConfirmationInputProps): JSX.Element {
   const { t } = useTranslation();
   const [interactedWithConfirmation, setInteractedWithConfirmation] = useState(false);
 
@@ -19,6 +20,7 @@ function PasswordConfirmationInput({ value, onChange, password }: PasswordConfir
   return (
     <BootstrapFormInput
       type="password"
+      name={name}
       label={t('authentication.confirmPasswordLabel')}
       className={classNames('form-control', { 'is-invalid': confirmationInvalid })}
       value={value}

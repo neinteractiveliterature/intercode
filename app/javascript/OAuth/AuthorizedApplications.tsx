@@ -2,19 +2,15 @@ import { useGraphQLConfirm } from '@neinteractiveliterature/litform';
 
 import PermissionsPrompt from './PermissionsPrompt';
 import { OAuthAuthorizedApplicationsQueryData, OAuthAuthorizedApplicationsQueryDocument } from './queries.generated';
-import { LoaderFunction, useLoaderData } from 'react-router';
-import { client } from '../useIntercodeApolloClient';
 import { useFetcher } from 'react-router';
+import { Route } from './+types/AuthorizedApplications';
 
-export async function loader() {
-  const { data } = await client.query<OAuthAuthorizedApplicationsQueryData>({
-    query: OAuthAuthorizedApplicationsQueryDocument,
-  });
+export async function loader({ context }: Route.LoaderArgs) {
+  const { data } = await context.client.query({ query: OAuthAuthorizedApplicationsQueryDocument });
   return data;
 }
 
-function AuthorizedApplications() {
-  const data = useLoaderData() as OAuthAuthorizedApplicationsQueryData;
+function AuthorizedApplications({ loaderData: data }: Route.ComponentProps) {
   const confirm = useGraphQLConfirm();
   const fetcher = useFetcher();
 
