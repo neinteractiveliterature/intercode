@@ -82,7 +82,9 @@ async function createServer() {
     createRequestHandler({
       build: viteDevServer
         ? () => viteDevServer.ssrLoadModule('virtual:react-router/server-build')
-        : await import('./build/server/index.js'),
+        : // eslint-disable-next-line @typescript-eslint/ban-ts-comment
+          // @ts-ignore
+          await import('./build/server/index.js'),
       getLoadContext: async (req, res) => {
         const session = await getSession(req.headers.cookie);
         const authenticityTokensManager = await getAuthenticityTokensManager(session, req.headers.cookie);
@@ -98,6 +100,7 @@ async function createServer() {
           client,
           clientConfigurationData: clientConfigurationDataWithProxy,
           authenticityTokensManager,
+          session,
         } satisfies AppLoadContext;
       },
     }),
