@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useContext, useEffect } from 'react';
 import { GraphiQL } from 'graphiql';
 import { parse } from 'graphql';
 import { Fetcher } from '@graphiql/toolkit';
@@ -9,7 +9,7 @@ import mountReactComponents from './mountReactComponents';
 
 import 'graphiql/graphiql.css';
 import './styles/dev-mode-graphiql.scss';
-import AuthenticityTokensManager from './AuthenticityTokensContext';
+import { AuthenticityTokensContext } from './AuthenticityTokensContext';
 
 export type DevModeGraphiqlProps = {
   authenticityTokens: {
@@ -18,10 +18,11 @@ export type DevModeGraphiqlProps = {
 };
 
 function DevModeGraphiql({ authenticityTokens }: DevModeGraphiqlProps): JSX.Element {
-  useCallback(() => {
-    AuthenticityTokensManager.instance.setTokens(authenticityTokens);
-  }, [authenticityTokens]);
-  const link = useIntercodeApolloLink(new URL('/graphql', window.location.href));
+  const manager = useContext(AuthenticityTokensContext);
+  useEffect(() => {
+    manager.setTokens(authenticityTokens);
+  }, [authenticityTokens, manager]);
+  const link = useIntercodeApolloLink(new URL('/graphql', window.location.href), manager);
 
   // @ts-expect-error This might be really broken but I need to ship a patch release ASAP and this is less important
   const fetcher: Fetcher = useCallback(
