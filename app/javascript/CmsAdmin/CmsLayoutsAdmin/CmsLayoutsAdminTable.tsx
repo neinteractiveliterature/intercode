@@ -3,7 +3,7 @@ import { Link, useSubmit } from 'react-router';
 import { ErrorDisplay, useConfirm, sortByLocaleString } from '@neinteractiveliterature/litform';
 
 import usePageTitle from '../../usePageTitle';
-import { useCmsLayoutsAdminLoader } from './loaders';
+import { useCmsLayoutsAdminLoader } from './route';
 
 function CmsLayoutsAdminTable() {
   const data = useCmsLayoutsAdminLoader();

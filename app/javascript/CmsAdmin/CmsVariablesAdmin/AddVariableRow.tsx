@@ -4,7 +4,6 @@ import { ErrorDisplay } from '@neinteractiveliterature/litform';
 import { CmsVariablesQueryData } from './queries.generated';
 import { useTranslation } from 'react-i18next';
 import { useFetcher } from 'react-router';
-import { useEffect } from 'react';
 
 export type AddingVariable = Omit<CmsVariablesQueryData['cmsParent']['cmsVariables'][0], 'id'> & {
   generatedId: number;
@@ -22,15 +21,10 @@ function AddVariableRow({ variable, onChange, onCancel }: AddVariableRowProps): 
   const setError = fetcher.data instanceof Error ? fetcher.data : undefined;
   const setInProgress = fetcher.state !== 'idle';
 
-  const save = () => {
-    fetcher.submit({ value_json: variable.value_json }, { action: `./${variable.key}`, method: 'POST' });
+  const save = async () => {
+    await fetcher.submit({ value_json: variable.value_json }, { action: `./${variable.key}`, method: 'POST' });
+    onCancel(variable.generatedId);
   };
-
-  useEffect(() => {
-    if (fetcher.state === 'idle' && fetcher.data && !setError) {
-      onCancel(variable.generatedId);
-    }
-  }, [fetcher.state, fetcher.data, onCancel, variable.generatedId, setError]);
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
     switch (event.key) {

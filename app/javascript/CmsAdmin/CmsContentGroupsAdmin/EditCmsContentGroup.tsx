@@ -1,23 +1,22 @@
 import { useState } from 'react';
 import * as React from 'react';
 import { ApolloError } from '@apollo/client';
-import { ActionFunction, redirect, useActionData, useLoaderData, useNavigation, useSubmit } from 'react-router';
+import { redirect, useNavigation, useSubmit } from 'react-router';
 import { ErrorDisplay, notEmpty } from '@neinteractiveliterature/litform';
 
 import { buildPermissionInput } from '../../Permissions/PermissionUtils';
 import { useChangeSet } from '../../ChangeSet';
 import CmsContentGroupFormFields from './CmsContentGroupFormFields';
-import { CmsContentGroupsAdminQueryData } from './queries.generated';
+import { CmsContentGroupAdminQueryDocument, CmsContentGroupsAdminQueryData } from './queries.generated';
 import { CmsContentTypeIndicator } from '../../graphqlTypes.generated';
-import { singleCmsContentGroupAdminLoader, SingleCmsContentGroupAdminLoaderResult } from './loaders';
-import { client } from '../../useIntercodeApolloClient';
 import { UpdateContentGroupDocument, UpdateContentGroupMutationVariables } from './mutations.generated';
+import { Route } from './+types/EditCmsContentGroup';
 
-export async function action({ params: { id }, request }) {
+export async function action({ params: { id }, request, context }: Route.ActionArgs) {
   const variables = (await request.json()) as Omit<UpdateContentGroupMutationVariables, 'id'>;
 
   try {
-    await client.mutate({
+    await context.client.mutate({
       mutation: UpdateContentGroupDocument,
       variables: {
         id: id ?? '',
@@ -27,24 +26,28 @@ export async function action({ params: { id }, request }) {
   } catch (e) {
     return e;
   }
-  await client.resetStore();
+  await context.client.resetStore();
 
   return redirect('/cms_content_groups');
 }
 
-export const loader = singleCmsContentGroupAdminLoader;
+export async function loader({ context, params: { id } }: Route.LoaderArgs) {
+  const { data } = await context.client.query({ query: CmsContentGroupAdminQueryDocument, variables: { id } });
+  return data;
+}
 
-function EditCmsContentGroupForm() {
-  const {
-    data: { convention },
-    contentGroup: initialContentGroup,
-  } = useLoaderData() as SingleCmsContentGroupAdminLoaderResult;
+function EditCmsContentGroup({
+  loaderData: {
+    convention,
+    cmsParent: { cmsContentGroup: initialContentGroup },
+  },
+  actionData: submitError,
+}: Route.ComponentProps) {
   const [contentGroup, setContentGroup] = useState(initialContentGroup);
   const [permissionsChangeSet, addPermission, removePermission] =
     useChangeSet<CmsContentGroupsAdminQueryData['cmsParent']['cmsContentGroups'][0]['permissions'][0]>();
   const submit = useSubmit();
   const navigation = useNavigation();
-  const submitError = useActionData();
   const submitInProgress = navigation.state !== 'idle';
 
   const formSubmitted = async (event: React.FormEvent) => {
@@ -98,4 +101,4 @@ function EditCmsContentGroupForm() {
   );
 }
 
-export default EditCmsContentGroupForm;
+export default EditCmsContentGroup;

@@ -431,6 +431,8 @@ export type CmsParent = {
   cmsFiles: Array<CmsFile>;
   /** Returns all CMS GraphQL queries within the current domain. */
   cmsGraphqlQueries: Array<CmsGraphqlQuery>;
+  /** Finds a CMS GraphQL query by ID. */
+  cmsGraphqlQuery: CmsGraphqlQuery;
   /** Finds a CMS layout by ID. */
   cmsLayout: CmsLayout;
   /** Returns all CMS layouts within the current domain. */
@@ -511,6 +513,20 @@ export type CmsParentBlockPartialArgs = {
  * object for more details about this.)
  */
 export type CmsParentCmsContentGroupArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+/**
+ * A CMS parent is a web site managed by Intercode. It acts as a container for CMS content, such
+ * as pages, partials, files, layouts, variables, content groups, and user-defined GraphQL queries.
+ *
+ * Most CMS parents are conventions, so their content will be convention-specific and scoped to
+ * that convention's domain name. The exception to this is the root site, which is what Intercode
+ * renders when there is no convention associated with the current domain name. (See the RootSite
+ * object for more details about this.)
+ */
+export type CmsParentCmsGraphqlQueryArgs = {
   id: Scalars['ID']['input'];
 };
 
@@ -725,6 +741,8 @@ export type Convention = CmsParent & {
   cmsFiles: Array<CmsFile>;
   /** Returns all CMS GraphQL queries within the current domain. */
   cmsGraphqlQueries: Array<CmsGraphqlQuery>;
+  /** Finds a CMS GraphQL query by ID. */
+  cmsGraphqlQuery: CmsGraphqlQuery;
   /** Finds a CMS layout by ID. */
   cmsLayout: CmsLayout;
   /** Returns all CMS layouts within the current domain. */
@@ -1021,6 +1039,19 @@ export type ConventionBlockPartialArgs = {
  * them as "web site."
  */
 export type ConventionCmsContentGroupArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+/**
+ * A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
+ * real-world convention (and this is probably the most common use case), but it can also represent a single event
+ * (if the site_mode is set to single_event) or a series of events over time (if the site_mode is set to event_series).
+ *
+ * They're called Convention for historical reasons, because naming is hard.  Sorry.  It's probably best to think of
+ * them as "web site."
+ */
+export type ConventionCmsGraphqlQueryArgs = {
   id: Scalars['ID']['input'];
 };
 
@@ -5251,6 +5282,8 @@ export type RootSite = CmsParent & {
   cmsFiles: Array<CmsFile>;
   /** Returns all CMS GraphQL queries within the current domain. */
   cmsGraphqlQueries: Array<CmsGraphqlQuery>;
+  /** Finds a CMS GraphQL query by ID. */
+  cmsGraphqlQuery: CmsGraphqlQuery;
   /** Finds a CMS layout by ID. */
   cmsLayout: CmsLayout;
   /** Returns all CMS layouts within the current domain. */
@@ -5315,6 +5348,11 @@ export type RootSiteBlockPartialArgs = {
 
 
 export type RootSiteCmsContentGroupArgs = {
+  id: Scalars['ID']['input'];
+};
+
+
+export type RootSiteCmsGraphqlQueryArgs = {
   id: Scalars['ID']['input'];
 };
 

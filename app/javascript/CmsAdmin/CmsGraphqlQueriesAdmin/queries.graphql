@@ -20,3 +20,13 @@ query CmsGraphqlQueriesQuery {
     can_create_cms_graphql_queries
   }
 }
+
+query CmsGraphqlQueryQuery($id: ID!) {
+  cmsParent: cmsParentByRequestHost {
+    id
+    cmsGraphqlQuery(id: $id) {
+      id
+      ...CmsGraphqlQueryFields
+    }
+  }
+}

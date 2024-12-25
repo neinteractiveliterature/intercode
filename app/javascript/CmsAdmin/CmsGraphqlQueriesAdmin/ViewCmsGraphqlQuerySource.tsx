@@ -2,13 +2,19 @@ import CmsGraphqlQueryForm from './CmsGraphqlQueryForm';
 import usePageTitle from '../../usePageTitle';
 
 import 'graphiql/graphiql.css';
-import { useLoaderData } from 'react-router';
-import { singleCmsGraphqlQueryAdminLoader, SingleCmsGraphqlQueryAdminLoaderResult } from './loaders';
+import { Route } from './+types/ViewCmsGraphqlQuerySource';
+import { CmsGraphqlQueryQueryDocument } from './queries.generated';
 
-export const loader = singleCmsGraphqlQueryAdminLoader;
+export async function loader({ context, params: { id } }: Route.LoaderArgs) {
+  const { data } = await context.client.query({ query: CmsGraphqlQueryQueryDocument, variables: { id } });
+  return data;
+}
 
-function ViewCmsGraphqlQuerySource() {
-  const { graphqlQuery: query } = useLoaderData() as SingleCmsGraphqlQueryAdminLoaderResult;
+function ViewCmsGraphqlQuerySource({
+  loaderData: {
+    cmsParent: { cmsGraphqlQuery: query },
+  },
+}: Route.ComponentProps) {
   usePageTitle(`View “${query.identifier}” Source`);
 
   return (

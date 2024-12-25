@@ -366,7 +366,41 @@ export default [
         ]),
       ]),
       layout('CmsAdmin/index.tsx', { id: NamedRoute.CmsAdmin }, [
+        route(
+          'cms_content_groups',
+          'CmsAdmin/CmsContentGroupsAdmin/route.ts',
+          { id: NamedRoute.CmsContentGroupsAdmin },
+          [
+            route(':id', 'CmsAdmin/CmsContentGroupsAdmin/SingleCmsContentGroupRoute.ts', [
+              route('edit', 'CmsAdmin/CmsContentGroupsAdmin/EditCmsContentGroup.tsx'),
+              route('view_source', 'CmsAdmin/CmsContentGroupsAdmin/ViewCmsContentGroup.tsx'),
+            ]),
+            route('new', 'CmsAdmin/CmsContentGroupsAdmin/NewCmsContentGroup.tsx'),
+            index('CmsAdmin/CmsContentGroupsAdmin/CmsContentGroupsAdminTable.tsx'),
+          ],
+        ),
         route('cms_files', 'CmsAdmin/CmsFilesAdmin/index.tsx', { id: NamedRoute.CmsFiles }),
+        route(
+          'cms_graphql_queries',
+          'CmsAdmin/CmsGraphqlQueriesAdmin/route.ts',
+          { id: NamedRoute.CmsGraphqlQueriesAdmin },
+          [
+            route(':id', 'CmsAdmin/CmsGraphqlQueriesAdmin/SingleGraphqlQueryRoute.ts', [
+              route('edit', 'CmsAdmin/CmsGraphqlQueriesAdmin/EditCmsGraphqlQuery.tsx'),
+              route('view_source', 'CmsAdmin/CmsGraphqlQueriesAdmin/ViewCmsGraphqlQuerySource.tsx'),
+            ]),
+            route('new', 'CmsAdmin/CmsGraphqlQueriesAdmin/NewCmsGraphqlQuery.tsx'),
+            index('CmsAdmin/CmsGraphqlQueriesAdmin/CmsGraphqlQueriesAdminTable.tsx'),
+          ],
+        ),
+        route('cms_layouts', 'CmsAdmin/CmsLayoutsAdmin/route.ts', { id: NamedRoute.CmsLayoutsAdmin }, [
+          route(':id', 'CmsAdmin/CmsLayoutsAdmin/SingleLayoutRoute.tsx', [
+            route('edit', 'CmsAdmin/CmsLayoutsAdmin/EditCmsLayout.tsx'),
+            route('view_source', 'CmsAdmin/CmsLayoutsAdmin/ViewCmsLayoutSource.tsx'),
+          ]),
+          route('new', 'CmsAdmin/CmsLayoutsAdmin/NewCmsLayout.tsx'),
+          index('CmsAdmin/CmsLayoutsAdmin/CmsLayoutsAdminTable.tsx'),
+        ]),
         route('cms_navigation_items', 'CmsAdmin/NavigationItemsAdmin/index.tsx'),
         route('cms_pages', 'CmsAdmin/CmsPagesAdmin/route.ts', { id: NamedRoute.CmsPagesAdmin }, [
           route(':id', 'CmsAdmin/CmsPagesAdmin/SinglePageRoute.tsx', [
@@ -384,6 +418,10 @@ export default [
           route('new', 'CmsAdmin/CmsPartialsAdmin/NewCmsPartial.tsx'),
           index('CmsAdmin/CmsPartialsAdmin/CmsPartialsAdminTable.tsx'),
         ]),
+        route('cms_variables', 'CmsAdmin/CmsVariablesAdmin/index.tsx', [
+          route(':key', 'CmsAdmin/CmsVariablesAdmin/SingleVariableRoute.ts'),
+        ]),
+        route('root_site', 'RootSiteAdmin/EditRootSite.tsx'),
       ]),
       route('/pages/*', 'CmsPage/index.tsx'),
       index('CmsPage/index.tsx', { id: NamedRoute.RootPage }),

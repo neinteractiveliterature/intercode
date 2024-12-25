@@ -67,6 +67,26 @@ query CmsContentGroupsAdminQuery {
   }
 }
 
+query CmsContentGroupAdminQuery($id: ID!) {
+  convention: conventionByRequestHostIfPresent {
+    id
+    name
+
+    staff_positions {
+      id
+      name
+    }
+  }
+
+  cmsParent: cmsParentByRequestHost {
+    id
+    cmsContentGroup(id: $id) {
+      id
+      ...CmsContentGroupFields
+    }
+  }
+}
+
 query SearchCmsContentQuery($name: String) {
   cmsParent: cmsParentByRequestHost {
     id
