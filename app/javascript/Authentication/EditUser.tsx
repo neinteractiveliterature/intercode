@@ -3,7 +3,7 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { BootstrapFormInput, LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import { LoaderFunction, Navigate, useLoaderData } from 'react-router';
+import { Navigate } from 'react-router';
 import PasswordConfirmationInput from './PasswordConfirmationInput';
 import useAsyncFunction from '../useAsyncFunction';
 import AccountFormContent from './AccountFormContent';
@@ -11,7 +11,7 @@ import UserFormFields, { UserFormState } from './UserFormFields';
 import usePageTitle from '../usePageTitle';
 import { EditUserQueryData, EditUserQueryDocument } from './queries.generated';
 import humanize from '../humanize';
-import AuthenticityTokensManager from '../AuthenticityTokensContext';
+import { AuthenticityTokensContext } from '../AuthenticityTokensContext';
 import { client } from '../useIntercodeApolloClient';
 import PasswordInputWithStrengthCheck from './PasswordInputWithStrengthCheck';
 
@@ -66,7 +66,7 @@ export async function loader() {
 function EditUserForm() {
   const { currentUser: initialFormState } = useLoaderData() as EditUserQueryData;
   const { t } = useTranslation();
-  const authenticityToken = AuthenticityTokensManager.instance.tokens.updateUser;
+  const manager = React.useContext(AuthenticityTokensContext);
   const [formState, setFormState] = useState<UserFormState | undefined>(initialFormState ?? undefined);
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
@@ -85,6 +85,7 @@ function EditUserForm() {
     if (!formState) {
       return;
     }
+    const authenticityToken = (await manager.getTokens()).updateUser;
     if (!authenticityToken) {
       throw new Error('No authenticity token received from server');
     }
