@@ -6,7 +6,7 @@ import { BootstrapFormInput, ErrorDisplay } from '@neinteractiveliterature/litfo
 import AuthenticationModalContext from './AuthenticationModalContext';
 import useAsyncFunction from '../useAsyncFunction';
 import humanize from '../humanize';
-import AuthenticityTokensManager from '../AuthenticityTokensContext';
+import { AuthenticityTokensContext } from '../AuthenticityTokensContext';
 
 function parseRailsErrorHash(errors: Record<string, string[]> | undefined) {
   if (!errors) {
@@ -44,7 +44,8 @@ async function resetPassword(authenticityToken: string, email: string) {
 function ForgotPasswordForm(): JSX.Element {
   const { t } = useTranslation();
   const { close: closeModal, setCurrentView } = useContext(AuthenticationModalContext);
-  const authenticityToken = AuthenticityTokensManager.instance.tokens.resetPassword;
+  const manager = useContext(AuthenticityTokensContext);
+  const authenticityToken = manager.tokens?.resetPassword;
   const [email, setEmail] = useState('');
   const [success, setSuccess] = useState(false);
   const [resetPasswordAsync, resetPasswordError, resetPasswordInProgress] = useAsyncFunction(resetPassword);
