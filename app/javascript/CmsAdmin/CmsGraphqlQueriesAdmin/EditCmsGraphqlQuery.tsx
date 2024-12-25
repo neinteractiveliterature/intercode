@@ -1,22 +1,22 @@
 import { useState } from 'react';
 import { ApolloError } from '@apollo/client';
-import { ActionFunction, Form, redirect, useActionData, useLoaderData, useNavigation } from 'react-router';
+import { Form, redirect, useNavigation } from 'react-router';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import CmsGraphqlQueryForm from './CmsGraphqlQueryForm';
 import usePageTitle from '../../usePageTitle';
 
 import 'graphiql/graphiql.css';
-import { singleCmsGraphqlQueryAdminLoader, SingleCmsGraphqlQueryAdminLoaderResult } from './loaders';
-import { client } from '../../useIntercodeApolloClient';
 import { UpdateCmsGraphqlQueryDocument } from './mutations.generated';
 import { buildCmsGraphqlQueryInputFromFormData } from './buildCmsGraphqlQueryInput';
+import { Route } from './+types/EditCmsGraphqlQuery';
+import { CmsGraphqlQueryQueryDocument } from './queries.generated';
 
-export async function action({ params: { id }, request }) {
+export async function action({ params: { id }, request, context }: Route.ActionArgs) {
   const formData = await request.formData();
 
   try {
-    await client.mutate({
+    await context.client.mutate({
       mutation: UpdateCmsGraphqlQueryDocument,
       variables: {
         id: id ?? '',
@@ -26,18 +26,24 @@ export async function action({ params: { id }, request }) {
   } catch (e) {
     return e;
   }
-  await client.resetStore();
+  await context.client.resetStore();
 
   return redirect(formData.get('destination')?.toString() ?? '/cms_graphql_queries');
 }
 
-export const loader = singleCmsGraphqlQueryAdminLoader;
+export async function loader({ context, params: { id } }: Route.LoaderArgs) {
+  const { data } = await context.client.query({ query: CmsGraphqlQueryQueryDocument, variables: { id } });
+  return data;
+}
 
-function EditCmsGraphqlQuery() {
-  const { graphqlQuery: initialQuery } = useLoaderData() as SingleCmsGraphqlQueryAdminLoaderResult;
+function EditCmsGraphqlQuery({
+  loaderData: {
+    cmsParent: { cmsGraphqlQuery: initialQuery },
+  },
+  actionData: saveError,
+}: Route.ComponentProps) {
   const [query, setQuery] = useState(initialQuery);
   const navigation = useNavigation();
-  const saveError = useActionData();
 
   const saveInProgress = navigation.state !== 'idle';
 

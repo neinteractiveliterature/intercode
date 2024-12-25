@@ -1,12 +1,15 @@
 import usePageTitle from '../../usePageTitle';
 import CmsContentGroupFormFields from './CmsContentGroupFormFields';
-import { useLoaderData } from 'react-router';
-import { singleCmsContentGroupAdminLoader, SingleCmsContentGroupAdminLoaderResult } from './loaders';
+import { Route } from './+types/ViewCmsContentGroup';
+import { CmsContentGroupAdminQueryDocument } from './queries.generated';
 
-export const loader = singleCmsContentGroupAdminLoader;
+export async function loader({ context, params: { id } }: Route.LoaderArgs) {
+  const { data } = await context.client.query({ query: CmsContentGroupAdminQueryDocument, variables: { id } });
+  return data;
+}
 
-function ViewCmsContentGroup(): JSX.Element {
-  const { data, contentGroup } = useLoaderData() as SingleCmsContentGroupAdminLoaderResult;
+function ViewCmsContentGroup({ loaderData: data }: Route.ComponentProps): JSX.Element {
+  const contentGroup = data.cmsParent.cmsContentGroup;
   usePageTitle(contentGroup.name);
 
   return (

@@ -4,6 +4,10 @@ module CmsParentImplementation
     object.cms_content_groups.find(id)
   end
 
+  def cms_graphql_query(id:)
+    object.cms_graphql_queries.find(id)
+  end
+
   def cms_layout(id:)
     object.cms_layouts.find(id)
   end

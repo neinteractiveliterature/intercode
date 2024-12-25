@@ -1,12 +1,12 @@
-import { ActionFunction, redirect } from 'react-router';
-import { client } from '../../useIntercodeApolloClient';
+import { redirect } from 'react-router';
 import { DeleteCmsVariableMutationDocument, SetCmsVariableMutationDocument } from './mutations.generated';
+import { Route } from './+types/SingleVariableRoute';
 
-export async function action({ params: { key }, request }) {
+export async function action({ params: { key }, request, context }: Route.ActionArgs) {
   const formData = await request.formData();
 
   if (request.method === 'POST' || request.method === 'PATCH') {
-    await client.mutate({
+    await context.client.mutate({
       mutation: SetCmsVariableMutationDocument,
       variables: {
         key: key ?? '',
@@ -14,7 +14,7 @@ export async function action({ params: { key }, request }) {
       },
     });
   } else if (request.method === 'DELETE') {
-    await client.mutate({
+    await context.client.mutate({
       mutation: DeleteCmsVariableMutationDocument,
       variables: { key: key ?? '' },
     });
@@ -22,6 +22,6 @@ export async function action({ params: { key }, request }) {
     return new Response(null, { status: 404 });
   }
 
-  await client.resetStore();
+  await context.client.resetStore();
   return redirect('/cms_variables');
 }

@@ -5,16 +5,16 @@ import { BootstrapFormInput, ErrorDisplay } from '@neinteractiveliterature/litfo
 
 import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
 import usePageTitle from '../usePageTitle';
-import { RootSiteAdminQueryData, RootSiteAdminQueryDocument } from './queries.generated';
-import { ActionFunction, json, LoaderFunction, useActionData, useLoaderData, useNavigation } from 'react-router';
-import { client } from '../useIntercodeApolloClient';
+import { RootSiteAdminQueryDocument } from './queries.generated';
+import { data, useNavigation } from 'react-router';
 import { Form } from 'react-router';
 import { UpdateRootSiteDocument } from './mutations.generated';
+import { Route } from './+types/EditRootSite';
 
-export async function action({ request }) {
+export async function action({ request, context }: Route.ActionArgs) {
   try {
     const formData = await request.formData();
-    const { data } = await client.mutate({
+    const result = await context.client.mutate({
       mutation: UpdateRootSiteDocument,
       variables: {
         defaultLayoutId: formData.get('default_layout_id')?.toString(),
@@ -22,7 +22,7 @@ export async function action({ request }) {
         siteName: formData.get('site_name')?.toString(),
       },
     });
-    return json(data);
+    return data(result.data);
   } catch (error) {
     return error;
   }
@@ -39,14 +39,12 @@ function useDirtyState<T>(initialState: T, setDirty: () => void) {
   ] as const;
 }
 
-export async function loader() {
-  const { data } = await client.query<RootSiteAdminQueryData>({ query: RootSiteAdminQueryDocument });
+export async function loader({ context }: Route.ActionArgs) {
+  const { data } = await context.client.query({ query: RootSiteAdminQueryDocument });
   return data;
 }
 
-function EditRootSite() {
-  const data = useLoaderData() as RootSiteAdminQueryData;
-  const actionData = useActionData();
+function EditRootSite({ loaderData: data, actionData }: Route.ComponentProps) {
   const error = actionData instanceof Error ? actionData : undefined;
   const navigation = useNavigation();
   const updateInProgress = navigation.state !== 'idle';
