@@ -431,6 +431,7 @@ export default [
       ...prefix('users', [
         route('edit', 'Authentication/EditUser.tsx'),
         route('password/edit', 'Authentication/ResetPassword.tsx'),
+        route('password/reset', 'Authentication/password/reset.ts'),
         route('sign_out', 'Authentication/sign_out.ts'),
       ]),
       route('/pages/*', 'CmsPage/index.tsx'),
