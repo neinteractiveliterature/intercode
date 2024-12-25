@@ -367,6 +367,7 @@ export default [
       ]),
       layout('CmsAdmin/index.tsx', { id: NamedRoute.CmsAdmin }, [
         route('cms_files', 'CmsAdmin/CmsFilesAdmin/index.tsx', { id: NamedRoute.CmsFiles }),
+        route('cms_navigation_items', 'CmsAdmin/NavigationItemsAdmin/index.tsx'),
         route('cms_pages', 'CmsAdmin/CmsPagesAdmin/route.ts', { id: NamedRoute.CmsPagesAdmin }, [
           route(':id', 'CmsAdmin/CmsPagesAdmin/SinglePageRoute.tsx', [
             route('edit', 'CmsAdmin/CmsPagesAdmin/EditCmsPage.tsx'),

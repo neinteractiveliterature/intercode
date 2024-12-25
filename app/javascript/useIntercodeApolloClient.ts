@@ -17,6 +17,7 @@ import { onError } from '@apollo/client/link/error/index.js';
 import possibleTypes from './possibleTypes.json';
 import AuthenticityTokensManager from './AuthenticityTokensContext';
 import { GraphQLFormattedError } from 'graphql';
+import { setContext } from '@apollo/client/link/context';
 
 // adapted from https://github.com/jaydenseric/apollo-upload-client/issues/63#issuecomment-392501449
 function isFile(value: unknown): value is Blob | File {
@@ -82,27 +83,27 @@ export function getIntercodeUserTimezoneHeader() {
   return { 'X-Intercode-User-Timezone': localTime.zoneName ?? '' };
 }
 
-export const AuthHeadersLink = new ApolloLink((operation: Operation, next: NextLink) => {
-  operation.setContext((context: ReturnType<Operation['getContext']>) => ({
-    ...context,
-    credentials: 'same-origin',
-    headers: {
-      ...context.headers,
-      'X-CSRF-Token': AuthenticityTokensManager.instance.tokens.graphql,
-    },
-  }));
-
-  return next(operation);
-});
+export function buildAuthHeadersLink(authenticityTokensManager: AuthenticityTokensManager) {
+  return setContext(async (operation, prevContext) => {
+    return {
+      ...prevContext,
+      authenticityTokensManager,
+      credentials: 'same-origin',
+      headers: {
+        'X-CSRF-Token': (await authenticityTokensManager.getTokens()).graphql,
+      },
+    };
+  });
+}
 
 export function buildTerminatingApolloLink(options: BatchHttpLink.Options): ApolloLink {
   // adapted from https://github.com/jaydenseric/apollo-upload-client/issues/63#issuecomment-392501449
   return split(isUpload, createUploadLink(options), new BatchHttpLink(options));
 }
 
-export function buildIntercodeApolloLink(uri: URL): ApolloLink {
+export function buildClientApolloLink(uri: URL, authenticityTokensManager: AuthenticityTokensManager): ApolloLink {
   return ApolloLink.from([
-    AuthHeadersLink,
+    buildAuthHeadersLink(authenticityTokensManager),
     AddTimezoneLink,
     ErrorHandlerLink,
     buildTerminatingApolloLink({
@@ -112,8 +113,8 @@ export function buildIntercodeApolloLink(uri: URL): ApolloLink {
   ]);
 }
 
-export function useIntercodeApolloLink(uri: URL): ApolloLink {
-  const link = useMemo(() => buildIntercodeApolloLink(uri), [uri]);
+export function useIntercodeApolloLink(uri: URL, authenticityTokensManager: AuthenticityTokensManager): ApolloLink {
+  const link = useMemo(() => buildClientApolloLink(uri, authenticityTokensManager), [uri, authenticityTokensManager]);
 
   return link;
 }
@@ -164,6 +165,6 @@ export function getClientURL(): URL {
   }
 }
 
-export function buildBrowserApolloClient() {
-  return buildIntercodeApolloClient(buildIntercodeApolloLink(getClientURL()));
+export function buildBrowserApolloClient(authenticityTokensManager: AuthenticityTokensManager) {
+  return buildIntercodeApolloClient(buildClientApolloLink(getClientURL(), authenticityTokensManager));
 }

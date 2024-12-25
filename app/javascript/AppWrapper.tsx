@@ -1,4 +1,4 @@
-import { Suspense, useCallback, useRef, useEffect, ReactNode, useState, useMemo } from 'react';
+import { Suspense, useCallback, useRef, useEffect, ReactNode, useState, useMemo, useContext } from 'react';
 import * as React from 'react';
 import { DataProxy } from '@apollo/client';
 import { Outlet } from 'react-router';
@@ -19,11 +19,7 @@ import AuthenticationModalContext, {
   useAuthenticationModalProvider,
 } from './Authentication/AuthenticationModalContext';
 import AuthenticationModal from './Authentication/AuthenticationModal';
-import {
-  AuthenticityTokens,
-  AuthenticityTokensContext,
-  useInitializeAuthenticityTokensManager,
-} from './AuthenticityTokensContext';
+import { AuthenticityTokensContext } from './AuthenticityTokensContext';
 import getI18n from './setupI18Next';
 import RailsDirectUploadsContext from './RailsDirectUploadsContext';
 
@@ -49,10 +45,10 @@ function I18NextWrapper({ children }: { children: (i18nInstance: i18n) => ReactN
 }
 
 export function ProviderStack(props: AppWrapperProps) {
-  const { authenticityTokens, recaptchaSiteKey } = props;
+  const { recaptchaSiteKey } = props;
   // TODO bring this back when we re-add prompting
   // const confirm = useConfirm();
-  const manager = useInitializeAuthenticityTokensManager(authenticityTokens);
+  const manager = useContext(AuthenticityTokensContext);
   const authenticationModalContextValue = useAuthenticationModalProvider(recaptchaSiteKey);
   const {
     open: openAuthenticationModal,
@@ -79,39 +75,36 @@ export function ProviderStack(props: AppWrapperProps) {
 
   return (
     <React.StrictMode>
-      <AuthenticityTokensContext.Provider value={manager}>
-        <Confirm>
-          <RailsDirectUploadsContext.Provider value={railsDirectUploadsContextValue}>
-            {/* TODO bring this back when we re-add prompting getUserConfirmation={getUserConfirmation}> */}
-            <AuthenticationModalContext.Provider value={authenticationModalContextValue}>
-              <>
-                {!unauthenticatedError && (
-                  <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
-                    <I18NextWrapper>
-                      {(i18nInstance) => (
-                        <AlertProvider okText={i18nInstance.t('buttons.ok', 'OK')}>
-                          <ToastProvider>
-                            <ErrorBoundary placement="replace" errorType="plain">
-                              <Outlet />
-                            </ErrorBoundary>
-                          </ToastProvider>
-                        </AlertProvider>
-                      )}
-                    </I18NextWrapper>
-                  </Suspense>
-                )}
-                <AuthenticationModal />
-              </>
-            </AuthenticationModalContext.Provider>
-          </RailsDirectUploadsContext.Provider>
-        </Confirm>
-      </AuthenticityTokensContext.Provider>
+      <Confirm>
+        <RailsDirectUploadsContext.Provider value={railsDirectUploadsContextValue}>
+          {/* TODO bring this back when we re-add prompting getUserConfirmation={getUserConfirmation}> */}
+          <AuthenticationModalContext.Provider value={authenticationModalContextValue}>
+            <>
+              {!unauthenticatedError && (
+                <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
+                  <I18NextWrapper>
+                    {(i18nInstance) => (
+                      <AlertProvider okText={i18nInstance.t('buttons.ok', 'OK')}>
+                        <ToastProvider>
+                          <ErrorBoundary placement="replace" errorType="plain">
+                            <Outlet />
+                          </ErrorBoundary>
+                        </ToastProvider>
+                      </AlertProvider>
+                    )}
+                  </I18NextWrapper>
+                </Suspense>
+              )}
+              <AuthenticationModal />
+            </>
+          </AuthenticationModalContext.Provider>
+        </RailsDirectUploadsContext.Provider>
+      </Confirm>
     </React.StrictMode>
   );
 }
 
 export type AppWrapperProps = {
-  authenticityTokens?: AuthenticityTokens;
   queryData?: DataProxy.WriteQueryOptions<unknown, unknown>[];
   railsDefaultActiveStorageServiceName: string;
   railsDirectUploadsUrl: string;
