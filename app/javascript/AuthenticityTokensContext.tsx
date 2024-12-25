@@ -1,3 +1,4 @@
+import { getBackendBaseUrl } from 'getBackendBaseUrl';
 import { createContext, useRef } from 'react';
 
 export type AuthenticityTokens = {
@@ -68,11 +69,7 @@ export async function fetchAuthenticityTokens(url: URL, headers?: HeadersInit): 
 }
 
 export function getAuthenticityTokensURL(): URL {
-  if (typeof window !== 'undefined') {
-    return new URL('/authenticity_tokens', window.location.href);
-  } else {
-    return new URL('/authenticity_tokens', process.env.INTERCODE_BACKEND);
-  }
+  return new URL('/authenticity_tokens', getBackendBaseUrl());
 }
 
 export const AuthenticityTokensContext = createContext<AuthenticityTokensManager>(

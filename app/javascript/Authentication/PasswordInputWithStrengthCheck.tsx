@@ -56,11 +56,17 @@ function getTextForScore(score: number): ScoreText {
 
 export type PasswordInputWithStrengthCheckProps = {
   id?: string;
+  name?: string;
   value: string;
   onChange: React.Dispatch<string>;
 };
 
-function PasswordInputWithStrengthCheck({ id, value, onChange }: PasswordInputWithStrengthCheckProps): JSX.Element {
+function PasswordInputWithStrengthCheck({
+  id,
+  name,
+  value,
+  onChange,
+}: PasswordInputWithStrengthCheckProps): JSX.Element {
   const { t } = useTranslation();
   const passwordStrengthResult = useMemo(() => zxcvbn(value), [value]);
   const hasFeedback = useMemo(
@@ -112,6 +118,7 @@ function PasswordInputWithStrengthCheck({ id, value, onChange }: PasswordInputWi
         <input
           id={id}
           className="form-control"
+          name={name}
           type="password"
           value={value}
           onChange={(event) => onChange(event.target.value)}
