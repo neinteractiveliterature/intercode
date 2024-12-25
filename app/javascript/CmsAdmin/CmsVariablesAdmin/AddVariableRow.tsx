@@ -23,8 +23,8 @@ function AddVariableRow({ variable, onChange, onCancel }: AddVariableRowProps): 
   const navigation = useNavigation();
   const setInProgress = navigation.state !== 'idle';
 
-  const save = () => {
-    fetcher.submit({ value_json: variable.value_json }, { action: `./${variable.key}`, method: 'POST' });
+  const save = async () => {
+    await fetcher.submit({ value_json: variable.value_json }, { action: `./${variable.key}`, method: 'POST' });
     onCancel(variable.generatedId);
   };
 

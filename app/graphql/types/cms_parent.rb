@@ -101,6 +101,11 @@ module Types::CmsParent
   MARKDOWN
   end
 
+  field :cms_graphql_query, Types::CmsGraphqlQueryType, null: false do
+    description "Finds a CMS GraphQL query by ID."
+    argument :id, ID, required: true, description: "The ID of the CMS GraphQL query to find."
+  end
+
   field :cms_navigation_items, [Types::CmsNavigationItemType], null: false do
     description <<~MARKDOWN
     Returns all CMS navigation items within the current domain.

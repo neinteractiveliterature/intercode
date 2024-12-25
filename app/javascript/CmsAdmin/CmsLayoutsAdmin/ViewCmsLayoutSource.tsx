@@ -1,14 +1,20 @@
 import CmsLayoutForm from './CmsLayoutForm';
 import usePageTitle from '../../usePageTitle';
-import { singleCmsLayoutAdminLoader, SingleCmsLayoutAdminLoaderResult } from './loaders';
-import { useLoaderData } from 'react-router';
+import { Route } from './+types/ViewCmsLayoutSource';
+import { CmsLayoutAdminQueryDocument } from './queries.generated';
 
-export const loader = singleCmsLayoutAdminLoader;
+export async function loader({ context, params: { id } }: Route.LoaderArgs) {
+  const { data } = await context.client.query({ query: CmsLayoutAdminQueryDocument, variables: { id } });
+  return data;
+}
 
-function ViewCmsLayoutSource() {
-  const { layout: value } = useLoaderData() as SingleCmsLayoutAdminLoaderResult;
-  usePageTitle(`View “${value.name}” Source`);
-  return <CmsLayoutForm layout={value} readOnly />;
+function ViewCmsLayoutSource({
+  loaderData: {
+    cmsParent: { cmsLayout },
+  },
+}: Route.ComponentProps) {
+  usePageTitle(`View “${cmsLayout.name}” Source`);
+  return <CmsLayoutForm layout={cmsLayout} readOnly />;
 }
 
 export default ViewCmsLayoutSource;
