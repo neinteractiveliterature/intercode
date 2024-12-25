@@ -1,12 +1,12 @@
 import { ApolloLink, InMemoryCache } from '@apollo/client';
 import {
+  buildAuthHeadersLink,
   buildIntercodeApolloCache,
   buildIntercodeApolloClient,
   buildTerminatingApolloLink,
   getClientURL,
 } from 'useIntercodeApolloClient';
 import nodeFetch from 'node-fetch';
-import { setContext } from '@apollo/client/link/context';
 import { Session } from 'react-router';
 import { getSessionUuid, SessionData, SessionFlashData } from 'sessions';
 import AuthenticityTokensManager from 'AuthenticityTokensContext';
@@ -21,25 +21,12 @@ declare module '@apollo/client' {
   }
 }
 
-function buildServerAuthenticityTokensLink(authenticityTokensManager: AuthenticityTokensManager) {
-  return setContext(async (operation, prevContext) => {
-    return {
-      ...prevContext,
-      authenticityTokensManager,
-      credentials: 'same-origin',
-      headers: {
-        'X-CSRF-Token': (await authenticityTokensManager.getTokens()).graphql,
-      },
-    };
-  });
-}
-
 export function buildServerApolloLink(
   uri: URL,
   headers: Record<string, string>,
   authenticityTokensManager: AuthenticityTokensManager,
 ): ApolloLink {
-  return buildServerAuthenticityTokensLink(authenticityTokensManager).concat(
+  return buildAuthHeadersLink(authenticityTokensManager).concat(
     buildTerminatingApolloLink({
       uri: uri.toString(),
       credentials: 'same-origin',

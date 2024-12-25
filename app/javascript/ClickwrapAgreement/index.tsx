@@ -6,7 +6,6 @@ import { ErrorDisplay } from '@neinteractiveliterature/litform';
 import { parseCmsContent } from '../parseCmsContent';
 import useLoginRequired from '../Authentication/useLoginRequired';
 import { ClickwrapAgreementQueryDocument } from './queries.generated';
-import AuthenticityTokensManager from '../AuthenticityTokensContext';
 import { AcceptClickwrapAgreementDocument } from './mutations.generated';
 import { Route } from './+types/index';
 
@@ -15,7 +14,7 @@ export async function action({ context }: Route.ActionArgs) {
     await context.client.mutate({ mutation: AcceptClickwrapAgreementDocument });
     return redirect('/my_profile/setup');
   } catch (err) {
-    await AuthenticityTokensManager.instance.refresh();
+    await context.authenticityTokensManager.refresh();
     await context.client.resetStore();
     return err;
   }
