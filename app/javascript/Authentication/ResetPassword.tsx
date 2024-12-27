@@ -13,7 +13,7 @@ export async function action({ request, context }: Route.ActionArgs) {
   const formData = await request.formData();
   const tokens = await context.authenticityTokensManager.getTokens();
 
-  const response = await fetch(new URL('/users/password', getBackendBaseUrl()), {
+  const response = await context.fetch(new URL('/users/password', getBackendBaseUrl()), {
     method: 'PUT',
     body: formData,
     credentials: 'include',

@@ -6,7 +6,6 @@ import {
   buildTerminatingApolloLink,
   getClientURL,
 } from 'useIntercodeApolloClient';
-import nodeFetch from 'node-fetch';
 import { Session } from 'react-router';
 import { getSessionUuid, SessionData, SessionFlashData } from 'sessions';
 import AuthenticityTokensManager from 'AuthenticityTokensContext';
@@ -25,14 +24,14 @@ export function buildServerApolloLink(
   uri: URL,
   headers: Record<string, string>,
   authenticityTokensManager: AuthenticityTokensManager,
+  serverFetch: typeof fetch,
 ): ApolloLink {
   return buildAuthHeadersLink(authenticityTokensManager).concat(
     buildTerminatingApolloLink({
       uri: uri.toString(),
       credentials: 'same-origin',
       headers,
-      // host header setting doesn't work with the default fetch implementation
-      fetch: nodeFetch as unknown as typeof fetch,
+      fetch: serverFetch,
     }),
   );
 }
@@ -42,6 +41,7 @@ export type BuildServerApolloClientOptions = {
   authenticityTokensManager: AuthenticityTokensManager;
   cookie: string | undefined;
   hostname: string | undefined;
+  fetch: typeof fetch;
 };
 
 export function buildServerApolloHeaders({ cookie, hostname }: BuildServerApolloClientOptions) {
@@ -80,7 +80,12 @@ export async function buildServerApolloClient(options: BuildServerApolloClientOp
   console.log(`Cache size: ${filesize(getCacheSize(cache))}`);
 
   return buildIntercodeApolloClient(
-    buildServerApolloLink(getClientURL(), buildServerApolloHeaders(options), options.authenticityTokensManager),
+    buildServerApolloLink(
+      getClientURL(),
+      buildServerApolloHeaders(options),
+      options.authenticityTokensManager,
+      options.fetch,
+    ),
     {
       ssrMode: true,
       cache,

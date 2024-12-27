@@ -433,6 +433,7 @@ export default [
         route('password/edit', 'Authentication/ResetPassword.tsx'),
         route('password/reset', 'Authentication/password/reset.ts'),
         route('sign_out', 'Authentication/sign_out.ts'),
+        route('sign_in', 'Authentication/sign_in.ts'),
       ]),
       route('/pages/*', 'CmsPage/index.tsx'),
       index('CmsPage/index.tsx', { id: NamedRoute.RootPage }),

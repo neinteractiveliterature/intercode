@@ -20,7 +20,7 @@ export async function action({ context, request }: Route.ActionArgs) {
   const tokens = await context.authenticityTokensManager.getTokens();
   const url = new URL('/users', getBackendBaseUrl());
 
-  const response = await fetch(url, {
+  const response = await context.fetch(url, {
     method: 'PATCH',
     body: formData,
     credentials: 'include',

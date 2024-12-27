@@ -11,13 +11,20 @@ import { AppLoadContext, Session } from 'react-router';
 import { buildServerApolloClient } from 'serverApolloClient.server.js';
 import { ClientConfigurationQueryData, ClientConfigurationQueryDocument } from 'serverQueries.generated.js';
 import { commitSession, getSession, getSessionUuid, SessionData, SessionFlashData } from 'sessions.js';
+import { buildServerFetcher, ServerFetcher } from 'ServerFetcher.server.js';
+import nodeFetch from 'node-fetch';
 
 async function getClientConfiguration() {
   const client = await buildServerApolloClient({
     cookie: undefined,
     hostname: undefined,
     session: await getSession(),
-    authenticityTokensManager: new AuthenticityTokensManager(undefined, getAuthenticityTokensURL()),
+    authenticityTokensManager: new AuthenticityTokensManager(
+      nodeFetch as unknown as typeof fetch,
+      undefined,
+      getAuthenticityTokensURL(),
+    ),
+    fetch: nodeFetch as unknown as typeof fetch,
   });
   const { data } = await client.query({ query: ClientConfigurationQueryDocument });
   return data;
@@ -25,7 +32,11 @@ async function getClientConfiguration() {
 
 const authenticityTokensManagers: Map<string, AuthenticityTokensManager> = new Map();
 
-async function getAuthenticityTokensManager(session: Session<SessionData, SessionFlashData>, cookie?: string) {
+async function getAuthenticityTokensManager(
+  fetcher: typeof fetch,
+  session: Session<SessionData, SessionFlashData>,
+  cookie?: string,
+) {
   const uuid = await getSessionUuid(session);
   const existing = authenticityTokensManagers.get(uuid);
   if (existing) {
@@ -33,8 +44,9 @@ async function getAuthenticityTokensManager(session: Session<SessionData, Sessio
   }
 
   const authenticityTokensUrl = getAuthenticityTokensURL();
-  const tokens = await fetchAuthenticityTokens(authenticityTokensUrl, cookie ? { cookie } : {});
-  const manager = new AuthenticityTokensManager(tokens, authenticityTokensUrl);
+  const tokensResponse = await fetchAuthenticityTokens(fetcher, authenticityTokensUrl, cookie ? { cookie } : {});
+  const tokens = await tokensResponse.json();
+  const manager = new AuthenticityTokensManager(fetcher, tokens, authenticityTokensUrl);
   authenticityTokensManagers.set(uuid, manager);
   return manager;
 }
@@ -79,6 +91,10 @@ async function createServer() {
   // handle SSR requests
   app.all(
     '*',
+    (req, res, next) => {
+      res.locals.serverFetch = buildServerFetcher(res);
+      next();
+    },
     createRequestHandler({
       build: viteDevServer
         ? () => viteDevServer.ssrLoadModule('virtual:react-router/server-build')
@@ -86,20 +102,26 @@ async function createServer() {
           // @ts-ignore
           await import('./build/server/index.js'),
       getLoadContext: async (req, res) => {
+        const serverFetch: ServerFetcher = res.locals.serverFetch;
         const session = await getSession(req.headers.cookie);
-        const authenticityTokensManager = await getAuthenticityTokensManager(session, req.headers.cookie);
-        res.setHeader('set-cookie', await commitSession(session));
+
+        const manager = await getAuthenticityTokensManager(serverFetch, session, req.headers.cookie);
+
+        serverFetch.setCookie(await commitSession(session));
 
         const client = await buildServerApolloClient({
           cookie: req.headers.cookie,
           hostname: req.hostname,
           session,
-          authenticityTokensManager,
+          authenticityTokensManager: manager,
+          fetch: serverFetch,
         });
+
         return {
           client,
           clientConfigurationData: clientConfigurationDataWithProxy,
-          authenticityTokensManager,
+          authenticityTokensManager: manager,
+          fetch: serverFetch,
           session,
         } satisfies AppLoadContext;
       },
