@@ -9,6 +9,7 @@ declare module 'react-router' {
     authenticityTokensManager: AuthenticityTokensManager;
     client: ApolloClient<NormalizedCacheObject>;
     clientConfigurationData: ClientConfigurationQueryData;
+    fetch: typeof fetch;
     session: Session<SessionData, SessionFlashData>;
   }
 }

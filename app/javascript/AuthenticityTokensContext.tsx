@@ -1,5 +1,5 @@
 import { getBackendBaseUrl } from 'getBackendBaseUrl';
-import { createContext, useRef } from 'react';
+import { createContext } from 'react';
 
 export type AuthenticityTokens = {
   graphql?: string;
@@ -17,10 +17,12 @@ export type AuthenticityTokens = {
 export default class AuthenticityTokensManager {
   tokens?: AuthenticityTokens;
   url: URL;
+  fetcher: typeof fetch;
 
-  constructor(tokens: AuthenticityTokens | undefined, url: URL) {
+  constructor(fetcher: typeof fetch, tokens: AuthenticityTokens | undefined, url: URL) {
     this.tokens = tokens;
     this.url = url;
+    this.fetcher = fetcher;
   }
 
   setTokens(tokens: AuthenticityTokens) {
@@ -40,7 +42,8 @@ export default class AuthenticityTokensManager {
   }
 
   async refresh() {
-    const json = await fetchAuthenticityTokens(this.url);
+    const response = await fetchAuthenticityTokens(this.fetcher, this.url);
+    const json = await response.json();
 
     this.setTokens(json);
     return this.tokens!;
@@ -55,8 +58,12 @@ export default class AuthenticityTokensManager {
   }
 }
 
-export async function fetchAuthenticityTokens(url: URL, headers?: HeadersInit): Promise<AuthenticityTokens> {
-  const response = await fetch(url, {
+export async function fetchAuthenticityTokens(
+  fetcher: typeof fetch,
+  url: URL,
+  headers?: HeadersInit,
+): Promise<Response> {
+  const response = await fetcher(url, {
     method: 'GET',
     headers: {
       Accept: 'application/json',
@@ -64,8 +71,7 @@ export async function fetchAuthenticityTokens(url: URL, headers?: HeadersInit): 
     },
   });
 
-  const json = await response.json();
-  return json;
+  return response;
 }
 
 export function getAuthenticityTokensURL(): URL {
@@ -73,10 +79,5 @@ export function getAuthenticityTokensURL(): URL {
 }
 
 export const AuthenticityTokensContext = createContext<AuthenticityTokensManager>(
-  new AuthenticityTokensManager(undefined, getAuthenticityTokensURL()),
+  new AuthenticityTokensManager(fetch, undefined, getAuthenticityTokensURL()),
 );
-
-export function useInitializeAuthenticityTokensManager(initialTokens?: AuthenticityTokens) {
-  const manager = useRef(new AuthenticityTokensManager(initialTokens, getAuthenticityTokensURL()));
-  return manager.current;
-}
