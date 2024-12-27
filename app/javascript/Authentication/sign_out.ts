@@ -10,7 +10,7 @@ export async function action({ request, context }: Route.ActionArgs) {
   }
 
   const tokens = await context.authenticityTokensManager.getTokens();
-  const response = await fetch(new URL('/users/sign_out', getBackendBaseUrl()), {
+  const response = await context.fetch(new URL('/users/sign_out', getBackendBaseUrl()), {
     method: 'DELETE',
     credentials: 'include',
     headers: {
