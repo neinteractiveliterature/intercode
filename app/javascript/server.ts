@@ -91,10 +91,6 @@ async function createServer() {
   // handle SSR requests
   app.all(
     '*',
-    (req, res, next) => {
-      res.locals.serverFetch = buildServerFetcher(res);
-      next();
-    },
     createRequestHandler({
       build: viteDevServer
         ? () => viteDevServer.ssrLoadModule('virtual:react-router/server-build')
@@ -102,7 +98,7 @@ async function createServer() {
           // @ts-ignore
           await import('./build/server/index.js'),
       getLoadContext: async (req, res) => {
-        const serverFetch: ServerFetcher = res.locals.serverFetch;
+        const serverFetch: ServerFetcher = buildServerFetcher(res);
         const session = await getSession(req.headers.cookie);
 
         const manager = await getAuthenticityTokensManager(serverFetch, session, req.headers.cookie);

@@ -5,6 +5,7 @@ import { CookieJar } from 'tough-cookie';
 export type ServerFetcher = {
   (url: URL, init: RequestInit): Promise<Response>;
   setCookie: (...items: (string | SetCookieInit)[]) => void;
+  res: import('express').Response;
 };
 
 export function buildServerFetcher(res: import('express').Response): ServerFetcher {
@@ -24,8 +25,19 @@ export function buildServerFetcher(res: import('express').Response): ServerFetch
     }
 
     headers.setCookie.push(...items.map((item) => new SetCookie(item)));
+    const uniqueSetCookies = headers.setCookie.reduce((uniqueMap, setCookie) => {
+      if (setCookie.name != null) {
+        uniqueMap.set(setCookie.name, setCookie);
+      }
+      return uniqueMap;
+    }, new Map<string, SetCookie>());
+    headers.setCookie = [...uniqueSetCookies.values()];
 
-    res.setHeader('set-cookie', headers.getSetCookie());
+    if (res.headersSent) {
+      console.warn("Can't send set-cookie header because headers were already sent!");
+    } else {
+      res.setHeader('set-cookie', headers.getSetCookie());
+    }
   };
 
   const serverFetch = async (url: URL, init: RequestInit) => {
@@ -52,6 +64,7 @@ export function buildServerFetcher(res: import('express').Response): ServerFetch
   };
 
   serverFetch.setCookie = setCookie;
+  serverFetch.res = res;
 
   return serverFetch;
 }

@@ -26,7 +26,8 @@ export async function action({ request, context }: Route.ActionArgs) {
     return new Error((await response.text()) || response.statusText);
   }
 
-  await context.client.resetStore();
+  await context.authenticityTokensManager.refresh();
+  await context.client.clearStore();
 
   return data(response.headers.get('location') ?? response.url);
 }
