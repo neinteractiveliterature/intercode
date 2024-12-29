@@ -19,8 +19,6 @@ export async function action({ request, context }: Route.ActionArgs) {
     },
   });
 
-  console.log(response);
-
   if (!response.ok) {
     const responseJson = await response.json();
     throw new Error(responseJson.error);
