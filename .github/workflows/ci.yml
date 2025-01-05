@@ -227,7 +227,7 @@ jobs:
           path: doc-site.tar.gz
   coverage-report:
     runs-on: ubuntu-latest
-    if: github.event_name == 'pull_request' && github.actor != 'dependabot[bot]'
+    if: github.actor != 'dependabot[bot]'
     needs:
       - vitest
       - minitest
@@ -253,6 +253,7 @@ jobs:
           artifact_download_workflow_names: 'ci,cron'
           only_list_changed_files: true
       - name: Add Coverage PR Comment
+        if: github.event_name == 'pull_request'
         uses: marocchino/sticky-pull-request-comment@v2
         with:
           recreate: true
