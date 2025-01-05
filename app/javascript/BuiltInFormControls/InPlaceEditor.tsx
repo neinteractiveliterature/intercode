@@ -148,9 +148,7 @@ function propsHasRenderer<T>(props: InPlaceEditorProps<T>): props is InPlaceEdit
   return 'renderInput' in props && typeof props['renderInput'] === 'function';
 }
 
-function InPlaceEditor<T extends ReactNode, InputType extends HTMLElement = HTMLElement>(
-  props: InPlaceEditorProps<T>,
-): JSX.Element {
+function InPlaceEditor<T, InputType extends HTMLElement = HTMLElement>(props: InPlaceEditorProps<T>): JSX.Element {
   const { children, className, onChange, value } = props;
   const [editing, setEditing] = useState(false);
   const inputRef = useRef<InputType>();
@@ -211,7 +209,7 @@ function InPlaceEditor<T extends ReactNode, InputType extends HTMLElement = HTML
   return (
     <div className="d-flex">
       <div>
-        <>{children || value}</>
+        <>{children || (value as ReactNode)}</>
       </div>
       <button type="button" className="btn btn-link btn-sm" onClick={beginEditing} aria-label="Edit">
         <i className="bi-pencil-fill" />

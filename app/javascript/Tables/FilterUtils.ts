@@ -105,7 +105,7 @@ const jsonCodec: FilterCodec<unknown> = {
 
     try {
       return JSON.parse(value);
-    } catch (err) {
+    } catch {
       return null;
     }
   },
