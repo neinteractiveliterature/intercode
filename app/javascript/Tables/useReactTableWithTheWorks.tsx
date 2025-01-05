@@ -1,5 +1,5 @@
 import React, { createContext, useMemo, useEffect, InputHTMLAttributes } from 'react';
-import { ApolloError, ApolloQueryResult, MaybeMasked } from '@apollo/client';
+import { MaybeMasked } from '@apollo/client';
 import {
   CellProps,
   Column,
