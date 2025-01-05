@@ -54,6 +54,7 @@ function ColumnSelector<RowType extends Record<string, unknown>>({
         multiple
         choices={possibleColumns
           .filter((column) => column.id != null && !alwaysVisibleColumns.includes(column.id))
+          // @ts-expect-error This technically isn't allowed but the headers we're passing always work with this
           .map((column) => (column.id != null ? { label: <>{column.Header}</>, value: column.id } : undefined))
           .filter(notEmpty)}
         value={visibleColumnIds}

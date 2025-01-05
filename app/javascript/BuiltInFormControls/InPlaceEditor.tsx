@@ -148,7 +148,9 @@ function propsHasRenderer<T>(props: InPlaceEditorProps<T>): props is InPlaceEdit
   return 'renderInput' in props && typeof props['renderInput'] === 'function';
 }
 
-function InPlaceEditor<T, InputType extends HTMLElement = HTMLElement>(props: InPlaceEditorProps<T>): JSX.Element {
+function InPlaceEditor<T extends ReactNode, InputType extends HTMLElement = HTMLElement>(
+  props: InPlaceEditorProps<T>,
+): JSX.Element {
   const { children, className, onChange, value } = props;
   const [editing, setEditing] = useState(false);
   const inputRef = useRef<InputType>();
