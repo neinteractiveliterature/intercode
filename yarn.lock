@@ -8003,6 +8003,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@types/array-to-sentence@npm:^2.0.0":
+  version: 2.0.0
+  resolution: "@types/array-to-sentence@npm:2.0.0"
+  checksum: 10c0/fdf2466683d9db1a2e3cccccf91876e6c02c23daa9fafb890a323cfd529b1135a0002293fba12094a8a8bbfa348f3d9dd41d9a9a45665f5846dc73ceefdb0298
+  languageName: node
+  linkType: hard
+
 "@types/body-parser@npm:*":
   version: 1.19.2
   resolution: "@types/body-parser@npm:1.19.2"
@@ -23380,6 +23387,7 @@ __metadata:
     "@testing-library/react": "npm:16.3.0"
     "@testing-library/react-hooks": "npm:8.0.1"
     "@testing-library/user-event": "npm:^14.5.2"
+    "@types/array-to-sentence": "npm:^2.0.0"
     "@types/bootstrap": "npm:5.2.10"
     "@types/bytes": "npm:3.1.5"
     "@types/debounce-promise": "npm:3.1.9"
