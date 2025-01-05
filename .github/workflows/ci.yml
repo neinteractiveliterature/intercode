@@ -233,21 +233,15 @@ jobs:
       - minitest
     steps:
       - name: Download Minitest coverage
-        uses: dawidd6/action-download-artifact@v7
+        uses: actions/download-artifact@v4
         with:
-          workflow: ci.yml
-          commit: ${{ github.sha }}
           name: minitest-coverage
           path: minitest-coverage
-          github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Download Vitest coverage
-        uses: dawidd6/action-download-artifact@v7
+        uses: actions/download-artifact@v4
         with:
-          workflow: ci.yml
-          commit: ${{ github.sha }}
           name: vitest-coverage
           path: vitest-coverage
-          github_token: ${{ secrets.GITHUB_TOKEN }}
       - name: Merge coverage reports
         run: npx cobertura-merge -o merged-coverage.xml package1=minitest-coverage/coverage.xml package2=vitestcoverage/cobertura-coverage.xml
       - name: Generate Coverage Report
