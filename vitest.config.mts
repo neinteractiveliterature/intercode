@@ -11,7 +11,7 @@ const viteConfigWithoutHttps = defineConfig({
   test: {
     coverage: {
       enabled: true,
-      include: ['./app/javascript/**/*.{js,jsx,ts,tsx}'],
+      include: ['app/javascript/**/*.{js,jsx,ts,tsx}'],
       reportsDirectory: absolutePath('./coverage'),
       reporter: ['text', 'lcov'],
       reportOnFailure: true,
