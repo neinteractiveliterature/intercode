@@ -25,7 +25,7 @@ function updateCacheAfterSignup(
   run: EventPageQueryData['convention']['event']['runs'][0],
   signup: EventPageQueryData['convention']['event']['runs'][0]['my_signups'][0],
 ) {
-  const data = cache.readQuery<EventPageQueryData, EventPageQueryVariables>({
+  const data = cache.readQuery({
     query: EventPageQueryDocument,
     variables: { eventId: event.id },
   });
@@ -33,7 +33,7 @@ function updateCacheAfterSignup(
     return;
   }
 
-  cache.writeQuery<EventPageQueryData>({
+  cache.writeQuery({
     query: EventPageQueryDocument,
     variables: { eventId: event.id },
     data: {
@@ -117,7 +117,6 @@ function EventPageRunCard({
           },
         });
 
-        await client.resetStore();
         revalidator.revalidate();
         window.requestAnimationFrame(async () => {
           await client.resetStore();
