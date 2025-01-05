@@ -1,10 +1,9 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { Column } from 'react-table';
-import { ChoiceSet } from '@neinteractiveliterature/litform';
+import { ChoiceSet, notEmpty } from '@neinteractiveliterature/litform';
 
 import { DropdownMenu } from '../UIComponents/DropdownMenu';
-import { notEmpty } from '@neinteractiveliterature/litform/lib/ValueUtils';
 
 export type ColumnSelectorProps<RowType extends Record<string, unknown>> = {
   alwaysVisibleColumns: string[];
@@ -55,6 +54,7 @@ function ColumnSelector<RowType extends Record<string, unknown>>({
         multiple
         choices={possibleColumns
           .filter((column) => column.id != null && !alwaysVisibleColumns.includes(column.id))
+          // @ts-expect-error This technically isn't allowed but the headers we're passing always work with this
           .map((column) => (column.id != null ? { label: <>{column.Header}</>, value: column.id } : undefined))
           .filter(notEmpty)}
         value={visibleColumnIds}

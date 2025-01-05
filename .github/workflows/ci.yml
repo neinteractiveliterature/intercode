@@ -46,7 +46,7 @@ jobs:
       - name: yarn install
         run: yarn install
       - name: build
-        run: yarn run test
+        run: COVERAGE=true yarn run test
       - name: Publish Test Report
         uses: mikepenz/action-junit-report@v5
         if: always() # always run even if the previous step fails
@@ -59,6 +59,12 @@ jobs:
         with:
           name: vitest-reports
           path: test/html_reports/*
+      - name: Archive coverage report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: vitest-coverage
+          path: coverage/*
   minitest:
     permissions: write-all
     name: minitest
@@ -96,24 +102,6 @@ jobs:
         run: bundle exec rails db:create db:migrate
       - name: Run tests
         run: TERM=xterm-color bundle exec rails test
-      - name: Generate Coverage Report
-        uses: clearlyip/code-coverage-report-action@v5
-        id: code_coverage_report_action
-        #Dont run for dependabot unless you fix PR comment permissions
-        if: ${{ github.actor != 'dependabot[bot]'}}
-        with:
-          #Location of the generate coverage file
-          filename: 'coverage/coverage.xml'
-          fail_on_negative_difference: true
-          artifact_download_workflow_names: 'ci,cron'
-          only_list_changed_files: true
-      - name: Add Coverage PR Comment
-        uses: marocchino/sticky-pull-request-comment@v2
-        #Make sure the report was generated and that the event is actually a pull request, run if failed or success
-        if: steps.code_coverage_report_action.outputs.file != '' && github.event_name == 'pull_request' && (success() || failure())
-        with:
-          recreate: true
-          path: code-coverage-results.md
       - name: Publish Test Report
         uses: mikepenz/action-junit-report@v5
         if: always() # always run even if the previous step fails
@@ -126,6 +114,12 @@ jobs:
         with:
           name: minitest-reports
           path: test/html_reports/*
+      - name: Archive coverage report
+        uses: actions/upload-artifact@v4
+        if: always()
+        with:
+          name: minitest-coverage
+          path: coverage/*
   docker-build:
     runs-on: ubuntu-latest
     steps:
@@ -231,6 +225,38 @@ jobs:
         with:
           name: doc-site
           path: doc-site.tar.gz
+  coverage-report:
+    runs-on: ubuntu-latest
+    if: github.event_name == 'pull_request' && github.actor != 'dependabot[bot]'
+    needs:
+      - vitest
+      - minitest
+    steps:
+      - name: Download Minitest coverage
+        uses: actions/download-artifact@v4
+        with:
+          name: minitest-coverage
+          path: minitest-coverage
+      - name: Download Vitest coverage
+        uses: actions/download-artifact@v4
+        with:
+          name: vitest-coverage
+          path: vitest-coverage
+      - name: Merge coverage reports
+        run: npx cobertura-merge -o merged-coverage.xml package1=minitest-coverage/coverage.xml package2=vitest-coverage/cobertura-coverage.xml
+      - name: Generate Coverage Report
+        uses: clearlyip/code-coverage-report-action@v5
+        id: code_coverage_report_action
+        with:
+          filename: 'merged-coverage.xml'
+          fail_on_negative_difference: true
+          artifact_download_workflow_names: 'ci,cron'
+          only_list_changed_files: true
+      - name: Add Coverage PR Comment
+        uses: marocchino/sticky-pull-request-comment@v2
+        with:
+          recreate: true
+          path: code-coverage-results.md
   update-release-draft:
     runs-on: ubuntu-latest
     if: github.event_name == 'push' && github.event.ref == 'refs/heads/main'

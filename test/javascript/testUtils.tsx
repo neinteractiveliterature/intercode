@@ -37,12 +37,25 @@ function TestWrapper({
     () => ({ ...appRootContextDefaultValue, ...appRootContextValue }),
     [appRootContextValue],
   );
-  const router = createMemoryRouter([
+  const router = createMemoryRouter(
+    [
+      {
+        path: '*',
+        Component: () => (
+          <Suspense fallback={<div data-testid="test-wrapper-suspense-fallback" />}>{children}</Suspense>
+        ),
+      },
+    ],
     {
-      path: '*',
-      Component: () => <Suspense fallback={<div data-testid="test-wrapper-suspense-fallback" />}>{children}</Suspense>,
+      future: {
+        v7_fetcherPersist: true,
+        v7_normalizeFormMethod: true,
+        v7_partialHydration: true,
+        v7_relativeSplatPath: true,
+        v7_skipActionErrorRevalidation: true,
+      },
     },
-  ]);
+  );
 
   return (
     <AppRootContext.Provider value={effectiveAppRootContextValue}>
@@ -50,7 +63,7 @@ function TestWrapper({
         <LazyStripeContext.Provider value={lazyStripeProviderValue}>
           <Confirm>
             <I18nextProvider i18n={i18nInstance}>
-              <RouterProvider router={router} />
+              <RouterProvider router={router} future={{ v7_startTransition: true }} />
             </I18nextProvider>
           </Confirm>
         </LazyStripeContext.Provider>

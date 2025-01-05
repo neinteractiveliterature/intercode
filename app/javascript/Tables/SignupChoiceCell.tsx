@@ -1,7 +1,8 @@
+import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { CellProps } from 'react-table';
 
-function SignupChoiceCell<RowType extends { counted?: boolean | null }, ValueType>({
+function SignupChoiceCell<RowType extends { counted?: boolean | null }, ValueType extends ReactNode>({
   value,
   row: { original },
 }: CellProps<RowType, ValueType>): JSX.Element {

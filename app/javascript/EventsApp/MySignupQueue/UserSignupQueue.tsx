@@ -28,12 +28,14 @@ function UserSignupQueue({ userConProfile, refetchQueries, readOnly }: UserSignu
   const revalidator = useRevalidator();
   const [deleteSignupRankedChoice] = useMutation(DeleteSignupRankedChoiceDocument, {
     refetchQueries,
+    awaitRefetchQueries: true,
     onCompleted: revalidator.revalidate,
   });
   const [updateSignupRankedChoicePriority, { loading: updatePriorityLoading }] = useMutation(
     UpdateSignupRankedChoicePriorityDocument,
     {
       refetchQueries,
+      awaitRefetchQueries: true,
       onCompleted: revalidator.revalidate,
     },
   );

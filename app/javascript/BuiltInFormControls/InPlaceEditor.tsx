@@ -209,7 +209,7 @@ function InPlaceEditor<T, InputType extends HTMLElement = HTMLElement>(props: In
   return (
     <div className="d-flex">
       <div>
-        <>{children || value}</>
+        <>{children || (value as ReactNode)}</>
       </div>
       <button type="button" className="btn btn-link btn-sm" onClick={beginEditing} aria-label="Edit">
         <i className="bi-pencil-fill" />

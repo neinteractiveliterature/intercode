@@ -11,13 +11,13 @@ import { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
 import AppRootContext from '../AppRootContext';
 import { PricingStrategy, Product } from '../graphqlTypes.generated';
-import { ModalData } from '@neinteractiveliterature/litform/dist/useModal';
 import NewTicketProvidingProductModal from './NewTicketProvidingProductModal';
 import EditTicketProvidingProductModal, {
   EditTicketProvidingProductModalProps,
 } from './EditTicketProvidingProductModal';
 import { TicketTypeLoaderResult } from './loaders';
 import { AdminPricingStructureDescription } from 'Store/describePricingStructure';
+import type { ModalData } from '@neinteractiveliterature/litform/dist/types/useModal';
 
 type TicketTypeType = AdminTicketTypesQueryData['convention']['ticket_types'][0];
 

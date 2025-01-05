@@ -1,13 +1,13 @@
 import { useState, useEffect } from 'react';
 import * as React from 'react';
 import { Modal } from 'react-bootstrap4-modal';
-import { ModalData } from '@neinteractiveliterature/litform/lib/useModal';
 
 import EnumTypes from '../../enumTypes.json';
 import MoneyInput from '../MoneyInput';
 import { Money } from '../../graphqlTypes.generated';
 import PricingStructureForm, { PricingStructureFormProps } from './PricingStructureForm';
 import { useTranslation } from 'react-i18next';
+import type { ModalData } from '@neinteractiveliterature/litform/dist/types/useModal';
 
 type EditingPricingStructure = PricingStructureFormProps['pricingStructure'];
 

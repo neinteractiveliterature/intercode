@@ -7,7 +7,7 @@ import {
   liquid,
   useModal,
 } from '@neinteractiveliterature/litform';
-import type { CodeInputProps } from '@neinteractiveliterature/litform/lib/CodeInput';
+import type { CodeInputProps } from '@neinteractiveliterature/litform/dist/types/CodeInput';
 import { useTranslation } from 'react-i18next';
 import { markdown } from '@codemirror/lang-markdown';
 import { useMemo } from 'react';

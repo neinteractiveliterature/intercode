@@ -1,5 +1,5 @@
 import React, { createContext, useMemo, useEffect, InputHTMLAttributes } from 'react';
-import { ApolloError, ApolloQueryResult } from '@apollo/client';
+import { MaybeMasked } from '@apollo/client';
 import {
   CellProps,
   Column,
@@ -19,7 +19,11 @@ import {
 } from 'react-table';
 
 import useColumnSelection, { UseColumnSelectionOptions, UseColumnSelectionResult } from './useColumnSelection';
-import useGraphQLReactTable, { GraphQLReactTableVariables, UseGraphQLReactTableOptions } from './useGraphQLReactTable';
+import useGraphQLReactTable, {
+  GraphQLReactTableVariables,
+  UseGraphQLReactTableOptions,
+  UseGraphQLReactTableResult,
+} from './useGraphQLReactTable';
 import useLocalStorageReactTable, { UseLocalStorageReactTableOptions } from './useLocalStorageReactTable';
 import useReactRouterReactTable, { UseReactRouterReactTableOptions } from './useReactRouterReactTable';
 import useCachedLoadableValue from '../useCachedLoadableValue';
@@ -59,7 +63,7 @@ export type UseReactTableWithTheWorksOptions<
   UseLocalStorageReactTableOptions &
   UseReactRouterReactTableOptions<RowType> & {
     defaultState?: Partial<TableState<RowType>>;
-    getPossibleColumns: (queryData: QueryData) => Column<RowType>[];
+    getPossibleColumns: (queryData: MaybeMasked<QueryData>) => Column<RowType>[];
     storageKeyPrefix: string;
     rowSelect?: boolean;
   };
@@ -68,13 +72,9 @@ export type UseReactTableWithTheWorksResult<
   QueryData,
   RowType extends Record<string, unknown>,
   Variables extends GraphQLReactTableVariables = GraphQLReactTableVariables,
-> = {
+> = Pick<UseGraphQLReactTableResult<RowType, QueryData, Variables>, 'refetch' | 'queryData' | 'loading' | 'error'> & {
   tableInstance: TableInstance<RowType>;
   columnSelectionProps: UseColumnSelectionResult<RowType>;
-  error: ApolloError | undefined;
-  loading: boolean;
-  refetch: (variables?: Partial<Variables>) => Promise<ApolloQueryResult<QueryData>>;
-  queryData: QueryData | null | undefined;
   tableHeaderProps: TableHeaderProps<RowType>;
 };
 

@@ -11,7 +11,7 @@ import { usePendingChoices } from './usePendingChoices';
 import { client } from '../../useIntercodeApolloClient';
 
 export const loader: LoaderFunction = async () => {
-  const { data } = await client.query<MySignupQueueQueryData>({ query: MySignupQueueQueryDocument });
+  const { data } = await client.query({ query: MySignupQueueQueryDocument });
   return data;
 };
 
