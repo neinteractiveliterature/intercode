@@ -2,7 +2,7 @@ import { useCallback, useContext, useEffect } from 'react';
 import { useNavigate, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { useFetcher } from 'react-router-dom';
-import useModal from '@neinteractiveliterature/litform/lib/useModal';
+import useModal from '@neinteractiveliterature/litform/dist/types/useModal';
 import { FormEditorContext } from 'FormAdmin/FormEditorContexts';
 import { CreateFormItemMutationData } from 'FormAdmin/mutations.generated';
 import { buildFormItemInput, ParsedFormItem } from 'FormAdmin/FormItemUtils';

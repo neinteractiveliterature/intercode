@@ -1,7 +1,7 @@
-import { notEmpty } from '@neinteractiveliterature/litform/lib/ValueUtils';
 import { useEffect, useContext } from 'react';
 
 import AppRootContext from './AppRootContext';
+import { notEmpty } from '@neinteractiveliterature/litform';
 
 export default function usePageTitle(title?: string | null): void {
   const { conventionName, rootSiteName } = useContext(AppRootContext);

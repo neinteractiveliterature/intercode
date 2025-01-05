@@ -11,7 +11,7 @@ import {
   UseStandardCodeMirrorExtensionsOptions,
   liquid,
 } from '@neinteractiveliterature/litform';
-import { CodeInputProps } from '@neinteractiveliterature/litform/lib/CodeInput';
+import { CodeInputProps } from '@neinteractiveliterature/litform/dist/types/CodeInput';
 import { Extension } from '@codemirror/state';
 
 import MenuIcon from '../NavigationBar/MenuIcon';

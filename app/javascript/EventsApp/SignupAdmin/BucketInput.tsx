@@ -1,7 +1,7 @@
 import { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
 import { MultipleChoiceInput } from '@neinteractiveliterature/litform';
-import { MultipleChoiceInputProps } from '@neinteractiveliterature/litform/lib/MultipleChoiceInput';
+import { MultipleChoiceInputProps } from '@neinteractiveliterature/litform/dist/types/MultipleChoiceInput';
 
 import { SignupFieldsFragment } from './queries.generated';
 

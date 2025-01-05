@@ -12,7 +12,7 @@ import PersonalScheduleFiltersBar, { usePersonalScheduleFilters } from './Schedu
 import { useAuthorizationRequiredWithoutLogin } from '../Authentication/useAuthorizationRequired';
 import { ScheduleGridConfig, allConfigs } from './ScheduleGrid/ScheduleGridConfig';
 import { conventionRequiresDates } from './runTimeFormatting';
-import { notEmpty } from '@neinteractiveliterature/litform/dist';
+import { notEmpty } from '@neinteractiveliterature/litform';
 import {
   ScheduleGridConventionDataQueryData,
   ScheduleGridConventionDataQueryDocument,

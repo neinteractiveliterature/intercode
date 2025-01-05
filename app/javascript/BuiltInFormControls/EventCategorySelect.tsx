@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { BootstrapFormSelect } from '@neinteractiveliterature/litform';
-import { BootstrapFormSelectProps } from '@neinteractiveliterature/litform/lib/BootstrapFormSelect';
+import { BootstrapFormSelectProps } from '@neinteractiveliterature/litform/dist/types/BootstrapFormSelect';
 
 import { EventCategory } from '../graphqlTypes.generated';
 import humanize from '../humanize';

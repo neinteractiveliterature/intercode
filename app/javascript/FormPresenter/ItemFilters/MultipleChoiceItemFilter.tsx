@@ -1,4 +1,4 @@
-import { ChoiceSet } from '@neinteractiveliterature/litform/dist';
+import { ChoiceSet } from '@neinteractiveliterature/litform';
 import { useMemo } from 'react';
 import { MultipleChoiceFormItem } from '../../FormAdmin/FormItemUtils';
 import { CommonFormItemFilterProps } from './CommonFormItemFilterProps';
