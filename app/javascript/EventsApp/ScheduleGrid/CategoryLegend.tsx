@@ -1,7 +1,7 @@
 import { useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import groupBy from 'lodash/groupBy';
-import { sortByLocaleString } from '@neinteractiveliterature/litform/dist/types/ValueUtils';
+import { sortByLocaleString } from '@neinteractiveliterature/litform';
 
 import FakeEventRun from './FakeEventRun';
 import { CommonConventionDataQueryDocument } from '../queries.generated';

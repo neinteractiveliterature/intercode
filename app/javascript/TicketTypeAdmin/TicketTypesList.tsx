@@ -17,7 +17,7 @@ import EditTicketProvidingProductModal, {
 } from './EditTicketProvidingProductModal';
 import { TicketTypeLoaderResult } from './loaders';
 import { AdminPricingStructureDescription } from 'Store/describePricingStructure';
-import { ModalData } from '@neinteractiveliterature/litform/dist/types/useModal';
+import type { ModalData } from '@neinteractiveliterature/litform/dist/types/useModal';
 
 type TicketTypeType = AdminTicketTypesQueryData['convention']['ticket_types'][0];
 

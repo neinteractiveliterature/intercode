@@ -1,5 +1,5 @@
 import { BootstrapFormCheckbox, ErrorDisplay } from '@neinteractiveliterature/litform';
-import useModal from '@neinteractiveliterature/litform/dist/types/useModal';
+import { useModal } from '@neinteractiveliterature/litform';
 import { Fragment, useContext, useEffect, useMemo, useState } from 'react';
 import Modal from 'react-bootstrap4-modal';
 import { Link, useFetcher } from 'react-router-dom';

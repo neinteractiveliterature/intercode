@@ -6,6 +6,7 @@ const viteConfigWithoutHttps = defineConfig({
   server: {
     ...viteConfig.server,
     https: undefined,
+    proxy: undefined,
   },
   test: {
     coverage: {
@@ -24,6 +25,11 @@ const viteConfigWithoutHttps = defineConfig({
       ['junit', { outputFile: absolutePath('./test/reports/TEST-jest.xml') }],
       ['html', { outputFile: absolutePath('./test/html_reports/jest-report.html') }],
     ],
+    server: {
+      deps: {
+        inline: ['@neinteractiveliterature/litform'],
+      },
+    },
   },
 });
 
