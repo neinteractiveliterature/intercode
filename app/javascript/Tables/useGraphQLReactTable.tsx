@@ -1,12 +1,5 @@
 import { useMemo } from 'react';
-import {
-  QueryResult,
-  ApolloQueryResult,
-  ApolloError,
-  OperationVariables,
-  TypedDocumentNode,
-  useQuery,
-} from '@apollo/client';
+import { QueryResult, ApolloError, OperationVariables, TypedDocumentNode, useQuery } from '@apollo/client';
 import { Filters, SortingRule } from 'react-table';
 
 import { reactTableFiltersToTableResultsFilters, reactTableSortToTableResultsSort } from './TableUtils';
@@ -48,6 +41,19 @@ export type UseGraphQLReactTableOptions<
   pageSize?: number;
 };
 
+export type UseGraphQLReactTableResult<
+  RowType extends Record<string, unknown>,
+  QueryData,
+  Variables extends GraphQLReactTableVariables = GraphQLReactTableVariables,
+> = {
+  data: RowType[];
+  pages: number;
+  refetch: QueryResult<QueryData, Variables>['refetch'];
+  loading: boolean;
+  error?: ApolloError;
+  queryData: QueryResult<QueryData, Variables>['data'];
+};
+
 export default function useGraphQLReactTable<
   RowType extends Record<string, unknown>,
   QueryData,
@@ -61,14 +67,11 @@ export default function useGraphQLReactTable<
   sortBy,
   page,
   pageSize,
-}: UseGraphQLReactTableOptions<RowType, QueryData, Variables>): {
-  data: RowType[];
-  pages: number;
-  refetch: (variables?: Partial<Variables>) => Promise<ApolloQueryResult<QueryData>>;
-  loading: boolean;
-  error?: ApolloError;
-  queryData: QueryData | null | undefined;
-} {
+}: UseGraphQLReactTableOptions<RowType, QueryData, Variables>): UseGraphQLReactTableResult<
+  RowType,
+  QueryData,
+  Variables
+> {
   const effectiveVariables = useMemo(
     () => ({
       ...(variables as Variables),
@@ -99,7 +102,15 @@ export default function useGraphQLReactTable<
   );
 
   const result = useMemo(
-    () => ({ data: tableData ?? [], pages: pages ?? 0, refetch, loading, error, queryData }),
+    () =>
+      ({
+        data: tableData ?? [],
+        pages: pages ?? 0,
+        refetch,
+        loading,
+        error,
+        queryData: queryData ?? undefined,
+      }) satisfies UseGraphQLReactTableResult<RowType, QueryData, Variables>,
     [tableData, pages, refetch, loading, error, queryData],
   );
 
