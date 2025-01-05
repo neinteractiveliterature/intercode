@@ -13,7 +13,7 @@ const viteConfigWithoutHttps = defineConfig({
       enabled: process.env['COVERAGE'] ? true : false,
       include: ['app/javascript/**/*.{js,jsx,ts,tsx}'],
       reportsDirectory: absolutePath('./coverage'),
-      reporter: ['text', 'lcov'],
+      reporter: ['text', 'cobertura'],
       reportOnFailure: true,
     },
     environment: 'jsdom',
