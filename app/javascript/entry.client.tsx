@@ -7,7 +7,7 @@ import AuthenticityTokensManager, {
   getAuthenticityTokensURL,
 } from 'AuthenticityTokensContext';
 
-const manager = new AuthenticityTokensManager(undefined, getAuthenticityTokensURL());
+const manager = new AuthenticityTokensManager(fetch, undefined, getAuthenticityTokensURL());
 
 startTransition(() => {
   hydrateRoot(
