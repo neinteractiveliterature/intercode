@@ -1,6 +1,6 @@
 {
   "engines": {
-    "node": "20.x"
+    "node": "22.x"
   },
   "workspaces": [
     ".",
@@ -179,7 +179,7 @@
     "@types/bootstrap": "5.2.10",
     "@types/events": "3.0.3",
     "@types/md5": "^2",
-    "@types/node": "20.17.11",
+    "@types/node": "22.10.5",
     "@types/punycode": "2.1.4",
     "@types/qs": "^6",
     "@types/rails__activestorage": "7.1.1",
