@@ -168,7 +168,7 @@
     "@graphql-eslint/eslint-plugin": "3.20.1",
     "@prettier/plugin-ruby": "4.0.4",
     "@rollup/plugin-commonjs": "^28.0.1",
-    "@rollup/plugin-node-resolve": "^15.3.0",
+    "@rollup/plugin-node-resolve": "^16.0.0",
     "@rollup/plugin-replace": "^6.0.1",
     "@rollup/plugin-swc": "^0.4.0",
     "@swc/core": "^1.9.2",
