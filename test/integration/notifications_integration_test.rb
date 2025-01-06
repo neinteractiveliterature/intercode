@@ -1,11 +1,11 @@
-require 'test_helper'
+require "test_helper"
 
 class NotificationsIntegrationTest < ActiveSupport::TestCase
   let(:convention) do
     create(:convention, :with_standard_content).tap do |c|
       user_con_profile = create(:user_con_profile, convention: c)
-      event_form = c.forms.find_by!(form_type: 'event')
-      event_proposal_form = c.forms.find_by!(form_type: 'event_proposal')
+      event_form = c.forms.find_by!(form_type: "event")
+      event_proposal_form = c.forms.find_by!(form_type: "event_proposal")
       event_category =
         create(:event_category, convention: c, event_proposal_form: event_proposal_form, event_form: event_form)
       event_proposal = create(:event_proposal, convention: c, event_category: event_category)
@@ -23,14 +23,14 @@ class NotificationsIntegrationTest < ActiveSupport::TestCase
     end
   end
 
-  Notifier::NOTIFICATIONS_CONFIG['categories'].each do |category|
-    category['events'].each do |event|
-      event_key = "#{category['key']}/#{event['key']}"
+  Notifier::NOTIFICATIONS_CONFIG["categories"].each do |category|
+    category["events"].each do |event|
+      event_key = "#{category["key"]}/#{event["key"]}"
       describe event_key do
-        it 'renders without errors' do
+        it "renders without errors" do
           notifier = NotifierPreviewFactory.new(convention: convention, event_key: event_key).notifier
 
-          notifier.render
+          assert notifier.render
         end
       end
     end
