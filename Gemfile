@@ -59,7 +59,9 @@ gem "apollo_upload_server", "2.1.6"
 gem "graphql-rails_logger", groups: %i[development test]
 
 # Email stuff
+gem "aws-actionmailer-ses"
 gem "aws-sdk-rails"
+gem "aws-sdk-ses"
 gem "aws-sdk-sns"
 
 # Markdown
