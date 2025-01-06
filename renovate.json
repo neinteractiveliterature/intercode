@@ -1,6 +1,6 @@
 {
   "labels": ["dependencies"],
-  "extends": ["config:base"],
+  "extends": ["config:recommended"],
   "packageRules": [
     {
       "matchUpdateTypes": ["minor", "patch", "pin", "digest"],
