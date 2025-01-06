@@ -83,6 +83,7 @@ gem "ahoy_matey"
 gem "lograge"
 
 # Miscellany
+gem "csv"
 gem "dalli"
 gem "domain_prefix"
 gem "icalendar"
