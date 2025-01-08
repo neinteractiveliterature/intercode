@@ -1,4 +1,9 @@
 # frozen_string_literal: true
+
+# The routes file is what ultimately gets the Devise methods to exist on ApplicationController (in the devise_for call).
+# Loading the GraphqlController::Context class will fail unless we do this explicitly as of Rails 8.
+require Rails.application.root.join("config/routes")
+
 class GraphqlController < ApplicationController
   class Context
     METHODS =
