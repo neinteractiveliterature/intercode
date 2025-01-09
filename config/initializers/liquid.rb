@@ -1,6 +1,6 @@
 Rails.application.config.to_prepare do
-  require 'intercode/liquid/tags'
-  require 'intercode/liquid/filters'
+  require "intercode/liquid/tags"
+  require "intercode/liquid/filters"
 end
 
 Liquid::Template.default_exception_renderer = ->(exception) do
@@ -18,7 +18,7 @@ Liquid::Template.default_exception_renderer = ->(exception) do
 end
 
 # Patching Money and Money::Currency to convert to our Liquid drops
-require 'money'
+require "money"
 class Money
   def to_liquid
     MoneyDrop.new(self)
@@ -48,7 +48,7 @@ module Liquid::Utils
     end
 
     case obj
-    when 'now'.freeze, 'today'.freeze
+    when "now".freeze, "today".freeze
       Time.zone.now
     when /\A\d+\z/, Integer
       Time.zone.at(obj.to_i)

@@ -20,7 +20,7 @@ require "minitest/reporters"
 if ENV["CI"].present?
   Minitest::Reporters.use!(
     [
-      Minitest::Reporters::DefaultReporter.new,
+      Minitest::Reporters::SpecReporter.new,
       Minitest::Reporters::HtmlReporter.new(output_filename: "minitest-report.html"),
       Minitest::Reporters::JUnitReporter.new
     ],
