@@ -2,22 +2,23 @@
 
 # The routes file is what ultimately gets the Devise methods to exist on ApplicationController (in the devise_for call).
 # Loading the GraphqlController::Context class will fail unless we do this explicitly as of Rails 8.
-require Rails.application.root.join("config/routes")
+# require Rails.application.root.join("config/routes")
 
 class GraphqlController < ApplicationController
   class Context
-    METHODS =
-      {
-        current_user: :current_user,
-        pundit_user: :pundit_user,
-        user_con_profile: :user_con_profile,
-        convention: :convention,
-        cadmus_renderer: :cadmus_renderer,
-        current_pending_order: :current_pending_order,
-        assumed_identity_from_profile: :assumed_identity_from_profile,
-        verified_request: :verified_request?,
-        timezone_for_request: :timezone_for_request
-      }.transform_values { |method_name| ApplicationController.instance_method(method_name) }
+    METHODS = {
+      current_user: :current_user,
+      pundit_user: :pundit_user,
+      user_con_profile: :user_con_profile,
+      convention: :convention,
+      cadmus_renderer: :cadmus_renderer,
+      current_pending_order: :current_pending_order,
+      assumed_identity_from_profile: :assumed_identity_from_profile,
+      verified_request: :verified_request?,
+      timezone_for_request: :timezone_for_request
+    }
+
+    METHOD_CACHE = {}
 
     def initialize(controller, **values)
       @controller = controller
@@ -36,7 +37,8 @@ class GraphqlController < ApplicationController
       if key == :controller
         @controller
       elsif METHODS.key?(key)
-        @values[key] ||= METHODS[key].bind_call(@controller)
+        METHOD_CACHE[key] ||= ApplicationController.instance_method(METHODS[key])
+        @values[key] ||= METHOD_CACHE[key].bind_call(@controller)
         @values[key]
       else
         @values[key]
