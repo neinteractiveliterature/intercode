@@ -492,7 +492,7 @@ GEM
     rexml (3.3.9)
     rollbar (3.6.0)
     rouge (3.26.1)
-    rubocop (1.69.2)
+    rubocop (1.70.0)
       json (~> 2.3)
       language_server-protocol (>= 3.17.0)
       parallel (~> 1.10)
@@ -700,7 +700,7 @@ DEPENDENCIES
   redcarpet
   reverse_markdown
   rollbar
-  rubocop (= 1.69.2)
+  rubocop (= 1.70.0)
   rubocop-factory_bot
   rubocop-graphql
   rubocop-performance
