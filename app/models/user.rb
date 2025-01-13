@@ -53,12 +53,15 @@ class User < ApplicationRecord
   has_many :event_proposals, through: :user_con_profiles
   has_many :user_activity_alerts, dependent: :nullify
   has_many :tickets, through: :user_con_profiles
+  has_many :signups, through: :user_con_profiles
+  has_many :signup_requests, through: :user_con_profiles
+  has_many :signup_ranked_choices, through: :user_con_profiles
   has_and_belongs_to_many :organization_roles
 
   attr_accessor :reset_password_mail_options
 
   def privileges
-    site_admin? ? ['site_admin'] : []
+    site_admin? ? ["site_admin"] : []
   end
 
   def blank_password!
