@@ -126,18 +126,18 @@ class Types::RunType < Types::BaseObject
   end
 
   def my_signups
-    return [] unless context[:user_con_profile]
-    dataloader.with(Sources::MySignups, context[:user_con_profile]).load(object)
+    return [] unless context[:current_user]
+    dataloader.with(Sources::MySignups, context[:current_user]).load(object)
   end
 
   def my_signup_requests
-    return [] unless context[:user_con_profile]
-    dataloader.with(Sources::MySignupRequests, context[:user_con_profile]).load(object)
+    return [] unless context[:current_user]
+    dataloader.with(Sources::MySignupRequests, context[:current_user]).load(object)
   end
 
   def my_signup_ranked_choices
-    return [] unless context[:user_con_profile]
-    dataloader.with(Sources::MySignupRankedChoices, context[:user_con_profile]).load(object)
+    return [] unless context[:current_user]
+    dataloader.with(Sources::MySignupRankedChoices, context[:current_user]).load(object)
   end
 
   def current_ability_can_signup_summary_run
