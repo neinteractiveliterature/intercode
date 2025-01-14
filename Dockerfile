@@ -10,7 +10,7 @@ USER root
 RUN useradd www
 WORKDIR /usr/src/intercode
 
-RUN apt-get update && apt-get install -y libvips42 git build-essential shared-mime-info libpq-dev libmariadb-dev && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y libvips42 git build-essential shared-mime-info libpq-dev libmariadb-dev libyaml-dev && rm -rf /var/lib/apt/lists/*
 
 COPY --chown=www:www Gemfile Gemfile.lock .ruby-version /usr/src/intercode/
 RUN bundle config set without 'development test' \
