@@ -216,7 +216,7 @@ GEM
     devise-encryptable (0.2.0)
       devise (>= 2.1.0)
     docile (1.4.0)
-    domain_prefix (0.4.20210906)
+    domain_prefix (1.0.20241203)
       json
       simpleidn (>= 0.0.5)
     doorkeeper (5.8.1)
@@ -551,8 +551,7 @@ GEM
       simplecov (~> 0.19)
     simplecov-html (0.12.3)
     simplecov_json_formatter (0.1.4)
-    simpleidn (0.2.1)
-      unf (~> 0.1.4)
+    simpleidn (0.2.3)
     skylight (6.0.4)
       activesupport (>= 5.2.0)
     slop (3.6.0)
@@ -602,9 +601,6 @@ GEM
       concurrent-ruby (~> 1.0)
     tzinfo-data (1.2024.2)
       tzinfo (>= 1.0.0)
-    unf (0.1.4)
-      unf_ext
-    unf_ext (0.0.8)
     unicode-display_width (2.6.0)
     uri (1.0.2)
     useragent (0.16.11)
