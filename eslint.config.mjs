@@ -222,22 +222,17 @@ export default [
   },
   {
     files: ['app/**/*.graphql', 'test/**/*.graphql'],
-    plugins: { '@graphql-eslint': fixupPluginRules(graphqlEslint) },
+    plugins: { '@graphql-eslint': graphqlEslint },
 
     languageOptions: {
-      ...graphqlEslint.flatConfigs['operations-recommended'].languageOptions,
+      ...graphqlEslint.configs['flat/operations-recommended'].languageOptions,
       parser: graphqlEslintParser,
       ecmaVersion: 5,
       sourceType: 'script',
-
-      parserOptions: {
-        operations: ['./app/javascript/**/*.graphql'],
-        schema: './schema.graphql',
-      },
     },
 
     rules: {
-      ...graphqlEslint.flatConfigs['operations-recommended'].rules,
+      ...graphqlEslint.configs['flat/operations-recommended'].rules,
       '@graphql-eslint/naming-convention': 'off',
       '@graphql-eslint/known-fragment-names': 'off',
 
@@ -252,21 +247,17 @@ export default [
   },
   {
     files: ['schema.graphql'],
-    plugins: { '@graphql-eslint': fixupPluginRules(graphqlEslint) },
+    plugins: { '@graphql-eslint': graphqlEslint },
 
     languageOptions: {
-      ...graphqlEslint.flatConfigs['schema-recommended'].languageOptions,
+      ...graphqlEslint.configs['flat/schema-recommended'].languageOptions,
       parser: graphqlEslintParser,
       ecmaVersion: 5,
       sourceType: 'script',
-
-      parserOptions: {
-        schema: './schema.graphql',
-      },
     },
 
     rules: {
-      ...graphqlEslint.flatConfigs['schema-recommended'].rules,
+      ...graphqlEslint.configs['flat/schema-recommended'].rules,
       '@graphql-eslint/no-typename-prefix': 'off',
       '@graphql-eslint/naming-convention': 'off',
       '@graphql-eslint/require-description': 'off',
