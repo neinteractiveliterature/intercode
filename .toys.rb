@@ -139,7 +139,7 @@ tool "pull_production_db" do
     pull_options << "--exclude-table-data=form_response_changes" unless include_form_response_changes
     pull_options << "--exclude-table-data=ahoy_events --exclude-table-data=ahoy_visits" unless include_ahoy_data
     cmd =
-      "docker run -i -t --mount type=bind,source=\"#{Dir.pwd}\",target=/out postgres:16 \
+      "docker run -i -t --mount type=bind,source=\"#{Dir.pwd}\",target=/out postgres:17 \
 pg_dump #{pull_options.join(" ")} -v -x --no-owner -Fp \"#{database_url}\" \
 -f /out/intercode_production.sql"
     puts cmd
