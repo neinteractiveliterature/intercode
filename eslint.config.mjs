@@ -1,12 +1,14 @@
-import { fixupConfigRules, fixupPluginRules, includeIgnoreFile } from '@eslint/compat';
+// @ts-check
+
+import { includeIgnoreFile } from '@eslint/compat';
 import vitest from '@vitest/eslint-plugin';
 import jsxA11Y from 'eslint-plugin-jsx-a11y';
-import reactHooks from 'eslint-plugin-react-hooks';
 import i18Next from 'eslint-plugin-i18next';
-import * as graphqlEslint from '@graphql-eslint/eslint-plugin';
-import typescriptEslint from '@typescript-eslint/eslint-plugin';
+import reactPlugin from 'eslint-plugin-react';
+import graphqlEslint from '@graphql-eslint/eslint-plugin';
+import typescriptEslint from 'typescript-eslint';
+import eslintConfigPrettier from 'eslint-config-prettier';
 import globals from 'globals';
-import tsParser from '@typescript-eslint/parser';
 import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import js from '@eslint/js';
@@ -23,14 +25,7 @@ const compat = new FlatCompat({
 });
 const gitignorePath = path.resolve(__dirname, '.gitignore');
 
-const graphqlEslintParser = {
-  ...graphqlEslint,
-  meta: {
-    name: '@graphql-eslint',
-  },
-};
-
-export default [
+export default typescriptEslint.config(
   includeIgnoreFile(gitignorePath),
   {
     ignores: [
@@ -46,20 +41,14 @@ export default [
       '**/*.generated.ts',
     ],
   },
-  ...fixupConfigRules(
-    compat.extends(
-      'eslint:recommended',
-      'plugin:@typescript-eslint/recommended',
-      'plugin:react/recommended',
-      'plugin:react/jsx-runtime',
-      'plugin:react-hooks/recommended',
-      'plugin:jsx-a11y/recommended',
-      'prettier',
-    ),
-  ),
+  js.configs.recommended,
+  reactPlugin.configs.flat.recommended,
+  reactPlugin.configs.flat['jsx-runtime'],
+  ...compat.extends('plugin:react-hooks/recommended'),
+  typescriptEslint.configs.recommended,
   {
     files: ['app/javascript/**/*.tsx'],
-    plugins: { i18next: fixupPluginRules(i18Next) },
+    .../** @type {import('typescript-eslint').InfiniteDepthConfigWithExtends} */ (i18Next.configs['flat/recommended']),
     rules: {
       'i18next/no-literal-string': [
         'warn',
@@ -80,9 +69,7 @@ export default [
   {
     plugins: {
       vitest,
-      'jsx-a11y': fixupPluginRules(jsxA11Y),
-      'react-hooks': fixupPluginRules(reactHooks),
-      '@typescript-eslint': fixupPluginRules(typescriptEslint),
+      'jsx-a11y': jsxA11Y,
     },
 
     languageOptions: {
@@ -94,7 +81,6 @@ export default [
         ...vitest.environments.env.globals,
       },
 
-      parser: tsParser,
       ecmaVersion: 6,
       sourceType: 'module',
 
@@ -225,8 +211,7 @@ export default [
     plugins: { '@graphql-eslint': graphqlEslint },
 
     languageOptions: {
-      ...graphqlEslint.configs['flat/operations-recommended'].languageOptions,
-      parser: graphqlEslintParser,
+      parser: graphqlEslint.parser,
       ecmaVersion: 5,
       sourceType: 'script',
     },
@@ -250,8 +235,7 @@ export default [
     plugins: { '@graphql-eslint': graphqlEslint },
 
     languageOptions: {
-      ...graphqlEslint.configs['flat/schema-recommended'].languageOptions,
-      parser: graphqlEslintParser,
+      parser: graphqlEslint.parser,
       ecmaVersion: 5,
       sourceType: 'script',
     },
@@ -303,4 +287,5 @@ export default [
       ],
     },
   },
-];
+  eslintConfigPrettier,
+);
