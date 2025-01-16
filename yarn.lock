@@ -4393,8 +4393,8 @@ __metadata:
   linkType: hard
 
 "@graphql-tools/graphql-file-loader@npm:^8.0.0, @graphql-tools/graphql-file-loader@npm:^8.0.1":
-  version: 8.0.11
-  resolution: "@graphql-tools/graphql-file-loader@npm:8.0.11"
+  version: 8.0.12
+  resolution: "@graphql-tools/graphql-file-loader@npm:8.0.12"
   dependencies:
     "@graphql-tools/import": "npm:7.0.11"
     "@graphql-tools/utils": "npm:^10.7.2"
@@ -4403,7 +4403,7 @@ __metadata:
     unixify: "npm:^1.0.0"
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
-  checksum: 10c0/7eb7ca8eee889cc80c784ede9a244cd28d53514409242073b1aa14d2c49dc0e6838965d1e359dbdb79ad2555019c85b7dc56f1c5da836722c06cd230c2392dc1
+  checksum: 10c0/c8aa8f5ce3540959dd40d452407b262518c6b87e0cc131c47c4061d8f53dba08e04f5487ea36c1fa5e3452e4eb205898c68d0e9f20da965609dafb7f032d05b9
   languageName: node
   linkType: hard
 
