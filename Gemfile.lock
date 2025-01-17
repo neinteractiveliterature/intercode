@@ -305,7 +305,7 @@ GEM
       addressable (~> 2.8)
     letter_opener (1.10.0)
       launchy (>= 2.2, < 4)
-    liquid (5.6.4)
+    liquid (5.7.0)
       bigdecimal
       strscan (>= 3.1.1)
     listen (3.9.0)
