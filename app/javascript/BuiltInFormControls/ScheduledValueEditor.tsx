@@ -49,7 +49,7 @@ function addTimespanToScheduledValue<ValueType, ScheduledValueType extends Editi
   return { ...scheduledValue, timespans: newTimespans };
 }
 
-function recalculateTimespans<ValueType>(timespans: EditingTimespan<ValueType>[]): EditingTimespan<ValueType>[] {
+function sortTimespans<ValueType>(timespans: EditingTimespan<ValueType>[]): EditingTimespan<ValueType>[] {
   const sortedNewTimespans = sortBy(timespans, (timespan) => {
     if (timespan.finish) {
       return DateTime.fromISO(timespan.finish).toMillis();
@@ -59,10 +59,21 @@ function recalculateTimespans<ValueType>(timespans: EditingTimespan<ValueType>[]
     return Number.MAX_SAFE_INTEGER;
   });
 
-  return sortedNewTimespans.map((timespan, i) => ({
-    ...timespan,
-    start: i === 0 ? undefined : sortedNewTimespans[i - 1].finish,
-  }));
+  return sortedNewTimespans;
+}
+
+function deleteTimespan<ValueType>(
+  timespans: EditingTimespan<ValueType>[],
+  index: number,
+): EditingTimespan<ValueType>[] {
+  const newTimespans = timespans.slice(0, index).concat(timespans.slice(index + 1));
+  const nextTimespan = newTimespans[index];
+  if (nextTimespan) {
+    // extend the next timespan's start time to fill in the gap left by deleting this timespan
+    newTimespans[index] = { ...nextTimespan, start: newTimespans[index - 1]?.finish };
+  }
+
+  return sortTimespans(newTimespans);
 }
 
 function updateTimespanFinish<ValueType>(
@@ -71,8 +82,11 @@ function updateTimespanFinish<ValueType>(
   newFinish: string | undefined,
 ): EditingTimespan<ValueType>[] {
   const newTimespans = timespans.map((timespan, i) => {
-    if (index === i) {
+    if (i === index) {
       return { ...timespan, finish: newFinish };
+    }
+    if (i === index + 1) {
+      return { ...timespan, start: newFinish };
     }
     return timespan;
   });
@@ -82,7 +96,7 @@ function updateTimespanFinish<ValueType>(
     return newTimespans;
   }
 
-  return recalculateTimespans(newTimespans);
+  return sortTimespans(newTimespans);
 }
 
 type AddTimespanAction = {
@@ -122,9 +136,7 @@ export function scheduledValueReducer<ValueType, ScheduledValueType extends Edit
     case 'deleteTimespan':
       return {
         ...state,
-        timespans: recalculateTimespans(
-          state.timespans.slice(0, action.index).concat(state.timespans.slice(action.index + 1)),
-        ),
+        timespans: deleteTimespan(state.timespans, action.index),
       };
     case 'updateTimespanValue':
       return {
@@ -209,7 +221,7 @@ function ScheduledValueEditor<ValueType>({
     <ScheduledValueTimespanRow
       timespan={timespan}
       timezone={timezone}
-      key={i}  
+      key={`${i}-${timespan.start}-${timespan.finish}`}
       rowIdentifier={i}
       deleteClicked={deleteRowClicked}
       finishDidChange={timespanFinishDidChange}

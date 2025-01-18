@@ -177,7 +177,11 @@ function TicketTypeDisplay({
                       onClick={() =>
                         editProductModal.open({
                           ticketType,
-                          initialProduct: { ...buildBlankProduct(defaultCurrencyCode), ...product },
+                          initialProduct: {
+                            ...buildBlankProduct(defaultCurrencyCode),
+                            ...product,
+                            provides_ticket_type: { __typename: 'TicketType', id: ticketType.id },
+                          },
                         })
                       }
                     >
