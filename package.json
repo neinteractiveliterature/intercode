@@ -52,7 +52,7 @@
     "@sentry/types": "^8.34.0",
     "@stripe/react-stripe-js": "3.1.1",
     "@stripe/stripe-js": "5.5.0",
-    "@testing-library/react": "16.1.0",
+    "@testing-library/react": "16.2.0",
     "@types/bytes": "3.1.5",
     "@types/debounce-promise": "3.1.9",
     "@types/diff": "7.0.0",
