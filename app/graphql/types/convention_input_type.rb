@@ -94,8 +94,6 @@ class Types::ConventionInputType < Types::BaseInputObject
     description "The home time zone for this convention."
   end
 
-  private
-
   def get_apollo_upload_object(upload)
     upload&.__getobj__ # Unwrap value for ActiveStorage
   end
