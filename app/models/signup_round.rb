@@ -21,6 +21,7 @@
 #  fk_rails_...  (convention_id => conventions.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
+
 class SignupRound < ApplicationRecord
   RANKED_CHOICE_ORDERS = Types::RankedChoiceOrder.values.values.map(&:value).freeze
 

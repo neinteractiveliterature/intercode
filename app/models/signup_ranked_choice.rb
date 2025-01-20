@@ -33,6 +33,7 @@
 #  fk_rails_...  (user_con_profile_id => user_con_profiles.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
+
 class SignupRankedChoice < ApplicationRecord
   belongs_to :user_con_profile
   belongs_to :target_run, class_name: "Run"

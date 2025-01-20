@@ -116,9 +116,7 @@ GEM
       activesupport (>= 6.1)
       device_detector (>= 1)
       safely_block (>= 0.4)
-    annotate (2.6.5)
-      activerecord (>= 2.3.0)
-      rake (>= 0.8.7)
+    annotaterb (4.13.0)
     ansi (1.5.0)
     apollo_upload_server (2.1.6)
       actionpack (>= 6.1.6)
@@ -283,7 +281,7 @@ GEM
       multi_json (>= 1.9.2)
       webrick
     holidays (8.8.0)
-    i18n (1.14.6)
+    i18n (1.14.7)
       concurrent-ruby (~> 1.0)
     icalendar (2.10.3)
       ice_cube (~> 0.16)
@@ -627,7 +625,7 @@ DEPENDENCIES
   active_storage_svg_sanitizer
   activerecord-session_store
   ahoy_matey
-  annotate
+  annotaterb
   apollo_upload_server (= 2.1.6)
   aws-actionmailer-ses
   aws-sdk-rails

@@ -29,6 +29,7 @@
 #  fk_rails_...  (run_id => runs.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
+
 FactoryBot.define do
   factory :order_entry do
     association :order

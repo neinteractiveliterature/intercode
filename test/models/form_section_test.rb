@@ -19,6 +19,7 @@
 #  fk_rails_...  (form_id => forms.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
+
 require 'test_helper'
 
 class FormSectionTest < ActiveSupport::TestCase

@@ -39,12 +39,11 @@ class CreateSignupRequestServiceTest < ActiveSupport::TestCase
   end
 
   describe "in a limited signup round" do
-    let(:signup_round) { create(:signup_round, convention:, maximum_event_signups: "1") }
     let(:other_event) { create(:event, convention:, length_seconds: event.length_seconds) }
     let(:other_run) { create(:run, event: other_event, starts_at: the_run.ends_at) }
 
     before do
-      signup_round
+      convention.signup_rounds.first.update!(maximum_event_signups: "1", executed_at: 1.hour.ago)
       other_run
     end
 
@@ -122,6 +121,8 @@ class CreateSignupRequestServiceTest < ActiveSupport::TestCase
   describe "conflicts" do
     let(:other_event) { create(:event, convention:, length_seconds: event.length_seconds) }
     let(:other_run) { create(:run, event: other_event, starts_at: the_run.starts_at) }
+
+    before { convention.signup_rounds.first.update!(maximum_event_signups: "unlimited") }
 
     it "counts a conflicting signup as a conflict" do
       create(:signup, user_con_profile:, run: other_run, state: "confirmed")

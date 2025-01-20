@@ -29,6 +29,7 @@
 #  fk_rails_...  (run_id => runs.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
+
 require 'test_helper'
 
 class OrderEntryTest < ActiveSupport::TestCase

@@ -31,7 +31,7 @@ describe ExecuteRankedChoiceSignupRoundService do
     end
 
     it "does ascending order correctly" do
-      signup_round = create(:signup_round, convention:, ranked_choice_order: "asc")
+      signup_round = create(:signup_round, convention:, ranked_choice_order: "asc", start: 1.day.ago)
       boost_1_user = create(:user_con_profile, convention:, lottery_number: -1, ranked_choice_ordering_boost: 1)
       boost_2_user = create(:user_con_profile, convention:, lottery_number: 0, ranked_choice_ordering_boost: 2)
       low_number_user = create(:user_con_profile, convention:, lottery_number: 1, ranked_choice_allow_waitlist: false)
@@ -60,7 +60,7 @@ describe ExecuteRankedChoiceSignupRoundService do
     end
 
     it "does descending order correctly" do
-      signup_round = create(:signup_round, convention:, ranked_choice_order: "desc")
+      signup_round = create(:signup_round, convention:, ranked_choice_order: "desc", start: 1.day.ago)
       boost_1_user = create(:user_con_profile, convention:, lottery_number: 4, ranked_choice_ordering_boost: 1)
       boost_2_user = create(:user_con_profile, convention:, lottery_number: 3, ranked_choice_ordering_boost: 2)
       low_number_user = create(:user_con_profile, convention:, lottery_number: 1, ranked_choice_allow_waitlist: false)
@@ -90,7 +90,13 @@ describe ExecuteRankedChoiceSignupRoundService do
 
     it "does ascending serpentine order correctly" do
       signup_round =
-        create(:signup_round, convention:, ranked_choice_order: "asc_serpentine", maximum_event_signups: "unlimited")
+        create(
+          :signup_round,
+          convention:,
+          ranked_choice_order: "asc_serpentine",
+          maximum_event_signups: "unlimited",
+          start: 1.day.ago
+        )
       boost_1_user = create(:user_con_profile, convention:, lottery_number: -1, ranked_choice_ordering_boost: 1)
       boost_2_user = create(:user_con_profile, convention:, lottery_number: 0, ranked_choice_ordering_boost: 2)
       low_number_user = create(:user_con_profile, convention:, lottery_number: 1, ranked_choice_allow_waitlist: false)
@@ -144,7 +150,13 @@ describe ExecuteRankedChoiceSignupRoundService do
 
     it "does descending serpentine order correctly" do
       signup_round =
-        create(:signup_round, convention:, ranked_choice_order: "desc_serpentine", maximum_event_signups: "unlimited")
+        create(
+          :signup_round,
+          convention:,
+          ranked_choice_order: "desc_serpentine",
+          maximum_event_signups: "unlimited",
+          start: 1.day.ago
+        )
       boost_1_user = create(:user_con_profile, convention:, lottery_number: 4, ranked_choice_ordering_boost: 1)
       boost_2_user = create(:user_con_profile, convention:, lottery_number: 3, ranked_choice_ordering_boost: 2)
       low_number_user = create(:user_con_profile, convention:, lottery_number: 1, ranked_choice_allow_waitlist: false)
@@ -197,7 +209,7 @@ describe ExecuteRankedChoiceSignupRoundService do
     end
 
     it "rejects unknown orderings" do
-      signup_round = create(:signup_round, convention:)
+      signup_round = create(:signup_round, convention:, start: 1.day.ago)
 
       error =
         assert_raises(StandardError) { ExecuteRankedChoiceSignupRoundService.new(signup_round:, whodunit: nil).call! }
@@ -207,7 +219,7 @@ describe ExecuteRankedChoiceSignupRoundService do
   end
 
   it "respects the ranked_choice_allow_waitlist flag for a user profile" do
-    signup_round = create(:signup_round, convention:, ranked_choice_order: "asc")
+    signup_round = create(:signup_round, convention:, ranked_choice_order: "asc", start: 1.day.ago)
     low_number_user = create(:user_con_profile, convention:, lottery_number: 1, ranked_choice_allow_waitlist: false)
     high_number_user = create(:user_con_profile, convention:, lottery_number: 2, ranked_choice_allow_waitlist: true)
     create(:signup_ranked_choice, user_con_profile: low_number_user, target_run: the_run)
@@ -225,7 +237,8 @@ describe ExecuteRankedChoiceSignupRoundService do
   end
 
   it "skips users who haven't made any choices" do
-    signup_round = create(:signup_round, convention:, ranked_choice_order: "asc", maximum_event_signups: "1")
+    signup_round =
+      create(:signup_round, convention:, ranked_choice_order: "asc", maximum_event_signups: "1", start: 1.day.ago)
     low_number_user = create(:user_con_profile, convention:, lottery_number: 1, ranked_choice_allow_waitlist: false)
     high_number_user = create(:user_con_profile, convention:, lottery_number: 2, ranked_choice_allow_waitlist: true)
     create(:signup_ranked_choice, user_con_profile: high_number_user, target_run: the_run)
@@ -241,7 +254,8 @@ describe ExecuteRankedChoiceSignupRoundService do
   end
 
   it "skips users who already have the max number of signups for this round" do
-    signup_round = create(:signup_round, convention:, ranked_choice_order: "asc", maximum_event_signups: "1")
+    signup_round =
+      create(:signup_round, convention:, ranked_choice_order: "asc", maximum_event_signups: "1", start: 1.day.ago)
     low_number_user = create(:user_con_profile, convention:, lottery_number: 1, ranked_choice_allow_waitlist: false)
     high_number_user = create(:user_con_profile, convention:, lottery_number: 2, ranked_choice_allow_waitlist: true)
     create(:signup_ranked_choice, user_con_profile: low_number_user, target_run: the_run)
@@ -261,7 +275,8 @@ describe ExecuteRankedChoiceSignupRoundService do
   end
 
   it "keeps going until no users have signups left" do
-    signup_round = create(:signup_round, convention:, ranked_choice_order: "asc", maximum_event_signups: "2")
+    signup_round =
+      create(:signup_round, convention:, ranked_choice_order: "asc", maximum_event_signups: "2", start: 1.day.ago)
     low_number_user = create(:user_con_profile, convention:, lottery_number: 1, ranked_choice_allow_waitlist: false)
     high_number_user = create(:user_con_profile, convention:, lottery_number: 2, ranked_choice_allow_waitlist: true)
     low_first_run = create(:signup_ranked_choice, user_con_profile: low_number_user, target_run: the_run)
@@ -302,7 +317,7 @@ describe ExecuteRankedChoiceSignupRoundService do
     let(:convention) { create(:convention, :with_notification_templates, ticket_mode: "required_for_signup") }
 
     it "skips unticketed users" do
-      signup_round = create(:signup_round, convention:, ranked_choice_order: "asc")
+      signup_round = create(:signup_round, convention:, ranked_choice_order: "asc", start: 1.day.ago)
       low_number_user = create(:user_con_profile, convention:, lottery_number: 1, ranked_choice_allow_waitlist: false)
       high_number_user = create(:user_con_profile, convention:, lottery_number: 2, ranked_choice_allow_waitlist: false)
       create(:signup_ranked_choice, user_con_profile: low_number_user, target_run: the_run)

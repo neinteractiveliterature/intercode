@@ -74,6 +74,7 @@ class Convention < ApplicationRecord
   has_one_attached :favicon
   has_one_attached :open_graph_image
 
+  after_create :ensure_signup_round_exists
   before_destroy :nullify_associated_content
 
   belongs_to :updated_by, class_name: "User", optional: true
@@ -210,6 +211,12 @@ class Convention < ApplicationRecord
 
   def default_currency_code_or_site_default
     default_currency_code || Money.default_currency.iso_code
+  end
+
+  def ensure_signup_round_exists
+    return if signup_rounds.any?
+
+    signup_rounds.create!(maximum_event_signups: "not_yet", executed_at: Time.now)
   end
 
   private

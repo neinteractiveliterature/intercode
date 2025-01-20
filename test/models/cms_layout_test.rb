@@ -18,7 +18,7 @@
 #  index_cms_layouts_on_parent_type_and_parent_id  (parent_type,parent_id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
+
 require "test_helper"
 
 class CmsLayoutTest < ActiveSupport::TestCase

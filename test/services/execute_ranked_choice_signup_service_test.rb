@@ -2,7 +2,7 @@ require "test_helper"
 
 describe ExecuteRankedChoiceSignupService do
   let(:convention) { create(:convention, :with_notification_templates) }
-  let(:signup_round) { create(:signup_round, convention:) }
+  let(:signup_round) { create(:signup_round, convention:, start: 1.day.ago) }
 
   it "signs a user up in the happy path" do
     event = create(:event, convention:)

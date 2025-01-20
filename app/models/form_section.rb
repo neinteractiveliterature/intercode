@@ -20,6 +20,7 @@
 #  fk_rails_...  (form_id => forms.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
+
 class FormSection < ApplicationRecord
   belongs_to :form
   has_many :form_items, dependent: :destroy

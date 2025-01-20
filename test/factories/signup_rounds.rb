@@ -21,6 +21,7 @@
 #  fk_rails_...  (convention_id => conventions.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
+
 FactoryBot.define do
   factory :signup_round do
     maximum_event_signups { 'unlimited' }

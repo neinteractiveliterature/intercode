@@ -20,6 +20,7 @@
 #  fk_rails_...  (uploader_id => users.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
+
 require 'test_helper'
 
 class CmsFileTest < ActiveSupport::TestCase

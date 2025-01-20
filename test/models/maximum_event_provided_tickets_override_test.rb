@@ -21,6 +21,7 @@
 #  fk_rails_...  (ticket_type_id => ticket_types.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
+
 require 'test_helper'
 
 class MaximumEventProvidedTicketsOverrideTest < ActiveSupport::TestCase

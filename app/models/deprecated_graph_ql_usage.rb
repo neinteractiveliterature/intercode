@@ -15,5 +15,6 @@
 #  updated_at     :datetime         not null
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
+
 class DeprecatedGraphQlUsage < ApplicationRecord
 end

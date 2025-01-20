@@ -43,7 +43,7 @@ class CloneConventionServiceTest < ActiveSupport::TestCase
   end
 
   it "clones signup rounds" do
-    create(:signup_round, convention:, start: nil, maximum_event_signups: "not_yet", executed_at: Time.now)
+    convention.signup_rounds.first.update!(executed_at: Time.now)
     create(:signup_round, convention:, start: convention.starts_at - 30.days, maximum_event_signups: "unlimited")
 
     result = service.call!

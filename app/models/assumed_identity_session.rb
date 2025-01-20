@@ -23,6 +23,7 @@
 #  fk_rails_...  (assumer_profile_id => user_con_profiles.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
+
 class AssumedIdentitySession < ApplicationRecord
   belongs_to :assumed_profile, class_name: 'UserConProfile'
   belongs_to :assumer_profile, class_name: 'UserConProfile'

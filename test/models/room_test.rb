@@ -18,6 +18,7 @@
 #  fk_rails_...  (convention_id => conventions.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
+
 require 'test_helper'
 
 class RoomTest < ActiveSupport::TestCase

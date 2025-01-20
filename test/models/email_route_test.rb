@@ -14,7 +14,7 @@
 #  index_email_routes_on_receiver_address  (receiver_address) UNIQUE
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
+
 require "test_helper"
 
 class EmailRouteTest < ActiveSupport::TestCase
