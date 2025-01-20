@@ -43,6 +43,7 @@ export function WithdrawMySignupModal({ close, event, run, signup, signupRounds 
       revalidator.revalidate();
       close();
     } catch (error) {
+      setBusy(false);
       setError(error);
     }
   };
