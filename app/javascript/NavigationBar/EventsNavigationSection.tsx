@@ -8,7 +8,8 @@ import { SignupAutomationMode } from '../graphqlTypes.generated';
 
 export function useEventsNavigationItems(): GeneratedNavigationItem[] {
   const { t } = useTranslation();
-  const { conventionAcceptingProposals, currentAbility, signupAutomationMode } = useContext(AppRootContext);
+  const { conventionAcceptingProposals, currentAbility, signupAutomationMode, currentUser } =
+    useContext(AppRootContext);
 
   const items = useMemo(
     () =>
@@ -23,11 +24,12 @@ export function useEventsNavigationItems(): GeneratedNavigationItem[] {
           url: '/events',
           icon: 'bi-list-ul',
         },
-        signupAutomationMode === SignupAutomationMode.RankedChoice && {
-          label: t('navigation.events.mySignupQueue'),
-          url: '/events/my-signup-queue',
-          icon: 'bi-card-checklist',
-        },
+        signupAutomationMode === SignupAutomationMode.RankedChoice &&
+          currentUser && {
+            label: t('navigation.events.mySignupQueue'),
+            url: '/events/my-signup-queue',
+            icon: 'bi-card-checklist',
+          },
         conventionAcceptingProposals && {
           label: t('navigation.events.newProposal'),
           url: '/pages/new-proposal',

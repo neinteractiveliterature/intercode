@@ -9,6 +9,7 @@ import NextRoundInfoBox from './NextRoundInfoBox';
 import UserSignupQueue from './UserSignupQueue';
 import { usePendingChoices } from './usePendingChoices';
 import { client } from '../../useIntercodeApolloClient';
+import useLoginRequired from 'Authentication/useLoginRequired';
 
 export const loader: LoaderFunction = async () => {
   const { data } = await client.query({ query: MySignupQueueQueryDocument });
@@ -20,6 +21,11 @@ function MySignupQueue() {
   const { t } = useTranslation();
   const { myProfile } = useContext(AppRootContext);
   const pendingChoices = usePendingChoices(data.convention.my_profile);
+  const replacementContent = useLoginRequired();
+
+  if (replacementContent) {
+    return replacementContent;
+  }
 
   return (
     <>
