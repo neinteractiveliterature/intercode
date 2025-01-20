@@ -40,7 +40,7 @@
 #  fk_rails_...  (owner_id => user_con_profiles.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
+
 require "test_helper"
 
 class EventProposalTest < ActiveSupport::TestCase

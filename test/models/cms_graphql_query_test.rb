@@ -17,7 +17,7 @@
 #  index_cms_graphql_queries_on_parent_type_and_parent_id  (parent_type,parent_id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
+
 require "test_helper"
 
 class CmsGraphqlQueryTest < ActiveSupport::TestCase

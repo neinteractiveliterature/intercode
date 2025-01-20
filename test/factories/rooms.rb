@@ -18,6 +18,7 @@
 #  fk_rails_...  (convention_id => conventions.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
+
 FactoryBot.define do
   factory :room do
     association(:convention)

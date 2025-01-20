@@ -31,7 +31,7 @@
 #  fk_rails_...  (staff_position_id => staff_positions.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
+
 FactoryBot.define do
   factory :organization_permission, class: Permission do
     association :organization_role

@@ -22,7 +22,7 @@
 #  fk_rails_...  (product_id => products.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
+
 require "test_helper"
 
 class ProductVariantTest < ActiveSupport::TestCase

@@ -27,6 +27,7 @@
 #  fk_rails_...  (provides_ticket_type_id => ticket_types.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
+
 require 'test_helper'
 
 class ProductTest < ActiveSupport::TestCase

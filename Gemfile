@@ -133,7 +133,7 @@ group :development do
   gem "yard"
 
   # Automatic annotation for models
-  gem "annotate"
+  gem "annotaterb"
 
   # Debugging
   gem "debug"

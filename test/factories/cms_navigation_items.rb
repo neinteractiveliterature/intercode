@@ -25,7 +25,7 @@
 #  fk_rails_...  (page_id => pages.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
+
 FactoryBot.define do
   factory :cms_navigation_item do
     sequence(:title) { |n| "navigation item #{n}" }

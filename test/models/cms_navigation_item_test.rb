@@ -25,7 +25,7 @@
 #  fk_rails_...  (page_id => pages.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
+
 require "test_helper"
 
 class CmsNavigationItemTest < ActiveSupport::TestCase

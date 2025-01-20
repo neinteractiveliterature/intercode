@@ -18,7 +18,7 @@
 #  index_cms_layouts_on_parent_type_and_parent_id  (parent_type,parent_id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
+
 FactoryBot.define do
   factory :cms_layout do
     sequence(:name) { |n| "layout_#{n}" }

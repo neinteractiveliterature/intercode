@@ -20,7 +20,7 @@
 #  fk_rails_...  (order_id => orders.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Metrics/LineLength, Lint/RedundantCopDisableDirective
+
 require "test_helper"
 
 class CouponApplicationTest < ActiveSupport::TestCase

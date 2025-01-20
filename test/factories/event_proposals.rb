@@ -40,7 +40,7 @@
 #  fk_rails_...  (owner_id => user_con_profiles.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-# rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
+
 FactoryBot.define do
   factory :event_proposal do
     sequence(:title) { |n| "Event proposal #{n}" }

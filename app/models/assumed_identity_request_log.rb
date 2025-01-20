@@ -28,6 +28,7 @@
 #  fk_rails_...  (assumed_identity_session_id => assumed_identity_sessions.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
+
 class AssumedIdentityRequestLog < ApplicationRecord
   belongs_to :assumed_identity_session
 end

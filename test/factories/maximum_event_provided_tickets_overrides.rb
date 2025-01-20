@@ -21,6 +21,7 @@
 #  fk_rails_...  (ticket_type_id => ticket_types.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
+
 FactoryBot.define do
   factory :maximum_event_provided_tickets_override do
     association :event

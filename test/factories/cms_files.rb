@@ -20,6 +20,7 @@
 #  fk_rails_...  (uploader_id => users.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
+
 FactoryBot.define do
   factory :cms_file do
     file { Rack::Test::UploadedFile.new(File.expand_path('test/files/war_bond.png', Rails.root), 'image/png') }
