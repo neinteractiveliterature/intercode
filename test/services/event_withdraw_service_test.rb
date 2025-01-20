@@ -47,7 +47,7 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
   end
 
   it "disallows withdrawals in a frozen convention" do
-    create(:signup_round, convention:, maximum_event_signups: "not_now")
+    create(:signup_round, convention:, maximum_event_signups: "not_now", start: 1.day.ago, executed_at: 1.day.ago)
 
     result = subject.call
     assert result.failure?
