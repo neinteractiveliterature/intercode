@@ -29,16 +29,15 @@ class ContentCloners::ContentClonerBase
     return nil unless value
 
     value.class.new(
-      **value.attributes.symbolize_keys.merge(
-        timespans:
-          value.timespans.map do |timespan|
-            {
-              start: timespan.start ? timespan.start + amount : nil,
-              finish: timespan.finish ? timespan.finish + amount : nil,
-              value: timespan.value
-            }
-          end
-      )
+      **value.attributes.symbolize_keys,
+      timespans:
+        value.timespans.map do |timespan|
+          {
+            start: timespan.start ? timespan.start + amount : nil,
+            finish: timespan.finish ? timespan.finish + amount : nil,
+            value: timespan.value
+          }
+        end
     )
   end
 

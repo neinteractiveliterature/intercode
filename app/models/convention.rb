@@ -216,7 +216,7 @@ class Convention < ApplicationRecord
   def ensure_signup_round_exists
     return if signup_rounds.any?
 
-    signup_rounds.create!(maximum_event_signups: "not_yet")
+    signup_rounds.create!(maximum_event_signups: "not_yet", executed_at: Time.now)
   end
 
   private

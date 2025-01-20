@@ -40,6 +40,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
   describe "with a convention that does not require tickets" do
     let(:convention) { create(:convention, :with_notification_templates, ticket_mode: "disabled") }
 
+    before { convention.signup_rounds.first.update!(maximum_event_signups: "unlimited") }
+
     it "signs the user up for an event" do
       result = subject.call!
       assert result.success?
@@ -49,6 +51,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
 
   describe "with a convention that uses ticket_per_event mode" do
     let(:convention) { create(:convention, :with_notification_templates, ticket_mode: "ticket_per_event") }
+
+    before { convention.signup_rounds.first.update!(maximum_event_signups: "unlimited") }
 
     it "signs the user up for an event with a ticket purchase hold" do
       result = subject.call!
@@ -61,6 +65,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
 
   describe "with a valid ticket" do
     setup { ticket }
+
+    before { convention.signup_rounds.first.update!(maximum_event_signups: "unlimited") }
 
     it "signs the user up for an event and emails them a confirmation" do
       perform_enqueued_jobs do
@@ -131,8 +137,6 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
       end
 
       it "does not care whether signups are open yet" do
-        create(:signup_round, convention:, maximum_event_signups: "not_yet")
-
         result = subject.call!
         assert result.success?
         assert result.signup.confirmed?
@@ -140,7 +144,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
     end
 
     it "allows signups if the user has not yet reached the current signup limit" do
-      create(:signup_round, convention:, maximum_event_signups: "1")
+      convention.signup_rounds.update!(maximum_event_signups: "1")
 
       result = subject.call!
       assert result.success?
@@ -148,7 +152,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
     end
 
     it "does not count non-counted signups towards the signup limit" do
-      create(:signup_round, convention:, maximum_event_signups: "1")
+      convention.signup_rounds.update!(maximum_event_signups: "1")
 
       another_event = create(:event, convention:)
       another_run = create(:run, event: another_event, starts_at: the_run.ends_at)
@@ -160,7 +164,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
     end
 
     it "does count waitlisted signups towards the signup limit" do
-      create(:signup_round, convention:, maximum_event_signups: "1")
+      convention.signup_rounds.update!(maximum_event_signups: "1")
 
       another_event = create(:event, convention:)
       another_run = create(:run, event: another_event, starts_at: the_run.ends_at)
@@ -172,7 +176,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
     end
 
     it "does count ticket_purchase_hold signups towards the signup limit" do
-      create(:signup_round, convention:, maximum_event_signups: "1")
+      convention.signup_rounds.update!(maximum_event_signups: "1")
 
       another_event = create(:event, convention:)
       another_run = create(:run, event: another_event, starts_at: the_run.ends_at)
@@ -184,7 +188,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
     end
 
     it "does not count withdrawn signups towards the signup limit" do
-      create(:signup_round, convention:, maximum_event_signups: "1")
+      convention.signup_rounds.update!(maximum_event_signups: "1")
 
       another_event = create(:event, convention:)
       another_run = create(:run, event: another_event, starts_at: the_run.ends_at)
@@ -196,7 +200,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
     end
 
     it "disallows signups if the user has reached the current signup limit" do
-      create(:signup_round, convention:, maximum_event_signups: "1")
+      convention.signup_rounds.update!(maximum_event_signups: "1")
 
       other_event = create(:event, convention:, length_seconds: event.length_seconds)
       other_run = create(:run, event: other_event, starts_at: the_run.starts_at + event.length_seconds * 2)
@@ -209,7 +213,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
     end
 
     it "disallows signups if signups are not yet open" do
-      create(:signup_round, convention:, maximum_event_signups: "not_yet")
+      convention.signup_rounds.first.update!(maximum_event_signups: "not_yet")
 
       result = subject.call
       assert result.failure?
@@ -217,7 +221,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
     end
 
     it "disallows signups to a frozen convention" do
-      create(:signup_round, convention:, maximum_event_signups: "not_now")
+      create(:signup_round, convention:, maximum_event_signups: "not_now", start: 1.day.ago)
 
       result = subject.call
       assert result.failure?
@@ -312,6 +316,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
       end
 
       let(:requested_bucket_key) { :cats }
+
+      before { convention.signup_rounds.first.update!(maximum_event_signups: "unlimited") }
 
       it "will sign the user up into that bucket" do
         result = subject.call!
@@ -548,6 +554,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
 
       let(:requested_bucket_key) { :npc }
 
+      before { convention.signup_rounds.first.update!(maximum_event_signups: "unlimited") }
+
       it "will sign the user up into that bucket" do
         result = subject.call!
         assert result.success?
@@ -640,6 +648,13 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
     end
 
     it "automatically deletes any ranked choices the user has for this run/bucket" do
+      create(
+        :signup_round,
+        convention:,
+        maximum_event_signups: "unlimited",
+        start: 1.minute.ago,
+        executed_at: 1.minute.ago
+      )
       signup_ranked_choice = create(:signup_ranked_choice, user_con_profile:, target_run: the_run)
 
       result = subject.call!
