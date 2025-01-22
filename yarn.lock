@@ -5166,6 +5166,62 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@oxlint/darwin-arm64@npm:0.15.7":
+  version: 0.15.7
+  resolution: "@oxlint/darwin-arm64@npm:0.15.7"
+  conditions: os=darwin & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@oxlint/darwin-x64@npm:0.15.7":
+  version: 0.15.7
+  resolution: "@oxlint/darwin-x64@npm:0.15.7"
+  conditions: os=darwin & cpu=x64
+  languageName: node
+  linkType: hard
+
+"@oxlint/linux-arm64-gnu@npm:0.15.7":
+  version: 0.15.7
+  resolution: "@oxlint/linux-arm64-gnu@npm:0.15.7"
+  conditions: os=linux & cpu=arm64 & libc=glibc
+  languageName: node
+  linkType: hard
+
+"@oxlint/linux-arm64-musl@npm:0.15.7":
+  version: 0.15.7
+  resolution: "@oxlint/linux-arm64-musl@npm:0.15.7"
+  conditions: os=linux & cpu=arm64 & libc=musl
+  languageName: node
+  linkType: hard
+
+"@oxlint/linux-x64-gnu@npm:0.15.7":
+  version: 0.15.7
+  resolution: "@oxlint/linux-x64-gnu@npm:0.15.7"
+  conditions: os=linux & cpu=x64 & libc=glibc
+  languageName: node
+  linkType: hard
+
+"@oxlint/linux-x64-musl@npm:0.15.7":
+  version: 0.15.7
+  resolution: "@oxlint/linux-x64-musl@npm:0.15.7"
+  conditions: os=linux & cpu=x64 & libc=musl
+  languageName: node
+  linkType: hard
+
+"@oxlint/win32-arm64@npm:0.15.7":
+  version: 0.15.7
+  resolution: "@oxlint/win32-arm64@npm:0.15.7"
+  conditions: os=win32 & cpu=arm64
+  languageName: node
+  linkType: hard
+
+"@oxlint/win32-x64@npm:0.15.7":
+  version: 0.15.7
+  resolution: "@oxlint/win32-x64@npm:0.15.7"
+  conditions: os=win32 & cpu=x64
+  languageName: node
+  linkType: hard
+
 "@parcel/watcher-android-arm64@npm:2.4.1":
   version: 2.4.1
   resolution: "@parcel/watcher-android-arm64@npm:2.4.1"
@@ -11964,6 +12020,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"eslint-plugin-oxlint@npm:^0.15.7":
+  version: 0.15.7
+  resolution: "eslint-plugin-oxlint@npm:0.15.7"
+  dependencies:
+    jsonc-parser: "npm:^3.3.1"
+  checksum: 10c0/eec3a160ceaf2fe4ff949810560179dbaf647adf518242886673205d5b6e45d3c73acf446a4a201bf7d448e8cf092aa8b39e1367ed80a9f5a80950f7294e737b
+  languageName: node
+  linkType: hard
+
 "eslint-plugin-react-hooks@npm:5.1.0":
   version: 5.1.0
   resolution: "eslint-plugin-react-hooks@npm:5.1.0"
@@ -15364,6 +15429,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"jsonc-parser@npm:^3.3.1":
+  version: 3.3.1
+  resolution: "jsonc-parser@npm:3.3.1"
+  checksum: 10c0/269c3ae0a0e4f907a914bf334306c384aabb9929bd8c99f909275ebd5c2d3bc70b9bcd119ad794f339dec9f24b6a4ee9cd5a8ab2e6435e730ad4075388fc2ab6
+  languageName: node
+  linkType: hard
+
 "jsonfile@npm:^6.0.1":
   version: 6.1.0
   resolution: "jsonfile@npm:6.1.0"
@@ -17654,6 +17726,42 @@ __metadata:
     object-keys: "npm:^1.1.1"
     safe-push-apply: "npm:^1.0.0"
   checksum: 10c0/6dfeb3455bff92ec3f16a982d4e3e65676345f6902d9f5ded1d8265a6318d0200ce461956d6d1c70053c7fe9f9fe65e552faac03f8140d37ef0fdd108e67013a
+  languageName: node
+  linkType: hard
+
+"oxlint@npm:^0.15.7":
+  version: 0.15.7
+  resolution: "oxlint@npm:0.15.7"
+  dependencies:
+    "@oxlint/darwin-arm64": "npm:0.15.7"
+    "@oxlint/darwin-x64": "npm:0.15.7"
+    "@oxlint/linux-arm64-gnu": "npm:0.15.7"
+    "@oxlint/linux-arm64-musl": "npm:0.15.7"
+    "@oxlint/linux-x64-gnu": "npm:0.15.7"
+    "@oxlint/linux-x64-musl": "npm:0.15.7"
+    "@oxlint/win32-arm64": "npm:0.15.7"
+    "@oxlint/win32-x64": "npm:0.15.7"
+  dependenciesMeta:
+    "@oxlint/darwin-arm64":
+      optional: true
+    "@oxlint/darwin-x64":
+      optional: true
+    "@oxlint/linux-arm64-gnu":
+      optional: true
+    "@oxlint/linux-arm64-musl":
+      optional: true
+    "@oxlint/linux-x64-gnu":
+      optional: true
+    "@oxlint/linux-x64-musl":
+      optional: true
+    "@oxlint/win32-arm64":
+      optional: true
+    "@oxlint/win32-x64":
+      optional: true
+  bin:
+    oxc_language_server: bin/oxc_language_server
+    oxlint: bin/oxlint
+  checksum: 10c0/c542b104efdad14a2b80ffca75c7ffc6262c4e89090826235400698714d50e3ab34392530452346a7efca20ae647432a7de3b336c25c74e3ddc7d51c07035b5a
   languageName: node
   linkType: hard
 
@@ -21074,6 +21182,7 @@ __metadata:
     eslint-plugin-i18next: "npm:^6.1.1"
     eslint-plugin-import: "npm:2.31.0"
     eslint-plugin-jsx-a11y: "npm:6.10.2"
+    eslint-plugin-oxlint: "npm:^0.15.7"
     eslint-plugin-react: "npm:7.37.4"
     eslint-plugin-react-hooks: "npm:5.1.0"
     events: "npm:3.3.0"
@@ -21102,6 +21211,7 @@ __metadata:
     mini-css-extract-plugin: "npm:2.9.2"
     minimist: "npm:1.2.8"
     ol: "npm:^10.2.1"
+    oxlint: "npm:^0.15.7"
     path-browserify: "npm:1.0.1"
     path-complete-extname: "npm:1.0.0"
     payment: "npm:2.4.7"

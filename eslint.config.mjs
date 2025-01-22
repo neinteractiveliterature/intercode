@@ -13,6 +13,7 @@ import path from 'node:path';
 import { fileURLToPath } from 'node:url';
 import js from '@eslint/js';
 import { FlatCompat } from '@eslint/eslintrc';
+import oxlint from 'eslint-plugin-oxlint';
 
 // eslint-disable-next-line no-underscore-dangle
 const __filename = fileURLToPath(import.meta.url);
@@ -288,4 +289,5 @@ export default typescriptEslint.config(
     },
   },
   eslintConfigPrettier,
+  oxlint.configs['flat/recommended'],
 );
