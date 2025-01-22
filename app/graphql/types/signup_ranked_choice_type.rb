@@ -30,6 +30,9 @@ module Types
         convention)
       MARKDOWN
     end
+    field :simulated_skip_reason, Types::SimulatedSkipReasonType, null: true do
+      description "If this choice would be skipped if executed now, the reason why.  If it wouldn't, null."
+    end
     field :state, Types::SignupRankedChoiceStateType, null: false do
       description "The current processing state of this choice (e.g. pending, accepted)"
     end
@@ -48,5 +51,9 @@ module Types
                         :result_signup,
                         :result_signup_request,
                         :ranked_choice_decisions
+
+    def simulated_skip_reason
+      dataloader.with(Sources::SimulatedSkipReason, object.user_con_profile).load(object)
+    end
   end
 end

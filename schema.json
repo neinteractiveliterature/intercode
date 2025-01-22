@@ -31693,6 +31693,18 @@
               "args": []
             },
             {
+              "name": "simulated_skip_reason",
+              "description": "If this choice would be skipped if executed now, the reason why.  If it wouldn't, null.",
+              "type": {
+                "kind": "OBJECT",
+                "name": "SimulatedSkipReason",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
               "name": "state",
               "description": "The current processing state of this choice (e.g. pending, accepted)",
               "type": {
@@ -32529,6 +32541,49 @@
                 "ofType": {
                   "kind": "SCALAR",
                   "name": "Int",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            }
+          ],
+          "inputFields": null,
+          "enumValues": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "SimulatedSkipReason",
+          "description": "If a SignupRankedChoice would be skipped if executed now, the reason why it would be skipped.",
+          "interfaces": [],
+          "possibleTypes": null,
+          "fields": [
+            {
+              "name": "extra",
+              "description": "Any additional data the attached to this skip.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "JSON",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "reason",
+              "description": "The reason this choice would be skipped, if any.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "RankedChoiceDecisionReason",
                   "ofType": null
                 }
               },

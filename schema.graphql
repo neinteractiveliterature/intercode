@@ -6781,6 +6781,11 @@ type SignupRankedChoice {
   result_signup_request: SignupRequest
 
   """
+  If this choice would be skipped if executed now, the reason why.  If it wouldn't, null.
+  """
+  simulated_skip_reason: SimulatedSkipReason
+
+  """
   The current processing state of this choice (e.g. pending, accepted)
   """
   state: SignupRankedChoiceState!
@@ -7083,6 +7088,21 @@ type SignupsPagination implements PaginationInterface {
   The total number of pages in the paginated list
   """
   total_pages: Int!
+}
+
+"""
+If a SignupRankedChoice would be skipped if executed now, the reason why it would be skipped.
+"""
+type SimulatedSkipReason {
+  """
+  Any additional data the attached to this skip.
+  """
+  extra: JSON!
+
+  """
+  The reason this choice would be skipped, if any.
+  """
+  reason: RankedChoiceDecisionReason!
 }
 
 enum SiteMode {

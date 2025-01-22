@@ -6,12 +6,75 @@ import { InternalRefetchQueriesInclude, useMutation } from '@apollo/client';
 import RankedChoicePriorityIndicator from './RankedChoicePriorityIndicator';
 import buildEventUrl from '../buildEventUrl';
 import { Link, useRevalidator } from 'react-router-dom';
-import { useAppDateTimeFormat } from '../../TimeUtils';
+import { formatLCM, getDateTimeFormat, useAppDateTimeFormat } from '../../TimeUtils';
 import { DateTime } from 'luxon';
 import classNames from 'classnames';
 import { usePendingChoices } from './usePendingChoices';
 import AppRootContext from '../../AppRootContext';
 import { DeleteSignupRankedChoiceDocument, UpdateSignupRankedChoicePriorityDocument } from './mutations.generated';
+import { TFunction } from 'i18next';
+import { RankedChoiceDecisionReason, SignupState } from 'graphqlTypes.generated';
+
+function formatSkipReason({
+  t,
+  pendingChoice,
+  simulatedSkipReason,
+  userConProfile,
+  timeZone,
+}: {
+  t: TFunction;
+  pendingChoice: ReturnType<typeof usePendingChoices>[number];
+  simulatedSkipReason: NonNullable<ReturnType<typeof usePendingChoices>[number]['simulated_skip_reason']>;
+  userConProfile: UserConProfileRankedChoiceQueueFieldsFragment;
+  timeZone: string;
+}): React.ReactNode {
+  if (simulatedSkipReason.reason === RankedChoiceDecisionReason.Conflict) {
+    const signupIds: Set<string> = new Set(
+      (simulatedSkipReason.extra as { conflicting_signup_ids: (string | number)[] }).conflicting_signup_ids?.map((id) =>
+        id.toString(),
+      ) ?? [],
+    );
+    const signups = userConProfile.signups.filter((signup) => signupIds.has(signup.id));
+    if (signups.length === 1 && signups[0].run.id === pendingChoice.target_run.id) {
+      if (signups[0].state === SignupState.Confirmed) {
+        return t('signups.mySignupQueue.simulatedSkip.alreadySignedUp');
+      } else if (signups[0].state === SignupState.Waitlisted) {
+        return t('signups.mySignupQueue.simulatedSkip.alreadyWaitlisted');
+      }
+    }
+    return t('signups.mySignupQueue.simulatedSkip.conflict', {
+      eventTitles: signups.map((signup) => signup.run.event.title),
+    });
+  } else if (simulatedSkipReason.reason === RankedChoiceDecisionReason.RankedChoiceUserConstraints) {
+    const constraintIds: Set<string> = new Set(
+      (
+        simulatedSkipReason.extra as { ranked_choice_user_constraint_ids: (string | number)[] }
+      ).ranked_choice_user_constraint_ids?.map((id) => id.toString()) ?? [],
+    );
+    const constraints = userConProfile.ranked_choice_user_constraints.filter((constraint) =>
+      constraintIds.has(constraint.id),
+    );
+
+    return constraints
+      .map((constraint) => {
+        if (constraint.start && constraint.finish) {
+          return t('signups.mySignupQueue.simulatedSkip.maxSignupsInTimespan', {
+            timespan: formatLCM(
+              DateTime.fromISO(constraint.start).setZone(timeZone),
+              getDateTimeFormat('longWeekday', t),
+            ),
+          });
+        } else {
+          return t('signups.mySignupQueue.simulatedSkip.maxSignupsTotal');
+        }
+      })
+      .join(', ');
+  } else if (simulatedSkipReason.reason === RankedChoiceDecisionReason.Full) {
+    return t('signups.mySignupQueue.simulatedSkip.full', { eventTitle: pendingChoice.target_run.event.title });
+  }
+
+  return <></>;
+}
 
 export type UserSignupQueueProps = {
   userConProfile: UserConProfileRankedChoiceQueueFieldsFragment;
@@ -45,7 +108,11 @@ function UserSignupQueue({ userConProfile, refetchQueries, readOnly }: UserSignu
       <ul className="list-group list-group-flush">
         {pendingChoices.map((pendingChoice, index) => (
           <React.Fragment key={pendingChoice.id}>
-            <li className="list-group-item d-flex align-items-center">
+            <li
+              className={classNames('list-group-item d-flex align-items-center', {
+                'bg-light': pendingChoice.simulated_skip_reason,
+              })}
+            >
               <div className="me-3">
                 <div className="d-flex align-items-center">
                   <RankedChoicePriorityIndicator priority={pendingChoice.priority} fontSize={14} />
@@ -72,6 +139,18 @@ function UserSignupQueue({ userConProfile, refetchQueries, readOnly }: UserSignu
                     )?.name
                   }
                 </div>
+                {pendingChoice.simulated_skip_reason && (
+                  <div>
+                    <i className="bi bi-exclamation-circle-fill" />{' '}
+                    {formatSkipReason({
+                      t,
+                      pendingChoice,
+                      simulatedSkipReason: pendingChoice.simulated_skip_reason,
+                      userConProfile,
+                      timeZone: timezoneName,
+                    })}
+                  </div>
+                )}
               </div>
               <div className="d-flex flex-column gap-2 justify-content-center me-3">
                 {!readOnly && (

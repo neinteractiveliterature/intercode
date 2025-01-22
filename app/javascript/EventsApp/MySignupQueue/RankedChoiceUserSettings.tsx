@@ -232,8 +232,8 @@ function RankedChoiceUserSettings({ data }: { data: MySignupQueueQueryData }) {
             { label: t('signups.mySignupQueue.allowWaitlist.no'), value: 'false' },
           ]}
           value={(data.convention.my_profile?.ranked_choice_allow_waitlist || false).toString()}
-          onChange={(newValue) =>
-            updateUserConProfile({
+          onChange={async (newValue) => {
+            await updateUserConProfile({
               variables: {
                 input: {
                   user_con_profile: {
@@ -243,8 +243,10 @@ function RankedChoiceUserSettings({ data }: { data: MySignupQueueQueryData }) {
                 },
               },
               refetchQueries: [{ query: MySignupQueueQueryDocument }],
-            })
-          }
+              awaitRefetchQueries: true,
+            });
+            revalidator.revalidate();
+          }}
           disabled={profileUpdateLoading}
         />
 
