@@ -221,6 +221,21 @@ describe ExecuteRankedChoiceSignupService do
       assert_equal [constraint.id], result.decision.extra["ranked_choice_user_constraint_ids"]
     end
 
+    it "does not sign a user up for an event if they have a zero-event constraint" do
+      event = create(:event, convention:)
+      the_run = create(:run, event:)
+      user_con_profile = create(:user_con_profile, convention:)
+      signup_ranked_choice = create(:signup_ranked_choice, target_run: the_run, user_con_profile:)
+      constraint = create(:ranked_choice_user_constraint, user_con_profile:, maximum_signups: 0)
+
+      result = ExecuteRankedChoiceSignupService.new(signup_round:, signup_ranked_choice:, whodunit: nil).call!
+
+      signup_ranked_choice.reload
+      assert_equal "skip_choice", result.decision.decision
+      assert_equal "ranked_choice_user_constraints", result.decision.reason
+      assert_equal [constraint.id], result.decision.extra["ranked_choice_user_constraint_ids"]
+    end
+
     it "signs a user up for an event outside the timespan of their constraints" do
       event = create(:event, convention:)
       the_run = create(:run, event:)
