@@ -5441,6 +5441,8 @@ export type SignupRankedChoice = {
    * convention)
    */
   result_signup_request?: Maybe<SignupRequest>;
+  /** If this choice would be skipped if executed now, the reason why.  If it wouldn't, null. */
+  simulated_skip_reason?: Maybe<SimulatedSkipReason>;
   /** The current processing state of this choice (e.g. pending, accepted) */
   state: SignupRankedChoiceState;
   /** The event run that this choice is trying to sign up for */
@@ -5608,6 +5610,15 @@ export type SignupsPagination = PaginationInterface & {
   total_entries: Scalars['Int']['output'];
   /** The total number of pages in the paginated list */
   total_pages: Scalars['Int']['output'];
+};
+
+/** If a SignupRankedChoice would be skipped if executed now, the reason why it would be skipped. */
+export type SimulatedSkipReason = {
+  __typename: 'SimulatedSkipReason';
+  /** Any additional data the attached to this skip. */
+  extra: Scalars['JSON']['output'];
+  /** The reason this choice would be skipped, if any. */
+  reason: RankedChoiceDecisionReason;
 };
 
 export enum SiteMode {

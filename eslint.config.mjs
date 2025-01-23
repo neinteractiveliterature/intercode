@@ -278,6 +278,7 @@ export default typescriptEslint.config(
               'ScheduledValue',
               'SearchResultEntry',
               'SignupCountByState',
+              'SimulatedSkipReason',
               'TicketCountByTypeAndPaymentAmount',
               'TimespanWithMoneyValue',
               'TimespanWithValue',

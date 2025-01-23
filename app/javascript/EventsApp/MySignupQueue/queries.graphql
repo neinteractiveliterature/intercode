@@ -31,6 +31,11 @@ fragment UserConProfileRankedChoiceQueueFields on UserConProfile {
       id
       starts_at
       ends_at
+
+      event {
+        id
+        title
+      }
     }
   }
 
@@ -39,6 +44,11 @@ fragment UserConProfileRankedChoiceQueueFields on UserConProfile {
     state
     priority
     requested_bucket_key
+
+    simulated_skip_reason {
+      reason
+      extra
+    }
 
     target_run {
       id

@@ -1169,6 +1169,14 @@
       "settingsSection": {
         "label": "Settings"
       },
+      "simulatedSkip": {
+        "alreadySignedUp": "Skip: You are already signed up",
+        "alreadyWaitlisted": "Skip: You are already on the waitlist",
+        "conflict": "Skip: Conflicts with {{ eventTitles, list }}",
+        "full": "Skip: {{ eventTitle }} is full, and you have opted not to be put on waitlists",
+        "maxSignupsInTimespan": "Skip: You set a limit for signups on {{ timespan }}, and that limit has been reached",
+        "maxSignupsTotal": "Skip: You set a limit for total signups, and that limit has been reached"
+      },
       "ticketStatus": {
         "noTicket": "You do not have a {{ ticketName }}.  You will not be able to sign up for games until you have purchased a {{ ticketName }}.",
         "ok": "You have a {{ ticketName }} and will be signed up for events at that time.",
