@@ -139,7 +139,7 @@ group :development do
   gem "debug"
 
   # Linting
-  gem "rubocop", "1.70.0"
+  gem "rubocop", "1.71.0"
   gem "rubocop-performance"
   gem "rubocop-rails"
   gem "rubocop-sequel"
