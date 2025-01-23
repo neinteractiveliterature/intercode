@@ -1143,7 +1143,7 @@
       "allowWaitlist": {
         "caption": "What should we do if all your choices are full?",
         "no": "Don't sign me up for anything",
-        "yes": "Add me to the waitlist of my top-ranked choice"
+        "yes": "Waitlist me for the first choice in my queue that fits in my schedule"
       },
       "constraintsTable": {
         "label": "Limits"
