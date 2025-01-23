@@ -1178,7 +1178,8 @@
       "totalSignupsConstraint": {
         "help": "How many events do you want to sign up for over the entirety of the con (in addition to any events you are running?)",
         "label": "Total event signups"
-      }
+      },
+      "zeroLimit": "Don’t automatically sign me up for events"
     },
     "noPreference": "No preference",
     "noSignupsAvailable": "This event does not take signups.",

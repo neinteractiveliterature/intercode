@@ -77,6 +77,7 @@ function MaximumSignupsLimitSelect({ value, onValueChange, ...props }: MaximumSi
           {t('signups.mySignupQueue.maximumSignupsLimit', { number: n })}
         </option>
       ))}
+      <option value="0">{t('signups.mySignupQueue.zeroLimit')}</option>
     </select>
   );
 }
