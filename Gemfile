@@ -125,6 +125,7 @@ group :development do
 
   # Email testing/debugging
   gem "letter_opener"
+  gem "letter_opener_web"
 
   # Reloader support
   gem "listen"

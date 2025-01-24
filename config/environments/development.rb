@@ -50,7 +50,7 @@ Rails.application.configure do
   config.active_record.migration_error = :page_load
 
   config.action_mailer.default_url_options = { host: "intercode.test", port: 5050 }
-  config.action_mailer.delivery_method = :letter_opener
+  config.action_mailer.delivery_method = :letter_opener_web
 
   # Highlight code that triggered database queries in logs.
   config.active_record.verbose_query_logs = true
