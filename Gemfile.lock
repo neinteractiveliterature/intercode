@@ -408,7 +408,7 @@ GEM
     pry-remote (0.1.8)
       pry (~> 0.9)
       slop (~> 3.0)
-    psych (5.2.2)
+    psych (5.2.3)
       date
       stringio
     public_suffix (4.0.7)
@@ -527,10 +527,10 @@ GEM
     scheduled_value (1.4.0)
       sorted_set (~> 1.0)
     securerandom (0.4.1)
-    sentry-rails (5.22.1)
+    sentry-rails (5.22.2)
       railties (>= 5.0)
-      sentry-ruby (~> 5.22.1)
-    sentry-ruby (5.22.1)
+      sentry-ruby (~> 5.22.2)
+    sentry-ruby (5.22.2)
       bigdecimal
       concurrent-ruby (~> 1.0, >= 1.0.2)
     sequel (5.88.0)
