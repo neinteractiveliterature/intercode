@@ -1,21 +1,23 @@
-import { ReactNode } from 'react';
-import { Filters, SortingRule } from 'react-table';
+import { ReactNode, useMemo } from 'react';
+import { ColumnDef, ColumnFiltersState, SortingState } from '@tanstack/react-table';
 
 import ColumnSelector from './ColumnSelector';
 import ExportButton from './ExportButton';
 import { UseColumnSelectionResult } from './useColumnSelection';
 
-export type TableHeaderProps<RowType extends Record<string, unknown>> = {
-  columnSelectionProps: UseColumnSelectionResult<RowType>;
+export type TableHeaderProps<TData> = {
+  columns: ColumnDef<TData>[];
+  columnSelectionProps: UseColumnSelectionResult;
   exportButton?: ReactNode;
   exportUrl?: string;
-  filters: Filters<RowType>;
+  filters: ColumnFiltersState;
   renderLeftContent?: () => ReactNode;
   renderRightContent?: () => ReactNode;
-  sortBy: SortingRule<RowType>[];
+  sortBy: SortingState;
 };
 
-function TableHeader<RowType extends Record<string, unknown>>({
+function TableHeader<TData>({
+  columns,
   columnSelectionProps,
   exportButton,
   exportUrl,
@@ -23,24 +25,34 @@ function TableHeader<RowType extends Record<string, unknown>>({
   renderLeftContent,
   renderRightContent,
   sortBy,
-}: TableHeaderProps<RowType>): JSX.Element {
+}: TableHeaderProps<TData>): JSX.Element {
+  const visibleColumnIds = useMemo(() => {
+    return Object.entries(columnSelectionProps.columnVisibility).reduce((acc, [id, visible]) => {
+      if (visible) {
+        return [...acc, id];
+      } else {
+        return acc;
+      }
+    }, []);
+  }, [columnSelectionProps.columnVisibility]);
+
   return (
     <div className="d-flex mb-2">
       <div className="flex-grow-1">
         {exportButton ||
           (exportUrl && (
-            <ExportButton
-              exportUrl={exportUrl}
-              filters={filters}
-              sortBy={sortBy}
-              columns={columnSelectionProps.visibleColumnIds}
-            />
+            <ExportButton exportUrl={exportUrl} filters={filters} sortBy={sortBy} columns={visibleColumnIds} />
           ))}
         {(renderLeftContent || (() => null))()}
       </div>
       <div>
         {(renderRightContent || (() => null))()}
-        <ColumnSelector {...columnSelectionProps} />
+        <ColumnSelector
+          alwaysVisibleColumns={columnSelectionProps.alwaysVisibleColumns}
+          possibleColumns={columns}
+          columnVisibility={columnSelectionProps.columnVisibility}
+          setColumnVisibility={columnSelectionProps.setColumnVisibility}
+        />
       </div>
     </div>
   );

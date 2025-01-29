@@ -1,6 +1,6 @@
 import { useContext, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Column, CellProps, FilterProps } from 'react-table';
+import { Column, CellProps, FilterProps } from '@tanstack/react-table';
 import { useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
 import { DateTime } from 'luxon';
@@ -308,7 +308,12 @@ function UserConProfilesTable({ defaultVisibleColumns }: UserConProfilesTablePro
       getPossibleColumns(data, t, getSortedParsedFormItems(data.convention.user_con_profile_form), timezoneName),
     [t, timezoneName],
   );
-  const { tableInstance, loading, tableHeaderProps, queryData } = useReactTableWithTheWorks<
+  const {
+    table: tableInstance,
+    loading,
+    tableHeaderProps,
+    queryData,
+  } = useReactTableWithTheWorks<
     UserConProfilesTableUserConProfilesQueryData,
     UserConProfilesTableRow,
     UserConProfilesTableUserConProfilesQueryVariables
@@ -341,7 +346,7 @@ function UserConProfilesTable({ defaultVisibleColumns }: UserConProfilesTablePro
         />
 
         <ReactTableWithTheWorks
-          tableInstance={tableInstance}
+          table={tableInstance}
           loading={loading}
           onClickRow={(row) => {
             navigate(`/user_con_profiles/${row.original.id}`);

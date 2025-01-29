@@ -1,4 +1,4 @@
-import { CellProps, Column, Renderer } from 'react-table';
+import { CellProps, Column, Renderer } from '@tanstack/react-table';
 
 import useReactTableWithTheWorks from '../Tables/useReactTableWithTheWorks';
 import { buildFieldFilterCodecs } from '../Tables/FilterUtils';
@@ -51,7 +51,11 @@ const defaultVisibleColumns = ['receiver_address', 'forward_addresses'];
 function RootSiteEmailRoutesAdminTable(): JSX.Element {
   const authorizationWarning = useAuthorizationRequired('can_manage_email_routes');
 
-  const { tableInstance, loading, tableHeaderProps } = useReactTableWithTheWorks({
+  const {
+    table: tableInstance,
+    loading,
+    tableHeaderProps,
+  } = useReactTableWithTheWorks({
     decodeFilterValue,
     defaultVisibleColumns,
     encodeFilterValue,
@@ -82,7 +86,7 @@ function RootSiteEmailRoutesAdminTable(): JSX.Element {
       />
 
       <ReactTableWithTheWorks
-        tableInstance={tableInstance}
+        table={tableInstance}
         loading={loading}
         onClickRow={(row) => navigate(`./${row.original.id}`)}
       />

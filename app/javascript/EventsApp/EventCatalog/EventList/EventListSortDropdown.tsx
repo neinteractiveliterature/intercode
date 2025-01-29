@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import * as React from 'react';
 import isEqual from 'lodash/isEqual';
-import { SortingRule } from 'react-table';
+import { SortingRule } from '@tanstack/react-table';
 
 import AppRootContext from '../../../AppRootContext';
 import { DropdownMenu } from '../../../UIComponents/DropdownMenu';

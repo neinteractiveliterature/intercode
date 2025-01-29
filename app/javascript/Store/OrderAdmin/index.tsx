@@ -1,5 +1,5 @@
 import { useContext, useCallback } from 'react';
-import { Column, FilterProps } from 'react-table';
+import { Column, FilterProps } from '@tanstack/react-table';
 import { DateTime } from 'luxon';
 
 import ArrayToSentenceCell from 'Tables/ArrayToSentenceCell';
@@ -148,7 +148,12 @@ function OrderAdmin(): JSX.Element {
 
   const getPossibleColumnsWithTranslation = useCallback(() => getPossibleColumns(t), [t]);
 
-  const { tableHeaderProps, queryData, tableInstance, loading } = useReactTableWithTheWorks({
+  const {
+    tableHeaderProps,
+    queryData,
+    table: tableInstance,
+    loading,
+  } = useReactTableWithTheWorks({
     getData: ({ data }) => data?.convention.orders_paginated.entries,
     getPages: ({ data }) => data?.convention.orders_paginated.total_pages,
     getPossibleColumns: getPossibleColumnsWithTranslation,
@@ -174,7 +179,7 @@ function OrderAdmin(): JSX.Element {
         />
 
         <ReactTableWithTheWorks
-          tableInstance={tableInstance}
+          table={tableInstance}
           loading={loading}
           onClickRow={
             queryData?.currentAbility.can_update_orders ? (row) => navigate(`./${row.original.id}`) : undefined

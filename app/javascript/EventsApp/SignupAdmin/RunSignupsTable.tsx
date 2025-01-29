@@ -1,5 +1,5 @@
 import { useContext, useMemo } from 'react';
-import { Column, FilterProps, CellProps } from 'react-table';
+import { Column, FilterProps, CellProps } from '@tanstack/react-table';
 import { useNavigate, useParams, useRouteLoaderData, useRevalidator } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
@@ -180,7 +180,7 @@ function RunSignupsTable(): JSX.Element {
   const revalidator = useRevalidator();
 
   const {
-    tableInstance,
+    table: tableInstance,
     loading: tableLoading,
     tableHeaderProps,
     queryData,
@@ -245,7 +245,7 @@ function RunSignupsTable(): JSX.Element {
           )}
         />
         <ReactTableWithTheWorks
-          tableInstance={tableInstance}
+          table={tableInstance}
           loading={tableLoading}
           onClickRow={(row) =>
             navigate(`${buildEventUrl(data.convention.event)}/runs/${runId}/admin_signups/${row.original.id}`)

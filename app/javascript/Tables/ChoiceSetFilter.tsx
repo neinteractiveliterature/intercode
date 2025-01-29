@@ -2,7 +2,7 @@ import { useMemo, useState, ReactNode } from 'react';
 import classNames from 'classnames';
 import { Modifier } from 'react-popper';
 import { useTranslation } from 'react-i18next';
-import { FilterProps } from 'react-table';
+import { FilterProps } from '@tanstack/react-table';
 import max from 'lodash/max';
 import { ChoiceSet, useLitformPopperWithAutoClosing, useToggleOpen } from '@neinteractiveliterature/litform';
 

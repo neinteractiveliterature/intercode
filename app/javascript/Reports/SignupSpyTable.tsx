@@ -1,4 +1,4 @@
-import { Column } from 'react-table';
+import { Column } from '@tanstack/react-table';
 
 import useReactTableWithTheWorks, { QueryDataContext } from '../Tables/useReactTableWithTheWorks';
 import RefreshButton from '../EventsApp/ScheduleGrid/RefreshButton';
@@ -76,18 +76,24 @@ const defaultState = {
 };
 
 function SignupSpyTable(): JSX.Element {
-  const { columnSelectionProps, refetch, queryData, loading, tableHeaderProps, tableInstance } =
-    useReactTableWithTheWorks({
-      decodeFilterValue: FILTER_CODECS.decodeFilterValue,
-      defaultState,
-      defaultVisibleColumns,
-      encodeFilterValue: FILTER_CODECS.encodeFilterValue,
-      getData: ({ data }) => data.convention.signup_changes_paginated.entries,
-      getPages: ({ data }) => data.convention.signup_changes_paginated.total_pages,
-      getPossibleColumns: () => columns,
-      query: SignupSpySignupChangesQueryDocument,
-      storageKeyPrefix: 'signupSpy',
-    });
+  const {
+    columnSelectionProps,
+    refetch,
+    queryData,
+    loading,
+    tableHeaderProps,
+    table: tableInstance,
+  } = useReactTableWithTheWorks({
+    decodeFilterValue: FILTER_CODECS.decodeFilterValue,
+    defaultState,
+    defaultVisibleColumns,
+    encodeFilterValue: FILTER_CODECS.encodeFilterValue,
+    getData: ({ data }) => data.convention.signup_changes_paginated.entries,
+    getPages: ({ data }) => data.convention.signup_changes_paginated.total_pages,
+    getPossibleColumns: () => columns,
+    query: SignupSpySignupChangesQueryDocument,
+    storageKeyPrefix: 'signupSpy',
+  });
 
   const { filters, sortBy } = tableHeaderProps;
 
@@ -106,7 +112,7 @@ function SignupSpyTable(): JSX.Element {
             />
           }
         />
-        <ReactTableWithTheWorks tableInstance={tableInstance} loading={loading} />
+        <ReactTableWithTheWorks table={tableInstance} loading={loading} />
       </div>
     </QueryDataContext.Provider>
   );

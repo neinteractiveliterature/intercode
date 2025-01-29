@@ -1,4 +1,4 @@
-import { Column } from 'react-table';
+import { Column } from '@tanstack/react-table';
 
 import describeCoupon from '../describeCoupon';
 import useReactTableWithTheWorks from '../../Tables/useReactTableWithTheWorks';
@@ -74,7 +74,12 @@ function CouponAdminTable(): JSX.Element {
 
   const getPossibleColumnsWithTranslation = useCallback(() => getPossibleColumns(t), [t]);
 
-  const { tableHeaderProps, columnSelectionProps, tableInstance, loading } = useReactTableWithTheWorks({
+  const {
+    tableHeaderProps,
+    columnSelectionProps,
+    table: tableInstance,
+    loading,
+  } = useReactTableWithTheWorks({
     getData: ({ data }) => data?.convention.coupons_paginated.entries,
     getPages: ({ data }) => data?.convention.coupons_paginated.total_pages,
     getPossibleColumns: getPossibleColumnsWithTranslation,
@@ -103,7 +108,7 @@ function CouponAdminTable(): JSX.Element {
       />
 
       <ReactTableWithTheWorks
-        tableInstance={tableInstance}
+        table={tableInstance}
         loading={loading}
         onClickRow={(row) => navigate(`./${row.original.id}`)}
       />

@@ -1,5 +1,5 @@
 import { useContext, useMemo } from 'react';
-import { FilterProps } from 'react-table';
+import { FilterProps } from '@tanstack/react-table';
 import { QueryDataContext } from './useReactTableWithTheWorks';
 import ChoiceSetFilter from './ChoiceSetFilter';
 

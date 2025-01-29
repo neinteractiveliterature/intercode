@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FilterProps } from 'react-table';
+import { FilterProps } from '@tanstack/react-table';
 
 import ChoiceSetFilter from './ChoiceSetFilter';
 import EnumTypes from '../enumTypes.json';

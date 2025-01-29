@@ -1,11 +1,8 @@
-import { FilterProps } from 'react-table';
-
+import { Column } from '@tanstack/react-table';
 import CommitableInput from '../BuiltInFormControls/CommitableInput';
 
-function FreeTextFilter<RowType extends Record<string, unknown>>({
-  column: { filterValue, setFilter },
-}: FilterProps<RowType>): JSX.Element {
-  return <CommitableInput value={filterValue} onChange={setFilter} />;
+function FreeTextFilter<TData, TValue>({ column }: { column: Column<TData, TValue> }): JSX.Element {
+  return <CommitableInput value={column.getFilterValue() as string | undefined} onChange={column.setFilterValue} />;
 }
 
 export default FreeTextFilter;

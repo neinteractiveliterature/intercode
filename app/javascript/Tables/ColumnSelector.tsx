@@ -1,29 +1,33 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { Column } from 'react-table';
+import { ColumnDef, TableState } from '@tanstack/react-table';
 import { ChoiceSet, notEmpty } from '@neinteractiveliterature/litform';
 
 import { DropdownMenu } from '../UIComponents/DropdownMenu';
+import { useMemo } from 'react';
 
-export type ColumnSelectorProps<RowType extends Record<string, unknown>> = {
+export type ColumnSelectorProps<TData> = {
   alwaysVisibleColumns: string[];
-  possibleColumns: Column<RowType>[];
-  visibleColumnIds: string[];
-  setVisibleColumnIds: React.Dispatch<string[]>;
+  possibleColumns: ColumnDef<TData>[];
+  columnVisibility: TableState['columnVisibility'];
+  setColumnVisibility: React.Dispatch<React.SetStateAction<TableState['columnVisibility']>>;
 };
 
-function ColumnSelector<RowType extends Record<string, unknown>>({
+function ColumnSelector<TData>({
   alwaysVisibleColumns,
   possibleColumns,
-  visibleColumnIds,
-  setVisibleColumnIds,
-}: ColumnSelectorProps<RowType>): JSX.Element {
+  columnVisibility,
+  setColumnVisibility,
+}: ColumnSelectorProps<TData>): JSX.Element {
   const { t } = useTranslation();
+
+  const selectableColumns = useMemo(
+    () => possibleColumns.filter((column) => column.id != null && !alwaysVisibleColumns.includes(column.id)),
+    [possibleColumns, alwaysVisibleColumns],
+  );
+
   const renderHiddenColumnCount = () => {
-    const count =
-      possibleColumns.length -
-      visibleColumnIds.filter((columnId) => !alwaysVisibleColumns.includes(columnId)).length -
-      alwaysVisibleColumns.length;
+    const count = Object.values(columnVisibility).filter((visible) => !visible).length;
 
     if (count <= 0) {
       return null;
@@ -34,6 +38,29 @@ function ColumnSelector<RowType extends Record<string, unknown>>({
         {' '}
         <span className="badge bg-primary">{count}</span>
       </>
+    );
+  };
+
+  const visibleColumnIds = useMemo(() => {
+    return Object.entries(columnVisibility).reduce((acc, [id, visible]) => {
+      if (visible) {
+        return [...acc, id];
+      } else {
+        return acc;
+      }
+    }, []);
+  }, [columnVisibility]);
+
+  const setVisibleColumnIds = (visibleColumnIds: string[]) => {
+    const visibleColumnIdsSet = new Set(visibleColumnIds);
+    setColumnVisibility(
+      possibleColumns.reduce((acc, column) => {
+        if (column.id) {
+          return { ...acc, [column.id]: visibleColumnIdsSet.has(column.id) };
+        } else {
+          return acc;
+        }
+      }, {}),
     );
   };
 
@@ -48,13 +75,13 @@ function ColumnSelector<RowType extends Record<string, unknown>>({
         </>
       }
       dropdownClassName="px-2"
+      shouldAutoCloseOnNavigate={() => false}
     >
       <ChoiceSet
         name="columns"
         multiple
-        choices={possibleColumns
-          .filter((column) => column.id != null && !alwaysVisibleColumns.includes(column.id))
-          .map((column) => (column.id != null ? { label: <>{column.Header}</>, value: column.id } : undefined))
+        choices={selectableColumns
+          .map((column) => (column.id != null ? { label: <>{column.header}</>, value: column.id } : undefined))
           .filter(notEmpty)}
         value={visibleColumnIds}
         onChange={setVisibleColumnIds}

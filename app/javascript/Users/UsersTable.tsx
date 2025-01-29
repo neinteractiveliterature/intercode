@@ -1,5 +1,5 @@
 import { Outlet, useNavigate } from 'react-router-dom';
-import { Column } from 'react-table';
+import { createColumnHelper } from '@tanstack/react-table';
 
 import { buildFieldFilterCodecs } from '../Tables/FilterUtils';
 import EmailCell from '../Tables/EmailCell';
@@ -11,56 +11,11 @@ import usePageTitle from '../usePageTitle';
 import { UsersTableUsersQueryData, UsersTableUsersQueryDocument } from './queries.generated';
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
 import { useTranslation } from 'react-i18next';
-import { TFunction } from 'i18next';
-import { useCallback } from 'react';
+import { useMemo } from 'react';
 
 type UserType = UsersTableUsersQueryData['users_paginated']['entries'][0];
 
 const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({});
-
-function getPossibleColumns(t: TFunction): Column<UserType>[] {
-  return [
-    {
-      Header: t('admin.users.table.headers.id'),
-      id: 'id',
-      accessor: 'id',
-      width: 70,
-    },
-    {
-      Header: t('admin.users.table.headers.name'),
-      id: 'name',
-      accessor: (user: UserType) => user.name_inverted,
-      Filter: FreeTextFilter,
-      disableFilters: false,
-      disableSortBy: false,
-    },
-    {
-      Header: t('admin.users.table.headers.firstName'),
-      id: 'first_name',
-      accessor: 'first_name',
-      Filter: FreeTextFilter,
-      disableFilters: false,
-      disableSortBy: false,
-    },
-    {
-      Header: t('admin.users.table.headers.lastName'),
-      id: 'last_name',
-      accessor: 'last_name',
-      Filter: FreeTextFilter,
-      disableFilters: false,
-      disableSortBy: false,
-    },
-    {
-      Header: t('admin.users.table.headers.email'),
-      id: 'email',
-      accessor: 'email',
-      Cell: EmailCell,
-      Filter: FreeTextFilter,
-      disableFilters: false,
-      disableSortBy: false,
-    },
-  ];
-}
 
 // eslint-disable-next-line i18next/no-literal-string
 const defaultVisibleColumns = ['id', 'first_name', 'last_name', 'email'];
@@ -70,15 +25,50 @@ function UsersTable(): JSX.Element {
   const navigate = useNavigate();
   usePageTitle(t('navigation.admin.users'));
 
-  const getPossibleColumnsWithTranslation = useCallback(() => getPossibleColumns(t), [t]);
+  const columns = useMemo(() => {
+    const columnHelper = createColumnHelper<UserType>();
+    return [
+      columnHelper.accessor('id', {
+        id: 'id',
+        header: t('admin.users.table.headers.id'),
+        size: 70,
+        enableSorting: true,
+      }),
+      columnHelper.accessor('name_inverted', {
+        id: 'name',
+        header: t('admin.users.table.headers.name'),
+        enableColumnFilter: true,
+        enableSorting: true,
+      }),
+      columnHelper.accessor('first_name', {
+        id: 'first_name',
+        header: t('admin.users.table.headers.firstName'),
+        enableColumnFilter: true,
+        enableSorting: true,
+      }),
+      columnHelper.accessor('last_name', {
+        id: 'last_name',
+        header: t('admin.users.table.headers.lastName'),
+        enableColumnFilter: true,
+        enableSorting: true,
+      }),
+      columnHelper.accessor('email', {
+        id: 'email',
+        header: t('admin.users.table.headers.email'),
+        cell: EmailCell,
+        enableColumnFilter: true,
+        enableSorting: true,
+      }),
+    ];
+  }, [t]);
 
-  const { tableInstance, tableHeaderProps, loading } = useReactTableWithTheWorks({
+  const { table, tableHeaderProps, loading } = useReactTableWithTheWorks({
     decodeFilterValue,
     defaultVisibleColumns,
     encodeFilterValue,
     getData: ({ data }) => data.users_paginated.entries,
     getPages: ({ data }) => data.users_paginated.total_pages,
-    getPossibleColumns: getPossibleColumnsWithTranslation,
+    columns,
     rowSelect: true,
     storageKeyPrefix: 'users',
     query: UsersTableUsersQueryDocument,
@@ -94,7 +84,7 @@ function UsersTable(): JSX.Element {
         renderLeftContent={() => (
           <div className="ms-2 mb-2 d-inline-block align-top">
             <MultiUserActionsDropdown
-              selectedUserIds={tableInstance.selectedFlatRows.map((row) => row.original.id)}
+              selectedUserIds={table.getSelectedRowModel().flatRows.map((row) => row.original.id)}
               onClickMerge={(userIds) => navigate(`merge/${userIds.join(',')}`)}
             />
           </div>
@@ -102,10 +92,14 @@ function UsersTable(): JSX.Element {
       />
 
       <ReactTableWithTheWorks
-        tableInstance={tableInstance}
+        table={table}
         loading={loading}
         onClickRow={(row) => {
           navigate(`/users/${row.original.id}`);
+        }}
+        renderFilter={({ column }) => {
+          // all columns in this table are text filters
+          return <FreeTextFilter column={column} />;
         }}
       />
 

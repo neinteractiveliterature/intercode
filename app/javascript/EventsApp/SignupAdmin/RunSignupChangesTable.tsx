@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Column } from 'react-table';
+import { Column } from '@tanstack/react-table';
 import { useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
 
@@ -63,7 +63,13 @@ function RunSignupChangesTable(): JSX.Element {
   const { t } = useTranslation();
   const { runId } = useParams();
   const getPossibleColumnsFunc = useMemo(() => () => getPossibleColumns(t), [t]);
-  const { tableInstance, loading, queryData, tableHeaderProps, columnSelectionProps } = useReactTableWithTheWorks({
+  const {
+    table: tableInstance,
+    loading,
+    queryData,
+    tableHeaderProps,
+    columnSelectionProps,
+  } = useReactTableWithTheWorks({
     decodeFilterValue: FILTER_CODECS.decodeFilterValue,
     defaultVisibleColumns,
     encodeFilterValue: FILTER_CODECS.encodeFilterValue,
@@ -99,7 +105,7 @@ function RunSignupChangesTable(): JSX.Element {
             />
           }
         />
-        <ReactTableWithTheWorks tableInstance={tableInstance} loading={loading} />
+        <ReactTableWithTheWorks table={tableInstance} loading={loading} />
       </div>
     </QueryDataContext.Provider>
   );

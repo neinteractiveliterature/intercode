@@ -1,6 +1,6 @@
 import { Fragment, ReactNode, useContext } from 'react';
 import { Waypoint } from 'react-waypoint';
-import { SortingRule } from 'react-table';
+import { SortingRule } from '@tanstack/react-table';
 import { DateTime } from 'luxon';
 
 import EventCard from './EventCard';

@@ -1,6 +1,6 @@
 import { createContext, useCallback, useContext, useMemo } from 'react';
 import { assertNever } from 'assert-never';
-import { Column } from 'react-table';
+import { Column } from '@tanstack/react-table';
 import { useConfirm, ErrorDisplay, useGraphQLConfirm } from '@neinteractiveliterature/litform';
 
 import AppRootContext from '../AppRootContext';
@@ -309,7 +309,7 @@ function SignupModerationQueue(): JSX.Element {
     [pageData.convention.signup_rounds],
   );
 
-  const { tableInstance, loading } = useReactTableWithTheWorks({
+  const { table: tableInstance, loading } = useReactTableWithTheWorks({
     query: SignupModerationQueueQueryDocument,
     storageKeyPrefix: 'signupModerationQueue',
     getData: (result) => result.data.convention.signup_requests_paginated.entries,
@@ -382,7 +382,7 @@ function SignupModerationQueue(): JSX.Element {
   return (
     <SignupModerationContext.Provider value={contextValue}>
       <ErrorDisplay graphQLError={error as ApolloError} />
-      <ReactTableWithTheWorks tableInstance={tableInstance} loading={loading} />
+      <ReactTableWithTheWorks table={tableInstance} loading={loading} />
     </SignupModerationContext.Provider>
   );
 }

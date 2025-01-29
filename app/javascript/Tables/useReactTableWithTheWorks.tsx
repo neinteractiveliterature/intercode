@@ -1,22 +1,14 @@
-import React, { createContext, useMemo, useEffect, InputHTMLAttributes } from 'react';
-import { MaybeMasked } from '@apollo/client';
+import React, { createContext, useMemo, useEffect } from 'react';
 import {
-  CellProps,
-  Column,
-  Hooks,
-  Renderer,
-  Row,
-  TableInstance,
   TableState,
-  UseRowSelectRowProps,
-  useTable,
-  useFilters,
-  useSortBy,
-  usePagination,
-  useResizeColumns,
-  useFlexLayout,
-  useRowSelect,
-} from 'react-table';
+  useReactTable,
+  getCoreRowModel,
+  getFilteredRowModel,
+  getSortedRowModel,
+  getPaginationRowModel,
+  Table,
+  ColumnDef,
+} from '@tanstack/react-table';
 
 import useColumnSelection, { UseColumnSelectionOptions, UseColumnSelectionResult } from './useColumnSelection';
 import useGraphQLReactTable, {
@@ -26,7 +18,6 @@ import useGraphQLReactTable, {
 } from './useGraphQLReactTable';
 import useLocalStorageReactTable, { UseLocalStorageReactTableOptions } from './useLocalStorageReactTable';
 import useReactRouterReactTable, { UseReactRouterReactTableOptions } from './useReactRouterReactTable';
-import useCachedLoadableValue from '../useCachedLoadableValue';
 import type { TableHeaderProps } from './TableHeader';
 
 export function createQueryDataContext<DataType>(): React.Context<DataType | null | undefined> {
@@ -34,36 +25,16 @@ export function createQueryDataContext<DataType>(): React.Context<DataType | nul
 }
 export const QueryDataContext = createContext({});
 
-const IndeterminateCheckbox = React.forwardRef<
-  HTMLInputElement,
-  InputHTMLAttributes<HTMLInputElement> & { indeterminate?: boolean }
->(function IndeterminateCheckbox({ indeterminate, ...rest }, ref) {
-  const defaultRef = React.useRef<HTMLInputElement>(null);
-  const resolvedRef = ref ?? defaultRef;
-
-  React.useEffect(() => {
-    if (typeof resolvedRef !== 'function' && resolvedRef.current) {
-      resolvedRef.current.indeterminate = indeterminate ?? false;
-    }
-  }, [resolvedRef, indeterminate]);
-
-  return (
-    <>
-      <input type="checkbox" className="form-check" ref={resolvedRef} {...rest} />
-    </>
-  );
-});
-
 export type UseReactTableWithTheWorksOptions<
   RowType extends Record<string, unknown>,
   QueryData,
   Variables extends GraphQLReactTableVariables = GraphQLReactTableVariables,
-> = Omit<UseColumnSelectionOptions<RowType>, 'possibleColumns'> &
+> = UseColumnSelectionOptions<RowType> &
   UseGraphQLReactTableOptions<RowType, QueryData, Variables> &
   UseLocalStorageReactTableOptions &
-  UseReactRouterReactTableOptions<RowType> & {
-    defaultState?: Partial<TableState<RowType>>;
-    getPossibleColumns: (queryData: MaybeMasked<QueryData>) => Column<RowType>[];
+  UseReactRouterReactTableOptions & {
+    defaultState?: Partial<TableState>;
+    columns: ColumnDef<RowType>[];
     storageKeyPrefix: string;
     rowSelect?: boolean;
   };
@@ -73,8 +44,8 @@ export type UseReactTableWithTheWorksResult<
   RowType extends Record<string, unknown>,
   Variables extends GraphQLReactTableVariables = GraphQLReactTableVariables,
 > = Pick<UseGraphQLReactTableResult<RowType, QueryData, Variables>, 'refetch' | 'queryData' | 'loading' | 'error'> & {
-  tableInstance: TableInstance<RowType>;
-  columnSelectionProps: UseColumnSelectionResult<RowType>;
+  table: Table<RowType>;
+  columnSelectionProps: UseColumnSelectionResult;
   tableHeaderProps: TableHeaderProps<RowType>;
 };
 
@@ -90,7 +61,7 @@ export default function useReactTableWithTheWorks<
   encodeFilterValue,
   getData,
   getPages,
-  getPossibleColumns,
+  columns,
   query,
   rowSelect,
   storageKeyPrefix,
@@ -117,98 +88,66 @@ export default function useReactTableWithTheWorks<
     sortBy,
   });
 
-  const possibleColumns = useCachedLoadableValue(
-    loading,
-    error,
-    () => (queryData ? getPossibleColumns(queryData) : []),
-    [queryData],
-  );
-
-  const memoizedPossibleColumns = useMemo(() => possibleColumns ?? [], [possibleColumns]);
-
   const columnSelectionProps = useColumnSelection<RowType>({
     alwaysVisibleColumns,
     defaultVisibleColumns,
-    possibleColumns: memoizedPossibleColumns,
+    columns: columns,
   });
 
   const tableHeaderProps: TableHeaderProps<RowType> = useMemo(
-    () => ({ columnSelectionProps, filters, sortBy }),
-    [columnSelectionProps, filters, sortBy],
+    () => ({ columns, columnSelectionProps, filters, sortBy }),
+    [columns, columnSelectionProps, filters, sortBy],
   );
 
-  const tableInstance = useTable<RowType>(
-    {
-      columns: columnSelectionProps.visibleColumns,
-      data,
-      defaultColumn: {
-        defaultCanFilter: false,
-        disableSortBy: true,
-      },
-      initialState: {
-        filters,
-        sortBy,
-        pageSize,
+  const table = useReactTable<RowType>({
+    columns,
+    data,
+    defaultColumn: {
+      enableColumnFilter: false,
+      enableSorting: false,
+    },
+    initialState: {
+      columnFilters: filters,
+      sorting: sortBy,
+      pagination: {
         pageIndex: page ?? 0,
+        pageSize,
       },
-      manualFilters: true,
-      manualPagination: true,
-      manualSortBy: true,
-      pageCount: pages,
+      columnVisibility: columnSelectionProps.columnVisibility,
     },
-    useFilters,
-    useSortBy,
-    useResizeColumns,
-    usePagination,
-    useFlexLayout,
-    useRowSelect,
-    (hooks: Hooks<RowType>) => {
-      if (rowSelect) {
-        hooks.visibleColumns.push((columns) => {
-          const selectedColumnRenderer: Renderer<CellProps<RowType>> = ({ row }: { row: Row<RowType> }) => {
-            // I can't figure out how to get typescript to infer this properly
-            const rowAsUseRowSelectRowProps = row as unknown as UseRowSelectRowProps<Record<string, unknown>>;
-            const { toggleRowSelected, isSelected, getToggleRowSelectedProps } = rowAsUseRowSelectRowProps;
-            const toggle = (event: React.SyntheticEvent) => {
-              event.stopPropagation();
-              toggleRowSelected(!isSelected);
-            };
+    columnResizeDirection: 'rtl',
+    columnResizeMode: 'onChange',
+    manualFiltering: true,
+    manualPagination: true,
+    manualSorting: true,
+    pageCount: pages,
+    enableRowSelection: rowSelect,
+    getCoreRowModel: getCoreRowModel(),
+    getFilteredRowModel: getFilteredRowModel(),
+    getSortedRowModel: getSortedRowModel(),
+    getPaginationRowModel: getPaginationRowModel(),
+  });
 
-            // The cell can use the individual row's getToggleRowSelectedProps method
-            // to the render a checkbox
-            return <IndeterminateCheckbox {...getToggleRowSelectedProps()} onChange={toggle} />;
-          };
-
-          const selectedColumn: Column<RowType> = {
-            id: '_selected',
-            width: 20,
-            // The header can use the table's getToggleAllRowsSelectedProps method
-            // to render a checkbox
-            Header: ({ getToggleAllPageRowsSelectedProps }) => (
-              <IndeterminateCheckbox {...getToggleAllPageRowsSelectedProps()} />
-            ),
-            Cell: selectedColumnRenderer,
-          };
-          return [selectedColumn, ...columns];
-        });
-      }
-    },
-  );
+  const { columnFilters, sorting, pagination } = table.getState();
 
   useEffect(() => {
     updateSearch({
-      filters: tableInstance.state.filters,
-      sortBy: tableInstance.state.sortBy,
-      page: tableInstance.state.pageIndex,
+      filters: columnFilters,
+      sortBy: sorting,
+      page: pagination.pageIndex,
     });
-  }, [updateSearch, tableInstance.state.filters, tableInstance.state.sortBy, tableInstance.state.pageIndex]);
+  }, [updateSearch, columnFilters, sorting, pagination.pageIndex]);
 
   useEffect(() => {
-    setAndStorePageSize(tableInstance.state.pageSize);
-  }, [setAndStorePageSize, tableInstance.state.pageSize]);
+    setAndStorePageSize(pagination.pageSize);
+  }, [setAndStorePageSize, pagination.pageSize]);
+
+  useEffect(() => {
+    table.setColumnVisibility(columnSelectionProps.columnVisibility);
+  }, [columnSelectionProps.columnVisibility, table]);
 
   return {
-    tableInstance,
+    table,
     tableHeaderProps,
     columnSelectionProps,
     queryData,
