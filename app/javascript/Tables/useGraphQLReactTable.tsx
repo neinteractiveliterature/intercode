@@ -1,10 +1,10 @@
 import { useMemo } from 'react';
 import { QueryResult, ApolloError, OperationVariables, TypedDocumentNode, useQuery } from '@apollo/client';
-import { Filters, SortingRule } from 'react-table';
 
 import { reactTableFiltersToTableResultsFilters, reactTableSortToTableResultsSort } from './TableUtils';
 import useCachedLoadableValue from '../useCachedLoadableValue';
 import { SortInput } from '../graphqlTypes.generated';
+import { ColumnFiltersState, SortingState } from '@tanstack/react-table';
 
 export type GraphQLReactTableVariables = {
   page?: number | null;
@@ -35,8 +35,8 @@ export type UseGraphQLReactTableOptions<
   getPages: (queryData: QueryResultWithData<QueryData, Variables>) => number;
   query: TypedDocumentNode<QueryData, Variables>;
   variables?: Variables;
-  filters?: Filters<RowType>;
-  sortBy?: SortingRule<RowType>[];
+  filters?: ColumnFiltersState;
+  sortBy?: SortingState;
   page?: number;
   pageSize?: number;
 };

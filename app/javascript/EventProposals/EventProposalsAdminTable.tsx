@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { Column, FilterProps, CellProps } from 'react-table';
+import { Column, FilterProps, CellProps } from '@tanstack/react-table';
 
 import ChoiceSetFilter from '../Tables/ChoiceSetFilter';
 import { buildFieldFilterCodecs, FilterCodecs } from '../Tables/FilterUtils';
@@ -152,7 +152,12 @@ const alwaysVisibleColumns = ['_extra'];
 
 function EventProposalsAdminTable(): JSX.Element {
   const navigate = useNavigate();
-  const { tableHeaderProps, queryData, tableInstance, loading } = useReactTableWithTheWorks({
+  const {
+    tableHeaderProps,
+    queryData,
+    table: tableInstance,
+    loading,
+  } = useReactTableWithTheWorks({
     decodeFilterValue: FILTER_CODECS.decodeFilterValue,
     defaultVisibleColumns,
     alwaysVisibleColumns,
@@ -173,7 +178,7 @@ function EventProposalsAdminTable(): JSX.Element {
         <TableHeader {...tableHeaderProps} exportUrl="/csv_exports/event_proposals" />
 
         <ReactTableWithTheWorks
-          tableInstance={tableInstance}
+          table={tableInstance}
           loading={loading}
           onClickRow={(row) => navigate(`/admin_event_proposals/${row.original.id}`)}
         />

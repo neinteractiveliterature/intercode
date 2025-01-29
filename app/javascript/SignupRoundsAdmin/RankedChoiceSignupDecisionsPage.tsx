@@ -16,7 +16,7 @@ import { useAppDateTimeFormat } from '../TimeUtils';
 import useReactTableWithTheWorks, { QueryDataContext } from '../Tables/useReactTableWithTheWorks';
 import TableHeader from '../Tables/TableHeader';
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
-import { Column, FilterProps } from 'react-table';
+import { Column, FilterProps } from '@tanstack/react-table';
 import usePageTitle from '../usePageTitle';
 import { SingleLineTimestampCell } from '../Tables/TimestampCell';
 import FreeTextFilter from '../Tables/FreeTextFilter';
@@ -194,7 +194,12 @@ type RankedChoiceSignupDecisionsTableProps = {
 function RankedChoiceSignupDecisionsTable({ signupRoundId }: RankedChoiceSignupDecisionsTableProps) {
   const { t } = useTranslation();
 
-  const { queryData, tableHeaderProps, tableInstance, loading } = useReactTableWithTheWorks({
+  const {
+    queryData,
+    tableHeaderProps,
+    table: tableInstance,
+    loading,
+  } = useReactTableWithTheWorks({
     alwaysVisibleColumns,
     decodeFilterValue: FILTER_CODECS.decodeFilterValue,
     defaultState: {
@@ -220,7 +225,7 @@ function RankedChoiceSignupDecisionsTable({ signupRoundId }: RankedChoiceSignupD
           exportUrl={`/csv_exports/ranked_choice_decisions?signup_round_id=${encodeURIComponent(signupRoundId)}`}
         />
 
-        <ReactTableWithTheWorks tableInstance={tableInstance} loading={loading} />
+        <ReactTableWithTheWorks table={tableInstance} loading={loading} />
       </div>
     </QueryDataContext.Provider>
   );

@@ -1,37 +1,59 @@
-import React, { useState, useCallback, useEffect, HTMLAttributes, useId } from 'react';
+import React, { useState, useCallback, useEffect, useId } from 'react';
 import classNames from 'classnames';
-import { ColumnInstance, Row, UseRowSelectRowProps } from 'react-table';
+import { Column, Row, Table, flexRender } from '@tanstack/react-table';
 import { parseIntOrNull } from '@neinteractiveliterature/litform';
 
 import { UseReactTableWithTheWorksResult } from './useReactTableWithTheWorks';
 import { GraphQLReactTableVariables } from './useGraphQLReactTable';
 import { Trans, useTranslation } from 'react-i18next';
+import max from 'lodash/max';
+import styles from './tables.module.css';
 
-function mergeProps<T extends HTMLAttributes<unknown>>(...propSets: T[]) {
-  return propSets.reduce((acc, props) =>
-    Object.entries(props).reduce((currentProps, [key, value]) => {
-      if (key === 'className') {
-        return { ...currentProps, [key]: classNames(currentProps[key], value) };
-      }
+function Resizer<TData, TValue>({
+  table,
+  column,
+  resizeHandler,
+}: {
+  table: Table<TData>;
+  column: Column<TData, TValue>;
+  resizeHandler?: (e: React.SyntheticEvent) => void;
+}) {
+  const resizeHandlerWithStopPropagation = (e: React.SyntheticEvent) => {
+    if (resizeHandler) {
+      e.stopPropagation();
+      resizeHandler(e);
+    }
+  };
 
-      if (key === 'style') {
-        return { ...currentProps, [key]: { ...currentProps[key], ...value } };
-      }
-
-      return { ...currentProps, [key]: value };
-    }, acc),
+  return (
+    <div
+      onDoubleClick={() => column.resetSize()}
+      onMouseDown={resizeHandlerWithStopPropagation}
+      onTouchStart={resizeHandlerWithStopPropagation}
+      className={classNames(styles.resizer, table.options.columnResizeDirection, {
+        isResizing: column.getIsResizing(),
+      })}
+      style={{
+        transform:
+          table.options.columnResizeMode === 'onEnd' && column.getIsResizing()
+            ? `translateX(${
+                (table.options.columnResizeDirection === 'rtl' ? -1 : 1) *
+                (table.getState().columnSizingInfo.deltaOffset ?? 0)
+              }px)`
+            : '',
+      }}
+    />
   );
 }
 
-function Resizer<RowType extends Record<string, unknown>>({ column }: { column: ColumnInstance<RowType> }) {
-  return <div {...column.getResizerProps()} className={`resizer ${column.isResizing ? 'isResizing' : ''}`} />;
-}
+export type FilterRenderer<TData> = <TValue>(props: { column: Column<TData, TValue> }) => React.ReactNode;
 
 export type ReactTableWithTheWorksProps<
   QueryData,
   RowType extends Record<string, unknown>,
   Variables extends GraphQLReactTableVariables = GraphQLReactTableVariables,
-> = Pick<UseReactTableWithTheWorksResult<QueryData, RowType, Variables>, 'tableInstance' | 'loading'> & {
+> = Pick<UseReactTableWithTheWorksResult<QueryData, RowType, Variables>, 'table' | 'loading'> & {
+  renderFilter?: FilterRenderer<RowType>;
   onClickRow?: React.Dispatch<Row<RowType>>;
 };
 
@@ -39,25 +61,17 @@ function ReactTableWithTheWorks<
   QueryData,
   RowType extends Record<string, unknown>,
   Variables extends GraphQLReactTableVariables = GraphQLReactTableVariables,
->({ tableInstance, loading, onClickRow }: ReactTableWithTheWorksProps<QueryData, RowType, Variables>): JSX.Element {
-  const {
-    getTableProps,
-    headerGroups,
-    getTableBodyProps,
-    rows,
-    prepareRow,
-    gotoPage,
-    previousPage,
-    canPreviousPage,
-    nextPage,
-    canNextPage,
-    pageOptions,
-    setPageSize,
-    state: { pageIndex, pageSize },
-  } = tableInstance;
+>({
+  table,
+  loading,
+  onClickRow,
+  renderFilter,
+}: ReactTableWithTheWorksProps<QueryData, RowType, Variables>): JSX.Element {
+  const { previousPage, nextPage, setPageSize, setPageIndex } = table;
+  const { pagination } = table.getState();
 
   const { t } = useTranslation();
-  const [pageInputValue, setPageInputValue] = useState<string>(() => (pageIndex + 1).toString());
+  const [pageInputValue, setPageInputValue] = useState<string>(() => (pagination.pageIndex + 1).toString());
   const pageInputId = useId();
 
   const pageInputChanged = useCallback(
@@ -65,194 +79,155 @@ function ReactTableWithTheWorks<
       setPageInputValue(event.target.value);
       const parsedPage = parseIntOrNull(event.target.value);
       if (parsedPage != null) {
-        gotoPage(parsedPage - 1);
+        setPageIndex(parsedPage - 1);
       }
     },
-    [gotoPage],
+    [setPageIndex],
   );
 
   useEffect(() => {
-    setPageInputValue((pageIndex + 1).toString());
-  }, [pageIndex]);
+    setPageInputValue((pagination.pageIndex + 1).toString());
+  }, [pagination.pageIndex]);
+
+  const rowModel = table.getRowModel();
 
   return (
     <div className="mb-3 border">
-      <div
-        {...mergeProps(getTableProps(), {
-          className: classNames('table react-table table-striped table-highlight table-borderless mb-0', {
-            'table-hover': onClickRow != null,
-          }),
+      <table
+        className={classNames('table react-table table-striped table-highlight table-borderless mb-0', {
+          'table-hover': onClickRow != null,
         })}
       >
-        <div className="thead">
-          {headerGroups.map((headerGroup) => (
-            <React.Fragment key={headerGroup.getHeaderGroupProps().key}>
-              <div {...headerGroup.getHeaderGroupProps()}>
-                {headerGroup.headers.map((column) => {
-                  const headerProps = column.getHeaderProps();
-                  return (
-                    <div
-                      key={headerProps.key}
-                      {...mergeProps<HTMLAttributes<HTMLDivElement>>(headerProps, {
-                        className: 'border-bottom py-1 align-middle',
-                      })}
-                    >
-                      {column.canSort ? (
-                        <button
-                          type="button"
-                          className="btn btn-unstyled p-0 fw-bold w-100 text-start"
-                          onClick={() => column.toggleSortBy()}
-                        >
-                          {column.render('Header')}
-                          {column.isSorted && <>&nbsp;{column.isSortedDesc ? '▾' : '▴'}</>}
-                        </button>
-                      ) : (
-                        column.render('Header')
-                      )}
-                      <Resizer column={column} />
-                    </div>
-                  );
-                })}
-              </div>
-              {headerGroup.headers.some((column) => column.canFilter && column.Filter) && (
-                <div
-                  {...mergeProps(headerGroup.getHeaderGroupProps(), {
-                    key: `filter-${headerGroup.getHeaderGroupProps().key}`,
-                    className: 'glow-inset-medium-light',
-                  })}
-                >
-                  {headerGroup.headers.map((column) => {
-                    const headerProps = column.getHeaderProps();
-                    return (
-                      <div
-                        key={headerProps.key}
-                        {...mergeProps<HTMLAttributes<HTMLDivElement>>(headerProps, {
-                          className: 'py-1 border-bottom fw-normal align-middle',
-                          style: { overflow: 'visible' },
-                        })}
+        <thead className="thead">
+          {table.getHeaderGroups().map((headerGroup) => (
+            <React.Fragment key={headerGroup.id}>
+              <tr>
+                {headerGroup.headers.map((header) => (
+                  <th key={header.id} className="border-bottom py-1 align-middle" style={{ width: header.getSize() }}>
+                    {header.column.getCanSort() ? (
+                      <button
+                        type="button"
+                        className="btn btn-unstyled p-0 fw-bold w-100 text-start"
+                        onClick={() => header.column.toggleSorting()}
                       >
-                        {column.canFilter && column.Filter && column.render('Filter')}
-                        <Resizer column={column} />
-                      </div>
+                        {flexRender(header.column.columnDef.header, header.getContext())}
+                        {header.column.getIsSorted() && <>&nbsp;{header.column.getIsSorted() === 'desc' ? '▾' : '▴'}</>}
+                      </button>
+                    ) : (
+                      flexRender(header.column.columnDef.header, header.getContext())
+                    )}
+                    <Resizer column={header.column} table={table} resizeHandler={header.getResizeHandler()} />
+                  </th>
+                ))}
+              </tr>
+              {renderFilter && headerGroup.headers.some((header) => header.column.getCanFilter()) && (
+                <tr key={`filter-${headerGroup.id}`} className="glow-inset-medium-light">
+                  {headerGroup.headers.map((header) => {
+                    return (
+                      <th
+                        key={header.id}
+                        className="py-1 border-bottom fw-normal align-middle"
+                        style={{ overflow: 'visible' }}
+                      >
+                        {header.column.getCanFilter() && renderFilter({ column: header.column })}
+                        <Resizer column={header.column} table={table} resizeHandler={header.getResizeHandler()} />
+                      </th>
                     );
                   })}
-                </div>
+                </tr>
               )}
             </React.Fragment>
           ))}
-        </div>
-        <div
-          {...mergeProps(getTableBodyProps(), {
-            style: { opacity: loading ? 0.3 : 1.0, transition: 'opacity 0.5s' },
-          })}
-        >
-          {loading && rows.length === 0
-            ? [...Array(pageSize)].map((value, index) => (
-                <div key={index} role="row" aria-hidden>
-                  <div>&nbsp;</div>
-                </div>
+        </thead>
+        <tbody style={{ opacity: loading ? 0.3 : 1.0, transition: 'opacity 0.5s' }}>
+          {loading && rowModel.rows.length === 0
+            ? [...Array(pagination.pageSize)].map((value, index) => (
+                <tr key={index} role="row" aria-hidden>
+                  <td>&nbsp;</td>
+                </tr>
               ))
-            : rows.map((row: Row<RowType> & UseRowSelectRowProps<RowType>) => {
-                prepareRow(row);
-                const rowProps = row.getRowProps();
+            : rowModel.rows.map((row: Row<RowType>) => {
                 return (
-                  <div
-                    key={rowProps.key}
-                    {...mergeProps<HTMLAttributes<HTMLDivElement>>(
-                      rowProps,
-                      { style: { minWidth: 'max-content' } },
-                      onClickRow
-                        ? {
-                            style: { cursor: 'pointer' },
-                            onClick: () => onClickRow(row),
-                          }
-                        : {},
-                    )}
+                  <tr
+                    key={row.id}
+                    style={{ minWidth: 'max-content', ...(onClickRow ? { cursor: 'pointer' } : {}) }}
+                    onClick={onClickRow ? () => onClickRow(row) : undefined}
                   >
-                    {row.cells.map((cell) => {
-                      const cellProps = cell.getCellProps();
+                    {row.getVisibleCells().map((cell) => {
                       return (
-                        <div
-                          key={cellProps.key}
-                          {...mergeProps<HTMLAttributes<HTMLDivElement>>(
-                            cellProps,
-                            {
-                              style: { position: 'relative', overflow: 'hidden' },
-                            },
-                            cell.column.id === '_selected'
-                              ? {
-                                  onClick: (event) => {
-                                    event.stopPropagation();
-                                    row.toggleRowSelected(!row.isSelected);
-                                  },
-                                }
-                              : {},
-                          )}
+                        <td
+                          key={cell.id}
+                          style={{
+                            position: 'relative',
+                            overflow: 'hidden',
+                            width: cell.column.getSize(),
+                          }}
                         >
-                          {cell.render('Cell')}
-                          <Resizer column={cell.column} />
-                        </div>
+                          {flexRender(cell.column.columnDef.cell, cell.getContext())}
+                        </td>
                       );
                     })}
-                  </div>
+                  </tr>
                 );
               })}
-        </div>
-      </div>
-      <div className="tfoot">
-        <div className="border-top p-1">
-          <div className="d-flex justify-content-between align-items-center">
-            <button
-              type="button"
-              onClick={() => previousPage()}
-              className="btn btn-outline-secondary col-3 me-2"
-              disabled={!canPreviousPage}
-            >
-              <i className="bi-chevron-left" /> {t('tables.pagination.previous')}
-            </button>
-            <div className="text-nowrap">
-              <Trans i18nKey="tables.pagination.pageSelector" values={{ totalPages: pageOptions.length }}>
-                <label className="form-label" htmlFor={pageInputId}>
-                  Page
-                </label>{' '}
-                {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
-                <input
-                  className="form-control form-control-sm d-inline"
-                  style={{ width: '5rem' }}
-                  id={pageInputId}
-                  type="number"
-                  value={pageInputValue}
-                  onChange={pageInputChanged}
-                />{' '}
-                of {{ totalPages: pageOptions.length }}
-              </Trans>
-            </div>
-            <div>
-              <select
-                className="form-select"
-                value={pageSize}
-                onChange={(e) => {
-                  setPageSize(Number(e.target.value));
-                }}
-              >
-                {[5, 10, 20, 25, 50, 100].map((count) => (
-                  <option key={count} value={count}>
-                    {t('tables.pagination.rowCount', { count })}
-                  </option>
-                ))}
-              </select>
-            </div>
-            <button
-              type="button"
-              className="btn btn-outline-secondary col-3 ms-2"
-              onClick={() => nextPage()}
-              disabled={!canNextPage}
-            >
-              {t('tables.pagination.next')} <i className="bi-chevron-right" />
-            </button>
-          </div>
-        </div>
-      </div>
+        </tbody>
+        <tfoot className="tfoot">
+          <tr className="border-top p-1">
+            <td colSpan={max(table.getHeaderGroups().map((headerGroup) => headerGroup.headers.length))}>
+              <div className="d-flex justify-content-between align-items-center">
+                <button
+                  type="button"
+                  onClick={() => previousPage()}
+                  className="btn btn-outline-secondary col-3 me-2"
+                  disabled={!table.getCanPreviousPage()}
+                >
+                  <i className="bi-chevron-left" /> {t('tables.pagination.previous')}
+                </button>
+                <div className="text-nowrap">
+                  <Trans i18nKey="tables.pagination.pageSelector" values={{ totalPages: table.getPageCount() }}>
+                    <label className="form-label" htmlFor={pageInputId}>
+                      Page
+                    </label>{' '}
+                    {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+                    <input
+                      className="form-control form-control-sm d-inline"
+                      style={{ width: '5rem' }}
+                      id={pageInputId}
+                      type="number"
+                      value={pageInputValue}
+                      onChange={pageInputChanged}
+                    />{' '}
+                    of {{ totalPages: table.getPageCount() }}
+                  </Trans>
+                </div>
+                <div>
+                  <select
+                    className="form-select"
+                    value={pagination.pageSize}
+                    onChange={(e) => {
+                      setPageSize(Number(e.target.value));
+                    }}
+                  >
+                    {[5, 10, 20, 25, 50, 100].map((count) => (
+                      <option key={count} value={count}>
+                        {t('tables.pagination.rowCount', { count })}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                <button
+                  type="button"
+                  className="btn btn-outline-secondary col-3 ms-2"
+                  onClick={() => nextPage()}
+                  disabled={!table.getCanNextPage()}
+                >
+                  {t('tables.pagination.next')} <i className="bi-chevron-right" />
+                </button>
+              </div>
+            </td>
+          </tr>
+        </tfoot>
+      </table>
     </div>
   );
 }

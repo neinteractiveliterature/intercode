@@ -1,32 +1,32 @@
 import { useCallback, useMemo } from 'react';
 import { useSearchParams } from 'react-router-dom';
-import { Filters, SortingRule } from 'react-table';
+import { ColumnFiltersState, SortingState } from '@tanstack/react-table';
 
 import { FieldFilterCodecs } from './FilterUtils';
 
-export type UseReactRouterReactTableOptions<RowType extends Record<string, unknown>> = Partial<FieldFilterCodecs> & {
-  defaultState?: Partial<ReactRouterReactTableState<RowType>>;
+export type UseReactRouterReactTableOptions = Partial<FieldFilterCodecs> & {
+  defaultState?: Partial<ReactRouterReactTableState>;
 };
 
-export type ReactRouterReactTableState<RowType extends Record<string, unknown>> = {
+export type ReactRouterReactTableState = {
   page: number;
-  filters: Filters<RowType>;
-  sortBy: SortingRule<RowType>[];
+  filters: ColumnFiltersState;
+  sortBy: SortingState;
 };
 
 function identityCodec(field: string, value: string): string {
   return value;
 }
 
-export default function useReactRouterReactTable<RowType extends Record<string, unknown>>({
+export default function useReactRouterReactTable({
   defaultState,
   encodeFilterValue,
   decodeFilterValue,
-}: UseReactRouterReactTableOptions<RowType>): {
+}: UseReactRouterReactTableOptions): {
   page: number;
-  filters: Filters<RowType>;
-  sortBy: SortingRule<RowType>[];
-  updateSearch: (state: Partial<ReactRouterReactTableState<RowType>>) => void;
+  filters: ColumnFiltersState;
+  sortBy: SortingState;
+  updateSearch: (state: Partial<ReactRouterReactTableState>) => void;
 } {
   const [searchParams, setSearchParams] = useSearchParams();
   const encode = useMemo(() => encodeFilterValue ?? identityCodec, [encodeFilterValue]);
@@ -35,8 +35,8 @@ export default function useReactRouterReactTable<RowType extends Record<string, 
   const decodeSearchParams = useCallback(
     (params: URLSearchParams) => {
       let page: number | undefined;
-      const filters: Filters<RowType> = [];
-      const sortBy: SortingRule<RowType>[] = [];
+      const filters: ColumnFiltersState = [];
+      const sortBy: SortingState = [];
 
       Array.from(params.entries()).forEach(([key, value]) => {
         if (key === 'page') {
@@ -64,15 +64,15 @@ export default function useReactRouterReactTable<RowType extends Record<string, 
 
       return {
         page: page ?? defaultState?.page ?? 0,
-        filters: filters.length > 0 ? filters : defaultState?.filters ?? [],
-        sortBy: sortBy.length > 0 ? sortBy : defaultState?.sortBy ?? [],
+        filters: filters.length > 0 ? filters : (defaultState?.filters ?? []),
+        sortBy: sortBy.length > 0 ? sortBy : (defaultState?.sortBy ?? []),
       };
     },
     [decode, defaultState],
   );
 
   const encodeSearchParams = useCallback(
-    ({ page, filters, sortBy }: ReactRouterReactTableState<RowType>, existingParams: URLSearchParams) => {
+    ({ page, filters, sortBy }: ReactRouterReactTableState, existingParams: URLSearchParams) => {
       const params = new URLSearchParams(existingParams);
 
       if (page != null) {
@@ -105,7 +105,7 @@ export default function useReactRouterReactTable<RowType extends Record<string, 
   );
 
   const updateSearch = useCallback(
-    (newState: Partial<ReactRouterReactTableState<RowType>>) => {
+    (newState: Partial<ReactRouterReactTableState>) => {
       const oldState = decodeSearchParams(searchParams);
       const newSearch = encodeSearchParams({ ...oldState, ...newState }, searchParams);
       if (newSearch.toString() !== searchParams.toString()) {

@@ -8,7 +8,7 @@ import { FilterCodecs, buildFieldFilterCodecs } from '../../../Tables/FilterUtil
 import TableHeader from '../../../Tables/TableHeader';
 import ReactTableWithTheWorks from '../../../Tables/ReactTableWithTheWorks';
 import { LoaderFunction, useLoaderData, useNavigate } from 'react-router';
-import { Column } from 'react-table';
+import { Column } from '@tanstack/react-table';
 import EventCategoryCell from '../../../Tables/EventCategoryCell';
 import EventCategoryFilter from '../../../Tables/EventCategoryFilter';
 import { useContext, useMemo } from 'react';
@@ -174,7 +174,12 @@ function EventTable() {
   const navigate = useNavigate();
   usePageTitle('Table View - Event Catalog');
 
-  const { tableHeaderProps, tableInstance, loading, queryData } = useReactTableWithTheWorks({
+  const {
+    tableHeaderProps,
+    table: tableInstance,
+    loading,
+    queryData,
+  } = useReactTableWithTheWorks({
     decodeFilterValue: FILTER_CODECS.decodeFilterValue,
     defaultVisibleColumns,
     encodeFilterValue: FILTER_CODECS.encodeFilterValue,
@@ -196,7 +201,7 @@ function EventTable() {
 
         <QueryDataContext.Provider value={mergedQueryData}>
           <ReactTableWithTheWorks
-            tableInstance={tableInstance}
+            table={tableInstance}
             loading={loading}
             onClickRow={(row) => navigate(`/events/${row.original.event.id}`)}
           />

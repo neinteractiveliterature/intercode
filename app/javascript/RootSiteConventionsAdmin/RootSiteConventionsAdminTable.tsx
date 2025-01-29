@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Column } from 'react-table';
+import { Column } from '@tanstack/react-table';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { DateTime } from 'luxon';
 import { useTranslation } from 'react-i18next';
@@ -100,7 +100,11 @@ const defaultVisibleColumns = ['name', 'organization_name', 'starts_at'];
 
 function RootSiteConventionsAdminTable(): JSX.Element {
   const navigate = useNavigate();
-  const { tableInstance, loading, tableHeaderProps } = useReactTableWithTheWorks({
+  const {
+    table: tableInstance,
+    loading,
+    tableHeaderProps,
+  } = useReactTableWithTheWorks({
     decodeFilterValue,
     defaultVisibleColumns,
     encodeFilterValue,
@@ -128,7 +132,7 @@ function RootSiteConventionsAdminTable(): JSX.Element {
       />
 
       <ReactTableWithTheWorks
-        tableInstance={tableInstance}
+        table={tableInstance}
         loading={loading}
         onClickRow={(row) => navigate(`/conventions/${row.original.id}`)}
       />

@@ -1,6 +1,6 @@
 import { useState, useCallback, useContext, useMemo } from 'react';
 import { ApolloError, useQuery } from '@apollo/client';
-import { Filters } from 'react-table';
+import { Filters } from '@tanstack/react-table';
 import { useTranslation } from 'react-i18next';
 import {
   LoadingIndicator,
