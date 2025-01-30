@@ -5910,10 +5910,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@remix-run/router@npm:1.21.1":
-  version: 1.21.1
-  resolution: "@remix-run/router@npm:1.21.1"
-  checksum: 10c0/a90e62c6f18e53d8a1f39de8aaebe3abd340ea085a761296f4fddda23bd3ad133f9adf0190392e0b02933761180b484e7fc052447a6a8482c52207fcecbf9a90
+"@remix-run/router@npm:1.22.0":
+  version: 1.22.0
+  resolution: "@remix-run/router@npm:1.22.0"
+  checksum: 10c0/6fbfbdddb485af6bc24635272436fc9884b40d2517581b5cc66ab866279d238ccb11b6f8f67ad99d43ff21c0ea8bc088c96d510a42dcc0cc05a716760fe5a633
   languageName: node
   linkType: hard
 
@@ -20054,16 +20054,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-router-dom@npm:6.28.2":
-  version: 6.28.2
-  resolution: "react-router-dom@npm:6.28.2"
+"react-router-dom@npm:6.29.0":
+  version: 6.29.0
+  resolution: "react-router-dom@npm:6.29.0"
   dependencies:
-    "@remix-run/router": "npm:1.21.1"
-    react-router: "npm:6.28.2"
+    "@remix-run/router": "npm:1.22.0"
+    react-router: "npm:6.29.0"
   peerDependencies:
     react: ">=16.8"
     react-dom: ">=16.8"
-  checksum: 10c0/09757f0f8c63d5b939176825536d2311edac1f32b18410eb2b37900774c8622dbaa340bef78ab46931111e30890c7bc3f83346d809c2664a5dc4866fe0175f41
+  checksum: 10c0/f89f922006b6ff896ba81d82088812e42ae56790ccb838e7041eebe0f7d36ac2a4eca56512a422da4249cca23f389f998e84cf8ff868d4a83defd72951b8fbf9
   languageName: node
   linkType: hard
 
@@ -20103,14 +20103,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-router@npm:6.28.2":
-  version: 6.28.2
-  resolution: "react-router@npm:6.28.2"
+"react-router@npm:6.29.0":
+  version: 6.29.0
+  resolution: "react-router@npm:6.29.0"
   dependencies:
-    "@remix-run/router": "npm:1.21.1"
+    "@remix-run/router": "npm:1.22.0"
   peerDependencies:
     react: ">=16.8"
-  checksum: 10c0/07f033a0bfdcfee6cb889d8603b6063c04c7b7fe38567fea5c7e55c45f31cf32115c2615a7962685632df49538bc867368631feb84fd1fec6f709827d492abe8
+  checksum: 10c0/0ad27b34e2ccb6db68ef124cd4492ba86b5422ea3e2af01c9de95e372eb3a36fb4727b40488ebc90e5e0cea41bc655c53569a754713554a465ca9423aa233df8
   languageName: node
   linkType: hard
 
@@ -21135,8 +21135,8 @@ __metadata:
     react-i18next: "npm:15.4.0"
     react-onclickoutside: "npm:6.13.1"
     react-popper: "npm:2.3.0"
-    react-router: "npm:6.28.2"
-    react-router-dom: "npm:6.28.2"
+    react-router: "npm:6.29.0"
+    react-router-dom: "npm:6.29.0"
     react-select: "npm:5.10.0"
     react-table: "npm:7.8.0"
     react-test-renderer: "npm:18.3.1"
