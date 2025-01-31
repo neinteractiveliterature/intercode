@@ -115,7 +115,7 @@ export default function useReactTableWithTheWorks<
       },
       columnVisibility: columnSelectionProps.columnVisibility,
     },
-    columnResizeDirection: 'rtl',
+    columnResizeDirection: 'ltr',
     columnResizeMode: 'onChange',
     manualFiltering: true,
     manualPagination: true,

@@ -30,8 +30,8 @@ function Resizer<TData, TValue>({
       onDoubleClick={() => column.resetSize()}
       onMouseDown={resizeHandlerWithStopPropagation}
       onTouchStart={resizeHandlerWithStopPropagation}
-      className={classNames(styles.resizer, table.options.columnResizeDirection, {
-        isResizing: column.getIsResizing(),
+      className={classNames(styles.resizer, table.options.columnResizeDirection === 'ltr' ? styles.ltr : styles.rtl, {
+        [styles.isResizing]: column.getIsResizing(),
       })}
       style={{
         transform:
@@ -103,7 +103,11 @@ function ReactTableWithTheWorks<
             <React.Fragment key={headerGroup.id}>
               <tr>
                 {headerGroup.headers.map((header) => (
-                  <th key={header.id} className="border-bottom py-1 align-middle" style={{ width: header.getSize() }}>
+                  <th
+                    key={header.id}
+                    className="border-bottom py-1 align-middle  position-relative"
+                    style={{ width: header.getSize() }}
+                  >
                     {header.column.getCanSort() ? (
                       <button
                         type="button"
@@ -116,7 +120,9 @@ function ReactTableWithTheWorks<
                     ) : (
                       flexRender(header.column.columnDef.header, header.getContext())
                     )}
-                    <Resizer column={header.column} table={table} resizeHandler={header.getResizeHandler()} />
+                    {header.index < headerGroup.headers.length - 1 && (
+                      <Resizer column={header.column} table={table} resizeHandler={header.getResizeHandler()} />
+                    )}
                   </th>
                 ))}
               </tr>
@@ -126,11 +132,12 @@ function ReactTableWithTheWorks<
                     return (
                       <th
                         key={header.id}
-                        className="py-1 border-bottom fw-normal align-middle"
-                        style={{ overflow: 'visible' }}
+                        className="py-1 border-bottom fw-normal align-middle position-relative overflow-visible"
                       >
                         {header.column.getCanFilter() && renderFilter({ column: header.column })}
-                        <Resizer column={header.column} table={table} resizeHandler={header.getResizeHandler()} />
+                        {header.index < headerGroup.headers.length - 1 && (
+                          <Resizer column={header.column} table={table} resizeHandler={header.getResizeHandler()} />
+                        )}
                       </th>
                     );
                   })}
