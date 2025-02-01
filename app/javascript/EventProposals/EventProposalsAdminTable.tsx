@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router-dom';
-import { Column, FilterProps, CellProps } from '@tanstack/react-table';
+import { Column } from '@tanstack/react-table';
 
 import ChoiceSetFilter from '../Tables/ChoiceSetFilter';
 import { buildFieldFilterCodecs, FilterCodecs } from '../Tables/FilterUtils';
@@ -32,8 +32,8 @@ const STATUS_OPTIONS = [
   { value: 'withdrawn', label: 'Withdrawn', badgeClass: 'bg-warning' },
 ] as const;
 
-function StatusFilter(props: FilterProps<EventProposalType>) {
-  return <ChoiceSetFilter {...props} choices={STATUS_OPTIONS} multiple />;
+function StatusFilter<TData extends Record<string, unknown>, TValue>({ column }: { column: Column<TData, TValue> }) {
+  return <ChoiceSetFilter column={column} choices={STATUS_OPTIONS} multiple />;
 }
 
 function StatusCell({ value }: { value: EventProposalType['status'] }) {
