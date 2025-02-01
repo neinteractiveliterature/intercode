@@ -1,6 +1,7 @@
 import React, { useContext } from 'react';
+import { flushSync } from 'react-dom';
 import { UserConProfileRankedChoiceQueueFieldsFragment } from './queries.generated';
-import { useTranslation } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 import { ErrorDisplay, LoadingIndicator, useGraphQLConfirm } from '@neinteractiveliterature/litform';
 import { InternalRefetchQueriesInclude, useMutation } from '@apollo/client';
 import RankedChoicePriorityIndicator from './RankedChoicePriorityIndicator';
@@ -14,6 +15,7 @@ import AppRootContext from '../../AppRootContext';
 import { DeleteSignupRankedChoiceDocument, UpdateSignupRankedChoicePriorityDocument } from './mutations.generated';
 import { TFunction } from 'i18next';
 import { RankedChoiceDecisionReason, SignupState } from 'graphqlTypes.generated';
+import styles from './signup-queue.module.css';
 
 function formatSkipReason({
   t,
@@ -37,14 +39,30 @@ function formatSkipReason({
     const signups = userConProfile.signups.filter((signup) => signupIds.has(signup.id));
     if (signups.length === 1 && signups[0].run.id === pendingChoice.target_run.id) {
       if (signups[0].state === SignupState.Confirmed) {
-        return t('signups.mySignupQueue.simulatedSkip.alreadySignedUp');
+        return (
+          <>
+            <i className="bi-exclamation-circle-fill" /> {t('signups.mySignupQueue.simulatedSkip.alreadySignedUp')}
+          </>
+        );
       } else if (signups[0].state === SignupState.Waitlisted) {
-        return t('signups.mySignupQueue.simulatedSkip.alreadyWaitlisted');
+        return (
+          <>
+            <i className="bi-exclamation-circle-fill" /> {t('signups.mySignupQueue.simulatedSkip.alreadyWaitlisted')}
+          </>
+        );
       }
     }
-    return t('signups.mySignupQueue.simulatedSkip.conflict', {
-      eventTitles: signups.map((signup) => signup.run.event.title),
-    });
+    return (
+      <>
+        <i className="bi-exclamation-circle-fill" />{' '}
+        <Trans
+          i18nKey="signups.mySignupQueue.simulatedSkip.conflict"
+          values={{
+            eventTitles: signups.map((signup) => signup.run.event.title),
+          }}
+        />
+      </>
+    );
   } else if (simulatedSkipReason.reason === RankedChoiceDecisionReason.RankedChoiceUserConstraints) {
     const constraintIds: Set<string> = new Set(
       (
@@ -55,27 +73,48 @@ function formatSkipReason({
       constraintIds.has(constraint.id),
     );
 
-    return constraints
-      .map((constraint) => {
-        if (constraint.start && constraint.finish) {
-          return t('signups.mySignupQueue.simulatedSkip.maxSignupsInTimespan', {
-            timespan: formatLCM(
-              DateTime.fromISO(constraint.start).setZone(timeZone),
-              getDateTimeFormat('longWeekday', t),
-            ),
-          });
-        } else {
-          return t('signups.mySignupQueue.simulatedSkip.maxSignupsTotal');
-        }
-      })
-      .join(', ');
+    return (
+      <>
+        <i className="bi-exclamation-circle-fill" />{' '}
+        {constraints
+          .map((constraint) => {
+            if (constraint.start && constraint.finish) {
+              return t('signups.mySignupQueue.simulatedSkip.maxSignupsInTimespan', {
+                timespan: formatLCM(
+                  DateTime.fromISO(constraint.start).setZone(timeZone),
+                  getDateTimeFormat('longWeekday', t),
+                ),
+              });
+            } else {
+              return t('signups.mySignupQueue.simulatedSkip.maxSignupsTotal');
+            }
+          })
+          .join(', ')}
+      </>
+    );
   } else if (simulatedSkipReason.reason === RankedChoiceDecisionReason.Full) {
     if (userConProfile.ranked_choice_allow_waitlist) {
-      return t('signups.mySignupQueue.simulatedSkip.fullWaitlist', {
-        eventTitle: pendingChoice.target_run.event.title,
-      });
+      return (
+        <>
+          <i className="bi-hourglass-split" />{' '}
+          <Trans
+            i18nKey="signups.mySignupQueue.simulatedSkip.fullWaitlist"
+            values={{
+              eventTitle: pendingChoice.target_run.event.title,
+            }}
+          />
+        </>
+      );
     } else {
-      return t('signups.mySignupQueue.simulatedSkip.full', { eventTitle: pendingChoice.target_run.event.title });
+      return (
+        <>
+          <i className="bi-exclamation-circle-fill" />{' '}
+          <Trans
+            i18nKey="signups.mySignupQueue.simulatedSkip.full"
+            values={{ eventTitle: pendingChoice.target_run.event.title }}
+          />
+        </>
+      );
     }
   }
 
@@ -105,9 +144,19 @@ function UserSignupQueue({ userConProfile, refetchQueries, readOnly }: UserSignu
     {
       refetchQueries,
       awaitRefetchQueries: true,
-      onCompleted: revalidator.revalidate,
     },
   );
+
+  const changePriorityButtonClicked = async (...args: Parameters<typeof updateSignupRankedChoicePriority>) => {
+    await updateSignupRankedChoicePriority(...args);
+    if (typeof document !== 'undefined' && typeof document.startViewTransition === 'function') {
+      document.startViewTransition(() => {
+        flushSync(() => revalidator.revalidate());
+      });
+    } else {
+      revalidator.revalidate();
+    }
+  };
 
   return (
     <section className="card">
@@ -116,8 +165,15 @@ function UserSignupQueue({ userConProfile, refetchQueries, readOnly }: UserSignu
           <React.Fragment key={pendingChoice.id}>
             <li
               className={classNames('list-group-item d-flex align-items-center', {
-                'bg-light': pendingChoice.simulated_skip_reason,
+                [styles.skip]: pendingChoice.simulated_skip_reason,
+                [styles.waitlist]:
+                  pendingChoice.simulated_skip_reason?.reason === RankedChoiceDecisionReason.Full &&
+                  userConProfile.ranked_choice_allow_waitlist,
               })}
+              style={{
+                // @ts-expect-error awaiting fix for https://github.com/frenic/csstype/issues/193
+                viewTransitionName: `queue-item-${pendingChoice.id}`,
+              }}
             >
               <div className="me-3">
                 <div className="d-flex align-items-center">
@@ -147,7 +203,6 @@ function UserSignupQueue({ userConProfile, refetchQueries, readOnly }: UserSignu
                 </div>
                 {pendingChoice.simulated_skip_reason && (
                   <div>
-                    <i className="bi bi-exclamation-circle-fill" />{' '}
                     {formatSkipReason({
                       t,
                       pendingChoice,
@@ -166,7 +221,7 @@ function UserSignupQueue({ userConProfile, refetchQueries, readOnly }: UserSignu
                     className={classNames('btn btn-dark px-1 py-0', { 'opacity-25': index < 1 })}
                     disabled={updatePriorityLoading || index < 1}
                     onClick={() =>
-                      updateSignupRankedChoicePriority({
+                      changePriorityButtonClicked({
                         variables: { id: pendingChoice.id, priority: pendingChoice.priority - 1 },
                       })
                     }
@@ -183,7 +238,7 @@ function UserSignupQueue({ userConProfile, refetchQueries, readOnly }: UserSignu
                     })}
                     disabled={updatePriorityLoading || index >= pendingChoices.length - 1}
                     onClick={() =>
-                      updateSignupRankedChoicePriority({
+                      changePriorityButtonClicked({
                         variables: { id: pendingChoice.id, priority: pendingChoice.priority + 1 },
                       })
                     }
