@@ -1,0 +1,7 @@
+.skip {
+  background-color: hsl(from var(--bs-gray) h s l / calc(alpha * 0.2));
+}
+
+.skip.waitlist {
+  background-color: hsl(from var(--bs-yellow) h s l / calc(alpha * 0.2));
+}
