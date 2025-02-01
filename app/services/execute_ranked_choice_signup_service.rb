@@ -45,13 +45,14 @@ class ExecuteRankedChoiceSignupService < CivilService::Service
   def inner_call
     skip = skip_reason
 
-    decision = if skip
-      do_skip_choice(skip.reason, skip.extra)
-    elsif actual_bucket
-      do_signup
-    else
-      do_waitlist
-    end
+    decision =
+      if skip
+        do_skip_choice(skip.reason, skip.extra)
+      elsif actual_bucket
+        do_signup
+      else
+        do_waitlist
+      end
 
     success(decision:)
   end
@@ -71,9 +72,7 @@ class ExecuteRankedChoiceSignupService < CivilService::Service
       )
     end
 
-    if !actual_bucket && !allow_waitlist
-      return SkipReason.new(:full)
-    end
+    return SkipReason.new(:full) if !actual_bucket
 
     nil
   end
@@ -81,20 +80,21 @@ class ExecuteRankedChoiceSignupService < CivilService::Service
   private
 
   def actual_bucket
-    @actual_bucket ||= begin
-      run = signup_ranked_choice.target_run
-      existing_signups = run.signups.counted.occupying_slot.to_a
-      bucket_finder =
-        SignupBucketFinder.new(run.registration_policy, signup_ranked_choice.requested_bucket_key, existing_signups)
-      if convention.signup_mode == "moderated"
-        run
-          .signup_requests
-          .where(state: "pending")
-          .find_each { |request| bucket_finder.simulate_accepting_signup_request(request) }
-      end
+    @actual_bucket ||=
+      begin
+        run = signup_ranked_choice.target_run
+        existing_signups = run.signups.counted.occupying_slot.to_a
+        bucket_finder =
+          SignupBucketFinder.new(run.registration_policy, signup_ranked_choice.requested_bucket_key, existing_signups)
+        if convention.signup_mode == "moderated"
+          run
+            .signup_requests
+            .where(state: "pending")
+            .find_each { |request| bucket_finder.simulate_accepting_signup_request(request) }
+        end
 
-      bucket_finder.find_bucket
-    end
+        bucket_finder.find_bucket
+      end
   end
 
   def do_skip_choice(reason, extra = nil)
