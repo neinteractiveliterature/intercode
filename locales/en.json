@@ -1174,6 +1174,7 @@
         "alreadyWaitlisted": "Skip: You are already on the waitlist",
         "conflict": "Skip: Conflicts with {{ eventTitles, list }}",
         "full": "Skip: {{ eventTitle }} is full, and you have opted not to be put on waitlists",
+        "fullWaitlist": "Possible skip: {{ eventTitle }} is full. If there are no other available options, you may be put on the waitlist for this event.",
         "maxSignupsInTimespan": "Skip: You set a limit for signups on {{ timespan }}, and that limit has been reached",
         "maxSignupsTotal": "Skip: You set a limit for total signups, and that limit has been reached"
       },

@@ -70,7 +70,13 @@ function formatSkipReason({
       })
       .join(', ');
   } else if (simulatedSkipReason.reason === RankedChoiceDecisionReason.Full) {
-    return t('signups.mySignupQueue.simulatedSkip.full', { eventTitle: pendingChoice.target_run.event.title });
+    if (userConProfile.ranked_choice_allow_waitlist) {
+      return t('signups.mySignupQueue.simulatedSkip.fullWaitlist', {
+        eventTitle: pendingChoice.target_run.event.title,
+      });
+    } else {
+      return t('signups.mySignupQueue.simulatedSkip.full', { eventTitle: pendingChoice.target_run.event.title });
+    }
   }
 
   return <></>;
