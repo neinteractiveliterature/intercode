@@ -72,12 +72,12 @@ function MaximumSignupsLimitSelect({ value, onValueChange, ...props }: MaximumSi
       }}
     >
       <option value="NO_LIMIT">{t('signups.mySignupQueue.noLimit')}</option>
+      <option value="0">{t('signups.mySignupQueue.zeroLimit')}</option>
       {Array.from({ length: 10 }, (n, index) => index + 1).map((n) => (
         <option key={n} value={n}>
           {t('signups.mySignupQueue.maximumSignupsLimit', { number: n })}
         </option>
       ))}
-      <option value="0">{t('signups.mySignupQueue.zeroLimit')}</option>
     </select>
   );
 }
