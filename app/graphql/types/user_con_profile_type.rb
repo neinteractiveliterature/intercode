@@ -65,6 +65,9 @@ class Types::UserConProfileType < Types::BaseObject
   field :show_nickname_in_bio, Boolean, null: true do
     description "Should this profile's bio use the nickname as part of their name?"
   end
+  field :signup_constraints, Types::UserSignupConstraintsType, null: false do
+    description "The current constraints on signups for this user at this convention."
+  end
   field :signup_ranked_choices, [Types::SignupRankedChoiceType], null: false do
     description "This user's ranked choice list for signups."
   end
@@ -153,6 +156,10 @@ class Types::UserConProfileType < Types::BaseObject
   def gravatar_url
     dataloader.with(Sources::ActiveRecordAssociation, UserConProfile, :user).load(object)
     object.gravatar_url
+  end
+
+  def signup_constraints
+    UserSignupConstraints.new(object)
   end
 
   def staff_positions

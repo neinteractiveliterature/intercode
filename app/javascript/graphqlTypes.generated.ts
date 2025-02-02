@@ -6627,6 +6627,8 @@ export type UserConProfile = {
   ranked_choice_user_constraints: Array<RankedChoiceUserConstraint>;
   /** Should this profile's bio use the nickname as part of their name? */
   show_nickname_in_bio?: Maybe<Scalars['Boolean']['output']>;
+  /** The current constraints on signups for this user at this convention. */
+  signup_constraints: UserSignupConstraints;
   /** This user's ranked choice list for signups. */
   signup_ranked_choices: Array<SignupRankedChoice>;
   /** All the signup requests made by this profile. */
@@ -6751,6 +6753,17 @@ export type UserFiltersInput = {
   last_name?: InputMaybe<Scalars['String']['input']>;
   name?: InputMaybe<Scalars['String']['input']>;
   privileges?: InputMaybe<Array<Scalars['String']['input']>>;
+};
+
+/** The signup constraints on a user for a particular convention. */
+export type UserSignupConstraints = {
+  __typename: 'UserSignupConstraints';
+  /** Is this user currently at their maximum allowed signups? */
+  at_maximum_signups: Scalars['Boolean']['output'];
+  /** The current number of counted signups for this user. */
+  current_signup_count: Scalars['Int']['output'];
+  /** The user profile these constraints describe. */
+  user_con_profile: UserConProfile;
 };
 
 export type UsersPagination = PaginationInterface & {

@@ -8557,6 +8557,11 @@ type UserConProfile {
   show_nickname_in_bio: Boolean
 
   """
+  The current constraints on signups for this user at this convention.
+  """
+  signup_constraints: UserSignupConstraints!
+
+  """
   This user's ranked choice list for signups.
   """
   signup_ranked_choices: [SignupRankedChoice!]!
@@ -8758,6 +8763,26 @@ input UserFiltersInput {
   last_name: String
   name: String
   privileges: [String!]
+}
+
+"""
+The signup constraints on a user for a particular convention.
+"""
+type UserSignupConstraints {
+  """
+  Is this user currently at their maximum allowed signups?
+  """
+  at_maximum_signups: Boolean!
+
+  """
+  The current number of counted signups for this user.
+  """
+  current_signup_count: Int!
+
+  """
+  The user profile these constraints describe.
+  """
+  user_con_profile: UserConProfile!
 }
 
 type UsersPagination implements PaginationInterface {

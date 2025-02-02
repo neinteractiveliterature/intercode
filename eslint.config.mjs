@@ -282,6 +282,7 @@ export default typescriptEslint.config(
               'TicketCountByTypeAndPaymentAmount',
               'TimespanWithMoneyValue',
               'TimespanWithValue',
+              'UserSignupConstraints',
             ],
           },
         },
