@@ -1,6 +1,6 @@
 import { useState, useCallback, useContext, useMemo } from 'react';
 import { ApolloError, useQuery } from '@apollo/client';
-import { Filters } from '@tanstack/react-table';
+import { ColumnFiltersState } from '@tanstack/react-table';
 import { useTranslation } from 'react-i18next';
 import {
   LoadingIndicator,
@@ -32,8 +32,6 @@ import { FetchMoreFunction } from '@apollo/client/react/hooks/useSuspenseQuery';
 import { ResultOf, VariablesOf } from '@graphql-typed-document-node/core';
 
 const PAGE_SIZE = 20;
-
-type EventType = NonNullable<EventListEventsQueryData['convention']>['events_paginated']['entries'][number];
 
 const filterCodecs = buildFieldFilterCodecs({
   category: FilterCodecs.integerArray,
@@ -106,7 +104,7 @@ function EventList(): JSX.Element {
       ]
     : [{ id: 'category', value: [] }];
   const effectiveSortBy = sortBy && sortBy.length > 0 ? sortBy : defaultSort;
-  const effectiveFilters: Filters<EventType> = filters && filters.length > 0 ? filters : defaultFiltered;
+  const effectiveFilters: ColumnFiltersState = filters && filters.length > 0 ? filters : defaultFiltered;
   const filterableFormItemIdentifiers = useMemo(
     () => filterableFormItems.map((item) => item.identifier).filter(notEmpty),
     [filterableFormItems],
@@ -195,7 +193,7 @@ function EventList(): JSX.Element {
             <div>
               <EventListCategoryDropdown
                 eventCategories={convention.event_categories}
-                value={effectiveFilters.find(({ id }) => id === 'category')?.value}
+                value={(effectiveFilters.find(({ id }) => id === 'category')?.value ?? []) as string[]}
                 onChange={categoryChanged}
               />
             </div>
@@ -215,10 +213,17 @@ function EventList(): JSX.Element {
                 <EventListFilterableFormItemDropdown
                   convention={convention}
                   formItem={item}
-                  value={effectiveFilters.find(({ id }) => id === 'form_items')?.value[item.identifier ?? '']}
+                  value={
+                    ((effectiveFilters.find(({ id }) => id === 'form_items')?.value as
+                      | Record<string, string[]>
+                      | undefined) ?? {})[item.identifier ?? '']
+                  }
                   onChange={(newValue) => {
                     const prevValue = effectiveFilters.find(({ id }) => id === 'form_items');
-                    changeFilterValue('form_items', { ...prevValue?.value, [item.identifier ?? '']: newValue });
+                    changeFilterValue('form_items', {
+                      ...(prevValue?.value as Record<string, string[]> | undefined),
+                      [item.identifier ?? '']: newValue,
+                    });
                   }}
                 />
               </div>
@@ -228,7 +233,7 @@ function EventList(): JSX.Element {
           <div className="ms-2 flex-grow-1">
             <SearchInput
               label="Search"
-              value={(effectiveFilters.find(({ id }) => id === 'title_prefix') || {}).value}
+              value={effectiveFilters.find(({ id }) => id === 'title_prefix')?.value as string | undefined}
               onChange={titlePrefixChanged}
               iconSet="bootstrap-icons"
             />
@@ -238,7 +243,7 @@ function EventList(): JSX.Element {
         {myProfile && (
           <>
             <EventListMyRatingSelector
-              value={(effectiveFilters.find(({ id }) => id === 'my_rating') || {}).value}
+              value={effectiveFilters.find(({ id }) => id === 'my_rating')?.value as number[] | undefined}
               onChange={myRatingFilterChanged}
             />
           </>

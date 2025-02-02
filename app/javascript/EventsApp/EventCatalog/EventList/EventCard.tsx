@@ -1,6 +1,6 @@
 import { Fragment, useMemo, useContext, ReactNode } from 'react';
 import { Link } from 'react-router-dom';
-import { SortingRule } from '@tanstack/react-table';
+import { SortingState } from '@tanstack/react-table';
 import { DateTime } from 'luxon';
 import { notEmpty } from '@neinteractiveliterature/litform';
 
@@ -93,7 +93,7 @@ function teamIsAllAuthors(author?: string, teamMembers?: EventType['team_members
 export type EventCardProps = {
   convention: ConventionType;
   event: EventType;
-  sortBy?: SortingRule<NonNullable<EventListEventsQueryData['convention']>['events_paginated']['entries'][number]>[];
+  sortBy?: SortingState;
   canReadSchedule?: boolean;
 };
 
