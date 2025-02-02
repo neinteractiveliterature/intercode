@@ -19,8 +19,8 @@ class Sources::SimulatedSkipReason < GraphQL::Dataloader::Source
             signup_round: nil,
             whodunit: nil,
             signup_ranked_choice:,
-            # Always simulate a skip if the user would be waitlisted, so that the frontend can show the appropriate message
-            # about it
+            # Always simulate a skip if the user would be waitlisted, so that the frontend can show the appropriate
+            # message about it
             allow_waitlist: false,
             constraints:
           ).skip_reason
