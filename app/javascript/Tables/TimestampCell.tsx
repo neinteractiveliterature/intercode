@@ -17,11 +17,8 @@ export function SingleLineTimestampCell<TData, TValue extends string | null | un
   return <>{format(timestamp, 'compactDateTime')}</>;
 }
 
-export type TimestampCellProps = {
-  value: string;
-};
-
-function TimestampCell({ value }: TimestampCellProps): JSX.Element {
+function TimestampCell<TData, TValue extends string>({ getValue }: CellContext<TData, TValue>): JSX.Element {
+  const value = getValue();
   const timestamp = useISODateTimeInAppZone(value);
   const format = useAppDateTimeFormat();
 

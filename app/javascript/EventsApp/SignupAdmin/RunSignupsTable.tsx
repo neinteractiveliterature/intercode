@@ -1,8 +1,7 @@
 import { useContext, useMemo } from 'react';
-import { Column, FilterProps, CellProps } from '@tanstack/react-table';
+import { CellContext, Column, createColumnHelper } from '@tanstack/react-table';
 import { useNavigate, useParams, useRouteLoaderData, useRevalidator } from 'react-router-dom';
 import { Trans, useTranslation } from 'react-i18next';
-import { TFunction } from 'i18next';
 import { DateTime } from 'luxon';
 
 import { ageAsOf } from '../../TimeUtils';
@@ -11,7 +10,7 @@ import EmailCell from '../../Tables/EmailCell';
 import { buildFieldFilterCodecs, FilterCodecs } from '../../Tables/FilterUtils';
 import { formatBucket } from './SignupUtils';
 import FreeTextFilter from '../../Tables/FreeTextFilter';
-import SignupStateCell, { getSignupStateLabel } from '../../Tables/SignupStateCell';
+import { getSignupStateLabel } from '../../Tables/SignupStateCell';
 import TableHeader from '../../Tables/TableHeader';
 import ReactTableWithTheWorks from '../../Tables/ReactTableWithTheWorks';
 import useReactTableWithTheWorks, { QueryDataContext } from '../../Tables/useReactTableWithTheWorks';
@@ -31,6 +30,7 @@ import { NamedRoute } from '../../AppRouter';
 import { useGraphQLConfirm } from '@neinteractiveliterature/litform';
 import { useApolloClient } from '@apollo/client';
 import { FreezeBucketAssignmentsDocument } from './mutations.generated';
+import SignupStateCell from '../../Tables/SignupStateCell';
 
 const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({
   state: FilterCodecs.stringArray,
@@ -39,7 +39,7 @@ const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({
 
 type SignupType = RunSignupsTableSignupsQueryData['convention']['event']['run']['signups_paginated']['entries'][0];
 
-const SignupStateFilter = (props: FilterProps<SignupType>) => {
+function SignupStateFilter<TData extends SignupType, TValue>({ column }: { column: Column<TData, TValue> }) {
   const { t } = useTranslation();
   const { ticketName } = useContext(AppRootContext);
   const choices = useMemo(
@@ -51,10 +51,11 @@ const SignupStateFilter = (props: FilterProps<SignupType>) => {
     [ticketName, t],
   );
 
-  return <ChoiceSetFilter {...props} multiple choices={choices} />;
-};
+  return <ChoiceSetFilter column={column} multiple choices={choices} />;
+}
 
-const AgeRestrictionsCheckCell = ({ value }: CellProps<SignupType, string>) => {
+function AgeRestrictionsCheckCell({ getValue }: CellContext<SignupType, string>) {
+  const value = getValue();
   const { t } = useTranslation();
   // eslint-disable-next-line i18next/no-literal-string
   let badgeClass = 'bg-danger';
@@ -74,96 +75,26 @@ const AgeRestrictionsCheckCell = ({ value }: CellProps<SignupType, string>) => {
   }
 
   return <span className={`badge ${badgeClass}`}>{text}</span>;
-};
+}
 
-const BucketCell = ({ row: { original } }: CellProps<SignupType>) => {
+function BucketCell<TData extends SignupType, TValue>({ row: { original } }: CellContext<TData, TValue>) {
   const { t } = useTranslation();
-  const data = useContext(QueryDataContext) as RunSignupsTableSignupsQueryData;
-  return <>{formatBucket(original, data.convention.event, t)}</>;
-};
+  const data = useContext(QueryDataContext) as Partial<RunSignupsTableSignupsQueryData>;
+  return <>{data.convention && formatBucket(original, data.convention.event, t)}</>;
+}
 
-const BucketFilter = (props: FilterProps<SignupType>) => {
-  const data = useContext(QueryDataContext) as RunSignupsTableSignupsQueryData;
+function BucketFilter<TData extends SignupType, TValue>({ column }: { column: Column<TData, TValue> }) {
+  const data = useContext(QueryDataContext) as Partial<RunSignupsTableSignupsQueryData>;
   const choices = useMemo(
     () =>
-      data?.convention.event
-        ? (data.convention.event.registration_policy?.buckets ?? []).map((bucket) => ({
-            label: bucket.name ?? bucket.key,
-            value: bucket.key,
-          }))
-        : [],
+      (data.convention?.event.registration_policy?.buckets ?? []).map((bucket) => ({
+        label: bucket.name ?? bucket.key,
+        value: bucket.key,
+      })) ?? [],
     [data],
   );
 
-  return <ChoiceSetFilter {...props} multiple choices={choices} />;
-};
-
-function getPossibleColumns(t: TFunction): Column<SignupType>[] {
-  return [
-    {
-      Header: <>{t('events.signupAdmin.sequenceHeader')}</>,
-      id: 'id',
-      accessor: 'id',
-      disableSortBy: false,
-      width: 65,
-    },
-    {
-      Header: <>{t('events.signupAdmin.stateHeader')}</>,
-      id: 'state',
-      accessor: 'state',
-      width: 130,
-      disableFilters: false,
-      disableSortBy: false,
-      Filter: SignupStateFilter,
-      Cell: SignupStateCell,
-    },
-    {
-      Header: <>{t('events.signupAdmin.nameHeader')}</>,
-      id: 'name',
-      accessor: (signup: SignupType) => signup.user_con_profile,
-      disableFilters: false,
-      disableSortBy: false,
-      Filter: FreeTextFilter,
-      Cell: UserConProfileWithGravatarCell,
-    },
-    {
-      Header: <>{t('events.signupAdmin.bucketHeader')}</>,
-      id: 'bucket',
-      accessor: (signup: SignupType) => signup.bucket_key,
-      Cell: BucketCell,
-      disableFilters: false,
-      disableSortBy: false,
-      Filter: BucketFilter,
-    },
-    {
-      Header: <>{t('events.signupAdmin.ageCheckHeader')}</>,
-      id: 'age_restrictions_check',
-      accessor: 'age_restrictions_check',
-      width: 100,
-      disableSortBy: false,
-      Cell: AgeRestrictionsCheckCell,
-    },
-    {
-      Header: <>{t('events.signupAdmin.ageTableHeader')}</>,
-      id: 'age',
-      width: 40,
-      accessor: (signup: SignupType) =>
-        ageAsOf(
-          signup.user_con_profile.birth_date ? DateTime.fromISO(signup.user_con_profile.birth_date) : undefined,
-          DateTime.fromISO(signup.run.starts_at),
-        ),
-      disableSortBy: false,
-    },
-    {
-      Header: <>{t('events.signupAdmin.emailTableHeader')}</>,
-      id: 'email',
-      accessor: (signup: SignupType) => signup.user_con_profile.email,
-      Cell: EmailCell,
-      Filter: FreeTextFilter,
-      disableFilters: false,
-      disableSortBy: false,
-    },
-  ];
+  return <ChoiceSetFilter column={column} multiple choices={choices} />;
 }
 
 // eslint-disable-next-line i18next/no-literal-string
@@ -174,10 +105,70 @@ function RunSignupsTable(): JSX.Element {
   const { runId } = useParams();
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const getPossibleColumnsFunc = useMemo(() => () => getPossibleColumns(t), [t]);
   const confirm = useGraphQLConfirm();
   const client = useApolloClient();
   const revalidator = useRevalidator();
+
+  const columns = useMemo(() => {
+    const columnHelper = createColumnHelper<SignupType>();
+    return [
+      columnHelper.accessor('id', {
+        header: t('events.signupAdmin.sequenceHeader'),
+        id: 'id',
+        enableSorting: true,
+        size: 65,
+      }),
+      columnHelper.accessor('state', {
+        header: t('events.signupAdmin.stateHeader'),
+        id: 'state',
+        size: 130,
+        enableColumnFilter: true,
+        enableSorting: true,
+        cell: SignupStateCell,
+      }),
+      columnHelper.accessor('user_con_profile', {
+        header: t('events.signupAdmin.nameHeader'),
+        id: 'name',
+        enableColumnFilter: true,
+        enableSorting: true,
+        cell: UserConProfileWithGravatarCell,
+      }),
+      columnHelper.accessor('bucket_key', {
+        header: t('events.signupAdmin.bucketHeader'),
+        id: 'bucket',
+        cell: BucketCell,
+        enableColumnFilter: true,
+        enableSorting: true,
+      }),
+      columnHelper.accessor('age_restrictions_check', {
+        header: t('events.signupAdmin.ageCheckHeader'),
+        id: 'age_restrictions_check',
+        size: 100,
+        enableSorting: true,
+        cell: AgeRestrictionsCheckCell,
+      }),
+      columnHelper.accessor(
+        (signup: SignupType) =>
+          ageAsOf(
+            signup.user_con_profile.birth_date ? DateTime.fromISO(signup.user_con_profile.birth_date) : undefined,
+            DateTime.fromISO(signup.run.starts_at),
+          ),
+        {
+          header: t('events.signupAdmin.ageTableHeader'),
+          id: 'age',
+          size: 40,
+          enableSorting: true,
+        },
+      ),
+      columnHelper.accessor('user_con_profile.email', {
+        header: t('events.signupAdmin.emailTableHeader'),
+        id: 'email',
+        cell: EmailCell,
+        enableColumnFilter: true,
+        enableSorting: true,
+      }),
+    ];
+  }, [t]);
 
   const {
     table: tableInstance,
@@ -194,7 +185,7 @@ function RunSignupsTable(): JSX.Element {
     encodeFilterValue,
     getData: ({ data: tableData }) => tableData.convention.event.run.signups_paginated.entries,
     getPages: ({ data: tableData }) => tableData.convention.event.run.signups_paginated.total_pages,
-    getPossibleColumns: getPossibleColumnsFunc,
+    columns,
     query: RunSignupsTableSignupsQueryDocument,
     storageKeyPrefix: 'adminSignups',
     variables: { eventId: data.convention.event.id, runId: runId ?? '' },
@@ -250,6 +241,15 @@ function RunSignupsTable(): JSX.Element {
           onClickRow={(row) =>
             navigate(`${buildEventUrl(data.convention.event)}/runs/${runId}/admin_signups/${row.original.id}`)
           }
+          renderFilter={({ column }) => {
+            if (column.id === 'state') {
+              return <SignupStateFilter column={column} />;
+            } else if (column.id === 'name' || column.id === 'email') {
+              return <FreeTextFilter column={column} />;
+            } else if (column.id === 'bucket') {
+              return <BucketFilter column={column} />;
+            }
+          }}
         />
       </div>
     </QueryDataContext.Provider>
