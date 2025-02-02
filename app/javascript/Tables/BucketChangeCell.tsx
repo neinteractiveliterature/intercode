@@ -1,10 +1,10 @@
 import { useTranslation } from 'react-i18next';
 
 import { formatBucket } from '../EventsApp/SignupAdmin/SignupUtils';
-import { SignupChange } from 'graphqlTypes.generated';
 import { CellContext } from '@tanstack/react-table';
+import { SignupChangeType } from 'EventsApp/SignupAdmin/RunSignupChangesTable';
 
-function BucketChangeCell<TData extends SignupChange, TValue>({ cell }: CellContext<TData, TValue>): JSX.Element {
+function BucketChangeCell<TData extends SignupChangeType, TValue>({ cell }: CellContext<TData, TValue>): JSX.Element {
   const value = cell.row.original;
   const { t } = useTranslation();
 

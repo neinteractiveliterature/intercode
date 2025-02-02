@@ -22,7 +22,7 @@ const FILTER_CODECS = buildFieldFilterCodecs({
   action: FilterCodecs.stringArray,
 });
 
-export type SignupChange = RunSignupChangesQueryData['convention']['run']['signup_changes_paginated']['entries'][0];
+export type SignupChangeType = RunSignupChangesQueryData['convention']['run']['signup_changes_paginated']['entries'][0];
 
 const defaultVisibleColumns = ['name', 'action', 'bucket_change', 'created_at'];
 
@@ -31,7 +31,7 @@ function RunSignupChangesTable(): JSX.Element {
   const { runId } = useParams();
 
   const columns = useMemo(() => {
-    const columnHelper = createColumnHelper<SignupChange>();
+    const columnHelper = createColumnHelper<SignupChangeType>();
     return [
       columnHelper.accessor('user_con_profile', {
         header: t('events.signupAdmin.history.nameHeader'),

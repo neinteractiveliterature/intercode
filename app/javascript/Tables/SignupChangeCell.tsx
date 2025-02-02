@@ -3,8 +3,9 @@ import { TFunction } from 'i18next';
 import { assertNever } from 'assert-never';
 
 import { SignupStateDisplay } from './SignupStateCell';
-import { SignupChange, SignupChangeAction } from '../graphqlTypes.generated';
+import { SignupChangeAction } from '../graphqlTypes.generated';
 import { CellContext } from '@tanstack/react-table';
+import { SignupChangeType } from 'EventsApp/SignupAdmin/RunSignupChangesTable';
 
 export function describeAction(action: SignupChangeAction, t: TFunction): string {
   if (action === 'self_service_signup') {
@@ -55,7 +56,7 @@ export function describeAction(action: SignupChangeAction, t: TFunction): string
   return action;
 }
 
-function SignupChangeCell<TData extends SignupChange, TValue>({ cell }: CellContext<TData, TValue>): JSX.Element {
+function SignupChangeCell<TData extends SignupChangeType, TValue>({ cell }: CellContext<TData, TValue>): JSX.Element {
   const value = cell.row.original;
   const { t } = useTranslation();
 
