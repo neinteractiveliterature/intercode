@@ -105,7 +105,7 @@ function ReactTableWithTheWorks<
                 {headerGroup.headers.map((header) => (
                   <th
                     key={header.id}
-                    className="border-bottom py-1 align-middle  position-relative"
+                    className="border-bottom border-end py-1 align-middle position-relative"
                     style={{ width: header.getSize() }}
                   >
                     {header.column.getCanSort() ? (
@@ -132,7 +132,7 @@ function ReactTableWithTheWorks<
                     return (
                       <th
                         key={header.id}
-                        className="py-1 border-bottom fw-normal align-middle position-relative overflow-visible"
+                        className="py-1 border-bottom border-end fw-normal align-middle position-relative overflow-visible"
                       >
                         {header.column.getCanFilter() && renderFilter({ column: header.column })}
                         {header.index < headerGroup.headers.length - 1 && (
@@ -164,6 +164,7 @@ function ReactTableWithTheWorks<
                       return (
                         <td
                           key={cell.id}
+                          className="border-end"
                           style={{
                             position: 'relative',
                             overflow: 'hidden',
