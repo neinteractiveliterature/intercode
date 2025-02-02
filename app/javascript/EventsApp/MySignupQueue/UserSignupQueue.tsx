@@ -2,7 +2,12 @@ import React, { useContext } from 'react';
 import { flushSync } from 'react-dom';
 import { UserConProfileRankedChoiceQueueFieldsFragment } from './queries.generated';
 import { Trans, useTranslation } from 'react-i18next';
-import { ErrorDisplay, LoadingIndicator, useGraphQLConfirm } from '@neinteractiveliterature/litform';
+import {
+  BootstrapFormCheckbox,
+  ErrorDisplay,
+  LoadingIndicator,
+  useGraphQLConfirm,
+} from '@neinteractiveliterature/litform';
 import { InternalRefetchQueriesInclude, useMutation } from '@apollo/client';
 import RankedChoicePriorityIndicator from './RankedChoicePriorityIndicator';
 import buildEventUrl from '../buildEventUrl';
@@ -12,7 +17,11 @@ import { DateTime } from 'luxon';
 import classNames from 'classnames';
 import { usePendingChoices } from './usePendingChoices';
 import AppRootContext from '../../AppRootContext';
-import { DeleteSignupRankedChoiceDocument, UpdateSignupRankedChoicePriorityDocument } from './mutations.generated';
+import {
+  DeleteSignupRankedChoiceDocument,
+  SetSignupRankedChoicePrioritizeWaitlistDocument,
+  UpdateSignupRankedChoicePriorityDocument,
+} from './mutations.generated';
 import { TFunction } from 'i18next';
 import { RankedChoiceDecisionReason, SignupState } from 'graphqlTypes.generated';
 import styles from './signup-queue.module.css';
@@ -94,17 +103,31 @@ function formatSkipReason({
     );
   } else if (simulatedSkipReason.reason === RankedChoiceDecisionReason.Full) {
     if (userConProfile.ranked_choice_allow_waitlist) {
-      return (
-        <>
-          <i className="bi-hourglass-split" />{' '}
-          <Trans
-            i18nKey="signups.mySignupQueue.simulatedSkip.fullWaitlist"
-            values={{
-              eventTitle: pendingChoice.target_run.event.title,
-            }}
-          />
-        </>
-      );
+      if (pendingChoice.prioritize_waitlist) {
+        return (
+          <>
+            <i className="bi-hourglass-split" />{' '}
+            <Trans
+              i18nKey="signups.mySignupQueue.simulatedSkip.fullWaitlistPrioritized"
+              values={{
+                eventTitle: pendingChoice.target_run.event.title,
+              }}
+            />
+          </>
+        );
+      } else {
+        return (
+          <>
+            <i className="bi-hourglass-split" />{' '}
+            <Trans
+              i18nKey="signups.mySignupQueue.simulatedSkip.fullWaitlist"
+              values={{
+                eventTitle: pendingChoice.target_run.event.title,
+              }}
+            />
+          </>
+        );
+      }
     } else {
       return (
         <>
@@ -158,6 +181,15 @@ function UserSignupQueue({ userConProfile, refetchQueries, readOnly }: UserSignu
     }
   };
 
+  const [setPrioritizeWaitlist, { loading: setPrioritizeWaitlistLoading }] = useMutation(
+    SetSignupRankedChoicePrioritizeWaitlistDocument,
+    {
+      refetchQueries,
+      awaitRefetchQueries: true,
+      onCompleted: revalidator.revalidate,
+    },
+  );
+
   return (
     <section className="card">
       <ul className="list-group list-group-flush">
@@ -181,26 +213,41 @@ function UserSignupQueue({ userConProfile, refetchQueries, readOnly }: UserSignu
                 </div>
               </div>
               <div className="flex-grow-1 me-3">
-                <div>
-                  <strong>
-                    {pendingChoice.target_run.event.event_category.name}:{' '}
-                    <Link to={buildEventUrl(pendingChoice.target_run.event)}>
-                      {pendingChoice.target_run.event.title}
-                    </Link>
-                    {pendingChoice.target_run.title_suffix && `(${pendingChoice.target_run.title_suffix})`}
-                  </strong>
-                  <br />
-                  {formatDateTime(
-                    DateTime.fromISO(pendingChoice.target_run.starts_at).setZone(timezoneName),
-                    'shortWeekdayTimeWithZone',
-                  )}{' '}
-                  |{' '}
-                  {
-                    pendingChoice.target_run.event.registration_policy?.buckets.find(
-                      (bucket) => bucket.key === pendingChoice.requested_bucket_key,
-                    )?.name
-                  }
+                <div className="d-flex flex-wrap">
+                  <div className="flex-grow-1">
+                    <strong>
+                      {pendingChoice.target_run.event.event_category.name}:{' '}
+                      <Link to={buildEventUrl(pendingChoice.target_run.event)}>
+                        {pendingChoice.target_run.event.title}
+                      </Link>
+                      {pendingChoice.target_run.title_suffix && `(${pendingChoice.target_run.title_suffix})`}
+                    </strong>
+                    <br />
+                    {formatDateTime(
+                      DateTime.fromISO(pendingChoice.target_run.starts_at).setZone(timezoneName),
+                      'shortWeekdayTimeWithZone',
+                    )}{' '}
+                    |{' '}
+                    {
+                      pendingChoice.target_run.event.registration_policy?.buckets.find(
+                        (bucket) => bucket.key === pendingChoice.requested_bucket_key,
+                      )?.name
+                    }
+                  </div>
+
+                  <BootstrapFormCheckbox
+                    checked={pendingChoice.prioritize_waitlist}
+                    disabled={setPrioritizeWaitlistLoading}
+                    onChange={(event) =>
+                      setPrioritizeWaitlist({
+                        variables: { id: pendingChoice.id, prioritizeWaitlist: event.target.checked },
+                      })
+                    }
+                    label={t('signups.mySignupQueue.prioritizeWaitlist')}
+                    type="checkbox"
+                  />
                 </div>
+
                 {pendingChoice.simulated_skip_reason && (
                   <div>
                     {formatSkipReason({

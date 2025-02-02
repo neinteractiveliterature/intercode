@@ -4,6 +4,7 @@
 # Table name: signup_ranked_choices
 #
 #  id                       :bigint           not null, primary key
+#  prioritize_waitlist      :boolean          default(FALSE), not null
 #  priority                 :integer          not null
 #  requested_bucket_key     :string
 #  state                    :string           not null

@@ -12,6 +12,12 @@ mutation UpdateSignupRankedChoicePriority($id: ID!, $priority: Int!) {
   }
 }
 
+mutation SetSignupRankedChoicePrioritizeWaitlist($id: ID!, $prioritizeWaitlist: Boolean!) {
+  setSignupRankedChoicePrioritzeWaitlist(input: { id: $id, prioritizeWaitlist: $prioritizeWaitlist }) {
+    clientMutationId
+  }
+}
+
 mutation CreateMyRankedChoiceUserConstraint($rankedChoiceUserConstraint: RankedChoiceUserConstraintInput!) {
   createRankedChoiceUserConstraint(input: { rankedChoiceUserConstraint: $rankedChoiceUserConstraint }) {
     ranked_choice_user_constraint {

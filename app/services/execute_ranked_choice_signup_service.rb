@@ -72,7 +72,7 @@ class ExecuteRankedChoiceSignupService < CivilService::Service
       )
     end
 
-    return SkipReason.new(:full) if !actual_bucket && !allow_waitlist
+    return SkipReason.new(:full) if !actual_bucket && !signup_ranked_choice.prioritize_waitlist && !allow_waitlist
 
     nil
   end
