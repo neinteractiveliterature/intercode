@@ -29,7 +29,7 @@ function sortChoices(choices: readonly ChoiceSetFilterChoice[]) {
 type ChoiceSetFilterValue = ChoiceSetFilterChoice['value'];
 
 type LenientFilterProps<TData extends Record<string, unknown>, TValue> = {
-  column: Column<TData, TValue>;
+  column: Pick<Column<TData, TValue>, 'getFilterValue' | 'setFilterValue'>;
 };
 
 type ChoiceSetFilterCommonProps<TData extends Record<string, unknown>, TValue> = LenientFilterProps<TData, TValue> & {

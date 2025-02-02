@@ -251,9 +251,14 @@ function ScheduleApp(): JSX.Element {
                 <EventListFilterableFormItemDropdown
                   convention={data.convention}
                   formItem={item}
-                  value={filters.find(({ id }) => id === 'form_items')?.value[item.identifier ?? ''] ?? []}
+                  value={
+                    ((filters.find(({ id }) => id === 'form_items')?.value as Record<string, string[]> | undefined) ??
+                      {})[item.identifier ?? ''] ?? []
+                  }
                   onChange={(newValue) => {
-                    const prevValue = filters.find(({ id }) => id === 'form_items');
+                    const prevValue = filters.find(({ id }) => id === 'form_items') as
+                      | Record<string, string[]>
+                      | undefined;
                     updateSearch({
                       filters: [
                         ...filters.filter(({ id }) => id !== 'form_items'),

@@ -1,6 +1,6 @@
 import React, { useEffect, useMemo } from 'react';
 import { useLocation } from 'react-router-dom';
-import { Filters } from '@tanstack/react-table';
+import { ColumnFiltersState } from '@tanstack/react-table';
 import { parseIntOrNull } from '@neinteractiveliterature/litform';
 
 import ChoiceSetFilter from '../../Tables/ChoiceSetFilter';
@@ -18,11 +18,6 @@ const DEFAULT_PERSONAL_FILTERS = [
   { id: 'hide_conflicts', value: false },
 ] as const;
 
-type PersonalScheduleFilter = {
-  my_rating: number[];
-  hide_conflicts: boolean;
-};
-
 const STORAGE_KEY = 'schedule:personalFilters';
 
 function loadPersonalFilters() {
@@ -30,7 +25,7 @@ function loadPersonalFilters() {
   if (storedValue) {
     try {
       return JSON.parse(storedValue);
-    } catch (e) {
+    } catch {
       return DEFAULT_PERSONAL_FILTERS;
     }
   }
@@ -38,9 +33,9 @@ function loadPersonalFilters() {
   return DEFAULT_PERSONAL_FILTERS;
 }
 
-function parseFilters(filters: Filters<PersonalScheduleFilter>) {
-  const ratingFilter: number[] | undefined = (filters.find((f) => f.id === 'my_rating') || {}).value;
-  const hideConflicts: boolean | undefined = (filters.find((f) => f.id === 'hide_conflicts') || {}).value;
+function parseFilters(filters: ColumnFiltersState) {
+  const ratingFilter = filters.find((f) => f.id === 'my_rating')?.value as number[] | undefined;
+  const hideConflicts = filters.find((f) => f.id === 'hide_conflicts')?.value as boolean | undefined;
 
   const choiceSetValue: string[] = [
     ...(ratingFilter || []).map((integer: number) => integer.toString()),
@@ -65,9 +60,7 @@ export function usePersonalScheduleFilters({
   showPersonalFilters,
   signedIn,
 }: UsePersonalScheduleFiltersOptions): UsePersonalScheduleFiltersResult {
-  const { filters, updateSearch } = useReactRouterReactTable<PersonalScheduleFilter>({
-    ...filterCodecs,
-  });
+  const { filters, updateSearch } = useReactRouterReactTable(filterCodecs);
   const otherFilters = useMemo(
     () => filters.filter(({ id }) => id !== 'my_rating' && id !== 'hide_conflicts'),
     [filters],
@@ -141,8 +134,8 @@ function PersonalScheduleFiltersBar({
     <ChoiceSetFilter
       choices={filterOptions}
       column={{
-        filterValue: choiceSetValue,
-        setFilter: choiceSetChanged,
+        getFilterValue: () => choiceSetValue,
+        setFilterValue: choiceSetChanged,
       }}
       renderHeaderCaption={renderFilterHeaderCaption}
       multiple

@@ -5,19 +5,16 @@ import ReactTableExportButton, { ReactTableExportButtonProps } from './ExportBut
 import { VisibilityState } from '@tanstack/react-table';
 import { columnVisibilityToVisibleColumnIds } from './useColumnSelection';
 
-export type ReactTableExportButtonWithColumnTransformProps<RowType extends Record<string, unknown>> = Omit<
-  ReactTableExportButtonProps<RowType>,
-  'columns'
-> & {
+export type ReactTableExportButtonWithColumnTransformProps = Omit<ReactTableExportButtonProps, 'columns'> & {
   columnVisibility: VisibilityState;
   columnTransform: (columnId: string) => string | string[];
 };
 
-function ReactTableExportButtonWithColumnTransform<RowType extends Record<string, unknown>>({
+function ReactTableExportButtonWithColumnTransform({
   columnVisibility,
   columnTransform,
   ...otherProps
-}: ReactTableExportButtonWithColumnTransformProps<RowType>): JSX.Element {
+}: ReactTableExportButtonWithColumnTransformProps): JSX.Element {
   const columns = useMemo(
     () => flatMap(columnVisibilityToVisibleColumnIds(columnVisibility), columnTransform),
     [columnVisibility, columnTransform],
