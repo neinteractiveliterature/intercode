@@ -10,7 +10,7 @@ import { ActionFunction, redirect } from 'react-router';
 import { client } from 'useIntercodeApolloClient';
 import { CreateEmailRouteDocument } from './mutations.generated';
 import { EmailRouteInput } from 'graphqlTypes.generated';
-import { useFetcher } from 'react-router-dom';
+import { Link, useFetcher } from 'react-router-dom';
 
 export const action: ActionFunction = async ({ request }) => {
   try {
@@ -55,9 +55,9 @@ function NewEmailRouteModal(): JSX.Element {
       </div>
 
       <div className="modal-footer">
-        <button className="btn btn-secondary" type="button" onClick={close} disabled={inProgress}>
+        <Link className="btn btn-secondary" type="button" to="..">
           Cancel
-        </button>
+        </Link>
 
         <button className="btn btn-primary" type="button" onClick={createClicked} disabled={inProgress}>
           Create email route
