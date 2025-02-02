@@ -35,8 +35,6 @@
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
 
-# rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-
 require "test_helper"
 
 class SignupRankedChoiceTest < ActiveSupport::TestCase

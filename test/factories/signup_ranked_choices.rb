@@ -35,8 +35,6 @@
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
 
-# rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-
 FactoryBot.define do
   factory :signup_ranked_choice do
     target_run factory: :run
