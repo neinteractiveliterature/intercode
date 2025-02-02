@@ -1,5 +1,5 @@
-import { useContext, useCallback } from 'react';
-import { Column, FilterProps } from '@tanstack/react-table';
+import { useContext, useMemo } from 'react';
+import { CellContext, Column, createColumnHelper } from '@tanstack/react-table';
 import { DateTime } from 'luxon';
 
 import ArrayToSentenceCell from 'Tables/ArrayToSentenceCell';
@@ -14,7 +14,6 @@ import AppRootContext from 'AppRootContext';
 import { AdminOrdersQueryData, AdminOrdersQueryDocument } from './queries.generated';
 import ReactTableWithTheWorks from 'Tables/ReactTableWithTheWorks';
 import { useAppDateTimeFormat } from 'TimeUtils';
-import { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
 import { ActionFunction, json, Outlet, useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
@@ -65,80 +64,30 @@ const fieldFilterCodecs = buildFieldFilterCodecs({
   status: FilterCodecs.stringArray,
 });
 
-const StatusFilter = (props: FilterProps<OrderType>) => (
-  <ChoiceSetFilter
-    {...props}
-    choices={[
-      { label: 'Paid', value: 'paid' },
-      { label: 'Unpaid', value: 'unpaid' },
-      { label: 'Cancelled', value: 'cancelled' },
-    ]}
-    multiple
-  />
-);
+function StatusFilter({ column }: { column: Column<OrderType, unknown> }) {
+  return (
+    <ChoiceSetFilter
+      column={column}
+      choices={[
+        { label: 'Paid', value: 'paid' },
+        { label: 'Unpaid', value: 'unpaid' },
+        { label: 'Cancelled', value: 'cancelled' },
+      ]}
+      multiple
+    />
+  );
+}
 
-type SubmittedAtCellProps = {
-  value?: string | null;
-};
-
-const SubmittedAtCell = ({ value }: SubmittedAtCellProps) => {
+function SubmittedAtCell<TData, TValue extends string | undefined | null>({ getValue }: CellContext<TData, TValue>) {
   const { timezoneName } = useContext(AppRootContext);
   const format = useAppDateTimeFormat();
+  const value = getValue();
 
   if (!value) {
     return <></>;
   }
 
   return <>{format(DateTime.fromISO(value, { zone: timezoneName }), 'shortDateTime')}</>;
-};
-
-function getPossibleColumns(t: TFunction): Column<OrderType>[] {
-  return [
-    {
-      Header: t('admin.store.orders.headers.id'),
-      id: 'id',
-      accessor: 'id',
-      disableFilters: false,
-      disableSortBy: false,
-      Filter: FreeTextFilter,
-      width: 100,
-    },
-    {
-      Header: t('admin.store.orders.headers.user_name'),
-      id: 'user_name',
-      disableFilters: false,
-      disableSortBy: false,
-      accessor: (order: OrderType) => order.user_con_profile.name_without_nickname,
-      Filter: FreeTextFilter,
-    },
-    {
-      Header: t('admin.store.orders.headers.status'),
-      id: 'status',
-      accessor: 'status',
-      disableFilters: false,
-      disableSortBy: false,
-      Filter: StatusFilter,
-    },
-    {
-      Header: t('admin.store.orders.headers.submitted_at'),
-      id: 'submitted_at',
-      accessor: 'submitted_at',
-      disableSortBy: false,
-      Cell: ({ value }: { value: OrderType['submitted_at'] }) => <SubmittedAtCell value={value} />,
-    },
-    {
-      Header: t('admin.store.orders.headers.describe_products'),
-      id: 'describe_products',
-      accessor: (order: OrderType) => order.order_entries.map((entry) => entry.describe_products),
-      Cell: ArrayToSentenceCell,
-    },
-    {
-      Header: t('admin.store.orders.headers.payment_amount'),
-      id: 'payment_amount',
-      accessor: 'payment_amount',
-      Cell: MoneyCell,
-    },
-  ];
 }
 
 function OrderAdmin(): JSX.Element {
@@ -146,7 +95,46 @@ function OrderAdmin(): JSX.Element {
   usePageTitle(t('admin.store.orders.title'));
   const navigate = useNavigate();
 
-  const getPossibleColumnsWithTranslation = useCallback(() => getPossibleColumns(t), [t]);
+  const columns = useMemo(() => {
+    const columnHelper = createColumnHelper<OrderType>();
+    return [
+      columnHelper.accessor('id', {
+        header: t('admin.store.orders.headers.id'),
+        id: 'id',
+        enableColumnFilter: true,
+        enableSorting: true,
+        size: 100,
+      }),
+      columnHelper.accessor('user_con_profile.name_without_nickname', {
+        header: t('admin.store.orders.headers.user_name'),
+        id: 'user_name',
+        enableColumnFilter: true,
+        enableSorting: true,
+      }),
+      columnHelper.accessor('status', {
+        header: t('admin.store.orders.headers.status'),
+        id: 'status',
+        enableColumnFilter: true,
+        enableSorting: true,
+      }),
+      columnHelper.accessor('submitted_at', {
+        header: t('admin.store.orders.headers.submitted_at'),
+        id: 'submitted_at',
+        enableSorting: true,
+        cell: SubmittedAtCell,
+      }),
+      columnHelper.accessor((order) => order.order_entries.map((entry) => entry.describe_products), {
+        header: t('admin.store.orders.headers.describe_products'),
+        id: 'describe_products',
+        cell: ArrayToSentenceCell,
+      }),
+      columnHelper.accessor('payment_amount', {
+        header: t('admin.store.orders.headers.payment_amount'),
+        id: 'payment_amount',
+        cell: MoneyCell,
+      }),
+    ];
+  }, [t]);
 
   const {
     tableHeaderProps,
@@ -156,7 +144,7 @@ function OrderAdmin(): JSX.Element {
   } = useReactTableWithTheWorks({
     getData: ({ data }) => data?.convention.orders_paginated.entries,
     getPages: ({ data }) => data?.convention.orders_paginated.total_pages,
-    getPossibleColumns: getPossibleColumnsWithTranslation,
+    columns,
     storageKeyPrefix: 'orderAdmin',
     query: AdminOrdersQueryDocument,
     decodeFilterValue: fieldFilterCodecs.decodeFilterValue,
@@ -184,6 +172,13 @@ function OrderAdmin(): JSX.Element {
           onClickRow={
             queryData?.currentAbility.can_update_orders ? (row) => navigate(`./${row.original.id}`) : undefined
           }
+          renderFilter={({ column }) => {
+            if (column.id === 'id' || column.id === 'user_name') {
+              return <FreeTextFilter column={column} />;
+            } else if (column.id === 'status') {
+              return <StatusFilter column={column} />;
+            }
+          }}
         />
 
         <Outlet />
