@@ -16,7 +16,7 @@ import { useAppDateTimeFormat } from '../TimeUtils';
 import useReactTableWithTheWorks, { QueryDataContext } from '../Tables/useReactTableWithTheWorks';
 import TableHeader from '../Tables/TableHeader';
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
-import { Column, FilterProps } from '@tanstack/react-table';
+import { CellContext, Column, createColumnHelper } from '@tanstack/react-table';
 import usePageTitle from '../usePageTitle';
 import { SingleLineTimestampCell } from '../Tables/TimestampCell';
 import FreeTextFilter from '../Tables/FreeTextFilter';
@@ -53,22 +53,24 @@ const DECISIONS = EnumTypes.RankedChoiceDecisionValue.enumValues.map(
   (value) => value.name as RankedChoiceDecisionValue,
 );
 
-function RankedChoiceDecisionFilter<RowType extends Record<string, unknown>>(props: FilterProps<RowType>): JSX.Element {
+function RankedChoiceDecisionFilter<TData, TValue>({ column }: { column: Column<TData, TValue> }): JSX.Element {
   const { t } = useTranslation();
   const choices = useMemo(
     () => DECISIONS.map((decision) => ({ value: decision, label: describeDecision(decision, t) })),
     [t],
   );
 
-  return <ChoiceSetFilter {...props} choices={choices} multiple />;
+  return <ChoiceSetFilter column={column} choices={choices} multiple />;
 }
 export type RankedChoiceDecisionCellProps = {
   value: RankedChoiceDecisionValue;
 };
 
-export function RankedChoiceDecisionCell({ value }: RankedChoiceDecisionCellProps): JSX.Element {
+export function RankedChoiceDecisionCell<TData, TValue extends RankedChoiceDecisionValue>({
+  getValue,
+}: CellContext<TData, TValue>): JSX.Element {
   const { t } = useTranslation();
-  return <>{describeDecision(value, t)}</>;
+  return <>{describeDecision(getValue(), t)}</>;
 }
 
 export function describeReason(reason: RankedChoiceDecisionReason, ticketName: string, t: TFunction): string {
@@ -104,9 +106,7 @@ const REASONS = EnumTypes.RankedChoiceDecisionReason.enumValues.map(
   (value) => value.name as RankedChoiceDecisionReason,
 );
 
-function RankedChoiceDecisionReasonFilter<RowType extends Record<string, unknown>>(
-  props: FilterProps<RowType>,
-): JSX.Element {
+function RankedChoiceDecisionReasonFilter<TData, TValue>({ column }: { column: Column<TData, TValue> }): JSX.Element {
   const { t } = useTranslation();
   const { ticketName } = useContext(AppRootContext);
   const choices = useMemo(
@@ -114,15 +114,18 @@ function RankedChoiceDecisionReasonFilter<RowType extends Record<string, unknown
     [t, ticketName],
   );
 
-  return <ChoiceSetFilter {...props} choices={choices} multiple />;
+  return <ChoiceSetFilter column={column} choices={choices} multiple />;
 }
 export type RankedChoiceReasonCellProps = {
   value: RankedChoiceDecisionReason | null | undefined;
 };
 
-export function RankedChoiceReasonCell({ value }: RankedChoiceReasonCellProps): JSX.Element {
+export function RankedChoiceReasonCell<TData, TValue extends RankedChoiceDecisionReason>({
+  getValue,
+}: CellContext<TData, TValue>): JSX.Element {
   const { t } = useTranslation();
   const { ticketName } = useContext(AppRootContext);
+  const value = getValue();
 
   if (value == null) {
     return <></>;
@@ -136,54 +139,6 @@ const FILTER_CODECS = buildFieldFilterCodecs({
   reason: FilterCodecs.integerArray,
 });
 
-function getPossibleColumns(): Column<
-  SignupRoundRankedChoiceDecisionsTableQueryData['convention']['signup_round']['ranked_choice_decisions_paginated']['entries'][number]
->[] {
-  return [
-    {
-      Header: 'Attendee',
-      id: 'user_con_profile_name',
-      accessor: (row) => row.user_con_profile?.name_without_nickname,
-      Filter: FreeTextFilter,
-      disableFilters: false,
-      disableSortBy: false,
-    },
-    {
-      Header: 'Event',
-      id: 'event_title',
-      Filter: FreeTextFilter,
-      accessor: (row) => row.signup_ranked_choice?.target_run.event.title,
-    },
-    {
-      Header: 'Decision',
-      id: 'decision',
-      accessor: 'decision',
-      Cell: RankedChoiceDecisionCell,
-      Filter: RankedChoiceDecisionFilter,
-      width: 100,
-      disableFilters: false,
-      disableSortBy: false,
-    },
-    {
-      Header: 'Reason',
-      id: 'reason',
-      accessor: 'reason',
-      Cell: RankedChoiceReasonCell,
-      Filter: RankedChoiceDecisionReasonFilter,
-      width: 100,
-      disableFilters: false,
-      disableSortBy: false,
-    },
-    {
-      Header: 'Timestamp',
-      id: 'created_at',
-      accessor: 'created_at',
-      Cell: SingleLineTimestampCell,
-      disableSortBy: false,
-    },
-  ];
-}
-
 // eslint-disable-next-line i18next/no-literal-string
 const alwaysVisibleColumns = ['user_con_profile_name', 'event_title', 'decision', 'reason'];
 
@@ -193,6 +148,50 @@ type RankedChoiceSignupDecisionsTableProps = {
 
 function RankedChoiceSignupDecisionsTable({ signupRoundId }: RankedChoiceSignupDecisionsTableProps) {
   const { t } = useTranslation();
+
+  const columns = useMemo(() => {
+    const columnHelper =
+      createColumnHelper<
+        SignupRoundRankedChoiceDecisionsTableQueryData['convention']['signup_round']['ranked_choice_decisions_paginated']['entries'][number]
+      >();
+
+    return [
+      columnHelper.accessor('user_con_profile.name_without_nickname', {
+        header: 'Attendee',
+        id: 'user_con_profile_name',
+        enableColumnFilter: true,
+        enableSorting: true,
+      }),
+      columnHelper.accessor('signup_ranked_choice.target_run.event.title', {
+        header: 'Event',
+        id: 'event_title',
+        enableColumnFilter: true,
+        enableSorting: true,
+      }),
+      columnHelper.accessor('decision', {
+        header: 'Decision',
+        id: 'decision',
+        cell: RankedChoiceDecisionCell,
+        size: 100,
+        enableColumnFilter: true,
+        enableSorting: true,
+      }),
+      columnHelper.accessor('reason', {
+        header: 'Reason',
+        id: 'reason',
+        cell: RankedChoiceReasonCell,
+        size: 100,
+        enableColumnFilter: true,
+        enableSorting: true,
+      }),
+      columnHelper.accessor('created_at', {
+        header: 'Timestamp',
+        id: 'created_at',
+        cell: SingleLineTimestampCell,
+        enableSorting: true,
+      }),
+    ];
+  }, []);
 
   const {
     queryData,
@@ -209,7 +208,7 @@ function RankedChoiceSignupDecisionsTable({ signupRoundId }: RankedChoiceSignupD
     encodeFilterValue: FILTER_CODECS.encodeFilterValue,
     getData: (queryData) => queryData.data.convention.signup_round.ranked_choice_decisions_paginated.entries,
     getPages: (queryData) => queryData.data.convention.signup_round.ranked_choice_decisions_paginated.total_pages,
-    getPossibleColumns,
+    columns,
     storageKeyPrefix: `rankedChoiceSignupDecisions-${signupRoundId}`,
     query: SignupRoundRankedChoiceDecisionsTableQueryDocument,
     variables: { signupRoundId },
@@ -225,7 +224,19 @@ function RankedChoiceSignupDecisionsTable({ signupRoundId }: RankedChoiceSignupD
           exportUrl={`/csv_exports/ranked_choice_decisions?signup_round_id=${encodeURIComponent(signupRoundId)}`}
         />
 
-        <ReactTableWithTheWorks table={tableInstance} loading={loading} />
+        <ReactTableWithTheWorks
+          table={tableInstance}
+          loading={loading}
+          renderFilter={({ column }) => {
+            if (column.id === 'user_con_profile_name' || column.id === 'event_title') {
+              return <FreeTextFilter column={column} />;
+            } else if (column.id === 'decision') {
+              return <RankedChoiceDecisionFilter column={column} />;
+            } else if (column.id === 'reason') {
+              return <RankedChoiceDecisionReasonFilter column={column} />;
+            }
+          }}
+        />
       </div>
     </QueryDataContext.Provider>
   );
