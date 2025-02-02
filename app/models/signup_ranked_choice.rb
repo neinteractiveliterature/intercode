@@ -4,6 +4,7 @@
 # Table name: signup_ranked_choices
 #
 #  id                       :bigint           not null, primary key
+#  prioritize_waitlist      :boolean          default(FALSE), not null
 #  priority                 :integer          not null
 #  requested_bucket_key     :string
 #  state                    :string           not null
@@ -32,6 +33,8 @@
 #  fk_rails_...  (updated_by_id => users.id)
 #  fk_rails_...  (user_con_profile_id => user_con_profiles.id)
 #
+# rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
+
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
 
 class SignupRankedChoice < ApplicationRecord

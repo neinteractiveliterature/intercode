@@ -37,6 +37,25 @@ describe ExecuteRankedChoiceSignupService do
     assert_equal "pending", signup_ranked_choice.state
   end
 
+  it "waitlists if there's no room in the run and this choice prioritizes waitlisting" do
+    event =
+      create(
+        :event,
+        convention:,
+        registration_policy:
+          RegistrationPolicy.new(buckets: [RegistrationPolicy::Bucket.new(slots_limited: true, total_slots: 0)])
+      )
+    the_run = create(:run, event:)
+    signup_ranked_choice = create(:signup_ranked_choice, target_run: the_run, prioritize_waitlist: true)
+
+    result = ExecuteRankedChoiceSignupService.new(signup_round:, signup_ranked_choice:, whodunit: nil).call!
+
+    signup_ranked_choice.reload
+    assert_equal "waitlist", result.decision.decision
+    assert_equal "waitlisted", result.decision.signup.state
+    assert_equal "waitlisted", signup_ranked_choice.state
+  end
+
   it "waitlists if there's no room in the run and waitlisting is allowed" do
     event =
       create(

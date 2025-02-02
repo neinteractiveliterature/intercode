@@ -226,6 +226,9 @@ class Types::MutationType < Types::BaseObject # rubocop:disable GraphQL/ObjectDe
 
   field :createSignupRankedChoice, null: false, mutation: Mutations::CreateSignupRankedChoice
   field :deleteSignupRankedChoice, null: false, mutation: Mutations::DeleteSignupRankedChoice
+  field :setSignupRankedChoicePrioritzeWaitlist,
+        null: false,
+        mutation: Mutations::SetSignupRankedChoicePrioritizeWaitlist
   field :updateSignupRankedChoicePriority, null: false, mutation: Mutations::UpdateSignupRankedChoicePriority
 
   ### SignupRequest

@@ -12,6 +12,12 @@ module Types
 
     field :created_at, Types::DateType, null: false, description: "The time this choice was added to the user's queue"
     field :id, ID, null: false, description: "The ID of this SignupRankedChoice"
+    field :prioritize_waitlist, Boolean, null: false do
+      description <<~MARKDOWN
+        If true, this ranked choice will prioritize itself even if the event is full (and therefore the attendee would
+        end up on the waitlist)
+      MARKDOWN
+    end
     field :priority, Integer, null: false do
       description "The priority of this choice (lower numbers are higher priority)"
     end
