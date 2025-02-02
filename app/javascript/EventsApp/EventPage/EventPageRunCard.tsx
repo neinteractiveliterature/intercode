@@ -7,7 +7,7 @@ import RunCard from './RunCard';
 import buildSignupOptions, { SignupOption } from './buildSignupOptions';
 import AppRootContext from '../../AppRootContext';
 import CreateModeratedSignupModal from './CreateModeratedSignupModal';
-import { EventPageQueryData, EventPageQueryDocument, EventPageQueryVariables } from './queries.generated';
+import { EventPageQueryData, EventPageQueryDocument } from './queries.generated';
 import { SignupMode, SignupRankedChoiceState } from '../../graphqlTypes.generated';
 import SignupCountData from '../SignupCountData';
 import {
@@ -62,8 +62,6 @@ export type EventPageRunCardProps = {
   event: EventPageQueryData['convention']['event'];
   run: EventPageQueryData['convention']['event']['runs'][0];
   myProfile: EventPageQueryData['convention']['my_profile'];
-  mySignups: EventPageQueryData['convention']['my_signups'];
-  mySignupRequests: EventPageQueryData['convention']['my_signup_requests'];
   signupRounds: EventPageQueryData['convention']['signup_rounds'];
   currentAbility: EventPageQueryData['currentAbility'];
   addToQueue: boolean;
@@ -73,8 +71,6 @@ function EventPageRunCard({
   event,
   run,
   myProfile,
-  mySignups,
-  mySignupRequests,
   currentAbility,
   signupRounds,
   addToQueue,
@@ -91,13 +87,11 @@ function EventPageRunCard({
         event,
         SignupCountData.fromRun(run),
         addToQueue,
-        mySignups,
-        mySignupRequests,
         myPendingRankedChoices,
-        signupRounds,
+        myProfile?.signup_constraints ?? { at_maximum_signups: false },
         myProfile ?? undefined,
       ),
-    [event, run, myProfile, mySignups, mySignupRequests, signupRounds, addToQueue, myPendingRankedChoices],
+    [event, run, myProfile, addToQueue, myPendingRankedChoices],
   );
   const confirm = useConfirm();
   const createModeratedSignupModal = useModal<{ signupOption: SignupOption }>();

@@ -13,10 +13,8 @@ module SignupCountLimits
     when "not_yet"
       errors.add :base, I18n.t("signups.errors.closed")
     else
-      user_signup_count =
-        user_signup_constraints.current_signup_count + user_signup_constraints.pending_signup_request_count
-      unless user_signup_constraints.signup_count_allowed?(user_signup_count + 1)
-        errors.add :base, I18n.t("signups.errors.already_at_max", count: user_signup_count)
+      if user_signup_constraints.at_maximum_signups?
+        errors.add :base, I18n.t("signups.errors.already_at_max", count: user_signup_constraints.current_signup_count)
       end
     end
   end

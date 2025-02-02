@@ -115,9 +115,7 @@ class ExecuteRankedChoiceSignupRoundService < CivilService::Service
       return true
     end
 
-    unless constraints.signup_count_allowed?(
-             constraints.current_signup_count + constraints.pending_signup_request_count + 1
-           )
+    unless constraints.signup_count_allowed?(constraints.current_signup_count + 1)
       decisions << RankedChoiceDecision.create!(
         signup_round:,
         decision: :skip_user,

@@ -191,6 +191,10 @@ query CreateSignupRunCardQuery($userConProfileId: ID!, $eventId: ID!) {
         }
       }
 
+      signup_constraints {
+        at_maximum_signups
+      }
+
       signup_requests {
         id
         state

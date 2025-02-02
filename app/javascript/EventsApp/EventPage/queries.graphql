@@ -104,17 +104,9 @@ query EventPageQuery($eventId: ID!) {
 
     my_profile {
       id
-    }
-
-    my_signups {
-      id
-      state
-      counted
-    }
-
-    my_signup_requests {
-      id
-      state
+      signup_constraints {
+        at_maximum_signups
+      }
     }
 
     event(id: $eventId) {

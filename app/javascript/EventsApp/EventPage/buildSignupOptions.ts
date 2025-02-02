@@ -3,16 +3,7 @@ import { notEmpty } from '@neinteractiveliterature/litform';
 import { EventPageQueryData, RunCardRegistrationPolicyFieldsFragment } from './queries.generated';
 import sortBuckets from './sortBuckets';
 import SignupCountData from '../SignupCountData';
-import {
-  SignupState,
-  SignupRankedChoice,
-  SignupRound,
-  Signup,
-  SignupRequest,
-  SignupRequestState,
-} from '../../graphqlTypes.generated';
-import { parseSignupRounds } from '../../SignupRoundUtils';
-import { DateTime } from 'luxon';
+import { SignupState, SignupRankedChoice, UserSignupConstraints } from '../../graphqlTypes.generated';
 
 type SignupOptionBucket = RunCardRegistrationPolicyFieldsFragment['buckets'][0];
 
@@ -136,10 +127,8 @@ function allSignupOptions(
     },
   signupCounts: SignupCountData,
   addToQueue: boolean,
-  mySignups: Pick<Signup, 'state' | 'counted'>[],
-  mySignupRequests: Pick<SignupRequest, 'state'>[],
   myPendingRankedChoices: Pick<SignupRankedChoice, 'requested_bucket_key' | 'priority'>[],
-  signupRounds: Pick<SignupRound, 'start' | 'maximum_event_signups'>[],
+  userSignupConstraints: Pick<UserSignupConstraints, 'at_maximum_signups'>,
   userConProfile?: { id: string },
 ): SignupOption[] {
   if (isTeamMember(event, userConProfile)) {
@@ -161,17 +150,7 @@ function allSignupOptions(
 
   const buckets = sortBuckets((event.registration_policy || {}).buckets || []);
   const nonAnythingBuckets = buckets.filter((bucket) => !bucket.anything);
-  const parsedRounds = parseSignupRounds(signupRounds);
-  const now = DateTime.local();
-  const currentRound = parsedRounds.find((round) => round.timespan.includesTime(now));
-  const maximumEventSignups = currentRound?.maximum_event_signups ?? 'not_now';
-  const signupCount =
-    mySignups.filter(
-      (signup) =>
-        (signup.state === SignupState.Confirmed || signup.state === SignupState.TicketPurchaseHold) && signup.counted,
-    ).length + mySignupRequests.filter((signupRequest) => signupRequest.state === SignupRequestState.Pending).length;
-  const hasAvailableSignups =
-    typeof maximumEventSignups === 'number' ? signupCount < maximumEventSignups : maximumEventSignups === 'unlimited';
+  const hasAvailableSignups = !userSignupConstraints.at_maximum_signups;
   const noPreferencePendingRankedChoices = myPendingRankedChoices.filter(
     (request) => request.requested_bucket_key == null,
   );
@@ -240,20 +219,16 @@ export default function buildSignupOptions(
   event: Parameters<typeof allSignupOptions>[0],
   signupCounts: SignupCountData,
   addToQueue: boolean,
-  mySignups: Pick<Signup, 'state' | 'counted'>[],
-  mySignupRequests: Pick<SignupRequest, 'state'>[],
   myPendingRankedChoices: Pick<SignupRankedChoice, 'requested_bucket_key' | 'priority'>[],
-  signupRounds: Pick<SignupRound, 'start' | 'maximum_event_signups'>[],
+  userSignupConstraints: Pick<UserSignupConstraints, 'at_maximum_signups'>,
   userConProfile?: { id: string },
 ): PartitionedSignupOptions {
   const allOptions = allSignupOptions(
     event,
     signupCounts,
     addToQueue,
-    mySignups,
-    mySignupRequests,
     myPendingRankedChoices,
-    signupRounds,
+    userSignupConstraints,
     userConProfile,
   );
   const noPreferenceOptions = allOptions.filter((option) => option.noPreference);

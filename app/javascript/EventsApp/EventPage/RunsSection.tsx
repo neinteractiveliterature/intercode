@@ -5,30 +5,7 @@ import { DateTime } from 'luxon';
 import RunCapacityGraph from './RunCapacityGraph';
 import EventPageRunCard from './EventPageRunCard';
 import { EventPageQueryData } from './queries.generated';
-import { SignupAutomationMode, SignupRequestState, SignupRound, SignupState } from '../../graphqlTypes.generated';
-import { parseSignupRounds } from '../../SignupRoundUtils';
-
-function getMaxSignupCount(signupRounds: Pick<SignupRound, 'start' | 'maximum_event_signups'>[]) {
-  const parsedRounds = parseSignupRounds(signupRounds);
-  const now = DateTime.local();
-  const currentRound = parsedRounds.find((round) => round.timespan.includesTime(now));
-
-  if (currentRound == null) {
-    return undefined;
-  }
-
-  const strValue = currentRound.maximum_event_signups;
-
-  if (strValue === 'not_now' || strValue === 'not_yet') {
-    return 0;
-  }
-
-  if (strValue === 'unlimited') {
-    return undefined;
-  }
-
-  return strValue;
-}
+import { SignupAutomationMode } from '../../graphqlTypes.generated';
 
 type FakeRunProps = {
   event: EventPageQueryData['convention']['event'];
@@ -61,26 +38,8 @@ export default function RunsSection({ data }: RunsSectionProps) {
       return false;
     }
 
-    const maxSignups = getMaxSignupCount(data.convention.signup_rounds);
-
-    if (maxSignups === undefined || Number.isNaN(maxSignups)) {
-      return false;
-    }
-
-    const confirmedCountedSignups = data.convention.my_signups.filter(
-      (signup) => signup.state === SignupState.Confirmed && signup.counted,
-    );
-    const pendingSignupRequests = data.convention.my_signup_requests.filter(
-      (signupRequest) => signupRequest.state === SignupRequestState.Pending,
-    );
-
-    return confirmedCountedSignups.length + pendingSignupRequests.length >= maxSignups;
-  }, [
-    data.convention.signup_automation_mode,
-    data.convention.my_signups,
-    data.convention.my_signup_requests,
-    data.convention.signup_rounds,
-  ]);
+    return data.convention.my_profile?.signup_constraints.at_maximum_signups ?? false;
+  }, [data.convention.my_profile?.signup_constraints.at_maximum_signups, data.convention.signup_automation_mode]);
 
   const { currentAbility, convention } = data;
   const myProfile = convention.my_profile;
@@ -100,8 +59,6 @@ export default function RunsSection({ data }: RunsSectionProps) {
             run={run}
             key={run.id}
             myProfile={myProfile}
-            mySignups={data.convention.my_signups}
-            mySignupRequests={data.convention.my_signup_requests}
             signupRounds={data.convention.signup_rounds}
             currentAbility={currentAbility}
             addToQueue={addToQueue}

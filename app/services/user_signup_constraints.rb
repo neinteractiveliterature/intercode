@@ -31,11 +31,11 @@ class UserSignupConstraints
   end
 
   def current_signup_count
-    current_signups.size
+    @current_signup_count ||= current_signups.size + pending_signup_requests.size
   end
 
-  def pending_signup_request_count
-    pending_signup_requests.size
+  def at_maximum_signups?
+    !signup_count_allowed?(current_signup_count + 1)
   end
 
   def concurrent_signups_for_run(run)
