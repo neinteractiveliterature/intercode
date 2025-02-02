@@ -1176,7 +1176,7 @@
         "conflict": "Skip: Conflicts with <i>{{ eventTitles, list }}</i>",
         "full": "Skip: <i>{{ eventTitle }}</i> is full, and you have opted not to be put on waitlists",
         "fullWaitlist": "Waitlist: <i>{{ eventTitle }}</i> is full. If there are no other available options, you may be put on the waitlist for this event.",
-        "fullWaitlistPrioritized": "Waitlist: <i>{{ eventTitle }}</i> is full. You will be put on the waitlist for this event.",
+        "fullWaitlistPrioritized": "Waitlist: <i>{{ eventTitle }}</i> is full. If this choice is processed, you will be put on the waitlist.",
         "maxSignupsInTimespan": "Skip: You set a limit for signups on {{ timespan }}, and that limit has been reached",
         "maxSignupsTotal": "Skip: You set a limit for total signups, and that limit has been reached"
       },
