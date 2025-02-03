@@ -11,6 +11,7 @@ import { client } from 'useIntercodeApolloClient';
 import { CreateEmailRouteDocument } from './mutations.generated';
 import { EmailRouteInput } from 'graphqlTypes.generated';
 import { Link, useFetcher } from 'react-router-dom';
+import { useTranslation } from 'react-i18next';
 
 export const action: ActionFunction = async ({ request }) => {
   try {
@@ -31,6 +32,7 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 function NewEmailRouteModal(): JSX.Element {
+  const { t } = useTranslation();
   const [emailRoute, setEmailRoute] = useState<EmailRouteFieldsFragment>({
     __typename: 'EmailRoute',
     id: '',
@@ -46,7 +48,7 @@ function NewEmailRouteModal(): JSX.Element {
 
   return (
     <Modal visible dialogClassName="modal-lg">
-      <div className="modal-header">New email route</div>
+      <div className="modal-header">{t('admin.emailRoutes.newEmailRoute.title')}</div>
 
       <div className="modal-body">
         <EmailRouteForm emailRoute={emailRoute} onChange={setEmailRoute} />
@@ -56,11 +58,11 @@ function NewEmailRouteModal(): JSX.Element {
 
       <div className="modal-footer">
         <Link className="btn btn-secondary" type="button" to="..">
-          Cancel
+          {t('buttons.cancel')}
         </Link>
 
         <button className="btn btn-primary" type="button" onClick={createClicked} disabled={inProgress}>
-          Create email route
+          {t('admin.emailRoutes.newEmailRoute.createButton')}
         </button>
       </div>
     </Modal>

@@ -4,6 +4,7 @@ import { BootstrapFormInput } from '@neinteractiveliterature/litform';
 import { StringArrayEditor } from '../BuiltInFormControls/ArrayEditor';
 import { usePropertySetters } from '@neinteractiveliterature/litform';
 import { EmailRouteFieldsFragment } from './queries.generated';
+import { useTranslation } from 'react-i18next';
 
 export type EmailRouteFormProps = {
   emailRoute: EmailRouteFieldsFragment;
@@ -11,6 +12,7 @@ export type EmailRouteFormProps = {
 };
 
 function EmailRouteForm({ emailRoute, onChange }: EmailRouteFormProps): JSX.Element {
+  const { t } = useTranslation();
   const [setReceiverAddress, setForwardAddresses] = usePropertySetters(
     onChange,
     'receiver_address',
@@ -20,7 +22,7 @@ function EmailRouteForm({ emailRoute, onChange }: EmailRouteFormProps): JSX.Elem
   return (
     <>
       <BootstrapFormInput
-        label="Receiver email"
+        label={t('admin.emailRoutes.newEmailRoute.receiverEmailLabel')}
         value={emailRoute.receiver_address}
         onTextChange={setReceiverAddress}
       />
@@ -28,10 +30,10 @@ function EmailRouteForm({ emailRoute, onChange }: EmailRouteFormProps): JSX.Elem
       <StringArrayEditor
         array={emailRoute.forward_addresses ?? []}
         onChange={setForwardAddresses}
-        header="Forward addresses"
+        header={t('admin.emailRoutes.newEmailRoute.forwardAddressesLabel')}
         renderValue={(value) => value}
-        getDeleteButtonLabel={(value) => `Delete forward address ${value}`}
-        getDeletePrompt={(value) => `Are you sure you want to delete ${value} from the forward addresses?`}
+        getDeleteButtonLabel={(email) => t('admin.emailRoutes.newEmailRoute.forwardAddressesDeleteButton', { email })}
+        getDeletePrompt={(email) => t('admin.emailRoutes.newEmailRoute.forwardAddressesDeletePrompt', { email })}
         renderAddValueInput={({ value, onChange: onAddValueChange, onKeyDown }) => (
           <input
             type="email"
@@ -39,10 +41,10 @@ function EmailRouteForm({ emailRoute, onChange }: EmailRouteFormProps): JSX.Elem
             value={value}
             onChange={(event) => onAddValueChange(event.target.value)}
             onKeyDown={onKeyDown}
-            aria-label="Forward address to add"
+            aria-label={t('admin.emailRoutes.newEmailRoute.forwardAddressesAddLabel')}
           />
         )}
-        addValueLabel="Add forward address"
+        addValueLabel={t('admin.emailRoutes.newEmailRoute.forwardAddressesAddButton')}
       />
     </>
   );
