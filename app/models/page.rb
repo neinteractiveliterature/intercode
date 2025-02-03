@@ -9,6 +9,7 @@
 #  content                  :text
 #  hidden_from_search       :boolean          default(FALSE), not null
 #  invariant                :boolean          default(FALSE), not null
+#  meta_description         :text
 #  name                     :text
 #  parent_type              :string
 #  skip_clickwrap_agreement :boolean          default(FALSE), not null
@@ -80,7 +81,7 @@ class Page < ApplicationRecord
     strip_tags(CmsContentFinder.new(convention).cms_rendering_context.render_page_content(self))
   rescue StandardError => e
     Rails.logger.debug e
-    ''
+    ""
   end
 
   private

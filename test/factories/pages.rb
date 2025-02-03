@@ -8,6 +8,7 @@
 #  content                  :text
 #  hidden_from_search       :boolean          default(FALSE), not null
 #  invariant                :boolean          default(FALSE), not null
+#  meta_description         :text
 #  name                     :text
 #  parent_type              :string
 #  skip_clickwrap_agreement :boolean          default(FALSE), not null
@@ -30,7 +31,7 @@
 FactoryBot.define do
   factory :page do
     sequence(:name) { |n| "Page #{n}" }
-    content { 'MyText' }
+    content { "MyText" }
     association :parent, factory: :convention
   end
 end

@@ -6,6 +6,9 @@
     "title": "Add to calendar"
   },
   "admin": {
+    "adminNotes": {
+      "label": "Admin notes"
+    },
     "convention": {
       "defaultCurrency": "Default currency for convention",
       "faviconHelpText": "Used by browsers for the icon in tabs for this site.  180x180 pixels is recommended.",
@@ -579,6 +582,19 @@
         "coreLiquidMarkup": "Core Liquid markup",
         "iframeTitle": "Documentation"
       }
+    },
+    "pages": {
+      "contentLabel": "Content",
+      "defaultLayout": "Default layout (currently set as {{ name }})",
+      "defaultLayoutUnset": "Default layout",
+      "hiddenFromSearchLabel": "Hidden from search",
+      "hiddenFromSearchHelpText": "If selected, this page will not appear in site search results.",
+      "layoutLabel": "Layout",
+      "metaDescriptionLabel": "Meta description",
+      "metaDescriptionHelpText": "If present, this text will be used as the description for link previews from sites such as Facebook and Twitter.",
+      "nameLabel": "Name",
+      "skipClickwrapAgreementLabel": "Skip clickwrap agreement",
+      "skipClickwrapAgreementHelpText": "If selected, this page will not check whether the user has accepted the site clickwrap agreement."
     }
   },
   "cookieConsent": {

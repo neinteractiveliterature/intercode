@@ -4303,29 +4303,78 @@ export type OrganizationRoleInput = {
   name?: InputMaybe<Scalars['String']['input']>;
 };
 
+/** A CMS page, viewable at a location under `/pages/`. */
 export type Page = {
   __typename: 'Page';
+  /** Notes on this page that will be visible to site admins */
   admin_notes?: Maybe<Scalars['String']['output']>;
+  /**
+   * If present, the layout to use for rendering this page.  If not, this page will use the default layout for its CMS
+   * parent.
+   */
   cms_layout?: Maybe<CmsLayout>;
+  /** The content of this page, in Liquid format */
   content?: Maybe<Scalars['String']['output']>;
+  /** The rendered content of this page, in HTML format */
   content_html: Scalars['String']['output'];
+  /** Is the user making this request allowed to delete this page? */
   current_ability_can_delete: Scalars['Boolean']['output'];
+  /** Is the user making this request allowed to update this page? */
   current_ability_can_update: Scalars['Boolean']['output'];
+  /** If true, this page will not be indexed for full-text search. */
   hidden_from_search: Scalars['Boolean']['output'];
+  /** The ID of this page. */
   id: Scalars['ID']['output'];
+  /**
+   * If present, this value will be used in the `<meta property="og:description">` and
+   * `<meta name="description">` tags in the `<head>` of this page, which are used as the
+   * preview text for links to this page on web sites such as Facebook, Twitter, etc.
+   *
+   * If absent, the description text will be automatically generated from the page content.
+   */
+  meta_description?: Maybe<Scalars['String']['output']>;
+  /** The title of this page */
   name?: Maybe<Scalars['String']['output']>;
+  /** An automatically-generated list of CMS partials referenced by this page (and any partials referenced by those, etc.) */
   referenced_partials: Array<CmsPartial>;
+  /**
+   * If true, this page will not require the user to agree to the site's clickwrap agreement (if applicable) in order to
+   * view it.  This should be used on any pages referenced in the clickwrap agreement, such as site policies.
+   */
   skip_clickwrap_agreement?: Maybe<Scalars['Boolean']['output']>;
+  /** The URL portion after `/pages/` at which this page can be viewed */
   slug?: Maybe<Scalars['String']['output']>;
 };
 
+/** A CMS page. */
 export type PageInput = {
+  /** Notes on this page that will be visible to site admins */
   admin_notes?: InputMaybe<Scalars['String']['input']>;
+  /**
+   * If present, the ID of the layout to use for rendering this page.  If not, this page will use the default layout for
+   * its CMS parent.
+   */
   cmsLayoutId?: InputMaybe<Scalars['ID']['input']>;
+  /** The content of this page, in Liquid format */
   content?: InputMaybe<Scalars['String']['input']>;
+  /** If true, this page will not be indexed for full-text search. */
   hidden_from_search?: InputMaybe<Scalars['Boolean']['input']>;
+  /**
+   * If present, this value will be used in the `<meta property="og:description">` and
+   * `<meta name="description">` tags in the `<head>` of this page, which are used as the
+   * preview text for links to this page on web sites such as Facebook, Twitter, etc.
+   *
+   * If absent, the description text will be automatically generated from the page content.
+   */
+  metaDescription?: InputMaybe<Scalars['String']['input']>;
+  /** The title of this page */
   name?: InputMaybe<Scalars['String']['input']>;
+  /**
+   * If true, this page will not require the user to agree to the site's clickwrap agreement (if applicable) in order to
+   * view it.  This should be used on any pages referenced in the clickwrap agreement, such as site policies.
+   */
   skip_clickwrap_agreement?: InputMaybe<Scalars['Boolean']['input']>;
+  /** The URL portion after `/pages/` at which this page can be viewed */
   slug?: InputMaybe<Scalars['String']['input']>;
 };
 

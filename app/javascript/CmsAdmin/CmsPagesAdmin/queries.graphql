@@ -13,6 +13,7 @@ fragment CmsPageFields on Page {
   hidden_from_search
   current_ability_can_update
   current_ability_can_delete
+  meta_description
 
   cms_layout {
     id

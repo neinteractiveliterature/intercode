@@ -8,6 +8,7 @@
 #  content                  :text
 #  hidden_from_search       :boolean          default(FALSE), not null
 #  invariant                :boolean          default(FALSE), not null
+#  meta_description         :text
 #  name                     :text
 #  parent_type              :string
 #  skip_clickwrap_agreement :boolean          default(FALSE), not null
@@ -27,7 +28,7 @@
 #  fk_rails_...  (cms_layout_id => cms_layouts.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-require 'test_helper'
+require "test_helper"
 
 class PageTest < ActiveSupport::TestCase
   # test "the truth" do

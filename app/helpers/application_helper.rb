@@ -18,6 +18,8 @@ module ApplicationHelper
   end
 
   def open_graph_description_for_page(page)
+    return page.meta_description if page.meta_description.present?
+
     Rails
       .cache
       .fetch(["open_graph_description", page], expires_in: 1.day) do
