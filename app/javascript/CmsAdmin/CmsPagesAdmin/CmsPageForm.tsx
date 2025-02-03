@@ -5,6 +5,7 @@ import {
   BootstrapFormInput,
   usePropertySetters,
   sortByLocaleString,
+  BootstrapFormTextarea,
 } from '@neinteractiveliterature/litform';
 import { EditorView } from '@codemirror/view';
 
@@ -15,7 +16,7 @@ import { CmsPagesAdminQueryData } from './queries.generated';
 
 export type PageFormFields = Pick<
   Page,
-  'name' | 'admin_notes' | 'slug' | 'skip_clickwrap_agreement' | 'hidden_from_search' | 'content'
+  'name' | 'admin_notes' | 'slug' | 'skip_clickwrap_agreement' | 'hidden_from_search' | 'content' | 'meta_description'
 > & { cms_layout?: (Pick<CmsLayout, 'name'> & { id: string }) | null };
 
 export type CmsPageFormProps<T extends PageFormFields> = {
@@ -33,17 +34,26 @@ function CmsPageForm<T extends PageFormFields>({
   cmsLayouts,
   readOnly,
 }: CmsPageFormProps<T>): JSX.Element {
-  const [setName, setAdminNotes, setSlug, setSkipClickwrapAgreement, setHiddenFromSearch, setCmsLayout, setContent] =
-    usePropertySetters(
-      onChange,
-      'name',
-      'admin_notes',
-      'slug',
-      'skip_clickwrap_agreement',
-      'hidden_from_search',
-      'cms_layout',
-      'content',
-    );
+  const [
+    setName,
+    setAdminNotes,
+    setSlug,
+    setSkipClickwrapAgreement,
+    setHiddenFromSearch,
+    setCmsLayout,
+    setContent,
+    setMetaDescription,
+  ] = usePropertySetters(
+    onChange,
+    'name',
+    'admin_notes',
+    'slug',
+    'skip_clickwrap_agreement',
+    'hidden_from_search',
+    'cms_layout',
+    'content',
+    'meta_description',
+  );
 
   const extensions = React.useMemo(() => [EditorView.editable.of(!readOnly)], [readOnly]);
 
@@ -129,6 +139,14 @@ function CmsPageForm<T extends PageFormFields>({
         onChange={setCmsLayout}
         placeholder={cmsLayoutSelectPlaceholder}
         isDisabled={readOnly}
+      />
+
+      <BootstrapFormTextarea
+        name="meta_description"
+        label="Meta description"
+        value={page.meta_description ?? ''}
+        onTextChange={setMetaDescription}
+        helpText="If present, this text will be used as the description for link previews from sites such as Facebook and Twitter."
       />
 
       <div className="mb-3">

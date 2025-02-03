@@ -47,12 +47,12 @@
 :skip_on_db_migrate: false
 :target_action: :do_annotations
 :wrapper:
-:wrapper_close: "rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective\n"
-:wrapper_open: "rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective"
+:wrapper_close: 'rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective'
+:wrapper_open: 'rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective'
 :classes_default_to_s: []
 :additional_file_patterns: []
 :model_dir:
-- app/models
+  - app/models
 :require: []
 :root_dir:
-- ''
+  - ''

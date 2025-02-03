@@ -2127,7 +2127,8 @@ CREATE TABLE public.pages (
     admin_notes text,
     invariant boolean DEFAULT false NOT NULL,
     skip_clickwrap_agreement boolean DEFAULT false NOT NULL,
-    hidden_from_search boolean DEFAULT false NOT NULL
+    hidden_from_search boolean DEFAULT false NOT NULL,
+    meta_description text
 );
 
 
@@ -6121,6 +6122,7 @@ ALTER TABLE ONLY public.cms_files_pages
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20250203173940'),
 ('20250202200327'),
 ('20250120173505'),
 ('20241111212526'),
