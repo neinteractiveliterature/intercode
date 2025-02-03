@@ -1,14 +1,13 @@
 import { notEmpty } from '@neinteractiveliterature/litform';
 import { CommonConventionDataQueryData, CommonConventionDataQueryDocument } from '../../queries.generated';
 import { getFilterableFormItems } from '../../useFilterableFormItems';
-import { TypedFormItem } from '../../../FormAdmin/FormItemUtils';
 import useReactTableWithTheWorks, { QueryDataContext } from '../../../Tables/useReactTableWithTheWorks';
 import usePageTitle from '../../../usePageTitle';
 import { FilterCodecs, buildFieldFilterCodecs } from '../../../Tables/FilterUtils';
 import TableHeader from '../../../Tables/TableHeader';
 import ReactTableWithTheWorks from '../../../Tables/ReactTableWithTheWorks';
 import { LoaderFunction, useLoaderData, useNavigate } from 'react-router';
-import { Column } from '@tanstack/react-table';
+import { CellContext, createColumnHelper } from '@tanstack/react-table';
 import EventCategoryCell from '../../../Tables/EventCategoryCell';
 import EventCategoryFilter from '../../../Tables/EventCategoryFilter';
 import { useContext, useMemo } from 'react';
@@ -28,132 +27,19 @@ const FILTER_CODECS = buildFieldFilterCodecs({
   category: FilterCodecs.integerArray,
 });
 
-function TeamMembersCell({ value }: { value: RunType['event']['team_members'] }) {
+type RunType = EventCatalogRunsQueryData['convention']['runs_paginated']['entries'][number];
+
+function TeamMembersCell<TData, TValue extends RunType['event']['team_members']>({
+  getValue,
+}: CellContext<TData, TValue>) {
   return (
     <div>
-      {value
+      {getValue()
         .filter((teamMember) => teamMember.display_team_member)
         .map((teamMember) => teamMember.user_con_profile.name_without_nickname.trim())
         .join(', ')}
     </div>
   );
-}
-
-type RunType = EventCatalogRunsQueryData['convention']['runs_paginated']['entries'][number];
-
-function getPossibleColumns(filterableFormItems: TypedFormItem[]): Column<RunType>[] {
-  return [
-    {
-      Header: 'Category',
-      id: 'category',
-      accessor: (run) => run.event.event_category,
-      width: 100,
-      Cell: EventCategoryCell,
-      Filter: EventCategoryFilter,
-      disableFilters: false,
-      disableSortBy: false,
-    },
-    {
-      Header: 'Title',
-      id: 'title',
-      accessor: (run) => run.event.title,
-      Filter: FreeTextFilter,
-      disableFilters: false,
-      disableSortBy: false,
-    },
-    {
-      Header: 'Starts at',
-      id: 'starts_at',
-      accessor: (run) => run.starts_at,
-      width: 80,
-      disableSortBy: false,
-      Cell: SingleLineTimestampCell,
-    },
-    {
-      Header: 'Ends at',
-      id: 'ends_at',
-      accessor: (run) => DateTime.fromISO(run.starts_at).plus({ seconds: run.event.length_seconds }).toISO(),
-      width: 80,
-      disableSortBy: false,
-      Cell: SingleLineTimestampCell,
-    },
-    {
-      Header: 'Duration',
-      id: 'length_seconds',
-      accessor: (run) => run.event.length_seconds,
-      width: 80,
-      disableSortBy: false,
-      Cell: DurationCell,
-    },
-    {
-      Header: 'Short blurb',
-      id: 'short_blurb',
-      accessor: (run) => run.event.short_blurb_html,
-      Cell: HtmlCell,
-    },
-    {
-      Header: 'Description',
-      id: 'description',
-      accessor: (run) => run.event.description_html,
-      Cell: HtmlCell,
-    },
-    {
-      Header: 'Content warnings',
-      id: 'content_warnings',
-      accessor: (run) => run.event.content_warnings,
-      Cell: HtmlCell,
-    },
-    {
-      Header: 'Participant communications',
-      id: 'participant communications',
-      accessor: (run) => run.event.participant_communications,
-      Cell: HtmlCell,
-    },
-    {
-      Header: 'Capacity',
-      id: 'total_slots',
-      width: 80,
-      accessor: (run) => run.event.registration_policy,
-      Cell: CapacityCell,
-    },
-    {
-      Header: 'Team members',
-      id: 'team_members',
-      accessor: (run) => run.event.team_members,
-      Cell: TeamMembersCell,
-    },
-    {
-      Header: 'Author(s)',
-      id: 'author',
-      accessor: (run) => run.event.author,
-    },
-    {
-      Header: 'Event added at',
-      id: 'event_created_at',
-      accessor: (run) => run.event.created_at,
-      Cell: SingleLineTimestampCell,
-    },
-    ...filterableFormItems
-      .map((formItem) => {
-        if (formItem.item_type === 'static_text') {
-          return undefined;
-        }
-
-        return {
-          Header: formItem.public_description ?? formItem.identifier,
-          id: `form_fields[${formItem.identifier}]`,
-          accessor: (run: RunType) =>
-            JSON.parse(run.event.form_response_attrs_json_with_rendered_markdown ?? '{}')[formItem.identifier],
-          Cell: ({ value }: { value: unknown }) => {
-            const data = useContext(QueryDataContext) as EventCatalogRunsQueryData;
-            return (
-              <FormItemDisplay convention={data.convention} formItem={formItem} displayMode="public" value={value} />
-            );
-          },
-        };
-      })
-      .filter(notEmpty),
-  ];
 }
 
 const defaultVisibleColumns = ['category', 'title', 'starts_at', 'length_seconds', 'total_slots'];
@@ -174,6 +60,119 @@ function EventTable() {
   const navigate = useNavigate();
   usePageTitle('Table View - Event Catalog');
 
+  const columns = useMemo(() => {
+    const columnHelper = createColumnHelper<RunType>();
+    return [
+      columnHelper.accessor('event.event_category', {
+        header: 'Category',
+        id: 'category',
+        size: 100,
+        cell: EventCategoryCell,
+        enableColumnFilter: true,
+        enableSorting: true,
+      }),
+      columnHelper.accessor('event.title', {
+        header: 'Title',
+        id: 'title',
+        enableColumnFilter: true,
+        enableSorting: true,
+      }),
+      columnHelper.accessor('starts_at', {
+        header: 'Starts at',
+        id: 'starts_at',
+        size: 80,
+        enableSorting: true,
+        cell: SingleLineTimestampCell,
+      }),
+      columnHelper.accessor(
+        (run) => DateTime.fromISO(run.starts_at).plus({ seconds: run.event.length_seconds }).toISO(),
+        {
+          header: 'Ends at',
+          id: 'ends_at',
+          size: 80,
+          enableSorting: true,
+          cell: SingleLineTimestampCell,
+        },
+      ),
+      columnHelper.accessor('event.length_seconds', {
+        header: 'Duration',
+        id: 'length_seconds',
+        size: 80,
+        enableSorting: true,
+        cell: DurationCell,
+      }),
+      columnHelper.accessor('event.short_blurb_html', {
+        header: 'Short blurb',
+        id: 'short_blurb',
+        cell: HtmlCell,
+      }),
+      columnHelper.accessor('event.description_html', {
+        header: 'Description',
+        id: 'description',
+        cell: HtmlCell,
+      }),
+      columnHelper.accessor('event.content_warnings', {
+        header: 'Content warnings',
+        id: 'content_warnings',
+        cell: HtmlCell,
+      }),
+      columnHelper.accessor('event.participant_communications', {
+        header: 'Participant communications',
+        id: 'participant communications',
+        cell: HtmlCell,
+      }),
+      columnHelper.accessor('event.registration_policy', {
+        header: 'Capacity',
+        id: 'total_slots',
+        size: 80,
+        cell: CapacityCell,
+      }),
+      columnHelper.accessor('event.team_members', {
+        header: 'Team members',
+        id: 'team_members',
+        cell: TeamMembersCell,
+      }),
+      columnHelper.accessor('event.author', {
+        header: 'Author(s)',
+        id: 'author',
+      }),
+      columnHelper.accessor('event.created_at', {
+        header: 'Event added at',
+        id: 'event_created_at',
+        cell: SingleLineTimestampCell,
+      }),
+      ...filterableFormItems
+        .map((formItem) => {
+          if (formItem.item_type === 'static_text') {
+            return undefined;
+          }
+
+          function FormItemCell<TData, TValue>({ getValue }: CellContext<TData, TValue>) {
+            const data = useContext(QueryDataContext) as EventCatalogRunsQueryData;
+            return (
+              <FormItemDisplay
+                convention={data.convention}
+                formItem={formItem}
+                displayMode="public"
+                value={getValue()}
+              />
+            );
+          }
+
+          return columnHelper.accessor(
+            (run: RunType) =>
+              JSON.parse(run.event.form_response_attrs_json_with_rendered_markdown ?? '{}')[formItem.identifier],
+            {
+              header: formItem.public_description ?? formItem.identifier,
+              id: `form_fields[${formItem.identifier}]`,
+              cell: FormItemCell,
+            },
+          );
+        })
+        .filter(notEmpty),
+    ];
+  }, [filterableFormItems]);
+
   const {
     tableHeaderProps,
     table: tableInstance,
@@ -185,7 +184,7 @@ function EventTable() {
     encodeFilterValue: FILTER_CODECS.encodeFilterValue,
     getData: ({ data: tableData }) => tableData.convention.runs_paginated.entries,
     getPages: ({ data: tableData }) => tableData.convention.runs_paginated.total_pages,
-    getPossibleColumns: () => getPossibleColumns(filterableFormItems),
+    columns,
     query: EventCatalogRunsQueryDocument,
     storageKeyPrefix: 'eventTable',
   });
@@ -204,6 +203,13 @@ function EventTable() {
             table={tableInstance}
             loading={loading}
             onClickRow={(row) => navigate(`/events/${row.original.event.id}`)}
+            renderFilter={({ column }) => {
+              if (column.id === 'category') {
+                return <EventCategoryFilter column={column} />;
+              } else if (column.id === 'title') {
+                return <FreeTextFilter column={column} />;
+              }
+            }}
           />
         </QueryDataContext.Provider>
       </div>
