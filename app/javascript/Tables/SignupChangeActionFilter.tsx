@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { FilterProps } from 'react-table';
+import { Column } from '@tanstack/react-table';
 
 import ChoiceSetFilter from './ChoiceSetFilter';
 import EnumTypes from '../enumTypes.json';
@@ -9,11 +9,15 @@ import { SignupChangeAction } from '../graphqlTypes.generated';
 
 const ACTIONS = EnumTypes.SignupChangeAction.enumValues.map((value) => value.name as SignupChangeAction);
 
-function SignupChangeActionFilter<RowType extends Record<string, unknown>>(props: FilterProps<RowType>): JSX.Element {
+function SignupChangeActionFilter<TData extends Record<string, unknown>, TValue>({
+  column,
+}: {
+  column: Column<TData, TValue>;
+}): JSX.Element {
   const { t } = useTranslation();
   const choices = useMemo(() => ACTIONS.map((action) => ({ value: action, label: describeAction(action, t) })), [t]);
 
-  return <ChoiceSetFilter {...props} choices={choices} multiple />;
+  return <ChoiceSetFilter column={column} choices={choices} multiple />;
 }
 
 export default SignupChangeActionFilter;

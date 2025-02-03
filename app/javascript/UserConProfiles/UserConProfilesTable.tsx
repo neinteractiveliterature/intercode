@@ -1,8 +1,7 @@
 import { useContext, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router-dom';
-import { Column, CellProps, FilterProps } from 'react-table';
+import { CellContext, Column, ColumnDef, createColumnHelper } from '@tanstack/react-table';
 import { useTranslation } from 'react-i18next';
-import { TFunction } from 'i18next';
 import { DateTime } from 'luxon';
 
 import BooleanCell from '../Tables/BooleanCell';
@@ -17,6 +16,7 @@ import useReactTableWithTheWorks, { createQueryDataContext } from '../Tables/use
 import TableHeader from '../Tables/TableHeader';
 import UserConProfileWithGravatarCell from '../Tables/UserConProfileWithGravatarCell';
 import {
+  AttendeesPageQueryData,
   UserConProfilesTableUserConProfilesQueryData,
   UserConProfilesTableUserConProfilesQueryDocument,
   UserConProfilesTableUserConProfilesQueryVariables,
@@ -27,6 +27,7 @@ import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
 import { formatLCM, getDateTimeFormat } from '../TimeUtils';
 import AppRootContext from '../AppRootContext';
 import humanize from '../humanize';
+import { TicketMode } from 'graphqlTypes.generated';
 
 type UserConProfilesTableRow = NonNullable<
   UserConProfilesTableUserConProfilesQueryData['convention']
@@ -43,12 +44,11 @@ const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({
   payment_amount: FilterCodecs.float,
 });
 
-type TicketStatusCellProps = {
-  value: UserConProfilesTableRow['ticket'];
-};
-
-function TicketStatusCell({ value }: TicketStatusCellProps): JSX.Element {
+function TicketStatusCell<TData, TValue extends UserConProfilesTableRow['ticket']>({
+  getValue,
+}: CellContext<TData, TValue>): JSX.Element {
   const { t } = useTranslation();
+  const value = getValue();
 
   if (!value) {
     return <>{t('tables.ticketStatus.unpaid')}</>;
@@ -57,258 +57,253 @@ function TicketStatusCell({ value }: TicketStatusCellProps): JSX.Element {
   return <>{humanize(value.ticket_type.name)}</>;
 }
 
-type TicketPaymentAmountCellProps = {
-  value: UserConProfilesTableRow['ticket'];
-};
-
-function TicketPaymentAmountCell({ value }: TicketPaymentAmountCellProps): JSX.Element {
-  return <>{formatMoney(value?.order_entry?.price_per_item)}</>;
+function TicketPaymentAmountCell<TData, TValue extends UserConProfilesTableRow['ticket']>({
+  getValue,
+}: CellContext<TData, TValue>): JSX.Element {
+  return <>{formatMoney(getValue()?.order_entry?.price_per_item)}</>;
 }
 
-type TicketStatusWithPaymentAmountCellProps = {
-  value: UserConProfilesTableRow['ticket'];
-};
-
-function TicketStatusWithPaymentAmountCell({ value }: TicketStatusWithPaymentAmountCellProps): JSX.Element {
+function TicketStatusWithPaymentAmountCell<TData, TValue extends UserConProfilesTableRow['ticket']>(
+  props: CellContext<TData, TValue>,
+): JSX.Element {
   return (
     <>
-      <TicketStatusCell value={value} /> <TicketPaymentAmountCell value={value} />
+      <TicketStatusCell {...props} /> <TicketPaymentAmountCell {...props} />
     </>
   );
 }
 
-function TicketStatusChangeCell({ value }: { value: DateTime | null }): JSX.Element {
+function TicketStatusChangeCell<TData, TValue extends DateTime | null | undefined>({
+  getValue,
+}: CellContext<TData, TValue>): JSX.Element {
   const { t } = useTranslation();
+  const value = getValue();
+
   return <>{value ? formatLCM(value, getDateTimeFormat('shortDateTime', t)) : null}</>;
 }
 
-const TicketTypeFilter = (props: FilterProps<UserConProfilesTableRow>): JSX.Element => {
+function TicketTypeFilter<TData extends UserConProfilesTableRow, TValue>({
+  column,
+  ticketTypes,
+}: {
+  column: Column<TData, TValue>;
+  ticketTypes: AttendeesPageQueryData['convention']['ticket_types'];
+}): JSX.Element {
   const { t } = useTranslation();
-  const data = useContext(UserConProfilesTableQueryDataContext);
   const choices = useMemo(
-    () =>
-      data
-        ? [
-            { label: t('tables.ticketStatus.unpaid'), value: 'none' },
-            ...data.convention.ticket_types.map((ticketType) => ({
-              label: humanize(ticketType.name),
-              value: ticketType.id.toString(),
-            })),
-          ]
-        : [],
-    [data, t],
+    () => [
+      { label: t('tables.ticketStatus.unpaid'), value: 'none' },
+      ...ticketTypes.map((ticketType) => ({
+        label: humanize(ticketType.name),
+        value: ticketType.id.toString(),
+      })),
+    ],
+    [t, ticketTypes],
   );
 
-  return <ChoiceSetFilter {...props} choices={choices} multiple />;
-};
+  return <ChoiceSetFilter column={column} choices={choices} multiple />;
+}
 
-const PrivilegesCell = ({ row: { original } }: CellProps<UserConProfilesTableRow>) => {
+function PrivilegesCell<TData extends UserConProfilesTableRow, TValue>({
+  row: { original },
+}: CellContext<TData, TValue>) {
   const { t } = useTranslation();
   if (original.site_admin) {
     return <>{t('tables.privileges.siteAdmin')}</>;
   }
 
   return <></>;
-};
+}
 
-const PrivilegesFilter = (props: FilterProps<UserConProfilesTableRow>) => {
+function PrivilegesFilter<TData extends UserConProfilesTableRow, TValue>({
+  column,
+}: {
+  column: Column<TData, TValue>;
+}) {
   const { t } = useTranslation();
   return (
-    <ChoiceSetFilter {...props} choices={[{ label: t('tables.privileges.siteAdmin'), value: 'site_admin' }]} multiple />
+    <ChoiceSetFilter
+      column={column}
+      choices={[{ label: t('tables.privileges.siteAdmin'), value: 'site_admin' }]}
+      multiple
+    />
   );
-};
-
-function getPossibleColumns(
-  data: UserConProfilesTableUserConProfilesQueryData,
-  t: TFunction,
-  formItems: TypedFormItem[],
-  timezoneName: string,
-): Column<UserConProfilesTableRow>[] {
-  const columns: Column<UserConProfilesTableRow>[] = [
-    {
-      Header: <>{t('admin.userConProfiles.id')}</>,
-      id: 'id',
-      accessor: (userConProfile) => userConProfile.id,
-      width: 70,
-    },
-    {
-      Header: <>{t('admin.userConProfiles.userId')}</>,
-      id: 'user_id',
-      accessor: (userConProfile) => userConProfile.user_id,
-      width: 70,
-    },
-    {
-      Header: <>{t('admin.userConProfiles.name')}</>,
-      id: 'name',
-      accessor: (userConProfile) => userConProfile,
-      disableFilters: false,
-      disableSortBy: false,
-      Filter: FreeTextFilter,
-      Cell: UserConProfileWithGravatarCell,
-    },
-    {
-      Header: <>{t('admin.userConProfiles.firstName')}</>,
-      id: 'first_name',
-      accessor: (userConProfile) => userConProfile.first_name,
-      disableFilters: false,
-      disableSortBy: false,
-      Filter: FreeTextFilter,
-    },
-    {
-      Header: <>{t('admin.userConProfiles.lastName')}</>,
-      id: 'last_name',
-      accessor: (userConProfile) => userConProfile.last_name,
-      disableFilters: false,
-      disableSortBy: false,
-      Filter: FreeTextFilter,
-    },
-    {
-      Header: <>{t('admin.userConProfiles.email')}</>,
-      id: 'email',
-      accessor: (userConProfile) => userConProfile.email,
-      disableFilters: false,
-      disableSortBy: false,
-      Cell: EmailCell,
-      Filter: FreeTextFilter,
-    },
-  ];
-
-  if (data.convention.ticket_mode !== 'disabled') {
-    columns.push(
-      {
-        Header: <>{humanize(data.convention.ticket_name || 'ticket')}</>,
-        id: 'ticket',
-        accessor: (userConProfile) => userConProfile.ticket,
-        width: 150,
-        disableFilters: false,
-        disableSortBy: false,
-        Cell: TicketStatusWithPaymentAmountCell,
-        Filter: TicketTypeFilter,
-      },
-      {
-        Header: (
-          <>
-            {t('admin.userConProfiles.ticketType', {
-              ticketName: humanize(data.convention.ticket_name || 'ticket'),
-            })}
-          </>
-        ),
-        id: 'ticket_type',
-        accessor: (userConProfile) => userConProfile.ticket,
-        width: 150,
-        disableFilters: false,
-        disableSortBy: false,
-        Cell: TicketStatusCell,
-        Filter: TicketTypeFilter,
-      },
-      {
-        Header: <>{t('admin.userConProfiles.paymentAmount')}</>,
-        id: 'payment_amount',
-        accessor: (userConProfile) => userConProfile.ticket,
-        width: 150,
-        disableFilters: false,
-        disableSortBy: false,
-        Cell: TicketPaymentAmountCell,
-        Filter: FreeTextFilter,
-      },
-    );
-  }
-
-  columns.push(
-    {
-      Header: <>{t('admin.userConProfiles.isTeamMember')}</>,
-      id: 'is_team_member',
-      accessor: (userConProfile) => userConProfile.team_members.length > 0,
-      width: 150,
-      disableFilters: false,
-      Cell: BooleanCell,
-      Filter: BooleanChoiceSetFilter,
-    },
-    {
-      Header: <>{t('admin.userConProfiles.isAttending')}</>,
-      id: 'attending',
-      accessor: (userConProfile) => userConProfile.ticket != null,
-      width: 150,
-      disableFilters: false,
-      Cell: BooleanCell,
-      Filter: BooleanChoiceSetFilter,
-    },
-  );
-
-  if (data.convention.ticket_mode !== 'disabled') {
-    columns.push({
-      Header: (
-        <>
-          {t('admin.userConProfiles.ticketStatusChangedAt', {
-            ticketName: humanize(data.convention.ticket_name || 'ticket'),
-          })}
-        </>
-      ),
-      id: 'ticket_updated_at',
-      accessor: (userConProfile) =>
-        userConProfile.ticket ? DateTime.fromISO(userConProfile.ticket.updated_at, { zone: timezoneName }) : null,
-      disableSortBy: false,
-      Cell: TicketStatusChangeCell,
-    });
-  }
-
-  columns.push(
-    {
-      Header: <>{t('admin.userConProfiles.privileges')}</>,
-      id: 'privileges',
-      accessor: (row) => row,
-      disableFilters: false,
-      disableSortBy: false,
-      Cell: PrivilegesCell,
-      Filter: PrivilegesFilter,
-    },
-    {
-      Header: <>{t('admin.userConProfiles.orderSummary')}</>,
-      id: 'order_summary',
-      accessor: 'order_summary',
-    },
-  );
-
-  formItems.forEach((formItem) => {
-    const { identifier } = formItem;
-    if (
-      !identifier ||
-      identifier === 'first_name' ||
-      identifier === 'last_name' ||
-      columns.some((column) => column.id === identifier)
-    ) {
-      return;
-    }
-
-    const FormItemCell = ({ value }: { value: FormItemValueType<TypedFormItem> }) => (
-      <FormItemDisplay formItem={formItem} value={value} convention={data.convention} displayMode="admin" />
-    );
-
-    columns.push({
-      Header: formItem.admin_description || humanize(identifier),
-      id: identifier,
-      accessor: (userConProfile) => JSON.parse(userConProfile.form_response_attrs_json ?? '{}')[identifier],
-      Cell: FormItemCell,
-    });
-  });
-
-  return columns;
 }
 
 export type UserConProfilesTableProps = {
   defaultVisibleColumns?: string[];
+  attendeesPageQueryData: AttendeesPageQueryData;
 };
 
-function UserConProfilesTable({ defaultVisibleColumns }: UserConProfilesTableProps): JSX.Element {
+function UserConProfilesTable({
+  defaultVisibleColumns,
+  attendeesPageQueryData,
+}: UserConProfilesTableProps): JSX.Element {
   const { timezoneName } = useContext(AppRootContext);
   const { t } = useTranslation();
   const navigate = useNavigate();
-  const getPossibleColumnsWithTranslation = useMemo(
-    () => (data: UserConProfilesTableUserConProfilesQueryData) =>
-      getPossibleColumns(data, t, getSortedParsedFormItems(data.convention.user_con_profile_form), timezoneName),
-    [t, timezoneName],
-  );
-  const { tableInstance, loading, tableHeaderProps, queryData } = useReactTableWithTheWorks<
+
+  const columns = useMemo(() => {
+    const formItems = getSortedParsedFormItems(attendeesPageQueryData.convention.user_con_profile_form);
+    const columnHelper = createColumnHelper<UserConProfilesTableRow>();
+
+    const columns: ColumnDef<UserConProfilesTableRow>[] = [
+      columnHelper.accessor('id', {
+        header: t('admin.userConProfiles.id'),
+        id: 'id',
+        size: 70,
+      }),
+      columnHelper.accessor('user_id', {
+        header: t('admin.userConProfiles.userId'),
+        id: 'user_id',
+        size: 70,
+      }),
+      columnHelper.accessor((userConProfile) => userConProfile, {
+        header: t('admin.userConProfiles.name'),
+        id: 'name',
+        enableColumnFilter: true,
+        enableSorting: true,
+        cell: UserConProfileWithGravatarCell,
+      }),
+      columnHelper.accessor('first_name', {
+        header: t('admin.userConProfiles.firstName'),
+        id: 'first_name',
+        enableColumnFilter: true,
+        enableSorting: true,
+      }),
+      columnHelper.accessor('last_name', {
+        header: t('admin.userConProfiles.lastName'),
+        id: 'last_name',
+        enableColumnFilter: true,
+        enableSorting: true,
+      }),
+      columnHelper.accessor('email', {
+        header: t('admin.userConProfiles.email'),
+        id: 'email',
+        enableColumnFilter: true,
+        enableSorting: true,
+        cell: EmailCell,
+      }),
+    ];
+
+    if (attendeesPageQueryData.convention.ticket_mode !== TicketMode.Disabled) {
+      columns.push(
+        columnHelper.accessor('ticket', {
+          header: humanize(attendeesPageQueryData.convention.ticket_name || 'ticket'),
+          id: 'ticket',
+          size: 150,
+          enableColumnFilter: true,
+          enableSorting: true,
+          cell: TicketStatusWithPaymentAmountCell,
+        }),
+        columnHelper.accessor('ticket', {
+          header: t('admin.userConProfiles.ticketType', {
+            ticketName: humanize(attendeesPageQueryData.convention.ticket_name || 'ticket'),
+          }),
+          id: 'ticket_type',
+          size: 150,
+          enableColumnFilter: true,
+          enableSorting: true,
+          cell: TicketStatusCell,
+        }),
+        columnHelper.accessor('ticket', {
+          header: t('admin.userConProfiles.paymentAmount'),
+          id: 'payment_amount',
+          size: 150,
+          enableColumnFilter: true,
+          enableSorting: true,
+          cell: TicketPaymentAmountCell,
+        }),
+      );
+    }
+
+    columns.push(
+      columnHelper.accessor((userConProfile) => userConProfile.team_members.length > 0, {
+        header: t('admin.userConProfiles.isTeamMember'),
+        id: 'is_team_member',
+        size: 150,
+        enableColumnFilter: true,
+        cell: BooleanCell,
+      }),
+      columnHelper.accessor((userConProfile) => userConProfile.ticket != null, {
+        header: t('admin.userConProfiles.isAttending'),
+        id: 'attending',
+        size: 150,
+        enableColumnFilter: true,
+        cell: BooleanCell,
+      }),
+    );
+
+    if (attendeesPageQueryData.convention.ticket_mode !== TicketMode.Disabled) {
+      columns.push(
+        columnHelper.accessor(
+          (userConProfile) =>
+            userConProfile.ticket ? DateTime.fromISO(userConProfile.ticket.updated_at, { zone: timezoneName }) : null,
+          {
+            header: t('admin.userConProfiles.ticketStatusChangedAt', {
+              ticketName: humanize(attendeesPageQueryData.convention.ticket_name || 'ticket'),
+            }),
+            id: 'ticket_updated_at',
+            enableSorting: true,
+            cell: TicketStatusChangeCell,
+          },
+        ),
+      );
+    }
+
+    columns.push(
+      columnHelper.accessor((row) => row, {
+        header: t('admin.userConProfiles.privileges'),
+        id: 'privileges',
+        enableColumnFilter: true,
+        enableSorting: true,
+        cell: PrivilegesCell,
+      }),
+      columnHelper.accessor('order_summary', {
+        header: t('admin.userConProfiles.orderSummary'),
+        id: 'order_summary',
+      }),
+    );
+
+    const existingColumnIds = new Set(columns.map((column) => column.id));
+    formItems.forEach((formItem) => {
+      const { identifier } = formItem;
+      if (!identifier || existingColumnIds.has(identifier)) {
+        return;
+      }
+
+      const FormItemCell = <TData, TValue extends FormItemValueType<TypedFormItem>>({
+        getValue,
+      }: CellContext<TData, TValue>) => (
+        <FormItemDisplay
+          formItem={formItem}
+          value={getValue()}
+          convention={attendeesPageQueryData.convention}
+          displayMode="admin"
+        />
+      );
+
+      columns.push(
+        columnHelper.accessor(
+          (userConProfile) => JSON.parse(userConProfile.form_response_attrs_json ?? '{}')[identifier],
+          {
+            header: formItem.admin_description || humanize(identifier),
+            id: identifier,
+            cell: FormItemCell,
+          },
+        ),
+      );
+    });
+
+    return columns;
+  }, [t, timezoneName, attendeesPageQueryData]);
+
+  const {
+    table: tableInstance,
+    loading,
+    tableHeaderProps,
+    queryData,
+  } = useReactTableWithTheWorks<
     UserConProfilesTableUserConProfilesQueryData,
     UserConProfilesTableRow,
     UserConProfilesTableUserConProfilesQueryVariables
@@ -318,7 +313,7 @@ function UserConProfilesTable({ defaultVisibleColumns }: UserConProfilesTablePro
     encodeFilterValue,
     getData: ({ data }) => data?.convention.user_con_profiles_paginated.entries,
     getPages: ({ data }) => data?.convention.user_con_profiles_paginated.total_pages,
-    getPossibleColumns: getPossibleColumnsWithTranslation,
+    columns,
     query: UserConProfilesTableUserConProfilesQueryDocument,
     storageKeyPrefix: 'userConProfiles',
   });
@@ -341,10 +336,27 @@ function UserConProfilesTable({ defaultVisibleColumns }: UserConProfilesTablePro
         />
 
         <ReactTableWithTheWorks
-          tableInstance={tableInstance}
+          table={tableInstance}
           loading={loading}
           onClickRow={(row) => {
             navigate(`/user_con_profiles/${row.original.id}`);
+          }}
+          renderFilter={({ column }) => {
+            if (
+              column.id === 'name' ||
+              column.id === 'first_name' ||
+              column.id === 'last_name' ||
+              column.id === 'email' ||
+              column.id === 'payment_amount'
+            ) {
+              return <FreeTextFilter column={column} />;
+            } else if (column.id === 'is_team_member' || column.id === 'attending') {
+              return <BooleanChoiceSetFilter column={column} />;
+            } else if (column.id === 'privileges') {
+              return <PrivilegesFilter column={column} />;
+            } else if (column.id === 'ticket' || column.id === 'ticket_type') {
+              return <TicketTypeFilter column={column} ticketTypes={attendeesPageQueryData.convention.ticket_types} />;
+            }
           }}
         />
       </div>

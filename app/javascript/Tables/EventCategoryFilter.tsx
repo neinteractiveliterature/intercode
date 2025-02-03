@@ -1,23 +1,22 @@
 import { useContext, useMemo } from 'react';
-import { FilterProps } from 'react-table';
 import { QueryDataContext } from './useReactTableWithTheWorks';
 import ChoiceSetFilter from './ChoiceSetFilter';
+import { Column } from '@tanstack/react-table';
 
-export default function EventCategoryFilter<
-  T extends object,
-  QueryData extends { convention: { event_categories: { id: string; name: string }[] } },
->(props: FilterProps<T>) {
-  const data = useContext(QueryDataContext) as QueryData;
+export default function EventCategoryFilter<TData extends Record<string, unknown>, TValue>({
+  column,
+}: {
+  column: Column<TData, TValue>;
+}) {
+  const data = useContext(QueryDataContext) as { convention?: { event_categories: { id: string; name: string }[] } };
   const choices = useMemo(
     () =>
-      data
-        ? data.convention.event_categories.map((eventCategory) => ({
-            value: eventCategory.id.toString(),
-            label: eventCategory.name,
-          }))
-        : [],
+      data.convention?.event_categories.map((eventCategory) => ({
+        value: eventCategory.id.toString(),
+        label: eventCategory.name,
+      })) ?? [],
     [data],
   );
 
-  return <ChoiceSetFilter {...props} choices={choices} multiple />;
+  return <ChoiceSetFilter column={column} choices={choices} multiple />;
 }

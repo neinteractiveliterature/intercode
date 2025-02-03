@@ -2,11 +2,11 @@ import { useMemo, useState, ReactNode } from 'react';
 import classNames from 'classnames';
 import { Modifier } from 'react-popper';
 import { useTranslation } from 'react-i18next';
-import { FilterProps } from 'react-table';
 import max from 'lodash/max';
 import { ChoiceSet, useLitformPopperWithAutoClosing, useToggleOpen } from '@neinteractiveliterature/litform';
 
 import { FilterCodec } from './FilterUtils';
+import { Column } from '@tanstack/react-table';
 
 export type ChoiceSetFilterChoice = {
   label: string;
@@ -28,37 +28,43 @@ function sortChoices(choices: readonly ChoiceSetFilterChoice[]) {
 
 type ChoiceSetFilterValue = ChoiceSetFilterChoice['value'];
 
-type LenientFilterProps<RowType extends Record<string, unknown>> = {
-  column: Pick<FilterProps<RowType>['column'], 'filterValue' | 'setFilter'>;
+type LenientFilterProps<TData extends Record<string, unknown>, TValue> = {
+  column: Pick<Column<TData, TValue>, 'getFilterValue' | 'setFilterValue'>;
 };
 
-type ChoiceSetFilterCommonProps<RowType extends Record<string, unknown>> = LenientFilterProps<RowType> & {
+type ChoiceSetFilterCommonProps<TData extends Record<string, unknown>, TValue> = LenientFilterProps<TData, TValue> & {
   choices: readonly ChoiceSetFilterChoice[];
   filterCodec?: FilterCodec<ChoiceSetFilterValue>;
 };
 
-export type ChoiceSetFilterSingleProps<RowType extends Record<string, unknown>> =
-  ChoiceSetFilterCommonProps<RowType> & {
-    multiple: false;
-    renderHeaderCaption?: (value: ChoiceSetFilterValue) => ReactNode;
-  };
+export type ChoiceSetFilterSingleProps<TData extends Record<string, unknown>, TValue> = ChoiceSetFilterCommonProps<
+  TData,
+  TValue
+> & {
+  multiple: false;
+  renderHeaderCaption?: (value: ChoiceSetFilterValue) => ReactNode;
+};
 
-export type ChoiceSetFilterMultipleProps<RowType extends Record<string, unknown>> =
-  ChoiceSetFilterCommonProps<RowType> & {
-    multiple: true;
-    hideSelectNone?: boolean;
-    renderHeaderCaption?: (value: ChoiceSetFilterValue[]) => ReactNode;
-  };
+export type ChoiceSetFilterMultipleProps<TData extends Record<string, unknown>, TValue> = ChoiceSetFilterCommonProps<
+  TData,
+  TValue
+> & {
+  multiple: true;
+  hideSelectNone?: boolean;
+  renderHeaderCaption?: (value: ChoiceSetFilterValue[]) => ReactNode;
+};
 
-export type ChoiceSetFilterProps<RowType extends Record<string, unknown>> =
-  | ChoiceSetFilterSingleProps<RowType>
-  | ChoiceSetFilterMultipleProps<RowType>;
+export type ChoiceSetFilterProps<TData extends Record<string, unknown>, TValue> =
+  | ChoiceSetFilterSingleProps<TData, TValue>
+  | ChoiceSetFilterMultipleProps<TData, TValue>;
 
-function ChoiceSetFilter<RowType extends Record<string, unknown>>(props: ChoiceSetFilterProps<RowType>): JSX.Element {
+function ChoiceSetFilter<TData extends Record<string, unknown>, TValue>(
+  props: ChoiceSetFilterProps<TData, TValue>,
+): JSX.Element {
   const {
     choices: rawChoices,
-    column: { filterValue: filterValueFromColumn, setFilter },
-    multiple: originalMultiple,
+    column: { getFilterValue, setFilterValue },
+    multiple,
     ...otherProps
   } = props;
   const { t } = useTranslation();
@@ -106,21 +112,23 @@ function ChoiceSetFilter<RowType extends Record<string, unknown>>(props: ChoiceS
   const toggleOpen = useToggleOpen(setDropdownOpen, update);
 
   const filterValue = useMemo(() => {
-    const rawFilterValue = filterValueFromColumn ?? (props.multiple ? [] : undefined);
     const filterCodec = props.filterCodec;
-    if (filterCodec) {
-      if (props.multiple) {
-        return rawFilterValue.map((singleValue: string) => filterCodec.encode(singleValue)?.toString());
-      }
-      return filterCodec.encode(rawFilterValue)?.toString();
-    }
-
     if (props.multiple) {
-      return rawFilterValue.map((singleValue: string | undefined) => singleValue?.toString());
+      const rawFilterValue = (getFilterValue() ?? []) as (string | undefined)[];
+      if (filterCodec) {
+        return rawFilterValue.map((singleValue) => filterCodec.encode(singleValue)?.toString());
+      } else {
+        return rawFilterValue.map((singleValue) => singleValue?.toString());
+      }
+    } else {
+      const rawFilterValue = (getFilterValue() ?? undefined) as string | undefined;
+      if (filterCodec) {
+        return filterCodec.encode(rawFilterValue)?.toString();
+      } else {
+        return rawFilterValue?.toString();
+      }
     }
-
-    return rawFilterValue?.toString();
-  }, [filterValueFromColumn, props.filterCodec, props.multiple]);
+  }, [getFilterValue, props.filterCodec, props.multiple]);
 
   const choices = useMemo(() => {
     const filterCodec = props.filterCodec;
@@ -141,12 +149,12 @@ function ChoiceSetFilter<RowType extends Record<string, unknown>>(props: ChoiceS
   const valueChanged = (value: string | string[] | null) => {
     const filterCodec = props.filterCodec;
     if (props.multiple && filterCodec && Array.isArray(value)) {
-      setFilter(value.map((singleValue: string) => filterCodec.decode(singleValue)));
+      setFilterValue(value.map((singleValue: string) => filterCodec.decode(singleValue)));
     }
     if (!props.multiple && filterCodec && !Array.isArray(value)) {
-      setFilter(filterCodec.decode(value));
+      setFilterValue(filterCodec.decode(value));
     }
-    setFilter(value);
+    setFilterValue(value);
   };
 
   const renderHeaderCaptionWithChoices = () => {
@@ -155,7 +163,13 @@ function ChoiceSetFilter<RowType extends Record<string, unknown>>(props: ChoiceS
     }
 
     if (props.renderHeaderCaption) {
-      return <span className="me-2">{props.renderHeaderCaption(filterValue)}</span>;
+      return (
+        <span className="me-2">
+          {props.multiple
+            ? props.renderHeaderCaption(getFilterValue() as string[])
+            : props.renderHeaderCaption(getFilterValue() as string)}
+        </span>
+      );
     }
 
     const anyText = t('tables.choiceSetFilter.anyText');
@@ -215,13 +229,17 @@ function ChoiceSetFilter<RowType extends Record<string, unknown>>(props: ChoiceS
         {...attributes.popper}
       >
         <div className="card-body p-2">
-          <ChoiceSet
-            value={filterValue}
-            choices={choices}
-            onChange={valueChanged}
-            multiple={originalMultiple}
-            {...otherProps}
-          />
+          {props.multiple ? (
+            <ChoiceSet
+              multiple
+              value={getFilterValue() as string[]}
+              choices={choices}
+              onChange={valueChanged}
+              {...otherProps}
+            />
+          ) : (
+            <ChoiceSet value={getFilterValue() as string} choices={choices} onChange={valueChanged} {...otherProps} />
+          )}
         </div>
 
         {props.multiple && (

@@ -2,8 +2,10 @@ import { useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
 import { assertNever } from 'assert-never';
 
-import SignupStateCell from './SignupStateCell';
-import { SignupChangeAction, SignupState } from '../graphqlTypes.generated';
+import { SignupStateDisplay } from './SignupStateCell';
+import { SignupChangeAction } from '../graphqlTypes.generated';
+import { CellContext } from '@tanstack/react-table';
+import { SignupChangeType } from 'EventsApp/SignupAdmin/RunSignupChangesTable';
 
 export function describeAction(action: SignupChangeAction, t: TFunction): string {
   if (action === 'self_service_signup') {
@@ -54,24 +56,19 @@ export function describeAction(action: SignupChangeAction, t: TFunction): string
   return action;
 }
 
-export type SignupChangeCellProps = {
-  value: {
-    action: SignupChangeAction;
-    state?: SignupState | null;
-    previous_signup_change?: {
-      state?: SignupState | null;
-    } | null;
-  };
-};
-
-const SignupChangeCell = ({ value }: SignupChangeCellProps): JSX.Element => {
+function SignupChangeCell<TData extends SignupChangeType, TValue>({ cell }: CellContext<TData, TValue>): JSX.Element {
+  const value = cell.row.original;
   const { t } = useTranslation();
+
+  if (!value) {
+    return <></>;
+  }
 
   return (
     <>
       {value.previous_signup_change ? (
         <>
-          <SignupStateCell value={value.previous_signup_change.state} strikeThrough />
+          <SignupStateDisplay value={value.previous_signup_change.state} strikeThrough />
           {' → '}
         </>
       ) : (
@@ -81,7 +78,7 @@ const SignupChangeCell = ({ value }: SignupChangeCellProps): JSX.Element => {
           </span>
         )
       )}
-      <SignupStateCell value={value.state} />
+      <SignupStateDisplay value={value.state} />
       {value.action !== 'unknown' && (
         <>
           <br />
@@ -90,6 +87,6 @@ const SignupChangeCell = ({ value }: SignupChangeCellProps): JSX.Element => {
       )}
     </>
   );
-};
+}
 
 export default SignupChangeCell;

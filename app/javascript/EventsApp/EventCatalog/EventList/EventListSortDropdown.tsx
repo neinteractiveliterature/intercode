@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import * as React from 'react';
 import isEqual from 'lodash/isEqual';
-import { SortingRule } from 'react-table';
+import { SortingState } from '@tanstack/react-table';
 
 import AppRootContext from '../../../AppRootContext';
 import { DropdownMenu } from '../../../UIComponents/DropdownMenu';
@@ -13,17 +13,13 @@ const SORT_ORDERS = [
   { sorted: [{ id: 'created_at', desc: true }], caption: 'order added (newest first)' },
 ];
 
-export type EventListSortDropdownProps<D extends Record<string, unknown>> = {
+export type EventListSortDropdownProps = {
   showConventionOrder: boolean;
-  value?: SortingRule<D>[];
-  onChange: React.Dispatch<SortingRule<D>[]>;
+  value?: SortingState;
+  onChange: React.Dispatch<SortingState>;
 };
 
-function EventListSortDropdown<D extends Record<string, unknown>>({
-  showConventionOrder,
-  value,
-  onChange,
-}: EventListSortDropdownProps<D>): JSX.Element {
+function EventListSortDropdown({ showConventionOrder, value, onChange }: EventListSortDropdownProps): JSX.Element {
   const { myProfile } = useContext(AppRootContext);
 
   const mySortOrders = [...SORT_ORDERS];

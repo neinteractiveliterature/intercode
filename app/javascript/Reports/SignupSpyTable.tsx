@@ -1,4 +1,4 @@
-import { Column } from 'react-table';
+import { createColumnHelper } from '@tanstack/react-table';
 
 import useReactTableWithTheWorks, { QueryDataContext } from '../Tables/useReactTableWithTheWorks';
 import RefreshButton from '../EventsApp/ScheduleGrid/RefreshButton';
@@ -14,59 +14,13 @@ import TableHeader from '../Tables/TableHeader';
 import SignupChangesTableExportButton from '../Tables/SignupChangesTableExportButton';
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
 import { SignupSpySignupChangesQueryData, SignupSpySignupChangesQueryDocument } from './queries.generated';
+import { useMemo } from 'react';
 
 type SignupChangeType = SignupSpySignupChangesQueryData['convention']['signup_changes_paginated']['entries'][0];
 
 const FILTER_CODECS = buildFieldFilterCodecs({
   action: FilterCodecs.stringArray,
 });
-
-const columns: Column<SignupChangeType>[] = [
-  {
-    Header: 'Name',
-    id: 'name',
-    accessor: (signupChange: SignupChangeType) => signupChange.user_con_profile,
-    Cell: UserConProfileWithGravatarCell,
-    Filter: FreeTextFilter,
-    defaultCanFilter: true,
-  },
-  {
-    Header: 'Event',
-    id: 'event_title',
-    accessor: (signupChange: SignupChangeType) => signupChange.run.event.title,
-    Filter: FreeTextFilter,
-    defaultCanFilter: true,
-  },
-  {
-    Header: 'Change',
-    id: 'action',
-    accessor: (signupChange: SignupChangeType) => signupChange,
-    Cell: ({ value }: { value: SignupChangeType }) => <SignupChangeCell value={value} />,
-    Filter: SignupChangeActionFilter,
-    defaultCanFilter: true,
-  },
-  {
-    Header: 'Bucket',
-    id: 'bucket_change',
-    accessor: (signupChange: SignupChangeType) => signupChange,
-    Cell: ({ value }: { value: SignupChangeType }) => <BucketChangeCell value={value} />,
-  },
-  {
-    Header: 'Timestamp',
-    id: 'created_at',
-    accessor: 'created_at',
-    width: 130,
-    Cell: ({ value }: { value: SignupChangeType['created_at'] }) => <TimestampCell value={value} />,
-    disableSortBy: false,
-  },
-  {
-    Header: 'Choice',
-    id: 'choice',
-    width: 100,
-    accessor: (signupChange: SignupChangeType) => signupChange.signup.choice,
-    Cell: SignupChoiceCell,
-  },
-];
 
 // eslint-disable-next-line i18next/no-literal-string
 const defaultVisibleColumns = ['name', 'event_title', 'action', 'bucket_change', 'created_at', 'choice'];
@@ -76,18 +30,65 @@ const defaultState = {
 };
 
 function SignupSpyTable(): JSX.Element {
-  const { columnSelectionProps, refetch, queryData, loading, tableHeaderProps, tableInstance } =
-    useReactTableWithTheWorks({
-      decodeFilterValue: FILTER_CODECS.decodeFilterValue,
-      defaultState,
-      defaultVisibleColumns,
-      encodeFilterValue: FILTER_CODECS.encodeFilterValue,
-      getData: ({ data }) => data.convention.signup_changes_paginated.entries,
-      getPages: ({ data }) => data.convention.signup_changes_paginated.total_pages,
-      getPossibleColumns: () => columns,
-      query: SignupSpySignupChangesQueryDocument,
-      storageKeyPrefix: 'signupSpy',
-    });
+  const columns = useMemo(() => {
+    const columnHelper = createColumnHelper<SignupChangeType>();
+    return [
+      columnHelper.accessor('user_con_profile', {
+        header: 'Name',
+        id: 'name',
+        cell: UserConProfileWithGravatarCell,
+        enableColumnFilter: true,
+      }),
+      columnHelper.accessor('run.event.title', {
+        header: 'Event',
+        id: 'event_title',
+        enableColumnFilter: true,
+      }),
+      columnHelper.accessor((signupChange) => signupChange, {
+        header: 'Change',
+        id: 'action',
+        cell: SignupChangeCell,
+        enableColumnFilter: true,
+      }),
+      columnHelper.accessor((signupChange) => signupChange, {
+        header: 'Bucket',
+        id: 'bucket_change',
+        cell: BucketChangeCell,
+      }),
+      columnHelper.accessor('created_at', {
+        header: 'Timestamp',
+        id: 'created_at',
+        size: 130,
+        cell: TimestampCell,
+        enableSorting: true,
+      }),
+      columnHelper.accessor('signup.choice', {
+        header: 'Choice',
+        id: 'choice',
+        size: 100,
+        cell: SignupChoiceCell,
+      }),
+    ];
+  }, []);
+
+  const {
+    columnSelectionProps,
+    refetch,
+    queryData,
+    loading,
+    tableHeaderProps,
+    table: tableInstance,
+  } = useReactTableWithTheWorks({
+    decodeFilterValue: FILTER_CODECS.decodeFilterValue,
+    defaultState,
+    defaultVisibleColumns,
+    encodeFilterValue: FILTER_CODECS.encodeFilterValue,
+    getData: ({ data }) => data.convention.signup_changes_paginated.entries,
+    getPages: ({ data }) => data.convention.signup_changes_paginated.total_pages,
+    columns,
+    query: SignupSpySignupChangesQueryDocument,
+    storageKeyPrefix: 'signupSpy',
+  });
 
   const { filters, sortBy } = tableHeaderProps;
 
@@ -102,11 +103,21 @@ function SignupSpyTable(): JSX.Element {
               exportUrl="/csv_exports/signup_changes"
               filters={filters}
               sortBy={sortBy}
-              visibleColumnIds={columnSelectionProps.visibleColumnIds}
+              columnVisibility={columnSelectionProps.columnVisibility}
             />
           }
         />
-        <ReactTableWithTheWorks tableInstance={tableInstance} loading={loading} />
+        <ReactTableWithTheWorks
+          table={tableInstance}
+          loading={loading}
+          renderFilter={({ column }) => {
+            if (column.id === 'name' || column.id === 'event_title') {
+              return <FreeTextFilter column={column} />;
+            } else if (column.id === 'action') {
+              return <SignupChangeActionFilter column={column} />;
+            }
+          }}
+        />
       </div>
     </QueryDataContext.Provider>
   );

@@ -53,6 +53,18 @@
       "ticketModeTicketPerEvent": "Each event in this convention sells {{ ticketNamePlural }} separately",
       "ticketNameLabel": "Name for “ticket” at this convention"
     },
+    "emailRoutes": {
+      "newEmailRoute": {
+        "createButton": "Create email route",
+        "forwardAddressesAddButton": "Add forward address",
+        "forwardAddressesAddLabel": "Forward address to add",
+        "forwardAddressesLabel": "Forward addresses",
+        "forwardAddressesDeleteButton": "Delete forward address {{ email }}",
+        "forwardAddressesDeletePrompt": "Are you sure you want to delete {{ email }} from the forward addresses?",
+        "receiverEmailLabel": "Receiver email",
+        "title": "New email route"
+      }
+    },
     "eventCategories": {
       "autogenerateColorsLabel": "Generate signed up and full colors based on default color",
       "cannotDeleteCategoryWithEvents": "This event category cannot be deleted because there are events in it. To delete it, first either drop these events or change their categories.",

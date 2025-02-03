@@ -1,6 +1,6 @@
-import { createContext, useCallback, useContext, useMemo } from 'react';
+import { createContext, useContext, useMemo } from 'react';
 import { assertNever } from 'assert-never';
-import { Column } from 'react-table';
+import { CellContext, createColumnHelper } from '@tanstack/react-table';
 import { useConfirm, ErrorDisplay, useGraphQLConfirm } from '@neinteractiveliterature/litform';
 
 import AppRootContext from '../AppRootContext';
@@ -107,29 +107,37 @@ function SignupModerationRunDetails({ run, showRequestedBucket, requestedBucketK
   );
 }
 
-function SignupRequestUserConProfileCell({
-  value,
-}: {
-  value: SignupModerationSignupRequestFieldsFragment['user_con_profile'];
-}) {
+function SignupRequestUserConProfileCell<
+  TData,
+  TValue extends SignupModerationSignupRequestFieldsFragment['user_con_profile'],
+>(props: CellContext<TData, TValue>) {
   const { signupAutomationMode } = useContext(AppRootContext);
   const { t } = useTranslation();
 
   return (
     <>
-      <UserConProfileWithGravatarCell value={value} />
+      <UserConProfileWithGravatarCell {...props} />
       {signupAutomationMode === SignupAutomationMode.RankedChoice && (
         <>
           <br />
-          <Link to={`../ranked_choice_queue/${value.id}`}>{t('signupModeration.goToRankedChoiceQueue')}</Link>
+          <Link to={`../ranked_choice_queue/${props.getValue().id}`}>
+            {t('signupModeration.goToRankedChoiceQueue')}
+          </Link>
         </>
       )}
     </>
   );
 }
 
-function SignupRequestCell({ value }: { value: SignupModerationSignupRequestFieldsFragment }) {
+function SignupRequestCell<TData, TValue extends SignupModerationSignupRequestFieldsFragment | null | undefined>({
+  getValue,
+}: CellContext<TData, TValue>) {
   const { t } = useTranslation();
+  const value = getValue();
+
+  if (value == null) {
+    return <></>;
+  }
 
   return (
     <>
@@ -153,13 +161,22 @@ function SignupRequestCell({ value }: { value: SignupModerationSignupRequestFiel
   );
 }
 
-function SignupRequestStateCell({ value }: { value: SignupRequestState }) {
+function SignupRequestStateCell<TData, TValue extends SignupRequestState>({ getValue }: CellContext<TData, TValue>) {
+  const value = getValue();
   return <div className={`badge ${signupRequestStateBadgeClass(value)}`}>{value}</div>;
 }
 
-function SignupRequestActionsCell({ value }: { value: SignupModerationSignupRequestFieldsFragment }) {
+function SignupRequestActionsCell<
+  TData,
+  TValue extends SignupModerationSignupRequestFieldsFragment | null | undefined,
+>({ getValue }: CellContext<TData, TValue>) {
   const { t } = useTranslation();
   const { acceptClicked, rejectClicked } = useContext(SignupModerationContext);
+  const value = getValue();
+
+  if (value == null) {
+    return <></>;
+  }
 
   return (
     <>
@@ -183,15 +200,18 @@ function SignupRequestActionsCell({ value }: { value: SignupModerationSignupRequ
   );
 }
 
-function SignupRankedChoiceCell({ value }: { value: SignupModerationSignupRequestFieldsFragment }) {
+function SignupRankedChoiceCell<TData, TValue extends SignupModerationSignupRequestFieldsFragment | null | undefined>({
+  getValue,
+}: CellContext<TData, TValue>) {
   const { t } = useTranslation();
   const { parsedSignupRounds, rerunSignupRound } = useContext(SignupModerationContext);
   const confirm = useGraphQLConfirm();
+  const value = getValue();
 
   const finalDecision = useMemo(() => {
-    if (value.signup_ranked_choice?.ranked_choice_decisions) {
+    if (value?.signup_ranked_choice?.ranked_choice_decisions) {
       return sortBy(
-        value.signup_ranked_choice.ranked_choice_decisions.filter(
+        value?.signup_ranked_choice.ranked_choice_decisions.filter(
           (decision) => decision.decision !== RankedChoiceDecisionValue.SkipChoice,
         ) ?? [],
         (decision) => new Date(decision.created_at).getTime() * -1,
@@ -199,7 +219,7 @@ function SignupRankedChoiceCell({ value }: { value: SignupModerationSignupReques
     } else {
       return undefined;
     }
-  }, [value.signup_ranked_choice?.ranked_choice_decisions]);
+  }, [value?.signup_ranked_choice?.ranked_choice_decisions]);
 
   if (finalDecision == null) {
     return <></>;
@@ -208,7 +228,7 @@ function SignupRankedChoiceCell({ value }: { value: SignupModerationSignupReques
   const roundIndex = parsedSignupRounds.findIndex((round) => round.id === finalDecision.signup_round.id);
   const searchParams = new URLSearchParams({
     'filters.decision': Object.values(RankedChoiceDecisionValue).join(','),
-    'filters.user_con_profile_name': value.user_con_profile.name_without_nickname,
+    'filters.user_con_profile_name': value?.user_con_profile.name_without_nickname ?? '',
     'sort.created_at': 'asc',
   });
 
@@ -243,54 +263,6 @@ function SignupRankedChoiceCell({ value }: { value: SignupModerationSignupReques
   );
 }
 
-function getPossibleColumns(
-  t: TFunction,
-): Column<SignupModerationQueueQueryData['convention']['signup_requests_paginated']['entries'][number]>[] {
-  return [
-    {
-      id: 'attendee',
-      Header: t('admin.signupModeration.headers.user_con_profile'),
-      accessor: 'user_con_profile',
-      width: 130,
-      Cell: SignupRequestUserConProfileCell,
-    },
-    {
-      id: 'request',
-      Header: t('admin.signupModeration.headers.signup_request'),
-      Cell: SignupRequestCell,
-      accessor: (signupRequest) => signupRequest,
-    },
-    {
-      id: 'state',
-      Header: t('admin.signupModeration.headers.state'),
-      Cell: SignupRequestStateCell,
-      width: 60,
-      accessor: 'state',
-    },
-    {
-      id: 'created_at',
-      Header: t('admin.signupModeration.headers.created_at'),
-      Cell: TimestampCell,
-      width: 60,
-      accessor: 'created_at',
-    },
-    {
-      id: 'signup_ranked_choice',
-      Header: t('admin.signupModeration.headers.signup_ranked_choice'),
-      Cell: SignupRankedChoiceCell,
-      width: 60,
-      accessor: (signupRequest) => signupRequest,
-    },
-    {
-      id: 'actions',
-      Header: t('admin.signupModeration.headers.actions'),
-      width: 100,
-      Cell: SignupRequestActionsCell,
-      accessor: (signupRequest) => signupRequest,
-    },
-  ];
-}
-
 export const loader: LoaderFunction = async () => {
   const { data } = await client.query({ query: SignupModerationQueuePageQueryDocument });
   return data;
@@ -300,7 +272,6 @@ function SignupModerationQueue(): JSX.Element {
   const { t } = useTranslation();
   const pageData = useLoaderData() as SignupModerationQueuePageQueryData;
   const confirm = useConfirm();
-  const getPossibleColumnsWithTranslation = useCallback(() => getPossibleColumns(t), [t]);
   const fetcher = useFetcher();
   const error = fetcher.data instanceof Error ? fetcher.data : undefined;
 
@@ -309,12 +280,57 @@ function SignupModerationQueue(): JSX.Element {
     [pageData.convention.signup_rounds],
   );
 
-  const { tableInstance, loading } = useReactTableWithTheWorks({
+  const columns = useMemo(() => {
+    const columnHelper =
+      createColumnHelper<
+        SignupModerationQueueQueryData['convention']['signup_requests_paginated']['entries'][number]
+      >();
+
+    return [
+      columnHelper.accessor('user_con_profile', {
+        id: 'attendee',
+        header: t('admin.signupModeration.headers.user_con_profile'),
+        size: 130,
+        cell: SignupRequestUserConProfileCell,
+      }),
+      columnHelper.accessor((signupRequest) => signupRequest, {
+        id: 'request',
+        header: t('admin.signupModeration.headers.signup_request'),
+        cell: SignupRequestCell,
+      }),
+      columnHelper.accessor('state', {
+        id: 'state',
+        header: t('admin.signupModeration.headers.state'),
+        cell: SignupRequestStateCell,
+        size: 60,
+      }),
+      columnHelper.accessor('created_at', {
+        id: 'created_at',
+        header: t('admin.signupModeration.headers.created_at'),
+        cell: TimestampCell,
+        size: 60,
+      }),
+      columnHelper.accessor((signupRequest) => signupRequest, {
+        id: 'signup_ranked_choice',
+        header: t('admin.signupModeration.headers.signup_ranked_choice'),
+        cell: SignupRankedChoiceCell,
+        size: 60,
+      }),
+      columnHelper.display({
+        id: 'actions',
+        header: t('admin.signupModeration.headers.actions'),
+        size: 100,
+        cell: SignupRequestActionsCell,
+      }),
+    ];
+  }, [t]);
+
+  const { table: tableInstance, loading } = useReactTableWithTheWorks({
     query: SignupModerationQueueQueryDocument,
     storageKeyPrefix: 'signupModerationQueue',
     getData: (result) => result.data.convention.signup_requests_paginated.entries,
     getPages: (result) => result.data.convention.signup_requests_paginated.total_pages,
-    getPossibleColumns: getPossibleColumnsWithTranslation,
+    columns,
   });
 
   const contextValue = useMemo<SignupModerationContextValue>(
@@ -382,7 +398,7 @@ function SignupModerationQueue(): JSX.Element {
   return (
     <SignupModerationContext.Provider value={contextValue}>
       <ErrorDisplay graphQLError={error as ApolloError} />
-      <ReactTableWithTheWorks tableInstance={tableInstance} loading={loading} />
+      <ReactTableWithTheWorks table={tableInstance} loading={loading} />
     </SignupModerationContext.Provider>
   );
 }

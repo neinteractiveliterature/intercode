@@ -1,8 +1,8 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Filters, SortingRule } from 'react-table';
 
 import { reactTableFiltersToTableResultsFilters, reactTableSortToTableResultsSort } from './TableUtils';
+import { ColumnFiltersState, SortingState } from '@tanstack/react-table';
 
 export type URLParamSerializableScalar = string | number | boolean;
 export type URLParamSerializable =
@@ -56,15 +56,15 @@ function dataToParams(data: URLParamSerializable) {
   return params;
 }
 
-function getExportUrl<RowType extends Record<string, unknown>>(
+function getExportUrl(
   baseUrl: string,
   {
     filters,
     sortBy,
     columns,
   }: {
-    filters?: null | Filters<RowType>;
-    sortBy: null | SortingRule<RowType>[];
+    filters?: null | ColumnFiltersState;
+    sortBy: null | SortingState;
     columns?: string[] | null;
   },
 ) {
@@ -82,19 +82,14 @@ function getExportUrl<RowType extends Record<string, unknown>>(
   return url.toString();
 }
 
-export type ReactTableExportButtonProps<RowType extends Record<string, unknown>> = {
+export type ReactTableExportButtonProps = {
   exportUrl: string;
-  filters: Filters<RowType>;
-  sortBy: SortingRule<RowType>[];
+  filters: ColumnFiltersState;
+  sortBy: SortingState;
   columns?: string[];
 };
 
-function ReactTableExportButton<RowType extends Record<string, unknown>>({
-  exportUrl,
-  filters,
-  sortBy,
-  columns,
-}: ReactTableExportButtonProps<RowType>): JSX.Element {
+function ReactTableExportButton({ exportUrl, filters, sortBy, columns }: ReactTableExportButtonProps): JSX.Element {
   const { t } = useTranslation();
   const href = useMemo(
     () => getExportUrl(exportUrl, { filters, sortBy, columns }),

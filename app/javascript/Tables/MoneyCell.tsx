@@ -1,9 +1,11 @@
+import { CellContext } from '@tanstack/react-table';
 import formatMoney from '../formatMoney';
 import { Money } from '../graphqlTypes.generated';
 
-export type MoneyCellProps = {
-  value?: Money | null;
-};
-const MoneyCell = ({ value }: MoneyCellProps): JSX.Element => <>{formatMoney(value)}</>;
+function MoneyCell<TData, TValue extends Money | undefined | null>({
+  getValue,
+}: CellContext<TData, TValue>): JSX.Element {
+  return <>{formatMoney(getValue())}</>;
+}
 
 export default MoneyCell;

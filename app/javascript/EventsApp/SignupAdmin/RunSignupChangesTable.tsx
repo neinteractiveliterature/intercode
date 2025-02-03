@@ -1,7 +1,6 @@
 import { useMemo } from 'react';
-import { Column } from 'react-table';
+import { createColumnHelper } from '@tanstack/react-table';
 import { useTranslation } from 'react-i18next';
-import { TFunction } from 'i18next';
 
 import useReactTableWithTheWorks, { QueryDataContext } from '../../Tables/useReactTableWithTheWorks';
 import UserConProfileWithGravatarCell from '../../Tables/UserConProfileWithGravatarCell';
@@ -23,53 +22,56 @@ const FILTER_CODECS = buildFieldFilterCodecs({
   action: FilterCodecs.stringArray,
 });
 
-type SignupChangeType = RunSignupChangesQueryData['convention']['run']['signup_changes_paginated']['entries'][0];
-
-const getPossibleColumns: (t: TFunction) => Column<SignupChangeType>[] = (t) => [
-  {
-    Header: <>{t('events.signupAdmin.history.nameHeader')}</>,
-    id: 'name',
-    accessor: (signupChange: SignupChangeType) => signupChange.user_con_profile,
-    disableFilters: false,
-    Cell: UserConProfileWithGravatarCell,
-    Filter: FreeTextFilter,
-  },
-  {
-    Header: <>{t('events.signupAdmin.history.changeHeader')}</>,
-    id: 'action',
-    accessor: (signupChange: SignupChangeType) => signupChange,
-    disableFilters: false,
-    Cell: ({ value }: { value: SignupChangeType }) => <SignupChangeCell value={value} />,
-    Filter: SignupChangeActionFilter,
-  },
-  {
-    Header: <>{t('events.signupAdmin.history.bucketHeader')}</>,
-    id: 'bucket_change',
-    accessor: (signupChange: SignupChangeType) => signupChange,
-    Cell: ({ value }: { value: SignupChangeType }) => <BucketChangeCell value={value} />,
-  },
-  {
-    Header: <>{t('events.signupAdmin.history.timestampHeader')}</>,
-    id: 'created_at',
-    accessor: 'created_at',
-    width: 130,
-    Cell: ({ value }: { value: string }) => <TimestampCell value={value} />,
-  },
-];
+export type SignupChangeType = RunSignupChangesQueryData['convention']['run']['signup_changes_paginated']['entries'][0];
 
 const defaultVisibleColumns = ['name', 'action', 'bucket_change', 'created_at'];
 
 function RunSignupChangesTable(): JSX.Element {
   const { t } = useTranslation();
   const { runId } = useParams();
-  const getPossibleColumnsFunc = useMemo(() => () => getPossibleColumns(t), [t]);
-  const { tableInstance, loading, queryData, tableHeaderProps, columnSelectionProps } = useReactTableWithTheWorks({
+
+  const columns = useMemo(() => {
+    const columnHelper = createColumnHelper<SignupChangeType>();
+    return [
+      columnHelper.accessor('user_con_profile', {
+        header: t('events.signupAdmin.history.nameHeader'),
+        id: 'name',
+        enableColumnFilter: true,
+        cell: UserConProfileWithGravatarCell,
+      }),
+      columnHelper.display({
+        header: t('events.signupAdmin.history.changeHeader'),
+        id: 'action',
+        enableColumnFilter: true,
+        cell: SignupChangeCell,
+      }),
+      columnHelper.display({
+        header: t('events.signupAdmin.history.bucketHeader'),
+        id: 'bucket_change',
+        cell: BucketChangeCell,
+      }),
+      columnHelper.accessor('created_at', {
+        header: t('events.signupAdmin.history.timestampHeader'),
+        id: 'created_at',
+        size: 130,
+        cell: TimestampCell,
+      }),
+    ];
+  }, [t]);
+
+  const {
+    table: tableInstance,
+    loading,
+    queryData,
+    tableHeaderProps,
+    columnSelectionProps,
+  } = useReactTableWithTheWorks({
     decodeFilterValue: FILTER_CODECS.decodeFilterValue,
     defaultVisibleColumns,
     encodeFilterValue: FILTER_CODECS.encodeFilterValue,
     getData: ({ data }) => data.convention.run.signup_changes_paginated.entries,
     getPages: ({ data }) => data.convention.run.signup_changes_paginated.total_pages,
-    getPossibleColumns: getPossibleColumnsFunc,
+    columns,
     query: RunSignupChangesQueryDocument,
     storageKeyPrefix: 'signupSpy',
     variables: { runId: runId ?? '' },
@@ -95,11 +97,21 @@ function RunSignupChangesTable(): JSX.Element {
               exportUrl={`/csv_exports/run_signup_changes?run_id=${runId}`}
               filters={tableHeaderProps.filters}
               sortBy={tableHeaderProps.sortBy}
-              visibleColumnIds={columnSelectionProps.visibleColumnIds}
+              columnVisibility={columnSelectionProps.columnVisibility}
             />
           }
         />
-        <ReactTableWithTheWorks tableInstance={tableInstance} loading={loading} />
+        <ReactTableWithTheWorks
+          table={tableInstance}
+          loading={loading}
+          renderFilter={({ column }) => {
+            if (column.id === 'name') {
+              return <FreeTextFilter column={column} />;
+            } else if (column.id === 'action') {
+              return <SignupChangeActionFilter column={column} />;
+            }
+          }}
+        />
       </div>
     </QueryDataContext.Provider>
   );

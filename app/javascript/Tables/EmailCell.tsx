@@ -1,16 +1,14 @@
-export type EmailCellProps = {
-  value?: string | null;
-};
+import { CellContext } from '@tanstack/react-table';
 
-function EmailCell({ value }: EmailCellProps): JSX.Element {
+function EmailCell<TData, TValue extends string>({ cell }: CellContext<TData, TValue>): JSX.Element {
   return (
     <a
-      href={`mailto:${value}`}
+      href={`mailto:${cell.getValue()}`}
       onClick={(event) => {
         event.stopPropagation();
       }}
     >
-      {value}
+      {cell.getValue()}
     </a>
   );
 }

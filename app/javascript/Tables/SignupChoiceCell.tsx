@@ -1,15 +1,15 @@
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
-import { CellProps } from 'react-table';
+import { CellContext } from '@tanstack/react-table';
 
-function SignupChoiceCell<RowType extends { counted?: boolean | null }, ValueType extends ReactNode>({
-  value,
+function SignupChoiceCell<TData extends { counted?: boolean | null }, TValue extends ReactNode>({
+  getValue,
   row: { original },
-}: CellProps<RowType, ValueType>): JSX.Element {
+}: CellContext<TData, TValue>): JSX.Element {
   const { t } = useTranslation();
 
   if (original.counted) {
-    return <>{value}</>;
+    return <>{getValue()}</>;
   }
 
   return <>{t('tables.signupChoice.notCounted')}</>;

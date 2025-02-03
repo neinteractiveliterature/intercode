@@ -5,6 +5,7 @@ import { assertNever } from 'assert-never';
 import { SignupState } from '../graphqlTypes.generated';
 import { useContext } from 'react';
 import AppRootContext from '../AppRootContext';
+import { CellContext } from '@tanstack/react-table';
 
 export function getSignupStateLabel(
   state: SignupState | null | undefined,
@@ -32,17 +33,23 @@ export function getSignupStateLabel(
   }
 }
 
-export type SignupStateCellProps = {
+export type SignupStateDislayProps = {
   value?: SignupState | null;
   strikeThrough?: boolean | null;
 };
 
-const SignupStateCell = ({ value, strikeThrough }: SignupStateCellProps): JSX.Element => {
+export function SignupStateDisplay({ value, strikeThrough }: SignupStateDislayProps): JSX.Element {
   const { t } = useTranslation();
   const { ticketName } = useContext(AppRootContext);
 
   const text: string | null | undefined = getSignupStateLabel(value, t, ticketName);
   return <div className={`badge bg-signup-state-color-${value}`}>{strikeThrough ? <s>{text}</s> : text}</div>;
-};
+}
+
+function SignupStateCell<TData, TValue extends SignupState | null | undefined>({
+  getValue,
+}: CellContext<TData, TValue>) {
+  return <SignupStateDisplay value={getValue()} />;
+}
 
 export default SignupStateCell;

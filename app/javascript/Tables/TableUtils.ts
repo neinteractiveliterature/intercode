@@ -1,22 +1,22 @@
-import { Filters, SortingRule } from 'react-table';
+import { ColumnFiltersState, SortingState } from '@tanstack/react-table';
 import { URLParamSerializable } from './ExportButton';
 
-export function reactTableFiltersToTableResultsFilters<D extends Record<string, unknown>>(
-  filters: Filters<D> | null | undefined,
-): { [field: string]: URLParamSerializable } {
+export function reactTableFiltersToTableResultsFilters(filters: ColumnFiltersState | null | undefined): {
+  [field: string]: URLParamSerializable;
+} {
   if (filters == null) {
     return {};
   }
 
   const tableResultsFilters: { [field: string]: URLParamSerializable } = {};
   filters.forEach(({ id, value }) => {
-    tableResultsFilters[id] = value;
+    tableResultsFilters[id] = value as URLParamSerializable;
   });
   return tableResultsFilters;
 }
 
-export function reactTableSortToTableResultsSort<D>(
-  sort: SortingRule<D>[] | null | undefined,
+export function reactTableSortToTableResultsSort(
+  sort: SortingState | null | undefined,
 ): { field: string; desc: boolean }[] {
   if (sort == null) {
     return [];

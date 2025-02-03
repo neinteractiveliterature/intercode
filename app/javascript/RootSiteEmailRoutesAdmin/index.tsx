@@ -1,4 +1,4 @@
-import { CellProps, Column, Renderer } from 'react-table';
+import { CellContext, createColumnHelper } from '@tanstack/react-table';
 
 import useReactTableWithTheWorks from '../Tables/useReactTableWithTheWorks';
 import { buildFieldFilterCodecs } from '../Tables/FilterUtils';
@@ -13,37 +13,14 @@ import {
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
 import { Outlet, useNavigate } from 'react-router';
 import { Link } from 'react-router-dom';
+import { useMemo } from 'react';
 
 type EmailRouteType = RootSiteEmailRoutesAdminTableQueryData['email_routes_paginated']['entries'][0];
 
 const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({});
 
-const ForwardAddressesCell: Renderer<CellProps<EmailRouteType>> = ({
-  value,
-}: {
-  value: EmailRouteType['forward_addresses'];
-}) => <>{value?.join(', ')}</>;
-
-function getPossibleColumns(): Column<EmailRouteType>[] {
-  return [
-    {
-      Header: 'Receiver address',
-      id: 'receiver_address',
-      accessor: 'receiver_address',
-      Filter: FreeTextFilter,
-      disableFilters: false,
-      disableSortBy: false,
-    },
-    {
-      Header: 'Forward addresses',
-      id: 'forward_addresses',
-      accessor: 'forward_addresses',
-      Filter: FreeTextFilter,
-      Cell: ForwardAddressesCell,
-      disableFilters: false,
-      disableSortBy: false,
-    },
-  ];
+function ForwardAddressesCell({ getValue }: CellContext<EmailRouteType, EmailRouteType['forward_addresses']>) {
+  return <>{getValue()?.join(', ')}</>;
 }
 
 const defaultVisibleColumns = ['receiver_address', 'forward_addresses'];
@@ -51,13 +28,36 @@ const defaultVisibleColumns = ['receiver_address', 'forward_addresses'];
 function RootSiteEmailRoutesAdminTable(): JSX.Element {
   const authorizationWarning = useAuthorizationRequired('can_manage_email_routes');
 
-  const { tableInstance, loading, tableHeaderProps } = useReactTableWithTheWorks({
+  const columns = useMemo(() => {
+    const columnHelper = createColumnHelper<EmailRouteType>();
+    return [
+      columnHelper.accessor('receiver_address', {
+        header: 'Receiver address',
+        id: 'receiver_address',
+        enableColumnFilter: true,
+        enableSorting: true,
+      }),
+      columnHelper.accessor('forward_addresses', {
+        header: 'Forward addresses',
+        id: 'forward_addresses',
+        cell: ForwardAddressesCell,
+        enableColumnFilter: true,
+        enableSorting: true,
+      }),
+    ];
+  }, []);
+
+  const {
+    table: tableInstance,
+    loading,
+    tableHeaderProps,
+  } = useReactTableWithTheWorks({
     decodeFilterValue,
     defaultVisibleColumns,
     encodeFilterValue,
     getData: ({ data }) => data.email_routes_paginated.entries,
     getPages: ({ data }) => data.email_routes_paginated.total_pages,
-    getPossibleColumns,
+    columns,
     storageKeyPrefix: 'email-routes',
     query: RootSiteEmailRoutesAdminTableQueryDocument,
   });
@@ -82,9 +82,10 @@ function RootSiteEmailRoutesAdminTable(): JSX.Element {
       />
 
       <ReactTableWithTheWorks
-        tableInstance={tableInstance}
+        table={tableInstance}
         loading={loading}
         onClickRow={(row) => navigate(`./${row.original.id}`)}
+        renderFilter={({ column }) => <FreeTextFilter column={column} />}
       />
 
       <Outlet />

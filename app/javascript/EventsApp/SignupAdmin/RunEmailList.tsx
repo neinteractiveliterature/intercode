@@ -119,8 +119,8 @@ function RunEmailList() {
               },
             ]}
             column={{
-              setFilter: setIncludes,
-              filterValue: includes,
+              setFilterValue: setIncludes,
+              getFilterValue: () => includes,
             }}
             renderHeaderCaption={(currentIncludes) => {
               if (currentIncludes.length === 0) {

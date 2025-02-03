@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Column } from 'react-table';
+import { CellContext, createColumnHelper } from '@tanstack/react-table';
 import { Link, Outlet, useNavigate } from 'react-router-dom';
 import { DateTime } from 'luxon';
 import { useTranslation } from 'react-i18next';
@@ -8,7 +8,7 @@ import useReactTableWithTheWorks from 'Tables/useReactTableWithTheWorks';
 import ReactTableWithTheWorks from 'Tables/ReactTableWithTheWorks';
 import { buildFieldFilterCodecs } from 'Tables/FilterUtils';
 import FreeTextFilter from 'Tables/FreeTextFilter';
-import { timespanFromConvention } from 'TimespanUtils';
+import { describeTimespan, timespanFromConvention } from 'TimespanUtils';
 import TableHeader from 'Tables/TableHeader';
 import usePageTitle from 'usePageTitle';
 import {
@@ -21,7 +21,8 @@ type ConventionType = RootSiteConventionsAdminTableQueryData['conventions_pagina
 
 const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({});
 
-function ConventionDatesCell({ value }: { value: ConventionType }) {
+function ConventionDatesCell({ row }: CellContext<ConventionType, unknown>) {
+  const value = row.original;
   const { t } = useTranslation();
   const timespan = useMemo(() => timespanFromConvention(value), [value]);
 
@@ -40,7 +41,7 @@ function ConventionDatesCell({ value }: { value: ConventionType }) {
       return `${timespan.start.toFormat(startFormat)} - ${timespan.finish.toFormat(finishFormat)}`;
     }
 
-    return timespan.humanizeInTimezone(value.timezone_name ?? 'Etc/UTC', t, 'longDate', 'longDate');
+    return describeTimespan(timespan, t, 'longDate', value.timezone_name ?? 'Etc/UTC');
   }, [timespan, value.timezone_name, t]);
 
   const now = DateTime.local();
@@ -68,45 +69,46 @@ function ConventionDatesCell({ value }: { value: ConventionType }) {
   );
 }
 
-function getPossibleColumns(): Column<ConventionType>[] {
-  return [
-    {
-      Header: 'Name',
-      id: 'name',
-      accessor: 'name',
-      Filter: FreeTextFilter,
-      disableFilters: false,
-      disableSortBy: false,
-    },
-    {
-      Header: 'Organization name',
-      id: 'organization_name',
-      accessor: (convention: ConventionType) => convention.organization?.name,
-      Filter: FreeTextFilter,
-      disableFilters: false,
-      disableSortBy: false,
-    },
-    {
-      Header: 'Dates',
-      id: 'starts_at',
-      accessor: (convention: ConventionType) => convention,
-      Cell: ConventionDatesCell,
-      disableSortBy: false,
-    },
-  ];
-}
-
 const defaultVisibleColumns = ['name', 'organization_name', 'starts_at'];
 
 function RootSiteConventionsAdminTable(): JSX.Element {
   const navigate = useNavigate();
-  const { tableInstance, loading, tableHeaderProps } = useReactTableWithTheWorks({
+
+  const columns = useMemo(() => {
+    const columnHelper = createColumnHelper<ConventionType>();
+    return [
+      columnHelper.accessor('name', {
+        header: 'Name',
+        id: 'name',
+        enableColumnFilter: true,
+        enableSorting: true,
+      }),
+      columnHelper.accessor('organization.name', {
+        header: 'Organization name',
+        id: 'organization_name',
+        enableColumnFilter: true,
+        enableSorting: true,
+      }),
+      columnHelper.accessor((row) => row, {
+        header: 'Dates',
+        id: 'starts_at',
+        cell: ConventionDatesCell,
+        enableSorting: true,
+      }),
+    ];
+  }, []);
+
+  const {
+    table: tableInstance,
+    loading,
+    tableHeaderProps,
+  } = useReactTableWithTheWorks({
     decodeFilterValue,
     defaultVisibleColumns,
     encodeFilterValue,
     getData: ({ data }) => data.conventions_paginated.entries,
     getPages: ({ data }) => data.conventions_paginated.total_pages,
-    getPossibleColumns,
+    columns,
     storageKeyPrefix: 'conventions',
     query: RootSiteConventionsAdminTableQueryDocument,
   });
@@ -128,9 +130,14 @@ function RootSiteConventionsAdminTable(): JSX.Element {
       />
 
       <ReactTableWithTheWorks
-        tableInstance={tableInstance}
+        table={tableInstance}
         loading={loading}
         onClickRow={(row) => navigate(`/conventions/${row.original.id}`)}
+        renderFilter={({ column }) => {
+          if (column.id === 'name' || column.id === 'organization_name') {
+            return <FreeTextFilter column={column} />;
+          }
+        }}
       />
 
       <Outlet />

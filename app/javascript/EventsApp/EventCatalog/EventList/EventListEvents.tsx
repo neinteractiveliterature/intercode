@@ -1,6 +1,6 @@
 import { Fragment, ReactNode, useContext } from 'react';
 import { Waypoint } from 'react-waypoint';
-import { SortingRule } from 'react-table';
+import { SortingState } from '@tanstack/react-table';
 import { DateTime } from 'luxon';
 
 import EventCard from './EventCard';
@@ -19,7 +19,7 @@ export type EventListEventsProps = {
       event_category: CommonConventionDataFragment['event_categories'][number];
     })[];
   };
-  sortBy?: SortingRule<NonNullable<EventListEventsQueryData['convention']>['events_paginated']['entries'][number]>[];
+  sortBy?: SortingState;
   canReadSchedule: boolean;
   fetchMoreIfNeeded: () => void;
 };
