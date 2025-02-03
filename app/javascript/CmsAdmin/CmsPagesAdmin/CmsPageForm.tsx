@@ -13,6 +13,7 @@ import LiquidInput from '../../BuiltInFormControls/LiquidInput';
 import SelectWithLabel from '../../BuiltInFormControls/SelectWithLabel';
 import { CmsLayout, Page } from '../../graphqlTypes.generated';
 import { CmsPagesAdminQueryData } from './queries.generated';
+import { useTranslation } from 'react-i18next';
 
 export type PageFormFields = Pick<
   Page,
@@ -34,6 +35,7 @@ function CmsPageForm<T extends PageFormFields>({
   cmsLayouts,
   readOnly,
 }: CmsPageFormProps<T>): JSX.Element {
+  const { t } = useTranslation();
   const [
     setName,
     setAdminNotes,
@@ -77,15 +79,21 @@ function CmsPageForm<T extends PageFormFields>({
   );
 
   const cmsLayoutSelectPlaceholder = defaultLayout
-    ? `Default layout (currently set as ${defaultLayout.name})`
-    : 'Default layout';
+    ? t('cms.pages.defaultLayout', { name: defaultLayout.name })
+    : t('cms.pages.defaultLayoutUnset');
 
   return (
     <>
-      <BootstrapFormInput label="Name" name="name" value={page.name ?? ''} onTextChange={setName} readOnly={readOnly} />
+      <BootstrapFormInput
+        label={t('cms.pages.nameLabel')}
+        name="name"
+        value={page.name ?? ''}
+        onTextChange={setName}
+        readOnly={readOnly}
+      />
 
       <BootstrapFormInput
-        label="Admin notes"
+        label={t('admin.adminNotes.label')}
         name="admin_notes"
         value={page.admin_notes ?? ''}
         onTextChange={setAdminNotes}
@@ -112,8 +120,8 @@ function CmsPageForm<T extends PageFormFields>({
 
       <BooleanInput
         name="skip_clickwrap_agreement"
-        caption="Skip clickwrap agreement"
-        helpText="If selected, this page will not check whether the user has accepted the site clickwrap agreement."
+        caption={t('cms.pages.skipClickwrapAgreementLabel')}
+        helpText={t('cms.pages.skipClickwrapAgreementHelpText')}
         value={page.skip_clickwrap_agreement ?? false}
         onChange={setSkipClickwrapAgreement}
         disabled={readOnly}
@@ -121,8 +129,8 @@ function CmsPageForm<T extends PageFormFields>({
 
       <BooleanInput
         name="hidden_from_search"
-        caption="Hidden from search"
-        helpText="If selected, this page will not appear in site search results."
+        caption={t('cms.pages.hiddenFromSearchLabel')}
+        helpText={t('cms.pages.hiddenFromSearchHelpText')}
         value={page.hidden_from_search ?? false}
         onChange={setHiddenFromSearch}
         disabled={readOnly}
@@ -130,7 +138,7 @@ function CmsPageForm<T extends PageFormFields>({
 
       <SelectWithLabel<T['cms_layout']>
         name="cms_layout_id"
-        label="Layout"
+        label={t('cms.pages.layoutLabel')}
         value={page.cms_layout}
         isClearable
         getOptionValue={(option) => option?.id.toString() ?? ''}
@@ -143,14 +151,14 @@ function CmsPageForm<T extends PageFormFields>({
 
       <BootstrapFormTextarea
         name="meta_description"
-        label="Meta description"
+        label={t('cms.pages.metaDescriptionLabel')}
         value={page.meta_description ?? ''}
         onTextChange={setMetaDescription}
-        helpText="If present, this text will be used as the description for link previews from sites such as Facebook and Twitter."
+        helpText={t('cms.pages.metaDescriptionHelpText')}
       />
 
       <div className="mb-3">
-        <legend className="col-form-label">Content</legend>
+        <legend className="col-form-label">{t('cms.pages.contentLabel')}</legend>
         <LiquidInput value={page.content ?? ''} onChange={setContent} extensions={extensions} />
         <input type="hidden" name="content" value={page.content ?? ''} />
       </div>
