@@ -1,11 +1,11 @@
+import { CellContext } from '@tanstack/react-table';
 import { useTranslation } from 'react-i18next';
 
-export type BooleanCellProps = {
-  value?: boolean | null;
-};
-function BooleanCell({ value }: BooleanCellProps): JSX.Element {
+function BooleanCell<TData, TValue extends boolean | null | undefined>({
+  getValue,
+}: CellContext<TData, TValue>): JSX.Element {
   const { t } = useTranslation();
-  return <>{value ? t('general.booleans.yes') : t('general.booleans.no')}</>;
+  return <>{getValue() ? t('general.booleans.yes') : t('general.booleans.no')}</>;
 }
 
 export default BooleanCell;

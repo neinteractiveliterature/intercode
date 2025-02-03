@@ -133,21 +133,13 @@ query UserConProfileAdminQuery($id: ID!) {
   }
 }
 
-query UserConProfilesTableUserConProfilesQuery(
-  $page: Int
-  $perPage: Int
-  $filters: UserConProfileFiltersInput
-  $sort: [SortInput!]
-) {
+query AttendeesPageQuery {
   convention: conventionByRequestHost {
     id
-    name
-    starts_at
-    ends_at
-    timezone_name
-    timezone_mode
     ticket_name
     ticket_mode
+    timezone_name
+    timezone_mode
 
     ticket_types {
       id
@@ -167,6 +159,20 @@ query UserConProfilesTableUserConProfilesQuery(
         }
       }
     }
+  }
+}
+
+query UserConProfilesTableUserConProfilesQuery(
+  $page: Int
+  $perPage: Int
+  $filters: UserConProfileFiltersInput
+  $sort: [SortInput!]
+) {
+  convention: conventionByRequestHost {
+    id
+    name
+    starts_at
+    ends_at
 
     user_con_profiles_paginated(page: $page, per_page: $perPage, filters: $filters, sort: $sort) {
       total_entries
