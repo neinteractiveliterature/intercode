@@ -228,9 +228,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/client@npm:3.12.9":
-  version: 3.12.9
-  resolution: "@apollo/client@npm:3.12.9"
+"@apollo/client@npm:3.12.10":
+  version: 3.12.10
+  resolution: "@apollo/client@npm:3.12.10"
   dependencies:
     "@graphql-typed-document-node/core": "npm:^3.1.1"
     "@wry/caches": "npm:^1.0.0"
@@ -247,7 +247,7 @@ __metadata:
     zen-observable-ts: "npm:^1.2.5"
   peerDependencies:
     graphql: ^15.0.0 || ^16.0.0
-    graphql-ws: ^5.5.5
+    graphql-ws: ^5.5.5 || ^6.0.3
     react: ^16.8.0 || ^17.0.0 || ^18.0.0 || >=19.0.0-rc
     react-dom: ^16.8.0 || ^17.0.0 || ^18.0.0 || >=19.0.0-rc
     subscriptions-transport-ws: ^0.9.0 || ^0.11.0
@@ -260,7 +260,7 @@ __metadata:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: 10c0/b76a1cce25a08bd1835588420afb12a709194dc380d792f8bec5e4f7fad186af5cf13f5170e835c3d7d62b43ac8e94699621ea3afc6f20a0e30f164ffcc4c97a
+  checksum: 10c0/05ad40938094b3ae16eceeee93de16e20068c31a37fa31ef8bf92d3a739baad26f1fe763ce85068ef4d9bea54313e233b712eb7719103c699e4be56bc77b72df
   languageName: node
   linkType: hard
 
@@ -21142,7 +21142,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
-    "@apollo/client": "npm:3.12.9"
+    "@apollo/client": "npm:3.12.10"
     "@breezehr/currency-codes": "npm:^2.2.1"
     "@codemirror/commands": "npm:^6.7.1"
     "@codemirror/lang-html": "npm:6.4.9"
