@@ -86,7 +86,7 @@ function EventAdminEditEvent() {
   );
 
   const dropEvent = () => {
-    submit({}, { method: 'PATCH', action: `drop` });
+    submit({}, { method: 'PATCH', action: `../events/${event.id}/drop`, relative: 'route' });
   };
 
   usePageTitle(`Editing “${initialEvent.title}”`);

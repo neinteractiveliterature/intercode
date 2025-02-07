@@ -501,6 +501,7 @@ const commonInConventionRoutes: RouteObject[] = [
             path: ':eventCategoryId',
             children: [
               { path: 'events/new', lazy: () => import('./EventAdmin/NewEvent') },
+              { path: 'events/:eventId/edit', lazy: () => import('./EventAdmin/EventAdminEditEvent') },
               {
                 path: '',
                 lazy: () => import('./EventAdmin/CategorySpecificEventAdmin'),
@@ -516,7 +517,6 @@ const commonInConventionRoutes: RouteObject[] = [
                         children: [
                           { path: 'admin_notes', lazy: () => import('./EventAdmin/AdminNotesRoute') },
                           { path: 'drop', lazy: () => import('./EventAdmin/drop') },
-                          { path: 'edit', lazy: () => import('./EventAdmin/EventAdminEditEvent') },
                           { path: 'restore', lazy: () => import('./EventAdmin/RestoreEventRoute') },
                           {
                             path: 'runs',
