@@ -6,17 +6,12 @@ class SignupBucketFinder
     attr_accessor :id, :state, :run, :bucket_key, :requested_bucket_key, :user_con_profile, :counted
 
     def self.from_signup(signup)
-      new(
-        signup.attributes.with_indifferent_access.slice(
-          :id,
-          :state,
-          :run,
-          :bucket_key,
-          :requested_bucket_key,
-          :user_con_profile,
-          :counted
-        )
-      )
+      attrs =
+        %i[id state run bucket_key requested_bucket_key user_con_profile counted].index_with do |attr|
+          signup.public_send(attr)
+        end
+
+      new(attrs)
     end
 
     def attributes
