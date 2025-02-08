@@ -7635,8 +7635,8 @@ __metadata:
   linkType: hard
 
 "@vitest/eslint-plugin@npm:^1.1.24":
-  version: 1.1.25
-  resolution: "@vitest/eslint-plugin@npm:1.1.25"
+  version: 1.1.26
+  resolution: "@vitest/eslint-plugin@npm:1.1.26"
   peerDependencies:
     "@typescript-eslint/utils": ">= 8.0"
     eslint: ">= 8.57.0"
@@ -7647,7 +7647,7 @@ __metadata:
       optional: true
     vitest:
       optional: true
-  checksum: 10c0/9707dbad11d86136a36c6c820fea063cb96e5fa6f8111ad24d3a9894df5594154da9a28ab51858a158ccaff4f49fbd79baada57b49d4891f98d5251cd53c90cb
+  checksum: 10c0/921dd793aa68bacaf2c83fe193e67bf8c15e817636c400eb72cfc9d97dc6460e455db1b378ef294c8871fe519b01c8d4b66eb8562f7a26899ae4ae1bf155bf98
   languageName: node
   linkType: hard
 
