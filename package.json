@@ -26,7 +26,7 @@
     "test:watch": "vitest watch"
   },
   "dependencies": {
-    "@apollo/client": "3.12.10",
+    "@apollo/client": "3.12.11",
     "@breezehr/currency-codes": "^2.2.1",
     "@codemirror/commands": "^6.7.1",
     "@codemirror/lang-html": "6.4.9",
