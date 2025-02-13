@@ -114,11 +114,23 @@
       "editFormItem": {
         "previewHeader": "Preview"
       },
+      "formTypes": {
+        "event": "Event form",
+        "event_proposal": "Event proposal form",
+        "user_con_profile": "User profile form"
+      },
       "newFormItem": {
         "customItemTypesHeader": "Custom item types",
         "deprecatedItemsHeader": "Deprecated items",
         "itemTypeSelectPlaceholder": "Choose an item type...",
         "standardItemsHeader": "Standard {{ formType }} items"
+      },
+      "newForm": {
+        "createButton": "Create form",
+        "formTypeLabel": "Form type",
+        "formTypePlaceholder": "Select a form type...",
+        "header": "New form",
+        "titleLabel": "Title"
       }
     },
     "rooms": {
@@ -595,6 +607,10 @@
       "nameLabel": "Name",
       "skipClickwrapAgreementLabel": "Skip clickwrap agreement",
       "skipClickwrapAgreementHelpText": "If selected, this page will not check whether the user has accepted the site clickwrap agreement."
+    },
+    "variables": {
+      "keyLabel": "Variable name",
+      "valueLabel": "Variable value (JSON format)"
     }
   },
   "cookieConsent": {

@@ -9,7 +9,7 @@ import { LoaderFunction, useLoaderData } from 'react-router';
 import { client } from '../../useIntercodeApolloClient';
 
 export const loader: LoaderFunction = async () => {
-  const { data } = await client.query<CmsVariablesQueryData>({ query: CmsVariablesQueryDocument });
+  const { data } = await client.query({ query: CmsVariablesQueryDocument });
   return data;
 };
 

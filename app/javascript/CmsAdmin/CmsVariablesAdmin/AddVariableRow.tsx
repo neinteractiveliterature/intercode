@@ -1,10 +1,10 @@
-import * as React from 'react';
 import { ApolloError } from '@apollo/client';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { CmsVariablesQueryData } from './queries.generated';
 import { useTranslation } from 'react-i18next';
-import { useActionData, useFetcher, useNavigation } from 'react-router-dom';
+import { useFetcher } from 'react-router-dom';
+import { useEffect } from 'react';
 
 export type AddingVariable = Omit<CmsVariablesQueryData['cmsParent']['cmsVariables'][0], 'id'> & {
   generatedId: number;
@@ -19,14 +19,18 @@ export type AddVariableRowProps = {
 function AddVariableRow({ variable, onChange, onCancel }: AddVariableRowProps): JSX.Element {
   const { t } = useTranslation();
   const fetcher = useFetcher();
-  const setError = useActionData();
-  const navigation = useNavigation();
-  const setInProgress = navigation.state !== 'idle';
+  const setError = fetcher.data instanceof Error ? fetcher.data : undefined;
+  const setInProgress = fetcher.state !== 'idle';
 
   const save = () => {
     fetcher.submit({ value_json: variable.value_json }, { action: `./${variable.key}`, method: 'POST' });
-    onCancel(variable.generatedId);
   };
+
+  useEffect(() => {
+    if (fetcher.state === 'idle' && fetcher.data && !setError) {
+      onCancel(variable.generatedId);
+    }
+  }, [fetcher.state, fetcher.data, onCancel, variable.generatedId, setError]);
 
   const handleKeyDown = (event: React.KeyboardEvent) => {
     switch (event.key) {
@@ -48,7 +52,7 @@ function AddVariableRow({ variable, onChange, onCancel }: AddVariableRowProps): 
             className="form-control font-monospace"
             value={variable.key}
             onChange={(event) => onChange({ ...variable, key: event.target.value })}
-            aria-label="Variable name"
+            aria-label={t('cms.variables.keyLabel')}
           />
         </td>
         <td>
@@ -58,7 +62,7 @@ function AddVariableRow({ variable, onChange, onCancel }: AddVariableRowProps): 
             value={variable.value_json}
             onChange={(event) => onChange({ ...variable, value_json: event.target.value })}
             onKeyDown={handleKeyDown}
-            aria-label="Variable value (JSON format)"
+            aria-label={t('cms.variables.valueLabel')}
           />
         </td>
         <td>
