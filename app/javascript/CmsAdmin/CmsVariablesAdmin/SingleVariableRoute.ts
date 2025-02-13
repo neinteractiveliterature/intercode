@@ -1,27 +1,32 @@
-import { ActionFunction, redirect } from 'react-router';
+import { ActionFunction } from 'react-router';
 import { client } from '../../useIntercodeApolloClient';
 import { DeleteCmsVariableMutationDocument, SetCmsVariableMutationDocument } from './mutations.generated';
 
 export const action: ActionFunction = async ({ params: { key }, request }) => {
   const formData = await request.formData();
 
-  if (request.method === 'POST' || request.method === 'PATCH') {
-    await client.mutate({
-      mutation: SetCmsVariableMutationDocument,
-      variables: {
-        key: key ?? '',
-        value_json: formData.get('value_json'),
-      },
-    });
-  } else if (request.method === 'DELETE') {
-    await client.mutate({
-      mutation: DeleteCmsVariableMutationDocument,
-      variables: { key: key ?? '' },
-    });
-  } else {
-    return new Response(null, { status: 404 });
+  try {
+    if (request.method === 'POST' || request.method === 'PATCH') {
+      const { data } = await client.mutate({
+        mutation: SetCmsVariableMutationDocument,
+        variables: {
+          key: key ?? '',
+          value_json: formData.get('value_json'),
+        },
+      });
+      await client.resetStore();
+      return data;
+    } else if (request.method === 'DELETE') {
+      const { data } = await client.mutate({
+        mutation: DeleteCmsVariableMutationDocument,
+        variables: { key: key ?? '' },
+      });
+      await client.resetStore();
+      return data;
+    } else {
+      return new Response(null, { status: 404 });
+    }
+  } catch (error) {
+    return error;
   }
-
-  await client.resetStore();
-  return redirect('/cms_variables');
 };

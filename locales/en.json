@@ -595,6 +595,10 @@
       "nameLabel": "Name",
       "skipClickwrapAgreementLabel": "Skip clickwrap agreement",
       "skipClickwrapAgreementHelpText": "If selected, this page will not check whether the user has accepted the site clickwrap agreement."
+    },
+    "variables": {
+      "keyLabel": "Variable name",
+      "valueLabel": "Variable value (JSON format)"
     }
   },
   "cookieConsent": {
