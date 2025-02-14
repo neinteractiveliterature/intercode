@@ -191,7 +191,10 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
   field :organization, Types::OrganizationType, null: true do
     description "The organization in charge of this convention."
   end
-  field :pre_schedule_content_html, String, null: true do
+  field :pre_schedule_content_html,
+        String,
+        null: true,
+        deprecation_reason: "Please use the blockPartial field instead." do
     description "If present, a block of HTML content to show above the schedule on various schedule pages."
   end
   field :preview_notifier_liquid, String, null: false do

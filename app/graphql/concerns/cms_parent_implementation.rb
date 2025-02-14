@@ -10,6 +10,10 @@ module CmsParentImplementation
     object.pages.find_by!(slug:)
   end
 
+  def block_partial(name:)
+    Types::CmsPartialBlockName.retrieve(name:, cms_parent: object)
+  end
+
   def effective_cms_layout(path:)
     convention = object.is_a?(Convention) ? object : nil
     CmsContentFinder.new(convention).effective_cms_layout(path)

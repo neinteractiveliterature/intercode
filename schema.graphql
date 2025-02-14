@@ -315,6 +315,16 @@ object for more details about this.)
 """
 interface CmsParent {
   """
+  Returns the content block partial for the given content block name
+  """
+  blockPartial(
+    """
+    The name of the content block
+    """
+    name: CmsPartialBlockName!
+  ): CmsPartial
+
+  """
   Finds a CMS content group by ID within the domain name of this HTTP request. If there is no
   CMS content group with that ID, or the CMS content group is associated with a different
   domain name, errors out.
@@ -482,10 +492,36 @@ interface CmsParent {
 type CmsPartial {
   admin_notes: String
   content: String
+
+  """
+  The rendered content of this partial, in HTML format
+  """
+  content_html: String!
   current_ability_can_delete: Boolean!
   current_ability_can_update: Boolean!
   id: ID!
   name: String
+}
+
+"""
+Reserved names for partials that will automatically be shown on certain pages if present
+"""
+enum CmsPartialBlockName {
+  """
+  Content shown on top of the "update your account" and "create your account" forms. This is used by the "update your
+  account" pages as a way to clarify that your account is shared between multiple conventions.
+  """
+  ACCOUNT_FORM_TEXT
+
+  """
+  Content shown on top of the "my signup queue" page.
+  """
+  MY_SIGNUP_QUEUE_TEXT
+
+  """
+  Content shown on top of the convention schedule.
+  """
+  PRE_SCHEDULE_TEXT
 }
 
 input CmsPartialInput {
@@ -532,6 +568,16 @@ type Convention implements CmsParent {
   User profiles in this convention that can have a bio (because they're staff or event team members).
   """
   bio_eligible_user_con_profiles: [UserConProfile!]!
+
+  """
+  Returns the content block partial for the given content block name
+  """
+  blockPartial(
+    """
+    The name of the content block
+    """
+    name: CmsPartialBlockName!
+  ): CmsPartial
 
   """
   Is this convention canceled?
@@ -1002,7 +1048,7 @@ type Convention implements CmsParent {
   """
   If present, a block of HTML content to show above the schedule on various schedule pages.
   """
-  pre_schedule_content_html: String
+  pre_schedule_content_html: String @deprecated(reason: "Please use the blockPartial field instead.")
 
   """
   Given a Liquid text string, renders it to HTML and returns the result.
@@ -1824,7 +1870,16 @@ input CreateCmsPartialInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
+
+  """
+  The attributes for the partial to create
+  """
   cms_partial: CmsPartialInput!
+
+  """
+  If present, uses the given CmsPartialBlockName to as the name rather than the one given in cms_partial
+  """
+  partial_block_name: CmsPartialBlockName
 }
 
 """
@@ -1835,6 +1890,10 @@ type CreateCmsPartialPayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
+
+  """
+  The partial that was just created
+  """
   cms_partial: CmsPartial!
 }
 
@@ -4124,6 +4183,10 @@ type Mutation {
     """
     input: CreateCmsNavigationItemInput!
   ): CreateCmsNavigationItemPayload!
+
+  """
+  Creates a new CMS partial
+  """
   createCmsPartial(
     """
     Parameters for CreateCmsPartial
@@ -5484,7 +5547,7 @@ type Query {
   This is used by the "update your account" pages as a way to clarify that your account is
   shared between multiple conventions.
   """
-  accountFormContentHtml: String
+  accountFormContentHtml: String @deprecated(reason: "Please use the blockPartial field of CmsParent instead.")
 
   """
   If the current user is an assumed identity (using the "become user" feature), this returns
@@ -6249,6 +6312,16 @@ input RoomInput {
 }
 
 type RootSite implements CmsParent {
+  """
+  Returns the content block partial for the given content block name
+  """
+  blockPartial(
+    """
+    The name of the content block
+    """
+    name: CmsPartialBlockName!
+  ): CmsPartial
+
   """
   Finds a CMS content group by ID within the domain name of this HTTP request. If there is no
   CMS content group with that ID, or the CMS content group is associated with a different

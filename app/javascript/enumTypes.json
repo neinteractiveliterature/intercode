@@ -28,6 +28,29 @@
       }
     ]
   },
+  "CmsPartialBlockName": {
+    "kind": "ENUM",
+    "name": "CmsPartialBlockName",
+    "description": "Reserved names for partials that will automatically be shown on certain pages if present",
+    "interfaces": null,
+    "possibleTypes": null,
+    "fields": null,
+    "inputFields": null,
+    "enumValues": [
+      {
+        "name": "ACCOUNT_FORM_TEXT",
+        "description": "Content shown on top of the \"update your account\" and \"create your account\" forms. This is used by the \"update your\naccount\" pages as a way to clarify that your account is shared between multiple conventions.\n",
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "MY_SIGNUP_QUEUE_TEXT",
+        "description": "Content shown on top of the \"my signup queue\" page.\n",
+        "isDeprecated": false,
+        "deprecationReason": null
+      }
+    ]
+  },
   "EmailMode": {
     "kind": "ENUM",
     "name": "EmailMode",

@@ -1,5 +1,19 @@
 query AccountFormContentQuery {
-  accountFormContentHtml
+  currentAbility {
+    can_create_cms_partials
+  }
+
+  rootSite {
+    id
+
+    blockPartial(name: ACCOUNT_FORM_TEXT) {
+      id
+      content
+      content_html
+      current_ability_can_delete
+      current_ability_can_update
+    }
+  }
 }
 
 query EditUserQuery {

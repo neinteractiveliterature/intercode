@@ -1,7 +1,7 @@
 #import "./queries.graphql"
 
-mutation CreatePartial($cmsPartial: CmsPartialInput!) {
-  createCmsPartial(input: { cms_partial: $cmsPartial }) {
+mutation CreatePartial($cmsPartial: CmsPartialInput!, $partialBlockName: CmsPartialBlockName) {
+  createCmsPartial(input: { cms_partial: $cmsPartial, partial_block_name: $partialBlockName }) {
     cms_partial {
       id
       ...CmsPartialFields

@@ -10,7 +10,7 @@ import useCachedLoadableValue from '../../useCachedLoadableValue';
 import ScheduleGridSkeleton from './ScheduleGridSkeleton';
 import AppRootContext from '../../AppRootContext';
 import { ScheduleGridConfig } from './ScheduleGridConfig';
-import { EventFiltersInput, TimezoneMode } from '../../graphqlTypes.generated';
+import { CmsPartialBlockName, EventFiltersInput, TimezoneMode } from '../../graphqlTypes.generated';
 import {
   ScheduleGridConventionDataQueryData,
   ScheduleGridEventFragment,
@@ -20,6 +20,7 @@ import { FiniteTimespan } from '../../Timespan';
 import useMergeCategoriesIntoEvents from '../useMergeCategoriesIntoEvents';
 import { useLoaderData } from 'react-router';
 import { ConventionDayLoaderResult } from '../conventionDayUrls';
+import BlockPartial from 'UIComponents/BlockPartial';
 
 const IS_MOBILE = ['iOS', 'Android OS'].includes(detect()?.os ?? '');
 
@@ -280,6 +281,7 @@ export type ScheduleGridProviderProps = {
   myRatingFilter?: number[];
   hideConflicts: boolean;
   filters?: EventFiltersInput;
+  currentAbilityCanCreateCmsPartials: boolean;
 };
 
 export function ScheduleGridProvider({
@@ -290,6 +292,7 @@ export function ScheduleGridProvider({
   hideConflicts,
   convention,
   filters,
+  currentAbilityCanCreateCmsPartials,
 }: ScheduleGridProviderProps): JSX.Element {
   const { timezoneName } = useContext(AppRootContext);
   const filtersContextValue = { myRatingFilter, hideConflicts };
@@ -323,9 +326,11 @@ export function ScheduleGridProvider({
 
   return (
     <ScheduleGridFiltersContext.Provider value={filtersContextValue}>
-      {convention.pre_schedule_content_html && (
-        <div dangerouslySetInnerHTML={{ __html: convention.pre_schedule_content_html }} />
-      )}
+      <BlockPartial
+        name={CmsPartialBlockName.PreScheduleText}
+        blockPartial={convention.blockPartial}
+        currentAbilityCanCreate={currentAbilityCanCreateCmsPartials}
+      />
       <ConventionDayTabContainer
         basename="/events/schedule"
         conventionTimespan={conventionTimespan as FiniteTimespan} // TODO: make this work with infinite cons
