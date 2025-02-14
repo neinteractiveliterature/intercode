@@ -2829,6 +2829,35 @@
           ],
           "fields": [
             {
+              "name": "blockPartial",
+              "description": null,
+              "type": {
+                "kind": "OBJECT",
+                "name": "CmsPartial",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": [
+                {
+                  "name": "name",
+                  "description": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "ENUM",
+                      "name": "CmsPartialBlockName",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ]
+            },
+            {
               "name": "cmsContentGroup",
               "description": "Finds a CMS content group by ID within the domain name of this HTTP request. If there is no\nCMS content group with that ID, or the CMS content group is associated with a different\ndomain name, errors out.\n",
               "type": {
@@ -3407,6 +3436,22 @@
               "args": []
             },
             {
+              "name": "content_html",
+              "description": "The rendered content of this partial, in HTML format",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
               "name": "current_ability_can_delete",
               "description": null,
               "type": {
@@ -3469,6 +3514,29 @@
           ],
           "inputFields": null,
           "enumValues": null
+        },
+        {
+          "kind": "ENUM",
+          "name": "CmsPartialBlockName",
+          "description": "Reserved names for partials that will automatically be shown on certain pages if present",
+          "interfaces": null,
+          "possibleTypes": null,
+          "fields": null,
+          "inputFields": null,
+          "enumValues": [
+            {
+              "name": "ACCOUNT_FORM_TEXT",
+              "description": "Content shown on top of the \"update your account\" and \"create your account\" forms. This is used by the \"update your\naccount\" pages as a way to clarify that your account is shared between multiple conventions.\n",
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "MY_SIGNUP_QUEUE_TEXT",
+              "description": "Content shown on top of the \"my signup queue\" page.\n",
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ]
         },
         {
           "kind": "INPUT_OBJECT",
@@ -3770,6 +3838,35 @@
               "isDeprecated": false,
               "deprecationReason": null,
               "args": []
+            },
+            {
+              "name": "blockPartial",
+              "description": null,
+              "type": {
+                "kind": "OBJECT",
+                "name": "CmsPartial",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": [
+                {
+                  "name": "name",
+                  "description": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "ENUM",
+                      "name": "CmsPartialBlockName",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ]
             },
             {
               "name": "canceled",
@@ -8142,6 +8239,18 @@
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "partial_block_name",
+              "description": null,
+              "type": {
+                "kind": "ENUM",
+                "name": "CmsPartialBlockName",
                 "ofType": null
               },
               "defaultValue": null,
@@ -26445,8 +26554,8 @@
                 "name": "String",
                 "ofType": null
               },
-              "isDeprecated": false,
-              "deprecationReason": null,
+              "isDeprecated": true,
+              "deprecationReason": "Please use the blockPartial field of CmsParent instead.",
               "args": []
             },
             {
@@ -28668,6 +28777,35 @@
           ],
           "possibleTypes": null,
           "fields": [
+            {
+              "name": "blockPartial",
+              "description": null,
+              "type": {
+                "kind": "OBJECT",
+                "name": "CmsPartial",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": [
+                {
+                  "name": "name",
+                  "description": null,
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "ENUM",
+                      "name": "CmsPartialBlockName",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ]
+            },
             {
               "name": "cmsContentGroup",
               "description": "Finds a CMS content group by ID within the domain name of this HTTP request. If there is no\nCMS content group with that ID, or the CMS content group is associated with a different\ndomain name, errors out.\n",

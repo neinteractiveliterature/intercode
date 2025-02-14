@@ -80,7 +80,10 @@ class Types::QueryType < Types::BaseObject
     MARKDOWN
   end
 
-  field :account_form_content_html, String, null: true do
+  field :account_form_content_html,
+        String,
+        null: true,
+        deprecation_reason: "Please use the blockPartial field of CmsParent instead." do
     description <<~MARKDOWN
       If there is a CMS partial on the root site called `account_form_text`, renders it to HTML
       and returns the result. Otherwise, returns null.

@@ -129,6 +129,10 @@ module Types::CmsParent
     MARKDOWN
   end
 
+  field :block_partial, Types::CmsPartialType, null: true do
+    argument :name, Types::CmsPartialBlockName, required: true
+  end
+
   field :preview_markdown, String, null: false do
     argument :markdown, String, required: true, description: "The Markdown content to render."
     argument :event_id,

@@ -79,8 +79,20 @@ fragment UserConProfileRankedChoiceQueueFields on UserConProfile {
 }
 
 query MySignupQueueQuery {
+  currentAbility {
+    can_create_cms_partials
+  }
+
   convention: conventionByRequestHost {
     id
+
+    blockPartial(name: MY_SIGNUP_QUEUE_TEXT) {
+      id
+      content
+      content_html
+      current_ability_can_update
+      current_ability_can_delete
+    }
 
     signup_rounds {
       id

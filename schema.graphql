@@ -314,6 +314,8 @@ renders when there is no convention associated with the current domain name. (Se
 object for more details about this.)
 """
 interface CmsParent {
+  blockPartial(name: CmsPartialBlockName!): CmsPartial
+
   """
   Finds a CMS content group by ID within the domain name of this HTTP request. If there is no
   CMS content group with that ID, or the CMS content group is associated with a different
@@ -482,10 +484,31 @@ interface CmsParent {
 type CmsPartial {
   admin_notes: String
   content: String
+
+  """
+  The rendered content of this partial, in HTML format
+  """
+  content_html: String!
   current_ability_can_delete: Boolean!
   current_ability_can_update: Boolean!
   id: ID!
   name: String
+}
+
+"""
+Reserved names for partials that will automatically be shown on certain pages if present
+"""
+enum CmsPartialBlockName {
+  """
+  Content shown on top of the "update your account" and "create your account" forms. This is used by the "update your
+  account" pages as a way to clarify that your account is shared between multiple conventions.
+  """
+  ACCOUNT_FORM_TEXT
+
+  """
+  Content shown on top of the "my signup queue" page.
+  """
+  MY_SIGNUP_QUEUE_TEXT
 }
 
 input CmsPartialInput {
@@ -532,6 +555,7 @@ type Convention implements CmsParent {
   User profiles in this convention that can have a bio (because they're staff or event team members).
   """
   bio_eligible_user_con_profiles: [UserConProfile!]!
+  blockPartial(name: CmsPartialBlockName!): CmsPartial
 
   """
   Is this convention canceled?
@@ -1825,6 +1849,7 @@ input CreateCmsPartialInput {
   """
   clientMutationId: String
   cms_partial: CmsPartialInput!
+  partial_block_name: CmsPartialBlockName
 }
 
 """
@@ -5484,7 +5509,7 @@ type Query {
   This is used by the "update your account" pages as a way to clarify that your account is
   shared between multiple conventions.
   """
-  accountFormContentHtml: String
+  accountFormContentHtml: String @deprecated(reason: "Please use the blockPartial field of CmsParent instead.")
 
   """
   If the current user is an assumed identity (using the "become user" feature), this returns
@@ -6249,6 +6274,8 @@ input RoomInput {
 }
 
 type RootSite implements CmsParent {
+  blockPartial(name: CmsPartialBlockName!): CmsPartial
+
   """
   Finds a CMS content group by ID within the domain name of this HTTP request. If there is no
   CMS content group with that ID, or the CMS content group is associated with a different

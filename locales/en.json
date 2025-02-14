@@ -575,6 +575,11 @@
       },
       "title": "Add file"
     },
+    "blockPartial": {
+      "addContent": "Add content",
+      "editContent": "Edit content",
+      "deleteContent": "Delete content"
+    },
     "files": {
       "copyEmbedCode": "Copy CMS embed code"
     },

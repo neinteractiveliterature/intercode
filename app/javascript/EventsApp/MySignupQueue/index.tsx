@@ -10,6 +10,8 @@ import UserSignupQueue from './UserSignupQueue';
 import { usePendingChoices } from './usePendingChoices';
 import { client } from '../../useIntercodeApolloClient';
 import useLoginRequired from 'Authentication/useLoginRequired';
+import BlockPartial from 'UIComponents/BlockPartial';
+import { CmsPartialBlockName } from 'graphqlTypes.generated';
 
 export const loader: LoaderFunction = async () => {
   const { data } = await client.query({ query: MySignupQueueQueryDocument });
@@ -30,6 +32,11 @@ function MySignupQueue() {
   return (
     <>
       <h1>{t('signups.mySignupQueue.title')}</h1>
+      <BlockPartial
+        name={CmsPartialBlockName.MySignupQueueText}
+        blockPartial={data.convention.blockPartial}
+        currentAbilityCanCreate={data.currentAbility.can_create_cms_partials}
+      />
       <div className="row mb-4">
         <div className="col-12 col-md-8">
           <NextRoundInfoBox data={data} />
