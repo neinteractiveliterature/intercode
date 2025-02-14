@@ -24,6 +24,10 @@
       "allowedVersions": "!/4.8.4/"
     },
     {
+      "matchPackageNames": ["rollup"],
+      "allowedVersions": "4.34.4"
+    },
+    {
       "matchPackageNames": ["postgres"],
       "matchManagers": ["dockerfile"],
       "enabled": false
