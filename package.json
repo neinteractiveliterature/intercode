@@ -229,7 +229,7 @@
   "resolutions": {
     "@typescript-eslint/parser": "8.24.0",
     "react-bootstrap4-modal": "3.0.8",
-    "rollup": "4.34.4"
+    "rollup": "4.34.7"
   },
   "graphdoc": {
     "logo": "<h1 style=\"font-family: Helvetica, Arial; letter-spacing: -4px; font-size: 60px; font-weight: bold;\">Intercode</h1>"
