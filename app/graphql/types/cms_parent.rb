@@ -130,7 +130,9 @@ module Types::CmsParent
   end
 
   field :block_partial, Types::CmsPartialType, null: true do
-    argument :name, Types::CmsPartialBlockName, required: true
+    description "Returns the content block partial for the given content block name"
+
+    argument :name, Types::CmsPartialBlockName, required: true, description: "The name of the content block"
   end
 
   field :preview_markdown, String, null: false do

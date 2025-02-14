@@ -20,6 +20,7 @@ export type ScheduleGridAppProps = {
   fetchFormItemIdentifiers: string[];
   convention: ScheduleGridConventionDataQueryData['convention'];
   filters?: EventFiltersInput;
+  currentAbilityCanCreateCmsPartials: boolean;
 };
 
 function ScheduleGridApp({
@@ -27,6 +28,7 @@ function ScheduleGridApp({
   convention,
   fetchFormItemIdentifiers,
   filters,
+  currentAbilityCanCreateCmsPartials,
 }: ScheduleGridAppProps): JSX.Element {
   const { t } = useTranslation();
   const { myProfile, timezoneName, language } = useContext(AppRootContext);
@@ -51,6 +53,7 @@ function ScheduleGridApp({
         myRatingFilter={myProfile ? ratingFilter : undefined}
         hideConflicts={myProfile ? hideConflicts : false}
         filters={filters}
+        currentAbilityCanCreateCmsPartials={currentAbilityCanCreateCmsPartials}
       >
         <div className="mb-4">
           <div className="m-0 p-2 border-bottom">

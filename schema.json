@@ -2830,7 +2830,7 @@
           "fields": [
             {
               "name": "blockPartial",
-              "description": null,
+              "description": "Returns the content block partial for the given content block name",
               "type": {
                 "kind": "OBJECT",
                 "name": "CmsPartial",
@@ -2841,7 +2841,7 @@
               "args": [
                 {
                   "name": "name",
-                  "description": null,
+                  "description": "The name of the content block",
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
@@ -3535,6 +3535,12 @@
               "description": "Content shown on top of the \"my signup queue\" page.\n",
               "isDeprecated": false,
               "deprecationReason": null
+            },
+            {
+              "name": "PRE_SCHEDULE_TEXT",
+              "description": "Content shown on top of the convention schedule.\n",
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ]
         },
@@ -3841,7 +3847,7 @@
             },
             {
               "name": "blockPartial",
-              "description": null,
+              "description": "Returns the content block partial for the given content block name",
               "type": {
                 "kind": "OBJECT",
                 "name": "CmsPartial",
@@ -3852,7 +3858,7 @@
               "args": [
                 {
                   "name": "name",
-                  "description": null,
+                  "description": "The name of the content block",
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
@@ -5344,8 +5350,8 @@
                 "name": "String",
                 "ofType": null
               },
-              "isDeprecated": false,
-              "deprecationReason": null,
+              "isDeprecated": true,
+              "deprecationReason": "Please use the blockPartial field instead.",
               "args": []
             },
             {
@@ -8246,20 +8252,8 @@
               "deprecationReason": null
             },
             {
-              "name": "partial_block_name",
-              "description": null,
-              "type": {
-                "kind": "ENUM",
-                "name": "CmsPartialBlockName",
-                "ofType": null
-              },
-              "defaultValue": null,
-              "isDeprecated": false,
-              "deprecationReason": null
-            },
-            {
               "name": "cms_partial",
-              "description": null,
+              "description": "The attributes for the partial to create",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -8268,6 +8262,18 @@
                   "name": "CmsPartialInput",
                   "ofType": null
                 }
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "partial_block_name",
+              "description": "If present, uses the given CmsPartialBlockName to as the name rather than the one given in cms_partial",
+              "type": {
+                "kind": "ENUM",
+                "name": "CmsPartialBlockName",
+                "ofType": null
               },
               "defaultValue": null,
               "isDeprecated": false,
@@ -8297,7 +8303,7 @@
             },
             {
               "name": "cms_partial",
-              "description": null,
+              "description": "The partial that was just created",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -19115,7 +19121,7 @@
             },
             {
               "name": "createCmsPartial",
-              "description": null,
+              "description": "Creates a new CMS partial",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -28779,7 +28785,7 @@
           "fields": [
             {
               "name": "blockPartial",
-              "description": null,
+              "description": "Returns the content block partial for the given content block name",
               "type": {
                 "kind": "OBJECT",
                 "name": "CmsPartial",
@@ -28790,7 +28796,7 @@
               "args": [
                 {
                   "name": "name",
-                  "description": null,
+                  "description": "The name of the content block",
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,

@@ -46,9 +46,21 @@ fragment ScheduleGridEventFragment on Event {
 }
 
 query ScheduleGridConventionDataQuery {
+  currentAbility {
+    can_create_cms_partials
+  }
+
   convention: conventionByRequestHost {
     id
-    pre_schedule_content_html
+
+    blockPartial(name: PRE_SCHEDULE_TEXT) {
+      id
+      content
+      content_html
+      current_ability_can_update
+      current_ability_can_delete
+    }
+
     ...CommonConventionData
   }
 }

@@ -1,9 +1,17 @@
 # frozen_string_literal: true
 class Mutations::CreateCmsPartial < Mutations::BaseMutation
-  field :cms_partial, Types::CmsPartialType, null: false
+  description "Creates a new CMS partial"
 
-  argument :partial_block_name, Types::CmsPartialBlockName, required: false, camelize: false
-  argument :cms_partial, Types::CmsPartialInputType, required: true, camelize: false
+  field :cms_partial, Types::CmsPartialType, null: false do
+    description "The partial that was just created"
+  end
+
+  argument :cms_partial, Types::CmsPartialInputType, required: true, camelize: false do
+    description "The attributes for the partial to create"
+  end
+  argument :partial_block_name, Types::CmsPartialBlockName, required: false, camelize: false do
+    description "If present, uses the given CmsPartialBlockName to as the name rather than the one given in cms_partial"
+  end
 
   authorize_create_cms_model :cms_partials
 

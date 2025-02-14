@@ -10,6 +10,10 @@ class Types::CmsPartialBlockName < Types::BaseEnum
     Content shown on top of the "my signup queue" page.
   MARKDOWN
 
+  value "PRE_SCHEDULE_TEXT", value: "pre_schedule_text", description: <<~MARKDOWN
+    Content shown on top of the convention schedule.
+  MARKDOWN
+
   def self.retrieve(name:, cms_parent:)
     case name
     when "account_form_text"

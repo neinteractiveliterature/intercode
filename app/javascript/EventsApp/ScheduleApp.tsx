@@ -206,6 +206,7 @@ function ScheduleApp(): JSX.Element {
           configKey={scheduleGridConfig.key}
           convention={data.convention}
           filters={effectiveFilters}
+          currentAbilityCanCreateCmsPartials={data.currentAbility.can_create_cms_partials}
         />
       );
     }

@@ -404,6 +404,7 @@ export type CmsNavigationItemInput = {
  * object for more details about this.)
  */
 export type CmsParent = {
+  /** Returns the content block partial for the given content block name */
   blockPartial?: Maybe<CmsPartial>;
   /**
    * Finds a CMS content group by ID within the domain name of this HTTP request. If there is no
@@ -604,7 +605,9 @@ export enum CmsPartialBlockName {
    */
   AccountFormText = 'ACCOUNT_FORM_TEXT',
   /** Content shown on top of the "my signup queue" page. */
-  MySignupQueueText = 'MY_SIGNUP_QUEUE_TEXT'
+  MySignupQueueText = 'MY_SIGNUP_QUEUE_TEXT',
+  /** Content shown on top of the convention schedule. */
+  PreScheduleText = 'PRE_SCHEDULE_TEXT'
 }
 
 export type CmsPartialInput = {
@@ -649,6 +652,7 @@ export type Convention = CmsParent & {
   accepting_proposals?: Maybe<Scalars['Boolean']['output']>;
   /** User profiles in this convention that can have a bio (because they're staff or event team members). */
   bio_eligible_user_con_profiles: Array<UserConProfile>;
+  /** Returns the content block partial for the given content block name */
   blockPartial?: Maybe<CmsPartial>;
   /** Is this convention canceled? */
   canceled: Scalars['Boolean']['output'];
@@ -823,7 +827,10 @@ export type Convention = CmsParent & {
   orders_paginated: OrdersPagination;
   /** The organization in charge of this convention. */
   organization?: Maybe<Organization>;
-  /** If present, a block of HTML content to show above the schedule on various schedule pages. */
+  /**
+   * If present, a block of HTML content to show above the schedule on various schedule pages.
+   * @deprecated Please use the blockPartial field instead.
+   */
   pre_schedule_content_html?: Maybe<Scalars['String']['output']>;
   /** Given a Liquid text string, renders it to HTML and returns the result. */
   previewLiquid: Scalars['String']['output'];
@@ -1676,7 +1683,9 @@ export type CreateCmsNavigationItemPayload = {
 export type CreateCmsPartialInput = {
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  /** The attributes for the partial to create */
   cms_partial: CmsPartialInput;
+  /** If present, uses the given CmsPartialBlockName to as the name rather than the one given in cms_partial */
   partial_block_name?: InputMaybe<CmsPartialBlockName>;
 };
 
@@ -1685,6 +1694,7 @@ export type CreateCmsPartialPayload = {
   __typename: 'CreateCmsPartialPayload';
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
+  /** The partial that was just created */
   cms_partial: CmsPartial;
 };
 
@@ -3316,6 +3326,7 @@ export type Mutation = {
   createCmsGraphqlQuery: CreateCmsGraphqlQueryPayload;
   createCmsLayout: CreateCmsLayoutPayload;
   createCmsNavigationItem: CreateCmsNavigationItemPayload;
+  /** Creates a new CMS partial */
   createCmsPartial: CreateCmsPartialPayload;
   createConvention: CreateConventionPayload;
   createConventionStripeAccount: CreateConventionStripeAccountPayload;
@@ -5090,6 +5101,7 @@ export type RoomInput = {
 
 export type RootSite = CmsParent & {
   __typename: 'RootSite';
+  /** Returns the content block partial for the given content block name */
   blockPartial?: Maybe<CmsPartial>;
   /**
    * Finds a CMS content group by ID within the domain name of this HTTP request. If there is no
