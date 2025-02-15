@@ -1,6 +1,7 @@
 @use "sass:color";
+@use "sass:map";
 
-$schedule-grid-background: map-get(
+$schedule-grid-background: map.get(
   $map: $theme-colors,
   $key: 'light',
 );
@@ -51,8 +52,8 @@ $signed-up-event-background-color: rgba(0, 0, 0, 0.4);
 
 .schedule-grid-event {
   // default colors, overrideable by event categories
-  background-color: color.adjust(map-get($theme-colors, 'info'), $lightness: 50%);
-  border: 1px map-get($theme-colors, 'info') solid;
+  background-color: color.adjust(map.get($theme-colors, 'info'), $lightness: 50%);
+  border: 1px map.get($theme-colors, 'info') solid;
   border-radius: $schedule-grid-event-border-radius;
   overflow: hidden;
   display: flex;
@@ -63,8 +64,8 @@ $signed-up-event-background-color: rgba(0, 0, 0, 0.4);
   }
 
   &.signed-up {
-    background-color: map-get($theme-colors, 'info');
-    border-color: map-get($theme-colors, 'info');
+    background-color: map.get($theme-colors, 'info');
+    border-color: map.get($theme-colors, 'info');
     color: white;
   }
 
@@ -146,23 +147,23 @@ $signed-up-event-background-color: rgba(0, 0, 0, 0.4);
 }
 
 .event-fullness-unlimited .availability-bar .unavailable {
-  background-color: color.adjust(map-get($theme-colors, 'info'), $lightness: 50%);
+  background-color: color.adjust(map.get($theme-colors, 'info'), $lightness: 50%);
 }
 
 .event-fullness-below-minimum .availability-bar .unavailable {
-  background-color: color.adjust(map-get($theme-colors, 'danger'), $lightness: 20%);
+  background-color: color.adjust(map.get($theme-colors, 'danger'), $lightness: 20%);
 }
 
 .event-fullness-minimum .availability-bar .unavailable {
-  background-color: color.adjust(map-get($theme-colors, 'warning'), $lightness: 20%);
+  background-color: color.adjust(map.get($theme-colors, 'warning'), $lightness: 20%);
 }
 
 .event-fullness-preferred .availability-bar .unavailable {
-  background-color: color.adjust(map-get($theme-colors, 'success'), $lightness: 20%);
+  background-color: color.adjust(map.get($theme-colors, 'success'), $lightness: 20%);
 }
 
 .event-fullness-full .availability-bar .unavailable {
-  background-color: color.adjust(map-get($theme-colors, 'primary'), $lightness: 20%);
+  background-color: color.adjust(map.get($theme-colors, 'primary'), $lightness: 20%);
 
   &.full {
     opacity: 1;

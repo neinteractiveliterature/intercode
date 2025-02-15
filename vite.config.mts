@@ -63,6 +63,15 @@ export default defineConfig({
       },
     },
   },
+  css: {
+    preprocessorOptions: {
+      scss: {
+        // can't get import to work until Bootstrap supports it
+        silenceDeprecations: ['import', 'legacy-js-api'],
+        quietDeps: true,
+      },
+    },
+  },
   server: {
     port: 3135,
     host: '0.0.0.0',
