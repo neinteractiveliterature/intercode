@@ -228,11 +228,9 @@ function UserSignupQueue({ userConProfile, refetchQueries, readOnly }: UserSignu
                       'shortWeekdayTimeWithZone',
                     )}{' '}
                     |{' '}
-                    {
-                      pendingChoice.target_run.event.registration_policy?.buckets.find(
-                        (bucket) => bucket.key === pendingChoice.requested_bucket_key,
-                      )?.name
-                    }
+                    {pendingChoice.target_run.event.registration_policy?.buckets.find(
+                      (bucket) => bucket.key === pendingChoice.requested_bucket_key,
+                    )?.name ?? t('signups.noPreference')}
                   </div>
 
                   <BootstrapFormCheckbox
