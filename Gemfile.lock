@@ -505,7 +505,7 @@ GEM
     rexml (3.3.9)
     rollbar (3.6.0)
     rouge (3.26.1)
-    rubocop (1.72.0)
+    rubocop (1.72.1)
       json (~> 2.3)
       language_server-protocol (~> 3.17.0.2)
       lint_roller (~> 1.1.0)
@@ -714,7 +714,7 @@ DEPENDENCIES
   redcarpet
   reverse_markdown
   rollbar
-  rubocop (= 1.72.0)
+  rubocop (= 1.72.1)
   rubocop-factory_bot
   rubocop-graphql
   rubocop-performance
