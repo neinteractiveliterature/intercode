@@ -1,4 +1,5 @@
 @use "sass:color";
+@use "sass:map";
 
 $success-light: color.adjust($success, $lightness: 35%);
 $warning-light: color.adjust($warning, $lightness: 35%);
@@ -6,7 +7,7 @@ $danger-light: color.adjust($danger, $lightness: 35%);
 $info-light: color.adjust($info, $lightness: 35%);
 
 $color-variants: () !default;
-$color-variants: map-merge(
+$color-variants: map.merge(
   (
     'success-light': $success-light,
     'warning-light': $warning-light,

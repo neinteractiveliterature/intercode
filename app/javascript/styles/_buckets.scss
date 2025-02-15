@@ -1,4 +1,5 @@
 @use "sass:color";
+@use "sass:map";
 
 .run-capacity {
   border: $card-border-width solid $card-border-color;
@@ -90,7 +91,7 @@ $bucket-color-9: $pink;
 $bucket-color-full: $gray-500;
 
 $bucket-colors: () !default;
-$bucket-colors: map-merge(
+$bucket-colors: map.merge(
   (
     'bucket-color-1': $bucket-color-1,
     'bucket-color-2': $bucket-color-2,
