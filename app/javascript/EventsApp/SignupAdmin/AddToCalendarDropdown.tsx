@@ -11,8 +11,9 @@ export type AddToCalendarDropdownProps = {
 function AddToCalendarDropdown({ icalSecret, className }: AddToCalendarDropdownProps): JSX.Element {
   const { t } = useTranslation();
   const icalUrl = new URL(`/calendars/user_schedule/${encodeURIComponent(icalSecret)}`, window.location.href);
-  icalUrl.protocol = 'webcal';
-  const googleCalendarUrl = `https://calendar.google.com/calendar/r?cid=${encodeURIComponent(icalUrl.toString())}`;
+  const icalUrlWithWebcalProtocol = icalUrl.toString().replace(/^https?:/, 'webcal:');
+  // eslint-disable-next-line i18next/no-literal-string
+  const googleCalendarUrl = `https://calendar.google.com/calendar/r?cid=${encodeURIComponent(icalUrlWithWebcalProtocol)}`;
 
   return (
     <DropdownMenu
@@ -30,14 +31,14 @@ function AddToCalendarDropdown({ icalSecret, className }: AddToCalendarDropdownP
           <i className="bi-google" aria-hidden /> {t('addToCalendarDropdown.subscribeGoogle')}
         </>
       </a>
-      <a className="dropdown-item" href={icalUrl.toString()}>
+      <a className="dropdown-item" href={icalUrlWithWebcalProtocol}>
         <>
           <i className="bi-calendar3" aria-hidden /> {t('addToCalendarDropdown.subscribeICal')}
         </>
       </a>
       <CopyToClipboardButton
         className="dropdown-item"
-        text={icalUrl.toString()}
+        text={icalUrlWithWebcalProtocol}
         copiedProps={{ className: 'dropdown-item text-success' }}
         defaultText={t('addToCalendarDropdown.copyWebcal')}
         copiedText={t('copyToClipboard.defaultSuccess')}
