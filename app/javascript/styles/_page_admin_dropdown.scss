@@ -3,6 +3,8 @@
 .page-admin-dropdown {
   margin-bottom: 4px;
   float: right;
+  z-index: $zindex-dropdown;
+  position: relative;
 
   @media (min-width: #{breakpoint-min(lg, $grid-breakpoints) + 65px}) and (max-width: #{breakpoint-max(lg, $grid-breakpoints)}) {
     position: absolute;

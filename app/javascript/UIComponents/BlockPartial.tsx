@@ -110,7 +110,7 @@ export default function BlockPartial({ blockPartial, currentAbilityCanCreate, na
       {(currentAbilityCanCreate ||
         blockPartial?.current_ability_can_delete ||
         blockPartial?.current_ability_can_update) && (
-        <div className="float-end mb-2">
+        <div className="page-admin-dropdown">
           <DropdownMenu
             buttonClassName="btn btn-dark dropdown-toggle"
             buttonContent={
