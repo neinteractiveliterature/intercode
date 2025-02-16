@@ -4124,9 +4124,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-markdown/core@npm:^1.12.2":
-  version: 1.12.2
-  resolution: "@graphql-markdown/core@npm:1.12.2"
+"@graphql-markdown/core@npm:^1.13.0":
+  version: 1.13.0
+  resolution: "@graphql-markdown/core@npm:1.13.0"
   dependencies:
     "@graphql-markdown/graphql": "npm:^1.1.5"
     "@graphql-markdown/logger": "npm:^1.0.5"
@@ -4134,7 +4134,7 @@ __metadata:
   peerDependencies:
     "@graphql-markdown/diff": ^1.1.9
     "@graphql-markdown/helpers": ^1.0.8
-    "@graphql-markdown/printer-legacy": ^1.9.1
+    "@graphql-markdown/printer-legacy": ^1.10.0
     graphql-config: ^5.1.0
   peerDependenciesMeta:
     "@graphql-markdown/diff":
@@ -4145,7 +4145,7 @@ __metadata:
       optional: true
     graphql-config:
       optional: true
-  checksum: 10c0/8c2002135d1123b4d1eeab0b82634306d211beb86e677fc8da70b68795313a9a5fc45a5e3cae778c83b94583d97056bfc781d102172cd1256ef2a922e10ee32a
+  checksum: 10c0/94266650f46a8d5b4fe85d6202e327ce56a099ed0a224c394bdab614cb42a7533ca2174964afe085abf92d1230cc58bed00009c7db4c93780b4fb85d5cf152e5
   languageName: node
   linkType: hard
 
@@ -4163,15 +4163,16 @@ __metadata:
   linkType: hard
 
 "@graphql-markdown/docusaurus@npm:^1.24.1":
-  version: 1.26.4
-  resolution: "@graphql-markdown/docusaurus@npm:1.26.4"
+  version: 1.27.0
+  resolution: "@graphql-markdown/docusaurus@npm:1.27.0"
   dependencies:
-    "@graphql-markdown/core": "npm:^1.12.2"
+    "@docusaurus/utils": "npm:>=3.2.0"
+    "@graphql-markdown/core": "npm:^1.13.0"
     "@graphql-markdown/logger": "npm:^1.0.5"
-    "@graphql-markdown/printer-legacy": "npm:^1.9.1"
+    "@graphql-markdown/printer-legacy": "npm:^1.10.0"
   peerDependencies:
     "@docusaurus/logger": "*"
-  checksum: 10c0/f7057164029155ff0087e067c6a43247ebabacc3873e05357271c700c2f282dcb1cab0efc9fb05b6c98167e5616b086f5bb438afaa2cd46b97cdceec5d7054cf
+  checksum: 10c0/95fb98afd4954816490961f97d072aa26ea6bf9a2d507f528726eae9cfaf4c9b7e37858b519e8486e9d8c71ed285c8f6b7fa4b3839f3ea5c3f384387c170a7c3
   languageName: node
   linkType: hard
 
@@ -4194,14 +4195,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-markdown/printer-legacy@npm:^1.9.1":
-  version: 1.9.1
-  resolution: "@graphql-markdown/printer-legacy@npm:1.9.1"
+"@graphql-markdown/printer-legacy@npm:^1.10.0":
+  version: 1.10.0
+  resolution: "@graphql-markdown/printer-legacy@npm:1.10.0"
   dependencies:
-    "@docusaurus/utils": "npm:>=3.2.0"
     "@graphql-markdown/graphql": "npm:^1.1.5"
     "@graphql-markdown/utils": "npm:^1.7.1"
-  checksum: 10c0/ec6a8bd965b0779954581b71e4db3395642028215a234bcc7713bd6eb1e04ee6ead0e249aa045c278c66e3b4d421ba71de556ec1647d71d711bbd4128c73d76e
+  checksum: 10c0/f01a3ddeb5627cb7a41ee77590bdfd7b8a9f164c26ca1ad403fef37cd38a04ebf5c9f94f04d9908d8b95d64aa3a4dff051a75ea270b27278f304bc9b4560d988
   languageName: node
   linkType: hard
 
