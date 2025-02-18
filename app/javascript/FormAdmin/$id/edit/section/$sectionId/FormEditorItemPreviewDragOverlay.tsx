@@ -4,6 +4,7 @@ import { ButtonWithTooltip } from '@neinteractiveliterature/litform';
 import { FormEditorContext } from 'FormAdmin/FormEditorContexts';
 import FormItemInput from 'FormPresenter/ItemInputs/FormItemInput';
 import { findStandardItem, TypedFormItem } from 'FormAdmin/FormItemUtils';
+import styles from 'styles/form_editor.module.scss';
 
 export type FormEditorItemPreviewDragOverlayProps = {
   formItem: TypedFormItem;
@@ -21,7 +22,7 @@ function FormEditorItemPreviewDragOverlay({ formItem }: FormEditorItemPreviewDra
         <span className="visually-hidden">Drag to reorder</span>
         <i className="cursor-grab bi-grip-vertical" />
       </div>
-      <div className="form-editor-item flex-grow-1">
+      <div className={`form-editor-item ${styles.formEditorItem} flex-grow-1`}>
         {renderedFormItem && (
           <FormItemInput
             convention={convention}

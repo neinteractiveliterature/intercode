@@ -7,6 +7,7 @@ import { FormEditorContext, FormEditorForm } from 'FormAdmin/FormEditorContexts'
 import { findStandardItem, StandardItem, TypedFormItem } from 'FormAdmin/FormItemUtils';
 import { getSortableStyle } from 'SortableUtils';
 import FormItemInput from 'FormPresenter/ItemInputs/FormItemInput';
+import styles from 'styles/form_editor.module.scss';
 
 function describeFormItemForDelete(formItem: TypedFormItem, standardItem: StandardItem | undefined) {
   if (standardItem) {
@@ -46,13 +47,13 @@ function FormEditorItemPreview({ formSection, formItem }: FormEditorItemPreviewP
         <span className="visually-hidden">Drag to reorder</span>
         <i className="cursor-grab bi-grip-vertical" />
       </div>
-      <div className="form-editor-item flex-grow-1">
+      <div className={`form-editor-item ${styles.formEditorItem} flex-grow-1`}>
         <Link
-          className="form-editor-item-overlay"
+          className={`form-editor-item-overlay ${styles.formEditorItemOverlay}`}
           to={`/admin_forms/${params.id}/edit/section/${params.sectionId}/item/${formItem.id}`}
         >
           {formItem.identifier && (
-            <div className="form-editor-item-identifier">
+            <div className={`form-editor-item-identifier ${styles.formEditorItemIdentifier}`}>
               {standardItem ? (
                 <>
                   <i className="bi-wrench" /> {standardItem.description}

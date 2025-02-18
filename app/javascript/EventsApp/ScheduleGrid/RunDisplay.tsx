@@ -75,7 +75,7 @@ const RunDisplay = forwardRef<HTMLDivElement, RunDisplayProps>(function RunDispl
     }
 
     return (
-      <div className="event-extended-counts p-1">
+      <div className={`event-extended-counts ${styles.eventExtendedCounts} p-1`}>
         <span className="text-success">
           {signupCountData.sumSignupCounts({ state: SignupState.Confirmed, counted: true })}
         </span>
