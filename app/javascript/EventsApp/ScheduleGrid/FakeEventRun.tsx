@@ -12,6 +12,7 @@ import {
 } from './StylingUtils';
 import { PIXELS_PER_LANE, LANE_GUTTER_HEIGHT } from './LayoutConstants';
 import Timespan from '../../Timespan';
+import styles from 'styles/schedule_grid.module.scss';
 
 export type FakeEventRunProps = {
   classifyEventsBy?: 'category' | 'fullness';
@@ -74,6 +75,7 @@ function FakeEventRun({
     <div
       className={classNames(
         'px-1 pb-1 schedule-grid-event small',
+        styles.scheduleGridEvent,
         getRunClassName({
           config,
           signupCountData,
@@ -105,9 +107,9 @@ function FakeEventRun({
       ref={withRef}
       {...clickableProps}
     >
-      <div className="schedule-grid-event-content">
+      <div className={`schedule-grid-event-content ${styles.scheduleGridEventContent}`}>
         <AvailabilityBar availabilityFraction={availability ?? 0.0} unlimited={unlimited} runStyle={runStyle} />
-        <div className="schedule-grid-event-content-main">{children}</div>
+        <div className={`schedule-grid-event-content-main ${styles.scheduleGridEventContentMain}`}>{children}</div>
       </div>
     </div>
   );

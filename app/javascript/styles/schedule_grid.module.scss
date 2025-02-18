@@ -1,5 +1,6 @@
 @use "sass:color";
 @use "sass:map";
+@import "./bootstrap_defs";
 
 $schedule-grid-background: map.get(
   $map: $theme-colors,

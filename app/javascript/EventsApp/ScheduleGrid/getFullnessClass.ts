@@ -1,5 +1,6 @@
 import SignupCountData, { EventForSignupCountData } from '../SignupCountData';
 import getCapacityThresholds, { RegistrationPolicyForCapacityThresholds } from './getCapacityThresholds';
+import styles from 'styles/schedule_grid.module.scss';
 
 export default function getFullnessClass(
   event: {
@@ -14,15 +15,15 @@ export default function getFullnessClass(
   signupCountData: Pick<SignupCountData, 'getNotCountedConfirmedSignupCount' | 'getConfirmedLimitedSignupCount'>,
 ): string {
   if (!event.registration_policy) {
-    return 'event-fullness-no-slots';
+    return `event-fullness-no-slots ${styles.eventFullnessNoSlots}`;
   }
 
   if (!event.registration_policy.slots_limited) {
-    return 'event-fullness-unlimited';
+    return `event-fullness-unlimited ${styles.eventFullnessUnlimited}`;
   }
 
   if (event.registration_policy.total_slots_including_not_counted === 0) {
-    return 'event-fullness-no-slots';
+    return `event-fullness-no-slots ${styles.eventFullnessNoSlots}`;
   }
 
   const thresholds = getCapacityThresholds(event.registration_policy);
@@ -31,16 +32,16 @@ export default function getFullnessClass(
     : signupCountData.getConfirmedLimitedSignupCount(event);
 
   if (signupCount >= (thresholds.total_slots ?? 0)) {
-    return 'event-fullness-full';
+    return `event-fullness-full ${styles.eventFullnessFull}`;
   }
 
   if (signupCount >= (thresholds.preferred_slots ?? 0)) {
-    return 'event-fullness-preferred';
+    return `event-fullness-preferred ${styles.eventFullnessPreferred}`;
   }
 
   if (signupCount >= (thresholds.minimum_slots ?? 0)) {
-    return 'event-fullness-minimum';
+    return `event-fullness-minimum ${styles.eventFullnessMinimum}`;
   }
 
-  return 'event-fullness-below-minimum';
+  return `event-fullness-below-minimum ${styles.eventFullnessBelowMinimum}`;
 }
