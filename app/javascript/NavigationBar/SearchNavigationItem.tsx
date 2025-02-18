@@ -4,6 +4,7 @@ import { useTranslation } from 'react-i18next';
 
 import SiteSearch from './SiteSearch';
 import NavigationBarContext from './NavigationBarContext';
+import searchStyles from 'styles/search.module.scss';
 
 function SearchNavigationItem(): JSX.Element {
   const { t } = useTranslation();
@@ -38,9 +39,18 @@ function SearchNavigationItem(): JSX.Element {
         visible={visible}
         visibilityChangeComplete={visibilityChangeComplete}
       />
-      <CSSTransition timeout={400} in={!visible} classNames="site-search-navigation-button">
+      <CSSTransition
+        timeout={400}
+        in={!visible}
+        classNames={{
+          enterActive: searchStyles.siteSearchNavigationButtonEnterActive,
+          enterDone: searchStyles.siteSearchNavigationButtonEnterDone,
+          exitActive: searchStyles.siteSearchNavigationButtonExitActive,
+          exitDone: searchStyles.siteSearchNavigationButtonExitDone,
+        }}
+      >
         <button
-          className="btn btn-link nav-link text-end site-search-navigation-button"
+          className={`btn btn-link nav-link text-end site-search-navigation-button ${searchStyles.siteSearchNavigationButton}`}
           type="button"
           onClick={() => setVisibleWithHiding(true)}
         >

@@ -70,8 +70,7 @@ function CmsPage(): JSX.Element {
   return (
     <>
       {data.currentAbility.can_manage_any_cms_content && (
-        // @ts-expect-error typescript css modules plugin doesn't correctly handle package imports
-        <div className={`page-admin-dropdown ${pageAdminDropdownStyles['page-admin-dropdown']}`}>
+        <div className={`page-admin-dropdown ${pageAdminDropdownStyles.pageAdminDropdown}`}>
           <Suspense fallback={<></>}>
             <PageAdminDropdown
               pageId={data.cmsParent.cmsPage.id}

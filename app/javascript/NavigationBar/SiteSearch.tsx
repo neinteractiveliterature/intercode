@@ -16,6 +16,7 @@ import { useEventsNavigationItems } from './EventsNavigationSection';
 import { GeneratedNavigationItem } from './GeneratedNavigationSection';
 import { SelectInstance } from 'react-select';
 import { client } from '../useIntercodeApolloClient';
+import searchStyles from 'styles/search.module.scss';
 
 type NavigationItemSearchDocument = GeneratedNavigationItem & {
   id: string;
@@ -35,25 +36,31 @@ type SiteSearchOptionType =
 
 function getSearchableModelIcon(model: { __typename: string; icon?: string }) {
   if (model.__typename === 'NavigationItem') {
+    // eslint-disable-next-line i18next/no-literal-string
     return model.icon ?? 'bi-file-earmark-text';
   }
 
   if (model.__typename === 'Page') {
+    // eslint-disable-next-line i18next/no-literal-string
     return 'bi-file-earmark-text';
   }
 
   if (model.__typename === 'Event') {
+    // eslint-disable-next-line i18next/no-literal-string
     return 'bi-calendar';
   }
 
   if (model.__typename === 'UserConProfile') {
+    // eslint-disable-next-line i18next/no-literal-string
     return 'bi-person-circle';
   }
 
   if (model.__typename === 'EventProposal') {
+    // eslint-disable-next-line i18next/no-literal-string
     return 'bi-gift-fill';
   }
 
+  // eslint-disable-next-line i18next/no-literal-string
   return 'bi-square-fill';
 }
 
@@ -200,11 +207,22 @@ function SiteSearch({ visible, setVisible, visibilityChangeComplete }: SiteSearc
   }, [visibilityChangeComplete]);
 
   return (
-    <CSSTransition timeout={400} in={visible} classNames="site-search" onEntered={entered} onExited={exited}>
+    <CSSTransition
+      timeout={400}
+      in={visible}
+      classNames={{
+        enterActive: searchStyles.siteSearchEnterActive,
+        enterDone: searchStyles.siteSearchEnterDone,
+        exitActive: searchStyles.siteSearchExitActive,
+        exitDone: searchStyles.siteSearchExitDone,
+      }}
+      onEntered={entered}
+      onExited={exited}
+    >
       <AsyncSelect<SiteSearchOptionType>
         ref={selectRef}
         placeholder=""
-        className="site-search"
+        className={`site-search ${searchStyles.siteSearch}`}
         inputValue={inputValue}
         value={value}
         onInputChange={(newInputValue) => {
