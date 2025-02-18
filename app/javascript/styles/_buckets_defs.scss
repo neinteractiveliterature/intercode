@@ -1,0 +1,29 @@
+@use "sass:color";
+@use "sass:map";
+
+$bucket-color-1: color.adjust($orange, $lightness: -5%);
+$bucket-color-2: $green;
+$bucket-color-3: $purple;
+$bucket-color-4: $blue;
+$bucket-color-5: $red;
+$bucket-color-6: $teal;
+$bucket-color-7: $indigo;
+$bucket-color-8: $cyan;
+$bucket-color-9: $pink;
+$bucket-color-full: $gray-500;
+
+$bucket-colors: (
+  ) !default;
+$bucket-colors: map.merge(('bucket-color-1': $bucket-color-1,
+      'bucket-color-2': $bucket-color-2,
+      'bucket-color-3': $bucket-color-3,
+      'bucket-color-4': $bucket-color-4,
+      'bucket-color-5': $bucket-color-5,
+      'bucket-color-6': $bucket-color-6,
+      'bucket-color-7': $bucket-color-7,
+      'bucket-color-8': $bucket-color-8,
+      'bucket-color-9': $bucket-color-9,
+      'bucket-color-full': $bucket-color-full,
+    ),
+    $bucket-colors
+);

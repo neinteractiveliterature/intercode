@@ -31,6 +31,7 @@ $info: #17a2b8;
 @import "bootstrap/scss/mixins";
 @import "bootstrap/scss/utilities";
 
+@import "./buckets_defs";
 @import './color_variants_defs';
 
 $theme-colors: map.merge($theme-colors, $custom-colors);

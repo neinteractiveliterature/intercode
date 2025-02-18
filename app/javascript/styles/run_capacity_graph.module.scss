@@ -1,0 +1,22 @@
+@import "./bootstrap_defs";
+
+.run-capacity {
+  border: $card-border-width solid $card-border-color;
+  padding-left: 2px;
+  padding-right: 2px;
+}
+
+.bucket-capacity {
+  text-align: left;
+  font-size: $progress-font-size;
+  padding-top: 3px;
+  padding-left: 2px;
+  padding-bottom: 5px;
+  position: relative;
+
+  // border-bottom: $card-border-width solid $card-border-color;
+
+  &:last-child {
+    border-bottom: none;
+  }
+}
