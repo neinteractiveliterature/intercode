@@ -5,6 +5,7 @@ import SignupCountData from '../SignupCountData';
 import sortBuckets from './sortBuckets';
 import BucketAvailabilityDisplay from './BucketAvailabilityDisplay';
 import { EventPageQueryData } from './queries.generated';
+import styles from 'styles/run_capacity_graph.module.scss';
 
 export type RunCapacityGraphProps = {
   run: Pick<EventPageQueryData['convention']['event']['runs'][0], 'grouped_signup_counts'>;
@@ -17,7 +18,7 @@ function RunCapacityGraph({ run, event, signupsAvailable }: RunCapacityGraphProp
   const signupCountData = SignupCountData.fromRun(run);
 
   return (
-    <div className="run-capacity bg-white rounded mb-2" style={{ overflow: 'hidden' }}>
+    <div className={`run-capacity ${styles.runCapacity} bg-white rounded mb-2`} style={{ overflow: 'hidden' }}>
       {sortBuckets((event.registration_policy || {}).buckets || []).map((bucket, bucketIndex) => (
         <RunCapacityGraphBucket
           bucket={bucket}
@@ -27,7 +28,7 @@ function RunCapacityGraph({ run, event, signupsAvailable }: RunCapacityGraphProp
           bucketIndex={bucketIndex}
         />
       ))}
-      <div className="bucket-capacity">
+      <div className={`bucket-capacity ${styles.bucketCapacity}`}>
         <>
           {t('events.runCapacity.waitlistCount', {
             waitlistCount: signupCountData.getWaitlistCount(),

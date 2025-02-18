@@ -1,8 +1,7 @@
- 
-
 import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import classNames from 'classnames';
 import { ResizeObserver } from '@juggle/resize-observer';
+import styles from 'styles/bucket_availability_display.module.scss';
 
 export type BucketAvailabilityDisplayProps = {
   className?: string;
@@ -74,12 +73,12 @@ function BucketAvailabilityDisplay({
 
   const cells = [
     ...generateNElements(signupCount, (index) => (
-      <div className="bucket-availability-cell" key={`signedup-${index}`}>
+      <div className={`bucket-availability-cell ${styles.bucketAvailabilityCell}`} key={`signedup-${index}`}>
         <i className="bi-person-circle" />
       </div>
     )),
     ...generateNElements(remainingCapacity, (index) => (
-      <div className="bucket-availability-cell" key={`available-${index}`}>
+      <div className={`bucket-availability-cell ${styles.bucketAvailabilityCell}`} key={`available-${index}`}>
         <i className="bi-circle" />
       </div>
     )),
@@ -93,8 +92,9 @@ function BucketAvailabilityDisplay({
     <div ref={measuredRef}>
       {[...Array(numLines)].map((value, index) => (
         <div
-          className={classNames('bucket-availability-display', className, {
+          className={classNames('bucket-availability-display', styles.bucketAvailabilityDisplay, className, {
             'bucket-availability-display-compact': compact,
+            [styles.bucketAvailabilityDisplayCompact]: compact,
           })}
           key={`line-${index}`}
         >
