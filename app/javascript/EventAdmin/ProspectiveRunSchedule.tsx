@@ -24,6 +24,7 @@ import { EventFieldsFragment, RunFieldsFragment } from './queries.generated';
 import { ScheduleGridEventFragment } from '../EventsApp/ScheduleGrid/queries.generated';
 import { ScheduleRun } from '../EventsApp/ScheduleGrid/Schedule';
 import { useEventAdminEventsLoader } from './loaders';
+import styles from 'styles/schedule_grid.module.scss';
 
 const SCHEDULE_GRID_CONFIG: ScheduleGridConfig = {
   key: 'con_schedule_by_room',
@@ -128,13 +129,13 @@ function ProspectiveRunScheduleEventRun({
         fontWeight: runIsProspectiveRun ? 'bold' : undefined,
       }}
     >
-      <div className="schedule-grid-event-content">
+      <div className={`schedule-grid-event-content ${styles.scheduleGridEventContent}`}>
         <AvailabilityBar
           availabilityFraction={0}
           runStyle={runStyle}
           unlimited={!event.registration_policy?.slots_limited}
         />
-        <div className="schedule-grid-event-content-main">{event.title}</div>
+        <div className={`schedule-grid-event-content-main ${styles.scheduleGridEventContentMain}`}>{event.title}</div>
       </div>
     </div>
   );
@@ -239,8 +240,11 @@ export default function ProspectiveRunSchedule({ day, runs, event }: Prospective
 
   return (
     <ScheduleGridContext.Provider value={scheduleGridProviderValue}>
-      <div className="schedule-grid mb-4" style={{ overflowX: 'auto' }}>
-        <div className="schedule-grid-content" style={{ backgroundSize: `${PIXELS_PER_HOUR}px ${PIXELS_PER_LANE}px` }}>
+      <div className={`schedule-grid ${styles.scheduleGrid} mb-4`} style={{ overflowX: 'auto' }}>
+        <div
+          className={`schedule-grid-content ${styles.scheduleGridContent}`}
+          style={{ backgroundSize: `${PIXELS_PER_HOUR}px ${PIXELS_PER_LANE}px` }}
+        >
           <div className="mt-1 d-flex">
             {scheduleGridProviderValue.schedule.shouldUseRowHeaders() ? (
               <div style={{ width: `${PIXELS_PER_HOUR}px`, minWidth: `${PIXELS_PER_HOUR}px` }} />
