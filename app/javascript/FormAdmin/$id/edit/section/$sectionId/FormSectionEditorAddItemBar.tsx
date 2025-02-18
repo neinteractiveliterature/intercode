@@ -8,6 +8,7 @@ import { CreateFormItemMutationData } from 'FormAdmin/mutations.generated';
 import { buildFormItemInput, ParsedFormItem } from 'FormAdmin/FormItemUtils';
 import buildNewFormItem from 'FormAdmin/buildNewFormItem';
 import NewFormItemModal from './NewFormItemModal';
+import styles from 'styles/form_editor.module.scss';
 
 type FormSectionEditorAddItemBarProps = {
   sectionBottomRef: React.RefObject<HTMLElement>;
@@ -52,7 +53,9 @@ export default function FormSectionEditorAddItemBar({
   const newFormItemModal = useModal();
 
   return (
-    <div className="form-section-editor-add-item-bar bg-warning-light p-2 border-top border-warning">
+    <div
+      className={`form-section-editor-add-item-bar ${styles.formSectionEditorAddItemBar} bg-warning-light p-2 border-top border-warning`}
+    >
       <button className="btn btn-sm btn-secondary me-2" type="button" onClick={newFormItemModal.open}>
         {t('admin.forms.addItem')}
       </button>

@@ -8,6 +8,7 @@ import { FormEditorContext } from 'FormAdmin/FormEditorContexts';
 import FormSectionNav from './FormSectionNav';
 import FormSectionEditorContent from './FormSectionEditorContent';
 import FormSectionEditorAddItemBar from './FormSectionEditorAddItemBar';
+import styles from 'styles/form_editor.module.scss';
 
 export const action: ActionFunction = async ({ request, params: { sectionId } }) => {
   try {
@@ -51,11 +52,11 @@ function FormSectionEditorLayout(): JSX.Element {
 
   return (
     <>
-      <nav className="form-section-editor-nav bg-light border-right p-2">
+      <nav className={`form-section-editor-nav ${styles.formSectionEditorNav} bg-light border-right p-2`}>
         <FormSectionNav />
       </nav>
 
-      <div className="form-section-editor-content overflow-auto">
+      <div className={`form-section-editor-content ${styles.formSectionEditorContent} overflow-auto`}>
         <FormSectionEditorContent />
 
         <div ref={sectionBottomRef} />

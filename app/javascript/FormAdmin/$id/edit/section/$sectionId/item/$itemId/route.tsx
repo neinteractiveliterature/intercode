@@ -22,6 +22,7 @@ import { client } from 'useIntercodeApolloClient';
 import { DeleteFormItemDocument, UpdateFormItemDocument } from 'FormAdmin/mutations.generated';
 import { FormItem } from 'graphqlTypes.generated';
 import FormItemEditorContent from './FormItemEditorContent';
+import styles from 'styles/form_editor.module.scss';
 
 export const action: ActionFunction = async ({ request, params: { id, sectionId, itemId } }) => {
   try {
@@ -141,10 +142,10 @@ function FormItemEditorLayout(): JSX.Element {
     >
       {/* TODO: re-add this once https://github.com/remix-run/react-router/issues/8139 is fixed */}
       {/* <Prompt message="Are you sure you want to discard changes to this item?" when={hasChanges} /> */}
-      <nav className="form-item-editor-tools bg-light p-2 border-right">
+      <nav className={`form-item-editor-tools ${styles.formItemEditorTools} bg-light p-2 border-right`}>
         <FormItemTools saveFormItem={saveFormItem} />
       </nav>
-      <div className="form-item-editor-preview bg-info-light">
+      <div className={`form-item-editor-preview ${styles.formItemEditorPreview} bg-info-light`}>
         <div className="bg-info text-white px-2 fw-bold">{t('admin.forms.editFormItem.previewHeader')}</div>
         <div className="glow-inset-info p-2 overflow-auto">
           {previewFormItem && (
@@ -160,10 +161,10 @@ function FormItemEditorLayout(): JSX.Element {
           )}
         </div>
       </div>
-      <div className="form-item-editor-error">
+      <div className={`form-item-editor-error ${styles.formItemEditorError}`}>
         <ErrorDisplay graphQLError={updateError as ApolloError} />
       </div>
-      <div className="form-item-editor-content bg-white p-2 overflow-auto">
+      <div className={`form-item-editor-content ${styles.formItemEditorContent} bg-white p-2 overflow-auto`}>
         <FormItemEditorContent />
       </div>
     </FormItemEditorContext.Provider>
