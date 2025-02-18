@@ -64,6 +64,9 @@ export default defineConfig({
     },
   },
   css: {
+    modules: {
+      localsConvention: 'camelCaseOnly',
+    },
     preprocessorOptions: {
       scss: {
         // can't get import to work until Bootstrap supports it

@@ -1,6 +1,7 @@
 import { useState, ReactNode } from 'react';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
+import spoilerStyles from 'styles/spoiler.module.scss';
 
 export type SpoilerProps = {
   content: ReactNode;
@@ -14,7 +15,10 @@ function Spoiler({ content }: SpoilerProps): JSX.Element {
 
   return (
     <span
-      className={classNames('spoiler', { 'spoiler-hidden': !visible })}
+      className={classNames('spoiler', spoilerStyles.spoiler, {
+        'spoiler-hidden': !visible,
+        [spoilerStyles.spoilerHidden]: !visible,
+      })}
       aria-hidden={!visible}
       onClick={toggleVisible}
       onKeyDown={toggleVisible}
@@ -22,7 +26,7 @@ function Spoiler({ content }: SpoilerProps): JSX.Element {
       tabIndex={-1}
     >
       {content}
-      <span className="spoiler-hover">{t('spoiler.hoverText')}</span>
+      <span className={`spoiler-hover ${spoilerStyles.spoilerHover}`}>{t('spoiler.hoverText')}</span>
     </span>
   );
 }

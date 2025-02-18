@@ -20,27 +20,6 @@
     vertical-align: bottom;
   }
 
-  // Highlight border color between thead, tbody and tfoot.
-  // > :not(:last-child) > :last-child > * {
-  //   border-bottom-color: $table-group-separator-color;
-  // }
-
-  // [role=columnheader],
-  // [role=cell] {
-  //   padding: $table-cell-padding-y $table-cell-padding-x;
-  //   vertical-align: top;
-  //   border-top: $table-border-width solid $table-border-color;
-  // }
-
-  // [role=columnheader] {
-  //   vertical-align: bottom;
-  //   border-bottom: (2 * $table-border-width) solid $table-border-color;
-  // }
-
-  // [role=rowgroup] + [role=rowgroup] {
-  //   border-top: (2 * $table-border-width) solid $table-border-color;
-  // }
-
   &.table-bordered {
     border: $table-border-width solid $table-border-color;
 
