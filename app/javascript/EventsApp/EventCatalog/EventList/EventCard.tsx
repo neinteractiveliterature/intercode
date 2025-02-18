@@ -21,6 +21,7 @@ import { FormItemExposeIn } from '../../../graphqlTypes.generated';
 import FormItemDisplay from '../../../FormPresenter/ItemDisplays/FormItemDisplay';
 import { parseTypedFormItemArray } from '../../../FormAdmin/FormItemUtils';
 import { CommonConventionDataFragment } from '../../queries.generated';
+import styles from 'styles/event_list.module.scss';
 
 type ConventionType = NonNullable<EventListEventsQueryData['convention']>;
 type EventType = ConventionType['events_paginated']['entries'][0] & {
@@ -203,6 +204,7 @@ function EventCard({ convention, event, sortBy, canReadSchedule }: EventCardProp
     <>
       <div className="card mb-4" key={event.id}>
         <div className="card-header">
+          {/* Currently we don't have any special styles for this; if we do add some, add styles.eventCardHeader here */}
           <div className="event-card-header">
             <div className="float-end text-end ms-1">
               <div className="lead">
@@ -220,7 +222,7 @@ function EventCard({ convention, event, sortBy, canReadSchedule }: EventCardProp
             </div>
 
             <div>
-              <h4 className="m-0 d-inline event-card-event-title">
+              <h4 className={`m-0 d-inline event-card-event-title ${styles.eventCardEventTitle}`}>
                 <Link to={buildEventUrl(event)}>{event.title}</Link>
               </h4>{' '}
               <span className="lead text-muted">{event.event_category.name}</span>

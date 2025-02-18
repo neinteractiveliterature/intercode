@@ -1,6 +1,7 @@
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ButtonWithTooltip } from '@neinteractiveliterature/litform';
+import styles from 'styles/event_ratings.module.scss';
 
 import EventRatingIcon from './EventRatingIcon';
 
@@ -57,7 +58,7 @@ function RateEventControl({ value, onChange, size }: RateEventControlProps): JSX
   const width = `calc(${hasRating ? buttonWidth : buttonWidth * 2.0}rem + 2px)`;
 
   return (
-    <div className="bg-white border rounded rate-event-control" style={{ width }}>
+    <div className={`bg-white border rounded rate-event-control ${styles.rateEventControl}`} style={{ width }}>
       {hasRating && value != null ? (
         <RatingButton
           rating={value}
