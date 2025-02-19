@@ -13,6 +13,7 @@ import {
   UpdatePartialDocument,
 } from 'CmsAdmin/CmsPartialsAdmin/mutations.generated';
 import parseCmsContent from 'parseCmsContent';
+import pageAdminDropdownStyles from 'styles/page_admin_dropdown.module.scss';
 
 export type BlockPartialProps = {
   name: CmsPartialBlockName;
@@ -110,7 +111,8 @@ export default function BlockPartial({ blockPartial, currentAbilityCanCreate, na
       {(currentAbilityCanCreate ||
         blockPartial?.current_ability_can_delete ||
         blockPartial?.current_ability_can_update) && (
-        <div className="page-admin-dropdown">
+        // @ts-expect-error typescript css modules plugin doesn't correctly handle package imports
+        <div className={`page-admin-dropdown ${pageAdminDropdownStyles['page-admin-dropdown']}`}>
           <DropdownMenu
             buttonClassName="btn btn-dark dropdown-toggle"
             buttonContent={

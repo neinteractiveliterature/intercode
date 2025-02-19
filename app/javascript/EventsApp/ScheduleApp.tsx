@@ -25,6 +25,7 @@ import { reactTableFiltersToTableResultsFilters } from '../Tables/TableUtils';
 import { LoaderFunction, useLoaderData } from 'react-router';
 import { client } from '../useIntercodeApolloClient';
 import { conventionDayLoader, ConventionDayLoaderResult } from './conventionDayUrls';
+import styles from 'styles/schedule_grid.module.scss';
 
 const filterCodecs = buildFieldFilterCodecs({
   form_items: FilterCodecs.json,
@@ -239,7 +240,10 @@ function ScheduleApp(): JSX.Element {
           </li>
         </ol>
       </nav>
-      <div className="schedule-grid-navigation-bar mb-3" style={{ top: `${navigationBarTop}px` }}>
+      <div
+        className={`schedule-grid-navigation-bar ${styles.scheduleGridNavigationBar} mb-3`}
+        style={{ top: `${navigationBarTop}px` }}
+      >
         {/* We set the ref to the inner content element of the navbar because height overflow isn't working right on the sticky */}
         <div className="bg-light p-1 d-flex flex-wrap" ref={scheduleGridNavigationBarRef}>
           <div className="flex-grow-1 d-flex flex-wrap">

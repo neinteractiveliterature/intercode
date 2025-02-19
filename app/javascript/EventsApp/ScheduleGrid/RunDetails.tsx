@@ -19,6 +19,7 @@ import { useAppDateTimeFormat } from '../../TimeUtils';
 import { FormItemExposeIn } from '../../graphqlTypes.generated';
 import FormItemDisplay from '../../FormPresenter/ItemDisplays/FormItemDisplay';
 import { parseTypedFormItemArray } from '../../FormAdmin/FormItemUtils';
+import scheduleGridStyles from 'styles/schedule_grid.module.scss';
 
 export type RunDetailsProps = {
   placement?: Placement;
@@ -89,17 +90,19 @@ const RunDetails = React.forwardRef<HTMLDivElement, RunDetailsProps>(function Ru
 
   return (
     <div
-      className={`popover schedule-grid-run-details-popover bs-popover-${placement}`}
+      className={`popover schedule-grid-run-details-popover ${scheduleGridStyles.scheduleGridRunDetailsPopover} bs-popover-${placement}`}
       ref={ref}
       style={styles.popper}
       role="tooltip"
       {...attributes.popper}
     >
       <span ref={arrowRef} style={styles.arrow} className="popover-arrow" />
-      <div className="schedule-grid-run-details-content">
+      <div className={`schedule-grid-run-details-content ${scheduleGridStyles.scheduleGridRunDetailsContent}`}>
         <div className="popover-header">
           <div className="d-flex align-items-center">
-            <div className="flex-grow-1 schedule-grid-run-details-title">
+            <div
+              className={`flex-grow-1 schedule-grid-run-details-title ${scheduleGridStyles.scheduleGridRunDetailsTitle}`}
+            >
               <strong>{event.title}</strong>
               {run.title_suffix
                 ? [<span key="mdash">&mdash;</span>, <em key="title-suffix">{run.title_suffix}</em>]

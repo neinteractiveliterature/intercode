@@ -3,6 +3,7 @@ import { Fragment, ReactNode, useMemo } from 'react';
 import { PIXELS_PER_LANE, PIXELS_PER_HOUR } from './LayoutConstants';
 import ScheduleLayoutBlock, { ScheduleLayoutResult, RunDimensions } from './ScheduleLayout/ScheduleLayoutBlock';
 import ScheduleGridRowHeader from './ScheduleGridRowHeader';
+import styles from 'styles/schedule_grid.module.scss';
 
 export type ScheduleBlockProps = {
   layoutBlock: ScheduleLayoutBlock;
@@ -22,7 +23,7 @@ function ScheduleBlock({ layoutBlock, rowHeader, renderEventRun }: ScheduleBlock
   return (
     <>
       <ScheduleGridRowHeader layoutResult={layoutResult} rowHeader={rowHeader} />
-      <div className="schedule-grid-block">
+      <div className={`schedule-grid-block ${styles.scheduleGridBlock}`}>
         <div style={blockContentStyle}>
           {layoutResult.runDimensions.map((runDimensions) => (
             <Fragment key={runDimensions.runId}>{renderEventRun({ layoutResult, runDimensions })}</Fragment>

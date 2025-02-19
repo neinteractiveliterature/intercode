@@ -9,6 +9,7 @@ import { ScheduleGridConfig } from './ScheduleGridConfig';
 import SignupCountData, { EventForSignupCountData } from '../SignupCountData';
 import { RunDimensions, ScheduleLayoutResult } from './ScheduleLayout/ScheduleLayoutBlock';
 import { RegistrationPolicyForCapacityThresholds } from './getCapacityThresholds';
+import styles from 'styles/schedule_grid.module.scss';
 
 export enum SignupStatus {
   Confirmed = 'confirmed',
@@ -72,17 +73,22 @@ export function getRunClassName({
 }: GetRunClassNameOptions): string {
   return classNames(
     'schedule-grid-event',
+    styles.scheduleGridEvent,
     'small',
     config.classifyEventsBy === 'fullness' ? getFullnessClass(event, signupCountData) : null,
     {
-      'signed-up': config.showSignedUp && signupStatus != null && signupStatus !== SignupStatus.InMyQueue,
-      'in-queue': config.showSignedUp && signupStatus === SignupStatus.InMyQueue,
-      'zero-capacity': event.registration_policy && event.registration_policy.total_slots_including_not_counted === 0,
-      full: config.classifyEventsBy !== 'fullness' && signupCountData.runFull(event) && signupStatus == null,
-      fake: event.fake,
-      unlimited,
-      'truncated-start': runDimensions.fullTimespan.start < runDimensions.timespan.start,
-      'truncated-finish': runDimensions.fullTimespan.finish > runDimensions.timespan.finish,
+      [`signed-up ${styles.signedUp}`]:
+        config.showSignedUp && signupStatus != null && signupStatus !== SignupStatus.InMyQueue,
+      // We don't currently have any special styling for in-my-queue events, but if we do, this will be a placeholder for it
+      [`in-queue`]: config.showSignedUp && signupStatus === SignupStatus.InMyQueue,
+      [`zero-capacity ${styles.zeroCapacity}`]:
+        event.registration_policy && event.registration_policy.total_slots_including_not_counted === 0,
+      [`full ${styles.full}`]:
+        config.classifyEventsBy !== 'fullness' && signupCountData.runFull(event) && signupStatus == null,
+      [`fake ${styles.fake}`]: event.fake,
+      [`unlimited ${styles.unlimited}`]: unlimited,
+      [`truncated-start ${styles.truncatedStart}`]: runDimensions.fullTimespan.start < runDimensions.timespan.start,
+      [`truncated-finish ${styles.truncatedFinish}`]: runDimensions.fullTimespan.finish > runDimensions.timespan.finish,
     },
   );
 }

@@ -84,6 +84,7 @@ function ScheduleGridExtendedCounts({ now, runIds }: ScheduleGridExtendedCountsP
   const playerCount = confirmedSignups + notCountedSignups + waitlistedSignups;
 
   return (
+    // We don't currently have any special styling for this but if we do, add a class from schedule_grid.module.scss
     <div className="schedule-grid-hour-extended-counts">
       <div>
         {minimumSlots}/{preferredSlots}/{totalSlots}

@@ -1,22 +1,43 @@
-$navbar-inverse-color: rgba(white, 0.85);
-$navbar-inverse-hover-color: white;
-$enable-responsive-font-sizes: true;
+@import "./bootstrap_defs";
 
-// Bootstrap 4 style breadcrumb
-$breadcrumb-bg: #e9ecef;
-$breadcrumb-padding-x: 1rem;
-$breadcrumb-padding-y: 0.75rem;
-$breadcrumb-border-radius: 0.25rem;
+// Layout & components
+@import "bootstrap/scss/root";
+@import "bootstrap/scss/reboot";
+@import "bootstrap/scss/type";
+@import "bootstrap/scss/images";
+@import "bootstrap/scss/containers";
+@import "bootstrap/scss/grid";
+@import "bootstrap/scss/tables";
+@import "bootstrap/scss/forms";
+@import "bootstrap/scss/buttons";
+@import "bootstrap/scss/transitions";
+@import "bootstrap/scss/dropdown";
+@import "bootstrap/scss/button-group";
+@import "bootstrap/scss/nav";
+@import "bootstrap/scss/navbar";
+@import "bootstrap/scss/card";
+@import "bootstrap/scss/accordion";
+@import "bootstrap/scss/breadcrumb";
+@import "bootstrap/scss/pagination";
+@import "bootstrap/scss/badge";
+@import "bootstrap/scss/alert";
+@import "bootstrap/scss/progress";
+@import "bootstrap/scss/list-group";
+@import "bootstrap/scss/close";
+@import "bootstrap/scss/toasts";
+@import "bootstrap/scss/modal";
+@import "bootstrap/scss/tooltip";
+@import "bootstrap/scss/popover";
+@import "bootstrap/scss/carousel";
+@import "bootstrap/scss/spinners";
+@import "bootstrap/scss/offcanvas";
+@import "bootstrap/scss/placeholders";
 
-$prefix: 'bs-';
+// Helpers
+@import "bootstrap/scss/helpers";
 
-// People are having trouble seeing the checkboxes
-$form-check-input-border: var(--#{$prefix}border-width) solid var(--#{$prefix}gray);
-
-$custom-colors: (
-  'intercode-blue': #3b5998,
-  'medium-light': #5f6265,
-);
+// Utilities
+@import "bootstrap/scss/utilities/api";
 
 .bg-intercode-blue {
   box-shadow: 0px 3px 7px 0px rgba(0, 0, 0, 0.4);
@@ -38,15 +59,6 @@ $custom-colors: (
   width: 100vw; // Don't let page content blow out the sides of fixed UI
 }
 
-// Port Bootstrap 4's info color to Bootstrap 5, because otherwise our sidebar boxes
-// will look super weird
-$info: #17a2b8;
-
-// Reset and dependencies
-@import 'bootstrap/scss/bootstrap';
-
-$theme-colors: map-merge($theme-colors, $custom-colors);
-
 // Port Bootstrap 4 link behavior to Bootstrap 5
 a,
 .btn-link {
@@ -64,3 +76,5 @@ a,
     margin-right: auto;
   }
 }
+
+@import "./color_variants";

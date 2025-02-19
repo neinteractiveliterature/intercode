@@ -6,6 +6,7 @@ import { lazyWithAppEntrypointHeadersCheck } from '../checkAppEntrypointHeadersM
 import parseCmsContent from '../parseCmsContent';
 import { CmsPageQueryData, CmsPageQueryDocument, CmsPageQueryVariables } from './queries.generated';
 import { client } from '../useIntercodeApolloClient';
+import pageAdminDropdownStyles from '../styles/page_admin_dropdown.module.scss';
 
 const PageAdminDropdown = lazyWithAppEntrypointHeadersCheck(() => import('./PageAdminDropdown'));
 
@@ -69,7 +70,7 @@ function CmsPage(): JSX.Element {
   return (
     <>
       {data.currentAbility.can_manage_any_cms_content && (
-        <div className="page-admin-dropdown">
+        <div className={`page-admin-dropdown ${pageAdminDropdownStyles.pageAdminDropdown}`}>
           <Suspense fallback={<></>}>
             <PageAdminDropdown
               pageId={data.cmsParent.cmsPage.id}
