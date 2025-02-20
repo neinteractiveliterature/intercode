@@ -118,7 +118,7 @@
     "path-complete-extname": "1.0.0",
     "payment": "2.4.7",
     "porter-stemmer": "0.9.1",
-    "postcss": "8.5.2",
+    "postcss": "8.5.3",
     "postcss-import": "16.1.0",
     "prop-types": "15.8.1",
     "punycode": "2.3.1",
