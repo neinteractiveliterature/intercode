@@ -5103,9 +5103,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@neinteractiveliterature/litform@npm:0.32.0":
-  version: 0.32.0
-  resolution: "@neinteractiveliterature/litform@npm:0.32.0"
+"@neinteractiveliterature/litform@npm:0.32.1":
+  version: 0.32.1
+  resolution: "@neinteractiveliterature/litform@npm:0.32.1"
   dependencies:
     classnames: "npm:^2.5.1"
     copy-to-clipboard: "npm:^3.3.3"
@@ -5121,16 +5121,16 @@ __metadata:
     "@codemirror/language": ^6.10.3
     "@codemirror/state": ^6.4.1
     "@codemirror/view": ^6.35.0
-    "@lezer/common": 1.2.1
+    "@lezer/common": ^1.2.1
     "@lezer/highlight": ^1.2.1
-    "@lezer/lr": 1.4.0
+    "@lezer/lr": ^1.4.0
     "@popperjs/core": ^2.11.8
     codemirror: ^6.0.1
     graphql: ">= 15.5.0"
     luxon: ^3.5.0
     react: ">= 18"
     react-bootstrap4-modal: ^3.0.8
-  checksum: 10c0/c643213da569daa68dc642bd684be9035e383f4f7a22e6f12eee0cd02100021df6e8b234882e543ec7d05efd7b4c83f23b6bce7e69f793c36d66b989d6f641fe
+  checksum: 10c0/f55e35568b559749050cdb83e614c34005f99419d94858567216b0522fca36d1977a3b6bd303cd60ed5ab37f618459a1df084861bf50d56ee736b06b313db7f1
   languageName: node
   linkType: hard
 
@@ -21212,7 +21212,7 @@ __metadata:
     "@lezer/common": "npm:1.2.3"
     "@lezer/highlight": "npm:^1.2.1"
     "@lezer/lr": "npm:^1.4.2"
-    "@neinteractiveliterature/litform": "npm:0.32.0"
+    "@neinteractiveliterature/litform": "npm:0.32.1"
     "@popperjs/core": "npm:^2.11.8"
     "@prettier/plugin-ruby": "npm:4.0.4"
     "@rails/activestorage": "npm:8.0.100"

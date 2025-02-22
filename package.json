@@ -45,7 +45,7 @@
     "@lezer/common": "1.2.3",
     "@lezer/highlight": "^1.2.1",
     "@lezer/lr": "^1.4.2",
-    "@neinteractiveliterature/litform": "0.32.0",
+    "@neinteractiveliterature/litform": "0.32.1",
     "@popperjs/core": "^2.11.8",
     "@rails/activestorage": "8.0.100",
     "@sentry/browser": "^8.7.0",
