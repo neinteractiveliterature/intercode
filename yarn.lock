@@ -19941,14 +19941,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-bootstrap4-modal@npm:3.0.8":
-  version: 3.0.8
-  resolution: "react-bootstrap4-modal@npm:3.0.8"
+"react-bootstrap4-modal@npm:3.0.9":
+  version: 3.0.9
+  resolution: "react-bootstrap4-modal@npm:3.0.9"
   dependencies:
-    classnames: "npm:^2.3.1"
+    classnames: "npm:^2.5.1"
   peerDependencies:
-    react: ^18.0
-  checksum: 10c0/feed7521ffb5bdaacf86c691b45c1d0f7b840818e61290318b610f0e73761b640c15863a359d5cc6ffaef9216ebfdf7b162d985bda885b84dcc2f74e825b9a54
+    react: ">= 18"
+    react-dom: ">= 18"
+  checksum: 10c0/f220bea76383f9acd5285d86d0cce8d1f8801351ef1e89171457fa0dd55eb7b8e2c405ed294ecaf467263ad6420471bc74249278cec9389628952b220a276b76
   languageName: node
   linkType: hard
 
@@ -21326,7 +21327,7 @@ __metadata:
     punycode: "npm:2.3.1"
     qs: "npm:^6.13.0"
     react: "npm:18.3.1"
-    react-bootstrap4-modal: "npm:3.0.8"
+    react-bootstrap4-modal: "npm:3.0.9"
     react-color: "npm:2.19.3"
     react-cookie-consent: "npm:9.0.0"
     react-dom: "npm:18.3.1"
