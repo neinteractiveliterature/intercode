@@ -1,21 +1,38 @@
 import { useTranslation } from 'react-i18next';
 
-import { formatBucket } from '../EventsApp/SignupAdmin/SignupUtils';
+import { EventForFormatBucket, formatBucket } from '../EventsApp/SignupAdmin/SignupUtils';
 import { CellContext } from '@tanstack/react-table';
 import { SignupChangeType } from 'EventsApp/SignupAdmin/RunSignupChangesTable';
 
-function BucketChangeCell<TData extends SignupChangeType, TValue>({ cell }: CellContext<TData, TValue>): JSX.Element {
-  const value = cell.row.original;
+export type BucketChangeType = {
+  signupChange: SignupChangeType;
+  event: EventForFormatBucket;
+};
+
+function BucketChangeCell<TData, TValue extends BucketChangeType>({
+  getValue,
+}: CellContext<TData, TValue>): JSX.Element {
+  const value = getValue();
   const { t } = useTranslation();
 
   if (!value) {
     return <></>;
   }
 
-  const oldBucket = value.previous_signup_change
-    ? formatBucket(value.previous_signup_change, value.run.event, t)
+  const { signupChange, event } = value;
+
+  const oldBucket = signupChange.previous_signup_change
+    ? formatBucket(
+        { ...signupChange.previous_signup_change, requested_bucket_key: signupChange.signup.requested_bucket_key },
+        event,
+        t,
+      )
     : null;
-  const newBucket = formatBucket(value, value.run.event, t);
+  const newBucket = formatBucket(
+    { ...signupChange, requested_bucket_key: signupChange.signup.requested_bucket_key },
+    event,
+    t,
+  );
 
   return (
     <>
