@@ -104,17 +104,26 @@ class EventVacancyFillServiceTest < ActiveSupport::TestCase
     assert cats_result.success?
 
     assert_equal 0, cats_result.move_results.size
+  end
+
+  it "still pulls no-preference signups from the waitlist even if the registration policy has frozen no-pref" do
+    travel(-2.seconds) { create_signup(state: "confirmed", bucket_key: "cats", requested_bucket_key: nil) }
+    travel(-1.second) { create_signup(state: "confirmed", bucket_key: "anything", requested_bucket_key: nil) }
+    waitlist_no_pref_signup
+    event.allow_registration_policy_change = true
+    frozen_policy = event.registration_policy.dup.tap { |p| p.assign_attributes(freeze_no_preference_buckets: true) }
+    event.update!(registration_policy: frozen_policy)
 
     dogs_result = EventVacancyFillService.new(the_run, "dogs").call
     assert dogs_result.success?
 
     assert_equal 1, dogs_result.move_results.size
     waitlist_move_result = dogs_result.move_results.first
-    assert_equal waitlist_signup.id, waitlist_move_result.signup_id
+    assert_equal waitlist_no_pref_signup.id, waitlist_move_result.signup_id
     assert_equal "waitlisted", waitlist_move_result.prev_state
     assert_nil waitlist_move_result.prev_bucket_key
 
-    assert_equal "dogs", waitlist_signup.reload.bucket_key
+    assert_equal "dogs", waitlist_no_pref_signup.reload.bucket_key
   end
 
   it "handles waitlisted signups in strictly chronological order, regardless of no-pref status" do
