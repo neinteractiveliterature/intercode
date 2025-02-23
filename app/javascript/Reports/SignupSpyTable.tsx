@@ -50,7 +50,7 @@ function SignupSpyTable(): JSX.Element {
         cell: SignupChangeCell,
         enableColumnFilter: true,
       }),
-      columnHelper.accessor((signupChange) => signupChange, {
+      columnHelper.accessor((signupChange) => ({ signupChange, event: signupChange.run.event }), {
         header: 'Bucket',
         id: 'bucket_change',
         cell: BucketChangeCell,

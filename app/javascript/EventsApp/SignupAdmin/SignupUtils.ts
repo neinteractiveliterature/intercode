@@ -33,6 +33,10 @@ export function formatBucket(signup: SignupForFormatBucket, event: EventForForma
   const { bucket_key: bucketKey } = signup;
   const registrationPolicy = event.registration_policy ?? { buckets: [] };
 
+  if (signup.state === SignupState.Withdrawn) {
+    return t('signups.states.withdrawn');
+  }
+
   if (!signup.counted) {
     if (bucketKey) {
       return t('signups.states.notCountedWithBucket', {

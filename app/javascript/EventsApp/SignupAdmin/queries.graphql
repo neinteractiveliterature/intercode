@@ -340,13 +340,7 @@ query UserConProfileSignupsQuery($id: ID!) {
   }
 }
 
-query RunSignupChangesQuery(
-  $runId: ID!
-  $filters: SignupChangeFiltersInput
-  $sort: [SortInput!]
-  $page: Int
-  $perPage: Int
-) {
+query RunSignupChangesPageQuery($runId: ID!) {
   convention: conventionByRequestHost {
     id
     timezone_name
@@ -356,7 +350,43 @@ query RunSignupChangesQuery(
       event {
         id
         title
+
+        event_category {
+          id
+          team_member_name
+        }
+
+        registration_policy {
+          buckets {
+            key
+            name
+            anything
+          }
+        }
+
+        team_members {
+          id
+          user_con_profile {
+            id
+          }
+        }
       }
+    }
+  }
+}
+
+query RunSignupChangesQuery(
+  $runId: ID!
+  $filters: SignupChangeFiltersInput
+  $sort: [SortInput!]
+  $page: Int
+  $perPage: Int
+) {
+  convention: conventionByRequestHost {
+    id
+
+    run(id: $runId) {
+      id
 
       signup_changes_paginated(page: $page, per_page: $perPage, filters: $filters, sort: $sort) {
         total_entries
@@ -379,33 +409,9 @@ query RunSignupChangesQuery(
             bucket_key
           }
 
-          run {
+          signup {
             id
-
-            event {
-              id
-              title
-
-              event_category {
-                id
-                team_member_name
-              }
-
-              registration_policy {
-                buckets {
-                  key
-                  name
-                  anything
-                }
-              }
-
-              team_members {
-                id
-                user_con_profile {
-                  id
-                }
-              }
-            }
+            requested_bucket_key
           }
 
           user_con_profile {

@@ -128,7 +128,9 @@ class EventVacancyFillService < CivilService::Service
 
   def signup_movable?(signup)
     return false if immovable_signups.include?(signup)
-    return false if signup.no_preference? && event.registration_policy.freeze_no_preference_buckets?
+    if signup.no_preference? && signup.state == "confirmed" && event.registration_policy.freeze_no_preference_buckets?
+      return false
+    end
     return false if move_results.any? { |result| result.signup_id == signup.id }
     true
   end
