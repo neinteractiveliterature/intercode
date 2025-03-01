@@ -7097,10 +7097,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/lodash@npm:4.17.15":
-  version: 4.17.15
-  resolution: "@types/lodash@npm:4.17.15"
-  checksum: 10c0/2eb2dc6d231f5fb4603d176c08c8d7af688f574d09af47466a179cd7812d9f64144ba74bb32ca014570ffdc544eedc51b7a5657212bad083b6eecbd72223f9bb
+"@types/lodash@npm:4.17.16":
+  version: 4.17.16
+  resolution: "@types/lodash@npm:4.17.16"
+  checksum: 10c0/cf017901b8ab1d7aabc86d5189d9288f4f99f19a75caf020c0e2c77b8d4cead4db0d0b842d009b029339f92399f49f34377dd7c2721053388f251778b4c23534
   languageName: node
   linkType: hard
 
@@ -11158,7 +11158,7 @@ __metadata:
     "@graphql-tools/graphql-file-loader": "npm:^8.0.1"
     "@mdx-js/react": "npm:^3.0.0"
     "@svgr/webpack": "npm:8.1.0"
-    "@types/lodash": "npm:4.17.15"
+    "@types/lodash": "npm:4.17.16"
     clsx: "npm:2.1.1"
     entities: "npm:6.0.0"
     file-loader: "npm:6.2.0"
@@ -21241,7 +21241,7 @@ __metadata:
     "@types/file-saver": "npm:2.0.7"
     "@types/geojson": "npm:^7946.0.14"
     "@types/js-search": "npm:1.4.4"
-    "@types/lodash": "npm:4.17.15"
+    "@types/lodash": "npm:4.17.16"
     "@types/luxon": "npm:3.4.2"
     "@types/md5": "npm:^2"
     "@types/minimist": "npm:1.2.5"
