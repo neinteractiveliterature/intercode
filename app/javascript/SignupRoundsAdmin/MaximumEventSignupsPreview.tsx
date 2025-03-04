@@ -6,31 +6,62 @@ import { TFunction } from 'i18next';
 import assertNever from 'assert-never';
 import { useTranslation } from 'react-i18next';
 import { SignupRoundsAdminQueryData } from './queries.generated';
+import styles from 'styles/scheduled_value_previews.module.scss';
+import kebabCase from 'lodash/kebabCase';
 
-function getMaximumEventSignupsValueClassName(value: MaximumEventSignupsValue | undefined) {
+function getMaximumEventSignupsValueClassName(
+  value: MaximumEventSignupsValue | undefined,
+): Exclude<keyof typeof styles, `${keyof typeof styles}Transition`> | undefined {
   if (value == null) {
     return undefined;
   } else if (typeof value === 'number') {
-    if (value <= 6) {
-      return `maximum-event-signups-${value}`;
-    } else {
-      return `maximum-event-signups-${((value - 4) % 3) + 4}`;
+    switch (value) {
+      case 1:
+      case 2:
+      case 3:
+      case 4:
+      case 5:
+      case 6:
+        // eslint-disable-next-line i18next/no-literal-string
+        return `maximumEventSignups${value}`;
+      default:
+        // eslint-disable-next-line i18next/no-literal-string
+        return `maximumEventSignups${(((value - 4) % 3) + 4) as 4 | 5 | 6}`;
     }
   } else {
-    return `maximum-event-signups-${value?.replace(/_/g, '-')}`;
+    switch (value) {
+      case 'not_now':
+        // eslint-disable-next-line i18next/no-literal-string
+        return 'maximumEventSignupsNotNow';
+      case 'not_yet':
+        // eslint-disable-next-line i18next/no-literal-string
+        return 'maximumEventSignupsNotYet';
+      case 'unlimited':
+        // eslint-disable-next-line i18next/no-literal-string
+        return 'maximumEventSignupsUnlimited';
+      default:
+        assertNever(value);
+    }
   }
 }
 
-function getMaximumEventSignupsClassName(value: string | undefined, nextValue: string | undefined) {
+function getMaximumEventSignupsClassNames(
+  value: string | undefined,
+  nextValue: string | undefined,
+): (keyof typeof styles)[] {
   const valueClassName = getMaximumEventSignupsValueClassName(parseMaximumEventSignupsString(value));
 
   if (value === nextValue || !nextValue) {
-    return valueClassName ?? '';
+    return valueClassName ? [valueClassName] : [];
   }
 
   const nextValueClassName = getMaximumEventSignupsValueClassName(parseMaximumEventSignupsString(nextValue));
 
-  return `${valueClassName} ${nextValueClassName}-transition`;
+  return [
+    ...((valueClassName ? [valueClassName] : []) as (keyof typeof styles)[]),
+    // eslint-disable-next-line i18next/no-literal-string
+    ...((nextValueClassName ? [`${nextValueClassName}Transition`] : []) as (keyof typeof styles)[]),
+  ];
 }
 
 function getMaximumEventSignupsDescription(value: string | undefined, t: TFunction) {
@@ -81,7 +112,10 @@ export default function MaximumEventSignupsPreview({
   return (
     <ScheduledValuePreview
       scheduledValue={maximumEventSignups}
-      getClassNameForValue={getMaximumEventSignupsClassName}
+      getClassNameForValue={(value, nextValue) => {
+        const classNames = getMaximumEventSignupsClassNames(value, nextValue);
+        return [...classNames.map((cn) => kebabCase(cn)), ...classNames.map((cn) => styles[cn])].join(' ');
+      }}
       getDescriptionForValue={getDescriptionForValue}
       timezoneName={timezoneName}
     />

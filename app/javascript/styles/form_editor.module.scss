@@ -1,3 +1,6 @@
+@use "sass:map";
+@import "./bootstrap_defs";
+
 .form-editor {
   display: grid;
   height: 100vh;
@@ -87,7 +90,7 @@
 }
 
 .form-editor-item-identifier {
-  background-color: map-get($map: $theme-colors, $key: 'info');
+  background-color: map.get($map: $theme-colors, $key: 'info');
   border-radius: 0.3rem;
   padding-left: 0.5rem;
   padding-right: 0.5rem;
@@ -95,7 +98,7 @@
 }
 
 .form-item-editor {
-  background-color: map-get($map: $theme-colors, $key: 'warning');
+  background-color: map.get($map: $theme-colors, $key: 'warning');
   border-radius: 0.5rem;
   padding: 0.5rem;
 }

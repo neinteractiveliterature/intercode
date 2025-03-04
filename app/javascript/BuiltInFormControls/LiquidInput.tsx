@@ -13,6 +13,7 @@ import {
 } from '@neinteractiveliterature/litform';
 import type { CodeInputProps } from '@neinteractiveliterature/litform/dist/types/CodeInput';
 import { Extension } from '@codemirror/state';
+import styles from 'styles/liquid_docs.module.scss';
 
 import MenuIcon from '../NavigationBar/MenuIcon';
 import {
@@ -131,11 +132,12 @@ function LiquidInput(props: LiquidInputProps): JSX.Element {
       return null;
     }
 
+    // eslint-disable-next-line i18next/no-literal-string
     const liquidDocsUrl = notifierEventKey ? `/liquid_docs?notifier_event_key=${notifierEventKey}` : '/liquid_docs';
 
     return (
       <>
-        <div className="liquid-docs-browser d-flex flex-column align-items-stretch">
+        <div className={`liquid-docs-browser ${styles.liquidDocsBrowser} d-flex flex-column align-items-stretch`}>
           <header className="bg-light border-top border-color-light d-flex align-items-stretch">
             <div className="flex-grow-1 pt-1">
               <ul className="nav nav-tabs ps-2 justify-content-center">
@@ -180,7 +182,7 @@ function LiquidInput(props: LiquidInputProps): JSX.Element {
             className="flex-grow-1 border-0"
           />
         </div>
-        <div className="liquid-docs-spacer" />
+        <div className={`liquid-docs-spacer ${styles.liquidDocsSpacer}`} />
       </>
     );
   };

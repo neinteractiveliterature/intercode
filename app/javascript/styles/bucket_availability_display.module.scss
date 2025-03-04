@@ -1,0 +1,33 @@
+@import "./bootstrap_defs";
+
+$bucket-availability-font-size: $progress-font-size * 1.4;
+$bucket-availability-compact-font-size: $progress-font-size * 0.8;
+
+.bucket-availability-display {
+  font-size: $bucket-availability-font-size;
+  display: flex;
+  flex-wrap: wrap;
+
+  &.bucket-availability-display-compact {
+    font-size: $bucket-availability-compact-font-size;
+  }
+}
+
+.bucket-availability-cell {
+  width: $bucket-availability-font-size;
+  margin-left: 1px;
+  margin-right: 1px;
+  text-align: center;
+
+  .bucket-availability-display-compact & {
+    width: $bucket-availability-compact-font-size;
+  }
+}
+
+.bucket-availability-open-slot {
+  clip-path: ellipse(($bucket-availability-font-size * 0.44) ($bucket-availability-font-size * 0.2) at center);
+
+  .bucket-availability-display-compact & {
+    clip-path: ellipse(($bucket-availability-compact-font-size * 0.44) ($bucket-availability-compact-font-size * 0.2) at center);
+  }
+}

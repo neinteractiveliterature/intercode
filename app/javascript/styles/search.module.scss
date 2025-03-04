@@ -1,15 +1,4 @@
-.search-input-control {
-  border-top-left-radius: $border-radius-pill;
-  border-bottom-left-radius: $border-radius-pill;
-  border-right: 0;
-}
-
-.search-input-addon.input-group-text {
-  border-top-right-radius: $border-radius-pill;
-  border-bottom-right-radius: $border-radius-pill;
-  background-color: white;
-  border-left: 0;
-}
+@import "./bootstrap_defs";
 
 .site-search {
   height: 38px;

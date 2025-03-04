@@ -1,21 +1,3 @@
-@use "sass:color";
-
-$success-light: color.adjust($success, $lightness: 35%);
-$warning-light: color.adjust($warning, $lightness: 35%);
-$danger-light: color.adjust($danger, $lightness: 35%);
-$info-light: color.adjust($info, $lightness: 35%);
-
-$color-variants: () !default;
-$color-variants: map-merge(
-  (
-    'success-light': $success-light,
-    'warning-light': $warning-light,
-    'danger-light': $danger-light,
-    'info-light': $info-light,
-  ),
-  $color-variants
-);
-
 @each $color, $value in $color-variants {
   .bg-#{$color} {
     background-color: $value;

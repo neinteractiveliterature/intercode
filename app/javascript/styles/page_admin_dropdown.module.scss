@@ -1,4 +1,6 @@
 @use 'sass:math';
+@use 'sass:map';
+@import "./bootstrap_defs";
 
 .page-admin-dropdown {
   margin-bottom: 4px;
@@ -8,13 +10,13 @@
 
   @media (min-width: #{breakpoint-min(lg, $grid-breakpoints) + 65px}) and (max-width: #{breakpoint-max(lg, $grid-breakpoints)}) {
     position: absolute;
-    margin-left: calc(#{map-get($container-max-widths, xl)} - #{math.div($grid-gutter-width, 2)});
+    margin-left: calc(#{map.get($container-max-widths, xl)} - #{math.div($grid-gutter-width, 2)});
     float: none;
   }
 
   @media (min-width: #{breakpoint-min(xl, $grid-breakpoints) + 65px}) {
     position: absolute;
-    margin-left: calc(#{map-get($container-max-widths, xxl)} - #{math.div($grid-gutter-width, 2)});
+    margin-left: calc(#{map.get($container-max-widths, xxl)} - #{math.div($grid-gutter-width, 2)});
     float: none;
   }
 }

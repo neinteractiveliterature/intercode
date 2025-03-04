@@ -10,6 +10,7 @@ import { ScheduleLayoutResult, RunDimensions } from './ScheduleLayout/ScheduleLa
 import { SignupState } from '../../graphqlTypes.generated';
 import { useAppDateTimeFormat } from '../../TimeUtils';
 import { ScheduleGridConfig } from './ScheduleGridConfig';
+import styles from 'styles/schedule_grid.module.scss';
 
 export type RunDisplayProps = {
   event: ScheduleEvent;
@@ -74,7 +75,7 @@ const RunDisplay = forwardRef<HTMLDivElement, RunDisplayProps>(function RunDispl
     }
 
     return (
-      <div className="event-extended-counts p-1">
+      <div className={`event-extended-counts ${styles.eventExtendedCounts} p-1`}>
         <span className="text-success">
           {signupCountData.sumSignupCounts({ state: SignupState.Confirmed, counted: true })}
         </span>
@@ -102,9 +103,7 @@ const RunDisplay = forwardRef<HTMLDivElement, RunDisplayProps>(function RunDispl
   };
 
   return (
-     
     <div
-       
       tabIndex={run.disableDetailsPopup ? undefined : 0}
       className={getRunClassName({
         event,
@@ -130,19 +129,23 @@ const RunDisplay = forwardRef<HTMLDivElement, RunDisplayProps>(function RunDispl
       ref={ref}
     >
       {renderExtendedCounts()}
-      <div className="schedule-grid-event-content">
+      <div className={`schedule-grid-event-content ${styles.scheduleGridEventContent}`}>
         {!event.fake && renderAvailabilityBar()}
         {runDimensions.fullTimespan.start < runDimensions.timespan.start && (
-          <div className="schedule-grid-event-truncation-label truncation-label-start">
+          <div
+            className={`schedule-grid-event-truncation-label truncation-label-start ${styles.scheduleGridEventTruncationLabel}`}
+          >
             starts {format(runDimensions.fullTimespan.start, 'shortWeekdayTime')}
           </div>
         )}
-        <div className="schedule-grid-event-content-main">
+        <div className={`schedule-grid-event-content-main ${styles.scheduleGridEventContentMain}`}>
           {renderSignupStatusBadge()}
           {event.displayTitle || event.title}
         </div>
         {runDimensions.fullTimespan.finish > runDimensions.timespan.finish && (
-          <div className="schedule-grid-event-truncation-label truncation-label-finish">
+          <div
+            className={`schedule-grid-event-truncation-label truncation-label-finish ${styles.scheduleGridEventTruncationLabel}`}
+          >
             ends {format(runDimensions.fullTimespan.finish, 'shortWeekdayTime')}
           </div>
         )}

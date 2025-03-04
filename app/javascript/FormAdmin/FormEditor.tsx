@@ -23,6 +23,7 @@ import { FormEditorQueryData, FormEditorQueryDocument, FormEditorQueryVariables 
 import { useTranslation } from 'react-i18next';
 import { client } from '../useIntercodeApolloClient';
 import { UpdateFormDocument } from './mutations.generated';
+import styles from 'styles/form_editor.module.scss';
 
 export const loader: LoaderFunction = async ({ params: { id } }) => {
   const { data } = await client.query<FormEditorQueryData, FormEditorQueryVariables>({
@@ -91,8 +92,8 @@ function FormEditor(): JSX.Element {
   const formType = FormTypes[form.form_type] || {};
 
   return (
-    <div className="form-editor">
-      <div className="form-editor-top-navbar px-2 navbar navbar-light bg-warning-light">
+    <div className={`form-editor ${styles.formEditor}`}>
+      <div className={`form-editor-top-navbar ${styles.formEditorTopNavbar} px-2 navbar navbar-light bg-warning-light`}>
         {params.itemId && currentSection ? (
           <Link to={`/admin_forms/${form.id}/edit/section/${currentSection.id}`} className="btn btn-secondary">
             <i className="bi-chevron-left" />
