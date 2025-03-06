@@ -1,5 +1,6 @@
 import { CSSProperties } from 'react';
 import classNames from 'classnames';
+import styles from 'styles/schedule_grid.module.scss';
 
 export type AvailabilityBarProps = {
   availabilityFraction: number;
@@ -11,9 +12,9 @@ function AvailabilityBar({ availabilityFraction, unlimited, runStyle }: Availabi
   const unavailableBarWidth = unlimited ? 100.0 : 100.0 - availabilityFraction * 100.0;
 
   return (
-    <div className={classNames('availability-bar', { unlimited })}>
+    <div className={classNames('availability-bar', styles.availabilityBar, { unlimited })}>
       <div
-        className="available"
+        className={`available ${styles.available}`}
         style={{
           boxShadow:
             unavailableBarWidth < 100.0
@@ -26,7 +27,7 @@ function AvailabilityBar({ availabilityFraction, unlimited, runStyle }: Availabi
           width: `${unavailableBarWidth}%`,
           backgroundColor: (runStyle || {}).backgroundColor,
         }}
-        className="unavailable"
+        className={`unavailable ${styles.unavailable}`}
       />
     </div>
   );
