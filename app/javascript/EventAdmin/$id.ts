@@ -4,6 +4,7 @@ import { CreateOrUpdateRunForEventDocument, UpdateEventDocument } from './mutati
 import { redirect } from 'react-router';
 import { Route } from './+types/$id';
 import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
+import { EventAdminRootQueryData } from './queries.generated';
 
 export type UpdateRegularEventOptions = {
   client: ApolloClient<NormalizedCacheObject>;
@@ -55,6 +56,7 @@ export async function updateSingleRunEvent({ event, run, client }: UpdateSingleR
         });
       },
     });
+    await client.resetStore();
   }
 }
 

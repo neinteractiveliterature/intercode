@@ -3,9 +3,9 @@ import { MoveFormSectionDocument } from 'FormAdmin/mutations.generated';
 import { FormEditorQueryDocument } from 'FormAdmin/queries.generated';
 import { ActionFunction } from 'react-router';
 import invariant from 'tiny-invariant';
-import { client } from 'useIntercodeApolloClient';
+import { Route } from './+types/move';
 
-export async function action({ request, params: { id, sectionId } }) {
+export async function action({ request, params: { id, sectionId }, context }: Route.ActionArgs) {
   try {
     const formData = await request.formData();
     const destinationIndex = Number.parseInt(formData.get('destination_index')?.toString() ?? '');
@@ -13,7 +13,7 @@ export async function action({ request, params: { id, sectionId } }) {
     invariant(sectionId != null);
     invariant(destinationIndex != null);
 
-    const queryData = client.cache.readQuery({
+    const queryData = context.client.cache.readQuery({
       query: FormEditorQueryDocument,
       variables: { id: id },
     });
@@ -39,7 +39,7 @@ export async function action({ request, params: { id, sectionId } }) {
       } as const;
     }
 
-    const { data } = await client.mutate({
+    const { data } = await context.client.mutate({
       mutation: MoveFormSectionDocument,
       variables: {
         id: sectionId,

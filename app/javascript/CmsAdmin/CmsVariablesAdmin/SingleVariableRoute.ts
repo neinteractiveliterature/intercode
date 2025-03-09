@@ -4,6 +4,7 @@ import { Route } from './+types/SingleVariableRoute';
 
 export async function action({ params: { key }, request, context }: Route.ActionArgs) {
   const formData = await request.formData();
+  const { client } = context;
 
   try {
     if (request.method === 'POST' || request.method === 'PATCH') {

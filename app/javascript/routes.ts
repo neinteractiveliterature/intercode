@@ -61,6 +61,7 @@ export default [
     route('admin_forms/:id/edit', 'FormAdmin/FormEditor.tsx', [
       route('section', 'FormAdmin/$id/edit/section/route.ts', [
         ...prefix(':sectionId', [
+          route('move', 'FormAdmin/$id/edit/section/$sectionId/move.ts'),
           route('item', 'FormAdmin/$id/edit/section/$sectionId/item/route.ts', [
             ...prefix(':itemId', [
               route('move', 'FormAdmin/$id/edit/section/$sectionId/item/$itemId/move.ts'),
@@ -112,6 +113,7 @@ export default [
                 ]),
                 route('events', 'EventAdmin/create.ts', [
                   index('EventAdmin/events/route.ts'),
+                  route('new', 'EventAdmin/NewEvent.ts'),
                   route(':eventId', 'EventAdmin/$id.ts', [
                     route('admin_notes', 'EventAdmin/AdminNotesRoute.ts'),
                     route('drop', 'EventAdmin/drop.ts'),

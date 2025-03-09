@@ -63,7 +63,7 @@ function TestWrapper({
         <LazyStripeContext.Provider value={lazyStripeProviderValue}>
           <Confirm>
             <I18nextProvider i18n={i18nInstance}>
-              <RouterProvider router={router} future={{ v7_startTransition: true }} />
+              <RouterProvider router={router} />
             </I18nextProvider>
           </Confirm>
         </LazyStripeContext.Provider>
