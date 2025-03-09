@@ -16,6 +16,7 @@ import { FuzzyTime } from '../FormPresenter/TimeblockTypes';
 import { EventAdminRootQueryData, EventFieldsFragment, RoomFieldsFragment } from './queries.generated';
 import { useTranslation } from 'react-i18next';
 import { useFetcher } from 'react-router';
+import { Convention, Room } from 'graphqlTypes.generated';
 
 type FuzzyTimeWithoutSecond = Omit<FuzzyTime, 'second'>;
 type CompleteFuzzyTimeWithoutSecond = {
@@ -28,7 +29,9 @@ function timeIsComplete(time: FuzzyTimeWithoutSecond): time is CompleteFuzzyTime
 }
 
 export type ScheduleMultipleRunsModalProps = {
-  convention: EventAdminRootQueryData['convention'];
+  convention: Pick<Convention, 'timezone_mode' | 'id' | 'starts_at' | 'ends_at' | 'timezone_name'> & {
+    rooms: Pick<Room, 'id' | 'name' | '__typename'>[];
+  };
   event: EventFieldsFragment;
   visible: boolean;
   onCancel: () => void;
