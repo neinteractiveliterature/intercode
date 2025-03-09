@@ -1,10 +1,10 @@
 import { buildEventInput, buildRunInput } from './InputBuilders';
-import { EventAdminEventsQueryData, EventAdminEventsQueryDocument } from './queries.generated';
 import { EventCategory, SchedulingUi } from '../graphqlTypes.generated';
 import { CreateRunDocument, UpdateEventDocument, UpdateRunDocument } from './mutations.generated';
 import { redirect } from 'react-router';
 import { Route } from './+types/$id';
 import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
+import { EventAdminRootQueryData } from './queries.generated';
 
 export type UpdateRegularEventOptions = {
   client: ApolloClient<NormalizedCacheObject>;
@@ -54,36 +54,8 @@ export async function updateSingleRunEvent({ event, run, client }: UpdateSingleR
           eventId: event.id,
         },
       },
-      update: (store, { data }) => {
-        const eventsData = store.readQuery<EventAdminEventsQueryData>({
-          query: EventAdminEventsQueryDocument,
-        });
-        const newRun = data?.createRun?.run;
-        if (!newRun || !eventsData) {
-          return;
-        }
-
-        store.writeQuery<EventAdminEventsQueryData>({
-          query: EventAdminEventsQueryDocument,
-          data: {
-            ...eventsData,
-            convention: {
-              ...eventsData.convention,
-              events: eventsData.convention.events.map((existingEvent) => {
-                if (existingEvent.id === event.id) {
-                  return {
-                    ...existingEvent,
-                    runs: [...existingEvent.runs, newRun],
-                  };
-                }
-
-                return existingEvent;
-              }),
-            },
-          },
-        });
-      },
     });
+    await client.resetStore();
   }
 }
 

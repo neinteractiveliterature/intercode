@@ -19,31 +19,6 @@ type ActionInput = {
   eventId: string | null;
 };
 
-export async function action({ request }) {
-  try {
-    const { ticketType, eventId, conventionId } = (await request.json()) as ActionInput;
-    const client = new ApolloClient();
-    await client.mutate({
-      mutation: CreateTicketTypeDocument,
-      variables: {
-        input: { ticket_type: ticketType, eventId },
-      },
-      update: updateCacheAfterCreateTicketType(eventId, conventionId, (cache, ref) => {
-        cache.modify<Convention>({
-          id: cache.identify({ __typename: 'Convention', id: conventionId }),
-          fields: {
-            ticket_types: (value) => [...value, ref],
-          },
-        });
-      }),
-    });
-
-    return replace('/ticket_types');
-  } catch (error) {
-    return error;
-  }
-}
-
 function NewTicketType({ parent }: TicketTypeLoaderResult) {
   const { t } = useTranslation();
   const { convention, ticketName } = useContext(AppRootContext);

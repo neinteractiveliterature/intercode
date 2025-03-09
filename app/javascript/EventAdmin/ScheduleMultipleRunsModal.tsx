@@ -13,7 +13,7 @@ import RoomSelect from '../BuiltInFormControls/RoomSelect';
 import AppRootContext from '../AppRootContext';
 import { timezoneNameForConvention, useAppDateTimeFormat } from '../TimeUtils';
 import { FuzzyTime } from '../FormPresenter/TimeblockTypes';
-import { EventAdminEventsQueryData, EventFieldsFragment, RoomFieldsFragment } from './queries.generated';
+import { EventAdminRootQueryData, EventFieldsFragment, RoomFieldsFragment } from './queries.generated';
 import { useTranslation } from 'react-i18next';
 import { useFetcher } from 'react-router';
 
@@ -28,7 +28,7 @@ function timeIsComplete(time: FuzzyTimeWithoutSecond): time is CompleteFuzzyTime
 }
 
 export type ScheduleMultipleRunsModalProps = {
-  convention: EventAdminEventsQueryData['convention'];
+  convention: EventAdminRootQueryData['convention'];
   event: EventFieldsFragment;
   visible: boolean;
   onCancel: () => void;

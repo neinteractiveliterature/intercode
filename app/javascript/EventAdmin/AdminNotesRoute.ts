@@ -1,6 +1,5 @@
 import { redirect } from 'react-router';
 import { UpdateEventAdminNotesDocument } from './mutations.generated';
-import { EventAdminEventsQueryDocument } from './queries.generated';
 import { Route } from './+types/AdminNotesRoute';
 
 export async function action({ request, params: { eventId }, context }: Route.ActionArgs) {
@@ -12,9 +11,8 @@ export async function action({ request, params: { eventId }, context }: Route.Ac
         eventId,
         adminNotes: formData.get('admin_notes')?.toString(),
       },
-      refetchQueries: [{ query: EventAdminEventsQueryDocument }],
-      awaitRefetchQueries: true,
     });
+    await context.client.resetStore();
     return redirect('../..');
   } catch (error) {
     return error;
