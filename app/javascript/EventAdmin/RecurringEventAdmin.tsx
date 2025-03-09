@@ -4,10 +4,12 @@ import RecurringEventSection from './RecurringEventSection';
 import usePageTitle from '../usePageTitle';
 import { useTranslation } from 'react-i18next';
 import { CategorySpecificEventAdminComponentProps } from './CategorySpecificEventAdmin';
+import { useEventAdminRootLoaderData } from 'EventAdmin';
 
 export default function RecurringEventAdmin({ data }: CategorySpecificEventAdminComponentProps): JSX.Element {
   const { t } = useTranslation();
   const eventCategory = data.convention.event_category;
+  const rootLoaderData = useEventAdminRootLoaderData();
 
   usePageTitle(
     t('admin.events.eventListPageTitle', {
@@ -24,7 +26,7 @@ export default function RecurringEventAdmin({ data }: CategorySpecificEventAdmin
       </Link>
       <hr className="my-4" />
       {data.convention.event_category.events_paginated.entries.map((event) => (
-        <RecurringEventSection convention={data.convention} event={event} key={event.id} />
+        <RecurringEventSection convention={rootLoaderData.convention} event={event} key={event.id} />
       ))}
     </div>
   );

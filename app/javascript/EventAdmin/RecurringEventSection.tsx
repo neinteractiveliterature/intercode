@@ -12,7 +12,7 @@ import AppRootContext from '../AppRootContext';
 import { EventFieldsFragment } from './queries.generated';
 import { getDateTimeFormat, useAppDateTimeFormat } from '../TimeUtils';
 import { DateTimeFormatKey } from '../DateTimeFormats';
-import { Convention } from 'graphqlTypes.generated';
+import { Convention, Room } from 'graphqlTypes.generated';
 
 function humanizeEventLength(event: Pick<EventFieldsFragment, 'length_seconds'>, t: TFunction) {
   const duration = Duration.fromObject({ seconds: event.length_seconds });
@@ -86,7 +86,9 @@ function RecurringEventSectionBody({ event, convention, startSchedulingRuns }: R
 
 export type RecurringEventSectionProps = {
   event: EventFieldsFragment;
-  convention: Pick<Convention, 'timezone_mode' | 'timezone_name' | 'starts_at' | 'ends_at'>;
+  convention: Pick<Convention, 'id' | 'timezone_mode' | 'timezone_name' | 'starts_at' | 'ends_at'> & {
+    rooms: Pick<Room, '__typename' | 'id' | 'name'>[];
+  };
 };
 
 function RecurringEventSection({ event, convention }: RecurringEventSectionProps): JSX.Element {
