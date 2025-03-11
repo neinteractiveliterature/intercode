@@ -6311,16 +6311,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stripe/react-stripe-js@npm:3.3.0":
-  version: 3.3.0
-  resolution: "@stripe/react-stripe-js@npm:3.3.0"
+"@stripe/react-stripe-js@npm:3.4.0":
+  version: 3.4.0
+  resolution: "@stripe/react-stripe-js@npm:3.4.0"
   dependencies:
     prop-types: "npm:^15.7.2"
   peerDependencies:
-    "@stripe/stripe-js": ^1.44.1 || ^2.0.0 || ^3.0.0 || ^4.0.0 || ^5.0.0
+    "@stripe/stripe-js": ">=1.44.1 <7.0.0"
     react: ">=16.8.0 <20.0.0"
     react-dom: ">=16.8.0 <20.0.0"
-  checksum: 10c0/63cacf993605fbadc52e02c0ffe2a733b5d2b5fd331958c3841987df7f98bf0fb397ed03509281222f94824d4efda470f36c47c5d4e1f6e1a4685de3bf120abd
+  checksum: 10c0/cd32c668b3bfda66a48bbd866eb1a06aa9e238d7e15012c967af84fa6d5f9d7860f4c569cb699a6ebf9e04f3a5176e835b520eb420f8e63f10ffb646afda6f7d
   languageName: node
   linkType: hard
 
@@ -21124,7 +21124,7 @@ __metadata:
     "@rollup/plugin-swc": "npm:^0.4.0"
     "@sentry/browser": "npm:^8.7.0"
     "@sentry/types": "npm:^8.34.0"
-    "@stripe/react-stripe-js": "npm:3.3.0"
+    "@stripe/react-stripe-js": "npm:3.4.0"
     "@stripe/stripe-js": "npm:5.10.0"
     "@swc/core": "npm:^1.9.2"
     "@tanstack/react-table": "npm:^8.20.6"
