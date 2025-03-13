@@ -104,7 +104,7 @@
     "graphql-ws": "6.0.4",
     "history": "5.3.0",
     "html-to-react": "1.7.0",
-    "i18next": "23.16.8",
+    "i18next": "24.2.3",
     "i18next-chained-backend": "^4.6.2",
     "i18next-intervalplural-postprocessor": "3.0.0",
     "i18next-localstorage-backend": "^4.2.0",
