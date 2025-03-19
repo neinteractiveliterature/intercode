@@ -1,5 +1,5 @@
 import { defineConfig } from 'vitest/config';
-import viteConfig, { absolutePath } from './vite.config.mts';
+import viteConfig, { absolutePath } from './viteConfigCommon';
 
 const viteConfigWithoutHttps = defineConfig({
   ...viteConfig,
