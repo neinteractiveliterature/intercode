@@ -1,50 +1,15 @@
-import { defineConfig, Plugin, ProxyOptions, ViteDevServer } from 'vite';
+import { defineConfig } from 'vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
-import { reactRouter } from '@react-router/dev/vite';
 import { fileURLToPath } from 'url';
-// import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import { globalDefines } from './globalDefines.mts';
-import morgan from 'morgan';
 import { envOnlyMacros } from 'vite-env-only';
-import { proxyPaths, getBackendUrl } from './app/javascript/proxyConfig';
 
 export function absolutePath(relativePath: string) {
   return fileURLToPath(new URL(relativePath, import.meta.url));
 }
 
-// https://github.com/remix-run/remix/discussions/7850
-function morganPlugin(): Plugin {
-  return {
-    name: 'morgan-plugin',
-    configureServer(server: ViteDevServer) {
-      return () => {
-        server.middlewares.use(morgan('tiny'));
-      };
-    },
-  };
-}
-
-function getProxyConfig() {
-  let backendUrl: URL;
-  try {
-    backendUrl = getBackendUrl();
-  } catch {
-    return undefined;
-  }
-
-  return [...proxyPaths].reduce<Record<string, ProxyOptions>>(
-    (memo, path) => ({
-      ...memo,
-      [path]: {
-        target: backendUrl,
-      },
-    }),
-    {},
-  );
-}
-
 export default defineConfig({
-  plugins: [tsconfigPaths(), morganPlugin(), envOnlyMacros(), !process.env.VITEST && reactRouter()],
+  plugins: [tsconfigPaths(), envOnlyMacros()],
   ssr: {
     noExternal: ['@neinteractiveliterature/litform', '@apollo/client', 'react-helmet-async'],
   },
@@ -128,7 +93,6 @@ export default defineConfig({
       cert: absolutePath('./dev_certificate.crt'),
       ca: absolutePath('./dev_ca.crt'),
     },
-    proxy: getProxyConfig(),
   },
   preview: {
     port: 3135,
