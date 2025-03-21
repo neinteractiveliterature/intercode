@@ -5,7 +5,6 @@ import IsValidNodeDefinitions from 'html-to-react/lib/is-valid-node-definitions'
 import camelCaseAttrMap from 'html-to-react/lib/camel-case-attribute-names';
 import { Link } from 'react-router';
 import { ErrorBoundary } from '@neinteractiveliterature/litform';
-import { clientOnly$, serverOnly$ } from 'vite-env-only/macros';
 import { JSDOM } from 'jsdom';
 
 import SignInButton from './Authentication/SignInButton';
@@ -434,17 +433,17 @@ export const parseContent: ParseContentFunction = (content, componentMap = DEFAU
     headComponents: <></>,
   };
 
-  const parse =
-    serverOnly$(() => {
-      const dom = new JSDOM(content);
-      // eslint-disable-next-line no-underscore-dangle
-      result = parseDocument(dom.window._document, componentMap, dom.window.Node, dom.window);
-    }) ??
-    clientOnly$(() => {
-      const parser = new DOMParser();
-      const doc = parser.parseFromString(content, 'text/html');
-      result = parseDocument(doc, componentMap, Node, window);
-    });
+  const parse = import.meta.env.SSR
+    ? () => {
+        const dom = new JSDOM(content);
+        // eslint-disable-next-line no-underscore-dangle
+        result = parseDocument(dom.window._document, componentMap, dom.window.Node, dom.window);
+      }
+    : () => {
+        const parser = new DOMParser();
+        const doc = parser.parseFromString(content, 'text/html');
+        result = parseDocument(doc, componentMap, Node, window);
+      };
 
   if (parse) {
     parse();
