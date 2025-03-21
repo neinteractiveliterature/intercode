@@ -113,7 +113,7 @@ export default [
                 ]),
                 route('events', 'EventAdmin/create.ts', [
                   index('EventAdmin/events/route.ts'),
-                  route('new', 'EventAdmin/NewEvent.ts'),
+                  route('new', 'EventAdmin/NewEvent.tsx'),
                   route(':eventId', 'EventAdmin/$id.ts', [
                     route('admin_notes', 'EventAdmin/AdminNotesRoute.ts'),
                     route('drop', 'EventAdmin/drop.ts'),
