@@ -9226,7 +9226,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vitest/coverage-v8@npm:^3.0.0-beta.3":
+"@vitest/coverage-v8@npm:^3.0.9":
   version: 3.0.9
   resolution: "@vitest/coverage-v8@npm:3.0.9"
   dependencies:
@@ -9252,9 +9252,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vitest/eslint-plugin@npm:^1.1.24":
-  version: 1.1.39
-  resolution: "@vitest/eslint-plugin@npm:1.1.39"
+"@vitest/eslint-plugin@npm:^1.1.38":
+  version: 1.1.38
+  resolution: "@vitest/eslint-plugin@npm:1.1.38"
   peerDependencies:
     "@typescript-eslint/utils": ^8.24.0
     eslint: ">= 8.57.0"
@@ -9265,7 +9265,7 @@ __metadata:
       optional: true
     vitest:
       optional: true
-  checksum: 10c0/baaa1430800f4072c4f010a41cc9009aa2103ead53442106700cadfcbb0929362168bbb3580afc3743a9bbc391eca36956f549e1a4b7a69e57a2c59f4133804f
+  checksum: 10c0/b5bdde57dbea90a35d0c37d29b1574d4f0fab8da19a52570f33a51188acbdcb9565f69f24e79010d3351f78591449896d326030e299736483ff5729b07d76904
   languageName: node
   linkType: hard
 
@@ -9339,7 +9339,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@vitest/ui@npm:^3.0.0-beta.3":
+"@vitest/ui@npm:^3.0.9":
   version: 3.0.9
   resolution: "@vitest/ui@npm:3.0.9"
   dependencies:
@@ -23594,9 +23594,9 @@ __metadata:
     "@typescript-eslint/parser": "npm:8.28.0"
     "@typescript-eslint/utils": "npm:8.20.0"
     "@vitejs/plugin-react-swc": "npm:^3.8.1"
-    "@vitest/coverage-v8": "npm:^3.0.0-beta.3"
-    "@vitest/eslint-plugin": "npm:^1.1.24"
-    "@vitest/ui": "npm:^3.0.0-beta.3"
+    "@vitest/coverage-v8": "npm:^3.0.9"
+    "@vitest/eslint-plugin": "npm:^1.1.38"
+    "@vitest/ui": "npm:^3.0.9"
     apollo-upload-client: "npm:18.0.1"
     array-to-sentence: "npm:2.0.0"
     assert-never: "npm:1.4.0"
@@ -23716,7 +23716,7 @@ __metadata:
     vite-env-only: "npm:^3.0.3"
     vite-plugin-node-polyfills: "npm:^0.23.0"
     vite-tsconfig-paths: "npm:^5.1.4"
-    vitest: "npm:^3.0.0-beta.4"
+    vitest: "npm:^3.0.9"
     zxcvbn: "npm:4.4.2"
   languageName: unknown
   linkType: soft
@@ -26638,7 +26638,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vitest@npm:^3.0.0-beta.4":
+"vitest@npm:^3.0.9":
   version: 3.0.9
   resolution: "vitest@npm:3.0.9"
   dependencies:

@@ -8,11 +8,21 @@ import AuthenticityTokensManager, {
 } from 'AuthenticityTokensContext';
 import { createBrowserRouter, RouteObject, RouterProvider } from 'react-router';
 import routes from 'routes';
+import { ProviderStack } from 'AppWrapper';
 
 const manager = new AuthenticityTokensManager(fetch, undefined, getAuthenticityTokensURL());
 
 function AppRoot() {
-  const router = useMemo(() => createBrowserRouter([routes] as RouteObject[]), []);
+  const router = useMemo(
+    () =>
+      createBrowserRouter([
+        {
+          Component: ProviderStack,
+          children: [routes as RouteObject],
+        },
+      ]),
+    [],
+  );
 
   return (
     <StrictMode>

@@ -211,9 +211,9 @@
     "@typescript-eslint/parser": "8.28.0",
     "@typescript-eslint/utils": "8.20.0",
     "@vitejs/plugin-react-swc": "^3.8.1",
-    "@vitest/coverage-v8": "^3.0.0-beta.3",
-    "@vitest/eslint-plugin": "^1.1.24",
-    "@vitest/ui": "^3.0.0-beta.3",
+    "@vitest/coverage-v8": "^3.0.9",
+    "@vitest/eslint-plugin": "^1.1.38",
+    "@vitest/ui": "^3.0.9",
     "core-js-compat": "3.41.0",
     "esbuild": "^0.25.1",
     "eslint": "9.23.0",
@@ -251,7 +251,7 @@
     "vite-env-only": "^3.0.3",
     "vite-plugin-node-polyfills": "^0.23.0",
     "vite-tsconfig-paths": "^5.1.4",
-    "vitest": "^3.0.0-beta.4"
+    "vitest": "^3.0.9"
   },
   "resolutions": {
     "@typescript-eslint/parser": "8.28.0",
