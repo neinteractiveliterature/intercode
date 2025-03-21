@@ -2,17 +2,17 @@ import 'regenerator-runtime/runtime';
 
 import mountReactComponents from '../mountReactComponents';
 import { StrictMode, useMemo } from 'react';
-import { buildLibraryModeBrowserRouter } from 'libraryModeRouter';
 import AuthenticityTokensManager, {
   AuthenticityTokensContext,
   getAuthenticityTokensURL,
 } from 'AuthenticityTokensContext';
-import { RouterProvider } from 'react-router';
+import { createBrowserRouter, RouteObject, RouterProvider } from 'react-router';
+import routes from 'routes';
 
 const manager = new AuthenticityTokensManager(fetch, undefined, getAuthenticityTokensURL());
 
 function AppRoot() {
-  const router = useMemo(() => buildLibraryModeBrowserRouter(), []);
+  const router = useMemo(() => createBrowserRouter([routes] as RouteObject[]), []);
 
   return (
     <StrictMode>

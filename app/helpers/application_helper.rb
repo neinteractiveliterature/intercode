@@ -32,4 +32,8 @@ module ApplicationHelper
 
     "#{request.scheme}://#{host}#{path}"
   end
+
+  def application_entry_path
+    Rails.env.development? ? "/app/javascript/packs/applicationEntry.ts" : "/packs/application.js"
+  end
 end

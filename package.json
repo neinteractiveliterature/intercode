@@ -21,6 +21,7 @@
     "prepare": "husky install",
     "preview": "vite preview --outDir ./public",
     "start": "INTERCODE_BACKEND=https://intercode.test:5050 NODE_EXTRA_CA_CERTS=dev_ca.crt tsx ./app/javascript/server.ts",
+    "start:library": "vite dev -c vite-library.config.mts",
     "ts:check": "tsc --noEmit --incremental",
     "test": "vitest run",
     "test:ui": "vitest --ui",
