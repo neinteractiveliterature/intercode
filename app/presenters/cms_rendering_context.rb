@@ -65,18 +65,17 @@ class CmsRenderingContext
     layout_doc = Nokogiri::HTML.parse(render_layout_content(cms_layout, assigns))
     layout_head = layout_doc.xpath("//head").to_s
 
-    # graphql_presend_presenter = GraphqlPresendPresenter.new(controller: controller, cms_parent: cms_parent)
-    doc =
-      Nokogiri::HTML.parse(
-        "<!DOCTYPE html><html><head>#{assigns["content_for_head"]}#{layout_head}</head><body></body></html>"
-      )
+    graphql_presend_presenter = GraphqlPresendPresenter.new(controller: controller, cms_parent: cms_parent)
+    doc = Nokogiri::HTML.parse("<!DOCTYPE html><html><head>#{layout_head}</head><body></body></html>")
     doc.xpath("//body/*").remove
     doc.xpath("//body").first.inner_html =
       tag.div(
         "",
         "data-react-class" => "AppRoot",
-        "data-react-props" => (controller&.app_component_props || {}).merge({}).to_json
-        # queryData: graphql_presend_presenter.graphql_presend_data
+        "data-react-props" =>
+          (controller&.app_component_props || {}).merge(
+            { queryData: graphql_presend_presenter.graphql_presend_data }
+          ).to_json
       )
     doc.to_s.html_safe
   rescue StandardError => e

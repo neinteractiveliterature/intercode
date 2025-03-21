@@ -57,7 +57,10 @@ async function createServer() {
       ? undefined
       : await import('vite').then((vite) =>
           vite.createServer({
-            server: { middlewareMode: true },
+            configFile: 'vite-framework.config.mts',
+            server: {
+              middlewareMode: true,
+            },
           }),
         );
 
