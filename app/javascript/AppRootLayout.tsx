@@ -6,6 +6,7 @@ import { AppRootLayoutQueryDocument } from './appRootQueries.generated';
 import RouteErrorBoundary from 'RouteErrorBoundary';
 import { Route } from './+types/AppRootLayout';
 import { createPortal } from 'react-dom';
+import { apolloClientContext } from 'AppContexts';
 
 // Avoid unnecessary layout checks when moving between pages that can't change layout
 export function normalizePathForLayout(path: string) {
@@ -25,7 +26,7 @@ export function normalizePathForLayout(path: string) {
 }
 
 export const loader = async ({ request, context }: Route.LoaderArgs) => {
-  const client = context!.client;
+  const client = context.get(apolloClientContext);
   const url = new URL(request.url);
   const { data } = await client.query({
     query: AppRootLayoutQueryDocument,

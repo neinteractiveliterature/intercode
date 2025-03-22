@@ -7,12 +7,19 @@ import express from 'express';
 import { readFileSync } from 'node:fs';
 import http from 'node:http';
 import https from 'node:https';
-import { AppLoadContext, Session } from 'react-router';
+import { AppLoadContext, Session, unstable_InitialContext } from 'react-router';
 import { buildServerApolloClient } from 'serverApolloClient.server.js';
 import { ClientConfigurationQueryData, ClientConfigurationQueryDocument } from 'serverQueries.generated.js';
 import { commitSession, getSession, getSessionUuid, SessionData, SessionFlashData } from 'sessions.js';
 import { buildServerFetcher, ServerFetcher } from 'ServerFetcher.server.js';
 import nodeFetch from 'node-fetch';
+import {
+  apolloClientContext,
+  authenticityTokensManagerContext,
+  clientConfigurationDataContext,
+  fetchContext,
+  sessionContext,
+} from 'AppContexts.js';
 
 async function getClientConfiguration() {
   const client = await buildServerApolloClient({
@@ -116,13 +123,13 @@ async function createServer() {
           fetch: serverFetch,
         });
 
-        return {
-          client,
-          clientConfigurationData: clientConfigurationDataWithProxy,
-          authenticityTokensManager: manager,
-          fetch: serverFetch,
-          session,
-        } satisfies AppLoadContext;
+        const context: unstable_InitialContext = new Map();
+        context.set(apolloClientContext, client);
+        context.set(clientConfigurationDataContext, clientConfigurationData);
+        context.set(authenticityTokensManagerContext, manager);
+        context.set(fetchContext, serverFetch);
+        context.set(sessionContext, session);
+        return context;
       },
     }),
   );
