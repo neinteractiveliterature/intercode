@@ -34,6 +34,7 @@
     "graphql.config.js",
     "i18next-parser-english.config.cjs",
     "i18next-parser-non-english.config.cjs",
+    "react-router.config.ts",
     "vite.config.mts"
   ]
 }
