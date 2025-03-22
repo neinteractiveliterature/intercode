@@ -1,5 +1,5 @@
 import { Suspense, useMemo, useState, useEffect, useContext, useRef, RefObject } from 'react';
-import { useLocation, useNavigate, Outlet, useNavigation } from 'react-router';
+import { useLocation, useNavigate, Outlet, useNavigation, UNSAFE_MiddlewareEnabled, Future } from 'react-router';
 import { Settings } from 'luxon';
 import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
@@ -17,12 +17,13 @@ import { initErrorReporting } from 'ErrorReporting';
 import RouteErrorBoundary from 'RouteErrorBoundary';
 import { Route } from './+types/AppRoot';
 import { MetaDescriptors } from 'react-router/route-module';
+import { apolloClientContext, authenticityTokensManagerContext } from 'AppContexts';
 
 export const loader = async ({ context }: Route.LoaderArgs) => {
-  const client = context.client;
+  const client = context.get(apolloClientContext);
   const [{ data }, authenticityTokens] = await Promise.all([
     client.query({ query: AppRootQueryDocument }),
-    context.authenticityTokensManager.getTokens(),
+    context.get(authenticityTokensManagerContext).getTokens(),
   ]);
   return { data, authenticityTokens };
 };
@@ -32,7 +33,7 @@ export function meta({ data }: Route.MetaArgs): MetaDescriptors {
   return [{ name: 'csrf-token', content: data.authenticityTokens.railsDirectUploads }];
 }
 
-export const errorElement = RouteErrorBoundary;
+export const ErrorBoundary = RouteErrorBoundary;
 
 export function buildAppRootContextValue(
   data: AppRootQueryData,

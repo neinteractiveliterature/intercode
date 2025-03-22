@@ -14,7 +14,7 @@ function browserRouterPlugin(routesFilePath: string): Plugin {
         caseSensitive: ${JSON.stringify(caseSensitive)},
         id: ${JSON.stringify(id)},
         index: ${JSON.stringify(index)},
-        lazy: async () => { const { default: defaultExport, ...other } = await import(${JSON.stringify(file)}); debugger; return { Component: defaultExport, ...other }; },
+        lazy: async () => { const { default: defaultExport, ...other } = await import(${JSON.stringify(file)}); return { Component: defaultExport, ...other }; },
         path: ${JSON.stringify(path)},
       }`;
     }
@@ -24,7 +24,7 @@ function browserRouterPlugin(routesFilePath: string): Plugin {
       children: ${children ? '[' + children.map(routeConfigEntryToRouteObject).join(',') + ']' : 'undefined'},
       id: ${JSON.stringify(id)},
       index: ${JSON.stringify(index)},
-      lazy: async () => { const { default: defaultExport, ...other } = await import(${JSON.stringify(file)}); debugger; return { Component: defaultExport, ...other }; },
+      lazy: async () => { const { default: defaultExport, ...other } = await import(${JSON.stringify(file)}); return { Component: defaultExport, ...other }; },
       path: ${JSON.stringify(path)},
     }`;
   }
