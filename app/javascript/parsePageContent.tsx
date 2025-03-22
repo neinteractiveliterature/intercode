@@ -5,7 +5,7 @@ import IsValidNodeDefinitions from 'html-to-react/lib/is-valid-node-definitions'
 import camelCaseAttrMap from 'html-to-react/lib/camel-case-attribute-names';
 import { Link } from 'react-router';
 import { ErrorBoundary } from '@neinteractiveliterature/litform';
-import { JSDOM } from 'jsdom';
+// import { JSDOM } from 'jsdom';
 
 import SignInButton from './Authentication/SignInButton';
 import SignOutButton from './Authentication/SignOutButton';
@@ -427,27 +427,17 @@ export type ParseContentFunction = (
 ) => { bodyComponents: ReactNode; headComponents: ReactNode };
 
 export const parseContent: ParseContentFunction = (content, componentMap = DEFAULT_COMPONENT_MAP) => {
-  let result: { bodyComponents: ReactNode; headComponents: ReactNode } = {
-    // eslint-disable-next-line i18next/no-literal-string
-    bodyComponents: <>WARNING: neither serverOnly$ nor clientOnly$ was compiled in parsePageContent.tsx</>,
-    headComponents: <></>,
-  };
+  let result: { bodyComponents: ReactNode; headComponents: ReactNode };
 
-  const parse = import.meta.env.SSR
-    ? () => {
-        const dom = new JSDOM(content);
-        // eslint-disable-next-line no-underscore-dangle
-        result = parseDocument(dom.window._document, componentMap, dom.window.Node, dom.window);
-      }
-    : () => {
-        const parser = new DOMParser();
-        const doc = parser.parseFromString(content, 'text/html');
-        result = parseDocument(doc, componentMap, Node, window);
-      };
-
-  if (parse) {
-    parse();
-  }
+  // if (import.meta.env.SSR) {
+  //   const dom = new JSDOM(content);
+  //   // eslint-disable-next-line no-underscore-dangle
+  //   result = parseDocument(dom.window._document, componentMap, dom.window.Node, dom.window);
+  // } else {
+  const parser = new DOMParser();
+  const doc = parser.parseFromString(content, 'text/html');
+  result = parseDocument(doc, componentMap, Node, window);
+  // }
 
   return result;
 };

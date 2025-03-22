@@ -5,10 +5,23 @@ export default function RouteErrorBoundary() {
   const error = useRouteError();
 
   if (error instanceof Error) {
-    return <ErrorDisplay stringError={error.message} />;
+    return (
+      <div className="alert alert-danger m-4">
+        <h1>{error.message}</h1>
+        <pre>{error.stack}</pre>
+      </div>
+    );
   } else if (typeof error === 'object' && error) {
-    return <ErrorDisplay stringError={error.toString()} />;
+    return (
+      <div className="m-4">
+        <ErrorDisplay stringError={error.toString()} />
+      </div>
+    );
   } else {
-    return <ErrorDisplay stringError={error as string} />;
+    return (
+      <div className="m-4">
+        <ErrorDisplay stringError={error as string} />
+      </div>
+    );
   }
 }
