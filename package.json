@@ -64,7 +64,7 @@
     "@types/lodash": "4.17.16",
     "@types/luxon": "3.4.2",
     "@types/minimist": "1.2.5",
-    "@types/react": "18.3.18",
+    "@types/react": "18.3.19",
     "@types/react-click-outside-hook": "1.0.3",
     "@types/react-color": "3.0.13",
     "@types/react-google-recaptcha": "2.1.9",
