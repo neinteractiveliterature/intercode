@@ -16,4 +16,12 @@ class Signups::SignupConfirmationNotifier < Notifier
   def destinations
     [signup.user_con_profile]
   end
+
+  def default_destinations
+    [:signup_user_con_profile]
+  end
+
+  def allowed_dynamic_destinations
+    %i[signup_user_con_profile event_team_members triggering_user]
+  end
 end

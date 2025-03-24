@@ -6,14 +6,22 @@ class EventProposals::NewProposalNotifier < Notifier
 
   def initialize(event_proposal:)
     @event_proposal = event_proposal
-    super(convention: event_proposal.convention, event_key: 'event_proposals/new_proposal')
+    super(convention: event_proposal.convention, event_key: "event_proposals/new_proposal")
   end
 
   def liquid_assigns
-    super.merge('event_proposal' => event_proposal)
+    super.merge("event_proposal" => event_proposal)
   end
 
   def destinations
     proposal_destinations(event_proposal)
+  end
+
+  def default_destinations
+    proposal_destinations(event_proposal)
+  end
+
+  def allowed_dynamic_destinations
+    [:triggering_user]
   end
 end

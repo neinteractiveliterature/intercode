@@ -4,14 +4,22 @@ class EventProposals::UnfinishedDraftReminderNotifier < Notifier
 
   def initialize(event_proposal:)
     @event_proposal = event_proposal
-    super(convention: event_proposal.convention, event_key: 'event_proposals/unfinished_draft_reminder')
+    super(convention: event_proposal.convention, event_key: "event_proposals/unfinished_draft_reminder")
   end
 
   def liquid_assigns
-    super.merge('event_proposal' => event_proposal)
+    super.merge("event_proposal" => event_proposal)
   end
 
   def destinations
     [event_proposal.owner]
+  end
+
+  def default_destinations
+    [:event_proposal_owner]
+  end
+
+  def allowed_dynamic_destinations
+    [:event_proposal_owner]
   end
 end

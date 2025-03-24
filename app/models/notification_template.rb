@@ -28,6 +28,9 @@ class NotificationTemplate < ApplicationRecord
   include Cadmus::Concerns::LiquidTemplateField
 
   belongs_to :convention
+  has_many :notification_destinations, as: :source, dependent: :destroy
+  after_create :create_default_destinations!
+
   liquid_template_field :subject_template, :subject
   liquid_template_field :body_html_template, :body_html
   liquid_template_field :body_text_template, :body_text
@@ -36,4 +39,25 @@ class NotificationTemplate < ApplicationRecord
   validates_template_validity :body_html
   validates_template_validity :body_text
   validates_template_validity :body_sms
+
+  delegate :allowed_dynamic_destinations, to: :notifier
+
+  def notifier
+    Notifier.for_event_key(event_key, convention:)
+  end
+
+  def create_default_destinations!
+    notifier.default_destinations.each do |default_destination|
+      case default_destination
+      when UserConProfile
+        notification_destinations.create!(user_con_profile: default_destination)
+      when StaffPosition
+        notification_destinations.create!(staff_position: default_destination)
+      when Symbol
+        notification_destinations.create!(dynamic_destination: default_destination)
+      else
+        raise "Invalid default destination: #{default_destination.inspect}"
+      end
+    end
+  end
 end

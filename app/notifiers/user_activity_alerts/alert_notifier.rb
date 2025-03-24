@@ -6,15 +6,15 @@ class UserActivityAlerts::AlertNotifier < Notifier
     @alert_user_con_profile = alert_user_con_profile
     @user_activity_alert = user_activity_alert
     @event = event
-    super(convention: alert_user_con_profile.convention, event_key: 'user_activity_alerts/alert')
+    super(convention: alert_user_con_profile.convention, event_key: "user_activity_alerts/alert")
   end
 
   def liquid_assigns
     super.merge(
-      'alert_user_con_profile' => alert_user_con_profile,
-      'event_description' => event_description,
-      'event_short_description' => event_short_description,
-      'trigger_reasons' => trigger_reasons
+      "alert_user_con_profile" => alert_user_con_profile,
+      "event_description" => event_description,
+      "event_short_description" => event_short_description,
+      "trigger_reasons" => trigger_reasons
     )
   end
 
@@ -22,12 +22,20 @@ class UserActivityAlerts::AlertNotifier < Notifier
     user_activity_alert.destination_user_con_profiles
   end
 
+  def default_destinations
+    []
+  end
+
+  def allowed_dynamic_destinations
+    []
+  end
+
   def event_description
     case event.to_sym
     when :ticket_create
       "purchased a #{alert_user_con_profile.ticket.ticket_type.description}"
     when :user_con_profile_create
-      'created a profile'
+      "created a profile"
     else
       event.to_s.humanize.downcase
     end

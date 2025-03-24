@@ -4,14 +4,22 @@ class SignupRequests::RequestAcceptedNotifier < Notifier
 
   def initialize(signup_request:)
     @signup_request = signup_request
-    super(convention: signup_request.target_run.event.convention, event_key: 'signup_requests/request_accepted')
+    super(convention: signup_request.target_run.event.convention, event_key: "signup_requests/request_accepted")
   end
 
   def liquid_assigns
-    super.merge('signup_request' => signup_request)
+    super.merge("signup_request" => signup_request)
   end
 
   def destinations
     [signup_request.user_con_profile]
+  end
+
+  def default_destinations
+    [:signup_request_user_con_profile]
+  end
+
+  def allowed_dynamic_destinations
+    %i[triggering_user signup_request_user_con_profile]
   end
 end
