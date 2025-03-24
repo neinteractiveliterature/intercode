@@ -15,11 +15,11 @@ class Signups::HoldExpiredNotifier < Notifier
     [signup.user_con_profile]
   end
 
-  def default_destinations
+  def self.default_destinations(**)
     [:signup_user_con_profile]
   end
 
-  def allowed_dynamic_destinations
+  def self.allowed_dynamic_destinations
     %i[signup_user_con_profile event_team_members]
   end
 end

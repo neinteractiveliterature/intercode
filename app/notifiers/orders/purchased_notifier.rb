@@ -15,11 +15,11 @@ class Orders::PurchasedNotifier < Notifier
     [order.user_con_profile]
   end
 
-  def default_destinations
+  def self.default_destinations(**)
     [:order_user_con_profile]
   end
 
-  def allowed_dynamic_destinations
+  def self.allowed_dynamic_destinations
     %i[order_user_con_profile triggering_user]
   end
 end

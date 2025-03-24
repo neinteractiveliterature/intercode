@@ -20,11 +20,11 @@ class EventProposals::ProposalSubmitConfirmationNotifier < Notifier
     [event_proposal.owner]
   end
 
-  def default_destinations
+  def self.default_destinations(**)
     %i[event_proposal_owner]
   end
 
-  def allowed_dynamic_destinations
+  def self.allowed_dynamic_destinations
     %i[triggering_user event_proposal_owner]
   end
 end

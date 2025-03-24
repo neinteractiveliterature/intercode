@@ -15,11 +15,11 @@ class EventProposals::UnfinishedDraftReminderNotifier < Notifier
     [event_proposal.owner]
   end
 
-  def default_destinations
+  def self.default_destinations(**)
     [:event_proposal_owner]
   end
 
-  def allowed_dynamic_destinations
+  def self.allowed_dynamic_destinations
     [:event_proposal_owner]
   end
 end

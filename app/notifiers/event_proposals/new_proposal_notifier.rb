@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class EventProposals::NewProposalNotifier < Notifier
   include EventProposals::EventProposalNotificationsHelper
+  extend EventProposals::EventProposalNotificationsHelper
 
   attr_reader :event_proposal
 
@@ -17,11 +18,11 @@ class EventProposals::NewProposalNotifier < Notifier
     proposal_destinations(event_proposal)
   end
 
-  def default_destinations
-    proposal_destinations(event_proposal)
+  def self.default_destinations(convention:)
+    [:event_category_proposal_reviewers, *global_proposal_chair_staff_positions(convention)]
   end
 
-  def allowed_dynamic_destinations
-    [:triggering_user]
+  def self.allowed_dynamic_destinations
+    [:triggering_user, :event_proposal_owner, :event_category_proposal_reviewers]
   end
 end

@@ -8,7 +8,7 @@ module EventProposals::EventProposalNotificationsHelper
         id:
           Permission
             .for_model(event_proposal.event_category)
-            .where(permission: 'read_pending_event_proposals')
+            .where(permission: "read_pending_event_proposals")
             .select(:staff_position_id)
       )
       .sort_by { |staff_position| staff_position.email.present? ? 0 : 1 }
@@ -16,7 +16,7 @@ module EventProposals::EventProposalNotificationsHelper
 
   def global_proposal_chair_staff_positions(convention)
     convention.staff_positions.where(
-      id: Permission.for_model(convention).where(permission: 'read_pending_event_proposals').select(:staff_position_id)
+      id: Permission.for_model(convention).where(permission: "read_pending_event_proposals").select(:staff_position_id)
     )
   end
 

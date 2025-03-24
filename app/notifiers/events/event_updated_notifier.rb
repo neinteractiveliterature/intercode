@@ -22,7 +22,7 @@ class Events::EventUpdatedNotifier < Notifier
     staff_positions
   end
 
-  def default_destinations
+  def self.default_destinations(convention:)
     staff_positions = convention.staff_positions.where(name: ["GM Coordinator", "GM Liaison"]).to_a
     staff_positions ||=
       StaffPosition.where(
@@ -32,7 +32,7 @@ class Events::EventUpdatedNotifier < Notifier
     staff_positions
   end
 
-  def allowed_dynamic_destinations
+  def self.allowed_dynamic_destinations
     [:triggering_user]
   end
 

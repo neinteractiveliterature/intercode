@@ -17,13 +17,13 @@ class SignupRequests::NewSignupRequestNotifier < Notifier
     )
   end
 
-  def default_destinations
+  def self.default_destinations(convention:)
     StaffPosition.where(
-      id: Permission.for_model(signup_request.convention).where(permission: "update_signups").select(:staff_position_id)
+      id: Permission.for_model(convention).where(permission: "update_signups").select(:staff_position_id)
     )
   end
 
-  def allowed_dynamic_destinations
+  def self.allowed_dynamic_destinations
     %i[triggering_user signup_request_user_con_profile]
   end
 end

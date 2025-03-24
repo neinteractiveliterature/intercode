@@ -15,11 +15,11 @@ class SignupRequests::RequestAcceptedNotifier < Notifier
     [signup_request.user_con_profile]
   end
 
-  def default_destinations
+  def self.default_destinations(**)
     [:signup_request_user_con_profile]
   end
 
-  def allowed_dynamic_destinations
+  def self.allowed_dynamic_destinations
     %i[triggering_user signup_request_user_con_profile]
   end
 end

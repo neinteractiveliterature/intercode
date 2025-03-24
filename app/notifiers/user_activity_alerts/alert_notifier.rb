@@ -22,11 +22,11 @@ class UserActivityAlerts::AlertNotifier < Notifier
     user_activity_alert.destination_user_con_profiles
   end
 
-  def default_destinations
+  def self.default_destinations(**)
     []
   end
 
-  def allowed_dynamic_destinations
+  def self.allowed_dynamic_destinations
     []
   end
 

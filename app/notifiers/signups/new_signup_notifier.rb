@@ -17,11 +17,11 @@ class Signups::NewSignupNotifier < Notifier
     team_members_to_notify_for_signup(signup).map(&:user_con_profile)
   end
 
-  def default_destinations
+  def self.default_destinations(**)
     [:event_team_members]
   end
 
-  def allowed_dynamic_destinations
+  def self.allowed_dynamic_destinations
     %i[signup_user_con_profile event_team_members triggering_user]
   end
 

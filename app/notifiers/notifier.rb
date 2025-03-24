@@ -26,8 +26,8 @@ class Notifier
     Thread.current["notifier_timezone"] = nil
   end
 
-  def self.for_event_key(event_key, convention:)
-    Notifier::NOTIFIER_CLASSES_BY_EVENT_KEY.fetch(event_key).new(convention:, event_key:)
+  def self.notifier_class_for_event_key(event_key)
+    Notifier::NOTIFIER_CLASSES_BY_EVENT_KEY.fetch(event_key)
   end
 
   attr_reader :event_key, :convention
@@ -58,11 +58,11 @@ class Notifier
     raise NotImplementedError, "Notifier subclasses must implement #destinations"
   end
 
-  def default_destinations
+  def self.default_destinations(convention:)
     raise NotImplementedError, "Notifier subclasses must implement #default_destinations"
   end
 
-  def allowed_dynamic_destinations
+  def self.allowed_dynamic_destinations
     []
   end
 
