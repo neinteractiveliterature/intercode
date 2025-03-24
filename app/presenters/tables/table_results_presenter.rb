@@ -165,23 +165,26 @@ class Tables::TableResultsPresenter
     fields.slice(*visible_field_ids.map(&:to_sym)).values
   end
 
-  def csv_enumerator
-    return to_enum(:csv_enumerator) unless block_given?
+  def csv_enumerator(zone: nil)
+    return to_enum(:csv_enumerator, zone: Time.zone) unless block_given? # rubocop:disable Lint/ToEnumArguments
 
-    the_fields = visible_fields
-    yield CSV.generate_line(the_fields.map(&:csv_header))
+    current_zone = Time.zone
+    Time.use_zone(zone || current_zone) do
+      the_fields = visible_fields
+      yield CSV.generate_line(the_fields.map(&:csv_header))
 
-    # I'm gonna make my own find_each, with limits and offsets!
-    total_records = csv_scope.count
-    batch_size = 1000
-    (0..total_records).step(batch_size) do |offset|
-      csv_scope
-        .limit(batch_size)
-        .offset(offset)
-        .each do |model|
-          csv_data = the_fields.map { |field| field.generate_csv_cell(model) }
-          yield CSV.generate_line(csv_data)
-        end
+      # I'm gonna make my own find_each, with limits and offsets!
+      total_records = csv_scope.count
+      batch_size = 1000
+      (0..total_records).step(batch_size) do |offset|
+        csv_scope
+          .limit(batch_size)
+          .offset(offset)
+          .each do |model|
+            csv_data = the_fields.map { |field| field.generate_csv_cell(model) }
+            yield CSV.generate_line(csv_data)
+          end
+      end
     end
   end
 
