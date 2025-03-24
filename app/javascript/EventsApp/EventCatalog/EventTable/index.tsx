@@ -42,6 +42,16 @@ function TeamMembersCell<TData, TValue extends RunType['event']['team_members']>
   );
 }
 
+function RoomNamesCell<TData, TValue extends RunType['rooms']>({ getValue }: CellContext<TData, TValue>) {
+  return (
+    <div>
+      {getValue()
+        .map((room) => room.name)
+        .join(', ')}
+    </div>
+  );
+}
+
 const defaultVisibleColumns = ['category', 'title', 'starts_at', 'length_seconds', 'total_slots'];
 
 type LoaderResult = {
@@ -50,7 +60,7 @@ type LoaderResult = {
 };
 
 export const loader: LoaderFunction = async () => {
-  const { data } = await client.query<CommonConventionDataQueryData>({ query: CommonConventionDataQueryDocument });
+  const { data } = await client.query({ query: CommonConventionDataQueryDocument });
   const filterableFormItems = getFilterableFormItems(data.convention);
   return { convention: data.convention, filterableFormItems } satisfies LoaderResult;
 };
@@ -100,6 +110,11 @@ function EventTable() {
         size: 80,
         enableSorting: true,
         cell: DurationCell,
+      }),
+      columnHelper.accessor('rooms', {
+        header: 'Rooms',
+        id: 'room_names',
+        cell: RoomNamesCell,
       }),
       columnHelper.accessor('event.short_blurb_html', {
         header: 'Short blurb',

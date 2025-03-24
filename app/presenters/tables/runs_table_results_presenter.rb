@@ -4,7 +4,11 @@ class Tables::RunsTableResultsPresenter < Tables::TableResultsPresenter
     scope =
       Pundit.policy_scope(
         pundit_user,
-        convention.runs.joins(:event).where(events: { status: "active" }).includes(event: %i[convention event_category])
+        convention
+          .runs
+          .joins(:event)
+          .where(events: { status: "active" })
+          .includes(:rooms, event: %i[convention event_category])
       )
     new(
       base_scope: scope,
@@ -107,6 +111,12 @@ class Tables::RunsTableResultsPresenter < Tables::TableResultsPresenter
   field :author, "Author(s)" do
     def generate_csv_cell(run)
       run.event.author
+    end
+  end
+
+  field :room_names, "Rooms" do
+    def generate_csv_cell(run)
+      run.rooms.map(&:name).join(", ")
     end
   end
 

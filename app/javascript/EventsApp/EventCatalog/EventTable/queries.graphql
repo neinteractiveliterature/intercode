@@ -25,6 +25,11 @@ query EventCatalogRunsQuery(
         title_suffix
         schedule_note
 
+        rooms {
+          id
+          name
+        }
+
         event {
           id
           title
