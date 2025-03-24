@@ -41,7 +41,7 @@ class NotificationDestination < ApplicationRecord
 
   def ensure_dynamic_destination_allowed_for_source
     return unless dynamic_destination
-    return if source.allowed_dynamic_destinations.include?(dynamic_destination)
+    return if source.allowed_dynamic_destinations.include?(dynamic_destination.to_sym)
 
     errors.add :dynamic_destination,
                "is not allowed type for this source. Valid options: #{source.allowed_dynamic_destinations.to_sentence}"

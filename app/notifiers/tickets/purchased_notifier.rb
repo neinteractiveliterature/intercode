@@ -15,11 +15,11 @@ class Tickets::PurchasedNotifier < Notifier
     [ticket.user_con_profile]
   end
 
-  def default_destinations
+  def self.default_destinations(**)
     [:ticket_user_con_profile]
   end
 
-  def allowed_dynamic_destinations
+  def self.allowed_dynamic_destinations
     %i[ticket_user_con_profile]
   end
 end
