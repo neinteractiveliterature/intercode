@@ -7,15 +7,23 @@ class EventProposals::ProposalUpdatedNotifier < Notifier
   def initialize(event_proposal:, changes:)
     @event_proposal = event_proposal
     @changes = changes
-    super(convention: event_proposal.convention, event_key: 'event_proposals/proposal_updated')
+    super(convention: event_proposal.convention, event_key: "event_proposals/proposal_updated")
   end
 
   def liquid_assigns
-    super.merge('event_proposal' => event_proposal, 'changes_html' => changes_html)
+    super.merge("event_proposal" => event_proposal, "changes_html" => changes_html)
   end
 
   def destinations
     proposal_destinations(event_proposal)
+  end
+
+  def default_destinations
+    proposal_destinations(event_proposal)
+  end
+
+  def allowed_dynamic_destinations
+    %i[triggering_user event_proposal_owner]
   end
 
   def changes_html

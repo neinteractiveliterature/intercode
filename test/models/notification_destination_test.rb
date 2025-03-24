@@ -4,6 +4,7 @@
 # Table name: notification_destinations
 #
 #  id                  :bigint           not null, primary key
+#  dynamic_destination :text
 #  source_type         :string           not null
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null

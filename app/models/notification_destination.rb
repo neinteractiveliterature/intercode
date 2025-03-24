@@ -5,6 +5,7 @@
 # Table name: notification_destinations
 #
 #  id                  :bigint           not null, primary key
+#  dynamic_destination :text
 #  source_type         :string           not null
 #  created_at          :datetime         not null
 #  updated_at          :datetime         not null
@@ -30,7 +31,19 @@ class NotificationDestination < ApplicationRecord
   belongs_to :staff_position, optional: true
   belongs_to :user_con_profile, optional: true
 
+  validate :ensure_dynamic_destination_allowed_for_source
+
   def user_con_profiles
     staff_position ? staff_position.user_con_profiles : [user_con_profile]
+  end
+
+  private
+
+  def ensure_dynamic_destination_allowed_for_source
+    return unless dynamic_destination
+    return if source.allowed_dynamic_destinations.include?(dynamic_destination)
+
+    errors.add :dynamic_destination,
+               "is not allowed type for this source. Valid options: #{source.allowed_dynamic_destinations.to_sentence}"
   end
 end

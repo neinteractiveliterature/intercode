@@ -5,21 +5,35 @@ class Events::EventUpdatedNotifier < Notifier
   def initialize(event:, changes:)
     @event = event
     @changes = changes
-    super(convention: event.convention, event_key: 'events/event_updated')
+    super(convention: event.convention, event_key: "events/event_updated")
   end
 
   def liquid_assigns
-    super.merge('event' => event, 'changes_html' => changes_html)
+    super.merge("event" => event, "changes_html" => changes_html)
   end
 
   def destinations
-    staff_positions = convention.staff_positions.where(name: ['GM Coordinator', 'GM Liaison']).to_a
+    staff_positions = convention.staff_positions.where(name: ["GM Coordinator", "GM Liaison"]).to_a
     staff_positions ||=
       StaffPosition.where(
-        id: Permission.for_model(convention).where(permission: 'update_events').select(:staff_position_id)
+        id: Permission.for_model(convention).where(permission: "update_events").select(:staff_position_id)
       )
 
     staff_positions
+  end
+
+  def default_destinations
+    staff_positions = convention.staff_positions.where(name: ["GM Coordinator", "GM Liaison"]).to_a
+    staff_positions ||=
+      StaffPosition.where(
+        id: Permission.for_model(convention).where(permission: "update_events").select(:staff_position_id)
+      )
+
+    staff_positions
+  end
+
+  def allowed_dynamic_destinations
+    [:triggering_user]
   end
 
   def changes_html

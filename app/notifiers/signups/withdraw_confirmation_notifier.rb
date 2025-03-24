@@ -19,6 +19,14 @@ class Signups::WithdrawConfirmationNotifier < Notifier
     [signup.user_con_profile]
   end
 
+  def default_destinations
+    [:signup_user_con_profile]
+  end
+
+  def allowed_dynamic_destinations
+    %i[signup_user_con_profile event_team_members triggering_user]
+  end
+
   def prev_bucket
     return unless prev_bucket_key
     signup.run.event.registration_policy.bucket_with_key(prev_bucket_key)
