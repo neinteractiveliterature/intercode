@@ -7385,13 +7385,13 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*, @types/react@npm:18.3.19":
-  version: 18.3.19
-  resolution: "@types/react@npm:18.3.19"
+"@types/react@npm:*, @types/react@npm:18.3.20":
+  version: 18.3.20
+  resolution: "@types/react@npm:18.3.20"
   dependencies:
     "@types/prop-types": "npm:*"
     csstype: "npm:^3.0.2"
-  checksum: 10c0/236bfe0c4748ada1a640f13573eca3e0fc7c9d847b442947adb352b0718d6d285357fd84c33336c8ffb8cbfabc0d58a43a647c7fd79857fecd61fb58ab6f7918
+  checksum: 10c0/65fa867c91357e4c4c646945c8b99044360f8973cb7f928ec4de115fe3207827985d45be236e6fd6c092b09f631c2126ce835c137be30718419e143d73300d8f
   languageName: node
   linkType: hard
 
@@ -21292,7 +21292,7 @@ __metadata:
     "@types/punycode": "npm:2.1.4"
     "@types/qs": "npm:^6"
     "@types/rails__activestorage": "npm:7.1.1"
-    "@types/react": "npm:18.3.19"
+    "@types/react": "npm:18.3.20"
     "@types/react-click-outside-hook": "npm:1.0.3"
     "@types/react-color": "npm:3.0.13"
     "@types/react-dom": "npm:18.3.5"
