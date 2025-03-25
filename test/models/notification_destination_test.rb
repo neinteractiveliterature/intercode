@@ -4,6 +4,7 @@
 # Table name: notification_destinations
 #
 #  id                  :bigint           not null, primary key
+#  conditions          :jsonb
 #  dynamic_destination :text
 #  source_type         :string           not null
 #  created_at          :datetime         not null

@@ -40,26 +40,13 @@ class NotificationTemplate < ApplicationRecord
   validates_template_validity :body_text
   validates_template_validity :body_sms
 
-  delegate :allowed_dynamic_destinations, to: :notifier_class
+  delegate :allowed_dynamic_destinations, :allowed_conditions, to: :notifier_class
 
   def notifier_class
     Notifier.notifier_class_for_event_key(event_key)
   end
 
   def create_default_destinations!
-    notifier_class
-      .default_destinations(convention:)
-      .each do |default_destination|
-        case default_destination
-        when UserConProfile
-          notification_destinations.create!(user_con_profile: default_destination)
-        when StaffPosition
-          notification_destinations.create!(staff_position: default_destination)
-        when Symbol
-          notification_destinations.create!(dynamic_destination: default_destination)
-        else
-          raise "Invalid default destination: #{default_destination.inspect}"
-        end
-      end
+    notifier_class.build_default_destinations(notification_template: self).each(&:save!)
   end
 end

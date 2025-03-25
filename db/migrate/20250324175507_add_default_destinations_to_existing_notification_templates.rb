@@ -9,5 +9,6 @@ class AddDefaultDestinationsToExistingNotificationTemplates < ActiveRecord::Migr
   end
 
   def down
+    NotificationDestination.where(source_type: "NotificationTemplate").delete_all
   end
 end

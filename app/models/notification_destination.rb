@@ -5,6 +5,7 @@
 # Table name: notification_destinations
 #
 #  id                  :bigint           not null, primary key
+#  conditions          :jsonb
 #  dynamic_destination :text
 #  source_type         :string           not null
 #  created_at          :datetime         not null
@@ -32,6 +33,7 @@ class NotificationDestination < ApplicationRecord
   belongs_to :user_con_profile, optional: true
 
   validate :ensure_dynamic_destination_allowed_for_source
+  validate :ensure_all_conditions_allowed_for_source
 
   def user_con_profiles
     staff_position ? staff_position.user_con_profiles : [user_con_profile]
@@ -44,6 +46,18 @@ class NotificationDestination < ApplicationRecord
     return if source.allowed_dynamic_destinations.include?(dynamic_destination.to_sym)
 
     errors.add :dynamic_destination,
-               "is not allowed type for this source. Valid options: #{source.allowed_dynamic_destinations.to_sentence}"
+               "is not valid this source. Valid options: #{source.allowed_dynamic_destinations.to_sentence}"
+  end
+
+  def ensure_all_conditions_allowed_for_source
+    return unless conditions
+
+    allowed_conditions = Set.new(source.allowed_conditions.map(&:to_s))
+    invalid_conditions = conditions.keys.filter { |key| allowed_conditions.exclude(key) }
+    return if invalid_conditions.empty?
+
+    errors.add :conditions,
+               "#{invalid_conditions.to_sentence} not allowed for this source. \
+Valid options: #{source.allowed_conditions.to_sentence}"
   end
 end

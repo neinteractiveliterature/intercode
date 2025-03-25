@@ -1766,6 +1766,7 @@ CREATE TABLE public.notification_destinations (
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     dynamic_destination text,
+    conditions jsonb,
     CONSTRAINT notification_destination_type_exclusive_arc CHECK ((((((user_con_profile_id IS NOT NULL))::integer + ((staff_position_id IS NOT NULL))::integer) + ((dynamic_destination IS NOT NULL))::integer) = 1))
 );
 

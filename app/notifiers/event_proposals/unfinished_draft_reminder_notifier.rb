@@ -15,11 +15,15 @@ class EventProposals::UnfinishedDraftReminderNotifier < Notifier
     [event_proposal.owner]
   end
 
-  def self.default_destinations(**)
-    [:event_proposal_owner]
+  def self.build_default_destinations(notification_template:)
+    [notification_template.notification_destinations.new(dynamic_destination: :event_proposal_owner)]
   end
 
   def self.allowed_dynamic_destinations
     [:event_proposal_owner]
+  end
+
+  def self.allowed_conditions
+    %i[event_category]
   end
 end
