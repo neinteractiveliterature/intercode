@@ -1,6 +1,9 @@
 class EnhanceNotificationDestinationsForNotificationTemplates < ActiveRecord::Migration[8.0]
   def change
-    add_column :notification_destinations, :dynamic_destination, :text
+    change_table :notification_destinations, bulk: true do |t|
+      t.text :dynamic_destination
+      t.jsonb :conditions
+    end
 
     add_check_constraint :notification_destinations, <<~SQL, name: "notification_destination_type_exclusive_arc"
       (

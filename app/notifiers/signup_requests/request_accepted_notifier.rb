@@ -15,8 +15,8 @@ class SignupRequests::RequestAcceptedNotifier < Notifier
     [signup_request.user_con_profile]
   end
 
-  def self.default_destinations(**)
-    [:signup_request_user_con_profile]
+  def self.build_default_destinations(notification_template:)
+    [notification_template.notification_destinations.new(dynamic_destination: :signup_request_user_con_profile)]
   end
 
   def self.allowed_dynamic_destinations

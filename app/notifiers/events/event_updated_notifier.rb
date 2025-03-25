@@ -22,18 +22,27 @@ class Events::EventUpdatedNotifier < Notifier
     staff_positions
   end
 
-  def self.default_destinations(convention:)
-    staff_positions = convention.staff_positions.where(name: ["GM Coordinator", "GM Liaison"]).to_a
+  def self.build_default_destinations(notification_template:)
+    staff_positions =
+      notification_template.convention.staff_positions.where(name: ["GM Coordinator", "GM Liaison"]).to_a
     staff_positions ||=
       StaffPosition.where(
-        id: Permission.for_model(convention).where(permission: "update_events").select(:staff_position_id)
+        id:
+          Permission
+            .for_model(notification_template.convention)
+            .where(permission: "update_events")
+            .select(:staff_position_id)
       )
 
-    staff_positions
+    staff_positions.map { |staff_position| notification_template.notification_destinations.new(staff_position:) }
   end
 
   def self.allowed_dynamic_destinations
     [:triggering_user]
+  end
+
+  def self.allowed_conditions
+    [:event_category]
   end
 
   def changes_html

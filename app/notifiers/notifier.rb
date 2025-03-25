@@ -58,11 +58,15 @@ class Notifier
     raise NotImplementedError, "Notifier subclasses must implement #destinations"
   end
 
-  def self.default_destinations(convention:)
-    raise NotImplementedError, "Notifier subclasses must implement #default_destinations"
+  def self.build_default_destinations(notification_template:)
+    raise NotImplementedError, "Notifier subclasses must implement #build_default_destinations"
   end
 
   def self.allowed_dynamic_destinations
+    []
+  end
+
+  def self.allowed_conditions
     []
   end
 

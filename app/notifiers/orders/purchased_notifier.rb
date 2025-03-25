@@ -15,8 +15,8 @@ class Orders::PurchasedNotifier < Notifier
     [order.user_con_profile]
   end
 
-  def self.default_destinations(**)
-    [:order_user_con_profile]
+  def self.build_default_destinations(notification_template:)
+    [notification_template.notification_destinations.new(dynamic_destination: :order_user_con_profile)]
   end
 
   def self.allowed_dynamic_destinations

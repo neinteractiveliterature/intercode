@@ -17,10 +17,16 @@ class SignupRequests::NewSignupRequestNotifier < Notifier
     )
   end
 
-  def self.default_destinations(convention:)
-    StaffPosition.where(
-      id: Permission.for_model(convention).where(permission: "update_signups").select(:staff_position_id)
-    )
+  def self.build_default_destinations(notification_template:)
+    StaffPosition
+      .where(
+        id:
+          Permission
+            .for_model(notification_template.convention)
+            .where(permission: "update_signups")
+            .select(:staff_position_id)
+      )
+      .map { |staff_position| notification_template.notification_destinations.new(staff_position:) }
   end
 
   def self.allowed_dynamic_destinations

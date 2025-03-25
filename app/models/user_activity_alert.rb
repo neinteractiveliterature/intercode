@@ -82,6 +82,10 @@ class UserActivityAlert < ApplicationRecord
     []
   end
 
+  def allowed_conditions
+    []
+  end
+
   private
 
   def normalize_email(email)
