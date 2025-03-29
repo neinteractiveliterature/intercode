@@ -74,10 +74,6 @@ class UserActivityAlert < ApplicationRecord
     partial_name.blank? && email.blank? && !user
   end
 
-  def destination_user_con_profiles
-    notification_destinations.flat_map(&:user_con_profiles).compact.uniq
-  end
-
   def allowed_dynamic_destinations
     []
   end

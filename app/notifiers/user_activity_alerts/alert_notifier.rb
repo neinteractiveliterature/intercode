@@ -18,12 +18,19 @@ class UserActivityAlerts::AlertNotifier < Notifier
     )
   end
 
-  def self.build_default_destinations(**)
-    []
+  def self.build_default_destinations(notification_template:)
+    [notification_template.notification_destinations.new(dynamic_destination: :user_activity_alert_destinations)]
   end
 
   def self.allowed_dynamic_destinations
-    []
+    [:user_activity_alert_destinations]
+  end
+
+  def dynamic_destination_evaluators
+    {
+      user_activity_alert_destinations:
+        Notifier::DynamicDestinations::UserActivityAlertDestinationsEvaluator.new(notifier: self, user_activity_alert:)
+    }
   end
 
   def event_description
