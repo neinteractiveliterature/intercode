@@ -12,16 +12,6 @@ class Events::EventUpdatedNotifier < Notifier
     super.merge("event" => event, "changes_html" => changes_html)
   end
 
-  def destinations
-    staff_positions = convention.staff_positions.where(name: ["GM Coordinator", "GM Liaison"]).to_a
-    staff_positions ||=
-      StaffPosition.where(
-        id: Permission.for_model(convention).where(permission: "update_events").select(:staff_position_id)
-      )
-
-    staff_positions
-  end
-
   def self.build_default_destinations(notification_template:)
     staff_positions =
       notification_template.convention.staff_positions.where(name: ["GM Coordinator", "GM Liaison"]).to_a
@@ -43,6 +33,10 @@ class Events::EventUpdatedNotifier < Notifier
 
   def self.allowed_conditions
     [:event_category]
+  end
+
+  def dynamic_destination_evaluators
+    { triggering_user: Notifier::DynamicDestinations::TriggeringUserEvaluator.new(notifier: self) }
   end
 
   def changes_html

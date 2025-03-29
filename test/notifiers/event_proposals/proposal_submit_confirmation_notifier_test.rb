@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class EventProposals::NewProposalNotifierTest < ActionMailer::TestCase
   let(:convention) { create(:convention, :with_notification_templates) }
@@ -16,14 +16,19 @@ class EventProposals::NewProposalNotifierTest < ActionMailer::TestCase
     create(:event_proposal, convention: convention, event_category: event_category, owner: proposer)
   end
 
-  describe '#destinations' do
-    it 'notifies the proposal owner' do
+  describe ".build_default_destinations" do
+    it "notifies the proposal owner" do
       event_proposal
       proposal_chair_staff_position
-      proposal_chair_staff_position.update!(email: 'proposal-chair@example.com')
-      notifier = EventProposals::ProposalSubmitConfirmationNotifier.new(event_proposal: event_proposal)
+      proposal_chair_staff_position.update!(email: "proposal-chair@example.com")
 
-      assert_equal [proposer], notifier.destinations
+      notification_template =
+        convention.notification_templates.find_by!(event_key: "event_proposals/proposal_submit_confirmation")
+      destinations =
+        EventProposals::ProposalSubmitConfirmationNotifier.build_default_destinations(notification_template:)
+
+      assert_equal 1, destinations.size
+      assert_equal "event_proposal_owner", destinations.first.dynamic_destination
     end
   end
 end

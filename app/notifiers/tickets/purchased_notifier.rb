@@ -11,15 +11,17 @@ class Tickets::PurchasedNotifier < Notifier
     super.merge("ticket" => ticket)
   end
 
-  def destinations
-    [ticket.user_con_profile]
-  end
-
   def self.build_default_destinations(notification_template:)
     [notification_template.notification_destinations.new(dynamic_destination: :ticket_user_con_profile)]
   end
 
   def self.allowed_dynamic_destinations
     %i[ticket_user_con_profile]
+  end
+
+  def dynamic_destination_evaluators
+    {
+      ticket_user_con_profile: Notifier::DynamicDestinations::TicketUserConProfileEvaluator.new(notifier: self, ticket:)
+    }
   end
 end

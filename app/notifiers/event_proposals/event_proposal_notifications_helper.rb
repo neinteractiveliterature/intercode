@@ -16,11 +16,9 @@ module EventProposals::EventProposalNotificationsHelper
 
   def category_proposal_reviewer_staff_positions(convention)
     permissions =
-      convention
-        .permissions
+      Permission
         .where(permission: "read_pending_event_proposals")
-        .where.not(event_category_id: nil)
-        .where.not(staff_position_id: nil)
+        .where(event_category_id: convention.event_categories.select(:id))
         .includes(:event_category, :staff_position)
 
     permissions.map { |permission| [permission.event_category, permission.staff_position] }

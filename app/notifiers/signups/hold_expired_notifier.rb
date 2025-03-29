@@ -11,15 +11,24 @@ class Signups::HoldExpiredNotifier < Notifier
     super.merge("signup" => signup)
   end
 
-  def destinations
-    [signup.user_con_profile]
-  end
-
   def self.build_default_destinations(notification_template:)
     [notification_template.notification_destinations.new(dynamic_destination: :signup_user_con_profile)]
   end
 
   def self.allowed_dynamic_destinations
     %i[signup_user_con_profile event_team_members]
+  end
+
+  def dynamic_destination_evaluators
+    {
+      signup_user_con_profile:
+        Notifier::DynamicDestinations::SignupUserConProfileEvaluator.new(notifier: self, signup:),
+      event_team_members:
+        Notifier::DynamicDestinations::EventTeamMembersEvaluator.new(
+          notifier: self,
+          signup_state: signup.state,
+          event: signup.run.event
+        )
+    }
   end
 end
