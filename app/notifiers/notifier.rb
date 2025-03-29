@@ -57,6 +57,14 @@ class Notifier
     notification_template.notification_destinations
   end
 
+  def destination_emails
+    destinations.flat_map { |destination| destination.emails(self) }.uniq
+  end
+
+  def destination_user_con_profiles
+    destinations.flat_map { |destination| destination.user_con_profiles(self) }.uniq
+  end
+
   def liquid_assigns
     {}
   end
@@ -125,8 +133,7 @@ class Notifier
 
     content = sms_content
 
-    user_con_profiles =
-      preview_user_con_profile ? [preview_user_con_profile] : user_con_profiles_for_destinations(destinations)
+    user_con_profiles = preview_user_con_profile ? [preview_user_con_profile] : destination_user_con_profiles
 
     user_con_profiles.filter_map do |user_con_profile|
       next nil unless user_con_profile.allow_sms?
@@ -154,20 +161,7 @@ class Notifier
     NotificationsMailer.notification(
       **render.slice(:subject, :body_html, :body_text),
       convention: convention,
-      to:
-        if preview_user_con_profile
-          email_for_user_con_profile(preview_user_con_profile)
-        else
-          emails_for_destinations(destinations)
-        end
+      to: (preview_user_con_profile ? email_for_user_con_profile(preview_user_con_profile) : destination_emails)
     )
-  end
-
-  def emails_for_destinations(destinations)
-    destinations.flat_map { |destination| destination.emails(self) }
-  end
-
-  def user_con_profiles_for_destinations(destinations)
-    destinations.flat_map { |destination| destination.user_con_profiles(self) }
   end
 end

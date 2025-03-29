@@ -110,4 +110,17 @@ module Notifier::DynamicDestinations
       [event_proposal.owner]
     end
   end
+
+  class UserActivityAlertDestinationsEvaluator < Evaluator
+    attr_reader :user_activity_alert
+
+    def initialize(notifier:, user_activity_alert:)
+      super(notifier:)
+      @user_activity_alert = user_activity_alert
+    end
+
+    def user_con_profiles
+      user_activity_alert.notification_destinations.flat_map { |destination| destination.user_con_profiles(notifier) }
+    end
+  end
 end
