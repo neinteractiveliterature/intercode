@@ -11,15 +11,19 @@ class SignupRequests::RequestAcceptedNotifier < Notifier
     super.merge("signup_request" => signup_request)
   end
 
-  def destinations
-    [signup_request.user_con_profile]
-  end
-
   def self.build_default_destinations(notification_template:)
     [notification_template.notification_destinations.new(dynamic_destination: :signup_request_user_con_profile)]
   end
 
   def self.allowed_dynamic_destinations
     %i[triggering_user signup_request_user_con_profile]
+  end
+
+  def dynamic_destination_evaluators
+    {
+      signup_request_user_con_profile:
+        Notifier::DynamicDestinations::SignupRequestUserConProfileEvaluator.new(notifier: self, signup_request:),
+      triggering_user: Notifier::DynamicDestinations::TriggeringUserEvaluator.new(notifier: self)
+    }
   end
 end

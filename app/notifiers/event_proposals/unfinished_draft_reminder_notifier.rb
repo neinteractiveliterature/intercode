@@ -11,10 +11,6 @@ class EventProposals::UnfinishedDraftReminderNotifier < Notifier
     super.merge("event_proposal" => event_proposal)
   end
 
-  def destinations
-    [event_proposal.owner]
-  end
-
   def self.build_default_destinations(notification_template:)
     [notification_template.notification_destinations.new(dynamic_destination: :event_proposal_owner)]
   end
@@ -25,5 +21,12 @@ class EventProposals::UnfinishedDraftReminderNotifier < Notifier
 
   def self.allowed_conditions
     %i[event_category]
+  end
+
+  def dynamic_destination_evaluators
+    {
+      event_proposal_owner:
+        Notifier::DynamicDestinations::EventProposalOwnerEvaluator.new(notifier: self, event_proposal:)
+    }
   end
 end

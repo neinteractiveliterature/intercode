@@ -11,12 +11,6 @@ class SignupRequests::NewSignupRequestNotifier < Notifier
     super.merge("signup_request" => signup_request)
   end
 
-  def destinations
-    StaffPosition.where(
-      id: Permission.for_model(signup_request.convention).where(permission: "update_signups").select(:staff_position_id)
-    )
-  end
-
   def self.build_default_destinations(notification_template:)
     StaffPosition
       .where(
@@ -31,5 +25,13 @@ class SignupRequests::NewSignupRequestNotifier < Notifier
 
   def self.allowed_dynamic_destinations
     %i[triggering_user signup_request_user_con_profile]
+  end
+
+  def dynamic_destination_evaluators
+    {
+      signup_request_user_con_profile:
+        Notifier::DynamicDestinations::SignupRequestUserConProfileEvaluator.new(notifier: self, signup_request:),
+      triggering_user: Notifier::DynamicDestinations::TriggeringUserEvaluator.new(notifier: self)
+    }
   end
 end

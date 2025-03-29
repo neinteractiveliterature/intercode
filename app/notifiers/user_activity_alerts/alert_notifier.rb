@@ -18,10 +18,6 @@ class UserActivityAlerts::AlertNotifier < Notifier
     )
   end
 
-  def destinations
-    user_activity_alert.destination_user_con_profiles
-  end
-
   def self.build_default_destinations(**)
     []
   end

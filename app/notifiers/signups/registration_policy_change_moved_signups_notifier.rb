@@ -20,16 +20,20 @@ class Signups::RegistrationPolicyChangeMovedSignupsNotifier < Notifier
     )
   end
 
-  def destinations
-    team_members_to_notify_for_move_results(event, move_results).map(&:user_con_profile)
-  end
-
   def self.build_default_destinations(notification_template:)
     [notification_template.notification_destinations.new(dynamic_destination: :event_team_members)]
   end
 
   def self.allowed_dynamic_destinations
     %i[event_team_members triggering_user]
+  end
+
+  def dynamic_destination_evaluators
+    {
+      event_team_members:
+        Notifier::DynamicDestinations::EventTeamMembersEvaluator.new(notifier: self, signup_state: "confirmed", event:),
+      triggering_user: Notifier::DynamicDestinations::TriggeringUserEvaluator.new(notifier: self)
+    }
   end
 
   def signups_by_id

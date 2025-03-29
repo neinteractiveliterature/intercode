@@ -30,16 +30,15 @@ class Notifier
     Notifier::NOTIFIER_CLASSES_BY_EVENT_KEY.fetch(event_key)
   end
 
-  attr_reader :event_key, :convention
+  attr_reader :event_key, :convention, :triggering_user
 
-  def initialize(convention:, event_key:)
+  def initialize(convention:, event_key:, triggering_user: nil)
     @convention = convention
     @event_key = event_key
+    @triggering_user = triggering_user
   end
 
   def render
-    notification_template = convention.notification_templates.find_by!(event_key: event_key)
-
     Time.use_zone(Notifier.current_timezone) do
       {
         subject: notification_template.subject_template,
@@ -50,16 +49,20 @@ class Notifier
     end
   end
 
+  def notification_template
+    @notification_template = convention.notification_templates.find_by!(event_key: event_key)
+  end
+
+  def destinations
+    notification_template.notification_destinations
+  end
+
   def liquid_assigns
     {}
   end
 
-  def destinations
-    raise NotImplementedError, "Notifier subclasses must implement #destinations"
-  end
-
   def self.build_default_destinations(notification_template:)
-    raise NotImplementedError, "Notifier subclasses must implement #build_default_destinations"
+    raise NotImplementedError, "Notifier subclasses must implement .build_default_destinations"
   end
 
   def self.allowed_dynamic_destinations
@@ -68,6 +71,19 @@ class Notifier
 
   def self.allowed_conditions
     []
+  end
+
+  def dynamic_destination_evaluators
+    raise NotImplementedError, "Notifier subclasses must implement #dynamic_destination_evaluators"
+  end
+
+  def evaluate_dynamic_destination(dynamic_destination)
+    @dynamic_destination_evaluators ||= dynamic_destination_evaluators
+    @dynamic_destination_evaluators.fetch(dynamic_destination.to_sym).user_con_profiles
+  end
+
+  def evaluate_condition(condition_type, condition_value)
+    raise NotImplementedError, "Notifier subclasses must implement #evaluate_condition"
   end
 
   def deliver_later(options = {})
@@ -147,44 +163,11 @@ class Notifier
     )
   end
 
-  def email_for_user_con_profile(user_con_profile)
-    address = Mail::Address.new(user_con_profile.email)
-    address.display_name = user_con_profile.name
-    address.format
-  end
-
-  def emails_for_staff_position(staff_position)
-    return [staff_position.email] if staff_position.email.present?
-    staff_position.user_con_profiles.map { |ucp| email_for_user_con_profile(ucp) }
-  end
-
   def emails_for_destinations(destinations)
-    destinations.flat_map do |destination|
-      case destination
-      when UserConProfile
-        email_for_user_con_profile(destination)
-      when StaffPosition
-        emails_for_staff_position(destination)
-      when nil
-        []
-      else
-        raise InvalidArgument, "Don't know how to send email to a #{destination.class}"
-      end
-    end
+    destinations.flat_map { |destination| destination.emails(self) }
   end
 
   def user_con_profiles_for_destinations(destinations)
-    destinations.flat_map do |destination|
-      case destination
-      when UserConProfile
-        destination
-      when StaffPosition
-        staff_position.user_con_profiles.to_a
-      when nil
-        []
-      else
-        raise InvalidArgument, "Don't know how to get a user con profile from a #{destination.class}"
-      end
-    end
+    destinations.flat_map { |destination| destination.user_con_profiles(self) }
   end
 end
