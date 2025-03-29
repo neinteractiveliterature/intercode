@@ -47,6 +47,13 @@ class EventProposals::ProposalUpdatedNotifier < Notifier
     }
   end
 
+  def condition_evaluators
+    {
+      event_category:
+        Notifier::Conditions::EventCategoryEvaluator.new(notifier: self, event_category: event_proposal.event_category)
+    }
+  end
+
   def changes_html
     @changes_html ||= FormResponseChangeGroupPresenter.new(changes, event_proposal.convention).html
   end

@@ -36,6 +36,20 @@ class Signups::RegistrationPolicyChangeMovedSignupsNotifier < Notifier
     }
   end
 
+  def self.allowed_conditions
+    [:event_category]
+  end
+
+  def condition_evaluators
+    {
+      event_category:
+        Notifier::Conditions::EventCategoryEvaluator.new(
+          notifier: self,
+          event_category: signup.run.event.event_category
+        )
+    }
+  end
+
   def signups_by_id
     @signups_by_id ||= Signup.where(id: move_results.map(&:signup_id)).includes(:run).index_by(&:id)
   end

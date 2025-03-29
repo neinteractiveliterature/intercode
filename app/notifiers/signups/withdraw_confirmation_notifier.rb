@@ -37,6 +37,20 @@ class Signups::WithdrawConfirmationNotifier < Notifier
     }
   end
 
+  def self.allowed_conditions
+    [:event_category]
+  end
+
+  def condition_evaluators
+    {
+      event_category:
+        Notifier::Conditions::EventCategoryEvaluator.new(
+          notifier: self,
+          event_category: signup.run.event.event_category
+        )
+    }
+  end
+
   def prev_bucket
     return unless prev_bucket_key
     signup.run.event.registration_policy.bucket_with_key(prev_bucket_key)

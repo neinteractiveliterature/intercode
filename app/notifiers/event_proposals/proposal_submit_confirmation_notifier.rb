@@ -35,4 +35,11 @@ class EventProposals::ProposalSubmitConfirmationNotifier < Notifier
       triggering_user: Notifier::DynamicDestinations::TriggeringUserEvaluator.new(notifier: self)
     }
   end
+
+  def condition_evaluators
+    {
+      event_category:
+        Notifier::Conditions::EventCategoryEvaluator.new(notifier: self, event_category: event_proposal.event_category)
+    }
+  end
 end
