@@ -12,8 +12,9 @@ class EventProposals::NewProposalNotifierTest < ActionMailer::TestCase
       end
     end
   end
+  let(:global_chair) { create(:user_con_profile, convention: convention) }
   let(:global_chair_staff_position) do
-    create(:staff_position, convention:).tap do |sp|
+    create(:staff_position, convention:, user_con_profiles: [global_chair]).tap do |sp|
       %w[read_event_proposals read_pending_event_proposals].each do |permission|
         sp.permissions.create!(model: convention, permission: permission)
       end
@@ -43,6 +44,31 @@ class EventProposals::NewProposalNotifierTest < ActionMailer::TestCase
       )
       assert(global_destination, "Expected a destination for the global proposal chair")
       assert(global_destination.conditions.blank?, "Expected no conditions on the global proposal chair destination")
+    end
+  end
+
+  describe "#destination_user_con_profiles" do
+    it "notifies the category-specific proposal chair(s) if there are any, as well as the global proposal chair(s)" do
+      event_proposal
+      proposal_chair_staff_position
+      global_chair_staff_position
+
+      # Create another event category and proposal chair, to make sure we're not accidentally notifying them
+      other_event_category = create(:event_category, convention: convention)
+      other_proposal_chair = create(:user_con_profile, convention: convention)
+      create(:staff_position, convention: convention, user_con_profiles: [other_proposal_chair]).tap do |sp|
+        %w[read_event_proposals read_pending_event_proposals].each do |permission|
+          sp.permissions.create!(model: other_event_category, permission: permission)
+        end
+      end
+
+      notification_template = convention.notification_templates.find_by!(event_key: "event_proposals/new_proposal")
+      notification_template.create_default_destinations!
+
+      notifier = EventProposals::NewProposalNotifier.new(event_proposal: event_proposal)
+      destination_user_con_profiles = notifier.destination_user_con_profiles
+
+      assert_equal [proposal_chair, global_chair].sort, destination_user_con_profiles.sort
     end
   end
 end

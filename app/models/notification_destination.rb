@@ -36,6 +36,8 @@ class NotificationDestination < ApplicationRecord
   validate :ensure_all_conditions_allowed_for_source
 
   def user_con_profiles(notifier)
+    return [] unless all_conditions_match?(notifier)
+
     if dynamic_destination
       notifier.evaluate_dynamic_destination(dynamic_destination.to_sym)
     elsif staff_position
@@ -48,6 +50,8 @@ class NotificationDestination < ApplicationRecord
   end
 
   def emails(notifier)
+    return [] unless all_conditions_match?(notifier)
+
     if dynamic_destination
       notifier.evaluate_dynamic_destination(dynamic_destination.to_sym).map { |ucp| email_for_user_con_profile(ucp) }
     elsif staff_position
@@ -57,6 +61,12 @@ class NotificationDestination < ApplicationRecord
     else
       []
     end
+  end
+
+  def all_conditions_match?(notifier)
+    return true unless conditions
+
+    conditions.all? { |condition_type, condition_value| notifier.evaluate_condition(condition_type, condition_value) }
   end
 
   private

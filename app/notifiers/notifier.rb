@@ -90,8 +90,13 @@ class Notifier
     @dynamic_destination_evaluators.fetch(dynamic_destination.to_sym).user_con_profiles
   end
 
+  def condition_evaluators
+    []
+  end
+
   def evaluate_condition(condition_type, condition_value)
-    raise NotImplementedError, "Notifier subclasses must implement #evaluate_condition"
+    @condition_evaluators ||= condition_evaluators
+    @condition_evaluators.fetch(condition_type.to_sym).matches?(condition_value)
   end
 
   def deliver_later(options = {})
@@ -151,10 +156,9 @@ class Notifier
 
   def sms_content
     all_content = render.transform_values(&:presence).compact
-    (
-      all_content[:body_sms] || all_content[:body_text]&.strip ||
-        (all_content[:body_html] && strip_tags(all_content[:body_html]).strip.gsub(/\s+/, " "))
-    )
+
+    all_content[:body_sms] || all_content[:body_text]&.strip ||
+      (all_content[:body_html] && strip_tags(all_content[:body_html]).strip.gsub(/\s+/, " "))
   end
 
   def mail(preview_user_con_profile: nil)

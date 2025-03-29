@@ -35,6 +35,20 @@ class Signups::NewSignupNotifier < Notifier
     }
   end
 
+  def self.allowed_conditions
+    [:event_category]
+  end
+
+  def condition_evaluators
+    {
+      event_category:
+        Notifier::Conditions::EventCategoryEvaluator.new(
+          notifier: self,
+          event_category: signup.run.event.event_category
+        )
+    }
+  end
+
   def sends_sms?
     true
   end

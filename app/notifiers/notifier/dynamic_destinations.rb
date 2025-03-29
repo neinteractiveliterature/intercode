@@ -7,7 +7,7 @@ module Notifier::DynamicDestinations
     end
 
     def user_con_profiles
-      []
+      raise NotImplementedError
     end
   end
 

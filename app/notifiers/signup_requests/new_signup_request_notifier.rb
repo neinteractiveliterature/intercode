@@ -34,4 +34,18 @@ class SignupRequests::NewSignupRequestNotifier < Notifier
       triggering_user: Notifier::DynamicDestinations::TriggeringUserEvaluator.new(notifier: self)
     }
   end
+
+  def self.allowed_conditions
+    [:event_category]
+  end
+
+  def condition_evaluators
+    {
+      event_category:
+        Notifier::Conditions::EventCategoryEvaluator.new(
+          notifier: self,
+          event_category: signup_request.target_run.event.event_category
+        )
+    }
+  end
 end

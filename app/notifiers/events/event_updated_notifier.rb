@@ -31,12 +31,19 @@ class Events::EventUpdatedNotifier < Notifier
     [:triggering_user]
   end
 
+  def dynamic_destination_evaluators
+    { triggering_user: Notifier::DynamicDestinations::TriggeringUserEvaluator.new(notifier: self) }
+  end
+
   def self.allowed_conditions
     [:event_category]
   end
 
-  def dynamic_destination_evaluators
-    { triggering_user: Notifier::DynamicDestinations::TriggeringUserEvaluator.new(notifier: self) }
+  def condition_evaluators
+    {
+      event_category:
+        Notifier::Conditions::EventCategoryEvaluator.new(notifier: self, event_category: event.event_category)
+    }
   end
 
   def changes_html
