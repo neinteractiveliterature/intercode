@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Notifier
   include ActionView::Helpers::SanitizeHelper
+  include Notifier::Dsl
 
   NOTIFICATIONS_CONFIG = JSON.parse(File.read(File.expand_path("config/notifications.json", Rails.root)))
   NOTIFIER_CLASSES_BY_EVENT_KEY =
@@ -28,6 +29,10 @@ class Notifier
 
   def self.notifier_class_for_event_key(event_key)
     Notifier::NOTIFIER_CLASSES_BY_EVENT_KEY.fetch(event_key)
+  end
+
+  def self.inherited(subclass)
+    subclass.instance_eval { include Notifier::Dsl }
   end
 
   attr_reader :event_key, :convention, :triggering_user
@@ -71,32 +76,6 @@ class Notifier
 
   def self.build_default_destinations(notification_template:)
     raise NotImplementedError, "Notifier subclasses must implement .build_default_destinations"
-  end
-
-  def self.allowed_dynamic_destinations
-    []
-  end
-
-  def self.allowed_conditions
-    []
-  end
-
-  def dynamic_destination_evaluators
-    raise NotImplementedError, "Notifier subclasses must implement #dynamic_destination_evaluators"
-  end
-
-  def evaluate_dynamic_destination(dynamic_destination)
-    @dynamic_destination_evaluators ||= dynamic_destination_evaluators
-    @dynamic_destination_evaluators.fetch(dynamic_destination.to_sym).user_con_profiles
-  end
-
-  def condition_evaluators
-    []
-  end
-
-  def evaluate_condition(condition_type, condition_value)
-    @condition_evaluators ||= condition_evaluators
-    @condition_evaluators.fetch(condition_type.to_sym).matches?(condition_value)
   end
 
   def deliver_later(options = {})

@@ -2,6 +2,13 @@
 class EventProposals::UnfinishedDraftReminderNotifier < Notifier
   attr_reader :event_proposal
 
+  dynamic_destination :event_proposal_owner do
+    { event_proposal: }
+  end
+  condition :event_category do
+    { event_category: event_proposal.event_category }
+  end
+
   def initialize(event_proposal:)
     @event_proposal = event_proposal
     super(convention: event_proposal.convention, event_key: "event_proposals/unfinished_draft_reminder")
@@ -13,27 +20,5 @@ class EventProposals::UnfinishedDraftReminderNotifier < Notifier
 
   def self.build_default_destinations(notification_template:)
     [notification_template.notification_destinations.new(dynamic_destination: :event_proposal_owner)]
-  end
-
-  def self.allowed_dynamic_destinations
-    [:event_proposal_owner]
-  end
-
-  def self.allowed_conditions
-    %i[event_category]
-  end
-
-  def dynamic_destination_evaluators
-    {
-      event_proposal_owner:
-        Notifier::DynamicDestinations::EventProposalOwnerEvaluator.new(notifier: self, event_proposal:)
-    }
-  end
-
-  def condition_evaluators
-    {
-      event_category:
-        Notifier::Conditions::EventCategoryEvaluator.new(notifier: self, event_category: event_proposal.event_category)
-    }
   end
 end

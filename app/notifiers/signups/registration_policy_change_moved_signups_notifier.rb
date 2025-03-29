@@ -1,8 +1,17 @@
 # frozen_string_literal: true
 class Signups::RegistrationPolicyChangeMovedSignupsNotifier < Notifier
-  include Signups::SignupNotificationsHelper
-
   attr_reader :event, :move_results, :whodunit
+
+  dynamic_destination :event_team_members do
+    no_confirmed_moves =
+      move_results.none? { |move_result| move_result.prev_state == "confirmed" || move_result.state == "confirmed" }
+
+    { signup_state: no_confirmed_moves ? "waitlisted" : "confirmed", event: }
+  end
+  dynamic_destination :triggering_user
+  condition :event_category do
+    { event_category: signup.run.event.event_category }
+  end
 
   def initialize(event:, move_results:, whodunit:)
     @event = event
@@ -22,32 +31,6 @@ class Signups::RegistrationPolicyChangeMovedSignupsNotifier < Notifier
 
   def self.build_default_destinations(notification_template:)
     [notification_template.notification_destinations.new(dynamic_destination: :event_team_members)]
-  end
-
-  def self.allowed_dynamic_destinations
-    %i[event_team_members triggering_user]
-  end
-
-  def dynamic_destination_evaluators
-    {
-      event_team_members:
-        Notifier::DynamicDestinations::EventTeamMembersEvaluator.new(notifier: self, signup_state: "confirmed", event:),
-      triggering_user: Notifier::DynamicDestinations::TriggeringUserEvaluator.new(notifier: self)
-    }
-  end
-
-  def self.allowed_conditions
-    [:event_category]
-  end
-
-  def condition_evaluators
-    {
-      event_category:
-        Notifier::Conditions::EventCategoryEvaluator.new(
-          notifier: self,
-          event_category: signup.run.event.event_category
-        )
-    }
   end
 
   def signups_by_id

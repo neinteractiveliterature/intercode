@@ -2,6 +2,11 @@
 class Events::EventUpdatedNotifier < Notifier
   attr_reader :event, :changes
 
+  dynamic_destination :triggering_user
+  condition :event_category do
+    { event_category: event.event_category }
+  end
+
   def initialize(event:, changes:)
     @event = event
     @changes = changes
@@ -25,25 +30,6 @@ class Events::EventUpdatedNotifier < Notifier
       )
 
     staff_positions.map { |staff_position| notification_template.notification_destinations.new(staff_position:) }
-  end
-
-  def self.allowed_dynamic_destinations
-    [:triggering_user]
-  end
-
-  def dynamic_destination_evaluators
-    { triggering_user: Notifier::DynamicDestinations::TriggeringUserEvaluator.new(notifier: self) }
-  end
-
-  def self.allowed_conditions
-    [:event_category]
-  end
-
-  def condition_evaluators
-    {
-      event_category:
-        Notifier::Conditions::EventCategoryEvaluator.new(notifier: self, event_category: event.event_category)
-    }
   end
 
   def changes_html
