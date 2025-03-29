@@ -3,6 +3,14 @@ class EventProposals::NewProposalNotifier < Notifier
   include EventProposals::EventProposalNotificationsHelper
   extend EventProposals::EventProposalNotificationsHelper
 
+  dynamic_destination :event_proposal_owner do
+    { event_proposal: }
+  end
+  dynamic_destination :triggering_user
+  condition :event_category do
+    { event_category: event_proposal.event_category }
+  end
+
   attr_reader :event_proposal
 
   def initialize(event_proposal:)
@@ -28,28 +36,5 @@ class EventProposals::NewProposalNotifier < Notifier
         )
       end
     ]
-  end
-
-  def self.allowed_dynamic_destinations
-    %i[triggering_user event_proposal_owner]
-  end
-
-  def self.allowed_conditions
-    %i[event_category]
-  end
-
-  def dynamic_destination_evaluators
-    {
-      event_proposal_owner:
-        Notifier::DynamicDestinations::EventProposalOwnerEvaluator.new(notifier: self, event_proposal:),
-      triggering_user: Notifier::DynamicDestinations::TriggeringUserEvaluator.new(notifier: self)
-    }
-  end
-
-  def condition_evaluators
-    {
-      event_category:
-        Notifier::Conditions::EventCategoryEvaluator.new(notifier: self, event_category: event_proposal.event_category)
-    }
   end
 end

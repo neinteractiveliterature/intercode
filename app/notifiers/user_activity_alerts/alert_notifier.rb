@@ -2,6 +2,10 @@
 class UserActivityAlerts::AlertNotifier < Notifier
   attr_reader :alert_user_con_profile, :user_activity_alert, :event
 
+  dynamic_destination :user_activity_alert_destinations do
+    { user_activity_alert: }
+  end
+
   def initialize(alert_user_con_profile:, user_activity_alert:, event:)
     @alert_user_con_profile = alert_user_con_profile
     @user_activity_alert = user_activity_alert
@@ -20,17 +24,6 @@ class UserActivityAlerts::AlertNotifier < Notifier
 
   def self.build_default_destinations(notification_template:)
     [notification_template.notification_destinations.new(dynamic_destination: :user_activity_alert_destinations)]
-  end
-
-  def self.allowed_dynamic_destinations
-    [:user_activity_alert_destinations]
-  end
-
-  def dynamic_destination_evaluators
-    {
-      user_activity_alert_destinations:
-        Notifier::DynamicDestinations::UserActivityAlertDestinationsEvaluator.new(notifier: self, user_activity_alert:)
-    }
   end
 
   def event_description
