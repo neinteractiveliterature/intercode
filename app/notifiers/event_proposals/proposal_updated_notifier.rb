@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class EventProposals::ProposalUpdatedNotifier < Notifier
   include EventProposals::EventProposalNotificationsHelper
+  extend EventProposals::EventProposalNotificationsHelper
 
   dynamic_destination :event_proposal_owner do
     { event_proposal: }
