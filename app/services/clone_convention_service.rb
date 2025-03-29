@@ -37,15 +37,16 @@ class CloneConventionService < CivilService::Service
 
       [
         ContentCloners::ConventionCloner,
+        ContentCloners::EarlyCmsContentCloner,
         ContentCloners::SignupRoundsCloner,
-        ContentCloners::CmsContentCloner,
         ContentCloners::DepartmentsCloner,
         ContentCloners::EventCategoriesCloner,
+        ContentCloners::StaffPositionsCloner,
+        ContentCloners::UserActivityAlertsCloner,
+        ContentCloners::CmsContentCloner,
         ContentCloners::RoomsCloner,
         ContentCloners::TicketTypesCloner,
-        ContentCloners::StaffPositionsCloner,
-        ContentCloners::StoreContentCloner,
-        ContentCloners::UserActivityAlertsCloner
+        ContentCloners::StoreContentCloner
       ].each do |cloner_class|
         cloner = cloner_class.new(source_convention, id_maps)
         cloner.clone(convention)
