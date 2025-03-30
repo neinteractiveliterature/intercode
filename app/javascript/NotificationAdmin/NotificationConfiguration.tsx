@@ -16,7 +16,7 @@ import { NotificationAdminQueryData, NotificationAdminQueryDocument } from './qu
 import { client } from '../useIntercodeApolloClient';
 import { ApolloError } from '@apollo/client';
 import { UpdateNotificationTemplateDocument } from './mutations.generated';
-import { NotificationEventKey } from 'graphqlTypes.generated';
+import { getNotificationEventKey } from './getNotificationEventKey';
 
 export const action: ActionFunction = async ({ params: { category, event }, request }) => {
   try {
@@ -25,7 +25,7 @@ export const action: ActionFunction = async ({ params: { category, event }, requ
     await client.mutate({
       mutation: UpdateNotificationTemplateDocument,
       variables: {
-        eventKey: `${category}/${event}` as NotificationEventKey,
+        eventKey: getNotificationEventKey(category ?? '', event ?? ''),
         notificationTemplate: {
           subject: formData.get('subject')?.toString(),
           body_html: formData.get('body_html')?.toString(),
@@ -51,15 +51,15 @@ export const loader: LoaderFunction = async ({ params }) => {
   const category = NotificationsConfig.categories.find((c) => c.key === params.category);
   const event = category?.events.find((e) => e.key === params.event);
   if (!category || !event) {
-    return new Response(null, { status: 404 });
+    throw new Response(null, { status: 404 });
   }
 
-  const { data } = await client.query<NotificationAdminQueryData>({ query: NotificationAdminQueryDocument });
+  const { data } = await client.query({ query: NotificationAdminQueryDocument });
   const initialNotificationTemplate = data.convention.notification_templates.find(
-    (t) => t.event_key === `${category.key}/${event.key}`,
+    (t) => t.event_key === getNotificationEventKey(category.key, event.key),
   );
   if (!initialNotificationTemplate) {
-    return new Response(null, { status: 404 });
+    throw new Response(null, { status: 404 });
   }
 
   return { category, event, initialNotificationTemplate } satisfies LoaderResult;
