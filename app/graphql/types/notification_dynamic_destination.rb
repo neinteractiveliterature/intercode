@@ -5,6 +5,6 @@ class Types::NotificationDynamicDestination < Types::BaseEnum
   MARKDOWN
 
   Notifier::Dsl::DYNAMIC_DESTINATION_EVALUATORS.each_key do |dynamic_destination|
-    value dynamic_destination.to_s.upcase, value: dynamic_destination
+    value dynamic_destination.to_s.upcase, value: dynamic_destination.to_s
   end
 end

@@ -5,6 +5,26 @@ fragment NotificationTemplateFields on NotificationTemplate {
   body_html
   body_text
   body_sms
+
+  notification_destinations {
+    id
+    dynamic_destination
+
+    staff_position {
+      id
+      name
+    }
+
+    user_con_profile {
+      id
+      name_without_nickname
+    }
+
+    conditions {
+      condition_type
+      value
+    }
+  }
 }
 
 query NotificationAdminQuery {

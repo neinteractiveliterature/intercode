@@ -91,7 +91,6 @@ function NotificationConfigurationForm() {
         <h1>
           {category.name} &mdash; {event.name}
         </h1>
-        <h4>Destination: {event.destination_description}</h4>
       </header>
 
       <div className="mb-3">
