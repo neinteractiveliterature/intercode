@@ -10,13 +10,13 @@ import {
 } from 'react-router-dom';
 import { ErrorDisplay, usePropertySetters } from '@neinteractiveliterature/litform';
 
-import NotificationsConfig from '../../../config/notifications.json';
 import LiquidInput from '../BuiltInFormControls/LiquidInput';
 import { NotificationAdminQueryData, NotificationAdminQueryDocument } from './queries.generated';
 import { client } from '../useIntercodeApolloClient';
 import { ApolloError } from '@apollo/client';
 import { UpdateNotificationTemplateDocument } from './mutations.generated';
 import { getNotificationEventKey } from './getNotificationEventKey';
+import NotificationDestinationsConfig from './NotificationDestinationsConfig';
 
 export const action: ActionFunction = async ({ params: { category, event }, request }) => {
   try {
@@ -42,31 +42,28 @@ export const action: ActionFunction = async ({ params: { category, event }, requ
 };
 
 type LoaderResult = {
-  category: (typeof NotificationsConfig)['categories'][number];
-  event: (typeof NotificationsConfig)['categories'][number]['events'][number];
+  event: NotificationAdminQueryData['notificationEvents'][number];
   initialNotificationTemplate: NotificationAdminQueryData['convention']['notification_templates'][number];
+  staffPositions: NotificationAdminQueryData['convention']['staff_positions'];
 };
 
 export const loader: LoaderFunction = async ({ params }) => {
-  const category = NotificationsConfig.categories.find((c) => c.key === params.category);
-  const event = category?.events.find((e) => e.key === params.event);
-  if (!category || !event) {
-    throw new Response(null, { status: 404 });
-  }
-
+  const eventKey = getNotificationEventKey(params.category ?? '', params.event ?? '');
   const { data } = await client.query({ query: NotificationAdminQueryDocument });
-  const initialNotificationTemplate = data.convention.notification_templates.find(
-    (t) => t.event_key === getNotificationEventKey(category.key, event.key),
-  );
+  const initialNotificationTemplate = data.convention.notification_templates.find((t) => t.event_key === eventKey);
   if (!initialNotificationTemplate) {
     throw new Response(null, { status: 404 });
   }
+  const event = data.notificationEvents.find((e) => e.key === eventKey);
+  if (!event) {
+    throw new Response(null, { status: 404 });
+  }
 
-  return { category, event, initialNotificationTemplate } satisfies LoaderResult;
+  return { event, initialNotificationTemplate, staffPositions: data.convention.staff_positions } satisfies LoaderResult;
 };
 
 function NotificationConfigurationForm() {
-  const { category, event, initialNotificationTemplate } = useLoaderData() as LoaderResult;
+  const { event, initialNotificationTemplate, staffPositions } = useLoaderData() as LoaderResult;
   const navigation = useNavigation();
   const data = useActionData();
   const updateError = data instanceof Error ? data : undefined;
@@ -89,9 +86,19 @@ function NotificationConfigurationForm() {
     <Form method="PATCH">
       <header className="mb-4">
         <h1>
-          {category.name} &mdash; {event.name}
+          {event.category} &mdash; {event.key}
         </h1>
       </header>
+
+      <NotificationDestinationsConfig
+        addDestination={() => {}}
+        notificationDestinations={notificationTemplate.notification_destinations}
+        removeDestination={() => {}}
+        disabled={updateInProgress}
+        staffPositions={staffPositions}
+        allowedConditionTypes={event.allowed_condition_types}
+        allowedDynamicDestinations={event.allowed_dynamic_destinations}
+      />
 
       <div className="mb-3">
         <legend className="col-form-label">Subject line</legend>

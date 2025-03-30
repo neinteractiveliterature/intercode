@@ -140,10 +140,21 @@
           "staffPositionType": "Staff position",
           "userConProfileType": "User"
         },
+        "dynamic": {
+          "EVENT_PROPOSAL_OWNER": "Event proposal owner",
+          "EVENT_TEAM_MEMBERS": "Event team members who have chosen to receive notifications",
+          "ORDER_USER_CON_PROFILE": "Purchaser",
+          "SIGNUP_REQUEST_USER_CON_PROFILE": "Signup requester",
+          "SIGNUP_USER_CON_PROFILE": "Signed up attendee",
+          "TICKET_USER_CON_PROFILE": "Attendee",
+          "TRIGGERING_USER": "User who triggered the notification",
+          "USER_ACTIVITY_ALERT_DESTINATIONS": "Configured destinations for this user activity alert"
+        },
         "header": "Notification destinations",
         "removeButton": "Remove destination",
         "removePrompt": "Are you sure you want to remove this notification destination?",
         "staffPosition": "<strong>Staff position:</strong> {{ staffPositionName }}",
+        "unknown": "<strong>Unknown destination</strong>",
         "userConProfile": "<strong>User:</strong> {{ name }}"
       }
     },

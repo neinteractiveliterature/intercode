@@ -7,6 +7,7 @@ import { Link, useFetcher } from 'react-router-dom';
 import NotificationsConfig from '../../../config/notifications.json';
 import AppRootContext from '../AppRootContext';
 import { ApolloError } from '@apollo/client';
+import { useTranslation } from 'react-i18next';
 
 type NotificationPreviewModalProps = {
   visible: boolean;
@@ -21,9 +22,10 @@ function NotificationPreviewModal({
   eventKey,
   categoryKey,
 }: NotificationPreviewModalProps): JSX.Element {
+  const { t } = useTranslation();
+  const { myProfile } = useContext(AppRootContext);
   const [sendEmail, setSendEmail] = useState(true);
   const [sendSms, setSendSms] = useState(true);
-  const { myProfile } = useContext(AppRootContext);
 
   const eventConfig = useMemo(() => {
     if (categoryKey == null || eventKey == null) {
@@ -37,11 +39,11 @@ function NotificationPreviewModal({
 
   useEffect(() => {
     if (eventConfig?.sends_sms) {
-      setSendSms(true);
+      setSendSms(myProfile?.mobile_phone != null);
     } else {
       setSendSms(false);
     }
-  }, [eventConfig]);
+  }, [eventConfig, myProfile?.mobile_phone]);
 
   const fetcher = useFetcher();
   const error = fetcher.data instanceof Error ? fetcher.data : undefined;
@@ -70,18 +72,19 @@ function NotificationPreviewModal({
           label={`Send email to ${myProfile?.email}`}
           onCheckedChange={setSendEmail}
         />
+        {console.log(sendSms) ?? ''}
         <BootstrapFormCheckbox
           type="checkbox"
           checked={sendSms}
-          disabled={!eventConfig?.sends_sms}
-          label={`Send SMS to ${myProfile?.mobile_phone}`}
+          disabled={!eventConfig?.sends_sms || !myProfile?.mobile_phone}
+          label={`Send SMS to ${myProfile?.mobile_phone ?? 'unknown number'}`}
           onCheckedChange={setSendSms}
         />
       </div>
       <div className="modal-footer">
         <ErrorDisplay graphQLError={error as ApolloError} />
         <button type="button" className="btn btn-secondary" onClick={close}>
-          Cancel
+          {t('buttons.cancel')}
         </button>
         <button type="button" className="btn btn-primary" onClick={sendPreview} disabled={fetcher.state !== 'idle'}>
           Send
@@ -103,7 +106,6 @@ function NotificationAdminIndex(): JSX.Element {
           <tr>
             <th>Category</th>
             <th>Event</th>
-            <th>Destination</th>
             <th />
           </tr>
         </thead>
@@ -114,8 +116,7 @@ function NotificationAdminIndex(): JSX.Element {
                 <tr key={`${category.key}/${event.key}`}>
                   <td>{category.name}</td>
                   <td>{event.name}</td>
-                  <td>{event.destination_description}</td>
-                  <td>
+                  <td className="text-end">
                     <button
                       type="button"
                       className="btn btn-sm btn-secondary me-2"

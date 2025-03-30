@@ -4301,6 +4301,21 @@ export enum NotificationDynamicDestination {
   UserActivityAlertDestinations = 'USER_ACTIVITY_ALERT_DESTINATIONS'
 }
 
+/** A notification event. This is the event that will trigger a notification to be sent out. */
+export type NotificationEvent = {
+  __typename: 'NotificationEvent';
+  /** The condition types that are allowed for this notification event. */
+  allowed_condition_types: Array<NotificationConditionType>;
+  /** The dynamic destinations that are allowed for this notification event. */
+  allowed_dynamic_destinations: Array<NotificationDynamicDestination>;
+  /** The category of the notification event. */
+  category: Scalars['String']['output'];
+  /** The key of the notification event. */
+  key: NotificationEventKey;
+  /** Whether this notification event sends SMS notifications. */
+  sends_sms: Scalars['Boolean']['output'];
+};
+
 /** An event that can trigger a notification. */
 export enum NotificationEventKey {
   EventsEventUpdated = 'EVENTS_EVENT_UPDATED',
@@ -4792,6 +4807,8 @@ export type Query = {
    * returns null.
    */
   myAuthorizedApplications: Array<AuthorizedApplication>;
+  /** Returns a list of all notification events that are available in this instance of Intercode. */
+  notificationEvents: Array<NotificationEvent>;
   /**
    * Given a set of valid OAuth query parameters for the `/oauth/authorize` endpoint, returns a
    * JSON object containing the necessary data for rendering the pre-authorization screen that

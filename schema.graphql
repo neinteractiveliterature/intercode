@@ -5184,6 +5184,36 @@ enum NotificationDynamicDestination {
 }
 
 """
+A notification event. This is the event that will trigger a notification to be sent out.
+"""
+type NotificationEvent {
+  """
+  The condition types that are allowed for this notification event.
+  """
+  allowed_condition_types: [NotificationConditionType!]!
+
+  """
+  The dynamic destinations that are allowed for this notification event.
+  """
+  allowed_dynamic_destinations: [NotificationDynamicDestination!]!
+
+  """
+  The category of the notification event.
+  """
+  category: String!
+
+  """
+  The key of the notification event.
+  """
+  key: NotificationEventKey!
+
+  """
+  Whether this notification event sends SMS notifications.
+  """
+  sends_sms: Boolean!
+}
+
+"""
 An event that can trigger a notification.
 """
 enum NotificationEventKey {
@@ -5858,6 +5888,11 @@ type Query {
   returns null.
   """
   myAuthorizedApplications: [AuthorizedApplication!]!
+
+  """
+  Returns a list of all notification events that are available in this instance of Intercode.
+  """
+  notificationEvents: [NotificationEvent!]!
 
   """
   Given a set of valid OAuth query parameters for the `/oauth/authorize` endpoint, returns a
