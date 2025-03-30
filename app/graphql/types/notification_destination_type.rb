@@ -33,6 +33,7 @@ class Types::NotificationDestinationType < Types::BaseObject
   end
 
   def conditions
+    return unless object.conditions
     object.conditions.map { |condition_type, value| { condition_type:, value: } }
   end
 end

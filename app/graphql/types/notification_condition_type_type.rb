@@ -4,6 +4,6 @@ class Types::NotificationConditionTypeType < Types::BaseEnum
   MARKDOWN
 
   Notifier::Dsl::CONDITION_EVALUATORS.each_key do |condition_type|
-    value condition_type.to_s.upcase, value: condition_type
+    value condition_type.to_s.upcase, value: condition_type.to_s
   end
 end
