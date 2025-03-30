@@ -5189,8 +5189,8 @@
                     "kind": "NON_NULL",
                     "name": null,
                     "ofType": {
-                      "kind": "SCALAR",
-                      "name": "String",
+                      "kind": "ENUM",
+                      "name": "NotificationEventKey",
                       "ofType": null
                     }
                   },
@@ -5482,8 +5482,8 @@
                     "kind": "NON_NULL",
                     "name": null,
                     "ofType": {
-                      "kind": "SCALAR",
-                      "name": "String",
+                      "kind": "ENUM",
+                      "name": "NotificationEventKey",
                       "ofType": null
                     }
                   },
@@ -23670,14 +23670,102 @@
         },
         {
           "kind": "OBJECT",
-          "name": "NotificationDestination",
-          "description": null,
+          "name": "NotificationCondition",
+          "description": "A condition that must be met for a notification to be sent to a destination.",
           "interfaces": [],
           "possibleTypes": null,
           "fields": [
             {
-              "name": "id",
+              "name": "condition_type",
+              "description": "The type of condition.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "NotificationConditionType",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "value",
+              "description": "The value of the condition.  This will vary depending on the condition type.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Json",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            }
+          ],
+          "inputFields": null,
+          "enumValues": null
+        },
+        {
+          "kind": "ENUM",
+          "name": "NotificationConditionType",
+          "description": "The type of a notification condition. This is used to determine what kind of condition it is and how to evaluate it.\n",
+          "interfaces": null,
+          "possibleTypes": null,
+          "fields": null,
+          "inputFields": null,
+          "enumValues": [
+            {
+              "name": "EVENT_CATEGORY",
               "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ]
+        },
+        {
+          "kind": "OBJECT",
+          "name": "NotificationDestination",
+          "description": "A destination that notifications will be sent to. This can be a user, a staff position, or a dynamic destination.\nOnly one of these can be present.\n",
+          "interfaces": [],
+          "possibleTypes": null,
+          "fields": [
+            {
+              "name": "conditions",
+              "description": "Conditions that must be met for this destination to be used",
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "OBJECT",
+                    "name": "NotificationCondition",
+                    "ofType": null
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "dynamic_destination",
+              "description": "A dynamic destination that will be used to determine the actual destination",
+              "type": {
+                "kind": "ENUM",
+                "name": "NotificationDynamicDestination",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "id",
+              "description": "The ID of the notification destination",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -23693,7 +23781,7 @@
             },
             {
               "name": "source",
-              "description": null,
+              "description": "The object that will send the notification",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -23709,7 +23797,7 @@
             },
             {
               "name": "staff_position",
-              "description": null,
+              "description": "The staff position that will receive the notification",
               "type": {
                 "kind": "OBJECT",
                 "name": "StaffPosition",
@@ -23721,7 +23809,7 @@
             },
             {
               "name": "user_con_profile",
-              "description": null,
+              "description": "The user profile that will receive the notification",
               "type": {
                 "kind": "OBJECT",
                 "name": "UserConProfile",
@@ -23771,6 +23859,184 @@
           "enumValues": null
         },
         {
+          "kind": "ENUM",
+          "name": "NotificationDynamicDestination",
+          "description": "A dynamic destination for notifications.  Dynamic destinations are evaluated at runtime to determine\nthe actual destination for a notification.\n",
+          "interfaces": null,
+          "possibleTypes": null,
+          "fields": null,
+          "inputFields": null,
+          "enumValues": [
+            {
+              "name": "EVENT_PROPOSAL_OWNER",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "EVENT_TEAM_MEMBERS",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "ORDER_USER_CON_PROFILE",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "SIGNUP_REQUEST_USER_CON_PROFILE",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "SIGNUP_USER_CON_PROFILE",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "TICKET_USER_CON_PROFILE",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "TRIGGERING_USER",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "USER_ACTIVITY_ALERT_DESTINATIONS",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ]
+        },
+        {
+          "kind": "ENUM",
+          "name": "NotificationEventKey",
+          "description": "An event that can trigger a notification.\n",
+          "interfaces": null,
+          "possibleTypes": null,
+          "fields": null,
+          "inputFields": null,
+          "enumValues": [
+            {
+              "name": "EVENT_PROPOSALS_NEW_PROPOSAL",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "EVENT_PROPOSALS_PROPOSAL_SUBMIT_CONFIRMATION",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "EVENT_PROPOSALS_PROPOSAL_UPDATED",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "EVENT_PROPOSALS_UNFINISHED_DRAFT_REMINDER",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "SIGNUPS_NEW_SIGNUP",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "SIGNUPS_SIGNUP_CONFIRMATION",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "SIGNUPS_WITHDRAWAL",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "SIGNUPS_WITHDRAW_CONFIRMATION",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "SIGNUPS_REGISTRATION_POLICY_CHANGE_MOVED_SIGNUPS",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "SIGNUPS_USER_SIGNUP_MOVED",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "SIGNUPS_HOLD_EXPIRED",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "SIGNUP_REQUESTS_NEW_SIGNUP_REQUEST",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "SIGNUP_REQUESTS_REQUEST_ACCEPTED",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "EVENTS_EVENT_UPDATED",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "ORDERS_PURCHASED",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "ORDERS_CANCELLED",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "TICKETS_PURCHASED",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "USER_ACTIVITY_ALERTS_ALERT",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ]
+        },
+        {
           "kind": "UNION",
           "name": "NotificationSource",
           "description": null,
@@ -23789,13 +24055,13 @@
         {
           "kind": "OBJECT",
           "name": "NotificationTemplate",
-          "description": null,
+          "description": "A notification template. When a notifiable event happens, this template will be used to send out notifications\nabout it.\n",
           "interfaces": [],
           "possibleTypes": null,
           "fields": [
             {
               "name": "body_html",
-              "description": null,
+              "description": "A Liquid template containing the email body for this notification in HTML.",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -23807,7 +24073,7 @@
             },
             {
               "name": "body_sms",
-              "description": null,
+              "description": "A Liquid template containing the SMS body for this notification.",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -23819,7 +24085,7 @@
             },
             {
               "name": "body_text",
-              "description": null,
+              "description": "A Liquid template containing the email body for this notification in plain text.",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -23831,13 +24097,13 @@
             },
             {
               "name": "event_key",
-              "description": null,
+              "description": "The event key that this notification template is sent for.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
+                  "kind": "ENUM",
+                  "name": "NotificationEventKey",
                   "ofType": null
                 }
               },
@@ -23847,7 +24113,7 @@
             },
             {
               "name": "id",
-              "description": null,
+              "description": "The ID of the notification template",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -23862,8 +24128,32 @@
               "args": []
             },
             {
+              "name": "notification_destinations",
+              "description": "The destinations that this notification will be sent to.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "OBJECT",
+                      "name": "NotificationDestination",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
               "name": "subject",
-              "description": null,
+              "description": "The email subject for this notification.",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -30769,8 +31059,8 @@
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
+                  "kind": "ENUM",
+                  "name": "NotificationEventKey",
                   "ofType": null
                 }
               },
@@ -36601,8 +36891,8 @@
                 "kind": "NON_NULL",
                 "name": null,
                 "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
+                  "kind": "ENUM",
+                  "name": "NotificationEventKey",
                   "ofType": null
                 }
               },

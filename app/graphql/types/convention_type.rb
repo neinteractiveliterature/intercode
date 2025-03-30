@@ -167,7 +167,7 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
   end
   field :notifier_liquid_assigns, [Types::LiquidAssign], null: false do
     argument :event_key,
-             String,
+             Types::NotificationEventKey,
              required: true,
              description: "The key of the notification event to use for generating assigns."
 
@@ -200,7 +200,7 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
   field :preview_notifier_liquid, String, null: false do
     argument :content, String, required: true, description: "The Liquid content to render."
     argument :event_key,
-             String,
+             Types::NotificationEventKey,
              required: true,
              description: "The key of the notification event to use for generating the preview."
 

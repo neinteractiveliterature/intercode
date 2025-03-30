@@ -1,6 +1,19 @@
 module Notifier::Dsl
   extend ActiveSupport::Concern
 
+  DYNAMIC_DESTINATION_EVALUATORS = {
+    event_proposal_owner: Notifier::DynamicDestinations::EventProposalOwnerEvaluator,
+    event_team_members: Notifier::DynamicDestinations::EventTeamMembersEvaluator,
+    order_user_con_profile: Notifier::DynamicDestinations::OrderUserConProfileEvaluator,
+    signup_request_user_con_profile: Notifier::DynamicDestinations::SignupRequestUserConProfileEvaluator,
+    signup_user_con_profile: Notifier::DynamicDestinations::SignupUserConProfileEvaluator,
+    ticket_user_con_profile: Notifier::DynamicDestinations::TicketUserConProfileEvaluator,
+    triggering_user: Notifier::DynamicDestinations::TriggeringUserEvaluator,
+    user_activity_alert_destinations: Notifier::DynamicDestinations::UserActivityAlertDestinationsEvaluator
+  }
+
+  CONDITION_EVALUATORS = { event_category: Notifier::Conditions::EventCategoryEvaluator }
+
   class_methods do
     def dynamic_destination(dynamic_destination, &block)
       @dynamic_destination_evaluators ||= {}
@@ -10,7 +23,7 @@ module Notifier::Dsl
     def evaluator_for_dynamic_destination(dynamic_destination, notifier)
       factory = @dynamic_destination_evaluators.fetch(dynamic_destination)
       args = notifier.instance_eval(&factory)
-      evaluator_class = Notifier::DynamicDestinations.const_get("#{dynamic_destination.to_s.camelize}Evaluator")
+      evaluator_class = DYNAMIC_DESTINATION_EVALUATORS.fetch(dynamic_destination)
       evaluator_class.new(notifier: notifier, **args)
     end
 
@@ -22,7 +35,7 @@ module Notifier::Dsl
     def evaluator_for_condition(condition, notifier)
       factory = @condition_evaluators.fetch(condition)
       args = notifier.instance_eval(&factory)
-      evaluator_class = Notifier::Conditions.const_get("#{condition.to_s.camelize}Evaluator")
+      evaluator_class = CONDITION_EVALUATORS.fetch(dynamic_destination)
       evaluator_class.new(notifier: notifier, **args)
     end
 

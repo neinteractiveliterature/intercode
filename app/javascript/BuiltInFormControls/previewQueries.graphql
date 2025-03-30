@@ -12,7 +12,7 @@ query PreviewMarkdownQuery($markdown: String!, $eventId: ID, $eventProposalId: I
   }
 }
 
-query PreviewNotifierLiquidQuery($eventKey: String!, $liquid: String!) {
+query PreviewNotifierLiquidQuery($eventKey: NotificationEventKey!, $liquid: String!) {
   convention: conventionByRequestHost {
     id
     previewLiquid: preview_notifier_liquid(eventKey: $eventKey, content: $liquid)

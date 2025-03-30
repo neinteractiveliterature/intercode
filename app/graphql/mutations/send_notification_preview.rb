@@ -5,7 +5,7 @@ class Mutations::SendNotificationPreview < Mutations::BaseMutation
 MARKDOWN
 
   argument :email, Boolean, required: true
-  argument :event_key, String, required: true, camelize: false
+  argument :event_key, Types::NotificationEventKey, required: true, camelize: false
   argument :sms, Boolean, required: true
 
   load_and_authorize_convention_associated_model :notification_templates, :event_key, :read
