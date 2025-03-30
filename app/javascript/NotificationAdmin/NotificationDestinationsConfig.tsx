@@ -1,12 +1,21 @@
 import { MultipleChoiceInput, useGraphQLConfirm } from '@neinteractiveliterature/litform';
 import { DefaultUserConProfilesQueryData } from 'BuiltInFormControls/selectDefaultQueries.generated';
 import UserConProfileSelect from 'BuiltInFormControls/UserConProfileSelect';
-import { NotificationDestination, StaffPosition } from 'graphqlTypes.generated';
+import {
+  NotificationConditionType,
+  NotificationDestination,
+  NotificationDynamicDestination,
+  StaffPosition,
+} from 'graphqlTypes.generated';
 import { useState } from 'react';
-import { Trans, useTranslation } from 'react-i18next';
+import { useTranslation } from 'react-i18next';
 import Select from 'react-select';
+import NotificationDestinationDescription from './NotificationDestinationDescription';
 
-type NotificationDestinationType = Pick<NotificationDestination, 'id' | '__typename'> & {
+type NotificationDestinationType = Pick<
+  NotificationDestination,
+  'id' | '__typename' | 'dynamic_destination' | 'conditions'
+> & {
   staff_position?: Pick<StaffPosition, 'id' | 'name' | '__typename'> | null;
   user_con_profile?:
     | NonNullable<DefaultUserConProfilesQueryData['convention']>['user_con_profiles_paginated']['entries'][number]
@@ -19,7 +28,11 @@ export type NotificationDestinationsConfigProps<T extends NotificationDestinatio
   notificationDestinations: T[];
   addDestination: (destination: T) => void;
   removeDestination: (id: string) => void;
+  allowedDynamicDestinations: NotificationDynamicDestination[];
+  allowedConditionTypes: NotificationConditionType[];
 };
+
+type DestinationType = NotificationDynamicDestination | 'staff_position' | 'user_con_profile';
 
 export default function NotificationDestinationsConfig<T extends NotificationDestinationType>({
   notificationDestinations,
@@ -27,17 +40,19 @@ export default function NotificationDestinationsConfig<T extends NotificationDes
   staffPositions,
   addDestination,
   removeDestination,
+  allowedConditionTypes,
+  allowedDynamicDestinations,
 }: NotificationDestinationsConfigProps<T>) {
   const { t } = useTranslation();
   const confirm = useGraphQLConfirm();
 
-  const [addDestinationType, setAddDestinationType] = useState<string | null>(null);
+  const [addDestinationType, setAddDestinationType] = useState<DestinationType>();
   const addStaffPositionDestination = (staffPosition: (typeof staffPositions)[number]) => {
     addDestination({
       __typename: 'NotificationDestination',
       staff_position: staffPosition,
     } as T);
-    setAddDestinationType(null);
+    setAddDestinationType(undefined);
   };
 
   const addUserConProfileDestination = (
@@ -49,7 +64,7 @@ export default function NotificationDestinationsConfig<T extends NotificationDes
       __typename: 'NotificationDestination',
       user_con_profile: userConProfile,
     } as T);
-    setAddDestinationType(null);
+    setAddDestinationType(undefined);
   };
 
   return (
@@ -61,17 +76,7 @@ export default function NotificationDestinationsConfig<T extends NotificationDes
           <li key={notificationDestination.id} className="list-group-item">
             <div className="d-flex">
               <div className="flex-grow-1">
-                {notificationDestination.staff_position ? (
-                  <Trans
-                    i18nKey="admin.notifications.destinations.staffPosition"
-                    values={{ staffPositionName: notificationDestination.staff_position.name }}
-                  />
-                ) : (
-                  <Trans
-                    i18nKey="admin.notifications.destinations.userConProfile"
-                    values={{ name: notificationDestination.user_con_profile?.name_without_nickname }}
-                  />
-                )}
+                <NotificationDestinationDescription notificationDestination={notificationDestination} />
               </div>
               <button
                 className="btn btn-sm btn-danger"
@@ -97,15 +102,21 @@ export default function NotificationDestinationsConfig<T extends NotificationDes
             choices={[
               {
                 label: t('admin.notifications.destinations.addDestination.staffPositionType'),
-                value: 'staff_position',
+                value: 'staff_position' satisfies DestinationType,
               },
               {
                 label: t('admin.notifications.destinations.addDestination.userConProfileType'),
-                value: 'user_con_profile',
+                value: 'user_con_profile' satisfies DestinationType,
               },
+              ...allowedDynamicDestinations.map((dynamicDestination) => ({
+                label: t(`admin.notifications.destinations.dynamic.${dynamicDestination}`),
+                value: dynamicDestination satisfies DestinationType,
+              })),
             ]}
             value={addDestinationType}
-            onChange={setAddDestinationType}
+            onChange={(destinationType) =>
+              setAddDestinationType((destinationType ?? undefined) as DestinationType | undefined)
+            }
             choiceClassName="form-check-inline"
             disabled={disabled}
           />
