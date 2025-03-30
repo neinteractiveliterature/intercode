@@ -16,6 +16,7 @@ import { NotificationAdminQueryData, NotificationAdminQueryDocument } from './qu
 import { client } from '../useIntercodeApolloClient';
 import { ApolloError } from '@apollo/client';
 import { UpdateNotificationTemplateDocument } from './mutations.generated';
+import { NotificationEventKey } from 'graphqlTypes.generated';
 
 export const action: ActionFunction = async ({ params: { category, event }, request }) => {
   try {
@@ -24,7 +25,7 @@ export const action: ActionFunction = async ({ params: { category, event }, requ
     await client.mutate({
       mutation: UpdateNotificationTemplateDocument,
       variables: {
-        eventKey: `${category}/${event}`,
+        eventKey: `${category}/${event}` as NotificationEventKey,
         notificationTemplate: {
           subject: formData.get('subject')?.toString(),
           body_html: formData.get('body_html')?.toString(),
