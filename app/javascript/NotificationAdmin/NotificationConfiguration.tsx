@@ -17,6 +17,7 @@ import { ApolloError } from '@apollo/client';
 import { UpdateNotificationTemplateDocument } from './mutations.generated';
 import { getNotificationEventKey } from './getNotificationEventKey';
 import NotificationDestinationsConfig from './NotificationDestinationsConfig';
+import { useTranslation } from 'react-i18next';
 
 export const action: ActionFunction = async ({ params: { category, event }, request }) => {
   try {
@@ -63,6 +64,7 @@ export const loader: LoaderFunction = async ({ params }) => {
 };
 
 function NotificationConfigurationForm() {
+  const { t } = useTranslation();
   const { event, initialNotificationTemplate, staffPositions } = useLoaderData() as LoaderResult;
   const navigation = useNavigation();
   const data = useActionData();
@@ -85,9 +87,7 @@ function NotificationConfigurationForm() {
   return (
     <Form method="PATCH">
       <header className="mb-4">
-        <h1>
-          {event.category} &mdash; {event.key}
-        </h1>
+        <h1>{t(`admin.notifications.events.${event.key}`)}</h1>
       </header>
 
       <NotificationDestinationsConfig

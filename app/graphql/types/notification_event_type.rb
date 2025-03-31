@@ -16,4 +16,8 @@ class Types::NotificationEventType < Types::BaseObject
   field :sends_sms, Boolean, null: false do
     description "Whether this notification event sends SMS notifications."
   end
+
+  def sends_sms
+    !!object["sends_sms"]
+  end
 end

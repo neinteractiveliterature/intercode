@@ -144,7 +144,7 @@ class Notifier
     NotificationsMailer.notification(
       **render.slice(:subject, :body_html, :body_text),
       convention: convention,
-      to: (preview_user_con_profile ? email_for_user_con_profile(preview_user_con_profile) : destination_emails)
+      to: (preview_user_con_profile ? preview_user_con_profile.email : destination_emails)
     )
   end
 end
