@@ -5,7 +5,7 @@
     <title>
       <%= page_title %>
     </title>
-    <%= javascript_include_tag url_with_possible_host('/packs/application-styles.js', ENV['ASSETS_HOST']) %>
+    <%= javascript_include_tag url_with_possible_host('/packs/application-styles.js', ENV['ASSETS_HOST'], type: 'module') %>
     <meta content="width=device-width, initial-scale=1" name="viewport"/>
   </head>
   <body>
