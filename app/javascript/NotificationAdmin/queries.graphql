@@ -27,6 +27,20 @@ fragment NotificationTemplateFields on NotificationTemplate {
   }
 }
 
+fragment NotificationsConfig on Query {
+  notificationEvents {
+    key
+    category
+    allowed_condition_types
+    allowed_dynamic_destinations
+    sends_sms
+  }
+}
+
+query NotificationsConfigQuery {
+  ...NotificationsConfig
+}
+
 query NotificationAdminQuery {
   convention: conventionByRequestHost {
     id
@@ -42,11 +56,5 @@ query NotificationAdminQuery {
     }
   }
 
-  notificationEvents {
-    key
-    category
-    allowed_condition_types
-    allowed_dynamic_destinations
-    sends_sms
-  }
+  ...NotificationsConfig
 }
