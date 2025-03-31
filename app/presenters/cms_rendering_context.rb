@@ -129,7 +129,7 @@ class CmsRenderingContext
   def liquid_assigns_for_placeholder_template
     styles_url = url_with_possible_host("/packs/application-styles.js", ENV.fetch("ASSETS_HOST", nil))
     liquid_assigns.merge(
-      "content_for_head" => "#{javascript_include_tag styles_url}{{ content_for_head }}",
+      "content_for_head" => "#{javascript_include_tag styles_url, type: "module"}{{ content_for_head }}",
       "content_for_navbar" => "{{ content_for_navbar }}",
       "content_for_layout" => "{{ content_for_layout }}"
     )
