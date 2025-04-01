@@ -16,16 +16,11 @@ import { Extension } from '@codemirror/state';
 import styles from 'styles/liquid_docs.module.scss';
 
 import MenuIcon from '../NavigationBar/MenuIcon';
-import {
-  PreviewNotifierLiquidQueryData,
-  PreviewLiquidQueryData,
-  PreviewNotifierLiquidQueryDocument,
-  PreviewLiquidQueryDocument,
-} from './previewQueries.generated';
+import { PreviewNotifierLiquidQueryDocument, PreviewLiquidQueryDocument } from './previewQueries.generated';
 import parseCmsContent from '../parseCmsContent';
 import parsePageContent from '../parsePageContent';
 import AddFileModal from './AddFileModal';
-import { ActiveStorageAttachment } from '../graphqlTypes.generated';
+import { ActiveStorageAttachment, NotificationEventKey } from '../graphqlTypes.generated';
 import { CmsFilesAdminQueryDocument } from '../CmsAdmin/CmsFilesAdmin/queries.generated';
 import { Blob } from '@rails/activestorage';
 import { useFetcher } from 'react-router-dom';
@@ -69,7 +64,7 @@ export type LiquidInputProps = Omit<
   'editorDidMount' | 'editorRef' | 'getPreviewContent' | 'previewButtonText' | 'editButtonText' | 'extraNavControls'
 > &
   Pick<UseStandardCodeMirrorExtensionsOptions, 'onChange'> & {
-    notifierEventKey?: string;
+    notifierEventKey?: NotificationEventKey;
     disablePreview?: boolean;
     extensions?: Extension[];
   };
@@ -104,7 +99,7 @@ function LiquidInput(props: LiquidInputProps): JSX.Element {
     ? undefined
     : async (liquidContent: string) => {
         if (notifierEventKey) {
-          const response = await client.query<PreviewNotifierLiquidQueryData>({
+          const response = await client.query({
             query: PreviewNotifierLiquidQueryDocument,
             variables: { liquid: liquidContent, eventKey: notifierEventKey },
             fetchPolicy: 'no-cache',
@@ -113,7 +108,7 @@ function LiquidInput(props: LiquidInputProps): JSX.Element {
           return parsePageContent(response.data?.convention.previewLiquid ?? '', {}).bodyComponents;
         }
 
-        const response = await client.query<PreviewLiquidQueryData>({
+        const response = await client.query({
           query: PreviewLiquidQueryDocument,
           variables: { liquid: liquidContent },
           fetchPolicy: 'no-cache',

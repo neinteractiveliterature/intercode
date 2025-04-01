@@ -100,6 +100,12 @@ class Types::QueryType < Types::BaseObject
     MARKDOWN
   end
 
+  field :notification_events, [Types::NotificationEventType], null: false do
+    description <<~MARKDOWN
+      Returns a list of all notification events that are available in this instance of Intercode.
+    MARKDOWN
+  end
+
   field :oauth_pre_auth, Types::JSON, null: false do
     argument :query_params,
              Types::JSON,
@@ -242,6 +248,26 @@ represented as a JSON object."
 
   def current_ability
     pundit_user
+  end
+
+  def notification_events
+    Notifier::NOTIFICATIONS_CONFIG
+      .fetch("categories")
+      .flat_map do |category|
+        category
+          .fetch("events")
+          .map do |event|
+            event_key = "#{category["key"]}/#{event["key"]}"
+            notifier_class = Notifier::NOTIFIER_CLASSES_BY_EVENT_KEY[event_key]
+
+            {
+              key: event_key,
+              category: category.fetch("key"),
+              allowed_dynamic_destinations: notifier_class.allowed_dynamic_destinations.map(&:to_s),
+              allowed_condition_types: notifier_class.allowed_conditions.map(&:to_s)
+            }
+          end
+      end
   end
 
   def assumed_identity_from_profile

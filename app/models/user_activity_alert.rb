@@ -56,7 +56,7 @@ class UserActivityAlert < ApplicationRecord
   end
 
   def matches_name?(user_con_profile)
-    return if partial_name.blank?
+    return false if partial_name.blank?
 
     names = [user_con_profile.name, user_con_profile.name_without_nickname, user_con_profile.user.name].map(&:downcase)
 
@@ -64,7 +64,7 @@ class UserActivityAlert < ApplicationRecord
   end
 
   def matches_email?(user_con_profile)
-    return if email.blank?
+    return false if email.blank?
 
     # UserConProfile doesn't have its own email field; it delegates to User
     normalize_email(user_con_profile.email) == normalize_email(email)
@@ -74,13 +74,17 @@ class UserActivityAlert < ApplicationRecord
     partial_name.blank? && email.blank? && !user
   end
 
-  def destination_user_con_profiles
-    notification_destinations.flat_map(&:user_con_profiles).compact.uniq
+  def allowed_dynamic_destinations
+    []
+  end
+
+  def allowed_conditions
+    []
   end
 
   private
 
   def normalize_email(email)
-    email.downcase.gsub(/\.(?=.*?@)/, '').gsub(/\+.*(?=@)/, '')
+    email.downcase.gsub(/\.(?=.*?@)/, "").gsub(/\+.*(?=@)/, "")
   end
 end

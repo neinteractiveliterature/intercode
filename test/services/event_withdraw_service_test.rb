@@ -18,7 +18,7 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
 
   it "withdraws the user from an event and emails them a confirmation" do
     perform_enqueued_jobs do
-      result = subject.call
+      result = subject.call!
       assert result.success?
       assert signup.reload.withdrawn?
       assert result.move_results.empty?

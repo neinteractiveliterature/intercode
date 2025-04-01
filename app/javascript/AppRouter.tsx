@@ -560,12 +560,10 @@ const commonInConventionRoutes: RouteObject[] = [
       {
         path: ':category/:event',
         lazy: () => import('./NotificationAdmin/NotificationConfiguration'),
-        children: [
-          {
-            path: 'preview',
-            lazy: () => import('./NotificationAdmin/preview'),
-          },
-        ],
+      },
+      {
+        path: ':eventKey/preview',
+        lazy: () => import('./NotificationAdmin/preview'),
       },
       { index: true, lazy: () => import('./NotificationAdmin/NotificationAdminIndex') },
     ],

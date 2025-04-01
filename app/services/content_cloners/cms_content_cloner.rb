@@ -5,8 +5,8 @@ class ContentCloners::CmsContentCloner < ContentCloners::ContentClonerBase
     clone_pages(convention)
     clone_cms_navigation_items(convention)
     clone_cms_files(convention)
-    clone_forms(convention)
-    clone_cms_content_groups(convention)
+    clone_cms_content_group_contents(convention)
+    clone_notification_templates(convention)
 
     convention.update!(
       root_page: @id_maps[:pages][source_convention.root_page_id],
@@ -18,7 +18,7 @@ class ContentCloners::CmsContentCloner < ContentCloners::ContentClonerBase
   private
 
   def clone_simple_cms_content(convention)
-    %i[cms_graphql_queries cms_variables cms_layouts cms_partials notification_templates].each do |association|
+    %i[cms_graphql_queries cms_variables cms_layouts cms_partials].each do |association|
       Rails.logger.info("Cloning #{association}")
       @id_maps[association] = clone_with_id_map(
         source_convention.public_send(association),
@@ -60,20 +60,12 @@ class ContentCloners::CmsContentCloner < ContentCloners::ContentClonerBase
     end
   end
 
-  def clone_forms(convention)
-    @id_maps[:forms] = clone_with_id_map(source_convention.forms, convention.forms) do |form, cloned_form|
-      cloned_form.save!
-      content = FormExportPresenter.new(form).as_json
-      ImportFormContentService.new(form: cloned_form, content: content).call!
-    end
-  end
+  def clone_cms_content_group_contents(convention)
+    Rails.logger.info("Cloning CMS content group contents")
 
-  def clone_cms_content_groups(convention)
-    @id_maps[:cms_content_groups] = clone_with_id_map(
-      source_convention.cms_content_groups,
-      convention.cms_content_groups
-    ) do |cms_content_group, cloned_cms_content_group|
-      cloned_cms_content_group.save!
+    convention.cms_content_groups.find_each do |cms_content_group|
+      cloned_cms_content_group = @id_maps.fetch(:cms_content_groups).fetch(cms_content_group.id)
+
       %i[pages cms_partials cms_layouts].each do |content_type|
         cms_content_group
           .public_send(content_type)
@@ -81,6 +73,21 @@ class ContentCloners::CmsContentCloner < ContentCloners::ContentClonerBase
             cloned_cms_content_group.cms_content_group_associations.create!(content: @id_maps[content_type][item.id])
           end
       end
+    end
+  end
+
+  def clone_notification_templates(convention)
+    Rails.logger.info("Cloning notification templates")
+
+    @id_maps[:notification_templates] = clone_with_id_map(
+      source_convention.notification_templates,
+      convention.notification_templates
+    ) do |notification_template, cloned_notification_template|
+      cloned_notification_template.save!
+
+      cloned_notification_template.notification_destinations.destroy_all
+      destination_id_map = clone_notification_destinations(notification_template, cloned_notification_template)
+      @id_maps[:notification_destinations].merge!(destination_id_map)
     end
   end
 end

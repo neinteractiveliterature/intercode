@@ -1,6 +1,9 @@
 #import "./queries.graphql"
 
-mutation UpdateNotificationTemplate($eventKey: String!, $notificationTemplate: NotificationTemplateInput!) {
+mutation UpdateNotificationTemplate(
+  $eventKey: NotificationEventKey!
+  $notificationTemplate: NotificationTemplateInput!
+) {
   updateNotificationTemplate(input: { event_key: $eventKey, notification_template: $notificationTemplate }) {
     notification_template {
       id
@@ -9,7 +12,7 @@ mutation UpdateNotificationTemplate($eventKey: String!, $notificationTemplate: N
   }
 }
 
-mutation SendNotificationPreview($eventKey: String!, $email: Boolean!, $sms: Boolean!) {
+mutation SendNotificationPreview($eventKey: NotificationEventKey!, $email: Boolean!, $sms: Boolean!) {
   sendNotificationPreview(input: { event_key: $eventKey, email: $email, sms: $sms }) {
     clientMutationId
   }
