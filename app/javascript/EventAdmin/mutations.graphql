@@ -89,6 +89,15 @@ mutation UpdateRun($input: UpdateRunInput!) {
   }
 }
 
+mutation CreateOrUpdateRunForEvent($input: CreateOrUpdateRunForEventInput!) {
+  createOrUpdateRunForEvent(input: $input) {
+    run {
+      id
+      ...RunFields
+    }
+  }
+}
+
 mutation DeleteRun($input: DeleteRunInput!) {
   deleteRun(input: $input) {
     run {

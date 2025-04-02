@@ -48,6 +48,12 @@
         "description": "Content shown on top of the \"my signup queue\" page.\n",
         "isDeprecated": false,
         "deprecationReason": null
+      },
+      {
+        "name": "PRE_SCHEDULE_TEXT",
+        "description": "Content shown on top of the convention schedule.\n",
+        "isDeprecated": false,
+        "deprecationReason": null
       }
     ]
   },
