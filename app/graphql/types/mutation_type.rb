@@ -208,6 +208,7 @@ class Types::MutationType < Types::BaseObject # rubocop:disable GraphQL/ObjectDe
   ### Run
 
   field :createMultipleRuns, null: false, mutation: Mutations::CreateMultipleRuns
+  field :createOrUpdateRunForEvent, null: false, mutation: Mutations::CreateOrUpdateRunForEvent
   field :createRun, null: false, mutation: Mutations::CreateRun
   field :deleteRun, null: false, mutation: Mutations::DeleteRun
   field :updateRun, null: false, mutation: Mutations::UpdateRun

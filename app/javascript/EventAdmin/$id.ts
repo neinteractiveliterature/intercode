@@ -1,8 +1,7 @@
 import { buildEventInput, buildRunInput } from './InputBuilders';
-import { EventAdminEventsQueryData, EventAdminEventsQueryDocument } from './queries.generated';
 import { EventCategory, SchedulingUi } from '../graphqlTypes.generated';
 import { client } from '../useIntercodeApolloClient';
-import { CreateRunDocument, UpdateEventDocument, UpdateRunDocument } from './mutations.generated';
+import { CreateOrUpdateRunForEventDocument, UpdateEventDocument } from './mutations.generated';
 import { ActionFunction, redirect } from 'react-router';
 
 export type UpdateRegularEventOptions = {
@@ -34,48 +33,20 @@ export async function updateSingleRunEvent({ event, run }: UpdateSingleRunEventO
 
   const runInput = buildRunInput(run);
 
-  if (run.id && runInput) {
+  if (runInput) {
     await client.mutate({
-      mutation: UpdateRunDocument,
-      variables: {
-        input: { ...runInput, id: run.id },
-      },
-    });
-  } else if (runInput) {
-    await client.mutate({
-      mutation: CreateRunDocument,
+      mutation: CreateOrUpdateRunForEventDocument,
       variables: {
         input: {
           ...runInput,
           eventId: event.id,
         },
       },
-      update: (store, { data }) => {
-        const eventsData = store.readQuery<EventAdminEventsQueryData>({
-          query: EventAdminEventsQueryDocument,
-        });
-        const newRun = data?.createRun?.run;
-        if (!newRun || !eventsData) {
-          return;
-        }
-
-        store.writeQuery<EventAdminEventsQueryData>({
-          query: EventAdminEventsQueryDocument,
-          data: {
-            ...eventsData,
-            convention: {
-              ...eventsData.convention,
-              events: eventsData.convention.events.map((existingEvent) => {
-                if (existingEvent.id === event.id) {
-                  return {
-                    ...existingEvent,
-                    runs: [...existingEvent.runs, newRun],
-                  };
-                }
-
-                return existingEvent;
-              }),
-            },
+      update: (cache) => {
+        cache.modify({
+          id: cache.identify(event),
+          fields: {
+            events: (value, { INVALIDATE }) => INVALIDATE,
           },
         });
       },
