@@ -62,7 +62,7 @@
     "@types/geojson": "^7946.0.14",
     "@types/js-search": "1.4.4",
     "@types/lodash": "4.17.16",
-    "@types/luxon": "3.4.2",
+    "@types/luxon": "3.6.0",
     "@types/minimist": "1.2.5",
     "@types/react": "18.3.20",
     "@types/react-click-outside-hook": "1.0.3",
