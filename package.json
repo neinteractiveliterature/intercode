@@ -184,7 +184,7 @@
     "@types/punycode": "2.1.4",
     "@types/qs": "^6",
     "@types/rails__activestorage": "7.1.1",
-    "@types/react-dom": "18.3.5",
+    "@types/react-dom": "18.3.6",
     "@types/react-transition-group": "4.4.12",
     "@typescript-eslint/eslint-plugin": "8.28.0",
     "@typescript-eslint/parser": "8.28.0",
