@@ -7147,10 +7147,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/luxon@npm:3.6.1":
-  version: 3.6.1
-  resolution: "@types/luxon@npm:3.6.1"
-  checksum: 10c0/682977d7e19ae9923ccbce5797262f21c9d02a8c37083bd2fb4faf237e058c294080cbaf20a12abb9c77a683b9ae07c38380018ff806035954b49a68a9b6f4c2
+"@types/luxon@npm:3.6.2":
+  version: 3.6.2
+  resolution: "@types/luxon@npm:3.6.2"
+  checksum: 10c0/7572ee52b3d3e9dd10464b90561a728b90f34b9a257751cc3ce23762693dd1d14fa98b7f103e2efe2c6f49033331f91de5681ffd65cca88618cefe555be326db
   languageName: node
   linkType: hard
 
@@ -21270,7 +21270,7 @@ __metadata:
     "@types/geojson": "npm:^7946.0.14"
     "@types/js-search": "npm:1.4.4"
     "@types/lodash": "npm:4.17.16"
-    "@types/luxon": "npm:3.6.1"
+    "@types/luxon": "npm:3.6.2"
     "@types/md5": "npm:^2"
     "@types/minimist": "npm:1.2.5"
     "@types/node": "npm:22.13.16"
