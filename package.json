@@ -51,7 +51,7 @@
     "@rails/activestorage": "8.0.200",
     "@sentry/browser": "^9.0.0",
     "@sentry/types": "^9.0.0",
-    "@stripe/react-stripe-js": "3.5.1",
+    "@stripe/react-stripe-js": "3.6.0",
     "@stripe/stripe-js": "6.1.0",
     "@tanstack/react-table": "^8.20.6",
     "@testing-library/react": "16.2.0",
