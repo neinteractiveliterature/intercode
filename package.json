@@ -179,7 +179,7 @@
     "@types/bootstrap": "5.2.10",
     "@types/events": "3.0.3",
     "@types/md5": "^2",
-    "@types/node": "22.13.16",
+    "@types/node": "22.14.0",
     "@types/pnpapi": "^0.0.5",
     "@types/punycode": "2.1.4",
     "@types/qs": "^6",
