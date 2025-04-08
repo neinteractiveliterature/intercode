@@ -11,7 +11,6 @@ import {
   UseStandardCodeMirrorExtensionsOptions,
   liquid,
 } from '@neinteractiveliterature/litform';
-import type { CodeInputProps } from '@neinteractiveliterature/litform/dist/types/CodeInput';
 import { Extension } from '@codemirror/state';
 import styles from 'styles/liquid_docs.module.scss';
 
@@ -65,7 +64,7 @@ function CreateCmsFileModal({ visible, close, fileChosen }: CreateCmsFileModalPr
 }
 
 export type LiquidInputProps = Omit<
-  CodeInputProps,
+  React.ComponentProps<typeof CodeInput>,
   'editorDidMount' | 'editorRef' | 'getPreviewContent' | 'previewButtonText' | 'editButtonText' | 'extraNavControls'
 > &
   Pick<UseStandardCodeMirrorExtensionsOptions, 'onChange'> & {

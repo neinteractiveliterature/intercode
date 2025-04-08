@@ -25,6 +25,7 @@ import getI18n from './setupI18Next';
 import RailsDirectUploadsContext from './RailsDirectUploadsContext';
 import { appRootRoutes } from './AppRouter';
 import { client } from './useIntercodeApolloClient';
+import { DateTime, Duration } from 'luxon';
 
 function I18NextWrapper({ children }: { children: (i18nInstance: i18n) => ReactNode }) {
   const [i18nInstance, seti18nInstance] = useState<i18n>();
@@ -88,7 +89,11 @@ function ProviderStack(props: AppWrapperProps) {
                   <I18NextWrapper>
                     {(i18nInstance) => (
                       <AlertProvider okText={i18nInstance.t('buttons.ok', 'OK')}>
-                        <ToastProvider>
+                        <ToastProvider
+                          formatTimeAgo={(timeAgo) =>
+                            DateTime.now().minus(Duration.fromMillis(timeAgo.milliseconds)).toRelative()
+                          }
+                        >
                           <ErrorBoundary placement="replace" errorType="plain">
                             <Outlet />
                           </ErrorBoundary>

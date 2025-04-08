@@ -1686,7 +1686,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/commands@npm:^6.0.0, @codemirror/commands@npm:^6.7.1":
+"@codemirror/commands@npm:^6.0.0, @codemirror/commands@npm:^6.7.1, @codemirror/commands@npm:^6.8.0":
   version: 6.8.1
   resolution: "@codemirror/commands@npm:6.8.1"
   dependencies:
@@ -1711,7 +1711,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/lang-html@npm:6.4.9, @codemirror/lang-html@npm:^6.0.0":
+"@codemirror/lang-html@npm:6.4.9, @codemirror/lang-html@npm:^6.0.0, @codemirror/lang-html@npm:^6.4.9":
   version: 6.4.9
   resolution: "@codemirror/lang-html@npm:6.4.9"
   dependencies:
@@ -1768,7 +1768,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/language@npm:6.11.0, @codemirror/language@npm:^6.0.0, @codemirror/language@npm:^6.3.0, @codemirror/language@npm:^6.4.0, @codemirror/language@npm:^6.6.0":
+"@codemirror/language@npm:6.11.0, @codemirror/language@npm:^6.0.0, @codemirror/language@npm:^6.10.8, @codemirror/language@npm:^6.3.0, @codemirror/language@npm:^6.4.0, @codemirror/language@npm:^6.6.0":
   version: 6.11.0
   resolution: "@codemirror/language@npm:6.11.0"
   dependencies:
@@ -1804,7 +1804,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/state@npm:6.5.2, @codemirror/state@npm:^6.0.0, @codemirror/state@npm:^6.4.0, @codemirror/state@npm:^6.5.0":
+"@codemirror/state@npm:6.5.2, @codemirror/state@npm:^6.0.0, @codemirror/state@npm:^6.4.0, @codemirror/state@npm:^6.5.0, @codemirror/state@npm:^6.5.2":
   version: 6.5.2
   resolution: "@codemirror/state@npm:6.5.2"
   dependencies:
@@ -1813,7 +1813,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/view@npm:6.36.5, @codemirror/view@npm:^6.0.0, @codemirror/view@npm:^6.17.0, @codemirror/view@npm:^6.23.0, @codemirror/view@npm:^6.27.0":
+"@codemirror/view@npm:6.36.5, @codemirror/view@npm:^6.0.0, @codemirror/view@npm:^6.17.0, @codemirror/view@npm:^6.23.0, @codemirror/view@npm:^6.27.0, @codemirror/view@npm:^6.36.3":
   version: 6.36.5
   resolution: "@codemirror/view@npm:6.36.5"
   dependencies:
@@ -4917,7 +4917,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lezer/common@npm:1.2.3, @lezer/common@npm:^1.0.0, @lezer/common@npm:^1.0.2, @lezer/common@npm:^1.1.0, @lezer/common@npm:^1.2.0, @lezer/common@npm:^1.2.1":
+"@lezer/common@npm:1.2.3, @lezer/common@npm:^1.0.0, @lezer/common@npm:^1.0.2, @lezer/common@npm:^1.1.0, @lezer/common@npm:^1.2.0, @lezer/common@npm:^1.2.1, @lezer/common@npm:^1.2.3":
   version: 1.2.3
   resolution: "@lezer/common@npm:1.2.3"
   checksum: 10c0/fe9f8e111080ef94037a34ca2af1221c8d01c1763ba5ecf708a286185c76119509a5d19d924c8842172716716ddce22d7834394670c4a9432f0ba9f3b7c0f50d
@@ -5129,34 +5129,96 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@neinteractiveliterature/litform@npm:0.32.1":
-  version: 0.32.1
-  resolution: "@neinteractiveliterature/litform@npm:0.32.1"
+"@neinteractiveliterature/litform-codemirror@npm:^0.34.1":
+  version: 0.34.1
+  resolution: "@neinteractiveliterature/litform-codemirror@npm:0.34.1"
   dependencies:
+    "@codemirror/commands": "npm:^6.8.0"
+    "@codemirror/lang-html": "npm:^6.4.9"
+    "@codemirror/language": "npm:^6.10.8"
+    "@codemirror/state": "npm:^6.5.2"
+    "@codemirror/view": "npm:^6.36.3"
+    "@lezer/common": "npm:^1.2.3"
+    "@lezer/highlight": "npm:^1.2.1"
+    "@lezer/lr": "npm:^1.4.2"
+    "@neinteractiveliterature/litform-core": "npm:^0.34.1"
+    classnames: "npm:^2.5.1"
+    codemirror: "npm:^6.0.1"
+  peerDependencies:
+    react: ">= 18"
+  checksum: 10c0/cc65203b4dc00f76653be2e9d52c3fb702d7de4d8e540eec72aac1eb33e060890e6906ff394c47a99cf2e0c77d4579e0c538cc47f9c0d67f97e7bfdb25230312
+  languageName: node
+  linkType: hard
+
+"@neinteractiveliterature/litform-controls@npm:^0.34.1":
+  version: 0.34.1
+  resolution: "@neinteractiveliterature/litform-controls@npm:0.34.1"
+  dependencies:
+    "@neinteractiveliterature/litform-core": "npm:^0.34.1"
     classnames: "npm:^2.5.1"
     copy-to-clipboard: "npm:^3.3.3"
+    graphql: "npm:^16.10.0"
     lodash: "npm:^4.17.21"
+    temporal-polyfill: "npm:^0.2.5"
+  peerDependencies:
+    react: ">= 18"
+  checksum: 10c0/3976ac5c7ecc3632ba5353e63ad60d9f60aa81376d94e37eb7dee07fa9218c1347db4f953cfab9ce58399a6640391104af9868313db3c3657877381c5b37d9d1
+  languageName: node
+  linkType: hard
+
+"@neinteractiveliterature/litform-core@npm:^0.34.1":
+  version: 0.34.1
+  resolution: "@neinteractiveliterature/litform-core@npm:0.34.1"
+  dependencies:
+    classnames: "npm:^2.5.1"
+    graphql: "npm:^16.10.0"
+    lodash: "npm:^4.17.21"
+    temporal-polyfill: "npm:^0.2.5"
+    uuid: "npm:^11.1.0"
+  peerDependencies:
+    react: ">= 18"
+  checksum: 10c0/fc15b376d90e9e63eaea30cc9309b96fe1425bdc4d4d0b9649227820bc369547a1e8daf90d7bc37f7d1f0197199e23fd939d03e4ee6e1aa268bd899d32afbd69
+  languageName: node
+  linkType: hard
+
+"@neinteractiveliterature/litform-modals@npm:^0.34.1":
+  version: 0.34.1
+  resolution: "@neinteractiveliterature/litform-modals@npm:0.34.1"
+  dependencies:
+    "@neinteractiveliterature/litform-core": "npm:^0.34.1"
+    react-bootstrap4-modal: "npm:^3.0.10"
+  peerDependencies:
+    react: ">= 18"
+  checksum: 10c0/547684864d80edcda2a9016749c5de4a4833bf9da3f5511c8ed67cbea2d7719216cc1e6caeac3f3d0c7bcd790272544f84cd1db5a8fc99626e53ab5628e12dcb
+  languageName: node
+  linkType: hard
+
+"@neinteractiveliterature/litform-popovers@npm:^0.34.1":
+  version: 0.34.1
+  resolution: "@neinteractiveliterature/litform-popovers@npm:0.34.1"
+  dependencies:
+    "@neinteractiveliterature/litform-core": "npm:^0.34.1"
+    "@popperjs/core": "npm:^2.11.8"
+    classnames: "npm:^2.5.1"
     react-cool-onclickoutside: "npm:^1.7.0"
     react-popper: "npm:^2.3.0"
-    style-mod: "npm:^4.1.2"
-    uuid: "npm:^11.0.3"
   peerDependencies:
-    "@apollo/client": ">= 3.3.18"
-    "@codemirror/commands": ^6.7.1
-    "@codemirror/lang-html": ^6.4.9
-    "@codemirror/language": ^6.10.3
-    "@codemirror/state": ^6.4.1
-    "@codemirror/view": ^6.35.0
-    "@lezer/common": ^1.2.1
-    "@lezer/highlight": ^1.2.1
-    "@lezer/lr": ^1.4.0
-    "@popperjs/core": ^2.11.8
-    codemirror: ^6.0.1
-    graphql: ">= 15.5.0"
-    luxon: ^3.5.0
     react: ">= 18"
-    react-bootstrap4-modal: ^3.0.8
-  checksum: 10c0/f55e35568b559749050cdb83e614c34005f99419d94858567216b0522fca36d1977a3b6bd303cd60ed5ab37f618459a1df084861bf50d56ee736b06b313db7f1
+    react-dom: ">= 18"
+  checksum: 10c0/385f70b29745472b45a69f3e7faede879ffc848b07692f2da681ad00c3545128f5dff7b257e7025b977b647866834bc511d92a69702972f5e17ca1ca08f9fef8
+  languageName: node
+  linkType: hard
+
+"@neinteractiveliterature/litform@npm:0.34.1":
+  version: 0.34.1
+  resolution: "@neinteractiveliterature/litform@npm:0.34.1"
+  dependencies:
+    "@neinteractiveliterature/litform-codemirror": "npm:^0.34.1"
+    "@neinteractiveliterature/litform-controls": "npm:^0.34.1"
+    "@neinteractiveliterature/litform-core": "npm:^0.34.1"
+    "@neinteractiveliterature/litform-modals": "npm:^0.34.1"
+    "@neinteractiveliterature/litform-popovers": "npm:^0.34.1"
+  checksum: 10c0/22dcea421ab452c45abdfac3ab81f930b09babbe9de804456701ba744857e4f1f6978d2d92a2e88ccbaae5fd813eb4d604b399ffb1082d07eaba0c5c433ae9ff
   languageName: node
   linkType: hard
 
@@ -13667,6 +13729,13 @@ __metadata:
   languageName: node
   linkType: hard
 
+"graphql@npm:^16.10.0":
+  version: 16.10.0
+  resolution: "graphql@npm:16.10.0"
+  checksum: 10c0/303730675538c8bd6c76b447dc6f03e61242e2d2596b408c34759666ec4877409e5593a7a0467d590ac5407b8c663b093b599556a77f24f281abea69ddc53de6
+  languageName: node
+  linkType: hard
+
 "gray-matter@npm:^4.0.3":
   version: 4.0.3
   resolution: "gray-matter@npm:4.0.3"
@@ -21243,7 +21312,7 @@ __metadata:
     "@lezer/common": "npm:1.2.3"
     "@lezer/highlight": "npm:^1.2.1"
     "@lezer/lr": "npm:^1.4.2"
-    "@neinteractiveliterature/litform": "npm:0.32.1"
+    "@neinteractiveliterature/litform": "npm:0.34.1"
     "@popperjs/core": "npm:^2.11.8"
     "@prettier/plugin-ruby": "npm:4.0.4"
     "@rails/activestorage": "npm:8.0.200"
@@ -22666,7 +22735,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"style-mod@npm:^4.0.0, style-mod@npm:^4.1.0, style-mod@npm:^4.1.2":
+"style-mod@npm:^4.0.0, style-mod@npm:^4.1.0":
   version: 4.1.2
   resolution: "style-mod@npm:4.1.2"
   checksum: 10c0/ad4d870b3642b0e42ecc7be0e106dd14b7af11985e34fee8de34e5e38c3214bfc96fa7055acea86d75a3a59ddea3f6a8c6641001a66494d7df72d09685e3fadb
@@ -22867,6 +22936,22 @@ __metadata:
     mkdirp: "npm:^1.0.3"
     yallist: "npm:^4.0.0"
   checksum: 10c0/a5eca3eb50bc11552d453488344e6507156b9193efd7635e98e867fab275d527af53d8866e2370cd09dfe74378a18111622ace35af6a608e5223a7d27fe99537
+  languageName: node
+  linkType: hard
+
+"temporal-polyfill@npm:^0.2.5":
+  version: 0.2.5
+  resolution: "temporal-polyfill@npm:0.2.5"
+  dependencies:
+    temporal-spec: "npm:^0.2.4"
+  checksum: 10c0/f2e828b15809bac9fcbab28f238c03277dd134ccc05f80cf2daa26cf8f8a865e9a2f610bcd6148845908665f8b59a5793c25d607cc0eec95f869d9d746839230
+  languageName: node
+  linkType: hard
+
+"temporal-spec@npm:^0.2.4":
+  version: 0.2.4
+  resolution: "temporal-spec@npm:0.2.4"
+  checksum: 10c0/89dec88dcded2cdffa36c3c2274881e833dd69e5959c9b50f52a93b29f02b8f265288be113b2d3b70e89dc85ece7eb8f9121c6d0e0563ea21bbf81693da8f97d
   languageName: node
   linkType: hard
 
@@ -23933,12 +24018,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"uuid@npm:^11.0.3":
-  version: 11.0.4
-  resolution: "uuid@npm:11.0.4"
+"uuid@npm:^11.1.0":
+  version: 11.1.0
+  resolution: "uuid@npm:11.1.0"
   bin:
     uuid: dist/esm/bin/uuid
-  checksum: 10c0/3c13591c4dedaa3741f925e284df5974e3d6e0b1cb0f6f75f98c36f9c01d2a414350364fd067613ef600a21c6973dab0506530d4f499ff878f32a06f84569ead
+  checksum: 10c0/34aa51b9874ae398c2b799c88a127701408cd581ee89ec3baa53509dd8728cbb25826f2a038f9465f8b7be446f0fbf11558862965b18d21c993684297628d4d3
   languageName: node
   linkType: hard
 
