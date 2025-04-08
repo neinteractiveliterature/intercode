@@ -45,4 +45,10 @@ query UserActivityAlertsAdminQuery {
       ...UserActivityAlertFields
     }
   }
+
+  notificationEvents {
+    key
+    allowed_condition_types
+    allowed_dynamic_destinations
+  }
 }

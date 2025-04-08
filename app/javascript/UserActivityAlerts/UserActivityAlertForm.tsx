@@ -6,6 +6,7 @@ import UserSelect from '../BuiltInFormControls/UserSelect';
 import { UserActivityAlertsAdminQueryData } from './queries.generated';
 import { useTranslation } from 'react-i18next';
 import NotificationDestinationsConfig from 'NotificationAdmin/NotificationDestinationsConfig';
+import { NotificationEvent } from 'graphqlTypes.generated';
 
 type AlertType = UserActivityAlertsAdminQueryData['convention']['user_activity_alerts'][number];
 
@@ -16,6 +17,7 @@ export type UserActivityAlertFormProps = {
   onChange: React.Dispatch<React.SetStateAction<AlertType>>;
   onAddNotificationDestination: React.Dispatch<Omit<AlertType['notification_destinations'][number], 'id'>>;
   onRemoveNotificationDestination: React.Dispatch<string>;
+  userActivityAlertEvent: Pick<NotificationEvent, 'allowed_condition_types' | 'allowed_dynamic_destinations'>;
 };
 
 function UserActivityAlertForm({
@@ -25,6 +27,7 @@ function UserActivityAlertForm({
   onRemoveNotificationDestination,
   convention,
   disabled,
+  userActivityAlertEvent,
 }: UserActivityAlertFormProps): JSX.Element {
   const { t } = useTranslation();
   const userSelectId = useId();
@@ -112,6 +115,8 @@ function UserActivityAlertForm({
           notificationDestinations={userActivityAlert.notification_destinations}
           disabled={disabled}
           staffPositions={convention.staff_positions}
+          allowedDynamicDestinations={userActivityAlertEvent.allowed_dynamic_destinations}
+          allowedConditionTypes={userActivityAlertEvent.allowed_condition_types}
         />
       </div>
     </>

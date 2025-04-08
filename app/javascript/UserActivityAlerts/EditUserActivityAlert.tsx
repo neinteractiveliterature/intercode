@@ -15,7 +15,7 @@ import {
 } from './mutations.generated';
 import { client } from '../useIntercodeApolloClient';
 import invariant from 'tiny-invariant';
-import { UserActivityAlert } from 'graphqlTypes.generated';
+import { NotificationEventKey, UserActivityAlert } from 'graphqlTypes.generated';
 
 export const action: ActionFunction = async ({ request, params: { id } }) => {
   invariant(id != null);
@@ -50,22 +50,29 @@ export const action: ActionFunction = async ({ request, params: { id } }) => {
 type LoaderResult = {
   convention: UserActivityAlertsAdminQueryData['convention'];
   initialUserActivityAlert: UserActivityAlertsAdminQueryData['convention']['user_activity_alerts'][number];
+  userActivityAlertEvent: UserActivityAlertsAdminQueryData['notificationEvents'][number];
 };
 
 export const loader: LoaderFunction = async ({ params: { id } }) => {
-  const { data } = await client.query<UserActivityAlertsAdminQueryData>({
-    query: UserActivityAlertsAdminQueryDocument,
-  });
+  const { data } = await client.query({ query: UserActivityAlertsAdminQueryDocument });
 
   const initialUserActivityAlert = data.convention.user_activity_alerts.find((alert) => alert.id === id);
   if (!initialUserActivityAlert) {
     return new Response(null, { status: 404 });
   }
-  return { convention: data.convention, initialUserActivityAlert } as LoaderResult;
+
+  const userActivityAlertEvent = data.notificationEvents.find(
+    (event) => event.key === NotificationEventKey.UserActivityAlertsAlert,
+  );
+  if (!userActivityAlertEvent) {
+    return new Response(null, { status: 404 });
+  }
+
+  return { convention: data.convention, initialUserActivityAlert, userActivityAlertEvent } satisfies LoaderResult;
 };
 
 function EditUserActivityAlertForm() {
-  const { initialUserActivityAlert, convention } = useLoaderData() as LoaderResult;
+  const { initialUserActivityAlert, convention, userActivityAlertEvent } = useLoaderData() as LoaderResult;
 
   usePageTitle('Editing user activity alert');
   const [userActivityAlert, setUserActivityAlert] = useState(initialUserActivityAlert);
@@ -128,6 +135,7 @@ function EditUserActivityAlertForm() {
         onAddNotificationDestination={addNotificationDestination}
         onRemoveNotificationDestination={removeNotificationDestination}
         disabled={inProgress}
+        userActivityAlertEvent={userActivityAlertEvent}
       />
       <ErrorDisplay graphQLError={error as ApolloError} />
       <button className="btn btn-primary mt-4" type="button" onClick={saveClicked} disabled={inProgress}>
