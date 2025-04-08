@@ -35,7 +35,7 @@ module Notifier::Dsl
     def evaluator_for_condition(condition, notifier)
       factory = @condition_evaluators.fetch(condition)
       args = notifier.instance_eval(&factory)
-      evaluator_class = CONDITION_EVALUATORS.fetch(dynamic_destination)
+      evaluator_class = CONDITION_EVALUATORS.fetch(condition)
       evaluator_class.new(notifier: notifier, **args)
     end
 
