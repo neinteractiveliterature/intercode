@@ -150,6 +150,8 @@ function OrderPaymentModal({ visible, onCancel, onError, onComplete, order }: Or
   const client = useApolloClient();
   const onErrorRef = useRef(onError);
 
+  const paymentIntentClientSecretNeeded = useMemo(() => order != null && order.total_price.fractional > 0, [order]);
+
   useEffect(() => {
     onErrorRef.current = onError;
   }, [onError]);
@@ -171,14 +173,14 @@ function OrderPaymentModal({ visible, onCancel, onError, onComplete, order }: Or
   useEffect(() => {
     setPaymentIntentClientSecret(undefined);
 
-    if (order != null && order.total_price.fractional > 0) {
+    if (paymentIntentClientSecretNeeded) {
       refreshPaymentIntentClientSecret();
     }
-  }, [order, order?.total_price, order?.order_entries, refreshPaymentIntentClientSecret]);
+  }, [paymentIntentClientSecretNeeded, refreshPaymentIntentClientSecret]);
 
   return (
     <Modal visible={visible && order != null} dialogClassName="modal-lg">
-      {visible && paymentIntentClientSecret && order != null && (
+      {visible && order != null && (paymentIntentClientSecret || !paymentIntentClientSecretNeeded) && (
         <LazyStripeElementsContainer options={{ clientSecret: paymentIntentClientSecret }}>
           <OrderPaymentModalContents onCancel={onCancel} onComplete={onComplete} onError={onError} order={order} />
         </LazyStripeElementsContainer>
