@@ -7,7 +7,7 @@ import MoneyInput from '../MoneyInput';
 import { Money } from '../../graphqlTypes.generated';
 import PricingStructureForm, { PricingStructureFormProps } from './PricingStructureForm';
 import { useTranslation } from 'react-i18next';
-import type { ModalData } from '@neinteractiveliterature/litform/dist/types/useModal';
+import { ModalData } from '@neinteractiveliterature/litform';
 
 type EditingPricingStructure = PricingStructureFormProps['pricingStructure'];
 

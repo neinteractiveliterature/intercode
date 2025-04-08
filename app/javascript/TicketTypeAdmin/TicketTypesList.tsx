@@ -1,6 +1,6 @@
 import { useContext, useMemo } from 'react';
 import { Link, useFetcher, useLoaderData } from 'react-router-dom';
-import { ErrorDisplay, useConfirm, useModal } from '@neinteractiveliterature/litform';
+import { ErrorDisplay, ModalData, useConfirm, useModal } from '@neinteractiveliterature/litform';
 import capitalize from 'lodash/capitalize';
 import { v4 as uuidv4 } from 'uuid';
 
@@ -17,7 +17,6 @@ import EditTicketProvidingProductModal, {
 } from './EditTicketProvidingProductModal';
 import { TicketTypeLoaderResult } from './loaders';
 import { AdminPricingStructureDescription } from 'Store/describePricingStructure';
-import type { ModalData } from '@neinteractiveliterature/litform/dist/types/useModal';
 
 type TicketTypeType = AdminTicketTypesQueryData['convention']['ticket_types'][0];
 

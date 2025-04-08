@@ -1,7 +1,6 @@
 import { useContext, useState } from 'react';
 import { DateTime } from 'luxon';
-import { ErrorDisplay, useModal } from '@neinteractiveliterature/litform';
-import type { ModalData } from '@neinteractiveliterature/litform/dist/types/useModal';
+import { ErrorDisplay, ModalData, useModal } from '@neinteractiveliterature/litform';
 
 import OrderPaymentModal from './OrderPaymentModal';
 import formatMoney from '../formatMoney';

@@ -7,10 +7,9 @@ import {
   liquid,
   useModal,
 } from '@neinteractiveliterature/litform';
-import type { CodeInputProps } from '@neinteractiveliterature/litform/dist/types/CodeInput';
 import { useTranslation } from 'react-i18next';
 import { markdown } from '@codemirror/lang-markdown';
-import { useMemo } from 'react';
+import { ComponentProps, useMemo } from 'react';
 import { Extension } from '@codemirror/state';
 
 import parsePageContent from '../parsePageContent';
@@ -46,7 +45,7 @@ export type ImageAttachmentConfig = {
 };
 
 export type MarkdownInputProps = Omit<
-  CodeInputProps,
+  ComponentProps<typeof CodeInput>,
   'getPreviewContent' | 'editorRef' | 'editButtonText' | 'previewButtonText'
 > &
   Pick<UseStandardCodeMirrorExtensionsOptions, 'onChange'> & {

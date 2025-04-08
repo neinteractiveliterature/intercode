@@ -1,9 +1,9 @@
 import { TFunction } from 'i18next';
 import { useTranslation } from 'react-i18next';
 import { MultipleChoiceInput } from '@neinteractiveliterature/litform';
-import type { MultipleChoiceInputProps } from '@neinteractiveliterature/litform/dist/types/MultipleChoiceInput';
 
 import { SignupFieldsFragment } from './queries.generated';
+import { ComponentProps } from 'react';
 
 type BucketType = NonNullable<SignupFieldsFragment['run']['event']['registration_policy']>['buckets'][0];
 
@@ -24,7 +24,10 @@ function shouldBucketChoiceBeDisabled(signup: SignupFieldsFragment, bucket: Buck
   return bucket.key === signup.bucket_key || (bucket.anything && signup.bucket_key != null);
 }
 
-export type BucketInputProps = Omit<MultipleChoiceInputProps, 'choices' | 'value' | 'onChange' | 'multiple'> & {
+export type BucketInputProps = Omit<
+  ComponentProps<typeof MultipleChoiceInput>,
+  'choices' | 'value' | 'onChange' | 'multiple'
+> & {
   signup: SignupFieldsFragment;
   value: string | null | undefined;
   onChange: (newValue: string | null | undefined) => void;

@@ -1,5 +1,4 @@
-import { usePropertySetters } from '@neinteractiveliterature/litform';
-import type { FunctionalStateUpdater } from '@neinteractiveliterature/litform/dist/types/usePropertySetters';
+import { FunctionalStateUpdater, usePropertySetters } from '@neinteractiveliterature/litform';
 import { useSortable } from '@dnd-kit/sortable';
 
 import InPlaceEditor from '../../BuiltInFormControls/InPlaceEditor';
