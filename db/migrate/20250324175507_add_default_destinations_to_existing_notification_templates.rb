@@ -3,7 +3,7 @@ class AddDefaultDestinationsToExistingNotificationTemplates < ActiveRecord::Migr
     NotificationTemplate
       .includes(:convention)
       .find_each do |template|
-        say "Adding default destinations for #{template.event_key}"
+        say "Adding default destinations for #{template.convention.name} #{template.event_key}"
         template.create_default_destinations!
       end
   end
