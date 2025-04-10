@@ -1,4 +1,0 @@
-cmake
-flex
-:repo:deb http://ppa.launchpad.net/dylan-smith/libgraphqlparser/ubuntu trusty main
-libgraphqlparser

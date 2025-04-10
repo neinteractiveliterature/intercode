@@ -1,6 +1,0 @@
-ARG INTERCODE_TAG
-FROM ghcr.io/neinteractiveliterature/intercode:${INTERCODE_TAG}
-ARG REVISION
-
-ENV REVISION $REVISION
-CMD bundle exec rails release:perform
