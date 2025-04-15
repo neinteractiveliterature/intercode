@@ -6666,7 +6666,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@swc/core@npm:^1.11.11, @swc/core@npm:^1.9.2":
+"@swc/core@npm:^1.11.21, @swc/core@npm:^1.9.2":
   version: 1.11.21
   resolution: "@swc/core@npm:1.11.21"
   dependencies:
@@ -7826,13 +7826,13 @@ __metadata:
   linkType: hard
 
 "@vitejs/plugin-react-swc@npm:^3.7.2":
-  version: 3.8.1
-  resolution: "@vitejs/plugin-react-swc@npm:3.8.1"
+  version: 3.9.0
+  resolution: "@vitejs/plugin-react-swc@npm:3.9.0"
   dependencies:
-    "@swc/core": "npm:^1.11.11"
+    "@swc/core": "npm:^1.11.21"
   peerDependencies:
     vite: ^4 || ^5 || ^6
-  checksum: 10c0/ef431a41321106c873e060f224b856ea5db98fafd736f4341f51bc33fc864a315ca933370e72eed44fe5871a148ab7bb5b2961ef99a214f0474f842b1ec38c07
+  checksum: 10c0/28e99f2833d390982b9ab17ccabe7fa7562c30ea56cf57b34fe97dc401958ce838bfbb8f562f73c2764e041f8672f10ca3872220fd78660fc9cc43b539bb7962
   languageName: node
   linkType: hard
 
