@@ -15,6 +15,7 @@ Intercode::Application.routes.draw do
   post "/sns_notifications", to: "sns_notifications#create"
   post "/stripe_webhook/account", to: "stripe_webhooks#account"
   post "/stripe_webhook/connect", to: "stripe_webhooks#connect"
+  get "/email_forwarders/:address", to: "email_forwarders#show", constraints: { address: /.+@.+/ }
 
   get "/healthz" => "health#healthz"
 

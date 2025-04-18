@@ -1,0 +1,13 @@
+{
+  "name": "intercode-email-forwarder",
+  "main": "intercode-email-forwarder.ts",
+  "compatibility_date": "2025-04-18",
+  "send_email": [{ "name": "SEND_EMAIL" }],
+  "observability": {
+    "enabled": true,
+    "head_sampling_rate": 1,
+  },
+  "vars": {
+    "INTERCODE_URL": "https://www.neilhosting.net",
+  },
+}

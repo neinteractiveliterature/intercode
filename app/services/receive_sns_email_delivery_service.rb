@@ -34,7 +34,7 @@ class ReceiveSnsEmailDeliveryService < CivilService::Service
     end
 
     begin
-      ReceiveEmailService.new(recipients:, load_email: -> { email }, message_id:).call
+      ForwardEmailViaSesService.new(recipients:, load_email: -> { email }, message_id:).call
     rescue StandardError => e
       ErrorReporting.error(e, recipients:, message_id:)
       raise e

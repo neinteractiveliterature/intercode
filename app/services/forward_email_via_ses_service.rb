@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class ReceiveEmailService < CivilService::Service
+class ForwardEmailViaSesService < CivilService::Service
   def self.ses_client
     @ses_client ||= Aws::SES::Client.new
   end
@@ -27,7 +27,7 @@ class ReceiveEmailService < CivilService::Service
       forward_addresses = forward_addresses_for_recipient(recipient)
 
       if forward_addresses
-        Rails.logger.debug { "Forwarding mail for #{recipient} -> #{forward_addresses.join(', ')}" }
+        Rails.logger.debug { "Forwarding mail for #{recipient} -> #{forward_addresses.join(", ")}" }
         forward_email(recipient, forward_addresses)
       elsif intercode_address?(recipient)
         Rails.logger.warn("Could not find matching route for #{recipient}, sending bounce")
@@ -68,62 +68,20 @@ class ReceiveEmailService < CivilService::Service
   end
 
   def forward_addresses_for_recipient(recipient)
-    address = EmailRoute.normalize_address(recipient)
-
-    staff_positions = staff_positions_for_recipient(address)
-    return staff_positions.flat_map { |sp| sp.user_con_profiles.map(&:email) + sp.cc_addresses } if staff_positions
-
-    team_members = team_members_for_recipient(address)
-    return team_members.flat_map { |tm| tm.user_con_profile.email } if team_members
-
-    route = EmailRoute.find_by(receiver_address: address)
-    route&.forward_addresses
-  end
-
-  def staff_positions_for_recipient(address)
-    convention = Convention.find_by(domain: Mail::Address.new(address).domain)
-    return nil unless convention
-
-    return [convention.catch_all_staff_position].compact if convention.email_mode == 'staff_emails_to_catch_all'
-
-    matched_positions =
-      convention
-        .staff_positions
-        .includes(user_con_profiles: :user)
-        .select do |sp|
-          full_email_aliases = sp.email_aliases.map { |ea| "#{ea}@#{convention.domain}" }
-          destinations = [sp.email, *full_email_aliases].map { |dest| EmailRoute.normalize_address(dest) }
-          destinations.include?(address)
-        end
-    return matched_positions if matched_positions.any?
-
-    [convention.catch_all_staff_position].compact
-  end
-
-  def team_members_for_recipient(address)
-    convention = Convention.find_by(event_mailing_list_domain: Mail::Address.new(address).domain)
-    return nil unless convention
-
-    events =
-      convention.events.select do |event|
-        next if event.team_mailing_list_name.blank?
-        full_alias = "#{event.team_mailing_list_name}@#{convention.event_mailing_list_domain}"
-        EmailRoute.normalize_address(full_alias) == address
-      end
-    TeamMember.where(event_id: events.map(&:id)).includes(user_con_profile: :user).to_a
+    EmailForwardingRouter.new(recipient).forward_addresses
   end
 
   def headers_for_forwarding(forward_message)
     {
-      'X-Intercode-Original-Return-Path' => forward_message.header['Return-Path'],
-      'Return-Path' => "bounces@#{mailer_host}",
-      'X-Intercode-Original-Sender' => forward_message.header['Sender'],
-      'Sender' => nil,
-      'X-Intercode-Original-Source' => forward_message.header['Source'],
-      'Source' => nil,
-      'DKIM-Signature' => nil, # SES will re-sign the message for us
-      'X-SES-CONFIGURATION-SET' => 'default',
-      'X-Intercode-Message-ID' => message_id
+      "X-Intercode-Original-Return-Path" => forward_message.header["Return-Path"],
+      "Return-Path" => "bounces@#{mailer_host}",
+      "X-Intercode-Original-Sender" => forward_message.header["Sender"],
+      "Sender" => nil,
+      "X-Intercode-Original-Source" => forward_message.header["Source"],
+      "Source" => nil,
+      "DKIM-Signature" => nil, # SES will re-sign the message for us
+      "X-SES-CONFIGURATION-SET" => "default",
+      "X-Intercode-Message-ID" => message_id
     }
   end
 
@@ -166,8 +124,8 @@ header: #{email.from}"
     begin
       self.class.ses_client.send_raw_email({ raw_message: { data: forward_message.to_s } })
     rescue Aws::SES::Errors::InvalidParameterValue => e
-      if e.message.include?('Message length is more')
-        send_bounce(original_recipient, bounce_type: 'MessageTooLarge')
+      if e.message.include?("Message length is more")
+        send_bounce(original_recipient, bounce_type: "MessageTooLarge")
       else
         send_bounce(original_recipient)
       end
@@ -178,7 +136,7 @@ header: #{email.from}"
     Rails.application.config.action_mailer.default_url_options[:host]
   end
 
-  def send_bounce(recipient, bounce_type: 'DoesNotExist')
+  def send_bounce(recipient, bounce_type: "DoesNotExist")
     self.class.ses_client.send_bounce(
       {
         original_message_id: message_id,
