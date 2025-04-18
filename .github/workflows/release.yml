@@ -43,11 +43,20 @@ jobs:
     steps:
       - name: Checkout code
         uses: actions/checkout@v4
-      - name: Deploy to Cloudflare
-        uses: cloudflare/wrangler-action@v3
+      - name: Read .node-version
+        id: node-version
+        run: echo "node-version=$(cat .node-version)" >> $GITHUB_OUTPUT
+      - name: install node
+        uses: actions/setup-node@v4
         with:
-          apiToken: ${{ secrets.CLOUDFLARE_API_TOKEN }}
-          workingDirectory: ./cloudflare
+          cache: yarn
+          node-version: ${{ steps.node-version.outputs.node-version }}
+      - name: yarn install
+        run: yarn install
+      - name: Deploy to Cloudflare
+        run: yarn run wrangler:deploy
+        env:
+          CLOUDFLARE_API_TOKEN: ${{ secrets.CLOUDFLARE_API_TOKEN }}
   notify-slack:
     runs-on: ubuntu-latest
     needs:

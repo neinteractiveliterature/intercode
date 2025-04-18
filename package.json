@@ -25,6 +25,7 @@
     "test": "vitest run",
     "test:ui": "vitest --ui",
     "test:watch": "vitest watch",
+    "wrangler:deploy": "wrangler deploy --cwd cloudflare",
     "wrangler:types": "wrangler types --cwd cloudflare"
   },
   "dependencies": {
