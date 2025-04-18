@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class ReceiveEmailService < CivilService::Service
+class ForwardEmailViaSesService < CivilService::Service
   def self.ses_client
     @ses_client ||= Aws::SES::Client.new
   end
