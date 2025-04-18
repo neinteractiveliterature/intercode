@@ -20,26 +20,26 @@ class EmailForwardingRouter
       *staff_positions_for_recipient.flat_map { |sp| sp.user_con_profiles.map(&:email) + sp.cc_addresses },
       *team_members_for_recipient.flat_map { |tm| tm.user_con_profile.email },
       *email_routes_for_recipient.flat_map(&:forward_addresses)
-    ]
+    ].compact.uniq
   end
 
   def staff_positions_for_recipient
     @staff_positions_for_recipient ||=
       if convention_by_domain
         if convention_by_domain.email_mode == "staff_emails_to_catch_all"
-          [convention.catch_all_staff_position].compact
+          [convention_by_domain.catch_all_staff_position].compact
         else
           matched_positions =
-            convention
+            convention_by_domain
               .staff_positions
               .includes(user_con_profiles: :user)
               .select do |sp|
-                full_email_aliases = sp.email_aliases.map { |ea| "#{ea}@#{convention.domain}" }
+                full_email_aliases = sp.email_aliases.map { |ea| "#{ea}@#{convention_by_domain.domain}" }
                 destinations = [sp.email, *full_email_aliases].map { |dest| EmailRoute.normalize_address(dest) }
                 destinations.include?(address)
               end
 
-          matched_positions.any? ? matched_positions : [convention.catch_all_staff_position].compact
+          matched_positions.any? ? matched_positions : [convention_by_domain.catch_all_staff_position].compact
         end
       else
         []
@@ -52,7 +52,7 @@ class EmailForwardingRouter
         events =
           convention_by_events_domain.events.select do |event|
             next if event.team_mailing_list_name.blank?
-            full_alias = "#{event.team_mailing_list_name}@#{convention.event_mailing_list_domain}"
+            full_alias = "#{event.team_mailing_list_name}@#{convention_by_events_domain.event_mailing_list_domain}"
             EmailRoute.normalize_address(full_alias) == address
           end
         TeamMember.where(event_id: events.map(&:id)).includes(user_con_profile: :user).to_a
