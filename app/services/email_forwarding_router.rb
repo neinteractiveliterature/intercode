@@ -55,6 +55,10 @@ class EmailForwardingRouter
     def merge(other_mapping_set)
       MappingSet.new(@mappings.values + other_mapping_set.values)
     end
+
+    def by_domain
+      @mappings.values.group_by(&:inbound_domain)
+    end
   end
 
   def self.all_staff_position_mappings
