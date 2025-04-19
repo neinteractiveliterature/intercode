@@ -38,13 +38,25 @@ class EmailRoute < ApplicationRecord
     address
   end
 
+  def self.normalize_local(local)
+    return nil if local.blank?
+
+    # remove +whatever and all dots
+    local_normalized = local.gsub(/\+.*/, "").delete(".")
+    local_normalized.downcase
+  end
+
+  def self.normalize_domain(domain)
+    return nil if domain.blank?
+
+    domain.downcase
+  end
+
   def self.normalize_address(raw_address)
     address = parse_address(raw_address)
     return nil unless address
 
-    # remove +whatever and all dots
-    local_normalized = address.local.gsub(/\+.*/, '').delete('.')
-    "#{local_normalized}@#{address.domain}".downcase
+    "#{normalize_local(address.local)}@#{normalize_domain(address.domain)}"
   end
 
   def receiver_address=(address)
