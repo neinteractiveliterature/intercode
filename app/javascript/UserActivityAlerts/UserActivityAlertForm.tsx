@@ -11,7 +11,10 @@ import { NotificationEvent } from 'graphqlTypes.generated';
 type AlertType = UserActivityAlertsAdminQueryData['convention']['user_activity_alerts'][number];
 
 export type UserActivityAlertFormProps = {
-  convention: Pick<UserActivityAlertsAdminQueryData['convention'], 'ticket_name' | 'ticket_mode' | 'staff_positions'>;
+  convention: Pick<
+    UserActivityAlertsAdminQueryData['convention'],
+    'ticket_name' | 'ticket_mode' | 'staff_positions' | 'event_categories'
+  >;
   disabled?: boolean;
   userActivityAlert: AlertType;
   onChange: React.Dispatch<React.SetStateAction<AlertType>>;
@@ -115,6 +118,7 @@ function UserActivityAlertForm({
           notificationDestinations={userActivityAlert.notification_destinations}
           disabled={disabled}
           staffPositions={convention.staff_positions}
+          eventCategories={convention.event_categories}
           allowedDynamicDestinations={userActivityAlertEvent.allowed_dynamic_destinations}
           allowedConditionTypes={userActivityAlertEvent.allowed_condition_types}
         />
