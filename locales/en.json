@@ -156,9 +156,25 @@
       },
       "destinations": {
         "addDestination": {
+          "addButton": "Add destination",
           "caption": "Add destination",
           "staffPositionType": "Staff position",
           "userConProfileType": "User"
+        },
+        "conditions": {
+          "addButton": "Add condition",
+          "addConditionCaption": "Add condition",
+          "addConditionDescription": "Only send to this destination if {{ condition }}",
+          "conditionList": "if {{ conditions, sentence }}",
+          "eventCategory": {
+            "addLabel": "Only if event is in category",
+            "description": "event category is {{ eventCategoryName }}"
+          },
+          "header": "Conditions",
+          "removeButton": "Remove condition",
+          "unknown": {
+            "description": "unknown condition"
+          }
         },
         "dynamic": {
           "EVENT_PROPOSAL_OWNER": "Event proposal owner",

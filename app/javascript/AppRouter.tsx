@@ -558,7 +558,7 @@ const commonInConventionRoutes: RouteObject[] = [
     element: <AuthorizationRequiredRouteGuard abilities={['can_update_notification_templates']} />,
     children: [
       {
-        path: ':category/:event',
+        path: ':eventKey',
         lazy: () => import('./NotificationAdmin/NotificationConfiguration'),
       },
       {

@@ -1,6 +1,6 @@
 import { BootstrapFormCheckbox, ErrorDisplay } from '@neinteractiveliterature/litform';
 import { useModal } from '@neinteractiveliterature/litform';
-import { Fragment, useContext, useEffect, useMemo, useState } from 'react';
+import { useContext, useEffect, useMemo, useState } from 'react';
 import Modal from 'react-bootstrap4-modal';
 import { Link, LoaderFunction, useFetcher, useLoaderData } from 'react-router-dom';
 
@@ -9,6 +9,7 @@ import { ApolloError } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { client } from 'useIntercodeApolloClient';
 import { NotificationsConfigQueryData, NotificationsConfigQueryDocument } from './queries.generated';
+import sortBy from 'lodash/sortBy';
 
 type NotificationPreviewModalProps = {
   visible: boolean;
@@ -54,7 +55,6 @@ function NotificationPreviewModal({ visible, close, eventConfig }: NotificationP
           label={`Send email to ${myProfile?.email}`}
           onCheckedChange={setSendEmail}
         />
-        {console.log(sendSms) ?? ''}
         <BootstrapFormCheckbox
           type="checkbox"
           checked={sendSms}
@@ -86,13 +86,8 @@ function NotificationAdminIndex(): JSX.Element {
   const data = useLoaderData() as NotificationsConfigQueryData;
   const { t } = useTranslation();
 
-  const categorizedEvents = useMemo(() => {
-    const categories = data.notificationEvents.reduce<Record<string, typeof data.notificationEvents>>((acc, event) => {
-      acc[event.category] ||= [];
-      acc[event.category].push(event);
-      return acc;
-    }, {});
-    return categories;
+  const sortedEvents = useMemo(() => {
+    return sortBy(data.notificationEvents, (event) => event.key);
   }, [data]);
 
   return (
@@ -108,30 +103,23 @@ function NotificationAdminIndex(): JSX.Element {
           </tr>
         </thead>
         <tbody>
-          {Object.entries(categorizedEvents).map(([category, events]) => (
-            <Fragment key={category}>
-              {events.map((event) => (
-                <tr key={`${category}/${event.key}`}>
-                  <td>{category}</td>
-                  <td>{t(`admin.notifications.events.${event.key}`)}</td>
-                  <td className="text-end">
-                    <button
-                      type="button"
-                      className="btn btn-sm btn-secondary me-2"
-                      onClick={() => previewModal.open({ eventConfig: event })}
-                    >
-                      Preview
-                    </button>
-                    <Link
-                      to={`/admin_notifications/${category}/${event.key}`}
-                      className="btn btn-sm btn-outline-primary"
-                    >
-                      Configure
-                    </Link>
-                  </td>
-                </tr>
-              ))}
-            </Fragment>
+          {sortedEvents.map((event) => (
+            <tr key={event.key}>
+              <td>{event.category}</td>
+              <td>{t(`admin.notifications.events.${event.key}`)}</td>
+              <td className="text-end">
+                <button
+                  type="button"
+                  className="btn btn-sm btn-secondary me-2"
+                  onClick={() => previewModal.open({ eventConfig: event })}
+                >
+                  Preview
+                </button>
+                <Link to={`/admin_notifications/${event.key}`} className="btn btn-sm btn-outline-primary">
+                  Configure
+                </Link>
+              </td>
+            </tr>
           ))}
         </tbody>
       </table>

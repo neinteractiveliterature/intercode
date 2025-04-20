@@ -3,8 +3,17 @@
 mutation UpdateNotificationTemplate(
   $eventKey: NotificationEventKey!
   $notificationTemplate: NotificationTemplateInput!
+  $addDestinations: [NotificationDestinationInput!]
+  $removeDestinationIds: [ID!]
 ) {
-  updateNotificationTemplate(input: { event_key: $eventKey, notification_template: $notificationTemplate }) {
+  updateNotificationTemplate(
+    input: {
+      event_key: $eventKey
+      notification_template: $notificationTemplate
+      add_destinations: $addDestinations
+      remove_destination_ids: $removeDestinationIds
+    }
+  ) {
     notification_template {
       id
       ...NotificationTemplateFields

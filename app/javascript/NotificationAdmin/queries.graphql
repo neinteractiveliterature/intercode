@@ -54,6 +54,11 @@ query NotificationAdminQuery {
       id
       name
     }
+
+    event_categories {
+      id
+      name
+    }
   }
 
   ...NotificationsConfig

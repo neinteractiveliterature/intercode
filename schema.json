@@ -21950,7 +21950,7 @@
             },
             {
               "name": "sendNotificationPreview",
-              "description": "Sends a preview of a given notification template to a given user.\n",
+              "description": "Sends a preview of a given notification template to the current user.\n",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -22841,7 +22841,7 @@
             },
             {
               "name": "updateNotificationTemplate",
-              "description": null,
+              "description": "Updates a notification template for a given event key.\n",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -23708,6 +23708,45 @@
           "enumValues": null
         },
         {
+          "kind": "INPUT_OBJECT",
+          "name": "NotificationConditionInput",
+          "description": "An input type for creating or updating conditions that must be met for a notification to be sent to a destination.\n",
+          "interfaces": null,
+          "possibleTypes": null,
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "conditionType",
+              "description": "The type of condition.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "NotificationConditionType",
+                  "ofType": null
+                }
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "value",
+              "description": "The value of the condition.  This will vary depending on the condition type.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Json",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "enumValues": null
+        },
+        {
           "kind": "ENUM",
           "name": "NotificationConditionType",
           "description": "The type of a notification condition. This is used to determine what kind of condition it is and how to evaluate it.\n",
@@ -23826,14 +23865,46 @@
         {
           "kind": "INPUT_OBJECT",
           "name": "NotificationDestinationInput",
-          "description": null,
+          "description": "Input type for creating or updating a notification destination.\n",
           "interfaces": null,
           "possibleTypes": null,
           "fields": null,
           "inputFields": [
             {
+              "name": "conditions",
+              "description": "The conditions under which the notification will be sent to this destination",
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "NotificationConditionInput",
+                    "ofType": null
+                  }
+                }
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "dynamicDestination",
+              "description": "The dynamic destination to send the notification to",
+              "type": {
+                "kind": "ENUM",
+                "name": "NotificationDynamicDestination",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "staffPositionId",
-              "description": null,
+              "description": "The ID of the staff position to send the notification to",
               "type": {
                 "kind": "SCALAR",
                 "name": "ID",
@@ -23845,7 +23916,7 @@
             },
             {
               "name": "userConProfileId",
-              "description": null,
+              "description": "The ID of the user con profile to send the notification to",
               "type": {
                 "kind": "SCALAR",
                 "name": "ID",
@@ -31169,7 +31240,7 @@
             },
             {
               "name": "email",
-              "description": null,
+              "description": "Whether to send the preview via email",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -31185,7 +31256,7 @@
             },
             {
               "name": "event_key",
-              "description": null,
+              "description": "The event key of the notification template to preview",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -31201,7 +31272,7 @@
             },
             {
               "name": "sms",
-              "description": null,
+              "description": "Whether to send the preview via SMS",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -37016,8 +37087,28 @@
               "deprecationReason": null
             },
             {
+              "name": "add_destinations",
+              "description": "The destinations to add to the notification template",
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "INPUT_OBJECT",
+                    "name": "NotificationDestinationInput",
+                    "ofType": null
+                  }
+                }
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "event_key",
-              "description": null,
+              "description": "The event key of the notification template to update",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -37033,7 +37124,7 @@
             },
             {
               "name": "notification_template",
-              "description": null,
+              "description": "The new values for the notification template",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -37041,6 +37132,26 @@
                   "kind": "INPUT_OBJECT",
                   "name": "NotificationTemplateInput",
                   "ofType": null
+                }
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "remove_destination_ids",
+              "description": "The IDs of the destinations to remove from the notification template",
+              "type": {
+                "kind": "LIST",
+                "name": null,
+                "ofType": {
+                  "kind": "NON_NULL",
+                  "name": null,
+                  "ofType": {
+                    "kind": "SCALAR",
+                    "name": "ID",
+                    "ofType": null
+                  }
                 }
               },
               "defaultValue": null,
@@ -37071,7 +37182,7 @@
             },
             {
               "name": "notification_template",
-              "description": null,
+              "description": "The updated notification template",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,

@@ -70,7 +70,7 @@ class NotifierPreviewFactory
       [
         convention.events.first&.form_response_changes&.first ||
           convention.event_proposals.first&.form_response_changes&.first
-      ]
+      ].compact
     when :event_proposal
       convention.event_proposals.first
     when :event
