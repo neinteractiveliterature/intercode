@@ -30,9 +30,11 @@ class StaffPosition < ApplicationRecord
   has_and_belongs_to_many :user_con_profiles
   has_many :permissions, dependent: :destroy
   has_one :catch_all_convention,
-          class_name: 'Convention',
-          foreign_key: 'catch_all_staff_position_id',
+          class_name: "Convention",
+          foreign_key: "catch_all_staff_position_id",
           dependent: :nullify
+
+  after_commit :sync_email_forwarding
 
   validates :name, presence: true
 
@@ -40,5 +42,9 @@ class StaffPosition < ApplicationRecord
 
   def to_liquid
     StaffPositionDrop.new(self)
+  end
+
+  def sync_email_forwarding
+    SyncEmailForwardingForDomainJob.perform_later(EmailRoute.normalize_domain(convention.domain))
   end
 end

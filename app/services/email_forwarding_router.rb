@@ -108,8 +108,12 @@ class EmailForwardingRouter
     MappingSet.new(
       EmailRoute
         .pluck(:receiver_address, :forward_addresses)
-        .map do |receiver_address, forward_addresses|
-          Mapping.from_address(receiver_address, destination_addresses: forward_addresses)
+        .filter_map do |receiver_address, forward_addresses|
+          if forward_addresses.blank?
+            nil
+          else
+            Mapping.from_address(receiver_address, destination_addresses: forward_addresses)
+          end
         end
     )
   end

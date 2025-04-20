@@ -123,6 +123,8 @@ class Event < ApplicationRecord
 
   has_many_attached :images
 
+  after_commit :sync_email_forwarding
+
   # Status specifies the status of the event.  It must be one of
   # "active" or "dropped".
   validates :status, inclusion: { in: STATUSES }
@@ -254,5 +256,10 @@ Use EventChangeRegistrationPolicyService instead."
     errors.add :event_category,
                "is from #{event_category.convention.name} but this event is in \
 #{convention.name}"
+  end
+
+  def sync_email_forwarding
+    return if convention.event_mailing_list_domain.blank?
+    SyncEmailForwardingForDomainJob.perform_later(EmailRoute.normalize_domain(convention.event_mailing_list_domain))
   end
 end
