@@ -101,7 +101,7 @@ class SyncForwardEmailService < CivilService::Service
 
     results = response.body
 
-    while response.headers["X-Page-Count"].to_i < response.headers["X-Page-Current"].to_i
+    while response.headers["X-Page-Current"].to_i < response.headers["X-Page-Count"].to_i
       uri = URI.parse(path)
       uri.query =
         Rack::Utils.build_query(
