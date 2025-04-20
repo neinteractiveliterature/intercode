@@ -76,6 +76,11 @@ class Convention < ApplicationRecord
 
   after_create :ensure_signup_round_exists
   before_destroy :nullify_associated_content
+  after_commit :sync_email_forwarding,
+               if: -> do
+                 saved_change_to_domain? || saved_change_to_event_mailing_list_domain? || saved_change_to_email_mode? ||
+                   saved_change_to_catch_all_staff_position_id?
+               end
 
   belongs_to :updated_by, class_name: "User", optional: true
   belongs_to :organization, optional: true
@@ -268,5 +273,11 @@ other types of site, use the ticket_per_event mode."
 
   def nullify_associated_content
     update!(root_page: nil, default_layout: nil, user_con_profile_form: nil)
+  end
+
+  def sync_email_forwarding
+    SyncEmailForwardingForDomainJob.perform_later(
+      [domain, event_mailing_list_domain].compact_blank.map { |d| EmailRoute.normalize_domain(d) }
+    )
   end
 end

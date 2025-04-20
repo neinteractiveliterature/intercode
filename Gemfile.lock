@@ -689,6 +689,7 @@ DEPENDENCIES
   factory_bot
   factory_bot_rails
   faker
+  faraday
   flamegraph
   fly.io-rails
   graphql

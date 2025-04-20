@@ -17,6 +17,8 @@
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
 
 class EmailRoute < ApplicationRecord
+  after_commit :sync_email_forwarding
+
   def self.parse_address(raw_address)
     return nil if raw_address.blank?
 
@@ -38,16 +40,37 @@ class EmailRoute < ApplicationRecord
     address
   end
 
+  def self.normalize_local(local)
+    return nil if local.blank?
+
+    # remove +whatever and all dots
+    local_normalized = local.gsub(/\+.*/, "").delete(".")
+    local_normalized.downcase
+  end
+
+  def self.normalize_domain(domain)
+    return nil if domain.blank?
+
+    domain.downcase
+  end
+
   def self.normalize_address(raw_address)
     address = parse_address(raw_address)
     return nil unless address
 
-    # remove +whatever and all dots
-    local_normalized = address.local.gsub(/\+.*/, '').delete('.')
-    "#{local_normalized}@#{address.domain}".downcase
+    "#{normalize_local(address.local)}@#{normalize_domain(address.domain)}"
   end
 
   def receiver_address=(address)
     self[:receiver_address] = EmailRoute.normalize_address(address)
+  end
+
+  private
+
+  def sync_email_forwarding
+    address = EmailRoute.parse_address(receiver_address)
+    return unless address
+
+    SyncEmailForwardingForDomainJob.perform_later(EmailRoute.normalize_domain(address.domain))
   end
 end

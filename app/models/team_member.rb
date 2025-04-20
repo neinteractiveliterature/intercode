@@ -27,27 +27,22 @@
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
 
 class TeamMember < ApplicationRecord
-  # All team members must be assigned to an event that exists
   belongs_to :event
   belongs_to :user_con_profile
   has_one :user, through: :user_con_profile
 
-  # A team member is a user that exists, and is not already a member
-  # of the team for this event
-  validates :user_con_profile, presence: true
+  after_commit :sync_email_forwarding
+
   validates :user_con_profile_id, uniqueness: { scope: :event_id }
-
   validates :receive_signup_email, inclusion: { in: Types::ReceiveSignupEmailType.values.keys.map(&:downcase) }
-
-  validates :event, presence: true
   validate :user_con_profile_and_event_must_belong_to_same_convention
 
-  belongs_to :updated_by, class_name: 'User', optional: true
+  belongs_to :updated_by, class_name: "User", optional: true
 
   delegate :name, to: :user_con_profile
 
   scope :visible, -> { where(display: true) }
-  scope :for_active_events, -> { joins(:event).where(events: { status: 'active' }) }
+  scope :for_active_events, -> { joins(:event).where(events: { status: "active" }) }
 
   # Return the email address for the team member, if it is to be displayed.
   # If not, return an empty string
@@ -78,6 +73,13 @@ class TeamMember < ApplicationRecord
       "User con profile and event must belong to the same convention!  \
 User con profile for #{user_con_profile.name} is from #{user_con_profile.convention.name} and \
 event #{event.name} is from #{event.convention.name}."
+    )
+  end
+
+  def sync_email_forwarding
+    return if event.convention.event_mailing_list_domain.blank?
+    SyncEmailForwardingForDomainJob.perform_later(
+      EmailRoute.normalize_domain(event.convention.event_mailing_list_domain)
     )
   end
 end
