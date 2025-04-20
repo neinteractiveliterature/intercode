@@ -32,7 +32,7 @@ class SyncForwardEmailService < CivilService::Service
     success
   end
 
-  def sync_mappings_for_domain(domain:)
+  def sync_mappings_for_domain(domain:) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     mappings = @mappings_by_domain[domain].index_by { |m| m.catch_all? ? "*" : m.inbound_local }
     return if mappings.nil?
 
