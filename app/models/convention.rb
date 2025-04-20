@@ -79,7 +79,7 @@ class Convention < ApplicationRecord
   after_commit :sync_email_forwarding,
                if: -> do
                  saved_change_to_domain? || saved_change_to_event_mailing_list_domain? || saved_change_to_email_mode? ||
-                   saved_change_to_catch_all_staff_position?
+                   saved_change_to_catch_all_staff_position_id?
                end
 
   belongs_to :updated_by, class_name: "User", optional: true
