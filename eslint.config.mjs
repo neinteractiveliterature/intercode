@@ -268,6 +268,7 @@ export default typescriptEslint.config(
               'Money',
               'Mutation',
               'NotificationCondition',
+              'NotificationEvent',
               'OrderQuantityByStatus',
               'PayWhatYouWantValue',
               'PricingStructure',
