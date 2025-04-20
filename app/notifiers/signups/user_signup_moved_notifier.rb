@@ -6,7 +6,6 @@ class Signups::UserSignupMovedNotifier < Notifier
   dynamic_destination :signup_user_con_profile do
     { signup: signup }
   end
-  dynamic_destination :triggering_user
   condition :event_category do
     { event_category: signup.run.event.event_category }
   end
@@ -14,9 +13,9 @@ class Signups::UserSignupMovedNotifier < Notifier
   attr_reader :move_result
   delegate :signup, to: :move_result
 
-  def initialize(move_result:)
+  def initialize(move_result:, triggering_user: nil)
     @move_result = move_result
-    super(convention: signup.event.convention, event_key: "signups/user_signup_moved")
+    super(convention: signup.event.convention, event_key: "signups/user_signup_moved", triggering_user:)
   end
 
   def liquid_assigns

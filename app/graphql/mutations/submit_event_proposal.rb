@@ -9,8 +9,13 @@ class Mutations::SubmitEventProposal < Mutations::BaseMutation
   def resolve(**_args)
     if event_proposal.status == "draft"
       event_proposal.update!(status: "proposed", submitted_at: Time.zone.now)
-      EventProposals::NewProposalNotifier.new(event_proposal:).deliver_later(wait: 5.seconds)
-      EventProposals::ProposalSubmitConfirmationNotifier.new(event_proposal:).deliver_later(wait: 5.seconds)
+      EventProposals::NewProposalNotifier.new(event_proposal:, triggering_user: current_user).deliver_later(
+        wait: 5.seconds
+      )
+      EventProposals::ProposalSubmitConfirmationNotifier.new(
+        event_proposal:,
+        triggering_user: current_user
+      ).deliver_later(wait: 5.seconds)
     end
 
     { event_proposal: }

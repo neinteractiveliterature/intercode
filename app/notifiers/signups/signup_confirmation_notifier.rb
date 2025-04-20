@@ -13,9 +13,9 @@ class Signups::SignupConfirmationNotifier < Notifier
 
   attr_reader :signup
 
-  def initialize(signup:)
+  def initialize(signup:, triggering_user: nil)
     @signup = signup
-    super(convention: signup.run.event.convention, event_key: "signups/signup_confirmation")
+    super(convention: signup.run.event.convention, event_key: "signups/signup_confirmation", triggering_user:)
   end
 
   def liquid_assigns

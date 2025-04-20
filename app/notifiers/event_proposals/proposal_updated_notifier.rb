@@ -5,7 +5,6 @@ class EventProposals::ProposalUpdatedNotifier < Notifier
   dynamic_destination :event_proposal_owner do
     { event_proposal: }
   end
-  dynamic_destination :triggering_user
   condition :event_category do
     { event_category: event_proposal.event_category }
   end

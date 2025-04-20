@@ -6,9 +6,9 @@ class Tickets::PurchasedNotifier < Notifier
     { user_con_profile: ticket.user_con_profile }
   end
 
-  def initialize(ticket:)
+  def initialize(ticket:, triggering_user: nil)
     @ticket = ticket
-    super(convention: ticket.convention, event_key: "tickets/purchased")
+    super(convention: ticket.convention, event_key: "tickets/purchased", triggering_user:)
   end
 
   def liquid_assigns

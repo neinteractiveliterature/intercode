@@ -7,9 +7,9 @@ class Orders::PurchasedNotifier < Notifier
   end
   dynamic_destination :triggering_user
 
-  def initialize(order:)
+  def initialize(order:, triggering_user: nil)
     @order = order
-    super(convention: order.user_con_profile.convention, event_key: "orders/purchased")
+    super(convention: order.user_con_profile.convention, event_key: "orders/purchased", triggering_user:)
   end
 
   def liquid_assigns

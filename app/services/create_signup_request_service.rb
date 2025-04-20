@@ -54,7 +54,9 @@ class CreateSignupRequestService < CivilService::Service
       )
     destroy_pending_ranked_choices
 
-    SignupRequests::NewSignupRequestNotifier.new(signup_request:).deliver_later unless suppress_notifications
+    unless suppress_notifications
+      SignupRequests::NewSignupRequestNotifier.new(signup_request:, triggering_user: whodunit).deliver_later
+    end
 
     success(signup_request:)
   end

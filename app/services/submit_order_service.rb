@@ -15,14 +15,15 @@ class SubmitOrderService < CivilService::Service
   validate :ensure_free_order_is_actually_free
   validate :check_ticket_provider_validity
 
-  attr_reader :order, :payment_mode, :payment_intent_id
+  attr_reader :order, :payment_mode, :payment_intent_id, :whodunit
   delegate :user_con_profile, to: :order
   delegate :convention, to: :user_con_profile
 
-  def initialize(order, payment_mode:, payment_intent_id: nil)
+  def initialize(order, payment_mode:, payment_intent_id: nil, whodunit: nil)
     @order = order
     @payment_mode = payment_mode
     @payment_intent_id = payment_intent_id
+    @whodunit = whodunit
   end
 
   def payment_intent
@@ -59,7 +60,7 @@ class SubmitOrderService < CivilService::Service
         paid_at: Time.zone.at(charge.created),
         submitted_at: Time.zone.now
       )
-      Orders::PurchasedNotifier.new(order:).deliver_now
+      Orders::PurchasedNotifier.new(order:, triggering_user: whodunit).deliver_now
     else
       order.update!(status: "unpaid", submitted_at: Time.zone.now)
     end
@@ -98,7 +99,7 @@ class SubmitOrderService < CivilService::Service
     @ticket_providers ||=
       order.order_entries.flat_map do |order_entry|
         if order_entry.product.provides_ticket_type
-          [ProvideOrderEntryTicketService.new(order_entry, suppress_notifications: (payment_mode == "now"))]
+          [ProvideOrderEntryTicketService.new(order_entry, suppress_notifications: (payment_mode == "now"), whodunit:)]
         else
           []
         end

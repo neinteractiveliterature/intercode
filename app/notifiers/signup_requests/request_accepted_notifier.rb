@@ -10,9 +10,13 @@ class SignupRequests::RequestAcceptedNotifier < Notifier
     { event_category: signup_request.target_run.event.event_category }
   end
 
-  def initialize(signup_request:)
+  def initialize(signup_request:, triggering_user: nil)
     @signup_request = signup_request
-    super(convention: signup_request.target_run.event.convention, event_key: "signup_requests/request_accepted")
+    super(
+      convention: signup_request.target_run.event.convention,
+      event_key: "signup_requests/request_accepted",
+      triggering_user:
+    )
   end
 
   def liquid_assigns

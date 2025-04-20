@@ -13,11 +13,11 @@ class Signups::WithdrawConfirmationNotifier < Notifier
 
   attr_reader :signup, :prev_state, :prev_bucket_key, :move_results
 
-  def initialize(signup:, prev_state:, prev_bucket_key:)
+  def initialize(signup:, prev_state:, prev_bucket_key:, triggering_user: nil)
     @signup = signup
     @prev_state = prev_state
     @prev_bucket_key = prev_bucket_key
-    super(convention: signup.run.event.convention, event_key: "signups/withdraw_confirmation")
+    super(convention: signup.run.event.convention, event_key: "signups/withdraw_confirmation", triggering_user:)
   end
 
   def liquid_assigns

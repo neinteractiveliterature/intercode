@@ -12,9 +12,13 @@ class EventProposals::ProposalSubmitConfirmationNotifier < Notifier
 
   attr_reader :event_proposal
 
-  def initialize(event_proposal:)
+  def initialize(event_proposal:, triggering_user: nil)
     @event_proposal = event_proposal
-    super(convention: event_proposal.convention, event_key: "event_proposals/proposal_submit_confirmation")
+    super(
+      convention: event_proposal.convention,
+      event_key: "event_proposals/proposal_submit_confirmation",
+      triggering_user:
+    )
   end
 
   def liquid_assigns

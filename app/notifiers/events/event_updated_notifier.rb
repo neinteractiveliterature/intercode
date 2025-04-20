@@ -2,7 +2,6 @@
 class Events::EventUpdatedNotifier < Notifier
   attr_reader :event, :changes
 
-  dynamic_destination :triggering_user
   condition :event_category do
     { event_category: event.event_category }
   end

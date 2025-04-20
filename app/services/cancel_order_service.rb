@@ -20,19 +20,18 @@ class CancelOrderService < CivilService::Service
   def inner_call # rubocop:disable Metrics/AbcSize
     refund, refund_status = refund_order
 
-    action = "Cancelled #{order.status == 'paid' ? " (#{refund_status.to_s.humanize.downcase})" : 'unpaid'}"
+    action = "Cancelled #{order.status == "paid" ? " (#{refund_status.to_s.humanize.downcase})" : "unpaid"}"
 
     order.update!(
-      status: 'cancelled',
-      payment_note:
-        [
-          "#{action} by #{whodunit.name_without_nickname}
-on #{Time.now.in_time_zone(convention.timezone).strftime('%B %-d, %Y at %l:%M%P')}",
-          order.payment_note.presence
-        ].compact.join('; ')
+      status: "cancelled",
+      payment_note: [
+        "#{action} by #{whodunit.name}
+on #{Time.now.in_time_zone(convention.timezone).strftime("%B %-d, %Y at %l:%M%P")}",
+        order.payment_note.presence
+      ].compact.join("; ")
     )
     order.order_entries.each { |entry| entry.tickets.destroy_all }
-    Orders::CancelledNotifier.new(order: order, refund_id: refund&.id).deliver_later
+    Orders::CancelledNotifier.new(order: order, refund_id: refund&.id, triggering_user: whodunit).deliver_later
 
     success(refund_status: refund_status)
   end
@@ -55,9 +54,9 @@ on #{Time.now.in_time_zone(convention.timezone).strftime('%B %-d, %Y at %l:%M%P'
   end
 
   def order_must_not_already_be_cancelled
-    return unless order.status == 'cancelled'
+    return unless order.status == "cancelled"
 
-    errors.add(:order, 'is already cancelled')
+    errors.add(:order, "is already cancelled")
   end
 
   def convention

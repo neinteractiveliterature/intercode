@@ -212,14 +212,14 @@ class EventSignupService < CivilService::Service
     return if suppress_notifications
 
     # Wait 5 seconds because the transaction hasn't been committed yet
-    Signups::NewSignupNotifier.new(signup:).deliver_later(wait: 5.seconds)
+    Signups::NewSignupNotifier.new(signup:, triggering_user: whodunit).deliver_later(wait: 5.seconds)
   end
 
   def send_confirmation(signup)
     return if suppress_confirmation
 
     # Wait 5 seconds because the transaction hasn't been committed yet
-    Signups::SignupConfirmationNotifier.new(signup:).deliver_later(wait: 5.seconds)
+    Signups::SignupConfirmationNotifier.new(signup:, triggering_user: whodunit).deliver_later(wait: 5.seconds)
   end
 
   def destroy_pending_ranked_choices
