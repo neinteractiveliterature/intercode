@@ -44,5 +44,16 @@ query UserActivityAlertsAdminQuery {
       id
       ...UserActivityAlertFields
     }
+
+    event_categories {
+      id
+      name
+    }
+  }
+
+  notificationEvents {
+    key
+    allowed_condition_types
+    allowed_dynamic_destinations
   }
 }

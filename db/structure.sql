@@ -1764,7 +1764,10 @@ CREATE TABLE public.notification_destinations (
     staff_position_id bigint,
     user_con_profile_id bigint,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    dynamic_destination text,
+    conditions jsonb,
+    CONSTRAINT notification_destination_type_exclusive_arc CHECK ((((((user_con_profile_id IS NOT NULL))::integer + ((staff_position_id IS NOT NULL))::integer) + ((dynamic_destination IS NOT NULL))::integer) = 1))
 );
 
 
@@ -6122,6 +6125,8 @@ ALTER TABLE ONLY public.cms_files_pages
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20250324175507'),
+('20250324172627'),
 ('20250203173940'),
 ('20250202200327'),
 ('20250120173505'),

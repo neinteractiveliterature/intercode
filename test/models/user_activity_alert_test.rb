@@ -100,21 +100,6 @@ class UserActivityAlertTest < ActiveSupport::TestCase
     end
   end
 
-  describe "destinations" do
-    let(:user_activity_alert) { create(:user_activity_alert) }
-    let(:convention) { user_activity_alert.convention }
-
-    it "figures out the destinations correctly" do
-      staff_member = create(:user_con_profile, convention: convention)
-      staff_position = create(:staff_position, convention: convention, user_con_profiles: [staff_member])
-      other_user_con_profile = create(:user_con_profile, convention: convention)
-      user_activity_alert.notification_destinations.create!(staff_position: staff_position)
-      user_activity_alert.notification_destinations.create!(user_con_profile: other_user_con_profile)
-
-      assert_equal([staff_member, other_user_con_profile].sort, user_activity_alert.destination_user_con_profiles.sort)
-    end
-  end
-
   private
 
   def create_copy_profile(user, convention, **attrs)

@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class Notifier
   include ActionView::Helpers::SanitizeHelper
+  include Notifier::Dsl
 
   NOTIFICATIONS_CONFIG = JSON.parse(File.read(File.expand_path("config/notifications.json", Rails.root)))
   NOTIFIER_CLASSES_BY_EVENT_KEY =
@@ -26,16 +27,23 @@ class Notifier
     Thread.current["notifier_timezone"] = nil
   end
 
-  attr_reader :event_key, :convention
+  def self.notifier_class_for_event_key(event_key)
+    Notifier::NOTIFIER_CLASSES_BY_EVENT_KEY.fetch(event_key)
+  end
 
-  def initialize(convention:, event_key:)
+  def self.inherited(subclass)
+    subclass.instance_eval { include Notifier::Dsl }
+  end
+
+  attr_reader :event_key, :convention, :triggering_user
+
+  def initialize(convention:, event_key:, triggering_user: nil)
     @convention = convention
     @event_key = event_key
+    @triggering_user = triggering_user
   end
 
   def render
-    notification_template = convention.notification_templates.find_by!(event_key: event_key)
-
     Time.use_zone(Notifier.current_timezone) do
       {
         subject: notification_template.subject_template,
@@ -46,12 +54,28 @@ class Notifier
     end
   end
 
+  def notification_template
+    @notification_template = convention.notification_templates.find_by!(event_key: event_key)
+  end
+
+  def destinations
+    notification_template.notification_destinations
+  end
+
+  def destination_emails
+    destinations.flat_map { |destination| destination.emails(self) }.uniq
+  end
+
+  def destination_user_con_profiles
+    destinations.flat_map { |destination| destination.user_con_profiles(self) }.uniq
+  end
+
   def liquid_assigns
     {}
   end
 
-  def destinations
-    raise NotImplementedError, "Notifier subclasses must implement #destinations"
+  def self.build_default_destinations(notification_template:)
+    raise NotImplementedError, "Notifier subclasses must implement .build_default_destinations"
   end
 
   def deliver_later(options = {})
@@ -93,8 +117,7 @@ class Notifier
 
     content = sms_content
 
-    user_con_profiles =
-      preview_user_con_profile ? [preview_user_con_profile] : user_con_profiles_for_destinations(destinations)
+    user_con_profiles = preview_user_con_profile ? [preview_user_con_profile] : destination_user_con_profiles
 
     user_con_profiles.filter_map do |user_con_profile|
       next nil unless user_con_profile.allow_sms?
@@ -112,63 +135,16 @@ class Notifier
 
   def sms_content
     all_content = render.transform_values(&:presence).compact
-    (
-      all_content[:body_sms] || all_content[:body_text]&.strip ||
-        (all_content[:body_html] && strip_tags(all_content[:body_html]).strip.gsub(/\s+/, " "))
-    )
+
+    all_content[:body_sms] || all_content[:body_text]&.strip ||
+      (all_content[:body_html] && strip_tags(all_content[:body_html]).strip.gsub(/\s+/, " "))
   end
 
   def mail(preview_user_con_profile: nil)
     NotificationsMailer.notification(
       **render.slice(:subject, :body_html, :body_text),
       convention: convention,
-      to:
-        if preview_user_con_profile
-          email_for_user_con_profile(preview_user_con_profile)
-        else
-          emails_for_destinations(destinations)
-        end
+      to: (preview_user_con_profile ? preview_user_con_profile.email : destination_emails)
     )
-  end
-
-  def email_for_user_con_profile(user_con_profile)
-    address = Mail::Address.new(user_con_profile.email)
-    address.display_name = user_con_profile.name
-    address.format
-  end
-
-  def emails_for_staff_position(staff_position)
-    return [staff_position.email] if staff_position.email.present?
-    staff_position.user_con_profiles.map { |ucp| email_for_user_con_profile(ucp) }
-  end
-
-  def emails_for_destinations(destinations)
-    destinations.flat_map do |destination|
-      case destination
-      when UserConProfile
-        email_for_user_con_profile(destination)
-      when StaffPosition
-        emails_for_staff_position(destination)
-      when nil
-        []
-      else
-        raise InvalidArgument, "Don't know how to send email to a #{destination.class}"
-      end
-    end
-  end
-
-  def user_con_profiles_for_destinations(destinations)
-    destinations.flat_map do |destination|
-      case destination
-      when UserConProfile
-        destination
-      when StaffPosition
-        staff_position.user_con_profiles.to_a
-      when nil
-        []
-      else
-        raise InvalidArgument, "Don't know how to get a user con profile from a #{destination.class}"
-      end
-    end
   end
 end

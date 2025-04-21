@@ -5,6 +5,40 @@ fragment NotificationTemplateFields on NotificationTemplate {
   body_html
   body_text
   body_sms
+
+  notification_destinations {
+    id
+    dynamic_destination
+
+    staff_position {
+      id
+      name
+    }
+
+    user_con_profile {
+      id
+      name_without_nickname
+    }
+
+    conditions {
+      condition_type
+      value
+    }
+  }
+}
+
+fragment NotificationsConfig on Query {
+  notificationEvents {
+    key
+    category
+    allowed_condition_types
+    allowed_dynamic_destinations
+    sends_sms
+  }
+}
+
+query NotificationsConfigQuery {
+  ...NotificationsConfig
 }
 
 query NotificationAdminQuery {
@@ -15,5 +49,17 @@ query NotificationAdminQuery {
       id
       ...NotificationTemplateFields
     }
+
+    staff_positions {
+      id
+      name
+    }
+
+    event_categories {
+      id
+      name
+    }
   }
+
+  ...NotificationsConfig
 }

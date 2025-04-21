@@ -173,6 +173,201 @@
       }
     ]
   },
+  "NotificationConditionType": {
+    "kind": "ENUM",
+    "name": "NotificationConditionType",
+    "description": "The type of a notification condition. This is used to determine what kind of condition it is and how to evaluate it.\n",
+    "interfaces": null,
+    "possibleTypes": null,
+    "fields": null,
+    "inputFields": null,
+    "enumValues": [
+      {
+        "name": "EVENT_CATEGORY",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      }
+    ]
+  },
+  "NotificationDynamicDestination": {
+    "kind": "ENUM",
+    "name": "NotificationDynamicDestination",
+    "description": "A dynamic destination for notifications.  Dynamic destinations are evaluated at runtime to determine\nthe actual destination for a notification.\n",
+    "interfaces": null,
+    "possibleTypes": null,
+    "fields": null,
+    "inputFields": null,
+    "enumValues": [
+      {
+        "name": "EVENT_PROPOSAL_OWNER",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "EVENT_TEAM_MEMBERS",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "ORDER_USER_CON_PROFILE",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "SIGNUP_REQUEST_USER_CON_PROFILE",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "SIGNUP_USER_CON_PROFILE",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "TICKET_USER_CON_PROFILE",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "TRIGGERING_USER",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "USER_ACTIVITY_ALERT_DESTINATIONS",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      }
+    ]
+  },
+  "NotificationEventKey": {
+    "kind": "ENUM",
+    "name": "NotificationEventKey",
+    "description": "An event that can trigger a notification.\n",
+    "interfaces": null,
+    "possibleTypes": null,
+    "fields": null,
+    "inputFields": null,
+    "enumValues": [
+      {
+        "name": "EVENT_PROPOSALS_NEW_PROPOSAL",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "EVENT_PROPOSALS_PROPOSAL_SUBMIT_CONFIRMATION",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "EVENT_PROPOSALS_PROPOSAL_UPDATED",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "EVENT_PROPOSALS_UNFINISHED_DRAFT_REMINDER",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "SIGNUPS_NEW_SIGNUP",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "SIGNUPS_SIGNUP_CONFIRMATION",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "SIGNUPS_WITHDRAWAL",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "SIGNUPS_WITHDRAW_CONFIRMATION",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "SIGNUPS_REGISTRATION_POLICY_CHANGE_MOVED_SIGNUPS",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "SIGNUPS_USER_SIGNUP_MOVED",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "SIGNUPS_HOLD_EXPIRED",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "SIGNUP_REQUESTS_NEW_SIGNUP_REQUEST",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "SIGNUP_REQUESTS_REQUEST_ACCEPTED",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "EVENTS_EVENT_UPDATED",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "ORDERS_PURCHASED",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "ORDERS_CANCELLED",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "TICKETS_PURCHASED",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "USER_ACTIVITY_ALERTS_ALERT",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      }
+    ]
+  },
   "OrderStatus": {
     "kind": "ENUM",
     "name": "OrderStatus",

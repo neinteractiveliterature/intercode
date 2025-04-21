@@ -14,7 +14,7 @@ query LiquidAssignsQuery {
   }
 }
 
-query NotifierLiquidAssignsQuery($eventKey: String!) {
+query NotifierLiquidAssignsQuery($eventKey: NotificationEventKey!) {
   cmsParent: conventionByRequestHost {
     id
     liquidAssigns: notifier_liquid_assigns(eventKey: $eventKey) {

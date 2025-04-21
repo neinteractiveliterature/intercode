@@ -28,7 +28,7 @@ class Mutations::UpdateEvent < Mutations::BaseMutation
     new_registration_policy = RegistrationPolicy.new(registration_policy_attributes)
     return {} if event.registration_policy == new_registration_policy
 
-    EventChangeRegistrationPolicyService.new(event, new_registration_policy, user_con_profile).call!
+    EventChangeRegistrationPolicyService.new(event, new_registration_policy, current_user).call!
 
     event.reload
 

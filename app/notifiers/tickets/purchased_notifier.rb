@@ -2,16 +2,20 @@
 class Tickets::PurchasedNotifier < Notifier
   attr_reader :ticket
 
-  def initialize(ticket:)
+  dynamic_destination :ticket_user_con_profile do
+    { user_con_profile: ticket.user_con_profile }
+  end
+
+  def initialize(ticket:, triggering_user: nil)
     @ticket = ticket
-    super(convention: ticket.convention, event_key: 'tickets/purchased')
+    super(convention: ticket.convention, event_key: "tickets/purchased", triggering_user:)
   end
 
   def liquid_assigns
-    super.merge('ticket' => ticket)
+    super.merge("ticket" => ticket)
   end
 
-  def destinations
-    [ticket.user_con_profile]
+  def self.build_default_destinations(notification_template:)
+    [notification_template.notification_destinations.new(dynamic_destination: :ticket_user_con_profile)]
   end
 end

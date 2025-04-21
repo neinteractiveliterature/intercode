@@ -133,6 +133,67 @@
         "titleLabel": "Title"
       }
     },
+    "notifications": {
+      "events": {
+        "EVENT_PROPOSALS_NEW_PROPOSAL": "New event proposal submitted",
+        "EVENT_PROPOSALS_PROPOSAL_SUBMIT_CONFIRMATION": "Event proposal submit confirmation",
+        "EVENT_PROPOSALS_PROPOSAL_UPDATED": "Event proposal updated",
+        "EVENT_PROPOSALS_UNFINISHED_DRAFT_REMINDER": "Unfinished event proposal draft reminder",
+        "EVENTS_EVENT_UPDATED": "Event details updated",
+        "ORDERS_CANCELLED": "Store purchase cancelled",
+        "ORDERS_PURCHASED": "Store purchase confirmation",
+        "SIGNUP_REQUESTS_NEW_SIGNUP_REQUEST": "New signup request received",
+        "SIGNUP_REQUESTS_REQUEST_ACCEPTED": "Your signup request was accepted",
+        "SIGNUPS_HOLD_EXPIRED": "Signup hold expired",
+        "SIGNUPS_NEW_SIGNUP": "Attendee signed up for event",
+        "SIGNUPS_REGISTRATION_POLICY_CHANGE_MOVED_SIGNUPS": "Bucket changes caused signups to move",
+        "SIGNUPS_SIGNUP_CONFIRMATION": "Signup confirmation for event",
+        "SIGNUPS_USER_SIGNUP_MOVED": "Your signup status changed",
+        "SIGNUPS_WITHDRAW_CONFIRMATION": "Withdraw confirmation for event",
+        "SIGNUPS_WITHDRAWAL": "Attendee withdrew from event",
+        "TICKETS_PURCHASED": "Ticket purchase confirmation",
+        "USER_ACTIVITY_ALERTS_ALERT": "User activity alert"
+      },
+      "destinations": {
+        "addDestination": {
+          "addButton": "Add destination",
+          "caption": "Add destination",
+          "staffPositionType": "Staff position",
+          "userConProfileType": "User"
+        },
+        "conditions": {
+          "addButton": "Add condition",
+          "addConditionCaption": "Add condition",
+          "addConditionDescription": "Only send to this destination if {{ condition }}",
+          "conditionList": "if {{ conditions, sentence }}",
+          "eventCategory": {
+            "addLabel": "Only if event is in category",
+            "description": "event category is {{ eventCategoryName }}"
+          },
+          "header": "Conditions",
+          "removeButton": "Remove condition",
+          "unknown": {
+            "description": "unknown condition"
+          }
+        },
+        "dynamic": {
+          "EVENT_PROPOSAL_OWNER": "Event proposal owner",
+          "EVENT_TEAM_MEMBERS": "Event team members who have chosen to receive notifications",
+          "ORDER_USER_CON_PROFILE": "Purchaser",
+          "SIGNUP_REQUEST_USER_CON_PROFILE": "Signup requester",
+          "SIGNUP_USER_CON_PROFILE": "Signed up attendee",
+          "TICKET_USER_CON_PROFILE": "Attendee",
+          "TRIGGERING_USER": "User who triggered the notification",
+          "USER_ACTIVITY_ALERT_DESTINATIONS": "Configured destinations for this user activity alert"
+        },
+        "header": "Notification destinations",
+        "removeButton": "Remove destination",
+        "removePrompt": "Are you sure you want to remove this notification destination?",
+        "staffPosition": "<strong>Staff position:</strong> {{ staffPositionName }}",
+        "unknown": "<strong>Unknown destination</strong>",
+        "userConProfile": "<strong>User:</strong> {{ name }}"
+      }
+    },
     "rooms": {
       "addRoomLabel": "Add room",
       "deleteConfirmation": "Are you sure you want to delete this room?",
@@ -340,18 +401,6 @@
       }
     },
     "userActivityAlerts": {
-      "alertDestinations": {
-        "addDestination": {
-          "caption": "Add destination",
-          "staffPositionType": "Staff position",
-          "userConProfileType": "User"
-        },
-        "header": "Alert destinations",
-        "removeButton": "Remove destination",
-        "removePrompt": "Are you sure you want to remove this alert destination?",
-        "staffPosition": "<strong>Staff position:</strong> {{ staffPositionName }}",
-        "userConProfile": "<strong>User:</strong> {{ name }}"
-      },
       "email": {
         "label": "Email",
         "helpText": "If the user’s email address matches this string, the alert will match.  Case insensitive, ignores dots before the @ and any text following a + sign."

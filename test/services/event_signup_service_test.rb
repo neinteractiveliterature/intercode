@@ -374,13 +374,13 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
               requested_bucket_key,
               user,
               suppress_confirmation: true
-            ).call
+            ).call!
           assert result.success?
 
           assert_equal 1, ActionMailer::Base.deliveries.size
-          recipients = ActionMailer::Base.deliveries.map(&:to)
-          assert_includes recipients, [email_team_member.user_con_profile.email]
-          refute_includes recipients, [no_email_team_member.user_con_profile.email]
+          recipients = ActionMailer::Base.deliveries.first.to
+          assert_includes recipients, email_team_member.user_con_profile.email
+          refute_includes recipients, no_email_team_member.user_con_profile.email
         end
       end
 

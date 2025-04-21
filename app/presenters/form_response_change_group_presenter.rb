@@ -1,9 +1,9 @@
 # frozen_string_literal: true
 
-require 'open3'
+require "open3"
 
 class FormResponseChangeGroupPresenter
-  SCRIPT_PATH = File.expand_path('bin/renderFormResponseChangeGroup.cjs', Rails.root)
+  SCRIPT_PATH = File.expand_path("bin/renderFormResponseChangeGroup.cjs", Rails.root)
   attr_reader :changes, :convention
 
   def initialize(changes, convention)
@@ -23,7 +23,7 @@ class FormResponseChangeGroupPresenter
         stderr:,
         component_props: component_props.to_json
       )
-      return 'Sorry, an error occurred trying to render these changes.'
+      return "Sorry, an error occurred trying to render these changes."
     end
 
     stdout.html_safe
@@ -35,35 +35,35 @@ class FormResponseChangeGroupPresenter
 
   def component_props
     {
-      'changeGroup' => {
-        'id' => 'serverRenderedChangeGroup',
-        'changes' => changes.map { |change| change_props(change) }
+      "changeGroup" => {
+        "id" => "serverRenderedChangeGroup",
+        "changes" => changes.map { |change| change_props(change) }
       },
-      'convention' => {
-        'id' => convention.id,
-        'starts_at' => convention.starts_at,
-        'ends_at' => convention.ends_at,
-        'language' => convention.language,
+      "convention" => {
+        "id" => convention.id,
+        "starts_at" => convention.starts_at,
+        "ends_at" => convention.ends_at,
+        "language" => convention.language,
         # force JS timezone helpers to use the request timezone
-        'timezone_name' => Notifier.current_timezone || 'Etc/UTC',
-        'timezone_mode' => 'convention_local'
+        "timezone_name" => Notifier.current_timezone || "Etc/UTC",
+        "timezone_mode" => "convention_local"
       }
     }
   end
 
   def change_props(change)
     {
-      'id' => change.id,
-      'formItem' => form_item_props(change.response, change.field_identifier),
-      'user_con_profile' => {
-        'id' => change.user_con_profile.id,
-        'name_without_nickname' => change.user_con_profile.name_without_nickname
+      "id" => change.id,
+      "formItem" => form_item_props(change.response, change.field_identifier),
+      "user_con_profile" => {
+        "id" => change.user_con_profile.id,
+        "name_without_nickname" => change.user_con_profile.name_without_nickname
       },
-      'field_identifier' => change.field_identifier,
-      'previous_value' => change.previous_value,
-      'new_value' => change.new_value,
-      'created_at' => change.created_at,
-      'updated_at' => change.updated_at
+      "field_identifier" => change.field_identifier,
+      "previous_value" => change.previous_value,
+      "new_value" => change.new_value,
+      "created_at" => change.created_at,
+      "updated_at" => change.updated_at
     }
   end
 

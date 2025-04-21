@@ -996,7 +996,7 @@ type Convention implements CmsParent {
     """
     The key of the notification event to use for generating assigns.
     """
-    eventKey: String!
+    eventKey: NotificationEventKey!
   ): [LiquidAssign!]!
 
   """
@@ -1093,7 +1093,7 @@ type Convention implements CmsParent {
     """
     The key of the notification event to use for generating the preview.
     """
-    eventKey: String!
+    eventKey: NotificationEventKey!
   ): String!
 
   """
@@ -4769,7 +4769,7 @@ type Mutation {
   ): RevokeAuthorizedApplicationPayload!
 
   """
-  Sends a preview of a given notification template to a given user.
+  Sends a preview of a given notification template to the current user.
   """
   sendNotificationPreview(
     """
@@ -4941,6 +4941,10 @@ type Mutation {
     """
     input: UpdateMaximumEventProvidedTicketsOverrideInput!
   ): UpdateMaximumEventProvidedTicketsOverridePayload!
+
+  """
+  Updates a notification template for a given event key.
+  """
   updateNotificationTemplate(
     """
     Parameters for UpdateNotificationTemplate
@@ -5105,26 +5109,213 @@ type Mutation {
   ): WithdrawUserSignupPayload!
 }
 
+"""
+A condition that must be met for a notification to be sent to a destination.
+"""
+type NotificationCondition {
+  """
+  The type of condition.
+  """
+  condition_type: NotificationConditionType!
+
+  """
+  The value of the condition.  This will vary depending on the condition type.
+  """
+  value: Json
+}
+
+"""
+An input type for creating or updating conditions that must be met for a notification to be sent to a destination.
+"""
+input NotificationConditionInput {
+  """
+  The type of condition.
+  """
+  conditionType: NotificationConditionType!
+
+  """
+  The value of the condition.  This will vary depending on the condition type.
+  """
+  value: Json
+}
+
+"""
+The type of a notification condition. This is used to determine what kind of condition it is and how to evaluate it.
+"""
+enum NotificationConditionType {
+  EVENT_CATEGORY
+}
+
+"""
+A destination that notifications will be sent to. This can be a user, a staff position, or a dynamic destination.
+Only one of these can be present.
+"""
 type NotificationDestination {
+  """
+  Conditions that must be met for this destination to be used
+  """
+  conditions: [NotificationCondition!]
+
+  """
+  A dynamic destination that will be used to determine the actual destination
+  """
+  dynamic_destination: NotificationDynamicDestination
+
+  """
+  The ID of the notification destination
+  """
   id: ID!
+
+  """
+  The object that will send the notification
+  """
   source: NotificationSource!
+
+  """
+  The staff position that will receive the notification
+  """
   staff_position: StaffPosition
+
+  """
+  The user profile that will receive the notification
+  """
   user_con_profile: UserConProfile
 }
 
+"""
+Input type for creating or updating a notification destination.
+"""
 input NotificationDestinationInput {
+  """
+  The conditions under which the notification will be sent to this destination
+  """
+  conditions: [NotificationConditionInput!]
+
+  """
+  The dynamic destination to send the notification to
+  """
+  dynamicDestination: NotificationDynamicDestination
+
+  """
+  The ID of the staff position to send the notification to
+  """
   staffPositionId: ID
+
+  """
+  The ID of the user con profile to send the notification to
+  """
   userConProfileId: ID
+}
+
+"""
+A dynamic destination for notifications.  Dynamic destinations are evaluated at runtime to determine
+the actual destination for a notification.
+"""
+enum NotificationDynamicDestination {
+  EVENT_PROPOSAL_OWNER
+  EVENT_TEAM_MEMBERS
+  ORDER_USER_CON_PROFILE
+  SIGNUP_REQUEST_USER_CON_PROFILE
+  SIGNUP_USER_CON_PROFILE
+  TICKET_USER_CON_PROFILE
+  TRIGGERING_USER
+  USER_ACTIVITY_ALERT_DESTINATIONS
+}
+
+"""
+A notification event. This is the event that will trigger a notification to be sent out.
+"""
+type NotificationEvent {
+  """
+  The condition types that are allowed for this notification event.
+  """
+  allowed_condition_types: [NotificationConditionType!]!
+
+  """
+  The dynamic destinations that are allowed for this notification event.
+  """
+  allowed_dynamic_destinations: [NotificationDynamicDestination!]!
+
+  """
+  The category of the notification event.
+  """
+  category: String!
+
+  """
+  The key of the notification event.
+  """
+  key: NotificationEventKey!
+
+  """
+  Whether this notification event sends SMS notifications.
+  """
+  sends_sms: Boolean!
+}
+
+"""
+An event that can trigger a notification.
+"""
+enum NotificationEventKey {
+  EVENTS_EVENT_UPDATED
+  EVENT_PROPOSALS_NEW_PROPOSAL
+  EVENT_PROPOSALS_PROPOSAL_SUBMIT_CONFIRMATION
+  EVENT_PROPOSALS_PROPOSAL_UPDATED
+  EVENT_PROPOSALS_UNFINISHED_DRAFT_REMINDER
+  ORDERS_CANCELLED
+  ORDERS_PURCHASED
+  SIGNUPS_HOLD_EXPIRED
+  SIGNUPS_NEW_SIGNUP
+  SIGNUPS_REGISTRATION_POLICY_CHANGE_MOVED_SIGNUPS
+  SIGNUPS_SIGNUP_CONFIRMATION
+  SIGNUPS_USER_SIGNUP_MOVED
+  SIGNUPS_WITHDRAWAL
+  SIGNUPS_WITHDRAW_CONFIRMATION
+  SIGNUP_REQUESTS_NEW_SIGNUP_REQUEST
+  SIGNUP_REQUESTS_REQUEST_ACCEPTED
+  TICKETS_PURCHASED
+  USER_ACTIVITY_ALERTS_ALERT
 }
 
 union NotificationSource = UserActivityAlert
 
+"""
+A notification template. When a notifiable event happens, this template will be used to send out notifications
+about it.
+"""
 type NotificationTemplate {
+  """
+  A Liquid template containing the email body for this notification in HTML.
+  """
   body_html: String
+
+  """
+  A Liquid template containing the SMS body for this notification.
+  """
   body_sms: String
+
+  """
+  A Liquid template containing the email body for this notification in plain text.
+  """
   body_text: String
-  event_key: String!
+
+  """
+  The event key that this notification template is sent for.
+  """
+  event_key: NotificationEventKey!
+
+  """
+  The ID of the notification template
+  """
   id: ID!
+
+  """
+  The destinations that this notification will be sent to.
+  """
+  notification_destinations: [NotificationDestination!]!
+
+  """
+  The email subject for this notification.
+  """
   subject: String
 }
 
@@ -5736,6 +5927,11 @@ type Query {
   returns null.
   """
   myAuthorizedApplications: [AuthorizedApplication!]!
+
+  """
+  Returns a list of all notification events that are available in this instance of Intercode.
+  """
+  notificationEvents: [NotificationEvent!]!
 
   """
   Given a set of valid OAuth query parameters for the `/oauth/authorize` endpoint, returns a
@@ -6775,8 +6971,20 @@ input SendNotificationPreviewInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
+
+  """
+  Whether to send the preview via email
+  """
   email: Boolean!
-  event_key: String!
+
+  """
+  The event key of the notification template to preview
+  """
+  event_key: NotificationEventKey!
+
+  """
+  Whether to send the preview via SMS
+  """
   sms: Boolean!
 }
 
@@ -8112,11 +8320,29 @@ Autogenerated input type of UpdateNotificationTemplate
 """
 input UpdateNotificationTemplateInput {
   """
+  The destinations to add to the notification template
+  """
+  add_destinations: [NotificationDestinationInput!]
+
+  """
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
-  event_key: String!
+
+  """
+  The event key of the notification template to update
+  """
+  event_key: NotificationEventKey!
+
+  """
+  The new values for the notification template
+  """
   notification_template: NotificationTemplateInput!
+
+  """
+  The IDs of the destinations to remove from the notification template
+  """
+  remove_destination_ids: [ID!]
 }
 
 """
@@ -8127,6 +8353,10 @@ type UpdateNotificationTemplatePayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
+
+  """
+  The updated notification template
+  """
   notification_template: NotificationTemplate!
 }
 

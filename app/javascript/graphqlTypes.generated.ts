@@ -1153,7 +1153,7 @@ export type ConventionFullTextSearchArgs = {
  * them as "web site."
  */
 export type ConventionNotifier_Liquid_AssignsArgs = {
-  eventKey: Scalars['String']['input'];
+  eventKey: NotificationEventKey;
 };
 
 
@@ -1224,7 +1224,7 @@ export type ConventionPreviewMarkdownArgs = {
  */
 export type ConventionPreview_Notifier_LiquidArgs = {
   content: Scalars['String']['input'];
-  eventKey: Scalars['String']['input'];
+  eventKey: NotificationEventKey;
 };
 
 
@@ -3452,7 +3452,7 @@ export type Mutation = {
   rerunModeratedRankedChoiceSignupRound: RerunModeratedRankedChoiceSignupRoundPayload;
   restoreDroppedEvent: RestoreDroppedEventPayload;
   revokeAuthorizedApplication: RevokeAuthorizedApplicationPayload;
-  /** Sends a preview of a given notification template to a given user. */
+  /** Sends a preview of a given notification template to the current user. */
   sendNotificationPreview: SendNotificationPreviewPayload;
   setCmsVariable: SetCmsVariablePayload;
   setConventionCanceled: SetConventionCanceledPayload;
@@ -3482,6 +3482,7 @@ export type Mutation = {
   updateFormSection: UpdateFormSectionPayload;
   updateFormWithJSON: UpdateFormWithJsonPayload;
   updateMaximumEventProvidedTicketsOverride: UpdateMaximumEventProvidedTicketsOverridePayload;
+  /** Updates a notification template for a given event key. */
   updateNotificationTemplate: UpdateNotificationTemplatePayload;
   updateOrder: UpdateOrderPayload;
   updateOrderEntry: UpdateOrderEntryPayload;
@@ -4247,28 +4248,133 @@ export type MutationWithdrawUserSignupArgs = {
   input: WithdrawUserSignupInput;
 };
 
+/** A condition that must be met for a notification to be sent to a destination. */
+export type NotificationCondition = {
+  __typename: 'NotificationCondition';
+  /** The type of condition. */
+  condition_type: NotificationConditionType;
+  /** The value of the condition.  This will vary depending on the condition type. */
+  value?: Maybe<Scalars['Json']['output']>;
+};
+
+/** An input type for creating or updating conditions that must be met for a notification to be sent to a destination. */
+export type NotificationConditionInput = {
+  /** The type of condition. */
+  conditionType: NotificationConditionType;
+  /** The value of the condition.  This will vary depending on the condition type. */
+  value?: InputMaybe<Scalars['Json']['input']>;
+};
+
+/** The type of a notification condition. This is used to determine what kind of condition it is and how to evaluate it. */
+export enum NotificationConditionType {
+  EventCategory = 'EVENT_CATEGORY'
+}
+
+/**
+ * A destination that notifications will be sent to. This can be a user, a staff position, or a dynamic destination.
+ * Only one of these can be present.
+ */
 export type NotificationDestination = {
   __typename: 'NotificationDestination';
+  /** Conditions that must be met for this destination to be used */
+  conditions?: Maybe<Array<NotificationCondition>>;
+  /** A dynamic destination that will be used to determine the actual destination */
+  dynamic_destination?: Maybe<NotificationDynamicDestination>;
+  /** The ID of the notification destination */
   id: Scalars['ID']['output'];
+  /** The object that will send the notification */
   source: NotificationSource;
+  /** The staff position that will receive the notification */
   staff_position?: Maybe<StaffPosition>;
+  /** The user profile that will receive the notification */
   user_con_profile?: Maybe<UserConProfile>;
 };
 
+/** Input type for creating or updating a notification destination. */
 export type NotificationDestinationInput = {
+  /** The conditions under which the notification will be sent to this destination */
+  conditions?: InputMaybe<Array<NotificationConditionInput>>;
+  /** The dynamic destination to send the notification to */
+  dynamicDestination?: InputMaybe<NotificationDynamicDestination>;
+  /** The ID of the staff position to send the notification to */
   staffPositionId?: InputMaybe<Scalars['ID']['input']>;
+  /** The ID of the user con profile to send the notification to */
   userConProfileId?: InputMaybe<Scalars['ID']['input']>;
 };
 
+/**
+ * A dynamic destination for notifications.  Dynamic destinations are evaluated at runtime to determine
+ * the actual destination for a notification.
+ */
+export enum NotificationDynamicDestination {
+  EventProposalOwner = 'EVENT_PROPOSAL_OWNER',
+  EventTeamMembers = 'EVENT_TEAM_MEMBERS',
+  OrderUserConProfile = 'ORDER_USER_CON_PROFILE',
+  SignupRequestUserConProfile = 'SIGNUP_REQUEST_USER_CON_PROFILE',
+  SignupUserConProfile = 'SIGNUP_USER_CON_PROFILE',
+  TicketUserConProfile = 'TICKET_USER_CON_PROFILE',
+  TriggeringUser = 'TRIGGERING_USER',
+  UserActivityAlertDestinations = 'USER_ACTIVITY_ALERT_DESTINATIONS'
+}
+
+/** A notification event. This is the event that will trigger a notification to be sent out. */
+export type NotificationEvent = {
+  __typename: 'NotificationEvent';
+  /** The condition types that are allowed for this notification event. */
+  allowed_condition_types: Array<NotificationConditionType>;
+  /** The dynamic destinations that are allowed for this notification event. */
+  allowed_dynamic_destinations: Array<NotificationDynamicDestination>;
+  /** The category of the notification event. */
+  category: Scalars['String']['output'];
+  /** The key of the notification event. */
+  key: NotificationEventKey;
+  /** Whether this notification event sends SMS notifications. */
+  sends_sms: Scalars['Boolean']['output'];
+};
+
+/** An event that can trigger a notification. */
+export enum NotificationEventKey {
+  EventsEventUpdated = 'EVENTS_EVENT_UPDATED',
+  EventProposalsNewProposal = 'EVENT_PROPOSALS_NEW_PROPOSAL',
+  EventProposalsProposalSubmitConfirmation = 'EVENT_PROPOSALS_PROPOSAL_SUBMIT_CONFIRMATION',
+  EventProposalsProposalUpdated = 'EVENT_PROPOSALS_PROPOSAL_UPDATED',
+  EventProposalsUnfinishedDraftReminder = 'EVENT_PROPOSALS_UNFINISHED_DRAFT_REMINDER',
+  OrdersCancelled = 'ORDERS_CANCELLED',
+  OrdersPurchased = 'ORDERS_PURCHASED',
+  SignupsHoldExpired = 'SIGNUPS_HOLD_EXPIRED',
+  SignupsNewSignup = 'SIGNUPS_NEW_SIGNUP',
+  SignupsRegistrationPolicyChangeMovedSignups = 'SIGNUPS_REGISTRATION_POLICY_CHANGE_MOVED_SIGNUPS',
+  SignupsSignupConfirmation = 'SIGNUPS_SIGNUP_CONFIRMATION',
+  SignupsUserSignupMoved = 'SIGNUPS_USER_SIGNUP_MOVED',
+  SignupsWithdrawal = 'SIGNUPS_WITHDRAWAL',
+  SignupsWithdrawConfirmation = 'SIGNUPS_WITHDRAW_CONFIRMATION',
+  SignupRequestsNewSignupRequest = 'SIGNUP_REQUESTS_NEW_SIGNUP_REQUEST',
+  SignupRequestsRequestAccepted = 'SIGNUP_REQUESTS_REQUEST_ACCEPTED',
+  TicketsPurchased = 'TICKETS_PURCHASED',
+  UserActivityAlertsAlert = 'USER_ACTIVITY_ALERTS_ALERT'
+}
+
 export type NotificationSource = UserActivityAlert;
 
+/**
+ * A notification template. When a notifiable event happens, this template will be used to send out notifications
+ * about it.
+ */
 export type NotificationTemplate = {
   __typename: 'NotificationTemplate';
+  /** A Liquid template containing the email body for this notification in HTML. */
   body_html?: Maybe<Scalars['String']['output']>;
+  /** A Liquid template containing the SMS body for this notification. */
   body_sms?: Maybe<Scalars['String']['output']>;
+  /** A Liquid template containing the email body for this notification in plain text. */
   body_text?: Maybe<Scalars['String']['output']>;
-  event_key: Scalars['String']['output'];
+  /** The event key that this notification template is sent for. */
+  event_key: NotificationEventKey;
+  /** The ID of the notification template */
   id: Scalars['ID']['output'];
+  /** The destinations that this notification will be sent to. */
+  notification_destinations: Array<NotificationDestination>;
+  /** The email subject for this notification. */
   subject?: Maybe<Scalars['String']['output']>;
 };
 
@@ -4717,6 +4823,8 @@ export type Query = {
    * returns null.
    */
   myAuthorizedApplications: Array<AuthorizedApplication>;
+  /** Returns a list of all notification events that are available in this instance of Intercode. */
+  notificationEvents: Array<NotificationEvent>;
   /**
    * Given a set of valid OAuth query parameters for the `/oauth/authorize` endpoint, returns a
    * JSON object containing the necessary data for rendering the pre-authorization screen that
@@ -5406,8 +5514,11 @@ export type SearchableModel = Event | EventProposal | Page | UserConProfile;
 export type SendNotificationPreviewInput = {
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  /** Whether to send the preview via email */
   email: Scalars['Boolean']['input'];
-  event_key: Scalars['String']['input'];
+  /** The event key of the notification template to preview */
+  event_key: NotificationEventKey;
+  /** Whether to send the preview via SMS */
   sms: Scalars['Boolean']['input'];
 };
 
@@ -6343,10 +6454,16 @@ export type UpdateMaximumEventProvidedTicketsOverridePayload = {
 
 /** Autogenerated input type of UpdateNotificationTemplate */
 export type UpdateNotificationTemplateInput = {
+  /** The destinations to add to the notification template */
+  add_destinations?: InputMaybe<Array<NotificationDestinationInput>>;
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
-  event_key: Scalars['String']['input'];
+  /** The event key of the notification template to update */
+  event_key: NotificationEventKey;
+  /** The new values for the notification template */
   notification_template: NotificationTemplateInput;
+  /** The IDs of the destinations to remove from the notification template */
+  remove_destination_ids?: InputMaybe<Array<Scalars['ID']['input']>>;
 };
 
 /** Autogenerated return type of UpdateNotificationTemplate. */
@@ -6354,6 +6471,7 @@ export type UpdateNotificationTemplatePayload = {
   __typename: 'UpdateNotificationTemplatePayload';
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
+  /** The updated notification template */
   notification_template: NotificationTemplate;
 };
 

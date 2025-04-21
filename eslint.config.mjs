@@ -267,6 +267,8 @@ export default typescriptEslint.config(
               'MailingLists',
               'Money',
               'Mutation',
+              'NotificationCondition',
+              'NotificationEvent',
               'OrderQuantityByStatus',
               'PayWhatYouWantValue',
               'PricingStructure',

@@ -13,6 +13,7 @@ import { client } from '../useIntercodeApolloClient';
 import { loadDocData, YardClass, YardDocs, YardMethod } from './DocData';
 import { NamedRoute } from '../AppRouter';
 import findLiquidTagName from './findLiquidTagName';
+import { NotificationEventKey } from 'graphqlTypes.generated';
 
 export type LiquidDocsLoaderResultCommonFields = {
   assigns: Record<string, LiquidAssignsQueryData['cmsParent']['liquidAssigns'][number]>;
@@ -67,7 +68,7 @@ export const liquidDocsLoader: LoaderFunction = async ({ request }) => {
     const [{ data }, docData] = await Promise.all([
       client.query<NotifierLiquidAssignsQueryData, NotifierLiquidAssignsQueryVariables>({
         query: NotifierLiquidAssignsQueryDocument,
-        variables: { eventKey: notifierEventKey },
+        variables: { eventKey: notifierEventKey as NotificationEventKey },
       }),
       loadDocData(),
     ]);

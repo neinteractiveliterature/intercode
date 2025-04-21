@@ -8,7 +8,7 @@ class Mutations::DeleteTicket < Mutations::BaseMutation
   load_and_authorize_convention_associated_model :tickets, :id, :destroy
 
   def resolve(**args)
-    DeleteTicketService.new(ticket:, refund: args[:refund], whodunit: user_con_profile).call!
+    DeleteTicketService.new(ticket:, refund: args[:refund], whodunit: current_user).call!
 
     { ticket: }
   end

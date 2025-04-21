@@ -65,16 +65,25 @@ class EventWithdrawService < CivilService::Service
     return if suppress_notifications
 
     # Wait 5 seconds because the transaction hasn't been committed yet
-    Signups::WithdrawalNotifier.new(signup:, prev_state:, prev_bucket_key:, move_results:).deliver_later(
-      wait: 5.seconds
-    )
+    Signups::WithdrawalNotifier.new(
+      signup:,
+      prev_state:,
+      prev_bucket_key:,
+      move_results:,
+      triggering_user: whodunit
+    ).deliver_later(wait: 5.seconds)
   end
 
   def send_confirmation(signup, prev_state, prev_bucket_key)
     return if suppress_confirmation
 
     # Wait 5 seconds because the transaction hasn't been committed yet
-    Signups::WithdrawConfirmationNotifier.new(signup:, prev_state:, prev_bucket_key:).deliver_later(wait: 5.seconds)
+    Signups::WithdrawConfirmationNotifier.new(
+      signup:,
+      prev_state:,
+      prev_bucket_key:,
+      triggering_user: whodunit
+    ).deliver_later(wait: 5.seconds)
   end
 
   def move_signups(prev_state, prev_bucket_key, prev_counted)

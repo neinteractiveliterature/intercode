@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { ActionFunction, redirect, useFetcher, useRouteLoaderData } from 'react-router-dom';
+import { ActionFunction, LoaderFunction, redirect, useFetcher, useLoaderData } from 'react-router-dom';
 import { ApolloError } from '@apollo/client';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -7,11 +7,32 @@ import buildUserActivityAlertInput from './buildUserActivityAlertInput';
 import { useChangeSet } from '../ChangeSet';
 import UserActivityAlertForm from './UserActivityAlertForm';
 import usePageTitle from '../usePageTitle';
-import { UserActivityAlertFieldsFragmentDoc, UserActivityAlertsAdminQueryData } from './queries.generated';
+import {
+  UserActivityAlertFieldsFragmentDoc,
+  UserActivityAlertsAdminQueryData,
+  UserActivityAlertsAdminQueryDocument,
+} from './queries.generated';
 import { CreateUserActivityAlertDocument, CreateUserActivityAlertMutationVariables } from './mutations.generated';
-import { NamedRoute } from '../AppRouter';
 import { client } from 'useIntercodeApolloClient';
-import { Convention } from 'graphqlTypes.generated';
+import { Convention, NotificationEventKey } from 'graphqlTypes.generated';
+
+type LoaderResult = {
+  convention: UserActivityAlertsAdminQueryData['convention'];
+  userActivityAlertEvent: UserActivityAlertsAdminQueryData['notificationEvents'][number];
+};
+
+export const loader: LoaderFunction = async () => {
+  const { data } = await client.query({ query: UserActivityAlertsAdminQueryDocument });
+
+  const userActivityAlertEvent = data.notificationEvents.find(
+    (event) => event.key === NotificationEventKey.UserActivityAlertsAlert,
+  );
+  if (!userActivityAlertEvent) {
+    return new Response(null, { status: 404 });
+  }
+
+  return { userActivityAlertEvent, convention: data.convention } satisfies LoaderResult;
+};
 
 export const action: ActionFunction = async ({ request }) => {
   try {
@@ -46,7 +67,8 @@ export const action: ActionFunction = async ({ request }) => {
 };
 
 function NewUserActivityAlert() {
-  const data = useRouteLoaderData(NamedRoute.UserActivityAlerts) as UserActivityAlertsAdminQueryData;
+  const { userActivityAlertEvent, convention } = useLoaderData() as LoaderResult;
+  // const data = useRouteLoaderData(NamedRoute.UserActivityAlerts) as UserActivityAlertsAdminQueryData;
   usePageTitle('New user activity alert');
 
   const [userActivityAlert, setUserActivityAlert] = useState<
@@ -98,11 +120,12 @@ function NewUserActivityAlert() {
 
       <UserActivityAlertForm
         userActivityAlert={combinedUserActivityAlert}
-        convention={data.convention}
+        convention={convention}
         onChange={setUserActivityAlert}
         onAddNotificationDestination={addNotificationDestination}
         onRemoveNotificationDestination={removeNotificationDestination}
         disabled={createInProgress}
+        userActivityAlertEvent={userActivityAlertEvent}
       />
 
       <ErrorDisplay graphQLError={createError as ApolloError} />

@@ -16,7 +16,12 @@ class Mutations::SubmitOrder < Mutations::BaseMutation
 
   def resolve(**args)
     service =
-      SubmitOrderService.new(order, payment_mode: args[:payment_mode], payment_intent_id: args[:payment_intent_id])
+      SubmitOrderService.new(
+        order,
+        payment_mode: args[:payment_mode],
+        payment_intent_id: args[:payment_intent_id],
+        whodunit: current_user
+      )
     result = service.call
 
     if result.failure?
