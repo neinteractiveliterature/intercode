@@ -107,7 +107,7 @@ class SyncForwardEmailService < CivilService::Service
         Rack::Utils.build_query(
           Rack::Utils.parse_query(uri.query).merge("page" => response.headers["X-Page-Current"].to_i + 1)
         )
-      response = @connection.get("#{path}&page=#{response.headers["X-Page-Current"] + 1}")
+      response = @connection.get("#{path}&page=#{response.headers["X-Page-Current"].to_i + 1}")
       results += response.body
     end
 
