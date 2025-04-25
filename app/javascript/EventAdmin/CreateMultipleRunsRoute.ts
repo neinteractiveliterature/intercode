@@ -1,4 +1,4 @@
-import { ActionFunction, json } from 'react-router';
+import { ActionFunction, data } from 'react-router';
 import { RunInput } from '../graphqlTypes.generated';
 import { client } from '../useIntercodeApolloClient';
 import { CreateMultipleRunsDocument } from './mutations.generated';
@@ -14,7 +14,7 @@ export const action: ActionFunction = async ({ request, params: { eventId } }) =
       roomIds: roomIds,
     }));
 
-    const { data } = await client.mutate({
+    const result = await client.mutate({
       mutation: CreateMultipleRunsDocument,
       variables: {
         input: { eventId, runs },
@@ -22,7 +22,7 @@ export const action: ActionFunction = async ({ request, params: { eventId } }) =
     });
     await client.resetStore();
 
-    return json(data);
+    return data(result.data);
   } catch (error) {
     return error;
   }

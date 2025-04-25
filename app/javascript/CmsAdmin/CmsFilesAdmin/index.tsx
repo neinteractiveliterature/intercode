@@ -12,7 +12,7 @@ import { Blob } from '@rails/activestorage';
 import { ActionFunction, LoaderFunction, redirect, useLoaderData } from 'react-router';
 import { client } from '../../useIntercodeApolloClient';
 import { CreateCmsFileDocument, DeleteCmsFileDocument, RenameCmsFileDocument } from './mutations.generated';
-import { useSubmit } from 'react-router-dom';
+import { useSubmit } from 'react-router';
 
 export const action: ActionFunction = async ({ request }) => {
   const formData = await request.formData();

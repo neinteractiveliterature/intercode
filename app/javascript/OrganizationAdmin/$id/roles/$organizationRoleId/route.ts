@@ -1,12 +1,12 @@
 import { OrganizationRole } from 'graphqlTypes.generated';
 import { DeleteOrganizationRoleDocument, UpdateOrganizationRoleDocument } from 'OrganizationAdmin/mutations.generated';
-import { ActionFunction, json, redirect } from 'react-router';
+import { ActionFunction, data, redirect } from 'react-router';
 import { client } from 'useIntercodeApolloClient';
 
 export const action: ActionFunction = async ({ params: { id, organizationRoleId }, request }) => {
   try {
     if (request.method === 'DELETE') {
-      const { data } = await client.mutate({
+      const result = await client.mutate({
         mutation: DeleteOrganizationRoleDocument,
         variables: { id: organizationRoleId },
         update: (cache) => {
@@ -16,7 +16,7 @@ export const action: ActionFunction = async ({ params: { id, organizationRoleId 
           });
         },
       });
-      return json(data);
+      return data(result.data);
     } else if (request.method === 'PATCH') {
       const json = await request.json();
       await client.mutate({

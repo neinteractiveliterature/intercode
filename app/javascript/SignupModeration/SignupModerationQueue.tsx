@@ -19,7 +19,7 @@ import useReactTableWithTheWorks from '../Tables/useReactTableWithTheWorks';
 import UserConProfileWithGravatarCell from '../Tables/UserConProfileWithGravatarCell';
 import TimestampCell from '../Tables/TimestampCell';
 import { useFormatRunTimespan } from '../EventsApp/runTimeFormatting';
-import { Link, LoaderFunction, useFetcher, useLoaderData } from 'react-router-dom';
+import { Link, LoaderFunction, useFetcher, useLoaderData } from 'react-router';
 import { Trans, useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
 import { ParsedSignupRound, parseSignupRounds } from '../SignupRoundUtils';

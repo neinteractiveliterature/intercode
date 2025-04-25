@@ -1,7 +1,7 @@
 import { Suspense, useCallback, useRef, useEffect, ReactNode, useState, useMemo } from 'react';
 import * as React from 'react';
 import { ApolloProvider, DataProxy } from '@apollo/client';
-import { createBrowserRouter, Outlet, RouterProvider } from 'react-router-dom';
+import { createBrowserRouter, Outlet, RouterProvider } from 'react-router';
 import { i18n } from 'i18next';
 import { I18nextProvider } from 'react-i18next';
 import {
@@ -143,13 +143,7 @@ function AppWrapper<P extends JSX.IntrinsicAttributes>(
           },
         ],
         {
-          future: {
-            v7_relativeSplatPath: true,
-            v7_normalizeFormMethod: true,
-            v7_partialHydration: true,
-            v7_skipActionErrorRevalidation: true,
-            v7_fetcherPersist: true,
-          },
+          future: {},
         },
       );
     }, [props, queryPreloadComplete]);
@@ -180,11 +174,7 @@ function AppWrapper<P extends JSX.IntrinsicAttributes>(
       setQueryPreloadComplete(true);
     }, [queryData]);
 
-    return (
-      <React.StrictMode>
-        {router && <RouterProvider router={router} future={{ v7_startTransition: true }} />}
-      </React.StrictMode>
-    );
+    return <React.StrictMode>{router && <RouterProvider router={router} />}</React.StrictMode>;
   }
 
   // eslint-disable-next-line i18next/no-literal-string

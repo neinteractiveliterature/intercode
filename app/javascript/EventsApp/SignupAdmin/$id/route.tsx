@@ -1,6 +1,6 @@
 import { useCallback, useContext } from 'react';
 import classNames from 'classnames';
-import { ActionFunction, json, Link, Outlet, useSubmit } from 'react-router-dom';
+import { ActionFunction, data, Link, Outlet, useSubmit } from 'react-router';
 import { Trans, useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
 import { DateTime } from 'luxon';
@@ -96,14 +96,14 @@ export type EditSignupProps = {
 
 export const action: ActionFunction = async ({ request, params: { id } }) => {
   const formData = await request.formData();
-  const { data } = await client.mutate({
+  const result = await client.mutate({
     mutation: UpdateSignupCountedDocument,
     variables: {
       signupId: id,
       counted: formData.get('counted')?.toString() === 'true',
     },
   });
-  return json(data);
+  return data(result.data);
 };
 
 function EditSignup({ teamMembersUrl }: EditSignupProps): JSX.Element {

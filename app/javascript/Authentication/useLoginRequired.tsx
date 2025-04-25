@@ -1,5 +1,5 @@
 import { useContext, useEffect } from 'react';
-import { useLocation } from 'react-router-dom';
+import { useLocation } from 'react-router';
 
 import AuthenticationModalContext from './AuthenticationModalContext';
 import AppRootContext from '../AppRootContext';

@@ -1,4 +1,4 @@
-import { ActionFunction, Form, redirect, useLoaderData, useNavigation } from 'react-router-dom';
+import { ActionFunction, Form, redirect, useLoaderData, useNavigation } from 'react-router';
 
 import usePageTitle from '../usePageTitle';
 import { buildDepartmentInputFromFormData } from './buildDepartmentInput';

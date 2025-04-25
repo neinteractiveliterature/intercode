@@ -1,6 +1,6 @@
 import { useContext, useMemo } from 'react';
 import { CellContext, Column, createColumnHelper } from '@tanstack/react-table';
-import { useNavigate, useParams, useRouteLoaderData, useRevalidator } from 'react-router-dom';
+import { useNavigate, useParams, useRouteLoaderData, useRevalidator } from 'react-router';
 import { Trans, useTranslation } from 'react-i18next';
 import { DateTime } from 'luxon';
 

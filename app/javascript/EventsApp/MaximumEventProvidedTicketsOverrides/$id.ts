@@ -1,4 +1,4 @@
-import { ActionFunction, json } from 'react-router';
+import { ActionFunction, data } from 'react-router';
 import { client } from '../../useIntercodeApolloClient';
 import {
   DeleteMaximumEventProvidedTicketsOverrideDocument,
@@ -8,7 +8,7 @@ import {
 export const action: ActionFunction = async ({ request, params: { id } }) => {
   try {
     if (request.method === 'DELETE') {
-      const { data } = await client.mutate({
+      const result = await client.mutate({
         mutation: DeleteMaximumEventProvidedTicketsOverrideDocument,
         variables: {
           input: { id: id ?? '' },
@@ -23,10 +23,10 @@ export const action: ActionFunction = async ({ request, params: { id } }) => {
         },
       });
 
-      return json(data);
+      return data(result.data);
     } else if (request.method === 'PATCH') {
       const formData = await request.formData();
-      const { data } = await client.mutate({
+      const result = await client.mutate({
         mutation: UpdateMaximumEventProvidedTicketsOverrideDocument,
         variables: {
           input: {
@@ -36,7 +36,7 @@ export const action: ActionFunction = async ({ request, params: { id } }) => {
         },
       });
 
-      return json(data);
+      return data(result.data);
     } else {
       return new Response(null, { status: 404 });
     }

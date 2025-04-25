@@ -1,4 +1,4 @@
-import { ActionFunction, json } from 'react-router';
+import { ActionFunction, data } from 'react-router';
 import { FormItemInput, FormSection } from '../../../../../../graphqlTypes.generated';
 import { client } from '../../../../../../useIntercodeApolloClient';
 import { CreateFormItemDocument } from '../../../../../mutations.generated';
@@ -8,7 +8,7 @@ export const action: ActionFunction = async ({ request, params: { sectionId } })
   try {
     if (request.method === 'POST') {
       const formItem = (await request.json()) as FormItemInput;
-      const { data } = await client.mutate({
+      const result = await client.mutate({
         mutation: CreateFormItemDocument,
         variables: {
           formSectionId: sectionId,
@@ -32,7 +32,7 @@ export const action: ActionFunction = async ({ request, params: { sectionId } })
         },
       });
 
-      return json(data);
+      return data(result.data);
     } else {
       return new Response(null, { status: 404 });
     }

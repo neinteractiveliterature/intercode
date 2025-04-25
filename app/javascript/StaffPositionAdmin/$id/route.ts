@@ -1,12 +1,12 @@
 import { StaffPosition } from 'graphqlTypes.generated';
-import { ActionFunction, json } from 'react-router';
+import { ActionFunction, data } from 'react-router';
 import { DeleteStaffPositionDocument } from 'StaffPositionAdmin/mutations.generated';
 import { client } from 'useIntercodeApolloClient';
 
 export const action: ActionFunction = async ({ request, params: { id } }) => {
   try {
     if (request.method === 'DELETE') {
-      const { data } = await client.mutate({
+      const result = await client.mutate({
         mutation: DeleteStaffPositionDocument,
         variables: { input: { id } },
         update: (cache) => {
@@ -16,7 +16,7 @@ export const action: ActionFunction = async ({ request, params: { id } }) => {
           });
         },
       });
-      return json(data);
+      return data(result.data);
     }
   } catch (error) {
     return error;

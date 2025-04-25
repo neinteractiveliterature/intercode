@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { ReactNode, useMemo } from 'react';
-import { Link, NavLink, NavLinkProps, To, useMatch } from 'react-router-dom';
+import { Link, NavLink, NavLinkProps, To, useMatch } from 'react-router';
 import MenuIcon from '../NavigationBar/MenuIcon';
 
 export type BootstrapNavLinkProps = {

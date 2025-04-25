@@ -12,7 +12,7 @@ import {
 } from './queries.generated';
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
 import { Outlet, useNavigate } from 'react-router';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { useMemo } from 'react';
 
 type EmailRouteType = RootSiteEmailRoutesAdminTableQueryData['email_routes_paginated']['entries'][0];

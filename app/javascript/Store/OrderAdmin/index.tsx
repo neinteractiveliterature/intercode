@@ -15,8 +15,8 @@ import { AdminOrdersQueryData, AdminOrdersQueryDocument } from './queries.genera
 import ReactTableWithTheWorks from 'Tables/ReactTableWithTheWorks';
 import { useAppDateTimeFormat } from 'TimeUtils';
 import { useTranslation } from 'react-i18next';
-import { ActionFunction, json, Outlet, useNavigate } from 'react-router';
-import { Link } from 'react-router-dom';
+import { ActionFunction, data, Outlet, useNavigate } from 'react-router';
+import { Link } from 'react-router';
 import { CreateOrderDocument, CreateOrderMutationVariables } from './mutations.generated';
 import { client } from 'useIntercodeApolloClient';
 import { CreateCouponApplicationDocument } from 'Store/mutations.generated';
@@ -30,12 +30,13 @@ export const action: ActionFunction = async ({ request }) => {
   try {
     const { createOrderVariables, couponCodes } = (await request.json()) as CreateOrderActionInput;
 
-    const { data } = await client.mutate({
+    const result = await client.mutate({
       mutation: CreateOrderDocument,
       variables: createOrderVariables,
     });
 
-    if (!data) {
+    const { createOrder } = result.data ?? {};
+    if (!createOrder) {
       return;
     }
 
@@ -44,7 +45,7 @@ export const action: ActionFunction = async ({ request }) => {
         client.mutate({
           mutation: CreateCouponApplicationDocument,
           variables: {
-            orderId: data.createOrder.order.id,
+            orderId: createOrder.order.id,
             couponCode: code,
           },
         }),
@@ -52,7 +53,7 @@ export const action: ActionFunction = async ({ request }) => {
     );
 
     await client.resetStore();
-    return json(data);
+    return data(result.data);
   } catch (error) {
     return error;
   }

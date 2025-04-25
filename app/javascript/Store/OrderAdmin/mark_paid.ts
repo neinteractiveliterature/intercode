@@ -1,4 +1,4 @@
-import { ActionFunction, json } from 'react-router';
+import { ActionFunction, data } from 'react-router';
 import { client } from 'useIntercodeApolloClient';
 import { MarkOrderPaidDocument } from './mutations.generated';
 import invariant from 'tiny-invariant';
@@ -8,11 +8,11 @@ export const action: ActionFunction = async ({ params: { id }, request }) => {
 
   try {
     if (request.method === 'PATCH') {
-      const { data } = await client.mutate({
+      const result = await client.mutate({
         mutation: MarkOrderPaidDocument,
         variables: { orderId: id },
       });
-      return json(data);
+      return data(result.data);
     } else {
       return new Response(null, { status: 404 });
     }

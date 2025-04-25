@@ -7,7 +7,7 @@ import {
   useActionData,
   useLoaderData,
   useNavigation,
-} from 'react-router-dom';
+} from 'react-router';
 import { ApolloError } from '@apollo/client';
 import {
   BootstrapFormInput,

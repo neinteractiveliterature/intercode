@@ -1,5 +1,5 @@
 import { Fragment, useMemo, useContext, ReactNode } from 'react';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { SortingState } from '@tanstack/react-table';
 import { DateTime } from 'luxon';
 import { notEmpty } from '@neinteractiveliterature/litform';

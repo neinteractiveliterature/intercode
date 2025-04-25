@@ -15,7 +15,7 @@ import { timezoneNameForConvention, useAppDateTimeFormat } from '../TimeUtils';
 import { FuzzyTime } from '../FormPresenter/TimeblockTypes';
 import { ConventionFieldsFragment, EventFieldsFragment, RoomFieldsFragment } from './queries.generated';
 import { useTranslation } from 'react-i18next';
-import { useFetcher } from 'react-router-dom';
+import { useFetcher } from 'react-router';
 
 type FuzzyTimeWithoutSecond = Omit<FuzzyTime, 'second'>;
 type CompleteFuzzyTimeWithoutSecond = {

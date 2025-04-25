@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router';
 import { CellContext, Column, createColumnHelper } from '@tanstack/react-table';
 
 import ChoiceSetFilter from '../Tables/ChoiceSetFilter';

@@ -7,7 +7,7 @@ import { ErrorDisplay, sortByLocaleString, parseIntOrNull, useConfirm } from '@n
 
 import InPlaceEditor from './InPlaceEditor';
 import { TicketType, MaximumEventProvidedTicketsOverride } from '../graphqlTypes.generated';
-import { useFetcher } from 'react-router-dom';
+import { useFetcher } from 'react-router';
 
 type TicketTypeForMEPTO = Pick<TicketType, 'description' | 'maximum_event_provided_tickets'> & { id: string };
 

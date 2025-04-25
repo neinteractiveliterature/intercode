@@ -40,11 +40,19 @@ function getSingleTicketType(ticketTypes: TicketTypeLoaderResult['ticketTypes'],
 }
 
 export const adminSingleTicketTypeLoader: LoaderFunction = async ({ request, params: { id } }) => {
-  const { ticketTypes } = (await adminTicketTypesLoader({ params: {}, request })) as TicketTypeLoaderResult;
+  const { ticketTypes } = (await adminTicketTypesLoader({
+    params: {},
+    request,
+    context: {},
+  })) as TicketTypeLoaderResult;
   return getSingleTicketType(ticketTypes, id ?? '');
 };
 
 export const eventSingleTicketTypeLoader: LoaderFunction = async ({ request, params: { id, eventId } }) => {
-  const { ticketTypes } = (await eventTicketTypesLoader({ params: { eventId }, request })) as TicketTypeLoaderResult;
+  const { ticketTypes } = (await eventTicketTypesLoader({
+    params: { eventId },
+    request,
+    context: {},
+  })) as TicketTypeLoaderResult;
   return getSingleTicketType(ticketTypes, id ?? '');
 };

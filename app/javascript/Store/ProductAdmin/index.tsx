@@ -13,7 +13,7 @@ import scrollToLocationHash from '../../scrollToLocationHash';
 import { AdminProductsQueryData, AdminProductsQueryDocument } from './queries.generated';
 import { duplicateProductForEditing, EditingProduct } from './EditingProductTypes';
 import { getRealOrGeneratedId, realOrGeneratedIdsMatch } from '../../GeneratedIdUtils';
-import { ActionFunction, json, LoaderFunction, useLoaderData } from 'react-router';
+import { ActionFunction, data, LoaderFunction, useLoaderData } from 'react-router';
 import { client } from '../../useIntercodeApolloClient';
 import { Convention, TicketType } from 'graphqlTypes.generated';
 import { AdminProductFieldsFragmentDoc } from 'Store/adminProductFields.generated';
@@ -24,7 +24,7 @@ export const action: ActionFunction = async ({ request }) => {
   try {
     if (request.method === 'POST') {
       const product = parseProductFormData(await request.formData());
-      const { data } = await client.mutate({
+      const result = await client.mutate({
         mutation: CreateProductDocument,
         variables: { product },
         update: (cache, result) => {
@@ -52,7 +52,7 @@ export const action: ActionFunction = async ({ request }) => {
           }
         },
       });
-      return json(data);
+      return data(result.data);
     } else {
       return new Response(null, { status: 404 });
     }

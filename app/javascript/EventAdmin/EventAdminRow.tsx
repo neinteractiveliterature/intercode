@@ -1,5 +1,5 @@
 import { useState, useMemo, useContext } from 'react';
-import { Link, useFetcher } from 'react-router-dom';
+import { Link, useFetcher } from 'react-router';
 import { Duration } from 'luxon';
 import { useTranslation } from 'react-i18next';
 

@@ -1,4 +1,4 @@
-import { ActionFunction, json, Link, LoaderFunction, Outlet, useFetcher, useLoaderData } from 'react-router-dom';
+import { ActionFunction, data, Link, LoaderFunction, Outlet, useFetcher, useLoaderData } from 'react-router';
 import { ErrorDisplay, useConfirm } from '@neinteractiveliterature/litform';
 
 import ConventionFormHeader from '../ConventionAdmin/ConventionFormHeader';
@@ -16,11 +16,11 @@ export const action: ActionFunction = async ({ params: { id }, request }) => {
   try {
     const formData = await request.formData();
     const canceled = formData.get('canceled')?.toString() === 'true';
-    const { data } = await client.mutate({
+    const result = await client.mutate({
       mutation: SetConventionCanceledDocument,
       variables: { id, canceled },
     });
-    return json(data);
+    return data(result.data);
   } catch (error) {
     return error;
   }

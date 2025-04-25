@@ -1,5 +1,5 @@
 import { useEffect, useMemo, useState } from 'react';
-import { NavLink, useLocation, Outlet } from 'react-router-dom';
+import { NavLink, useLocation, Outlet } from 'react-router';
 import classNames from 'classnames';
 import { useLitformPopperWithAutoClosing } from '@neinteractiveliterature/litform';
 

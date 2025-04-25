@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import * as React from 'react';
 import { ApolloError } from '@apollo/client';
-import { ActionFunction, redirect, useActionData, useLoaderData, useNavigation, useSubmit } from 'react-router-dom';
+import { ActionFunction, redirect, useActionData, useLoaderData, useNavigation, useSubmit } from 'react-router';
 import { ErrorDisplay, notEmpty } from '@neinteractiveliterature/litform';
 
 import { buildPermissionInput } from '../../Permissions/PermissionUtils';

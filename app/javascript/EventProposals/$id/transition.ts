@@ -1,4 +1,4 @@
-import { ActionFunction, json } from 'react-router';
+import { ActionFunction, data } from 'react-router';
 import invariant from 'tiny-invariant';
 import { client } from '../../useIntercodeApolloClient';
 import { TransitionEventProposalDocument } from '../mutations.generated';
@@ -10,7 +10,7 @@ export const action: ActionFunction = async ({ params: { id }, request }) => {
     const status = formData.get('status')?.toString();
     invariant(status);
 
-    const { data } = await client.mutate({
+    const result = await client.mutate({
       mutation: TransitionEventProposalDocument,
       variables: {
         eventProposalId: id,
@@ -20,7 +20,7 @@ export const action: ActionFunction = async ({ params: { id }, request }) => {
     });
     await client.resetStore();
 
-    return json(data);
+    return data(result.data);
   } catch (error) {
     return error;
   }
