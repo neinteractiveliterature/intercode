@@ -1,3 +1,4 @@
+import { apolloClientContext } from 'AppContexts';
 import { UpdateEventProposalAdminNotesDocument } from '../mutations.generated';
 import { Route } from './+types/admin_notes';
 
@@ -5,7 +6,7 @@ export async function action({ request, params: { id }, context }: Route.ActionA
   try {
     if (request.method === 'PATCH') {
       const formData = await request.formData();
-      return await context.client.mutate({
+      return await context.get(apolloClientContext).mutate({
         mutation: UpdateEventProposalAdminNotesDocument,
         variables: {
           eventProposalId: id,

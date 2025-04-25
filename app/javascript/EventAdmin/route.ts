@@ -3,11 +3,11 @@ import buildEventCategoryUrl from 'EventAdmin/buildEventCategoryUrl';
 import { SiteMode } from 'graphqlTypes.generated';
 import { Route } from './+types/route';
 import { EventAdminRootQueryDocument } from './queries.generated';
-import sortBy from 'lodash/sortBy';
 import sortEventCategories from './sortEventCategories';
+import { apolloClientContext } from 'AppContexts';
 
 export async function loader({ context }: Route.LoaderArgs) {
-  const client = context.client;
+  const client = context.get(apolloClientContext);
   const { data } = await client.query({ query: EventAdminRootQueryDocument });
   if (!data.convention) {
     return new Response(null, { status: 404 });

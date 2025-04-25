@@ -6,9 +6,10 @@ import usePageTitle from '../usePageTitle';
 import { TicketPurchaseFormQueryDocument } from './queries.generated';
 import TicketPurchaseForm from './TicketPurchaseForm';
 import { Route } from './+types/TicketPurchasePage';
+import { apolloClientContext } from 'AppContexts';
 
 export async function loader({ context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({ query: TicketPurchaseFormQueryDocument });
+  const { data } = await context.get(apolloClientContext).query({ query: TicketPurchaseFormQueryDocument });
   if (data.convention.my_profile?.ticket) {
     throw replace('/ticket');
   }

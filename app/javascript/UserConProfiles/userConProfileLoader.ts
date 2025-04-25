@@ -2,9 +2,10 @@ import { UserConProfileAdminQueryDocument } from './queries.generated';
 import { Route, Info } from './+types/userConProfileLoader';
 import { useRouteLoaderData } from 'react-router';
 import { NamedRoute } from 'routes';
+import { apolloClientContext } from 'AppContexts';
 
 export async function loader({ params: { id }, context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({
+  const { data } = await context.get(apolloClientContext).query({
     query: UserConProfileAdminQueryDocument,
     variables: { id },
   });

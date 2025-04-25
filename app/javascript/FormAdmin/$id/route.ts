@@ -2,11 +2,12 @@ import { redirect } from 'react-router';
 import { DeleteFormDocument } from '../mutations.generated';
 import { Form } from '../../graphqlTypes.generated';
 import { Route } from './+types/route';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ params: { id }, request, context }: Route.ActionArgs) {
   try {
     if (request.method === 'DELETE') {
-      await context.client.mutate({
+      await context.get(apolloClientContext).mutate({
         mutation: DeleteFormDocument,
         variables: {
           id,

@@ -1,16 +1,17 @@
 import { redirect } from 'react-router';
 import { DeleteLayoutDocument } from './mutations.generated';
 import { Route } from './+types/SingleLayoutRoute';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ request, params: { id }, context }: Route.ActionArgs) {
   if (request.method === 'DELETE') {
-    await context.client.mutate({
+    await context.get(apolloClientContext).mutate({
       mutation: DeleteLayoutDocument,
       variables: {
         id: id ?? '',
       },
     });
-    await context.client.resetStore();
+    await context.get(apolloClientContext).resetStore();
 
     return redirect('/cms_layouts');
   }

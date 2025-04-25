@@ -9,12 +9,13 @@ import usePageTitle from '../../usePageTitle';
 import { UpdateLayoutDocument } from './mutations.generated';
 import { Route } from './+types/EditCmsLayout';
 import { CmsLayoutAdminQueryDocument } from './queries.generated';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ params: { id }, request, context }: Route.ActionArgs) {
   const formData = await request.formData();
 
   try {
-    await context.client.mutate({
+    await context.get(apolloClientContext).mutate({
       mutation: UpdateLayoutDocument,
       variables: {
         id: id ?? '',
@@ -24,13 +25,15 @@ export async function action({ params: { id }, request, context }: Route.ActionA
   } catch (e) {
     return e;
   }
-  await context.client.resetStore();
+  await context.get(apolloClientContext).resetStore();
 
   return redirect(formData.get('destination')?.toString() ?? '/cms_layouts');
 }
 
 export async function loader({ context, params: { id } }: Route.LoaderArgs) {
-  const { data } = await context.client.query({ query: CmsLayoutAdminQueryDocument, variables: { id } });
+  const { data } = await context
+    .get(apolloClientContext)
+    .query({ query: CmsLayoutAdminQueryDocument, variables: { id } });
   return data;
 }
 

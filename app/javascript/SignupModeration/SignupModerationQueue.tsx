@@ -28,6 +28,7 @@ import { describeDecision } from '../SignupRoundsAdmin/RankedChoiceSignupDecisio
 import sortBy from 'lodash/sortBy';
 import { ApolloError } from '@apollo/client';
 import { Route } from './+types/SignupModerationQueue';
+import { apolloClientContext } from 'AppContexts';
 
 type SignupModerationContextValue = {
   acceptClicked: (signupRequest: SignupModerationSignupRequestFieldsFragment) => void;
@@ -264,7 +265,7 @@ function SignupRankedChoiceCell<TData, TValue extends SignupModerationSignupRequ
 }
 
 export const loader = async ({ context }: Route.LoaderArgs) => {
-  const { data } = await context.client.query({ query: SignupModerationQueuePageQueryDocument });
+  const { data } = await context.get(apolloClientContext).query({ query: SignupModerationQueuePageQueryDocument });
   return data;
 };
 

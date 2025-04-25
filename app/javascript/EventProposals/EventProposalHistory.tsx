@@ -4,6 +4,7 @@ import FormResponseChangeHistory from '../FormPresenter/ItemChangeDisplays/FormR
 import { EventProposalHistoryQueryDocument } from './queries.generated';
 import { FormType } from '../graphqlTypes.generated';
 import { Route } from './+types/EventProposalHistory';
+import { apolloClientContext } from 'AppContexts';
 
 const EXCLUDE_FIELDS = new Set([
   'minimum_age',
@@ -14,7 +15,7 @@ const EXCLUDE_FIELDS = new Set([
 ]);
 
 export async function loader({ params: { id }, context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({
+  const { data } = await context.get(apolloClientContext).query({
     query: EventProposalHistoryQueryDocument,
     variables: { id: id ?? '' },
   });

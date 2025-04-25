@@ -8,6 +8,7 @@ import {
   OrganizationAdminOrganizationsQueryDocument,
 } from './queries.generated';
 import { Route } from './+types/OrganizationIndex';
+import { apolloClientContext } from 'AppContexts';
 
 function renderOrganizationConventions(organization: OrganizationAdminOrganizationsQueryData['organizations'][0]) {
   const sortedConventions = sortBy(organization.conventions, [(convention) => convention.starts_at]);
@@ -22,7 +23,7 @@ function renderOrganizationConventions(organization: OrganizationAdminOrganizati
 }
 
 export async function loader({ context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({ query: OrganizationAdminOrganizationsQueryDocument });
+  const { data } = await context.get(apolloClientContext).query({ query: OrganizationAdminOrganizationsQueryDocument });
   return data;
 }
 

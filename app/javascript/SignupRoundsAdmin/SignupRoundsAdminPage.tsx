@@ -9,9 +9,12 @@ import MaximumEventSignupsPreview from './MaximumEventSignupsPreview';
 import SignupRoundScheduleTable from './SignupRoundScheduleTable';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 import { Route } from './+types/SignupRoundsAdminPage';
+import { apolloClientContext } from 'AppContexts';
 
 export async function loader({ context }: Route.LoaderArgs) {
-  const { data } = await context.client.query<SignupRoundsAdminQueryData>({ query: SignupRoundsAdminQueryDocument });
+  const { data } = await context
+    .get(apolloClientContext)
+    .query<SignupRoundsAdminQueryData>({ query: SignupRoundsAdminQueryDocument });
   return data;
 }
 

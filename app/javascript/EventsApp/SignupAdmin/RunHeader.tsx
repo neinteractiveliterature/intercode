@@ -8,9 +8,10 @@ import { useFormatRunTimespan } from '../runTimeFormatting';
 import { Outlet } from 'react-router';
 import NamedRouteBreadcrumbItem from '../../Breadcrumbs/NamedRouteBreadcrumbItem';
 import { Route } from './+types/RunHeader';
+import { apolloClientContext } from 'AppContexts';
 
 export const loader = async ({ context, params: { eventId, runId } }: Route.LoaderArgs) => {
-  const client = context!.client;
+  const client = context.get(apolloClientContext);
   const { data } = await client.query({
     query: RunHeaderRunInfoQueryDocument,
     variables: { eventId: eventId ?? '', runId: runId ?? '' },

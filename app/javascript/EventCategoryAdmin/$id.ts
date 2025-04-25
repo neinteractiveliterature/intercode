@@ -3,11 +3,12 @@ import { DeleteEventCategoryDocument, UpdateEventCategoryDocument } from './muta
 import { buildEventCategoryFromFormData } from './buildEventCategoryInput';
 import { EventCategory } from '../graphqlTypes.generated';
 import { Route } from './+types/$id';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ request, params: { id }, context }: Route.ActionArgs) {
   try {
     if (request.method === 'DELETE') {
-      await context.client.mutate({
+      await context.get(apolloClientContext).mutate({
         mutation: DeleteEventCategoryDocument,
         variables: {
           id,
@@ -22,7 +23,7 @@ export async function action({ request, params: { id }, context }: Route.ActionA
       return redirect('..');
     } else if (request.method === 'PATCH') {
       const formData = await request.formData();
-      await context.client.mutate({
+      await context.get(apolloClientContext).mutate({
         mutation: UpdateEventCategoryDocument,
         variables: {
           id,

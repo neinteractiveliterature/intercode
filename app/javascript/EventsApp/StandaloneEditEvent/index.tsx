@@ -19,6 +19,7 @@ import { ImageAttachmentConfig } from '../../BuiltInFormControls/MarkdownInput';
 import { StandaloneUpdateEventDocument } from './mutations.generated';
 import { Route } from './+types';
 import { useApolloClient } from '@apollo/client';
+import { apolloClientContext } from 'AppContexts';
 
 export type StandaloneEditEventFormProps = {
   initialEvent: WithFormResponse<StandaloneEditEventQueryData['convention']['event']>;
@@ -90,10 +91,12 @@ function StandaloneEditEventForm({
 }
 
 export const loader = async ({ params: { eventId }, context }: Route.LoaderArgs) => {
-  const { data } = await context.client.query<StandaloneEditEventQueryData, StandaloneEditEventQueryVariables>({
-    query: StandaloneEditEventQueryDocument,
-    variables: { eventId: eventId ?? '' },
-  });
+  const { data } = await context
+    .get(apolloClientContext)
+    .query<StandaloneEditEventQueryData, StandaloneEditEventQueryVariables>({
+      query: StandaloneEditEventQueryDocument,
+      variables: { eventId: eventId ?? '' },
+    });
   return data;
 };
 

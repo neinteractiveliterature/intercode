@@ -11,11 +11,12 @@ import { buildEventCategoryFromFormData } from './buildEventCategoryInput';
 import { Convention } from '../graphqlTypes.generated';
 import { Route } from './+types/NewEventCategory';
 import { useEventCategoryAdminLoader } from './route';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ request, context }: Route.ActionArgs) {
   try {
     const formData = await request.formData();
-    await context.client.mutate({
+    await context.get(apolloClientContext).mutate({
       mutation: CreateEventCategoryDocument,
       variables: {
         eventCategory: buildEventCategoryFromFormData(formData),

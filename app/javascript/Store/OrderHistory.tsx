@@ -12,6 +12,7 @@ import { useAppDateTimeFormat } from '../TimeUtils';
 import { useTranslation } from 'react-i18next';
 import { ApolloError } from '@apollo/client';
 import { Route } from './+types/OrderHistory';
+import { apolloClientContext } from 'AppContexts';
 
 type OrderType = NonNullable<OrderHistoryQueryData['convention']['my_profile']>['orders'][0];
 type PaymentModalState = {
@@ -179,7 +180,7 @@ function OrderHistoryOrder({ order, convention, paymentModal }: OrderHistoryOrde
 }
 
 export async function loader({ context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({ query: OrderHistoryQueryDocument });
+  const { data } = await context.get(apolloClientContext).query({ query: OrderHistoryQueryDocument });
   return data;
 }
 

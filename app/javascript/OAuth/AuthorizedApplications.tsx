@@ -4,9 +4,10 @@ import PermissionsPrompt from './PermissionsPrompt';
 import { OAuthAuthorizedApplicationsQueryData, OAuthAuthorizedApplicationsQueryDocument } from './queries.generated';
 import { useFetcher } from 'react-router';
 import { Route } from './+types/AuthorizedApplications';
+import { apolloClientContext } from 'AppContexts';
 
 export async function loader({ context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({ query: OAuthAuthorizedApplicationsQueryDocument });
+  const { data } = await context.get(apolloClientContext).query({ query: OAuthAuthorizedApplicationsQueryDocument });
   return data;
 }
 

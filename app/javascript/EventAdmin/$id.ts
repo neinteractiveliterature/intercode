@@ -5,6 +5,7 @@ import { redirect } from 'react-router';
 import { Route } from './+types/$id';
 import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
 import { EventAdminRootQueryData } from './queries.generated';
+import { apolloClientContext } from 'AppContexts';
 
 export type UpdateRegularEventOptions = {
   client: ApolloClient<NormalizedCacheObject>;
@@ -81,7 +82,7 @@ async function updateEvent({ event, eventCategory, run, client }: UpdateEventOpt
 export async function action({ request, context }: Route.ActionArgs) {
   try {
     const options = (await request.json()) as Omit<UpdateEventOptions, 'client'>;
-    await updateEvent({ ...options, client: context.client });
+    await updateEvent({ ...options, client: context.get(apolloClientContext) });
     return redirect(`/admin_events/${options.eventCategory.id}`);
   } catch (error) {
     return error;

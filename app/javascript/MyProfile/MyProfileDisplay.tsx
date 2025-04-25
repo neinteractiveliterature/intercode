@@ -12,9 +12,10 @@ import { getSortedParsedFormItems } from '../Models/Form';
 import AdminWarning from '../UIComponents/AdminWarning';
 import { ConventionForTimespanUtils } from '../TimespanUtils';
 import { Route } from './+types/MyProfileDisplay';
+import { apolloClientContext } from 'AppContexts';
 
 export async function loader({ context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({ query: MyProfileQueryDocument });
+  const { data } = await context.get(apolloClientContext).query({ query: MyProfileQueryDocument });
   if (!data.convention.my_profile) {
     throw new Response(null, { status: 404 });
   }

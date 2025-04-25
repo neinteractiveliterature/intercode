@@ -9,11 +9,12 @@ import { ApolloError } from '@apollo/client';
 import { buildDepartmentInputFromFormData } from './buildDepartmentInput';
 import { DepartmentAdminQueryDocument } from './queries.generated';
 import { Route } from './+types/NewDepartment';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ request, context }: Route.ActionArgs) {
   try {
     const formData = await request.formData();
-    await context.client.mutate({
+    await context.get(apolloClientContext).mutate({
       mutation: CreateDepartmentDocument,
       variables: {
         department: buildDepartmentInputFromFormData(formData),

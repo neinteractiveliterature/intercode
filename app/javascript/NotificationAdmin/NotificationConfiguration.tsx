@@ -11,6 +11,7 @@ import { useTranslation } from 'react-i18next';
 import { useChangeSet } from 'ChangeSet';
 import { NotificationDestinationInput, NotificationEventKey } from 'graphqlTypes.generated';
 import { Route } from './+types/NotificationConfiguration';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ params: { eventKey }, request, context }: Route.ActionArgs) {
   try {
@@ -20,7 +21,7 @@ export async function action({ params: { eventKey }, request, context }: Route.A
     ) as NotificationAdminQueryData['convention']['notification_templates'][number]['notification_destinations'];
     const removeDestinationIds = JSON.parse(formData.get('remove_destination_ids')?.toString() ?? '[]') as string[];
 
-    await context.client.mutate({
+    await context.get(apolloClientContext).mutate({
       mutation: UpdateNotificationTemplateDocument,
       variables: {
         eventKey: eventKey as NotificationEventKey,
@@ -60,7 +61,7 @@ type LoaderResult = {
 
 export async function loader({ params, context }: Route.LoaderArgs) {
   const { eventKey } = params;
-  const { data } = await context.client.query({ query: NotificationAdminQueryDocument });
+  const { data } = await context.get(apolloClientContext).query({ query: NotificationAdminQueryDocument });
   const initialNotificationTemplate = data.convention.notification_templates.find((t) => t.event_key === eventKey);
 
   if (!initialNotificationTemplate) {

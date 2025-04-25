@@ -9,6 +9,7 @@ import humanize from '../humanize';
 import { CreateFormDocument } from './mutations.generated';
 import { FormType } from '../graphqlTypes.generated';
 import { Route } from './+types/FormAdminIndex';
+import { apolloClientContext } from 'AppContexts';
 
 function describeFormUsers(form: FormAdminQueryData['convention']['forms'][0]) {
   return [
@@ -19,14 +20,14 @@ function describeFormUsers(form: FormAdminQueryData['convention']['forms'][0]) {
 }
 
 export async function loader({ context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({ query: FormAdminQueryDocument });
+  const { data } = await context.get(apolloClientContext).query({ query: FormAdminQueryDocument });
   return data;
 }
 
 export async function action({ request, context }: Route.ActionArgs) {
   try {
     const formData = await request.formData();
-    const { data } = await context.client.mutate({
+    const { data } = await context.get(apolloClientContext).mutate({
       mutation: CreateFormDocument,
       variables: {
         form: {

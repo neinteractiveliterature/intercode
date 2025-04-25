@@ -8,9 +8,10 @@ import AppRootContext from 'AppRootContext';
 import capitalize from 'lodash/capitalize';
 import { EventTicketTypesQueryData, EventTicketTypesQueryDocument } from 'TicketTypeAdmin/queries.generated';
 import { Route } from './+types/layout';
+import { apolloClientContext } from 'AppContexts';
 
 export const loader = async ({ context, params: { eventId } }: Route.LoaderArgs) => {
-  const client = context!.client;
+  const client = context.get(apolloClientContext);
   const { data } = await client.query({
     query: EventTicketTypesQueryDocument,
     variables: { id: eventId ?? '' },

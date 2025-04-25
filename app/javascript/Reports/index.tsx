@@ -4,9 +4,10 @@ import usePageTitle from '../usePageTitle';
 import { ReportsMenuQueryDocument } from './queries.generated';
 import { useTranslation } from 'react-i18next';
 import { Route } from './+types/index';
+import { apolloClientContext } from 'AppContexts';
 
 export async function loader({ context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({ query: ReportsMenuQueryDocument });
+  const { data } = await context.get(apolloClientContext).query({ query: ReportsMenuQueryDocument });
   return data;
 }
 

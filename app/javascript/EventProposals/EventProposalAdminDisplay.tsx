@@ -8,6 +8,7 @@ import { EventProposalAdminNotesQueryDocument, EventProposalQueryWithOwnerDocume
 import humanize from '../humanize';
 import { ApolloError, useSuspenseQuery } from '@apollo/client';
 import { Route } from './+types/EventProposalAdminDisplay';
+import { apolloClientContext } from 'AppContexts';
 
 export type EventProposalAdminNotesProps = {
   eventProposalId: string;
@@ -35,7 +36,7 @@ function EventProposalAdminNotes({ eventProposalId }: EventProposalAdminNotesPro
 }
 
 export async function loader({ context, params: { id } }: Route.LoaderArgs) {
-  const { data } = await context.client.query({
+  const { data } = await context.get(apolloClientContext).query({
     query: EventProposalQueryWithOwnerDocument,
     variables: { eventProposalId: id ?? '' },
   });

@@ -5,6 +5,7 @@ import usePageTitle from '../usePageTitle';
 import { UserActivityAlertsAdminQueryData, UserActivityAlertsAdminQueryDocument } from './queries.generated';
 import humanize from '../humanize';
 import { Route } from './+types/UserActivityAlertsList';
+import { apolloClientContext } from 'AppContexts';
 
 function renderCriteriaList(criteria: React.ReactNode[], defaultText: React.ReactNode) {
   if (criteria.length > 0) {
@@ -84,7 +85,7 @@ function renderAlertNotificationDestinations(
 }
 
 export async function loader({ context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({
+  const { data } = await context.get(apolloClientContext).query({
     query: UserActivityAlertsAdminQueryDocument,
   });
   return data;

@@ -4,6 +4,7 @@ import { FormEditorQueryDocument } from 'FormAdmin/queries.generated';
 import { ActionFunction } from 'react-router';
 import invariant from 'tiny-invariant';
 import { Route } from './+types/move';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ request, params: { id, sectionId }, context }: Route.ActionArgs) {
   try {
@@ -13,7 +14,7 @@ export async function action({ request, params: { id, sectionId }, context }: Ro
     invariant(sectionId != null);
     invariant(destinationIndex != null);
 
-    const queryData = context.client.cache.readQuery({
+    const queryData = context.get(apolloClientContext).cache.readQuery({
       query: FormEditorQueryDocument,
       variables: { id: id },
     });
@@ -39,7 +40,7 @@ export async function action({ request, params: { id, sectionId }, context }: Ro
       } as const;
     }
 
-    const { data } = await context.client.mutate({
+    const { data } = await context.get(apolloClientContext).mutate({
       mutation: MoveFormSectionDocument,
       variables: {
         id: sectionId,

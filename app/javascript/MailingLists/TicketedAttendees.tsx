@@ -2,9 +2,10 @@ import TabbedMailingList from './TabbedMailingList';
 import usePageTitle from '../usePageTitle';
 import { TicketedAttendeesQueryDocument } from './queries.generated';
 import { Route } from './+types/TicketedAttendees';
+import { apolloClientContext } from 'AppContexts';
 
 export async function loader({ context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({ query: TicketedAttendeesQueryDocument });
+  const { data } = await context.get(apolloClientContext).query({ query: TicketedAttendeesQueryDocument });
   return data;
 }
 

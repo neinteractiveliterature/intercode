@@ -16,10 +16,11 @@ import { ReceiveSignupEmail } from '../../graphqlTypes.generated';
 import { CreateTeamMemberDocument } from './mutations.generated';
 import { Route } from './+types/NewTeamMember';
 import { useTeamMembersLoader } from '.';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ params: { eventId }, request, context }: Route.ActionArgs) {
   const formData = await request.formData();
-  await context.client.mutate({
+  await context.get(apolloClientContext).mutate({
     mutation: CreateTeamMemberDocument,
     variables: {
       input: {

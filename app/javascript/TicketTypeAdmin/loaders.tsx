@@ -8,6 +8,7 @@ import {
 import { LoaderFunction } from 'react-router';
 import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
 import { findById } from 'findById';
+import { apolloClientContext } from 'AppContexts';
 
 export type TicketTypeLoaderResult = {
   parent: AdminTicketTypesQueryData['convention'] | EventTicketTypesQueryData['convention']['event'];
@@ -17,13 +18,13 @@ export type TicketTypeLoaderResult = {
 };
 
 export const adminTicketTypesLoader: LoaderFunction = async ({ context }) => {
-  const client = context!.client as ApolloClient<NormalizedCacheObject>;
+  const client = context.get(apolloClientContext);
   const { data } = await client.query<AdminTicketTypesQueryData>({ query: AdminTicketTypesQueryDocument });
   return { parent: data.convention, ticketTypes: data.convention.ticket_types } as TicketTypeLoaderResult;
 };
 
 export const eventTicketTypesLoader: LoaderFunction = async ({ context, params: { eventId } }) => {
-  const client = context!.client as ApolloClient<NormalizedCacheObject>;
+  const client = context.get(apolloClientContext);
   const { data } = await client.query<EventTicketTypesQueryData, EventTicketTypesQueryVariables>({
     query: EventTicketTypesQueryDocument,
     variables: { id: eventId ?? '' },

@@ -3,6 +3,7 @@ import { CreateCouponApplicationDocument } from 'Store/mutations.generated';
 import invariant from 'tiny-invariant';
 import { CartQueryDocument } from '../queries.generated';
 import { Route } from './+types/route';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ request, context }: Route.ActionArgs) {
   try {
@@ -12,7 +13,7 @@ export async function action({ request, context }: Route.ActionArgs) {
       const couponCode = formData.get('coupon_code')?.toString();
       invariant(orderId != null);
 
-      const result = await context.client.mutate({
+      const result = await context.get(apolloClientContext).mutate({
         mutation: CreateCouponApplicationDocument,
         variables: { orderId, couponCode },
         refetchQueries: [{ query: CartQueryDocument }],

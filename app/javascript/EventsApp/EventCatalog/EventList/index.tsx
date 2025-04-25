@@ -29,6 +29,7 @@ import EventCatalogNavTabs from '../EventCatalogNavTabs';
 import { FetchMoreFunction } from '@apollo/client/react/hooks/useSuspenseQuery';
 import { ResultOf, VariablesOf } from '@graphql-typed-document-node/core';
 import { Route } from './+types';
+import { apolloClientContext } from 'AppContexts';
 
 const PAGE_SIZE = 20;
 
@@ -72,7 +73,7 @@ const fetchMoreEvents = async (
 };
 
 export const loader = async ({ context }: Route.LoaderArgs) => {
-  const { data } = await context.client.query<CommonConventionDataQueryData>({
+  const { data } = await context.get(apolloClientContext).query<CommonConventionDataQueryData>({
     query: CommonConventionDataQueryDocument,
   });
   const filterableFormItems = getFilterableFormItems(data.convention);

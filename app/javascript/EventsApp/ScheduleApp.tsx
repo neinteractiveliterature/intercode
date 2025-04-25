@@ -26,6 +26,7 @@ import styles from 'styles/schedule_grid.module.scss';
 import { conventionDayLoader } from './conventionDayUrls';
 import { Route } from './+types/ScheduleApp';
 import Timespan from 'Timespan';
+import { apolloClientContext } from 'AppContexts';
 
 const filterCodecs = buildFieldFilterCodecs({
   form_items: FilterCodecs.json,
@@ -96,7 +97,7 @@ function ScheduleViewDropdown({ viewSelected, scheduleView, configs }: ScheduleV
 }
 
 export const loader = async ({ params, request, context }: Route.LoaderArgs) => {
-  const client = context.client;
+  const client = context.get(apolloClientContext);
   const [conventionDayLoaderResult, { data }] = await Promise.all([
     conventionDayLoader({ params, request, context }),
     await client.query<ScheduleGridConventionDataQueryData>({

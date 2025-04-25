@@ -14,13 +14,14 @@ import PasswordInputWithStrengthCheck from './PasswordInputWithStrengthCheck';
 import { Route } from './+types/EditUser';
 import { Form } from 'react-router';
 import { getBackendBaseUrl } from 'getBackendBaseUrl';
+import { apolloClientContext, authenticityTokensManagerContext, fetchContext } from 'AppContexts';
 
 export async function action({ context, request }: Route.ActionArgs) {
   const formData = await request.formData();
-  const tokens = await context.authenticityTokensManager.getTokens();
+  const tokens = await context.get(authenticityTokensManagerContext).getTokens();
   const url = new URL('/users', getBackendBaseUrl());
 
-  const response = await context.fetch(url, {
+  const response = await context.get(fetchContext)(url, {
     method: 'PATCH',
     body: formData,
     credentials: 'include',
@@ -44,13 +45,13 @@ export async function action({ context, request }: Route.ActionArgs) {
     return new Error(responseJson.error);
   }
 
-  await context.client.resetStore();
+  await context.get(apolloClientContext).resetStore();
 
   return redirect('/');
 }
 
 export async function loader({ context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({ query: EditUserQueryDocument });
+  const { data } = await context.get(apolloClientContext).query({ query: EditUserQueryDocument });
   return data;
 }
 

@@ -11,6 +11,7 @@ import { DeleteTeamMemberDocument, UpdateTeamMemberDocument } from './mutations.
 import { Route } from './+types/EditTeamMember';
 import { loader as indexLoader } from './index';
 import { findById } from 'findById';
+import { apolloClientContext } from 'AppContexts';
 
 export async function loader({ params, context, request }: Route.LoaderArgs) {
   const data = await indexLoader({ params, context, request });
@@ -19,7 +20,7 @@ export async function loader({ params, context, request }: Route.LoaderArgs) {
 
 export const action = async ({ params: { eventId, teamMemberId }, request, context }: Route.ActionArgs) => {
   if (request.method === 'DELETE') {
-    await context.client.mutate({
+    await context.get(apolloClientContext).mutate({
       mutation: DeleteTeamMemberDocument,
       variables: {
         input: {
@@ -32,7 +33,7 @@ export const action = async ({ params: { eventId, teamMemberId }, request, conte
   } else {
     const formData = await request.formData();
 
-    await context.client.mutate({
+    await context.get(apolloClientContext).mutate({
       mutation: UpdateTeamMemberDocument,
       variables: {
         input: {

@@ -8,20 +8,21 @@ import useLoginRequired from '../Authentication/useLoginRequired';
 import { ClickwrapAgreementQueryDocument } from './queries.generated';
 import { AcceptClickwrapAgreementDocument } from './mutations.generated';
 import { Route } from './+types/index';
+import { apolloClientContext, authenticityTokensManagerContext } from 'AppContexts';
 
 export async function action({ context }: Route.ActionArgs) {
   try {
-    await context.client.mutate({ mutation: AcceptClickwrapAgreementDocument });
+    await context.get(apolloClientContext).mutate({ mutation: AcceptClickwrapAgreementDocument });
     return redirect('/my_profile/setup');
   } catch (err) {
-    await context.authenticityTokensManager.refresh();
-    await context.client.resetStore();
+    await context.get(authenticityTokensManagerContext).refresh();
+    await context.get(apolloClientContext).resetStore();
     return err;
   }
 }
 
 export async function loader({ context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({ query: ClickwrapAgreementQueryDocument });
+  const { data } = await context.get(apolloClientContext).query({ query: ClickwrapAgreementQueryDocument });
   if (data.convention.my_profile?.accepted_clickwrap_agreement) {
     throw replace('/');
   }

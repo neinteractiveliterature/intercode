@@ -12,11 +12,12 @@ import { Link, useFetcher } from 'react-router';
 import { DeleteCouponDocument, UpdateCouponDocument } from './mutations.generated';
 import { CouponInput } from 'graphqlTypes.generated';
 import { Route } from './+types/EditCouponModal';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ params: { id }, request, context }: Route.ActionArgs) {
   try {
     if (request.method === 'DELETE') {
-      await context.client.mutate({
+      await context.get(apolloClientContext).mutate({
         mutation: DeleteCouponDocument,
         variables: { id },
         update: (cache) => {
@@ -29,7 +30,7 @@ export async function action({ params: { id }, request, context }: Route.ActionA
       return redirect('..');
     } else if (request.method === 'PATCH') {
       const coupon = (await request.json()) as CouponInput;
-      await context.client.mutate({ mutation: UpdateCouponDocument, variables: { id, coupon } });
+      await context.get(apolloClientContext).mutate({ mutation: UpdateCouponDocument, variables: { id, coupon } });
       return redirect('..');
     } else {
       return new Response(null, { status: 404 });
@@ -40,7 +41,7 @@ export async function action({ params: { id }, request, context }: Route.ActionA
 }
 
 export async function loader({ params: { id }, context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({
+  const { data } = await context.get(apolloClientContext).query({
     query: AdminSingleCouponQueryDocument,
     variables: { id },
   });

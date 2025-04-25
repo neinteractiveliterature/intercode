@@ -14,6 +14,7 @@ import { ApolloError } from '@apollo/client';
 import { loader as indexLoader } from './index';
 import { Route } from './+types/ProvideTicketModal';
 import { findById } from 'findById';
+import { apolloClientContext } from 'AppContexts';
 
 export async function loader({ params, context, request }: Route.LoaderArgs) {
   const data = await indexLoader({ params, context, request });
@@ -23,7 +24,7 @@ export async function loader({ params, context, request }: Route.LoaderArgs) {
 export const action = async ({ params: { eventId }, request, context }: Route.ActionArgs) => {
   try {
     const formData = await request.formData();
-    await context.client.mutate({
+    await context.get(apolloClientContext).mutate({
       mutation: ProvideEventTicketDocument,
       variables: {
         eventId,

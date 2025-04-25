@@ -15,9 +15,10 @@ import {
 import { CreateUserActivityAlertDocument, CreateUserActivityAlertMutationVariables } from './mutations.generated';
 import { Convention, NotificationEventKey } from 'graphqlTypes.generated';
 import { Route } from './+types/NewUserActivityAlert';
+import { apolloClientContext } from 'AppContexts';
 
 export async function loader({ context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({ query: UserActivityAlertsAdminQueryDocument });
+  const { data } = await context.get(apolloClientContext).query({ query: UserActivityAlertsAdminQueryDocument });
 
   const userActivityAlertEvent = data.notificationEvents.find(
     (event) => event.key === NotificationEventKey.UserActivityAlertsAlert,
@@ -33,7 +34,7 @@ export async function action({ request, context }: Route.ActionArgs) {
   try {
     if (request.method === 'POST') {
       const variables = (await request.json()) as CreateUserActivityAlertMutationVariables;
-      await context.client.mutate({
+      await context.get(apolloClientContext).mutate({
         mutation: CreateUserActivityAlertDocument,
         variables,
         update: (cache, result) => {

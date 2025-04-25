@@ -2,9 +2,12 @@ import CmsPartialForm from './CmsPartialForm';
 import usePageTitle from '../../usePageTitle';
 import { Route } from './+types/ViewCmsPartialSource';
 import { CmsPartialAdminQueryDocument } from './queries.generated';
+import { apolloClientContext } from 'AppContexts';
 
 export async function loader({ context, params: { id } }: Route.LoaderArgs) {
-  const { data } = await context.client.query({ query: CmsPartialAdminQueryDocument, variables: { id } });
+  const { data } = await context
+    .get(apolloClientContext)
+    .query({ query: CmsPartialAdminQueryDocument, variables: { id } });
   return data;
 }
 

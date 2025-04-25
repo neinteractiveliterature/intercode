@@ -1,10 +1,11 @@
 import { data } from 'react-router';
 import { DeleteCmsVariableMutationDocument, SetCmsVariableMutationDocument } from './mutations.generated';
 import { Route } from './+types/SingleVariableRoute';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ params: { key }, request, context }: Route.ActionArgs) {
   const formData = await request.formData();
-  const { client } = context;
+  const client = context.get(apolloClientContext);
 
   try {
     if (request.method === 'POST' || request.method === 'PATCH') {

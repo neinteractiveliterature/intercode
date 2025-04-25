@@ -16,12 +16,13 @@ import { MyProfileQueryDocument } from './queries.generated';
 import { parseResponseErrors } from '../parseResponseErrors';
 import { UpdateUserConProfileDocument } from '../UserConProfiles/mutations.generated';
 import { Route, Info } from './+types/MyProfileForm';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ context, request }: Route.ActionArgs) {
   const profile = (await request.json()) as Info['loaderData']['initialUserConProfile'];
 
   try {
-    await context.client.mutate({
+    await context.get(apolloClientContext).mutate({
       mutation: UpdateUserConProfileDocument,
       variables: {
         input: {
@@ -44,7 +45,7 @@ export async function action({ context, request }: Route.ActionArgs) {
 }
 
 export async function loader({ context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({ query: MyProfileQueryDocument });
+  const { data } = await context.get(apolloClientContext).query({ query: MyProfileQueryDocument });
   const myProfile = data.convention.my_profile;
   if (!myProfile) {
     throw new Response(null, { status: 404 });

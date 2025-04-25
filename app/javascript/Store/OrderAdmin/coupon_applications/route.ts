@@ -1,6 +1,7 @@
 import { data } from 'react-router';
 import { CreateCouponApplicationDocument } from 'Store/mutations.generated';
 import { Route } from './+types/route';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ request, params: { id }, context }: Route.ActionArgs) {
   try {
@@ -8,11 +9,11 @@ export async function action({ request, params: { id }, context }: Route.ActionA
       const formData = await request.formData();
       const couponCode = formData.get('coupon_code')?.toString();
 
-      const result = await context.client.mutate({
+      const result = await context.get(apolloClientContext).mutate({
         mutation: CreateCouponApplicationDocument,
         variables: { orderId: id, couponCode },
       });
-      await context.client.resetStore();
+      await context.get(apolloClientContext).resetStore();
       return data(result.data);
     } else {
       return new Response(null, { status: 404 });

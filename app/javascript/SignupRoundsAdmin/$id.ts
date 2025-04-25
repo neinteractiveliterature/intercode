@@ -3,11 +3,12 @@ import { DeleteSignupRoundDocument, UpdateSignupRoundDocument } from './mutation
 import { SignupRound } from '../graphqlTypes.generated';
 import { buildSignupRoundInputFromFormData } from './buildSignupRoundInput';
 import { Route } from './+types/$id';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ request, params: { id }, context }: Route.ActionArgs) {
   try {
     if (request.method === 'DELETE') {
-      await context.client.mutate({
+      await context.get(apolloClientContext).mutate({
         mutation: DeleteSignupRoundDocument,
         variables: { id },
         update: (cache) => {
@@ -19,7 +20,7 @@ export async function action({ request, params: { id }, context }: Route.ActionA
       });
     } else if (request.method === 'PATCH') {
       const formData = await request.formData();
-      await context.client.mutate({
+      await context.get(apolloClientContext).mutate({
         mutation: UpdateSignupRoundDocument,
         variables: { id, signupRound: buildSignupRoundInputFromFormData(formData) },
       });

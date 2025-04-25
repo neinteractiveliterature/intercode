@@ -15,6 +15,7 @@ import { i18n } from '../setupI18Next';
 import { ApolloError } from '@apollo/client';
 import { useSubmit } from 'react-router';
 import { Route } from './+types/MergeUsersModal';
+import { apolloClientContext } from 'AppContexts';
 
 type UserType = MergeUsersModalQueryData['users'][0];
 type UserConProfileType = UserType['user_con_profiles'][0];
@@ -36,7 +37,7 @@ export async function action({ request, context }: Route.ActionArgs) {
   }
 
   try {
-    await context.client.mutate({
+    await context.get(apolloClientContext).mutate({
       mutation: MergeUsersDocument,
       variables: {
         userIds: userIds,
@@ -57,7 +58,7 @@ export async function action({ request, context }: Route.ActionArgs) {
 }
 
 export async function loader({ params: { ids }, context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({
+  const { data } = await context.get(apolloClientContext).query({
     query: MergeUsersModalQueryDocument,
     variables: { ids: ids.split(',') },
   });

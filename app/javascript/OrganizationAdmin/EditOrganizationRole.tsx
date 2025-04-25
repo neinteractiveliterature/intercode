@@ -6,9 +6,12 @@ import usePageTitle from '../usePageTitle';
 import { OrganizationAdminOrganizationQueryDocument } from './queries.generated';
 import { ApolloError } from '@apollo/client';
 import { Route } from './+types/EditOrganizationRole';
+import { apolloClientContext } from 'AppContexts';
 
 export async function loader({ params: { id, organizationRoleId }, context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({ query: OrganizationAdminOrganizationQueryDocument, variables: { id } });
+  const { data } = await context
+    .get(apolloClientContext)
+    .query({ query: OrganizationAdminOrganizationQueryDocument, variables: { id } });
   const organization = data.organization;
   const initialOrganizationRole = organization?.organization_roles.find((role) => role.id === organizationRoleId);
 

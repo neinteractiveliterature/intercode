@@ -5,11 +5,12 @@ import updateCacheAfterCreateTicketType from './updateCacheAfterCreateTicketType
 import { replace } from 'react-router';
 import { loader as routeLoader } from './route';
 import NewTicketType from './NewTicketType';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ context, request }: Route.ActionArgs) {
   try {
     const { ticketType, conventionId } = await request.json();
-    await context.client.mutate({
+    await context.get(apolloClientContext).mutate({
       mutation: CreateTicketTypeDocument,
       variables: {
         input: { ticket_type: ticketType },

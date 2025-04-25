@@ -3,12 +3,13 @@ import { FormItemInput, FormSection } from '../../../../../../graphqlTypes.gener
 import { CreateFormItemDocument } from '../../../../../mutations.generated';
 import { FormEditorFormItemFieldsFragmentDoc } from 'FormAdmin/queries.generated';
 import { Route } from './+types/route';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ request, params: { sectionId }, context }: Route.ActionArgs) {
   try {
     if (request.method === 'POST') {
       const formItem = (await request.json()) as FormItemInput;
-      const result = await context.client.mutate({
+      const result = await context.get(apolloClientContext).mutate({
         mutation: CreateFormItemDocument,
         variables: {
           formSectionId: sectionId,

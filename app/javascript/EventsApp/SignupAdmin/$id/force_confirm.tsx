@@ -9,9 +9,10 @@ import { ApolloError } from '@apollo/client';
 import Modal from 'react-bootstrap4-modal';
 import { useSingleSignupLoader } from './route';
 import { Route } from './+types/force_confirm';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ context, request, params: { id } }: Route.ActionArgs) {
-  const client = context!.client;
+  const client = context.get(apolloClientContext);
   try {
     const formData = await request.formData();
     const result = await client.mutate({

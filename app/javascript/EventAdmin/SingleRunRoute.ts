@@ -1,11 +1,12 @@
 import { redirect } from 'react-router';
 import { DeleteRunDocument } from './mutations.generated';
 import { Route } from './+types/SingleRunRoute';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ params: { eventCategoryId, eventId, runId }, request, context }: Route.ActionArgs) {
   try {
     if (request.method === 'DELETE') {
-      await context.client.mutate({
+      await context.get(apolloClientContext).mutate({
         mutation: DeleteRunDocument,
         variables: {
           input: {

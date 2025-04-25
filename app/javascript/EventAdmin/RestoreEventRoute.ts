@@ -1,10 +1,11 @@
 import { redirect } from 'react-router';
 import { RestoreDroppedEventDocument } from './mutations.generated';
 import { Route } from './+types/RestoreEventRoute';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ params: { eventId }, context }: Route.ActionArgs) {
   try {
-    await context.client.mutate({
+    await context.get(apolloClientContext).mutate({
       mutation: RestoreDroppedEventDocument,
       variables: {
         input: {
@@ -12,7 +13,7 @@ export async function action({ params: { eventId }, context }: Route.ActionArgs)
         },
       },
     });
-    await context.client.resetStore();
+    await context.get(apolloClientContext).resetStore();
     return redirect('/admin_events/dropped_events');
   } catch (error) {
     return error;

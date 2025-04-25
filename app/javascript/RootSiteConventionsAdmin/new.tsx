@@ -3,11 +3,12 @@ import NewConventionModal from './NewConventionModal';
 import { NewConventionModalQueryDocument } from './queries.generated';
 import { CreateConventionDocument } from './mutations.generated';
 import { Route } from './+types/new';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ request, context }: Route.ActionArgs) {
   try {
     const variables = await request.json();
-    const { data } = await context.client.mutate({
+    const { data } = await context.get(apolloClientContext).mutate({
       mutation: CreateConventionDocument,
       variables,
     });
@@ -19,7 +20,7 @@ export async function action({ request, context }: Route.ActionArgs) {
 }
 
 export async function loader({ context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({ query: NewConventionModalQueryDocument });
+  const { data } = await context.get(apolloClientContext).query({ query: NewConventionModalQueryDocument });
   return data;
 }
 

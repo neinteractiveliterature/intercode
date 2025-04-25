@@ -3,13 +3,14 @@ import { redirect } from 'react-router';
 import { DeleteRoomDocument, UpdateRoomDocument } from 'RoomsAdmin/mutations.generated';
 import invariant from 'tiny-invariant';
 import { Route } from './+types/route';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ request, params: { id }, context }: Route.ActionArgs) {
   invariant(id != null);
 
   try {
     if (request.method === 'DELETE') {
-      await context.client.mutate({
+      await context.get(apolloClientContext).mutate({
         mutation: DeleteRoomDocument,
         variables: { input: { id } },
         update: (cache) => {
@@ -22,7 +23,7 @@ export async function action({ request, params: { id }, context }: Route.ActionA
       return redirect('..');
     } else if (request.method === 'PATCH') {
       const formData = await request.formData();
-      await context.client.mutate({
+      await context.get(apolloClientContext).mutate({
         mutation: UpdateRoomDocument,
         variables: { input: { id, room: { name: formData.get('name')?.toString() } } },
       });

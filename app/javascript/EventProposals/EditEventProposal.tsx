@@ -6,9 +6,10 @@ import EventProposalForm from './EventProposalForm';
 import usePageTitle from '../usePageTitle';
 import { EventProposalQueryDocument } from './queries.generated';
 import { Route } from './+types/EditEventProposal';
+import { apolloClientContext } from 'AppContexts';
 
 export async function loader({ params: { id }, context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({
+  const { data } = await context.get(apolloClientContext).query({
     query: EventProposalQueryDocument,
     variables: { eventProposalId: id },
   });

@@ -7,9 +7,10 @@ import { OrderFormProductQueryDocument } from './queries.generated';
 import { UserPricingStructureDescription } from './describePricingStructure';
 import { parseCmsContent } from 'parseCmsContent';
 import { Route } from './+types/ProductPage';
+import { apolloClientContext } from 'AppContexts';
 
 export async function loader({ params: { id }, context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({
+  const { data } = await context.get(apolloClientContext).query({
     query: OrderFormProductQueryDocument,
     variables: { productId: id ?? '' },
   });

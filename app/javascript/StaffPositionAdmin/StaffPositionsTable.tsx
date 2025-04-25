@@ -15,6 +15,7 @@ import { DropdownMenu } from '../UIComponents/DropdownMenu';
 import { StaffPositionsQueryData, StaffPositionsQueryDocument } from './queries.generated';
 import { PolymorphicPermission } from '../Permissions/PermissionUtils';
 import { Route } from './+types/StaffPositionsTable';
+import { apolloClientContext } from 'AppContexts';
 
 type UserConProfilesListProps = {
   userConProfiles: StaffPositionsQueryData['convention']['staff_positions'][0]['user_con_profiles'];
@@ -149,7 +150,9 @@ function PermissionsDescription({ permissions }: PermissionsDescriptionProps) {
 }
 
 export async function loader({ context }: Route.LoaderArgs) {
-  const { data } = await context.client.query<StaffPositionsQueryData>({ query: StaffPositionsQueryDocument });
+  const { data } = await context
+    .get(apolloClientContext)
+    .query<StaffPositionsQueryData>({ query: StaffPositionsQueryDocument });
   return data;
 }
 

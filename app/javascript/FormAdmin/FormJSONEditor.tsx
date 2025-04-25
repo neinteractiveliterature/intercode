@@ -16,6 +16,7 @@ import { FormAdminQueryDocument } from './queries.generated';
 import { FormType } from '../graphqlTypes.generated';
 import { CreateFormWithJsonDocument, UpdateFormWithJsonDocument } from './mutations.generated';
 import { Route } from './+types/FormJSONEditor';
+import { apolloClientContext } from 'AppContexts';
 
 function parseFormData(formData: FormData) {
   const formJSON = JSON.stringify({
@@ -36,7 +37,7 @@ export async function action({ request, params, context }: Route.ActionArgs) {
       }
       const formJSON = parseFormData(await request.formData());
 
-      await context.client.mutate({
+      await context.get(apolloClientContext).mutate({
         mutation: CreateFormWithJsonDocument,
         variables: { formType, formJSON },
         refetchQueries: [{ query: FormAdminQueryDocument }],
@@ -47,7 +48,7 @@ export async function action({ request, params, context }: Route.ActionArgs) {
       const id = params.id;
 
       const formJSON = parseFormData(await request.formData());
-      await context.client.mutate({
+      await context.get(apolloClientContext).mutate({
         mutation: UpdateFormWithJsonDocument,
         variables: { id, formJSON },
         refetchQueries: [{ query: FormAdminQueryDocument }],
@@ -82,7 +83,7 @@ function formDataFromJSON(json: string): EditingFormJSONData {
 }
 
 export async function loader({ params: { id }, context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({ query: FormAdminQueryDocument });
+  const { data } = await context.get(apolloClientContext).query({ query: FormAdminQueryDocument });
   const initialForm = data.convention.forms.find((form) => form.id === id);
   if (!initialForm) {
     throw new Response(null, { status: 404 });

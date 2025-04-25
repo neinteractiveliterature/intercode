@@ -12,6 +12,7 @@ import { ConventionAdminConventionQueryData, ConventionAdminConventionQueryDocum
 import { ConventionInput } from '../graphqlTypes.generated';
 import { UpdateConventionDocument } from './mutations.generated';
 import { Route } from './+types/index';
+import { apolloClientContext } from 'AppContexts';
 
 export const action = async ({ request, context }: Route.ActionArgs) => {
   try {
@@ -54,7 +55,7 @@ export const action = async ({ request, context }: Route.ActionArgs) => {
       ...(openGraphImage == null ? {} : { openGraphImage }),
     };
 
-    await context.client.mutate({
+    await context.get(apolloClientContext).mutate({
       mutation: UpdateConventionDocument,
       variables: {
         input: {
@@ -66,12 +67,12 @@ export const action = async ({ request, context }: Route.ActionArgs) => {
     return error;
   }
 
-  await context.client.resetStore();
+  await context.get(apolloClientContext).resetStore();
   return redirect('/');
 };
 
 export const loader = async ({ context }: Route.LoaderArgs) => {
-  const { data } = await context.client.query<ConventionAdminConventionQueryData>({
+  const { data } = await context.get(apolloClientContext).query<ConventionAdminConventionQueryData>({
     query: ConventionAdminConventionQueryDocument,
   });
   return data;

@@ -4,12 +4,13 @@ import EditOrderModal from './EditOrderModal';
 import { AdminUpdateOrderDocument } from './mutations.generated';
 import { AdminOrderQueryDocument } from './queries.generated';
 import { Route } from './+types/$id';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ params: { id }, request, context }: Route.ActionArgs) {
   try {
     if (request.method === 'PATCH') {
       const order = (await request.json()) as OrderInput;
-      const result = await context.client.mutate({
+      const result = await context.get(apolloClientContext).mutate({
         mutation: AdminUpdateOrderDocument,
         variables: { id, order },
       });
@@ -23,7 +24,7 @@ export async function action({ params: { id }, request, context }: Route.ActionA
 }
 
 export async function loader({ params: { id }, context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({
+  const { data } = await context.get(apolloClientContext).query({
     query: AdminOrderQueryDocument,
     variables: { id },
   });

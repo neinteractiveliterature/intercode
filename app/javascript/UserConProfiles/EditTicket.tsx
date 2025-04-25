@@ -9,6 +9,7 @@ import { UpdateTicketDocument } from './mutations.generated';
 import { ApolloError } from '@apollo/client';
 import { Route } from './+types/EditTicket';
 import { useUserConProfileLoaderData } from './userConProfileLoader';
+import { apolloClientContext } from 'AppContexts';
 
 type ActionInput = {
   ticketId: string;
@@ -18,7 +19,7 @@ type ActionInput = {
 export async function action({ request, params: { id }, context }: Route.ActionArgs) {
   try {
     const { ticketId, ticketInput } = (await request.json()) as ActionInput;
-    await context.client.mutate({
+    await context.get(apolloClientContext).mutate({
       mutation: UpdateTicketDocument,
       variables: { id: ticketId, ticket: ticketInput },
     });

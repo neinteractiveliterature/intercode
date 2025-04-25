@@ -1,9 +1,10 @@
+import { apolloClientContext } from 'AppContexts';
 import { Route } from './+types/route';
 import { AdminTicketTypesQueryDocument } from './queries.generated';
 import TicketTypesList from './TicketTypesList';
 
 export async function loader({ context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({ query: AdminTicketTypesQueryDocument });
+  const { data } = await context.get(apolloClientContext).query({ query: AdminTicketTypesQueryDocument });
   return { parent: data.convention, ticketTypes: data.convention.ticket_types };
 }
 

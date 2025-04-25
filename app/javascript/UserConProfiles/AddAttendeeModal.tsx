@@ -11,12 +11,13 @@ import { FormResponse } from '../FormPresenter/useFormResponse';
 import AppRootContext from 'AppRootContext';
 import { CreateUserConProfileDocument, CreateUserConProfileMutationVariables } from './mutations.generated';
 import { Route } from './+types/AddAttendeeModal';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ request, context }: Route.ActionArgs) {
   try {
     const variables = (await request.json()) as CreateUserConProfileMutationVariables;
-    await context.client.mutate({ mutation: CreateUserConProfileDocument, variables });
-    await context.client.resetStore();
+    await context.get(apolloClientContext).mutate({ mutation: CreateUserConProfileDocument, variables });
+    await context.get(apolloClientContext).resetStore();
     return redirect('..');
   } catch (error) {
     return error;

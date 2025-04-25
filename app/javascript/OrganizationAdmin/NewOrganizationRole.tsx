@@ -9,6 +9,7 @@ import { Organization } from 'graphqlTypes.generated';
 import { ApolloError } from '@apollo/client';
 import { Route } from './+types/NewOrganizationRole';
 import { useOrganizationLoaderData } from './$id';
+import { apolloClientContext } from 'AppContexts';
 
 type ActionRequest = Omit<CreateOrganizationRoleMutationVariables, 'organizationId'>;
 
@@ -17,7 +18,7 @@ export async function action({ request, params: { id }, context }: Route.ActionA
     if (request.method === 'POST') {
       const variables = (await request.json()) as ActionRequest;
 
-      await context.client.mutate({
+      await context.get(apolloClientContext).mutate({
         mutation: CreateOrganizationRoleDocument,
         variables: {
           organizationId: id,

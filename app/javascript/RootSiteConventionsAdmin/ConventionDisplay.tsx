@@ -7,12 +7,13 @@ import humanize from '../humanize';
 import { ConventionDisplayQueryDocument } from './queries.generated';
 import { SetConventionCanceledDocument } from './mutations.generated';
 import { Route } from './+types/ConventionDisplay';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ params: { id }, request, context }: Route.ActionArgs) {
   try {
     const formData = await request.formData();
     const canceled = formData.get('canceled')?.toString() === 'true';
-    const result = await context.client.mutate({
+    const result = await context.get(apolloClientContext).mutate({
       mutation: SetConventionCanceledDocument,
       variables: { id, canceled },
     });
@@ -23,7 +24,7 @@ export async function action({ params: { id }, request, context }: Route.ActionA
 }
 
 export async function loader({ params: { id }, context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({
+  const { data } = await context.get(apolloClientContext).query({
     query: ConventionDisplayQueryDocument,
     variables: { id },
   });

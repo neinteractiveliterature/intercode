@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { NotificationsConfigQueryData, NotificationsConfigQueryDocument } from './queries.generated';
 import sortBy from 'lodash/sortBy';
 import { Route } from './+types/NotificationAdminIndex';
+import { apolloClientContext } from 'AppContexts';
 
 type NotificationPreviewModalProps = {
   visible: boolean;
@@ -77,7 +78,7 @@ function NotificationPreviewModal({ visible, close, eventConfig }: NotificationP
 }
 
 export async function loader({ context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({ query: NotificationsConfigQueryDocument });
+  const { data } = await context.get(apolloClientContext).query({ query: NotificationsConfigQueryDocument });
   return data;
 }
 

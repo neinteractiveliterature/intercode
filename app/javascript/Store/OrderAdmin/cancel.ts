@@ -1,6 +1,7 @@
 import { data } from 'react-router';
 import { CancelOrderDocument } from './mutations.generated';
 import { Route } from './+types/cancel';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ params: { id }, request, context }: Route.ActionArgs) {
   try {
@@ -8,7 +9,7 @@ export async function action({ params: { id }, request, context }: Route.ActionA
       const formData = await request.formData();
       const skipRefund = formData.get('skip_refund')?.toString() === 'true';
 
-      const result = await context.client.mutate({
+      const result = await context.get(apolloClientContext).mutate({
         mutation: CancelOrderDocument,
         variables: { orderId: id, skipRefund },
       });

@@ -12,13 +12,14 @@ import { CouponInput } from 'graphqlTypes.generated';
 import { redirect } from 'react-router';
 import { Link, useFetcher } from 'react-router';
 import { Route } from './+types/NewCouponModal';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ request, context }: Route.ActionArgs) {
   try {
     if (request.method === 'POST') {
       const coupon = (await request.json()) as CouponInput;
-      await context.client.mutate({ mutation: CreateCouponDocument, variables: { coupon } });
-      await context.client.resetStore();
+      await context.get(apolloClientContext).mutate({ mutation: CreateCouponDocument, variables: { coupon } });
+      await context.get(apolloClientContext).resetStore();
       return redirect('..');
     } else {
       return new Response(null, { status: 404 });

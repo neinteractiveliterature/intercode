@@ -50,7 +50,7 @@ Doorkeeper.configure do
   # `scopes` - the requested scopes (see Doorkeeper::OAuth::Scopes)
   #
   # custom_access_token_expires_in do |context|
-  #   context.client.application.additional_settings.implicit_oauth_expiration
+  #   context.get(apolloClientContext).application.additional_settings.implicit_oauth_expiration
   # end
 
   # Use a custom class for generating the access token.

@@ -10,12 +10,13 @@ import 'graphiql/graphiql.css';
 import { CreateCmsGraphqlQueryDocument } from './mutations.generated';
 import { buildCmsGraphqlQueryInputFromFormData } from './buildCmsGraphqlQueryInput';
 import { Route } from './+types/NewCmsGraphqlQuery';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ request, context }: Route.ActionArgs) {
   const formData = await request.formData();
 
   try {
-    await context.client.mutate({
+    await context.get(apolloClientContext).mutate({
       mutation: CreateCmsGraphqlQueryDocument,
       variables: {
         query: buildCmsGraphqlQueryInputFromFormData(formData),
@@ -24,7 +25,7 @@ export async function action({ request, context }: Route.ActionArgs) {
   } catch (e) {
     return e;
   }
-  await context.client.resetStore();
+  await context.get(apolloClientContext).resetStore();
 
   return redirect('/cms_graphql_queries');
 }

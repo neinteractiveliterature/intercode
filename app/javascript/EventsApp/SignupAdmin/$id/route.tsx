@@ -18,6 +18,7 @@ import { getSignupStateLabel } from '../../../Tables/SignupStateCell';
 import humanize from '../../../humanize';
 import { Route, Info } from './+types/route';
 import { NamedRoute } from 'routes';
+import { apolloClientContext } from 'AppContexts';
 
 function cityState(userConProfile: SignupFieldsFragment['user_con_profile']) {
   return [userConProfile.city, userConProfile.state].filter((item) => item && item.trim() !== '').join(', ');
@@ -95,7 +96,7 @@ export type EditSignupProps = {
 };
 
 export const loader = async ({ context, params: { id } }: Route.LoaderArgs) => {
-  const client = context!.client;
+  const client = context.get(apolloClientContext);
   const { data } = await client.query({
     query: AdminSignupQueryDocument,
     variables: { id: id ?? '' },
@@ -104,7 +105,7 @@ export const loader = async ({ context, params: { id } }: Route.LoaderArgs) => {
 };
 
 export const action = async ({ context, request, params: { id } }: Route.ActionArgs) => {
-  const client = context.client;
+  const client = context.get(apolloClientContext);
   const formData = await request.formData();
   const result = await client.mutate({
     mutation: UpdateSignupCountedDocument,

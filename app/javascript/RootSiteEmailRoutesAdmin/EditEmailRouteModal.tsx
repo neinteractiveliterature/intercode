@@ -11,19 +11,20 @@ import { DeleteEmailRouteDocument, UpdateEmailRouteDocument } from './mutations.
 import { EmailRouteInput } from 'graphqlTypes.generated';
 import { Link, useFetcher } from 'react-router';
 import { Route } from './+types/EditEmailRouteModal';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ params: { id }, request, context }: Route.ActionArgs) {
   try {
     if (request.method === 'DELETE') {
-      await context.client.mutate({
+      await context.get(apolloClientContext).mutate({
         mutation: DeleteEmailRouteDocument,
         variables: { id },
       });
-      await context.client.resetStore();
+      await context.get(apolloClientContext).resetStore();
       return redirect('..');
     } else if (request.method === 'PATCH') {
       const emailRoute = (await request.json()) as EmailRouteInput;
-      await context.client.mutate({
+      await context.get(apolloClientContext).mutate({
         mutation: UpdateEmailRouteDocument,
         variables: { id, emailRoute },
       });
@@ -37,7 +38,9 @@ export async function action({ params: { id }, request, context }: Route.ActionA
 }
 
 export async function loader({ params: { id }, context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({ query: RootSiteSingleEmailRouteQueryDocument, variables: { id } });
+  const { data } = await context
+    .get(apolloClientContext)
+    .query({ query: RootSiteSingleEmailRouteQueryDocument, variables: { id } });
   return data;
 }
 

@@ -2,9 +2,12 @@ import CmsPageForm from './CmsPageForm';
 import usePageTitle from '../../usePageTitle';
 import { Route } from './+types/ViewCmsPageSource';
 import { CmsPageAdminQueryDocument } from './queries.generated';
+import { apolloClientContext } from 'AppContexts';
 
 export async function loader({ context, params: { id } }: Route.LoaderArgs) {
-  const { data } = await context.client.query({ query: CmsPageAdminQueryDocument, variables: { id } });
+  const { data } = await context
+    .get(apolloClientContext)
+    .query({ query: CmsPageAdminQueryDocument, variables: { id } });
   return data;
 }
 

@@ -11,12 +11,13 @@ import { CmsContentGroupAdminQueryDocument, CmsContentGroupsAdminQueryData } fro
 import { CmsContentTypeIndicator } from '../../graphqlTypes.generated';
 import { UpdateContentGroupDocument, UpdateContentGroupMutationVariables } from './mutations.generated';
 import { Route } from './+types/EditCmsContentGroup';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ params: { id }, request, context }: Route.ActionArgs) {
   const variables = (await request.json()) as Omit<UpdateContentGroupMutationVariables, 'id'>;
 
   try {
-    await context.client.mutate({
+    await context.get(apolloClientContext).mutate({
       mutation: UpdateContentGroupDocument,
       variables: {
         id: id ?? '',
@@ -26,13 +27,15 @@ export async function action({ params: { id }, request, context }: Route.ActionA
   } catch (e) {
     return e;
   }
-  await context.client.resetStore();
+  await context.get(apolloClientContext).resetStore();
 
   return redirect('/cms_content_groups');
 }
 
 export async function loader({ context, params: { id } }: Route.LoaderArgs) {
-  const { data } = await context.client.query({ query: CmsContentGroupAdminQueryDocument, variables: { id } });
+  const { data } = await context
+    .get(apolloClientContext)
+    .query({ query: CmsContentGroupAdminQueryDocument, variables: { id } });
   return data;
 }
 

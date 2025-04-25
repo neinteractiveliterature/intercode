@@ -7,6 +7,7 @@ import { i18n } from '../setupI18Next';
 import { CreateSignupRoundDocument } from './mutations.generated';
 import { SignupRoundsAdminQueryDocument } from './queries.generated';
 import { Route } from './+types/index';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ request, context }: Route.ActionArgs) {
   if (request.method === 'POST') {
@@ -17,7 +18,7 @@ export async function action({ request, context }: Route.ActionArgs) {
         throw new Error(i18n.t('signups.signupRounds.errors.startTimeRequired'));
       }
 
-      const result = await context.client.mutate({
+      const result = await context.get(apolloClientContext).mutate({
         mutation: CreateSignupRoundDocument,
         variables: {
           conventionId: formData.get('convention_id')?.toString() ?? '',

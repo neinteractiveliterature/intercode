@@ -13,6 +13,8 @@ import getI18n from '../setupI18Next';
 import { getConventionDayTimespans } from '../TimespanUtils';
 import { AppLoadContext, replace } from 'react-router';
 import mapValues from 'lodash/mapValues';
+import { unstable_RouterContextProvider } from 'react-router';
+import { apolloClientContext } from 'AppContexts';
 
 function conventionDayUrlPortionFormat(
   siteMode: SiteMode | undefined,
@@ -83,9 +85,9 @@ export async function conventionDayLoader({
 }: {
   params: { day?: string };
   request: Request;
-  context?: AppLoadContext;
+  context: unstable_RouterContextProvider;
 }) {
-  const client = context!.client;
+  const client = context.get(apolloClientContext);
   const { data } = await client.query<AppRootQueryData>({ query: AppRootQueryDocument });
   const { conventionTimespan, timezoneName, siteMode } = buildAppRootContextValue(data, { current: null });
   const { t } = await getI18n();

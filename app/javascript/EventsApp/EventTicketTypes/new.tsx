@@ -5,11 +5,12 @@ import { Event } from 'graphqlTypes.generated';
 import { replace } from 'react-router';
 import { loader as layoutLoader } from './route';
 import NewTicketType from 'TicketTypeAdmin/NewTicketType';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ context, request, params: { eventId } }: Route.ActionArgs) {
   try {
     const { ticketType } = await request.json();
-    await context.client.mutate({
+    await context.get(apolloClientContext).mutate({
       mutation: CreateTicketTypeDocument,
       variables: {
         input: { ticket_type: ticketType, eventId },

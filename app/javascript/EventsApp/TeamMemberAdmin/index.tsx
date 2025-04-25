@@ -7,9 +7,10 @@ import { Route } from './+types/index';
 import { TeamMembersQueryDocument } from './queries.generated';
 import { NamedRoute } from 'routes';
 import capitalize from 'lodash/capitalize';
+import { apolloClientContext } from 'AppContexts';
 
 export async function loader({ params: { eventId }, context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({
+  const { data } = await context.get(apolloClientContext).query({
     query: TeamMembersQueryDocument,
     variables: { eventId: eventId ?? '' },
   });

@@ -7,11 +7,12 @@ import { CreateRunDocument } from './mutations.generated';
 import { buildRunInputFromFormData } from './buildRunInputFromFormData';
 import { Event } from '../graphqlTypes.generated';
 import { Route } from './+types/NewRun';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ params: { eventCategoryId, eventId }, request, context }: Route.ActionArgs) {
   try {
     const formData = await request.formData();
-    await context.client.mutate({
+    await context.get(apolloClientContext).mutate({
       mutation: CreateRunDocument,
       variables: {
         input: {
@@ -49,7 +50,7 @@ const initialRun: EditingRun = {
 };
 
 export async function loader({ params: { eventId }, context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({ query: NewRunQueryDocument, variables: { eventId } });
+  const { data } = await context.get(apolloClientContext).query({ query: NewRunQueryDocument, variables: { eventId } });
   const convention = data.convention;
   const event = convention.event;
 

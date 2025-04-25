@@ -3,9 +3,10 @@ import usePageTitle from '../usePageTitle';
 import { SignupCountsByStateQueryDocument } from './queries.generated';
 import { SignupState } from '../graphqlTypes.generated';
 import { Route } from './+types/SignupSpy';
+import { apolloClientContext } from 'AppContexts';
 
 export async function loader({ context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({ query: SignupCountsByStateQueryDocument });
+  const { data } = await context.get(apolloClientContext).query({ query: SignupCountsByStateQueryDocument });
   return data;
 }
 

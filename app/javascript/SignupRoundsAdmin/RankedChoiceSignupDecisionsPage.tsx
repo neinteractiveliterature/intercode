@@ -25,6 +25,7 @@ import { TFunction } from 'i18next';
 import assertNever from 'assert-never';
 import { FilterCodecs, buildFieldFilterCodecs } from '../Tables/FilterUtils';
 import { Route } from './+types/RankedChoiceSignupDecisionsPage';
+import { apolloClientContext } from 'AppContexts';
 
 export function describeDecision(decision: RankedChoiceDecisionValue, t: TFunction): string {
   if (decision === RankedChoiceDecisionValue.Signup) {
@@ -241,7 +242,7 @@ function RankedChoiceSignupDecisionsTable({ signupRoundId }: RankedChoiceSignupD
 }
 
 export async function loader({ context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({ query: SignupRoundsAdminQueryDocument });
+  const { data } = await context.get(apolloClientContext).query({ query: SignupRoundsAdminQueryDocument });
   return data;
 }
 

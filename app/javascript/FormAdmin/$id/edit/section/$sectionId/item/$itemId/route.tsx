@@ -23,12 +23,13 @@ import { FormItem } from 'graphqlTypes.generated';
 import FormItemEditorContent from './FormItemEditorContent';
 import styles from 'styles/form_editor.module.scss';
 import { Route } from './+types/route';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ request, params: { id, sectionId, itemId }, context }: Route.ActionArgs) {
   try {
     if (request.method === 'PATCH') {
       const json = await request.json();
-      await context.client.mutate({
+      await context.get(apolloClientContext).mutate({
         mutation: UpdateFormItemDocument,
         variables: {
           id: itemId,
@@ -37,7 +38,7 @@ export async function action({ request, params: { id, sectionId, itemId }, conte
       });
       return redirect(`/admin_forms/${id}/edit/section/${sectionId}`);
     } else if (request.method === 'DELETE') {
-      await context.client.mutate({
+      await context.get(apolloClientContext).mutate({
         mutation: DeleteFormItemDocument,
         variables: {
           id: itemId,

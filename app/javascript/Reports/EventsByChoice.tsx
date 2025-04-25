@@ -11,6 +11,7 @@ import { titleSort } from '@neinteractiveliterature/litform';
 import usePageTitle from '../usePageTitle';
 import { EventsByChoiceQueryDocument } from './queries.generated';
 import { Route } from './+types/EventsByChoice';
+import { apolloClientContext } from 'AppContexts';
 
 type ProcessedChoiceCount = {
   confirmed?: number;
@@ -36,7 +37,7 @@ function renderChoiceCounts(choiceData: ProcessedChoiceCount) {
 }
 
 export async function loader({ context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({ query: EventsByChoiceQueryDocument });
+  const { data } = await context.get(apolloClientContext).query({ query: EventsByChoiceQueryDocument });
   return data;
 }
 

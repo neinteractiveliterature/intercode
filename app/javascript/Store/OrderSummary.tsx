@@ -5,6 +5,7 @@ import { OrderQuantityByStatus, OrderStatus } from '../graphqlTypes.generated';
 import { OrderSummaryQueryData, OrderSummaryQueryDocument } from './queries.generated';
 import humanize from '../humanize';
 import { Route } from './+types/OrderSummary';
+import { apolloClientContext } from 'AppContexts';
 
 const ORDER_STATUSES = [OrderStatus.Paid, OrderStatus.Unpaid, OrderStatus.Cancelled];
 
@@ -27,7 +28,7 @@ function statusClass(status: OrderStatus) {
 }
 
 export async function loader({ context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({ query: OrderSummaryQueryDocument });
+  const { data } = await context.get(apolloClientContext).query({ query: OrderSummaryQueryDocument });
   return data;
 }
 

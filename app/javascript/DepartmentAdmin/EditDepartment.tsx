@@ -8,11 +8,12 @@ import { DepartmentAdminQueryDocument } from './queries.generated';
 import { useTranslation } from 'react-i18next';
 import { Route } from './+types/EditDepartment';
 import { loader as routeLoader } from './route';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ params: { id }, request, context }: Route.ActionArgs) {
   try {
     const formData = await request.formData();
-    await context.client.mutate({
+    await context.get(apolloClientContext).mutate({
       mutation: UpdateDepartmentDocument,
       variables: {
         id,

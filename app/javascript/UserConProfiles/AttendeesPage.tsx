@@ -4,9 +4,10 @@ import UserConProfilesTable from './UserConProfilesTable';
 import { Outlet, useLoaderData } from 'react-router';
 import { AttendeesPageQueryData, AttendeesPageQueryDocument } from './queries.generated';
 import { Route } from './+types/AttendeesPage';
+import { apolloClientContext } from 'AppContexts';
 
 export async function loader({ context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({ query: AttendeesPageQueryDocument });
+  const { data } = await context.get(apolloClientContext).query({ query: AttendeesPageQueryDocument });
   return data;
 }
 

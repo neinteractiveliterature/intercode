@@ -2,9 +2,10 @@ import TabbedMailingList from './TabbedMailingList';
 import usePageTitle from '../usePageTitle';
 import { EventProposersQueryDocument } from './queries.generated';
 import { Route } from './+types/EventProposers';
+import { apolloClientContext } from 'AppContexts';
 
 export async function loader({ context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({ query: EventProposersQueryDocument });
+  const { data } = await context.get(apolloClientContext).query({ query: EventProposersQueryDocument });
   return data;
 }
 

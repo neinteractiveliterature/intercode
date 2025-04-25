@@ -6,11 +6,12 @@ import { UpdateRunDocument } from './mutations.generated';
 import { buildRunInputFromFormData } from './buildRunInputFromFormData';
 import { Route } from './+types/EditRun';
 import { EditRunQueryDocument } from './queries.generated';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ params: { eventCategoryId, runId }, request, context }: Route.ActionArgs) {
   try {
     const formData = await request.formData();
-    await context.client.mutate({
+    await context.get(apolloClientContext).mutate({
       mutation: UpdateRunDocument,
       variables: {
         input: {
@@ -28,7 +29,7 @@ export async function action({ params: { eventCategoryId, runId }, request, cont
 export async function loader({ params: { runId }, context }: Route.LoaderArgs) {
   const {
     data: { convention },
-  } = await context.client.query({ query: EditRunQueryDocument, variables: { runId } });
+  } = await context.get(apolloClientContext).query({ query: EditRunQueryDocument, variables: { runId } });
   const initialRun = convention.run as EditingRun;
   const event = convention.run.event;
 

@@ -24,11 +24,12 @@ import { DeleteUserConProfileDocument } from './mutations.generated';
 import { UserConProfile } from 'graphqlTypes.generated';
 import { Route } from './+types/UserConProfileAdminDisplay';
 import { useUserConProfileLoaderData } from './userConProfileLoader';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ request, params: { id }, context }: Route.ActionArgs) {
   try {
     if (request.method === 'DELETE') {
-      await context.client.mutate({
+      await context.get(apolloClientContext).mutate({
         mutation: DeleteUserConProfileDocument,
         variables: { userConProfileId: id },
         update: (cache) => {

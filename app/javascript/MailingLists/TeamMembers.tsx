@@ -2,9 +2,10 @@ import TabbedMailingList from './TabbedMailingList';
 import usePageTitle from '../usePageTitle';
 import { TeamMembersMailingListQueryDocument } from './queries.generated';
 import { Route } from './+types/TeamMembers';
+import { apolloClientContext } from 'AppContexts';
 
 export async function loader({ context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({
+  const { data } = await context.get(apolloClientContext).query({
     query: TeamMembersMailingListQueryDocument,
   });
   return data;

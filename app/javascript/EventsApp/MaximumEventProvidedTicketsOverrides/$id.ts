@@ -4,11 +4,12 @@ import {
   UpdateMaximumEventProvidedTicketsOverrideDocument,
 } from '../../EventAdmin/mutations.generated';
 import { Route } from './+types/$id';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ request, params: { id }, context }: Route.ActionArgs) {
   try {
     if (request.method === 'DELETE') {
-      const result = await context.client.mutate({
+      const result = await context.get(apolloClientContext).mutate({
         mutation: DeleteMaximumEventProvidedTicketsOverrideDocument,
         variables: {
           input: { id: id ?? '' },
@@ -26,7 +27,7 @@ export async function action({ request, params: { id }, context }: Route.ActionA
       return data(result.data);
     } else if (request.method === 'PATCH') {
       const formData = await request.formData();
-      const result = await context.client.mutate({
+      const result = await context.get(apolloClientContext).mutate({
         mutation: UpdateMaximumEventProvidedTicketsOverrideDocument,
         variables: {
           input: {

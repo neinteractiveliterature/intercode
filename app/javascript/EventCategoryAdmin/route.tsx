@@ -8,9 +8,10 @@ import { useContext } from 'react';
 import AppRootContext from 'AppRootContext';
 import { SiteMode } from 'graphqlTypes.generated';
 import FourOhFourPage from 'FourOhFourPage';
+import { apolloClientContext } from 'AppContexts';
 
 export async function loader({ context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({ query: EventCategoryAdminQueryDocument });
+  const { data } = await context.get(apolloClientContext).query({ query: EventCategoryAdminQueryDocument });
   return data;
 }
 

@@ -6,9 +6,10 @@ import ExistingVariableRow from './ExistingVariableRow';
 import usePageTitle from '../../usePageTitle';
 import { CmsVariablesQueryDocument } from './queries.generated';
 import { Route } from './+types/index';
+import { apolloClientContext } from 'AppContexts';
 
 export async function loader({ context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({ query: CmsVariablesQueryDocument });
+  const { data } = await context.get(apolloClientContext).query({ query: CmsVariablesQueryDocument });
   return data;
 }
 

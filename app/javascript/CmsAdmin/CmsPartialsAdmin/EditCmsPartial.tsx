@@ -9,12 +9,13 @@ import usePageTitle from '../../usePageTitle';
 import { UpdatePartialDocument } from './mutations.generated';
 import { Route } from './+types/EditCmsPartial';
 import { CmsPartialAdminQueryDocument } from './queries.generated';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ params: { id }, request, context }: Route.ActionArgs) {
   const formData = await request.formData();
 
   try {
-    await context.client.mutate({
+    await context.get(apolloClientContext).mutate({
       mutation: UpdatePartialDocument,
       variables: {
         id: id ?? '',
@@ -24,13 +25,15 @@ export async function action({ params: { id }, request, context }: Route.ActionA
   } catch (e) {
     return e;
   }
-  await context.client.resetStore();
+  await context.get(apolloClientContext).resetStore();
 
   return redirect(formData.get('destination')?.toString() ?? '/cms_partials');
 }
 
 export async function loader({ context, params: { id } }: Route.LoaderArgs) {
-  const { data } = await context.client.query({ query: CmsPartialAdminQueryDocument, variables: { id } });
+  const { data } = await context
+    .get(apolloClientContext)
+    .query({ query: CmsPartialAdminQueryDocument, variables: { id } });
   return data;
 }
 

@@ -19,12 +19,13 @@ import { AdminProductFieldsFragmentDoc } from 'Store/adminProductFields.generate
 import { parseProductFormData } from 'Store/buildProductInput';
 import { CreateProductDocument } from './mutations.generated';
 import { Route } from './+types/index';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ request, context }: Route.ActionArgs) {
   try {
     if (request.method === 'POST') {
       const product = parseProductFormData(await request.formData());
-      const result = await context.client.mutate({
+      const result = await context.get(apolloClientContext).mutate({
         mutation: CreateProductDocument,
         variables: { product },
         update: (cache, result) => {
@@ -75,7 +76,7 @@ function generateBlankProduct(): EditingProduct {
 }
 
 export async function loader({ context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({ query: AdminProductsQueryDocument });
+  const { data } = await context.get(apolloClientContext).query({ query: AdminProductsQueryDocument });
   return data;
 }
 

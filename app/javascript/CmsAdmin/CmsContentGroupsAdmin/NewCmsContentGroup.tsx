@@ -13,11 +13,12 @@ import { CmsContentTypeIndicator, CreateCmsContentGroupInput } from '../../graph
 import { CreateContentGroupDocument } from './mutations.generated';
 import { useCmsContentGroupsAdminLoader } from './route';
 import { Route } from './+types/NewCmsContentGroup';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ request, context }: Route.ActionArgs) {
   const variables = (await request.json()) as CreateCmsContentGroupInput;
   try {
-    await context.client.mutate({
+    await context.get(apolloClientContext).mutate({
       mutation: CreateContentGroupDocument,
       variables: {
         cmsContentGroup: variables.cms_content_group,
@@ -27,7 +28,7 @@ export async function action({ request, context }: Route.ActionArgs) {
   } catch (e) {
     return e;
   }
-  await context.client.resetStore();
+  await context.get(apolloClientContext).resetStore();
 
   return redirect('/cms_content_groups');
 }

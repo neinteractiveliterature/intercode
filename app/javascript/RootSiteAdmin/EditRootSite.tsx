@@ -10,11 +10,12 @@ import { data, useNavigation } from 'react-router';
 import { Form } from 'react-router';
 import { UpdateRootSiteDocument } from './mutations.generated';
 import { Route } from './+types/EditRootSite';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ request, context }: Route.ActionArgs) {
   try {
     const formData = await request.formData();
-    const result = await context.client.mutate({
+    const result = await context.get(apolloClientContext).mutate({
       mutation: UpdateRootSiteDocument,
       variables: {
         defaultLayoutId: formData.get('default_layout_id')?.toString(),
@@ -40,7 +41,7 @@ function useDirtyState<T>(initialState: T, setDirty: () => void) {
 }
 
 export async function loader({ context }: Route.ActionArgs) {
-  const { data } = await context.client.query({ query: RootSiteAdminQueryDocument });
+  const { data } = await context.get(apolloClientContext).query({ query: RootSiteAdminQueryDocument });
   return data;
 }
 

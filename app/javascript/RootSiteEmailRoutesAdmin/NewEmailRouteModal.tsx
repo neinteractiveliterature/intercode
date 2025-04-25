@@ -12,16 +12,17 @@ import { EmailRouteInput } from 'graphqlTypes.generated';
 import { useTranslation } from 'react-i18next';
 import { useFetcher } from 'react-router';
 import { Route, Info } from './+types/NewEmailRouteModal';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ request, context }: Route.ActionArgs) {
   try {
     if (request.method === 'POST') {
       const emailRoute = (await request.json()) as EmailRouteInput;
-      await context.client.mutate({
+      await context.get(apolloClientContext).mutate({
         mutation: CreateEmailRouteDocument,
         variables: { emailRoute },
       });
-      await context.client.resetStore();
+      await context.get(apolloClientContext).resetStore();
       return redirect('..');
     } else {
       throw new Response(null, { status: 404 });

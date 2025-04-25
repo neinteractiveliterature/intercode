@@ -10,11 +10,12 @@ import { buildEventCategoryFromFormData } from './buildEventCategoryInput';
 import { useTranslation } from 'react-i18next';
 import { Route } from './+types/EditEventCategory';
 import { loader as routeLoader } from './route';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ request, params: { id }, context }: Route.ActionArgs) {
   try {
     const formData = await request.formData();
-    await context.client.mutate({
+    await context.get(apolloClientContext).mutate({
       mutation: UpdateEventCategoryDocument,
       variables: {
         id,

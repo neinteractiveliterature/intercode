@@ -2,9 +2,10 @@ import UserSignupQueue from '../EventsApp/MySignupQueue/UserSignupQueue';
 import UserConProfileSignupsCard from '../EventsApp/SignupAdmin/UserConProfileSignupsCard';
 import { SignupModerationAttendeeRankedChoicesQueryDocument } from './queries.generated';
 import { Route } from './+types/UserRankedChoiceQueue';
+import { apolloClientContext } from 'AppContexts';
 
 export async function loader({ params: { userConProfileId }, context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({
+  const { data } = await context.get(apolloClientContext).query({
     query: SignupModerationAttendeeRankedChoicesQueryDocument,
     variables: { userConProfileId: userConProfileId ?? '' },
   });

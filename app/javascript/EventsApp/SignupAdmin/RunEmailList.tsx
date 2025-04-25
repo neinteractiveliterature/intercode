@@ -9,6 +9,7 @@ import { RunSignupsTableSignupsQueryData, RunSignupsTableSignupsQueryDocument } 
 import humanize from '../../humanize';
 import { Navigate, useParams } from 'react-router';
 import { Route } from './+types/RunEmailList';
+import { apolloClientContext } from 'AppContexts';
 
 function getEmails({ data, includes }: { data: RunSignupsTableSignupsQueryData; includes: string[] }) {
   const teamMemberUserConProfileIds = data.convention.event.team_members.map(
@@ -45,7 +46,7 @@ function getEmails({ data, includes }: { data: RunSignupsTableSignupsQueryData; 
 }
 
 export const loader = async ({ params: { runId, eventId }, context }: Route.LoaderArgs) => {
-  const client = context!.client;
+  const client = context.get(apolloClientContext);
   const { data } = await client.query({
     query: RunSignupsTableSignupsQueryDocument,
     variables: {

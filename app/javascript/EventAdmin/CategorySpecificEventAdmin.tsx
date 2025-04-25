@@ -6,6 +6,7 @@ import SingleRunEventAdminList from './SingleRunEventAdminList';
 import { Route } from './+types/CategorySpecificEventAdmin';
 import { SchedulingUi } from 'graphqlTypes.generated';
 import range from 'lodash/range';
+import { apolloClientContext } from 'AppContexts';
 
 export type CategorySpecificEventAdminComponentProps = { data: Route.ComponentProps['loaderData'] };
 
@@ -24,7 +25,7 @@ export async function loader({ params: { eventCategoryId }, context }: Route.Loa
     throw new Response(null, { status: 404 });
   }
 
-  const { data } = await context.client.query({
+  const { data } = await context.get(apolloClientContext).query({
     query: CategorySpecificEventAdminQueryDocument,
     variables: { eventCategoryId },
   });
@@ -33,7 +34,7 @@ export async function loader({ params: { eventCategoryId }, context }: Route.Loa
     const pagesToFetch = range(2, data.convention.event_category.events_paginated.total_pages + 1);
     const fetchedPages = await Promise.all(
       pagesToFetch.map(async (page) => {
-        const { data } = await context.client.query({
+        const { data } = await context.get(apolloClientContext).query({
           query: CategorySpecificEventAdminQueryDocument,
           variables: { eventCategoryId, page },
         });

@@ -5,11 +5,12 @@ import { redirect } from 'react-router';
 import EditTicketTypeForm from 'TicketTypeAdmin/EditTicketType';
 import { loader as routeLoader } from './route';
 import { findById } from 'findById';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ request, params: { id }, context }: Route.ActionArgs) {
   try {
     const ticketType = (await request.json()) as TicketTypeInput;
-    await context.client.mutate({
+    await context.get(apolloClientContext).mutate({
       mutation: UpdateTicketTypeDocument,
       variables: {
         input: { ticket_type: ticketType, id },

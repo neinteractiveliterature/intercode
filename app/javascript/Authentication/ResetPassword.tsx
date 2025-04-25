@@ -8,12 +8,13 @@ import PasswordConfirmationInput from './PasswordConfirmationInput';
 import PasswordInputWithStrengthCheck from './PasswordInputWithStrengthCheck';
 import { Route } from './+types/ResetPassword';
 import { getBackendBaseUrl } from 'getBackendBaseUrl';
+import { apolloClientContext, authenticityTokensManagerContext, fetchContext } from 'AppContexts';
 
 export async function action({ request, context }: Route.ActionArgs) {
   const formData = await request.formData();
-  const tokens = await context.authenticityTokensManager.getTokens();
+  const tokens = await context.get(authenticityTokensManagerContext).getTokens();
 
-  const response = await context.fetch(new URL('/users/password', getBackendBaseUrl()), {
+  const response = await context.get(fetchContext)(new URL('/users/password', getBackendBaseUrl()), {
     method: 'PUT',
     body: formData,
     credentials: 'include',
@@ -28,7 +29,7 @@ export async function action({ request, context }: Route.ActionArgs) {
     return new Error((await response.json()).error);
   }
 
-  await context.client.resetStore();
+  await context.get(apolloClientContext).resetStore();
 
   return redirect('/');
 }

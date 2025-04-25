@@ -11,9 +11,10 @@ import { EventAdminSingleEventQueryDocument } from './queries.generated';
 import { ImageAttachmentConfig } from '../BuiltInFormControls/MarkdownInput';
 import { UpdateEventOptions } from './$id';
 import { Route } from './+types/EventAdminEditEvent';
+import { apolloClientContext } from 'AppContexts';
 
 export async function loader({ params: { eventId }, context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({
+  const { data } = await context.get(apolloClientContext).query({
     query: EventAdminSingleEventQueryDocument,
     variables: { eventId: eventId ?? '' },
   });

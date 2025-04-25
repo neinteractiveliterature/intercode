@@ -8,12 +8,13 @@ import CmsPartialForm, { CmsPartialFormFields } from './CmsPartialForm';
 import usePageTitle from '../../usePageTitle';
 import { CreatePartialDocument } from './mutations.generated';
 import { Route } from './+types/NewCmsPartial';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ request, context }: Route.ActionArgs) {
   const formData = await request.formData();
 
   try {
-    await context.client.mutate({
+    await context.get(apolloClientContext).mutate({
       mutation: CreatePartialDocument,
       variables: {
         cmsPartial: buildPartialInputFromFormData(formData),
@@ -22,7 +23,7 @@ export async function action({ request, context }: Route.ActionArgs) {
   } catch (e) {
     return e;
   }
-  await context.client.resetStore();
+  await context.get(apolloClientContext).resetStore();
 
   return redirect('/cms_partials');
 }

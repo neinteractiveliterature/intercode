@@ -1,14 +1,15 @@
 import { redirect } from 'react-router';
 import { DeleteContentGroupDocument } from './mutations.generated';
 import { Route } from './+types/SingleCmsContentGroupRoute';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ request, params: { id }, context }: Route.ActionArgs) {
   if (request.method === 'DELETE') {
-    await context.client.mutate({
+    await context.get(apolloClientContext).mutate({
       mutation: DeleteContentGroupDocument,
       variables: { id },
     });
-    await context.client.resetStore();
+    await context.get(apolloClientContext).resetStore();
 
     return redirect('/cms_content_groups');
   }

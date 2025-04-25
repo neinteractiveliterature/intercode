@@ -4,9 +4,10 @@ import usePageTitle from '../usePageTitle';
 import { useSubmit } from 'react-router';
 import { Route } from './+types/DroppedEventAdmin';
 import { DroppedEventsAdminQueryDocument } from './queries.generated';
+import { apolloClientContext } from 'AppContexts';
 
 export async function loader({ context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({ query: DroppedEventsAdminQueryDocument });
+  const { data } = await context.get(apolloClientContext).query({ query: DroppedEventsAdminQueryDocument });
   return data;
 }
 

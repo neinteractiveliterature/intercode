@@ -10,11 +10,12 @@ import { StaffPositionsQueryDocument } from './queries.generated';
 import { UpdateStaffPositionDocument } from './mutations.generated';
 import { StaffPositionInput } from 'graphqlTypes.generated';
 import { Route } from './+types/EditStaffPosition';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ params: { id }, request, context }: Route.ActionArgs) {
   try {
     const staffPosition = (await request.json()) as StaffPositionInput;
-    await context.client.mutate({
+    await context.get(apolloClientContext).mutate({
       mutation: UpdateStaffPositionDocument,
       variables: { input: { id, staff_position: staffPosition } },
     });
@@ -25,7 +26,7 @@ export async function action({ params: { id }, request, context }: Route.ActionA
 }
 
 export async function loader({ params: { id }, context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({ query: StaffPositionsQueryDocument });
+  const { data } = await context.get(apolloClientContext).query({ query: StaffPositionsQueryDocument });
   const initialStaffPosition = data.convention.staff_positions.find((staffPosition) => staffPosition.id === id);
   if (!initialStaffPosition) {
     throw new Response(null, { status: 404 });

@@ -7,6 +7,7 @@ import BreadcrumbItem from '../../Breadcrumbs/BreadcrumbItem';
 import { EventHistoryQueryDocument } from './eventHistoryQuery.generated';
 import buildEventUrl from '../buildEventUrl';
 import { Route } from './+types/EventHistory';
+import { apolloClientContext } from 'AppContexts';
 
 const EXCLUDE_FIELDS = new Set([
   'minimum_age',
@@ -17,7 +18,7 @@ const EXCLUDE_FIELDS = new Set([
 ]);
 
 export const loader = async ({ params: { eventId }, context }: Route.LoaderArgs) => {
-  const { data } = await context.client.query({
+  const { data } = await context.get(apolloClientContext).query({
     query: EventHistoryQueryDocument,
     variables: { id: eventId ?? '' },
   });

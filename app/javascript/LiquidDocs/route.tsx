@@ -14,6 +14,7 @@ import { NamedRoute } from '../routes';
 import findLiquidTagName from './findLiquidTagName';
 import { NotificationEventKey } from 'graphqlTypes.generated';
 import { Route } from './+types/route';
+import { apolloClientContext } from 'AppContexts';
 
 export type LiquidDocsLoaderResultCommonFields = {
   assigns: Record<string, LiquidAssignsQueryData['cmsParent']['liquidAssigns'][number]>;
@@ -58,7 +59,7 @@ export async function loader({ request, context }: Route.LoaderArgs): Promise<Li
 
   if (notifierEventKey == null) {
     const [{ data }, docData] = await Promise.all([
-      context.client.query<LiquidAssignsQueryData, LiquidAssignsQueryVariables>({
+      context.get(apolloClientContext).query<LiquidAssignsQueryData, LiquidAssignsQueryVariables>({
         query: LiquidAssignsQueryDocument,
       }),
       loadDocData(),
@@ -66,7 +67,7 @@ export async function loader({ request, context }: Route.LoaderArgs): Promise<Li
     return { notifierEventKey, ...extractCommonFields(data, docData) } satisfies GlobalLiquidDocsLoaderResult;
   } else {
     const [{ data }, docData] = await Promise.all([
-      context.client.query<NotifierLiquidAssignsQueryData, NotifierLiquidAssignsQueryVariables>({
+      context.get(apolloClientContext).query<NotifierLiquidAssignsQueryData, NotifierLiquidAssignsQueryVariables>({
         query: NotifierLiquidAssignsQueryDocument,
         variables: { eventKey: notifierEventKey as NotificationEventKey },
       }),

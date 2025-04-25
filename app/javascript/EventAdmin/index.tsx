@@ -10,9 +10,10 @@ import humanize from '../humanize';
 import { Route } from './+types/index';
 import { EventAdminRootQueryDocument } from './queries.generated';
 import { NamedRoute } from 'routes';
+import { apolloClientContext } from 'AppContexts';
 
 export async function loader({ context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({ query: EventAdminRootQueryDocument });
+  const { data } = await context.get(apolloClientContext).query({ query: EventAdminRootQueryDocument });
   return data;
 }
 

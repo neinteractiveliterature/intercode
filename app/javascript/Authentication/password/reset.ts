@@ -2,6 +2,7 @@ import { data } from 'react-router';
 import { Route } from './+types/reset';
 import { getBackendBaseUrl } from 'getBackendBaseUrl';
 import humanize from 'humanize';
+import { apolloClientContext, authenticityTokensManagerContext, fetchContext } from 'AppContexts';
 
 function parseRailsErrorHash(errors: Record<string, string[]> | undefined) {
   if (!errors) {
@@ -15,9 +16,9 @@ function parseRailsErrorHash(errors: Record<string, string[]> | undefined) {
 
 export async function action({ request, context }: Route.ActionArgs) {
   const formData = await request.formData();
-  const tokens = await context.authenticityTokensManager.getTokens();
+  const tokens = await context.get(authenticityTokensManagerContext).getTokens();
 
-  const response = await context.fetch(new URL('/users/password', getBackendBaseUrl()), {
+  const response = await context.get(fetchContext)(new URL('/users/password', getBackendBaseUrl()), {
     method: 'POST',
     body: formData,
     credentials: 'include',
@@ -33,7 +34,7 @@ export async function action({ request, context }: Route.ActionArgs) {
     throw new Error(responseJson.error ?? parseRailsErrorHash(responseJson.errors) ?? response.statusText);
   }
 
-  await context.client.resetStore();
+  await context.get(apolloClientContext).resetStore();
 
   return data(responseJson);
 }

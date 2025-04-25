@@ -2,11 +2,12 @@ import { StaffPosition } from 'graphqlTypes.generated';
 import { data } from 'react-router';
 import { DeleteStaffPositionDocument } from 'StaffPositionAdmin/mutations.generated';
 import { Route } from './+types/route';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ request, params: { id }, context }: Route.ActionArgs) {
   try {
     if (request.method === 'DELETE') {
-      const result = await context.client.mutate({
+      const result = await context.get(apolloClientContext).mutate({
         mutation: DeleteStaffPositionDocument,
         variables: { input: { id } },
         update: (cache) => {

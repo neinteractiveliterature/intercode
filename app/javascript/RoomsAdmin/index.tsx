@@ -11,12 +11,13 @@ import { useTranslation } from 'react-i18next';
 import { useSubmit } from 'react-router';
 import { CreateRoomDocument } from './mutations.generated';
 import { Route } from './+types/index';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ request, context }: Route.ActionArgs) {
   try {
     if (request.method === 'POST') {
       const formData = await request.formData();
-      const { data } = await context.client.mutate({
+      const { data } = await context.get(apolloClientContext).mutate({
         mutation: CreateRoomDocument,
         variables: {
           input: { room: { name: formData.get('name')?.toString() } },
@@ -34,7 +35,7 @@ export async function action({ request, context }: Route.ActionArgs) {
 }
 
 export async function loader({ context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({ query: RoomsAdminQueryDocument });
+  const { data } = await context.get(apolloClientContext).query({ query: RoomsAdminQueryDocument });
   return data;
 }
 

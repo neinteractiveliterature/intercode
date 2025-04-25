@@ -14,9 +14,10 @@ import { useTranslation } from 'react-i18next';
 import { UpdateFormDocument } from './mutations.generated';
 import styles from 'styles/form_editor.module.scss';
 import { Route } from './+types/FormEditor';
+import { apolloClientContext } from 'AppContexts';
 
 export async function loader({ params: { id }, context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({
+  const { data } = await context.get(apolloClientContext).query({
     query: FormEditorQueryDocument,
     variables: { id: id ?? '' },
   });
@@ -26,7 +27,7 @@ export async function loader({ params: { id }, context }: Route.LoaderArgs) {
 export async function action({ params: { id }, request, context }: Route.ActionArgs) {
   try {
     const formData = await request.formData();
-    const result = await context.client.mutate({
+    const result = await context.get(apolloClientContext).mutate({
       mutation: UpdateFormDocument,
       variables: { id: id ?? '', form: { title: formData.get('title')?.toString() } },
     });

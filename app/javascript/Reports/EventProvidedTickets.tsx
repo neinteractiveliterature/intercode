@@ -7,6 +7,7 @@ import { sortByLocaleString, titleSort, useTabs, TabList, TabBody } from '@neint
 import usePageTitle from '../usePageTitle';
 import { EventProvidedTicketsQueryData, EventProvidedTicketsQueryDocument } from './queries.generated';
 import { Route } from './+types/EventProvidedTickets';
+import { apolloClientContext } from 'AppContexts';
 
 function EventProvidedTicketsByEvent({ data }: { data: EventProvidedTicketsQueryData }) {
   const sortedRows = titleSort(
@@ -66,7 +67,7 @@ function EventProvidedTicketsByUser({ data }: { data: EventProvidedTicketsQueryD
 }
 
 export async function loader({ context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({
+  const { data } = await context.get(apolloClientContext).query({
     query: EventProvidedTicketsQueryDocument,
   });
   return data;

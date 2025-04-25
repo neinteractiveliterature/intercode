@@ -2,6 +2,7 @@ import { data } from 'react-router';
 import invariant from 'tiny-invariant';
 import { TransitionEventProposalDocument } from '../mutations.generated';
 import { Route } from './+types/transition';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ params: { id }, request, context }: Route.ActionArgs) {
   try {
@@ -9,7 +10,7 @@ export async function action({ params: { id }, request, context }: Route.ActionA
     const status = formData.get('status')?.toString();
     invariant(status);
 
-    const result = await context.client.mutate({
+    const result = await context.get(apolloClientContext).mutate({
       mutation: TransitionEventProposalDocument,
       variables: {
         eventProposalId: id,
@@ -17,7 +18,7 @@ export async function action({ params: { id }, request, context }: Route.ActionA
         dropEvent: formData.get('drop_event')?.toString() === 'true',
       },
     });
-    await context.client.resetStore();
+    await context.get(apolloClientContext).resetStore();
 
     return data(result.data);
   } catch (error) {

@@ -8,12 +8,13 @@ import applicationStylesUrl from 'styles/application.scss?url';
 import { Route } from './+types/root';
 import { ClientConfiguration } from 'graphqlTypes.generated';
 import { AuthenticityTokensContext } from 'AuthenticityTokensContext';
+import { clientConfigurationDataContext } from 'AppContexts';
 
 export const errorElement = <RouteErrorBoundary />;
 
 export async function loader({ context }: Route.LoaderArgs) {
   return {
-    clientConfiguration: context.clientConfigurationData.clientConfiguration,
+    clientConfiguration: context.get(clientConfigurationDataContext).clientConfiguration,
   };
 }
 

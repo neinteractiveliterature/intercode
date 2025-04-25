@@ -12,6 +12,7 @@ import { ImageAttachmentConfig } from '../BuiltInFormControls/MarkdownInput';
 import { CreateEventOptions } from './create';
 import { EventAdminRootQueryData, EventAdminRootQueryDocument } from './queries.generated';
 import { Route } from './+types/NewEvent';
+import { apolloClientContext } from 'AppContexts';
 
 type NewEventFormResponseAttrs = {
   length_seconds?: number | null;
@@ -35,7 +36,7 @@ function runIsCreatable(run: RunForRunFormFields): run is Omit<RunForRunFormFiel
 }
 
 export async function loader({ context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({ query: EventAdminRootQueryDocument });
+  const { data } = await context.get(apolloClientContext).query({ query: EventAdminRootQueryDocument });
   return data;
 }
 

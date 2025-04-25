@@ -1,11 +1,12 @@
 import { data } from 'react-router';
 import { AttachImageToEventDocument } from '../EventAdmin/mutations.generated';
 import { Route } from './+types/attach_image';
+import { apolloClientContext } from 'AppContexts';
 
 export const action = async ({ params: { eventId }, request, context }: Route.ActionArgs) => {
   try {
     const formData = await request.formData();
-    const result = await context.client.mutate({
+    const result = await context.get(apolloClientContext).mutate({
       mutation: AttachImageToEventDocument,
       variables: {
         id: eventId ?? '',

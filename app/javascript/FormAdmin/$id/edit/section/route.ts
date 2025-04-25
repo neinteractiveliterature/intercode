@@ -3,6 +3,7 @@ import { FormEditorQueryDocument } from 'FormAdmin/queries.generated';
 import { redirect } from 'react-router';
 import invariant from 'tiny-invariant';
 import { Route } from './+types/route';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ request, params: { id }, context }: Route.ActionArgs) {
   try {
@@ -10,7 +11,7 @@ export async function action({ request, params: { id }, context }: Route.ActionA
     if (request.method === 'POST') {
       const formData = await request.formData();
 
-      const { data } = await context.client.mutate({
+      const { data } = await context.get(apolloClientContext).mutate({
         mutation: CreateFormSectionDocument,
         variables: {
           formId: id,

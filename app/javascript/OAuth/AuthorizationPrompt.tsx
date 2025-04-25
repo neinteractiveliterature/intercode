@@ -6,6 +6,7 @@ import AuthenticationModalContext from '../Authentication/AuthenticationModalCon
 import usePageTitle from '../usePageTitle';
 import { OAuthAuthorizationPromptQueryDocument } from './queries.generated';
 import { Route } from './+types/AuthorizationPrompt';
+import { apolloClientContext } from 'AppContexts';
 
 type AuthorizationParams = {
   client_id?: string;
@@ -29,7 +30,7 @@ export async function loader({ request, context }: Route.LoaderArgs) {
     [...url.searchParams].reduce((object, [field, value]) => ({ ...object, [field]: value }), {}),
   );
 
-  const { data } = await context.client.query({
+  const { data } = await context.get(apolloClientContext).query({
     query: OAuthAuthorizationPromptQueryDocument,
     variables: { queryParams: preAuthParamsJSON },
   });

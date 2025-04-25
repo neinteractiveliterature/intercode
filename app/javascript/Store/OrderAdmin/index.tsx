@@ -20,6 +20,7 @@ import { Link } from 'react-router';
 import { CreateOrderDocument, CreateOrderMutationVariables } from './mutations.generated';
 import { CreateCouponApplicationDocument } from 'Store/mutations.generated';
 import { Route } from './+types/index';
+import { apolloClientContext } from 'AppContexts';
 
 export type CreateOrderActionInput = {
   createOrderVariables: CreateOrderMutationVariables;
@@ -30,7 +31,7 @@ export async function action({ request, context }: Route.ActionArgs) {
   try {
     const { createOrderVariables, couponCodes } = (await request.json()) as CreateOrderActionInput;
 
-    const result = await context.client.mutate({
+    const result = await context.get(apolloClientContext).mutate({
       mutation: CreateOrderDocument,
       variables: createOrderVariables,
     });
@@ -41,7 +42,7 @@ export async function action({ request, context }: Route.ActionArgs) {
 
     await Promise.all(
       couponCodes.map((code) =>
-        context.client.mutate({
+        context.get(apolloClientContext).mutate({
           mutation: CreateCouponApplicationDocument,
           variables: {
             orderId: result.data!.createOrder.order.id,
@@ -51,7 +52,7 @@ export async function action({ request, context }: Route.ActionArgs) {
       ),
     );
 
-    await context.client.resetStore();
+    await context.get(apolloClientContext).resetStore();
     return data(result.data);
   } catch (error) {
     return error;

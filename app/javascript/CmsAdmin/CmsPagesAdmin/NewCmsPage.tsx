@@ -9,12 +9,13 @@ import usePageTitle from '../../usePageTitle';
 import { CreatePageDocument } from './mutations.generated';
 import { Route } from './+types/NewCmsPage';
 import { useCmsPagesAdminLoader } from './route';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ request, context }: Route.ActionArgs) {
   const formData = await request.formData();
 
   try {
-    await context.client.mutate({
+    await context.get(apolloClientContext).mutate({
       mutation: CreatePageDocument,
       variables: {
         page: buildPageInputFromFormData(formData),
@@ -23,7 +24,7 @@ export async function action({ request, context }: Route.ActionArgs) {
   } catch (e) {
     return e;
   }
-  await context.client.resetStore();
+  await context.get(apolloClientContext).resetStore();
 
   return redirect('/cms_pages');
 }

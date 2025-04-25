@@ -8,9 +8,10 @@ import AppRootContext from '../AppRootContext';
 import { MyTicketDisplayQueryDocument } from './queries.generated';
 import { useAppDateTimeFormat } from '../TimeUtils';
 import { Route } from './+types/MyTicketDisplay';
+import { apolloClientContext } from 'AppContexts';
 
 export async function loader({ context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({ query: MyTicketDisplayQueryDocument });
+  const { data } = await context.get(apolloClientContext).query({ query: MyTicketDisplayQueryDocument });
   if (!data.convention.my_profile?.ticket) {
     throw replace('new');
   }

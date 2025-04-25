@@ -10,12 +10,13 @@ import { StaffPositionsQueryDocument } from './queries.generated';
 import { StaffPositionInput } from 'graphqlTypes.generated';
 import { CreateStaffPositionDocument } from './mutations.generated';
 import { Route } from './+types/NewStaffPosition';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ request, context }: Route.ActionArgs) {
   try {
     if (request.method === 'POST') {
       const staffPosition = (await request.json()) as StaffPositionInput;
-      const { data } = await context.client.mutate({
+      const { data } = await context.get(apolloClientContext).mutate({
         mutation: CreateStaffPositionDocument,
         variables: { input: { staff_position: staffPosition } },
         refetchQueries: [{ query: StaffPositionsQueryDocument }],

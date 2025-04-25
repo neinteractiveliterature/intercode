@@ -9,20 +9,21 @@ import FormSectionEditorContent from './FormSectionEditorContent';
 import FormSectionEditorAddItemBar from './FormSectionEditorAddItemBar';
 import styles from 'styles/form_editor.module.scss';
 import { Route } from './+types/route';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ request, params: { sectionId }, context }: Route.ActionArgs) {
   try {
     invariant(sectionId != null);
     if (request.method === 'PATCH') {
       const formData = await request.formData();
-      const { data } = await context.client.mutate({
+      const { data } = await context.get(apolloClientContext).mutate({
         mutation: UpdateFormSectionDocument,
         variables: { id: sectionId, formSection: { title: formData.get('title')?.toString() } },
       });
 
       return data;
     } else if (request.method === 'DELETE') {
-      await context.client.mutate({
+      await context.get(apolloClientContext).mutate({
         mutation: DeleteFormSectionDocument,
         variables: { id: sectionId },
         update: (cache) => {

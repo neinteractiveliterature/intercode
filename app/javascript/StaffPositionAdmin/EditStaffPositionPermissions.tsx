@@ -16,13 +16,14 @@ import {
   UpdateStaffPositionPermissionsMutationVariables,
 } from './mutations.generated';
 import { Route } from './+types/EditStaffPositionPermissions';
+import { apolloClientContext } from 'AppContexts';
 
 type ActionInput = Omit<UpdateStaffPositionPermissionsMutationVariables, 'staffPositionId'>;
 
 export async function action({ params: { id }, request, context }: Route.ActionArgs) {
   try {
     const { grantPermissions, revokePermissions } = (await request.json()) as ActionInput;
-    await context.client.mutate({
+    await context.get(apolloClientContext).mutate({
       mutation: UpdateStaffPositionPermissionsDocument,
       variables: { staffPositionId: id, grantPermissions, revokePermissions },
     });
@@ -37,7 +38,7 @@ const EventCategoryPermissionNames = getPermissionNamesForModelType(Permissioned
 const ConventionPermissionNames = getPermissionNamesForModelType(PermissionedModelTypeIndicator.Convention);
 
 export async function loader({ params: { id }, context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({ query: StaffPositionsQueryDocument });
+  const { data } = await context.get(apolloClientContext).query({ query: StaffPositionsQueryDocument });
   const staffPosition = data.convention.staff_positions.find((staffPosition) => staffPosition.id === id);
   if (!staffPosition) {
     throw new Response(null, { status: 404 });

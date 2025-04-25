@@ -21,6 +21,7 @@ import HtmlCell from '../../../Tables/HtmlCell';
 import { DateTime } from 'luxon';
 import EventCatalogNavTabs from '../EventCatalogNavTabs';
 import { Route } from './+types/index';
+import { apolloClientContext } from 'AppContexts';
 
 const FILTER_CODECS = buildFieldFilterCodecs({
   status: FilterCodecs.stringArray,
@@ -55,7 +56,7 @@ function RoomNamesCell<TData, TValue extends RunType['rooms']>({ getValue }: Cel
 const defaultVisibleColumns = ['category', 'title', 'starts_at', 'length_seconds', 'total_slots'];
 
 export const loader = async ({ context }: Route.LoaderArgs) => {
-  const { data } = await context.client.query<CommonConventionDataQueryData>({
+  const { data } = await context.get(apolloClientContext).query<CommonConventionDataQueryData>({
     query: CommonConventionDataQueryDocument,
   });
   const filterableFormItems = getFilterableFormItems(data.convention);

@@ -10,11 +10,12 @@ import { UserConProfileQueryDocument } from './queries.generated';
 import { UpdateUserConProfileDocument } from './mutations.generated';
 import { UserConProfileInput } from 'graphqlTypes.generated';
 import { Route } from './+types/EditUserConProfile';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ request, params: { id }, context }: Route.ActionArgs) {
   try {
     const userConProfile = (await request.json()) as UserConProfileInput;
-    await context.client.mutate({
+    await context.get(apolloClientContext).mutate({
       mutation: UpdateUserConProfileDocument,
       variables: { input: { id, user_con_profile: userConProfile } },
     });
@@ -25,7 +26,7 @@ export async function action({ request, params: { id }, context }: Route.ActionA
 }
 
 export async function loader({ params: { id }, context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({
+  const { data } = await context.get(apolloClientContext).query({
     query: UserConProfileQueryDocument,
     variables: { id },
   });

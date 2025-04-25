@@ -15,9 +15,10 @@ import FormItemDisplay from '../../FormPresenter/ItemDisplays/FormItemDisplay';
 import { valueIsPresent } from './valueIsPresent';
 import buildEventUrl from '../buildEventUrl';
 import { Route } from './+types/index';
+import { apolloClientContext } from 'AppContexts';
 
 export const loader = async ({ params: { eventId }, context }: Route.LoaderArgs) => {
-  const client = context!.client;
+  const client = context.get(apolloClientContext);
 
   const { data } = await client.query({
     query: EventPageQueryDocument,

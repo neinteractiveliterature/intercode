@@ -7,9 +7,10 @@ import { BootstrapRRNavLink } from '../UIComponents/BootstrapNavLink';
 import { NamedRoute } from 'routes';
 import { Route, Info } from './+types/index';
 import { CmsAdminBaseQueryDocument } from './queries.generated';
+import { apolloClientContext } from 'AppContexts';
 
 export async function loader({ context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({ query: CmsAdminBaseQueryDocument });
+  const { data } = await context.get(apolloClientContext).query({ query: CmsAdminBaseQueryDocument });
   return data;
 }
 

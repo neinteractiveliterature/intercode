@@ -3,12 +3,13 @@ import { data } from 'react-router';
 import humanize from 'humanize';
 import arrayToSentence from 'array-to-sentence';
 import { getBackendBaseUrl } from 'getBackendBaseUrl';
+import { apolloClientContext, authenticityTokensManagerContext, fetchContext } from 'AppContexts';
 
 export async function action({ request, context }: Route.ActionArgs) {
   const formData = await request.formData();
-  const tokens = await context.authenticityTokensManager.getTokens();
+  const tokens = await context.get(authenticityTokensManagerContext).getTokens();
 
-  const response = await context.fetch(new URL('/users', getBackendBaseUrl()), {
+  const response = await context.get(fetchContext)(new URL('/users', getBackendBaseUrl()), {
     method: 'POST',
     body: formData,
     credentials: 'include',
@@ -33,8 +34,8 @@ export async function action({ request, context }: Route.ActionArgs) {
     throw new Error(response.statusText);
   }
 
-  await context.authenticityTokensManager.refresh();
-  await context.client.clearStore();
+  await context.get(authenticityTokensManagerContext).refresh();
+  await context.get(apolloClientContext).clearStore();
 
   return data(null);
 }

@@ -2,6 +2,7 @@ import { data } from 'react-router';
 import { RunInput } from '../graphqlTypes.generated';
 import { CreateMultipleRunsDocument } from './mutations.generated';
 import { Route } from './+types/CreateMultipleRunsRoute';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ request, params: { eventId }, context }: Route.ActionArgs) {
   try {
@@ -14,13 +15,13 @@ export async function action({ request, params: { eventId }, context }: Route.Ac
       roomIds: roomIds,
     }));
 
-    const result = await context.client.mutate({
+    const result = await context.get(apolloClientContext).mutate({
       mutation: CreateMultipleRunsDocument,
       variables: {
         input: { eventId, runs },
       },
     });
-    await context.client.resetStore();
+    await context.get(apolloClientContext).resetStore();
 
     return data(result.data);
   } catch (error) {

@@ -13,6 +13,7 @@ import { redirect } from 'react-router';
 import { CreateCmsFileDocument, DeleteCmsFileDocument, RenameCmsFileDocument } from './mutations.generated';
 import { useSubmit } from 'react-router';
 import { Route } from './+types/index';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ request, context }: Route.ActionArgs) {
   console.log(request);
@@ -21,7 +22,7 @@ export async function action({ request, context }: Route.ActionArgs) {
   try {
     if (request.method === 'DELETE') {
       const id = formData.get('id')?.toString() ?? '';
-      await context.client.mutate({
+      await context.get(apolloClientContext).mutate({
         mutation: DeleteCmsFileDocument,
         variables: { id },
         refetchQueries: [{ query: CmsFilesAdminQueryDocument }],
@@ -30,7 +31,7 @@ export async function action({ request, context }: Route.ActionArgs) {
     } else if (request.method === 'PATCH') {
       const id = formData.get('id')?.toString() ?? '';
       const filename = formData.get('filename')?.toString() ?? '';
-      await context.client.mutate({
+      await context.get(apolloClientContext).mutate({
         mutation: RenameCmsFileDocument,
         variables: { id, filename },
         refetchQueries: [{ query: CmsFilesAdminQueryDocument }],
@@ -38,7 +39,7 @@ export async function action({ request, context }: Route.ActionArgs) {
       });
     } else if (request.method === 'POST') {
       const signedBlobId = formData.get('signedBlobId')?.toString() ?? '';
-      await context.client.mutate({
+      await context.get(apolloClientContext).mutate({
         mutation: CreateCmsFileDocument,
         variables: { signedBlobId },
         refetchQueries: [{ query: CmsFilesAdminQueryDocument }],
@@ -55,7 +56,7 @@ export async function action({ request, context }: Route.ActionArgs) {
 }
 
 export async function loader({ context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({ query: CmsFilesAdminQueryDocument });
+  const { data } = await context.get(apolloClientContext).query({ query: CmsFilesAdminQueryDocument });
   return data;
 }
 

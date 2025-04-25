@@ -9,6 +9,7 @@ import Gravatar from '../../Gravatar';
 import { RunSignupSummaryQueryData, RunSignupSummaryQueryDocument } from './queries.generated';
 import humanize from '../../humanize';
 import { Route } from './+types/RunSignupSummary';
+import { apolloClientContext } from 'AppContexts';
 
 type EventType = RunSignupSummaryQueryData['convention']['event'];
 type SignupType = EventType['run']['signups_paginated']['entries'][0];
@@ -52,7 +53,7 @@ export type RunSignupSummaryProps = {
 };
 
 export const loader = async ({ params: { eventId, runId }, context }: Route.LoaderArgs) => {
-  const client = context!.client;
+  const client = context.get(apolloClientContext);
   const { data } = await client.query({
     query: RunSignupSummaryQueryDocument,
     variables: { eventId: eventId ?? '', runId: runId ?? '' },

@@ -4,6 +4,7 @@ import { EventCategory, SchedulingUi } from '../graphqlTypes.generated';
 import { redirect } from 'react-router';
 import { Route } from './+types/create';
 import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
+import { apolloClientContext } from 'AppContexts';
 
 export type CreateRegularEventOptions = {
   client: ApolloClient<NormalizedCacheObject>;
@@ -86,7 +87,7 @@ async function createEvent({ event, eventCategory, run, signedImageBlobIds, clie
 export async function action({ request, context }: Route.ActionArgs) {
   try {
     const options = (await request.json()) as Omit<CreateEventOptions, 'client'>;
-    await createEvent({ ...options, client: context.client });
+    await createEvent({ ...options, client: context.get(apolloClientContext) });
     return redirect(`/admin_events/${options.eventCategory.id}`);
   } catch (error) {
     return error;

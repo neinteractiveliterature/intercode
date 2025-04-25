@@ -5,6 +5,7 @@ import usePageTitle from '../usePageTitle';
 import { WhosFreeQueryData, WhosFreeQueryDocument } from './queries.generated';
 import { useSearchParams } from 'react-router';
 import { Route } from './+types/WhosFree';
+import { apolloClientContext } from 'AppContexts';
 
 export async function loader({ context, request }: Route.LoaderArgs) {
   const url = new URL(request.url);
@@ -19,7 +20,7 @@ export async function loader({ context, request }: Route.LoaderArgs) {
       return {};
     }
 
-    const { data } = await context.client.query({
+    const { data } = await context.get(apolloClientContext).query({
       query: WhosFreeQueryDocument,
       variables: { start: timespan.start.toISO(), finish: timespan.finish.toISO() },
     });

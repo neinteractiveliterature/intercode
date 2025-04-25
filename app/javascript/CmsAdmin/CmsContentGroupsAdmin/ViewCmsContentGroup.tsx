@@ -2,9 +2,12 @@ import usePageTitle from '../../usePageTitle';
 import CmsContentGroupFormFields from './CmsContentGroupFormFields';
 import { Route } from './+types/ViewCmsContentGroup';
 import { CmsContentGroupAdminQueryDocument } from './queries.generated';
+import { apolloClientContext } from 'AppContexts';
 
 export async function loader({ context, params: { id } }: Route.LoaderArgs) {
-  const { data } = await context.client.query({ query: CmsContentGroupAdminQueryDocument, variables: { id } });
+  const { data } = await context
+    .get(apolloClientContext)
+    .query({ query: CmsContentGroupAdminQueryDocument, variables: { id } });
   return data;
 }
 

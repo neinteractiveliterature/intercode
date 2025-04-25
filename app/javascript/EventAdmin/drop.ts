@@ -1,11 +1,12 @@
 import { redirect } from 'react-router';
 import { DropEventDocument } from '../EventAdmin/mutations.generated';
 import { Route } from './+types/drop';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ params: { eventId }, request, context }: Route.ActionArgs) {
   try {
     if (request.method === 'PATCH') {
-      await context.client.mutate({
+      await context.get(apolloClientContext).mutate({
         mutation: DropEventDocument,
         variables: {
           input: { id: eventId ?? '' },

@@ -7,9 +7,10 @@ import AppRootContext from '../AppRootContext';
 import { WaitlistMailingListsQueryDocument } from './queries.generated';
 import { useAppDateTimeFormat } from '../TimeUtils';
 import { Route } from './+types/WaitlistMailingLists';
+import { apolloClientContext } from 'AppContexts';
 
 export async function loader({ context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({ query: WaitlistMailingListsQueryDocument });
+  const { data } = await context.get(apolloClientContext).query({ query: WaitlistMailingListsQueryDocument });
   return data;
 }
 

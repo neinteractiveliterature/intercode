@@ -15,11 +15,12 @@ import {
 } from './mutations.generated';
 import { NotificationEventKey, UserActivityAlert } from 'graphqlTypes.generated';
 import { Route } from './+types/EditUserActivityAlert';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ request, params: { id }, context }: Route.ActionArgs) {
   try {
     if (request.method === 'DELETE') {
-      await context.client.mutate({
+      await context.get(apolloClientContext).mutate({
         mutation: DeleteUserActivityAlertDocument,
         variables: { id },
         update: (cache) => {
@@ -32,7 +33,7 @@ export async function action({ request, params: { id }, context }: Route.ActionA
       return replace('/user_activity_alerts');
     } else if (request.method === 'PATCH') {
       const variables = (await request.json()) as Omit<UpdateUserActivityAlertMutationVariables, 'id'>;
-      await context.client.mutate({
+      await context.get(apolloClientContext).mutate({
         mutation: UpdateUserActivityAlertDocument,
         variables: { id, ...variables },
       });
@@ -46,7 +47,7 @@ export async function action({ request, params: { id }, context }: Route.ActionA
 }
 
 export async function loader({ params: { id }, context }: Route.LoaderArgs) {
-  const { data } = await context.client.query({
+  const { data } = await context.get(apolloClientContext).query({
     query: UserActivityAlertsAdminQueryDocument,
   });
 

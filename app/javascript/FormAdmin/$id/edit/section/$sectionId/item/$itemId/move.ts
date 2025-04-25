@@ -4,6 +4,7 @@ import invariant from 'tiny-invariant';
 import { FormEditorQueryDocument } from 'FormAdmin/queries.generated';
 import { MoveFormItemDocument } from 'FormAdmin/mutations.generated';
 import { Route } from './+types/move';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ params: { id, sectionId, itemId }, request, context }: Route.ActionArgs) {
   try {
@@ -18,7 +19,7 @@ export async function action({ params: { id, sectionId, itemId }, request, conte
       const destinationIndex = Number.parseInt(formData.get('destination_index')?.toString() ?? '');
       invariant(destinationIndex != null && !Number.isNaN(destinationIndex));
 
-      const queryData = context.client.cache.readQuery({
+      const queryData = context.get(apolloClientContext).cache.readQuery({
         query: FormEditorQueryDocument,
         variables: { id: id },
       });
@@ -41,7 +42,7 @@ export async function action({ params: { id, sectionId, itemId }, request, conte
         },
       } as const;
 
-      const { data } = await context.client.mutate({
+      const { data } = await context.get(apolloClientContext).mutate({
         mutation: MoveFormItemDocument,
         variables: {
           id: itemId,
@@ -53,7 +54,7 @@ export async function action({ params: { id, sectionId, itemId }, request, conte
 
       return data;
     } else {
-      await context.client.mutate({
+      await context.get(apolloClientContext).mutate({
         mutation: MoveFormItemDocument,
         variables: {
           id: itemId,

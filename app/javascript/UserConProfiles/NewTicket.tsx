@@ -10,11 +10,12 @@ import { ErrorDisplay } from '@neinteractiveliterature/litform';
 import { ApolloError } from '@apollo/client';
 import { Route } from './+types/NewTicket';
 import { useUserConProfileLoaderData } from './userConProfileLoader';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ request, context }: Route.ActionArgs) {
   try {
     const variables = (await request.json()) as CreateTicketMutationVariables;
-    await context.client.mutate({
+    await context.get(apolloClientContext).mutate({
       mutation: CreateTicketDocument,
       variables,
       update: (cache, result) => {

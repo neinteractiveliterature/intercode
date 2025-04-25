@@ -4,11 +4,12 @@ import { UpdateTicketTypeDocument } from './mutations.generated';
 import EditTicketTypeForm from './EditTicketType';
 import { findById } from 'findById';
 import { loader as routeLoader } from './route';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ request, params: { id }, context }: Route.ActionArgs) {
   try {
     const ticketType = await request.json();
-    await context.client.mutate({
+    await context.get(apolloClientContext).mutate({
       mutation: UpdateTicketTypeDocument,
       variables: {
         input: { ticket_type: ticketType, id },

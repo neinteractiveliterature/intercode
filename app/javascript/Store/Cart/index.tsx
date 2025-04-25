@@ -8,13 +8,14 @@ import useLoginRequired from 'Authentication/useLoginRequired';
 import CartContents from './CartContents';
 import OrderPaymentModal from 'Store/OrderPaymentModal';
 import { Route } from './+types/index';
+import { apolloClientContext } from 'AppContexts';
 
 type OrderEntryType = NonNullable<
   NonNullable<CartQueryData['convention']['my_profile']>['current_pending_order']
 >['order_entries'][0];
 
 export async function loader({ context }: Route.LoaderArgs) {
-  const { data } = await context.client.query<CartQueryData>({ query: CartQueryDocument });
+  const { data } = await context.get(apolloClientContext).query<CartQueryData>({ query: CartQueryDocument });
   return data;
 }
 

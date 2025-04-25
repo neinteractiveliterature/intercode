@@ -1,12 +1,13 @@
 import { data } from 'react-router';
 import { CreateMaximumEventProvidedTicketsOverrideDocument } from '../../EventAdmin/mutations.generated';
 import { Route } from './+types/route';
+import { apolloClientContext } from 'AppContexts';
 
 export async function action({ request, params: { eventId }, context }: Route.ActionArgs) {
   try {
     if (request.method === 'POST') {
       const formData = await request.formData();
-      const result = await context.client.mutate({
+      const result = await context.get(apolloClientContext).mutate({
         mutation: CreateMaximumEventProvidedTicketsOverrideDocument,
         variables: {
           input: {
