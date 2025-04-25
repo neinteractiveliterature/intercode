@@ -1,5 +1,5 @@
 import { OrderInput } from 'graphqlTypes.generated';
-import { ActionFunction, json, LoaderFunction, useLoaderData, useNavigate } from 'react-router';
+import { ActionFunction, data, LoaderFunction, useLoaderData, useNavigate } from 'react-router';
 import { client } from 'useIntercodeApolloClient';
 import EditOrderModal from './EditOrderModal';
 import { AdminUpdateOrderDocument } from './mutations.generated';
@@ -9,11 +9,11 @@ export const action: ActionFunction = async ({ params: { id }, request }) => {
   try {
     if (request.method === 'PATCH') {
       const order = (await request.json()) as OrderInput;
-      const { data } = await client.mutate({
+      const result = await client.mutate({
         mutation: AdminUpdateOrderDocument,
         variables: { id, order },
       });
-      return json(data);
+      return data(result.data);
     } else {
       return new Response(null, { status: 404 });
     }

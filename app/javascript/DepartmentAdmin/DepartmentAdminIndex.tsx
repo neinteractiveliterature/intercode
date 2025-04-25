@@ -1,4 +1,4 @@
-import { Link, useSubmit } from 'react-router-dom';
+import { Link, useSubmit } from 'react-router';
 import { useGraphQLConfirm, sortByLocaleString } from '@neinteractiveliterature/litform';
 
 import usePageTitle from '../usePageTitle';

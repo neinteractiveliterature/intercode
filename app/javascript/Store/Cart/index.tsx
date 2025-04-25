@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { LoaderFunction, useFetcher, useLoaderData, useNavigate } from 'react-router-dom';
+import { LoaderFunction, useFetcher, useLoaderData, useNavigate } from 'react-router';
 import { ApolloError } from '@apollo/client';
 import { useModal, useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 import { CartQueryData, CartQueryDocument } from './queries.generated';

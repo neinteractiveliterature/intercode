@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router';
 import { ColumnFiltersState, SortingState } from '@tanstack/react-table';
 
 import { FieldFilterCodecs } from './FilterUtils';

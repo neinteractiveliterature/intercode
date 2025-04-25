@@ -1,4 +1,4 @@
-import { Outlet, useRouteLoaderData } from 'react-router-dom';
+import { Outlet, useRouteLoaderData } from 'react-router';
 import { useTranslation } from 'react-i18next';
 
 import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';

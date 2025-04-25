@@ -5,7 +5,7 @@ import usePageTitle from '../usePageTitle';
 import { WhosFreeQueryData, WhosFreeQueryDocument } from './queries.generated';
 import { LoaderFunction, useLoaderData } from 'react-router';
 import { client } from '../useIntercodeApolloClient';
-import { useSearchParams } from 'react-router-dom';
+import { useSearchParams } from 'react-router';
 
 type LoaderResult = {
   timespan?: FiniteTimespan;

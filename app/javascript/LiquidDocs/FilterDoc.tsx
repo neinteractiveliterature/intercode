@@ -1,4 +1,4 @@
-import { Link, useLocation, useParams, useRouteLoaderData } from 'react-router-dom';
+import { Link, useLocation, useParams, useRouteLoaderData } from 'react-router';
 
 import MethodDoc from './MethodDoc';
 import { NamedRoute } from '../AppRouter';

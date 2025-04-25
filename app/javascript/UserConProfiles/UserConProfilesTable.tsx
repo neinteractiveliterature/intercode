@@ -1,5 +1,5 @@
 import { useContext, useMemo } from 'react';
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router';
 import { CellContext, Column, ColumnDef, createColumnHelper } from '@tanstack/react-table';
 import { useTranslation } from 'react-i18next';
 import { DateTime } from 'luxon';

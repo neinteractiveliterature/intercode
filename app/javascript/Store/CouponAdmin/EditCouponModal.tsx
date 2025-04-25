@@ -13,7 +13,7 @@ import {
 import { useTranslation } from 'react-i18next';
 import { ActionFunction, LoaderFunction, redirect, useLoaderData } from 'react-router';
 import { client } from 'useIntercodeApolloClient';
-import { Link, useFetcher } from 'react-router-dom';
+import { Link, useFetcher } from 'react-router';
 import { DeleteCouponDocument, UpdateCouponDocument } from './mutations.generated';
 import { CouponInput } from 'graphqlTypes.generated';
 

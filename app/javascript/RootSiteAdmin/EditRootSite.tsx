@@ -6,15 +6,15 @@ import { BootstrapFormInput, ErrorDisplay } from '@neinteractiveliterature/litfo
 import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
 import usePageTitle from '../usePageTitle';
 import { RootSiteAdminQueryData, RootSiteAdminQueryDocument } from './queries.generated';
-import { ActionFunction, json, LoaderFunction, useActionData, useLoaderData, useNavigation } from 'react-router';
+import { ActionFunction, data, LoaderFunction, useActionData, useLoaderData, useNavigation } from 'react-router';
 import { client } from '../useIntercodeApolloClient';
-import { Form } from 'react-router-dom';
+import { Form } from 'react-router';
 import { UpdateRootSiteDocument } from './mutations.generated';
 
 export const action: ActionFunction = async ({ request }) => {
   try {
     const formData = await request.formData();
-    const { data } = await client.mutate({
+    const result = await client.mutate({
       mutation: UpdateRootSiteDocument,
       variables: {
         defaultLayoutId: formData.get('default_layout_id')?.toString(),
@@ -22,7 +22,7 @@ export const action: ActionFunction = async ({ request }) => {
         siteName: formData.get('site_name')?.toString(),
       },
     });
-    return json(data);
+    return data(result.data);
   } catch (error) {
     return error;
   }

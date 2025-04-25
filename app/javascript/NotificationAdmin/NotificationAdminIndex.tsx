@@ -2,7 +2,7 @@ import { BootstrapFormCheckbox, ErrorDisplay } from '@neinteractiveliterature/li
 import { useModal } from '@neinteractiveliterature/litform';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import Modal from 'react-bootstrap4-modal';
-import { Link, LoaderFunction, useFetcher, useLoaderData } from 'react-router-dom';
+import { Link, LoaderFunction, useFetcher, useLoaderData } from 'react-router';
 
 import AppRootContext from '../AppRootContext';
 import { ApolloError } from '@apollo/client';

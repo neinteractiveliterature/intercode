@@ -4,8 +4,8 @@ import { ApolloError } from '@apollo/client';
 import { useTranslation } from 'react-i18next';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import { Link, useFetcher } from 'react-router-dom';
-import { ActionFunction, json, useNavigate } from 'react-router';
+import { Link, useFetcher } from 'react-router';
+import { ActionFunction, data, useNavigate } from 'react-router';
 import { client } from '../../../useIntercodeApolloClient';
 import { ChangeSignupBucketDocument } from '../mutations.generated';
 import BucketInput from '../BucketInput';
@@ -14,14 +14,14 @@ import { useSingleSignupLoader } from '../loaders';
 export const action: ActionFunction = async ({ request, params: { id } }) => {
   try {
     const formData = await request.formData();
-    const { data } = await client.mutate({
+    const result = await client.mutate({
       mutation: ChangeSignupBucketDocument,
       variables: {
         signupId: id ?? '',
         bucketKey: formData.get('bucket_key')?.toString(),
       },
     });
-    return json(data);
+    return data(result.data);
   } catch (error) {
     return error;
   }

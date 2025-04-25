@@ -1,4 +1,4 @@
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 
 import EventAdminRow from './EventAdminRow';
 import usePageTitle from '../usePageTitle';

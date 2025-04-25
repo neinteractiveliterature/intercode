@@ -58,7 +58,7 @@ export default defineConfig({
           i18next: ['i18next', 'react-i18next'],
           lodash: ['lodash'],
           luxon: ['luxon'],
-          reactRouter: ['react-router', 'react-router-dom'],
+          reactRouter: ['react-router'],
         },
       },
     },

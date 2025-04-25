@@ -1,4 +1,4 @@
-import { Navigate, useNavigate, Link, LoaderFunction, useLoaderData, useSubmit } from 'react-router-dom';
+import { Navigate, useNavigate, Link, LoaderFunction, useLoaderData, useSubmit } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { ErrorDisplay, useConfirm } from '@neinteractiveliterature/litform';
 

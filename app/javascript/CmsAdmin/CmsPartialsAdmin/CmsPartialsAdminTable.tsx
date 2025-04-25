@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Link, useSubmit } from 'react-router-dom';
+import { Link, useSubmit } from 'react-router';
 import { ErrorDisplay, sortByLocaleString, useConfirm } from '@neinteractiveliterature/litform';
 
 import usePageTitle from '../../usePageTitle';

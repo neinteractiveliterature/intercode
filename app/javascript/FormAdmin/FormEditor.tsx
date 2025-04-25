@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import {
   ActionFunction,
-  json,
+  data,
   Link,
   LoaderFunction,
   Navigate,
@@ -9,7 +9,7 @@ import {
   useFetcher,
   useLoaderData,
   useParams,
-} from 'react-router-dom';
+} from 'react-router';
 import sortBy from 'lodash/sortBy';
 import flatMap from 'lodash/flatMap';
 import { notEmpty } from '@neinteractiveliterature/litform';
@@ -36,11 +36,11 @@ export const loader: LoaderFunction = async ({ params: { id } }) => {
 export const action: ActionFunction = async ({ params: { id }, request }) => {
   try {
     const formData = await request.formData();
-    const { data } = await client.mutate({
+    const result = await client.mutate({
       mutation: UpdateFormDocument,
       variables: { id: id ?? '', form: { title: formData.get('title')?.toString() } },
     });
-    return json(data);
+    return data(result.data);
   } catch (error) {
     return error;
   }

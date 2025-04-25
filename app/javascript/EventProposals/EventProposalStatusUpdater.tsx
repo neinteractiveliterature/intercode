@@ -5,7 +5,7 @@ import { useModal, BooleanInput, ErrorDisplay, MultipleChoiceInput } from '@nein
 import { ApolloError } from '@apollo/client';
 import { EventProposalQueryWithOwnerQueryData } from './queries.generated';
 import humanize from '../humanize';
-import { useActionData, useFetcher } from 'react-router-dom';
+import { useActionData, useFetcher } from 'react-router';
 import { useTranslation } from 'react-i18next';
 
 const STATUSES = [

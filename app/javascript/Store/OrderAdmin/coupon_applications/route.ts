@@ -1,4 +1,4 @@
-import { ActionFunction, json } from 'react-router';
+import { ActionFunction, data } from 'react-router';
 import { CreateCouponApplicationDocument } from 'Store/mutations.generated';
 import invariant from 'tiny-invariant';
 import { client } from 'useIntercodeApolloClient';
@@ -11,12 +11,12 @@ export const action: ActionFunction = async ({ request, params: { id } }) => {
       const formData = await request.formData();
       const couponCode = formData.get('coupon_code')?.toString();
 
-      const { data } = await client.mutate({
+      const result = await client.mutate({
         mutation: CreateCouponApplicationDocument,
         variables: { orderId: id, couponCode },
       });
       await client.resetStore();
-      return json(data);
+      return data(result.data);
     } else {
       return new Response(null, { status: 404 });
     }

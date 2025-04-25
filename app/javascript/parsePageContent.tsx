@@ -4,7 +4,7 @@ import * as React from 'react';
 import camelCase from 'lodash/camelCase';
 import IsValidNodeDefinitions from 'html-to-react/lib/is-valid-node-definitions';
 import camelCaseAttrMap from 'html-to-react/lib/camel-case-attribute-names';
-import { Link } from 'react-router-dom';
+import { Link } from 'react-router';
 import { ErrorBoundary } from '@neinteractiveliterature/litform';
 
 import SignInButton from './Authentication/SignInButton';

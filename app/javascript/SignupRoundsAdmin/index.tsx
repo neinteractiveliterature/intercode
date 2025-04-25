@@ -1,4 +1,4 @@
-import { ActionFunction, json, Outlet } from 'react-router';
+import { ActionFunction, data, Outlet } from 'react-router';
 import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import RouteActivatedBreadcrumbItemV2 from '../Breadcrumbs/RouteActivatedBreadcrumbItemV2';
 import { useTranslation } from 'react-i18next';
@@ -27,7 +27,7 @@ export const action: ActionFunction = async ({ request }) => {
         awaitRefetchQueries: true,
       });
 
-      return json(result.data?.createSignupRound.signup_round);
+      return data(result.data?.createSignupRound.signup_round);
     } catch (error) {
       return error;
     }

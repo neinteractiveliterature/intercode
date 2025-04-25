@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { Link, useSubmit } from 'react-router-dom';
+import { Link, useSubmit } from 'react-router';
 import { sortByLocaleString, useGraphQLConfirm } from '@neinteractiveliterature/litform';
 
 import usePageTitle from '../../usePageTitle';
