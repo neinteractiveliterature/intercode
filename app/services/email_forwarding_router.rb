@@ -61,9 +61,9 @@ class EmailForwardingRouter
     end
   end
 
-  def self.all_staff_position_mappings
+  def self.all_staff_position_mappings(staff_position_scope = StaffPosition.all)
     MappingSet.new(
-      StaffPosition
+      staff_position_scope
         .includes(user_con_profiles: :user)
         .joins(:convention)
         .where("staff_positions.email ilike '%@' || conventions.domain")
@@ -73,9 +73,9 @@ class EmailForwardingRouter
     )
   end
 
-  def self.all_catch_all_mappings
+  def self.all_catch_all_mappings(convention_scope = Convention.all)
     MappingSet.new(
-      Convention
+      convention_scope
         .where.not(catch_all_staff_position_id: nil)
         .filter_map do |convention|
           sp = convention.catch_all_staff_position
@@ -87,9 +87,9 @@ class EmailForwardingRouter
     )
   end
 
-  def self.all_team_member_mappings
+  def self.all_team_member_mappings(event_scope = Event.all)
     MappingSet.new(
-      Event
+      event_scope
         .includes(:convention, team_members: { user_con_profile: :user })
         .joins(:convention)
         .where.not(conventions: { event_mailing_list_domain: nil })
@@ -104,9 +104,9 @@ class EmailForwardingRouter
     )
   end
 
-  def self.all_email_route_mappings
+  def self.all_email_route_mappings(email_route_scope = EmailRoute.all)
     MappingSet.new(
-      EmailRoute
+      email_route_scope
         .pluck(:receiver_address, :forward_addresses)
         .filter_map do |receiver_address, forward_addresses|
           if forward_addresses.blank?
@@ -123,6 +123,30 @@ class EmailForwardingRouter
       .merge(all_catch_all_mappings)
       .merge(all_team_member_mappings)
       .merge(all_email_route_mappings)
+  end
+
+  def self.all_mappings_for_domains(domains)
+    conventions = Convention.where("domain IN (:domains) OR event_mailing_list_domain IN (:domains)", domains:)
+
+    all_staff_position_mappings(StaffPosition.where(convention_id: conventions.select(:id)))
+      .merge(all_catch_all_mappings(conventions))
+      .merge(all_team_member_mappings(Event.where(convention_id: conventions.select(:id))))
+      .merge(
+        all_email_route_mappings(
+          EmailRoute.where(
+            domains.map { |_| "receiver_address ILIKE ?" }.join(" OR "),
+            *domains.map { |domain| "%@#{domain}" }
+          )
+        )
+      )
+  end
+
+  def self.all_mappings_for_inbound_address(address)
+    all_mappings[EmailRoute.normalize_address(address)]
+  end
+
+  def self.all_mappings_for_destination_address(address)
+    all_mappings.values.flatten.select { |mapping| mapping.destination_addresses.include?(address) }
   end
 
   def self.all_inbound_addresses
