@@ -5367,9 +5367,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@neinteractiveliterature/litform-codemirror@npm:^0.34.1":
-  version: 0.34.1
-  resolution: "@neinteractiveliterature/litform-codemirror@npm:0.34.1"
+"@neinteractiveliterature/litform-codemirror@npm:^0.35.0":
+  version: 0.35.0
+  resolution: "@neinteractiveliterature/litform-codemirror@npm:0.35.0"
   dependencies:
     "@codemirror/commands": "npm:^6.8.0"
     "@codemirror/lang-html": "npm:^6.4.9"
@@ -5379,63 +5379,63 @@ __metadata:
     "@lezer/common": "npm:^1.2.3"
     "@lezer/highlight": "npm:^1.2.1"
     "@lezer/lr": "npm:^1.4.2"
-    "@neinteractiveliterature/litform-core": "npm:^0.34.1"
+    "@neinteractiveliterature/litform-core": "npm:^0.35.0"
     classnames: "npm:^2.5.1"
     codemirror: "npm:^6.0.1"
   peerDependencies:
     react: ">= 18"
-  checksum: 10c0/cc65203b4dc00f76653be2e9d52c3fb702d7de4d8e540eec72aac1eb33e060890e6906ff394c47a99cf2e0c77d4579e0c538cc47f9c0d67f97e7bfdb25230312
+  checksum: 10c0/967d79db9879960b6164fc65a66740350b64082712098e46fa3e14185aed035e38a90d9733a5dbcecf45a1014a6e5f66ab4a54b60420ed14fce590bbd47a0f29
   languageName: node
   linkType: hard
 
-"@neinteractiveliterature/litform-controls@npm:^0.34.1":
-  version: 0.34.1
-  resolution: "@neinteractiveliterature/litform-controls@npm:0.34.1"
+"@neinteractiveliterature/litform-controls@npm:^0.35.0":
+  version: 0.35.0
+  resolution: "@neinteractiveliterature/litform-controls@npm:0.35.0"
   dependencies:
-    "@neinteractiveliterature/litform-core": "npm:^0.34.1"
+    "@neinteractiveliterature/litform-core": "npm:^0.35.0"
     classnames: "npm:^2.5.1"
     copy-to-clipboard: "npm:^3.3.3"
     graphql: "npm:^16.10.0"
     lodash: "npm:^4.17.21"
-    temporal-polyfill: "npm:^0.2.5"
+    temporal-polyfill: "npm:^0.3.0"
   peerDependencies:
     react: ">= 18"
-  checksum: 10c0/3976ac5c7ecc3632ba5353e63ad60d9f60aa81376d94e37eb7dee07fa9218c1347db4f953cfab9ce58399a6640391104af9868313db3c3657877381c5b37d9d1
+  checksum: 10c0/ae59213f0d665b32b21582f6ce6a1d5d784ae35511d4cd1d6cd6af39d987bbc58cb20bb4bcacccc993034a7eb99b07c22353e39f6c4bffd15fd05c52f1b23e3b
   languageName: node
   linkType: hard
 
-"@neinteractiveliterature/litform-core@npm:^0.34.1":
-  version: 0.34.1
-  resolution: "@neinteractiveliterature/litform-core@npm:0.34.1"
+"@neinteractiveliterature/litform-core@npm:^0.35.0":
+  version: 0.35.0
+  resolution: "@neinteractiveliterature/litform-core@npm:0.35.0"
   dependencies:
     classnames: "npm:^2.5.1"
     graphql: "npm:^16.10.0"
     lodash: "npm:^4.17.21"
-    temporal-polyfill: "npm:^0.2.5"
+    temporal-polyfill: "npm:^0.3.0"
     uuid: "npm:^11.1.0"
   peerDependencies:
     react: ">= 18"
-  checksum: 10c0/fc15b376d90e9e63eaea30cc9309b96fe1425bdc4d4d0b9649227820bc369547a1e8daf90d7bc37f7d1f0197199e23fd939d03e4ee6e1aa268bd899d32afbd69
+  checksum: 10c0/ea97624bb1ce76f1c59f6a01a80697cd60a3a41fcb09fc30c81fc6c3023f5e2eff492525c7f6290cbe646e97cddbe2f0e5a3fcaa7051663ca2e8103f993a3055
   languageName: node
   linkType: hard
 
-"@neinteractiveliterature/litform-modals@npm:^0.34.1":
-  version: 0.34.1
-  resolution: "@neinteractiveliterature/litform-modals@npm:0.34.1"
+"@neinteractiveliterature/litform-modals@npm:^0.35.0":
+  version: 0.35.0
+  resolution: "@neinteractiveliterature/litform-modals@npm:0.35.0"
   dependencies:
-    "@neinteractiveliterature/litform-core": "npm:^0.34.1"
+    "@neinteractiveliterature/litform-core": "npm:^0.35.0"
     react-bootstrap4-modal: "npm:^3.0.10"
   peerDependencies:
     react: ">= 18"
-  checksum: 10c0/547684864d80edcda2a9016749c5de4a4833bf9da3f5511c8ed67cbea2d7719216cc1e6caeac3f3d0c7bcd790272544f84cd1db5a8fc99626e53ab5628e12dcb
+  checksum: 10c0/5cf80890b10a6a09f6021d0538e742bfecd0be2bb9b642e289a94d9de699c1962333d5b1ddca07586c5a9a15bb80288c97002401909f3ee2713ed7448fe005b3
   languageName: node
   linkType: hard
 
-"@neinteractiveliterature/litform-popovers@npm:^0.34.1":
-  version: 0.34.1
-  resolution: "@neinteractiveliterature/litform-popovers@npm:0.34.1"
+"@neinteractiveliterature/litform-popovers@npm:^0.35.0":
+  version: 0.35.0
+  resolution: "@neinteractiveliterature/litform-popovers@npm:0.35.0"
   dependencies:
-    "@neinteractiveliterature/litform-core": "npm:^0.34.1"
+    "@neinteractiveliterature/litform-core": "npm:^0.35.0"
     "@popperjs/core": "npm:^2.11.8"
     classnames: "npm:^2.5.1"
     react-cool-onclickoutside: "npm:^1.7.0"
@@ -5443,20 +5443,20 @@ __metadata:
   peerDependencies:
     react: ">= 18"
     react-dom: ">= 18"
-  checksum: 10c0/385f70b29745472b45a69f3e7faede879ffc848b07692f2da681ad00c3545128f5dff7b257e7025b977b647866834bc511d92a69702972f5e17ca1ca08f9fef8
+  checksum: 10c0/adb8f1e9880bd06fe8cdc8ae690ff4746dc5d5683d5f972068cacb7ae01be206ff88b6516f56c7294eec7a909f152a7e2bde1806059bd40ab05d0e502f86c617
   languageName: node
   linkType: hard
 
-"@neinteractiveliterature/litform@npm:0.34.1":
-  version: 0.34.1
-  resolution: "@neinteractiveliterature/litform@npm:0.34.1"
+"@neinteractiveliterature/litform@npm:0.35.0":
+  version: 0.35.0
+  resolution: "@neinteractiveliterature/litform@npm:0.35.0"
   dependencies:
-    "@neinteractiveliterature/litform-codemirror": "npm:^0.34.1"
-    "@neinteractiveliterature/litform-controls": "npm:^0.34.1"
-    "@neinteractiveliterature/litform-core": "npm:^0.34.1"
-    "@neinteractiveliterature/litform-modals": "npm:^0.34.1"
-    "@neinteractiveliterature/litform-popovers": "npm:^0.34.1"
-  checksum: 10c0/22dcea421ab452c45abdfac3ab81f930b09babbe9de804456701ba744857e4f1f6978d2d92a2e88ccbaae5fd813eb4d604b399ffb1082d07eaba0c5c433ae9ff
+    "@neinteractiveliterature/litform-codemirror": "npm:^0.35.0"
+    "@neinteractiveliterature/litform-controls": "npm:^0.35.0"
+    "@neinteractiveliterature/litform-core": "npm:^0.35.0"
+    "@neinteractiveliterature/litform-modals": "npm:^0.35.0"
+    "@neinteractiveliterature/litform-popovers": "npm:^0.35.0"
+  checksum: 10c0/a04c40170d8f5b68756916ccfd78d869fa976e3e7272fca6b03f6b74d6c778dadb46e71cbb1333d6314a98635bae97599d149fd5dafa2c86699f5d56b4290f9e
   languageName: node
   linkType: hard
 
@@ -21678,7 +21678,7 @@ __metadata:
     "@lezer/common": "npm:1.2.3"
     "@lezer/highlight": "npm:^1.2.1"
     "@lezer/lr": "npm:^1.4.2"
-    "@neinteractiveliterature/litform": "npm:0.34.1"
+    "@neinteractiveliterature/litform": "npm:0.35.0"
     "@popperjs/core": "npm:^2.11.8"
     "@prettier/plugin-ruby": "npm:4.0.4"
     "@rails/activestorage": "npm:8.0.200"
@@ -23398,19 +23398,19 @@ __metadata:
   languageName: node
   linkType: hard
 
-"temporal-polyfill@npm:^0.2.5":
-  version: 0.2.5
-  resolution: "temporal-polyfill@npm:0.2.5"
+"temporal-polyfill@npm:^0.3.0":
+  version: 0.3.0
+  resolution: "temporal-polyfill@npm:0.3.0"
   dependencies:
-    temporal-spec: "npm:^0.2.4"
-  checksum: 10c0/f2e828b15809bac9fcbab28f238c03277dd134ccc05f80cf2daa26cf8f8a865e9a2f610bcd6148845908665f8b59a5793c25d607cc0eec95f869d9d746839230
+    temporal-spec: "npm:0.3.0"
+  checksum: 10c0/ea6a495fac64c19b194ec3536c2a5916a754c2bf7f645fac5c149fe6a43f266fe4493c6fd6a6b6dfa3e9813505bc48346cf0514c1631a401b354f4c6568b908d
   languageName: node
   linkType: hard
 
-"temporal-spec@npm:^0.2.4":
-  version: 0.2.4
-  resolution: "temporal-spec@npm:0.2.4"
-  checksum: 10c0/89dec88dcded2cdffa36c3c2274881e833dd69e5959c9b50f52a93b29f02b8f265288be113b2d3b70e89dc85ece7eb8f9121c6d0e0563ea21bbf81693da8f97d
+"temporal-spec@npm:0.3.0":
+  version: 0.3.0
+  resolution: "temporal-spec@npm:0.3.0"
+  checksum: 10c0/2f7c8530f10e628ff755618490352f6c45b9a20833518286a3c10a8301012696fe6f0bcaa795d5f6f20038777595f2a73dc3390ddea743803405173ff233f482
   languageName: node
   linkType: hard
 
