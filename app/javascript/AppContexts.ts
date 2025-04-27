@@ -1,14 +1,8 @@
-// authenticityTokensManager: AuthenticityTokensManager;
-// client: ApolloClient<NormalizedCacheObject>;
-// clientConfigurationData: ClientConfigurationQueryData;
-// fetch: typeof fetch;
-// session: Session<SessionData, SessionFlashData>;
-
 import { ApolloClient, NormalizedCacheObject } from '@apollo/client';
-import AuthenticityTokensManager from 'AuthenticityTokensContext';
 import { Session, unstable_createContext } from 'react-router';
 import { ClientConfigurationQueryData } from 'serverQueries.generated';
 import { SessionData, SessionFlashData } from 'sessions';
+import AuthenticityTokensManager from 'AuthenticityTokensContext';
 
 export const authenticityTokensManagerContext = unstable_createContext<AuthenticityTokensManager>();
 export const apolloClientContext = unstable_createContext<ApolloClient<NormalizedCacheObject>>();

@@ -8,11 +8,14 @@
   ],
   "scripts": {
     "analyze": "vite-bundle-visualizer",
-    "build": "yarn run build:web && yarn run build:cli",
-    "build:web": "vite build",
+    "build": "yarn run build:framework && yarn run build:library && yarn run build:cli",
+    "build:library": "vite build -c vite-library.config.mts",
+    "build:framework": "react-router build -c vite-framework.config.mts",
     "build:cli": "rollup -c rollup.cliUtils.config.ts --configPlugin swc && chmod +x ./bin/*.cjs",
     "build:timezone_data": "node script/buildTimezoneData.js",
     "css:typegen": "yarn run typed-scss-modules 'app/javascript/**/*.module.scss'",
+    "dev:framework": "INTERCODE_BACKEND=https://intercode.test:5050 NODE_EXTRA_CA_CERTS=dev_ca.crt NODE_ENV=development tsx ./server.js",
+    "dev:library": "vite dev -c vite-library.config.mts",
     "graphql:build_type_data": "node script/buildGraphQLTypeData.js",
     "graphql:codegen": "graphql-codegen --config codegen.yml",
     "graphql:update": "yarn run graphql:codegen && yarn run graphql:build_type_data",
@@ -20,8 +23,7 @@
     "lint": "eslint app/javascript test/javascript schema.graphql --cache",
     "prepare": "husky install",
     "preview": "vite preview --outDir ./public",
-    "start": "INTERCODE_BACKEND=https://intercode.test:5050 NODE_EXTRA_CA_CERTS=dev_ca.crt tsx ./app/javascript/server.ts",
-    "start:library": "vite dev -c vite-library.config.mts",
+    "start": "tsx ./server.js",
     "ts:check": "tsc --noEmit --incremental",
     "test": "vitest run",
     "test:ui": "vitest --ui",
@@ -58,9 +60,6 @@
     "@react-router/express": "7.5.2",
     "@react-router/node": "7.5.2",
     "@react-router/serve": "7.5.2",
-    "@remix-run/node": "^2.16.5",
-    "@remix-run/react": "^2.16.5",
-    "@remix-run/serve": "^2.16.5",
     "@sentry/browser": "^9.0.0",
     "@sentry/types": "^9.0.0",
     "@stripe/react-stripe-js": "3.6.0",
@@ -97,6 +96,7 @@
     "caniuse-lite": "1.0.30001715",
     "classnames": "2.5.1",
     "codemirror": "^6.0.1",
+    "compression": "^1.8.0",
     "core-js": "3.41.0",
     "crypto-browserify": "3.12.1",
     "cssnano": "7.0.6",
@@ -196,6 +196,7 @@
     "@testing-library/user-event": "^14.5.2",
     "@types/array-to-sentence": "^2.0.0",
     "@types/bootstrap": "5.2.10",
+    "@types/compression": "^1",
     "@types/eslint-config-prettier": "^6.11.3",
     "@types/eslint-plugin-jsx-a11y": "^6.10.0",
     "@types/eslint__eslintrc": "^2.1.2",
@@ -259,10 +260,7 @@
   "resolutions": {
     "@typescript-eslint/parser": "8.31.0",
     "react-bootstrap4-modal": "3.0.10",
-    "rollup": "4.34.4",
-    "react-router@npm:^5.3.4": "patch:react-router@npm%3A7.5.2#~/.yarn/patches/react-router-npm-7.5.2-b23978ff45.patch",
-    "react-router@npm:5.3.4": "patch:react-router@npm%3A7.5.2#~/.yarn/patches/react-router-npm-7.5.2-b23978ff45.patch",
-    "react-router@npm:6.30.0": "patch:react-router@npm%3A7.5.2#~/.yarn/patches/react-router-npm-7.5.2-b23978ff45.patch"
+    "rollup": "4.34.4"
   },
   "graphdoc": {
     "logo": "<h1 style=\"font-family: Helvetica, Arial; letter-spacing: -4px; font-size: 60px; font-weight: bold;\">Intercode</h1>"
@@ -278,5 +276,10 @@
   "cacheDirectories": [
     ".yarn/cache"
   ],
-  "packageManager": "yarn@4.9.1"
+  "packageManager": "yarn@4.9.1",
+  "dependenciesMeta": {
+    "vite@6.3.3": {
+      "unplugged": true
+    }
+  }
 }

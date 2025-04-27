@@ -11,7 +11,26 @@ export function absolutePath(relativePath: string) {
 export default defineConfig({
   plugins: [tsconfigPaths(), envOnlyMacros()],
   ssr: {
-    noExternal: ['@neinteractiveliterature/litform', '@apollo/client', 'react-helmet-async'],
+    noExternal: [
+      '@neinteractiveliterature/litform',
+      '@apollo/client',
+      'react-helmet-async',
+      'apollo-upload-client',
+      '@codemirror/state',
+      '@codemirror/view',
+      '@codemirror/language',
+      '@codemirror/lang-html',
+      '@codemirror/lang-json',
+      '@codemirror/lang-markdown',
+      '@lezer/common',
+      '@breezehr/currency-codes',
+      'graphql',
+      'i18next',
+      'react-i18next',
+      'lodash',
+      'luxon',
+      'react-router',
+    ],
   },
   optimizeDeps: {
     exclude: ['node-fetch'],
@@ -20,15 +39,6 @@ export default defineConfig({
     mainFields: ['module'],
   },
   define: globalDefines,
-  experimental: {
-    renderBuiltUrl: (filename, { hostType }) => {
-      if (hostType !== 'js' || filename === 'setPublicPath.ts') {
-        return { relative: true };
-      } else {
-        return { runtime: `window.__intercodeAssetURL(${JSON.stringify(filename)})` };
-      }
-    },
-  },
   css: {
     preprocessorOptions: {
       scss: {
@@ -47,16 +57,7 @@ export default defineConfig({
       // tree shaking is causing empty GraphQL document constants as of Rollup 4.27,
       // hopefully can remove this eventually
       treeshake: false,
-      input: {
-        'application-styles': absolutePath('./app/javascript/packs/applicationStyles.ts'),
-        ...(process.env.NODE_ENV === 'production'
-          ? {}
-          : {
-              'dev-mode-graphiql': absolutePath('./app/javascript/DevModeGraphiql.tsx'),
-            }),
-      },
       output: {
-        dir: absolutePath('./public/packs'),
         entryFileNames: '[name].js',
         manualChunks: {
           apollo: ['@apollo/client', 'apollo-upload-client/createUploadLink.mjs'],

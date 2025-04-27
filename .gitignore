@@ -15,6 +15,7 @@
 /test/html_reports
 /test/reports
 /stats.json
+/build
 *.tsbuildinfo
 /.cache
 /.react-router
