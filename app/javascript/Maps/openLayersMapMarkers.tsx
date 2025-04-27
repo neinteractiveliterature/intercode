@@ -69,7 +69,6 @@ export function useMarkerFeatureSource(markers: BuildMarkerOptions[]) {
 
   useEffect(() => {
     if (!isEqual(prevMarkers.current, markers)) {
-      console.log(prevMarkers.current, markers);
       prevMarkers.current = markers;
       setFeatureSource(buildFeatureSourceFromMarkers(markers));
     }

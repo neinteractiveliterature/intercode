@@ -16,7 +16,6 @@ import { Route } from './+types/index';
 import { apolloClientContext } from 'AppContexts';
 
 export async function action({ request, context }: Route.ActionArgs) {
-  console.log(request);
   const formData = await request.formData();
 
   try {

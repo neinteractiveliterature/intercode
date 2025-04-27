@@ -5,7 +5,6 @@ import { getBackendBaseUrl } from 'getBackendBaseUrl';
 import { apolloClientContext, authenticityTokensManagerContext, fetchContext, sessionContext } from 'AppContexts';
 
 export async function action({ request, context }: Route.ActionArgs) {
-  console.log(request.method);
   if (request.method !== 'DELETE') {
     throw new Response('Not Found', { status: 404 });
   }
@@ -26,7 +25,12 @@ export async function action({ request, context }: Route.ActionArgs) {
   }
 
   await context.get(apolloClientContext).resetStore();
-  const setCookie = await destroySession(context.get(sessionContext));
 
-  return redirect('/', { headers: { 'Set-Cookie': setCookie } });
+  const session = context.get(sessionContext);
+  const headers: HeadersInit = {};
+  if (session) {
+    headers['Set-Cookie'] = await destroySession(session);
+  }
+
+  return redirect('/', { headers });
 }

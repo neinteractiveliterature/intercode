@@ -264,7 +264,6 @@ function AddDestinationForm<T extends NotificationDestinationType>({
             className="btn btn-primary mt-2"
             type="button"
             onClick={() => {
-              console.log(destination);
               addDestination(destination);
               setDestination({ __typename: 'NotificationDestination', id: '' } as T);
               setDestinationType(undefined);

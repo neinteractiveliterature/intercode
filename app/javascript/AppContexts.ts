@@ -14,4 +14,4 @@ export const authenticityTokensManagerContext = unstable_createContext<Authentic
 export const apolloClientContext = unstable_createContext<ApolloClient<NormalizedCacheObject>>();
 export const clientConfigurationDataContext = unstable_createContext<ClientConfigurationQueryData>();
 export const fetchContext = unstable_createContext<typeof fetch>();
-export const sessionContext = unstable_createContext<Session<SessionData, SessionFlashData>>();
+export const sessionContext = unstable_createContext<Session<SessionData, SessionFlashData> | undefined>();

@@ -16654,7 +16654,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"hoist-non-react-statics@npm:^3.1.0, hoist-non-react-statics@npm:^3.3.0, hoist-non-react-statics@npm:^3.3.1, hoist-non-react-statics@npm:^3.3.2":
+"hoist-non-react-statics@npm:^3.3.0, hoist-non-react-statics@npm:^3.3.1, hoist-non-react-statics@npm:^3.3.2":
   version: 3.3.2
   resolution: "hoist-non-react-statics@npm:3.3.2"
   dependencies:
@@ -17927,13 +17927,6 @@ __metadata:
   version: 0.4.1
   resolution: "is-yarn-global@npm:0.4.1"
   checksum: 10c0/8ff66f33454614f8e913ad91cc4de0d88d519a46c1ed41b3f589da79504ed0fcfa304064fe3096dda9360c5f35aa210cb8e978fd36798f3118cb66a4de64d365
-  languageName: node
-  linkType: hard
-
-"isarray@npm:0.0.1":
-  version: 0.0.1
-  resolution: "isarray@npm:0.0.1"
-  checksum: 10c0/ed1e62da617f71fe348907c71743b5ed550448b455f8d269f89a7c7ddb8ae6e962de3dab6a74a237b06f5eb7f6ece7a45ada8ce96d87fe972926530f91ae3311
   languageName: node
   linkType: hard
 
@@ -21201,15 +21194,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"path-to-regexp@npm:^1.7.0":
-  version: 1.8.0
-  resolution: "path-to-regexp@npm:1.8.0"
-  dependencies:
-    isarray: "npm:0.0.1"
-  checksum: 10c0/7b25d6f27a8de03f49406d16195450f5ced694398adea1510b0f949d9660600d1769c5c6c83668583b7e6b503f3caf1ede8ffc08135dbe3e982f034f356fbb5c
-  languageName: node
-  linkType: hard
-
 "path-type@npm:^4.0.0":
   version: 4.0.0
   resolution: "path-type@npm:4.0.0"
@@ -23150,7 +23134,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-is@npm:^16.13.1, react-is@npm:^16.6.0, react-is@npm:^16.7.0":
+"react-is@npm:^16.13.1, react-is@npm:^16.7.0":
   version: 16.13.1
   resolution: "react-is@npm:16.13.1"
   checksum: 10c0/33977da7a5f1a287936a0c85639fec6ca74f4f15ef1e59a6bc20338fc73dc69555381e211f7a3529b8150a1f71e4225525b41b60b52965bda53ce7d47377ada1
@@ -23304,33 +23288,20 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-router@npm:5.3.4, react-router@npm:^5.3.4":
-  version: 5.3.4
-  resolution: "react-router@npm:5.3.4"
+"react-router@file:/Users/nbudin/src/react-router/packages/react-router/react-router-7.5.2.tgz::locator=root-workspace-0b6124%40workspace%3A.":
+  version: 7.5.2
+  resolution: "react-router@file:/Users/nbudin/src/react-router/packages/react-router/react-router-7.5.2.tgz#/Users/nbudin/src/react-router/packages/react-router/react-router-7.5.2.tgz::hash=4551c5&locator=root-workspace-0b6124%40workspace%3A."
   dependencies:
-    "@babel/runtime": "npm:^7.12.13"
-    history: "npm:^4.9.0"
-    hoist-non-react-statics: "npm:^3.1.0"
-    loose-envify: "npm:^1.3.1"
-    path-to-regexp: "npm:^1.7.0"
-    prop-types: "npm:^15.6.2"
-    react-is: "npm:^16.6.0"
-    tiny-invariant: "npm:^1.0.2"
-    tiny-warning: "npm:^1.0.0"
+    cookie: "npm:^1.0.1"
+    set-cookie-parser: "npm:^2.6.0"
+    turbo-stream: "npm:2.4.0"
   peerDependencies:
-    react: ">=15"
-  checksum: 10c0/e15c00dfef199249b4c6e6d98e5e76cc352ce66f3270f13df37cc069ddf7c05e43281e8c308fc407e4435d72924373baef1d2890e0f6b0b1eb423cf47315a053
-  languageName: node
-  linkType: hard
-
-"react-router@npm:6.30.0":
-  version: 6.30.0
-  resolution: "react-router@npm:6.30.0"
-  dependencies:
-    "@remix-run/router": "npm:1.23.0"
-  peerDependencies:
-    react: ">=16.8"
-  checksum: 10c0/e6f20cf5c47ec057a057a4cfb9a55983d0a5b4b3314d20e07f0a70e59e004f51778d4dac415aee1e4e64db69cc4cd72e5acf8fd60dcf07d909895b8863b0b023
+    react: ">=18"
+    react-dom: ">=18"
+  peerDependenciesMeta:
+    react-dom:
+      optional: true
+  checksum: 10c0/7c7103b08c4f9e664e6faa627672db24c04aaa06c076228643ac0a06180ad6205d8a36fdc64f25ff5514256bede45375235cb0dd67703bd204d5c991fdedc4c7
   languageName: node
   linkType: hard
 
@@ -23348,6 +23319,23 @@ __metadata:
     react-dom:
       optional: true
   checksum: 10c0/5972ecb783e0ac0512c500b84bd4ff475665ba49c67b69e13b79dc24c7ee0496d523858058bb43c70147367688e0cc0d6d6d0f51cabfdebfbc5556d559bff457
+  languageName: node
+  linkType: hard
+
+"react-router@patch:react-router@npm%3A7.5.2#~/.yarn/patches/react-router-npm-7.5.2-b23978ff45.patch":
+  version: 7.5.2
+  resolution: "react-router@patch:react-router@npm%3A7.5.2#~/.yarn/patches/react-router-npm-7.5.2-b23978ff45.patch::version=7.5.2&hash=af069e"
+  dependencies:
+    cookie: "npm:^1.0.1"
+    set-cookie-parser: "npm:^2.6.0"
+    turbo-stream: "npm:2.4.0"
+  peerDependencies:
+    react: ">=18"
+    react-dom: ">=18"
+  peerDependenciesMeta:
+    react-dom:
+      optional: true
+  checksum: 10c0/7d6cfeb75a70ebd04f3af66f423da957e9448156ecb3714a8c127ab3c02a509d2ba674c5e16254f1b9f25e256f65178b16e720aa32cc12b520bea73e59c207f9
   languageName: node
   linkType: hard
 
@@ -24423,7 +24411,7 @@ __metadata:
     react-i18next: "npm:15.5.1"
     react-onclickoutside: "npm:6.13.2"
     react-popper: "npm:2.3.0"
-    react-router: "npm:7.5.2"
+    react-router: /Users/nbudin/src/react-router/packages/react-router/react-router-7.5.2.tgz
     react-select: "npm:5.10.1"
     react-table: "npm:7.8.0"
     react-test-renderer: "npm:18.3.1"

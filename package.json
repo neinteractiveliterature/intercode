@@ -152,7 +152,7 @@
     "react-i18next": "15.5.1",
     "react-onclickoutside": "6.13.2",
     "react-popper": "2.3.0",
-    "react-router": "7.5.2",
+    "react-router": "/Users/nbudin/src/react-router/packages/react-router/react-router-7.5.2.tgz",
     "react-select": "5.10.1",
     "react-table": "7.8.0",
     "react-transition-group": "4.4.5",
@@ -259,7 +259,10 @@
   "resolutions": {
     "@typescript-eslint/parser": "8.31.0",
     "react-bootstrap4-modal": "3.0.10",
-    "rollup": "4.34.4"
+    "rollup": "4.34.4",
+    "react-router@npm:^5.3.4": "patch:react-router@npm%3A7.5.2#~/.yarn/patches/react-router-npm-7.5.2-b23978ff45.patch",
+    "react-router@npm:5.3.4": "patch:react-router@npm%3A7.5.2#~/.yarn/patches/react-router-npm-7.5.2-b23978ff45.patch",
+    "react-router@npm:6.30.0": "patch:react-router@npm%3A7.5.2#~/.yarn/patches/react-router-npm-7.5.2-b23978ff45.patch"
   },
   "graphdoc": {
     "logo": "<h1 style=\"font-family: Helvetica, Arial; letter-spacing: -4px; font-size: 60px; font-weight: bold;\">Intercode</h1>"
