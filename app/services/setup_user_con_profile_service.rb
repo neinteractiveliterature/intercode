@@ -16,9 +16,9 @@ class SetupUserConProfileService < CivilService::Service
 
   def inner_call
     user_con_profile =
-      current_user.user_con_profiles.build(
-        first_name: current_user.first_name,
-        last_name: current_user.last_name,
+      user.user_con_profiles.build(
+        first_name: user.first_name,
+        last_name: user.last_name,
         convention_id: convention.id,
         needs_update: true
       )
@@ -53,7 +53,7 @@ class SetupUserConProfileService < CivilService::Service
     return nil unless convention.organization_id
 
     @profiles_by_recency ||=
-      current_user
+      user
         .user_con_profiles
         .joins(:convention)
         .where(conventions: { organization_id: convention.organization_id })
