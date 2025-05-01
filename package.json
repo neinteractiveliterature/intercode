@@ -87,7 +87,7 @@
     "caniuse-lite": "1.0.30001716",
     "classnames": "2.5.1",
     "codemirror": "^6.0.1",
-    "core-js": "3.41.0",
+    "core-js": "3.42.0",
     "crypto-browserify": "3.12.1",
     "cssnano": "7.0.6",
     "csv-stringify": "^6.5.1",
