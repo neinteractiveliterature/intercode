@@ -70,7 +70,7 @@ jobs:
           text: ${{ github.event.release.body }}
       - name: Post about release to Slack
         id: slack
-        uses: slackapi/slack-github-action@v2.0.0
+        uses: slackapi/slack-github-action@v2.1.0
         with:
           method: chat.postMessage
           token: ${{ secrets.SLACKTOKEN }}
