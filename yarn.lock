@@ -4481,17 +4481,17 @@ __metadata:
   linkType: hard
 
 "@graphql-tools/graphql-file-loader@npm:^8.0.0, @graphql-tools/graphql-file-loader@npm:^8.0.1":
-  version: 8.0.19
-  resolution: "@graphql-tools/graphql-file-loader@npm:8.0.19"
+  version: 8.0.20
+  resolution: "@graphql-tools/graphql-file-loader@npm:8.0.20"
   dependencies:
-    "@graphql-tools/import": "npm:7.0.18"
+    "@graphql-tools/import": "npm:7.0.19"
     "@graphql-tools/utils": "npm:^10.8.6"
     globby: "npm:^11.0.3"
     tslib: "npm:^2.4.0"
     unixify: "npm:^1.0.0"
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
-  checksum: 10c0/4357dfea9b424ba44d7c8398809fbca9f4f07d4e3026bf5cdef3867ba32857f0ccd4a5378981eb3bba7c9e5f00d33108b0d51bde60a98b4e3395e02e05666e87
+  checksum: 10c0/94d8b4ad6730bfba174eda254692f483c6d0fe29cdd4e23d538e9171e806ca49978238bcc92d0c1753b8493f84a45b464148a3b91a39b90ed96eefe602425c61
   languageName: node
   linkType: hard
 
@@ -4528,16 +4528,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/import@npm:7.0.18":
-  version: 7.0.18
-  resolution: "@graphql-tools/import@npm:7.0.18"
+"@graphql-tools/import@npm:7.0.19":
+  version: 7.0.19
+  resolution: "@graphql-tools/import@npm:7.0.19"
   dependencies:
     "@graphql-tools/utils": "npm:^10.8.6"
     resolve-from: "npm:5.0.0"
     tslib: "npm:^2.4.0"
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
-  checksum: 10c0/60c83ba5850d61f81f33ec4aa83a53538b3ce3aecd2d16d6a3304e99a02177af36e011d5aefd33d8463809fbb211d7bfc8037fdbee50cd6b9d66465635f67aeb
+  checksum: 10c0/5639fcd9c44a862710fc0821cb4798245ae20cfd7f0aa8a5bba420bde92882e0bc68350db0add59c3dfe544380e90424ff6e1bfd3e2441e8ac045b9ce0290a79
   languageName: node
   linkType: hard
 
