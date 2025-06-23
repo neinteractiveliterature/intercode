@@ -9429,12 +9429,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"bootstrap@npm:5.3.6":
-  version: 5.3.6
-  resolution: "bootstrap@npm:5.3.6"
+"bootstrap@npm:5.3.7":
+  version: 5.3.7
+  resolution: "bootstrap@npm:5.3.7"
   peerDependencies:
     "@popperjs/core": ^2.11.8
-  checksum: 10c0/1b3f8f4f265463b3cd6aece84135b521ff55f3225a5c16c6981fdd8fb2bfb53b35b0815bff63382e5c83f6d537c017ae8392afe34366d5d547e4fd507d086e1c
+  checksum: 10c0/019f0d683aec843b9fc0592ae78560cfe286bc8e31e706d40d8c15d390dcca7ab2ffa193a489a74f65ed5596800b9b79da867545ce3bbafca945b630fe0055af
   languageName: node
   linkType: hard
 
@@ -21922,7 +21922,7 @@ __metadata:
     array-to-sentence: "npm:2.0.0"
     assert-never: "npm:1.4.0"
     autoprefixer: "npm:10.4.21"
-    bootstrap: "npm:5.3.6"
+    bootstrap: "npm:5.3.7"
     bootstrap-icons: "npm:1.13.1"
     buffer: "npm:6.0.3"
     bytes: "npm:3.1.2"
