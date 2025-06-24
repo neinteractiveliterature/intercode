@@ -10291,15 +10291,15 @@ __metadata:
   linkType: hard
 
 "codemirror@npm:^5.65.3":
-  version: 5.65.5
-  resolution: "codemirror@npm:5.65.5"
-  checksum: 10c0/7b2a086c30145a726410995cb0a0cdf2653dc498d06324c53420fefb350bb5ac3ef900c07e4f3accad6f01a3d788d88193e508704c6efb7cc5aed3a70fe80b6b
+  version: 5.65.19
+  resolution: "codemirror@npm:5.65.19"
+  checksum: 10c0/067024d74a9a98721063bcd78373899e827914c92881c595a2d6789649a3c4e061edd892b29bca10995a5450488c9c93fc3998a3c4ed6fd19cba2e97cd23d4e1
   languageName: node
   linkType: hard
 
 "codemirror@npm:^6.0.1":
-  version: 6.0.1
-  resolution: "codemirror@npm:6.0.1"
+  version: 6.0.2
+  resolution: "codemirror@npm:6.0.2"
   dependencies:
     "@codemirror/autocomplete": "npm:^6.0.0"
     "@codemirror/commands": "npm:^6.0.0"
@@ -10308,7 +10308,7 @@ __metadata:
     "@codemirror/search": "npm:^6.0.0"
     "@codemirror/state": "npm:^6.0.0"
     "@codemirror/view": "npm:^6.0.0"
-  checksum: 10c0/219b0f6ee91d373380fba2e0564a2665990a3cdada0b01861768005b09061187c58eeb3db96aef486777b02b77b50a50ee843635e3743c47d3725034913c4b60
+  checksum: 10c0/8d198d8aebc32e56c966ac57b0fe8f832b7d601a2f62819ba3a294570233982bf4d5b499a764194b6b26dbc5313a156c2611cbc542234ea6eae6accf07a651ab
   languageName: node
   linkType: hard
 
