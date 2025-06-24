@@ -292,7 +292,7 @@ GEM
     holidays (8.8.0)
     i18n (1.14.7)
       concurrent-ruby (~> 1.0)
-    icalendar (2.11.0)
+    icalendar (2.11.2)
       base64
       ice_cube (~> 0.16)
       logger
@@ -395,7 +395,7 @@ GEM
       ostruct (>= 0.2)
     optimist (3.1.0)
     orm_adapter (0.5.0)
-    ostruct (0.6.1)
+    ostruct (0.6.2)
     parallel (1.27.0)
     parser (3.3.8.0)
       ast (~> 2.4.1)
