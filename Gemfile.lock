@@ -256,8 +256,8 @@ GEM
       logger
     faraday-net_http (3.4.0)
       net-http (>= 0.5.0)
-    ffi (1.17.1-arm64-darwin)
-    ffi (1.17.1-x86_64-linux-gnu)
+    ffi (1.17.2-arm64-darwin)
+    ffi (1.17.2-x86_64-linux-gnu)
     flamegraph (0.9.5)
     fly-ruby (0.5.1)
       rack (~> 2.0)
@@ -490,7 +490,7 @@ GEM
       ffi (~> 1.0)
     rbs (3.7.0)
       logger
-    rbtrace (0.5.1)
+    rbtrace (0.5.2)
       ffi (>= 1.0.6)
       msgpack (>= 0.4.3)
       optimist (>= 3.0.0)
