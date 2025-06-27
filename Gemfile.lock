@@ -550,7 +550,7 @@ GEM
       rubocop (>= 1.72.1, < 2)
     ruby-progressbar (1.13.0)
     ruby-statistics (4.1.0)
-    ruby-vips (2.2.3)
+    ruby-vips (2.2.4)
       ffi (~> 1.12)
       logger
     ruby2_keywords (0.0.5)
@@ -760,7 +760,7 @@ DEPENDENCIES
   yard
 
 RUBY VERSION
-   ruby 3.4.3p32
+   ruby 3.4.4p34
 
 BUNDLED WITH
    2.6.2
