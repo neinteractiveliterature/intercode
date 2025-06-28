@@ -47,7 +47,7 @@ function DroppedEventAdmin(): JSX.Element {
                 submit(
                   {},
                   {
-                    action: `/admin_events/${droppedEvent.event_category.id}/${droppedEvent.id}/restore`,
+                    action: `/admin_events/${droppedEvent.event_category.id}/events/${droppedEvent.id}/restore`,
                     method: 'POST',
                   },
                 ),
