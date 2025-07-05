@@ -71,6 +71,8 @@ class Types::AbilityType < Types::BaseObject
 
   field :can_read_reports, Boolean, null: false
 
+  field :can_read_tickets, Boolean, null: false
+
   field :can_manage_forms, Boolean, null: false
 
   field :can_manage_oauth_applications, Boolean, null: false
@@ -253,6 +255,10 @@ class Types::AbilityType < Types::BaseObject
 
   def can_read_reports
     !!(convention && convention_policy.view_reports?)
+  end
+
+  def can_read_tickets
+    !!(convention && policy(Ticket.new(user_con_profile: UserConProfile.new(convention:))).read?)
   end
 
   def can_manage_forms

@@ -133,11 +133,13 @@ function PrivilegesFilter<TData extends UserConProfilesTableRow, TValue>({
 export type UserConProfilesTableProps = {
   defaultVisibleColumns?: string[];
   attendeesPageQueryData: AttendeesPageQueryData;
+  canReadTickets: boolean;
 };
 
 function UserConProfilesTable({
   defaultVisibleColumns,
   attendeesPageQueryData,
+  canReadTickets,
 }: UserConProfilesTableProps): JSX.Element {
   const { timezoneName } = useContext(AppRootContext);
   const { t } = useTranslation();
@@ -186,7 +188,7 @@ function UserConProfilesTable({
       }),
     ];
 
-    if (attendeesPageQueryData.convention.ticket_mode !== TicketMode.Disabled) {
+    if (attendeesPageQueryData.convention.ticket_mode !== TicketMode.Disabled && canReadTickets) {
       columns.push(
         columnHelper.accessor('ticket', {
           header: humanize(attendeesPageQueryData.convention.ticket_name || 'ticket'),
@@ -225,16 +227,21 @@ function UserConProfilesTable({
         enableColumnFilter: true,
         cell: BooleanCell,
       }),
-      columnHelper.accessor((userConProfile) => userConProfile.ticket != null, {
-        header: t('admin.userConProfiles.isAttending'),
-        id: 'attending',
-        size: 150,
-        enableColumnFilter: true,
-        cell: BooleanCell,
-      }),
     );
 
-    if (attendeesPageQueryData.convention.ticket_mode !== TicketMode.Disabled) {
+    if (canReadTickets) {
+      columns.push(
+        columnHelper.accessor((userConProfile) => userConProfile.ticket != null, {
+          header: t('admin.userConProfiles.isAttending'),
+          id: 'attending',
+          size: 150,
+          enableColumnFilter: true,
+          cell: BooleanCell,
+        }),
+      );
+    }
+
+    if (attendeesPageQueryData.convention.ticket_mode !== TicketMode.Disabled && canReadTickets) {
       columns.push(
         columnHelper.accessor(
           (userConProfile) =>
@@ -296,7 +303,7 @@ function UserConProfilesTable({
     });
 
     return columns;
-  }, [t, timezoneName, attendeesPageQueryData]);
+  }, [t, timezoneName, attendeesPageQueryData, canReadTickets]);
 
   const {
     table: tableInstance,
