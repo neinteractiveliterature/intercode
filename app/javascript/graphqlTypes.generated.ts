@@ -65,6 +65,7 @@ export type Ability = {
   can_read_schedule: Scalars['Boolean']['output'];
   can_read_schedule_with_counts: Scalars['Boolean']['output'];
   can_read_signups: Scalars['Boolean']['output'];
+  can_read_tickets: Scalars['Boolean']['output'];
   can_read_user_activity_alerts: Scalars['Boolean']['output'];
   can_read_user_con_profiles: Scalars['Boolean']['output'];
   can_read_users: Scalars['Boolean']['output'];

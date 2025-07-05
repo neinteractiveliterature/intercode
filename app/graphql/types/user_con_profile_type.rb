@@ -127,7 +127,6 @@ class Types::UserConProfileType < Types::BaseObject
                       :signups,
                       :signup_ranked_choices,
                       :signup_requests,
-                      :ticket,
                       :user
 
   def bio_html
@@ -204,6 +203,11 @@ class Types::UserConProfileType < Types::BaseObject
 
     override = context[:convention].ticket_types.new.maximum_event_provided_tickets_overrides.new
     Pundit.policy(user, override).create?
+  end
+
+  def ticket
+    ticket = dataloader.with(Sources::ActiveRecordAssociation, UserConProfile, :ticket).load(object)
+    ticket && policy(ticket).read? ? ticket : nil
   end
 
   private

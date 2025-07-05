@@ -21,6 +21,7 @@ function AttendeesPage() {
       <UserConProfilesTable
         defaultVisibleColumns={['name', 'email', 'ticket', 'privileges']}
         attendeesPageQueryData={data}
+        canReadTickets={data.currentAbility.can_read_tickets}
       />
       <Outlet />
     </>

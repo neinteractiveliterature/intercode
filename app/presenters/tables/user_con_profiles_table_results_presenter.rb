@@ -1,23 +1,23 @@
 # frozen_string_literal: true
-require 'money-rails/helpers/action_view_extension'
+require "money-rails/helpers/action_view_extension"
 
 class Tables::UserConProfilesTableResultsPresenter < Tables::TableResultsPresenter
   extend MoneyRails::ActionViewExtension
 
-  attr_reader :convention
+  attr_reader :convention, :pundit_user
 
-  def self.for_convention(convention, pundit_user, *args)
-    new(convention, Pundit.policy_scope(pundit_user, convention.user_con_profiles), *args)
+  def self.for_convention(convention, pundit_user, *)
+    new(convention, pundit_user, Pundit.policy_scope(pundit_user, convention.user_con_profiles), *)
   end
 
   def self.filter_ticket_type(scope, value)
-    ticket_type_ids = value.map { |id_value| id_value == 'none' ? nil : id_value.to_i }
+    ticket_type_ids = value.map { |id_value| id_value == "none" ? nil : id_value.to_i }
 
     scope.left_joins(:ticket).where(tickets: { ticket_type_id: ticket_type_ids })
   end
 
   def self.describe_ticket(ticket, include_payment_amount: true)
-    return 'Unpaid' unless ticket
+    return "Unpaid" unless ticket
 
     status_parts = []
     status_parts << ticket.ticket_type.name.humanize
@@ -27,13 +27,13 @@ class Tables::UserConProfilesTableResultsPresenter < Tables::TableResultsPresent
       status_parts << humanized_money_with_symbol(payment_amount) if payment_amount.try(:>, 0)
     end
 
-    status_parts.compact.join(' ')
+    status_parts.compact.join(" ")
   end
 
-  field :id, 'ID'
-  field :user_id, 'User ID'
+  field :id, "ID"
+  field :user_id, "User ID"
 
-  field :name, 'Name' do
+  field :name, "Name" do
     def apply_filter(scope, value)
       scope.name_search(value)
     end
@@ -50,7 +50,7 @@ lower(user_con_profiles.first_name) #{direction}"
     end
   end
 
-  field :first_name, 'First name' do
+  field :first_name, "First name" do
     def apply_filter(scope, value)
       scope.name_search(value, columns: %w[first_name])
     end
@@ -60,7 +60,7 @@ lower(user_con_profiles.first_name) #{direction}"
     end
   end
 
-  field :last_name, 'Last name' do
+  field :last_name, "Last name" do
     def apply_filter(scope, value)
       scope.name_search(value, columns: %w[last_name])
     end
@@ -70,9 +70,9 @@ lower(user_con_profiles.first_name) #{direction}"
     end
   end
 
-  field :email, 'Email' do
+  field :email, "Email" do
     def apply_filter(scope, value)
-      scope.joins(:user).where('lower(users.email) like :value', value: "%#{value.downcase}%")
+      scope.joins(:user).where("lower(users.email) like :value", value: "%#{value.downcase}%")
     end
 
     def expand_scope_for_sort(scope, _direction)
@@ -90,6 +90,7 @@ lower(user_con_profiles.first_name) #{direction}"
     end
 
     def apply_filter(scope, value)
+      return scope unless presenter.can_read_tickets?
       Tables::UserConProfilesTableResultsPresenter.filter_ticket_type(scope, value)
     end
 
@@ -98,6 +99,7 @@ lower(user_con_profiles.first_name) #{direction}"
     end
 
     def sql_order(direction)
+      return unless presenter.can_read_tickets?
       Arel.sql("ticket_types.name #{direction}, order_entries.price_per_item_cents #{direction}")
     end
 
@@ -112,6 +114,7 @@ lower(user_con_profiles.first_name) #{direction}"
     end
 
     def apply_filter(scope, value)
+      return scope unless presenter.can_read_tickets?
       Tables::UserConProfilesTableResultsPresenter.filter_ticket_type(scope, value)
     end
 
@@ -120,6 +123,7 @@ lower(user_con_profiles.first_name) #{direction}"
     end
 
     def sql_order(direction)
+      return unless presenter.can_read_tickets?
       Arel.sql("ticket_types.name #{direction}")
     end
 
@@ -131,13 +135,14 @@ lower(user_con_profiles.first_name) #{direction}"
     end
   end
 
-  field :payment_amount, 'Payment amount' do
+  field :payment_amount, "Payment amount" do
     def apply_filter(scope, value)
+      return scope unless presenter.can_read_tickets?
       payment_amount_fractional = (value.to_f * 100.0).to_i
       if payment_amount_fractional.zero?
-        scope
-          .left_joins(ticket: :order_entry)
-          .where('order_entries.price_per_item_cents = 0 OR order_entries.price_per_item_cents IS NULL')
+        scope.left_joins(ticket: :order_entry).where(
+          "order_entries.price_per_item_cents = 0 OR order_entries.price_per_item_cents IS NULL"
+        )
       else
         scope.left_joins(ticket: :order_entry).where(order_entries: { price_per_item_cents: payment_amount_fractional })
       end
@@ -149,7 +154,7 @@ lower(user_con_profiles.first_name) #{direction}"
     end
   end
 
-  field :is_team_member, 'Event team member?' do
+  field :is_team_member, "Event team member?" do
     def apply_filter(scope, value)
       if value
         scope.where(id: TeamMember.for_active_events.select(:user_con_profile_id))
@@ -159,21 +164,18 @@ lower(user_con_profiles.first_name) #{direction}"
     end
 
     def generate_csv_cell(user_con_profile)
-      user_con_profile.team_members.for_active_events.any? ? 'yes' : 'no'
+      user_con_profile.team_members.for_active_events.any? ? "yes" : "no"
     end
   end
 
-  field :attending, 'Attending?' do
+  field :attending, "Attending?" do
     def apply_filter(scope, value)
-      if value
-        scope.left_joins(:ticket).where.not(tickets: { id: nil })
-      else
-        scope.left_joins(:ticket).where(tickets: { id: nil })
-      end
+      return scope unless presenter.can_read_tickets?
+      value ? scope.left_joins(:ticket).where.not(tickets: { id: nil }) : scope.where.missing(:ticket)
     end
 
     def generate_csv_cell(user_con_profile)
-      user_con_profile.ticket ? 'yes' : 'no'
+      user_con_profile.ticket ? "yes" : "no"
     end
   end
 
@@ -183,10 +185,12 @@ lower(user_con_profiles.first_name) #{direction}"
     end
 
     def expand_scope_for_sort(scope, _direction)
+      return scope unless presenter.can_read_tickets?
       scope.joins(ticket: :ticket_type)
     end
 
     def sql_order(direction)
+      return unless presenter.can_read_tickets?
       Arel.sql("tickets.updated_at #{direction}")
     end
 
@@ -195,21 +199,27 @@ lower(user_con_profiles.first_name) #{direction}"
     end
   end
 
-  field :privileges, 'Privileges' do
+  field :privileges, "Privileges" do
     def apply_filter(scope, value)
-      value.include?('site_admin') ? scope.joins(:user).where(users: { site_admin: true }) : scope
+      value.include?("site_admin") ? scope.joins(:user).where(users: { site_admin: true }) : scope
     end
 
     def generate_csv_cell(user_con_profile)
-      user_con_profile.privileges.map(&:titleize).sort.join(', ')
+      user_con_profile.privileges.map(&:titleize).sort.join(", ")
     end
   end
 
-  field :order_summary, 'Order summary'
+  field :order_summary, "Order summary"
 
-  def initialize(convention, *args)
+  def initialize(convention, pundit_user, *)
     @convention = convention
-    super(*args)
+    @pundit_user = pundit_user
+    super(*)
+  end
+
+  def can_read_tickets?
+    return @can_read_tickets if defined?(@can_read_tickets)
+    @can_read_tickets = Pundit.policy(pundit_user, Ticket.new(user_con_profile: UserConProfile.new(convention:))).read?
   end
 
   def fields
@@ -229,7 +239,7 @@ lower(user_con_profiles.first_name) #{direction}"
   private
 
   def apply_privileges_filter(scope, value)
-    value.include?('site_admin') ? scope.joins(:user).where(users: { site_admin: true }) : scope
+    value.include?("site_admin") ? scope.joins(:user).where(users: { site_admin: true }) : scope
   end
 
   def csv_scope

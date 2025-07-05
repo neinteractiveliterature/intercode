@@ -745,6 +745,22 @@
               "args": []
             },
             {
+              "name": "can_read_tickets",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
               "name": "can_read_user_activity_alerts",
               "description": null,
               "type": {

@@ -38,6 +38,7 @@ type Ability {
   can_read_schedule: Boolean!
   can_read_schedule_with_counts: Boolean!
   can_read_signups: Boolean!
+  can_read_tickets: Boolean!
   can_read_user_activity_alerts: Boolean!
   can_read_user_con_profiles: Boolean!
   can_read_users: Boolean!

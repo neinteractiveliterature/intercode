@@ -134,6 +134,10 @@ query UserConProfileAdminQuery($id: ID!) {
 }
 
 query AttendeesPageQuery {
+  currentAbility {
+    can_read_tickets
+  }
+
   convention: conventionByRequestHost {
     id
     ticket_name
