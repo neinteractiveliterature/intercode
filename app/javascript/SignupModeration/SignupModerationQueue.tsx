@@ -316,7 +316,7 @@ function SignupModerationQueue(): JSX.Element {
         cell: SignupRankedChoiceCell,
         size: 60,
       }),
-      columnHelper.display({
+      columnHelper.accessor((signupRequest) => signupRequest, {
         id: 'actions',
         header: t('admin.signupModeration.headers.actions'),
         size: 100,
