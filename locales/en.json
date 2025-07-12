@@ -1436,6 +1436,10 @@
         "waitlist": "waitlist"
       }
     },
+    "rowSelection": {
+      "selectAllRows": "Select all rows",
+      "selectRow": "Select row"
+    },
     "signupChange": {
       "actions": {
         "acceptSignupRankedChoice": "accepted signup ranked choice",

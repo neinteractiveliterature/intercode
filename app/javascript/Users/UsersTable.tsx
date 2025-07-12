@@ -12,6 +12,7 @@ import { UsersTableUsersQueryData, UsersTableUsersQueryDocument } from './querie
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
 import { useTranslation } from 'react-i18next';
 import { useMemo } from 'react';
+import { buildRowSelectColumn } from 'Tables/RowSelection';
 
 type UserType = UsersTableUsersQueryData['users_paginated']['entries'][0];
 
@@ -19,6 +20,8 @@ const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({});
 
 // eslint-disable-next-line i18next/no-literal-string
 const defaultVisibleColumns = ['id', 'first_name', 'last_name', 'email'];
+// eslint-disable-next-line i18next/no-literal-string
+const alwaysVisibleColumns = ['_rowSelect'];
 
 function UsersTable(): JSX.Element {
   const { t } = useTranslation();
@@ -28,6 +31,7 @@ function UsersTable(): JSX.Element {
   const columns = useMemo(() => {
     const columnHelper = createColumnHelper<UserType>();
     return [
+      buildRowSelectColumn(columnHelper),
       columnHelper.accessor('id', {
         id: 'id',
         header: t('admin.users.table.headers.id'),
@@ -63,9 +67,11 @@ function UsersTable(): JSX.Element {
   }, [t]);
 
   const { table, tableHeaderProps, loading } = useReactTableWithTheWorks({
+    alwaysVisibleColumns,
     decodeFilterValue,
     defaultVisibleColumns,
     encodeFilterValue,
+    getRowId: (user) => user.id,
     getData: ({ data }) => data.users_paginated.entries,
     getPages: ({ data }) => data.users_paginated.total_pages,
     columns,

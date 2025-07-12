@@ -8,6 +8,7 @@ import {
   getPaginationRowModel,
   Table,
   ColumnDef,
+  TableOptions,
 } from '@tanstack/react-table';
 
 import useColumnSelection, { UseColumnSelectionOptions, UseColumnSelectionResult } from './useColumnSelection';
@@ -37,6 +38,8 @@ export type UseReactTableWithTheWorksOptions<
     columns: ColumnDef<RowType>[];
     storageKeyPrefix: string;
     rowSelect?: boolean;
+  } & {
+    getRowId?: TableOptions<RowType>['getRowId'];
   };
 
 export type UseReactTableWithTheWorksResult<
@@ -61,6 +64,7 @@ export default function useReactTableWithTheWorks<
   encodeFilterValue,
   getData,
   getPages,
+  getRowId,
   columns,
   query,
   rowSelect,
@@ -122,6 +126,7 @@ export default function useReactTableWithTheWorks<
     manualSorting: true,
     pageCount: pages,
     enableRowSelection: rowSelect,
+    getRowId,
     getCoreRowModel: getCoreRowModel(),
     getFilteredRowModel: getFilteredRowModel(),
     getSortedRowModel: getSortedRowModel(),
