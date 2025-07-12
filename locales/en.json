@@ -1262,7 +1262,11 @@
       },
       "nextRoundInfo": "The next signup round starts at <2>{{nextRoundStart}}</2>. {{nextRoundActionDescription}}",
       "noLimit": "No limit",
-      "prioritizeWaitlist": "If full, waitlist instead of skipping",
+      "prioritizeWaitlist": {
+        "confirmPrioritized": "Success!  If <i>{{ eventTitle }}</i> is full, we’ll put you on the waitlist for it rather than trying to sign you up for <i>{{ nextEventTitle }}</i>.",
+        "confirmNotPrioritized": "Success!  If <i>{{ eventTitle }}</i> is full, we’ll try to sign you up for <i>{{ nextEventTitle }}</i>.",
+        "label": "If full, waitlist instead of skipping"
+      },
       "remove": "Remove",
       "removeConfirmPrompt": "Are you sure you want to remove {{ eventTitle }} from your signup queue?",
       "settingsSection": {
