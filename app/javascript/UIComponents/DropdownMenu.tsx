@@ -1,8 +1,14 @@
-import { CSSProperties, ReactNode, useState } from 'react';
+import React, { CSSProperties, forwardRef, ReactNode, useImperativeHandle, useState } from 'react';
 import classNames from 'classnames';
 import { useLitformPopperWithAutoClosing, useToggleOpen } from '@neinteractiveliterature/litform';
 
 import useAutoCloseOnNavigate from '../NavigationBar/useAutoCloseOnNavigate';
+import { createPortal } from 'react-dom';
+
+export type DropdownMenuRef = {
+  dropdownOpen: boolean;
+  setDropdownOpen: React.Dispatch<React.SetStateAction<boolean>>;
+};
 
 export type DropdownMenuProps = {
   buttonContent: ReactNode;
@@ -15,19 +21,24 @@ export type DropdownMenuProps = {
   shouldAutoCloseOnNavigate?: Parameters<typeof useAutoCloseOnNavigate>[1];
 };
 
-export function DropdownMenu({
-  children,
-  buttonContent,
-  buttonClassName,
-  buttonStyle,
-  dropdownClassName,
-  dropdownStyle,
-  popperOptions,
-  shouldAutoCloseOnNavigate,
-}: DropdownMenuProps): JSX.Element {
+export const DropdownMenu = forwardRef(function DropdownMenuInner(
+  {
+    children,
+    buttonContent,
+    buttonClassName,
+    buttonStyle,
+    dropdownClassName,
+    dropdownStyle,
+    popperOptions,
+    shouldAutoCloseOnNavigate,
+  }: DropdownMenuProps,
+  ref,
+): JSX.Element {
   const [dropdownButton, setDropdownButton] = useState<HTMLButtonElement | null>(null);
   const [dropdownMenu, setDropdownMenu] = useState<HTMLDivElement | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
+
+  useImperativeHandle(ref, () => ({ dropdownOpen, setDropdownOpen }) satisfies DropdownMenuRef);
 
   const { styles, attributes, update } = useLitformPopperWithAutoClosing(
     dropdownMenu,
@@ -44,6 +55,17 @@ export function DropdownMenu({
   const toggleOpen = useToggleOpen(setDropdownOpen, update);
   useAutoCloseOnNavigate(setDropdownOpen, shouldAutoCloseOnNavigate);
 
+  const content = (
+    <div
+      className={classNames('dropdown-menu m-0', dropdownClassName, { show: dropdownOpen })}
+      ref={setDropdownMenu}
+      style={{ ...styles.popper, ...dropdownStyle }}
+      {...attributes.popper}
+    >
+      {children}
+    </div>
+  );
+
   return (
     <>
       <button
@@ -55,14 +77,7 @@ export function DropdownMenu({
       >
         {buttonContent}
       </button>
-      <div
-        className={classNames('dropdown-menu m-0', dropdownClassName, { show: dropdownOpen })}
-        ref={setDropdownMenu}
-        style={{ ...styles.popper, ...dropdownStyle }}
-        {...attributes.popper}
-      >
-        {children}
-      </div>
+      {typeof document === 'undefined' ? content : createPortal(content, document.body)}
     </>
   );
-}
+});

@@ -1238,6 +1238,9 @@
     },
     "mySignupQueue": {
       "addAdditional": "To add more events to your queue, go to <1>the event catalog</1> or <4>the event schedule</4>. You can add events to your queue from each event’s page.",
+      "advancedMenu": {
+        "button": "Advanced options"
+      },
       "allowWaitlist": {
         "caption": "What should we do if all your choices are full?",
         "no": "Don't sign me up for anything",
@@ -1262,7 +1265,11 @@
       },
       "nextRoundInfo": "The next signup round starts at <2>{{nextRoundStart}}</2>. {{nextRoundActionDescription}}",
       "noLimit": "No limit",
-      "prioritizeWaitlist": "If full, waitlist instead of skipping",
+      "prioritizeWaitlist": {
+        "confirmPrioritized": "Success!  If <i>{{ eventTitle }}</i> is full, we’ll put you on the waitlist for it rather than trying to sign you up for <i>{{ nextEventTitle }}</i>.",
+        "confirmNotPrioritized": "Success!  If <i>{{ eventTitle }}</i> is full, we’ll try to sign you up for <i>{{ nextEventTitle }}</i>.",
+        "label": "If full, waitlist instead of skipping"
+      },
       "remove": "Remove",
       "removeConfirmPrompt": "Are you sure you want to remove {{ eventTitle }} from your signup queue?",
       "settingsSection": {
