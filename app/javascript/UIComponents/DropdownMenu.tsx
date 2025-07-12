@@ -21,65 +21,63 @@ export type DropdownMenuProps = {
   shouldAutoCloseOnNavigate?: Parameters<typeof useAutoCloseOnNavigate>[1];
 };
 
-export const DropdownMenu = forwardRef(
-  (
+export const DropdownMenu = forwardRef(function DropdownMenuInner(
+  {
+    children,
+    buttonContent,
+    buttonClassName,
+    buttonStyle,
+    dropdownClassName,
+    dropdownStyle,
+    popperOptions,
+    shouldAutoCloseOnNavigate,
+  }: DropdownMenuProps,
+  ref,
+): JSX.Element {
+  const [dropdownButton, setDropdownButton] = useState<HTMLButtonElement | null>(null);
+  const [dropdownMenu, setDropdownMenu] = useState<HTMLDivElement | null>(null);
+  const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
+
+  useImperativeHandle(ref, () => ({ dropdownOpen, setDropdownOpen }) satisfies DropdownMenuRef);
+
+  const { styles, attributes, update } = useLitformPopperWithAutoClosing(
+    dropdownMenu,
+    dropdownButton,
+    undefined,
+    setDropdownOpen,
     {
-      children,
-      buttonContent,
-      buttonClassName,
-      buttonStyle,
-      dropdownClassName,
-      dropdownStyle,
-      popperOptions,
-      shouldAutoCloseOnNavigate,
-    }: DropdownMenuProps,
-    ref,
-  ): JSX.Element => {
-    const [dropdownButton, setDropdownButton] = useState<HTMLButtonElement | null>(null);
-    const [dropdownMenu, setDropdownMenu] = useState<HTMLDivElement | null>(null);
-    const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
+      placement: 'bottom-start',
+      modifiers: [{ name: 'offset', options: { offset: [0, 2] } }, ...(popperOptions?.modifiers ?? [])],
+      ...popperOptions,
+    },
+  );
 
-    useImperativeHandle(ref, () => ({ dropdownOpen, setDropdownOpen }) satisfies DropdownMenuRef);
+  const toggleOpen = useToggleOpen(setDropdownOpen, update);
+  useAutoCloseOnNavigate(setDropdownOpen, shouldAutoCloseOnNavigate);
 
-    const { styles, attributes, update } = useLitformPopperWithAutoClosing(
-      dropdownMenu,
-      dropdownButton,
-      undefined,
-      setDropdownOpen,
-      {
-        placement: 'bottom-start',
-        modifiers: [{ name: 'offset', options: { offset: [0, 2] } }, ...(popperOptions?.modifiers ?? [])],
-        ...popperOptions,
-      },
-    );
+  const content = (
+    <div
+      className={classNames('dropdown-menu m-0', dropdownClassName, { show: dropdownOpen })}
+      ref={setDropdownMenu}
+      style={{ ...styles.popper, ...dropdownStyle }}
+      {...attributes.popper}
+    >
+      {children}
+    </div>
+  );
 
-    const toggleOpen = useToggleOpen(setDropdownOpen, update);
-    useAutoCloseOnNavigate(setDropdownOpen, shouldAutoCloseOnNavigate);
-
-    const content = (
-      <div
-        className={classNames('dropdown-menu m-0', dropdownClassName, { show: dropdownOpen })}
-        ref={setDropdownMenu}
-        style={{ ...styles.popper, ...dropdownStyle }}
-        {...attributes.popper}
+  return (
+    <>
+      <button
+        type="button"
+        className={buttonClassName ?? 'btn dropdown-toggle'}
+        ref={setDropdownButton}
+        onClick={toggleOpen}
+        style={buttonStyle}
       >
-        {children}
-      </div>
-    );
-
-    return (
-      <>
-        <button
-          type="button"
-          className={buttonClassName ?? 'btn dropdown-toggle'}
-          ref={setDropdownButton}
-          onClick={toggleOpen}
-          style={buttonStyle}
-        >
-          {buttonContent}
-        </button>
-        {typeof document === 'undefined' ? content : createPortal(content, document.body)}
-      </>
-    );
-  },
-);
+        {buttonContent}
+      </button>
+      {typeof document === 'undefined' ? content : createPortal(content, document.body)}
+    </>
+  );
+});

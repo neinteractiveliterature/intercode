@@ -133,7 +133,6 @@ export function PrioritizeWaitlistConfirmation({
   prioritizeWaitlist,
   userConProfile,
 }: PrioritizeWaitlistConfirmationProps) {
-  const { t } = useTranslation();
   const pendingChoices = usePendingChoices(userConProfile);
   const pendingChoice = pendingChoices[index];
   const nextPendingChoice = pendingChoices[index + 1];
