@@ -7,7 +7,7 @@ import {
 } from './mutations.generated';
 import { Link, useRevalidator } from 'react-router';
 import { RankedChoiceDecisionReason } from 'graphqlTypes.generated';
-import { ReactNode, useContext, useState } from 'react';
+import { ReactNode, useContext, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
 import RankedChoicePriorityIndicator from './RankedChoicePriorityIndicator';
 import buildEventUrl from 'EventsApp/buildEventUrl';
@@ -25,6 +25,8 @@ import { usePendingChoices } from './usePendingChoices';
 import { UserConProfileRankedChoiceQueueFieldsFragment } from './queries.generated';
 import styles from './signup-queue.module.css';
 import { PrioritizeWaitlistConfirmation, SkipReason } from './SignupQueueMessages';
+import { DropdownMenu, DropdownMenuRef } from 'UIComponents/DropdownMenu';
+import MenuIcon from 'NavigationBar/MenuIcon';
 
 export type UserSignupQueueItemProps = {
   userConProfile: UserConProfileRankedChoiceQueueFieldsFragment;
@@ -80,6 +82,8 @@ export default function UserSignupQueueItem({
     },
   );
 
+  const advancedMenuRef = useRef<DropdownMenuRef>();
+
   return (
     <li
       className={classNames('list-group-item', {
@@ -119,37 +123,57 @@ export default function UserSignupQueueItem({
               )?.name ?? t('signups.noPreference')}
             </div>
 
-            <BootstrapFormCheckbox
-              checked={pendingChoice.prioritize_waitlist}
-              disabled={setPrioritizeWaitlistLoading}
-              onChange={(event) =>
-                setPrioritizeWaitlist({
-                  variables: { id: pendingChoice.id, prioritizeWaitlist: event.target.checked },
-                  onCompleted(data) {
-                    setConfirmMessage(
-                      <div className="alert alert-success alert-dismissible">
-                        <PrioritizeWaitlistConfirmation
-                          index={index}
-                          userConProfile={userConProfile}
-                          prioritizeWaitlist={
-                            data.setSignupRankedChoicePrioritzeWaitlist.signup_ranked_choice.prioritize_waitlist
-                          }
-                        />
-                        <button
-                          type="button"
-                          className="btn-close"
-                          onClick={() => setConfirmMessage(undefined)}
-                          aria-label="Close"
-                        />
-                      </div>,
-                    );
-                    revalidator.revalidate();
-                  },
-                })
-              }
-              label={t('signups.mySignupQueue.prioritizeWaitlist.label')}
-              type="checkbox"
-            />
+            <div>
+              <DropdownMenu
+                ref={advancedMenuRef}
+                buttonClassName="btn btn-secondary btn-sm dropdown-toggle"
+                buttonContent={
+                  <>
+                    <MenuIcon icon="bi-gear-fill" colorClass="" />
+                    {t('signups.mySignupQueue.advancedMenu.button')}
+                  </>
+                }
+                popperOptions={{
+                  placement: 'bottom-end',
+                  modifiers: [],
+                }}
+              >
+                <div className="px-2">
+                  <BootstrapFormCheckbox
+                    checked={pendingChoice.prioritize_waitlist}
+                    disabled={setPrioritizeWaitlistLoading}
+                    onChange={(event) =>
+                      setPrioritizeWaitlist({
+                        variables: { id: pendingChoice.id, prioritizeWaitlist: event.target.checked },
+                        onCompleted(data) {
+                          advancedMenuRef.current?.setDropdownOpen(false);
+                          setConfirmMessage(
+                            <div className="alert alert-success alert-dismissible">
+                              <PrioritizeWaitlistConfirmation
+                                index={index}
+                                userConProfile={userConProfile}
+                                prioritizeWaitlist={
+                                  data.setSignupRankedChoicePrioritzeWaitlist.signup_ranked_choice.prioritize_waitlist
+                                }
+                              />
+                              <button
+                                type="button"
+                                className="btn-close"
+                                onClick={() => setConfirmMessage(undefined)}
+                                aria-label="Close"
+                              />
+                            </div>,
+                          );
+                          revalidator.revalidate();
+                        },
+                      })
+                    }
+                    label={t('signups.mySignupQueue.prioritizeWaitlist.label')}
+                    type="checkbox"
+                  />
+                </div>
+              </DropdownMenu>
+            </div>
           </div>
 
           {pendingChoice.simulated_skip_reason && (
