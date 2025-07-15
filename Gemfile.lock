@@ -310,7 +310,7 @@ GEM
       reline (>= 0.4.2)
     jmespath (1.6.2)
     json (2.11.3)
-    jwt (2.10.1)
+    jwt (2.10.2)
       base64
     language_server-protocol (3.17.0.5)
     launchy (2.5.2)
@@ -622,7 +622,7 @@ GEM
       sync
     toml (0.3.0)
       parslet (>= 1.8.0, < 3.0.0)
-    twilio-ruby (7.6.3)
+    twilio-ruby (7.6.5)
       faraday (>= 0.9, < 3.0)
       jwt (>= 1.5, < 3.0)
       nokogiri (>= 1.6, < 2.0)
