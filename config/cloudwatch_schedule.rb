@@ -19,7 +19,7 @@ CloudwatchScheduler() do |_config|
     DropExpiredSignupsJob.perform_later
   end
 
-  task "execute_signup_rounds", cron: "0/15 * * * ? *" do
+  task "execute_signup_rounds", cron: "0/5 * * * ? *" do
     SignupRound.execute_currently_due_rounds!
   end
 
