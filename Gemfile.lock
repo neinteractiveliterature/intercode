@@ -115,7 +115,7 @@ GEM
       activesupport (>= 7.1)
       device_detector (>= 1)
       safely_block (>= 0.4)
-    annotaterb (4.16.0)
+    annotaterb (4.17.0)
       activerecord (>= 6.0.0)
       activesupport (>= 6.0.0)
     ansi (1.5.0)
@@ -167,7 +167,7 @@ GEM
     bcrypt (3.1.20)
     benchmark (0.4.1)
     benchmark-ips (2.14.0)
-    bigdecimal (3.1.9)
+    bigdecimal (3.2.2)
     bootsnap (1.18.6)
       msgpack (~> 1.2)
     browser (6.2.0)
@@ -762,7 +762,7 @@ DEPENDENCIES
   yard
 
 RUBY VERSION
-   ruby 3.4.4p34
+   ruby 3.4.5p51
 
 BUNDLED WITH
    2.6.2
