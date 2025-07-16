@@ -291,7 +291,7 @@ jobs:
           echo END_OF_SLACK_MESSAGE >> "$GITHUB_OUTPUT"
       - name: Post about drafted release to Slack
         id: slack
-        uses: slackapi/slack-github-action@v2.1.0
+        uses: slackapi/slack-github-action@v2.1.1
         with:
           method: chat.postMessage
           token: ${{ secrets.SLACKTOKEN }}
