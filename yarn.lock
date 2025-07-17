@@ -4463,17 +4463,17 @@ __metadata:
   linkType: hard
 
 "@graphql-tools/graphql-file-loader@npm:^8.0.0, @graphql-tools/graphql-file-loader@npm:^8.0.1":
-  version: 8.0.20
-  resolution: "@graphql-tools/graphql-file-loader@npm:8.0.20"
+  version: 8.0.21
+  resolution: "@graphql-tools/graphql-file-loader@npm:8.0.21"
   dependencies:
-    "@graphql-tools/import": "npm:7.0.19"
-    "@graphql-tools/utils": "npm:^10.8.6"
+    "@graphql-tools/import": "npm:7.0.20"
+    "@graphql-tools/utils": "npm:^10.9.0"
     globby: "npm:^11.0.3"
     tslib: "npm:^2.4.0"
     unixify: "npm:^1.0.0"
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
-  checksum: 10c0/94d8b4ad6730bfba174eda254692f483c6d0fe29cdd4e23d538e9171e806ca49978238bcc92d0c1753b8493f84a45b464148a3b91a39b90ed96eefe602425c61
+  checksum: 10c0/e7e9451f5c43979f9ae7445ada5957434436212ba0cab82e958b4e7f4038ee9117fe020f4b1377a18f5114a9f65c7cab7b97580413164a3880eafe6fa48e7379
   languageName: node
   linkType: hard
 
@@ -4510,16 +4510,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/import@npm:7.0.19":
-  version: 7.0.19
-  resolution: "@graphql-tools/import@npm:7.0.19"
+"@graphql-tools/import@npm:7.0.20":
+  version: 7.0.20
+  resolution: "@graphql-tools/import@npm:7.0.20"
   dependencies:
-    "@graphql-tools/utils": "npm:^10.8.6"
+    "@graphql-tools/utils": "npm:^10.9.0"
+    "@theguild/federation-composition": "npm:^0.19.0"
     resolve-from: "npm:5.0.0"
     tslib: "npm:^2.4.0"
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
-  checksum: 10c0/5639fcd9c44a862710fc0821cb4798245ae20cfd7f0aa8a5bba420bde92882e0bc68350db0add59c3dfe544380e90424ff6e1bfd3e2441e8ac045b9ce0290a79
+  checksum: 10c0/b02be2bfa094de67450a7f7c69152460b32e86d279542c28af9b88032766d8b6f98b4fc49a15b84bde73281b193b10ced2184643d4e8e14a037c0b879643b8b4
   languageName: node
   linkType: hard
 
@@ -4686,9 +4687,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/utils@npm:^10.0.0, @graphql-tools/utils@npm:^10.7.2, @graphql-tools/utils@npm:^10.8.6":
-  version: 10.8.6
-  resolution: "@graphql-tools/utils@npm:10.8.6"
+"@graphql-tools/utils@npm:^10.0.0, @graphql-tools/utils@npm:^10.7.2, @graphql-tools/utils@npm:^10.8.6, @graphql-tools/utils@npm:^10.9.0":
+  version: 10.9.0
+  resolution: "@graphql-tools/utils@npm:10.9.0"
   dependencies:
     "@graphql-typed-document-node/core": "npm:^3.1.1"
     "@whatwg-node/promise-helpers": "npm:^1.0.0"
@@ -4697,7 +4698,7 @@ __metadata:
     tslib: "npm:^2.4.0"
   peerDependencies:
     graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
-  checksum: 10c0/17f727eb85415c15c5920ab9ef4648e0d205e1ca8b7d8539ac84f55da04ed60464313792456ebbde30bb883c0abde8df81919fd22f2ed5096b873920e84bef4b
+  checksum: 10c0/fd8e82ff87c3debd78f774327160da81381c9b6746022b7e1e20861690c11c71022a6924d61da38460414046416a48eb8355556fd36dfc726ed160501ba009f7
   languageName: node
   linkType: hard
 
@@ -7051,6 +7052,20 @@ __metadata:
   peerDependencies:
     "@testing-library/dom": ">=7.21.4"
   checksum: 10c0/75fea130a52bf320d35d46ed54f3eec77e71a56911b8b69a3fe29497b0b9947b2dc80d30f04054ad4ce7f577856ae3e5397ea7dff0ef14944d3909784c7a93fe
+  languageName: node
+  linkType: hard
+
+"@theguild/federation-composition@npm:^0.19.0":
+  version: 0.19.1
+  resolution: "@theguild/federation-composition@npm:0.19.1"
+  dependencies:
+    constant-case: "npm:^3.0.4"
+    debug: "npm:4.4.1"
+    json5: "npm:^2.2.3"
+    lodash.sortby: "npm:^4.7.0"
+  peerDependencies:
+    graphql: ^16.0.0
+  checksum: 10c0/f5a1a9a89beaea4e5b152a05583d26d1a06ecc4139451a954f92894a22d24d99d7696842724d41d85fb3fa5e2976f4d2f07a49a914b4151a45ce70e81471c3a9
   languageName: node
   linkType: hard
 
@@ -11365,15 +11380,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"debug@npm:4, debug@npm:^4.0.0, debug@npm:^4.1.0, debug@npm:^4.1.1, debug@npm:^4.3.1, debug@npm:^4.3.2, debug@npm:^4.3.4, debug@npm:^4.3.5, debug@npm:^4.4.0":
-  version: 4.4.0
-  resolution: "debug@npm:4.4.0"
+"debug@npm:4, debug@npm:4.4.1, debug@npm:^4.0.0, debug@npm:^4.1.0, debug@npm:^4.1.1, debug@npm:^4.3.1, debug@npm:^4.3.2, debug@npm:^4.3.4, debug@npm:^4.3.5, debug@npm:^4.4.0":
+  version: 4.4.1
+  resolution: "debug@npm:4.4.1"
   dependencies:
     ms: "npm:^2.1.3"
   peerDependenciesMeta:
     supports-color:
       optional: true
-  checksum: 10c0/db94f1a182bf886f57b4755f85b3a74c39b5114b9377b7ab375dc2cfa3454f09490cc6c30f829df3fc8042bc8b8995f6567ce5cd96f3bc3688bd24027197d9de
+  checksum: 10c0/d2b44bc1afd912b49bb7ebb0d50a860dc93a4dd7d946e8de94abc957bb63726b7dd5aa48c18c2386c379ec024c46692e15ed3ed97d481729f929201e671fcd55
   languageName: node
   linkType: hard
 
