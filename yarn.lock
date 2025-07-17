@@ -11280,9 +11280,9 @@ __metadata:
   linkType: hard
 
 "csv-stringify@npm:^6.5.1":
-  version: 6.5.2
-  resolution: "csv-stringify@npm:6.5.2"
-  checksum: 10c0/8d2c601ce99c4baf5009abb16a9021cfd8d91a7be660f54343cba566ee5057d0ef517e0afde91e7e8803aeafb81268f6f04e47cb272462553b12f8e65c9c0674
+  version: 6.6.0
+  resolution: "csv-stringify@npm:6.6.0"
+  checksum: 10c0/2e5b14ff1e434aba7b8cae74faa0329c1d967654820f2ae3f358a660b5887ab623224ed8eb7f3ab6d0f7342663c965ca079ca420b6046210709f72e8aec87d94
   languageName: node
   linkType: hard
 
