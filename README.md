@@ -78,7 +78,7 @@ If you want to test how the app runs in production, but using your local develop
 
 To contact the Intercode project team, you can:
 
-- [File an issue or feature request here](https://github.com/neinteractiveliterature/issues)
+- [File an issue or feature request here](https://github.com/neinteractiveliterature/intercode/issues)
 - [Email Nat Budin](mailto:natbudin@gmail.com).
 
 # Code of Conduct
