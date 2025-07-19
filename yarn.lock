@@ -18485,15 +18485,15 @@ __metadata:
   linkType: hard
 
 "ol@npm:^10.2.1":
-  version: 10.5.0
-  resolution: "ol@npm:10.5.0"
+  version: 10.6.1
+  resolution: "ol@npm:10.6.1"
   dependencies:
     "@types/rbush": "npm:4.0.0"
     earcut: "npm:^3.0.0"
     geotiff: "npm:^2.1.3"
     pbf: "npm:4.0.1"
     rbush: "npm:^4.0.0"
-  checksum: 10c0/436c81c16684fc7dc0a64c10d59c7aa9a1b7a5d7d2bc266c3bc141856d40f35042f5f55d40244f2e1580b613cb5adc22556583c400b19d6bbe4ea57b39d0cc70
+  checksum: 10c0/02c79a8e547fa43f1a54d008e6116668de088769bb4891c807ebde6b5d3bc41131026f1bc5c5ea57372a8109fe9f9dd3c37855f126a92374a599af3ff79a3590
   languageName: node
   linkType: hard
 
