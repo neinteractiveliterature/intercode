@@ -127,7 +127,7 @@
     "punycode": "2.3.1",
     "qs": "^6.13.0",
     "react": "18.3.1",
-    "react-bootstrap4-modal": "3.0.10",
+    "react-bootstrap4-modal": "3.0.11",
     "react-color": "2.19.3",
     "react-cookie-consent": "9.0.0",
     "react-dom": "18.3.1",
@@ -233,7 +233,7 @@
   },
   "resolutions": {
     "@typescript-eslint/parser": "8.31.1",
-    "react-bootstrap4-modal": "3.0.10",
+    "react-bootstrap4-modal": "3.0.11",
     "rollup": "4.34.4"
   },
   "graphdoc": {
