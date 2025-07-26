@@ -601,7 +601,7 @@ GEM
       sprockets (>= 3.0.0)
     stackprof (0.2.27)
     stringio (3.1.7)
-    stripe (15.1.0)
+    stripe (15.3.0)
     strscan (3.1.5)
     sync (0.5.0)
     syntax_tree (6.2.0)
