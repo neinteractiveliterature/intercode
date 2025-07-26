@@ -604,7 +604,7 @@ GEM
     stripe (15.3.0)
     strscan (3.1.5)
     sync (0.5.0)
-    syntax_tree (6.2.0)
+    syntax_tree (6.3.0)
       prettier_print (>= 1.2.0)
     syntax_tree-haml (4.0.3)
       haml (>= 5.2)
