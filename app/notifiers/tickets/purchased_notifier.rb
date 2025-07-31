@@ -3,7 +3,7 @@ class Tickets::PurchasedNotifier < Notifier
   attr_reader :ticket
 
   dynamic_destination :ticket_user_con_profile do
-    { user_con_profile: ticket.user_con_profile }
+    { ticket: ticket }
   end
 
   def initialize(ticket:, triggering_user: nil)
