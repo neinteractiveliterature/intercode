@@ -29,7 +29,7 @@
     "wrangler:types": "wrangler types --cwd cloudflare"
   },
   "dependencies": {
-    "@apollo/client": "3.13.8",
+    "@apollo/client": "3.13.9",
     "@breezehr/currency-codes": "^2.2.1",
     "@codemirror/commands": "^6.7.1",
     "@codemirror/lang-html": "6.4.9",
