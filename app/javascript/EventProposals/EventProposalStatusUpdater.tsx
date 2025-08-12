@@ -5,7 +5,7 @@ import { useModal, BooleanInput, ErrorDisplay, MultipleChoiceInput } from '@nein
 import { ApolloError } from '@apollo/client';
 import { EventProposalQueryWithOwnerQueryData } from './queries.generated';
 import humanize from '../humanize';
-import { useActionData, useFetcher } from 'react-router';
+import { useFetcher } from 'react-router';
 import { useTranslation } from 'react-i18next';
 
 const STATUSES = [
@@ -40,8 +40,7 @@ function EventProposalStatusUpdater({ eventProposal }: EventProposalStatusUpdate
   const [dropEvent, setDropEvent] = useState(false);
   const { open: openModal, close: closeModal, visible: modalVisible } = useModal();
   const fetcher = useFetcher();
-  const actionData = useActionData();
-  const transitionError = actionData instanceof Error ? actionData : undefined;
+  const transitionError = fetcher.data instanceof Error ? fetcher.data : undefined;
   const { t } = useTranslation();
 
   useEffect(() => {
