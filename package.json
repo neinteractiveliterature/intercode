@@ -50,7 +50,7 @@
     "@lezer/lr": "^1.4.2",
     "@neinteractiveliterature/litform": "0.35.0",
     "@popperjs/core": "^2.11.8",
-    "@rails/activestorage": "8.0.200",
+    "@rails/activestorage": "8.0.201",
     "@sentry/browser": "^9.0.0",
     "@sentry/types": "^9.0.0",
     "@stripe/react-stripe-js": "3.9.0",
