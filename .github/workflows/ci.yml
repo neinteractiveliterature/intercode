@@ -249,7 +249,7 @@ jobs:
       - name: Merge coverage reports
         run: npx cobertura-merge -o merged-coverage.xml package1=minitest-coverage/coverage.xml package2=vitest-coverage/cobertura-coverage.xml
       - name: Generate Coverage Report
-        uses: clearlyip/code-coverage-report-action@v5
+        uses: clearlyip/code-coverage-report-action@v6
         id: code_coverage_report_action
         with:
           filename: 'merged-coverage.xml'
