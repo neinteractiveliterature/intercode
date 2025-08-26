@@ -75,7 +75,7 @@ function MyProfileForm() {
   const responseErrors = fetcher.data;
   const mutationInProgress = fetcher.state !== 'idle';
 
-  usePageTitle(`${initialSetup ? 'Set up' : 'Editing'} my profile`);
+  usePageTitle(initialSetup ? t('myProfile.formTitle.initial') : t('myProfile.formTitle.subsequent'));
 
   const [userConProfile, setUserConProfile] = useState(initialUserConProfile);
   const [, responseValuesChanged] = useFormResponse(userConProfile, setUserConProfile);
