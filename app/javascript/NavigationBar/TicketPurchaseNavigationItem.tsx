@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import AppRootContext from '../AppRootContext';
 import humanize from '../humanize';
 
-function TicketPurchaseNavigationItem(): JSX.Element {
+function TicketPurchaseNavigationItem(): React.JSX.Element {
   const { t } = useTranslation();
   const { myProfile, ticketName, ticketTypes, ticketsAvailableForPurchase } = useContext(AppRootContext);
 

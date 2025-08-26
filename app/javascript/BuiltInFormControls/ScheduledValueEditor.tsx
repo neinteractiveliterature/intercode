@@ -174,7 +174,7 @@ export type ScheduledValueEditorProps<ValueType> = {
   scheduledValue: EditingScheduledValue<ValueType>;
   timezone: string;
   dispatch: (action: ScheduledValueReducerAction<ValueType>) => void;
-  buildValueInput: (value: ValueType | undefined, onChange: React.Dispatch<ValueType | undefined>) => JSX.Element;
+  buildValueInput: (value: ValueType | undefined, onChange: React.Dispatch<ValueType | undefined>) => React.JSX.Element;
 };
 
 function calculateNewFinish<ValueType, ScheduledValueType extends EditingScheduledValue<ValueType>>(
@@ -195,7 +195,7 @@ function ScheduledValueEditor<ValueType>({
   timezone,
   dispatch,
   buildValueInput,
-}: ScheduledValueEditorProps<ValueType>): JSX.Element {
+}: ScheduledValueEditorProps<ValueType>): React.JSX.Element {
   const addRowClicked = (e: React.MouseEvent<HTMLButtonElement>) => {
     e.preventDefault();
     dispatch({ type: 'addTimespan' });

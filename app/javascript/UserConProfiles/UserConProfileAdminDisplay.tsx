@@ -82,7 +82,12 @@ type BecomeUserModalProps = {
   userConProfileName?: string;
 };
 
-function BecomeUserModal({ userConProfileId, userConProfileName, visible, close }: BecomeUserModalProps): JSX.Element {
+function BecomeUserModal({
+  userConProfileId,
+  userConProfileName,
+  visible,
+  close,
+}: BecomeUserModalProps): React.JSX.Element {
   const { t } = useTranslation();
   const [justification, setJustification] = useState('');
   const [becomeAsync, error, inProgress] = useAsyncFunction(becomeUser);
@@ -127,7 +132,7 @@ function BecomeUserModal({ userConProfileId, userConProfileName, visible, close 
   );
 }
 
-function UserConProfileAdminDisplay(): JSX.Element {
+function UserConProfileAdminDisplay(): React.JSX.Element {
   const { t } = useTranslation();
   const userConProfileId = useParams<{ id: string }>().id;
   if (userConProfileId == null) {

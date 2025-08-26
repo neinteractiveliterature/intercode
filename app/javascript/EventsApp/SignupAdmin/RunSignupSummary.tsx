@@ -64,7 +64,7 @@ export const loader: LoaderFunction = async ({ params: { eventId, runId } }) => 
   return data;
 };
 
-function RunSignupSummary(): JSX.Element {
+function RunSignupSummary(): React.JSX.Element {
   const data = useLoaderData() as RunSignupSummaryQueryData;
   const { t } = useTranslation();
 

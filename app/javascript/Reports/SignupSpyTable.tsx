@@ -29,7 +29,7 @@ const defaultState = {
   sortBy: [{ id: 'created_at', desc: true }],
 };
 
-function SignupSpyTable(): JSX.Element {
+function SignupSpyTable(): React.JSX.Element {
   const columns = useMemo(() => {
     const columnHelper = createColumnHelper<SignupChangeType>();
     return [

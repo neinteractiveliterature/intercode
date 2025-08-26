@@ -16,7 +16,12 @@ export type RunListEventRunProps = {
   signupCountData: SignupCountData;
 };
 
-export default function RunListEventRun({ event, run, timespan, signupCountData }: RunListEventRunProps): JSX.Element {
+export default function RunListEventRun({
+  event,
+  run,
+  timespan,
+  signupCountData,
+}: RunListEventRunProps): React.JSX.Element {
   const format = useAppDateTimeFormat();
   const [detailsVisible, setDetailsVisible] = useState(false);
   const toggle = useCallback(() => setDetailsVisible((prevVisible) => !prevVisible), []);

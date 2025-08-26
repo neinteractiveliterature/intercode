@@ -11,7 +11,7 @@ export type DateItemChangeDisplayProps = {
   change: ParsedFormResponseChange<DateFormItem>;
 };
 
-function DateItemChangeDisplay({ change }: DateItemChangeDisplayProps): JSX.Element {
+function DateItemChangeDisplay({ change }: DateItemChangeDisplayProps): React.JSX.Element {
   const { timezoneName } = useContext(AppRootContext);
   const format = useAppDateTimeFormat();
   const before = useMemo(

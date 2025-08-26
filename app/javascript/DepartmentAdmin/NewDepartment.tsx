@@ -27,7 +27,7 @@ export const action: ActionFunction = async ({ request }) => {
   }
 };
 
-function NewDepartment(): JSX.Element {
+function NewDepartment(): React.JSX.Element {
   const { t } = useTranslation();
   const saveError = useActionData();
   const navigation = useNavigation();

@@ -13,7 +13,12 @@ export type AssignDocLinkProps = {
   preAssignNameContent?: React.ReactNode;
 };
 
-function AssignDocLink({ assign, compact = false, prefix, preAssignNameContent }: AssignDocLinkProps): JSX.Element {
+function AssignDocLink({
+  assign,
+  compact = false,
+  prefix,
+  preAssignNameContent,
+}: AssignDocLinkProps): React.JSX.Element {
   const { docData } = useLiquidDocs();
   const location = useLocation();
 

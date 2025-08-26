@@ -5,7 +5,7 @@ import { UserConProfile } from '../graphqlTypes.generated';
 function UserConProfileWithGravatarCell<
   TData,
   TValue extends Pick<UserConProfile, 'gravatar_enabled' | 'gravatar_url' | 'name_inverted'>,
->({ getValue }: CellContext<TData, TValue>): JSX.Element {
+>({ getValue }: CellContext<TData, TValue>): React.JSX.Element {
   const value = getValue();
   return (
     <>

@@ -28,7 +28,7 @@ function EditRunModal({
   editingRunChanged,
   onCancel,
   formProps,
-}: EditRunModalProps): JSX.Element {
+}: EditRunModalProps): React.JSX.Element {
   const { t } = useTranslation();
   const confirm = useConfirm();
   const submit = useSubmit();

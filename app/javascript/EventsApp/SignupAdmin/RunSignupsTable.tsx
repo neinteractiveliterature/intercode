@@ -100,7 +100,7 @@ function BucketFilter<TData extends SignupType, TValue>({ column }: { column: Co
 // eslint-disable-next-line i18next/no-literal-string
 const defaultVisibleColumns = ['id', 'state', 'name', 'bucket', 'age_restrictions_check', 'email'];
 
-function RunSignupsTable(): JSX.Element {
+function RunSignupsTable(): React.JSX.Element {
   const data = useRouteLoaderData(NamedRoute.SignupAdmin) as SignupAdminEventQueryData;
   const { runId } = useParams();
   const { t } = useTranslation();

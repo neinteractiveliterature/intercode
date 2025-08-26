@@ -27,7 +27,7 @@ export const action: ActionFunction = async ({ request }) => {
   return redirect('/cms_partials');
 };
 
-function NewCmsPartial(): JSX.Element {
+function NewCmsPartial(): React.JSX.Element {
   const [partial, setPartial] = useState<CmsPartialFormFields>({});
   const navigation = useNavigation();
   const createInProgress = navigation.state !== 'idle';

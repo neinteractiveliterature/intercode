@@ -6,7 +6,7 @@ export type RegistrationPolicyItemDisplayProps = {
   value: FormItemValueType<RegistrationPolicyFormItem>;
 };
 
-function RegistrationPolicyItemDisplay({ formItem, value }: RegistrationPolicyItemDisplayProps): JSX.Element {
+function RegistrationPolicyItemDisplay({ formItem, value }: RegistrationPolicyItemDisplayProps): React.JSX.Element {
   return <RegistrationPolicyDisplay registrationPolicy={value} presets={formItem.rendered_properties.presets} />;
 }
 

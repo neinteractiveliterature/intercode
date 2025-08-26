@@ -6,7 +6,7 @@ import { FormItemEditorContext } from '../FormEditorContexts';
 import { FormItemEditorProps } from '../FormItemEditorProps';
 
 export type AgeRestrictionsEditorProps = FormItemEditorProps<AgeRestrictionsFormItem>;
-function AgeRestrictionsEditor({ formItem, setFormItem }: AgeRestrictionsEditorProps): JSX.Element {
+function AgeRestrictionsEditor({ formItem, setFormItem }: AgeRestrictionsEditorProps): React.JSX.Element {
   const { disabled } = useContext(FormItemEditorContext);
   const captionInputId = useId();
 

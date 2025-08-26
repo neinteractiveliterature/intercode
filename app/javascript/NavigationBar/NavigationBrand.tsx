@@ -10,7 +10,7 @@ export type NavigationBrandProps = {
   };
 };
 
-function NavigationBrand({ item }: NavigationBrandProps): JSX.Element {
+function NavigationBrand({ item }: NavigationBrandProps): React.JSX.Element {
   const { hideBrand } = useContext(NavigationBarContext);
 
   return (

@@ -7,7 +7,7 @@ export type FilterDocLinkProps = {
   filter: YardMethod;
 };
 
-function FilterDocLink({ filter }: FilterDocLinkProps): JSX.Element {
+function FilterDocLink({ filter }: FilterDocLinkProps): React.JSX.Element {
   const location = useLocation();
 
   return (

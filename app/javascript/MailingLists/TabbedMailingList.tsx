@@ -15,7 +15,7 @@ export type TabbedMailingListProps = {
   metadataFields?: string[];
 };
 
-function TabbedMailingList({ emails, id, metadataFields, csvFilename }: TabbedMailingListProps): JSX.Element {
+function TabbedMailingList({ emails, id, metadataFields, csvFilename }: TabbedMailingListProps): React.JSX.Element {
   const exportCSV = useCallback(() => {
     const data = [
       ['Email', 'Name', ...(metadataFields ?? []).map((fieldName) => humanize(fieldName))],

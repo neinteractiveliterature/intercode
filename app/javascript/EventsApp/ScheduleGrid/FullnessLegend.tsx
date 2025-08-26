@@ -1,7 +1,7 @@
 import { useTranslation } from 'react-i18next';
 import FakeEventRun from './FakeEventRun';
 
-function FullnessLegend(): JSX.Element {
+function FullnessLegend(): React.JSX.Element {
   const { t } = useTranslation();
 
   return (

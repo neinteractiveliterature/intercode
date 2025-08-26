@@ -1,5 +1,3 @@
- 
-
 import { useState, useMemo, ReactNode, SetStateAction, useId } from 'react';
 
 import * as React from 'react';
@@ -53,7 +51,7 @@ export type TimezoneSelectProps = {
   onChange: React.Dispatch<SetStateAction<string | null | undefined>>;
 };
 
-function TimezoneSelect(props: TimezoneSelectProps): JSX.Element {
+function TimezoneSelect(props: TimezoneSelectProps): React.JSX.Element {
   const searchIndex = useMemo(() => {
     const search = new Search('name');
     search.searchIndex = new BoostableTfIdfSearchIndex('name');

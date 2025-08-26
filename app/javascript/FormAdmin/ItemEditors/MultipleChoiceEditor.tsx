@@ -20,7 +20,7 @@ import MultipleChoiceOptionRowDragOverlay from './MultipleChoiceOptionRowDragOve
 export type MultipleChoiceEditorProps = FormItemEditorProps<MultipleChoiceFormItem>;
 type FormItemType = MultipleChoiceEditorProps['formItem'];
 type ChoiceType = FormItemType['properties']['choices'][0];
-function MultipleChoiceEditor({ formItem, setFormItem }: MultipleChoiceEditorProps): JSX.Element {
+function MultipleChoiceEditor({ formItem, setFormItem }: MultipleChoiceEditorProps): React.JSX.Element {
   const { disabled } = useContext(FormItemEditorContext);
   const captionInputId = useId();
   const generateNewChoice = () => ({ caption: '', value: '' });

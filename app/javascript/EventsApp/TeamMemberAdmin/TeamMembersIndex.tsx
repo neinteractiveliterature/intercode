@@ -82,7 +82,7 @@ function TeamMemberActionMenu({
   );
 }
 
-function TeamMembersIndex(): JSX.Element {
+function TeamMembersIndex(): React.JSX.Element {
   const data = useTeamMembersLoader();
   const { t } = useTranslation();
   const navigate = useNavigate();

@@ -14,7 +14,7 @@ type BreadcrumbItemAlwaysActiveProps = {
 
 export type BreadcrumbItemProps = BreadcrumbItemRegularProps | BreadcrumbItemAlwaysActiveProps;
 
-function BreadcrumbItem(props: BreadcrumbItemProps): JSX.Element {
+function BreadcrumbItem(props: BreadcrumbItemProps): React.JSX.Element {
   if (props.active) {
     return <li className="breadcrumb-item active">{props.children}</li>;
   }

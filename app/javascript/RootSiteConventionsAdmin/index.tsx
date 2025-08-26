@@ -5,7 +5,7 @@ import NamedRouteBreadcrumbItem from '../Breadcrumbs/NamedRouteBreadcrumbItem';
 import { NamedRoute } from '../AppRouter';
 import { ConventionDisplayQueryData } from './queries.generated';
 
-function RootSiteConventionsAdmin(): JSX.Element {
+function RootSiteConventionsAdmin(): React.JSX.Element {
   const conventionData = useRouteLoaderData(NamedRoute.RootSiteConventionDisplay) as
     | ConventionDisplayQueryData
     | undefined;

@@ -19,7 +19,7 @@ export type EmailListProps = {
   renderToolbarContent?: () => ReactNode;
 };
 
-function EmailList({ emails, separator, renderToolbarContent }: EmailListProps): JSX.Element {
+function EmailList({ emails, separator, renderToolbarContent }: EmailListProps): React.JSX.Element {
   const { t } = useTranslation();
   const addresses = emails.map(formatEmail).join(separator);
   const mailtoParams = new URLSearchParams();

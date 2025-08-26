@@ -16,7 +16,7 @@ export type EditAdminProductCardProps = {
   ticketTypes: AdminProductsQueryData['convention']['ticket_types'];
 };
 
-function EditAdminProductCard({ initialProduct, close, ticketTypes }: EditAdminProductCardProps): JSX.Element {
+function EditAdminProductCard({ initialProduct, close, ticketTypes }: EditAdminProductCardProps): React.JSX.Element {
   const [product, setProduct] = useState(initialProduct);
   const { t } = useTranslation();
   const fetcher = useFetcher();

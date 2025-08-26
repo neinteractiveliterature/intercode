@@ -6,7 +6,7 @@ import LeafBreadcrumbItem from '../Breadcrumbs/LeafBreadcrumbItem';
 import NamedRouteBreadcrumbItem from '../Breadcrumbs/NamedRouteBreadcrumbItem';
 import { NamedRoute } from '../AppRouter';
 
-function StaffPositionAdmin(): JSX.Element {
+function StaffPositionAdmin(): React.JSX.Element {
   const authorizationWarning = useAuthorizationRequired('can_manage_staff_positions');
   if (authorizationWarning) return authorizationWarning;
 

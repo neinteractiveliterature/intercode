@@ -29,7 +29,7 @@ function AddOrderToTicketButton({
   userConProfile,
   convention,
   className,
-}: AddOrderToTicketButtonProps): JSX.Element {
+}: AddOrderToTicketButtonProps): React.JSX.Element {
   const { t } = useTranslation();
   const newOrderModal = useModal();
   const { myProfile, defaultCurrencyCode } = useContext(AppRootContext);

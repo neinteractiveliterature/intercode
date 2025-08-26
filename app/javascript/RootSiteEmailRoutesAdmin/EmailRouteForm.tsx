@@ -11,7 +11,7 @@ export type EmailRouteFormProps = {
   onChange: React.Dispatch<React.SetStateAction<EmailRouteFieldsFragment>>;
 };
 
-function EmailRouteForm({ emailRoute, onChange }: EmailRouteFormProps): JSX.Element {
+function EmailRouteForm({ emailRoute, onChange }: EmailRouteFormProps): React.JSX.Element {
   const { t } = useTranslation();
   const [setReceiverAddress, setForwardAddresses] = usePropertySetters(
     onChange,

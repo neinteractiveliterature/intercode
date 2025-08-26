@@ -22,7 +22,7 @@ export type OrganizationRoleFormState = {
 };
 
 export default function useOrganizationRoleForm(initialOrganizationRole: OrganizationRoleType): {
-  renderForm: () => JSX.Element;
+  renderForm: () => React.JSX.Element;
   formState: OrganizationRoleFormState;
 } {
   const [name, onNameChange] = useState(initialOrganizationRole.name);

@@ -89,7 +89,12 @@ export type ReactTableExportButtonProps = {
   columns?: string[];
 };
 
-function ReactTableExportButton({ exportUrl, filters, sortBy, columns }: ReactTableExportButtonProps): JSX.Element {
+function ReactTableExportButton({
+  exportUrl,
+  filters,
+  sortBy,
+  columns,
+}: ReactTableExportButtonProps): React.JSX.Element {
   const { t } = useTranslation();
   const href = useMemo(
     () => getExportUrl(exportUrl, { filters, sortBy, columns }),

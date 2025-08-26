@@ -7,7 +7,7 @@ export type MethodDocProps = {
   prefix?: string;
 };
 
-function MethodDoc({ method, prefix }: MethodDocProps): JSX.Element {
+function MethodDoc({ method, prefix }: MethodDocProps): React.JSX.Element {
   if (method.tags.some((tag) => tag.tag_name === 'api')) {
     return <></>;
   }
@@ -37,7 +37,6 @@ function MethodDoc({ method, prefix }: MethodDocProps): JSX.Element {
 
       <ul className="list-unstyled">
         {sortedTags.map((tag, i) => (
-           
           <TagDoc tag={tag} key={`${tag.tag_name}-${i}`} method={method} prefix={prefix} />
         ))}
       </ul>

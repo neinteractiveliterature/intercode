@@ -18,7 +18,7 @@ function ScheduleGridEventRun({
   runDimensions,
   layoutResult,
   scheduleLayoutBlock,
-}: ScheduleGridEventRunProps): JSX.Element {
+}: ScheduleGridEventRunProps): React.JSX.Element {
   const { schedule, toggleRunDetailsVisibility, isRunDetailsVisible, config } = useContext(ScheduleGridContext);
   const detailsVisible = useMemo(
     () => isRunDetailsVisible({ runId: runDimensions.runId, scheduleBlockId: scheduleLayoutBlock.id }),

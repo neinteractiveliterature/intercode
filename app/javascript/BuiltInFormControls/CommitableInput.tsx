@@ -29,11 +29,11 @@ function CommitableInput({
   renderInput,
   placeholder,
   label,
-}: CommitableInputProps): JSX.Element {
+}: CommitableInputProps): React.JSX.Element {
   const [editing, setEditing] = useState(false);
   const [editingValue, setEditingValue] = useState<string | undefined>('');
   const [commitInProgress, setCommitInProgress] = useState(false);
-  const inputRef = useRef<HTMLInputElement>();
+  const inputRef = useRef<HTMLInputElement>(undefined);
   const { t } = useTranslation();
 
   const beginEditing = useCallback(() => {

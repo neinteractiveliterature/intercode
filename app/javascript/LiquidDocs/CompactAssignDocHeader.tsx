@@ -10,7 +10,11 @@ export type CompactAssignDocHeaderProps = {
   preAssignNameContent?: React.ReactNode;
 };
 
-function CompactAssignDocHeader({ assign, prefix, preAssignNameContent }: CompactAssignDocHeaderProps): JSX.Element {
+function CompactAssignDocHeader({
+  assign,
+  prefix,
+  preAssignNameContent,
+}: CompactAssignDocHeaderProps): React.JSX.Element {
   const { docData } = useLiquidDocs();
   const assignClass = findClass(docData, assign.drop_class_name);
 

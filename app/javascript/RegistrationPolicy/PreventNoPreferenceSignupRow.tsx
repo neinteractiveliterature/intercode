@@ -19,7 +19,7 @@ function PreventNoPreferenceSignupRow({
   onChange,
   preset,
   registrationPolicy,
-}: PreventNoPreferenceSignupRowProps): JSX.Element {
+}: PreventNoPreferenceSignupRowProps): React.JSX.Element {
   const { t } = useTranslation();
   const renderPreventNoPreferenceSignupsDescription = () => {
     if (!isPreventNoPreferenceSignupsApplicable(registrationPolicy)) {

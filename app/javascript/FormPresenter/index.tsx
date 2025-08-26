@@ -8,7 +8,7 @@ export type FormPresenterAppProps = {
   children: ReactNode;
 };
 
-export default function FormPresenterApp({ form, children }: FormPresenterAppProps): JSX.Element {
+export default function FormPresenterApp({ form, children }: FormPresenterAppProps): React.JSX.Element {
   const itemInteractionProps = useItemInteractionTracking();
 
   return (

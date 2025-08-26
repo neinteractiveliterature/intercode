@@ -17,7 +17,7 @@ export type TimeSelectProps = {
   children?: ReactNode;
 };
 
-function TimeSelect({ value, timespan, onChange, children }: TimeSelectProps): JSX.Element {
+function TimeSelect({ value, timespan, onChange, children }: TimeSelectProps): React.JSX.Element {
   const format = useAppDateTimeFormat();
   const hourValues = useMemo(
     () => {

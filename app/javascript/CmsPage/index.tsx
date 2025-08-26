@@ -30,7 +30,7 @@ export const loader: LoaderFunction = async ({ request }) => {
   return data;
 };
 
-function CmsPage(): JSX.Element {
+function CmsPage(): React.JSX.Element {
   const data = useLoaderData() as CmsPageQueryData;
   const navigate = useNavigate();
   const location = useLocation();

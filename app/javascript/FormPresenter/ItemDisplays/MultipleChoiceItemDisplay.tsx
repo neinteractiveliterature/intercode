@@ -20,7 +20,10 @@ export type MultipleChoiceItemDisplayProps = {
   value: FormItemValueType<MultipleChoiceFormItem>;
 };
 
-function MultipleChoiceItemDisplay({ formItem, value: uncastValue }: MultipleChoiceItemDisplayProps): JSX.Element {
+function MultipleChoiceItemDisplay({
+  formItem,
+  value: uncastValue,
+}: MultipleChoiceItemDisplayProps): React.JSX.Element {
   const value = castValue(uncastValue);
   const isValueOther = (v: string) => !formItem.rendered_properties.choices.some((choice) => choice.value === v);
 

@@ -25,7 +25,7 @@ function ForwardAddressesCell({ getValue }: CellContext<EmailRouteType, EmailRou
 
 const defaultVisibleColumns = ['receiver_address', 'forward_addresses'];
 
-function RootSiteEmailRoutesAdminTable(): JSX.Element {
+function RootSiteEmailRoutesAdminTable(): React.JSX.Element {
   const authorizationWarning = useAuthorizationRequired('can_manage_email_routes');
 
   const columns = useMemo(() => {

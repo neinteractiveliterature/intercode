@@ -46,7 +46,7 @@ export const loader: LoaderFunction = async ({ params: { eventId, runId } }) => 
   }
 };
 
-function EditRun(): JSX.Element {
+function EditRun(): React.JSX.Element {
   const navigate = useNavigate();
   const { event, initialRun, convention } = useLoaderData() as LoaderResult;
 

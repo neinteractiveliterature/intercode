@@ -44,7 +44,7 @@ export function useEventsNavigationItems(): GeneratedNavigationItem[] {
   return items;
 }
 
-function EventsNavigationSection(): JSX.Element {
+function EventsNavigationSection(): React.JSX.Element {
   const { t } = useTranslation();
   const items = useEventsNavigationItems();
 

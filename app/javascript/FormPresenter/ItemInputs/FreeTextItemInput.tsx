@@ -58,7 +58,7 @@ function AdvisoryLimitDisplay({ content, advisoryCharacterLimit, advisoryWordLim
 
 export type FreeTextItemInputProps = CommonFormItemInputProps<FreeTextFormItem>;
 
-function FreeTextItemInput(props: FreeTextItemInputProps): JSX.Element {
+function FreeTextItemInput(props: FreeTextItemInputProps): React.JSX.Element {
   const {
     formItem,
     formResponseReference,

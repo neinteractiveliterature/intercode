@@ -17,7 +17,7 @@ type NotificationPreviewModalProps = {
   eventConfig?: NotificationsConfigQueryData['notificationEvents'][number];
 };
 
-function NotificationPreviewModal({ visible, close, eventConfig }: NotificationPreviewModalProps): JSX.Element {
+function NotificationPreviewModal({ visible, close, eventConfig }: NotificationPreviewModalProps): React.JSX.Element {
   const { t } = useTranslation();
   const { myProfile } = useContext(AppRootContext);
   const [sendEmail, setSendEmail] = useState(true);
@@ -81,7 +81,7 @@ export const loader: LoaderFunction = async () => {
   return data as NotificationsConfigQueryData;
 };
 
-function NotificationAdminIndex(): JSX.Element {
+function NotificationAdminIndex(): React.JSX.Element {
   const previewModal = useModal<{ eventConfig: NotificationsConfigQueryData['notificationEvents'][number] }>();
   const data = useLoaderData() as NotificationsConfigQueryData;
   const { t } = useTranslation();

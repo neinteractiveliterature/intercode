@@ -16,7 +16,7 @@ export type DateItemDisplayProps = {
   value: string;
 };
 
-function DateItemDisplay({ value }: DateItemDisplayProps): JSX.Element {
+function DateItemDisplay({ value }: DateItemDisplayProps): React.JSX.Element {
   const { timezoneName } = useContext(AppRootContext);
   const format = useAppDateTimeFormat();
   const formattedDate = useMemo(() => describeDate(value, timezoneName, format), [timezoneName, value, format]);

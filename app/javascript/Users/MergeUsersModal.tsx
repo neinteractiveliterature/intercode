@@ -72,7 +72,7 @@ export const loader: LoaderFunction = async ({ params: { ids } }) => {
   return data;
 };
 
-function MergeUsersModal(): JSX.Element {
+function MergeUsersModal(): React.JSX.Element {
   const data = useLoaderData() as MergeUsersModalQueryData;
   const [winningUserId, setWinningUserId] = useState<string>();
   const [winningProfileIds, setWinningProfileIds] = useState(new Map<string, string>());

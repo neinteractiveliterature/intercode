@@ -58,7 +58,7 @@ export const loader: LoaderFunction = async () => {
   return data;
 };
 
-function CmsFilesAdmin(): JSX.Element {
+function CmsFilesAdmin(): React.JSX.Element {
   const data = useLoaderData() as CmsFilesAdminQueryData;
   const confirm = useConfirm();
   const { t } = useTranslation();

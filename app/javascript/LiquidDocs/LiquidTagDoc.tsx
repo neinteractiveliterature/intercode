@@ -5,7 +5,7 @@ import TagDoc from './TagDoc';
 import { useLiquidDocs } from './loader';
 import FourOhFourPage from '../FourOhFourPage';
 
-function LiquidTagDoc(): JSX.Element {
+function LiquidTagDoc(): React.JSX.Element {
   const { name } = useParams();
   const { tags } = useLiquidDocs();
   const location = useLocation();

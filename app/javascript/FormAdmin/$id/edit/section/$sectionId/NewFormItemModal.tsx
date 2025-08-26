@@ -54,7 +54,7 @@ function NewFormItemModal<FormType extends FormTypeDefinition>({
   close,
   createFormItem,
   formType,
-}: NewFormItemModalProps<FormType>): JSX.Element {
+}: NewFormItemModalProps<FormType>): React.JSX.Element {
   const { t } = useTranslation();
   const { form } = useContext(FormEditorContext);
   const [itemType, setItemType] = useState<TypedFormItem['item_type']>();

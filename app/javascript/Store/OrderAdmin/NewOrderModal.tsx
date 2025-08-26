@@ -61,7 +61,7 @@ export type NewOrderModalProps = {
   initialOrder?: CreatingOrder;
 };
 
-export default function NewOrderModal({ visible, close, initialOrder }: NewOrderModalProps): JSX.Element {
+export default function NewOrderModal({ visible, close, initialOrder }: NewOrderModalProps): React.JSX.Element {
   const { t } = useTranslation();
   const confirm = useConfirm();
   const { defaultCurrencyCode } = useContext(AppRootContext);

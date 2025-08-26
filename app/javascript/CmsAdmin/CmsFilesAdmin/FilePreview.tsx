@@ -41,7 +41,7 @@ export type FilePreviewProps = {
   size?: string | null;
 };
 
-function FilePreview({ url, contentType, filename, size }: FilePreviewProps): JSX.Element {
+function FilePreview({ url, contentType, filename, size }: FilePreviewProps): React.JSX.Element {
   const effectiveSize = size ?? '100px';
 
   if (url != null) {

@@ -24,7 +24,7 @@ function getDefaultAgeRestrictionsDescription(minimumAge: number | null | undefi
 
 export type AgeRestrictionsInputProps = CommonFormItemInputProps<AgeRestrictionsFormItem>;
 
-function AgeRestrictionsInput(props: AgeRestrictionsInputProps): JSX.Element {
+function AgeRestrictionsInput(props: AgeRestrictionsInputProps): React.JSX.Element {
   const { t } = useTranslation();
   const {
     formItem,
@@ -84,11 +84,7 @@ function AgeRestrictionsInput(props: AgeRestrictionsInputProps): JSX.Element {
   return (
     <div className={classNames('card my-2', FORM_ITEM_ROLE_COLOR_CLASSES[formItem.visibility])}>
       <div className="card-header py-0">
-        <legend
-          className="col-form-label"
-           
-          dangerouslySetInnerHTML={{ __html: formItem.rendered_properties.caption }}
-        />
+        <legend className="col-form-label" dangerouslySetInnerHTML={{ __html: formItem.rendered_properties.caption }} />
       </div>
       <div className="card-body pb-1">
         <div className="mb-3">

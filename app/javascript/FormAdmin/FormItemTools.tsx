@@ -137,7 +137,7 @@ export type FormItemToolsProps = {
   saveFormItem: () => Promise<unknown>;
 };
 
-function FormItemTools({ saveFormItem }: FormItemToolsProps): JSX.Element {
+function FormItemTools({ saveFormItem }: FormItemToolsProps): React.JSX.Element {
   const params = useParams<{ id: string; sectionId: string }>();
   const navigate = useNavigate();
   const { disabled, formItem, setFormItem, standardItem } = useContext(FormItemEditorContext);

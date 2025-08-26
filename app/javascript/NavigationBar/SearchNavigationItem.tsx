@@ -6,7 +6,7 @@ import SiteSearch from './SiteSearch';
 import NavigationBarContext from './NavigationBarContext';
 import searchStyles from 'styles/search.module.scss';
 
-function SearchNavigationItem(): JSX.Element {
+function SearchNavigationItem(): React.JSX.Element {
   const { t } = useTranslation();
   const [visible, setVisible] = useState(false);
   const { setHideBrand, setHideNavItems } = useContext(NavigationBarContext);

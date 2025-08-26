@@ -7,7 +7,7 @@ export type CaptionLegendProps<PropertiesType extends { caption: string; require
 
 function CaptionLegend<PropertiesType extends { caption: string; required?: boolean }>({
   formItem,
-}: CaptionLegendProps<PropertiesType>): JSX.Element {
+}: CaptionLegendProps<PropertiesType>): React.JSX.Element {
   return (
     <legend className="col-form-label">
       <span dangerouslySetInnerHTML={{ __html: formItem.rendered_properties.caption }} />

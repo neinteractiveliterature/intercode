@@ -88,7 +88,7 @@ export type RecurringEventSectionProps = {
   convention: ConventionFieldsFragment;
 };
 
-function RecurringEventSection({ event, convention }: RecurringEventSectionProps): JSX.Element {
+function RecurringEventSection({ event, convention }: RecurringEventSectionProps): React.JSX.Element {
   const { t } = useTranslation();
   const [expanded, setExpanded] = useState(false);
   const scheduleRunsModal = useModal();

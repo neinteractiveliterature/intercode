@@ -15,7 +15,7 @@ function RouteActivatedBreadcrumbItemV2({
   children,
   route,
   hideUnlessMatch,
-}: RouteActivatedBreadcrumbItemV2Props): JSX.Element {
+}: RouteActivatedBreadcrumbItemV2Props): React.JSX.Element {
   const location = useLocation();
 
   const match = matchRoutes([route], location);

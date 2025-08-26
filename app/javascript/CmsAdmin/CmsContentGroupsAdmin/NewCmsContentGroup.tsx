@@ -32,7 +32,7 @@ export const action: ActionFunction = async ({ request }) => {
   return redirect('/cms_content_groups');
 };
 
-function NewCmsContentGroup(): JSX.Element {
+function NewCmsContentGroup(): React.JSX.Element {
   const data = useCmsContentGroupsAdminLoader();
   const [contentGroup, setContentGroup] = useState<
     Omit<CmsContentGroupsAdminQueryData['cmsParent']['cmsContentGroups'][0], 'id'>

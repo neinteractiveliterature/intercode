@@ -30,7 +30,7 @@ function CmsGraphqlQueryForm<T extends CmsGraphqlQueryFormFields>({
   value,
   onChange,
   readOnly,
-}: CmsGraphqlQueryFormProps<T>): JSX.Element {
+}: CmsGraphqlQueryFormProps<T>): React.JSX.Element {
   const { graphql: authenticityToken } = AuthenticityTokensManager.instance.tokens;
   const [setIdentifier, setAdminNotes, setQuery] = usePropertySetters(onChange, 'identifier', 'admin_notes', 'query');
 

@@ -40,7 +40,7 @@ export const action: ActionFunction = async ({ request, params: { sectionId } })
   }
 };
 
-function FormSectionEditorLayout(): JSX.Element {
+function FormSectionEditorLayout(): React.JSX.Element {
   const { currentSection, convention } = useContext(FormEditorContext);
   const sectionBottomRef = useRef<HTMLDivElement>(null);
 

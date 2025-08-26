@@ -31,7 +31,7 @@ function UserActivityAlertForm({
   convention,
   disabled,
   userActivityAlertEvent,
-}: UserActivityAlertFormProps): JSX.Element {
+}: UserActivityAlertFormProps): React.JSX.Element {
   const { t } = useTranslation();
   const userSelectId = useId();
 

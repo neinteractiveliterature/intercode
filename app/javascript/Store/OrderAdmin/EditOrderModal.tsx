@@ -28,7 +28,7 @@ export type EditOrderModalProps = {
   closeModal: () => void;
 };
 
-export default function EditOrderModal({ order, closeModal }: EditOrderModalProps): JSX.Element {
+export default function EditOrderModal({ order, closeModal }: EditOrderModalProps): React.JSX.Element {
   const { t } = useTranslation();
   const confirm = useConfirm();
   const fetcher = useFetcher();

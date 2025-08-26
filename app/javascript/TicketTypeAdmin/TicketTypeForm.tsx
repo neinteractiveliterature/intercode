@@ -14,7 +14,7 @@ export type TicketTypeFormProps = {
   onChange: React.Dispatch<React.SetStateAction<EditingTicketType>>;
 };
 
-function TicketTypeForm({ ticketType, onChange }: TicketTypeFormProps): JSX.Element {
+function TicketTypeForm({ ticketType, onChange }: TicketTypeFormProps): React.JSX.Element {
   const { t } = useTranslation();
   const { ticketNamePlural } = useContext(AppRootContext);
 

@@ -268,7 +268,7 @@ export const loader: LoaderFunction = async () => {
   return data;
 };
 
-function SignupModerationQueue(): JSX.Element {
+function SignupModerationQueue(): React.JSX.Element {
   const { t } = useTranslation();
   const pageData = useLoaderData() as SignupModerationQueuePageQueryData;
   const confirm = useConfirm();

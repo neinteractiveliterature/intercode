@@ -36,7 +36,7 @@ export type FileUploadFormProps = {
   onUpload?: (blob: Blob, file: File) => unknown;
 };
 
-function FileUploadForm({ onUpload }: FileUploadFormProps): JSX.Element {
+function FileUploadForm({ onUpload }: FileUploadFormProps): React.JSX.Element {
   const { t } = useTranslation();
   const [file, setFile] = useState<File | null | undefined>();
   const [uploadAsync, error, uploading] = useAsyncFunction(uploadFile);

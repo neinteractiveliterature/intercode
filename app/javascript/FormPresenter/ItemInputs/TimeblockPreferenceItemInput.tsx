@@ -32,7 +32,7 @@ function TimeblockPreferenceItemInput({
   formTypeIdentifier,
   value: uncheckedValue,
   onChange,
-}: TimeblockPreferenceItemInputProps): JSX.Element {
+}: TimeblockPreferenceItemInputProps): React.JSX.Element {
   const { t } = useTranslation();
   const format = useAppDateTimeFormat();
   const value = useMemo(() => uncheckedValue ?? [], [uncheckedValue]);

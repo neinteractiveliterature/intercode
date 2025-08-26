@@ -31,7 +31,7 @@ function ConventionForm({
   pages,
   saveConvention,
   rootSite,
-}: ConventionFormProps): JSX.Element {
+}: ConventionFormProps): React.JSX.Element {
   const [convention, setConvention] = useState(initialConvention);
   const [save, saveError, saveInProgress] = useAsyncFunction(saveConvention);
   const [openGraphImage, setOpenGraphImage] = useState<File | null | undefined>();

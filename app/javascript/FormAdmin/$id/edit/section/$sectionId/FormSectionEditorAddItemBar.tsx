@@ -11,12 +11,12 @@ import NewFormItemModal from './NewFormItemModal';
 import styles from 'styles/form_editor.module.scss';
 
 type FormSectionEditorAddItemBarProps = {
-  sectionBottomRef: React.RefObject<HTMLElement>;
+  sectionBottomRef: React.RefObject<HTMLElement | null>;
 };
 
 export default function FormSectionEditorAddItemBar({
   sectionBottomRef,
-}: FormSectionEditorAddItemBarProps): JSX.Element {
+}: FormSectionEditorAddItemBarProps): React.JSX.Element {
   const { formType } = useContext(FormEditorContext);
   const { id, sectionId } = useParams();
   const navigate = useNavigate();

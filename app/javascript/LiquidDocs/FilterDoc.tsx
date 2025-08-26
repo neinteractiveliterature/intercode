@@ -5,7 +5,7 @@ import { NamedRoute } from '../AppRouter';
 import { LiquidDocsLoaderResult } from './loader';
 import FourOhFourPage from '../FourOhFourPage';
 
-function FilterDoc(): JSX.Element {
+function FilterDoc(): React.JSX.Element {
   const { name } = useParams();
   const { filters } = useRouteLoaderData(NamedRoute.LiquidDocs) as LiquidDocsLoaderResult;
   const location = useLocation();

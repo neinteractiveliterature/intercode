@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import { BootstrapRRNavLink } from '../../UIComponents/BootstrapNavLink';
 
-function SignupsIndex(): JSX.Element {
+function SignupsIndex(): React.JSX.Element {
   const { t } = useTranslation();
 
   return (

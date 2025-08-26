@@ -16,7 +16,7 @@ export type ProductSelectProps<
 function ProductSelect<QueryType extends AdminProductsQueryData, IsMulti extends boolean = boolean>({
   productsQuery,
   ...otherProps
-}: ProductSelectProps<QueryType, IsMulti>): JSX.Element {
+}: ProductSelectProps<QueryType, IsMulti>): React.JSX.Element {
   const { data, loading, error } = useQuery<QueryType>(productsQuery ?? AdminProductsQueryDocument);
 
   if (loading) {

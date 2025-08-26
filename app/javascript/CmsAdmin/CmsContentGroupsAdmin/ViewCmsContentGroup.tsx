@@ -5,7 +5,7 @@ import { singleCmsContentGroupAdminLoader, SingleCmsContentGroupAdminLoaderResul
 
 export const loader = singleCmsContentGroupAdminLoader;
 
-function ViewCmsContentGroup(): JSX.Element {
+function ViewCmsContentGroup(): React.JSX.Element {
   const { data, contentGroup } = useLoaderData() as SingleCmsContentGroupAdminLoaderResult;
   usePageTitle(contentGroup.name);
 

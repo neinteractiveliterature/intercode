@@ -71,7 +71,7 @@ function ConventionDatesCell({ row }: CellContext<ConventionType, unknown>) {
 
 const defaultVisibleColumns = ['name', 'organization_name', 'starts_at'];
 
-function RootSiteConventionsAdminTable(): JSX.Element {
+function RootSiteConventionsAdminTable(): React.JSX.Element {
   const navigate = useNavigate();
 
   const columns = useMemo(() => {

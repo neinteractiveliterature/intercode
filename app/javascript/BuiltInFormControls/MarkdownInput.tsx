@@ -55,7 +55,12 @@ export type MarkdownInputProps = Omit<
     imageAttachmentConfig?: ImageAttachmentConfig;
   };
 
-function MarkdownInput({ eventId, eventProposalId, imageAttachmentConfig, ...props }: MarkdownInputProps): JSX.Element {
+function MarkdownInput({
+  eventId,
+  eventProposalId,
+  imageAttachmentConfig,
+  ...props
+}: MarkdownInputProps): React.JSX.Element {
   const client = useApolloClient();
   const { t } = useTranslation();
   const languageExtension = useMemo(() => markdown(), []);

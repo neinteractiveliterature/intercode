@@ -46,7 +46,7 @@ export const action: ActionFunction = async ({ params: { id }, request }) => {
   }
 };
 
-function FormEditor(): JSX.Element {
+function FormEditor(): React.JSX.Element {
   const params = useParams<{ id: string; sectionId?: string; itemId?: string }>();
   if (params.id == null) {
     throw new Error('id not found in URL params');

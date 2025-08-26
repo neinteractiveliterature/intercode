@@ -24,7 +24,7 @@ function CreateEventProposalModal({
   userEventProposals,
   proposableEventCategories,
   departments,
-}: CreateEventProposalModalProps): JSX.Element {
+}: CreateEventProposalModalProps): React.JSX.Element {
   const { t } = useTranslation();
   const [cloneEventProposal, setCloneEventProposal] = useState<(typeof userEventProposals)[0]>();
   const topLevelEventCategories = useMemo(

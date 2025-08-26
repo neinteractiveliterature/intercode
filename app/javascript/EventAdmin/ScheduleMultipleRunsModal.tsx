@@ -41,7 +41,7 @@ function ScheduleMultipleRunsModal({
   visible,
   onCancel,
   onFinish,
-}: ScheduleMultipleRunsModalProps): JSX.Element {
+}: ScheduleMultipleRunsModalProps): React.JSX.Element {
   const format = useAppDateTimeFormat();
   const [day, setDay] = useState<DateTime>();
   const [start, setStart] = useState<FuzzyTimeWithoutSecond>({});

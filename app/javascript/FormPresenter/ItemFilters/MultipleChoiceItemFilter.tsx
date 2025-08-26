@@ -5,7 +5,7 @@ import { CommonFormItemFilterProps } from './CommonFormItemFilterProps';
 
 export type MultipleChoiceItemFilterProps = CommonFormItemFilterProps<MultipleChoiceFormItem>;
 
-function MultipleChoiceItemFilter({ formItem, onChange, value }: MultipleChoiceItemFilterProps): JSX.Element {
+function MultipleChoiceItemFilter({ formItem, onChange, value }: MultipleChoiceItemFilterProps): React.JSX.Element {
   const choicesForChoiceSet = useMemo(() => {
     const providedChoices = formItem.rendered_properties.choices.map((choice) => ({
       label: choice.caption,

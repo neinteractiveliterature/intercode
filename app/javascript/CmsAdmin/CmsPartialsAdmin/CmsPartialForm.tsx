@@ -17,7 +17,7 @@ function CmsPartialForm<T extends CmsPartialFormFields>({
   partial,
   onChange,
   readOnly,
-}: CmsPartialFormProps<T>): JSX.Element {
+}: CmsPartialFormProps<T>): React.JSX.Element {
   const [setName, setAdminNotes, setContent] = usePropertySetters(onChange, 'name', 'admin_notes', 'content');
 
   const extensions = React.useMemo(() => [EditorView.editable.of(!readOnly)], [readOnly]);

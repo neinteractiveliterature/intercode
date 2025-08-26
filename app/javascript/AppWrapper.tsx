@@ -123,7 +123,7 @@ export type AppWrapperProps = {
   stripePublishableKey: string;
 };
 
-function AppWrapper<P extends JSX.IntrinsicAttributes>(
+function AppWrapper<P extends React.JSX.IntrinsicAttributes>(
   WrappedComponent: React.ComponentType<P>,
 ): React.ComponentType<P> {
   function Wrapper(props: P & AppWrapperProps) {

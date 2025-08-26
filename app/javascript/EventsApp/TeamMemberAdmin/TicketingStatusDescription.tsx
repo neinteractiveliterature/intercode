@@ -15,7 +15,10 @@ export type TicketingStatusDescriptionProps = {
   convention: Pick<Convention, 'name' | 'ticket_name'>;
 };
 
-function TicketingStatusDescription({ userConProfile, convention }: TicketingStatusDescriptionProps): JSX.Element {
+function TicketingStatusDescription({
+  userConProfile,
+  convention,
+}: TicketingStatusDescriptionProps): React.JSX.Element {
   const { t } = useTranslation();
   const { ticket_name: ticketName } = convention;
 

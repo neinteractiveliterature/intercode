@@ -16,7 +16,7 @@ type UserConProfileType = NonNullable<
   DefaultUserConProfilesQueryData['convention']
 >['user_con_profiles_paginated']['entries'][0];
 
-function CreateSignup(): JSX.Element {
+function CreateSignup(): React.JSX.Element {
   const { t } = useTranslation();
   const [event, setEvent] = useState<EventType>();
   const [userConProfile, setUserConProfile] = useState<UserConProfileType>();

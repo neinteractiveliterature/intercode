@@ -32,7 +32,7 @@ function ArrayEditor<T>({
   getDeletePrompt,
   renderAddValueInput,
   addValueLabel,
-}: ArrayEditorProps<T>): JSX.Element {
+}: ArrayEditorProps<T>): React.JSX.Element {
   const confirm = useConfirm();
   const [addingValue, setAddingValue] = useState(initialAddValue);
   const addValue = () => {
@@ -49,7 +49,6 @@ function ArrayEditor<T>({
 
       <ul className="list-group list-group-flush">
         {array.map((value, index) => (
-           
           <li className="list-group-item" key={index}>
             <div className="d-flex">
               <div className="flex-grow-1">{renderValue(value)}</div>
@@ -100,7 +99,7 @@ export type StringArrayEditorProps = Omit<
   ) => ReactNode;
 };
 
-export function StringArrayEditor({ renderAddValueInput, ...otherProps }: StringArrayEditorProps): JSX.Element {
+export function StringArrayEditor({ renderAddValueInput, ...otherProps }: StringArrayEditorProps): React.JSX.Element {
   return (
     <ArrayEditor
       initialAddValue=""

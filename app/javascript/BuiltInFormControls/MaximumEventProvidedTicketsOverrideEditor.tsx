@@ -40,7 +40,7 @@ function MaximumEventProvidedTicketsOverrideEditor({
   ticketName,
   overrides,
   ticketTypes,
-}: MEPTOEditorProps): JSX.Element {
+}: MEPTOEditorProps): React.JSX.Element {
   const { t } = useTranslation();
   const fetcher = useFetcher();
   const [addingOverride, setAddingOverride] = useState<{

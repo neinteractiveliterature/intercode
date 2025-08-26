@@ -38,7 +38,7 @@ export type SignupStateDislayProps = {
   strikeThrough?: boolean | null;
 };
 
-export function SignupStateDisplay({ value, strikeThrough }: SignupStateDislayProps): JSX.Element {
+export function SignupStateDisplay({ value, strikeThrough }: SignupStateDislayProps): React.JSX.Element {
   const { t } = useTranslation();
   const { ticketName } = useContext(AppRootContext);
 

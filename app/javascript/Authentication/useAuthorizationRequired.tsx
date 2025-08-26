@@ -14,7 +14,7 @@ export function AuthorizationError() {
 export type AbilityType = AppRootContextValue['currentAbility'];
 export type AbilityName = keyof AbilityType;
 
-export function useAuthorizationRequiredWithoutLogin(...abilities: AbilityName[]): JSX.Element | false {
+export function useAuthorizationRequiredWithoutLogin(...abilities: AbilityName[]): React.JSX.Element | false {
   const { currentAbility } = useContext(AppRootContext);
 
   if (!abilities.every((ability) => currentAbility[ability])) {
@@ -24,7 +24,7 @@ export function useAuthorizationRequiredWithoutLogin(...abilities: AbilityName[]
   return false;
 }
 
-export default function useAuthorizationRequired(...abilities: AbilityName[]): JSX.Element | false {
+export default function useAuthorizationRequired(...abilities: AbilityName[]): React.JSX.Element | false {
   const loginRequired = useLoginRequired();
   const authorizationRequired = useAuthorizationRequiredWithoutLogin(...abilities);
 
@@ -42,7 +42,7 @@ export type AuthorizationWrapperProps = {
   children: React.ReactNode;
 };
 
-export function AuthorizationWrapper({ abilities, children }: AuthorizationWrapperProps): JSX.Element {
+export function AuthorizationWrapper({ abilities, children }: AuthorizationWrapperProps): React.JSX.Element {
   const authorizationRequired = useAuthorizationRequired(...abilities);
 
   if (authorizationRequired) {
@@ -52,7 +52,7 @@ export function AuthorizationWrapper({ abilities, children }: AuthorizationWrapp
   return <>{children}</>;
 }
 
-export function NoLoginAuthorizationWrapper({ abilities, children }: AuthorizationWrapperProps): JSX.Element {
+export function NoLoginAuthorizationWrapper({ abilities, children }: AuthorizationWrapperProps): React.JSX.Element {
   const authorizationRequired = useAuthorizationRequiredWithoutLogin(...abilities);
 
   if (authorizationRequired) {

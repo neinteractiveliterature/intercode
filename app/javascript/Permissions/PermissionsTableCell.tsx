@@ -13,7 +13,7 @@ function PermissionsTableCell({
   grantPermission,
   revokePermission,
   readOnly,
-}: PermissionsTableCellProps): JSX.Element {
+}: PermissionsTableCellProps): React.JSX.Element {
   const { toggle, hasPermission, className } = usePermissionToggle({
     grantPermission,
     revokePermission,

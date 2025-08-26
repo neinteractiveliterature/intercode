@@ -51,7 +51,7 @@ export type AdminProductVariantsTableProps =
 
 const noop = () => {};
 
-function AdminProductVariantsTable(props: AdminProductVariantsTableProps): JSX.Element {
+function AdminProductVariantsTable(props: AdminProductVariantsTableProps): React.JSX.Element {
   const { product, editing } = props;
   const [matchWidthRef, matchWidthStyle] = useMatchWidthStyle<HTMLTableElement>();
   const { t } = useTranslation();

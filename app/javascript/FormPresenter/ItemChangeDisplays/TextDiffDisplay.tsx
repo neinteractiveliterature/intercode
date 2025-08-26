@@ -27,7 +27,7 @@ export type TextDiffDisplayProps = {
   after?: string | null;
 };
 
-function TextDiffDisplay({ before, after }: TextDiffDisplayProps): JSX.Element {
+function TextDiffDisplay({ before, after }: TextDiffDisplayProps): React.JSX.Element {
   const diff = useMemo(() => {
     const wordDiff = diffWords(before || '', after || '');
     if (wordDiff.length > 10) {
@@ -40,7 +40,6 @@ function TextDiffDisplay({ before, after }: TextDiffDisplayProps): JSX.Element {
   return (
     <>
       {diff.map(({ value, added, removed }, index) => (
-         
         <EditDisplay value={value} added={added} removed={removed} key={index} />
       ))}
     </>

@@ -4,7 +4,7 @@ import { ErrorDisplay, useConfirm } from '@neinteractiveliterature/litform';
 import usePageTitle from '../../usePageTitle';
 import { useCmsGraphqlQueriesAdminLoader } from './loaders';
 
-function CmsGraphqlQueriesAdminTable(): JSX.Element {
+function CmsGraphqlQueriesAdminTable(): React.JSX.Element {
   const data = useCmsGraphqlQueriesAdminLoader();
   const submit = useSubmit();
   const confirm = useConfirm();

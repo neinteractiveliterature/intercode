@@ -12,7 +12,7 @@ import TimeblockPreferenceEditor from 'FormAdmin/ItemEditors/TimeblockPreference
 import TimespanEditor from 'FormAdmin/ItemEditors/TimespanEditor';
 import errorReporting from 'ErrorReporting';
 
-function FormItemEditorContent(): JSX.Element {
+function FormItemEditorContent(): React.JSX.Element {
   const { formItem, setFormItem } = useContext(FormItemEditorContext);
 
   switch (formItem.item_type) {

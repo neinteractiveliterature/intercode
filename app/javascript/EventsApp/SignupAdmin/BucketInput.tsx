@@ -33,7 +33,7 @@ export type BucketInputProps = Omit<
   onChange: (newValue: string | null | undefined) => void;
 };
 
-export default function BucketInput({ signup, ...otherProps }: BucketInputProps): JSX.Element {
+export default function BucketInput({ signup, ...otherProps }: BucketInputProps): React.JSX.Element {
   const { t } = useTranslation();
   const bucketChoices = (signup.run.event.registration_policy?.buckets ?? []).map((bucket) => ({
     value: bucket.key,

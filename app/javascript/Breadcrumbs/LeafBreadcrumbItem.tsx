@@ -8,7 +8,7 @@ export type LeafBreadcrumbItemProps = {
   children: ReactNode;
 };
 
-export default function LeafBreadcrumbItem({ path, children }: LeafBreadcrumbItemProps): JSX.Element {
+export default function LeafBreadcrumbItem({ path, children }: LeafBreadcrumbItemProps): React.JSX.Element {
   return (
     <RouteActivatedBreadcrumbItem to={path} pattern={path} hideUnlessMatch>
       {children}

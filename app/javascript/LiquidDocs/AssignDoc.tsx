@@ -64,7 +64,7 @@ function findAssign(
   }
 }
 
-function AssignDoc(): JSX.Element {
+function AssignDoc(): React.JSX.Element {
   const { name } = useParams();
   const { docData, assigns } = useLiquidDocs();
   const location = useLocation();

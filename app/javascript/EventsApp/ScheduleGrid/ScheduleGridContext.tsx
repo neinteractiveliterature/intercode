@@ -293,7 +293,7 @@ export function ScheduleGridProvider({
   convention,
   filters,
   currentAbilityCanCreateCmsPartials,
-}: ScheduleGridProviderProps): JSX.Element {
+}: ScheduleGridProviderProps): React.JSX.Element {
   const { timezoneName } = useContext(AppRootContext);
   const filtersContextValue = { myRatingFilter, hideConflicts };
   const prefetchAll = IS_MOBILE;

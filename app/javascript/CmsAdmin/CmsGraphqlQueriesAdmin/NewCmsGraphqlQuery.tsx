@@ -29,7 +29,7 @@ export const action: ActionFunction = async ({ request }) => {
   return redirect('/cms_graphql_queries');
 };
 
-function NewCmsGraphqlQuery(): JSX.Element {
+function NewCmsGraphqlQuery(): React.JSX.Element {
   const [query, setQuery] = useState({ identifier: '', admin_notes: '', query: '' });
   const createError = useActionData();
   const navigation = useNavigation();

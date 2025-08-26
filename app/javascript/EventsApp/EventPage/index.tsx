@@ -25,7 +25,7 @@ export const loader: LoaderFunction = async ({ params: { eventId } }) => {
   return data;
 };
 
-function EventPage(): JSX.Element {
+function EventPage(): React.JSX.Element {
   const data = useLoaderData() as EventPageQueryData;
   const { myProfile } = useContext(AppRootContext);
   const rateEvent = useRateEvent();

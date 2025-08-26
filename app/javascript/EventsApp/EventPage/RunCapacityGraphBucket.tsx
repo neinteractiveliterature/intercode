@@ -53,7 +53,7 @@ function RunCapacityGraphBucket({
   signupCountData,
   signupsAvailable,
   bucketIndex,
-}: RunCapacityGraphBucketProps): JSX.Element {
+}: RunCapacityGraphBucketProps): React.JSX.Element {
   const { t } = useTranslation();
   const capacity = bucket.total_slots ?? 0;
 

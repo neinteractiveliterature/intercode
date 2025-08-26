@@ -37,7 +37,7 @@ function RunFormFields<RunType extends RunForRunFormFields>({
   event,
   convention,
   onChange,
-}: RunFormFieldsProps<RunType>): JSX.Element {
+}: RunFormFieldsProps<RunType>): React.JSX.Element {
   const { t } = useTranslation();
   const { timezoneName } = useContext(AppRootContext);
   const format = useAppDateTimeFormat();

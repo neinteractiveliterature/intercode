@@ -15,10 +15,10 @@ function BucketAvailabilityDisplay({
   signupCount,
   remainingCapacity,
   compact,
-}: BucketAvailabilityDisplayProps): JSX.Element {
+}: BucketAvailabilityDisplayProps): React.JSX.Element {
   const totalCells = signupCount + remainingCapacity;
   const [containerWidth, setContainerWidth] = useState(300);
-  const resizeObserverRef = useRef<ResizeObserver>();
+  const resizeObserverRef = useRef<ResizeObserver>(undefined);
 
   // https://reactjs.org/docs/hooks-faq.html#how-can-i-measure-a-dom-node
   const measuredRef = useCallback((element: HTMLDivElement) => {
@@ -63,7 +63,7 @@ function BucketAvailabilityDisplay({
     lineWidth = Math.ceil(totalCells / numLines);
   }
 
-  const generateNElements = (n: number, generateElement: (index: number) => JSX.Element) => {
+  const generateNElements = (n: number, generateElement: (index: number) => React.JSX.Element) => {
     if (n < 1) {
       return [];
     }

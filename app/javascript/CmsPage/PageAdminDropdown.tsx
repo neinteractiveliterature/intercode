@@ -31,7 +31,7 @@ function getEffectiveLayout(
   return cmsParent.root_site_default_layout;
 }
 
-export default function PageAdminDropdown({ showEdit, showDelete, pageId }: PageAdminDropdownProps): JSX.Element {
+export default function PageAdminDropdown({ showEdit, showDelete, pageId }: PageAdminDropdownProps): React.JSX.Element {
   const navigate = useNavigate();
   const confirm = useGraphQLConfirm();
   const { data } = useSuspenseQuery(PageAdminDropdownQueryDocument, { variables: { id: pageId } });

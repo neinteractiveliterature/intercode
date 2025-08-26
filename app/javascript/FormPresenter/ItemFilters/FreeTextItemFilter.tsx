@@ -4,7 +4,7 @@ import { CommonFormItemFilterProps } from './CommonFormItemFilterProps';
 
 export type FreeTextItemFilterProps = CommonFormItemFilterProps<FreeTextFormItem>;
 
-function FreeTextItemFilter({ formItem, onChange, value }: FreeTextItemFilterProps): JSX.Element {
+function FreeTextItemFilter({ formItem, onChange, value }: FreeTextItemFilterProps): React.JSX.Element {
   const filterValue = value ? (value[0] ?? '') : '';
   return (
     <BootstrapFormInput

@@ -35,7 +35,7 @@ async function changePassword(
   }
 }
 
-function ResetPassword(): JSX.Element {
+function ResetPassword(): React.JSX.Element {
   const { t } = useTranslation();
   const location = useLocation();
   const resetPasswordToken = useMemo(

@@ -7,7 +7,7 @@ export type AssignDocHeaderProps = {
   prefix?: string;
 };
 
-function AssignDocHeader({ assign, prefix }: AssignDocHeaderProps): JSX.Element {
+function AssignDocHeader({ assign, prefix }: AssignDocHeaderProps): React.JSX.Element {
   const { docData } = useLiquidDocs();
   const assignClass = findClass(docData, assign.drop_class_name);
 

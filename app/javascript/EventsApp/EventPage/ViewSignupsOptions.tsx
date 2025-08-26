@@ -10,7 +10,7 @@ export type ViewSignupsOptionsProps = {
   currentAbility: EventPageQueryData['currentAbility'];
 };
 
-function ViewSignupsOptions({ event, run, currentAbility }: ViewSignupsOptionsProps): JSX.Element {
+function ViewSignupsOptions({ event, run, currentAbility }: ViewSignupsOptionsProps): React.JSX.Element {
   const { t } = useTranslation();
   const eventPath = buildEventUrl(event);
 

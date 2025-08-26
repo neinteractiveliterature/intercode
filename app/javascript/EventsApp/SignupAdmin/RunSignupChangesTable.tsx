@@ -31,7 +31,7 @@ export type SignupChangeType = RunSignupChangesQueryData['convention']['run']['s
 
 const defaultVisibleColumns = ['name', 'action', 'bucket_change', 'created_at'];
 
-function RunSignupChangesTable(): JSX.Element {
+function RunSignupChangesTable(): React.JSX.Element {
   const { t } = useTranslation();
   const { runId } = useParams();
 

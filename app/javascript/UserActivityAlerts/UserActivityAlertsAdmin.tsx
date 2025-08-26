@@ -16,7 +16,7 @@ export const loader: LoaderFunction = async () => {
   return data;
 };
 
-function UserActivityAlertsAdmin(): JSX.Element {
+function UserActivityAlertsAdmin(): React.JSX.Element {
   const matches = useMatches();
   const { t } = useTranslation();
   const authorizationWarning = useAuthorizationRequired('can_read_user_activity_alerts');

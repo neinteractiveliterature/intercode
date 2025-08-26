@@ -183,7 +183,7 @@ export function useAdminNavigationItems(): GeneratedNavigationItem[] {
   return conventionName ? conventionItems : rootSiteItems;
 }
 
-export default function AdminNavigationSection(): JSX.Element {
+export default function AdminNavigationSection(): React.JSX.Element {
   const { t } = useTranslation();
   const items = useAdminNavigationItems();
   return <GeneratedNavigationSection label={t('navigation.headers.admin')} items={items} />;

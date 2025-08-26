@@ -15,7 +15,7 @@ function ConventionFormEventsSection({
   convention,
   setConvention,
   disabled,
-}: ConventionFormEventsSectionProps): JSX.Element {
+}: ConventionFormEventsSectionProps): React.JSX.Element {
   const [
     setSignupMode,
     setSignupAutomationMode,

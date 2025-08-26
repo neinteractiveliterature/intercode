@@ -54,7 +54,7 @@ function ConventionDayTabContainer({
   conventionTimespan,
   prefetchTimespan,
   children,
-}: ConventionDayTabContainerProps): JSX.Element {
+}: ConventionDayTabContainerProps): React.JSX.Element {
   const { t } = useTranslation();
   const { timezoneName } = useContext(AppRootContext);
   const client = useApolloClient();

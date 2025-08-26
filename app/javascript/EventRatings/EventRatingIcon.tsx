@@ -48,7 +48,7 @@ function EventRatingIcon({
   useColors,
   size: providedSize,
   overrideElementSize,
-}: EventRatingIconProps): JSX.Element {
+}: EventRatingIconProps): React.JSX.Element {
   const size = providedSize ?? 1.0;
   const ratingKey = `${rating}`;
 

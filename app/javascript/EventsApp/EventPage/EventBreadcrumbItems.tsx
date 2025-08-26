@@ -45,7 +45,7 @@ export type EventBreadcrumbItemsProps = {
   eventPath: string;
 };
 
-function EventBreadcrumbItems({ event, convention, currentAbility }: EventBreadcrumbItemsProps): JSX.Element {
+function EventBreadcrumbItems({ event, convention, currentAbility }: EventBreadcrumbItemsProps): React.JSX.Element {
   const { t } = useTranslation();
   const { timezoneName } = useContext(AppRootContext);
   const location = useLocation();

@@ -5,7 +5,7 @@ import { CellContext } from '@tanstack/react-table';
 function SignupChoiceCell<TData extends { counted?: boolean | null }, TValue extends ReactNode>({
   getValue,
   row: { original },
-}: CellContext<TData, TValue>): JSX.Element {
+}: CellContext<TData, TValue>): React.JSX.Element {
   const { t } = useTranslation();
 
   if (original.counted) {

@@ -13,7 +13,7 @@ export type MultipleChoiceOptionRowDragOverlayProps = {
 function MultipleChoiceOptionRowDragOverlay({
   choice,
   nonUnique,
-}: MultipleChoiceOptionRowDragOverlayProps): JSX.Element {
+}: MultipleChoiceOptionRowDragOverlayProps): React.JSX.Element {
   const missingValue = !choice.value || choice.value.trim() === '';
   const hasValidationError = nonUnique || missingValue;
 

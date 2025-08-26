@@ -13,7 +13,7 @@ export type RunCapacityGraphProps = {
   signupsAvailable: boolean;
 };
 
-function RunCapacityGraph({ run, event, signupsAvailable }: RunCapacityGraphProps): JSX.Element {
+function RunCapacityGraph({ run, event, signupsAvailable }: RunCapacityGraphProps): React.JSX.Element {
   const { t } = useTranslation();
   const signupCountData = SignupCountData.fromRun(run);
 

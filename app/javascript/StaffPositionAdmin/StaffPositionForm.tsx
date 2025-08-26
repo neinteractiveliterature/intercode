@@ -21,7 +21,7 @@ export type StaffPositionFormProps = {
   onChange: React.Dispatch<EditingStaffPosition>;
 };
 
-function StaffPositionForm({ staffPosition, onChange }: StaffPositionFormProps): JSX.Element {
+function StaffPositionForm({ staffPosition, onChange }: StaffPositionFormProps): React.JSX.Element {
   const { conventionDomain } = useContext(AppRootContext);
   const setStaffPosition = useFunctionalStateUpdater(staffPosition, onChange);
   const [setName, setEmail, setVisible, setUserConProfiles] = usePropertySetters(

@@ -56,7 +56,9 @@ export function describeAction(action: SignupChangeAction, t: TFunction): string
   return action;
 }
 
-function SignupChangeCell<TData extends SignupChangeType, TValue>({ cell }: CellContext<TData, TValue>): JSX.Element {
+function SignupChangeCell<TData extends SignupChangeType, TValue>({
+  cell,
+}: CellContext<TData, TValue>): React.JSX.Element {
   const value = cell.row.original;
   const { t } = useTranslation();
 

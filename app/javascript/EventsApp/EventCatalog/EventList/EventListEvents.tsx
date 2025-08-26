@@ -30,7 +30,7 @@ function EventListEvents({
   sortBy,
   canReadSchedule,
   fetchMoreIfNeeded,
-}: EventListEventsProps): JSX.Element {
+}: EventListEventsProps): React.JSX.Element {
   const format = useAppDateTimeFormat();
   const { timezoneName } = useContext(AppRootContext);
   let previousConventionDay: FiniteTimespan | null = null;

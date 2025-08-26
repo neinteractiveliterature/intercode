@@ -11,7 +11,7 @@ export type BucketChangeType = {
 
 function BucketChangeCell<TData, TValue extends BucketChangeType>({
   getValue,
-}: CellContext<TData, TValue>): JSX.Element {
+}: CellContext<TData, TValue>): React.JSX.Element {
   const value = getValue();
   const { t } = useTranslation();
 

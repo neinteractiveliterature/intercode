@@ -10,7 +10,7 @@ export type RecurringEventAdminProps = {
   eventCategoryId: string;
 };
 
-export default function RecurringEventAdmin({ eventCategoryId }: RecurringEventAdminProps): JSX.Element {
+export default function RecurringEventAdmin({ eventCategoryId }: RecurringEventAdminProps): React.JSX.Element {
   const data = useEventAdminEventsLoader();
   const [eventCategory, sortedEvents] = useEventAdminCategory(data, eventCategoryId);
   const { t } = useTranslation();

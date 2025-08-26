@@ -30,7 +30,7 @@ export const action: ActionFunction = async ({ request }) => {
   }
 };
 
-function NewStaffPosition(): JSX.Element {
+function NewStaffPosition(): React.JSX.Element {
   const fetcher = useFetcher();
   const error = fetcher.data instanceof Error ? fetcher.data : undefined;
   const inProgress = fetcher.state !== 'idle';

@@ -68,7 +68,7 @@ export type LiquidInputProps = Omit<
     extensions?: Extension[];
   };
 
-function LiquidInput(props: LiquidInputProps): JSX.Element {
+function LiquidInput(props: LiquidInputProps): React.JSX.Element {
   const { t } = useTranslation();
   const [showingDocs, setShowingDocs] = useState(false);
   const [currentDocTab, setCurrentDocTab] = useState('convention');

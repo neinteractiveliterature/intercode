@@ -2,7 +2,7 @@
 import { useEffect, useRef } from 'react';
 
 function useTimeout(callback: (...args: unknown[]) => void, delay: number): void {
-  const savedCallback = useRef<(...args: unknown[]) => void>();
+  const savedCallback = useRef<(...args: unknown[]) => void>(undefined);
 
   // Remember the latest callback.
   useEffect(() => {

@@ -9,7 +9,7 @@ export type NamedRouteBreadcrumbItemProps = {
   children: ReactNode;
 };
 
-function NamedRouteBreadcrumbItem({ children, routeId }: NamedRouteBreadcrumbItemProps): JSX.Element {
+function NamedRouteBreadcrumbItem({ children, routeId }: NamedRouteBreadcrumbItemProps): React.JSX.Element {
   const { match, active, to } = useNamedRouteMatch(routeId);
 
   if (!match) {

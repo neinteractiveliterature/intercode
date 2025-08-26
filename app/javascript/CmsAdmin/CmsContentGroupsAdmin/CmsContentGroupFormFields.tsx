@@ -41,7 +41,7 @@ function CmsContentGroupFormFields({
   permissionsChangeSet,
   addPermission,
   removePermission,
-}: CmsContentGroupFormFieldsProps): JSX.Element {
+}: CmsContentGroupFormFieldsProps): React.JSX.Element {
   const [roles, setRoles] = useState<RoleType[]>(() => {
     const permissions = uniqWith<PermissionType>(contentGroup.permissions, permissionEquals);
     return permissions.map((permission) => permission.role).filter(notEmpty);

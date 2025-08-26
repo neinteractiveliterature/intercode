@@ -17,7 +17,7 @@ export type DevModeGraphiqlProps = {
   };
 };
 
-function DevModeGraphiql({ authenticityTokens }: DevModeGraphiqlProps): JSX.Element {
+function DevModeGraphiql({ authenticityTokens }: DevModeGraphiqlProps): React.JSX.Element {
   useCallback(() => {
     AuthenticityTokensManager.instance.setTokens(authenticityTokens);
   }, [authenticityTokens]);

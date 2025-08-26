@@ -20,7 +20,7 @@ export type EventCapacityDisplayProps = {
   event: EventPageQueryData['convention']['event'];
 };
 
-function EventCapacityDisplay({ event }: EventCapacityDisplayProps): JSX.Element {
+function EventCapacityDisplay({ event }: EventCapacityDisplayProps): React.JSX.Element {
   const { t } = useTranslation();
   return (
     <ul className="list-inline mb-0">

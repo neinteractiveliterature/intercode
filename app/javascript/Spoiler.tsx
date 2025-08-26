@@ -7,7 +7,7 @@ export type SpoilerProps = {
   content: ReactNode;
 };
 
-function Spoiler({ content }: SpoilerProps): JSX.Element {
+function Spoiler({ content }: SpoilerProps): React.JSX.Element {
   const { t } = useTranslation();
   const [visible, setVisible] = useState(false);
 

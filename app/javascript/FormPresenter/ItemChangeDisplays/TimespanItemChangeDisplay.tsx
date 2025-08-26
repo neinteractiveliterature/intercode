@@ -9,7 +9,7 @@ export type TimespanItemChangeDisplayProps = {
   change: ParsedFormResponseChange<TimespanFormItem>;
 };
 
-function TimespanItemChangeDisplay({ change }: TimespanItemChangeDisplayProps): JSX.Element {
+function TimespanItemChangeDisplay({ change }: TimespanItemChangeDisplayProps): React.JSX.Element {
   const { t } = useTranslation();
 
   const before = useMemo(() => describeDuration(change.previous_value || 0, t), [change.previous_value, t]);

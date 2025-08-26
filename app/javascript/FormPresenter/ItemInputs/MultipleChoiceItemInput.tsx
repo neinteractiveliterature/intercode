@@ -49,7 +49,7 @@ function MultipleChoiceItemInput({
   value: uncastValue,
   valueInvalid,
   onInteract,
-}: MultipleChoiceItemInputProps): JSX.Element {
+}: MultipleChoiceItemInputProps): React.JSX.Element {
   const isMultiple = useMemo(
     () => ['checkbox_horizontal', 'checkbox_vertical'].includes(formItem.rendered_properties.style),
     [formItem.rendered_properties.style],

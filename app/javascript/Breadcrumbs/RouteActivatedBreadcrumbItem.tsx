@@ -19,7 +19,7 @@ function RouteActivatedBreadcrumbItem({
   hideUnlessMatch,
   caseSensitive,
   end,
-}: RouteActivatedBreadcrumbItemProps): JSX.Element {
+}: RouteActivatedBreadcrumbItemProps): React.JSX.Element {
   const location = useLocation();
   const path = useResolvedPath(pattern ?? to);
 

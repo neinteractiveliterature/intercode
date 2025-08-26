@@ -44,7 +44,7 @@ export const loader: LoaderFunction = async ({ params: { id } }) => {
   return data.convention.coupon;
 };
 
-function EditCouponModal(): JSX.Element {
+function EditCouponModal(): React.JSX.Element {
   const initialCoupon = useLoaderData() as AdminSingleCouponQueryData['convention']['coupon'];
   const { t } = useTranslation();
   const confirm = useGraphQLConfirm();

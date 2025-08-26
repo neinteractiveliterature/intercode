@@ -70,7 +70,7 @@ function RunCard({
   createSignup,
   withdrawSignup,
   withdrawPendingSignupRequest,
-}: RunCardProps): JSX.Element {
+}: RunCardProps): React.JSX.Element {
   const { t } = useTranslation();
   const location = useLocation();
   const formatRunTimespan = useFormatRunTimespan();

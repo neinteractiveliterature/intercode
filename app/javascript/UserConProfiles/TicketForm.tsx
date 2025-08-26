@@ -30,7 +30,7 @@ function TicketForm({
   convention,
   onSubmit,
   submitCaption,
-}: TicketFormProps): JSX.Element {
+}: TicketFormProps): React.JSX.Element {
   const { t } = useTranslation();
   const editOrderModal = useModal();
   const [ticketTypeId, setTicketTypeId] = useState(initialTicket.ticket_type?.id);

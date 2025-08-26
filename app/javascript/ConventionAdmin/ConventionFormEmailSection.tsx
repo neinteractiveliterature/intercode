@@ -18,7 +18,7 @@ function ConventionFormEmailSection({
   setConvention,
   disabled,
   staffPositions,
-}: ConventionFormEmailSectionProps): JSX.Element {
+}: ConventionFormEmailSectionProps): React.JSX.Element {
   const [setEventMailingListDomain, setEmailFrom, setCatchAllStaffPosition, setEmailMode] = usePropertySetters(
     setConvention,
     'event_mailing_list_domain',

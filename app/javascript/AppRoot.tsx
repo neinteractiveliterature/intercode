@@ -17,7 +17,7 @@ import { initErrorReporting } from 'ErrorReporting';
 
 export function buildAppRootContextValue(
   data: AppRootQueryData,
-  navigationBarRef: RefObject<HTMLElement>,
+  navigationBarRef: RefObject<HTMLElement | null>,
 ): AppRootContextValue {
   return {
     assumedIdentityFromProfile: data.assumedIdentityFromProfile,
@@ -51,7 +51,7 @@ export function buildAppRootContextValue(
   };
 }
 
-function AppRoot(): JSX.Element {
+function AppRoot(): React.JSX.Element {
   const location = useLocation();
   const navigate = useNavigate();
   const data = useLoaderData() as AppRootQueryData;

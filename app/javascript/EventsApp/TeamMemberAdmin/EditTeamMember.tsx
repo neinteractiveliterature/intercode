@@ -42,7 +42,7 @@ export const action: ActionFunction = async ({ params: { eventId, teamMemberId }
   return redirect(`/events/${eventId}/team_members`);
 };
 
-function EditTeamMember(): JSX.Element {
+function EditTeamMember(): React.JSX.Element {
   const navigation = useNavigation();
   const { data, teamMember: initialTeamMember } = useLoaderData() as SingleTeamMemberLoaderResult;
   const event = data.convention.event;

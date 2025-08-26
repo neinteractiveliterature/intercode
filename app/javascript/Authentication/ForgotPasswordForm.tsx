@@ -41,7 +41,7 @@ async function resetPassword(authenticityToken: string, email: string) {
   return responseJson;
 }
 
-function ForgotPasswordForm(): JSX.Element {
+function ForgotPasswordForm(): React.JSX.Element {
   const { t } = useTranslation();
   const { close: closeModal, setCurrentView } = useContext(AuthenticationModalContext);
   const authenticityToken = AuthenticityTokensManager.instance.tokens.resetPassword;

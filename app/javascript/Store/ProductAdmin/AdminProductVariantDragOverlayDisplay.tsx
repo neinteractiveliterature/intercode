@@ -8,7 +8,9 @@ export type AdminProductVariantDragOverlayDisplayProps = {
   variant: EditingVariant;
 };
 
-function AdminProductVariantDragOverlayDisplay({ variant }: AdminProductVariantDragOverlayDisplayProps): JSX.Element {
+function AdminProductVariantDragOverlayDisplay({
+  variant,
+}: AdminProductVariantDragOverlayDisplayProps): React.JSX.Element {
   const { t } = useTranslation();
 
   return (

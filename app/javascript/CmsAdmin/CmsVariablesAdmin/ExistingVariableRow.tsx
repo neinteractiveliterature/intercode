@@ -9,7 +9,7 @@ export type ExistingVariableRowProps = {
   variable: CmsVariablesQueryData['cmsParent']['cmsVariables'][0];
 };
 
-function ExistingVariableRow({ variable }: ExistingVariableRowProps): JSX.Element {
+function ExistingVariableRow({ variable }: ExistingVariableRowProps): React.JSX.Element {
   const error = useActionData();
   const confirm = useConfirm();
   const deleteFetcher = useFetcher();

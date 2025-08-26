@@ -40,7 +40,7 @@ function TimeblockPreferenceItemChangeDisplay({
   formItem,
   convention,
   change,
-}: TimeblockPreferenceItemChangeDisplayProps): JSX.Element {
+}: TimeblockPreferenceItemChangeDisplayProps): React.JSX.Element {
   const { t } = useTranslation();
   const format = useAppDateTimeFormat();
   const renderCell = (cell: ConcreteTimeblock | null, column: TimeblockColumn) => {

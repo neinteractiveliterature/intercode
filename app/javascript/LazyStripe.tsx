@@ -50,7 +50,7 @@ export function LazyStripeElementsContainer({
 }: {
   children: ReactNode;
   options: StripeElementsOptions | undefined;
-}): JSX.Element {
+}): React.JSX.Element {
   const [stripePromise, loadError] = useLazyStripe();
 
   if (loadError) {

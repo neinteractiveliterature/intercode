@@ -83,7 +83,7 @@ export const loader: LoaderFunction = async () => {
   return { convention: data.convention, filterableFormItems } satisfies LoaderResult;
 };
 
-function EventList(): JSX.Element {
+function EventList(): React.JSX.Element {
   const { filterableFormItems, convention } = useLoaderData() as LoaderResult;
   const { sortBy, filters, updateSearch } = useReactRouterReactTable({
     ...filterCodecs,

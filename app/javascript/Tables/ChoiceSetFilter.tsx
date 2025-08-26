@@ -60,7 +60,7 @@ export type ChoiceSetFilterProps<TData extends Record<string, unknown>, TValue> 
 
 function ChoiceSetFilter<TData extends Record<string, unknown>, TValue>(
   props: ChoiceSetFilterProps<TData, TValue>,
-): JSX.Element {
+): React.JSX.Element {
   const {
     choices: rawChoices,
     column: { getFilterValue, setFilterValue },

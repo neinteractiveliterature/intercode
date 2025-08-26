@@ -23,7 +23,7 @@ const defaultVisibleColumns = ['id', 'first_name', 'last_name', 'email'];
 // eslint-disable-next-line i18next/no-literal-string
 const alwaysVisibleColumns = ['_rowSelect'];
 
-function UsersTable(): JSX.Element {
+function UsersTable(): React.JSX.Element {
   const { t } = useTranslation();
   const navigate = useNavigate();
   usePageTitle(t('navigation.admin.users'));

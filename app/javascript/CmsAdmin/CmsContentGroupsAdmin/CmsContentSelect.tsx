@@ -8,7 +8,7 @@ export type CmsContentSelectProps<IsMulti extends boolean> = Omit<
   'getOptions' | 'getVariables' | 'getOptionValue' | 'formatOptionLabel' | 'query'
 >;
 
-function CmsContentSelect<IsMulti extends boolean = false>(props: CmsContentSelectProps<IsMulti>): JSX.Element {
+function CmsContentSelect<IsMulti extends boolean = false>(props: CmsContentSelectProps<IsMulti>): React.JSX.Element {
   const { ...otherProps } = props;
 
   return (

@@ -28,7 +28,7 @@ export const action: ActionFunction = async ({ request }) => {
   return redirect('/cms_layouts');
 };
 
-function NewCmsLayout(): JSX.Element {
+function NewCmsLayout(): React.JSX.Element {
   const [layout, setLayout] = useState<Pick<CmsLayout, 'name' | 'admin_notes' | 'navbar_classes' | 'content'>>({});
   const createError = useActionData();
   const navigation = useNavigation();

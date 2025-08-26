@@ -126,7 +126,7 @@ function EventCategoryForm<T extends EventCategoryForForm>({
   disabled,
   ticketNamePlural,
   ticketMode,
-}: EventCategoryFormProps<T>): JSX.Element {
+}: EventCategoryFormProps<T>): React.JSX.Element {
   const [
     setName,
     setTeamMemberName,

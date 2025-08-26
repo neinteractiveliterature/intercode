@@ -11,7 +11,7 @@ export const loader: LoaderFunction = async () => {
   return data;
 };
 
-function DroppedEventAdmin(): JSX.Element {
+function DroppedEventAdmin(): React.JSX.Element {
   const data = useLoaderData() as EventAdminEventsQueryData;
   const confirm = useConfirm();
   const submit = useSubmit();

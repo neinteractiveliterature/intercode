@@ -116,7 +116,7 @@ export function EventFormWithCategorySelection<EventType extends FormResponse>({
   eventFormProps,
 }: EventFormWithCategorySelectionProps<
   EventType & Pick<Event, 'current_user_form_item_viewer_role' | 'current_user_form_item_writer_role'>
->): JSX.Element {
+>): React.JSX.Element {
   return (
     <>
       <EventCategorySelect {...selectProps} />

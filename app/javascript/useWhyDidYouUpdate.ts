@@ -3,7 +3,7 @@ import { useRef, useEffect } from 'react';
 export default function useWhyDidYouUpdate<P>(name: string, props: P): void {
   // Get a mutable ref object where we can store props ...
   // ... for comparison next time this hook runs.
-  const previousProps = useRef<P>();
+  const previousProps = useRef<P>(undefined);
 
   useEffect(() => {
     const previousValue = previousProps.current;
@@ -31,7 +31,6 @@ export default function useWhyDidYouUpdate<P>(name: string, props: P): void {
 
       // If changesObj not empty then output to console
       if (Object.keys(changesObj).length) {
-         
         console.log('[why-did-you-update]', name, changesObj);
       }
     }

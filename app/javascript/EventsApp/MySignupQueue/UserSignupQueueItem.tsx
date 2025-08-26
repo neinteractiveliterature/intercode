@@ -82,7 +82,7 @@ export default function UserSignupQueueItem({
     },
   );
 
-  const advancedMenuRef = useRef<DropdownMenuRef>();
+  const advancedMenuRef = useRef<DropdownMenuRef>(undefined);
 
   return (
     <li

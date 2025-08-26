@@ -18,7 +18,7 @@ function TimeblockPreferenceEditorOmissionsRow({
   formItem,
   setFormItem,
   timeblock,
-}: TimeblockPreferenceEditorOmissionsRowProps): JSX.Element {
+}: TimeblockPreferenceEditorOmissionsRowProps): React.JSX.Element {
   const { convention } = useContext(FormEditorContext);
   const format = useAppDateTimeFormat();
 

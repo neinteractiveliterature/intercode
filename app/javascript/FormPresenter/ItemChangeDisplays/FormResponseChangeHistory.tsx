@@ -20,7 +20,7 @@ function FormResponseChangeHistory({
   convention,
   form,
   basePath,
-}: FormResponseChangeHistoryProps): JSX.Element {
+}: FormResponseChangeHistoryProps): React.JSX.Element {
   const { changeGroupId } = useParams();
   const { t } = useTranslation();
   const changeGroups = useMemo(() => buildChangeGroups(changes, form), [changes, form]);

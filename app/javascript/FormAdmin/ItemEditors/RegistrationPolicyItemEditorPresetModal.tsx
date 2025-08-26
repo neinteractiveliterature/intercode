@@ -17,7 +17,7 @@ function RegistrationPolicyItemEditorPresetModal({
   onChange,
   visible,
   close,
-}: RegistrationPolicyItemEditorPresetModalProps): JSX.Element {
+}: RegistrationPolicyItemEditorPresetModalProps): React.JSX.Element {
   const [preset, setPreset] = useState(initialPreset);
 
   const policyChanged = (policy: RegistrationPolicyPreset['policy']) => {

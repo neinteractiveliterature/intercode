@@ -33,7 +33,7 @@ export default function CreateModeratedSignupModal({
   run,
   event,
   signupOption,
-}: CreateModeratedSignupModalProps): JSX.Element {
+}: CreateModeratedSignupModalProps): React.JSX.Element {
   const { data } = useSuspenseQuery(CreateModeratedSignupModalQueryDocument);
   const { conventionName, timezoneName } = useContext(AppRootContext);
   const [createMutate] = useMutation(CreateSignupRequestDocument, {

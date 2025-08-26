@@ -106,7 +106,7 @@ export const action: ActionFunction = async ({ request, params: { id } }) => {
   return data(result.data);
 };
 
-function EditSignup({ teamMembersUrl }: EditSignupProps): JSX.Element {
+function EditSignup({ teamMembersUrl }: EditSignupProps): React.JSX.Element {
   const data = useSingleSignupLoader();
   const { timezoneName, ticketName } = useContext(AppRootContext);
   const confirm = useConfirm();

@@ -31,7 +31,7 @@ function ConventionFormGeneralSection({
   convention,
   setConvention,
   disabled,
-}: ConventionFormGeneralSectionProps): JSX.Element {
+}: ConventionFormGeneralSectionProps): React.JSX.Element {
   const [
     setName,
     setSiteMode,

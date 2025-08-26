@@ -9,7 +9,7 @@ export type FormSectionNavItemProps = {
   formSection: FormEditorForm['form_sections'][0];
 };
 
-function FormSectionNavItem({ formSection }: FormSectionNavItemProps): JSX.Element {
+function FormSectionNavItem({ formSection }: FormSectionNavItemProps): React.JSX.Element {
   const confirm = useConfirm();
   const { id } = useParams();
   const submit = useSubmit();

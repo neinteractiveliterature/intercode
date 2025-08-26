@@ -30,7 +30,7 @@ function SingleProposalBreadcrumbs() {
   );
 }
 
-function EventProposalsAdmin(): JSX.Element {
+function EventProposalsAdmin(): React.JSX.Element {
   const { t } = useTranslation();
   const authorizationWarning = useAuthorizationRequired('can_read_event_proposals');
 

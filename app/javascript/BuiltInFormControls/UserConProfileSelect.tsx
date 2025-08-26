@@ -29,7 +29,7 @@ function UserConProfileSelect<
 >({
   userConProfilesQuery,
   ...otherProps
-}: UserConProfileSelectProps<TypedDocumentNode<DataType, VariablesType>, OptionType, IsMulti>): JSX.Element {
+}: UserConProfileSelectProps<TypedDocumentNode<DataType, VariablesType>, OptionType, IsMulti>): React.JSX.Element {
   const { t } = useTranslation();
 
   return (

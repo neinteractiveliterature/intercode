@@ -16,7 +16,7 @@ function OrganizationSelect<IsMulti extends boolean = false>({
   organizations,
   label,
   ...props
-}: OrganizationSelectProps<IsMulti>): JSX.Element {
+}: OrganizationSelectProps<IsMulti>): React.JSX.Element {
   return (
     <SelectWithLabel
       label={label || 'Organization'}

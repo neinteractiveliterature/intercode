@@ -25,7 +25,7 @@ export type TimespanItemDisplayProps = {
   value: FormItemValueType<TimespanFormItem>;
 };
 
-function TimespanItemDisplay({ value }: TimespanItemDisplayProps): JSX.Element {
+function TimespanItemDisplay({ value }: TimespanItemDisplayProps): React.JSX.Element {
   const { t } = useTranslation();
   const description = useMemo(() => describeDuration(value, t), [value, t]);
   return <>{description}</>;

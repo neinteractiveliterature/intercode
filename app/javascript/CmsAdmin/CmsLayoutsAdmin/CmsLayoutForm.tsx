@@ -14,7 +14,11 @@ export type CmsLayoutFormProps<T extends CmsLayoutFields> = {
   readOnly?: boolean;
 };
 
-function CmsLayoutForm<T extends CmsLayoutFields>({ layout, onChange, readOnly }: CmsLayoutFormProps<T>): JSX.Element {
+function CmsLayoutForm<T extends CmsLayoutFields>({
+  layout,
+  onChange,
+  readOnly,
+}: CmsLayoutFormProps<T>): React.JSX.Element {
   const [setName, setAdminNotes, setNavbarClasses, setContent] = usePropertySetters(
     onChange,
     'name',

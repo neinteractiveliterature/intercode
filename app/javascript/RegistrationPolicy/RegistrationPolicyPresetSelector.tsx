@@ -16,7 +16,7 @@ function RegistrationPolicyPresetSelector({
   presetSelected,
   allowCustom,
   custom,
-}: RegistrationPolicyPresetSelectorProps): JSX.Element {
+}: RegistrationPolicyPresetSelectorProps): React.JSX.Element {
   const presetSelectorId = React.useId();
 
   if (!presets) {

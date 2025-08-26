@@ -173,7 +173,7 @@ export default function EventProposalForm({
   eventProposalId,
   afterSubmit,
   exitButton,
-}: EventProposalFormProps): JSX.Element {
+}: EventProposalFormProps): React.JSX.Element {
   const { data } = useSuspenseQuery(EventProposalQueryDocument, { variables: { eventProposalId } });
   const initialEventProposal = useMemo(
     () => deserializeFormResponse(data.convention.event_proposal),

@@ -74,7 +74,7 @@ function EventPageRunCard({
   currentAbility,
   signupRounds,
   addToQueue,
-}: EventPageRunCardProps): JSX.Element {
+}: EventPageRunCardProps): React.JSX.Element {
   const { t } = useTranslation();
   const { signupMode } = useContext(AppRootContext);
   const myPendingRankedChoices = useMemo(

@@ -43,7 +43,7 @@ export const action: ActionFunction = async ({ params: { eventId }, request }) =
   }
 };
 
-function ProvideTicketModal(): JSX.Element {
+function ProvideTicketModal(): React.JSX.Element {
   const { data, teamMember } = useLoaderData() as SingleTeamMemberLoaderResult;
   const { t } = useTranslation();
   const [ticketTypeId, setTicketTypeId] = useState<string>();

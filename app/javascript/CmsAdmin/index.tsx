@@ -6,7 +6,7 @@ import { Suspense } from 'react';
 import { BootstrapRRNavLink } from '../UIComponents/BootstrapNavLink';
 import { useCmsAdminBaseQueryLoader } from './loaders';
 
-function CmsAdmin(): JSX.Element {
+function CmsAdmin(): React.JSX.Element {
   const data = useCmsAdminBaseQueryLoader();
   const authorizationWarning = useAuthorizationRequired('can_manage_any_cms_content');
 

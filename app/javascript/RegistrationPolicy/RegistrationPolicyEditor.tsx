@@ -41,7 +41,7 @@ export type RegistrationPolicyEditorProps<
 function RegistrationPolicyEditor<
   BucketType extends EditingRegistrationBucket,
   T extends EditingRegistrationPolicy<BucketType>,
->(props: RegistrationPolicyEditorProps<BucketType, T>): JSX.Element {
+>(props: RegistrationPolicyEditorProps<BucketType, T>): React.JSX.Element {
   const {
     allowCustom,
     lockCounts,

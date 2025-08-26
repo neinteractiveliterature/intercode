@@ -13,7 +13,7 @@ export type NewFormModalProps = {
   close: () => void;
 };
 
-function NewFormModal({ visible, close }: NewFormModalProps): JSX.Element {
+function NewFormModal({ visible, close }: NewFormModalProps): React.JSX.Element {
   const [title, setTitle] = useState('');
   const [formType, setFormType] = useState<FormType>();
   const fetcher = useFetcher();
