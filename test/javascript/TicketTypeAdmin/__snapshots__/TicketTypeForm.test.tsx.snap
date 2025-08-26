@@ -8,13 +8,13 @@ exports[`TicketTypeForm matches snapshot 1`] = `
     >
       <label
         class="form-label"
-        for=":r0:"
+        for="«r0»"
       >
         Name (no spaces allowed — only letters, numbers, and underscores)
       </label>
       <input
         class="form-control"
-        id=":r0:"
+        id="«r0»"
         name="name"
         style="font-family: monospace;"
         type="text"
@@ -26,13 +26,13 @@ exports[`TicketTypeForm matches snapshot 1`] = `
     >
       <label
         class="form-label"
-        for=":r1:"
+        for="«r1»"
       >
         Description
       </label>
       <input
         class="form-control"
-        id=":r1:"
+        id="«r1»"
         name="description"
         type="text"
         value=""
@@ -52,12 +52,12 @@ exports[`TicketTypeForm matches snapshot 1`] = `
         >
           <label
             class="form-check-label"
-            for=":r2:"
+            for="«r2»"
           >
             <input
               checked=""
               class="form-check-input"
-              id=":r2:"
+              id="«r2»"
               name="allows_event_signups"
               type="radio"
               value="true"
@@ -70,11 +70,11 @@ exports[`TicketTypeForm matches snapshot 1`] = `
         >
           <label
             class="form-check-label"
-            for=":r3:"
+            for="«r3»"
           >
             <input
               class="form-check-input"
-              id=":r3:"
+              id="«r3»"
               name="allows_event_signups"
               type="radio"
               value="false"
@@ -98,12 +98,12 @@ exports[`TicketTypeForm matches snapshot 1`] = `
         >
           <label
             class="form-check-label"
-            for=":r4:"
+            for="«r4»"
           >
             <input
               checked=""
               class="form-check-input"
-              id=":r4:"
+              id="«r4»"
               name="counts_towards_convention_maximum"
               type="radio"
               value="true"
@@ -116,11 +116,11 @@ exports[`TicketTypeForm matches snapshot 1`] = `
         >
           <label
             class="form-check-label"
-            for=":r5:"
+            for="«r5»"
           >
             <input
               class="form-check-input"
-              id=":r5:"
+              id="«r5»"
               name="counts_towards_convention_maximum"
               type="radio"
               value="false"
@@ -135,13 +135,13 @@ exports[`TicketTypeForm matches snapshot 1`] = `
     >
       <label
         class="form-label"
-        for=":r6:"
+        for="«r6»"
       >
         Number of event-provided bananas of this type (per event)
       </label>
       <input
         class="form-control"
-        id=":r6:"
+        id="«r6»"
         name="maximum_event_provided_tickets"
         type="number"
         value="0"

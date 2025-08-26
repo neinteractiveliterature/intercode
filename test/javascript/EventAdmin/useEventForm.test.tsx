@@ -1,4 +1,4 @@
-import { renderHook, act } from '@testing-library/react-hooks';
+import { renderHook, act } from '@testing-library/react';
 
 import { render } from '../testUtils';
 import { convention, initialEvent, minimalForm } from './formMockData';
