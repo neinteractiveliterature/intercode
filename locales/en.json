@@ -1003,6 +1003,10 @@
       "pageTitle": "My profile"
     },
     "editButton": "Edit my profile",
+    "formTitle": {
+      "initial": "Set up my profile",
+      "subsequent": "Editing my profile"
+    },
     "gravatarEnabledHelpText": "Gravatar is a service that lets you create a globally-recognized avatar attached to your email address. For more information or to set up a Gravatar, <2>visit gravatar.com</2>.",
     "gravatarEnabledLabel": "Enable Gravatar for my profile",
     "initialSetupFinishButton": "Finish",
