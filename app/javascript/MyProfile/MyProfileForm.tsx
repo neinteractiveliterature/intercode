@@ -18,6 +18,7 @@ import { WithFormResponse } from '../Models/deserializeFormResponse';
 import { parseResponseErrors } from '../parseResponseErrors';
 import { client } from '../useIntercodeApolloClient';
 import { UpdateUserConProfileDocument } from '../UserConProfiles/mutations.generated';
+import AuthenticityTokensManager from 'AuthenticityTokensContext';
 
 export const action: ActionFunction = async ({ request }) => {
   const profile = (await request.json()) as LoaderResult['initialUserConProfile'];
@@ -79,8 +80,12 @@ function MyProfileForm() {
   const [userConProfile, setUserConProfile] = useState(initialUserConProfile);
   const [, responseValuesChanged] = useFormResponse(userConProfile, setUserConProfile);
 
-  const updateUserConProfile = async (profile: typeof userConProfile) => {
-    fetcher.submit(profile as SubmitTarget, { method: 'PATCH', encType: 'application/json' });
+  const updateUserConProfile = async (profile: typeof userConProfile, retries: number = 3) => {
+    if (AuthenticityTokensManager.instance.tokens.graphql) {
+      fetcher.submit(profile as SubmitTarget, { method: 'PATCH', encType: 'application/json' });
+    } else if (retries > 0) {
+      window.setTimeout(() => updateUserConProfile(profile, retries - 1), 100);
+    }
   };
   const itemInteractionProps = useItemInteractionTracking();
 
