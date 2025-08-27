@@ -1,11 +1,9 @@
-import React, { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useState } from 'react';
 import { LoaderFunction, useLoaderData } from 'react-router';
 import parseCmsContent, { CMS_COMPONENT_MAP } from './parseCmsContent';
 import OutletWithLoading from './OutletWithLoading';
 import NavigationBar from './NavigationBar';
-import { ScriptTag } from './parsePageContent';
 import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
-import { Helmet } from 'react-helmet-async';
 import { client } from './useIntercodeApolloClient';
 import { AppRootLayoutQueryData, AppRootLayoutQueryDocument } from './appRootQueries.generated';
 
@@ -48,25 +46,6 @@ function AppRootLayout() {
     });
   }, [data.cmsParentByRequestHost.effectiveCmsLayout.content_html]);
 
-  const [headComponentsWithoutScriptTags, headScriptTags] = useMemo(() => {
-    if (parsedCmsContent?.headComponents == null) {
-      return [[], []];
-    }
-
-    const nonScriptTags: React.ReactNode[] = [];
-    const scriptTags: React.ReactNode[] = [];
-
-    React.Children.forEach(parsedCmsContent.headComponents, (child) => {
-      if (React.isValidElement(child) && child.type === ScriptTag) {
-        scriptTags.push(child);
-      } else {
-        nonScriptTags.push(child);
-      }
-    });
-
-    return [nonScriptTags, scriptTags];
-  }, [parsedCmsContent?.headComponents]);
-
   useEffect(() => {
     if (cachedCmsLayoutId !== data.cmsParentByRequestHost.effectiveCmsLayout.id) {
       if (cachedCmsLayoutId) {
@@ -89,9 +68,8 @@ function AppRootLayout() {
 
   return (
     <>
-      <Helmet>{headComponentsWithoutScriptTags}</Helmet>
-      {headScriptTags}
-      {parsedCmsContent?.bodyComponents}
+      {parsedCmsContent.headComponents}
+      {parsedCmsContent.bodyComponents}
     </>
   );
 }

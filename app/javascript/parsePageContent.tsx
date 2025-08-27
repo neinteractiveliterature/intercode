@@ -128,6 +128,10 @@ function jsxAttributeKeyForHtmlKey(htmlKey: string) {
     return 'htmlFor';
   }
 
+  if (key === 'onload') {
+    return 'onLoad';
+  }
+
   return key;
 }
 
@@ -138,6 +142,15 @@ function jsxAttributesFromHTMLAttributes(node: Element, attributes: Attr[]) {
     const key = jsxAttributeKeyForHtmlKey(attribute.name);
     if (key === 'style') {
       return { ...result, [key]: createStyleJsonFromString(attribute.value) };
+    }
+
+    if (key === 'onLoad') {
+      return {
+        ...result,
+        [key]: () => {
+          eval(attribute.value);
+        },
+      };
     }
 
     try {

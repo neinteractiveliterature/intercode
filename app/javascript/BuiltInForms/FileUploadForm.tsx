@@ -8,7 +8,6 @@ import FileInputWithPreview from '../CmsAdmin/CmsFilesAdmin/FileInputWithPreview
 import { DirectUpload, DirectUploadDelegate, Blob } from '@rails/activestorage';
 import RailsDirectUploadsContext from '../RailsDirectUploadsContext';
 import classNames from 'classnames';
-import { Helmet } from 'react-helmet-async';
 import AuthenticityTokensManager from '../AuthenticityTokensContext';
 
 function uploadFile(file: File, directUploadURL: string, onProgress?: (event: ProgressEvent<XMLHttpRequest>) => void) {
@@ -72,10 +71,8 @@ function FileUploadForm({ onUpload }: FileUploadFormProps): React.JSX.Element {
     <div className="card">
       <div className="card-header">{t('cms.fileUploadForm.title')}</div>
       <div className="card-body">
-        <Helmet>
-          {/* ActiveStorage JS requires us to put the csrf token in the head */}
-          <meta name="csrf-token" content={directUploadsAuthenticityToken} />
-        </Helmet>
+        {/* ActiveStorage JS requires us to put the csrf token in the head */}
+        <meta name="csrf-token" content={directUploadsAuthenticityToken} />
         <FileInputWithPreview file={file} onChange={setFile} disabled={uploading} />
 
         <ErrorDisplay graphQLError={error as ApolloError} />
