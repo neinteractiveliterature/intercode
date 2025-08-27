@@ -11,7 +11,7 @@ export type PayWhatYouWantRangeDescriptionProps = {
   value?: PayWhatYouWantValue | null;
 };
 
-export function PayWhatYouWantRangeDescription({ value }: PayWhatYouWantRangeDescriptionProps): JSX.Element {
+export function PayWhatYouWantRangeDescription({ value }: PayWhatYouWantRangeDescriptionProps): React.JSX.Element {
   const { t } = useTranslation();
   if (!value) {
     return <></>;
@@ -60,7 +60,7 @@ export type PayWhatYouWantValueDescriptionProps = {
   value?: PayWhatYouWantValue | null;
 };
 
-export function PayWhatYouWantValueDescription({ value }: PayWhatYouWantValueDescriptionProps): JSX.Element {
+export function PayWhatYouWantValueDescription({ value }: PayWhatYouWantValueDescriptionProps): React.JSX.Element {
   if (!value) {
     return <></>;
   }
@@ -89,7 +89,7 @@ export type AdminPricingStructureDescriptionProps = {
 
 export function AdminPricingStructureDescription({
   pricingStructure,
-}: AdminPricingStructureDescriptionProps): JSX.Element {
+}: AdminPricingStructureDescriptionProps): React.JSX.Element {
   const { t } = useTranslation();
 
   if (!pricingStructure) {
@@ -141,7 +141,7 @@ export type UserPricingStructureDescriptionProps = {
 
 export function UserPricingStructureDescription({
   pricingStructure,
-}: UserPricingStructureDescriptionProps): JSX.Element {
+}: UserPricingStructureDescriptionProps): React.JSX.Element {
   const { t } = useTranslation();
   const { timezoneName } = useContext(AppRootContext);
 
@@ -203,7 +203,7 @@ export type CurrentPriceDescriptionProps = {
   pricingStructure?: Pick<PricingStructure, 'pricing_strategy' | 'value'> | null;
 };
 
-export function CurrentPriceDescription({ pricingStructure }: CurrentPriceDescriptionProps): JSX.Element {
+export function CurrentPriceDescription({ pricingStructure }: CurrentPriceDescriptionProps): React.JSX.Element {
   const { t } = useTranslation();
 
   if (!pricingStructure) {

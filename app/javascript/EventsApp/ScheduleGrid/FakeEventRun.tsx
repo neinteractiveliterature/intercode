@@ -38,7 +38,7 @@ function FakeEventRun({
   withRef,
   zeroCapacity,
   classifyEventsBy,
-}: FakeEventRunProps): JSX.Element {
+}: FakeEventRunProps): React.JSX.Element {
   const config = {
     classifyEventsBy: classifyEventsBy ?? ('category' as const),
     showSignedUp: true,

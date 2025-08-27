@@ -66,7 +66,7 @@ function ReactTableWithTheWorks<
   loading,
   onClickRow,
   renderFilter,
-}: ReactTableWithTheWorksProps<QueryData, RowType, Variables>): JSX.Element {
+}: ReactTableWithTheWorksProps<QueryData, RowType, Variables>): React.JSX.Element {
   const { previousPage, nextPage, setPageSize, setPageIndex } = table;
   const { pagination } = table.getState();
 

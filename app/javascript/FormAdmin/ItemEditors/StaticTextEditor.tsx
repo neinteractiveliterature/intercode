@@ -7,7 +7,7 @@ import { FormItemEditorContext } from '../FormEditorContexts';
 import { FormItemEditorProps } from '../FormItemEditorProps';
 
 export type StaticTextEditorProps = FormItemEditorProps<StaticTextFormItem>;
-function StaticTextEditor({ formItem, setFormItem }: StaticTextEditorProps): JSX.Element {
+function StaticTextEditor({ formItem, setFormItem }: StaticTextEditorProps): React.JSX.Element {
   const { disabled } = useContext(FormItemEditorContext);
   const contentInputId = useId();
 

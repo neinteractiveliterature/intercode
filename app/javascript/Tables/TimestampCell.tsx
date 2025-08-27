@@ -5,7 +5,7 @@ import { CellContext } from '@tanstack/react-table';
 
 export function SingleLineTimestampCell<TData, TValue extends string | null | undefined>({
   getValue,
-}: CellContext<TData, TValue>): JSX.Element {
+}: CellContext<TData, TValue>): React.JSX.Element {
   const value = getValue();
   const timestamp = useISODateTimeInAppZone(value ?? '');
   const format = useAppDateTimeFormat();
@@ -17,7 +17,7 @@ export function SingleLineTimestampCell<TData, TValue extends string | null | un
   return <>{format(timestamp, 'compactDateTime')}</>;
 }
 
-function TimestampCell<TData, TValue extends string>({ getValue }: CellContext<TData, TValue>): JSX.Element {
+function TimestampCell<TData, TValue extends string>({ getValue }: CellContext<TData, TValue>): React.JSX.Element {
   const value = getValue();
   const timestamp = useISODateTimeInAppZone(value);
   const format = useAppDateTimeFormat();

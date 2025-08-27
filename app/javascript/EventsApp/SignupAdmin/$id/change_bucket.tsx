@@ -27,7 +27,7 @@ export const action: ActionFunction = async ({ request, params: { id } }) => {
   }
 };
 
-function ChangeBucketModal(): JSX.Element {
+function ChangeBucketModal(): React.JSX.Element {
   const data = useSingleSignupLoader();
   const [bucketKey, setBucketKey] = useState<string | null>();
   const [prevSignupId, setPrevSignupId] = useState<string>();

@@ -21,7 +21,7 @@ export const loader: LoaderFunction = async ({ params: { eventId, runId } }) => 
   return data;
 };
 
-function RunHeader(): JSX.Element {
+function RunHeader(): React.JSX.Element {
   const data = useLoaderData() as RunHeaderRunInfoQueryData;
   const { t } = useTranslation();
   const { timezoneName } = useContext(AppRootContext);

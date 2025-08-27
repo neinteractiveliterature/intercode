@@ -27,7 +27,7 @@ function describePaymentOption(paymentOption: string, t: TFunction): string {
   return paymentOption;
 }
 
-function AdminProductCard({ currentAbility, startEditing, product }: AdminProductCardProps): JSX.Element {
+function AdminProductCard({ currentAbility, startEditing, product }: AdminProductCardProps): React.JSX.Element {
   const confirm = useConfirm();
   const { t } = useTranslation();
   const fetcher = useFetcher();

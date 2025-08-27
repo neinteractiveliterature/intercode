@@ -185,7 +185,7 @@ export function EventForm<
   formResponseValuesChanged,
   formRef,
   imageAttachmentConfig,
-}: EventFormProps<EventType>): JSX.Element {
+}: EventFormProps<EventType>): React.JSX.Element {
   return (
     <ItemInteractionTrackerContext.Provider value={itemInteractionTrackingProps}>
       <SinglePageFormPresenter

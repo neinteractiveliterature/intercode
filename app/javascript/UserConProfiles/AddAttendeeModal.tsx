@@ -25,7 +25,7 @@ export const action: ActionFunction = async ({ request }) => {
 
 type UserType = AddAttendeeUsersQueryData['users_paginated']['entries'][0];
 
-function AddAttendeeModal(): JSX.Element {
+function AddAttendeeModal(): React.JSX.Element {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const { convention } = useContext(AppRootContext);

@@ -4,7 +4,7 @@ import { Trans } from 'react-i18next';
 // eslint-disable-next-line @typescript-eslint/no-explicit-any
 type TI = any;
 
-export default function FourOhFourPage(): JSX.Element {
+export default function FourOhFourPage(): React.JSX.Element {
   const location = useLocation();
 
   return (

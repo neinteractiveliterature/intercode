@@ -40,7 +40,7 @@ export const buildScheduledMoneyValueInput = (value: Money | null | undefined, o
 
 export type EditPricingStructureModalProps = Pick<PricingStructureModalContextValue, 'visible' | 'state' | 'close'>;
 
-function EditPricingStructureModal({ visible, state, close }: EditPricingStructureModalProps): JSX.Element {
+function EditPricingStructureModal({ visible, state, close }: EditPricingStructureModalProps): React.JSX.Element {
   const { t } = useTranslation();
   const [pricingStructure, setPricingStructure] = useState(state?.value);
 

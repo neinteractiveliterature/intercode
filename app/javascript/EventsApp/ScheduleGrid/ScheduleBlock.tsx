@@ -1,4 +1,4 @@
-import { Fragment, ReactNode, useMemo } from 'react';
+import React, { Fragment, ReactNode, useMemo } from 'react';
 
 import { PIXELS_PER_LANE, PIXELS_PER_HOUR } from './LayoutConstants';
 import ScheduleLayoutBlock, { ScheduleLayoutResult, RunDimensions } from './ScheduleLayout/ScheduleLayoutBlock';
@@ -8,10 +8,10 @@ import styles from 'styles/schedule_grid.module.scss';
 export type ScheduleBlockProps = {
   layoutBlock: ScheduleLayoutBlock;
   rowHeader: ReactNode;
-  renderEventRun: (options: { layoutResult: ScheduleLayoutResult; runDimensions: RunDimensions }) => JSX.Element;
+  renderEventRun: (options: { layoutResult: ScheduleLayoutResult; runDimensions: RunDimensions }) => React.JSX.Element;
 };
 
-function ScheduleBlock({ layoutBlock, rowHeader, renderEventRun }: ScheduleBlockProps): JSX.Element {
+function ScheduleBlock({ layoutBlock, rowHeader, renderEventRun }: ScheduleBlockProps): React.JSX.Element {
   const layoutResult = useMemo(() => layoutBlock.computeLayout(), [layoutBlock]);
 
   const blockContentStyle = {

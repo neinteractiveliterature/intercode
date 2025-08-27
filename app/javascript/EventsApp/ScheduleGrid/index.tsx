@@ -29,7 +29,7 @@ function ScheduleGridApp({
   fetchFormItemIdentifiers,
   filters,
   currentAbilityCanCreateCmsPartials,
-}: ScheduleGridAppProps): JSX.Element {
+}: ScheduleGridAppProps): React.JSX.Element {
   const { t } = useTranslation();
   const { myProfile, timezoneName, language } = useContext(AppRootContext);
   const config = getConfig(configKey);

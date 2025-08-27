@@ -14,7 +14,7 @@ export type WhosFreeFormProps = {
   onSubmit: (options: { start: DateTime; finish: DateTime }) => void;
 };
 
-function WhosFreeForm({ onSubmit }: WhosFreeFormProps): JSX.Element {
+function WhosFreeForm({ onSubmit }: WhosFreeFormProps): React.JSX.Element {
   const { convention } = useContext(AppRootContext);
   const [start, setStart] = useState<TimeValues>({
     hour: undefined,

@@ -77,7 +77,7 @@ function TicketAdminControls({ convention, userConProfile }: TicketAdminControls
     });
   };
 
-  const buttons: JSX.Element[] = [];
+  const buttons: React.JSX.Element[] = [];
   const currentAbility = data?.currentAbility;
   const { ticket } = userConProfile;
   const chargeId = ticket?.order_entry?.order?.charge_id;
@@ -194,7 +194,7 @@ export type TicketAdminSectionProps = {
   userConProfile: TicketAdminControlsProps['userConProfile'];
 };
 
-function TicketAdminSection({ convention, userConProfile }: TicketAdminSectionProps): JSX.Element {
+function TicketAdminSection({ convention, userConProfile }: TicketAdminSectionProps): React.JSX.Element {
   const { t } = useTranslation();
   const { timezoneName } = useContext(AppRootContext);
   const format = useAppDateTimeFormat();

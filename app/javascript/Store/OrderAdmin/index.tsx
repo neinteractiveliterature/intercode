@@ -91,7 +91,7 @@ function SubmittedAtCell<TData, TValue extends string | undefined | null>({ getV
   return <>{format(DateTime.fromISO(value, { zone: timezoneName }), 'shortDateTime')}</>;
 }
 
-function OrderAdmin(): JSX.Element {
+function OrderAdmin(): React.JSX.Element {
   const { t } = useTranslation();
   usePageTitle(t('admin.store.orders.title'));
   const navigate = useNavigate();

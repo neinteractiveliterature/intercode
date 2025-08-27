@@ -9,7 +9,7 @@ export type CaptionLabelProps<PropertiesType extends { caption: string; required
 function CaptionLabel<PropertiesType extends { caption: string; required?: boolean }>({
   formItem,
   htmlFor,
-}: CaptionLabelProps<PropertiesType>): JSX.Element {
+}: CaptionLabelProps<PropertiesType>): React.JSX.Element {
   return (
     <label
       className="form-label form-item-label"

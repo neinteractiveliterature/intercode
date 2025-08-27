@@ -39,7 +39,7 @@ function isElementInViewport(el: HTMLElement) {
 export type RunListProps = {
   convention: ScheduleGridConventionDataQueryData['convention'];
   fetchFormItemIdentifiers: string[];
-  scheduleGridNavigationBarRef: RefObject<HTMLDivElement>;
+  scheduleGridNavigationBarRef: RefObject<HTMLDivElement | null>;
   filters?: EventFiltersInput;
 };
 

@@ -34,7 +34,7 @@ export type FormItemDisplayProps = {
   displayMode: FormItemDisplayMode;
 };
 
-function FormItemDisplay({ formItem, value, convention, displayMode }: FormItemDisplayProps): JSX.Element {
+function FormItemDisplay({ formItem, value, convention, displayMode }: FormItemDisplayProps): React.JSX.Element {
   if (value == null) {
     return <></>;
   }

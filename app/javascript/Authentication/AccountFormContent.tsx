@@ -3,7 +3,7 @@ import { AccountFormContentQueryDocument } from './queries.generated';
 import BlockPartial from 'UIComponents/BlockPartial';
 import { CmsPartialBlockName } from 'graphqlTypes.generated';
 
-function AccountFormContent(): JSX.Element {
+function AccountFormContent(): React.JSX.Element {
   const { data, loading, error } = useQuery(AccountFormContentQueryDocument);
 
   if (error || loading || !data) {

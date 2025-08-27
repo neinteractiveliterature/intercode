@@ -170,13 +170,13 @@ function ScheduledValuePreviewCalendar<ValueType>({
     return <>{t('scheduledValuePreview.tooLong')}</>;
   }
 
-  const monthPreviews: JSX.Element[] = [];
+  const monthPreviews: React.JSX.Element[] = [];
   let now = earliestChange.startOf('month');
   while (now < latestChange) {
     const startOfMonth = now;
     const currentMonth = now.month;
-    const weekPreviews: JSX.Element[] = [];
-    let currentWeek: JSX.Element[] = [];
+    const weekPreviews: React.JSX.Element[] = [];
+    let currentWeek: React.JSX.Element[] = [];
     while (now.month === currentMonth) {
       if (now.day === 1) {
         for (let wd = 0; wd < now.weekday; wd += 1) {
@@ -252,7 +252,7 @@ function ScheduledValuePreview<ValueType>({
   getClassNameForValue,
   getDescriptionForValue,
   timezoneName,
-}: ScheduledValuePreviewProps<ValueType>): JSX.Element {
+}: ScheduledValuePreviewProps<ValueType>): React.JSX.Element {
   const [focusedDate, setFocusedDate] = useState<DateTime>();
   const [tooltip, setTooltip] = useState<HTMLDivElement | null>(null);
   const [arrow, setArrow] = useState<HTMLDivElement | null>(null);

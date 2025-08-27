@@ -55,7 +55,7 @@ function FormItemChangeDisplay<FormItemType extends TypedFormItem>({
   formItem,
   change,
   convention,
-}: FormItemChangeDisplayProps<FormItemType>): JSX.Element {
+}: FormItemChangeDisplayProps<FormItemType>): React.JSX.Element {
   if (!changeIsValidForFormItemType(formItem, change)) {
     if (
       typeof change.previous_value === 'string' ||

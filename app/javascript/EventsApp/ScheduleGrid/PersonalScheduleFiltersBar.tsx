@@ -129,7 +129,7 @@ type PersonalScheduleFiltersBarProps = {
 function PersonalScheduleFiltersBar({
   choiceSetValue,
   choiceSetChanged,
-}: PersonalScheduleFiltersBarProps): JSX.Element {
+}: PersonalScheduleFiltersBarProps): React.JSX.Element {
   return (
     <ChoiceSetFilter
       choices={filterOptions}

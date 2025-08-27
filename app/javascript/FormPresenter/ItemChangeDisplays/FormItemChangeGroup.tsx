@@ -27,7 +27,7 @@ export type FormItemChangeGroupProps = {
   changeGroup: FormResponseChangeGroup;
 };
 
-function FormItemChangeGroup({ convention, changeGroup }: FormItemChangeGroupProps): JSX.Element {
+function FormItemChangeGroup({ convention, changeGroup }: FormItemChangeGroupProps): React.JSX.Element {
   const timespan = useMemo(() => getTimespanForChangeGroup(changeGroup), [changeGroup]);
   const format = useAppDateTimeFormat();
 

@@ -45,7 +45,7 @@ function WhosFreeResults({ data }: { data: WhosFreeQueryData }) {
   );
 }
 
-function WhosFree(): JSX.Element {
+function WhosFree(): React.JSX.Element {
   const { data } = useLoaderData() as LoaderResult;
   const [, setSearchParams] = useSearchParams();
 

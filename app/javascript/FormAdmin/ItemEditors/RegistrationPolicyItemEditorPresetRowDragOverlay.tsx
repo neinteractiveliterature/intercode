@@ -9,7 +9,7 @@ export type RegistrationPolicyItemEditorPresetRowDragOverlayProps = {
 
 function RegistrationPolicyItemEditorPresetRowDragOverlay({
   preset,
-}: RegistrationPolicyItemEditorPresetRowDragOverlayProps): JSX.Element {
+}: RegistrationPolicyItemEditorPresetRowDragOverlayProps): React.JSX.Element {
   return (
     <tr>
       <td style={{ cursor: 'grabbing' }}>

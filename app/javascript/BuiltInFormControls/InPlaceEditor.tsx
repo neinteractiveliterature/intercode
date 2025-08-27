@@ -46,7 +46,7 @@ export type InPlaceEditorInputWrapperProps<T> = {
   renderInput: (props: InPlaceEditorInputProps<T>) => ReactNode;
 };
 
-function InPlaceEditorInputWrapper<T>(props: InPlaceEditorInputWrapperProps<T>): JSX.Element {
+function InPlaceEditorInputWrapper<T>(props: InPlaceEditorInputWrapperProps<T>): React.JSX.Element {
   const { initialValue, commit, cancel, inputRef, renderInput } = props;
   const [value, setValue] = useState(initialValue);
   const [committing, setCommitting] = useState(false);
@@ -148,10 +148,12 @@ function propsHasRenderer<T>(props: InPlaceEditorProps<T>): props is InPlaceEdit
   return 'renderInput' in props && typeof props['renderInput'] === 'function';
 }
 
-function InPlaceEditor<T, InputType extends HTMLElement = HTMLElement>(props: InPlaceEditorProps<T>): JSX.Element {
+function InPlaceEditor<T, InputType extends HTMLElement = HTMLElement>(
+  props: InPlaceEditorProps<T>,
+): React.JSX.Element {
   const { children, className, onChange, value } = props;
   const [editing, setEditing] = useState(false);
-  const inputRef = useRef<InputType>();
+  const inputRef = useRef<InputType>(undefined);
 
   useLayoutEffect(() => {
     if (editing && inputRef.current) {

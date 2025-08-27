@@ -1,7 +1,7 @@
 import usePageTitle from '../usePageTitle';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 
-function OAuthApplications(): JSX.Element {
+function OAuthApplications(): React.JSX.Element {
   const authorizationWarning = useAuthorizationRequired('can_manage_oauth_applications');
 
   // cop-out?  maybe.

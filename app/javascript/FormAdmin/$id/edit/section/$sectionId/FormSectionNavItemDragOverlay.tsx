@@ -4,7 +4,7 @@ export type FormSectionNavItemDragOverlayProps = {
   formSection: FormEditorForm['form_sections'][0];
 };
 
-function FormSectionNavItemDragOverlay({ formSection }: FormSectionNavItemDragOverlayProps): JSX.Element {
+function FormSectionNavItemDragOverlay({ formSection }: FormSectionNavItemDragOverlayProps): React.JSX.Element {
   return (
     <li className="nav-item">
       <div className="d-flex align-items-center">

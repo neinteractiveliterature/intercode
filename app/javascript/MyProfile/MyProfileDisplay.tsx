@@ -37,7 +37,7 @@ export const loader: LoaderFunction = async () => {
   } satisfies LoaderResult;
 };
 
-function MyProfileDisplay(): JSX.Element {
+function MyProfileDisplay(): React.JSX.Element {
   const { t } = useTranslation();
   const { formResponse, formItems, myProfile, convention } = useLoaderData() as LoaderResult;
 

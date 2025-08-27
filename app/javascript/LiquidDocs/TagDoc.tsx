@@ -75,7 +75,7 @@ export type TagDocProps = BaseTagDocProps & {
   prefix?: string;
 };
 
-function TagDoc({ tag, method, prefix }: TagDocProps): JSX.Element {
+function TagDoc({ tag, method, prefix }: TagDocProps): React.JSX.Element {
   const { docData } = useLiquidDocs();
 
   if (tag.tag_name === 'example') {

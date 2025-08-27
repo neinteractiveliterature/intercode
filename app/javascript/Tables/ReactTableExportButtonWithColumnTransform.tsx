@@ -14,7 +14,7 @@ function ReactTableExportButtonWithColumnTransform({
   columnVisibility,
   columnTransform,
   ...otherProps
-}: ReactTableExportButtonWithColumnTransformProps): JSX.Element {
+}: ReactTableExportButtonWithColumnTransformProps): React.JSX.Element {
   const columns = useMemo(
     () => flatMap(columnVisibilityToVisibleColumnIds(columnVisibility), columnTransform),
     [columnVisibility, columnTransform],

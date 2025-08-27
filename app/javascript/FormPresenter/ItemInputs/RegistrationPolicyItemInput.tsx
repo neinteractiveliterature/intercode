@@ -15,7 +15,7 @@ function RegistrationPolicyItemInput({
   valueInvalid,
   onChange,
   onInteract,
-}: RegistrationPolicyItemInputProps): JSX.Element {
+}: RegistrationPolicyItemInputProps): React.JSX.Element {
   const defaultValue = useMemo(() => {
     const { presets, allow_custom: allowCustom } = formItem.rendered_properties;
     if (presets && presets.length === 1 && !allowCustom) {

@@ -12,7 +12,11 @@ export type SignupStatusBadgeProps = {
   mySignupRankedChoices: Pick<SignupRankedChoice, 'priority' | 'state'>[];
 };
 
-function SignupStatusBadge({ signupStatus, myRating, mySignupRankedChoices }: SignupStatusBadgeProps): JSX.Element {
+function SignupStatusBadge({
+  signupStatus,
+  myRating,
+  mySignupRankedChoices,
+}: SignupStatusBadgeProps): React.JSX.Element {
   const { t } = useTranslation();
 
   const signupRankedChoicesOrdered = useMemo(

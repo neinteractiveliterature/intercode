@@ -47,7 +47,7 @@ function RegistrationBucketRow<T extends EditingRegistrationBucket>({
   validateComplete,
   lockDelete,
   onDelete,
-}: RegistrationBucketRowProps<T>): JSX.Element {
+}: RegistrationBucketRowProps<T>): React.JSX.Element {
   const updateBucket = useCallback(
     (newValue: T) => onChange(registrationBucket.key, newValue),
     [registrationBucket.key, onChange],

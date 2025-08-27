@@ -35,7 +35,7 @@ function UserSelect<
   DataType extends DQ = DQ,
   OptionType extends DO<DataType> = DO<DQ>,
   IsMulti extends boolean = false,
->({ usersQuery, ...otherProps }: UserSelectProps<DataType, OptionType, IsMulti>): JSX.Element {
+>({ usersQuery, ...otherProps }: UserSelectProps<DataType, OptionType, IsMulti>): React.JSX.Element {
   const { t } = useTranslation();
 
   return (

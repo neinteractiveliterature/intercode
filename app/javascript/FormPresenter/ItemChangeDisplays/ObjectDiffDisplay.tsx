@@ -23,7 +23,7 @@ function ObjectDiffDisplay<T extends Record<string, { toString(): string } | und
   renderKey,
   renderValue,
   showUnchanged,
-}: ObjectDiffDisplayProps<T>): JSX.Element {
+}: ObjectDiffDisplayProps<T>): React.JSX.Element {
   const combinedKeys = uniq([...Object.keys(before || {}), ...Object.keys(after || {})]).sort();
 
   const keyRenderer = renderKey ?? ((key: ReactNode) => key);

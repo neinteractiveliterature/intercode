@@ -66,7 +66,7 @@ function addGeneratedIdsToFormItem(formItem: TypedFormItem): FormEditorFormItem 
   } as FormEditorFormItem;
 }
 
-function FormItemEditorLayout(): JSX.Element {
+function FormItemEditorLayout(): React.JSX.Element {
   const { t } = useTranslation();
   const params = useParams<{ itemId: string; id: string; sectionId: string }>();
   const { convention, currentSection, form, formType, formTypeIdentifier, formItemsById } =

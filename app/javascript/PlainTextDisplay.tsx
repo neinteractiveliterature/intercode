@@ -1,6 +1,6 @@
 import { Fragment } from 'react';
 
-function PlainTextDisplay({ value }: { value: string }): JSX.Element {
+function PlainTextDisplay({ value }: { value: string }): React.JSX.Element {
   let stringValue = value ?? '';
   if (Array.isArray(value)) {
     stringValue = value.join(', ');

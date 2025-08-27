@@ -156,7 +156,7 @@ export type ProspectiveRunScheduleProps = {
   event: EventFieldsFragment;
 };
 
-export default function ProspectiveRunSchedule({ day, runs, event }: ProspectiveRunScheduleProps): JSX.Element {
+export default function ProspectiveRunSchedule({ day, runs, event }: ProspectiveRunScheduleProps): React.JSX.Element {
   const data = useEventAdminEventsLoader();
   const { timezoneName } = useContext(AppRootContext);
 

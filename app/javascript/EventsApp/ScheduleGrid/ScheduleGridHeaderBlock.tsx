@@ -10,7 +10,7 @@ export type ScheduleGridHeaderBlockProps = {
 
 function ScheduleGridHeaderBlock({ timespan, runIds }: ScheduleGridHeaderBlockProps) {
   let now = timespan.start;
-  const hourDivs: JSX.Element[] = [];
+  const hourDivs: React.JSX.Element[] = [];
   while (timespan.includesTime(now)) {
     hourDivs.push(<ScheduleGridHour now={now} runIds={runIds} key={now.toISO()} />);
     now = now.plus({ hours: 1 });

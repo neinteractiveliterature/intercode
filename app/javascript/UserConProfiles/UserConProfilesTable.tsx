@@ -46,7 +46,7 @@ const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({
 
 function TicketStatusCell<TData, TValue extends UserConProfilesTableRow['ticket']>({
   getValue,
-}: CellContext<TData, TValue>): JSX.Element {
+}: CellContext<TData, TValue>): React.JSX.Element {
   const { t } = useTranslation();
   const value = getValue();
 
@@ -59,13 +59,13 @@ function TicketStatusCell<TData, TValue extends UserConProfilesTableRow['ticket'
 
 function TicketPaymentAmountCell<TData, TValue extends UserConProfilesTableRow['ticket']>({
   getValue,
-}: CellContext<TData, TValue>): JSX.Element {
+}: CellContext<TData, TValue>): React.JSX.Element {
   return <>{formatMoney(getValue()?.order_entry?.price_per_item)}</>;
 }
 
 function TicketStatusWithPaymentAmountCell<TData, TValue extends UserConProfilesTableRow['ticket']>(
   props: CellContext<TData, TValue>,
-): JSX.Element {
+): React.JSX.Element {
   return (
     <>
       <TicketStatusCell {...props} /> <TicketPaymentAmountCell {...props} />
@@ -75,7 +75,7 @@ function TicketStatusWithPaymentAmountCell<TData, TValue extends UserConProfiles
 
 function TicketStatusChangeCell<TData, TValue extends DateTime | null | undefined>({
   getValue,
-}: CellContext<TData, TValue>): JSX.Element {
+}: CellContext<TData, TValue>): React.JSX.Element {
   const { t } = useTranslation();
   const value = getValue();
 
@@ -88,7 +88,7 @@ function TicketTypeFilter<TData extends UserConProfilesTableRow, TValue>({
 }: {
   column: Column<TData, TValue>;
   ticketTypes: AttendeesPageQueryData['convention']['ticket_types'];
-}): JSX.Element {
+}): React.JSX.Element {
   const { t } = useTranslation();
   const choices = useMemo(
     () => [
@@ -140,7 +140,7 @@ function UserConProfilesTable({
   defaultVisibleColumns,
   attendeesPageQueryData,
   canReadTickets,
-}: UserConProfilesTableProps): JSX.Element {
+}: UserConProfilesTableProps): React.JSX.Element {
   const { timezoneName } = useContext(AppRootContext);
   const { t } = useTranslation();
   const navigate = useNavigate();

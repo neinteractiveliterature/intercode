@@ -136,7 +136,7 @@ function RevertAssumedIdentityButton() {
   );
 }
 
-function UserNavigationSection(): JSX.Element {
+function UserNavigationSection(): React.JSX.Element {
   const { t } = useTranslation();
   const { conventionName, currentUser, myProfile, hasOAuthApplications } = useContext(AppRootContext);
 

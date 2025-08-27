@@ -52,7 +52,7 @@ type PermissionsTableInputProps<RowsType extends BaseRowType[]> = RowsType exten
 
 function PermissionsTableInput<RowsType extends BaseRowType[]>(
   props: PermissionsTableInputProps<RowsType>,
-): JSX.Element {
+): React.JSX.Element {
   const { permissionNames, initialPermissions, changeSet, add, remove, rowsHeader, readOnly } = props;
 
   const { currentPermissions, grantPermission, revokePermission } = usePermissionsChangeSet({

@@ -3,7 +3,7 @@ import arrayToSentence from 'array-to-sentence';
 
 function ArrayToSentenceCell<TData, TValue extends string[] | null | undefined>({
   getValue,
-}: CellContext<TData, TValue>): JSX.Element {
+}: CellContext<TData, TValue>): React.JSX.Element {
   const sentence: string = arrayToSentence(getValue() ?? []);
   return <>{sentence}</>;
 }

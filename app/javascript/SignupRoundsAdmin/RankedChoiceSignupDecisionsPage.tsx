@@ -53,7 +53,7 @@ const DECISIONS = EnumTypes.RankedChoiceDecisionValue.enumValues.map(
   (value) => value.name as RankedChoiceDecisionValue,
 );
 
-function RankedChoiceDecisionFilter<TData, TValue>({ column }: { column: Column<TData, TValue> }): JSX.Element {
+function RankedChoiceDecisionFilter<TData, TValue>({ column }: { column: Column<TData, TValue> }): React.JSX.Element {
   const { t } = useTranslation();
   const choices = useMemo(
     () => DECISIONS.map((decision) => ({ value: decision, label: describeDecision(decision, t) })),
@@ -68,7 +68,7 @@ export type RankedChoiceDecisionCellProps = {
 
 export function RankedChoiceDecisionCell<TData, TValue extends RankedChoiceDecisionValue>({
   getValue,
-}: CellContext<TData, TValue>): JSX.Element {
+}: CellContext<TData, TValue>): React.JSX.Element {
   const { t } = useTranslation();
   return <>{describeDecision(getValue(), t)}</>;
 }
@@ -106,7 +106,11 @@ const REASONS = EnumTypes.RankedChoiceDecisionReason.enumValues.map(
   (value) => value.name as RankedChoiceDecisionReason,
 );
 
-function RankedChoiceDecisionReasonFilter<TData, TValue>({ column }: { column: Column<TData, TValue> }): JSX.Element {
+function RankedChoiceDecisionReasonFilter<TData, TValue>({
+  column,
+}: {
+  column: Column<TData, TValue>;
+}): React.JSX.Element {
   const { t } = useTranslation();
   const { ticketName } = useContext(AppRootContext);
   const choices = useMemo(
@@ -122,7 +126,7 @@ export type RankedChoiceReasonCellProps = {
 
 export function RankedChoiceReasonCell<TData, TValue extends RankedChoiceDecisionReason>({
   getValue,
-}: CellContext<TData, TValue>): JSX.Element {
+}: CellContext<TData, TValue>): React.JSX.Element {
   const { t } = useTranslation();
   const { ticketName } = useContext(AppRootContext);
   const value = getValue();

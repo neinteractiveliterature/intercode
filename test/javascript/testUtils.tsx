@@ -90,7 +90,7 @@ const customQueries: CustomQueries = {
 };
 
 async function customRender<Q extends Queries = Queries>(
-  ui: JSX.Element,
+  ui: React.JSX.Element,
   options: Omit<TestWrapperProps, 'children' | 'i18nInstance'> & RenderOptions<Q> = {},
 ): Promise<RenderResult<typeof queries & Q & CustomQueries>> {
   const { apolloMocks, stripePublishableKey, queries: providedQueries, appRootContextValue, ...otherOptions } = options;

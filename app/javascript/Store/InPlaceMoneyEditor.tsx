@@ -9,7 +9,7 @@ export type InPlaceMoneyEditorProps = MoneyInputProps & {
   children?: React.ReactNode;
 };
 
-function InPlaceMoneyEditor({ value, children, ...props }: InPlaceMoneyEditorProps): JSX.Element {
+function InPlaceMoneyEditor({ value, children, ...props }: InPlaceMoneyEditorProps): React.JSX.Element {
   return (
     <InPlaceEditor<Money | undefined>
       value={value ?? undefined}

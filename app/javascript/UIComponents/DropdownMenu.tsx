@@ -33,7 +33,7 @@ export const DropdownMenu = forwardRef(function DropdownMenuInner(
     shouldAutoCloseOnNavigate,
   }: DropdownMenuProps,
   ref,
-): JSX.Element {
+): React.JSX.Element {
   const [dropdownButton, setDropdownButton] = useState<HTMLButtonElement | null>(null);
   const [dropdownMenu, setDropdownMenu] = useState<HTMLDivElement | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);

@@ -10,7 +10,7 @@ import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable'
 import FormSectionNavItemDragOverlay from './FormSectionNavItemDragOverlay';
 import FormSectionNavItem from './FormSectionNavItem';
 
-function FormSectionNav(): JSX.Element {
+function FormSectionNav(): React.JSX.Element {
   const collapseRef = useRef<HTMLElement>(null);
   const { collapsed, collapseProps, toggleCollapsed } = useCollapse(collapseRef);
   const { className: collapseClassName, ...otherCollapseProps } = collapseProps;

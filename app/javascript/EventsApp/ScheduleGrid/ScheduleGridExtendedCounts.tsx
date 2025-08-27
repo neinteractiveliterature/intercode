@@ -32,7 +32,7 @@ export type ScheduleGridExtendedCountsProps = {
   runIds: string[];
 };
 
-function ScheduleGridExtendedCounts({ now, runIds }: ScheduleGridExtendedCountsProps): JSX.Element {
+function ScheduleGridExtendedCounts({ now, runIds }: ScheduleGridExtendedCountsProps): React.JSX.Element {
   const { schedule } = useContext(ScheduleGridContext);
   const { timezoneName } = useContext(AppRootContext);
 

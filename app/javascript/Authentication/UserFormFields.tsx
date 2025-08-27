@@ -14,7 +14,7 @@ export type UserFormFieldsProps = {
   showNameWarning?: boolean;
 };
 
-function UserFormFields({ formState, setFormState, showNameWarning }: UserFormFieldsProps): JSX.Element {
+function UserFormFields({ formState, setFormState, showNameWarning }: UserFormFieldsProps): React.JSX.Element {
   const { t } = useTranslation();
   const [setFirstName, setLastName, setEmail] = usePropertySetters(setFormState, 'first_name', 'last_name', 'email');
 

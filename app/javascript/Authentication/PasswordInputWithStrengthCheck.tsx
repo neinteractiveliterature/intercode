@@ -60,7 +60,11 @@ export type PasswordInputWithStrengthCheckProps = {
   onChange: React.Dispatch<string>;
 };
 
-function PasswordInputWithStrengthCheck({ id, value, onChange }: PasswordInputWithStrengthCheckProps): JSX.Element {
+function PasswordInputWithStrengthCheck({
+  id,
+  value,
+  onChange,
+}: PasswordInputWithStrengthCheckProps): React.JSX.Element {
   const { t } = useTranslation();
   const passwordStrengthResult = useMemo(() => zxcvbn(value), [value]);
   const hasFeedback = useMemo(

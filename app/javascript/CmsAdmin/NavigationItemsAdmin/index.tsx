@@ -6,7 +6,7 @@ import 'cadmus-navbar-admin/styles/cadmus-navbar-admin.css';
 import Client from './Client';
 import usePageTitle from '../../usePageTitle';
 
-function NavigationItemsAdmin(): JSX.Element {
+function NavigationItemsAdmin(): React.JSX.Element {
   const apolloClient = useApolloClient();
   const navbarAdminClient = useMemo(() => new Client(apolloClient), [apolloClient]);
 

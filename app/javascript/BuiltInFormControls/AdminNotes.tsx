@@ -12,7 +12,7 @@ export type AdminNotesProps = {
   value?: string;
 };
 
-function AdminNotes({ mutate, inProgress, error, value }: AdminNotesProps): JSX.Element {
+function AdminNotes({ mutate, inProgress, error, value }: AdminNotesProps): React.JSX.Element {
   const { t } = useTranslation();
   const [editingValue, setEditingValue] = useState<string | null>(null);
   const textareaElement = useRef<HTMLTextAreaElement | null>(null);

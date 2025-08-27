@@ -16,7 +16,7 @@ export type AddVariableRowProps = {
   onCancel: (id: number) => void;
 };
 
-function AddVariableRow({ variable, onChange, onCancel }: AddVariableRowProps): JSX.Element {
+function AddVariableRow({ variable, onChange, onCancel }: AddVariableRowProps): React.JSX.Element {
   const { t } = useTranslation();
   const fetcher = useFetcher();
   const setError = fetcher.data instanceof Error ? fetcher.data : undefined;

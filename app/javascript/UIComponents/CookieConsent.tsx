@@ -5,7 +5,7 @@ export type CookieConsentProps = {
   cookiePolicyUrl: string;
 };
 
-function CookieConsent({ cookiePolicyUrl }: CookieConsentProps): JSX.Element {
+function CookieConsent({ cookiePolicyUrl }: CookieConsentProps): React.JSX.Element {
   const { t } = useTranslation();
 
   return (

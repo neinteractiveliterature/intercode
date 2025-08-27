@@ -5,7 +5,7 @@ import { NamedRoute } from '../AppRouter';
 import { UserAdminQueryData } from './queries.generated';
 import NamedRouteBreadcrumbItem from '../Breadcrumbs/NamedRouteBreadcrumbItem';
 
-function UsersAdmin(): JSX.Element {
+function UsersAdmin(): React.JSX.Element {
   const { t } = useTranslation();
   const singleUserData = useRouteLoaderData(NamedRoute.UserAdminDisplay) as UserAdminQueryData;
 

@@ -20,7 +20,7 @@ function EventListFilterableFormItemDropdown({
   formItem,
   value,
   onChange,
-}: EventListFilterableFormItemDropdownProps): JSX.Element {
+}: EventListFilterableFormItemDropdownProps): React.JSX.Element {
   const shouldAutoCloseOnNavigate = useMemo(
     () => (prevLocation: LocationType, location: LocationType) => {
       return !locationsEqualWithSearchParamsTransform(prevLocation, location, (params) => {

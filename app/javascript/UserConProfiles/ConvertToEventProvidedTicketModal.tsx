@@ -72,7 +72,7 @@ function ConvertToEventProvidedTicketModal({
   userConProfile,
   visible,
   onClose,
-}: ConvertToEventProvidedTicketModalProps): JSX.Element {
+}: ConvertToEventProvidedTicketModalProps): React.JSX.Element {
   const { t } = useTranslation();
   const [event, setEvent] = useState<EventType>();
   const [ticketTypeId, setTicketTypeId] = useState<string>();

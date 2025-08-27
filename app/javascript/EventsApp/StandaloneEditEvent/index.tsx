@@ -95,7 +95,7 @@ export const loader: LoaderFunction = async ({ params: { eventId } }) => {
   return data;
 };
 
-function StandaloneEditEvent(): JSX.Element {
+function StandaloneEditEvent(): React.JSX.Element {
   const data = useLoaderData() as StandaloneEditEventQueryData;
 
   const initialEvent = useMemo(() => deserializeFormResponse(data.convention.event), [data]);

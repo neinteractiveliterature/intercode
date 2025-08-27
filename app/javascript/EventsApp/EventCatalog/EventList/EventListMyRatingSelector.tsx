@@ -17,7 +17,7 @@ export type EventListMyRatingSelectorProps = {
   onChange: React.Dispatch<number[]>;
 };
 
-function EventListMyRatingSelector({ value, onChange }: EventListMyRatingSelectorProps): JSX.Element {
+function EventListMyRatingSelector({ value, onChange }: EventListMyRatingSelectorProps): React.JSX.Element {
   return (
     <div className="d-flex btn cursor-auto">
       <span className="me-2">Show:</span>

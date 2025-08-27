@@ -5,7 +5,7 @@ export type GravatarProps = {
   imgClassName?: string;
 };
 
-function Gravatar({ url, enabled, pixelSize, imgClassName }: GravatarProps): JSX.Element {
+function Gravatar({ url, enabled, pixelSize, imgClassName }: GravatarProps): React.JSX.Element {
   if (!url || !(enabled ?? true)) {
     return (
       <span className="d-inline-block" style={{ width: `${pixelSize}px`, height: `${pixelSize}px` }}>

@@ -56,7 +56,7 @@ async function signUp(
   }
 }
 
-function SignUpForm(): JSX.Element {
+function SignUpForm(): React.JSX.Element {
   const { t } = useTranslation();
   const { close: closeModal, setCurrentView, recaptchaSiteKey } = useContext(AuthenticationModalContext);
   const [formState, setFormState] = useState({});

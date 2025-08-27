@@ -12,7 +12,7 @@ export type RoomSelectProps<OptionType extends RoomForSelect, IsMulti extends bo
 function RoomSelect<OptionType extends RoomForSelect, IsMulti extends boolean = boolean>({
   rooms,
   ...otherProps
-}: RoomSelectProps<OptionType, IsMulti>): JSX.Element {
+}: RoomSelectProps<OptionType, IsMulti>): React.JSX.Element {
   return (
     <Select<OptionType, IsMulti, GroupBase<OptionType>>
       options={rooms}

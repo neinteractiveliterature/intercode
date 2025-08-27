@@ -98,7 +98,7 @@ export type EventCardProps = {
   canReadSchedule?: boolean;
 };
 
-function EventCard({ convention, event, sortBy, canReadSchedule }: EventCardProps): JSX.Element {
+function EventCard({ convention, event, sortBy, canReadSchedule }: EventCardProps): React.JSX.Element {
   const { timezoneName } = useContext(AppRootContext);
   const format = useAppDateTimeFormat();
   const formatRunTime = useFormatRunTime();

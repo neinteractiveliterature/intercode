@@ -14,7 +14,6 @@ import {
   ErrorDisplay,
   ToastProvider,
 } from '@neinteractiveliterature/litform';
-import { HelmetProvider } from 'react-helmet-async';
 
 import AuthenticationModalContext, {
   useAuthenticationModalProvider,
@@ -79,35 +78,33 @@ function ProviderStack(props: AppWrapperProps) {
 
   return (
     <ApolloProvider client={client}>
-      <HelmetProvider>
-        {/* TODO bring this back when we re-add prompting getUserConfirmation={getUserConfirmation}> */}
-        <RailsDirectUploadsContext.Provider value={railsDirectUploadsContextValue}>
-          <AuthenticationModalContext.Provider value={authenticationModalContextValue}>
-            <>
-              {!unauthenticatedError && (
-                <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
-                  <I18NextWrapper>
-                    {(i18nInstance) => (
-                      <AlertProvider okText={i18nInstance.t('buttons.ok', 'OK')}>
-                        <ToastProvider
-                          formatTimeAgo={(timeAgo) =>
-                            DateTime.now().minus(Duration.fromMillis(timeAgo.milliseconds)).toRelative()
-                          }
-                        >
-                          <ErrorBoundary placement="replace" errorType="plain">
-                            <Outlet />
-                          </ErrorBoundary>
-                        </ToastProvider>
-                      </AlertProvider>
-                    )}
-                  </I18NextWrapper>
-                </Suspense>
-              )}
-              <AuthenticationModal />
-            </>
-          </AuthenticationModalContext.Provider>
-        </RailsDirectUploadsContext.Provider>
-      </HelmetProvider>
+      {/* TODO bring this back when we re-add prompting getUserConfirmation={getUserConfirmation}> */}
+      <RailsDirectUploadsContext.Provider value={railsDirectUploadsContextValue}>
+        <AuthenticationModalContext.Provider value={authenticationModalContextValue}>
+          <>
+            {!unauthenticatedError && (
+              <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
+                <I18NextWrapper>
+                  {(i18nInstance) => (
+                    <AlertProvider okText={i18nInstance.t('buttons.ok', 'OK')}>
+                      <ToastProvider
+                        formatTimeAgo={(timeAgo) =>
+                          DateTime.now().minus(Duration.fromMillis(timeAgo.milliseconds)).toRelative()
+                        }
+                      >
+                        <ErrorBoundary placement="replace" errorType="plain">
+                          <Outlet />
+                        </ErrorBoundary>
+                      </ToastProvider>
+                    </AlertProvider>
+                  )}
+                </I18NextWrapper>
+              </Suspense>
+            )}
+            <AuthenticationModal />
+          </>
+        </AuthenticationModalContext.Provider>
+      </RailsDirectUploadsContext.Provider>
     </ApolloProvider>
   );
 }
@@ -123,7 +120,7 @@ export type AppWrapperProps = {
   stripePublishableKey: string;
 };
 
-function AppWrapper<P extends JSX.IntrinsicAttributes>(
+function AppWrapper<P extends React.JSX.IntrinsicAttributes>(
   WrappedComponent: React.ComponentType<P>,
 ): React.ComponentType<P> {
   function Wrapper(props: P & AppWrapperProps) {

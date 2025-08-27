@@ -57,7 +57,7 @@ function formItemIsQuestion(formItem: CommonQuestionFieldsFormItem): formItem is
   return formItem.item_type !== 'static_text';
 }
 
-function CommonQuestionFields({ formItem, setFormItem }: CommonQuestionFieldsProps): JSX.Element {
+function CommonQuestionFields({ formItem, setFormItem }: CommonQuestionFieldsProps): React.JSX.Element {
   const { formType, formTypeIdentifier } = useContext(FormEditorContext);
   const { standardItem } = useContext(FormItemEditorContext);
   const defaultAnswerModal = useModal();

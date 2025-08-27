@@ -11,7 +11,7 @@ export type NavigationItemProps = {
   iconColorClass?: string;
 };
 
-function NavigationItem({ label, url, inSection, icon, iconColorClass }: NavigationItemProps): JSX.Element {
+function NavigationItem({ label, url, inSection, icon, iconColorClass }: NavigationItemProps): React.JSX.Element {
   const labelContent = (
     <>
       <MenuIcon icon={icon || 'bi-file-earmark-text'} colorClass={iconColorClass} />

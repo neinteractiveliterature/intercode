@@ -13,7 +13,7 @@ function SignupChangeActionFilter<TData extends Record<string, unknown>, TValue>
   column,
 }: {
   column: Column<TData, TValue>;
-}): JSX.Element {
+}): React.JSX.Element {
   const { t } = useTranslation();
   const choices = useMemo(() => ACTIONS.map((action) => ({ value: action, label: describeAction(action, t) })), [t]);
 

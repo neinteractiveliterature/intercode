@@ -1,7 +1,7 @@
 import { Trans } from 'react-i18next';
 import EventRatingIcon from './EventRatingIcon';
 
-function RatingsHelp(): JSX.Element {
+function RatingsHelp(): React.JSX.Element {
   return (
     <Trans i18nKey="events.ratings.helpText">
       You can mark an event as a “favorite” by clicking the <EventRatingIcon rating={1} /> icon on it, and you can hide

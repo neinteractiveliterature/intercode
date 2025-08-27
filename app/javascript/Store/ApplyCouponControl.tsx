@@ -10,7 +10,7 @@ export type ApplyCouponControlProps = {
   createCouponApplication: (code: string) => Promise<unknown>;
 };
 
-function ApplyCouponControl({ createCouponApplication }: ApplyCouponControlProps): JSX.Element {
+function ApplyCouponControl({ createCouponApplication }: ApplyCouponControlProps): React.JSX.Element {
   const { t } = useTranslation();
   const [couponCode, setCouponCode] = useState('');
   const couponCodeInputId = useId();

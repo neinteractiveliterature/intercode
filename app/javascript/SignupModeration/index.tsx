@@ -7,7 +7,7 @@ import { SignupAutomationMode } from '../graphqlTypes.generated';
 import { useTranslation } from 'react-i18next';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 
-function SignupModeration(): JSX.Element {
+function SignupModeration(): React.JSX.Element {
   const { signupAutomationMode } = useContext(AppRootContext);
   const { t } = useTranslation();
   const replacementContent = useAuthorizationRequired('can_manage_signups');

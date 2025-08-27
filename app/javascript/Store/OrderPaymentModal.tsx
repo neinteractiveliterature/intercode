@@ -145,7 +145,13 @@ export type OrderPaymentModalProps = Omit<OrderPaymentModalContentsProps, 'order
   order?: OrderPaymentModalContentsProps['order'];
 };
 
-function OrderPaymentModal({ visible, onCancel, onError, onComplete, order }: OrderPaymentModalProps): JSX.Element {
+function OrderPaymentModal({
+  visible,
+  onCancel,
+  onError,
+  onComplete,
+  order,
+}: OrderPaymentModalProps): React.JSX.Element {
   const [paymentIntentClientSecret, setPaymentIntentClientSecret] = useState<string>();
   const client = useApolloClient();
   const onErrorRef = useRef(onError);

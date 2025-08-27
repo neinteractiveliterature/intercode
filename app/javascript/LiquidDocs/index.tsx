@@ -3,7 +3,7 @@ import FilterDocLink from './FilterDocLink';
 import LiquidTagDocLink from './LiquidTagDocLink';
 import { useLiquidDocs } from './loader';
 
-function LiquidDocs(): JSX.Element {
+function LiquidDocs(): React.JSX.Element {
   const { sortedAssigns, sortedFilters, sortedTags } = useLiquidDocs();
 
   return (

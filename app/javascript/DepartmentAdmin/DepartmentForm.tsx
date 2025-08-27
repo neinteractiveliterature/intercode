@@ -8,7 +8,7 @@ export type DepartmentFormProps = {
   disabled: boolean;
 };
 
-function DepartmentForm({ initialDepartment, disabled }: DepartmentFormProps): JSX.Element {
+function DepartmentForm({ initialDepartment, disabled }: DepartmentFormProps): React.JSX.Element {
   const [name, setName] = useState(initialDepartment.name);
   const [proposalDescription, setProposalDescription] = useState(initialDepartment.proposal_description);
 

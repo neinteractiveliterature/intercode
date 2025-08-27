@@ -9,7 +9,7 @@ export type FormProgressProps = {
   form: CommonFormFieldsFragment;
 };
 
-export default function FormProgress({ form }: FormProgressProps): JSX.Element {
+export default function FormProgress({ form }: FormProgressProps): React.JSX.Element {
   const { currentSection, currentSectionIndex } = useContext(SectionTraversalContext);
   const items = useMemo(() => getSortedFormItems(form), [form]);
   const sectionItems = useMemo(() => sortFormItems(currentSection?.form_items ?? []), [currentSection]);

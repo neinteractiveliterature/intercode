@@ -20,7 +20,7 @@ export default function CreateSignupRunCard({
   eventId,
   runId,
   userConProfileId,
-}: CreateSignupRunCardProps): JSX.Element {
+}: CreateSignupRunCardProps): React.JSX.Element {
   const { data } = useSuspenseQuery(CreateSignupRunCardQueryDocument, { variables: { eventId, userConProfileId } });
   const confirm = useConfirm();
   const alert = useAlert();

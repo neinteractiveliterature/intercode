@@ -34,7 +34,7 @@ function CmsPageForm<T extends PageFormFields>({
   cmsParent,
   cmsLayouts,
   readOnly,
-}: CmsPageFormProps<T>): JSX.Element {
+}: CmsPageFormProps<T>): React.JSX.Element {
   const { t } = useTranslation();
   const [
     setName,

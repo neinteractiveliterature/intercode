@@ -6,7 +6,7 @@ export type MultiUserActionsDropdownProps = {
   onClickMerge: (userIds: string[]) => void;
 };
 
-function MultiUserActionsDropdown({ selectedUserIds, onClickMerge }: MultiUserActionsDropdownProps): JSX.Element {
+function MultiUserActionsDropdown({ selectedUserIds, onClickMerge }: MultiUserActionsDropdownProps): React.JSX.Element {
   const { t } = useTranslation();
   return (
     <DropdownMenu buttonClassName="btn btn-outline-primary dropdown-toggle" buttonContent="Actions">

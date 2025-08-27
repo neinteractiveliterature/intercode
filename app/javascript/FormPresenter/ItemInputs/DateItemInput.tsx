@@ -9,7 +9,7 @@ import { VisibilityDisclosureCard } from './PermissionDisclosures';
 
 export type DateItemInputProps = CommonFormItemInputProps<DateFormItem>;
 
-function DateItemInput(props: DateItemInputProps): JSX.Element {
+function DateItemInput(props: DateItemInputProps): React.JSX.Element {
   const { formItem, formTypeIdentifier, onInteract, onChange, value: uncheckedValue, valueInvalid } = props;
   const domId = useId();
 

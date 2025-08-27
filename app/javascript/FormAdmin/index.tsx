@@ -5,7 +5,7 @@ import { Suspense } from 'react';
 import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
 import NamedRouteBreadcrumbItem from '../Breadcrumbs/NamedRouteBreadcrumbItem';
 
-function FormAdmin(): JSX.Element {
+function FormAdmin(): React.JSX.Element {
   const authorizationWarning = useAuthorizationRequired('can_manage_forms');
   if (authorizationWarning) return authorizationWarning;
 

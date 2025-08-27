@@ -24,7 +24,7 @@ export type SignOutButtonProps = {
   caption?: React.ReactNode;
 };
 
-function SignOutButton({ className, caption }: SignOutButtonProps): JSX.Element {
+function SignOutButton({ className, caption }: SignOutButtonProps): React.JSX.Element {
   const afterSessionChange = useAfterSessionChange();
 
   const onClick = async (event: React.SyntheticEvent) => {

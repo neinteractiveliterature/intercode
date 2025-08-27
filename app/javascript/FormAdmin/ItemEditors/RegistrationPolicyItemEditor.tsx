@@ -14,7 +14,7 @@ import { useSortableDndSensors } from '../../SortableUtils';
 import RegistrationPolicyItemEditorPresetRowDragOverlay from './RegistrationPolicyItemEditorPresetRowDragOverlay';
 
 export type RegistrationPolicyItemEditorProps = FormItemEditorProps<RegistrationPolicyFormItem>;
-function RegistrationPolicyItemEditor({ formItem, setFormItem }: RegistrationPolicyItemEditorProps): JSX.Element {
+function RegistrationPolicyItemEditor({ formItem, setFormItem }: RegistrationPolicyItemEditorProps): React.JSX.Element {
   const { disabled } = useContext(FormItemEditorContext);
 
   const generateNewPreset: () => RegistrationPolicyPreset = useCallback(

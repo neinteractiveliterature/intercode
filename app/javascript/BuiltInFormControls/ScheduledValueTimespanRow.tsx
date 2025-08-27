@@ -15,7 +15,7 @@ export function scheduledValueTimespanIsValid(timespan: EditingTimespan<unknown>
 }
 
 export type ScheduledValueTimespanRowProps<ValueType> = {
-  buildInput: (value: ValueType | undefined, onChange: React.Dispatch<ValueType | undefined>) => JSX.Element;
+  buildInput: (value: ValueType | undefined, onChange: React.Dispatch<ValueType | undefined>) => React.JSX.Element;
   rowIdentifier: number;
   timespan: EditingTimespan<ValueType>;
   timezone: string;
@@ -34,7 +34,7 @@ function ScheduledValueTimespanRow<ValueType>({
   valueDidChange,
   deleteClicked,
   isLastTimespan,
-}: ScheduledValueTimespanRowProps<ValueType>): JSX.Element {
+}: ScheduledValueTimespanRowProps<ValueType>): React.JSX.Element {
   const rowFinishDidChange = useCallback(
     (finish: string | undefined) => finishDidChange(rowIdentifier, finish),
     [finishDidChange, rowIdentifier],

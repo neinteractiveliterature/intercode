@@ -3,7 +3,7 @@ import { FormItemEditorProps } from '../FormItemEditorProps';
 import { EventEmailFormItem } from '../FormItemUtils';
 
 export type EventEmailEditorProps = FormItemEditorProps<EventEmailFormItem>;
-function EventEmailEditor(props: EventEmailEditorProps): JSX.Element {
+function EventEmailEditor(props: EventEmailEditorProps): React.JSX.Element {
   return <CommonQuestionFields {...props} />;
 }
 

@@ -18,7 +18,7 @@ function EventSelect<
   IsMulti extends boolean = false,
   DataType extends DQ = DQ,
   OptionType extends DO<DataType> = DO<DQ>,
->({ eventsQuery, ...otherProps }: EventSelectProps<DataType, OptionType, IsMulti>): JSX.Element {
+>({ eventsQuery, ...otherProps }: EventSelectProps<DataType, OptionType, IsMulti>): React.JSX.Element {
   const { t } = useTranslation();
 
   return (

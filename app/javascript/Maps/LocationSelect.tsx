@@ -22,7 +22,7 @@ export type LocationSelectProps<Result extends GeocodingResult> = Omit<
   backend: GeocodingBackend<Result>;
 };
 
-function LocationSelect<Result extends GeocodingResult>({ ...props }: LocationSelectProps<Result>): JSX.Element {
+function LocationSelect<Result extends GeocodingResult>({ ...props }: LocationSelectProps<Result>): React.JSX.Element {
   return (
     <AsyncSelect<Result>
       loadOptions={(query) => props.backend.search(query)}

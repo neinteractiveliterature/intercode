@@ -24,7 +24,7 @@ function EventEmailInput({
   onChange,
   onInteract,
   valueInvalid,
-}: EventEmailInputProps): JSX.Element {
+}: EventEmailInputProps): React.JSX.Element {
   const { t } = useTranslation();
   const value = uncheckedValue ?? {};
   const [emailBehavior, setEmailBehavior] = useState<EventEmailBehavior | undefined>(() => {

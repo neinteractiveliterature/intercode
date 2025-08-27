@@ -6,7 +6,7 @@ import { FormItemEditorContext } from '../FormEditorContexts';
 import { FormItemEditorProps } from '../FormItemEditorProps';
 
 export type TimespanEditorProps = FormItemEditorProps<TimespanFormItem>;
-function TimespanEditor({ formItem, setFormItem }: TimespanEditorProps): JSX.Element {
+function TimespanEditor({ formItem, setFormItem }: TimespanEditorProps): React.JSX.Element {
   const { disabled } = useContext(FormItemEditorContext);
   const captionInputId = useId();
 

@@ -35,7 +35,7 @@ export type EventProposalStatusUpdaterProps = {
   eventProposal: EventProposalQueryWithOwnerQueryData['convention']['event_proposal'];
 };
 
-function EventProposalStatusUpdater({ eventProposal }: EventProposalStatusUpdaterProps): JSX.Element {
+function EventProposalStatusUpdater({ eventProposal }: EventProposalStatusUpdaterProps): React.JSX.Element {
   const [status, setStatus] = useState(eventProposal.status);
   const [dropEvent, setDropEvent] = useState(false);
   const { open: openModal, close: closeModal, visible: modalVisible } = useModal();

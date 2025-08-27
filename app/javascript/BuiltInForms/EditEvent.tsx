@@ -29,7 +29,7 @@ export default function EditEvent({
   updateEvent,
   onSave,
   onDrop,
-}: EditEventProps): JSX.Element {
+}: EditEventProps): React.JSX.Element {
   const [updateEventCallback, updateError, updateInProgress] = useAsyncFunction(
     useCallback(async () => {
       if (!validateForm()) {

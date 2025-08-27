@@ -42,7 +42,7 @@ function FormPresenter({
   submitForm,
   footerContent,
   imageAttachmentConfig,
-}: FormPresenterProps): JSX.Element {
+}: FormPresenterProps): React.JSX.Element {
   const { currentSection } = useContext(SectionTraversalContext);
 
   const headerRef = useRef<HTMLDivElement>(null);

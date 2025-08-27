@@ -7,7 +7,7 @@ export type AgeRestrictionsItemChangeDisplayProps = {
   change: ParsedFormResponseChange<AgeRestrictionsFormItem>;
 };
 
-function AgeRestrictionsItemChangeDisplay({ change }: AgeRestrictionsItemChangeDisplayProps): JSX.Element {
+function AgeRestrictionsItemChangeDisplay({ change }: AgeRestrictionsItemChangeDisplayProps): React.JSX.Element {
   const { previous_value: before, new_value: after } = change;
 
   return (

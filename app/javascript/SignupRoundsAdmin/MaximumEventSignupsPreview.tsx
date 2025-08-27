@@ -91,7 +91,7 @@ export type MaximumEventSignupsPreviewProps = {
 export default function MaximumEventSignupsPreview({
   signupRounds,
   timezoneName,
-}: MaximumEventSignupsPreviewProps): JSX.Element {
+}: MaximumEventSignupsPreviewProps): React.JSX.Element {
   const { t } = useTranslation();
   const getDescriptionForValue = useCallback(
     (value: string | undefined) => getMaximumEventSignupsDescription(value, t),

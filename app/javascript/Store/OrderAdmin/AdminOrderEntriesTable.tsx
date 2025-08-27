@@ -94,7 +94,7 @@ function AdminOrderEntriesTable<
   deleteCouponApplication,
   createError,
   createInProgress,
-}: AdminOrderEntriesTableProps<T, CouponApplicationType>): JSX.Element {
+}: AdminOrderEntriesTableProps<T, CouponApplicationType>): React.JSX.Element {
   const confirm = useConfirm();
   const [addingItem, setAddingItem] = useState<AddingOrderEntry<T>>();
   const [applyingCoupon, setApplyingCoupon] = useState(false);

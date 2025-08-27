@@ -131,7 +131,7 @@ export type NavigationBarProps = {
   navbarClasses: string;
 };
 
-function NavigationBar({ navbarClasses }: NavigationBarProps): JSX.Element {
+function NavigationBar({ navbarClasses }: NavigationBarProps): React.JSX.Element {
   const { cmsNavigationItems } = useContext(AppRootContext);
 
   const rootNavigationItems: RootItem[] = useMemo(() => {

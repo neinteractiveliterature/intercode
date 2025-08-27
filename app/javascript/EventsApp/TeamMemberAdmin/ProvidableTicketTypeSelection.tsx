@@ -26,7 +26,7 @@ function ProvidableTicketTypeSelection({
   value,
   onChange,
   disabled,
-}: ProvidableTicketTypeSelectionProps): JSX.Element {
+}: ProvidableTicketTypeSelectionProps): React.JSX.Element {
   const { t } = useTranslation();
   const providableTicketTypes = getProvidableTicketTypes(convention);
   const remainingCountByType = getRemainingTicketCountByType(convention, convention.event);

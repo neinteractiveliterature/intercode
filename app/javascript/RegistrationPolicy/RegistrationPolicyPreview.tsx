@@ -10,7 +10,7 @@ export type RegistrationPolicyPreviewProps = {
   registrationPolicy: RegistrationPolicyForRegistrationPolicyUtils;
 };
 
-function RegistrationPolicyPreview({ registrationPolicy }: RegistrationPolicyPreviewProps): JSX.Element {
+function RegistrationPolicyPreview({ registrationPolicy }: RegistrationPolicyPreviewProps): React.JSX.Element {
   const registrationPolicyForDisplay = useMemo(() => {
     const { buckets, ...otherProps } = registrationPolicy;
     return {

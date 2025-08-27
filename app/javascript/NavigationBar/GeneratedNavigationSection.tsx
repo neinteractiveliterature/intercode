@@ -14,7 +14,7 @@ export type GeneratedNavigationSectionProps = {
   items: GeneratedNavigationItem[];
 };
 
-function GeneratedNavigationSection({ label, items }: GeneratedNavigationSectionProps): JSX.Element {
+function GeneratedNavigationSection({ label, items }: GeneratedNavigationSectionProps): React.JSX.Element {
   const sortedItems = sortByLocaleString(items, (item) => item?.label ?? '');
 
   if (items.some((item) => item)) {

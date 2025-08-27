@@ -3,7 +3,7 @@ import styles from 'styles/schedule_grid.module.scss';
 
 import { PIXELS_PER_HOUR, PIXELS_PER_LANE } from './LayoutConstants';
 
-function ScheduleGridSkeleton(): JSX.Element {
+function ScheduleGridSkeleton(): React.JSX.Element {
   return (
     <div className={`schedule-grid mb-4 ${styles.scheduleGrid}`}>
       <div

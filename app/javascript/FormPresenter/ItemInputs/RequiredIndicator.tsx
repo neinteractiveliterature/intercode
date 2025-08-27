@@ -6,7 +6,7 @@ export type RequiredIndicatorProps<PropertiesType extends { required?: boolean }
 
 export default function RequiredIndicator<PropertiesType extends { required?: boolean }>({
   formItem,
-}: RequiredIndicatorProps<PropertiesType>): JSX.Element {
+}: RequiredIndicatorProps<PropertiesType>): React.JSX.Element {
   if (formItem.rendered_properties.required) {
     return (
       <span className="text-danger ms-1" aria-label="Required">

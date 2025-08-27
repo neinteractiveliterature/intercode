@@ -37,7 +37,7 @@ function TimeblockPreferenceEditorTimeblockRow({
   timeblock,
   onChange,
   deleteTimeblock,
-}: TimeblockPreferenceEditorTimeblockRowProps): JSX.Element {
+}: TimeblockPreferenceEditorTimeblockRowProps): React.JSX.Element {
   const { timezoneName } = useContext(AppRootContext);
   const confirm = useConfirm();
   const startChanged = useTimeblockPropertyUpdater(onChange, timeblock.generatedId, 'start');
@@ -62,7 +62,6 @@ function TimeblockPreferenceEditorTimeblockRow({
     }
 
     try {
-       
       getTimeblockTimespanForDisplay(timeblock);
     } catch (e) {
       return e.message;

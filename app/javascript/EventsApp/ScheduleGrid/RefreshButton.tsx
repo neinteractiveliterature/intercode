@@ -7,7 +7,7 @@ export type RefreshButtonProps = {
   refreshData: () => Promise<unknown>;
 };
 
-function RefreshButton({ refreshData }: RefreshButtonProps): JSX.Element {
+function RefreshButton({ refreshData }: RefreshButtonProps): React.JSX.Element {
   const { t } = useTranslation();
   const [refreshAsync, , refreshInProgress] = useAsyncFunction(refreshData);
 

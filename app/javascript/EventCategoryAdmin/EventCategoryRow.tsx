@@ -9,7 +9,7 @@ export type EventCategoryRowProps = {
   eventCategory: EventCategoryAdminQueryData['convention']['event_categories'][0];
 };
 
-function EventCategoryRow({ eventCategory }: EventCategoryRowProps): JSX.Element {
+function EventCategoryRow({ eventCategory }: EventCategoryRowProps): React.JSX.Element {
   const confirm = useConfirm();
   const submit = useSubmit();
   const { t } = useTranslation();

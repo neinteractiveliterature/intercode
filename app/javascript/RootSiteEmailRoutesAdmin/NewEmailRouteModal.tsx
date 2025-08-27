@@ -31,7 +31,7 @@ export const action: ActionFunction = async ({ request }) => {
   }
 };
 
-function NewEmailRouteModal(): JSX.Element {
+function NewEmailRouteModal(): React.JSX.Element {
   const { t } = useTranslation();
   const [emailRoute, setEmailRoute] = useState<EmailRouteFieldsFragment>({
     __typename: 'EmailRoute',

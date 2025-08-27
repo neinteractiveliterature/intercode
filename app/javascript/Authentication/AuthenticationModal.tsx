@@ -8,7 +8,7 @@ const ForgotPasswordForm = lazyWithAppEntrypointHeadersCheck(() => import('./For
 const SignInForm = lazyWithAppEntrypointHeadersCheck(() => import('./SignInForm'));
 const SignUpForm = lazyWithAppEntrypointHeadersCheck(() => import('./SignUpForm'));
 
-function AuthenticationModal(): JSX.Element {
+function AuthenticationModal(): React.JSX.Element {
   const { visible, currentView } = useContext(AuthenticationModalContext);
 
   const renderView = () => {

@@ -17,7 +17,7 @@ function propertiesHasCaption(
   return Object.prototype.hasOwnProperty.call(properties, 'caption');
 }
 
-function AdminCaption({ formItem }: AdminCaptionProps): JSX.Element {
+function AdminCaption({ formItem }: AdminCaptionProps): React.JSX.Element {
   if (formItem.admin_description) {
     return <span>{formItem.admin_description}</span>;
   }

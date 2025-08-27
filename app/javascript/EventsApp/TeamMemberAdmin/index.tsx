@@ -5,7 +5,7 @@ import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
 import { useTeamMembersLoader } from './loader';
 import NamedRouteBreadcrumbItem from '../../Breadcrumbs/NamedRouteBreadcrumbItem';
 
-function TeamMemberAdmin(): JSX.Element {
+function TeamMemberAdmin(): React.JSX.Element {
   const data = useTeamMembersLoader();
   const teamMemberId = useParams<{ teamMemberId: string }>().teamMemberId;
 

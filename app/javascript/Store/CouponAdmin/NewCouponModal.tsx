@@ -28,7 +28,7 @@ export const action: ActionFunction = async ({ request }) => {
   }
 };
 
-function NewCouponModal(): JSX.Element {
+function NewCouponModal(): React.JSX.Element {
   const { t } = useTranslation();
   const [coupon, setCoupon] = useState<Omit<AdminCouponFieldsFragment, 'id'>>({
     __typename: 'Coupon',

@@ -14,7 +14,7 @@ import { useSortableDndSensors } from '../../SortableUtils';
 import TimeblockPreferenceEditorTimeblockRowDragOverlay from './TimeblockPreferenceEditorTimeblockRowDragOverlay';
 
 export type TimeblockPreferenceEditorProps = FormItemEditorProps<TimeblockPreferenceFormItem>;
-function TimeblockPreferenceEditor({ formItem, setFormItem }: TimeblockPreferenceEditorProps): JSX.Element {
+function TimeblockPreferenceEditor({ formItem, setFormItem }: TimeblockPreferenceEditorProps): React.JSX.Element {
   const { disabled } = useContext(FormItemEditorContext);
   const captionInputId = useId();
   const generateNewTimeblock = useCallback(() => ({ label: '', start: {}, finish: {} }), []);

@@ -26,7 +26,7 @@ export type FormEditorItemPreviewProps = {
   formItem: TypedFormItem;
 };
 
-function FormEditorItemPreview({ formSection, formItem }: FormEditorItemPreviewProps): JSX.Element {
+function FormEditorItemPreview({ formSection, formItem }: FormEditorItemPreviewProps): React.JSX.Element {
   const confirm = useConfirm();
   const params = useParams<{ id: string; sectionId: string }>();
   const { convention, formType, formTypeIdentifier, formItemsById } = useContext(FormEditorContext);

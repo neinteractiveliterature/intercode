@@ -26,7 +26,7 @@ export const action: ActionFunction = async ({ request, params: { id } }) => {
   }
 };
 
-function ForceConfirmSignupModal(): JSX.Element {
+function ForceConfirmSignupModal(): React.JSX.Element {
   const data = useSingleSignupLoader();
   const [bucketKey, setBucketKey] = useState<string | null>();
   const { t } = useTranslation();

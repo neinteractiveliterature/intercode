@@ -1,7 +1,7 @@
 import OutletWithLoading from '../OutletWithLoading';
 import NamedRouteBreadcrumbItem from '../Breadcrumbs/NamedRouteBreadcrumbItem';
 
-function EventCategoryAdmin(): JSX.Element {
+function EventCategoryAdmin(): React.JSX.Element {
   return (
     <>
       <ol className="breadcrumb">

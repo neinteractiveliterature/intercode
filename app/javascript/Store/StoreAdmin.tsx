@@ -3,7 +3,7 @@ import { NavLink, Outlet } from 'react-router';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 import { useTranslation } from 'react-i18next';
 
-function StoreAdmin(): JSX.Element {
+function StoreAdmin(): React.JSX.Element {
   const { t } = useTranslation();
   const authorizationWarning = useAuthorizationRequired('can_read_orders');
   if (authorizationWarning) return authorizationWarning;

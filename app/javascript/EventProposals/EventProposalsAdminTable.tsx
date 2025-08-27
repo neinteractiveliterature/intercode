@@ -72,7 +72,7 @@ const defaultVisibleColumns = [
 ];
 const alwaysVisibleColumns = ['_extra'];
 
-function EventProposalsAdminTable(): JSX.Element {
+function EventProposalsAdminTable(): React.JSX.Element {
   const navigate = useNavigate();
   const columns = useMemo(() => {
     const columnHelper = createColumnHelper<EventProposalType>();

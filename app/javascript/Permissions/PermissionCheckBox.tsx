@@ -4,7 +4,7 @@ export type PermissionCheckBoxProps = {
   hasPermission: boolean;
 };
 
-function PermissionCheckBox({ hasPermission }: PermissionCheckBoxProps): JSX.Element {
+function PermissionCheckBox({ hasPermission }: PermissionCheckBoxProps): React.JSX.Element {
   const checkboxId = useId();
 
   return (

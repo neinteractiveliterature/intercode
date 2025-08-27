@@ -13,7 +13,7 @@ function WithdrawMySignupButton({
   signup,
   signupRounds,
   ...otherProps
-}: WithdrawMySignupButtonProps): JSX.Element {
+}: WithdrawMySignupButtonProps): React.JSX.Element {
   const withdrawMySignupModal = useWithdrawMySignupModal();
 
   return (

@@ -25,7 +25,7 @@ function FormItemFilter<FormItemType extends TypedFormItem>({
   value,
   convention,
   onChange,
-}: FormItemFilterProps<FormItemType>): JSX.Element {
+}: FormItemFilterProps<FormItemType>): React.JSX.Element {
   const commonProps: CommonFormItemFilterProps<FormItemType> = {
     formItem,
     value,

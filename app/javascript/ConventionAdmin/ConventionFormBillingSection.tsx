@@ -33,7 +33,7 @@ function ConventionFormBillingSection({
   convention,
   setConvention,
   disabled,
-}: ConventionFormBillingSectionProps): JSX.Element {
+}: ConventionFormBillingSectionProps): React.JSX.Element {
   const [setTicketName, setMaximumTickets, setTicketMode, setDefaultCurrencyCode] = usePropertySetters(
     setConvention,
     'ticket_name',

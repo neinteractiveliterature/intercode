@@ -45,7 +45,7 @@ export type RateEventControlProps = {
   size?: number;
 };
 
-function RateEventControl({ value, onChange, size }: RateEventControlProps): JSX.Element {
+function RateEventControl({ value, onChange, size }: RateEventControlProps): React.JSX.Element {
   const { t } = useTranslation();
   const clearRating = () => {
     onChange(0);

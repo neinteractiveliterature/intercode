@@ -7,7 +7,7 @@ import { FormItemEditorContext } from '../FormEditorContexts';
 import { FormItemEditorProps } from '../FormItemEditorProps';
 
 export type FreeTextEditorProps = FormItemEditorProps<FreeTextFormItem>;
-function FreeTextEditor({ formItem, setFormItem }: FreeTextEditorProps): JSX.Element {
+function FreeTextEditor({ formItem, setFormItem }: FreeTextEditorProps): React.JSX.Element {
   const { disabled } = useContext(FormItemEditorContext);
   const captionInputId = useId();
   const responseFormat =

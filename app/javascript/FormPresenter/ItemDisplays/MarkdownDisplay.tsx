@@ -8,7 +8,7 @@ export type MarkdownDisplayProps = {
   renderedMarkdown?: string | null;
 };
 
-export default function MarkdownDisplay({ renderedMarkdown }: MarkdownDisplayProps): JSX.Element {
+export default function MarkdownDisplay({ renderedMarkdown }: MarkdownDisplayProps): React.JSX.Element {
   return <>{parsePageContent(renderedMarkdown ?? '', { Spoiler }).bodyComponents}</>;
 }
 

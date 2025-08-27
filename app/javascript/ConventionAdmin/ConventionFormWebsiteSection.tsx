@@ -39,7 +39,7 @@ function ConventionFormWebsiteSection({
   setOpenGraphImage,
   favicon,
   setFavicon,
-}: ConventionFormWebsiteSectionProps): JSX.Element {
+}: ConventionFormWebsiteSectionProps): React.JSX.Element {
   const [setDefaultLayout, setRootPage, setClickwrapAgreement, setHidden] = usePropertySetters(
     setConvention,
     'defaultLayout',

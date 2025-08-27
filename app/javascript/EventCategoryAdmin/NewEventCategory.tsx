@@ -39,7 +39,7 @@ export const action: ActionFunction = async ({ request }) => {
   }
 };
 
-function NewEventCategory(): JSX.Element {
+function NewEventCategory(): React.JSX.Element {
   const data = useEventCategoryAdminLoader();
   const navigation = useNavigation();
   const createError = useActionData();

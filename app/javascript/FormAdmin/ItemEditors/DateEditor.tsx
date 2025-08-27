@@ -6,7 +6,7 @@ import { FormItemEditorContext } from '../FormEditorContexts';
 import { FormItemEditorProps } from '../FormItemEditorProps';
 
 export type DateEditorProps = FormItemEditorProps<DateFormItem>;
-function DateEditor({ formItem, setFormItem }: DateEditorProps): JSX.Element {
+function DateEditor({ formItem, setFormItem }: DateEditorProps): React.JSX.Element {
   const { disabled } = useContext(FormItemEditorContext);
   const captionInputId = useId();
 

@@ -19,7 +19,11 @@ export type EventListSortDropdownProps = {
   onChange: React.Dispatch<SortingState>;
 };
 
-function EventListSortDropdown({ showConventionOrder, value, onChange }: EventListSortDropdownProps): JSX.Element {
+function EventListSortDropdown({
+  showConventionOrder,
+  value,
+  onChange,
+}: EventListSortDropdownProps): React.JSX.Element {
   const { myProfile } = useContext(AppRootContext);
 
   const mySortOrders = [...SORT_ORDERS];

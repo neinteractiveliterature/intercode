@@ -10,7 +10,7 @@ import InPlaceEditor from 'BuiltInFormControls/InPlaceEditor';
 import FormEditorItemPreview from './FormEditorItemPreview';
 import FormEditorItemPreviewDragOverlay from './FormEditorItemPreviewDragOverlay';
 
-function FormSectionEditorContent(): JSX.Element {
+function FormSectionEditorContent(): React.JSX.Element {
   const { currentSection } = useContext(FormEditorContext);
   const moveFetcher = useFetcher();
   const updateFetcher = useFetcher();

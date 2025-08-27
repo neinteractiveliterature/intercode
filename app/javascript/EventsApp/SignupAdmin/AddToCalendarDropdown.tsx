@@ -8,7 +8,7 @@ export type AddToCalendarDropdownProps = {
   className?: string;
 };
 
-function AddToCalendarDropdown({ icalSecret, className }: AddToCalendarDropdownProps): JSX.Element {
+function AddToCalendarDropdown({ icalSecret, className }: AddToCalendarDropdownProps): React.JSX.Element {
   const { t } = useTranslation();
   const icalUrl = new URL(`/calendars/user_schedule/${encodeURIComponent(icalSecret)}`, window.location.href);
   const icalUrlWithWebcalProtocol = icalUrl.toString().replace(/^https?:/, 'webcal:');

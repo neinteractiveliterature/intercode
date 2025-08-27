@@ -17,7 +17,7 @@ export type EventAdminRowProps = {
   convention: ConventionFieldsFragment;
 };
 
-function EventAdminRow({ event, convention }: EventAdminRowProps): JSX.Element {
+function EventAdminRow({ event, convention }: EventAdminRowProps): React.JSX.Element {
   const { t } = useTranslation();
   const { timezoneName } = useContext(AppRootContext);
   const [expanded, setExpanded] = useState(false);

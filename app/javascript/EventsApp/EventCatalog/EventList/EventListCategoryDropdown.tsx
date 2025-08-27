@@ -27,7 +27,7 @@ function EventListCategoryDropdown({
   eventCategories,
   value,
   onChange: onChangeProp,
-}: EventListCategoryDropdownProps): JSX.Element {
+}: EventListCategoryDropdownProps): React.JSX.Element {
   const [interacted, setInteracted] = useState(false);
   const currentCategories = eventCategories.filter((category) => (value || []).includes(category.id));
   const { t } = useTranslation();

@@ -7,7 +7,7 @@ export type AssignNameProps = {
   prefix?: string;
 };
 
-function AssignName({ assign, prefix }: AssignNameProps): JSX.Element {
+function AssignName({ assign, prefix }: AssignNameProps): React.JSX.Element {
   const concatenatedName = `${prefix || ''}${assign.name}`;
   const rawParts = concatenatedName.split('.');
   const parts = rawParts.map((part, i) => (

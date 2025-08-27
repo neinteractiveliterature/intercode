@@ -133,7 +133,7 @@ export type AdminOrderFormProps<T extends AdminOrderType> = {
   updateOrder: React.Dispatch<Partial<T>>;
 };
 
-function AdminOrderForm<T extends AdminOrderType>({ order, updateOrder }: AdminOrderFormProps<T>): JSX.Element {
+function AdminOrderForm<T extends AdminOrderType>({ order, updateOrder }: AdminOrderFormProps<T>): React.JSX.Element {
   const { t } = useTranslation();
 
   return (

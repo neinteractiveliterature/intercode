@@ -75,7 +75,10 @@ export type VisibilityDisclosureTextProps = {
   formTypeIdentifier: FormType;
 };
 
-export function VisibilityDisclosureText({ formItem, formTypeIdentifier }: VisibilityDisclosureTextProps): JSX.Element {
+export function VisibilityDisclosureText({
+  formItem,
+  formTypeIdentifier,
+}: VisibilityDisclosureTextProps): React.JSX.Element {
   const { t } = useTranslation();
 
   if (formItem.visibility === FormItemRole.Normal) {
@@ -99,7 +102,7 @@ export function VisibilityDisclosureCard({
   formItem,
   formTypeIdentifier,
   children,
-}: VisibilityDisclosureCardProps): JSX.Element {
+}: VisibilityDisclosureCardProps): React.JSX.Element {
   if (formItem.visibility === FormItemRole.Normal) {
     return <>{children}</>;
   }

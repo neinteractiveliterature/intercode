@@ -7,7 +7,7 @@ export type FreeTextItemChangeDisplayProps = {
   change: ParsedFormResponseChange<FreeTextFormItem>;
 };
 
-function FreeTextItemChangeDisplay({ formItem, change }: FreeTextItemChangeDisplayProps): JSX.Element {
+function FreeTextItemChangeDisplay({ formItem, change }: FreeTextItemChangeDisplayProps): React.JSX.Element {
   const { previous_value: before, new_value: after } = change;
 
   if (formItem.rendered_properties.format === 'markdown') {

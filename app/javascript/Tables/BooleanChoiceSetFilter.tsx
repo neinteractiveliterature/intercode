@@ -18,7 +18,7 @@ function getBooleanFilterValue(filterValue: unknown) {
 
 function BooleanChoiceSetFilter<TData extends Record<string, unknown>, TValue>(
   props: Omit<ChoiceSetFilterSingleProps<TData, TValue>, 'choices' | 'multiple'>,
-): JSX.Element {
+): React.JSX.Element {
   const { t } = useTranslation();
   return (
     <ChoiceSetFilter

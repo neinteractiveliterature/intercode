@@ -27,7 +27,7 @@ export type TeamMemberFormProps = {
   onChange: React.Dispatch<Partial<TeamMembersQueryData['convention']['event']['team_members'][0]>>;
 };
 
-function TeamMemberForm({ event, disabled, value, onChange }: TeamMemberFormProps): JSX.Element {
+function TeamMemberForm({ event, disabled, value, onChange }: TeamMemberFormProps): React.JSX.Element {
   const { t } = useTranslation();
   const setValue = useFunctionalStateUpdater(value, onChange);
   const [setDisplayTeamMember, setShowEmail, setReceiveConEmail, setReceiveSignupEmail] = usePropertySetters(

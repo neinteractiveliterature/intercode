@@ -18,7 +18,7 @@ function isEmptyObject<T extends Record<string, unknown>>(value: T | Record<stri
   return true;
 }
 
-function RegistrationPolicyItemChangeDisplay({ change }: RegistrationPolicyItemChangeDisplayProps): JSX.Element {
+function RegistrationPolicyItemChangeDisplay({ change }: RegistrationPolicyItemChangeDisplayProps): React.JSX.Element {
   const { buckets: prevBuckets, ...otherPrev } = change.previous_value || {};
   const { buckets: newBuckets, ...otherNew } = change.new_value || {};
   const combinedBucketKeys = uniq([

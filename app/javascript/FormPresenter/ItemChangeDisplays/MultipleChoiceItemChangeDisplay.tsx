@@ -6,7 +6,7 @@ export type MultipleChoiceItemChangeDisplayProps = {
   change: ParsedFormResponseChange<MultipleChoiceFormItem>;
 };
 
-function MultipleChoiceItemChangeDisplay({ change }: MultipleChoiceItemChangeDisplayProps): JSX.Element {
+function MultipleChoiceItemChangeDisplay({ change }: MultipleChoiceItemChangeDisplayProps): React.JSX.Element {
   const { previous_value: before, new_value: after } = change;
 
   if (Array.isArray(before) || Array.isArray(after)) {

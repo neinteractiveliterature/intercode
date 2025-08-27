@@ -10,7 +10,7 @@ export type EditEventHeaderProps = {
   dropEvent: () => void;
 };
 
-function EditEventHeader({ event, showDropButton, dropEvent }: EditEventHeaderProps): JSX.Element {
+function EditEventHeader({ event, showDropButton, dropEvent }: EditEventHeaderProps): React.JSX.Element {
   const { t } = useTranslation();
   const confirm = useConfirm();
 

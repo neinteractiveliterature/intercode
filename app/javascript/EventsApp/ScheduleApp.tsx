@@ -111,7 +111,7 @@ export const loader: LoaderFunction = async ({ params, request }) => {
   return { ...conventionDayLoaderResult, data } satisfies LoaderResult;
 };
 
-function ScheduleApp(): JSX.Element {
+function ScheduleApp(): React.JSX.Element {
   const { data } = useLoaderData() as LoaderResult;
   const { myProfile, currentAbility, conventionTimespan, siteMode, navigationBarRef } = useContext(AppRootContext);
   const { t } = useTranslation();

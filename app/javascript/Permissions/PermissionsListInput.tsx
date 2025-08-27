@@ -93,7 +93,7 @@ function PermissionsListInput({
   reset,
   header,
   readOnly,
-}: PermissionsListInputProps): JSX.Element {
+}: PermissionsListInputProps): React.JSX.Element {
   const { currentPermissions, grantPermission, revokePermission } = usePermissionsChangeSet({
     initialPermissions,
     changeSet,

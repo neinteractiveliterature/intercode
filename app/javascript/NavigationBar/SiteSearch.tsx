@@ -100,7 +100,7 @@ export type SiteSearchProps = {
   visibilityChangeComplete: (visible: boolean) => void;
 };
 
-function SiteSearch({ visible, setVisible, visibilityChangeComplete }: SiteSearchProps): JSX.Element {
+function SiteSearch({ visible, setVisible, visibilityChangeComplete }: SiteSearchProps): React.JSX.Element {
   const navigate = useNavigate();
   const [inputValue, setInputValue] = useState('');
   const [value, setValue] = useState(null);

@@ -1,4 +1,4 @@
-import { renderHook } from '@testing-library/react-hooks';
+import { renderHook } from '@testing-library/react';
 import { vi } from 'vitest';
 import useFormResponse from '../../../app/javascript/FormPresenter/useFormResponse';
 

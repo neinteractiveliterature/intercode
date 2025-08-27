@@ -21,7 +21,7 @@ export type SignupChangesTableExportButtonProps = Omit<
   'columnTransform'
 >;
 
-function SignupChangesTableExportButton({ ...props }: SignupChangesTableExportButtonProps): JSX.Element {
+function SignupChangesTableExportButton({ ...props }: SignupChangesTableExportButtonProps): React.JSX.Element {
   return <ReactTableExportButtonWithColumnTransform {...props} columnTransform={transformColumnIdForExport} />;
 }
 

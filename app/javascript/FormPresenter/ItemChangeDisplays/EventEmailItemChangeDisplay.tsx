@@ -7,7 +7,7 @@ export type EventEmailItemChangeDisplayProps = {
   change: ParsedFormResponseChange<EventEmailFormItem>;
 };
 
-function EventEmailItemChangeDisplay({ change }: EventEmailItemChangeDisplayProps): JSX.Element {
+function EventEmailItemChangeDisplay({ change }: EventEmailItemChangeDisplayProps): React.JSX.Element {
   const { previous_value: before, new_value: after } = change;
 
   return (

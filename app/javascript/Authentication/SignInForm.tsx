@@ -40,7 +40,7 @@ async function signIn(authenticityToken: string, email: string, password: string
   return response.url;
 }
 
-function SignInForm(): JSX.Element {
+function SignInForm(): React.JSX.Element {
   const { t } = useTranslation();
   const navigate = useNavigate();
   const {

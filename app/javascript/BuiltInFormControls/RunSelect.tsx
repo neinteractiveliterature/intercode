@@ -24,7 +24,7 @@ type RunSelectProps = {
   };
 };
 
-function RunSelect({ event, ...otherProps }: RunSelectProps): JSX.Element {
+function RunSelect({ event, ...otherProps }: RunSelectProps): React.JSX.Element {
   const { timezoneName } = useContext(AppRootContext);
   const formatRunTimespan = useFormatRunTimespan();
   if (!event) {

@@ -19,7 +19,7 @@ export type AppRootContextValue = {
   hasOAuthApplications: boolean;
   language: string;
   myProfile?: NonNullable<AppRootQueryData['convention']>['my_profile'];
-  navigationBarRef: RefObject<HTMLElement>;
+  navigationBarRef: RefObject<HTMLElement | null>;
   rootSiteName?: string | null;
   signupMode?: SignupMode;
   signupAutomationMode?: SignupAutomationMode;

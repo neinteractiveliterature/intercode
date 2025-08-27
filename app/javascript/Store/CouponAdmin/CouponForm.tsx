@@ -50,7 +50,7 @@ export type CouponFormProps<T extends Omit<AdminCouponFieldsFragment, 'id'>> = {
 function CouponForm<T extends Omit<AdminCouponFieldsFragment, 'id'>>({
   value,
   onChange,
-}: CouponFormProps<T>): JSX.Element {
+}: CouponFormProps<T>): React.JSX.Element {
   const { t } = useTranslation();
   const { defaultCurrencyCode } = useContext(AppRootContext);
   const [setCode, setFixedAmount, setPercentDiscount, setProvidesProduct, setExpiresAt, setUsageLimit] =

@@ -6,7 +6,7 @@ import { NamedRoute } from '../AppRouter';
 import { SingleOrganizationLoaderResult } from './loaders';
 import NamedRouteBreadcrumbItem from '../Breadcrumbs/NamedRouteBreadcrumbItem';
 
-function OrganizationAdmin(): JSX.Element {
+function OrganizationAdmin(): React.JSX.Element {
   const organization = useRouteLoaderData(NamedRoute.Organization) as SingleOrganizationLoaderResult | undefined;
   const authorizationWarning = useAuthorizationRequired('can_read_organizations');
   if (authorizationWarning) return authorizationWarning;

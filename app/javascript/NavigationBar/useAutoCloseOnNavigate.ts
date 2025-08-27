@@ -10,7 +10,7 @@ export default function useAutoCloseOnNavigate(
 ): void {
   const location = useLocation();
   const { visible: authenticationModalVisible } = useContext(AuthenticationModalContext);
-  const prevLocation = useRef<LocationType>();
+  const prevLocation = useRef<LocationType>(undefined);
 
   useEffect(() => {
     if (shouldAutoClose == null || (prevLocation.current && shouldAutoClose(prevLocation.current, location))) {

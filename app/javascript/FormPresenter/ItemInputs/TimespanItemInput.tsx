@@ -10,7 +10,7 @@ import { VisibilityDisclosureCard } from './PermissionDisclosures';
 
 export type TimespanItemInputProps = CommonFormItemInputProps<TimespanFormItem>;
 
-function TimespanItemInput(props: TimespanItemInputProps): JSX.Element {
+function TimespanItemInput(props: TimespanItemInputProps): React.JSX.Element {
   const { formItem, formTypeIdentifier, value: uncheckedValue, valueInvalid, onChange, onInteract } = props;
   const value = useMemo(() => uncheckedValue ?? null, [uncheckedValue]);
   const [unit, setUnit] = useState(() => getUnitForValue(value).name);

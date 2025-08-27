@@ -18,7 +18,7 @@ function ColumnSelector<TData>({
   possibleColumns,
   columnVisibility,
   setColumnVisibility,
-}: ColumnSelectorProps<TData>): JSX.Element {
+}: ColumnSelectorProps<TData>): React.JSX.Element {
   const { t } = useTranslation();
 
   const selectableColumns = useMemo(

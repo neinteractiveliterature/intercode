@@ -33,7 +33,7 @@ function CouponEffectCell({ getValue }: CellContext<CouponType, CouponType>) {
   return describeCoupon(getValue());
 }
 
-function CouponAdminTable(): JSX.Element {
+function CouponAdminTable(): React.JSX.Element {
   const { t } = useTranslation();
   const navigate = useNavigate();
 

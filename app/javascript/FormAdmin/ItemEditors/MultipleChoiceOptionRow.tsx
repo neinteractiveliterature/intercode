@@ -32,7 +32,7 @@ function MultipleChoiceOptionRow({
   choiceChanged,
   nonUnique,
   deleteChoice,
-}: MultipleChoiceOptionRowProps): JSX.Element {
+}: MultipleChoiceOptionRowProps): React.JSX.Element {
   const confirm = useConfirm();
   const { isDragging, setNodeRef, attributes, listeners, transform, transition } = useSortable({
     id: choice.generatedId.toString(),

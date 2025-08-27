@@ -10,11 +10,11 @@ export type UseCollapseResult = {
   collapseProps: HTMLAttributes<HTMLElement>;
 };
 
-export default function useCollapse<T extends HTMLElement>(elementRef: React.RefObject<T>): UseCollapseResult {
+export default function useCollapse<T extends HTMLElement | null>(elementRef: React.RefObject<T>): UseCollapseResult {
   const [collapsed, setCollapsed] = useState(true);
   const [prevCollapsed, setPrevCollapsed] = useState(true);
   const [collapsing, setCollapsing] = useState(false);
-  const collapseTimeoutId = useRef<number>();
+  const collapseTimeoutId = useRef<number>(undefined);
   const [heightOverride, setHeightOverride] = useState<number>();
 
   const toggleCollapsed = () => {

@@ -41,7 +41,7 @@ export const loader: LoaderFunction = async ({ params: { id } }) => {
   return data;
 };
 
-function EditEmailRouteModal(): JSX.Element {
+function EditEmailRouteModal(): React.JSX.Element {
   const data = useLoaderData() as RootSiteSingleEmailRouteQueryData;
   const initialEmailRoute = data.email_route;
   const confirm = useConfirm();

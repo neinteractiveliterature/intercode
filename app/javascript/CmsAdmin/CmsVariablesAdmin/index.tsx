@@ -13,7 +13,7 @@ export const loader: LoaderFunction = async () => {
   return data;
 };
 
-function CmsVariablesAdmin(): JSX.Element {
+function CmsVariablesAdmin(): React.JSX.Element {
   const data = useLoaderData() as CmsVariablesQueryData;
   const [addingVariables, setAddingVariables] = useState<AddingVariable[]>([]);
 
