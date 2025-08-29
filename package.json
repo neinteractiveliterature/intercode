@@ -183,7 +183,7 @@
     "@types/punycode": "2.1.4",
     "@types/qs": "^6",
     "@types/rails__activestorage": "7.1.1",
-    "@types/react-dom": "19.1.8",
+    "@types/react-dom": "19.1.9",
     "@types/react-transition-group": "4.4.12",
     "@typescript-eslint/eslint-plugin": "8.40.0",
     "@typescript-eslint/parser": "8.40.0",
