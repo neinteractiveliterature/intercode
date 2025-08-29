@@ -7679,7 +7679,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-transition-group@npm:4.4.12, @types/react-transition-group@npm:^4.4.0":
+"@types/react-transition-group@npm:^4.4.0":
   version: 4.4.12
   resolution: "@types/react-transition-group@npm:4.4.12"
   peerDependencies:
@@ -20710,7 +20710,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-transition-group@npm:4.4.5, react-transition-group@npm:^4.3.0":
+"react-transition-group@npm:^4.3.0":
   version: 4.4.5
   resolution: "react-transition-group@npm:4.4.5"
   dependencies:
@@ -20722,6 +20722,16 @@ __metadata:
     react: ">=16.6.0"
     react-dom: ">=16.6.0"
   checksum: 10c0/2ba754ba748faefa15f87c96dfa700d5525054a0141de8c75763aae6734af0740e77e11261a1e8f4ffc08fd9ab78510122e05c21c2d79066c38bb6861a886c82
+  languageName: node
+  linkType: hard
+
+"react-transition-state@npm:^2.3.1":
+  version: 2.3.1
+  resolution: "react-transition-state@npm:2.3.1"
+  peerDependencies:
+    react: ">=16.8.0"
+    react-dom: ">=16.8.0"
+  checksum: 10c0/145f20e45c53d570f9db5fe749e0fd794b62bdf464c67c594c454df44f31fa58c16ccec705f9fdccf4c5250a309e4f7da5bd2e85cd686ba52d6b79e1c22b811f
   languageName: node
   linkType: hard
 
@@ -21558,7 +21568,6 @@ __metadata:
     "@types/react-dom": "npm:19.1.9"
     "@types/react-google-recaptcha": "npm:2.1.9"
     "@types/react-onclickoutside": "npm:6.7.10"
-    "@types/react-transition-group": "npm:4.4.12"
     "@types/source-map-support": "npm:0.5.10"
     "@types/tinycolor2": "npm:1.4.6"
     "@types/uuid": "npm:10.0.0"
@@ -21652,7 +21661,7 @@ __metadata:
     react-router: "npm:7.7.1"
     react-select: "npm:5.10.2"
     react-test-renderer: "npm:19.1.1"
-    react-transition-group: "npm:4.4.5"
+    react-transition-state: "npm:^2.3.1"
     react-waypoint: "npm:10.3.0"
     regenerator-runtime: "npm:0.14.1"
     require-from-string: "npm:2.0.2"
