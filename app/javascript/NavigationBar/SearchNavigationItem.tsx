@@ -1,15 +1,16 @@
 import { useState, useCallback, useContext } from 'react';
-import { CSSTransition } from 'react-transition-group';
 import { useTranslation } from 'react-i18next';
 
 import SiteSearch from './SiteSearch';
 import NavigationBarContext from './NavigationBarContext';
 import searchStyles from 'styles/search.module.scss';
+import { useTransitionState } from 'react-transition-state';
 
 function SearchNavigationItem(): React.JSX.Element {
   const { t } = useTranslation();
   const [visible, setVisible] = useState(false);
   const { setHideBrand, setHideNavItems } = useContext(NavigationBarContext);
+  const [transitionState, toggleTransition] = useTransitionState({ timeout: 400, initialEntered: !visible });
 
   const setVisibleWithHiding = useCallback(
     (newVisible: boolean) => {
@@ -18,8 +19,9 @@ function SearchNavigationItem(): React.JSX.Element {
         setHideBrand(true);
         setHideNavItems(true);
       }
+      toggleTransition(!newVisible);
     },
-    [setHideBrand, setHideNavItems],
+    [setHideBrand, setHideNavItems, toggleTransition],
   );
 
   const visibilityChangeComplete = useCallback(
@@ -39,25 +41,14 @@ function SearchNavigationItem(): React.JSX.Element {
         visible={visible}
         visibilityChangeComplete={visibilityChangeComplete}
       />
-      <CSSTransition
-        timeout={400}
-        in={!visible}
-        classNames={{
-          enterActive: searchStyles.siteSearchNavigationButtonEnterActive,
-          enterDone: searchStyles.siteSearchNavigationButtonEnterDone,
-          exitActive: searchStyles.siteSearchNavigationButtonExitActive,
-          exitDone: searchStyles.siteSearchNavigationButtonExitDone,
-        }}
+      <button
+        className={`btn btn-link nav-link text-end site-search-navigation-button ${searchStyles.siteSearchNavigationButton} ${transitionState.status}`}
+        type="button"
+        onClick={() => setVisibleWithHiding(true)}
       >
-        <button
-          className={`btn btn-link nav-link text-end site-search-navigation-button ${searchStyles.siteSearchNavigationButton}`}
-          type="button"
-          onClick={() => setVisibleWithHiding(true)}
-        >
-          <i className="bi-search" />
-          <span className="visually-hidden">{t('navigation.search.buttonText')}</span>
-        </button>
-      </CSSTransition>
+        <i className="bi-search" />
+        <span className="visually-hidden">{t('navigation.search.buttonText')}</span>
+      </button>
     </div>
   );
 }

@@ -3,7 +3,7 @@ import { components, DropdownIndicatorProps, GroupBase, MenuProps } from 'react-
 import AsyncSelect from 'react-select/async';
 import debounce from 'debounce-promise';
 import { useNavigate } from 'react-router';
-import { CSSTransition } from 'react-transition-group';
+import { useTransitionState } from 'react-transition-state';
 import { Search, ExactWordIndexStrategy, StemmingTokenizer, SimpleTokenizer } from 'js-search';
 import { stemmer } from 'porter-stemmer';
 import { v4 as uuidv4 } from 'uuid';
@@ -106,6 +106,22 @@ function SiteSearch({ visible, setVisible, visibilityChangeComplete }: SiteSearc
   const [value, setValue] = useState(null);
   const adminNavigationItems = useAdminNavigationItems();
   const eventsNavigationItems = useEventsNavigationItems();
+  const [transitionState, toggleTransition] = useTransitionState({
+    timeout: 400,
+    onStateChange: (event) => {
+      if (event.current.status === 'entered') {
+        focusSelect();
+        visibilityChangeComplete(true);
+      }
+      if (event.current.status === 'exited') {
+        visibilityChangeComplete(false);
+      }
+    },
+  });
+
+  useEffect(() => {
+    toggleTransition(visible);
+  }, [visible, toggleTransition]);
 
   const navigationItemsWithId = useMemo(
     () =>
@@ -197,83 +213,61 @@ function SiteSearch({ visible, setVisible, visibilityChangeComplete }: SiteSearc
     }
   }, []);
 
-  const entered = useCallback(() => {
-    focusSelect();
-    visibilityChangeComplete(true);
-  }, [focusSelect, visibilityChangeComplete]);
-
-  const exited = useCallback(() => {
-    visibilityChangeComplete(false);
-  }, [visibilityChangeComplete]);
-
   return (
-    <CSSTransition
-      timeout={400}
-      in={visible}
-      classNames={{
-        enterActive: searchStyles.siteSearchEnterActive,
-        enterDone: searchStyles.siteSearchEnterDone,
-        exitActive: searchStyles.siteSearchExitActive,
-        exitDone: searchStyles.siteSearchExitDone,
+    <AsyncSelect<SiteSearchOptionType>
+      ref={selectRef}
+      placeholder=""
+      className={`site-search ${searchStyles.siteSearch} ${transitionState.status}`}
+      inputValue={inputValue}
+      value={value}
+      onInputChange={(newInputValue) => {
+        if (visible) {
+          setInputValue(newInputValue);
+        }
       }}
-      onEntered={entered}
-      onExited={exited}
-    >
-      <AsyncSelect<SiteSearchOptionType>
-        ref={selectRef}
-        placeholder=""
-        className={`site-search ${searchStyles.siteSearch}`}
-        inputValue={inputValue}
-        value={value}
-        onInputChange={(newInputValue) => {
-          if (visible) {
-            setInputValue(newInputValue);
-          }
-        }}
-        onKeyDown={(event) => {
-          if (event.key === 'Escape') {
-            close();
-          }
-        }}
-        styles={{
-          control: (baseProps) => ({
-            ...baseProps,
-            borderRadius: (baseProps.minHeight as number) / 2,
-            paddingLeft: (baseProps.minHeight as number) / 6,
-          }),
-          indicatorSeparator: () => ({}),
-          indicatorsContainer: (baseProps) => ({
-            ...baseProps,
-            position: 'absolute',
-            right: '2px',
-          }),
-        }}
-        components={{
-          DropdownIndicator: SearchDropdownIndicator,
-          Menu: SearchMenu,
-        }}
-        loadOptions={loadOptions}
-        onChange={optionSelected}
-        onBlur={close}
-        formatOptionLabel={(entry: SiteSearchOptionType) => (
-          <>
-            <div className="fw-bold mb-1">
-              <i className={getSearchableModelIcon(entry.model)} /> {entry.title}
-            </div>
-            <div
-              className="small"
-              style={{
-                display: '-webkit-box',
-                WebkitBoxOrient: 'vertical',
-                WebkitLineClamp: 2,
-                overflow: 'hidden',
-              }}
-              dangerouslySetInnerHTML={{ __html: entry.highlight ?? '' }}
-            />
-          </>
-        )}
-      />
-    </CSSTransition>
+      onKeyDown={(event) => {
+        if (event.key === 'Escape') {
+          close();
+        }
+      }}
+      styles={{
+        control: (baseProps) => ({
+          ...baseProps,
+          borderRadius: (baseProps.minHeight as number) / 2,
+          paddingLeft: (baseProps.minHeight as number) / 6,
+        }),
+        indicatorSeparator: () => ({}),
+        indicatorsContainer: (baseProps) => ({
+          ...baseProps,
+          position: 'absolute',
+          right: '2px',
+        }),
+      }}
+      components={{
+        DropdownIndicator: SearchDropdownIndicator,
+        Menu: SearchMenu,
+      }}
+      loadOptions={loadOptions}
+      onChange={optionSelected}
+      onBlur={close}
+      formatOptionLabel={(entry: SiteSearchOptionType) => (
+        <>
+          <div className="fw-bold mb-1">
+            <i className={getSearchableModelIcon(entry.model)} /> {entry.title}
+          </div>
+          <div
+            className="small"
+            style={{
+              display: '-webkit-box',
+              WebkitBoxOrient: 'vertical',
+              WebkitLineClamp: 2,
+              overflow: 'hidden',
+            }}
+            dangerouslySetInnerHTML={{ __html: entry.highlight ?? '' }}
+          />
+        </>
+      )}
+    />
   );
 }
 

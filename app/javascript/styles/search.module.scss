@@ -17,27 +17,27 @@
     flex: 1;
   }
 }
-.site-search,
-.site-search-exit-done {
+.site-search {
   opacity: 0;
   flex: 0;
-}
-.site-search-enter-active {
-  animation-name: site-search-fade-and-expand;
-  animation-duration: 400ms;
-  animation-fill-mode: forwards;
-  animation-timing-function: ease-out;
-}
-.site-search-enter-done {
-  opacity: 1;
-  flex: 1;
-}
-.site-search-exit-active {
-  animation-name: site-search-fade-and-expand;
-  animation-duration: 400ms;
-  animation-direction: reverse;
-  animation-fill-mode: forwards;
-  animation-timing-function: ease-out;
+
+  &:global(.entering) {
+    animation-name: site-search-fade-and-expand;
+    animation-duration: 400ms;
+    animation-fill-mode: forwards;
+    animation-timing-function: ease-out;
+  }
+  &:global(.entered) {
+    opacity: 1;
+    flex: 1;
+  }
+  &:global(.exiting) {
+    animation-name: site-search-fade-and-expand;
+    animation-duration: 400ms;
+    animation-direction: reverse;
+    animation-fill-mode: forwards;
+    animation-timing-function: ease-out;
+  }
 }
 
 @keyframes site-search-navigation-button-fade {
@@ -52,29 +52,27 @@
   }
 }
 
-.site-search-navigation-button,
-.site-search-navigation-button-enter-done {
+.site-search-navigation-button {
   position: absolute;
   right: 10px;
   top: -3px;
   opacity: 1;
-}
-@include media-breakpoint-up(md) {
-  .site-search-navigation-button,
-  .site-search-navigation-button-enter-done {
+
+  @include media-breakpoint-up(md) {
     right: 2px;
   }
-}
-.site-search-navigation-button-enter-active,
-.site-search-navigation-button-exit-active {
-  animation-name: site-search-navigation-button-fade;
-  animation-duration: 400ms;
-  animation-fill-mode: forwards;
-  animation-timing-function: ease-out;
-}
-.site-search-navigation-button-exit-active {
-  animation-direction: reverse;
-}
-.site-search-navigation-button-exit-done {
-  opacity: 0;
+
+  &:global(.entering), &:global(.exiting) {
+    animation-name: site-search-navigation-button-fade;
+    animation-duration: 400ms;
+    animation-fill-mode: forwards;
+    animation-timing-function: ease-out;
+  }
+  &:global(.exiting) {
+    animation-direction: reverse;
+  }
+  &:global(.exited) {
+    opacity: 0;
+    pointer-events: none;
+  }
 }
