@@ -1326,6 +1326,11 @@
     },
     "signupRounds": {
       "addNewSignupRound": "Add new signup round",
+      "automationActionLabel": "When this round opens…",
+      "automationActions": {
+        "none": "Do nothing",
+        "executeRankedChoice": "Execute ranked choice signups based on attendee selections"
+      },
       "errors": {
         "startTimeRequired": "Start time is required."
       },

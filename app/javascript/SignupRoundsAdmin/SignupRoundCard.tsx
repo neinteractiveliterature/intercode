@@ -1,6 +1,6 @@
 import { useContext, useState, useMemo } from 'react';
-import { ParsedSignupRound } from '../SignupRoundUtils';
-import { RankedChoiceOrder, SignupAutomationMode } from '../graphqlTypes.generated';
+import { MaximumEventSignupsValue, ParsedSignupRound } from '../SignupRoundUtils';
+import { RankedChoiceOrder, SignupAutomationMode, SignupRoundAutomationAction } from '../graphqlTypes.generated';
 import { useTranslation } from 'react-i18next';
 import MaximumEventSignupsInput from './MaximumEventSignupsInput';
 import {
@@ -16,6 +16,18 @@ import { useAppDateTimeFormat } from '../TimeUtils';
 import { DateTime } from 'luxon';
 import { Link, useFetcher } from 'react-router';
 import { describeSignupRound } from './describeSignupRound';
+
+function maximumEventSignupsAsNumber(value: MaximumEventSignupsValue): number {
+  switch (value) {
+    case 'not_now':
+    case 'not_yet':
+      return 0;
+    case 'unlimited':
+      return Infinity;
+    default:
+      return value;
+  }
+}
 
 type SignupRoundCardProps = {
   rounds: ParsedSignupRound<SignupRoundsAdminQueryData['convention']['signup_rounds'][number]>[];
@@ -36,24 +48,38 @@ function SignupRoundCard({ rounds, roundIndex }: SignupRoundCardProps) {
   const unsavedChanges = useMemo(
     () =>
       editingRound.maximum_event_signups !== round.maximum_event_signups ||
+      editingRound.automation_action != round.automation_action ||
       editingRound.ranked_choice_order !== round.ranked_choice_order,
     [editingRound, round],
   );
 
-  const prevRound = roundIndex > 0 ? rounds[roundIndex - 1] : undefined;
+  const rankedChoiceSignupsAsNumbers = useMemo(() => {
+    return rounds.map((round) => {
+      if (round.automation_action === SignupRoundAutomationAction.ExecuteRankedChoice) {
+        return maximumEventSignupsAsNumber(round.maximum_event_signups ?? 'not_yet');
+      } else {
+        return undefined;
+      }
+    });
+  }, [rounds]);
   const roundDescription = useMemo(() => describeSignupRound(rounds, roundIndex, t), [rounds, roundIndex, t]);
   const increasedMaximumSignups = useMemo(() => {
-    return (
-      prevRound &&
-      ((round.maximum_event_signups === 'unlimited' && prevRound.maximum_event_signups !== 'unlimited') ||
-        (typeof round.maximum_event_signups === 'number' &&
-          typeof prevRound.maximum_event_signups === 'number' &&
-          round.maximum_event_signups > prevRound.maximum_event_signups) ||
-        (round.maximum_event_signups !== 'not_now' &&
-          round.maximum_event_signups !== 'not_yet' &&
-          (prevRound.maximum_event_signups === 'not_now' || prevRound.maximum_event_signups === 'not_yet')))
-    );
-  }, [prevRound, round.maximum_event_signups]);
+    if (round.maximum_event_signups == null) {
+      return false;
+    }
+
+    for (let i = roundIndex - 1; i > 0; i--) {
+      const roundSignupsAsNumber = rankedChoiceSignupsAsNumbers[i];
+      if (
+        roundSignupsAsNumber != null &&
+        roundSignupsAsNumber >= maximumEventSignupsAsNumber(round.maximum_event_signups)
+      ) {
+        return false;
+      }
+    }
+
+    return true;
+  }, [rankedChoiceSignupsAsNumbers, roundIndex, round.maximum_event_signups]);
 
   return (
     <fetcher.Form action={`./${round.id}`} method="PATCH" preventScrollReset>
@@ -82,6 +108,23 @@ function SignupRoundCard({ rounds, roundIndex }: SignupRoundCardProps) {
           </div>
           {signupAutomationMode === SignupAutomationMode.RankedChoice && (
             <>
+              <BootstrapFormSelect
+                label={t('signups.signupRounds.automationActionLabel')}
+                name="automation_action"
+                value={editingRound.automation_action ?? undefined}
+                onValueChange={(newValue) =>
+                  setEditingRound((prevEditingRound) => {
+                    const newAction =
+                      newValue === SignupRoundAutomationAction.ExecuteRankedChoice ? newValue : undefined;
+                    return { ...prevEditingRound, automation_action: newAction };
+                  })
+                }
+              >
+                <option value="">{t('signups.signupRounds.automationActions.none')}</option>
+                <option value={SignupRoundAutomationAction.ExecuteRankedChoice}>
+                  {t('signups.signupRounds.automationActions.executeRankedChoice')}
+                </option>
+              </BootstrapFormSelect>
               {increasedMaximumSignups && (
                 <BootstrapFormSelect
                   label={t('signups.rankedChoiceOrderLabel')}

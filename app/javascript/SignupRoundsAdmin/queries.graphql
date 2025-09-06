@@ -1,6 +1,7 @@
 fragment SignupRoundFields on SignupRound {
   id
   maximum_event_signups
+  automation_action
   ranked_choice_order
   start
   executed_at

@@ -7526,6 +7526,11 @@ An input for creating or modifying SignupRounds.
 """
 input SignupRoundInput {
   """
+  The action to take when this signup round opens.
+  """
+  automation_action: SignupRoundAutomationAction
+
+  """
   The maximum number of signups allowed during this signup round
   """
   maximum_event_signups: String

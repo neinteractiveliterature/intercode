@@ -5871,6 +5871,8 @@ export enum SignupRoundAutomationAction {
 
 /** An input for creating or modifying SignupRounds. */
 export type SignupRoundInput = {
+  /** The action to take when this signup round opens. */
+  automation_action?: InputMaybe<SignupRoundAutomationAction>;
   /** The maximum number of signups allowed during this signup round */
   maximum_event_signups?: InputMaybe<Scalars['String']['input']>;
   /** For ranked-choice conventions, the order to execute signup choices in */

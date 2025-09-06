@@ -8,6 +8,7 @@ import { ErrorDisplay, FormGroupWithLabel } from '@neinteractiveliterature/litfo
 import DateTimeInput from '../BuiltInFormControls/DateTimeInput';
 import MaximumEventSignupsInput from './MaximumEventSignupsInput';
 import { ApolloError } from '@apollo/client';
+import { SignupAutomationMode, SignupRoundAutomationAction } from 'graphqlTypes.generated';
 
 type CreateNewSignupRoundFormProps = {
   onCancel: () => void;
@@ -33,6 +34,15 @@ export default function CreateNewSignupRoundForm({ onCancel }: CreateNewSignupRo
     <fetcher.Form action="/signup_rounds" method="POST">
       <h6>{t('signups.signupRounds.addNewSignupRound')}</h6>
       <input type="hidden" name="convention_id" value={convention?.id} />
+      <input
+        type="hidden"
+        name="automation_action"
+        value={
+          convention?.signup_automation_mode === SignupAutomationMode.RankedChoice
+            ? SignupRoundAutomationAction.ExecuteRankedChoice
+            : ''
+        }
+      />
 
       <FormGroupWithLabel label={t('signups.signupRounds.start')}>
         {(id) => (
