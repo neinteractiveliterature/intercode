@@ -7440,6 +7440,11 @@ signup automation.
 """
 type SignupRound {
   """
+  The action to take when this signup round opens.
+  """
+  automation_action: SignupRoundAutomationAction
+
+  """
   The convention this SignupRound is in.
   """
   convention: Convention!
@@ -7504,6 +7509,16 @@ type SignupRound {
   When this SignupRound was last modified.
   """
   updated_at: Date!
+}
+
+"""
+An action to take when a signup round opens.
+"""
+enum SignupRoundAutomationAction {
+  """
+  Execute any pending ranked choices as allowed by this signup round
+  """
+  EXECUTE_RANKED_CHOICE
 }
 
 """

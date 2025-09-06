@@ -1,6 +1,7 @@
 SET statement_timeout = 0;
 SET lock_timeout = 0;
 SET idle_in_transaction_session_timeout = 0;
+SET transaction_timeout = 0;
 SET client_encoding = 'UTF8';
 SET standard_conforming_strings = on;
 SELECT pg_catalog.set_config('search_path', '', false);
@@ -8,6 +9,13 @@ SET check_function_bodies = false;
 SET xmloption = content;
 SET client_min_messages = warning;
 SET row_security = off;
+
+--
+-- Name: public; Type: SCHEMA; Schema: -; Owner: -
+--
+
+-- *not* creating schema, since initdb creates it
+
 
 --
 -- Name: pg_trgm; Type: EXTENSION; Schema: -; Owner: -
@@ -2656,6 +2664,7 @@ CREATE TABLE public.signup_rounds (
     updated_at timestamp(6) without time zone NOT NULL,
     ranked_choice_order text,
     executed_at timestamp without time zone,
+    automation_action text,
     CONSTRAINT chk_rails_4c92d587c4 CHECK (((maximum_event_signups = ANY (ARRAY['not_yet'::text, 'not_now'::text, 'unlimited'::text])) OR ((maximum_event_signups)::integer >= 1)))
 );
 
@@ -6125,6 +6134,7 @@ ALTER TABLE ONLY public.cms_files_pages
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20250906190727'),
 ('20250324175507'),
 ('20250324172627'),
 ('20250203173940'),

@@ -4,6 +4,7 @@
 # Table name: signup_rounds
 #
 #  id                    :bigint           not null, primary key
+#  automation_action     :text
 #  executed_at           :datetime
 #  maximum_event_signups :text             not null
 #  ranked_choice_order   :text
@@ -24,6 +25,11 @@
 
 FactoryBot.define do
   factory :signup_round do
-    maximum_event_signups { 'unlimited' }
+    convention
+    maximum_event_signups { "unlimited" }
+    start do
+      max_start = convention.signup_rounds.map(&:start).max
+      max_start ? max_start + 1.day : convention.starts_at - 30.days
+    end
   end
 end

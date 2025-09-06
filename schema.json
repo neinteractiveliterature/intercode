@@ -33115,6 +33115,18 @@
           "possibleTypes": null,
           "fields": [
             {
+              "name": "automation_action",
+              "description": "The action to take when this signup round opens.",
+              "type": {
+                "kind": "ENUM",
+                "name": "SignupRoundAutomationAction",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
               "name": "convention",
               "description": "The convention this SignupRound is in.",
               "type": {
@@ -33306,6 +33318,23 @@
           ],
           "inputFields": null,
           "enumValues": null
+        },
+        {
+          "kind": "ENUM",
+          "name": "SignupRoundAutomationAction",
+          "description": "An action to take when a signup round opens.",
+          "interfaces": null,
+          "possibleTypes": null,
+          "fields": null,
+          "inputFields": null,
+          "enumValues": [
+            {
+              "name": "EXECUTE_RANKED_CHOICE",
+              "description": "Execute any pending ranked choices as allowed by this signup round",
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ]
         },
         {
           "kind": "INPUT_OBJECT",

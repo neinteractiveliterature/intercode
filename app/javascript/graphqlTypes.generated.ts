@@ -5821,6 +5821,8 @@ export type SignupRequestsPagination = PaginationInterface & {
  */
 export type SignupRound = {
   __typename: 'SignupRound';
+  /** The action to take when this signup round opens. */
+  automation_action?: Maybe<SignupRoundAutomationAction>;
   /** The convention this SignupRound is in. */
   convention: Convention;
   /** When this SignupRound was first created. */
@@ -5860,6 +5862,12 @@ export type SignupRoundRanked_Choice_Decisions_PaginatedArgs = {
   per_page?: InputMaybe<Scalars['Int']['input']>;
   sort?: InputMaybe<Array<SortInput>>;
 };
+
+/** An action to take when a signup round opens. */
+export enum SignupRoundAutomationAction {
+  /** Execute any pending ranked choices as allowed by this signup round */
+  ExecuteRankedChoice = 'EXECUTE_RANKED_CHOICE'
+}
 
 /** An input for creating or modifying SignupRounds. */
 export type SignupRoundInput = {
