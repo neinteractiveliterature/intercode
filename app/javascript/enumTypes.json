@@ -951,6 +951,23 @@
       }
     ]
   },
+  "SignupRoundAutomationAction": {
+    "kind": "ENUM",
+    "name": "SignupRoundAutomationAction",
+    "description": "An action to take when a signup round opens.",
+    "interfaces": null,
+    "possibleTypes": null,
+    "fields": null,
+    "inputFields": null,
+    "enumValues": [
+      {
+        "name": "EXECUTE_RANKED_CHOICE",
+        "description": "Execute any pending ranked choices as allowed by this signup round",
+        "isDeprecated": false,
+        "deprecationReason": null
+      }
+    ]
+  },
   "SignupState": {
     "kind": "ENUM",
     "name": "SignupState",

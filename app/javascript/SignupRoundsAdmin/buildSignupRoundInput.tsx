@@ -1,5 +1,5 @@
 import { ParsedSignupRound } from '../SignupRoundUtils';
-import { RankedChoiceOrder, SignupRoundInput } from '../graphqlTypes.generated';
+import { RankedChoiceOrder, SignupRoundAutomationAction, SignupRoundInput } from '../graphqlTypes.generated';
 import { SignupRoundsAdminQueryData } from './queries.generated';
 
 export function buildSignupRoundInput(
@@ -16,8 +16,10 @@ export function buildSignupRoundInput(
 }
 
 export function buildSignupRoundInputFromFormData(formData: FormData): SignupRoundInput {
+  const automationActionValue = formData.get('automation_action')?.toString();
   return {
     maximum_event_signups: formData.get('maximum_event_signups')?.toString(),
+    automation_action: (automationActionValue || null) as SignupRoundAutomationAction | null,
     ranked_choice_order: formData.get('ranked_choice_order')?.toString() as RankedChoiceOrder | undefined,
     start: formData.get('start')?.toString(),
   };

@@ -10,6 +10,9 @@ module Types
       signup automation.
     MARKDOWN
 
+    field :automation_action, Types::SignupRoundAutomationAction, null: true do
+      description "The action to take when this signup round opens."
+    end
     field :convention, Types::ConventionType, null: false, description: "The convention this SignupRound is in."
     field :created_at, Types::DateType, null: false, description: "When this SignupRound was first created."
     field :executed_at, Types::DateType do

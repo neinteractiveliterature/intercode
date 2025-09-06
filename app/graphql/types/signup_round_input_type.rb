@@ -1,6 +1,9 @@
 class Types::SignupRoundInputType < Types::BaseInputObject
   description "An input for creating or modifying SignupRounds."
 
+  argument :automation_action, Types::SignupRoundAutomationAction, required: false, camelize: false do
+    description "The action to take when this signup round opens."
+  end
   argument :maximum_event_signups,
            String,
            required: false,
