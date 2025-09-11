@@ -32,7 +32,7 @@
     "@apollo/client": "3.14.0",
     "@breezehr/currency-codes": "^2.2.1",
     "@codemirror/commands": "^6.7.1",
-    "@codemirror/lang-html": "6.4.9",
+    "@codemirror/lang-html": "6.4.10",
     "@codemirror/lang-json": "6.0.2",
     "@codemirror/lang-markdown": "6.3.4",
     "@codemirror/language": "6.11.3",
