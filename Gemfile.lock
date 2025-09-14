@@ -616,8 +616,8 @@ GEM
       rbs
       syntax_tree (>= 2.0.1)
     temple (0.10.3)
-    term-ansicolor (1.11.2)
-      tins (~> 1.0)
+    term-ansicolor (1.11.3)
+      tins (~> 1)
     thor (1.4.0)
     tilt (2.3.0)
     timeout (0.4.3)
