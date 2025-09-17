@@ -223,7 +223,7 @@ GEM
       rails
     devise-encryptable (0.2.0)
       devise (>= 2.1.0)
-    docile (1.4.0)
+    docile (1.4.1)
     domain_prefix (1.0.20241203)
       json
       simpleidn (>= 0.0.5)
@@ -515,7 +515,7 @@ GEM
       railties (>= 5.2)
     reverse_markdown (3.0.0)
       nokogiri
-    rexml (3.4.2)
+    rexml (3.4.4)
     rollbar (3.6.2)
     rouge (3.26.1)
     rubocop (1.79.2)
@@ -581,10 +581,10 @@ GEM
       docile (~> 1.1)
       simplecov-html (~> 0.11)
       simplecov_json_formatter (~> 0.1)
-    simplecov-cobertura (2.1.0)
+    simplecov-cobertura (3.1.0)
       rexml
       simplecov (~> 0.19)
-    simplecov-html (0.12.3)
+    simplecov-html (0.13.2)
     simplecov_json_formatter (0.1.4)
     simpleidn (0.2.3)
     skylight (6.0.4)
