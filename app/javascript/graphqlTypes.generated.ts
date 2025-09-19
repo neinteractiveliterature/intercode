@@ -6821,16 +6821,29 @@ export type UpdateUserConProfilePayload = {
   user_con_profile: UserConProfile;
 };
 
+/**
+ * A user on this instance of Intercode.  Users exist across all conventions.  For each convention a user has logged
+ * into, they will have an attached UserConProfile.
+ */
 export type User = {
   __typename: 'User';
+  /** The user's email address */
   email?: Maybe<Scalars['String']['output']>;
+  /** The event proposals owned by this user */
   event_proposals: Array<EventProposal>;
+  /** The user's first name */
   first_name?: Maybe<Scalars['String']['output']>;
+  /** The unique ID of this user */
   id: Scalars['ID']['output'];
+  /** The user's last name */
   last_name?: Maybe<Scalars['String']['output']>;
+  /** The user's full name */
   name?: Maybe<Scalars['String']['output']>;
+  /** The user's full name in Last, First format */
   name_inverted?: Maybe<Scalars['String']['output']>;
+  /** The global privileges this user has across all conventions */
   privileges?: Maybe<Array<Scalars['String']['output']>>;
+  /** All of the UserConProfiles owned by this user */
   user_con_profiles: Array<UserConProfile>;
 };
 

@@ -8888,15 +8888,54 @@ type UpdateUserConProfilePayload {
 
 scalar Upload
 
+"""
+A user on this instance of Intercode.  Users exist across all conventions.  For each convention a user has logged
+into, they will have an attached UserConProfile.
+"""
 type User {
+  """
+  The user's email address
+  """
   email: String
+
+  """
+  The event proposals owned by this user
+  """
   event_proposals: [EventProposal!]!
+
+  """
+  The user's first name
+  """
   first_name: String
+
+  """
+  The unique ID of this user
+  """
   id: ID!
+
+  """
+  The user's last name
+  """
   last_name: String
+
+  """
+  The user's full name
+  """
   name: String
+
+  """
+  The user's full name in Last, First format
+  """
   name_inverted: String
+
+  """
+  The global privileges this user has across all conventions
+  """
   privileges: [String!]
+
+  """
+  All of the UserConProfiles owned by this user
+  """
   user_con_profiles: [UserConProfile!]!
 }
 

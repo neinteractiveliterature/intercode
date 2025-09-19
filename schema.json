@@ -39226,13 +39226,13 @@
         {
           "kind": "OBJECT",
           "name": "User",
-          "description": null,
+          "description": "A user on this instance of Intercode.  Users exist across all conventions.  For each convention a user has logged\ninto, they will have an attached UserConProfile.\n",
           "interfaces": [],
           "possibleTypes": null,
           "fields": [
             {
               "name": "email",
-              "description": null,
+              "description": "The user's email address",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -39244,7 +39244,7 @@
             },
             {
               "name": "event_proposals",
-              "description": null,
+              "description": "The event proposals owned by this user",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -39268,7 +39268,7 @@
             },
             {
               "name": "first_name",
-              "description": null,
+              "description": "The user's first name",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -39280,7 +39280,7 @@
             },
             {
               "name": "id",
-              "description": null,
+              "description": "The unique ID of this user",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -39296,7 +39296,7 @@
             },
             {
               "name": "last_name",
-              "description": null,
+              "description": "The user's last name",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -39308,7 +39308,7 @@
             },
             {
               "name": "name",
-              "description": null,
+              "description": "The user's full name",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -39320,7 +39320,7 @@
             },
             {
               "name": "name_inverted",
-              "description": null,
+              "description": "The user's full name in Last, First format",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -39332,7 +39332,7 @@
             },
             {
               "name": "privileges",
-              "description": null,
+              "description": "The global privileges this user has across all conventions",
               "type": {
                 "kind": "LIST",
                 "name": null,
@@ -39352,7 +39352,7 @@
             },
             {
               "name": "user_con_profiles",
-              "description": null,
+              "description": "All of the UserConProfiles owned by this user",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
