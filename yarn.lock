@@ -20683,9 +20683,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-router@npm:7.7.1":
-  version: 7.7.1
-  resolution: "react-router@npm:7.7.1"
+"react-router@npm:7.9.2":
+  version: 7.9.2
+  resolution: "react-router@npm:7.9.2"
   dependencies:
     cookie: "npm:^1.0.1"
     set-cookie-parser: "npm:^2.6.0"
@@ -20695,7 +20695,7 @@ __metadata:
   peerDependenciesMeta:
     react-dom:
       optional: true
-  checksum: 10c0/e55fe74a2947939526c79e496ab1fc501fd8e89a191a20157d94cfe712d4d9d84f68627811cf1d477a36b98250fcad958bf1237fc41ff0a8b2de00ddc8c53e3b
+  checksum: 10c0/7911441912fe5f7c933c74b9f8b93d2b1d89c5041ae280720f771494d5f16a065020b768c38ed89da419a867f95fbc3998dfbff00aca2c854b44a6ae3fb4acbd
   languageName: node
   linkType: hard
 
@@ -21696,7 +21696,7 @@ __metadata:
     react-i18next: "npm:15.6.1"
     react-onclickoutside: "npm:6.13.2"
     react-popper: "npm:2.3.0"
-    react-router: "npm:7.7.1"
+    react-router: "npm:7.9.2"
     react-select: "npm:5.10.2"
     react-test-renderer: "npm:19.1.1"
     react-transition-state: "npm:^2.3.1"
