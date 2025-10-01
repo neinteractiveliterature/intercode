@@ -1245,10 +1245,11 @@
       "advancedMenu": {
         "button": "Advanced options"
       },
-      "allowWaitlist": {
+      "fallbackAction": {
         "caption": "What should we do if all your choices are full?",
-        "no": "Don't sign me up for anything",
-        "yes": "Waitlist me for the first choice in my queue that fits in my schedule"
+        "NONE": "Don't sign me up for anything",
+        "WAITLIST": "Waitlist me for the first choice in my queue that fits in my schedule",
+        "RANDOM_SIGNUP": "I'M FEELING LUCKY! Add me to a random event that has openings and fits in my schedule"
       },
       "constraintsTable": {
         "label": "Limits"

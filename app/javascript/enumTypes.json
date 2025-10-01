@@ -601,6 +601,35 @@
       }
     ]
   },
+  "RankedChoiceFallbackAction": {
+    "kind": "ENUM",
+    "name": "RankedChoiceFallbackAction",
+    "description": "An action to take if a user can't be signed up for any of their ranked choices during a signup round",
+    "interfaces": null,
+    "possibleTypes": null,
+    "fields": null,
+    "inputFields": null,
+    "enumValues": [
+      {
+        "name": "NONE",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "WAITLIST",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "RANDOM_SIGNUP",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      }
+    ]
+  },
   "RankedChoiceOrder": {
     "kind": "ENUM",
     "name": "RankedChoiceOrder",

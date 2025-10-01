@@ -4999,6 +4999,13 @@ export type RankedChoiceDecisionsPagination = PaginationInterface & {
   total_pages: Scalars['Int']['output'];
 };
 
+/** An action to take if a user can't be signed up for any of their ranked choices during a signup round */
+export enum RankedChoiceFallbackAction {
+  None = 'NONE',
+  RandomSignup = 'RANDOM_SIGNUP',
+  Waitlist = 'WAITLIST'
+}
+
 /** An order to execute ranked-choice signup rounds in. */
 export enum RankedChoiceOrder {
   /** In lottery number order, lowest number first */
@@ -6934,8 +6941,13 @@ export type UserConProfile = {
   order_summary: Scalars['String']['output'];
   /** All the orders placed by this profile. */
   orders: Array<Order>;
-  /** If this user can't be signed up for any of their ranked choices, should the site waitlist them? */
+  /**
+   * If this user can't be signed up for any of their ranked choices, should the site waitlist them?
+   * @deprecated Use ranked_choice_fallback_action instead
+   */
   ranked_choice_allow_waitlist: Scalars['Boolean']['output'];
+  /** If this user can't be signed up for any of their ranked choices, what should the site do? */
+  ranked_choice_fallback_action: RankedChoiceFallbackAction;
   /** All the constraints this profile has placed on the number of ranked choice signups they want. */
   ranked_choice_user_constraints: Array<RankedChoiceUserConstraint>;
   /** Should this profile's bio use the nickname as part of their name? */
@@ -7037,8 +7049,8 @@ export type UserConProfileInput = {
   nickname?: InputMaybe<Scalars['String']['input']>;
   /** The method by which this user profile prefers the convention contact them. */
   preferred_contact?: InputMaybe<Scalars['String']['input']>;
-  /** If this user can't be signed up for any of their ranked choices, should the site waitlist them? */
-  ranked_choice_allow_waitlist?: InputMaybe<Scalars['Boolean']['input']>;
+  /** If this user can't be signed up for any of their ranked choices, what should the site do? */
+  ranked_choice_fallback_action?: InputMaybe<RankedChoiceFallbackAction>;
   /** Should this profile's bio use the nickname as part of their name? */
   show_nickname_in_bio?: InputMaybe<Scalars['Boolean']['input']>;
   /** The state portion of this profile's mailing address. */

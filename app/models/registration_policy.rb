@@ -59,7 +59,7 @@ class RegistrationPolicy
     buckets.none?(&:counted?)
   end
 
-  def prevent_no_preference_signups
+  def prevent_no_preference_signups # rubocop:disable Naming/PredicateMethod
     !!@prevent_no_preference_signups
   end
   alias prevent_no_preference_signups? prevent_no_preference_signups
@@ -68,7 +68,7 @@ class RegistrationPolicy
     !prevent_no_preference_signups
   end
 
-  def freeze_no_preference_buckets
+  def freeze_no_preference_buckets # rubocop:disable Naming/PredicateMethod
     !!@freeze_no_preference_buckets
   end
   alias freeze_no_preference_buckets? freeze_no_preference_buckets

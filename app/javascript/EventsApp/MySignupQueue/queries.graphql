@@ -7,7 +7,7 @@ fragment RankedChoiceUserConstraintFields on RankedChoiceUserConstraint {
 
 fragment UserConProfileRankedChoiceQueueFields on UserConProfile {
   id
-  ranked_choice_allow_waitlist
+  ranked_choice_fallback_action
 
   ranked_choice_user_constraints {
     id

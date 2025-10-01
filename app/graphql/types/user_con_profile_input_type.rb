@@ -35,8 +35,8 @@ class Types::UserConProfileInputType < Types::BaseInputObject
   argument :preferred_contact, String, required: false, camelize: false do
     description "The method by which this user profile prefers the convention contact them."
   end
-  argument :ranked_choice_allow_waitlist, Boolean, required: false, camelize: false do
-    description "If this user can't be signed up for any of their ranked choices, should the site waitlist them?"
+  argument :ranked_choice_fallback_action, Types::RankedChoiceFallbackAction, required: false, camelize: false do
+    description "If this user can't be signed up for any of their ranked choices, what should the site do?"
   end
   argument :show_nickname_in_bio, Boolean, required: false, camelize: false do
     description "Should this profile's bio use the nickname as part of their name?"

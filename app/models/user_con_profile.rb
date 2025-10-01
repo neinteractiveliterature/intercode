@@ -4,38 +4,38 @@
 #
 # Table name: user_con_profiles
 #
-#  id                           :bigint           not null, primary key
-#  accepted_clickwrap_agreement :boolean          default(FALSE), not null
-#  additional_info              :jsonb
-#  address                      :text
-#  allow_sms                    :boolean          default(TRUE), not null
-#  best_call_time               :string
-#  bio                          :text
-#  birth_date                   :date
-#  city                         :string
-#  country                      :string
-#  day_phone                    :string
-#  evening_phone                :string
-#  first_name                   :string           not null
-#  gender                       :string
-#  gravatar_enabled             :boolean          default(FALSE), not null
-#  ical_secret                  :text             not null
-#  last_name                    :string           not null
-#  lottery_number               :integer          not null
-#  mobile_phone                 :string
-#  needs_update                 :boolean          default(FALSE), not null
-#  nickname                     :string
-#  preferred_contact            :string
-#  ranked_choice_allow_waitlist :boolean          default(TRUE), not null
-#  ranked_choice_ordering_boost :integer
-#  receive_whos_free_emails     :boolean          default(TRUE), not null
-#  show_nickname_in_bio         :boolean
-#  state                        :string
-#  zipcode                      :string
-#  created_at                   :datetime
-#  updated_at                   :datetime
-#  convention_id                :bigint           not null
-#  user_id                      :bigint           not null
+#  id                            :bigint           not null, primary key
+#  accepted_clickwrap_agreement  :boolean          default(FALSE), not null
+#  additional_info               :jsonb
+#  address                       :text
+#  allow_sms                     :boolean          default(TRUE), not null
+#  best_call_time                :string
+#  bio                           :text
+#  birth_date                    :date
+#  city                          :string
+#  country                       :string
+#  day_phone                     :string
+#  evening_phone                 :string
+#  first_name                    :string           not null
+#  gender                        :string
+#  gravatar_enabled              :boolean          default(FALSE), not null
+#  ical_secret                   :text             not null
+#  last_name                     :string           not null
+#  lottery_number                :integer          not null
+#  mobile_phone                  :string
+#  needs_update                  :boolean          default(FALSE), not null
+#  nickname                      :string
+#  preferred_contact             :string
+#  ranked_choice_fallback_action :text             default("waitlist"), not null
+#  ranked_choice_ordering_boost  :integer
+#  receive_whos_free_emails      :boolean          default(TRUE), not null
+#  show_nickname_in_bio          :boolean
+#  state                         :string
+#  zipcode                       :string
+#  created_at                    :datetime
+#  updated_at                    :datetime
+#  convention_id                 :bigint           not null
+#  user_id                       :bigint           not null
 #
 # Indexes
 #
@@ -73,6 +73,10 @@ class UserConProfile < ApplicationRecord
 
   validates :name, presence: true
   validates :preferred_contact, inclusion: { in: %w[email day_phone evening_phone], allow_blank: true }
+
+  enum :ranked_choice_fallback_action,
+       { none: "none", waitlist: "waitlist", random_signup: "random_signup" },
+       prefix: :ranked_choice_fallback
 
   before_create :generate_ical_secret
   before_create :generate_lottery_number
@@ -149,7 +153,7 @@ class UserConProfile < ApplicationRecord
   # @deprecated
   delegate :privileges, to: :user
 
-  def is_team_member? # rubocop:disable Naming/PredicateName
+  def is_team_member? # rubocop:disable Naming/PredicatePrefix
     return team_members.size.positive? if team_members.loaded?
     self.class.is_team_member.where(id:).any?
   end

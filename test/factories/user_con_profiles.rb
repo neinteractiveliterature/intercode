@@ -3,38 +3,38 @@
 #
 # Table name: user_con_profiles
 #
-#  id                           :bigint           not null, primary key
-#  accepted_clickwrap_agreement :boolean          default(FALSE), not null
-#  additional_info              :jsonb
-#  address                      :text
-#  allow_sms                    :boolean          default(TRUE), not null
-#  best_call_time               :string
-#  bio                          :text
-#  birth_date                   :date
-#  city                         :string
-#  country                      :string
-#  day_phone                    :string
-#  evening_phone                :string
-#  first_name                   :string           not null
-#  gender                       :string
-#  gravatar_enabled             :boolean          default(FALSE), not null
-#  ical_secret                  :text             not null
-#  last_name                    :string           not null
-#  lottery_number               :integer          not null
-#  mobile_phone                 :string
-#  needs_update                 :boolean          default(FALSE), not null
-#  nickname                     :string
-#  preferred_contact            :string
-#  ranked_choice_allow_waitlist :boolean          default(TRUE), not null
-#  ranked_choice_ordering_boost :integer
-#  receive_whos_free_emails     :boolean          default(TRUE), not null
-#  show_nickname_in_bio         :boolean
-#  state                        :string
-#  zipcode                      :string
-#  created_at                   :datetime
-#  updated_at                   :datetime
-#  convention_id                :bigint           not null
-#  user_id                      :bigint           not null
+#  id                            :bigint           not null, primary key
+#  accepted_clickwrap_agreement  :boolean          default(FALSE), not null
+#  additional_info               :jsonb
+#  address                       :text
+#  allow_sms                     :boolean          default(TRUE), not null
+#  best_call_time                :string
+#  bio                           :text
+#  birth_date                    :date
+#  city                          :string
+#  country                       :string
+#  day_phone                     :string
+#  evening_phone                 :string
+#  first_name                    :string           not null
+#  gender                        :string
+#  gravatar_enabled              :boolean          default(FALSE), not null
+#  ical_secret                   :text             not null
+#  last_name                     :string           not null
+#  lottery_number                :integer          not null
+#  mobile_phone                  :string
+#  needs_update                  :boolean          default(FALSE), not null
+#  nickname                      :string
+#  preferred_contact             :string
+#  ranked_choice_fallback_action :text             default("waitlist"), not null
+#  ranked_choice_ordering_boost  :integer
+#  receive_whos_free_emails      :boolean          default(TRUE), not null
+#  show_nickname_in_bio          :boolean
+#  state                         :string
+#  zipcode                       :string
+#  created_at                    :datetime
+#  updated_at                    :datetime
+#  convention_id                 :bigint           not null
+#  user_id                       :bigint           not null
 #
 # Indexes
 #
@@ -54,6 +54,6 @@ FactoryBot.define do
 
     first_name { |profile| profile.user.first_name }
     last_name { |profile| profile.user.last_name }
-    nickname { 'Nick' }
+    nickname { "Nick" }
   end
 end
