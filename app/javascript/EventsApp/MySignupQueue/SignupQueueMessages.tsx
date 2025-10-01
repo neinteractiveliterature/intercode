@@ -1,4 +1,4 @@
-import { RankedChoiceDecisionReason, SignupState } from 'graphqlTypes.generated';
+import { RankedChoiceDecisionReason, RankedChoiceFallbackAction, SignupState } from 'graphqlTypes.generated';
 import { DateTime } from 'luxon';
 import { Trans, useTranslation } from 'react-i18next';
 import { formatLCM, getDateTimeFormat } from 'TimeUtils';
@@ -80,7 +80,7 @@ export function SkipReason({ pendingChoice, simulatedSkipReason, userConProfile 
       </>
     );
   } else if (simulatedSkipReason.reason === RankedChoiceDecisionReason.Full) {
-    if (userConProfile.ranked_choice_allow_waitlist) {
+    if (userConProfile.ranked_choice_fallback_action === RankedChoiceFallbackAction.Waitlist) {
       if (pendingChoice.prioritize_waitlist) {
         return (
           <>
