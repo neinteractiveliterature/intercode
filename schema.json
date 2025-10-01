@@ -28284,6 +28284,35 @@
         },
         {
           "kind": "ENUM",
+          "name": "RankedChoiceFallbackAction",
+          "description": "An action to take if a user can't be signed up for any of their ranked choices during a signup round",
+          "interfaces": null,
+          "possibleTypes": null,
+          "fields": null,
+          "inputFields": null,
+          "enumValues": [
+            {
+              "name": "NONE",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "WAITLIST",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "RANDOM_SIGNUP",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ]
+        },
+        {
+          "kind": "ENUM",
           "name": "RankedChoiceOrder",
           "description": "An order to execute ranked-choice signup rounds in.",
           "interfaces": null,
@@ -40085,6 +40114,22 @@
                   "ofType": null
                 }
               },
+              "isDeprecated": true,
+              "deprecationReason": "Use ranked_choice_fallback_action instead",
+              "args": []
+            },
+            {
+              "name": "ranked_choice_fallback_action",
+              "description": "If this user can't be signed up for any of their ranked choices, what should the site do?",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "ENUM",
+                  "name": "RankedChoiceFallbackAction",
+                  "ofType": null
+                }
+              },
               "isDeprecated": false,
               "deprecationReason": null,
               "args": []
@@ -40677,11 +40722,11 @@
               "deprecationReason": null
             },
             {
-              "name": "ranked_choice_allow_waitlist",
-              "description": "If this user can't be signed up for any of their ranked choices, should the site waitlist them?",
+              "name": "ranked_choice_fallback_action",
+              "description": "If this user can't be signed up for any of their ranked choices, what should the site do?",
               "type": {
-                "kind": "SCALAR",
-                "name": "Boolean",
+                "kind": "ENUM",
+                "name": "RankedChoiceFallbackAction",
                 "ofType": null
               },
               "defaultValue": null,

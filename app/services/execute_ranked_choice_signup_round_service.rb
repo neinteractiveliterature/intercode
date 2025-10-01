@@ -99,12 +99,67 @@ class ExecuteRankedChoiceSignupRoundService < CivilService::Service
 
     executed_choice = pending_choices.find { |choice| execute_choice(constraints, choice) }
     return executed_choice if executed_choice
-    return unless user_con_profile.ranked_choice_allow_waitlist
 
-    pending_choices.find { |choice| execute_choice(constraints, choice, allow_waitlist: true) }
+    execute_fallback_for_user_con_profile(user_con_profile, pending_choices:, constraints:)
   end
 
-  def check_skip_user_for_policy_reasons(constraints) # rubocop:disable Metrics/MethodLength
+  def execute_fallback_for_user_con_profile(user_con_profile, pending_choices:, constraints:)
+    case user_con_profile.ranked_choice_fallback_action
+    when "waitlist"
+      pending_choices.find { |choice| execute_choice(constraints, choice, allow_waitlist: true) }
+    when "random_signup"
+      picked_choice = generate_random_choice_for_user_con_profile(user_con_profile, pending_choices:)
+      return unless picked_choice
+
+      picked_choice.save!
+      execute_choice(constraints, picked_choice, allow_waitlist: false)
+    end
+  end
+
+  def generate_random_choice_for_user_con_profile(user_con_profile, pending_choices:)
+    picked_choice = nil
+    ActiveRecord::Base.transaction do
+      potential_choices = generate_potential_random_choices_for_user_con_profile(user_con_profile, pending_choices:)
+      source = Sources::SimulatedSkipReason.new(user_con_profile)
+      skip_reasons = source.fetch(potential_choices)
+      usable_choices = potential_choices.zip(skip_reasons).filter_map { |(choice, reason)| reason ? nil : choice }
+      picked_choice = usable_choices.sample
+      raise ActiveRecord::Rollback
+    end
+    picked_choice
+  end
+
+  def generate_potential_random_choices_for_user_con_profile(user_con_profile, pending_choices:)
+    existing_target_run_ids = Set.new(pending_choices.map { |choice| choice.target_run.id })
+    random_signup_eligible_runs
+      .reject { |run| existing_target_run_ids.include?(run.id) }
+      .map do |run|
+        SignupRankedChoice.new(
+          user_con_profile:,
+          target_run: run,
+          priority: pending_choices.size + 1,
+          state: "pending",
+          updated_by: user_con_profile.user
+        )
+      end
+  end
+
+  def random_signup_eligible_runs
+    @random_signup_eligible_runs ||=
+      begin
+        eligible_event_ids = Event.connection.select_values(<<~SQL, "random_signup_eligible_event_ids", [convention.id])
+          SELECT DISTINCT events.id from events
+          INNER JOIN (
+            SELECT id, jsonb_array_elements(registration_policy->'buckets')->'not_counted' bucket_not_counted
+            from events where convention_id = $1
+          ) bucket_not_counted ON (events.id = bucket_not_counted.id AND bucket_not_counted.bucket_not_counted != 'true')
+        SQL
+
+        Run.where(event_id: eligible_event_ids)
+      end
+  end
+
+  def check_skip_user_for_policy_reasons(constraints) # rubocop:disable Naming/PredicateMethod
     unless constraints.has_ticket_if_required?
       decisions << RankedChoiceDecision.create!(
         signup_round:,

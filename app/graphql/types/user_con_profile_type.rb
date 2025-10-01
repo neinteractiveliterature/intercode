@@ -56,8 +56,14 @@ class Types::UserConProfileType < Types::BaseObject
   field :nickname, String, null: true, description: "This user profile's nickname."
   field :order_summary, String, null: false, description: "A human-readable summary of all this profile's orders."
   field :orders, [Types::OrderType], null: false, description: "All the orders placed by this profile."
-  field :ranked_choice_allow_waitlist, Boolean, null: false do
+  field :ranked_choice_allow_waitlist,
+        Boolean,
+        null: false,
+        deprecation_reason: "Use ranked_choice_fallback_action instead" do
     description "If this user can't be signed up for any of their ranked choices, should the site waitlist them?"
+  end
+  field :ranked_choice_fallback_action, Types::RankedChoiceFallbackAction, null: false do
+    description "If this user can't be signed up for any of their ranked choices, what should the site do?"
   end
   field :ranked_choice_user_constraints, [Types::RankedChoiceUserConstraintType], null: false do # rubocop:disable GraphQL/ExtractType
     description "All the constraints this profile has placed on the number of ranked choice signups they want."
@@ -116,7 +122,7 @@ class Types::UserConProfileType < Types::BaseObject
   personal_info_field :user, Types::UserType, null: true, description: "The user account attached to this profile."
   personal_info_field :zipcode, String, null: true, description: "The ZIP portion of this profile's mailing address."
 
-  def site_admin
+  def site_admin # rubocop:disable Naming/PredicateMethod
     dataloader.with(Sources::ActiveRecordAssociation, UserConProfile, :user).load(object).site_admin?
   end
 
@@ -198,7 +204,7 @@ class Types::UserConProfileType < Types::BaseObject
     dataloader.with(Sources::OrderSummary).load(object)
   end
 
-  def can_override_maximum_event_provided_tickets
+  def can_override_maximum_event_provided_tickets # rubocop:disable Naming/PredicateMethod
     user = object == context[:user_con_profile] ? pundit_user : AuthorizationInfo.new(object.user, nil)
 
     override = context[:convention].ticket_types.new.maximum_event_provided_tickets_overrides.new
@@ -208,6 +214,10 @@ class Types::UserConProfileType < Types::BaseObject
   def ticket
     ticket = dataloader.with(Sources::ActiveRecordAssociation, UserConProfile, :ticket).load(object)
     ticket && policy(ticket).read? ? ticket : nil
+  end
+
+  def ranked_choice_allow_waitlist # rubocop:disable Naming/PredicateMethod
+    object.ranked_choice_fallback_action == "waitlist"
   end
 
   private

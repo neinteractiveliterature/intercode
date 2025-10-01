@@ -6194,6 +6194,15 @@ type RankedChoiceDecisionsPagination implements PaginationInterface {
 }
 
 """
+An action to take if a user can't be signed up for any of their ranked choices during a signup round
+"""
+enum RankedChoiceFallbackAction {
+  NONE
+  RANDOM_SIGNUP
+  WAITLIST
+}
+
+"""
 An order to execute ranked-choice signup rounds in.
 """
 enum RankedChoiceOrder {
@@ -9106,7 +9115,12 @@ type UserConProfile {
   """
   If this user can't be signed up for any of their ranked choices, should the site waitlist them?
   """
-  ranked_choice_allow_waitlist: Boolean!
+  ranked_choice_allow_waitlist: Boolean! @deprecated(reason: "Use ranked_choice_fallback_action instead")
+
+  """
+  If this user can't be signed up for any of their ranked choices, what should the site do?
+  """
+  ranked_choice_fallback_action: RankedChoiceFallbackAction!
 
   """
   All the constraints this profile has placed on the number of ranked choice signups they want.
@@ -9276,9 +9290,9 @@ input UserConProfileInput {
   preferred_contact: String
 
   """
-  If this user can't be signed up for any of their ranked choices, should the site waitlist them?
+  If this user can't be signed up for any of their ranked choices, what should the site do?
   """
-  ranked_choice_allow_waitlist: Boolean
+  ranked_choice_fallback_action: RankedChoiceFallbackAction
 
   """
   Should this profile's bio use the nickname as part of their name?

@@ -6,7 +6,7 @@ import {
   UpdateSignupRankedChoicePriorityDocument,
 } from './mutations.generated';
 import { Link, useRevalidator } from 'react-router';
-import { RankedChoiceDecisionReason } from 'graphqlTypes.generated';
+import { RankedChoiceDecisionReason, RankedChoiceFallbackAction } from 'graphqlTypes.generated';
 import { ReactNode, useContext, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
 import RankedChoicePriorityIndicator from './RankedChoicePriorityIndicator';
@@ -90,7 +90,7 @@ export default function UserSignupQueueItem({
         [styles.skip]: pendingChoice.simulated_skip_reason,
         [styles.waitlist]:
           pendingChoice.simulated_skip_reason?.reason === RankedChoiceDecisionReason.Full &&
-          userConProfile.ranked_choice_allow_waitlist,
+          userConProfile.ranked_choice_fallback_action === RankedChoiceFallbackAction.Waitlist,
       })}
       style={{
         // @ts-expect-error awaiting fix for https://github.com/frenic/csstype/issues/193

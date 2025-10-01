@@ -7,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 import { useAppDateTimeFormat } from '../../TimeUtils';
 import { DateTime } from 'luxon';
 import Timespan from '../../Timespan';
-import { RankedChoiceUserConstraint, SignupState } from '../../graphqlTypes.generated';
+import { RankedChoiceFallbackAction, RankedChoiceUserConstraint, SignupState } from '../../graphqlTypes.generated';
 import BucketAvailabilityDisplay from '../EventPage/BucketAvailabilityDisplay';
 import { useMutation } from '@apollo/client';
 import { UpdateUserConProfileDocument } from '../../UserConProfiles/mutations.generated';
@@ -224,21 +224,22 @@ function RankedChoiceUserSettings({ data }: { data: MySignupQueueQueryData }) {
       <div className="card-header">{t('signups.mySignupQueue.settingsSection.label')}</div>
       <div className="card-body">
         <MultipleChoiceInput
-          caption={t('signups.mySignupQueue.allowWaitlist.caption')}
+          caption={t('signups.mySignupQueue.fallbackAction.caption')}
           choices={[
-            {
-              label: t('signups.mySignupQueue.allowWaitlist.yes'),
-              value: 'true',
-            },
-            { label: t('signups.mySignupQueue.allowWaitlist.no'), value: 'false' },
-          ]}
-          value={(data.convention.my_profile?.ranked_choice_allow_waitlist || false).toString()}
+            RankedChoiceFallbackAction.Waitlist,
+            RankedChoiceFallbackAction.RandomSignup,
+            RankedChoiceFallbackAction.None,
+          ].map((value) => ({
+            label: t(`signups.mySignupQueue.fallbackAction.${value}`),
+            value,
+          }))}
+          value={data.convention.my_profile?.ranked_choice_fallback_action}
           onChange={async (newValue) => {
             await updateUserConProfile({
               variables: {
                 input: {
                   user_con_profile: {
-                    ranked_choice_allow_waitlist: newValue === 'true',
+                    ranked_choice_fallback_action: newValue as RankedChoiceFallbackAction,
                   },
                   id: myProfile?.id,
                 },
