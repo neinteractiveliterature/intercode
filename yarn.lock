@@ -1749,14 +1749,14 @@ __metadata:
   linkType: hard
 
 "@codemirror/commands@npm:^6.0.0, @codemirror/commands@npm:^6.7.1, @codemirror/commands@npm:^6.8.0":
-  version: 6.8.1
-  resolution: "@codemirror/commands@npm:6.8.1"
+  version: 6.9.0
+  resolution: "@codemirror/commands@npm:6.9.0"
   dependencies:
     "@codemirror/language": "npm:^6.0.0"
     "@codemirror/state": "npm:^6.4.0"
     "@codemirror/view": "npm:^6.27.0"
     "@lezer/common": "npm:^1.1.0"
-  checksum: 10c0/da61311f4c39036f93fbe518c673f2464902cf1b64b071319b14b7d690315b72828de4bc12f28be78eeac6e8b8bd8800d4e7921dc37977f78baac4dd49c5b4bf
+  checksum: 10c0/9317112b3bc2d5f083ea4f587773bfae4a0b532dd8a4b561a99b85a5f011f1f9693b5df5946b3f596565ee50f10ae4b9428901481dabeb96ba0a9c7caebba2fd
   languageName: node
   linkType: hard
 
@@ -1773,9 +1773,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/lang-html@npm:6.4.10, @codemirror/lang-html@npm:^6.0.0, @codemirror/lang-html@npm:^6.4.9":
-  version: 6.4.10
-  resolution: "@codemirror/lang-html@npm:6.4.10"
+"@codemirror/lang-html@npm:6.4.11, @codemirror/lang-html@npm:^6.0.0, @codemirror/lang-html@npm:^6.4.9":
+  version: 6.4.11
+  resolution: "@codemirror/lang-html@npm:6.4.11"
   dependencies:
     "@codemirror/autocomplete": "npm:^6.0.0"
     "@codemirror/lang-css": "npm:^6.0.0"
@@ -1785,8 +1785,8 @@ __metadata:
     "@codemirror/view": "npm:^6.17.0"
     "@lezer/common": "npm:^1.0.0"
     "@lezer/css": "npm:^1.1.0"
-    "@lezer/html": "npm:^1.3.0"
-  checksum: 10c0/57c6ddcc2ddf76b95bd60015054945d46bd2e474dc2d02c230a7c12a83617d881ac9da46d8fe690d1ffac2c935ac4ecc2971c4d666252a71a258b47f5c4ce62e
+    "@lezer/html": "npm:^1.3.12"
+  checksum: 10c0/d117b5c91377dd81e6551cbfaf881138787826c0d0c90fc2a7a69550decfc49af193ec1cd5c12b90d91de1acf09c42d4c5fec5bea848d354246b4ec778a4a88f
   languageName: node
   linkType: hard
 
@@ -1815,9 +1815,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/lang-markdown@npm:6.3.4":
-  version: 6.3.4
-  resolution: "@codemirror/lang-markdown@npm:6.3.4"
+"@codemirror/lang-markdown@npm:6.4.0":
+  version: 6.4.0
+  resolution: "@codemirror/lang-markdown@npm:6.4.0"
   dependencies:
     "@codemirror/autocomplete": "npm:^6.7.1"
     "@codemirror/lang-html": "npm:^6.0.0"
@@ -1826,7 +1826,7 @@ __metadata:
     "@codemirror/view": "npm:^6.0.0"
     "@lezer/common": "npm:^1.2.1"
     "@lezer/markdown": "npm:^1.0.0"
-  checksum: 10c0/4d8fcbab4f21b56e88d8df951a1717d32618606bca90426005e81d0a0b0600061db3bb728c6170c6475c3655563175cff3409a9b989c5511f1987faf407203ed
+  checksum: 10c0/8735b339c091b6144e40ef9413dd3b514c56d8be3a5bee30905af595a2df0458c98055ac1194466f56b14e4f2dd8906d00dee7796f1e321edf2186c3421a0156
   languageName: node
   linkType: hard
 
@@ -1875,15 +1875,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/view@npm:6.38.4, @codemirror/view@npm:^6.0.0, @codemirror/view@npm:^6.17.0, @codemirror/view@npm:^6.23.0, @codemirror/view@npm:^6.27.0, @codemirror/view@npm:^6.36.3":
-  version: 6.38.4
-  resolution: "@codemirror/view@npm:6.38.4"
+"@codemirror/view@npm:6.38.5, @codemirror/view@npm:^6.0.0, @codemirror/view@npm:^6.17.0, @codemirror/view@npm:^6.23.0, @codemirror/view@npm:^6.27.0, @codemirror/view@npm:^6.36.3":
+  version: 6.38.5
+  resolution: "@codemirror/view@npm:6.38.5"
   dependencies:
     "@codemirror/state": "npm:^6.5.0"
     crelt: "npm:^1.0.6"
     style-mod: "npm:^4.1.0"
     w3c-keyname: "npm:^2.2.4"
-  checksum: 10c0/8133e7d723f5ca82449e866cffdd267f72c5f924b5a88bdbc1ae29ca3e3274c8c5695342c82da8eb5b0509688ef8a0cfc6d517352a5329cfc3fed2cbbd504ce4
+  checksum: 10c0/ad2b2459d40154b24ac665197f0b41edab781f82cd99950c5b1285dc19b14c33788a03df6fcdaf843a99de4bb5f1c1c113b59f7d7e72daf6dcb50e706a62959d
   languageName: node
   linkType: hard
 
@@ -5160,14 +5160,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@lezer/html@npm:^1.3.0":
-  version: 1.3.9
-  resolution: "@lezer/html@npm:1.3.9"
+"@lezer/html@npm:^1.3.12":
+  version: 1.3.12
+  resolution: "@lezer/html@npm:1.3.12"
   dependencies:
     "@lezer/common": "npm:^1.2.0"
     "@lezer/highlight": "npm:^1.0.0"
     "@lezer/lr": "npm:^1.0.0"
-  checksum: 10c0/05677a9788456805812efa42028824136c7d7bb9a8d0236404531a74805de8998fda50198da71ed385459a5f4b9f2c13c85b7cddd173f8e0001be5d37ecd62a4
+  checksum: 10c0/d0e873e1b55e477462889eb388971b8ca7ef7318560b8f37c998c856a0cc203dc7b00bd55c93fd7f571eef8f5dd276bf2ff5fa7b14d9cb854324ed2466fa3f83
   languageName: node
   linkType: hard
 
@@ -21536,12 +21536,12 @@ __metadata:
     "@apollo/client": "npm:3.14.0"
     "@breezehr/currency-codes": "npm:^2.2.1"
     "@codemirror/commands": "npm:^6.7.1"
-    "@codemirror/lang-html": "npm:6.4.10"
+    "@codemirror/lang-html": "npm:6.4.11"
     "@codemirror/lang-json": "npm:6.0.2"
-    "@codemirror/lang-markdown": "npm:6.3.4"
+    "@codemirror/lang-markdown": "npm:6.4.0"
     "@codemirror/language": "npm:6.11.3"
     "@codemirror/state": "npm:6.5.2"
-    "@codemirror/view": "npm:6.38.4"
+    "@codemirror/view": "npm:6.38.5"
     "@dnd-kit/core": "npm:6.3.1"
     "@dnd-kit/sortable": "npm:8.0.0"
     "@dnd-kit/utilities": "npm:3.2.2"
