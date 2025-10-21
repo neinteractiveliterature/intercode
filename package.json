@@ -45,7 +45,7 @@
     "@graphiql/toolkit": "0.11.3",
     "@graphql-typed-document-node/core": "^3.2.0",
     "@juggle/resize-observer": "3.4.0",
-    "@lezer/common": "1.2.3",
+    "@lezer/common": "1.3.0",
     "@lezer/highlight": "^1.2.1",
     "@lezer/lr": "^1.4.2",
     "@neinteractiveliterature/litform": "0.35.0",
