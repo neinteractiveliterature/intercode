@@ -227,7 +227,7 @@ function RankedChoiceUserSettings({ data }: { data: MySignupQueueQueryData }) {
           caption={t('signups.mySignupQueue.fallbackAction.caption')}
           choices={[
             RankedChoiceFallbackAction.Waitlist,
-            RankedChoiceFallbackAction.RandomSignup,
+            // RankedChoiceFallbackAction.RandomSignup,
             RankedChoiceFallbackAction.None,
           ].map((value) => ({
             label: t(`signups.mySignupQueue.fallbackAction.${value}`),

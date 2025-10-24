@@ -242,6 +242,8 @@ describe ExecuteRankedChoiceSignupRoundService do
   end
 
   it "respects the ranked_choice_fallback_action=random_signup flag for a user profile" do
+    skip("We've disabled the random_signup option for now")
+
     signup_round = create(:signup_round, convention:, ranked_choice_order: "asc", start: 1.day.ago)
     low_number_user = create(:user_con_profile, convention:, lottery_number: 1, ranked_choice_fallback_action: "none")
     high_number_user =
