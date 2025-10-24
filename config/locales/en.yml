@@ -89,3 +89,6 @@ en:
     errors:
       closed: "Signup requests are closed."
       wrong_signup_mode: "This convention does not moderate signups. Instead of making a signup request, please sign up for events directly."
+  user_con_profiles:
+    errors:
+      random_signup_disabled: "We’ve disabled the random signup fallback option.  Please choose a different option."

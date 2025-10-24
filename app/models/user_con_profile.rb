@@ -78,6 +78,12 @@ class UserConProfile < ApplicationRecord
        { none: "none", waitlist: "waitlist", random_signup: "random_signup" },
        prefix: :ranked_choice_fallback
 
+  validates :ranked_choice_fallback_action,
+            exclusion: {
+              in: %w[random_signup],
+              message: I18n.t("user_con_profiles.errors.random_signup_disabled")
+            }
+
   before_create :generate_ical_secret
   before_create :generate_lottery_number
   after_commit :send_user_activity_alerts, on: :create
