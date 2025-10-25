@@ -1749,14 +1749,14 @@ __metadata:
   linkType: hard
 
 "@codemirror/commands@npm:^6.0.0, @codemirror/commands@npm:^6.7.1, @codemirror/commands@npm:^6.8.0":
-  version: 6.9.0
-  resolution: "@codemirror/commands@npm:6.9.0"
+  version: 6.10.0
+  resolution: "@codemirror/commands@npm:6.10.0"
   dependencies:
     "@codemirror/language": "npm:^6.0.0"
     "@codemirror/state": "npm:^6.4.0"
     "@codemirror/view": "npm:^6.27.0"
     "@lezer/common": "npm:^1.1.0"
-  checksum: 10c0/9317112b3bc2d5f083ea4f587773bfae4a0b532dd8a4b561a99b85a5f011f1f9693b5df5946b3f596565ee50f10ae4b9428901481dabeb96ba0a9c7caebba2fd
+  checksum: 10c0/5122c026ef3578049a9d166a0afe9cd66abcc20fd5a2a084c97a60b519db6f38e3b8f05af813e5bdbbf249d3a95dce07a52cd30f77083da4a2da660c1b424a88
   languageName: node
   linkType: hard
 
@@ -1815,9 +1815,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/lang-markdown@npm:6.4.0":
-  version: 6.4.0
-  resolution: "@codemirror/lang-markdown@npm:6.4.0"
+"@codemirror/lang-markdown@npm:6.5.0":
+  version: 6.5.0
+  resolution: "@codemirror/lang-markdown@npm:6.5.0"
   dependencies:
     "@codemirror/autocomplete": "npm:^6.7.1"
     "@codemirror/lang-html": "npm:^6.0.0"
@@ -1826,7 +1826,7 @@ __metadata:
     "@codemirror/view": "npm:^6.0.0"
     "@lezer/common": "npm:^1.2.1"
     "@lezer/markdown": "npm:^1.0.0"
-  checksum: 10c0/8735b339c091b6144e40ef9413dd3b514c56d8be3a5bee30905af595a2df0458c98055ac1194466f56b14e4f2dd8906d00dee7796f1e321edf2186c3421a0156
+  checksum: 10c0/b026997bca821d5faf62808bf125674c182a82090706f4b7250ea80d4e8e00a88c2783230b391950110e4f92eba773556b5361f6b65c705cf775f2458c6ff7b7
   languageName: node
   linkType: hard
 
@@ -21584,7 +21584,7 @@ __metadata:
     "@codemirror/commands": "npm:^6.7.1"
     "@codemirror/lang-html": "npm:6.4.11"
     "@codemirror/lang-json": "npm:6.0.2"
-    "@codemirror/lang-markdown": "npm:6.4.0"
+    "@codemirror/lang-markdown": "npm:6.5.0"
     "@codemirror/language": "npm:6.11.3"
     "@codemirror/state": "npm:6.5.2"
     "@codemirror/view": "npm:6.38.6"
