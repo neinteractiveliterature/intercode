@@ -36,6 +36,7 @@ export type UserSignupQueueItemProps = {
   refetchQueries: InternalRefetchQueriesInclude;
   readOnly: boolean;
   loading: boolean;
+  enableDragDrop: boolean;
 };
 
 export default function UserSignupQueueItem({
@@ -44,6 +45,7 @@ export default function UserSignupQueueItem({
   userConProfile,
   readOnly,
   loading: loadingProp,
+  enableDragDrop,
 }: UserSignupQueueItemProps) {
   const pendingChoices = usePendingChoices(userConProfile);
   const pendingChoice = pendingChoices[index];
@@ -113,10 +115,12 @@ export default function UserSignupQueueItem({
     >
       {confirmMessage}
       <div className="d-flex align-items-center">
-        <div className="me-2" {...attributes} {...listeners}>
-          <span className="visually-hidden">{t('buttons.dragToReorder')}</span>
-          <i className="cursor-grab bi-grip-vertical" />
-        </div>
+        {enableDragDrop && (
+          <div className="me-2" {...attributes} {...listeners}>
+            <span className="visually-hidden">{t('buttons.dragToReorder')}</span>
+            <i className="cursor-grab bi-grip-vertical" />
+          </div>
+        )}
         <div className="me-3">
           <div className="d-flex align-items-center">
             <RankedChoicePriorityIndicator priority={pendingChoice.priority} fontSize={14} />

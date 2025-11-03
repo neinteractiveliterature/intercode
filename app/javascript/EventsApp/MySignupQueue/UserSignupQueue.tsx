@@ -5,10 +5,11 @@ import UserSignupQueueItem from './UserSignupQueueItem';
 import { useSortableDndSensors } from 'SortableUtils';
 import { closestCorners, DndContext } from '@dnd-kit/core';
 import { useArrayBasicSortableHandlers } from '@neinteractiveliterature/litform';
-import { useCallback } from 'react';
+import { useCallback, useState } from 'react';
 import { UpdateSignupRankedChoicePriorityDocument } from './mutations.generated';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import { useRevalidator } from 'react-router';
+import { useTranslation } from 'react-i18next';
 
 export type UserSignupQueueProps = {
   userConProfile: UserConProfileRankedChoiceQueueFieldsFragment;
@@ -20,6 +21,8 @@ function UserSignupQueue({ userConProfile, refetchQueries, readOnly }: UserSignu
   const pendingChoices = usePendingChoices(userConProfile);
   const sensors = useSortableDndSensors();
   const revalidator = useRevalidator();
+  const [enableDragDrop, setEnableDragDrop] = useState(false);
+  const { t } = useTranslation();
 
   const [updateSignupRankedChoicePriority, { loading: updatePriorityLoading }] = useMutation(
     UpdateSignupRankedChoicePriorityDocument,
@@ -42,6 +45,22 @@ function UserSignupQueue({ userConProfile, refetchQueries, readOnly }: UserSignu
 
   return (
     <section className="card">
+      <div className="card-heading bg-light px-4 py-3 rounded-top">
+        <div className="form-check form-switch">
+          <input
+            className="form-check-input"
+            type="checkbox"
+            role="switch"
+            id="enableDragDrop"
+            aria-label={t('signups.mySignupQueue.enableDragDrop')}
+            checked={enableDragDrop}
+            onChange={(event) => setEnableDragDrop(event.target.checked)}
+          />
+          <label className="form-check-label" htmlFor="enableDragDrop">
+            {t('signups.mySignupQueue.enableDragDrop')}
+          </label>
+        </div>
+      </div>
       <DndContext sensors={sensors} {...sortableHandlers} collisionDetection={closestCorners}>
         <SortableContext items={pendingChoices.map((choice) => choice.id)} strategy={verticalListSortingStrategy}>
           <ul className="list-group list-group-flush">
@@ -53,6 +72,7 @@ function UserSignupQueue({ userConProfile, refetchQueries, readOnly }: UserSignu
                 refetchQueries={refetchQueries}
                 userConProfile={userConProfile}
                 loading={updatePriorityLoading}
+                enableDragDrop={enableDragDrop}
               />
             ))}
           </ul>
