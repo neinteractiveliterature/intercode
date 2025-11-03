@@ -8,6 +8,7 @@ import { findStandardItem, StandardItem, TypedFormItem } from 'FormAdmin/FormIte
 import { getSortableStyle } from 'SortableUtils';
 import FormItemInput from 'FormPresenter/ItemInputs/FormItemInput';
 import styles from 'styles/form_editor.module.scss';
+import { useTranslation } from 'react-i18next';
 
 function describeFormItemForDelete(formItem: TypedFormItem, standardItem: StandardItem | undefined) {
   if (standardItem) {
@@ -27,6 +28,7 @@ export type FormEditorItemPreviewProps = {
 };
 
 function FormEditorItemPreview({ formSection, formItem }: FormEditorItemPreviewProps): React.JSX.Element {
+  const { t } = useTranslation();
   const confirm = useConfirm();
   const params = useParams<{ id: string; sectionId: string }>();
   const { convention, formType, formTypeIdentifier, formItemsById } = useContext(FormEditorContext);
@@ -44,7 +46,7 @@ function FormEditorItemPreview({ formSection, formItem }: FormEditorItemPreviewP
   return (
     <div className={classnames('d-flex align-items-start bg-white', { 'opacity-50': isDragging })} style={style}>
       <div className="me-2 mt-2" {...attributes} {...listeners} ref={setNodeRef}>
-        <span className="visually-hidden">Drag to reorder</span>
+        <span className="visually-hidden">{t('buttons.dragToReorder')}</span>
         <i className="cursor-grab bi-grip-vertical" />
       </div>
       <div className={`form-editor-item ${styles.formEditorItem} flex-grow-1`}>

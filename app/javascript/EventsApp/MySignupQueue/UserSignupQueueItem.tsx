@@ -27,12 +27,15 @@ import styles from './signup-queue.module.css';
 import { PrioritizeWaitlistConfirmation, SkipReason } from './SignupQueueMessages';
 import { DropdownMenu, DropdownMenuRef } from 'UIComponents/DropdownMenu';
 import MenuIcon from 'NavigationBar/MenuIcon';
+import { useSortable } from '@dnd-kit/sortable';
+import { getSortableStyle } from 'SortableUtils';
 
 export type UserSignupQueueItemProps = {
   userConProfile: UserConProfileRankedChoiceQueueFieldsFragment;
   index: number;
   refetchQueries: InternalRefetchQueriesInclude;
   readOnly: boolean;
+  loading: boolean;
 };
 
 export default function UserSignupQueueItem({
@@ -40,6 +43,7 @@ export default function UserSignupQueueItem({
   refetchQueries,
   userConProfile,
   readOnly,
+  loading: loadingProp,
 }: UserSignupQueueItemProps) {
   const pendingChoices = usePendingChoices(userConProfile);
   const pendingChoice = pendingChoices[index];
@@ -62,6 +66,13 @@ export default function UserSignupQueueItem({
       awaitRefetchQueries: true,
     },
   );
+  const loading = updatePriorityLoading || loadingProp;
+
+  const { setNodeRef, isDragging, attributes, listeners, transform, transition } = useSortable({
+    id: pendingChoice.id.toString(),
+  });
+
+  const style = getSortableStyle(transform, transition, isDragging);
 
   const changePriorityButtonClicked = async (...args: Parameters<typeof updateSignupRankedChoicePriority>) => {
     await updateSignupRankedChoicePriority(...args);
@@ -86,19 +97,26 @@ export default function UserSignupQueueItem({
 
   return (
     <li
-      className={classNames('list-group-item', {
+      className={classNames('list-group-item ps-2', {
         [styles.skip]: pendingChoice.simulated_skip_reason,
         [styles.waitlist]:
           pendingChoice.simulated_skip_reason?.reason === RankedChoiceDecisionReason.Full &&
           userConProfile.ranked_choice_fallback_action === RankedChoiceFallbackAction.Waitlist,
+        'opacity-50': isDragging,
       })}
       style={{
+        ...style,
         // @ts-expect-error awaiting fix for https://github.com/frenic/csstype/issues/193
         viewTransitionName: `queue-item-${pendingChoice.id}`,
       }}
+      ref={setNodeRef}
     >
       {confirmMessage}
       <div className="d-flex align-items-center">
+        <div className="me-2" {...attributes} {...listeners}>
+          <span className="visually-hidden">{t('buttons.dragToReorder')}</span>
+          <i className="cursor-grab bi-grip-vertical" />
+        </div>
         <div className="me-3">
           <div className="d-flex align-items-center">
             <RankedChoicePriorityIndicator priority={pendingChoice.priority} fontSize={14} />
@@ -192,14 +210,14 @@ export default function UserSignupQueueItem({
               aria-label={t('signups.mySignupQueue.moveUp')}
               title={t('signups.mySignupQueue.moveUp')}
               className={classNames('btn btn-dark px-1 py-0', { 'opacity-25': index < 1 })}
-              disabled={updatePriorityLoading || index < 1}
+              disabled={loading || index < 1}
               onClick={() =>
                 changePriorityButtonClicked({
                   variables: { id: pendingChoice.id, priority: pendingChoice.priority - 1 },
                 })
               }
             >
-              {updatePriorityLoading ? <LoadingIndicator size={9} /> : <i className="bi-caret-up-fill" />}
+              {loading ? <LoadingIndicator size={9} /> : <i className="bi-caret-up-fill" />}
             </button>
           )}
           {!readOnly && (
@@ -209,14 +227,14 @@ export default function UserSignupQueueItem({
               className={classNames('btn btn-dark px-1 py-0', {
                 'opacity-25': index >= pendingChoices.length - 1,
               })}
-              disabled={updatePriorityLoading || index >= pendingChoices.length - 1}
+              disabled={loading || index >= pendingChoices.length - 1}
               onClick={() =>
                 changePriorityButtonClicked({
                   variables: { id: pendingChoice.id, priority: pendingChoice.priority + 1 },
                 })
               }
             >
-              {updatePriorityLoading ? <LoadingIndicator size={9} /> : <i className="bi-caret-down-fill" />}
+              {loading ? <LoadingIndicator size={9} /> : <i className="bi-caret-down-fill" />}
             </button>
           )}
         </div>
