@@ -1259,6 +1259,7 @@
         "label": "{{ conventionDay }} event signups"
       },
       "emptyState": "You currently have no events in your signup queue. To add something to your queue, go to <2>the event catalog</2> or <5>the event schedule</5>. You can add events to your queue from each event’s page.",
+      "enableDragDrop": "Enable drag and drop reordering",
       "maximumSignupsLimit": "{{ number }} at most",
       "miscSignupsConstraint": "Events {{ interval }}",
       "moveDown": "Move down in queue",

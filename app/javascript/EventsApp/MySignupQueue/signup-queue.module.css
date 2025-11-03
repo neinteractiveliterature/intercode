@@ -5,3 +5,4 @@
 .skip.waitlist {
   background-color: hsl(from var(--bs-yellow) h s l / calc(alpha * 0.2));
 }
+
