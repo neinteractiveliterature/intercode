@@ -749,7 +749,8 @@
     "catalog": {
       "author_one": "Author",
       "author_other": "Authors",
-      "organization": "Organization"
+      "organization": "Organization",
+      "textSearchLabel": "Search"
     },
     "categoryDropdown": {
       "allCategoriesLabel": "All event types",
