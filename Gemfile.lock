@@ -325,7 +325,7 @@ GEM
       railties (>= 6.1)
       rexml
     lint_roller (1.1.0)
-    liquid (5.8.7)
+    liquid (5.10.0)
       bigdecimal
       strscan (>= 3.1.1)
     listen (3.9.0)
