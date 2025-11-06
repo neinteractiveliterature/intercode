@@ -2960,6 +2960,7 @@ export type EventFiltersInput = {
   category?: InputMaybe<Array<InputMaybe<Scalars['Int']['input']>>>;
   form_items?: InputMaybe<Scalars['JSON']['input']>;
   my_rating?: InputMaybe<Array<Scalars['Int']['input']>>;
+  text_search?: InputMaybe<Scalars['String']['input']>;
   title?: InputMaybe<Scalars['String']['input']>;
   title_prefix?: InputMaybe<Scalars['String']['input']>;
 };

@@ -36,7 +36,7 @@ const PAGE_SIZE = 20;
 const filterCodecs = buildFieldFilterCodecs({
   category: FilterCodecs.integerArray,
   my_rating: FilterCodecs.integerArray,
-  title_prefix: FilterCodecs.nonEmptyString,
+  text_search: FilterCodecs.nonEmptyString,
   form_items: FilterCodecs.json,
 });
 
@@ -150,8 +150,8 @@ function EventList(): React.JSX.Element {
     [changeFilterValue],
   );
 
-  const titlePrefixChanged = useCallback(
-    (value: unknown) => changeFilterValue('title_prefix', value),
+  const textSearchChanged = useCallback(
+    (value: unknown) => changeFilterValue('text_search', value),
     [changeFilterValue],
   );
 
@@ -183,7 +183,7 @@ function EventList(): React.JSX.Element {
 
   return (
     <>
-      <h1>Event Catalog</h1>
+      <h1>{t('navigation.events.eventCatalog')}</h1>
 
       <EventCatalogNavTabs />
 
@@ -232,9 +232,9 @@ function EventList(): React.JSX.Element {
 
           <div className="ms-2 flex-grow-1">
             <SearchInput
-              label="Search"
-              value={effectiveFilters.find(({ id }) => id === 'title_prefix')?.value as string | undefined}
-              onChange={titlePrefixChanged}
+              label={t('events.catalog.textSearchLabel')}
+              value={effectiveFilters.find(({ id }) => id === 'text_search')?.value as string | undefined}
+              onChange={textSearchChanged}
               iconSet="bootstrap-icons"
             />
           </div>

@@ -37,6 +37,16 @@ class Tables::EventsTableResultsPresenter < Tables::TableResultsPresenter
     end
   end
 
+  field :text_search, "Text search" do
+    def apply_filter(scope, value)
+      scope.where(id: PgSearch.multisearch(value).where(searchable_type: "Event").select(:searchable_id))
+    end
+
+    def sql_order(_direction)
+      nil
+    end
+  end
+
   field :my_rating, "My rating" do
     delegate :user_con_profile, :pundit_user, to: :presenter
 

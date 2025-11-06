@@ -3713,6 +3713,7 @@ input EventFiltersInput {
   category: [Int]
   form_items: JSON
   my_rating: [Int!]
+  text_search: String
   title: String
   title_prefix: String
 }
