@@ -1444,15 +1444,18 @@
     },
     "rankedChoiceDecision": {
       "decisions": {
+        "signup": "sign up",
+        "skipChoice": "skip choice",
+        "skipUser": "skip user",
+        "waitlist": "waitlist"
+      },
+      "reasons": {
         "conflict": "conflict",
         "full": "event full",
         "missingTicket": "{{ ticketName }} required",
         "noMoreSignupsAllowed": "no more signups allowed",
         "noPendingChoices": "user constraints",
-        "signup": "sign up",
-        "skipChoice": "skip choice",
-        "skipUser": "skip user",
-        "waitlist": "waitlist"
+        "teamMember": "team member"
       }
     },
     "rowSelection": {

@@ -57,7 +57,16 @@ class ExecuteRankedChoiceSignupService < CivilService::Service
     success(decision:)
   end
 
-  def skip_reason
+  def skip_reason # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+    if signup_ranked_choice
+         .target_run
+         .event
+         .team_members
+         .where(user_con_profile_id: signup_ranked_choice.user_con_profile_id)
+         .any?
+      return SkipReason.new(:team_member)
+    end
+
     conflicts = constraints.conflicting_signups_for_run(signup_ranked_choice.target_run)
     return SkipReason.new(:conflict, conflicting_signup_ids: conflicts.map(&:id)) if conflicts.any?
 

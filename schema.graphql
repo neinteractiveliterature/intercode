@@ -6141,6 +6141,11 @@ enum RankedChoiceDecisionReason {
   The user's personal constraints prohibit signing up for this event (in conjunction with their existing signups)
   """
   RANKED_CHOICE_USER_CONSTRAINTS
+
+  """
+  The user is a team member for this event and should sign up manually.
+  """
+  TEAM_MEMBER
 }
 
 """

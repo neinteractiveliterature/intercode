@@ -37,6 +37,21 @@ describe ExecuteRankedChoiceSignupService do
     assert_equal "pending", signup_ranked_choice.state
   end
 
+  it "skips the choice if the user would be a team member" do
+    event = create(:event, convention:)
+    the_run = create(:run, event:)
+    signup_ranked_choice = create(:signup_ranked_choice, target_run: the_run)
+    create(:team_member, user_con_profile: signup_ranked_choice.user_con_profile, event:)
+
+    result = ExecuteRankedChoiceSignupService.new(signup_round:, signup_ranked_choice:, whodunit: nil).call!
+
+    signup_ranked_choice.reload
+    assert_equal "skip_choice", result.decision.decision
+    assert_equal "team_member", result.decision.reason
+    assert_nil result.decision.signup
+    assert_equal "pending", signup_ranked_choice.state
+  end
+
   it "waitlists if there's no room in the run and this choice prioritizes waitlisting" do
     event =
       create(
