@@ -4971,7 +4971,9 @@ export enum RankedChoiceDecisionReason {
   /** This user has no more pending ranked choices in their queue */
   NoPendingChoices = 'NO_PENDING_CHOICES',
   /** The user's personal constraints prohibit signing up for this event (in conjunction with their existing signups) */
-  RankedChoiceUserConstraints = 'RANKED_CHOICE_USER_CONSTRAINTS'
+  RankedChoiceUserConstraints = 'RANKED_CHOICE_USER_CONSTRAINTS',
+  /** The user is a team member for this event and should sign up manually. */
+  TeamMember = 'TEAM_MEMBER'
 }
 
 /** The decision the ranked choice automation algorithm made when evaluating a particular choice. */

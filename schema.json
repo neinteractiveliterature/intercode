@@ -28151,6 +28151,12 @@
               "description": "The user's personal constraints prohibit signing up for this event (in conjunction with their existing signups)",
               "isDeprecated": false,
               "deprecationReason": null
+            },
+            {
+              "name": "TEAM_MEMBER",
+              "description": "The user is a team member for this event and should sign up manually.",
+              "isDeprecated": false,
+              "deprecationReason": null
             }
           ]
         },

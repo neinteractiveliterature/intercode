@@ -75,27 +75,31 @@ export function RankedChoiceDecisionCell<TData, TValue extends RankedChoiceDecis
 
 export function describeReason(reason: RankedChoiceDecisionReason, ticketName: string, t: TFunction): string {
   if (reason === RankedChoiceDecisionReason.Conflict) {
-    return t('tables.rankedChoiceDecision.decisions.conflict');
+    return t('tables.rankedChoiceDecision.reasons.conflict');
   }
 
   if (reason === RankedChoiceDecisionReason.Full) {
-    return t('tables.rankedChoiceDecision.decisions.full');
+    return t('tables.rankedChoiceDecision.reasons.full');
   }
 
   if (reason === RankedChoiceDecisionReason.MissingTicket) {
-    return t('tables.rankedChoiceDecision.decisions.missingTicket', { ticketName });
+    return t('tables.rankedChoiceDecision.reasons.missingTicket', { ticketName });
   }
 
   if (reason === RankedChoiceDecisionReason.NoMoreSignupsAllowed) {
-    return t('tables.rankedChoiceDecision.decisions.noMoreSignupsAllowed');
+    return t('tables.rankedChoiceDecision.reasons.noMoreSignupsAllowed');
   }
 
   if (reason === RankedChoiceDecisionReason.NoPendingChoices) {
-    return t('tables.rankedChoiceDecision.decisions.noPendingChoices');
+    return t('tables.rankedChoiceDecision.reasons.noPendingChoices');
   }
 
   if (reason === RankedChoiceDecisionReason.RankedChoiceUserConstraints) {
-    return t('tables.rankedChoiceDecision.decisions.noPendingChoices');
+    return t('tables.rankedChoiceDecision.reasons.noPendingChoices');
+  }
+
+  if (reason === RankedChoiceDecisionReason.TeamMember) {
+    return t('tables.rankedChoiceDecision.reasons.teamMember');
   }
 
   assertNever(reason, true);
