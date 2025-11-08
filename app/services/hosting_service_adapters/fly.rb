@@ -121,13 +121,7 @@ class HostingServiceAdapters::Fly < HostingServiceAdapters::Base
 
   def machine_create_body(group:, type:)
     template_machine = instances_state.find_instances(group:).first
-    config_template =
-      template_machine.config.merge(
-        "guest" => guest_config_for_type(type),
-        "metadata" => {
-          "fly_process_group" => fly_process_group_for_group(group)
-        }
-      )
+    config_template = template_machine.config.merge("guest" => guest_config_for_type(type))
     { config: config_template, region: template_machine.region }
   end
 
