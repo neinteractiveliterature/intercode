@@ -92,23 +92,45 @@ class AutoscaleServersService < CivilService::Service
     scaling_targets.max.clamp(MIN_INSTANCES, MAX_INSTANCES).ceil
   end
 
+  def self.worker_scaling_target_for(time)
+    web_scaling_target = scaling_target_for(time)
+
+    if web_scaling_target == MIN_INSTANCES
+      1
+    else
+      2
+    end
+  end
+
+  def self.worker_instance_type_for(time)
+    web_scaling_target = scaling_target_for(time)
+
+    if web_scaling_target == MIN_INSTANCES
+      :small
+    else
+      :large
+    end
+  end
+
   private
 
   def inner_call
-    adapter = HostingServiceAdapters::Base.find_adapter
-    return unless adapter
+    now = Time.now
+    web_scaling_target = self.class.scaling_target_for(now)
+    worker_scaling_target = self.class.worker_scaling_target_for(now)
+    worker_instance_type = self.class.worker_instance_type_for(now)
 
-    scaling_target = self.class.scaling_target_for(Time.now)
-    current_instance_count = adapter.fetch_instance_count
-
-    if current_instance_count == scaling_target
-      Rails.logger.info "Currently running #{current_instance_count} #{"instance".pluralize(current_instance_count)}; \
-no autoscaling needed"
-    else
-      Rails.logger.info "Autoscaling to #{scaling_target} instances"
-      adapter.update_instance_count(scaling_target)
-    end
+    adapter.apply_instance_counts(
+      [
+        { group: :web, type: :small, count: web_scaling_target },
+        { group: :worker, type: worker_instance_type, count: worker_scaling_target }
+      ]
+    )
 
     success
+  end
+
+  def adapter
+    @adapter ||= HostingServiceAdapters.find_adapter
   end
 end

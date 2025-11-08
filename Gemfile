@@ -189,3 +189,5 @@ end
 
 gem "sentry-ruby", "~> 5.17"
 gem "sentry-rails", "~> 5.17"
+
+gem "openssl", "~> 3.3"
