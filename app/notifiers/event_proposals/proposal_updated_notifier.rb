@@ -17,6 +17,10 @@ class EventProposals::ProposalUpdatedNotifier < Notifier
     super(convention: event_proposal.convention, event_key: "event_proposals/proposal_updated")
   end
 
+  def initializer_options
+    { event_proposal:, changes: }
+  end
+
   def liquid_assigns
     super.merge("event_proposal" => event_proposal, "changes_html" => changes_html)
   end

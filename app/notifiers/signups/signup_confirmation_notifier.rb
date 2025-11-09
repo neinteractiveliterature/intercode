@@ -18,6 +18,10 @@ class Signups::SignupConfirmationNotifier < Notifier
     super(convention: signup.run.event.convention, event_key: "signups/signup_confirmation", triggering_user:)
   end
 
+  def initializer_options
+    { signup:, triggering_user: }
+  end
+
   def liquid_assigns
     super.merge("signup" => signup)
   end

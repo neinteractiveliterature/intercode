@@ -13,6 +13,10 @@ class Orders::CancelledNotifier < Notifier
     super(convention: order.user_con_profile.convention, event_key: "orders/cancelled", triggering_user:)
   end
 
+  def initializer_options
+    { order:, refund_id:, triggering_user: }
+  end
+
   def liquid_assigns
     super.merge("order" => order, "refund_id" => refund_id)
   end

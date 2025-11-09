@@ -17,7 +17,15 @@ class Signups::RegistrationPolicyChangeMovedSignupsNotifier < Notifier
     @event = event
     @move_results = move_results
     @whodunit = whodunit
-    super(convention: event.convention, event_key: "signups/registration_policy_change_moved_signups")
+    super(
+      convention: event.convention,
+      event_key: "signups/registration_policy_change_moved_signups",
+      triggering_user: whodunit
+    )
+  end
+
+  def initializer_options
+    { event:, move_results:, whodunit: }
   end
 
   def liquid_assigns

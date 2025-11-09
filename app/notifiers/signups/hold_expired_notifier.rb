@@ -17,6 +17,10 @@ class Signups::HoldExpiredNotifier < Notifier
     super(convention: signup.run.event.convention, event_key: "signups/hold_expired")
   end
 
+  def initializer_options
+    { signup: }
+  end
+
   def liquid_assigns
     super.merge("signup" => signup)
   end

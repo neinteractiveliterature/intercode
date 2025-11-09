@@ -21,6 +21,10 @@ class Signups::WithdrawalNotifier < Notifier
     super(convention: signup.run.event.convention, event_key: "signups/withdrawal", triggering_user:)
   end
 
+  def initializer_options
+    { signup:, prev_state:, prev_bucket_key:, move_results:, triggering_user: }
+  end
+
   def liquid_assigns
     super.merge(
       "signup" => signup,

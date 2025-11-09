@@ -18,6 +18,10 @@ class Signups::UserSignupMovedNotifier < Notifier
     super(convention: signup.event.convention, event_key: "signups/user_signup_moved", triggering_user:)
   end
 
+  def initializer_options
+    { move_result:, triggering_user: }
+  end
+
   def liquid_assigns
     super.merge("signup" => signup, "move_result" => move_result)
   end

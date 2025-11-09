@@ -78,9 +78,12 @@ class Notifier
     raise NotImplementedError, "Notifier subclasses must implement .build_default_destinations"
   end
 
+  def initializer_options
+    raise NotImplementedError, "Notifier subclasses must implement #initializer_options"
+  end
+
   def deliver_later(options = {})
-    mail.deliver_later(options)
-    sms_jobs.each { |job| job.enqueue(options) }
+    SendNotificationJob.set(options).perform_later(event_key:, options: initializer_options)
   end
 
   def deliver_now

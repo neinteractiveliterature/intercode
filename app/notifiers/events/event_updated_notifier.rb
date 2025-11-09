@@ -12,6 +12,10 @@ class Events::EventUpdatedNotifier < Notifier
     super(convention: event.convention, event_key: "events/event_updated")
   end
 
+  def initializer_options
+    { event:, changes: }
+  end
+
   def liquid_assigns
     super.merge("event" => event, "changes_html" => changes_html)
   end
