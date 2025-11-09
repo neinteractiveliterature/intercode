@@ -41,7 +41,12 @@ class SignupRound < ApplicationRecord
   scope :reverse_chronological, -> { order("start DESC NULLS LAST") }
 
   def self.execute_currently_due_rounds!
-    currently_due.chronological.includes(:convention).find_each(&:execute!)
+    # can't use find_each with ordered scopes so we'll roll our own
+    round_ids = currently_due.chronological.pluck(:id)
+    round_ids.in_groups_of(100) do |batch|
+      rounds = SignupRound.where(id: batch).includes(:convention)
+      rounds.sort_by { |round| batch.index(round.id) }.each(&:execute!)
+    end
   end
 
   def execute!
