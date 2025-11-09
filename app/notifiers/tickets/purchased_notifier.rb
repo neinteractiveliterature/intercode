@@ -11,6 +11,10 @@ class Tickets::PurchasedNotifier < Notifier
     super(convention: ticket.convention, event_key: "tickets/purchased", triggering_user:)
   end
 
+  def initializer_options
+    { ticket:, triggering_user: }
+  end
+
   def liquid_assigns
     super.merge("ticket" => ticket)
   end

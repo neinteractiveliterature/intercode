@@ -13,6 +13,10 @@ class UserActivityAlerts::AlertNotifier < Notifier
     super(convention: alert_user_con_profile.convention, event_key: "user_activity_alerts/alert")
   end
 
+  def initializer_options
+    { alert_user_con_profile:, user_activity_alert:, event: }
+  end
+
   def liquid_assigns
     super.merge(
       "alert_user_con_profile" => alert_user_con_profile,

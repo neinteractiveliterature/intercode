@@ -19,6 +19,10 @@ class SignupRequests::RequestAcceptedNotifier < Notifier
     )
   end
 
+  def initializer_options
+    { signup_request:, triggering_user: }
+  end
+
   def liquid_assigns
     super.merge("signup_request" => signup_request)
   end

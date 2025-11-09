@@ -17,6 +17,10 @@ class EventProposals::NewProposalNotifier < Notifier
     super(convention: event_proposal.convention, event_key: "event_proposals/new_proposal", triggering_user:)
   end
 
+  def initializer_options
+    { event_proposal:, triggering_user: }
+  end
+
   def liquid_assigns
     super.merge("event_proposal" => event_proposal)
   end

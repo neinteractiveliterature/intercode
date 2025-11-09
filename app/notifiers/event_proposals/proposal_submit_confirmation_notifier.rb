@@ -21,6 +21,10 @@ class EventProposals::ProposalSubmitConfirmationNotifier < Notifier
     )
   end
 
+  def initializer_options
+    { event_proposal:, triggering_user: }
+  end
+
   def liquid_assigns
     super.merge(
       "event_proposal" => event_proposal,

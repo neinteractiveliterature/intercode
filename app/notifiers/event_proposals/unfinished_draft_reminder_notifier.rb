@@ -14,6 +14,10 @@ class EventProposals::UnfinishedDraftReminderNotifier < Notifier
     super(convention: event_proposal.convention, event_key: "event_proposals/unfinished_draft_reminder")
   end
 
+  def initializer_options
+    { event_proposal: }
+  end
+
   def liquid_assigns
     super.merge("event_proposal" => event_proposal)
   end

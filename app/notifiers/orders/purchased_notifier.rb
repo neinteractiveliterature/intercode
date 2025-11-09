@@ -12,6 +12,10 @@ class Orders::PurchasedNotifier < Notifier
     super(convention: order.user_con_profile.convention, event_key: "orders/purchased", triggering_user:)
   end
 
+  def initializer_options
+    { order:, triggering_user: }
+  end
+
   def liquid_assigns
     super.merge("order" => order)
   end
