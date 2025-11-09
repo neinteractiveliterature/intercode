@@ -44,7 +44,7 @@ class Notifier
   end
 
   def render
-    Time.use_zone(Notifier.current_timezone) do
+    Time.use_zone(Notifier.current_timezone || convention.timezone) do
       {
         subject: notification_template.subject_template,
         body_html: notification_template.body_html_template,
