@@ -4,10 +4,7 @@ Intercode::Application.routes.draw do
   use_doorkeeper_openid_connect
   use_doorkeeper
 
-  if Rails.env.development?
-    mount LetterOpenerWeb::Engine, at: "/letter_opener"
-    get "/graphiql" => "graphiql#show"
-  end
+  get "/graphiql" => "graphiql#show" if Rails.env.development?
 
   post "/graphql", to: "graphql#execute"
   devise_for :users, controllers: { passwords: "passwords", registrations: "registrations", sessions: "sessions" }

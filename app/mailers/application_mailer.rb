@@ -4,18 +4,18 @@ class ApplicationMailer < ActionMailer::Base
 
   default(
     :from => "intercode@#{Rails.application.config.action_mailer.default_url_options.try(:[], :host)}",
-    'X-SES-CONFIGURATION-SET' => 'default'
+    "X-SES-CONFIGURATION-SET" => "default"
   )
 
-  layout 'mailer'
+  layout "mailer"
 
   protected
 
-  def use_convention_timezone(convention, &block)
+  def use_convention_timezone(convention, &)
     timezone = convention&.timezone
 
     if timezone
-      Time.use_zone(timezone, &block)
+      Time.use_zone(timezone, &)
     else
       yield
     end
@@ -58,7 +58,7 @@ class ApplicationMailer < ActionMailer::Base
       mail(subject: render_results[:subject], **default_headers_from_notifier(notifier), **options) do |format|
         format.html do
           @body_html = render_results[:body_html]
-          render template: 'notifications/notification'
+          render template: "notifications/notification"
         end
 
         format.text { render plain: render_results[:body_text] } if render_results[:body_text].present?
