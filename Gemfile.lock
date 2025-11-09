@@ -256,8 +256,8 @@ GEM
       faraday-net_http (>= 2.0, < 3.5)
       json
       logger
-    faraday-net_http (3.4.1)
-      net-http (>= 0.5.0)
+    faraday-net_http (3.4.2)
+      net-http (~> 0.5)
     ffi (1.17.2-arm64-darwin)
     ffi (1.17.2-x86_64-linux-gnu)
     flamegraph (0.9.5)
@@ -368,7 +368,7 @@ GEM
       bigdecimal
     nats-pure (2.4.0)
       concurrent-ruby (~> 1.0)
-    net-http (0.6.0)
+    net-http (0.7.0)
       uri
     net-imap (0.5.12)
       date
@@ -619,9 +619,9 @@ GEM
     toml (0.3.0)
       parslet (>= 1.8.0, < 3.0.0)
     tsort (0.2.0)
-    twilio-ruby (7.7.2)
+    twilio-ruby (7.8.5)
       faraday (>= 0.9, < 3.0)
-      jwt (>= 1.5, < 3.0)
+      jwt (>= 1.5, < 4.0)
       nokogiri (>= 1.6, < 2.0)
     typeprof (0.30.1)
       rbs (>= 3.6.0)
@@ -750,7 +750,7 @@ DEPENDENCIES
   syntax_tree-haml
   syntax_tree-rbs
   term-ansicolor
-  twilio-ruby (~> 7.7.0)
+  twilio-ruby (~> 7.8.0)
   typeprof
   tzinfo-data
   webrick
