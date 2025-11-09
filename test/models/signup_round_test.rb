@@ -42,7 +42,13 @@ class SignupRoundTest < ActiveSupport::TestCase
       mock_service = Minitest::Mock.new
       mock_service.expect :call!, nil
       convention = FactoryBot.create(:convention, signup_automation_mode: "ranked_choice")
-      signup_round = FactoryBot.create(:signup_round, convention:, automation_action: "execute_ranked_choice")
+      signup_round =
+        FactoryBot.create(
+          :signup_round,
+          convention:,
+          automation_action: "execute_ranked_choice",
+          ranked_choice_order: "asc"
+        )
 
       ExecuteRankedChoiceSignupRoundService.stub :new, mock_service do
         signup_round.execute!
