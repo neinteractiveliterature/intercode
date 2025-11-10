@@ -7693,12 +7693,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/node@npm:*, @types/node@npm:22.16.5":
-  version: 22.16.5
-  resolution: "@types/node@npm:22.16.5"
+"@types/node@npm:*, @types/node@npm:22.19.0":
+  version: 22.19.0
+  resolution: "@types/node@npm:22.19.0"
   dependencies:
     undici-types: "npm:~6.21.0"
-  checksum: 10c0/93a245e96a01f4a6aa38475000070292a9299e17b95bc1fc8180c652fb3a62f9b3b9ec0b78f9fc6a78b9274d3dfce456e80c7bb68b5357c8f7dbf581df4408c1
+  checksum: 10c0/66b98fcd38efb4ae58c628d61fed2b8f17c830eb665d8bceabc4174cae1dd81b8e4caac4c70d7dc929f9f76a3dc46cb21f480e904d0b898297bd12c0a2d1571a
   languageName: node
   linkType: hard
 
@@ -21897,7 +21897,7 @@ __metadata:
     "@types/luxon": "npm:3.7.1"
     "@types/md5": "npm:^2"
     "@types/minimist": "npm:1.2.5"
-    "@types/node": "npm:22.16.5"
+    "@types/node": "npm:22.19.0"
     "@types/pnpapi": "npm:^0.0.5"
     "@types/punycode": "npm:2.1.4"
     "@types/qs": "npm:^6"
