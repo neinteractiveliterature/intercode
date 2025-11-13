@@ -421,7 +421,7 @@ describe ExecuteRankedChoiceSignupRoundService do
       user_con_profile = create(:user_con_profile, convention:, lottery_number: 1)
       create(:signup_ranked_choice, user_con_profile:, target_run: the_run)
 
-      email_team_member = create(:team_member, event:, receive_signup_email: "all_signups")
+      create(:team_member, event:, receive_signup_email: "all_signups")
 
       perform_enqueued_jobs do
         result =
