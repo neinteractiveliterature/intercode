@@ -41,6 +41,7 @@ class Signup < ApplicationRecord
   has_one :event, through: :run
   has_one :convention, through: :event
   has_one :signup_request, foreign_key: "result_signup_id", dependent: :destroy
+  has_one :signup_ranked_choice, foreign_key: "result_signup_id", dependent: :destroy
   belongs_to :updated_by, class_name: "User", optional: true
   has_many :signup_changes, dependent: :destroy
 
