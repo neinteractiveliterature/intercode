@@ -74,6 +74,7 @@ class ErrorReporter
     yield
   rescue StandardError => e
     ErrorReporting.error(e, tags: { job: body["job_class"], queue: }, message: body)
+    raise e
   end
 end
 
