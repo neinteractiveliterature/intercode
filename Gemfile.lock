@@ -619,7 +619,7 @@ GEM
     toml (0.3.0)
       parslet (>= 1.8.0, < 3.0.0)
     tsort (0.2.0)
-    twilio-ruby (7.8.5)
+    twilio-ruby (7.8.6)
       faraday (>= 0.9, < 3.0)
       jwt (>= 1.5, < 4.0)
       nokogiri (>= 1.6, < 2.0)
