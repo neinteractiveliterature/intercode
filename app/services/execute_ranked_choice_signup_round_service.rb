@@ -66,20 +66,25 @@ class ExecuteRankedChoiceSignupRoundService < CivilService::Service
   def execute_pass(pass_number)
     prev_decisions = @decisions.dup
 
-    ActiveRecord::Base.transaction do
-      user_con_profiles = ordered_user_con_profiles.to_a
-      user_con_profiles.reverse! if signup_round.serpentine_ranked_choice_order? && pass_number.odd?
+    executed_choices =
+      ActiveRecord::Base.transaction do
+        user_con_profiles = ordered_user_con_profiles.to_a
+        user_con_profiles.reverse! if signup_round.serpentine_ranked_choice_order? && pass_number.odd?
 
-      executed_choices =
-        user_con_profiles.filter_map { |user_con_profile| execute_choices_for_user_con_profile(user_con_profile) }
+        executed_choices =
+          user_con_profiles.filter_map { |user_con_profile| execute_choices_for_user_con_profile(user_con_profile) }
 
-      if executed_choices.empty?
-        @decisions = prev_decisions
-        raise ActiveRecord::Rollback
+        if executed_choices.empty?
+          @decisions = prev_decisions
+          raise ActiveRecord::Rollback
+        end
+
+        executed_choices
       end
 
-      executed_choices
-    end
+    send_notifications(executed_choices) if executed_choices
+
+    executed_choices
   end
 
   def execute_choices_for_user_con_profile(user_con_profile)
@@ -183,7 +188,18 @@ class ExecuteRankedChoiceSignupRoundService < CivilService::Service
     false
   end
 
-  def execute_choice(constraints, signup_ranked_choice, allow_waitlist: false)
+  def send_notifications(executed_choices)
+    return if suppress_notifications
+
+    executed_choices.each do |choice|
+      if choice.result_signup
+        choice.result_signup.send_signup_confirmation_notification(triggering_user: nil)
+        choice.result_signup.send_team_member_notifications(triggering_user: nil)
+      end
+    end
+  end
+
+  def execute_choice(constraints, signup_ranked_choice, allow_waitlist: false) # rubocop:disable Naming/PredicateMethod
     result =
       ExecuteRankedChoiceSignupService.new(
         signup_round:,
@@ -192,7 +208,7 @@ class ExecuteRankedChoiceSignupRoundService < CivilService::Service
         allow_waitlist:,
         constraints:,
         skip_locking: true,
-        suppress_notifications:
+        suppress_notifications: true
       ).call!
     decisions << result.decision
     result.decision.decision != "skip_choice"

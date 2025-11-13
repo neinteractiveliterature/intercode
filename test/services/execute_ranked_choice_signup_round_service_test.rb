@@ -1,6 +1,8 @@
 require "test_helper"
 
 describe ExecuteRankedChoiceSignupRoundService do
+  include ActiveJob::TestHelper
+
   let(:convention) { create(:convention, :with_notification_templates) }
   let(:one_player_registration_policy) do
     RegistrationPolicy.new({ buckets: [{ key: "only_one_player", total_slots: 1, slots_limited: true }] })
@@ -365,6 +367,74 @@ describe ExecuteRankedChoiceSignupRoundService do
       assert_equal low_number_user, result.decisions[0].user_con_profile
       assert_equal "signup", result.decisions[1].decision
       assert_equal high_number_user, result.decisions[1].user_con_profile
+    end
+  end
+
+  describe "notifications" do
+    it "sends user confirmations to signed up users" do
+      signup_round = create(:signup_round, convention:, ranked_choice_order: "asc", start: 1.day.ago)
+      user_con_profile = create(:user_con_profile, convention:, lottery_number: 1)
+      create(:signup_ranked_choice, user_con_profile:, target_run: the_run)
+
+      perform_enqueued_jobs do
+        result = ExecuteRankedChoiceSignupRoundService.new(signup_round:, whodunit: nil).call!
+        assert result.success?
+
+        assert_equal 1, ActionMailer::Base.deliveries.size
+        recipients = ActionMailer::Base.deliveries.flat_map(&:to)
+        assert_equal [user_con_profile.email], recipients
+      end
+    end
+
+    it "sends team member notifications to team members who have requested them" do
+      signup_round = create(:signup_round, convention:, ranked_choice_order: "asc", start: 1.day.ago)
+      user_con_profile = create(:user_con_profile, convention:, lottery_number: 1)
+      create(:signup_ranked_choice, user_con_profile:, target_run: the_run)
+
+      email_team_member = create(:team_member, event:, receive_signup_email: "all_signups")
+      email_team_member2 = create(:team_member, event:, receive_signup_email: "non_waitlist_signups")
+      no_email_team_member = create(:team_member, event:, receive_signup_email: "no")
+
+      perform_enqueued_jobs do
+        result = ExecuteRankedChoiceSignupRoundService.new(signup_round:, whodunit: nil).call!
+        assert result.success?
+
+        # Should send 2 emails: 1 confirmation to user, 1 team notification
+        assert_equal 2, ActionMailer::Base.deliveries.size
+
+        all_recipients = ActionMailer::Base.deliveries.flat_map(&:to)
+
+        # User should receive confirmation
+        assert_includes all_recipients, user_con_profile.email
+
+        # Team members with notification preferences should receive notification
+        assert_includes all_recipients, email_team_member.user_con_profile.email
+        assert_includes all_recipients, email_team_member2.user_con_profile.email
+
+        # Team member with no notifications should not receive anything
+        refute_includes all_recipients, no_email_team_member.user_con_profile.email
+      end
+    end
+
+    it "does not send notifications when suppress_notifications is true" do
+      signup_round = create(:signup_round, convention:, ranked_choice_order: "asc", start: 1.day.ago)
+      user_con_profile = create(:user_con_profile, convention:, lottery_number: 1)
+      create(:signup_ranked_choice, user_con_profile:, target_run: the_run)
+
+      email_team_member = create(:team_member, event:, receive_signup_email: "all_signups")
+
+      perform_enqueued_jobs do
+        result =
+          ExecuteRankedChoiceSignupRoundService.new(
+            signup_round:,
+            whodunit: nil,
+            suppress_notifications: true
+          ).call!
+        assert result.success?
+
+        # No emails should be sent when notifications are suppressed
+        assert_equal 0, ActionMailer::Base.deliveries.size
+      end
     end
   end
 end
