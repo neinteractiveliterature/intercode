@@ -117,6 +117,14 @@ class Signup < ApplicationRecord
     )
   end
 
+  def send_team_member_notifications(triggering_user:, **args)
+    Signups::NewSignupNotifier.new(signup: self, triggering_user:).deliver_later(**args)
+  end
+
+  def send_signup_confirmation_notification(triggering_user:, **args)
+    Signups::SignupConfirmationNotifier.new(signup: self, triggering_user:).deliver_later(**args)
+  end
+
   private
 
   def must_be_in_existing_bucket
