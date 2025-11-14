@@ -82,7 +82,7 @@
       },
       {
         "id": "conServices",
-        "match": [{ "categoryName": "Con services" }]
+        "match": [{ "categoryName": "Con services" }, { "categoryName": "Hotel services" }]
       },
       {
         "id": "volunteerEvents",
