@@ -67,8 +67,17 @@ class EmailForwardingRouter
         .includes(user_con_profiles: :user)
         .joins(:convention)
         .where("staff_positions.email ilike '%@' || conventions.domain")
-        .map do |sp|
-          Mapping.from_address(sp.email, destination_addresses: sp.user_con_profiles.map(&:email) + sp.cc_addresses)
+        .flat_map do |sp|
+          [
+            Mapping.from_address(sp.email, destination_addresses: sp.user_con_profiles.map(&:email) + sp.cc_addresses),
+            *sp.email_aliases.map do |email_alias|
+              Mapping.new(
+                inbound_domain: sp.convention.domain,
+                inbound_local: email_alias,
+                destination_addresses: sp.user_con_profiles.map(&:email) + sp.cc_addresses
+              )
+            end
+          ]
         end
     )
   end
