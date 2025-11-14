@@ -206,7 +206,7 @@
     "eslint-plugin-react-hooks": "7.0.1",
     "globals": "^16.0.0",
     "husky": "9.1.7",
-    "jsdom": "^26.0.0",
+    "jsdom": "^27.0.0",
     "lint-staged": "15.5.2",
     "prettier": "3.6.2",
     "react-test-renderer": "19.1.1",
