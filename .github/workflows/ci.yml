@@ -51,8 +51,8 @@ jobs:
         uses: mikepenz/action-junit-report@v6
         if: always() # always run even if the previous step fails
         with:
-          check_name: 'Vitest Report'
-          report_paths: 'test/reports/TEST-*.xml'
+          check_name: "Vitest Report"
+          report_paths: "test/reports/TEST-*.xml"
           detailed_summary: true
           skip_success_summary: true
       - name: Archive HTML test reports
@@ -76,7 +76,7 @@ jobs:
       RAILS_ENV: test
     services:
       postgres:
-        image: postgres:17
+        image: postgres:18
         env:
           POSTGRES_PASSWORD: postgres
         options: >-
@@ -95,7 +95,7 @@ jobs:
           sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
           wget -qO- https://www.postgresql.org/media/keys/ACCC4CF8.asc | sudo tee /etc/apt/trusted.gpg.d/pgdg.asc &>/dev/null
           sudo apt-get update
-          sudo apt-get install postgresql-client-17 -y
+          sudo apt-get install postgresql-client-18 -y
       - name: Set up Ruby
         uses: ruby/setup-ruby@v1
         with:
@@ -108,8 +108,8 @@ jobs:
         uses: mikepenz/action-junit-report@v6
         if: always() # always run even if the previous step fails
         with:
-          check_name: 'Minitest Report'
-          report_paths: 'test/reports/TEST-*.xml'
+          check_name: "Minitest Report"
+          report_paths: "test/reports/TEST-*.xml"
           detailed_summary: true
           skip_success_summary: true
       - name: Archive HTML test reports
@@ -252,9 +252,9 @@ jobs:
         uses: clearlyip/code-coverage-report-action@v6
         id: code_coverage_report_action
         with:
-          filename: 'merged-coverage.xml'
+          filename: "merged-coverage.xml"
           fail_on_negative_difference: true
-          artifact_download_workflow_names: 'ci,cron'
+          artifact_download_workflow_names: "ci,cron"
           only_list_changed_files: true
       - name: Add Coverage PR Comment
         if: github.event_name == 'pull_request'
