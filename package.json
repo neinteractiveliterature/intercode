@@ -207,7 +207,7 @@
     "globals": "^16.0.0",
     "husky": "9.1.7",
     "jsdom": "^27.0.0",
-    "lint-staged": "15.5.2",
+    "lint-staged": "16.2.6",
     "prettier": "3.6.2",
     "react-test-renderer": "19.1.1",
     "rollup": "^4.29.2",
