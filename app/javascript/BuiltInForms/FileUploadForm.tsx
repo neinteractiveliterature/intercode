@@ -11,7 +11,7 @@ import classNames from 'classnames';
 import AuthenticityTokensManager from '../AuthenticityTokensContext';
 
 function uploadFile(file: File, directUploadURL: string, onProgress?: (event: ProgressEvent<XMLHttpRequest>) => void) {
-  return new Promise<Blob>((resolve, reject) => {
+  return new Promise<Blob | undefined>((resolve, reject) => {
     const delegate: DirectUploadDelegate = {
       directUploadWillStoreFileWithXHR: (xhr) => {
         if (onProgress) {
