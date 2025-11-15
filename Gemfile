@@ -183,7 +183,7 @@ group :test do
   gem "rails-controller-testing"
 end
 
-gem "sentry-ruby", "~> 5.17"
-gem "sentry-rails", "~> 5.17"
+gem "sentry-ruby", "~> 6.0"
+gem "sentry-rails", "~> 6.0"
 
 gem "openssl", "~> 3.3"
