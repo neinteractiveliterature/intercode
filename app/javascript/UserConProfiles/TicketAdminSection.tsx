@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { Link } from 'react-router';
+import { Link, useRevalidator } from 'react-router';
 import { useSuspenseQuery } from '@apollo/client';
 import { DateTime } from 'luxon';
 import { useModal, useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
@@ -59,6 +59,7 @@ function TicketAdminControls({ convention, userConProfile }: TicketAdminControls
   );
   const confirm = useConfirm();
   const convertModal = useModal();
+  const revalidator = useRevalidator();
 
   const deleteTicket = async (refund: boolean) => {
     if (!userConProfile.ticket) {
@@ -75,6 +76,7 @@ function TicketAdminControls({ convention, userConProfile }: TicketAdminControls
         });
       },
     });
+    await revalidator.revalidate();
   };
 
   const buttons: React.JSX.Element[] = [];
