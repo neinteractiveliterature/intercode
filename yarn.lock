@@ -9558,15 +9558,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"apollo-upload-client@npm:18.0.1":
-  version: 18.0.1
-  resolution: "apollo-upload-client@npm:18.0.1"
+"apollo-upload-client@npm:19.0.0":
+  version: 19.0.0
+  resolution: "apollo-upload-client@npm:19.0.0"
   dependencies:
     extract-files: "npm:^13.0.0"
   peerDependencies:
-    "@apollo/client": ^3.8.0
+    "@apollo/client": ^4.0.0
     graphql: 14 - 16
-  checksum: 10c0/30803d91df5ee32231afc8e15fa52be2a46b11c827255e8028b4f49149bcc8e4b4d4469e33d4331e63e12aa697e9a5e359a32ae3608335c51a76dbe62ad55bcb
+    rxjs: ^7.3.0
+  checksum: 10c0/2a31bab3bcadae186f79d375387b8845a133d6577e96c9f91dc2f2bc099acf658707863761c8627adb10166c5b80ecbd97106f0616f7c30b3e11d72cc25b2592
   languageName: node
   linkType: hard
 
@@ -21960,7 +21961,7 @@ __metadata:
     "@vitest/coverage-v8": "npm:^4.0.0"
     "@vitest/eslint-plugin": "npm:^1.1.24"
     "@vitest/ui": "npm:^4.0.0"
-    apollo-upload-client: "npm:18.0.1"
+    apollo-upload-client: "npm:19.0.0"
     array-to-sentence: "npm:2.0.0"
     assert-never: "npm:1.4.0"
     autoprefixer: "npm:10.4.22"

@@ -75,7 +75,7 @@
     "@types/tinycolor2": "1.4.6",
     "@types/uuid": "11.0.0",
     "@types/zxcvbn": "4.4.5",
-    "apollo-upload-client": "18.0.1",
+    "apollo-upload-client": "19.0.0",
     "array-to-sentence": "2.0.0",
     "assert-never": "1.4.0",
     "autoprefixer": "10.4.22",
