@@ -11,8 +11,7 @@ import { EventProposalQueryData, EventProposalQueryDocument } from './queries.ge
 import { ConventionForFormItemDisplay } from '../FormPresenter/ItemDisplays/FormItemDisplay';
 import { CommonFormFieldsFragment } from '../Models/commonFormFragments.generated';
 import { parseResponseErrors } from '../parseResponseErrors';
-import { ImageAttachmentConfig } from '../BuiltInFormControls/MarkdownInput';
-import { Blob } from '@rails/activestorage';
+import { useImageAttachmentConfig } from '../BuiltInFormControls/MarkdownInput';
 import { client } from '../useIntercodeApolloClient';
 import {
   AttachImageToEventProposalDocument,
@@ -43,17 +42,13 @@ function EventProposalFormInner({
   const [submitError, setSubmitError] = useState<ApolloError>();
   const [updateError, setUpdateError] = useState<ApolloError>();
 
-  const imageAttachmentConfig = useMemo<ImageAttachmentConfig>(
-    () => ({
-      addBlob: (blob: Blob) =>
-        client.mutate({
-          mutation: AttachImageToEventProposalDocument,
-          variables: { id: eventProposal.id, signedBlobId: blob.signed_id },
-        }),
-      existingImages: eventProposal.images,
-    }),
-    [eventProposal.id, eventProposal.images],
-  );
+  const imageAttachmentConfig = useImageAttachmentConfig(eventProposal.images, async (blob) => {
+    const { data } = await client.mutate({
+      mutation: AttachImageToEventProposalDocument,
+      variables: { id: eventProposal.id, signedBlobId: blob.signed_id },
+    });
+    return data?.attachImageToEventProposal.attachment;
+  });
 
   const responseValuesChanged = useCallback(
     (newResponseValues: (typeof initialEventProposal)['form_response_attrs']) => {

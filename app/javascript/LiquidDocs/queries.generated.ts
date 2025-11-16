@@ -7,7 +7,10 @@ export type LiquidAssignFieldsFragment = { __typename: 'LiquidAssign', name: str
 export type LiquidAssignsQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type LiquidAssignsQueryData = { __typename: 'Query', cmsParent: { __typename: 'Convention', id: string, liquidAssigns: Array<{ __typename: 'LiquidAssign', name: string, drop_class_name: string, cms_variable_value_json?: string | null }> } | { __typename: 'RootSite', id: string, liquidAssigns: Array<{ __typename: 'LiquidAssign', name: string, drop_class_name: string, cms_variable_value_json?: string | null }> } };
+export type LiquidAssignsQueryData = { __typename: 'Query', cmsParent:
+    | { __typename: 'Convention', id: string, liquidAssigns: Array<{ __typename: 'LiquidAssign', name: string, drop_class_name: string, cms_variable_value_json?: string | null }> }
+    | { __typename: 'RootSite', id: string, liquidAssigns: Array<{ __typename: 'LiquidAssign', name: string, drop_class_name: string, cms_variable_value_json?: string | null }> }
+   };
 
 export type NotifierLiquidAssignsQueryVariables = Types.Exact<{
   eventKey: Types.NotificationEventKey;

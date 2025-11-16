@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { LoaderFunction, useFetcher, useLoaderData, useRouteLoaderData, useSubmit } from 'react-router';
+import { LoaderFunction, useLoaderData, useRouteLoaderData, useSubmit } from 'react-router';
 
 import useEventFormWithCategorySelection, { EventFormWithCategorySelection } from './useEventFormWithCategorySelection';
 import EditEvent from '../BuiltInForms/EditEvent';
@@ -12,10 +12,12 @@ import {
   EventAdminSingleEventQueryData,
   EventAdminSingleEventQueryDocument,
 } from './queries.generated';
-import { ImageAttachmentConfig } from '../BuiltInFormControls/MarkdownInput';
+import { useImageAttachmentConfig } from '../BuiltInFormControls/MarkdownInput';
 import { NamedRoute } from '../AppRouter';
 import { client } from '../useIntercodeApolloClient';
 import { UpdateEventOptions } from './$id';
+import { ActiveStorageAttachment } from 'graphqlTypes.generated';
+import { useAsyncFetcher } from 'useAsyncFetcher';
 
 type LoaderResult = WithFormResponse<EventAdminSingleEventQueryData['conventionByRequestHost']['event']>;
 
@@ -36,21 +38,17 @@ function EventAdminEditEvent() {
   const { convention, currentAbility } = useRouteLoaderData(NamedRoute.EventAdmin) as EventAdminEventsQueryData;
   const initialEvent = useLoaderData() as LoaderResult;
   const submit = useSubmit();
-  const fetcher = useFetcher();
+  const fetcher = useAsyncFetcher();
 
   const [run, setRun] = useState(initialEvent?.runs[0] || {});
 
-  const imageAttachmentConfig = useMemo<ImageAttachmentConfig>(
-    () => ({
-      addBlob: (blob) =>
-        fetcher.submit(
-          { signed_blob_id: blob.signed_id },
-          { action: `/events/${initialEvent.id}/attach_image`, method: 'POST' },
-        ),
-      existingImages: initialEvent.images,
-    }),
-    [fetcher, initialEvent.images, initialEvent.id],
-  );
+  const imageAttachmentConfig = useImageAttachmentConfig(initialEvent.images, async (blob) => {
+    const data = await fetcher.submitAsync<ActiveStorageAttachment>(
+      { signed_blob_id: blob.signed_id },
+      { action: `/events/${initialEvent.id}/attach_image`, method: 'POST' },
+    );
+    return data;
+  });
 
   const [eventFormWithCategorySelectionProps, { event, eventCategory, validateForm }] =
     useEventFormWithCategorySelection({

@@ -46,6 +46,14 @@ mutation RestoreDroppedEvent($input: RestoreDroppedEventInput!) {
 
 mutation AttachImageToEvent($id: ID!, $signedBlobId: ID!) {
   attachImageToEvent(input: { id: $id, signedBlobId: $signedBlobId }) {
+    attachment {
+      id
+      byte_size
+      content_type
+      filename
+      url
+    }
+
     event {
       id
       ...EventFields
