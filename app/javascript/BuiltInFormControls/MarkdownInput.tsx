@@ -9,7 +9,7 @@ import {
 } from '@neinteractiveliterature/litform';
 import { useTranslation } from 'react-i18next';
 import { markdown } from '@codemirror/lang-markdown';
-import { ComponentProps, useMemo } from 'react';
+import { ComponentProps, useEffect, useMemo, useRef, useState } from 'react';
 import { Extension } from '@codemirror/state';
 
 import parsePageContent from '../parsePageContent';
@@ -43,6 +43,33 @@ export type ImageAttachmentConfig = {
   existingImages: ActiveStorageAttachment[];
   addBlob: (blob: Blob) => void;
 };
+
+export function useImageAttachmentConfig(
+  initialExistingImages: ActiveStorageAttachment[],
+  uploadImage: (blob: Blob) => Promise<ActiveStorageAttachment | undefined>,
+) {
+  const uploadImageRef = useRef(uploadImage);
+  const [newImages, setNewImages] = useState<ActiveStorageAttachment[]>([]);
+
+  useEffect(() => {
+    uploadImageRef.current = uploadImage;
+  }, [uploadImage]);
+
+  const config = useMemo<ImageAttachmentConfig>(
+    () => ({
+      addBlob: async (blob) => {
+        const attachment = await uploadImageRef.current(blob);
+        if (attachment) {
+          setNewImages((prevNewImages) => [...prevNewImages, attachment]);
+        }
+      },
+      existingImages: [...initialExistingImages, ...newImages],
+    }),
+    [initialExistingImages, newImages],
+  );
+
+  return config;
+}
 
 export type MarkdownInputProps = Omit<
   ComponentProps<typeof CodeInput>,

@@ -7,7 +7,10 @@ export type PreviewLiquidQueryVariables = Types.Exact<{
 }>;
 
 
-export type PreviewLiquidQueryData = { __typename: 'Query', cmsParent: { __typename: 'Convention', id: string, previewLiquid: string } | { __typename: 'RootSite', id: string, previewLiquid: string } };
+export type PreviewLiquidQueryData = { __typename: 'Query', cmsParent:
+    | { __typename: 'Convention', id: string, previewLiquid: string }
+    | { __typename: 'RootSite', id: string, previewLiquid: string }
+   };
 
 export type PreviewMarkdownQueryVariables = Types.Exact<{
   markdown: Types.Scalars['String']['input'];
@@ -16,7 +19,10 @@ export type PreviewMarkdownQueryVariables = Types.Exact<{
 }>;
 
 
-export type PreviewMarkdownQueryData = { __typename: 'Query', cmsParent: { __typename: 'Convention', id: string, previewMarkdown: string } | { __typename: 'RootSite', id: string, previewMarkdown: string } };
+export type PreviewMarkdownQueryData = { __typename: 'Query', cmsParent:
+    | { __typename: 'Convention', id: string, previewMarkdown: string }
+    | { __typename: 'RootSite', id: string, previewMarkdown: string }
+   };
 
 export type PreviewNotifierLiquidQueryVariables = Types.Exact<{
   eventKey: Types.NotificationEventKey;

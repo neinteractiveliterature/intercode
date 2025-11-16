@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react';
-import { LoaderFunction, useFetcher, useLoaderData, useNavigate } from 'react-router';
+import { LoaderFunction, useLoaderData, useNavigate } from 'react-router';
 
 import useEventForm, { EventForm } from '../../EventAdmin/useEventForm';
 import EditEvent from '../../BuiltInForms/EditEvent';
@@ -15,9 +15,10 @@ import { CommonFormFieldsFragment } from '../../Models/commonFormFragments.gener
 import FourOhFourPage from '../../FourOhFourPage';
 import { AuthorizationError } from '../../Authentication/useAuthorizationRequired';
 import buildEventUrl from '../buildEventUrl';
-import { ImageAttachmentConfig } from '../../BuiltInFormControls/MarkdownInput';
+import { useImageAttachmentConfig } from '../../BuiltInFormControls/MarkdownInput';
 import { client } from '../../useIntercodeApolloClient';
 import { StandaloneUpdateEventDocument } from './mutations.generated';
+import { useAsyncFetcher } from 'useAsyncFetcher';
 
 export type StandaloneEditEventFormProps = {
   initialEvent: WithFormResponse<StandaloneEditEventQueryData['convention']['event']>;
@@ -35,14 +36,10 @@ function StandaloneEditEventForm({
   currentAbility,
 }: StandaloneEditEventFormProps) {
   const navigate = useNavigate();
-  const fetcher = useFetcher();
-  const imageAttachmentConfig = useMemo<ImageAttachmentConfig>(
-    () => ({
-      addBlob: (blob) =>
-        fetcher.submit({ signed_blob_id: blob.signed_id }, { action: '../attach_image', method: 'PATCH' }),
-      existingImages: initialEvent.images,
-    }),
-    [fetcher, initialEvent.images],
+  const fetcher = useAsyncFetcher();
+
+  const imageAttachmentConfig = useImageAttachmentConfig(initialEvent.images, (blob) =>
+    fetcher.submitAsync({ signed_blob_id: blob.signed_id }, { action: '../attach_image', method: 'PATCH' }),
   );
 
   const [eventFormProps, { event, validateForm }] = useEventForm({

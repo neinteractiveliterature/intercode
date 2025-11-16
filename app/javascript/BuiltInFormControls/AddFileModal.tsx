@@ -81,11 +81,9 @@ export default function AddFileModal({ visible, existingFiles, addBlob, fileChos
                 menu: (provided) => ({ ...provided, zIndex: 25 }),
               }}
             />
-            {data?.currentAbility.can_create_cms_files && (
-              <div className="card mt-2">
-                <FileUploadForm onUpload={uploadedFile} />
-              </div>
-            )}
+            <div className="card mt-2">
+              <FileUploadForm onUpload={uploadedFile} />
+            </div>
             {file && (
               <div className="card mt-2">
                 <div className="card-header">{t('cms.addFileModal.filePreview.title')}</div>

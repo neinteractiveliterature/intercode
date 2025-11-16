@@ -12,13 +12,16 @@ import { VisibilityDisclosureCard } from './PermissionDisclosures';
 function getLimitClass(count: number, limit: number) {
   const warningThreshold = Math.min(limit * 0.9, limit - 10);
   if (count < warningThreshold) {
+    // eslint-disable-next-line i18next/no-literal-string
     return 'text-success';
   }
 
   if (count <= limit) {
+    // eslint-disable-next-line i18next/no-literal-string
     return 'text-warning';
   }
 
+  // eslint-disable-next-line i18next/no-literal-string
   return 'text-danger';
 }
 

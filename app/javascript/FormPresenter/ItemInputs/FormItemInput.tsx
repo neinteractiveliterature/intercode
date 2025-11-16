@@ -114,5 +114,6 @@ export default memo(
     nextProps.value === prevProps.value &&
     nextProps.convention === prevProps.convention &&
     nextProps.valueInvalid === prevProps.valueInvalid &&
-    nextProps.formItem === prevProps.formItem,
+    nextProps.formItem === prevProps.formItem &&
+    nextProps.imageAttachmentConfig === prevProps.imageAttachmentConfig,
 );

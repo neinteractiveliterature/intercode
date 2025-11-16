@@ -8,21 +8,72 @@ export type CmsContentFields_CmsPartial_Fragment = { __typename: 'CmsPartial', i
 
 export type CmsContentFields_Page_Fragment = { __typename: 'Page', id: string, name?: string | null };
 
-export type CmsContentFieldsFragment = CmsContentFields_CmsLayout_Fragment | CmsContentFields_CmsPartial_Fragment | CmsContentFields_Page_Fragment;
+export type CmsContentFieldsFragment =
+  | CmsContentFields_CmsLayout_Fragment
+  | CmsContentFields_CmsPartial_Fragment
+  | CmsContentFields_Page_Fragment
+;
 
-export type CmsContentGroupFieldsFragment = { __typename: 'CmsContentGroup', id: string, name: string, current_ability_can_update: boolean, current_ability_can_delete: boolean, contents: Array<{ __typename: 'CmsLayout', id: string, name?: string | null } | { __typename: 'CmsPartial', id: string, name?: string | null } | { __typename: 'Page', id: string, name?: string | null }>, permissions: Array<{ __typename: 'Permission', id: string, permission: string, model: { __typename: 'CmsContentGroup', id: string, name: string } | { __typename: 'Convention', id: string, name: string } | { __typename: 'EventCategory', id: string, name: string, default_color?: string | null }, role: { __typename: 'OrganizationRole', id: string, name: string } | { __typename: 'StaffPosition', id: string, name: string } }> };
+export type CmsContentGroupFieldsFragment = { __typename: 'CmsContentGroup', id: string, name: string, current_ability_can_update: boolean, current_ability_can_delete: boolean, contents: Array<
+    | { __typename: 'CmsLayout', id: string, name?: string | null }
+    | { __typename: 'CmsPartial', id: string, name?: string | null }
+    | { __typename: 'Page', id: string, name?: string | null }
+  >, permissions: Array<{ __typename: 'Permission', id: string, permission: string, model:
+      | { __typename: 'CmsContentGroup', id: string, name: string }
+      | { __typename: 'Convention', id: string, name: string }
+      | { __typename: 'EventCategory', id: string, name: string, default_color?: string | null }
+    , role:
+      | { __typename: 'OrganizationRole', id: string, name: string }
+      | { __typename: 'StaffPosition', id: string, name: string }
+     }> };
 
 export type CmsContentGroupsAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
 
 
-export type CmsContentGroupsAdminQueryData = { __typename: 'Query', convention?: { __typename: 'Convention', id: string, name: string, staff_positions: Array<{ __typename: 'StaffPosition', id: string, name: string }> } | null, cmsParent: { __typename: 'Convention', id: string, cmsContentGroups: Array<{ __typename: 'CmsContentGroup', id: string, name: string, current_ability_can_update: boolean, current_ability_can_delete: boolean, contents: Array<{ __typename: 'CmsLayout', id: string, name?: string | null } | { __typename: 'CmsPartial', id: string, name?: string | null } | { __typename: 'Page', id: string, name?: string | null }>, permissions: Array<{ __typename: 'Permission', id: string, permission: string, model: { __typename: 'CmsContentGroup', id: string, name: string } | { __typename: 'Convention', id: string, name: string } | { __typename: 'EventCategory', id: string, name: string, default_color?: string | null }, role: { __typename: 'OrganizationRole', id: string, name: string } | { __typename: 'StaffPosition', id: string, name: string } }> }> } | { __typename: 'RootSite', id: string, cmsContentGroups: Array<{ __typename: 'CmsContentGroup', id: string, name: string, current_ability_can_update: boolean, current_ability_can_delete: boolean, contents: Array<{ __typename: 'CmsLayout', id: string, name?: string | null } | { __typename: 'CmsPartial', id: string, name?: string | null } | { __typename: 'Page', id: string, name?: string | null }>, permissions: Array<{ __typename: 'Permission', id: string, permission: string, model: { __typename: 'CmsContentGroup', id: string, name: string } | { __typename: 'Convention', id: string, name: string } | { __typename: 'EventCategory', id: string, name: string, default_color?: string | null }, role: { __typename: 'OrganizationRole', id: string, name: string } | { __typename: 'StaffPosition', id: string, name: string } }> }> }, currentAbility: { __typename: 'Ability', can_create_cms_content_groups: boolean } };
+export type CmsContentGroupsAdminQueryData = { __typename: 'Query', convention?: { __typename: 'Convention', id: string, name: string, staff_positions: Array<{ __typename: 'StaffPosition', id: string, name: string }> } | null, cmsParent:
+    | { __typename: 'Convention', id: string, cmsContentGroups: Array<{ __typename: 'CmsContentGroup', id: string, name: string, current_ability_can_update: boolean, current_ability_can_delete: boolean, contents: Array<
+          | { __typename: 'CmsLayout', id: string, name?: string | null }
+          | { __typename: 'CmsPartial', id: string, name?: string | null }
+          | { __typename: 'Page', id: string, name?: string | null }
+        >, permissions: Array<{ __typename: 'Permission', id: string, permission: string, model:
+            | { __typename: 'CmsContentGroup', id: string, name: string }
+            | { __typename: 'Convention', id: string, name: string }
+            | { __typename: 'EventCategory', id: string, name: string, default_color?: string | null }
+          , role:
+            | { __typename: 'OrganizationRole', id: string, name: string }
+            | { __typename: 'StaffPosition', id: string, name: string }
+           }> }> }
+    | { __typename: 'RootSite', id: string, cmsContentGroups: Array<{ __typename: 'CmsContentGroup', id: string, name: string, current_ability_can_update: boolean, current_ability_can_delete: boolean, contents: Array<
+          | { __typename: 'CmsLayout', id: string, name?: string | null }
+          | { __typename: 'CmsPartial', id: string, name?: string | null }
+          | { __typename: 'Page', id: string, name?: string | null }
+        >, permissions: Array<{ __typename: 'Permission', id: string, permission: string, model:
+            | { __typename: 'CmsContentGroup', id: string, name: string }
+            | { __typename: 'Convention', id: string, name: string }
+            | { __typename: 'EventCategory', id: string, name: string, default_color?: string | null }
+          , role:
+            | { __typename: 'OrganizationRole', id: string, name: string }
+            | { __typename: 'StaffPosition', id: string, name: string }
+           }> }> }
+  , currentAbility: { __typename: 'Ability', can_create_cms_content_groups: boolean } };
 
 export type SearchCmsContentQueryVariables = Types.Exact<{
   name?: Types.InputMaybe<Types.Scalars['String']['input']>;
 }>;
 
 
-export type SearchCmsContentQueryData = { __typename: 'Query', cmsParent: { __typename: 'Convention', id: string, typeaheadSearchCmsContent: Array<{ __typename: 'CmsLayout', id: string, name?: string | null } | { __typename: 'CmsPartial', id: string, name?: string | null } | { __typename: 'Page', id: string, name?: string | null }> } | { __typename: 'RootSite', id: string, typeaheadSearchCmsContent: Array<{ __typename: 'CmsLayout', id: string, name?: string | null } | { __typename: 'CmsPartial', id: string, name?: string | null } | { __typename: 'Page', id: string, name?: string | null }> } };
+export type SearchCmsContentQueryData = { __typename: 'Query', cmsParent:
+    | { __typename: 'Convention', id: string, typeaheadSearchCmsContent: Array<
+        | { __typename: 'CmsLayout', id: string, name?: string | null }
+        | { __typename: 'CmsPartial', id: string, name?: string | null }
+        | { __typename: 'Page', id: string, name?: string | null }
+      > }
+    | { __typename: 'RootSite', id: string, typeaheadSearchCmsContent: Array<
+        | { __typename: 'CmsLayout', id: string, name?: string | null }
+        | { __typename: 'CmsPartial', id: string, name?: string | null }
+        | { __typename: 'Page', id: string, name?: string | null }
+      > }
+   };
 
 export const CmsContentFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CmsContentFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsContent"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Page"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsPartial"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsLayout"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<CmsContentFieldsFragment, unknown>;
 export const CmsContentGroupFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CmsContentGroupFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsContentGroup"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"current_ability_can_update"}},{"kind":"Field","name":{"kind":"Name","value":"current_ability_can_delete"}},{"kind":"Field","name":{"kind":"Name","value":"contents"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"CmsContentFields"}}]}},{"kind":"Field","name":{"kind":"Name","value":"permissions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"permission"}},{"kind":"Field","name":{"kind":"Name","value":"model"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PermissionedModelFields"}}]}},{"kind":"Field","name":{"kind":"Name","value":"role"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PermissionedRoleFields"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CmsContentFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsContent"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Page"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsPartial"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsLayout"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"PermissionedModelFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"PermissionedModel"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsContentGroup"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Convention"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"EventCategory"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"default_color"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"PermissionedRoleFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"PermissionedRole"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"StaffPosition"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"OrganizationRole"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<CmsContentGroupFieldsFragment, unknown>;
