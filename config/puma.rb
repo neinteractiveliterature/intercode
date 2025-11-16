@@ -41,7 +41,7 @@ preload_app!
 # Allow puma to be restarted by `rails restart` command.
 plugin :tmp_restart
 
-on_worker_boot do
+before_worker_boot do
   if ENV["DYNO"] == "web.1"
     # Trace objects on 1 Dyno to generate heap dump in production
     require "objspace"
