@@ -18,7 +18,7 @@ class ExecuteRankedChoiceSignupRoundService < CivilService::Service
     @decisions = []
   end
 
-  def inner_call
+  def inner_call # rubocop:disable Metrics/MethodLength
     prev_round =
       signup_round
         .convention
