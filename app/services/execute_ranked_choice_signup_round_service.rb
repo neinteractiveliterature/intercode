@@ -31,14 +31,16 @@ class ExecuteRankedChoiceSignupRoundService < CivilService::Service
     return success(decisions: []) if signup_round.maximum_event_signups_as_number <= prev_max_signups
 
     with_relevant_locks do
-      pass_number = 0
-      loop do
-        executed_choices_this_pass = execute_pass(pass_number)
-        break if executed_choices_this_pass.blank?
-        pass_number += 1
-      end
+      ActiveRecord::Base.transaction do
+        pass_number = 0
+        loop do
+          executed_choices_this_pass = execute_pass(pass_number)
+          break if executed_choices_this_pass.blank?
+          pass_number += 1
+        end
 
-      ordered_user_con_profiles.update_all(ranked_choice_ordering_boost: 0)
+        ordered_user_con_profiles.update_all(ranked_choice_ordering_boost: 0)
+      end
     end
 
     success(decisions:)
@@ -67,7 +69,7 @@ class ExecuteRankedChoiceSignupRoundService < CivilService::Service
     prev_decisions = @decisions.dup
 
     executed_choices =
-      ActiveRecord::Base.transaction do
+      ActiveRecord::Base.transaction(requires_new: true) do
         user_con_profiles = ordered_user_con_profiles.to_a
         user_con_profiles.reverse! if signup_round.serpentine_ranked_choice_order? && pass_number.odd?
 
