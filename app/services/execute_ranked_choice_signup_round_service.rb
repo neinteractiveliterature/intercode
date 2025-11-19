@@ -30,18 +30,24 @@ class ExecuteRankedChoiceSignupRoundService < CivilService::Service
     prev_max_signups = prev_round&.maximum_event_signups_as_number || 0
     return success(decisions: []) if signup_round.maximum_event_signups_as_number <= prev_max_signups
 
+    executed_choices = []
+
     with_relevant_locks do
       ActiveRecord::Base.transaction do
         pass_number = 0
         loop do
           executed_choices_this_pass = execute_pass(pass_number)
           break if executed_choices_this_pass.blank?
+
+          executed_choices += executed_choices_this_pass
           pass_number += 1
         end
 
         ordered_user_con_profiles.update_all(ranked_choice_ordering_boost: 0)
       end
     end
+
+    send_notifications(executed_choices)
 
     success(decisions:)
   end
@@ -68,25 +74,20 @@ class ExecuteRankedChoiceSignupRoundService < CivilService::Service
   def execute_pass(pass_number)
     prev_decisions = @decisions.dup
 
-    executed_choices =
-      ActiveRecord::Base.transaction(requires_new: true) do
-        user_con_profiles = ordered_user_con_profiles.to_a
-        user_con_profiles.reverse! if signup_round.serpentine_ranked_choice_order? && pass_number.odd?
+    ActiveRecord::Base.transaction(requires_new: true) do
+      user_con_profiles = ordered_user_con_profiles.to_a
+      user_con_profiles.reverse! if signup_round.serpentine_ranked_choice_order? && pass_number.odd?
 
-        executed_choices =
-          user_con_profiles.filter_map { |user_con_profile| execute_choices_for_user_con_profile(user_con_profile) }
+      executed_choices =
+        user_con_profiles.filter_map { |user_con_profile| execute_choices_for_user_con_profile(user_con_profile) }
 
-        if executed_choices.empty?
-          @decisions = prev_decisions
-          raise ActiveRecord::Rollback
-        end
-
-        executed_choices
+      if executed_choices.empty?
+        @decisions = prev_decisions
+        raise ActiveRecord::Rollback
       end
 
-    send_notifications(executed_choices) if executed_choices
-
-    executed_choices
+      executed_choices
+    end
   end
 
   def execute_choices_for_user_con_profile(user_con_profile)
