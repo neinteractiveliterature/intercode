@@ -122,7 +122,7 @@ class AutoscaleServersService < CivilService::Service
 
     adapter.apply_instance_counts(
       [
-        { group: :web, type: :small, count: web_scaling_target },
+        { group: :web, type: web_scaling_target == MIN_INSTANCES ? :small : :medium, count: web_scaling_target },
         { group: :worker, type: worker_instance_type, count: worker_scaling_target }
       ]
     )

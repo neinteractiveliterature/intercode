@@ -1,5 +1,6 @@
 class HostingServiceAdapters::Fly < HostingServiceAdapters::Base
   SMALL_GUEST = { "cpu_kind" => "shared", "cpus" => 1, "memory_mb" => 512 }
+  MEDIUM_GUEST = { "cpu_kind" => "shared", "cpus" => 4, "memory_mb" => 1024 }
   LARGE_GUEST = { "cpu_kind" => "performance", "cpus" => 1, "memory_mb" => 2048 }
 
   class Machine < HostingServiceAdapters::Instance
@@ -62,6 +63,7 @@ class HostingServiceAdapters::Fly < HostingServiceAdapters::Base
         builder.request :json
         builder.response :json
         builder.response :raise_error
+        builder.response :logger, nil, { headers: true, bodies: true, errors: true }
       end
   end
 
@@ -93,6 +95,8 @@ class HostingServiceAdapters::Fly < HostingServiceAdapters::Base
         case guest
         when SMALL_GUEST
           :small
+        when MEDIUM_GUEST
+          :medium
         when LARGE_GUEST
           :large
         else
@@ -105,6 +109,8 @@ class HostingServiceAdapters::Fly < HostingServiceAdapters::Base
     case type
     when :small
       SMALL_GUEST
+    when :medium
+      MEDIUM_GUEST
     when :large
       LARGE_GUEST
     end
