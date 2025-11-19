@@ -21,8 +21,10 @@ class HostingServiceAdapters::Heroku < HostingServiceAdapters::Base
 
             type =
               case dyno_group["dyno_size"]["name"]
-              when "eco", "basic", "standard-1X"
+              when "eco", "basic"
                 :small
+              when "standard-1X"
+                :medium
               when "standard-2X"
                 :large
               else
@@ -46,9 +48,12 @@ class HostingServiceAdapters::Heroku < HostingServiceAdapters::Base
       end
 
     dyno_size =
-      if type == :small
+      case type
+      when :small
         count == 1 ? "basic" : "standard-1X"
-      elsif type == :large
+      when :medium
+        "standard-1X"
+      when :largerge
         "standard-2X"
       end
 
