@@ -37,7 +37,21 @@ class SyncForwardEmailService < CivilService::Service
     return if mappings.nil?
 
     mapping_names = Set.new(mappings.keys)
-    aliases = fetch_aliases(domain:)
+    aliases_by_name = fetch_aliases(domain:)
+
+    errors = []
+
+    aliases = {}
+    aliases_by_name.each do |alias_name, alias_entries|
+      aliases[alias_name] = alias_entries.shift
+
+      alias_entries.each do |a|
+        delete_alias(alias_name:, id: a.fetch("id"), domain:)
+      rescue StandardError => e
+        Rails.logger.warn("Error while deleting duplicate alias #{alias_name}@#{domain}:\n#{e.message}")
+        errors << e
+      end
+    end
 
     add_aliases = mapping_names - aliases.keys
     delete_aliases = Set.new(aliases.keys) - mapping_names
@@ -46,11 +60,17 @@ class SyncForwardEmailService < CivilService::Service
     add_aliases.each do |alias_name|
       mapping = mappings.fetch(alias_name)
       add_alias(alias_name:, domain:, recipients: mapping.destination_addresses)
+    rescue StandardError => e
+      Rails.logger.warn("Error while adding #{alias_name}@#{domain}\n#{e.message}")
+      errors << e
     end
 
     delete_aliases.each do |alias_name|
       a = aliases.fetch(alias_name)
       delete_alias(alias_name:, id: a.fetch("id"), domain:)
+    rescue StandardError => e
+      Rails.logger.warn("Error while deleting #{alias_name}@#{domain}:\n#{e.message}")
+      errors << e
     end
 
     check_aliases.each do |alias_name|
@@ -60,7 +80,12 @@ class SyncForwardEmailService < CivilService::Service
       if mapping.destination_addresses.sort != a.fetch("recipients").sort
         update_alias(alias_name:, domain:, id: a.fetch("id"), recipients: mapping.destination_addresses)
       end
+    rescue StandardError => e
+      Rails.logger.warn("Error while updating #{alias_name}@#{domain}\n#{e.message}")
+      errors << e
     end
+
+    { errors: }
   end
 
   def fetch_domains
@@ -68,7 +93,7 @@ class SyncForwardEmailService < CivilService::Service
   end
 
   def fetch_aliases(domain:)
-    paginate_request("/v1/domains/#{domain}/aliases?pagination=true").index_by { |a| a["name"] }
+    paginate_request("/v1/domains/#{domain}/aliases?pagination=true").group_by { |a| a["name"] }
   end
 
   def add_alias(alias_name:, domain:, recipients:)
