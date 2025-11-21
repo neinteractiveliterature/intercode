@@ -1,27 +1,16 @@
-# Script to generate graph:
-# require "csv"
-# Time.zone = "America/New_York"
-# time = Time.local(2022, 10, 31)
-# data = []
-# while time < Time.local(2022, 11, 4)
-#   data << [time, AutoscaleServersService.scaling_target_for(time)]
-#   time += 15.minutes
-# end
-# CSV.open("scaling-graph.csv", "w") do |csv|
-#   csv << %w[Time Servers]
-#   data.each { |row| csv << row }
-# end
+# To simulate the effect of autoscaling as a CSV file:
+# bin/rails runner script/generate_simulated_autoscaling_graph.rb
 
 class AutoscaleServersService < CivilService::Service
   USERS_PER_INSTANCE = ENV.fetch("AUTOSCALE_USERS_PER_INSTANCE", "40").to_i
-  MIN_INSTANCES = ENV.fetch("AUTOSCALE_MIN_INSTANCES", "1").to_i
+  MIN_INSTANCES = ENV.fetch("AUTOSCALE_MIN_INSTANCES", "2").to_i
   MIN_INSTANCES_FOR_SIGNUP_OPENING = ENV.fetch("AUTOSCALE_MIN_INSTANCES_FOR_SIGNUP_OPENING", "2").to_i
-  MAX_INSTANCES = ENV.fetch("AUTOSCALE_MAX_INSTANCES", "8").to_i
+  MAX_INSTANCES = ENV.fetch("AUTOSCALE_MAX_INSTANCES", "10").to_i
   SIGNUP_OPENING_LOOKAHEAD_TIME = ENV.fetch("AUTOSCALE_SIGNUP_OPENING_LOOKAHEAD_HOURS", "48").to_i.hours
   SIGNUP_OPENING_RAMP_UP_LOOKAHEAD_TIME = ENV.fetch("AUTOSCALE_SIGNUP_OPENING_RAMP_UP_LOOKAHEAD_HOURS", "2").to_i.hours
   SIGNUP_OPENING_FULL_THROTTLE_LOOKAHEAD_TIME =
     ENV.fetch("AUTOSCALE_SIGNUP_OPENING_FULL_THROTTLE_LOOKAHEAD_HOURS", "1").to_i.hours
-  SIGNUP_OPENING_DECAY_TIME = ENV.fetch("AUTOSCALE_SIGNUP_OPENING_DECAY_TIME", "1").to_i.hours
+  SIGNUP_OPENING_DECAY_TIME = ENV.fetch("AUTOSCALE_SIGNUP_OPENING_DECAY_TIME", "6").to_i.hours
   SIGNUP_OPENING_LOOKBACK_TIME = ENV.fetch("AUTOSCALE_SIGNUP_OPENING_LOOKBACK_TIME", "6").to_i.hours
 
   def self.scaling_target_for_signup_opening(convention)

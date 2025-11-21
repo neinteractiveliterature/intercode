@@ -103,3 +103,7 @@ cookbooks
 
 # Vite
 /vite.config.mts.timestamp-*.mjs
+
+# Autoscaling simulation output
+/scaling-graph.csv
+/scaling-graph.png
