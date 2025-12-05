@@ -43,7 +43,7 @@ function NewEvent() {
     () => convention.event_categories.find((c) => c.id === eventCategoryIdParam?.replace(/-.*$/, '')),
     [convention, eventCategoryIdParam],
   );
-  const [createError, setCreateError] = useState<ApolloError>();
+  const [createError, setCreateError] = useState<Error>();
   const initialEvent = useMemo<NewEventFormEvent>(
     () => ({
       __typename: 'Event',

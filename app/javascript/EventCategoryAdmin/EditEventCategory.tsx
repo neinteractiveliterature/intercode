@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { ActionFunction, Form, redirect, useActionData, useLoaderData, useNavigation } from 'react-router';
-import { ApolloError } from '@apollo/client/v4-migration';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import EventCategoryForm from './EventCategoryForm';
@@ -17,7 +16,7 @@ export const action: ActionFunction = async ({ request, params: { id } }) => {
     await client.mutate({
       mutation: UpdateEventCategoryDocument,
       variables: {
-        id,
+        id: id ?? '',
         eventCategory: buildEventCategoryFromFormData(formData),
       },
     });

@@ -1,5 +1,5 @@
 import { Suspense, useMemo, useState } from 'react';
-import { MockedProvider, MockedProviderProps } from '@apollo/client/testing';
+import { MockedProvider, MockedProviderProps } from '@apollo/client/testing/react';
 import { render, queries, Queries, RenderOptions, RenderResult, waitFor } from '@testing-library/react';
 import { createMemoryRouter, RouterProvider } from 'react-router';
 import { i18n } from 'i18next';
@@ -13,7 +13,6 @@ import AppRootContext, { appRootContextDefaultValue, AppRootContextValue } from 
 
 export type TestWrapperProps = {
   apolloMocks?: MockedProviderProps['mocks'];
-  apolloResolvers?: MockedProviderProps['resolvers'];
   children?: React.ReactNode;
   stripePublishableKey?: string;
   i18nInstance: i18n;
@@ -22,7 +21,6 @@ export type TestWrapperProps = {
 
 function TestWrapper({
   apolloMocks,
-  apolloResolvers,
   stripePublishableKey,
   i18nInstance,
   appRootContextValue,
@@ -53,7 +51,7 @@ function TestWrapper({
 
   return (
     <AppRootContext.Provider value={effectiveAppRootContextValue}>
-      <MockedProvider mocks={apolloMocks} resolvers={apolloResolvers}>
+      <MockedProvider mocks={apolloMocks}>
         <LazyStripeContext.Provider value={lazyStripeProviderValue}>
           <Confirm>
             <I18nextProvider i18n={i18nInstance}>
