@@ -6,7 +6,7 @@ import { ErrorDisplay, sortByLocaleString } from '@neinteractiveliterature/litfo
 import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
 import { ProposeEventButtonQueryData } from './queries.generated';
 import { useActionData, useNavigation, useSubmit } from 'react-router';
-import { ApolloError } from '@apollo/client';
+import { ApolloError } from '@apollo/client/v4-migration';
 
 export type CreateEventProposalModalProps = {
   cancel: () => void;
@@ -160,7 +160,7 @@ function CreateEventProposalModal({
           </div>
         ) : null}
 
-        <ErrorDisplay graphQLError={createError as ApolloError} />
+        <ErrorDisplay graphQLError={createError} />
       </div>
       <div className="modal-footer">
         <button className="btn btn-secondary" type="button" disabled={createInProgress} onClick={cancel}>

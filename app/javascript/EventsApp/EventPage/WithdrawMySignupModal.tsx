@@ -7,7 +7,8 @@ import { parseSignupRounds } from 'SignupRoundUtils';
 import { DateTime } from 'luxon';
 import { BootstrapFormCheckbox, ErrorDisplay } from '@neinteractiveliterature/litform';
 import { WithdrawMySignupDocument } from './mutations.generated';
-import { ApolloError, useApolloClient } from '@apollo/client';
+
+import { useApolloClient } from '@apollo/client/react';
 import { useRevalidator } from 'react-router';
 
 export type WithdrawMySignupModalProps = {

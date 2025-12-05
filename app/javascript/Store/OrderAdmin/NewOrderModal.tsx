@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from 'react';
-import { ApolloError } from '@apollo/client';
+import { ApolloError } from '@apollo/client/v4-migration';
 import { Modal } from 'react-bootstrap4-modal';
 import { v4 as uuidv4 } from 'uuid';
 import { useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
@@ -174,7 +174,7 @@ export default function NewOrderModal({ visible, close, initialOrder }: NewOrder
           />
         </section>
 
-        <ErrorDisplay graphQLError={createOrderError as ApolloError} />
+        <ErrorDisplay graphQLError={createOrderError} />
       </div>
       <div className="modal-footer">
         <button type="button" className="btn btn-secondary" onClick={close} disabled={createOrderInProgress}>

@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import { Modal } from 'react-bootstrap4-modal';
 import { useFetcher } from 'react-router';
-import { ApolloError } from '@apollo/client';
+import { ApolloError } from '@apollo/client/v4-migration';
 import { BootstrapFormInput, BootstrapFormSelect, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import FormTypes from '../../../config/form_types.json';
@@ -51,7 +51,7 @@ function NewFormModal({ visible, close }: NewFormModalProps): React.JSX.Element 
             ))}
           </BootstrapFormSelect>
 
-          <ErrorDisplay graphQLError={error as ApolloError} />
+          <ErrorDisplay graphQLError={error} />
         </div>
 
         <div className="modal-footer">

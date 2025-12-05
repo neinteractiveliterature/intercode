@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ApolloError } from '@apollo/client';
+import { ApolloError } from '@apollo/client/v4-migration';
 import { ActionFunction, Form, redirect, useActionData, useLoaderData, useNavigation } from 'react-router';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -44,7 +44,7 @@ function EditCmsPartialForm() {
       <Form action="." method="PATCH">
         <CmsPartialForm partial={partial} onChange={setPartial} />
 
-        <ErrorDisplay graphQLError={updateError as ApolloError} />
+        <ErrorDisplay graphQLError={updateError} />
 
         <input
           type="submit"

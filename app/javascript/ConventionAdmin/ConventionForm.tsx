@@ -1,7 +1,7 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { TabList, TabBody, useTabsWithRouter, ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import { ApolloError } from '@apollo/client';
+import { ApolloError } from '@apollo/client/v4-migration';
 import { useNavigate, useLocation, useNavigation } from 'react-router';
 import ConventionFormGeneralSection from './ConventionFormGeneralSection';
 import ConventionFormWebsiteSection from './ConventionFormWebsiteSection';
@@ -102,7 +102,7 @@ function ConventionForm({
         <TabBody {...tabProps} />
       </div>
 
-      <ErrorDisplay graphQLError={saveError as ApolloError} />
+      <ErrorDisplay graphQLError={saveError} />
 
       <button className="btn btn-primary" onClick={onClickSave} type="button" disabled={navigation.state !== 'idle'}>
         Save settings

@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { ActionFunction, LoaderFunction, redirect, replace, useFetcher, useLoaderData } from 'react-router';
-import { ApolloError } from '@apollo/client';
+import { ApolloError } from '@apollo/client/v4-migration';
 import { useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import buildUserActivityAlertInput from './buildUserActivityAlertInput';
@@ -137,7 +137,7 @@ function EditUserActivityAlertForm() {
         disabled={inProgress}
         userActivityAlertEvent={userActivityAlertEvent}
       />
-      <ErrorDisplay graphQLError={error as ApolloError} />
+      <ErrorDisplay graphQLError={error} />
       <button className="btn btn-primary mt-4" type="button" onClick={saveClicked} disabled={inProgress}>
         Save changes
       </button>

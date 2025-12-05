@@ -9,7 +9,6 @@ import { TicketInput } from '../graphqlTypes.generated';
 import { NamedRoute } from '../AppRouter';
 import { client } from 'useIntercodeApolloClient';
 import { UpdateTicketDocument } from './mutations.generated';
-import { ApolloError } from '@apollo/client';
 
 type ActionInput = {
   ticketId: string;

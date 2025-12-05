@@ -20,7 +20,7 @@ import { client } from '../../useIntercodeApolloClient';
 import { ProvideEventTicketDocument } from './mutations.generated';
 import { TeamMembersQueryDocument } from './queries.generated';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
-import { ApolloError } from '@apollo/client';
+import { ApolloError } from '@apollo/client/v4-migration';
 
 export const loader = singleTeamMemberLoader;
 
@@ -88,7 +88,7 @@ function ProvideTicketModal(): React.JSX.Element {
             </>
           ) : null}
 
-          <ErrorDisplay graphQLError={error as ApolloError} />
+          <ErrorDisplay graphQLError={error} />
         </div>
         <div className="modal-footer">
           {teamMember && teamMember.user_con_profile.ticket ? (

@@ -10,7 +10,6 @@ import EditPricingStructureModal, {
 } from '../Store/ProductAdmin/EditPricingStructureModal';
 import { useFetcher } from 'react-router';
 import { buildProductFormData } from 'Store/buildProductInput';
-import { ApolloError } from '@apollo/client';
 
 export type EditTicketProvidingProductModalProps = {
   visible: boolean;

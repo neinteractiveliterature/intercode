@@ -1,5 +1,6 @@
 import { useCallback, useState, useMemo, ReactNode } from 'react';
-import { ApolloError, useSuspenseQuery } from '@apollo/client';
+
+import { useSuspenseQuery } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 

@@ -1,4 +1,4 @@
-import { useSuspenseQuery } from '@apollo/client';
+import { useSuspenseQuery } from "@apollo/client/react";
 import parsePageContent from '../../parsePageContent';
 import Spoiler from '../../Spoiler';
 import { FormResponse } from '../useFormResponse';

@@ -7,7 +7,7 @@ export const action: ActionFunction = async ({ request, params: { id } }) => {
   if (request.method === 'DELETE') {
     await client.mutate({
       mutation: DeleteDepartmentDocument,
-      variables: { id },
+      variables: { id: id ?? '' },
       refetchQueries: [{ query: DepartmentAdminQueryDocument }],
       awaitRefetchQueries: true,
     });

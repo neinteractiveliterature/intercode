@@ -1,4 +1,3 @@
-import { ApolloError } from '@apollo/client';
 import {
   LoaderFunction,
   useLoaderData,
@@ -32,7 +31,7 @@ export const action: ActionFunction = async () => {
 
 export const loader: LoaderFunction = async () => {
   const { data } = await client.query<ClickwrapAgreementQueryData>({ query: ClickwrapAgreementQueryDocument });
-  if (data.convention.my_profile?.accepted_clickwrap_agreement) {
+  if (data?.convention.my_profile?.accepted_clickwrap_agreement) {
     return replace('/');
   }
 
@@ -46,7 +45,7 @@ function ClickwrapAgreement() {
   const submit = useSubmit();
   const navigation = useNavigation();
   const acceptInProgress = navigation.state !== 'idle';
-  const acceptError = useActionData() as ApolloError | undefined;
+  const acceptError = useActionData() as Error | undefined;
 
   if (loginRequired) {
     return <></>;

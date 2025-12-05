@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import * as React from 'react';
-import { ApolloError } from '@apollo/client';
+
 import { ErrorDisplay, useGraphQLConfirm, sortByLocaleString } from '@neinteractiveliterature/litform';
 
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';

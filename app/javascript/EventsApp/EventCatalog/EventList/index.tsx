@@ -1,5 +1,6 @@
 import { useState, useCallback, useContext, useMemo } from 'react';
-import { ApolloError, useQuery } from '@apollo/client';
+import { ApolloError } from '@apollo/client/v4-migration';
+import { useQuery } from '@apollo/client/react';
 import { ColumnFiltersState } from '@tanstack/react-table';
 import { useTranslation } from 'react-i18next';
 import {
@@ -265,7 +266,7 @@ function EventList(): React.JSX.Element {
               <LoadingIndicator iconSet="bootstrap-icons" /> <em className="text-muted">Loading more events...</em>
             </div>
           )}
-          <ErrorDisplay graphQLError={fetchMoreError as ApolloError} />
+          <ErrorDisplay graphQLError={fetchMoreError} />
         </>
       )}
     </>

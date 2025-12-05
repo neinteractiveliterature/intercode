@@ -1,4 +1,4 @@
-import { ApolloError } from '@apollo/client';
+import { ApolloError } from '@apollo/client/v4-migration';
 import { ActionFunction, LoaderFunction, redirect, useFetcher, useLoaderData } from 'react-router';
 import { useTabs, TabList, TabBody, notEmpty, ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -155,7 +155,7 @@ function EditStaffPositionPermissions() {
         <TabBody {...tabProps} />
       </section>
 
-      <ErrorDisplay graphQLError={error as ApolloError} />
+      <ErrorDisplay graphQLError={error} />
 
       <button className="mt-4 btn btn-primary" type="button" onClick={saveChangesClicked} disabled={mutationInProgress}>
         Save changes

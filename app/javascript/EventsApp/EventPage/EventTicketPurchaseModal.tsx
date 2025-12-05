@@ -1,4 +1,4 @@
-import { ApolloError, useSuspenseQuery } from '@apollo/client';
+import { useSuspenseQuery } from '@apollo/client/react';
 import { ErrorDisplay, LoadingIndicator } from '@neinteractiveliterature/litform';
 import { useContext, useState } from 'react';
 import Modal from 'react-bootstrap4-modal';

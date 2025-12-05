@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ApolloError } from '@apollo/client';
+import { ApolloError } from '@apollo/client/v4-migration';
 import { ActionFunction, Form, redirect, useActionData, useNavigation } from 'react-router';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -44,7 +44,7 @@ function NewCmsPage() {
       <Form action="." method="POST">
         <CmsPageForm page={page} onChange={setPage} cmsLayouts={data.cmsParent.cmsLayouts} cmsParent={data.cmsParent} />
 
-        <ErrorDisplay graphQLError={createError as ApolloError} />
+        <ErrorDisplay graphQLError={createError} />
 
         <input
           type="submit"

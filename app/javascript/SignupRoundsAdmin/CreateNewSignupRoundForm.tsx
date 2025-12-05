@@ -7,7 +7,7 @@ import { useFetcher } from 'react-router';
 import { ErrorDisplay, FormGroupWithLabel } from '@neinteractiveliterature/litform';
 import DateTimeInput from '../BuiltInFormControls/DateTimeInput';
 import MaximumEventSignupsInput from './MaximumEventSignupsInput';
-import { ApolloError } from '@apollo/client';
+import { ApolloError } from '@apollo/client/v4-migration';
 import { SignupAutomationMode, SignupRoundAutomationAction } from 'graphqlTypes.generated';
 
 type CreateNewSignupRoundFormProps = {
@@ -69,7 +69,7 @@ export default function CreateNewSignupRoundForm({ onCancel }: CreateNewSignupRo
           {t('buttons.cancel')}
         </button>
       </div>
-      <ErrorDisplay graphQLError={error as ApolloError} />
+      <ErrorDisplay graphQLError={error} />
     </fetcher.Form>
   );
 }

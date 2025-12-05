@@ -1,6 +1,6 @@
 import { useState, useCallback, useEffect } from 'react';
 import { Modal } from 'react-bootstrap4-modal';
-import { ApolloError } from '@apollo/client';
+import { ApolloError } from '@apollo/client/v4-migration';
 import { useTranslation } from 'react-i18next';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -72,7 +72,7 @@ function ChangeBucketModal(): React.JSX.Element {
           value={bucketKey}
           onChange={setBucketKey}
         />
-        <ErrorDisplay graphQLError={error as ApolloError} />
+        <ErrorDisplay graphQLError={error} />
       </div>
     );
   };
@@ -93,7 +93,7 @@ function ChangeBucketModal(): React.JSX.Element {
         >
           {t('buttons.ok')}
         </button>
-        <ErrorDisplay graphQLError={error as ApolloError} />
+        <ErrorDisplay graphQLError={error} />
       </div>
     </Modal>
   );

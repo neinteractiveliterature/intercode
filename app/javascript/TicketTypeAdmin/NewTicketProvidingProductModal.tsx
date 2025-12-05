@@ -12,7 +12,7 @@ import EditPricingStructureModal, {
 import { buildBlankProduct } from './TicketTypesList';
 import AppRootContext from '../AppRootContext';
 import { useFetcher } from 'react-router';
-import { ApolloError } from '@apollo/client';
+
 import { buildProductFormData } from 'Store/buildProductInput';
 
 export type NewTicketProvidingProductModalProps = {

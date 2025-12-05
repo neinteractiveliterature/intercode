@@ -1,6 +1,6 @@
 import { useCallback, useState } from 'react';
 import { LoaderFunction, useFetcher, useLoaderData, useNavigate } from 'react-router';
-import { ApolloError } from '@apollo/client';
+import { ApolloError } from '@apollo/client/v4-migration';
 import { useModal, useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 import { CartQueryData, CartQueryDocument } from './queries.generated';
 import { client } from 'useIntercodeApolloClient';
@@ -103,7 +103,7 @@ function Cart() {
     <div>
       <h1 className="mb-4">Shopping cart</h1>
 
-      <ErrorDisplay graphQLError={error as ApolloError} />
+      <ErrorDisplay graphQLError={error} />
 
       <CartContents
         removeFromCart={removeFromCart}
@@ -124,7 +124,7 @@ function Cart() {
         deleteCouponApplication={deleteCouponApplication}
       />
 
-      <ErrorDisplay graphQLError={checkOutError as ApolloError} />
+      <ErrorDisplay graphQLError={checkOutError} />
 
       {checkOutModal.visible && (
         <OrderPaymentModal

@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Modal } from 'react-bootstrap4-modal';
-import { ApolloError } from '@apollo/client';
+import { ApolloError } from '@apollo/client/v4-migration';
 import { useGraphQLConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import CouponForm from './CouponForm';
@@ -86,7 +86,7 @@ function EditCouponModal(): React.JSX.Element {
       </div>
       <div className="modal-body">
         {coupon && <CouponForm<AdminCouponFieldsFragment> value={coupon} onChange={setCoupon} />}
-        <ErrorDisplay graphQLError={error as ApolloError} />
+        <ErrorDisplay graphQLError={error} />
       </div>
       <div className="modal-footer">
         <Link to=".." type="button" className="btn btn-secondary">

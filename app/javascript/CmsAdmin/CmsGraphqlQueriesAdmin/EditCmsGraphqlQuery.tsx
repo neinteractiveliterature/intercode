@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ApolloError } from '@apollo/client';
+import { ApolloError } from '@apollo/client/v4-migration';
 import { ActionFunction, Form, redirect, useActionData, useLoaderData, useNavigation } from 'react-router';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -51,7 +51,7 @@ function EditCmsGraphqlQuery() {
         <CmsGraphqlQueryForm value={query} readOnly={saveInProgress} onChange={setQuery} />
       </div>
 
-      <ErrorDisplay graphQLError={saveError as ApolloError} />
+      <ErrorDisplay graphQLError={saveError} />
 
       <button type="submit" className="btn btn-primary" disabled={saveInProgress}>
         Save GraphQL query

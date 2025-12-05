@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { ActionFunction, Form, redirect, useActionData, useNavigation } from 'react-router';
-import { ApolloError } from '@apollo/client';
+import { ApolloError } from '@apollo/client/v4-migration';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { buildLayoutInputFromFormData } from './buildLayoutInput';
@@ -39,7 +39,7 @@ function NewCmsLayout(): React.JSX.Element {
     <Form action="." method="POST">
       <CmsLayoutForm layout={layout} onChange={setLayout} />
 
-      <ErrorDisplay graphQLError={createError as ApolloError} />
+      <ErrorDisplay graphQLError={createError} />
 
       <input
         type="submit"

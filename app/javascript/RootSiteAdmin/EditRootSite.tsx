@@ -1,6 +1,6 @@
 import { useEffect, useState } from 'react';
 import * as React from 'react';
-import { ApolloError } from '@apollo/client';
+import { ApolloError } from '@apollo/client/v4-migration';
 import { BootstrapFormInput, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
@@ -106,7 +106,7 @@ function EditRootSite() {
         isDisabled={updateInProgress}
       />
 
-      <ErrorDisplay graphQLError={error as ApolloError} />
+      <ErrorDisplay graphQLError={error} />
 
       <button className="btn btn-primary" type="submit" disabled={!edited || updateInProgress}>
         Save changes

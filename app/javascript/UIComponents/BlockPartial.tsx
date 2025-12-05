@@ -6,7 +6,7 @@ import { useRevalidator } from 'react-router';
 import { useState } from 'react';
 import LiquidInput from 'BuiltInFormControls/LiquidInput';
 import { useTranslation } from 'react-i18next';
-import { useApolloClient, useMutation } from '@apollo/client';
+import { useApolloClient, useMutation } from "@apollo/client/react";
 import {
   CreatePartialDocument,
   DeletePartialDocument,
@@ -112,7 +112,7 @@ export default function BlockPartial({ blockPartial, currentAbilityCanCreate, na
         blockPartial?.current_ability_can_delete ||
         blockPartial?.current_ability_can_update) && (
         // @ts-expect-error typescript css modules plugin doesn't correctly handle package imports
-        <div className={`page-admin-dropdown ${pageAdminDropdownStyles['page-admin-dropdown']}`}>
+        (<div className={`page-admin-dropdown ${pageAdminDropdownStyles['page-admin-dropdown']}`}>
           <DropdownMenu
             buttonClassName="btn btn-dark dropdown-toggle"
             buttonContent={
@@ -152,7 +152,7 @@ export default function BlockPartial({ blockPartial, currentAbilityCanCreate, na
               </button>
             ) : null}
           </DropdownMenu>
-        </div>
+        </div>)
       )}
       {blockPartial && parseCmsContent(blockPartial.content_html).bodyComponents}
     </div>

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Select from 'react-select';
-import { ApolloError } from '@apollo/client';
+import { ApolloError } from '@apollo/client/v4-migration';
 import { parseIntOrNull, useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { useTranslation } from 'react-i18next';
@@ -315,7 +315,7 @@ function AdminOrderEntriesTable<
         {createError && (
           <tr>
             <td colSpan={4}>
-              <ErrorDisplay graphQLError={createError as ApolloError} />
+              <ErrorDisplay graphQLError={createError} />
             </td>
           </tr>
         )}

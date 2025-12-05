@@ -1,5 +1,7 @@
 import { useMemo } from 'react';
-import { QueryResult, ApolloError, OperationVariables, TypedDocumentNode, useQuery } from '@apollo/client';
+import { OperationVariables, TypedDocumentNode } from '@apollo/client';
+
+import { useQuery } from '@apollo/client/react';
 
 import { reactTableFiltersToTableResultsFilters, reactTableSortToTableResultsSort } from './TableUtils';
 import useCachedLoadableValue from '../useCachedLoadableValue';
@@ -14,14 +16,14 @@ export type GraphQLReactTableVariables = {
 };
 
 type QueryResultWithData<QueryData, Variables extends OperationVariables> = Omit<
-  QueryResult<QueryData, Variables>,
+  useQuery.Result<QueryData, Variables>,
   'data'
 > & {
-  data: NonNullable<QueryResult<QueryData, Variables>['data']>;
+  data: NonNullable<useQuery.Result<QueryData, Variables>['data']>;
 };
 
 function queryResultHasData<QueryData, Variables extends OperationVariables>(
-  queryResult: QueryResult<QueryData, Variables>,
+  queryResult: useQuery.Result<QueryData, Variables>,
 ): queryResult is QueryResultWithData<QueryData, Variables> {
   return queryResult.data != null;
 }
@@ -48,10 +50,10 @@ export type UseGraphQLReactTableResult<
 > = {
   data: RowType[];
   pages: number;
-  refetch: QueryResult<QueryData, Variables>['refetch'];
+  refetch: useQuery.Result<QueryData, Variables>['refetch'];
   loading: boolean;
   error?: ApolloError;
-  queryData: QueryResult<QueryData, Variables>['data'];
+  queryData: useQuery.Result<QueryData, Variables>['data'];
 };
 
 export default function useGraphQLReactTable<

@@ -13,7 +13,6 @@ import {
 } from 'graphqlTypes.generated';
 import { useTranslation } from 'react-i18next';
 import { useFetcher } from 'react-router';
-import { ApolloError } from '@apollo/client';
 
 export type EditOrderModalProps = {
   order: AdminOrderTypeWithId & {

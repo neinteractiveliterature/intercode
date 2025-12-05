@@ -1,6 +1,7 @@
 import { useState, useCallback, useMemo, useContext, useEffect, useRef } from 'react';
 import { Modal } from 'react-bootstrap4-modal';
-import { ApolloError, useApolloClient } from '@apollo/client';
+import { ApolloError } from '@apollo/client/v4-migration';
+import { useApolloClient } from '@apollo/client/react';
 import { LinkAuthenticationElement, PaymentElement } from '@stripe/react-stripe-js';
 import { ErrorDisplay, MultipleChoiceInput } from '@neinteractiveliterature/litform';
 
@@ -108,7 +109,7 @@ export function OrderPaymentModalContents({ onCancel, onComplete, onError, order
             <PaymentElement />
           </>
         ) : null}
-        <ErrorDisplay graphQLError={error as ApolloError} />
+        <ErrorDisplay graphQLError={error} />
       </div>
     );
   };

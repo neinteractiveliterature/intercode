@@ -1,5 +1,6 @@
 import { useContext, useMemo, useState, useCallback } from 'react';
-import { useApolloClient, ApolloError } from '@apollo/client';
+import { ApolloError } from '@apollo/client/v4-migration';
+import { useApolloClient } from '@apollo/client/react';
 import { ActionFunction, redirect, useFetcher, useParams } from 'react-router';
 // TODO: uncomment this when re-adding Prompt support below
 // import isEqual from 'lodash/isEqual';
@@ -162,7 +163,7 @@ function FormItemEditorLayout(): React.JSX.Element {
         </div>
       </div>
       <div className={`form-item-editor-error ${styles.formItemEditorError}`}>
-        <ErrorDisplay graphQLError={updateError as ApolloError} />
+        <ErrorDisplay graphQLError={updateError} />
       </div>
       <div className={`form-item-editor-content ${styles.formItemEditorContent} bg-white p-2 overflow-auto`}>
         <FormItemEditorContent />

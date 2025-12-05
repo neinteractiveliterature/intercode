@@ -126,19 +126,20 @@ function AuthorizationRequiredRouteGuard({ abilities }: AuthorizationRequiredRou
 
 const eventAdminRootRedirect: LoaderFunction = async () => {
   const { data } = await client.query({ query: EventAdminEventsQueryDocument });
-  if (!data.convention) {
+  const convention = data?.convention;
+  if (!convention) {
     return new Response(null, { status: 404 });
   }
 
-  if (data.convention.site_mode === SiteMode.SingleEvent) {
-    if (data.convention.events.length === 0) {
+  if (convention.site_mode === SiteMode.SingleEvent) {
+    if (convention.events.length === 0) {
       return redirect('./new');
     } else {
-      return redirect(`./${data.convention.events[0].id}/edit`);
+      return redirect(`./${convention.events[0].id}/edit`);
     }
   }
 
-  const firstEventCategory = data.convention.event_categories[0];
+  const firstEventCategory = convention.event_categories[0];
   if (!firstEventCategory) {
     return new Response(null, { status: 404 });
   }

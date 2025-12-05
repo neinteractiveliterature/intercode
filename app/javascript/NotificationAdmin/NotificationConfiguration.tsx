@@ -13,7 +13,7 @@ import { ErrorDisplay, usePropertySetters } from '@neinteractiveliterature/litfo
 import LiquidInput from '../BuiltInFormControls/LiquidInput';
 import { NotificationAdminQueryData, NotificationAdminQueryDocument } from './queries.generated';
 import { client } from '../useIntercodeApolloClient';
-import { ApolloError } from '@apollo/client';
+import { ApolloError } from '@apollo/client/v4-migration';
 import { UpdateNotificationTemplateDocument } from './mutations.generated';
 import NotificationDestinationsConfig from './NotificationDestinationsConfig';
 import { useTranslation } from 'react-i18next';
@@ -191,7 +191,7 @@ function NotificationConfigurationForm() {
         </p>
       )}
 
-      <ErrorDisplay graphQLError={updateError as ApolloError} />
+      <ErrorDisplay graphQLError={updateError} />
 
       <button type="submit" className="btn btn-primary" disabled={updateInProgress}>
         Save changes

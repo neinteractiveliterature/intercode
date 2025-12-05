@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useSuspenseQuery } from '@apollo/client';
+import { useSuspenseQuery } from "@apollo/client/react";
 import { ErrorDisplay, useConfirm, useAlert } from '@neinteractiveliterature/litform';
 
 import buildSignupOptions, { SignupOption } from '../EventsApp/EventPage/buildSignupOptions';

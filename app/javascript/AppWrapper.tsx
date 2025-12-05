@@ -1,6 +1,6 @@
 import { Suspense, useCallback, useRef, useEffect, ReactNode, useState, useMemo } from 'react';
 import * as React from 'react';
-import { ApolloProvider, DataProxy } from '@apollo/client';
+import { ApolloProvider } from '@apollo/client/react';
 import { createBrowserRouter, Outlet, RouterProvider } from 'react-router';
 import { i18n } from 'i18next';
 import { I18nextProvider } from 'react-i18next';
@@ -25,6 +25,7 @@ import RailsDirectUploadsContext from './RailsDirectUploadsContext';
 import { appRootRoutes } from './AppRouter';
 import { client } from './useIntercodeApolloClient';
 import { DateTime, Duration } from 'luxon';
+import { ApolloClient, OperationVariables } from '@apollo/client';
 
 function I18NextWrapper({ children }: { children: (i18nInstance: i18n) => ReactNode }) {
   const [i18nInstance, seti18nInstance] = useState<i18n>();
@@ -113,7 +114,7 @@ export type AppWrapperProps = {
   authenticityTokens: {
     graphql: string;
   };
-  queryData?: DataProxy.WriteQueryOptions<unknown, unknown>[];
+  queryData?: ApolloClient.WriteQueryOptions<unknown, OperationVariables>[];
   railsDefaultActiveStorageServiceName: string;
   railsDirectUploadsUrl: string;
   recaptchaSiteKey: string;

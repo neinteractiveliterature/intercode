@@ -1,6 +1,6 @@
 import { useContext, useId, useRef, useState } from 'react';
 import { useFetcher, useNavigate, useParams } from 'react-router';
-import { ApolloError } from '@apollo/client';
+import { ApolloError } from '@apollo/client/v4-migration';
 import { Modal } from 'react-bootstrap4-modal';
 import { useModal, MultipleChoiceInput, ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -112,7 +112,7 @@ function MoveFormItemModal({ visible, close }: MoveFormItemModalProps) {
           disabled={inProgress}
         />
 
-        <ErrorDisplay graphQLError={error as ApolloError} />
+        <ErrorDisplay graphQLError={error} />
       </div>
 
       <div className="modal-footer">

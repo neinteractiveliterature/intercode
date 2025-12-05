@@ -1,6 +1,6 @@
 import { useState, useMemo, useContext, ReactNode, useEffect } from 'react';
 import { Modal } from 'react-bootstrap4-modal';
-import { ApolloError } from '@apollo/client';
+import { ApolloError } from '@apollo/client/v4-migration';
 import { DateTime } from 'luxon';
 import { ErrorDisplay, FormGroupWithLabel } from '@neinteractiveliterature/litform';
 
@@ -235,7 +235,7 @@ function ScheduleMultipleRunsModal({
             event={eventForProspectiveRunSchedule}
           />
 
-          <ErrorDisplay graphQLError={error as ApolloError} />
+          <ErrorDisplay graphQLError={error} />
         </div>
         <div className="modal-footer">
           <div className="d-flex w-100">

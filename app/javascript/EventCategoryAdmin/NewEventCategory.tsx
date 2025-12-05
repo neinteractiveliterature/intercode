@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ApolloError } from '@apollo/client';
+import { ApolloError } from '@apollo/client/v4-migration';
 import { ActionFunction, Form, redirect, useActionData, useNavigation } from 'react-router';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -73,7 +73,7 @@ function NewEventCategory(): React.JSX.Element {
           departments={departments}
         />
 
-        <ErrorDisplay graphQLError={createError as ApolloError} />
+        <ErrorDisplay graphQLError={createError} />
 
         <button type="submit" className="btn btn-primary" disabled={navigation.state !== 'idle'}>
           Create event category
