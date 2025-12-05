@@ -39,20 +39,26 @@ function getSingleTicketType(ticketTypes: TicketTypeLoaderResult['ticketTypes'],
   return ticketType;
 }
 
-export const adminSingleTicketTypeLoader: LoaderFunction = async ({ request, params: { id } }) => {
+export const adminSingleTicketTypeLoader: LoaderFunction = async ({ request, params: { id }, unstable_pattern }) => {
   const { ticketTypes } = (await adminTicketTypesLoader({
     params: {},
     request,
     context: {},
+    unstable_pattern,
   })) as TicketTypeLoaderResult;
   return getSingleTicketType(ticketTypes, id ?? '');
 };
 
-export const eventSingleTicketTypeLoader: LoaderFunction = async ({ request, params: { id, eventId } }) => {
+export const eventSingleTicketTypeLoader: LoaderFunction = async ({
+  request,
+  params: { id, eventId },
+  unstable_pattern,
+}) => {
   const { ticketTypes } = (await eventTicketTypesLoader({
     params: { eventId },
     request,
     context: {},
+    unstable_pattern,
   })) as TicketTypeLoaderResult;
   return getSingleTicketType(ticketTypes, id ?? '');
 };
