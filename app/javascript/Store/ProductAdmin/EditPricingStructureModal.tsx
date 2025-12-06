@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 import * as React from 'react';
 import { Modal } from 'react-bootstrap4-modal';
 
@@ -19,6 +19,7 @@ export const PRICING_STRATEGIES = EnumTypes.PricingStrategy.enumValues.map(({ na
 export type PricingStructureModalState = {
   value: EditingPricingStructure | null | undefined;
   onChange: React.Dispatch<EditingPricingStructure | undefined>;
+  opened: Date;
 };
 
 export type PricingStructureModalContextValue = ModalData<PricingStructureModalState>;
@@ -43,10 +44,6 @@ export type EditPricingStructureModalProps = Pick<PricingStructureModalContextVa
 function EditPricingStructureModal({ visible, state, close }: EditPricingStructureModalProps): React.JSX.Element {
   const { t } = useTranslation();
   const [pricingStructure, setPricingStructure] = useState(state?.value);
-
-  useEffect(() => {
-    setPricingStructure(state?.value);
-  }, [state?.value]);
 
   const okClicked = () => {
     if (pricingStructure && state?.onChange) {

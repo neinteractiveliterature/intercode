@@ -145,6 +145,7 @@ function ProductAdmin() {
         visible={pricingStructureModal.visible}
         state={pricingStructureModal.state}
         close={pricingStructureModal.close}
+        key={pricingStructureModal.state?.opened.getTime()}
       />
     </PricingStructureModalContext.Provider>
   );

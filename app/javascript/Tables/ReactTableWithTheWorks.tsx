@@ -1,4 +1,4 @@
-import React, { useState, useCallback, useEffect, useId } from 'react';
+import React, { useState, useCallback, useId } from 'react';
 import classNames from 'classnames';
 import { Column, Row, Table, flexRender } from '@tanstack/react-table';
 import { parseIntOrNull } from '@neinteractiveliterature/litform';
@@ -85,9 +85,11 @@ function ReactTableWithTheWorks<
     [setPageIndex],
   );
 
-  useEffect(() => {
+  const [prevPageIndex, setPrevPageIndex] = useState(pagination.pageIndex);
+  if (pagination.pageIndex !== prevPageIndex) {
     setPageInputValue((pagination.pageIndex + 1).toString());
-  }, [pagination.pageIndex]);
+    setPrevPageIndex(pagination.pageIndex);
+  }
 
   const rowModel = table.getRowModel();
 

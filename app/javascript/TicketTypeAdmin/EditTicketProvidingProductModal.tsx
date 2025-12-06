@@ -17,6 +17,7 @@ export type EditTicketProvidingProductModalProps = {
   state?: {
     ticketType: EditProductFormProps<EditingProductBase>['ticketTypes'][number];
     initialProduct: EditingProductBase;
+    opened: Date;
   };
 };
 
@@ -33,13 +34,8 @@ export default function EditTicketProvidingProductModal({
   const [product, setProduct] = useState(state?.initialProduct);
 
   useEffect(() => {
-    setProduct(state?.initialProduct);
-  }, [state?.initialProduct]);
-
-  useEffect(() => {
     if (fetcher.data && fetcher.state === 'idle' && !error) {
       close();
-      setProduct(undefined);
     }
   }, [close, fetcher.data, fetcher.state, error]);
 
@@ -84,6 +80,7 @@ export default function EditTicketProvidingProductModal({
         state={pricingStructureModal.state}
         visible={pricingStructureModal.visible}
         close={pricingStructureModal.close}
+        key={pricingStructureModal.state?.opened.getTime()}
       />
     </>
   );

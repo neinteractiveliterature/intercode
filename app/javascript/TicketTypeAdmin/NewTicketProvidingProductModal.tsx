@@ -37,18 +37,8 @@ export default function NewTicketProvidingProductModal({
   );
 
   useEffect(() => {
-    setProduct((product) => ({
-      ...buildBlankProduct(defaultCurrencyCode),
-      ...product,
-      provides_ticket_type: ticketType,
-      name: ticketType?.description ?? '',
-    }));
-  }, [ticketType, defaultCurrencyCode]);
-
-  useEffect(() => {
     if (fetcher.data && fetcher.state === 'idle' && !error) {
       close();
-      setProduct(buildBlankProduct(defaultCurrencyCode));
     }
   }, [close, defaultCurrencyCode, fetcher.data, fetcher.state, error]);
 
@@ -91,6 +81,7 @@ export default function NewTicketProvidingProductModal({
         state={pricingStructureModal.state}
         visible={pricingStructureModal.visible}
         close={pricingStructureModal.close}
+        key={pricingStructureModal.state?.opened.getTime()}
       />
     </>
   );

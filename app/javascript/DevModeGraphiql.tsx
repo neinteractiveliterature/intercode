@@ -3,7 +3,7 @@ import { GraphiQL } from 'graphiql';
 import { parse } from 'graphql';
 import { Fetcher } from '@graphiql/toolkit';
 
-import { execute, GraphQLRequest } from '@apollo/client/';
+import { execute, GraphQLRequest } from '@apollo/client';
 import { useIntercodeApolloLink, client } from './useIntercodeApolloClient';
 import mountReactComponents from './mountReactComponents';
 

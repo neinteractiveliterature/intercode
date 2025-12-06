@@ -14,7 +14,7 @@ export function timespanFromConvention(convention: ConventionForTimespanUtils): 
 export function timespanFromConventionIfValid(convention: ConventionForTimespanUtils): Timespan | undefined {
   try {
     return timespanFromConvention(convention);
-  } catch (err) {
+  } catch {
     return undefined;
   }
 }
