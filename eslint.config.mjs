@@ -257,6 +257,7 @@ export default typescriptEslint.config(
             types: [
               'Ability',
               'ChoiceCount',
+              'ClientConfiguration',
               'ContactEmail',
               'ConventionReports',
               'EventProvidedTicketList',
