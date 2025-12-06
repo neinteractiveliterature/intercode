@@ -223,6 +223,12 @@ type ChoiceCount {
   state: SignupState!
 }
 
+type ClientConfiguration {
+  rails_default_active_storage_service_name: String!
+  rails_direct_uploads_url: String!
+  recaptcha_site_key: String!
+}
+
 union CmsContent = CmsLayout | CmsPartial | Page
 
 type CmsContentGroup {
@@ -5793,6 +5799,11 @@ type Query {
   the actual profile of the signed-in account. If not, returns null.
   """
   assumedIdentityFromProfile: UserConProfile
+
+  """
+  Returns the client configuration data for this instance of Intercode
+  """
+  clientConfiguration: ClientConfiguration!
 
   """
   Returns the CMS parent object associated with a given domain name. In a

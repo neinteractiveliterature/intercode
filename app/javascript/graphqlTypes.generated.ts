@@ -298,6 +298,13 @@ export type ChoiceCount = {
   state: SignupState;
 };
 
+export type ClientConfiguration = {
+  __typename: 'ClientConfiguration';
+  rails_default_active_storage_service_name: Scalars['String']['output'];
+  rails_direct_uploads_url: Scalars['String']['output'];
+  recaptcha_site_key: Scalars['String']['output'];
+};
+
 export type CmsContent = CmsLayout | CmsPartial | Page;
 
 export type CmsContentGroup = {
@@ -4769,6 +4776,8 @@ export type Query = {
    * the actual profile of the signed-in account. If not, returns null.
    */
   assumedIdentityFromProfile?: Maybe<UserConProfile>;
+  /** Returns the client configuration data for this instance of Intercode */
+  clientConfiguration: ClientConfiguration;
   /**
    * Returns the CMS parent object associated with a given domain name. In a
    * convention domain, this is the `Convention` itself. Otherwise, it's the `RootSite`.

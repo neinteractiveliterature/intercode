@@ -1,7 +1,6 @@
-import { Suspense, useCallback, useRef, useEffect, ReactNode, useState, useMemo } from 'react';
+import { Suspense, useCallback, useRef, useEffect, ReactNode, useState, useMemo, useContext } from 'react';
 import * as React from 'react';
-import { ApolloProvider } from '@apollo/client/react';
-import { createBrowserRouter, Outlet, RouterProvider } from 'react-router';
+import { Outlet } from 'react-router';
 import { i18n } from 'i18next';
 import { I18nextProvider } from 'react-i18next';
 import {
@@ -19,11 +18,9 @@ import AuthenticationModalContext, {
   useAuthenticationModalProvider,
 } from './Authentication/AuthenticationModalContext';
 import AuthenticationModal from './Authentication/AuthenticationModal';
-import AuthenticityTokensManager, { useInitializeAuthenticityTokens } from './AuthenticityTokensContext';
+import { AuthenticityTokensContext } from './AuthenticityTokensContext';
 import getI18n from './setupI18Next';
 import RailsDirectUploadsContext from './RailsDirectUploadsContext';
-import { appRootRoutes } from './AppRouter';
-import { client } from './useIntercodeApolloClient';
 import { DateTime, Duration } from 'luxon';
 import { ApolloClient, OperationVariables } from '@apollo/client';
 
@@ -48,11 +45,11 @@ function I18NextWrapper({ children }: { children: (i18nInstance: i18n) => ReactN
   return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
 }
 
-function ProviderStack(props: AppWrapperProps) {
-  const { authenticityTokens, recaptchaSiteKey } = props;
+export function ProviderStack(props: AppWrapperProps) {
+  const { recaptchaSiteKey } = props;
   // TODO bring this back when we re-add prompting
   // const confirm = useConfirm();
-  useInitializeAuthenticityTokens(authenticityTokens);
+  const manager = useContext(AuthenticityTokensContext);
   const authenticationModalContextValue = useAuthenticationModalProvider(recaptchaSiteKey);
   const {
     open: openAuthenticationModal,
@@ -61,9 +58,9 @@ function ProviderStack(props: AppWrapperProps) {
   } = authenticationModalContextValue;
   const openSignIn = useCallback(async () => {
     setUnauthenticatedError(true);
-    await AuthenticityTokensManager.instance.refresh();
+    await manager.refresh();
     openAuthenticationModal({ currentView: 'signIn' });
-  }, [openAuthenticationModal, setUnauthenticatedError]);
+  }, [openAuthenticationModal, setUnauthenticatedError, manager]);
   const onUnauthenticatedRef = useRef(openSignIn);
   useEffect(() => {
     onUnauthenticatedRef.current = openSignIn;
@@ -78,118 +75,43 @@ function ProviderStack(props: AppWrapperProps) {
   );
 
   return (
-    <ApolloProvider client={client}>
-      {/* TODO bring this back when we re-add prompting getUserConfirmation={getUserConfirmation}> */}
-      <RailsDirectUploadsContext.Provider value={railsDirectUploadsContextValue}>
-        <AuthenticationModalContext.Provider value={authenticationModalContextValue}>
-          <>
-            {!unauthenticatedError && (
-              <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
-                <I18NextWrapper>
-                  {(i18nInstance) => (
-                    <AlertProvider okText={i18nInstance.t('buttons.ok', 'OK')}>
-                      <ToastProvider
-                        formatTimeAgo={(timeAgo) =>
-                          DateTime.now().minus(Duration.fromMillis(timeAgo.milliseconds)).toRelative()
-                        }
-                      >
-                        <ErrorBoundary placement="replace" errorType="plain">
-                          <Outlet />
-                        </ErrorBoundary>
-                      </ToastProvider>
-                    </AlertProvider>
-                  )}
-                </I18NextWrapper>
-              </Suspense>
-            )}
-            <AuthenticationModal />
-          </>
-        </AuthenticationModalContext.Provider>
-      </RailsDirectUploadsContext.Provider>
-    </ApolloProvider>
+    <React.StrictMode>
+      <Confirm>
+        <RailsDirectUploadsContext.Provider value={railsDirectUploadsContextValue}>
+          {/* TODO bring this back when we re-add prompting getUserConfirmation={getUserConfirmation}> */}
+          <AuthenticationModalContext.Provider value={authenticationModalContextValue}>
+            <>
+              {!unauthenticatedError && (
+                <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
+                  <I18NextWrapper>
+                    {(i18nInstance) => (
+                      <AlertProvider okText={i18nInstance.t('buttons.ok', 'OK')}>
+                        <ToastProvider
+                          formatTimeAgo={(timeAgo) =>
+                            DateTime.now().minus(Duration.fromMillis(timeAgo.milliseconds)).toRelative()
+                          }
+                        >
+                          <ErrorBoundary placement="replace" errorType="plain">
+                            <Outlet />
+                          </ErrorBoundary>
+                        </ToastProvider>
+                      </AlertProvider>
+                    )}
+                  </I18NextWrapper>
+                </Suspense>
+              )}
+              <AuthenticationModal />
+            </>
+          </AuthenticationModalContext.Provider>
+        </RailsDirectUploadsContext.Provider>
+      </Confirm>
+    </React.StrictMode>
   );
 }
 
 export type AppWrapperProps = {
-  authenticityTokens: {
-    graphql: string;
-  };
   queryData?: ApolloClient.WriteQueryOptions<unknown, OperationVariables>[];
   railsDefaultActiveStorageServiceName: string;
   railsDirectUploadsUrl: string;
   recaptchaSiteKey: string;
-  stripePublishableKey: string;
 };
-
-function AppWrapper<P extends React.JSX.IntrinsicAttributes>(
-  WrappedComponent: React.ComponentType<P>,
-): React.ComponentType<P> {
-  function Wrapper(props: P & AppWrapperProps) {
-    const { queryData } = props;
-    const [queryPreloadComplete, setQueryPreloadComplete] = useState(false);
-
-    const router = useMemo(() => {
-      if (!queryPreloadComplete) {
-        return undefined;
-      }
-
-      return createBrowserRouter(
-        [
-          {
-            element: <ProviderStack {...props} />,
-            children: appRootRoutes,
-          },
-        ],
-        {
-          future: {},
-        },
-      );
-    }, [props, queryPreloadComplete]);
-
-    // TODO bring this back when we re-add prompting
-    // const getUserConfirmation = useCallback(
-    //   (message: ReactNode, callback: (confirmed: boolean) => void) => {
-    //     confirm({
-    //       prompt: message,
-    //       action: () => callback(true),
-    //       onCancel: () => callback(false),
-    //     });
-    //   },
-    //   [confirm],
-    // );
-
-    useEffect(() => {
-      if (queryData && Array.isArray(queryData)) {
-        for (const query of queryData) {
-          try {
-            client.writeQuery(query);
-          } catch {
-            // don't blow up if we get a malformed query
-          }
-        }
-      }
-
-      setQueryPreloadComplete(true);
-    }, [queryData]);
-
-    return <React.StrictMode>{router && <RouterProvider router={router} />}</React.StrictMode>;
-  }
-
-  // eslint-disable-next-line i18next/no-literal-string
-  const wrappedComponentDisplayName = WrappedComponent.displayName || WrappedComponent.name || 'Component';
-
-  // eslint-disable-next-line i18next/no-literal-string
-  Wrapper.displayName = `AppWrapper(${wrappedComponentDisplayName})`;
-
-  function ConfirmWrapper(props: P & AppWrapperProps) {
-    return (
-      <Confirm>
-        <Wrapper {...props} />
-      </Confirm>
-    );
-  }
-
-  return ConfirmWrapper;
-}
-
-export default AppWrapper;
