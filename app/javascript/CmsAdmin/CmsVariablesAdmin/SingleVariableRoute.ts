@@ -11,7 +11,7 @@ export const action: ActionFunction = async ({ params: { key }, request }) => {
         mutation: SetCmsVariableMutationDocument,
         variables: {
           key: key ?? '',
-          value_json: formData.get('value_json'),
+          value_json: formData.get('value_json')?.toString() ?? '',
         },
       });
       await client.resetStore();

@@ -1,5 +1,6 @@
 import { useContext, useMemo, useState, useCallback } from 'react';
-import { useApolloClient, ApolloError } from '@apollo/client';
+
+import { useApolloClient } from '@apollo/client/react';
 import { ActionFunction, redirect, useFetcher, useParams } from 'react-router';
 // TODO: uncomment this when re-adding Prompt support below
 // import isEqual from 'lodash/isEqual';
@@ -31,7 +32,7 @@ export const action: ActionFunction = async ({ request, params: { id, sectionId,
       await client.mutate({
         mutation: UpdateFormItemDocument,
         variables: {
-          id: itemId,
+          id: itemId ?? '',
           formItem: json,
         },
       });
@@ -40,11 +41,11 @@ export const action: ActionFunction = async ({ request, params: { id, sectionId,
       await client.mutate({
         mutation: DeleteFormItemDocument,
         variables: {
-          id: itemId,
+          id: itemId ?? '',
         },
         update: (cache) => {
           cache.modify<FormItem>({
-            id: cache.identify({ __typename: 'FormItem', id: itemId }),
+            id: cache.identify({ __typename: 'FormItem', id: itemId ?? '' }),
             fields: (field, { DELETE }) => DELETE,
           });
         },
@@ -162,7 +163,7 @@ function FormItemEditorLayout(): React.JSX.Element {
         </div>
       </div>
       <div className={`form-item-editor-error ${styles.formItemEditorError}`}>
-        <ErrorDisplay graphQLError={updateError as ApolloError} />
+        <ErrorDisplay graphQLError={updateError} />
       </div>
       <div className={`form-item-editor-content ${styles.formItemEditorContent} bg-white p-2 overflow-auto`}>
         <FormItemEditorContent />

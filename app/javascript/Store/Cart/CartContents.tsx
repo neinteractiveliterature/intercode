@@ -4,7 +4,7 @@ import InPlaceEditor from 'BuiltInFormControls/InPlaceEditor';
 import formatMoney from 'formatMoney';
 import describeCoupon from 'Store/describeCoupon';
 import ApplyCouponControl from 'Store/ApplyCouponControl';
-import { useSuspenseQuery } from '@apollo/client';
+import { useSuspenseQuery } from "@apollo/client/react";
 import { CartQueryData, CartQueryDocument } from './queries.generated';
 
 type OrderType = NonNullable<NonNullable<CartQueryData['convention']['my_profile']>['current_pending_order']>;

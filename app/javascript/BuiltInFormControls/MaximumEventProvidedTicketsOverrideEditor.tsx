@@ -2,7 +2,6 @@ import { useState, useMemo } from 'react';
 import * as React from 'react';
 import capitalize from 'lodash/capitalize';
 import { useTranslation } from 'react-i18next';
-import { ApolloError } from '@apollo/client';
 import { ErrorDisplay, sortByLocaleString, parseIntOrNull, useConfirm } from '@neinteractiveliterature/litform';
 
 import InPlaceEditor from './InPlaceEditor';
@@ -218,7 +217,7 @@ function MaximumEventProvidedTicketsOverrideEditor({
             </tr>
           </tfoot>
         </table>
-        <ErrorDisplay graphQLError={fetcher.data as ApolloError | null} />
+        <ErrorDisplay graphQLError={fetcher.data as Error | null} />
       </div>
     </div>
   );

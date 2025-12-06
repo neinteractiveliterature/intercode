@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { ActionFunction, Form, redirect, useActionData, useLoaderData, useNavigation } from 'react-router';
-import { ApolloError } from '@apollo/client';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import EventCategoryForm from './EventCategoryForm';
@@ -17,7 +16,7 @@ export const action: ActionFunction = async ({ request, params: { id } }) => {
     await client.mutate({
       mutation: UpdateEventCategoryDocument,
       variables: {
-        id,
+        id: id ?? '',
         eventCategory: buildEventCategoryFromFormData(formData),
       },
     });
@@ -57,7 +56,7 @@ function EditEventCategoryForm() {
           disabled={navigation.state !== 'idle'}
         />
 
-        <ErrorDisplay graphQLError={updateError as ApolloError} />
+        <ErrorDisplay graphQLError={updateError} />
 
         <button type="submit" className="btn btn-primary" disabled={navigation.state !== 'idle'}>
           {t('buttons.saveChanges')}

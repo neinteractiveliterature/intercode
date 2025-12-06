@@ -5,7 +5,7 @@ import FormItemDisplay from '../FormPresenter/ItemDisplays/FormItemDisplay';
 import Gravatar from '../Gravatar';
 import { getSortedFormItems } from '../Models/Form';
 import { parseTypedFormItemArray } from '../FormAdmin/FormItemUtils';
-import { useSuspenseQuery } from '@apollo/client';
+import { useSuspenseQuery } from "@apollo/client/react";
 import { EventProposalQueryWithOwnerDocument } from './queries.generated';
 
 export type EventProposalDisplayProps = {

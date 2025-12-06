@@ -2,7 +2,7 @@ import { useContext, useMemo, useState } from 'react';
 import { Modal } from 'react-bootstrap4-modal';
 import flatMap from 'lodash/flatMap';
 import classNames from 'classnames';
-import { ApolloError } from '@apollo/client';
+
 import {
   BootstrapFormCheckbox,
   BootstrapFormSelect,
@@ -249,7 +249,7 @@ function NewFormItemModal<FormType extends FormTypeDefinition>({
           </BootstrapFormSelect>
         )}
 
-        <ErrorDisplay graphQLError={createError as ApolloError} />
+        <ErrorDisplay graphQLError={createError} />
       </div>
 
       <div className="modal-footer">

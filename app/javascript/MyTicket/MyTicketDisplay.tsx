@@ -16,6 +16,9 @@ type LoaderResult = {
 
 export const loader: LoaderFunction = async () => {
   const { data } = await client.query<MyTicketDisplayQueryData>({ query: MyTicketDisplayQueryDocument });
+  if (!data) {
+    return new Response(null, { status: 404 });
+  }
   if (!data.convention.my_profile?.ticket) {
     return replace('new');
   }

@@ -1,6 +1,6 @@
 import { useState, useContext } from 'react';
 import { ActionFunction, redirect, useFetcher, useLoaderData } from 'react-router';
-import { ApolloError } from '@apollo/client';
+
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import buildTicketTypeInput from './buildTicketTypeInput';
@@ -52,7 +52,7 @@ function EditTicketTypeForm() {
       <button type="button" className="btn btn-primary" onClick={saveClicked} disabled={inProgress}>
         Save changes
       </button>
-      <ErrorDisplay graphQLError={error as ApolloError} />
+      <ErrorDisplay graphQLError={error} />
     </div>
   );
 }

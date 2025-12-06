@@ -23,7 +23,7 @@ import RunListEventRun from './RunListEventRun';
 import { EventFiltersInput } from '../../graphqlTypes.generated';
 import useMergeCategoriesIntoEvents from '../useMergeCategoriesIntoEvents';
 import { useConventionDayUrlPortion } from '../conventionDayUrls';
-import { useSuspenseQuery } from '@apollo/client';
+import { useSuspenseQuery } from "@apollo/client/react";
 
 // http://stackoverflow.com/questions/123999/how-to-tell-if-a-dom-element-is-visible-in-the-current-viewport
 function isElementInViewport(el: HTMLElement) {

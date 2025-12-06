@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import * as React from 'react';
-import { ApolloError } from '@apollo/client';
 import { ActionFunction, redirect, useActionData, useLoaderData, useNavigation, useSubmit } from 'react-router';
 import { ErrorDisplay, notEmpty } from '@neinteractiveliterature/litform';
 
@@ -85,7 +84,7 @@ function EditCmsContentGroupForm() {
         removePermission={removePermission}
       />
 
-      <ErrorDisplay graphQLError={submitError as ApolloError} />
+      <ErrorDisplay graphQLError={submitError} />
 
       <input
         type="submit"

@@ -5,7 +5,7 @@ import { useModal } from '@neinteractiveliterature/litform';
 import CreateEventProposalModal from './CreateEventProposalModal';
 import SignInButton from '../Authentication/SignInButton';
 import { ProposeEventButtonQueryDocument } from './queries.generated';
-import { useSuspenseQuery } from '@apollo/client';
+import { useSuspenseQuery } from "@apollo/client/react";
 
 export type ProposeEventButtonProps = {
   className?: string;

@@ -13,7 +13,7 @@ export const action: ActionFunction = async ({ request, params: { id } }) => {
 
       const result = await client.mutate({
         mutation: CreateCouponApplicationDocument,
-        variables: { orderId: id, couponCode },
+        variables: { orderId: id ?? '', couponCode: couponCode ?? '' },
       });
       await client.resetStore();
       return data(result.data);

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { ActionFunction, Form, redirect, useActionData, useNavigation } from 'react-router';
-import { ApolloError } from '@apollo/client';
+
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import CmsGraphqlQueryForm from './CmsGraphqlQueryForm';
@@ -44,7 +44,7 @@ function NewCmsGraphqlQuery(): React.JSX.Element {
         <CmsGraphqlQueryForm value={query} onChange={setQuery} />
       </div>
 
-      <ErrorDisplay graphQLError={createError as ApolloError} />
+      <ErrorDisplay graphQLError={createError} />
 
       <button type="submit" className="btn btn-primary" disabled={navigation.state !== 'idle'}>
         Create GraphQL query

@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback, Suspense } from 'react';
 import * as React from 'react';
 import classNames from 'classnames';
-import { useApolloClient, useSuspenseQuery } from '@apollo/client';
+import { useApolloClient, useSuspenseQuery } from "@apollo/client/react";
 import { useTranslation } from 'react-i18next';
 import { html } from '@codemirror/lang-html';
 import {

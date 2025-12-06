@@ -1,4 +1,3 @@
-import { ApolloError } from '@apollo/client';
 import { useConfirm, ErrorDisplay, LoadingIndicator } from '@neinteractiveliterature/litform';
 
 import CommitableInput from '../../BuiltInFormControls/CommitableInput';
@@ -68,7 +67,7 @@ function ExistingVariableRow({ variable }: ExistingVariableRowProps): React.JSX.
       {error ? (
         <tr>
           <td colSpan={3}>
-            <ErrorDisplay graphQLError={error as ApolloError} />
+            <ErrorDisplay graphQLError={error} />
           </td>
         </tr>
       ) : null}

@@ -1,5 +1,6 @@
 import { useState, useCallback, useContext, useMemo } from 'react';
-import { ApolloError, useQuery } from '@apollo/client';
+
+import { useQuery } from '@apollo/client/react';
 import { ColumnFiltersState } from '@tanstack/react-table';
 import { useTranslation } from 'react-i18next';
 import {
@@ -79,6 +80,9 @@ type LoaderResult = {
 
 export const loader: LoaderFunction = async () => {
   const { data } = await client.query<CommonConventionDataQueryData>({ query: CommonConventionDataQueryDocument });
+  if (!data) {
+    return new Response(null, { status: 404 });
+  }
   const filterableFormItems = getFilterableFormItems(data.convention);
   return { convention: data.convention, filterableFormItems } satisfies LoaderResult;
 };
@@ -265,7 +269,7 @@ function EventList(): React.JSX.Element {
               <LoadingIndicator iconSet="bootstrap-icons" /> <em className="text-muted">Loading more events...</em>
             </div>
           )}
-          <ErrorDisplay graphQLError={fetchMoreError as ApolloError} />
+          <ErrorDisplay graphQLError={fetchMoreError} />
         </>
       )}
     </>

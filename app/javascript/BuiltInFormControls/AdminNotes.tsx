@@ -1,5 +1,4 @@
 import { useState, useRef } from 'react';
-import { ApolloError } from '@apollo/client';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import PlainTextDisplay from '../PlainTextDisplay';
@@ -8,7 +7,7 @@ import { useTranslation } from 'react-i18next';
 export type AdminNotesProps = {
   mutate: (value: string) => void;
   inProgress: boolean;
-  error: ApolloError | undefined | null;
+  error: Error | undefined | null;
   value?: string;
 };
 

@@ -1,4 +1,3 @@
-import { ApolloError } from '@apollo/client';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { CmsVariablesQueryData } from './queries.generated';
@@ -91,7 +90,7 @@ function AddVariableRow({ variable, onChange, onCancel }: AddVariableRowProps): 
       {setError ? (
         <tr>
           <td colSpan={3}>
-            <ErrorDisplay graphQLError={setError as ApolloError} />
+            <ErrorDisplay graphQLError={setError} />
           </td>
         </tr>
       ) : null}

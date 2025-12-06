@@ -1,7 +1,6 @@
 import { useState } from 'react';
 import * as React from 'react';
 import { ActionFunction, redirect, useActionData, useNavigation, useSubmit } from 'react-router';
-import { ApolloError } from '@apollo/client';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { buildPermissionInput } from '../../Permissions/PermissionUtils';
@@ -83,7 +82,7 @@ function NewCmsContentGroup(): React.JSX.Element {
         removePermission={removePermission}
       />
 
-      <ErrorDisplay graphQLError={createError as ApolloError} />
+      <ErrorDisplay graphQLError={createError} />
 
       <input
         type="submit"

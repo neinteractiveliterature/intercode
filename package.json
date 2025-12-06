@@ -29,7 +29,7 @@
     "wrangler:types": "wrangler types --cwd cloudflare"
   },
   "dependencies": {
-    "@apollo/client": "3.14.0",
+    "@apollo/client": "4.0.9",
     "@breezehr/currency-codes": "^2.2.1",
     "@codemirror/commands": "^6.7.1",
     "@codemirror/lang-html": "6.4.11",
@@ -75,7 +75,7 @@
     "@types/tinycolor2": "1.4.6",
     "@types/uuid": "11.0.0",
     "@types/zxcvbn": "4.4.5",
-    "apollo-upload-client": "18.0.1",
+    "apollo-upload-client": "19.0.0",
     "array-to-sentence": "2.0.0",
     "assert-never": "1.4.0",
     "autoprefixer": "10.4.22",
@@ -143,6 +143,7 @@
     "regenerator-runtime": "0.14.1",
     "require-from-string": "2.0.2",
     "rollbar": "^2.26.5",
+    "rxjs": "^7.8.2",
     "sass": "1.94.0",
     "source-map-support": "0.5.21",
     "stream-browserify": "3.0.0",

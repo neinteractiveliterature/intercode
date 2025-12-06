@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { ActionFunction, Form, redirect, useActionData, useNavigation } from 'react-router';
-import { ApolloError } from '@apollo/client';
+
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { buildPartialInputFromFormData } from './buildPartialInput';
@@ -40,7 +40,7 @@ function NewCmsPartial(): React.JSX.Element {
       <Form action="." method="POST">
         <CmsPartialForm partial={partial} onChange={setPartial} />
 
-        <ErrorDisplay graphQLError={createError as ApolloError} />
+        <ErrorDisplay graphQLError={createError} />
 
         <input
           type="submit"

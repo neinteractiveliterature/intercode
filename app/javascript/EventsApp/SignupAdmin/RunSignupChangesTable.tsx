@@ -21,7 +21,7 @@ import {
 } from './queries.generated';
 import ReactTableWithTheWorks from '../../Tables/ReactTableWithTheWorks';
 import { useParams } from 'react-router';
-import { useSuspenseQuery } from '@apollo/client';
+import { useSuspenseQuery } from "@apollo/client/react";
 
 const FILTER_CODECS = buildFieldFilterCodecs({
   action: FilterCodecs.stringArray,
@@ -79,8 +79,8 @@ function RunSignupChangesTable(): React.JSX.Element {
     decodeFilterValue: FILTER_CODECS.decodeFilterValue,
     defaultVisibleColumns,
     encodeFilterValue: FILTER_CODECS.encodeFilterValue,
-    getData: ({ data }) => data.convention.run.signup_changes_paginated.entries,
-    getPages: ({ data }) => data.convention.run.signup_changes_paginated.total_pages,
+    getData: ({ data }) => data.convention?.run?.signup_changes_paginated?.entries ?? [],
+    getPages: ({ data }) => data.convention?.run?.signup_changes_paginated?.total_pages ?? 0,
     columns,
     query: RunSignupChangesQueryDocument,
     storageKeyPrefix: 'signupSpy',

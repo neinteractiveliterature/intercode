@@ -13,7 +13,7 @@ import AppRootContext from '../../AppRootContext';
 import { UserConProfileSignupsQueryData, UserConProfileSignupsQueryDocument } from './queries.generated';
 import { joinReact } from '../../RenderingUtils';
 import { useFormatRunTimespan } from '../runTimeFormatting';
-import { useSuspenseQuery } from '@apollo/client';
+import { useSuspenseQuery } from "@apollo/client/react";
 import { client } from '../../useIntercodeApolloClient';
 import { WithdrawAllUserConProfileSignupsDocument } from './mutations.generated';
 

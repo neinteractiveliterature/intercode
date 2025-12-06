@@ -9,7 +9,7 @@ import { DateTime } from 'luxon';
 import Timespan from '../../Timespan';
 import { RankedChoiceFallbackAction, RankedChoiceUserConstraint, SignupState } from '../../graphqlTypes.generated';
 import BucketAvailabilityDisplay from '../EventPage/BucketAvailabilityDisplay';
-import { useMutation } from '@apollo/client';
+import { useMutation } from "@apollo/client/react";
 import { UpdateUserConProfileDocument } from '../../UserConProfiles/mutations.generated';
 import {
   CreateMyRankedChoiceUserConstraintDocument,

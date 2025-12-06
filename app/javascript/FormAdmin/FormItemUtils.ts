@@ -439,7 +439,7 @@ export function mutationUpdaterForFormSection<ResultDataType>(
     mutationResultData: ResultDataType,
   ) => FormEditorQueryData['convention']['form']['form_sections'][number],
 ) {
-  return (proxy: ApolloCache<unknown>, mutationResultData: ResultDataType): void => {
+  return (proxy: ApolloCache, mutationResultData: ResultDataType): void => {
     if (formSectionId == null) {
       return;
     }

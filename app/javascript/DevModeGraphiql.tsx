@@ -4,7 +4,7 @@ import { parse } from 'graphql';
 import { Fetcher } from '@graphiql/toolkit';
 
 import { execute, GraphQLRequest } from '@apollo/client/';
-import { useIntercodeApolloLink } from './useIntercodeApolloClient';
+import { useIntercodeApolloLink, client } from './useIntercodeApolloClient';
 import mountReactComponents from './mountReactComponents';
 
 import 'graphiql/graphiql.css';
@@ -23,13 +23,12 @@ function DevModeGraphiql({ authenticityTokens }: DevModeGraphiqlProps): React.JS
   }, [authenticityTokens]);
   const link = useIntercodeApolloLink(new URL('/graphql', window.location.href));
 
-  // @ts-expect-error This might be really broken but I need to ship a patch release ASAP and this is less important
   const fetcher: Fetcher = useCallback(
     (operation) => {
       const operationAsGraphQLRequest = operation as unknown as GraphQLRequest;
 
       operationAsGraphQLRequest.query = parse(operation.query);
-      return execute(link, operationAsGraphQLRequest);
+      return execute(link, operationAsGraphQLRequest, { client });
     },
     [link],
   );

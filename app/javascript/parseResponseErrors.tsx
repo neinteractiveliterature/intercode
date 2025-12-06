@@ -1,5 +1,5 @@
+import { CombinedGraphQLErrors } from '@apollo/client';
 import isEqual from 'lodash/isEqual';
-import { ApolloError } from '@apollo/client';
 
 export class FormValidationError extends Error {
   validationErrors: Record<string, string[]>;
@@ -10,9 +10,12 @@ export class FormValidationError extends Error {
   }
 }
 
-export function parseResponseErrors(error: ApolloError, errorPath: readonly (string | number)[]) {
-  const { graphQLErrors } = error;
-  const updateError = graphQLErrors.find((graphQLError) => isEqual(graphQLError.path, errorPath));
-  const validationErrors = (updateError?.extensions?.validationErrors as Record<string, string[]>) ?? {};
-  return validationErrors;
+export function parseResponseErrors(error: Error, errorPath: readonly (string | number)[]) {
+  if (CombinedGraphQLErrors.is(error)) {
+    const updateError = error.errors.find((graphQLError) => isEqual(graphQLError.path, errorPath));
+    const validationErrors = (updateError?.extensions?.validationErrors as Record<string, string[]>) ?? {};
+    return validationErrors;
+  } else {
+    return {};
+  }
 }

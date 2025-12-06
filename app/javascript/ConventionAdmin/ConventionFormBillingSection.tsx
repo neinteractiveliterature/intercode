@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import * as React from 'react';
-import { ApolloError, useApolloClient, useMutation } from '@apollo/client';
+import { useApolloClient, useMutation } from '@apollo/client/react';
 import {
   BootstrapFormInput,
   MultipleChoiceInput,
@@ -68,7 +68,7 @@ function ConventionFormBillingSection({
       variables: { baseUrl: window.location.href.toString() },
     });
 
-    const onboardingLink = result.data.convention.stripe_account?.account_onboarding_link;
+    const onboardingLink = result.data?.convention.stripe_account?.account_onboarding_link;
     if (onboardingLink) {
       window.location.href = onboardingLink;
     }
@@ -164,7 +164,7 @@ function ConventionFormBillingSection({
                       t('admin.convention.stripeAccountContinue', { conventionName: convention.name })
                     )}
                   </button>
-                  <ErrorDisplay graphQLError={obtainOnboardingLinkError as ApolloError} />
+                  <ErrorDisplay graphQLError={obtainOnboardingLinkError} />
                 </>
               )}
             </>
@@ -184,7 +184,7 @@ function ConventionFormBillingSection({
                   })
                 )}
               </button>
-              <ErrorDisplay graphQLError={createStripeAccountError as ApolloError} />
+              <ErrorDisplay graphQLError={createStripeAccountError} />
             </>
           )}
         </div>

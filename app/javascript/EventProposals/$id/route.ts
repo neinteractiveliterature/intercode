@@ -7,7 +7,7 @@ export const action: ActionFunction = async ({ request, params: { id } }) => {
     if (request.method === 'DELETE') {
       await client.mutate({
         mutation: DeleteEventProposalDocument,
-        variables: { id },
+        variables: { id: id ?? '' },
       });
       await client.resetStore();
       return replace('/pages/new-proposal');

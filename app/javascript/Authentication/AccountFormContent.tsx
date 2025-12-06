@@ -1,4 +1,4 @@
-import { useQuery } from '@apollo/client';
+import { useQuery } from "@apollo/client/react";
 import { AccountFormContentQueryDocument } from './queries.generated';
 import BlockPartial from 'UIComponents/BlockPartial';
 import { CmsPartialBlockName } from 'graphqlTypes.generated';

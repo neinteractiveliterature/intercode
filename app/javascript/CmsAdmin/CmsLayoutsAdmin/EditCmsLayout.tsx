@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ApolloError } from '@apollo/client';
+
 import { ActionFunction, Form, redirect, useActionData, useLoaderData, useNavigation } from 'react-router';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -44,7 +44,7 @@ function EditCmsLayout() {
       <Form action="." method="PATCH">
         <CmsLayoutForm layout={layout} onChange={setLayout} />
 
-        <ErrorDisplay graphQLError={updateError as ApolloError} />
+        <ErrorDisplay graphQLError={updateError} />
 
         <input
           type="submit"

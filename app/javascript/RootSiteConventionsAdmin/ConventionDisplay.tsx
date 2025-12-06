@@ -18,7 +18,7 @@ export const action: ActionFunction = async ({ params: { id }, request }) => {
     const canceled = formData.get('canceled')?.toString() === 'true';
     const result = await client.mutate({
       mutation: SetConventionCanceledDocument,
-      variables: { id, canceled },
+      variables: { id: id ?? '', canceled },
     });
     return data(result.data);
   } catch (error) {

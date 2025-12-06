@@ -6,7 +6,7 @@ import { client } from '../useIntercodeApolloClient';
 import { CreateDepartmentDocument } from './mutations.generated';
 import { useTranslation } from 'react-i18next';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
-import { ApolloError } from '@apollo/client';
+
 import { buildDepartmentInputFromFormData } from './buildDepartmentInput';
 import { DepartmentAdminQueryDocument } from './queries.generated';
 
@@ -43,7 +43,7 @@ function NewDepartment(): React.JSX.Element {
           disabled={navigation.state !== 'idle'}
         />
 
-        <ErrorDisplay graphQLError={saveError as ApolloError} />
+        <ErrorDisplay graphQLError={saveError} />
 
         <input
           type="submit"

@@ -1,6 +1,6 @@
 import { useId, useState } from 'react';
 import * as React from 'react';
-import { ApolloError } from '@apollo/client';
+
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import useAsyncFunction from '../useAsyncFunction';
@@ -58,7 +58,7 @@ function ApplyCouponControl({ createCouponApplication }: ApplyCouponControlProps
           {t('buttons.apply')}
         </button>
       </div>
-      <ErrorDisplay graphQLError={applyError as ApolloError} />
+      <ErrorDisplay graphQLError={applyError} />
     </>
   );
 }

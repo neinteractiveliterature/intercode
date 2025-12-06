@@ -99,7 +99,7 @@ export const action: ActionFunction = async ({ request, params: { id } }) => {
   const result = await client.mutate({
     mutation: UpdateSignupCountedDocument,
     variables: {
-      signupId: id,
+      signupId: id ?? '',
       counted: formData.get('counted')?.toString() === 'true',
     },
   });

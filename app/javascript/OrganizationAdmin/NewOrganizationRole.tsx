@@ -18,7 +18,6 @@ import invariant from 'tiny-invariant';
 import { CreateOrganizationRoleDocument, CreateOrganizationRoleMutationVariables } from './mutations.generated';
 import { client } from 'useIntercodeApolloClient';
 import { Organization } from 'graphqlTypes.generated';
-import { ApolloError } from '@apollo/client';
 
 type ActionRequest = Omit<CreateOrganizationRoleMutationVariables, 'organizationId'>;
 
@@ -96,7 +95,7 @@ function NewOrganizationRole() {
 
       {renderForm()}
 
-      <ErrorDisplay graphQLError={mutationError as ApolloError} />
+      <ErrorDisplay graphQLError={mutationError} />
 
       <button className="btn btn-primary" type="button" onClick={createOrganizationRole} disabled={mutationInProgress}>
         Create role

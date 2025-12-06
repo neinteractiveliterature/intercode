@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Modal } from 'react-bootstrap4-modal';
-import { ApolloError } from '@apollo/client';
+
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import CouponForm from './CouponForm';
@@ -52,7 +52,7 @@ function NewCouponModal(): React.JSX.Element {
       <div className="modal-header">{t('admin.store.coupons.newCoupon')}</div>
       <div className="modal-body">
         <CouponForm value={coupon} onChange={setCoupon} />
-        <ErrorDisplay graphQLError={error as ApolloError} />
+        <ErrorDisplay graphQLError={error} />
       </div>
       <div className="modal-footer">
         <Link to=".." type="button" className="btn btn-secondary">

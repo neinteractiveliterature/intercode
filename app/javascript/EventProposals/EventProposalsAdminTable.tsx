@@ -154,7 +154,7 @@ function EventProposalsAdminTable(): React.JSX.Element {
     alwaysVisibleColumns,
     encodeFilterValue: FILTER_CODECS.encodeFilterValue,
     getData: ({ data: tableData }) => tableData.convention.event_proposals_paginated.entries,
-    getPages: ({ data: tableData }) => tableData.convention.event_proposals_paginated.total_pages,
+    getPages: ({ data: tableData }) => tableData.convention.event_proposals_paginated.total_pages ?? 0,
     columns,
     query: EventProposalsAdminQueryDocument,
     storageKeyPrefix: 'eventProposalsAdmin',

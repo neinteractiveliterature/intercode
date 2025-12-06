@@ -6,7 +6,7 @@ export const action: ActionFunction = async ({ params: { id } }) => {
   try {
     await client.mutate({
       mutation: RerunModeratedRankedChoiceSignupRoundDocument,
-      variables: { id },
+      variables: { id: id ?? '' },
     });
     await client.resetStore();
     return null;

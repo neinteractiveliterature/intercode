@@ -143,8 +143,8 @@ function OrderAdmin(): React.JSX.Element {
     table: tableInstance,
     loading,
   } = useReactTableWithTheWorks({
-    getData: ({ data }) => data?.convention.orders_paginated.entries,
-    getPages: ({ data }) => data?.convention.orders_paginated.total_pages,
+    getData: ({ data }) => data?.convention?.orders_paginated?.entries ?? [],
+    getPages: ({ data }) => data?.convention?.orders_paginated?.total_pages ?? 0,
     columns,
     storageKeyPrefix: 'orderAdmin',
     query: AdminOrdersQueryDocument,

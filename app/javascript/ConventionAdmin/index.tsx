@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { ApolloError } from '@apollo/client';
+
 import { ActionFunction, LoaderFunction, redirect, useActionData, useLoaderData, useSubmit } from 'react-router';
 import pick from 'lodash/pick';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
@@ -123,7 +123,7 @@ function ConventionAdmin() {
         rootSite={data.rootSite}
       />
 
-      <ErrorDisplay graphQLError={mutationError as ApolloError} />
+      <ErrorDisplay graphQLError={mutationError} />
     </div>
   );
 }

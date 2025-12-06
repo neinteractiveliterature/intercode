@@ -1,6 +1,5 @@
 import { useCallback, ReactNode } from 'react';
 import { Link } from 'react-router';
-import { ApolloError } from '@apollo/client';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import useAsyncFunction from '../useAsyncFunction';
@@ -63,7 +62,7 @@ export default function EditEvent({
 
       {children}
 
-      <ErrorDisplay graphQLError={updateError as ApolloError} />
+      <ErrorDisplay graphQLError={updateError as Error} />
 
       <div className="d-flex align-items-center mt-4">
         <button

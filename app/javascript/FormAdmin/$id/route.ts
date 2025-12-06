@@ -9,11 +9,11 @@ export const action: ActionFunction = async ({ params: { id }, request }) => {
       await client.mutate({
         mutation: DeleteFormDocument,
         variables: {
-          id,
+          id: id ?? '',
         },
         update: (cache) => {
           cache.modify<Form>({
-            id: cache.identify({ __typename: 'Form', id }),
+            id: cache.identify({ __typename: 'Form', id: id ?? '' }),
             fields: (a, { DELETE }) => DELETE,
           });
         },

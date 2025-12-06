@@ -1,18 +1,10 @@
 import { useMemo } from 'react';
-import {
-  ApolloClient,
-  ApolloLink,
-  Operation,
-  NextLink,
-  InMemoryCache,
-  NormalizedCacheObject,
-  split,
-  createQueryPreloader,
-} from '@apollo/client';
+import { ApolloClient, ApolloLink, CombinedGraphQLErrors, InMemoryCache } from '@apollo/client';
+import { createQueryPreloader } from '@apollo/client/react';
 import { BatchHttpLink } from '@apollo/client/link/batch-http';
-import createUploadLink from 'apollo-upload-client/createUploadLink.mjs';
+import UploadHttpLink from 'apollo-upload-client/UploadHttpLink.mjs';
 import { DateTime } from 'luxon';
-import { onError } from '@apollo/client/link/error/index.js';
+import { ErrorLink } from '@apollo/client/link/error';
 
 import possibleTypes from './possibleTypes.json';
 import AuthenticityTokensManager from './AuthenticityTokensContext';
@@ -40,11 +32,11 @@ function containsFile(obj: object, seen: Set<object>): boolean {
   });
 }
 
-function isUpload({ variables }: Operation) {
+function isUpload({ variables }: ApolloLink.Operation) {
   return containsFile(variables, new Set([variables]));
 }
 
-const AddTimezoneLink = new ApolloLink((operation: Operation, next: NextLink) => {
+const AddTimezoneLink = new ApolloLink((operation: ApolloLink.Operation, next: ApolloLink.ForwardFunction) => {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   operation.setContext((context: Record<string, any>) => ({
     ...context,
@@ -67,11 +59,11 @@ export class GraphQLNotAuthenticatedErrorEvent extends Event {
   }
 }
 
-export const ErrorHandlerLink: ApolloLink = onError(({ graphQLErrors }) => {
-  if (graphQLErrors) {
-    for (const error of graphQLErrors) {
-      if (error.extensions?.code === 'NOT_AUTHENTICATED') {
-        window.dispatchEvent(new GraphQLNotAuthenticatedErrorEvent(error));
+export const ErrorHandlerLink: ApolloLink = new ErrorLink(({ error }) => {
+  if (CombinedGraphQLErrors.is(error)) {
+    for (const err of error.errors) {
+      if (err.extensions?.code === 'NOT_AUTHENTICATED') {
+        window.dispatchEvent(new GraphQLNotAuthenticatedErrorEvent(err));
       }
     }
   }
@@ -82,8 +74,8 @@ export function getIntercodeUserTimezoneHeader() {
   return { 'X-Intercode-User-Timezone': localTime.zoneName ?? '' };
 }
 
-export const AuthHeadersLink = new ApolloLink((operation: Operation, next: NextLink) => {
-  operation.setContext((context: ReturnType<Operation['getContext']>) => ({
+export const AuthHeadersLink = new ApolloLink((operation: ApolloLink.Operation, next: ApolloLink.ForwardFunction) => {
+  operation.setContext((context: ReturnType<ApolloLink.Operation['getContext']>) => ({
     ...context,
     credentials: 'same-origin',
     headers: {
@@ -97,9 +89,9 @@ export const AuthHeadersLink = new ApolloLink((operation: Operation, next: NextL
 
 export function buildIntercodeApolloLink(uri: URL): ApolloLink {
   // adapted from https://github.com/jaydenseric/apollo-upload-client/issues/63#issuecomment-392501449
-  const terminatingLink = split(
+  const terminatingLink = ApolloLink.split(
     isUpload,
-    createUploadLink({ uri: uri.toString(), fetch }),
+    new UploadHttpLink({ uri: uri.toString(), fetch }),
     new BatchHttpLink({
       uri: uri.toString(),
       fetch,
@@ -115,11 +107,11 @@ export function useIntercodeApolloLink(uri: URL): ApolloLink {
   return link;
 }
 
-export function buildIntercodeApolloClient(link: ApolloLink): ApolloClient<NormalizedCacheObject> {
+export function buildIntercodeApolloClient(link: ApolloLink): ApolloClient {
   return new ApolloClient({
     link,
+
     cache: new InMemoryCache({
-      addTypename: true,
       possibleTypes,
       typePolicies: {
         Ability: {

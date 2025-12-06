@@ -8,7 +8,7 @@ import {
   useLoaderData,
   useNavigation,
 } from 'react-router';
-import { ApolloError } from '@apollo/client';
+
 import {
   BootstrapFormInput,
   ErrorDisplay,
@@ -98,6 +98,9 @@ type LoaderResult = {
 
 export const loader: LoaderFunction = async ({ params: { id } }) => {
   const { data } = await client.query<FormAdminQueryData>({ query: FormAdminQueryDocument });
+  if (!data) {
+    return new Response(null, { status: 404 });
+  }
   const initialForm = data.convention.forms.find((form) => form.id === id);
   if (!initialForm) {
     throw new Response(null, { status: 404 });
@@ -157,7 +160,7 @@ function FormJSONEditor() {
           Save changes
         </button>
       </div>
-      <ErrorDisplay graphQLError={error as ApolloError | undefined} />
+      <ErrorDisplay graphQLError={error as Error | undefined} />
     </Form>
   );
 }

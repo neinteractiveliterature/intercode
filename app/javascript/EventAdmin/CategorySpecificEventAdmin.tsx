@@ -18,7 +18,7 @@ export const loader: LoaderFunction = async ({ params: { eventCategoryId } }) =>
   if (Number.isNaN(eventCategoryIdIntPortion)) {
     return new Response(null, { status: 404 });
   }
-  const eventCategory = data.convention.event_categories.find(
+  const eventCategory = data?.convention.event_categories.find(
     (category) => Number.parseInt(category.id) === eventCategoryIdIntPortion,
   );
 

@@ -21,7 +21,7 @@ import {
 import { client } from '../useIntercodeApolloClient';
 import { MergeUsersDocument } from './mutations.generated';
 import { i18n } from '../setupI18Next';
-import { ApolloError } from '@apollo/client';
+
 import { useSubmit } from 'react-router';
 
 type UserType = MergeUsersModalQueryData['users'][0];
@@ -219,7 +219,7 @@ function MergeUsersModal(): React.JSX.Element {
 
         {renderMergePreview()}
 
-        <ErrorDisplay graphQLError={mutationError as ApolloError} />
+        <ErrorDisplay graphQLError={mutationError} />
       </div>
 
       <div className="modal-footer">

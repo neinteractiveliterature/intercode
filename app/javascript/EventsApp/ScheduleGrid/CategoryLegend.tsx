@@ -9,7 +9,7 @@ import { SignupStatus } from './StylingUtils';
 import AppRootContext from '../../AppRootContext';
 import { SignupAutomationMode, SignupMode } from '../../graphqlTypes.generated';
 import RankedChoicePriorityIndicator from '../MySignupQueue/RankedChoicePriorityIndicator';
-import { useSuspenseQuery } from '@apollo/client';
+import { useSuspenseQuery } from "@apollo/client/react";
 
 export default function CategoryLegend() {
   const { data } = useSuspenseQuery(CommonConventionDataQueryDocument);

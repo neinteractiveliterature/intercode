@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ApolloError } from '@apollo/client';
+
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import {
@@ -54,7 +54,7 @@ function EditCmsPageForm() {
       <Form method="PATCH" action=".">
         <CmsPageForm page={page} onChange={setPage} cmsLayouts={cmsParent.cmsLayouts} cmsParent={cmsParent} />
 
-        <ErrorDisplay graphQLError={updateError as ApolloError} />
+        <ErrorDisplay graphQLError={updateError} />
 
         <input type="hidden" name="destination" value={searchParams.get('destination') ?? '/cms_pages'} />
 

@@ -22,14 +22,14 @@ import { useAsyncFetcher } from 'useAsyncFetcher';
 type LoaderResult = WithFormResponse<EventAdminSingleEventQueryData['conventionByRequestHost']['event']>;
 
 export const loader: LoaderFunction = async ({ params: { eventId } }) => {
-  const {
-    data: {
-      conventionByRequestHost: { event: serializedEvent },
-    },
-  } = await client.query({
+  const { data } = await client.query({
     query: EventAdminSingleEventQueryDocument,
     variables: { eventId: eventId ?? '' },
   });
+  if (!data) {
+    return new Response(null, { status: 404 });
+  }
+  const serializedEvent = data.conventionByRequestHost.event;
   const initialEvent = deserializeFormResponse(serializedEvent);
   return initialEvent satisfies LoaderResult;
 };

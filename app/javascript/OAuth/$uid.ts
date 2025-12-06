@@ -8,11 +8,11 @@ export const action: ActionFunction = async ({ params: { uid }, request }) => {
     if (request.method === 'DELETE') {
       await client.mutate({
         mutation: RevokeAuthorizedApplicationDocument,
-        variables: { uid },
+        variables: { uid: uid ?? '' },
         update: (cache) => {
           cache.modify<AuthorizedApplication>({
             id: cache.identify({ __typename: 'AuthorizedApplication', uid }),
-            fields: (field, { DELETE }) => DELETE,
+            fields: (_field, { DELETE }) => DELETE,
           });
         },
       });

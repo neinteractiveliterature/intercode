@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { ActionFunction, LoaderFunction, redirect, useFetcher, useLoaderData } from 'react-router';
-import { ApolloError } from '@apollo/client';
+
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import buildUserActivityAlertInput from './buildUserActivityAlertInput';
@@ -23,6 +23,10 @@ type LoaderResult = {
 
 export const loader: LoaderFunction = async () => {
   const { data } = await client.query({ query: UserActivityAlertsAdminQueryDocument });
+
+  if (!data) {
+    return new Response(null, { status: 404 });
+  }
 
   const userActivityAlertEvent = data.notificationEvents.find(
     (event) => event.key === NotificationEventKey.UserActivityAlertsAlert,
@@ -128,7 +132,7 @@ function NewUserActivityAlert() {
         userActivityAlertEvent={userActivityAlertEvent}
       />
 
-      <ErrorDisplay graphQLError={createError as ApolloError} />
+      <ErrorDisplay graphQLError={createError} />
 
       <button className="btn btn-primary mt-4" type="button" onClick={saveClicked} disabled={createInProgress}>
         Create user activity alert

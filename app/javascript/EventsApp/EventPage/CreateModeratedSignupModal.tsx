@@ -1,6 +1,7 @@
 import { useContext, useMemo } from 'react';
 import { Modal } from 'react-bootstrap4-modal';
-import { ApolloError, useMutation, useSuspenseQuery } from '@apollo/client';
+
+import { useMutation, useSuspenseQuery } from '@apollo/client/react';
 import classnames from 'classnames';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -107,7 +108,7 @@ export default function CreateModeratedSignupModal({
           )}
         </>
 
-        <ErrorDisplay graphQLError={createError as ApolloError} />
+        <ErrorDisplay graphQLError={createError} />
       </div>
 
       <div className="modal-footer">

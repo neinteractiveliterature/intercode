@@ -1,6 +1,7 @@
 import Select, { Props as SelectProps } from 'react-select';
 // eslint-disable-next-line no-restricted-imports
-import { DocumentNode, useQuery } from '@apollo/client';
+import { DocumentNode } from '@apollo/client';
+import { useQuery } from "@apollo/client/react";
 import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import FourOhFourPage from '../FourOhFourPage';

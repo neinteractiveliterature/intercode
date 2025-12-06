@@ -8,10 +8,10 @@ export const action: ActionFunction = async ({ params: { id, organizationRoleId 
     if (request.method === 'DELETE') {
       const result = await client.mutate({
         mutation: DeleteOrganizationRoleDocument,
-        variables: { id: organizationRoleId },
+        variables: { id: organizationRoleId ?? '' },
         update: (cache) => {
           cache.modify<OrganizationRole>({
-            id: cache.identify({ __typename: 'OrganizationRole', id: organizationRoleId }),
+            id: cache.identify({ __typename: 'OrganizationRole', id: organizationRoleId ?? '' }),
             fields: (value, { DELETE }) => DELETE,
           });
         },

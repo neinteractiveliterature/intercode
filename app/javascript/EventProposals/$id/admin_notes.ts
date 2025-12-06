@@ -9,8 +9,8 @@ export const action: ActionFunction = async ({ request, params: { id } }) => {
       return await client.mutate({
         mutation: UpdateEventProposalAdminNotesDocument,
         variables: {
-          eventProposalId: id,
-          adminNotes: formData.get('admin_notes')?.toString(),
+          eventProposalId: id ?? '',
+          adminNotes: formData.get('admin_notes')?.toString() ?? '',
         },
       });
     } else {

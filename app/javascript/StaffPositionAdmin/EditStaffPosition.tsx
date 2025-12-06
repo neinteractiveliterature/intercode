@@ -1,6 +1,5 @@
 import { useState } from 'react';
 import { ActionFunction, LoaderFunction, redirect, useFetcher, useLoaderData } from 'react-router';
-import { ApolloError } from '@apollo/client';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import StaffPositionForm from './StaffPositionForm';
@@ -30,6 +29,9 @@ type LoaderResult = {
 
 export const loader: LoaderFunction = async ({ params: { id } }) => {
   const { data } = await client.query<StaffPositionsQueryData>({ query: StaffPositionsQueryDocument });
+  if (!data) {
+    return new Response(null, { status: 404 });
+  }
   const initialStaffPosition = data.convention.staff_positions.find((staffPosition) => staffPosition.id === id);
   if (!initialStaffPosition) {
     return new Response(null, { status: 404 });
@@ -55,7 +57,7 @@ function EditStaffPosition() {
     <div>
       <h1 className="mb-4">Editing {initialStaffPosition.name}</h1>
       <StaffPositionForm staffPosition={staffPosition} onChange={setStaffPosition} />
-      <ErrorDisplay graphQLError={updateError as ApolloError} />
+      <ErrorDisplay graphQLError={updateError} />
       <button type="button" className="btn btn-primary" onClick={saveClicked} disabled={requestInProgress}>
         Save changes
       </button>

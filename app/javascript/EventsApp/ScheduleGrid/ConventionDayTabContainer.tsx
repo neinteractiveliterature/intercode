@@ -1,6 +1,6 @@
 import { useCallback, useMemo, useContext, ReactNode } from 'react';
 import { NavLink, useLocation } from 'react-router';
-import { useApolloClient } from '@apollo/client';
+import { useApolloClient } from "@apollo/client/react";
 
 import { getConventionDayTimespans } from '../../TimespanUtils';
 import RefreshButton from './RefreshButton';

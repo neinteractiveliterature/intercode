@@ -11,7 +11,7 @@ export const action: ActionFunction = async ({ request, params: { sectionId } })
       const result = await client.mutate({
         mutation: CreateFormItemDocument,
         variables: {
-          formSectionId: sectionId,
+          formSectionId: sectionId ?? '',
           formItem,
         },
         update: (cache, result) => {
@@ -23,7 +23,7 @@ export const action: ActionFunction = async ({ request, params: { sectionId } })
               fragmentName: 'FormEditorFormItemFields',
             });
             cache.modify<FormSection>({
-              id: cache.identify({ __typename: 'FormSection', id: sectionId }),
+              id: cache.identify({ __typename: 'FormSection', id: sectionId ?? '' }),
               fields: {
                 form_items: (value) => [...value, itemRef],
               },

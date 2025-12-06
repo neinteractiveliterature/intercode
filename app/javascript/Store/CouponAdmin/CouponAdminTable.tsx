@@ -73,8 +73,8 @@ function CouponAdminTable(): React.JSX.Element {
     table: tableInstance,
     loading,
   } = useReactTableWithTheWorks({
-    getData: ({ data }) => data?.convention.coupons_paginated.entries,
-    getPages: ({ data }) => data?.convention.coupons_paginated.total_pages,
+    getData: ({ data }) => data?.convention?.coupons_paginated?.entries ?? [],
+    getPages: ({ data }) => data?.convention?.coupons_paginated?.total_pages ?? 0,
     columns,
     query: AdminCouponsQueryDocument,
     storageKeyPrefix: 'coupons',

@@ -8,7 +8,7 @@ import SelectWithLabel from './SelectWithLabel';
 import FileUploadForm from '../BuiltInForms/FileUploadForm';
 import { ActiveStorageAttachment } from '../graphqlTypes.generated';
 import { Blob } from '@rails/activestorage';
-import { useLazyQuery } from '@apollo/client';
+import { useLazyQuery } from "@apollo/client/react";
 
 export type AddFileModalProps = {
   visible: boolean;

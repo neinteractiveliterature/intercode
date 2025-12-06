@@ -1,6 +1,6 @@
 import { createContext, Suspense, useState, useMemo, useCallback, useContext, useEffect, ReactNode } from 'react';
 import { detect } from 'detect-browser';
-import { useApolloClient, useQuery } from '@apollo/client';
+import { useApolloClient, useQuery } from "@apollo/client/react";
 import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
 import ConventionDayTabContainer from './ConventionDayTabContainer';

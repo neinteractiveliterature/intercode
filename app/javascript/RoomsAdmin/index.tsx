@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import * as React from 'react';
-import { ApolloError } from '@apollo/client';
+
 import { ErrorDisplay, useGraphQLConfirm, sortByLocaleString } from '@neinteractiveliterature/litform';
 
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
@@ -139,7 +139,7 @@ function RoomsAdmin() {
           </li>
         </ul>
 
-        <ErrorDisplay graphQLError={error as ApolloError | undefined} />
+        <ErrorDisplay graphQLError={error as Error | undefined} />
       </div>
     </>
   );

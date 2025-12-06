@@ -7,7 +7,7 @@ import { Link, useFetcher } from 'react-router';
 import { useSingleSignupLoader } from '../loaders';
 import BucketInput from '../BucketInput';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
-import { ApolloError } from '@apollo/client';
+
 import Modal from 'react-bootstrap4-modal';
 
 export const action: ActionFunction = async ({ request, params: { id } }) => {
@@ -17,7 +17,7 @@ export const action: ActionFunction = async ({ request, params: { id } }) => {
       mutation: ForceConfirmSignupDocument,
       variables: {
         signupId: id ?? '',
-        bucketKey: formData.get('bucket_key')?.toString(),
+        bucketKey: formData.get('bucket_key')?.toString() ?? '',
       },
     });
     return data(result.data);
@@ -66,7 +66,7 @@ function ForceConfirmSignupModal(): React.JSX.Element {
           onChange={setBucketKey}
         />
         <p className="text-danger">{t('events.signupAdmin.forceConfirmSignup.overfillWarning')}</p>
-        <ErrorDisplay graphQLError={error as ApolloError} />
+        <ErrorDisplay graphQLError={error} />
       </div>
     );
   };

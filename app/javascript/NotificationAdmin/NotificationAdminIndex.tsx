@@ -5,7 +5,7 @@ import Modal from 'react-bootstrap4-modal';
 import { Link, LoaderFunction, useFetcher, useLoaderData } from 'react-router';
 
 import AppRootContext from '../AppRootContext';
-import { ApolloError } from '@apollo/client';
+
 import { useTranslation } from 'react-i18next';
 import { client } from 'useIntercodeApolloClient';
 import { NotificationsConfigQueryData, NotificationsConfigQueryDocument } from './queries.generated';
@@ -64,7 +64,7 @@ function NotificationPreviewModal({ visible, close, eventConfig }: NotificationP
         />
       </div>
       <div className="modal-footer">
-        <ErrorDisplay graphQLError={error as ApolloError} />
+        <ErrorDisplay graphQLError={error} />
         <button type="button" className="btn btn-secondary" onClick={close}>
           {t('buttons.cancel')}
         </button>
