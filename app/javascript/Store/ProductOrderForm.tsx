@@ -1,5 +1,5 @@
 import { useMemo, useState } from 'react';
-import { ApolloError } from '@apollo/client/v4-migration';
+
 import { useSuspenseQuery } from '@apollo/client/react';
 import {
   LoadingIndicator,

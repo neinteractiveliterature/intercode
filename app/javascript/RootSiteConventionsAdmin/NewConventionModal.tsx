@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { Modal } from 'react-bootstrap4-modal';
-import { ApolloError } from '@apollo/client/v4-migration';
+
 import { Link, useFetcher } from 'react-router';
 import { DateTime } from 'luxon';
 import {

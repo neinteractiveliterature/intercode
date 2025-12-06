@@ -18,7 +18,6 @@ import invariant from 'tiny-invariant';
 import { CreateOrganizationRoleDocument, CreateOrganizationRoleMutationVariables } from './mutations.generated';
 import { client } from 'useIntercodeApolloClient';
 import { Organization } from 'graphqlTypes.generated';
-import { ApolloError } from '@apollo/client/v4-migration';
 
 type ActionRequest = Omit<CreateOrganizationRoleMutationVariables, 'organizationId'>;
 

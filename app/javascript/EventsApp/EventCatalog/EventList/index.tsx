@@ -1,5 +1,5 @@
 import { useState, useCallback, useContext, useMemo } from 'react';
-import { ApolloError } from '@apollo/client/v4-migration';
+
 import { useQuery } from '@apollo/client/react';
 import { ColumnFiltersState } from '@tanstack/react-table';
 import { useTranslation } from 'react-i18next';

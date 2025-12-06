@@ -1,7 +1,7 @@
 import { useState } from 'react';
 import * as React from 'react';
 import { Modal } from 'react-bootstrap4-modal';
-import { ApolloError } from '@apollo/client/v4-migration';
+
 import { useMutation, useSuspenseQuery } from '@apollo/client/react';
 import { ErrorDisplay, LoadingIndicator } from '@neinteractiveliterature/litform';
 

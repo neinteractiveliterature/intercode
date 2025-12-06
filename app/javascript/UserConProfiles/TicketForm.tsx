@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback, SyntheticEvent } from 'react';
-import { ApolloError } from '@apollo/client/v4-migration';
+
 import { useModal, BootstrapFormSelect, ErrorDisplay, FormGroupWithLabel } from '@neinteractiveliterature/litform';
 
 import EventSelect from '../BuiltInFormControls/EventSelect';

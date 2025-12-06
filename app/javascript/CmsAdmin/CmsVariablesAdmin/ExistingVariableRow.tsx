@@ -1,4 +1,3 @@
-import { ApolloError } from '@apollo/client/v4-migration';
 import { useConfirm, ErrorDisplay, LoadingIndicator } from '@neinteractiveliterature/litform';
 
 import CommitableInput from '../../BuiltInFormControls/CommitableInput';

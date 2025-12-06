@@ -2,7 +2,6 @@ import { useEffect, useState } from 'react';
 import { Modal } from 'react-bootstrap4-modal';
 import { useModal, BooleanInput, ErrorDisplay, MultipleChoiceInput } from '@neinteractiveliterature/litform';
 
-import { ApolloError } from '@apollo/client/v4-migration';
 import { EventProposalQueryWithOwnerQueryData } from './queries.generated';
 import humanize from '../humanize';
 import { useFetcher } from 'react-router';

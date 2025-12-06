@@ -1,7 +1,6 @@
 import React, { useCallback, useMemo, useState } from 'react';
 import { TabList, TabBody, useTabsWithRouter, ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import { ApolloError } from '@apollo/client/v4-migration';
 import { useNavigate, useLocation, useNavigation } from 'react-router';
 import ConventionFormGeneralSection from './ConventionFormGeneralSection';
 import ConventionFormWebsiteSection from './ConventionFormWebsiteSection';

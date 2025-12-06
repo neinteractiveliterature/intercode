@@ -1,5 +1,5 @@
 import { useState, useContext, useEffect } from 'react';
-import { ApolloError } from '@apollo/client/v4-migration';
+
 import { Modal } from 'react-bootstrap4-modal';
 import { v4 as uuidv4 } from 'uuid';
 import { useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';

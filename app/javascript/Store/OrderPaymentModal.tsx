@@ -1,6 +1,6 @@
 import { useState, useCallback, useMemo, useContext, useEffect, useRef } from 'react';
 import { Modal } from 'react-bootstrap4-modal';
-import { ApolloError } from '@apollo/client/v4-migration';
+
 import { useApolloClient } from '@apollo/client/react';
 import { LinkAuthenticationElement, PaymentElement } from '@stripe/react-stripe-js';
 import { ErrorDisplay, MultipleChoiceInput } from '@neinteractiveliterature/litform';

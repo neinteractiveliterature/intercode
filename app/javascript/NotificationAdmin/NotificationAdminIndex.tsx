@@ -5,7 +5,7 @@ import Modal from 'react-bootstrap4-modal';
 import { Link, LoaderFunction, useFetcher, useLoaderData } from 'react-router';
 
 import AppRootContext from '../AppRootContext';
-import { ApolloError } from '@apollo/client/v4-migration';
+
 import { useTranslation } from 'react-i18next';
 import { client } from 'useIntercodeApolloClient';
 import { NotificationsConfigQueryData, NotificationsConfigQueryDocument } from './queries.generated';

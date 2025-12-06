@@ -1,4 +1,3 @@
-import { ApolloError } from '@apollo/client/v4-migration';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { CmsVariablesQueryData } from './queries.generated';

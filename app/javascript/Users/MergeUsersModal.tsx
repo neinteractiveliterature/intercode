@@ -21,7 +21,7 @@ import {
 import { client } from '../useIntercodeApolloClient';
 import { MergeUsersDocument } from './mutations.generated';
 import { i18n } from '../setupI18Next';
-import { ApolloError } from '@apollo/client/v4-migration';
+
 import { useSubmit } from 'react-router';
 
 type UserType = MergeUsersModalQueryData['users'][0];

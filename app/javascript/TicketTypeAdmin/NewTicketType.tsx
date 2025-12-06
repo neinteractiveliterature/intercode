@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
 import { ActionFunction, replace, useFetcher, useLoaderData } from 'react-router';
-import { ApolloError } from '@apollo/client/v4-migration';
+
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import buildTicketTypeInput from './buildTicketTypeInput';

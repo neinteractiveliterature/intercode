@@ -1,6 +1,6 @@
 import { useContext, useMemo } from 'react';
 import { Modal } from 'react-bootstrap4-modal';
-import { ApolloError } from '@apollo/client/v4-migration';
+
 import { useMutation, useSuspenseQuery } from '@apollo/client/react';
 import classnames from 'classnames';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';

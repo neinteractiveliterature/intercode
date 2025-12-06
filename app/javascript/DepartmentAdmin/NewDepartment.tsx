@@ -6,7 +6,7 @@ import { client } from '../useIntercodeApolloClient';
 import { CreateDepartmentDocument } from './mutations.generated';
 import { useTranslation } from 'react-i18next';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
-import { ApolloError } from '@apollo/client/v4-migration';
+
 import { buildDepartmentInputFromFormData } from './buildDepartmentInput';
 import { DepartmentAdminQueryDocument } from './queries.generated';
 

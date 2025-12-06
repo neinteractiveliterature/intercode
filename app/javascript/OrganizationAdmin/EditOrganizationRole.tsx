@@ -5,7 +5,6 @@ import useOrganizationRoleForm from './useOrganizationRoleForm';
 import usePageTitle from '../usePageTitle';
 import { OrganizationAdminOrganizationsQueryData } from './queries.generated';
 import { organizationsLoader } from './loaders';
-import { ApolloError } from '@apollo/client/v4-migration';
 
 type LoaderResult = {
   organization: OrganizationAdminOrganizationsQueryData['organizations'][number];

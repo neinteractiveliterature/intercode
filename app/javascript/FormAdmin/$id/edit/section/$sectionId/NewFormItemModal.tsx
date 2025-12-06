@@ -2,7 +2,7 @@ import { useContext, useMemo, useState } from 'react';
 import { Modal } from 'react-bootstrap4-modal';
 import flatMap from 'lodash/flatMap';
 import classNames from 'classnames';
-import { ApolloError } from '@apollo/client/v4-migration';
+
 import {
   BootstrapFormCheckbox,
   BootstrapFormSelect,

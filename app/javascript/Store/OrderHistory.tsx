@@ -12,7 +12,6 @@ import { useAppDateTimeFormat } from '../TimeUtils';
 import { useTranslation } from 'react-i18next';
 import { LoaderFunction, useLoaderData } from 'react-router';
 import { client } from '../useIntercodeApolloClient';
-import { ApolloError } from '@apollo/client/v4-migration';
 
 type OrderType = NonNullable<OrderHistoryQueryData['convention']['my_profile']>['orders'][0];
 type PaymentModalState = {

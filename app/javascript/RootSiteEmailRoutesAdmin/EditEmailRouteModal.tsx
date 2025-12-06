@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Modal } from 'react-bootstrap4-modal';
-import { ApolloError } from '@apollo/client/v4-migration';
+
 import { useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import EmailRouteForm from './EmailRouteForm';

@@ -1,7 +1,7 @@
 import { useContext, useState } from 'react';
 import { Modal } from 'react-bootstrap4-modal';
 import { ActionFunction, redirect, useFetcher, useNavigate } from 'react-router';
-import { ApolloError } from '@apollo/client/v4-migration';
+
 import { useTranslation } from 'react-i18next';
 import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
