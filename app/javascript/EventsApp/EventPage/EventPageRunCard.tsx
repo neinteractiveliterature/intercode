@@ -15,9 +15,9 @@ import {
   CreateSignupRankedChoiceDocument,
   WithdrawSignupRequestDocument,
 } from './mutations.generated';
-import { client } from '../../useIntercodeApolloClient';
 import { useRevalidator } from 'react-router';
 import { useWithdrawMySignupModal } from './WithdrawMySignupModal';
+import { useApolloClient } from '@apollo/client/react';
 
 function updateCacheAfterSignup(
   cache: ApolloCache,
@@ -99,6 +99,7 @@ function EventPageRunCard({
   const myPendingSignupRequest = run.my_signup_requests.find((signupRequest) => signupRequest.state === 'pending');
   const revalidator = useRevalidator();
   const withdrawMySignupModal = useWithdrawMySignupModal();
+  const client = useApolloClient();
 
   const selfServiceSignup = useCallback(
     async (signupOption: SignupOption) => {

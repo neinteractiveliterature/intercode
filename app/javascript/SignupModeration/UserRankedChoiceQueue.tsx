@@ -6,7 +6,7 @@ import {
   SignupModerationAttendeeRankedChoicesQueryDocument,
   SignupModerationAttendeeRankedChoicesQueryVariables,
 } from './queries.generated';
-import { client } from '../useIntercodeApolloClient';
+import { useApolloClient } from '@apollo/client/react';
 
 export const loader: LoaderFunction = async ({ params: { userConProfileId } }) => {
   const { data } = await client.query<

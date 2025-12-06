@@ -17,8 +17,8 @@ import { SignupOption } from './buildSignupOptions';
 import { CreateSignupRankedChoiceDocument, CreateSignupRequestDocument } from './mutations.generated';
 import { useRevalidator } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { client } from '../../useIntercodeApolloClient';
 import errorReporting from 'ErrorReporting';
+import { useApolloClient } from '@apollo/client/react';
 
 export type CreateModeratedSignupModalProps = {
   visible: boolean;
@@ -45,6 +45,7 @@ export default function CreateModeratedSignupModal({
   const [createSignupRankedChoiceMutate] = useMutation(CreateSignupRankedChoiceDocument);
   const revalidator = useRevalidator();
   const { t } = useTranslation();
+  const client = useApolloClient();
 
   const conflictingSignup = useMemo(() => {
     return (data.convention.my_profile?.signups || []).find((signup) => {

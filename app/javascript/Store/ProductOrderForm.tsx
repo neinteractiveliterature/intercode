@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 
-import { useSuspenseQuery } from '@apollo/client/react';
+import { useApolloClient, useSuspenseQuery } from '@apollo/client/react';
 import {
   LoadingIndicator,
   ErrorDisplay,
@@ -17,7 +17,6 @@ import { Money, PayWhatYouWantValue, PricingStrategy } from '../graphqlTypes.gen
 import { Trans, useTranslation } from 'react-i18next';
 import MoneyInput from './MoneyInput';
 import buildMoneyInput from './buildMoneyInput';
-import { client } from '../useIntercodeApolloClient';
 import { PayWhatYouWantRangeDescription } from './describePricingStructure';
 import {
   AddOrderEntryToCurrentPendingOrderDocument,
@@ -37,6 +36,7 @@ export default function ProductOrderForm({ productId, onAddedToCart, runId }: Pr
   const { data } = useSuspenseQuery(OrderFormProductQueryDocument, { variables: { productId } });
   const { product } = data.convention;
   const { t } = useTranslation();
+  const client = useApolloClient();
 
   const [productVariantId, setProductVariantId] = useState<string>();
   const [quantity, setQuantity] = useState(1);

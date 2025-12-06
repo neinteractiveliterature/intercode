@@ -6,7 +6,7 @@ import usePageTitle from '../usePageTitle';
 import NewFormModal from './NewFormModal';
 import { FormAdminQueryData, FormAdminQueryDocument } from './queries.generated';
 import humanize from '../humanize';
-import { client } from '../useIntercodeApolloClient';
+import { useApolloClient } from '@apollo/client/react';
 import { CreateFormDocument } from './mutations.generated';
 import { FormType } from '../graphqlTypes.generated';
 

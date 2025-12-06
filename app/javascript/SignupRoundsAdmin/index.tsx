@@ -4,7 +4,7 @@ import RouteActivatedBreadcrumbItemV2 from '../Breadcrumbs/RouteActivatedBreadcr
 import { useTranslation } from 'react-i18next';
 import { buildSignupRoundInputFromFormData } from './buildSignupRoundInput';
 import { i18n } from '../setupI18Next';
-import { client } from '../useIntercodeApolloClient';
+import { useApolloClient } from '@apollo/client/react';
 import { CreateSignupRoundDocument } from './mutations.generated';
 import { SignupRoundsAdminQueryDocument } from './queries.generated';
 

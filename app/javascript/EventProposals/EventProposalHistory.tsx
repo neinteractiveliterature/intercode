@@ -8,7 +8,7 @@ import {
   EventProposalHistoryQueryVariables,
 } from './queries.generated';
 import { FormType } from '../graphqlTypes.generated';
-import { client } from '../useIntercodeApolloClient';
+import { useApolloClient } from '@apollo/client/react';
 
 const EXCLUDE_FIELDS = new Set([
   'minimum_age',

@@ -3,7 +3,7 @@ import usePageTitle from '../usePageTitle';
 import { SignupCountsByStateQueryData, SignupCountsByStateQueryDocument } from './queries.generated';
 import { SignupState } from '../graphqlTypes.generated';
 import { LoaderFunction, useLoaderData } from 'react-router';
-import { client } from '../useIntercodeApolloClient';
+import { useApolloClient } from '@apollo/client/react';
 
 export const loader: LoaderFunction = async () => {
   const { data } = await client.query<SignupCountsByStateQueryData>({ query: SignupCountsByStateQueryDocument });

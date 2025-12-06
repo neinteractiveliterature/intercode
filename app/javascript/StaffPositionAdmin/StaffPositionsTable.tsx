@@ -14,7 +14,7 @@ import AppRootContext from '../AppRootContext';
 import { DropdownMenu } from '../UIComponents/DropdownMenu';
 import { StaffPositionsQueryData, StaffPositionsQueryDocument } from './queries.generated';
 import { PolymorphicPermission } from '../Permissions/PermissionUtils';
-import { client } from '../useIntercodeApolloClient';
+import { useApolloClient } from '@apollo/client/react';
 
 type UserConProfilesListProps = {
   userConProfiles: StaffPositionsQueryData['convention']['staff_positions'][0]['user_con_profiles'];

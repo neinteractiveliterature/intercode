@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
-import { LoaderFunction, useLoaderData } from 'react-router';
+import { LoaderFunction, RouterContextProvider, useLoaderData } from 'react-router';
 import parseCmsContent, { CMS_COMPONENT_MAP } from './parseCmsContent';
 import OutletWithLoading from './OutletWithLoading';
 import NavigationBar from './NavigationBar';
 import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
-import { client } from './useIntercodeApolloClient';
 import { AppRootLayoutQueryData, AppRootLayoutQueryDocument } from './appRootQueries.generated';
+import { apolloClientContext } from 'AppContexts';
 
 // Avoid unnecessary layout checks when moving between pages that can't change layout
 function normalizePathForLayout(path: string) {
@@ -24,7 +24,8 @@ function normalizePathForLayout(path: string) {
   return '/non_cms_path'; // arbitrary path that's not a CMS page
 }
 
-export const loader: LoaderFunction = async ({ request }) => {
+export const loader: LoaderFunction<RouterContextProvider> = async ({ context, request }) => {
+  const client = context.get(apolloClientContext);
   const url = new URL(request.url);
   const { data } = await client.query({
     query: AppRootLayoutQueryDocument,

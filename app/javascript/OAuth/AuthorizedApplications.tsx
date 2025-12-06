@@ -3,7 +3,7 @@ import { useGraphQLConfirm } from '@neinteractiveliterature/litform';
 import PermissionsPrompt from './PermissionsPrompt';
 import { OAuthAuthorizedApplicationsQueryData, OAuthAuthorizedApplicationsQueryDocument } from './queries.generated';
 import { LoaderFunction, useLoaderData } from 'react-router';
-import { client } from '../useIntercodeApolloClient';
+import { useApolloClient } from '@apollo/client/react';
 import { useFetcher } from 'react-router';
 
 export const loader: LoaderFunction = async () => {

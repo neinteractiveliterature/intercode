@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 import usePageTitle from '../usePageTitle';
 import EventProposalForm from './EventProposalForm';
 import { EventProposalQueryData, EventProposalQueryDocument, EventProposalQueryVariables } from './queries.generated';
-import { client } from '../useIntercodeApolloClient';
+import { useApolloClient } from '@apollo/client/react';
 
 export const loader: LoaderFunction = async ({ params: { id } }) => {
   const { data } = await client.query<EventProposalQueryData, EventProposalQueryVariables>({

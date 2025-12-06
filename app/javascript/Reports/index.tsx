@@ -2,7 +2,7 @@ import { Link, LoaderFunction, useLoaderData } from 'react-router';
 
 import usePageTitle from '../usePageTitle';
 import { ReportsMenuQueryData, ReportsMenuQueryDocument } from './queries.generated';
-import { client } from '../useIntercodeApolloClient';
+import { useApolloClient } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 
 export const loader: LoaderFunction = async () => {

@@ -10,7 +10,7 @@ import {
   OAuthAuthorizationPromptQueryDocument,
   OAuthAuthorizationPromptQueryVariables,
 } from './queries.generated';
-import { client } from '../useIntercodeApolloClient';
+import { useApolloClient } from '@apollo/client/react';
 
 type AuthorizationParams = {
   client_id?: string;
