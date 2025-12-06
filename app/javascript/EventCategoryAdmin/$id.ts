@@ -10,12 +10,12 @@ export const action: ActionFunction = async ({ request, params: { id } }) => {
       await client.mutate({
         mutation: DeleteEventCategoryDocument,
         variables: {
-          id,
+          id: id ?? '',
         },
         update: (cache) => {
           cache.modify<EventCategory>({
             id: cache.identify({ __typename: 'EventCategory', id }),
-            fields: (value, { DELETE }) => DELETE,
+            fields: (_value, { DELETE }) => DELETE,
           });
         },
       });
@@ -25,7 +25,7 @@ export const action: ActionFunction = async ({ request, params: { id } }) => {
       await client.mutate({
         mutation: UpdateEventCategoryDocument,
         variables: {
-          id,
+          id: id ?? '',
           eventCategory: buildEventCategoryFromFormData(formData),
         },
       });

@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { Modal } from 'react-bootstrap4-modal';
-import { ApolloError } from '@apollo/client';
+
 import { Link, useFetcher } from 'react-router';
 import { DateTime } from 'luxon';
 import {
@@ -201,7 +201,7 @@ export default function NewConventionModal({ data, cloneConvention }: NewConvent
           />
         )}
 
-        <ErrorDisplay graphQLError={createError as ApolloError} />
+        <ErrorDisplay graphQLError={createError} />
       </div>
 
       <div className="modal-footer">

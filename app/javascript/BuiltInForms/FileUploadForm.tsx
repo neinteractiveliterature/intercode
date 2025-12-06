@@ -1,7 +1,6 @@
 import { useCallback, useContext, useState } from 'react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ApolloError } from '@apollo/client';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 import useAsyncFunction from '../useAsyncFunction';
 import FileInputWithPreview from '../CmsAdmin/CmsFilesAdmin/FileInputWithPreview';
@@ -75,7 +74,7 @@ function FileUploadForm({ onUpload }: FileUploadFormProps): React.JSX.Element {
         <meta name="csrf-token" content={directUploadsAuthenticityToken} />
         <FileInputWithPreview file={file} onChange={setFile} disabled={uploading} />
 
-        <ErrorDisplay graphQLError={error as ApolloError} />
+        <ErrorDisplay graphQLError={error} />
 
         {uploading && (
           <div className="progress">

@@ -7,7 +7,8 @@ import { parseSignupRounds } from 'SignupRoundUtils';
 import { DateTime } from 'luxon';
 import { BootstrapFormCheckbox, ErrorDisplay } from '@neinteractiveliterature/litform';
 import { WithdrawMySignupDocument } from './mutations.generated';
-import { ApolloError, useApolloClient } from '@apollo/client';
+
+import { useApolloClient } from '@apollo/client/react';
 import { useRevalidator } from 'react-router';
 
 export type WithdrawMySignupModalProps = {
@@ -23,7 +24,7 @@ export function WithdrawMySignupModal({ close, event, run, signup, signupRounds 
   const { t } = useTranslation();
   const [checked, setChecked] = useState(false);
   const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<ApolloError>();
+  const [error, setError] = useState<Error>();
   const client = useApolloClient();
   const revalidator = useRevalidator();
 

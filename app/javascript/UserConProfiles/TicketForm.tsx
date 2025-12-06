@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback, SyntheticEvent } from 'react';
-import { ApolloError } from '@apollo/client';
+
 import { useModal, BootstrapFormSelect, ErrorDisplay, FormGroupWithLabel } from '@neinteractiveliterature/litform';
 
 import EventSelect from '../BuiltInFormControls/EventSelect';
@@ -117,7 +117,7 @@ function TicketForm({
 
       {order && editOrderModal.visible && <EditOrderModal order={order} closeModal={editOrderModal.close} />}
 
-      <ErrorDisplay graphQLError={submitError as ApolloError} />
+      <ErrorDisplay graphQLError={submitError} />
 
       <input
         type="submit"

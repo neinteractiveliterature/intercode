@@ -17,7 +17,7 @@ export type TicketTypeLoaderResult = {
 
 export const adminTicketTypesLoader: LoaderFunction = async () => {
   const { data } = await client.query<AdminTicketTypesQueryData>({ query: AdminTicketTypesQueryDocument });
-  return { parent: data.convention, ticketTypes: data.convention.ticket_types } as TicketTypeLoaderResult;
+  return { parent: data?.convention, ticketTypes: data?.convention.ticket_types } as TicketTypeLoaderResult;
 };
 
 export const eventTicketTypesLoader: LoaderFunction = async ({ params: { eventId } }) => {
@@ -25,7 +25,7 @@ export const eventTicketTypesLoader: LoaderFunction = async ({ params: { eventId
     query: EventTicketTypesQueryDocument,
     variables: { id: eventId ?? '' },
   });
-  return { parent: data.convention.event, ticketTypes: data.convention.event.ticket_types } as TicketTypeLoaderResult;
+  return { parent: data?.convention.event, ticketTypes: data?.convention.event.ticket_types } as TicketTypeLoaderResult;
 };
 
 export type SingleTicketTypeLoaderResult = TicketTypeLoaderResult['ticketTypes'][number];

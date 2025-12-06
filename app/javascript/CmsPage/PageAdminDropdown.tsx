@@ -5,7 +5,7 @@ import { useGraphQLConfirm } from '@neinteractiveliterature/litform';
 import MenuIcon from '../NavigationBar/MenuIcon';
 import { DropdownMenu } from '../UIComponents/DropdownMenu';
 import { PageAdminDropdownQueryData, PageAdminDropdownQueryDocument } from './queries.generated';
-import { useSuspenseQuery } from '@apollo/client';
+import { useSuspenseQuery } from "@apollo/client/react";
 import { client } from '../useIntercodeApolloClient';
 import { DeletePageDocument } from '../CmsAdmin/CmsPagesAdmin/mutations.generated';
 

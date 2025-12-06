@@ -10,7 +10,6 @@ import EditPricingStructureModal, {
 } from '../Store/ProductAdmin/EditPricingStructureModal';
 import { useFetcher } from 'react-router';
 import { buildProductFormData } from 'Store/buildProductInput';
-import { ApolloError } from '@apollo/client';
 
 export type EditTicketProvidingProductModalProps = {
   visible: boolean;
@@ -18,6 +17,7 @@ export type EditTicketProvidingProductModalProps = {
   state?: {
     ticketType: EditProductFormProps<EditingProductBase>['ticketTypes'][number];
     initialProduct: EditingProductBase;
+    opened: Date;
   };
 };
 
@@ -34,13 +34,8 @@ export default function EditTicketProvidingProductModal({
   const [product, setProduct] = useState(state?.initialProduct);
 
   useEffect(() => {
-    setProduct(state?.initialProduct);
-  }, [state?.initialProduct]);
-
-  useEffect(() => {
     if (fetcher.data && fetcher.state === 'idle' && !error) {
       close();
-      setProduct(undefined);
     }
   }, [close, fetcher.data, fetcher.state, error]);
 
@@ -72,7 +67,7 @@ export default function EditTicketProvidingProductModal({
           </PricingStructureModalContext.Provider>
         </div>
         <div className="modal-footer">
-          <ErrorDisplay graphQLError={error as ApolloError | undefined} />
+          <ErrorDisplay graphQLError={error as Error | undefined} />
           <button type="button" className="btn btn-secondary" onClick={close} disabled={loading}>
             {t('buttons.cancel')}
           </button>
@@ -85,6 +80,7 @@ export default function EditTicketProvidingProductModal({
         state={pricingStructureModal.state}
         visible={pricingStructureModal.visible}
         close={pricingStructureModal.close}
+        key={pricingStructureModal.state?.opened.getTime()}
       />
     </>
   );

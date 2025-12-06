@@ -1,5 +1,5 @@
 import { useEffect, useState } from 'react';
-import { ApolloError } from '@apollo/client';
+
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { buildProductFormData } from '../buildProductInput';
@@ -45,7 +45,7 @@ function EditAdminProductCard({ initialProduct, close, ticketTypes }: EditAdminP
       </div>
       <div className="card-body">
         <EditProductForm product={product} setProduct={setProduct} ticketTypes={ticketTypes} />
-        <ErrorDisplay graphQLError={saveError as ApolloError} />
+        <ErrorDisplay graphQLError={saveError} />
       </div>
       <div className="card-footer">
         <div className="ms-2">

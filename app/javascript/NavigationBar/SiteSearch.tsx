@@ -146,6 +146,9 @@ function SiteSearch({ visible, setVisible, visibilityChangeComplete }: SiteSearc
       debounce(
         async (query: string) => {
           const { data } = await client.query({ query: SiteSearchQueryDocument, variables: { query } });
+          if (!data) {
+            return [] as SiteSearchOptionType[];
+          }
           const navigationItemsResult = (navigationItemsSearchIndex.search(query) as typeof navigationItemsWithId).map(
             (navigationItem) => ({
               title: navigationItem.label,

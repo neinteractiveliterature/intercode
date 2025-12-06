@@ -1,5 +1,5 @@
 import { useState, useCallback, useContext, useMemo } from 'react';
-import { ApolloError, useQuery } from '@apollo/client';
+import { useQuery } from '@apollo/client/react';
 import { ColumnFiltersState } from '@tanstack/react-table';
 import { useTranslation } from 'react-i18next';
 import {
@@ -20,7 +20,11 @@ import usePageTitle from '../../../usePageTitle';
 import AppRootContext from '../../../AppRootContext';
 import EventListMyRatingSelector from './EventListMyRatingSelector';
 import useAsyncFunction from '../../../useAsyncFunction';
-import { EventListEventsQueryData, EventListEventsQueryDocument } from './queries.generated';
+import {
+  EventListEventsQueryData,
+  EventListEventsQueryDocument,
+  EventListEventsQueryVariables,
+} from './queries.generated';
 import EventListFilterableFormItemDropdown from './EventListFilterableFormItemDropdown';
 import { CommonConventionDataQueryData, CommonConventionDataQueryDocument } from '../../queries.generated';
 import { getFilterableFormItems } from '../../useFilterableFormItems';
@@ -28,8 +32,7 @@ import useMergeCategoriesIntoEvents from '../../useMergeCategoriesIntoEvents';
 import EventCatalogNavTabs from '../EventCatalogNavTabs';
 import { LoaderFunction, useLoaderData } from 'react-router';
 import { client } from '../../../useIntercodeApolloClient';
-import { FetchMoreFunction } from '@apollo/client/react/hooks/useSuspenseQuery';
-import { ResultOf, VariablesOf } from '@graphql-typed-document-node/core';
+import { FetchMoreFunction } from '@apollo/client/react/internal';
 
 const PAGE_SIZE = 20;
 
@@ -41,10 +44,7 @@ const filterCodecs = buildFieldFilterCodecs({
 });
 
 const fetchMoreEvents = async (
-  fetchMore: FetchMoreFunction<
-    ResultOf<typeof EventListEventsQueryDocument>,
-    VariablesOf<typeof EventListEventsQueryDocument>
-  >,
+  fetchMore: FetchMoreFunction<EventListEventsQueryData, EventListEventsQueryVariables>,
   page: number,
 ) => {
   try {
@@ -79,6 +79,9 @@ type LoaderResult = {
 
 export const loader: LoaderFunction = async () => {
   const { data } = await client.query<CommonConventionDataQueryData>({ query: CommonConventionDataQueryDocument });
+  if (!data) {
+    return new Response(null, { status: 404 });
+  }
   const filterableFormItems = getFilterableFormItems(data.convention);
   return { convention: data.convention, filterableFormItems } satisfies LoaderResult;
 };
@@ -130,7 +133,7 @@ function EventList(): React.JSX.Element {
     }
 
     if (loadedEntries < totalEntries) {
-      fetchMoreEventsAsync(fetchMore, loadedEntries / PAGE_SIZE + 1);
+      fetchMoreEventsAsync(fetchMore as Parameters<typeof fetchMoreEventsAsync>[0], loadedEntries / PAGE_SIZE + 1);
     }
   }, [fetchMore, fetchMoreEventsAsync, loadedEntries, totalEntries]);
 
@@ -250,7 +253,7 @@ function EventList(): React.JSX.Element {
         )}
       </div>
 
-      <PageLoadingIndicator visible={loading} iconSet="bootstrap-icons" />
+      <PageLoadingIndicator visible={loading} />
       {loading || !data ? null : (
         <>
           <EventListEvents
@@ -262,10 +265,10 @@ function EventList(): React.JSX.Element {
           />
           {fetchMoreInProgress && (
             <div>
-              <LoadingIndicator iconSet="bootstrap-icons" /> <em className="text-muted">Loading more events...</em>
+              <LoadingIndicator /> <em className="text-muted">Loading more events...</em>
             </div>
           )}
-          <ErrorDisplay graphQLError={fetchMoreError as ApolloError} />
+          <ErrorDisplay graphQLError={fetchMoreError} />
         </>
       )}
     </>

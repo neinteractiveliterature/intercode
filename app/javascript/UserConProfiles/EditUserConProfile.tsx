@@ -1,6 +1,6 @@
 import { useMemo, useState } from 'react';
 import { ActionFunction, LoaderFunction, redirect, useFetcher, useLoaderData } from 'react-router';
-import { ApolloError } from '@apollo/client';
+
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import buildFormStateFromData from './buildFormStateFromData';
@@ -70,7 +70,7 @@ function EditUserConProfile() {
         form={form}
         convention={convention}
       />
-      <ErrorDisplay graphQLError={updateError as ApolloError} />
+      <ErrorDisplay graphQLError={updateError} />
     </div>
   );
 }

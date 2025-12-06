@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { ActionFunction, redirect, useFetcher } from 'react-router';
-import { ApolloError } from '@apollo/client';
+
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import StaffPositionForm, { EditingStaffPosition } from './StaffPositionForm';
@@ -56,7 +56,7 @@ function NewStaffPosition(): React.JSX.Element {
     <div>
       <h1 className="mb-4">New staff position</h1>
       <StaffPositionForm staffPosition={staffPosition} onChange={setStaffPosition} />
-      <ErrorDisplay graphQLError={error as ApolloError} />
+      <ErrorDisplay graphQLError={error} />
       <button type="button" className="btn btn-primary" onClick={saveClicked} disabled={inProgress}>
         Save
       </button>

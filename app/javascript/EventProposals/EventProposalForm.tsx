@@ -1,5 +1,6 @@
 import { useCallback, useState, useMemo, ReactNode } from 'react';
-import { ApolloError, useSuspenseQuery } from '@apollo/client';
+
+import { useSuspenseQuery } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -39,8 +40,8 @@ function EventProposalFormInner({
   const [submitPromise, setSubmitPromise] = useState<Promise<unknown>>();
   const [eventProposal, setEventProposal] = useState(initialEventProposal);
   const [responseErrors, setResponseErrors] = useState({});
-  const [submitError, setSubmitError] = useState<ApolloError>();
-  const [updateError, setUpdateError] = useState<ApolloError>();
+  const [submitError, setSubmitError] = useState<Error>();
+  const [updateError, setUpdateError] = useState<Error>();
 
   const imageAttachmentConfig = useImageAttachmentConfig(eventProposal.images, async (blob) => {
     const { data } = await client.mutate({
@@ -152,7 +153,7 @@ function EventProposalFormInner({
           }
           imageAttachmentConfig={imageAttachmentConfig}
         />
-        <ErrorDisplay graphQLError={(updateError || submitError) as ApolloError | null} />
+        <ErrorDisplay graphQLError={(updateError || submitError) as Error | null} />
       </div>
     </FormPresenterApp>
   );

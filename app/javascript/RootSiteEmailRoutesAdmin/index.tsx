@@ -56,7 +56,7 @@ function RootSiteEmailRoutesAdminTable(): React.JSX.Element {
     defaultVisibleColumns,
     encodeFilterValue,
     getData: ({ data }) => data.email_routes_paginated.entries,
-    getPages: ({ data }) => data.email_routes_paginated.total_pages,
+    getPages: ({ data }) => data.email_routes_paginated.total_pages ?? 0,
     columns,
     storageKeyPrefix: 'email-routes',
     query: RootSiteEmailRoutesAdminTableQueryDocument,

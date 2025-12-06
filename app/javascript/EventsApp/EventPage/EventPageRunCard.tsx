@@ -20,7 +20,7 @@ import { useRevalidator } from 'react-router';
 import { useWithdrawMySignupModal } from './WithdrawMySignupModal';
 
 function updateCacheAfterSignup(
-  cache: ApolloCache<unknown>,
+  cache: ApolloCache,
   event: EventPageQueryData['convention']['event'],
   run: EventPageQueryData['convention']['event']['runs'][0],
   signup: EventPageQueryData['convention']['event']['runs'][0]['my_signups'][0],

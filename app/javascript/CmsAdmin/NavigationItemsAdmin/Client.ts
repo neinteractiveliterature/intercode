@@ -1,4 +1,4 @@
-import { ApolloClient, FetchResult } from '@apollo/client';
+import { ApolloClient } from '@apollo/client';
 import { CadmusNavbarAdminClient } from 'cadmus-navbar-admin/lib/CadmusNavbarAdminClient';
 import { NavigationItem } from 'cadmus-navbar-admin/lib/NavigationItem';
 import { EditingNavigationItem } from 'cadmus-navbar-admin/lib/EditingNavigationItemContext';
@@ -37,7 +37,7 @@ function graphqlNavigationItemToCadmusNavbarAdminObject(
 }
 
 class Client implements CadmusNavbarAdminClient {
-  apolloClient: ApolloClient<unknown>;
+  apolloClient: ApolloClient;
 
   requestsInProgress: {
     savingNavigationItem: boolean;
@@ -49,7 +49,7 @@ class Client implements CadmusNavbarAdminClient {
 
   errorSubscribers: ((error: Error) => void)[];
 
-  constructor(apolloClient: ApolloClient<unknown>) {
+  constructor(apolloClient: ApolloClient) {
     this.apolloClient = apolloClient;
 
     this.requestsInProgress = {
@@ -79,7 +79,7 @@ class Client implements CadmusNavbarAdminClient {
       const { data } = await this.apolloClient.query<NavigationItemsAdminQueryData>({
         query: NavigationItemsAdminQueryDocument,
       });
-      return data.cmsParent.cmsNavigationItems.map(graphqlNavigationItemToCadmusNavbarAdminObject);
+      return data!.cmsParent.cmsNavigationItems.map(graphqlNavigationItemToCadmusNavbarAdminObject);
     } catch (error) {
       this.onError(error);
       throw error;
@@ -99,7 +99,7 @@ class Client implements CadmusNavbarAdminClient {
       const { data } = await this.apolloClient.query<NavigationItemsAdminQueryData>({
         query: NavigationItemsAdminQueryDocument,
       });
-      return data.cmsParent.cmsPages.map((page) => ({
+      return data!.cmsParent.cmsPages.map((page) => ({
         ...page,
         id: page.id.toString(),
         name: page.name ?? 'Untitled page',
@@ -114,7 +114,9 @@ class Client implements CadmusNavbarAdminClient {
 
   async saveNavigationItem(navigationItem: EditingNavigationItem): Promise<NavigationItem> {
     this.requestsInProgress.savingNavigationItem = true;
-    let mutate: () => Promise<FetchResult<CreateNavigationItemMutationData | UpdateNavigationItemMutationData>>;
+    let mutate: () => Promise<
+      ApolloClient.MutateResult<CreateNavigationItemMutationData | UpdateNavigationItemMutationData>
+    >;
     const navigationItemInput: CmsNavigationItemInput = {
       title: navigationItem.title,
       navigationSectionId: navigationItem.navigation_section_id,

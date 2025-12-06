@@ -7,7 +7,8 @@ import usePageTitle from '../usePageTitle';
 import { EventProposalAdminNotesQueryDocument, EventProposalQueryWithOwnerQueryData } from './queries.generated';
 import humanize from '../humanize';
 import { NamedRoute } from '../AppRouter';
-import { ApolloError, useSuspenseQuery } from '@apollo/client';
+
+import { useSuspenseQuery } from '@apollo/client/react';
 
 export type EventProposalAdminNotesProps = {
   eventProposalId: string;
@@ -29,7 +30,7 @@ function EventProposalAdminNotes({ eventProposalId }: EventProposalAdminNotesPro
         )
       }
       inProgress={fetcher.state !== 'idle'}
-      error={fetcher.data instanceof ApolloError ? fetcher.data : undefined}
+      error={fetcher.data instanceof Error ? fetcher.data : undefined}
     />
   );
 }

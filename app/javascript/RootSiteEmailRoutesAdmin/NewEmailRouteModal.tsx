@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import { Modal } from 'react-bootstrap4-modal';
-import { ApolloError } from '@apollo/client';
+
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import EmailRouteForm from './EmailRouteForm';
@@ -53,7 +53,7 @@ function NewEmailRouteModal(): React.JSX.Element {
       <div className="modal-body">
         <EmailRouteForm emailRoute={emailRoute} onChange={setEmailRoute} />
 
-        <ErrorDisplay graphQLError={error as ApolloError} />
+        <ErrorDisplay graphQLError={error} />
       </div>
 
       <div className="modal-footer">

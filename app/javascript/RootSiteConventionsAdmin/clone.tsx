@@ -14,9 +14,12 @@ type LoaderResult = {
 
 export const loader: LoaderFunction = async ({ params: { id } }) => {
   const [{ data: conventionData }, { data }] = await Promise.all([
-    client.query({ query: ConventionDisplayQueryDocument, variables: { id } }),
+    client.query({ query: ConventionDisplayQueryDocument, variables: { id: id ?? '' } }),
     client.query({ query: NewConventionModalQueryDocument }),
   ]);
+  if (!data || !conventionData) {
+    return new Response(null, { status: 404 });
+  }
   return { data, cloneConvention: conventionData.convention } satisfies LoaderResult;
 };
 

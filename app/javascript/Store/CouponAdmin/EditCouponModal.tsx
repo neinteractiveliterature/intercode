@@ -1,6 +1,6 @@
 import { useState, useEffect } from 'react';
 import { Modal } from 'react-bootstrap4-modal';
-import { ApolloError } from '@apollo/client';
+
 import { useGraphQLConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import CouponForm from './CouponForm';
@@ -20,12 +20,12 @@ import { CouponInput } from 'graphqlTypes.generated';
 export const action: ActionFunction = async ({ params: { id }, request }) => {
   try {
     if (request.method === 'DELETE') {
-      await client.mutate({ mutation: DeleteCouponDocument, variables: { id } });
+      await client.mutate({ mutation: DeleteCouponDocument, variables: { id: id ?? '' } });
       await client.resetStore();
       return redirect('..');
     } else if (request.method === 'PATCH') {
       const coupon = (await request.json()) as CouponInput;
-      await client.mutate({ mutation: UpdateCouponDocument, variables: { id, coupon } });
+      await client.mutate({ mutation: UpdateCouponDocument, variables: { id: id ?? '', coupon } });
       await client.resetStore();
       return redirect('..');
     } else {
@@ -39,8 +39,11 @@ export const action: ActionFunction = async ({ params: { id }, request }) => {
 export const loader: LoaderFunction = async ({ params: { id } }) => {
   const { data } = await client.query({
     query: AdminSingleCouponQueryDocument,
-    variables: { id },
+    variables: { id: id ?? '' },
   });
+  if (!data) {
+    return new Response(null, { status: 404 });
+  }
   return data.convention.coupon;
 };
 
@@ -86,7 +89,7 @@ function EditCouponModal(): React.JSX.Element {
       </div>
       <div className="modal-body">
         {coupon && <CouponForm<AdminCouponFieldsFragment> value={coupon} onChange={setCoupon} />}
-        <ErrorDisplay graphQLError={error as ApolloError} />
+        <ErrorDisplay graphQLError={error} />
       </div>
       <div className="modal-footer">
         <Link to=".." type="button" className="btn btn-secondary">

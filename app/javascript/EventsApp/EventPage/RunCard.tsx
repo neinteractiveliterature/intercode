@@ -2,7 +2,7 @@ import { useContext, useRef, useEffect, useCallback } from 'react';
 import classNames from 'classnames';
 import { useLocation } from 'react-router';
 import { Trans, useTranslation } from 'react-i18next';
-import { ApolloError } from '@apollo/client';
+
 import { TFunction } from 'i18next';
 import { LoadingIndicator, ErrorDisplay, useModal } from '@neinteractiveliterature/litform';
 
@@ -164,7 +164,7 @@ function RunCard({
           onClick={signupButtonClicked}
         />
         {mutationInProgress && <LoadingIndicator iconSet="bootstrap-icons" />}
-        <ErrorDisplay graphQLError={signupError as ApolloError} />
+        <ErrorDisplay graphQLError={signupError} />
       </>
     );
   };

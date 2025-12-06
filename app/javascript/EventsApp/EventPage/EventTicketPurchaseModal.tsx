@@ -1,4 +1,4 @@
-import { ApolloError, useSuspenseQuery } from '@apollo/client';
+import { useSuspenseQuery } from '@apollo/client/react';
 import { ErrorDisplay, LoadingIndicator } from '@neinteractiveliterature/litform';
 import { useContext, useState } from 'react';
 import Modal from 'react-bootstrap4-modal';
@@ -95,8 +95,8 @@ export default function EventTicketPurchaseModal({
             {cancelInProgress ? <LoadingIndicator /> : t('buttons.cancel')}
           </button>
         )}
-        <ErrorDisplay graphQLError={cancelError as ApolloError | null} />
-        <ErrorDisplay graphQLError={checkOutError as ApolloError | null} />
+        <ErrorDisplay graphQLError={cancelError as Error | null} />
+        <ErrorDisplay graphQLError={checkOutError as Error | null} />
       </div>
     </Modal>
   );

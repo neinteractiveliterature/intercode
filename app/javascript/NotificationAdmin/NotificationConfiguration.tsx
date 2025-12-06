@@ -13,7 +13,7 @@ import { ErrorDisplay, usePropertySetters } from '@neinteractiveliterature/litfo
 import LiquidInput from '../BuiltInFormControls/LiquidInput';
 import { NotificationAdminQueryData, NotificationAdminQueryDocument } from './queries.generated';
 import { client } from '../useIntercodeApolloClient';
-import { ApolloError } from '@apollo/client';
+
 import { UpdateNotificationTemplateDocument } from './mutations.generated';
 import NotificationDestinationsConfig from './NotificationDestinationsConfig';
 import { useTranslation } from 'react-i18next';
@@ -69,6 +69,9 @@ type LoaderResult = {
 export const loader: LoaderFunction = async ({ params }) => {
   const { eventKey } = params;
   const { data } = await client.query({ query: NotificationAdminQueryDocument });
+  if (!data) {
+    return new Response(null, { status: 404 });
+  }
   const initialNotificationTemplate = data.convention.notification_templates.find((t) => t.event_key === eventKey);
 
   if (!initialNotificationTemplate) {
@@ -191,7 +194,7 @@ function NotificationConfigurationForm() {
         </p>
       )}
 
-      <ErrorDisplay graphQLError={updateError as ApolloError} />
+      <ErrorDisplay graphQLError={updateError} />
 
       <button type="submit" className="btn btn-primary" disabled={updateInProgress}>
         Save changes

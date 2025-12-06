@@ -1,6 +1,6 @@
 import { useState, useMemo } from 'react';
 import { ActionFunction, LoaderFunction, redirect, replace, useFetcher, useLoaderData } from 'react-router';
-import { ApolloError } from '@apollo/client';
+
 import { useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import buildUserActivityAlertInput from './buildUserActivityAlertInput';
@@ -55,6 +55,10 @@ type LoaderResult = {
 
 export const loader: LoaderFunction = async ({ params: { id } }) => {
   const { data } = await client.query({ query: UserActivityAlertsAdminQueryDocument });
+
+  if (!data) {
+    return new Response(null, { status: 404 });
+  }
 
   const initialUserActivityAlert = data.convention.user_activity_alerts.find((alert) => alert.id === id);
   if (!initialUserActivityAlert) {
@@ -137,7 +141,7 @@ function EditUserActivityAlertForm() {
         disabled={inProgress}
         userActivityAlertEvent={userActivityAlertEvent}
       />
-      <ErrorDisplay graphQLError={error as ApolloError} />
+      <ErrorDisplay graphQLError={error} />
       <button className="btn btn-primary mt-4" type="button" onClick={saveClicked} disabled={inProgress}>
         Save changes
       </button>

@@ -6,7 +6,7 @@ export const action: ActionFunction = async ({ params: { id } }) => {
   try {
     return await client.mutate({
       mutation: RejectSignupRequestDocument,
-      variables: { id },
+      variables: { id: id ?? '' },
     });
   } catch (error) {
     return error;

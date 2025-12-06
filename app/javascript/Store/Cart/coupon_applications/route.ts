@@ -14,7 +14,7 @@ export const action: ActionFunction = async ({ request }) => {
 
       const result = await client.mutate({
         mutation: CreateCouponApplicationDocument,
-        variables: { orderId, couponCode },
+        variables: { orderId: orderId ?? '', couponCode: couponCode ?? '' },
         refetchQueries: [{ query: CartQueryDocument }],
         awaitRefetchQueries: true,
       });

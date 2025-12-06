@@ -90,7 +90,7 @@ function EditTeamMember(): React.JSX.Element {
         }
         disabled={updateInProgress}
       />
-      {/* <ErrorDisplay graphQLError={updateError as ApolloError} /> */}
+      {/* <ErrorDisplay graphQLError={updateError} /> */}
       <ul className="list-inline mt-4">
         <li className="list-inline-item">
           <button type="submit" className="btn btn-primary" disabled={updateInProgress}>

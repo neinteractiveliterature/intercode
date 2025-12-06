@@ -1,5 +1,6 @@
 import { useMemo, useState } from 'react';
-import { ApolloError, useSuspenseQuery } from '@apollo/client';
+
+import { useSuspenseQuery } from '@apollo/client/react';
 import {
   LoadingIndicator,
   ErrorDisplay,
@@ -243,7 +244,7 @@ export default function ProductOrderForm({ productId, onAddedToCart, runId }: Pr
             Add to cart
           </button>
         </div>
-        <ErrorDisplay graphQLError={addToCartError as ApolloError} />
+        <ErrorDisplay graphQLError={addToCartError} />
       </div>
     </div>
   );

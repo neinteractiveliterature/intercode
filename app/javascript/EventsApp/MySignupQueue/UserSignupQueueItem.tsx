@@ -1,4 +1,5 @@
-import { InternalRefetchQueriesInclude, useMutation } from '@apollo/client';
+import { InternalRefetchQueriesInclude } from '@apollo/client';
+import { useMutation } from "@apollo/client/react";
 import classNames from 'classnames';
 import {
   DeleteSignupRankedChoiceDocument,

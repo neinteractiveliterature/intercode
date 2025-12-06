@@ -1,6 +1,6 @@
 import { useCallback } from 'react';
 import { useStripe, useElements, PaymentElement } from '@stripe/react-stripe-js';
-import { useApolloClient, useMutation } from '@apollo/client';
+import { useApolloClient, useMutation } from "@apollo/client/react";
 import { PaymentIntent } from '@stripe/stripe-js';
 
 import { PaymentMode } from '../graphqlTypes.generated';

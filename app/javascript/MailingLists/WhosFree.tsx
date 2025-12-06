@@ -27,7 +27,7 @@ export const loader: LoaderFunction = async ({ request }) => {
 
     const { data } = await client.query({
       query: WhosFreeQueryDocument,
-      variables: { start: timespan.start.toISO(), finish: timespan.finish.toISO() },
+      variables: { start: timespan.start.toISO() ?? '', finish: timespan.finish.toISO() ?? '' },
     });
     return { timespan, data } satisfies LoaderResult;
   }

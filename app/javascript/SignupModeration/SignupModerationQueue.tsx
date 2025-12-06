@@ -27,7 +27,6 @@ import { describeSignupRound } from '../SignupRoundsAdmin/describeSignupRound';
 import { describeDecision } from '../SignupRoundsAdmin/RankedChoiceSignupDecisionsPage';
 import sortBy from 'lodash/sortBy';
 import { client } from '../useIntercodeApolloClient';
-import { ApolloError } from '@apollo/client';
 
 type SignupModerationContextValue = {
   acceptClicked: (signupRequest: SignupModerationSignupRequestFieldsFragment) => void;
@@ -329,7 +328,7 @@ function SignupModerationQueue(): React.JSX.Element {
     query: SignupModerationQueueQueryDocument,
     storageKeyPrefix: 'signupModerationQueue',
     getData: (result) => result.data.convention.signup_requests_paginated.entries,
-    getPages: (result) => result.data.convention.signup_requests_paginated.total_pages,
+    getPages: (result) => result.data.convention.signup_requests_paginated.total_pages ?? 0,
     columns,
   });
 
@@ -397,7 +396,7 @@ function SignupModerationQueue(): React.JSX.Element {
 
   return (
     <SignupModerationContext.Provider value={contextValue}>
-      <ErrorDisplay graphQLError={error as ApolloError} />
+      <ErrorDisplay graphQLError={error} />
       <ReactTableWithTheWorks table={tableInstance} loading={loading} />
     </SignupModerationContext.Provider>
   );

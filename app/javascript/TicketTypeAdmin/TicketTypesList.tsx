@@ -79,7 +79,7 @@ function TicketTypeDisplay({
 }: {
   parent: EventTicketTypesQueryData['convention']['event'] | AdminTicketTypesQueryData['convention'];
   ticketType: TicketTypeType;
-  newProductModal: ModalData<{ ticketType: TicketTypeType }>;
+  newProductModal: ModalData<{ ticketType: TicketTypeType; opened: Date }>;
   editProductModal: ModalData<EditTicketProvidingProductModalProps['state']>;
 }) {
   const { ticketName, ticketNamePlural, defaultCurrencyCode } = useContext(AppRootContext);
@@ -181,6 +181,7 @@ function TicketTypeDisplay({
                             ...product,
                             provides_ticket_type: { __typename: 'TicketType', id: ticketType.id },
                           },
+                          opened: new Date(),
                         })
                       }
                     >
@@ -198,7 +199,7 @@ function TicketTypeDisplay({
           <button
             type="button"
             className="btn btn-outline-primary"
-            onClick={() => newProductModal.open({ ticketType })}
+            onClick={() => newProductModal.open({ ticketType, opened: new Date() })}
           >
             {t('admin.tickets.createProduct')}
           </button>
@@ -216,7 +217,7 @@ function TicketTypesList() {
 
   usePageTitle(`${capitalize(ticketName)} types${event ? ` - ${event.title}` : ''}`);
 
-  const newProductModal = useModal<{ ticketType: TicketTypeType }>();
+  const newProductModal = useModal<{ ticketType: TicketTypeType; opened: Date }>();
   const editProductModal = useModal<EditTicketProvidingProductModalProps['state']>();
 
   const sortedTicketTypes = useMemo(() => sortTicketTypes(ticketTypes), [ticketTypes]);
@@ -243,12 +244,14 @@ function TicketTypesList() {
         visible={newProductModal.visible}
         close={newProductModal.close}
         ticketType={newProductModal.state?.ticketType}
+        key={newProductModal.state?.opened.getTime()}
       />
 
       <EditTicketProvidingProductModal
         visible={editProductModal.visible}
         close={editProductModal.close}
         state={editProductModal.state}
+        key={editProductModal.state?.opened.getTime()}
       />
     </div>
   );

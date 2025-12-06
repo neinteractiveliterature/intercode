@@ -15,7 +15,7 @@ export const action: ActionFunction = async ({ params: { id }, request }) => {
     await client.mutate({
       mutation: UpdateDepartmentDocument,
       variables: {
-        id,
+        id: id ?? '',
         department: buildDepartmentInputFromFormData(formData),
       },
       refetchQueries: [{ query: DepartmentAdminQueryDocument }],

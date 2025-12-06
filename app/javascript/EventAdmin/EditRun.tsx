@@ -32,14 +32,13 @@ type LoaderResult = {
 };
 
 export const loader: LoaderFunction = async ({ params: { eventId, runId } }) => {
-  const {
-    data: { convention },
-  } = await client.query<EventAdminEventsQueryData>({ query: EventAdminEventsQueryDocument });
-  const events = convention.events;
-  const event = events.find((e) => e.id.toString() === eventId);
+  const { data } = await client.query<EventAdminEventsQueryData>({ query: EventAdminEventsQueryDocument });
+  const convention = data?.convention;
+  const events = convention?.events;
+  const event = events?.find((e) => e.id.toString() === eventId);
   const initialRun = event?.runs.find((r) => r.id === runId) as EditingRun;
 
-  if (event && initialRun) {
+  if (convention && event && initialRun) {
     return { event, initialRun, convention } satisfies LoaderResult;
   } else {
     return new Response(null, { status: 404 });

@@ -9,6 +9,9 @@ import { client } from '../useIntercodeApolloClient';
 
 export const loader: LoaderFunction = async () => {
   const { data } = await client.query<TicketPurchaseFormQueryData>({ query: TicketPurchaseFormQueryDocument });
+  if (!data) {
+    return new Response(null, { status: 404 });
+  }
   if (data.convention.my_profile?.ticket) {
     return replace('/ticket');
   }

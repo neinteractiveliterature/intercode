@@ -61,6 +61,9 @@ type LoaderResult = {
 
 export const loader: LoaderFunction = async () => {
   const { data } = await client.query({ query: CommonConventionDataQueryDocument });
+  if (!data) {
+    return new Response(null, { status: 404 });
+  }
   const filterableFormItems = getFilterableFormItems(data.convention);
   return { convention: data.convention, filterableFormItems } satisfies LoaderResult;
 };
@@ -197,8 +200,8 @@ function EventTable() {
     decodeFilterValue: FILTER_CODECS.decodeFilterValue,
     defaultVisibleColumns,
     encodeFilterValue: FILTER_CODECS.encodeFilterValue,
-    getData: ({ data: tableData }) => tableData.convention.runs_paginated.entries,
-    getPages: ({ data: tableData }) => tableData.convention.runs_paginated.total_pages,
+    getData: ({ data: tableData }) => tableData?.convention?.runs_paginated?.entries ?? [],
+    getPages: ({ data: tableData }) => tableData?.convention?.runs_paginated?.total_pages ?? 0,
     columns,
     query: EventCatalogRunsQueryDocument,
     storageKeyPrefix: 'eventTable',

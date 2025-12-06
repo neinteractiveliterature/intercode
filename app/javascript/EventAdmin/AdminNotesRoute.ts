@@ -9,8 +9,8 @@ export const action: ActionFunction = async ({ request, params: { eventId } }) =
     await client.mutate({
       mutation: UpdateEventAdminNotesDocument,
       variables: {
-        eventId,
-        adminNotes: formData.get('admin_notes')?.toString(),
+        eventId: eventId ?? '',
+        adminNotes: formData.get('admin_notes')?.toString() ?? '',
       },
       refetchQueries: [{ query: EventAdminEventsQueryDocument }],
       awaitRefetchQueries: true,

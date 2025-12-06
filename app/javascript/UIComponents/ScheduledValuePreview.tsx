@@ -205,10 +205,11 @@ function ScheduledValuePreviewCalendar<ValueType>({
       now = tomorrow;
     }
     if (currentWeek.length > 0) {
+      const weekPreview = [...currentWeek];
       while (currentWeek.length < 7) {
-        currentWeek.push(<td key={`fill-weekday-${currentWeek.length}`} className="p-1" />);
+        weekPreview.push(<td key={`fill-weekday-${currentWeek.length}`} className="p-1" />);
       }
-      weekPreviews.push(<tr key={now.toISO()}>{currentWeek}</tr>);
+      weekPreviews.push(<tr key={now.toISO()}>{weekPreview}</tr>);
     }
 
     monthPreviews.push(

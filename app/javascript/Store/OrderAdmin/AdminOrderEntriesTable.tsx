@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import Select from 'react-select';
-import { ApolloError } from '@apollo/client';
+
 import { parseIntOrNull, useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { useTranslation } from 'react-i18next';
@@ -78,7 +78,7 @@ export type AdminOrderEntriesTableProps<
   deleteOrderEntry: (orderEntry: T) => unknown;
   createCouponApplication: (code: string) => unknown;
   deleteCouponApplication: (couponApplication: CouponApplicationType) => unknown;
-  createError: ApolloError | undefined;
+  createError: Error | undefined;
   createInProgress: boolean;
 };
 
@@ -315,7 +315,7 @@ function AdminOrderEntriesTable<
         {createError && (
           <tr>
             <td colSpan={4}>
-              <ErrorDisplay graphQLError={createError as ApolloError} />
+              <ErrorDisplay graphQLError={createError} />
             </td>
           </tr>
         )}

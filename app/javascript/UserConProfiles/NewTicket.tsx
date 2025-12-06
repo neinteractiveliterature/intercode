@@ -9,7 +9,6 @@ import { NamedRoute } from '../AppRouter';
 import { client } from 'useIntercodeApolloClient';
 import { CreateTicketDocument, CreateTicketMutationVariables } from './mutations.generated';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
-import { ApolloError } from '@apollo/client';
 
 export const action: ActionFunction = async ({ request }) => {
   try {
@@ -82,7 +81,7 @@ function NewTicket() {
         userConProfile={userConProfile}
       />
 
-      <ErrorDisplay graphQLError={error as ApolloError | undefined} />
+      <ErrorDisplay graphQLError={error as Error | undefined} />
     </>
   );
 }
