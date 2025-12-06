@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { LoaderFunction, useLoaderData } from 'react-router';
+import { LoaderFunction, useLoaderData, RouterContextProvider } from 'react-router';
 
 import FormResponseChangeHistory from '../FormPresenter/ItemChangeDisplays/FormResponseChangeHistory';
 import {
@@ -8,7 +8,7 @@ import {
   EventProposalHistoryQueryVariables,
 } from './queries.generated';
 import { FormType } from '../graphqlTypes.generated';
-import { useApolloClient } from '@apollo/client/react';
+import { apolloClientContext } from 'AppContexts';
 
 const EXCLUDE_FIELDS = new Set([
   'minimum_age',
@@ -18,7 +18,8 @@ const EXCLUDE_FIELDS = new Set([
   'team_mailing_list_name',
 ]);
 
-export const loader: LoaderFunction = async ({ params: { id } }) => {
+export const loader: LoaderFunction<RouterContextProvider> = async ({ params: { id }, context }) => {
+  const client = context.get(apolloClientContext);
   const { data } = await client.query<EventProposalHistoryQueryData, EventProposalHistoryQueryVariables>({
     query: EventProposalHistoryQueryDocument,
     variables: { id: id ?? '' },

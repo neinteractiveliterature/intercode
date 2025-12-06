@@ -1,11 +1,12 @@
-import { Link, LoaderFunction, useLoaderData } from 'react-router';
+import { Link, LoaderFunction, useLoaderData, RouterContextProvider } from 'react-router';
 
 import usePageTitle from '../usePageTitle';
 import { ReportsMenuQueryData, ReportsMenuQueryDocument } from './queries.generated';
-import { useApolloClient } from '@apollo/client/react';
+import { apolloClientContext } from 'AppContexts';
 import { useTranslation } from 'react-i18next';
 
-export const loader: LoaderFunction = async () => {
+export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+  const client = context.get(apolloClientContext);
   const { data } = await client.query<ReportsMenuQueryData>({ query: ReportsMenuQueryDocument });
   return data;
 };

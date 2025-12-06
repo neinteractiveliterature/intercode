@@ -9,6 +9,7 @@ import {
   useFetcher,
   useLoaderData,
   useParams,
+  RouterContextProvider,
 } from 'react-router';
 import sortBy from 'lodash/sortBy';
 import flatMap from 'lodash/flatMap';
@@ -21,11 +22,12 @@ import { parseTypedFormItemObject } from './FormItemUtils';
 import usePageTitle from '../usePageTitle';
 import { FormEditorQueryData, FormEditorQueryDocument, FormEditorQueryVariables } from './queries.generated';
 import { useTranslation } from 'react-i18next';
-import { useApolloClient } from '@apollo/client/react';
+import { apolloClientContext } from 'AppContexts';
 import { UpdateFormDocument } from './mutations.generated';
 import styles from 'styles/form_editor.module.scss';
 
-export const loader: LoaderFunction = async ({ params: { id } }) => {
+export const loader: LoaderFunction<RouterContextProvider> = async ({ params: { id }, context }) => {
+  const client = context.get(apolloClientContext);
   const { data } = await client.query<FormEditorQueryData, FormEditorQueryVariables>({
     query: FormEditorQueryDocument,
     variables: { id: id ?? '' },
@@ -33,7 +35,8 @@ export const loader: LoaderFunction = async ({ params: { id } }) => {
   return data;
 };
 
-export const action: ActionFunction = async ({ params: { id }, request }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ params: { id }, request, context }) => {
+  const client = context.get(apolloClientContext);
   try {
     const formData = await request.formData();
     const result = await client.mutate({
