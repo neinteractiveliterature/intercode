@@ -1,10 +1,11 @@
-import { ActionFunction, data } from 'react-router';
+import { ActionFunction, RouterContextProvider, data } from 'react-router';
 import { FormItemInput, FormSection } from '../../../../../../graphqlTypes.generated';
-import { client } from '../../../../../../useIntercodeApolloClient';
+import { apolloClientContext } from '../../../../../../AppContexts';
 import { CreateFormItemDocument } from '../../../../../mutations.generated';
 import { FormEditorFormItemFieldsFragmentDoc } from 'FormAdmin/queries.generated';
 
-export const action: ActionFunction = async ({ request, params: { sectionId } }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ context, request, params: { sectionId } }) => {
+  const client = context.get(apolloClientContext);
   try {
     if (request.method === 'POST') {
       const formItem = (await request.json()) as FormItemInput;

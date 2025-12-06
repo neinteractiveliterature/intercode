@@ -1,4 +1,4 @@
-import { LoaderFunction, useRouteLoaderData } from 'react-router';
+import { LoaderFunction, RouterContextProvider, useRouteLoaderData } from 'react-router';
 import keyBy from 'lodash/keyBy';
 
 import {
@@ -9,7 +9,7 @@ import {
   NotifierLiquidAssignsQueryDocument,
   NotifierLiquidAssignsQueryVariables,
 } from './queries.generated';
-import { client } from '../useIntercodeApolloClient';
+import { apolloClientContext } from 'AppContexts';
 import { loadDocData, YardClass, YardDocs, YardMethod } from './DocData';
 import { NamedRoute } from '../AppRouter';
 import findLiquidTagName from './findLiquidTagName';
@@ -53,7 +53,8 @@ function extractCommonFields(
   return { assigns, filters, tags, sortedAssigns, sortedFilters, sortedTags, docData };
 }
 
-export const liquidDocsLoader: LoaderFunction = async ({ request }) => {
+export const liquidDocsLoader: LoaderFunction<RouterContextProvider> = async ({ context, request }) => {
+  const client = context.get(apolloClientContext);
   const notifierEventKey = new URL(request.url).searchParams.get('notifier_event_key');
 
   if (notifierEventKey == null) {

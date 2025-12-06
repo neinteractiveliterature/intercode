@@ -6,12 +6,21 @@ import { BootstrapFormInput, ErrorDisplay } from '@neinteractiveliterature/litfo
 import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
 import usePageTitle from '../usePageTitle';
 import { RootSiteAdminQueryData, RootSiteAdminQueryDocument } from './queries.generated';
-import { ActionFunction, data, LoaderFunction, useActionData, useLoaderData, useNavigation } from 'react-router';
-import { client } from '../useIntercodeApolloClient';
+import {
+  ActionFunction,
+  data,
+  LoaderFunction,
+  RouterContextProvider,
+  useActionData,
+  useLoaderData,
+  useNavigation,
+} from 'react-router';
+import { apolloClientContext } from 'AppContexts';
 import { Form } from 'react-router';
 import { UpdateRootSiteDocument } from './mutations.generated';
 
-export const action: ActionFunction = async ({ request }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
+  const client = context.get(apolloClientContext);
   try {
     const formData = await request.formData();
     const result = await client.mutate({
@@ -39,7 +48,8 @@ function useDirtyState<T>(initialState: T, setDirty: () => void) {
   ] as const;
 }
 
-export const loader: LoaderFunction = async () => {
+export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+  const client = context.get(apolloClientContext);
   const { data } = await client.query<RootSiteAdminQueryData>({ query: RootSiteAdminQueryDocument });
   return data;
 };

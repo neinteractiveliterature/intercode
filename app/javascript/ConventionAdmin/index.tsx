@@ -1,6 +1,14 @@
 import { useMemo } from 'react';
 
-import { ActionFunction, LoaderFunction, redirect, useActionData, useLoaderData, useSubmit } from 'react-router';
+import {
+  ActionFunction,
+  LoaderFunction,
+  RouterContextProvider,
+  redirect,
+  useActionData,
+  useLoaderData,
+  useSubmit,
+} from 'react-router';
 import pick from 'lodash/pick';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -10,10 +18,11 @@ import usePageTitle from '../usePageTitle';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 import { ConventionAdminConventionQueryData, ConventionAdminConventionQueryDocument } from './queries.generated';
 import { ConventionInput } from '../graphqlTypes.generated';
-import { client } from '../useIntercodeApolloClient';
+import { apolloClientContext } from 'AppContexts';
 import { UpdateConventionDocument } from './mutations.generated';
 
-export const action: ActionFunction = async ({ request }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
+  const client = context.get(apolloClientContext);
   try {
     const formData = await request.formData();
     const favicon = formData.get('favicon') as File | null;
@@ -70,7 +79,8 @@ export const action: ActionFunction = async ({ request }) => {
   return redirect('/');
 };
 
-export const loader: LoaderFunction = async () => {
+export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+  const client = context.get(apolloClientContext);
   const { data } = await client.query<ConventionAdminConventionQueryData>({
     query: ConventionAdminConventionQueryDocument,
   });

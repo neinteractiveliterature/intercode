@@ -1,10 +1,11 @@
 import TabbedMailingList from './TabbedMailingList';
 import usePageTitle from '../usePageTitle';
 import { TicketedAttendeesQueryData, TicketedAttendeesQueryDocument } from './queries.generated';
-import { LoaderFunction, useLoaderData } from 'react-router';
-import { client } from '../useIntercodeApolloClient';
+import { LoaderFunction, RouterContextProvider, useLoaderData } from 'react-router';
+import { apolloClientContext } from '../AppContexts';
 
-export const loader: LoaderFunction = async () => {
+export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+  const client = context.get(apolloClientContext);
   const { data } = await client.query<TicketedAttendeesQueryData>({ query: TicketedAttendeesQueryDocument });
   return data;
 };

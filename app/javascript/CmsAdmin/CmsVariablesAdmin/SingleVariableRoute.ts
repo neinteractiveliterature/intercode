@@ -1,8 +1,9 @@
-import { ActionFunction } from 'react-router';
-import { client } from '../../useIntercodeApolloClient';
+import { ActionFunction, RouterContextProvider } from 'react-router';
+import { apolloClientContext } from '../../AppContexts';
 import { DeleteCmsVariableMutationDocument, SetCmsVariableMutationDocument } from './mutations.generated';
 
-export const action: ActionFunction = async ({ params: { key }, request }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ context, params: { key }, request }) => {
+  const client = context.get(apolloClientContext);
   const formData = await request.formData();
 
   try {

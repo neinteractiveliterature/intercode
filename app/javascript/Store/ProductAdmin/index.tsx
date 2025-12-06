@@ -13,14 +13,15 @@ import scrollToLocationHash from '../../scrollToLocationHash';
 import { AdminProductsQueryData, AdminProductsQueryDocument } from './queries.generated';
 import { duplicateProductForEditing, EditingProduct } from './EditingProductTypes';
 import { getRealOrGeneratedId, realOrGeneratedIdsMatch } from '../../GeneratedIdUtils';
-import { ActionFunction, data, LoaderFunction, useLoaderData } from 'react-router';
-import { client } from '../../useIntercodeApolloClient';
+import { ActionFunction, data, LoaderFunction, useLoaderData, RouterContextProvider } from 'react-router';
+import { apolloClientContext } from 'AppContexts';
 import { Convention, TicketType } from 'graphqlTypes.generated';
 import { AdminProductFieldsFragmentDoc } from 'Store/adminProductFields.generated';
 import { parseProductFormData } from 'Store/buildProductInput';
 import { CreateProductDocument } from './mutations.generated';
 
-export const action: ActionFunction = async ({ request }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ request, context }) => {
+  const client = context.get(apolloClientContext);
   try {
     if (request.method === 'POST') {
       const product = parseProductFormData(await request.formData());
@@ -74,7 +75,8 @@ function generateBlankProduct(): EditingProduct {
   };
 }
 
-export const loader: LoaderFunction = async () => {
+export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+  const client = context.get(apolloClientContext);
   const { data } = await client.query<AdminProductsQueryData>({ query: AdminProductsQueryDocument });
   return data;
 };

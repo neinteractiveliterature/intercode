@@ -1,11 +1,12 @@
 import { OrderInput } from 'graphqlTypes.generated';
-import { ActionFunction, data, LoaderFunction, useLoaderData, useNavigate } from 'react-router';
-import { client } from 'useIntercodeApolloClient';
+import { ActionFunction, data, LoaderFunction, useLoaderData, useNavigate, RouterContextProvider } from 'react-router';
+import { apolloClientContext } from 'AppContexts';
 import EditOrderModal from './EditOrderModal';
 import { AdminUpdateOrderDocument } from './mutations.generated';
 import { AdminOrderQueryData, AdminOrderQueryDocument } from './queries.generated';
 
-export const action: ActionFunction = async ({ params: { id }, request }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ params: { id }, request, context }) => {
+  const client = context.get(apolloClientContext);
   try {
     if (request.method === 'PATCH') {
       const order = (await request.json()) as OrderInput;
@@ -22,7 +23,8 @@ export const action: ActionFunction = async ({ params: { id }, request }) => {
   }
 };
 
-export const loader: LoaderFunction = async ({ params: { id } }) => {
+export const loader: LoaderFunction<RouterContextProvider> = async ({ params: { id }, context }) => {
+  const client = context.get(apolloClientContext);
   const { data } = await client.query({
     query: AdminOrderQueryDocument,
     variables: { id: id ?? '' },

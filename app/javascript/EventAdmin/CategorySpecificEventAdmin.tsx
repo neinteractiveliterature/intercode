@@ -1,9 +1,9 @@
-import { LoaderFunction, Outlet, useLoaderData } from 'react-router';
+import { LoaderFunction, Outlet, useLoaderData, RouterContextProvider } from 'react-router';
 import { EventAdminEventsQueryData, EventAdminEventsQueryDocument } from './queries.generated';
 import EventAdminRunsTable from './EventAdminRunsTable';
 import RecurringEventAdmin from './RecurringEventAdmin';
 import SingleRunEventAdminList from './SingleRunEventAdminList';
-import { client } from '../useIntercodeApolloClient';
+import { apolloClientContext } from 'AppContexts';
 
 export const adminComponentsBySchedulingUi = {
   regular: EventAdminRunsTable,
@@ -11,7 +11,8 @@ export const adminComponentsBySchedulingUi = {
   single_run: SingleRunEventAdminList,
 };
 
-export const loader: LoaderFunction = async ({ params: { eventCategoryId } }) => {
+export const loader: LoaderFunction<RouterContextProvider> = async ({ params: { eventCategoryId }, context }) => {
+  const client = context.get(apolloClientContext);
   const { data } = await client.query<EventAdminEventsQueryData>({ query: EventAdminEventsQueryDocument });
 
   const eventCategoryIdIntPortion = Number.parseInt(eventCategoryId ?? '');

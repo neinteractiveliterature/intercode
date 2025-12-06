@@ -10,8 +10,8 @@ import { OrderHistoryQueryData, OrderHistoryQueryDocument } from './queries.gene
 import useLoginRequired from '../Authentication/useLoginRequired';
 import { useAppDateTimeFormat } from '../TimeUtils';
 import { useTranslation } from 'react-i18next';
-import { LoaderFunction, useLoaderData } from 'react-router';
-import { client } from '../useIntercodeApolloClient';
+import { LoaderFunction, useLoaderData, RouterContextProvider } from 'react-router';
+import { apolloClientContext } from 'AppContexts';
 
 type OrderType = NonNullable<OrderHistoryQueryData['convention']['my_profile']>['orders'][0];
 type PaymentModalState = {
@@ -178,7 +178,8 @@ function OrderHistoryOrder({ order, convention, paymentModal }: OrderHistoryOrde
   );
 }
 
-export const loader: LoaderFunction = async () => {
+export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+  const client = context.get(apolloClientContext);
   const { data } = await client.query<OrderHistoryQueryData>({ query: OrderHistoryQueryDocument });
   return data;
 };

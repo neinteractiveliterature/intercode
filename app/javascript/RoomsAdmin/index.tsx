@@ -8,12 +8,13 @@ import usePageTitle from '../usePageTitle';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 import { RoomsAdminQueryData, RoomsAdminQueryDocument } from './queries.generated';
 import { useTranslation } from 'react-i18next';
-import { ActionFunction, LoaderFunction, useActionData, useLoaderData } from 'react-router';
-import { client } from '../useIntercodeApolloClient';
+import { ActionFunction, LoaderFunction, RouterContextProvider, useActionData, useLoaderData } from 'react-router';
+import { apolloClientContext } from 'AppContexts';
 import { useSubmit } from 'react-router';
 import { CreateRoomDocument } from './mutations.generated';
 
-export const action: ActionFunction = async ({ request }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
+  const client = context.get(apolloClientContext);
   try {
     if (request.method === 'POST') {
       const formData = await request.formData();
@@ -34,7 +35,8 @@ export const action: ActionFunction = async ({ request }) => {
   }
 };
 
-export const loader: LoaderFunction = async () => {
+export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+  const client = context.get(apolloClientContext);
   const { data } = await client.query<RoomsAdminQueryData>({ query: RoomsAdminQueryDocument });
   return data;
 };

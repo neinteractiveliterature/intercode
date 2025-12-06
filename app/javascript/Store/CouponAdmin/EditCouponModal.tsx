@@ -11,13 +11,14 @@ import {
   AdminSingleCouponQueryDocument,
 } from './queries.generated';
 import { useTranslation } from 'react-i18next';
-import { ActionFunction, LoaderFunction, redirect, useLoaderData } from 'react-router';
-import { client } from 'useIntercodeApolloClient';
+import { ActionFunction, LoaderFunction, RouterContextProvider, redirect, useLoaderData } from 'react-router';
+import { apolloClientContext } from 'AppContexts';
 import { Link, useFetcher } from 'react-router';
 import { DeleteCouponDocument, UpdateCouponDocument } from './mutations.generated';
 import { CouponInput } from 'graphqlTypes.generated';
 
-export const action: ActionFunction = async ({ params: { id }, request }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ context, params: { id }, request }) => {
+  const client = context.get(apolloClientContext);
   try {
     if (request.method === 'DELETE') {
       await client.mutate({ mutation: DeleteCouponDocument, variables: { id: id ?? '' } });
@@ -36,7 +37,8 @@ export const action: ActionFunction = async ({ params: { id }, request }) => {
   }
 };
 
-export const loader: LoaderFunction = async ({ params: { id } }) => {
+export const loader: LoaderFunction<RouterContextProvider> = async ({ context, params: { id } }) => {
+  const client = context.get(apolloClientContext);
   const { data } = await client.query({
     query: AdminSingleCouponQueryDocument,
     variables: { id: id ?? '' },

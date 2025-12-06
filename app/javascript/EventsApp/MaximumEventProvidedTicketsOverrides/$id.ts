@@ -1,11 +1,12 @@
-import { ActionFunction, data } from 'react-router';
-import { client } from '../../useIntercodeApolloClient';
+import { ActionFunction, RouterContextProvider, data } from 'react-router';
+import { apolloClientContext } from '../../AppContexts';
 import {
   DeleteMaximumEventProvidedTicketsOverrideDocument,
   UpdateMaximumEventProvidedTicketsOverrideDocument,
 } from '../../EventAdmin/mutations.generated';
 
-export const action: ActionFunction = async ({ request, params: { id } }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {
+  const client = context.get(apolloClientContext);
   try {
     if (request.method === 'DELETE') {
       const result = await client.mutate({

@@ -1,11 +1,12 @@
-import { LoaderFunction } from 'react-router';
-import { client } from '../useIntercodeApolloClient';
+import { LoaderFunction, RouterContextProvider } from 'react-router';
+import { apolloClientContext } from 'AppContexts';
 import {
   OrganizationAdminOrganizationsQueryData,
   OrganizationAdminOrganizationsQueryDocument,
 } from './queries.generated';
 
-export const organizationsLoader: LoaderFunction = async () => {
+export const organizationsLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+  const client = context.get(apolloClientContext);
   const { data } = await client.query<OrganizationAdminOrganizationsQueryData>({
     query: OrganizationAdminOrganizationsQueryDocument,
   });

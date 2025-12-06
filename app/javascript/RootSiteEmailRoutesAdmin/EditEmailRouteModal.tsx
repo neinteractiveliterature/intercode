@@ -6,13 +6,14 @@ import { useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 import EmailRouteForm from './EmailRouteForm';
 import buildEmailRouteInput from './buildEmailRouteInput';
 import { RootSiteSingleEmailRouteQueryData, RootSiteSingleEmailRouteQueryDocument } from './queries.generated';
-import { ActionFunction, LoaderFunction, redirect, useLoaderData } from 'react-router';
-import { client } from 'useIntercodeApolloClient';
+import { ActionFunction, LoaderFunction, redirect, useLoaderData, RouterContextProvider } from 'react-router';
+import { apolloClientContext } from 'AppContexts';
 import { DeleteEmailRouteDocument, UpdateEmailRouteDocument } from './mutations.generated';
 import { EmailRouteInput } from 'graphqlTypes.generated';
 import { Link, useFetcher } from 'react-router';
 
-export const action: ActionFunction = async ({ params: { id }, request }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ params: { id }, request, context }) => {
+  const client = context.get(apolloClientContext);
   try {
     if (request.method === 'DELETE') {
       await client.mutate({
@@ -36,7 +37,8 @@ export const action: ActionFunction = async ({ params: { id }, request }) => {
   }
 };
 
-export const loader: LoaderFunction = async ({ params: { id } }) => {
+export const loader: LoaderFunction<RouterContextProvider> = async ({ params: { id }, context }) => {
+  const client = context.get(apolloClientContext);
   const { data } = await client.query({ query: RootSiteSingleEmailRouteQueryDocument, variables: { id: id ?? '' } });
   return data;
 };

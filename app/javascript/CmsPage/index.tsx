@@ -1,11 +1,11 @@
 import { useMemo, useEffect, Suspense, useRef } from 'react';
-import { useNavigate, useLocation, LoaderFunction, useLoaderData } from 'react-router';
+import { useNavigate, useLocation, LoaderFunction, RouterContextProvider, useLoaderData } from 'react-router';
 
 import usePageTitle from '../usePageTitle';
 import { lazyWithAppEntrypointHeadersCheck } from '../checkAppEntrypointHeadersMatch';
 import parseCmsContent from '../parseCmsContent';
 import { CmsPageQueryData, CmsPageQueryDocument, CmsPageQueryVariables } from './queries.generated';
-import { client } from '../useIntercodeApolloClient';
+import { apolloClientContext } from 'AppContexts';
 import pageAdminDropdownStyles from '../styles/page_admin_dropdown.module.scss';
 
 const PageAdminDropdown = lazyWithAppEntrypointHeadersCheck(() => import('./PageAdminDropdown'));
@@ -15,7 +15,8 @@ export type CmsPageProps = {
   rootPage?: boolean;
 };
 
-export const loader: LoaderFunction = async ({ request }) => {
+export const loader: LoaderFunction<RouterContextProvider> = async ({ context, request }) => {
+  const client = context.get(apolloClientContext);
   const slug = new URL(request.url).pathname.replace(/^\/pages\//, '').replace(/\/$/, '');
   let variables: CmsPageQueryVariables;
   if (slug.trim().length > 0) {
