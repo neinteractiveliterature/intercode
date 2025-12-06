@@ -29,8 +29,8 @@ import useMergeCategoriesIntoEvents from '../../useMergeCategoriesIntoEvents';
 import EventCatalogNavTabs from '../EventCatalogNavTabs';
 import { LoaderFunction, useLoaderData } from 'react-router';
 import { client } from '../../../useIntercodeApolloClient';
-import { FetchMoreFunction } from '@apollo/client/react/hooks/useSuspenseQuery';
 import { ResultOf, VariablesOf } from '@graphql-typed-document-node/core';
+import { FetchMoreFunction } from '@apollo/client/react/internal';
 
 const PAGE_SIZE = 20;
 

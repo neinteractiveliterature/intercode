@@ -15,16 +15,9 @@ export type GraphQLReactTableVariables = {
   sort?: SortInput | SortInput[] | null;
 };
 
-type QueryResultWithData<QueryData, Variables extends OperationVariables> = Omit<
-  useQuery.Result<QueryData, Variables>,
-  'data'
-> & {
-  data: NonNullable<useQuery.Result<QueryData, Variables>['data']>;
-};
-
 function queryResultHasData<QueryData, Variables extends OperationVariables>(
   queryResult: useQuery.Result<QueryData, Variables>,
-): queryResult is QueryResultWithData<QueryData, Variables> {
+): queryResult is useQuery.Result<QueryData, Variables, 'complete'> {
   return queryResult.data != null;
 }
 
@@ -33,8 +26,8 @@ export type UseGraphQLReactTableOptions<
   QueryData,
   Variables extends GraphQLReactTableVariables = GraphQLReactTableVariables,
 > = {
-  getData: (queryData: QueryResultWithData<QueryData, Variables>) => RowType[];
-  getPages: (queryData: QueryResultWithData<QueryData, Variables>) => number;
+  getData: (queryData: useQuery.Result<QueryData, Variables, 'complete'>) => RowType[];
+  getPages: (queryData: useQuery.Result<QueryData, Variables, 'complete'>) => number;
   query: TypedDocumentNode<QueryData, Variables>;
   variables?: Variables;
   filters?: ColumnFiltersState;
@@ -50,10 +43,10 @@ export type UseGraphQLReactTableResult<
 > = {
   data: RowType[];
   pages: number;
-  refetch: useQuery.Result<QueryData, Variables>['refetch'];
+  refetch: useQuery.Result<QueryData, Variables, 'complete' | 'empty'>['refetch'];
   loading: boolean;
   error?: Error;
-  queryData: useQuery.Result<QueryData, Variables>['data'];
+  queryData: useQuery.Result<QueryData, Variables, 'complete' | 'empty'>['data'];
 };
 
 export default function useGraphQLReactTable<

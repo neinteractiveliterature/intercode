@@ -9,7 +9,7 @@ export const action: ActionFunction = async ({ params: { eventId }, request }) =
       mutation: AttachImageToEventDocument,
       variables: {
         id: eventId ?? '',
-        signedBlobId: formData.get('signed_blob_id')?.toString(),
+        signedBlobId: formData.get('signed_blob_id')?.toString() ?? '',
       },
     });
 

@@ -78,7 +78,7 @@ export type AdminOrderEntriesTableProps<
   deleteOrderEntry: (orderEntry: T) => unknown;
   createCouponApplication: (code: string) => unknown;
   deleteCouponApplication: (couponApplication: CouponApplicationType) => unknown;
-  createError: ApolloError | undefined;
+  createError: Error | undefined;
   createInProgress: boolean;
 };
 

@@ -40,10 +40,10 @@ function sortByName<T extends { name: string }>(items: T[]) {
 }
 
 function extractCommonFields(
-  data: LiquidAssignsQueryData | NotifierLiquidAssignsQueryData,
+  data: LiquidAssignsQueryData | NotifierLiquidAssignsQueryData | null | undefined,
   docData: YardDocs,
 ): LiquidDocsLoaderResultCommonFields {
-  const sortedAssigns = sortByName(data.cmsParent.liquidAssigns);
+  const sortedAssigns = sortByName(data?.cmsParent.liquidAssigns ?? []);
   const sortedFilters = sortByName(docData.filter_methods);
   const sortedTags = sortByName(docData.classes.filter((klass) => findLiquidTagName(klass) != null));
   const assigns = keyBy(sortedAssigns, (assign) => assign.name);

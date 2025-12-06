@@ -170,7 +170,7 @@ function OrderPaymentModal({
         fetchPolicy: 'no-cache',
       });
       setPaymentIntentClientSecret(
-        result.data.convention.my_profile?.current_pending_order?.payment_intent_client_secret,
+        result.data?.convention.my_profile?.current_pending_order?.payment_intent_client_secret,
       );
     } catch (error) {
       onErrorRef.current(error);

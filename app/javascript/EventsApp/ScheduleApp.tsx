@@ -107,6 +107,9 @@ export const loader: LoaderFunction = async ({ params, request }) => {
   if (conventionDayLoaderResult instanceof Response) {
     return conventionDayLoaderResult;
   }
+  if (!data) {
+    return new Response(null, { status: 404 });
+  }
 
   return { ...conventionDayLoaderResult, data } satisfies LoaderResult;
 };

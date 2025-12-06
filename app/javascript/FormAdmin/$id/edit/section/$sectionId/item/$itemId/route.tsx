@@ -93,8 +93,10 @@ function FormItemEditorLayout(): React.JSX.Element {
         },
         fetchPolicy: 'no-cache',
       });
-      const responseFormItem = parseTypedFormItemObject(response.data.convention.form.form_section.preview_form_item);
-      setPreviewFormItem(responseFormItem);
+      if (response.data) {
+        const responseFormItem = parseTypedFormItemObject(response.data.convention.form.form_section.preview_form_item);
+        setPreviewFormItem(responseFormItem);
+      }
     },
     [apolloClient, currentSection?.id, form.id],
   );
