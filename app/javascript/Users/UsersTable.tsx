@@ -73,7 +73,7 @@ function UsersTable(): React.JSX.Element {
     encodeFilterValue,
     getRowId: (user) => user.id,
     getData: ({ data }) => data.users_paginated.entries,
-    getPages: ({ data }) => data.users_paginated.total_pages,
+    getPages: ({ data }) => data.users_paginated.total_pages ?? 0,
     columns,
     rowSelect: true,
     storageKeyPrefix: 'users',

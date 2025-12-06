@@ -95,8 +95,8 @@ export default function EventTicketPurchaseModal({
             {cancelInProgress ? <LoadingIndicator /> : t('buttons.cancel')}
           </button>
         )}
-        <ErrorDisplay graphQLError={cancelError as ApolloError | null} />
-        <ErrorDisplay graphQLError={checkOutError as ApolloError | null} />
+        <ErrorDisplay graphQLError={cancelError as Error | null} />
+        <ErrorDisplay graphQLError={checkOutError as Error | null} />
       </div>
     </Modal>
   );

@@ -215,7 +215,7 @@ function RankedChoiceSignupDecisionsTable({ signupRoundId }: RankedChoiceSignupD
     },
     encodeFilterValue: FILTER_CODECS.encodeFilterValue,
     getData: (queryData) => queryData.data.convention.signup_round.ranked_choice_decisions_paginated.entries,
-    getPages: (queryData) => queryData.data.convention.signup_round.ranked_choice_decisions_paginated.total_pages,
+    getPages: (queryData) => queryData.data.convention.signup_round.ranked_choice_decisions_paginated.total_pages ?? 0,
     columns,
     storageKeyPrefix: `rankedChoiceSignupDecisions-${signupRoundId}`,
     query: SignupRoundRankedChoiceDecisionsTableQueryDocument,

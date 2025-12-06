@@ -72,7 +72,7 @@ function EditTicket() {
         userConProfile={userConProfile}
       />
 
-      <ErrorDisplay graphQLError={error as ApolloError | undefined} />
+      <ErrorDisplay graphQLError={error as Error | undefined} />
     </>
   );
 }

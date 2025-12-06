@@ -24,7 +24,7 @@ export function WithdrawMySignupModal({ close, event, run, signup, signupRounds 
   const { t } = useTranslation();
   const [checked, setChecked] = useState(false);
   const [busy, setBusy] = useState(false);
-  const [error, setError] = useState<ApolloError>();
+  const [error, setError] = useState<Error>();
   const client = useApolloClient();
   const revalidator = useRevalidator();
 

@@ -107,7 +107,7 @@ function RootSiteConventionsAdminTable(): React.JSX.Element {
     defaultVisibleColumns,
     encodeFilterValue,
     getData: ({ data }) => data.conventions_paginated.entries,
-    getPages: ({ data }) => data.conventions_paginated.total_pages,
+    getPages: ({ data }) => data.conventions_paginated.total_pages ?? 0,
     columns,
     storageKeyPrefix: 'conventions',
     query: RootSiteConventionsAdminTableQueryDocument,

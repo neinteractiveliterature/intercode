@@ -129,12 +129,12 @@ export default function EditOrderModal({ order, closeModal }: EditOrderModalProp
                 deleteOrderEntry={deleteOrderEntry}
                 createCouponApplication={createCouponApplication}
                 deleteCouponApplication={deleteCouponApplication}
-                createError={createError as ApolloError | undefined}
+                createError={createError as Error | undefined}
                 createInProgress={createFetcher.state !== 'idle'}
               />
             </section>
 
-            <ErrorDisplay graphQLError={error as ApolloError | undefined} />
+            <ErrorDisplay graphQLError={error as Error | undefined} />
           </>
         )}
       </div>

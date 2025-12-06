@@ -7,7 +7,7 @@ export const action: ActionFunction = async ({ params: { id }, request }) => {
     if (request.method === 'DELETE') {
       const result = await client.mutate({
         mutation: DeleteCouponApplicationDocument,
-        variables: { id },
+        variables: { id: id ?? '' },
       });
       await client.resetStore();
       return data(result.data);

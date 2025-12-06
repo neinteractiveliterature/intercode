@@ -32,7 +32,7 @@ export const action: ActionFunction = async ({ request, params: { id, sectionId,
       await client.mutate({
         mutation: UpdateFormItemDocument,
         variables: {
-          id: itemId,
+          id: itemId ?? '',
           formItem: json,
         },
       });
@@ -41,11 +41,11 @@ export const action: ActionFunction = async ({ request, params: { id, sectionId,
       await client.mutate({
         mutation: DeleteFormItemDocument,
         variables: {
-          id: itemId,
+          id: itemId ?? '',
         },
         update: (cache) => {
           cache.modify<FormItem>({
-            id: cache.identify({ __typename: 'FormItem', id: itemId }),
+            id: cache.identify({ __typename: 'FormItem', id: itemId ?? '' }),
             fields: (field, { DELETE }) => DELETE,
           });
         },

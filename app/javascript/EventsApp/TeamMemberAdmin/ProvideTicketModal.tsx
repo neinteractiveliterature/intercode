@@ -20,7 +20,6 @@ import { client } from '../../useIntercodeApolloClient';
 import { ProvideEventTicketDocument } from './mutations.generated';
 import { TeamMembersQueryDocument } from './queries.generated';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
-import { ApolloError } from '@apollo/client/v4-migration';
 
 export const loader = singleTeamMemberLoader;
 
@@ -30,11 +29,11 @@ export const action: ActionFunction = async ({ params: { eventId }, request }) =
     await client.mutate({
       mutation: ProvideEventTicketDocument,
       variables: {
-        eventId,
-        userConProfileId: formData.get('userConProfileId'),
-        ticketTypeId: formData.get('ticketTypeId'),
+        eventId: eventId ?? '',
+        userConProfileId: formData.get('userConProfileId')?.toString() ?? '',
+        ticketTypeId: formData.get('ticketTypeId')?.toString() ?? '',
       },
-      refetchQueries: [{ query: TeamMembersQueryDocument, variables: { eventId: eventId } }],
+      refetchQueries: [{ query: TeamMembersQueryDocument, variables: { eventId: eventId ?? '' } }],
       awaitRefetchQueries: true,
     });
     return redirect(`/events/${eventId}/team_members`);

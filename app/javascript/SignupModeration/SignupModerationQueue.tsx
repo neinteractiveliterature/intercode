@@ -329,7 +329,7 @@ function SignupModerationQueue(): React.JSX.Element {
     query: SignupModerationQueueQueryDocument,
     storageKeyPrefix: 'signupModerationQueue',
     getData: (result) => result.data.convention.signup_requests_paginated.entries,
-    getPages: (result) => result.data.convention.signup_requests_paginated.total_pages,
+    getPages: (result) => result.data.convention.signup_requests_paginated.total_pages ?? 0,
     columns,
   });
 

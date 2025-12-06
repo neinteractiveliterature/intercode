@@ -30,7 +30,7 @@ function EventProposalAdminNotes({ eventProposalId }: EventProposalAdminNotesPro
         )
       }
       inProgress={fetcher.state !== 'idle'}
-      error={fetcher.data instanceof ApolloError ? fetcher.data : undefined}
+      error={fetcher.data instanceof Error ? fetcher.data : undefined}
     />
   );
 }

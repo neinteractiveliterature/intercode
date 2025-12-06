@@ -18,7 +18,7 @@ export const action: ActionFunction = async ({ request, params: { id } }) => {
       mutation: ChangeSignupBucketDocument,
       variables: {
         signupId: id ?? '',
-        bucketKey: formData.get('bucket_key')?.toString(),
+        bucketKey: formData.get('bucket_key')?.toString() ?? '',
       },
     });
     return data(result.data);

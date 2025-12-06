@@ -139,7 +139,7 @@ function RoomsAdmin() {
           </li>
         </ul>
 
-        <ErrorDisplay graphQLError={error as ApolloError | undefined} />
+        <ErrorDisplay graphQLError={error as Error | undefined} />
       </div>
     </>
   );

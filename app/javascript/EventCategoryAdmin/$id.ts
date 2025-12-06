@@ -15,7 +15,7 @@ export const action: ActionFunction = async ({ request, params: { id } }) => {
         update: (cache) => {
           cache.modify<EventCategory>({
             id: cache.identify({ __typename: 'EventCategory', id }),
-            fields: (value, { DELETE }) => DELETE,
+            fields: (_value, { DELETE }) => DELETE,
           });
         },
       });

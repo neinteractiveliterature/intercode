@@ -1,6 +1,7 @@
 import { ActionFunction, data } from 'react-router';
 import { client } from 'useIntercodeApolloClient';
 import { SendNotificationPreviewDocument } from './mutations.generated';
+import { NotificationEventKey } from 'graphqlTypes.generated';
 
 export const action: ActionFunction = async ({ params: { eventKey }, request }) => {
   try {
@@ -10,7 +11,7 @@ export const action: ActionFunction = async ({ params: { eventKey }, request }) 
 
     const result = await client.mutate({
       mutation: SendNotificationPreviewDocument,
-      variables: { email, eventKey, sms },
+      variables: { email, eventKey: (eventKey ?? '') as NotificationEventKey, sms },
     });
 
     return data(result.data);

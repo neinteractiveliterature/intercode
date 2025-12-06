@@ -9,10 +9,10 @@ export const action: ActionFunction = async ({ request, params: { id } }) => {
     if (request.method === 'DELETE') {
       await client.mutate({
         mutation: DeleteSignupRoundDocument,
-        variables: { id },
+        variables: { id: id ?? '' },
         update: (cache) => {
           cache.modify<SignupRound>({
-            id: cache.identify({ __typename: 'SignupRound', id }),
+            id: cache.identify({ __typename: 'SignupRound', id: id ?? '' }),
             fields: (value, { DELETE }) => DELETE,
           });
         },
@@ -21,7 +21,7 @@ export const action: ActionFunction = async ({ request, params: { id } }) => {
       const formData = await request.formData();
       await client.mutate({
         mutation: UpdateSignupRoundDocument,
-        variables: { id, signupRound: buildSignupRoundInputFromFormData(formData) },
+        variables: { id: id ?? '', signupRound: buildSignupRoundInputFromFormData(formData) },
       });
     }
   } catch (error) {

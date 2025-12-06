@@ -23,6 +23,9 @@ type LoaderResult = {
 
 export const loader: LoaderFunction = async () => {
   const { data } = await client.query<MyProfileQueryData>({ query: MyProfileQueryDocument });
+  if (!data) {
+    return new Response(null, { status: 404 });
+  }
   if (!data.convention.my_profile) {
     return new Response(null, { status: 404 });
   }

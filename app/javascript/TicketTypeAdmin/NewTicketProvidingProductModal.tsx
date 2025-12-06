@@ -78,7 +78,7 @@ export default function NewTicketProvidingProductModal({
           </PricingStructureModalContext.Provider>
         </div>
         <div className="modal-footer">
-          <ErrorDisplay graphQLError={error as ApolloError | undefined} />
+          <ErrorDisplay graphQLError={error as Error | undefined} />
           <button type="button" className="btn btn-secondary" onClick={close} disabled={loading}>
             {t('buttons.cancel')}
           </button>

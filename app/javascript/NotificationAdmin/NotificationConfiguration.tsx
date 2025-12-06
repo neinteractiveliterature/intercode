@@ -69,6 +69,9 @@ type LoaderResult = {
 export const loader: LoaderFunction = async ({ params }) => {
   const { eventKey } = params;
   const { data } = await client.query({ query: NotificationAdminQueryDocument });
+  if (!data) {
+    return new Response(null, { status: 404 });
+  }
   const initialNotificationTemplate = data.convention.notification_templates.find((t) => t.event_key === eventKey);
 
   if (!initialNotificationTemplate) {

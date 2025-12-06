@@ -11,7 +11,7 @@ export const action: ActionFunction = async ({ params: { id }, request }) => {
       const order = (await request.json()) as OrderInput;
       const result = await client.mutate({
         mutation: AdminUpdateOrderDocument,
-        variables: { id, order },
+        variables: { id: id ?? '', order },
       });
       return data(result.data);
     } else {
@@ -25,7 +25,7 @@ export const action: ActionFunction = async ({ params: { id }, request }) => {
 export const loader: LoaderFunction = async ({ params: { id } }) => {
   const { data } = await client.query({
     query: AdminOrderQueryDocument,
-    variables: { id },
+    variables: { id: id ?? '' },
   });
   return data;
 };

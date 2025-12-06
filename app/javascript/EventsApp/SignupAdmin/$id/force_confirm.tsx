@@ -17,7 +17,7 @@ export const action: ActionFunction = async ({ request, params: { id } }) => {
       mutation: ForceConfirmSignupDocument,
       variables: {
         signupId: id ?? '',
-        bucketKey: formData.get('bucket_key')?.toString(),
+        bucketKey: formData.get('bucket_key')?.toString() ?? '',
       },
     });
     return data(result.data);

@@ -17,7 +17,7 @@ export const action: ActionFunction = async ({ params: { id }, request }) => {
     if (request.method === 'DELETE') {
       await client.mutate({
         mutation: DeleteEmailRouteDocument,
-        variables: { id },
+        variables: { id: id ?? '' },
       });
       await client.resetStore();
       return redirect('..');
@@ -25,7 +25,7 @@ export const action: ActionFunction = async ({ params: { id }, request }) => {
       const emailRoute = (await request.json()) as EmailRouteInput;
       await client.mutate({
         mutation: UpdateEmailRouteDocument,
-        variables: { id, emailRoute },
+        variables: { id: id ?? '', emailRoute },
       });
       return redirect('..');
     } else {
@@ -37,7 +37,7 @@ export const action: ActionFunction = async ({ params: { id }, request }) => {
 };
 
 export const loader: LoaderFunction = async ({ params: { id } }) => {
-  const { data } = await client.query({ query: RootSiteSingleEmailRouteQueryDocument, variables: { id } });
+  const { data } = await client.query({ query: RootSiteSingleEmailRouteQueryDocument, variables: { id: id ?? '' } });
   return data;
 };
 

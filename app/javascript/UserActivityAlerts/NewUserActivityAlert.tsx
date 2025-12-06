@@ -24,6 +24,10 @@ type LoaderResult = {
 export const loader: LoaderFunction = async () => {
   const { data } = await client.query({ query: UserActivityAlertsAdminQueryDocument });
 
+  if (!data) {
+    return new Response(null, { status: 404 });
+  }
+
   const userActivityAlertEvent = data.notificationEvents.find(
     (event) => event.key === NotificationEventKey.UserActivityAlertsAlert,
   );

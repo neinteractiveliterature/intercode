@@ -56,6 +56,10 @@ type LoaderResult = {
 export const loader: LoaderFunction = async ({ params: { id } }) => {
   const { data } = await client.query({ query: UserActivityAlertsAdminQueryDocument });
 
+  if (!data) {
+    return new Response(null, { status: 404 });
+  }
+
   const initialUserActivityAlert = data.convention.user_activity_alerts.find((alert) => alert.id === id);
   if (!initialUserActivityAlert) {
     return new Response(null, { status: 404 });

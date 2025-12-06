@@ -1,4 +1,3 @@
-import { ApolloError } from '@apollo/client/v4-migration';
 import { ActionFunction, LoaderFunction, redirect, useFetcher, useLoaderData } from 'react-router';
 import { useTabs, TabList, TabBody, notEmpty, ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -24,7 +23,7 @@ export const action: ActionFunction = async ({ params: { id }, request }) => {
     const { grantPermissions, revokePermissions } = (await request.json()) as ActionInput;
     await client.mutate({
       mutation: UpdateStaffPositionPermissionsDocument,
-      variables: { staffPositionId: id, grantPermissions, revokePermissions },
+      variables: { staffPositionId: id ?? '', grantPermissions, revokePermissions },
     });
     return redirect('/staff_positions');
   } catch (error) {
@@ -43,6 +42,9 @@ type LoaderResult = {
 
 export const loader: LoaderFunction = async ({ params: { id } }) => {
   const { data } = await client.query<StaffPositionsQueryData>({ query: StaffPositionsQueryDocument });
+  if (!data) {
+    return new Response(null, { status: 404 });
+  }
   const staffPosition = data.convention.staff_positions.find((staffPosition) => staffPosition.id === id);
   if (!staffPosition) {
     return new Response(null, { status: 404 });

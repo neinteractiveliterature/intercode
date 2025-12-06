@@ -80,6 +80,9 @@ type LoaderResult = {
 
 export const loader: LoaderFunction = async () => {
   const { data } = await client.query<CommonConventionDataQueryData>({ query: CommonConventionDataQueryDocument });
+  if (!data) {
+    return new Response(null, { status: 404 });
+  }
   const filterableFormItems = getFilterableFormItems(data.convention);
   return { convention: data.convention, filterableFormItems } satisfies LoaderResult;
 };

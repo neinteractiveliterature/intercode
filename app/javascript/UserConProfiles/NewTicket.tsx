@@ -81,7 +81,7 @@ function NewTicket() {
         userConProfile={userConProfile}
       />
 
-      <ErrorDisplay graphQLError={error as ApolloError | undefined} />
+      <ErrorDisplay graphQLError={error as Error | undefined} />
     </>
   );
 }

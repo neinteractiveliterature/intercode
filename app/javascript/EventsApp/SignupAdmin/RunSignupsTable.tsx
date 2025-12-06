@@ -184,7 +184,7 @@ function RunSignupsTable(): React.JSX.Element {
     defaultVisibleColumns,
     encodeFilterValue,
     getData: ({ data: tableData }) => tableData.convention.event.run.signups_paginated.entries,
-    getPages: ({ data: tableData }) => tableData.convention.event.run.signups_paginated.total_pages,
+    getPages: ({ data: tableData }) => tableData.convention.event.run.signups_paginated.total_pages ?? 0,
     columns,
     query: RunSignupsTableSignupsQueryDocument,
     storageKeyPrefix: 'adminSignups',

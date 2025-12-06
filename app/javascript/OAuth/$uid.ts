@@ -12,7 +12,7 @@ export const action: ActionFunction = async ({ params: { uid }, request }) => {
         update: (cache) => {
           cache.modify<AuthorizedApplication>({
             id: cache.identify({ __typename: 'AuthorizedApplication', uid }),
-            fields: (field, { DELETE }) => DELETE,
+            fields: (_field, { DELETE }) => DELETE,
           });
         },
       });

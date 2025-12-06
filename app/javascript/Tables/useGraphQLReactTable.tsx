@@ -52,7 +52,7 @@ export type UseGraphQLReactTableResult<
   pages: number;
   refetch: useQuery.Result<QueryData, Variables>['refetch'];
   loading: boolean;
-  error?: ApolloError;
+  error?: Error;
   queryData: useQuery.Result<QueryData, Variables>['data'];
 };
 
