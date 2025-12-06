@@ -11,9 +11,8 @@ import { AppRootQueryData, AppRootQueryDocument } from '../appRootQueries.genera
 import { buildAppRootContextValue } from '../AppRoot';
 import getI18n from '../setupI18Next';
 import { getConventionDayTimespans } from '../TimespanUtils';
-import { replace, RouterContextProvider } from 'react-router';
-import { apolloClientContext } from '../AppContexts';
-import type { ApolloClient, NormalizedCacheObject } from '@apollo/client';
+import { replace } from 'react-router';
+import type { ApolloClient } from '@apollo/client';
 
 function conventionDayUrlPortionFormat(
   siteMode: SiteMode | undefined,
@@ -75,7 +74,7 @@ export async function redirectToFirstDay({
 }
 
 export async function conventionDayLoader(
-  client: ApolloClient<NormalizedCacheObject>,
+  client: ApolloClient,
   { params, request }: { params: { day?: string }; request: Request },
 ) {
   const { data } = await client.query<AppRootQueryData>({ query: AppRootQueryDocument });

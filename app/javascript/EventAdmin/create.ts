@@ -3,7 +3,7 @@ import { CreateEventDocument, CreateFillerEventDocument } from './mutations.gene
 import { EventCategory, SchedulingUi } from '../graphqlTypes.generated';
 import { apolloClientContext } from 'AppContexts';
 import { ActionFunction, RouterContextProvider, redirect } from 'react-router';
-import type { ApolloClient, NormalizedCacheObject } from '@apollo/client';
+import type { ApolloClient } from '@apollo/client';
 
 export type CreateRegularEventOptions = {
   event: Parameters<typeof buildEventInput>[0];
@@ -11,7 +11,7 @@ export type CreateRegularEventOptions = {
 };
 
 export async function createRegularEvent(
-  client: ApolloClient<NormalizedCacheObject>,
+  client: ApolloClient,
   { event, signedImageBlobIds }: CreateRegularEventOptions,
 ) {
   return await client.mutate({
@@ -39,7 +39,7 @@ export type CreateSingleRunEventOptions = {
 };
 
 export async function createSingleRunEvent(
-  client: ApolloClient<NormalizedCacheObject>,
+  client: ApolloClient,
   { event, run, signedImageBlobIds }: CreateSingleRunEventOptions,
 ) {
   return await client.mutate({
@@ -76,7 +76,7 @@ export type CreateEventOptions = {
 };
 
 async function createEvent(
-  client: ApolloClient<NormalizedCacheObject>,
+  client: ApolloClient,
   { event, eventCategory, run, signedImageBlobIds }: CreateEventOptions,
 ) {
   if (eventCategory.scheduling_ui === SchedulingUi.SingleRun) {

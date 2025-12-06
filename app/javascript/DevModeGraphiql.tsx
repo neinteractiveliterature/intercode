@@ -3,7 +3,7 @@ import { GraphiQL } from 'graphiql';
 import { parse } from 'graphql';
 import { Fetcher } from '@graphiql/toolkit';
 
-import { execute, GraphQLRequest } from '@apollo/client';
+import { ApolloLink, execute } from '@apollo/client';
 import { useIntercodeApolloLink } from './useIntercodeApolloClient';
 import mountReactComponents from './mountReactComponents';
 
@@ -24,12 +24,12 @@ function DevModeGraphiql({ authenticityTokens }: DevModeGraphiqlProps): React.JS
   useEffect(() => {
     manager.setTokens(authenticityTokens);
   }, [authenticityTokens, manager]);
-  const link = useIntercodeApolloLink(new URL('/graphql', window.location.href));
+  const link = useIntercodeApolloLink(new URL('/graphql', window.location.href), manager);
   const client = useApolloClient();
 
   const fetcher: Fetcher = useCallback(
     (operation) => {
-      const operationAsGraphQLRequest = operation as unknown as GraphQLRequest;
+      const operationAsGraphQLRequest = operation as unknown as ApolloLink.Request;
 
       operationAsGraphQLRequest.query = parse(operation.query);
       return execute(link, operationAsGraphQLRequest, { client });

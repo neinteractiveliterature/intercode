@@ -101,7 +101,7 @@ function EventAdminEditEvent() {
       validateForm={validateForm}
       updateEvent={() => {
         if (eventCategory) {
-          submit({ event, eventCategory, run } satisfies UpdateEventOptions, {
+          submit({ event, eventCategory, run } satisfies Omit<UpdateEventOptions, 'client'>, {
             method: 'PATCH',
             encType: 'application/json',
             action: `/admin_events/${eventCategory.id}/events/${event.id}`,

@@ -19,6 +19,7 @@ import { useImageAttachmentConfig } from '../../BuiltInFormControls/MarkdownInpu
 import { apolloClientContext } from '../../AppContexts';
 import { StandaloneUpdateEventDocument } from './mutations.generated';
 import { useAsyncFetcher } from 'useAsyncFetcher';
+import { useApolloClient } from '@apollo/client/react';
 
 export type StandaloneEditEventFormProps = {
   initialEvent: WithFormResponse<StandaloneEditEventQueryData['convention']['event']>;
@@ -37,6 +38,7 @@ function StandaloneEditEventForm({
 }: StandaloneEditEventFormProps) {
   const navigate = useNavigate();
   const fetcher = useAsyncFetcher();
+  const client = useApolloClient();
 
   const imageAttachmentConfig = useImageAttachmentConfig(initialEvent.images, (blob) =>
     fetcher.submitAsync({ signed_blob_id: blob.signed_id }, { action: '../attach_image', method: 'PATCH' }),
@@ -50,10 +52,6 @@ function StandaloneEditEventForm({
   });
 
   const updateEvent = useCallback(async () => {
-    // Note: This is inside a React component, not a loader/action
-    // TODO: This still uses the global client and should be refactored separately
-    // to use useApolloClient() or another appropriate hook
-    const { client } = await import('../../useIntercodeApolloClient');
     await client.mutate({
       mutation: StandaloneUpdateEventDocument,
       variables: {
@@ -63,7 +61,7 @@ function StandaloneEditEventForm({
         },
       },
     });
-  }, [event]);
+  }, [event, client]);
 
   return (
     <EditEvent

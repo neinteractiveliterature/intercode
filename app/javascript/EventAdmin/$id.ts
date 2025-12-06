@@ -3,10 +3,11 @@ import { EventCategory, SchedulingUi } from '../graphqlTypes.generated';
 import { apolloClientContext } from 'AppContexts';
 import { CreateOrUpdateRunForEventDocument, UpdateEventDocument } from './mutations.generated';
 import { ActionFunction, redirect, RouterContextProvider } from 'react-router';
+import { ApolloClient } from '@apollo/client';
 
 export type UpdateRegularEventOptions = {
   event: Parameters<typeof buildEventInput>[0] & { id: string };
-  client: any;
+  client: ApolloClient;
 };
 
 export async function updateRegularEvent({ event, client }: UpdateRegularEventOptions) {
@@ -24,7 +25,7 @@ export async function updateRegularEvent({ event, client }: UpdateRegularEventOp
 export type UpdateSingleRunEventOptions = {
   event: Parameters<typeof buildEventInput>[0] & { id: string };
   run: Parameters<typeof buildRunInput>[0] & { id?: string | null };
-  client: any;
+  client: ApolloClient;
 };
 
 export async function updateSingleRunEvent({ event, run, client }: UpdateSingleRunEventOptions) {
@@ -60,7 +61,7 @@ export type UpdateEventOptions = {
   event: Parameters<typeof buildEventInput>[0] & { id: string };
   eventCategory: Pick<EventCategory, 'scheduling_ui' | 'id'>;
   run?: (Parameters<typeof buildRunInput>[0] & { id?: string | null }) | null;
-  client: any;
+  client: ApolloClient;
 };
 
 async function updateEvent({ event, eventCategory, run, client }: UpdateEventOptions) {
