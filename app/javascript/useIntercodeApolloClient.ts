@@ -81,7 +81,7 @@ export function buildAuthHeadersLink(authenticityTokensManager: AuthenticityToke
       credentials: 'same-origin',
       headers: {
         ...prevContext.headers,
-        'X-CSRF-Token': authenticityTokensManager.tokens.graphql,
+        'X-CSRF-Token': authenticityTokensManager.tokens?.graphql,
       },
     };
   });

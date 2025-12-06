@@ -1,9 +1,10 @@
-import { ActionFunction, data } from 'react-router';
+import { ActionFunction, data, RouterContextProvider } from 'react-router';
 import { RunInput } from '../graphqlTypes.generated';
-import { client } from '../useIntercodeApolloClient';
+import { apolloClientContext } from '../AppContexts';
 import { CreateMultipleRunsDocument } from './mutations.generated';
 
-export const action: ActionFunction = async ({ request, params: { eventId } }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ request, params: { eventId }, context }) => {
+  const client = context.get(apolloClientContext);
   try {
     const requestJson = await request.json();
     const timespanStarts: string[] = requestJson.starts_at;

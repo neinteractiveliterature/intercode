@@ -1,6 +1,6 @@
 import { useContext, useRef, useMemo } from 'react';
-import { ActionFunction, redirect } from 'react-router';
-import { client } from 'useIntercodeApolloClient';
+import { ActionFunction, redirect, RouterContextProvider } from 'react-router';
+import { apolloClientContext } from 'AppContexts';
 import invariant from 'tiny-invariant';
 import { FormSection } from 'graphqlTypes.generated';
 import { DeleteFormSectionDocument, UpdateFormSectionDocument } from 'FormAdmin/mutations.generated';
@@ -10,7 +10,8 @@ import FormSectionEditorContent from './FormSectionEditorContent';
 import FormSectionEditorAddItemBar from './FormSectionEditorAddItemBar';
 import styles from 'styles/form_editor.module.scss';
 
-export const action: ActionFunction = async ({ request, params: { sectionId } }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ request, params: { sectionId }, context }) => {
+  const client = context.get(apolloClientContext);
   try {
     invariant(sectionId != null);
     if (request.method === 'PATCH') {

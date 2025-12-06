@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ActionFunction, Form, redirect, useActionData, useNavigation } from 'react-router';
+import { ActionFunction, Form, redirect, useActionData, useNavigation, RouterContextProvider } from 'react-router';
 
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -8,10 +8,11 @@ import usePageTitle from '../../usePageTitle';
 
 import 'graphiql/graphiql.css';
 import { CreateCmsGraphqlQueryDocument } from './mutations.generated';
-import { client } from '../../useIntercodeApolloClient';
+import { apolloClientContext } from '../../AppContexts';
 import { buildCmsGraphqlQueryInputFromFormData } from './buildCmsGraphqlQueryInput';
 
-export const action: ActionFunction = async ({ request }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ request, context }) => {
+  const client = context.get(apolloClientContext);
   const formData = await request.formData();
 
   try {

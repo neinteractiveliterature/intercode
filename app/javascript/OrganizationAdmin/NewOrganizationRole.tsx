@@ -6,6 +6,7 @@ import {
   useNavigation,
   useRouteLoaderData,
   useSubmit,
+  RouterContextProvider,
 } from 'react-router';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -16,12 +17,13 @@ import { NamedRoute } from '../AppRouter';
 import { SingleOrganizationLoaderResult } from './loaders';
 import invariant from 'tiny-invariant';
 import { CreateOrganizationRoleDocument, CreateOrganizationRoleMutationVariables } from './mutations.generated';
-import { client } from 'useIntercodeApolloClient';
+import { apolloClientContext } from 'AppContexts';
 import { Organization } from 'graphqlTypes.generated';
 
 type ActionRequest = Omit<CreateOrganizationRoleMutationVariables, 'organizationId'>;
 
-export const action: ActionFunction = async ({ request, params: { id } }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ request, params: { id }, context }) => {
+  const client = context.get(apolloClientContext);
   try {
     if (request.method === 'POST') {
       invariant(id != null);

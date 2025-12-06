@@ -12,8 +12,8 @@ import {
   RunSignupSummaryQueryVariables,
 } from './queries.generated';
 import humanize from '../../humanize';
-import { LoaderFunction, useLoaderData } from 'react-router';
-import { client } from '../../useIntercodeApolloClient';
+import { LoaderFunction, useLoaderData, RouterContextProvider } from 'react-router';
+import { apolloClientContext } from '../../AppContexts';
 
 type EventType = RunSignupSummaryQueryData['convention']['event'];
 type SignupType = EventType['run']['signups_paginated']['entries'][0];
@@ -56,7 +56,8 @@ export type RunSignupSummaryProps = {
   eventPath: string;
 };
 
-export const loader: LoaderFunction = async ({ params: { eventId, runId } }) => {
+export const loader: LoaderFunction<RouterContextProvider> = async ({ params: { eventId, runId }, context }) => {
+  const client = context.get(apolloClientContext);
   const { data } = await client.query<RunSignupSummaryQueryData, RunSignupSummaryQueryVariables>({
     query: RunSignupSummaryQueryDocument,
     variables: { eventId: eventId ?? '', runId: runId ?? '' },

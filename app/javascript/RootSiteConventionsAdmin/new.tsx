@@ -1,10 +1,11 @@
-import { ActionFunction, LoaderFunction, redirect, useLoaderData } from 'react-router';
+import { ActionFunction, LoaderFunction, redirect, useLoaderData, RouterContextProvider } from 'react-router';
 import NewConventionModal from './NewConventionModal';
-import { client } from 'useIntercodeApolloClient';
+import { apolloClientContext } from 'AppContexts';
 import { NewConventionModalQueryData, NewConventionModalQueryDocument } from './queries.generated';
 import { CreateConventionDocument } from './mutations.generated';
 
-export const action: ActionFunction = async ({ request }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ request, context }) => {
+  const client = context.get(apolloClientContext);
   try {
     const variables = await request.json();
     const { data } = await client.mutate({
@@ -18,7 +19,8 @@ export const action: ActionFunction = async ({ request }) => {
   }
 };
 
-export const loader: LoaderFunction = async () => {
+export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+  const client = context.get(apolloClientContext);
   const { data } = await client.query({ query: NewConventionModalQueryDocument });
   return data;
 };

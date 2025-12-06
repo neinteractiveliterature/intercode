@@ -22,8 +22,8 @@ import EventListFilterableFormItemDropdown from './EventCatalog/EventList/EventL
 import useReactRouterReactTable from '../Tables/useReactRouterReactTable';
 import { buildFieldFilterCodecs, FilterCodecs } from '../Tables/FilterUtils';
 import { reactTableFiltersToTableResultsFilters } from '../Tables/TableUtils';
-import { LoaderFunction, useLoaderData } from 'react-router';
-import { client } from '../useIntercodeApolloClient';
+import { LoaderFunction, useLoaderData, RouterContextProvider } from 'react-router';
+import { apolloClientContext } from '../AppContexts';
 import { conventionDayLoader, ConventionDayLoaderResult } from './conventionDayUrls';
 import styles from 'styles/schedule_grid.module.scss';
 
@@ -97,9 +97,10 @@ function ScheduleViewDropdown({ viewSelected, scheduleView, configs }: ScheduleV
 
 type LoaderResult = ConventionDayLoaderResult & { data: ScheduleGridConventionDataQueryData };
 
-export const loader: LoaderFunction = async ({ params, request }) => {
+export const loader: LoaderFunction<RouterContextProvider> = async ({ params, request, context }) => {
+  const client = context.get(apolloClientContext);
   const [conventionDayLoaderResult, { data }] = await Promise.all([
-    conventionDayLoader({ params, request }),
+    conventionDayLoader(client, { params, request }),
     await client.query<ScheduleGridConventionDataQueryData>({
       query: ScheduleGridConventionDataQueryDocument,
     }),

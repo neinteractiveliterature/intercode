@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ActionFunction, Link, LoaderFunction, SubmitTarget, useFetcher, useLoaderData, useMatch } from 'react-router';
+import { ActionFunction, Link, LoaderFunction, SubmitTarget, useFetcher, useLoaderData, useMatch, RouterContextProvider } from 'react-router';
 import md5 from 'md5';
 import { useTranslation, Trans } from 'react-i18next';
 import { BooleanInput, LoadingIndicator } from '@neinteractiveliterature/litform';
@@ -16,11 +16,12 @@ import { MyProfileQueryData, MyProfileQueryDocument } from './queries.generated'
 import { CommonFormFieldsFragment } from '../Models/commonFormFragments.generated';
 import { WithFormResponse } from '../Models/deserializeFormResponse';
 import { parseResponseErrors } from '../parseResponseErrors';
-import { client } from '../useIntercodeApolloClient';
+import { apolloClientContext } from '../AppContexts';
 import { UpdateUserConProfileDocument } from '../UserConProfiles/mutations.generated';
 import AuthenticityTokensManager from 'AuthenticityTokensContext';
 
-export const action: ActionFunction = async ({ request }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ request, context }) => {
+  const client = context.get(apolloClientContext);
   const profile = (await request.json()) as LoaderResult['initialUserConProfile'];
 
   try {
@@ -52,7 +53,8 @@ type LoaderResult = {
   form: CommonFormFieldsFragment;
 };
 
-export const loader: LoaderFunction = async () => {
+export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+  const client = context.get(apolloClientContext);
   const { data } = await client.query<MyProfileQueryData>({ query: MyProfileQueryDocument });
   if (!data) {
     return new Response(null, { status: 404 });

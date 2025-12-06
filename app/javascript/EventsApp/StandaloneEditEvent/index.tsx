@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react';
-import { LoaderFunction, useLoaderData, useNavigate } from 'react-router';
+import { LoaderFunction, useLoaderData, useNavigate, RouterContextProvider } from 'react-router';
 
 import useEventForm, { EventForm } from '../../EventAdmin/useEventForm';
 import EditEvent from '../../BuiltInForms/EditEvent';
@@ -16,7 +16,7 @@ import FourOhFourPage from '../../FourOhFourPage';
 import { AuthorizationError } from '../../Authentication/useAuthorizationRequired';
 import buildEventUrl from '../buildEventUrl';
 import { useImageAttachmentConfig } from '../../BuiltInFormControls/MarkdownInput';
-import { client } from '../../useIntercodeApolloClient';
+import { apolloClientContext } from '../../AppContexts';
 import { StandaloneUpdateEventDocument } from './mutations.generated';
 import { useAsyncFetcher } from 'useAsyncFetcher';
 
@@ -50,6 +50,10 @@ function StandaloneEditEventForm({
   });
 
   const updateEvent = useCallback(async () => {
+    // Note: This is inside a React component, not a loader/action
+    // TODO: This still uses the global client and should be refactored separately
+    // to use useApolloClient() or another appropriate hook
+    const { client } = await import('../../useIntercodeApolloClient');
     await client.mutate({
       mutation: StandaloneUpdateEventDocument,
       variables: {
@@ -84,7 +88,8 @@ function StandaloneEditEventForm({
   );
 }
 
-export const loader: LoaderFunction = async ({ params: { eventId } }) => {
+export const loader: LoaderFunction<RouterContextProvider> = async ({ params: { eventId }, context }) => {
+  const client = context.get(apolloClientContext);
   const { data } = await client.query<StandaloneEditEventQueryData, StandaloneEditEventQueryVariables>({
     query: StandaloneEditEventQueryDocument,
     variables: { eventId: eventId ?? '' },

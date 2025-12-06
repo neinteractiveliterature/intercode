@@ -13,11 +13,12 @@ import { EventPageQueryData, EventPageQueryDocument, EventPageQueryVariables } f
 import useSectionizedFormItems from './useSectionizedFormItems';
 import FormItemDisplay from '../../FormPresenter/ItemDisplays/FormItemDisplay';
 import { valueIsPresent } from './valueIsPresent';
-import { LoaderFunction, useLoaderData } from 'react-router';
+import { LoaderFunction, useLoaderData, RouterContextProvider } from 'react-router';
 import buildEventUrl from '../buildEventUrl';
-import { client } from '../../useIntercodeApolloClient';
+import { apolloClientContext } from '../../AppContexts';
 
-export const loader: LoaderFunction = async ({ params: { eventId } }) => {
+export const loader: LoaderFunction<RouterContextProvider> = async ({ params: { eventId }, context }) => {
+  const client = context.get(apolloClientContext);
   const { data } = await client.query<EventPageQueryData, EventPageQueryVariables>({
     query: EventPageQueryDocument,
     variables: { eventId: eventId ?? '' },

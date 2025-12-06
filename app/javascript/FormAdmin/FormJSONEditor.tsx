@@ -7,6 +7,7 @@ import {
   useActionData,
   useLoaderData,
   useNavigation,
+  RouterContextProvider,
 } from 'react-router';
 
 import {
@@ -22,7 +23,7 @@ import { json as jsonExtension } from '@codemirror/lang-json';
 import usePageTitle from '../usePageTitle';
 import { FormAdminQueryData, FormAdminQueryDocument } from './queries.generated';
 import { FormType } from '../graphqlTypes.generated';
-import { client } from '../useIntercodeApolloClient';
+import { apolloClientContext } from '../AppContexts';
 import { CreateFormWithJsonDocument, UpdateFormWithJsonDocument } from './mutations.generated';
 import invariant from 'tiny-invariant';
 
@@ -35,7 +36,8 @@ function parseFormData(formData: FormData) {
   return formJSON;
 }
 
-export const action: ActionFunction = async ({ request, params }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ request, params, context }) => {
+  const client = context.get(apolloClientContext);
   try {
     if (request.method === 'POST') {
       const formData = await request.formData();
@@ -96,7 +98,8 @@ type LoaderResult = {
   data: FormAdminQueryData;
 };
 
-export const loader: LoaderFunction = async ({ params: { id } }) => {
+export const loader: LoaderFunction<RouterContextProvider> = async ({ params: { id }, context }) => {
+  const client = context.get(apolloClientContext);
   const { data } = await client.query<FormAdminQueryData>({ query: FormAdminQueryDocument });
   if (!data) {
     return new Response(null, { status: 404 });

@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import * as React from 'react';
-import { ActionFunction, redirect, useActionData, useNavigation, useSubmit } from 'react-router';
+import { ActionFunction, redirect, useActionData, useNavigation, useSubmit, RouterContextProvider } from 'react-router';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { buildPermissionInput } from '../../Permissions/PermissionUtils';
@@ -11,9 +11,10 @@ import { CmsContentGroupsAdminQueryData } from './queries.generated';
 import { CmsContentTypeIndicator, CreateCmsContentGroupInput } from '../../graphqlTypes.generated';
 import { useCmsContentGroupsAdminLoader } from './loaders';
 import { CreateContentGroupDocument } from './mutations.generated';
-import { client } from '../../useIntercodeApolloClient';
+import { apolloClientContext } from '../../AppContexts';
 
-export const action: ActionFunction = async ({ request }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ request, context }) => {
+  const client = context.get(apolloClientContext);
   const variables = (await request.json()) as CreateCmsContentGroupInput;
   try {
     await client.mutate({

@@ -14,16 +14,18 @@ import {
   useNavigate,
   useNavigation,
   useParams,
+  RouterContextProvider,
 } from 'react-router';
 import { singleTeamMemberLoader, SingleTeamMemberLoaderResult } from './loader';
-import { client } from '../../useIntercodeApolloClient';
+import { apolloClientContext } from '../../AppContexts';
 import { ProvideEventTicketDocument } from './mutations.generated';
 import { TeamMembersQueryDocument } from './queries.generated';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 export const loader = singleTeamMemberLoader;
 
-export const action: ActionFunction = async ({ params: { eventId }, request }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ params: { eventId }, request, context }) => {
+  const client = context.get(apolloClientContext);
   try {
     const formData = await request.formData();
     await client.mutate({

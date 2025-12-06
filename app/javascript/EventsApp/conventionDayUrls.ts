@@ -7,12 +7,13 @@ import { appDateTimeFormat } from '../TimeUtils';
 import { useTranslation } from 'react-i18next';
 import { useCallback, useContext } from 'react';
 import AppRootContext from '../AppRootContext';
-import { client } from '../useIntercodeApolloClient';
 import { AppRootQueryData, AppRootQueryDocument } from '../appRootQueries.generated';
 import { buildAppRootContextValue } from '../AppRoot';
 import getI18n from '../setupI18Next';
 import { getConventionDayTimespans } from '../TimespanUtils';
-import { replace } from 'react-router';
+import { replace, RouterContextProvider } from 'react-router';
+import { apolloClientContext } from '../AppContexts';
+import type { ApolloClient, NormalizedCacheObject } from '@apollo/client';
 
 function conventionDayUrlPortionFormat(
   siteMode: SiteMode | undefined,
@@ -73,7 +74,10 @@ export async function redirectToFirstDay({
   }
 }
 
-export async function conventionDayLoader({ params, request }: { params: { day?: string }; request: Request }) {
+export async function conventionDayLoader(
+  client: ApolloClient<NormalizedCacheObject>,
+  { params, request }: { params: { day?: string }; request: Request },
+) {
   const { data } = await client.query<AppRootQueryData>({ query: AppRootQueryDocument });
   const { conventionTimespan, timezoneName, siteMode } = buildAppRootContextValue(data, { current: null });
   const { t } = await getI18n();
