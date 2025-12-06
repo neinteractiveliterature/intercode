@@ -1,4 +1,4 @@
-import { ActionFunction, LoaderFunction, redirect, useFetcher, useLoaderData } from 'react-router';
+import { ActionFunction, LoaderFunction, redirect, useFetcher, useLoaderData, RouterContextProvider } from 'react-router';
 import { useTabs, TabList, TabBody, notEmpty, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
@@ -10,7 +10,7 @@ import { getPermissionNamesForModelType, buildPermissionInput } from '../Permiss
 import { PermissionedModelTypeIndicator } from '../graphqlTypes.generated';
 import { StaffPositionsQueryData, StaffPositionsQueryDocument } from './queries.generated';
 import { PermissionWithId } from '../Permissions/usePermissionsChangeSet';
-import { client } from '../useIntercodeApolloClient';
+import { apolloClientContext } from 'AppContexts';
 import {
   UpdateStaffPositionPermissionsDocument,
   UpdateStaffPositionPermissionsMutationVariables,
@@ -18,7 +18,8 @@ import {
 
 type ActionInput = Omit<UpdateStaffPositionPermissionsMutationVariables, 'staffPositionId'>;
 
-export const action: ActionFunction = async ({ params: { id }, request }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ context, params: { id }, request }) => {
+  const client = context.get(apolloClientContext);
   try {
     const { grantPermissions, revokePermissions } = (await request.json()) as ActionInput;
     await client.mutate({
@@ -40,7 +41,8 @@ type LoaderResult = {
   staffPosition: StaffPositionsQueryData['convention']['staff_positions'][number];
 };
 
-export const loader: LoaderFunction = async ({ params: { id } }) => {
+export const loader: LoaderFunction<RouterContextProvider> = async ({ context, params: { id } }) => {
+  const client = context.get(apolloClientContext);
   const { data } = await client.query<StaffPositionsQueryData>({ query: StaffPositionsQueryDocument });
   if (!data) {
     return new Response(null, { status: 404 });

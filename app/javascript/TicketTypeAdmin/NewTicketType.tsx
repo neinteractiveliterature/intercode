@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { ActionFunction, replace, useFetcher, useLoaderData } from 'react-router';
+import { ActionFunction, replace, useFetcher, useLoaderData, RouterContextProvider } from 'react-router';
 
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -11,7 +11,7 @@ import AppRootContext from '../AppRootContext';
 import { TicketTypeLoaderResult } from './loaders';
 import { useTranslation } from 'react-i18next';
 import { Convention, TicketTypeInput } from 'graphqlTypes.generated';
-import { client } from 'useIntercodeApolloClient';
+import { apolloClientContext } from 'AppContexts';
 import { CreateTicketTypeDocument } from './mutations.generated';
 
 type ActionInput = {
@@ -20,7 +20,8 @@ type ActionInput = {
   eventId: string | null;
 };
 
-export const action: ActionFunction = async ({ request }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
+  const client = context.get(apolloClientContext);
   try {
     const { ticketType, eventId, conventionId } = (await request.json()) as ActionInput;
     await client.mutate({

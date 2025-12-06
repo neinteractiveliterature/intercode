@@ -1,10 +1,10 @@
-import { ActionFunction, data, Link, LoaderFunction, Outlet, useFetcher, useLoaderData } from 'react-router';
+import { ActionFunction, data, Link, LoaderFunction, Outlet, useFetcher, useLoaderData, RouterContextProvider } from 'react-router';
 import { ErrorDisplay, useConfirm } from '@neinteractiveliterature/litform';
 
 import ConventionFormHeader from '../ConventionAdmin/ConventionFormHeader';
 import usePageTitle from '../usePageTitle';
 import humanize from '../humanize';
-import { client } from '../useIntercodeApolloClient';
+import { apolloClientContext } from 'AppContexts';
 import {
   ConventionDisplayQueryData,
   ConventionDisplayQueryDocument,
@@ -12,7 +12,8 @@ import {
 } from './queries.generated';
 import { SetConventionCanceledDocument } from './mutations.generated';
 
-export const action: ActionFunction = async ({ params: { id }, request }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ context, params: { id }, request }) => {
+  const client = context.get(apolloClientContext);
   try {
     const formData = await request.formData();
     const canceled = formData.get('canceled')?.toString() === 'true';
@@ -26,7 +27,8 @@ export const action: ActionFunction = async ({ params: { id }, request }) => {
   }
 };
 
-export const loader: LoaderFunction = async ({ params: { id } }) => {
+export const loader: LoaderFunction<RouterContextProvider> = async ({ context, params: { id } }) => {
+  const client = context.get(apolloClientContext);
   const { data } = await client.query<ConventionDisplayQueryData, ConventionDisplayQueryVariables>({
     query: ConventionDisplayQueryDocument,
     variables: { id: id ?? '' },

@@ -15,10 +15,10 @@ import { AdminOrdersQueryData, AdminOrdersQueryDocument } from './queries.genera
 import ReactTableWithTheWorks from 'Tables/ReactTableWithTheWorks';
 import { useAppDateTimeFormat } from 'TimeUtils';
 import { useTranslation } from 'react-i18next';
-import { ActionFunction, data, Outlet, useNavigate } from 'react-router';
+import { ActionFunction, data, Outlet, useNavigate, RouterContextProvider } from 'react-router';
 import { Link } from 'react-router';
 import { CreateOrderDocument, CreateOrderMutationVariables } from './mutations.generated';
-import { client } from 'useIntercodeApolloClient';
+import { apolloClientContext } from 'AppContexts';
 import { CreateCouponApplicationDocument } from 'Store/mutations.generated';
 
 export type CreateOrderActionInput = {
@@ -26,7 +26,8 @@ export type CreateOrderActionInput = {
   couponCodes: string[];
 };
 
-export const action: ActionFunction = async ({ request }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
+  const client = context.get(apolloClientContext);
   try {
     const { createOrderVariables, couponCodes } = (await request.json()) as CreateOrderActionInput;
 

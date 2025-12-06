@@ -1,14 +1,15 @@
 import { buildEventInput, buildRunInput } from './InputBuilders';
 import { EventCategory, SchedulingUi } from '../graphqlTypes.generated';
-import { client } from '../useIntercodeApolloClient';
+import { apolloClientContext } from 'AppContexts';
 import { CreateOrUpdateRunForEventDocument, UpdateEventDocument } from './mutations.generated';
-import { ActionFunction, redirect } from 'react-router';
+import { ActionFunction, redirect, RouterContextProvider } from 'react-router';
 
 export type UpdateRegularEventOptions = {
   event: Parameters<typeof buildEventInput>[0] & { id: string };
+  client: any;
 };
 
-export async function updateRegularEvent({ event }: UpdateRegularEventOptions) {
+export async function updateRegularEvent({ event, client }: UpdateRegularEventOptions) {
   await client.mutate({
     mutation: UpdateEventDocument,
     variables: {
@@ -23,9 +24,10 @@ export async function updateRegularEvent({ event }: UpdateRegularEventOptions) {
 export type UpdateSingleRunEventOptions = {
   event: Parameters<typeof buildEventInput>[0] & { id: string };
   run: Parameters<typeof buildRunInput>[0] & { id?: string | null };
+  client: any;
 };
 
-export async function updateSingleRunEvent({ event, run }: UpdateSingleRunEventOptions) {
+export async function updateSingleRunEvent({ event, run, client }: UpdateSingleRunEventOptions) {
   await client.mutate({
     mutation: UpdateEventDocument,
     variables: { input: { ...buildEventInput(event), id: event.id } },
@@ -58,23 +60,25 @@ export type UpdateEventOptions = {
   event: Parameters<typeof buildEventInput>[0] & { id: string };
   eventCategory: Pick<EventCategory, 'scheduling_ui' | 'id'>;
   run?: (Parameters<typeof buildRunInput>[0] & { id?: string | null }) | null;
+  client: any;
 };
 
-async function updateEvent({ event, eventCategory, run }: UpdateEventOptions) {
+async function updateEvent({ event, eventCategory, run, client }: UpdateEventOptions) {
   if (eventCategory.scheduling_ui === SchedulingUi.SingleRun) {
     if (!run) {
       throw new Error('When updating a single-run event, the run must be provided');
     }
-    return await updateSingleRunEvent({ event, run });
+    return await updateSingleRunEvent({ event, run, client });
   }
 
-  return await updateRegularEvent({ event });
+  return await updateRegularEvent({ event, client });
 }
 
-export const action: ActionFunction = async ({ request }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
+  const client = context.get(apolloClientContext);
   try {
     const options = (await request.json()) as UpdateEventOptions;
-    await updateEvent(options);
+    await updateEvent({ ...options, client });
     return redirect(`/admin_events/${options.eventCategory.id}`);
   } catch (error) {
     return error;

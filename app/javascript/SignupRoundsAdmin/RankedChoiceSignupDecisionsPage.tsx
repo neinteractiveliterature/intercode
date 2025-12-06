@@ -5,7 +5,7 @@ import {
   SignupRoundsAdminQueryDocument,
 } from './queries.generated';
 import { useContext, useMemo } from 'react';
-import { LoaderFunction, useLoaderData, useParams } from 'react-router';
+import { LoaderFunction, useLoaderData, useParams, RouterContextProvider } from 'react-router';
 import { describeSignupRound } from './describeSignupRound';
 import { parseSignupRounds } from '../SignupRoundUtils';
 import { useTranslation } from 'react-i18next';
@@ -26,7 +26,7 @@ import ChoiceSetFilter from '../Tables/ChoiceSetFilter';
 import { TFunction } from 'i18next';
 import assertNever from 'assert-never';
 import { FilterCodecs, buildFieldFilterCodecs } from '../Tables/FilterUtils';
-import { client } from '../useIntercodeApolloClient';
+import { apolloClientContext } from 'AppContexts';
 
 export function describeDecision(decision: RankedChoiceDecisionValue, t: TFunction): string {
   if (decision === RankedChoiceDecisionValue.Signup) {
@@ -250,7 +250,8 @@ function RankedChoiceSignupDecisionsTable({ signupRoundId }: RankedChoiceSignupD
   );
 }
 
-export const loader: LoaderFunction = async () => {
+export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+  const client = context.get(apolloClientContext);
   const { data } = await client.query<SignupRoundsAdminQueryData>({ query: SignupRoundsAdminQueryDocument });
   return data;
 };

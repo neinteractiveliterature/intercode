@@ -1,18 +1,19 @@
 import { useState } from 'react';
 
-import { ActionFunction, Form, redirect, useActionData, useNavigation } from 'react-router';
+import { ActionFunction, Form, redirect, useActionData, useNavigation, RouterContextProvider } from 'react-router';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import EventCategoryForm, { EventCategoryForForm } from './EventCategoryForm';
 import usePageTitle from '../usePageTitle';
 import { EventCategoryFieldsFragmentDoc } from './queries.generated';
 import { useEventCategoryAdminLoader } from './loaders';
-import { client } from '../useIntercodeApolloClient';
+import { apolloClientContext } from 'AppContexts';
 import { CreateEventCategoryDocument } from './mutations.generated';
 import { buildEventCategoryFromFormData } from './buildEventCategoryInput';
 import { Convention } from '../graphqlTypes.generated';
 
-export const action: ActionFunction = async ({ request }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
+  const client = context.get(apolloClientContext);
   try {
     const formData = await request.formData();
     await client.mutate({

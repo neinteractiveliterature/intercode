@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { ActionFunction, LoaderFunction, redirect, replace, useFetcher, useLoaderData } from 'react-router';
+import { ActionFunction, LoaderFunction, redirect, replace, useFetcher, useLoaderData, RouterContextProvider } from 'react-router';
 
 import { useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -13,11 +13,12 @@ import {
   UpdateUserActivityAlertDocument,
   UpdateUserActivityAlertMutationVariables,
 } from './mutations.generated';
-import { client } from '../useIntercodeApolloClient';
+import { apolloClientContext } from 'AppContexts';
 import invariant from 'tiny-invariant';
 import { NotificationEventKey, UserActivityAlert } from 'graphqlTypes.generated';
 
-export const action: ActionFunction = async ({ request, params: { id } }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {
+  const client = context.get(apolloClientContext);
   invariant(id != null);
   try {
     if (request.method === 'DELETE') {
@@ -53,7 +54,8 @@ type LoaderResult = {
   userActivityAlertEvent: UserActivityAlertsAdminQueryData['notificationEvents'][number];
 };
 
-export const loader: LoaderFunction = async ({ params: { id } }) => {
+export const loader: LoaderFunction<RouterContextProvider> = async ({ context, params: { id } }) => {
+  const client = context.get(apolloClientContext);
   const { data } = await client.query({ query: UserActivityAlertsAdminQueryDocument });
 
   if (!data) {

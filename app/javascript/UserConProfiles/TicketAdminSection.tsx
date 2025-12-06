@@ -1,6 +1,6 @@
 import { useContext } from 'react';
 import { Link, useRevalidator } from 'react-router';
-import { useSuspenseQuery } from "@apollo/client/react";
+import { useApolloClient, useSuspenseQuery } from '@apollo/client/react';
 import { DateTime } from 'luxon';
 import { useModal, useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -18,7 +18,6 @@ import {
 } from './queries.generated';
 import { useAppDateTimeFormat } from '../TimeUtils';
 import { useTranslation } from 'react-i18next';
-import { client } from 'useIntercodeApolloClient';
 import { DeleteTicketDocument } from './mutations.generated';
 
 type UserConProfileData = UserConProfileAdminQueryData['convention']['user_con_profile'];
@@ -60,6 +59,7 @@ function TicketAdminControls({ convention, userConProfile }: TicketAdminControls
   const confirm = useConfirm();
   const convertModal = useModal();
   const revalidator = useRevalidator();
+  const client = useApolloClient();
 
   const deleteTicket = async (refund: boolean) => {
     if (!userConProfile.ticket) {

@@ -2,12 +2,12 @@ import { BootstrapFormCheckbox, ErrorDisplay } from '@neinteractiveliterature/li
 import { useModal } from '@neinteractiveliterature/litform';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import Modal from 'react-bootstrap4-modal';
-import { Link, LoaderFunction, useFetcher, useLoaderData } from 'react-router';
+import { Link, LoaderFunction, useFetcher, useLoaderData, RouterContextProvider } from 'react-router';
 
 import AppRootContext from '../AppRootContext';
 
 import { useTranslation } from 'react-i18next';
-import { client } from 'useIntercodeApolloClient';
+import { apolloClientContext } from 'AppContexts';
 import { NotificationsConfigQueryData, NotificationsConfigQueryDocument } from './queries.generated';
 import sortBy from 'lodash/sortBy';
 
@@ -76,7 +76,8 @@ function NotificationPreviewModal({ visible, close, eventConfig }: NotificationP
   );
 }
 
-export const loader: LoaderFunction = async () => {
+export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+  const client = context.get(apolloClientContext);
   const { data } = await client.query({ query: NotificationsConfigQueryDocument });
   return data as NotificationsConfigQueryData;
 };

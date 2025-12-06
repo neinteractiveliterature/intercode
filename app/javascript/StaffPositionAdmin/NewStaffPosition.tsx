@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ActionFunction, redirect, useFetcher } from 'react-router';
+import { ActionFunction, redirect, useFetcher, RouterContextProvider } from 'react-router';
 
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -7,11 +7,12 @@ import StaffPositionForm, { EditingStaffPosition } from './StaffPositionForm';
 import usePageTitle from '../usePageTitle';
 import buildStaffPositionInput from './buildStaffPositionInput';
 import { StaffPositionsQueryDocument } from './queries.generated';
-import { client } from '../useIntercodeApolloClient';
+import { apolloClientContext } from 'AppContexts';
 import { StaffPositionInput } from 'graphqlTypes.generated';
 import { CreateStaffPositionDocument } from './mutations.generated';
 
-export const action: ActionFunction = async ({ request }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
+  const client = context.get(apolloClientContext);
   try {
     if (request.method === 'POST') {
       const staffPosition = (await request.json()) as StaffPositionInput;

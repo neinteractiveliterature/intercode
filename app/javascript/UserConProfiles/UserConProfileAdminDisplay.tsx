@@ -1,5 +1,13 @@
 import { Suspense, useMemo, useState } from 'react';
-import { ActionFunction, Link, replace, useFetcher, useParams, useRouteLoaderData } from 'react-router';
+import {
+  ActionFunction,
+  Link,
+  replace,
+  RouterContextProvider,
+  useFetcher,
+  useParams,
+  useRouteLoaderData,
+} from 'react-router';
 import {
   useConfirm,
   useModal,
@@ -22,12 +30,13 @@ import Modal from 'react-bootstrap4-modal';
 import useAsyncFunction from '../useAsyncFunction';
 import { Trans, useTranslation } from 'react-i18next';
 import { NamedRoute } from '../AppRouter';
-import { client } from 'useIntercodeApolloClient';
 import { DeleteUserConProfileDocument } from './mutations.generated';
 import invariant from 'tiny-invariant';
 import { UserConProfile } from 'graphqlTypes.generated';
+import { apolloClientContext } from 'AppContexts';
 
-export const action: ActionFunction = async ({ request, params: { id } }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {
+  const client = context.get(apolloClientContext);
   invariant(id != null);
   try {
     if (request.method === 'DELETE') {
