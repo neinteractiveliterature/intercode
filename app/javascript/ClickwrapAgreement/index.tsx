@@ -15,17 +15,17 @@ import { ErrorDisplay } from '@neinteractiveliterature/litform';
 import parseCmsContent from '../parseCmsContent';
 import useLoginRequired from '../Authentication/useLoginRequired';
 import { ClickwrapAgreementQueryData, ClickwrapAgreementQueryDocument } from './queries.generated';
-import AuthenticityTokensManager from '../AuthenticityTokensContext';
-import { apolloClientContext } from '../AppContexts';
+import { apolloClientContext, authenticityTokensManagerContext } from '../AppContexts';
 import { AcceptClickwrapAgreementDocument } from './mutations.generated';
 
 export const action: ActionFunction<RouterContextProvider> = async ({ context }) => {
   const client = context.get(apolloClientContext);
+  const manager = context.get(authenticityTokensManagerContext);
   try {
     await client.mutate({ mutation: AcceptClickwrapAgreementDocument });
     return redirect('/my_profile/setup');
   } catch (err) {
-    await AuthenticityTokensManager.instance.refresh();
+    await manager.refresh();
     await client.resetStore();
     return err;
   }

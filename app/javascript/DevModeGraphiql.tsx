@@ -1,4 +1,4 @@
-import React, { useCallback } from 'react';
+import React, { useCallback, useContext, useEffect } from 'react';
 import { GraphiQL } from 'graphiql';
 import { parse } from 'graphql';
 import { Fetcher } from '@graphiql/toolkit';
@@ -9,7 +9,7 @@ import mountReactComponents from './mountReactComponents';
 
 import 'graphiql/graphiql.css';
 import './styles/dev-mode-graphiql.scss';
-import AuthenticityTokensManager from './AuthenticityTokensContext';
+import { AuthenticityTokensContext } from './AuthenticityTokensContext';
 import { useApolloClient } from '@apollo/client/react';
 
 export type DevModeGraphiqlProps = {
@@ -19,9 +19,11 @@ export type DevModeGraphiqlProps = {
 };
 
 function DevModeGraphiql({ authenticityTokens }: DevModeGraphiqlProps): React.JSX.Element {
-  useCallback(() => {
-    AuthenticityTokensManager.instance.setTokens(authenticityTokens);
-  }, [authenticityTokens]);
+  const manager = useContext(AuthenticityTokensContext);
+
+  useEffect(() => {
+    manager.setTokens(authenticityTokens);
+  }, [authenticityTokens, manager]);
   const link = useIntercodeApolloLink(new URL('/graphql', window.location.href));
   const client = useApolloClient();
 

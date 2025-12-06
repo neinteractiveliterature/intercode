@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useContext } from 'react';
 import { ActionFunction, Link, LoaderFunction, SubmitTarget, useFetcher, useLoaderData, useMatch, RouterContextProvider } from 'react-router';
 import md5 from 'md5';
 import { useTranslation, Trans } from 'react-i18next';
@@ -18,7 +18,7 @@ import { WithFormResponse } from '../Models/deserializeFormResponse';
 import { parseResponseErrors } from '../parseResponseErrors';
 import { apolloClientContext } from '../AppContexts';
 import { UpdateUserConProfileDocument } from '../UserConProfiles/mutations.generated';
-import AuthenticityTokensManager from 'AuthenticityTokensContext';
+import { AuthenticityTokensContext } from 'AuthenticityTokensContext';
 
 export const action: ActionFunction<RouterContextProvider> = async ({ request, context }) => {
   const client = context.get(apolloClientContext);
@@ -79,6 +79,7 @@ function MyProfileForm() {
   const fetcher = useFetcher();
   const responseErrors = fetcher.data;
   const mutationInProgress = fetcher.state !== 'idle';
+  const manager = useContext(AuthenticityTokensContext);
 
   usePageTitle(initialSetup ? t('myProfile.formTitle.initial') : t('myProfile.formTitle.subsequent'));
 
@@ -86,7 +87,7 @@ function MyProfileForm() {
   const [, responseValuesChanged] = useFormResponse(userConProfile, setUserConProfile);
 
   const updateUserConProfile = async (profile: typeof userConProfile, retries: number = 3) => {
-    if (AuthenticityTokensManager.instance.tokens.graphql) {
+    if (manager.tokens?.graphql) {
       fetcher.submit(profile as SubmitTarget, { method: 'PATCH', encType: 'application/json' });
     } else if (retries > 0) {
       window.setTimeout(() => updateUserConProfile(profile, retries - 1), 100);

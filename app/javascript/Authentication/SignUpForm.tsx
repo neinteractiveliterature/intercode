@@ -12,7 +12,7 @@ import UserFormFields, { UserFormState } from './UserFormFields';
 import PasswordConfirmationInput from './PasswordConfirmationInput';
 import useAfterSessionChange from './useAfterSessionChange';
 import humanize from '../humanize';
-import AuthenticityTokensManager from '../AuthenticityTokensContext';
+import { AuthenticityTokensContext } from '../AuthenticityTokensContext';
 import PasswordInputWithStrengthCheck from './PasswordInputWithStrengthCheck';
 
 async function signUp(
@@ -59,6 +59,7 @@ async function signUp(
 function SignUpForm(): React.JSX.Element {
   const { t } = useTranslation();
   const { close: closeModal, setCurrentView, recaptchaSiteKey } = useContext(AuthenticationModalContext);
+  const manager = useContext(AuthenticityTokensContext);
   const [formState, setFormState] = useState({});
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
@@ -67,7 +68,7 @@ function SignUpForm(): React.JSX.Element {
   const afterSessionChange = useAfterSessionChange();
 
   const onSubmit = async (event: React.SyntheticEvent) => {
-    const authenticityToken = AuthenticityTokensManager.instance.tokens.signUp;
+    const authenticityToken = manager.tokens?.signUp;
 
     event.preventDefault();
     if (!authenticityToken) {

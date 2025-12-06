@@ -1,7 +1,7 @@
 import { useMemo, useContext } from 'react';
 import { LoaderFunction, useLoaderData, RouterContextProvider } from 'react-router';
 
-import AuthenticityTokensManager from '../AuthenticityTokensContext';
+import { AuthenticityTokensContext } from '../AuthenticityTokensContext';
 import PermissionsPrompt from './PermissionsPrompt';
 import AuthenticationModalContext from '../Authentication/AuthenticationModalContext';
 import usePageTitle from '../usePageTitle';
@@ -71,6 +71,7 @@ function AuthorizationPrompt() {
     [preAuth],
   );
   const authenticationModal = useContext(AuthenticationModalContext);
+  const manager = useContext(AuthenticityTokensContext);
 
   usePageTitle('Authorization required');
 
@@ -109,13 +110,13 @@ function AuthorizationPrompt() {
   };
 
   const grantAuthorization = () => {
-    buildAndSubmitForm('POST', AuthenticityTokensManager.instance.tokens.grantAuthorization ?? '', authorizationParams);
+    buildAndSubmitForm('POST', manager.tokens?.grantAuthorization ?? '', authorizationParams);
   };
 
   const denyAuthorization = async () => {
     buildAndSubmitForm(
       'DELETE',
-      AuthenticityTokensManager.instance.tokens.denyAuthorization ?? '',
+      manager.tokens?.denyAuthorization ?? '',
       authorizationParams,
     );
   };

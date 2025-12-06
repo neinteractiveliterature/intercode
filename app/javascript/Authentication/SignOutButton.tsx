@@ -1,7 +1,8 @@
 import * as React from 'react';
+import { useContext } from 'react';
 
 import useAfterSessionChange from './useAfterSessionChange';
-import AuthenticityTokensManager from '../AuthenticityTokensContext';
+import { AuthenticityTokensContext } from '../AuthenticityTokensContext';
 
 async function signOut(authenticityToken: string) {
   const response = await fetch('/users/sign_out', {
@@ -26,9 +27,10 @@ export type SignOutButtonProps = {
 
 function SignOutButton({ className, caption }: SignOutButtonProps): React.JSX.Element {
   const afterSessionChange = useAfterSessionChange();
+  const manager = useContext(AuthenticityTokensContext);
 
   const onClick = async (event: React.SyntheticEvent) => {
-    const { signOut: authenticityToken } = AuthenticityTokensManager.instance.tokens;
+    const authenticityToken = manager.tokens?.signOut;
 
     event.preventDefault();
     await signOut(authenticityToken ?? '');
