@@ -43,7 +43,7 @@ export default defineConfig({
         dir: absolutePath('./public/packs'),
         entryFileNames: '[name].js',
         manualChunks: {
-          apollo: ['@apollo/client', 'apollo-upload-client/createUploadLink.mjs'],
+          apollo: ['@apollo/client', 'apollo-upload-client/UploadHttpLink.mjs'],
           codemirror: [
             '@codemirror/state',
             '@codemirror/view',
