@@ -1,4 +1,4 @@
-import { useState, Suspense, useId } from 'react';
+import { useState, Suspense, useId, useContext } from 'react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { BootstrapFormInput, LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
@@ -11,7 +11,7 @@ import UserFormFields, { UserFormState } from './UserFormFields';
 import usePageTitle from '../usePageTitle';
 import { EditUserQueryData, EditUserQueryDocument } from './queries.generated';
 import humanize from '../humanize';
-import AuthenticityTokensManager from '../AuthenticityTokensContext';
+import { AuthenticityTokensContext } from '../AuthenticityTokensContext';
 import { apolloClientContext } from 'AppContexts';
 import PasswordInputWithStrengthCheck from './PasswordInputWithStrengthCheck';
 
@@ -67,7 +67,8 @@ export const loader: LoaderFunction<RouterContextProvider> = async ({ context })
 function EditUserForm() {
   const { currentUser: initialFormState } = useLoaderData() as EditUserQueryData;
   const { t } = useTranslation();
-  const authenticityToken = AuthenticityTokensManager.instance.tokens.updateUser;
+  const manager = useContext(AuthenticityTokensContext);
+  const authenticityToken = manager.tokens?.updateUser;
   const [formState, setFormState] = useState<UserFormState | undefined>(initialFormState ?? undefined);
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
