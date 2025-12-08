@@ -1,7 +1,7 @@
 import 'regenerator-runtime/runtime';
 
 import mountReactComponents from '../mountReactComponents';
-import { StrictMode, useMemo } from 'react';
+import { StrictMode, use, useMemo } from 'react';
 import AuthenticityTokensManager, {
   AuthenticityTokensContext,
   getAuthenticityTokensURL,
@@ -21,6 +21,7 @@ import { ApolloProvider } from '@apollo/client/react';
 import { appRootRoutes } from 'AppRouter';
 
 const manager = new AuthenticityTokensManager(fetch, undefined, getAuthenticityTokensURL());
+const refreshPromise = manager.refresh();
 
 export type DataModeApplicationEntryProps = {
   recaptchaSiteKey: string;
@@ -33,6 +34,8 @@ function DataModeApplicationEntry({
   railsDefaultActiveStorageServiceName,
   railsDirectUploadsURL,
 }: DataModeApplicationEntryProps) {
+  use(refreshPromise);
+
   const client = useMemo(() => buildBrowserApolloClient(manager), []);
 
   const clientConfigurationData = useMemo<ClientConfigurationQueryData>(
