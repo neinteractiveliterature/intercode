@@ -1,19 +1,20 @@
 import { Trans, useTranslation } from 'react-i18next';
 import { MySignupQueueQueryData, MySignupQueueQueryDocument } from './queries.generated';
 import { useContext } from 'react';
-import { Link, LoaderFunction, useLoaderData } from 'react-router';
+import { Link, LoaderFunction, useLoaderData, RouterContextProvider } from 'react-router';
 import RankedChoiceUserSettings from './RankedChoiceUserSettings';
 import UserConProfileSignupsCard from '../SignupAdmin/UserConProfileSignupsCard';
 import AppRootContext from '../../AppRootContext';
 import NextRoundInfoBox from './NextRoundInfoBox';
 import UserSignupQueue from './UserSignupQueue';
 import { usePendingChoices } from './usePendingChoices';
-import { client } from '../../useIntercodeApolloClient';
+import { apolloClientContext } from '../../AppContexts';
 import useLoginRequired from 'Authentication/useLoginRequired';
 import BlockPartial from 'UIComponents/BlockPartial';
 import { CmsPartialBlockName } from 'graphqlTypes.generated';
 
-export const loader: LoaderFunction = async () => {
+export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+  const client = context.get(apolloClientContext);
   const { data } = await client.query({ query: MySignupQueueQueryDocument });
   return data;
 };

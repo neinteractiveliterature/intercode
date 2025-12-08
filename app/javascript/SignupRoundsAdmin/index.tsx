@@ -1,14 +1,15 @@
-import { ActionFunction, data, Outlet } from 'react-router';
+import { ActionFunction, data, Outlet, RouterContextProvider } from 'react-router';
 import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import RouteActivatedBreadcrumbItemV2 from '../Breadcrumbs/RouteActivatedBreadcrumbItemV2';
 import { useTranslation } from 'react-i18next';
 import { buildSignupRoundInputFromFormData } from './buildSignupRoundInput';
 import { i18n } from '../setupI18Next';
-import { client } from '../useIntercodeApolloClient';
+import { apolloClientContext } from 'AppContexts';
 import { CreateSignupRoundDocument } from './mutations.generated';
 import { SignupRoundsAdminQueryDocument } from './queries.generated';
 
-export const action: ActionFunction = async ({ request }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ request, context }) => {
+  const client = context.get(apolloClientContext);
   if (request.method === 'POST') {
     try {
       const formData = await request.formData();

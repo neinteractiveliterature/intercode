@@ -1,13 +1,13 @@
 import { useCallback, useContext } from 'react';
 import classNames from 'classnames';
-import { ActionFunction, data, Link, Outlet, useSubmit } from 'react-router';
+import { ActionFunction, data, Link, Outlet, useSubmit, RouterContextProvider } from 'react-router';
 import { Trans, useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
 import { DateTime } from 'luxon';
 import { useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 import snakeCase from 'lodash/snakeCase';
 import { AdminSignupQueryData, SignupFieldsFragment } from '../queries.generated';
-import { client } from '../../../useIntercodeApolloClient';
+import { apolloClientContext } from 'AppContexts';
 import { UpdateSignupCountedDocument } from '../mutations.generated';
 import { useSingleSignupLoader } from '../loaders';
 import AppRootContext from '../../../AppRootContext';
@@ -94,7 +94,8 @@ export type EditSignupProps = {
   teamMembersUrl: string;
 };
 
-export const action: ActionFunction = async ({ request, params: { id } }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {
+  const client = context.get(apolloClientContext);
   const formData = await request.formData();
   const result = await client.mutate({
     mutation: UpdateSignupCountedDocument,

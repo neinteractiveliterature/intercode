@@ -9,11 +9,12 @@ import {
   RunHeaderRunInfoQueryVariables,
 } from './queries.generated';
 import { useFormatRunTimespan } from '../runTimeFormatting';
-import { LoaderFunction, Outlet, useLoaderData } from 'react-router';
-import { client } from '../../useIntercodeApolloClient';
+import { LoaderFunction, Outlet, useLoaderData, RouterContextProvider } from 'react-router';
+import { apolloClientContext } from '../../AppContexts';
 import NamedRouteBreadcrumbItem from '../../Breadcrumbs/NamedRouteBreadcrumbItem';
 
-export const loader: LoaderFunction = async ({ params: { eventId, runId } }) => {
+export const loader: LoaderFunction<RouterContextProvider> = async ({ params: { eventId, runId }, context }) => {
+  const client = context.get(apolloClientContext);
   const { data } = await client.query<RunHeaderRunInfoQueryData, RunHeaderRunInfoQueryVariables>({
     query: RunHeaderRunInfoQueryDocument,
     variables: { eventId: eventId ?? '', runId: runId ?? '' },

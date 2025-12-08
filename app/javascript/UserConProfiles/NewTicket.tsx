@@ -1,16 +1,17 @@
 import { useCallback } from 'react';
-import { ActionFunction, redirect, useFetcher, useRouteLoaderData } from 'react-router';
+import { ActionFunction, RouterContextProvider, redirect, useFetcher, useRouteLoaderData } from 'react-router';
 
 import TicketForm from './TicketForm';
 import usePageTitle from '../usePageTitle';
 import { UserConProfileAdminQueryData, UserConProfileAdminTicketFieldsFragmentDoc } from './queries.generated';
 import { TicketInput } from '../graphqlTypes.generated';
 import { NamedRoute } from '../AppRouter';
-import { client } from 'useIntercodeApolloClient';
+import { apolloClientContext } from '../AppContexts';
 import { CreateTicketDocument, CreateTicketMutationVariables } from './mutations.generated';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
-export const action: ActionFunction = async ({ request }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
+  const client = context.get(apolloClientContext);
   try {
     const variables = (await request.json()) as CreateTicketMutationVariables;
     await client.mutate({

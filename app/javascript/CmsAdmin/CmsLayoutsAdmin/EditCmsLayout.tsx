@@ -1,16 +1,17 @@
 import { useState } from 'react';
 
-import { ActionFunction, Form, redirect, useActionData, useLoaderData, useNavigation } from 'react-router';
+import { ActionFunction, Form, redirect, useActionData, useLoaderData, useNavigation, RouterContextProvider } from 'react-router';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { buildLayoutInputFromFormData } from './buildLayoutInput';
 import CmsLayoutForm from './CmsLayoutForm';
 import usePageTitle from '../../usePageTitle';
 import { singleCmsLayoutAdminLoader, SingleCmsLayoutAdminLoaderResult } from './loaders';
-import { client } from '../../useIntercodeApolloClient';
+import { apolloClientContext } from '../../AppContexts';
 import { UpdateLayoutDocument } from './mutations.generated';
 
-export const action: ActionFunction = async ({ params: { id }, request }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ params: { id }, request, context }) => {
+  const client = context.get(apolloClientContext);
   const formData = await request.formData();
 
   try {

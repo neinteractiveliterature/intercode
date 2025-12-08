@@ -10,15 +10,17 @@ import {
   useLoaderData,
   useNavigation,
   useSearchParams,
+  RouterContextProvider,
 } from 'react-router';
 import { buildPageInputFromFormData } from './buildPageInput';
 import CmsPageForm from './CmsPageForm';
 import usePageTitle from '../../usePageTitle';
 import { singleCmsPageAdminLoader, SingleCmsPageAdminLoaderResult } from './loaders';
 import { UpdatePageDocument } from './mutations.generated';
-import { client } from '../../useIntercodeApolloClient';
+import { apolloClientContext } from '../../AppContexts';
 
-export const action: ActionFunction = async ({ params: { id }, request }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ params: { id }, request, context }) => {
+  const client = context.get(apolloClientContext);
   const formData = await request.formData();
 
   try {

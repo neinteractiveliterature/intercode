@@ -1,12 +1,12 @@
 import { useMemo } from 'react';
-import { ActionFunction, Link, LoaderFunction, redirect, useLoaderData, useSubmit } from 'react-router';
+import { ActionFunction, Link, LoaderFunction, redirect, useLoaderData, useSubmit, RouterContextProvider } from 'react-router';
 import { useModal, useConfirm, ErrorDisplay, sortByLocaleString } from '@neinteractiveliterature/litform';
 
 import usePageTitle from '../usePageTitle';
 import NewFormModal from './NewFormModal';
 import { FormAdminQueryData, FormAdminQueryDocument } from './queries.generated';
 import humanize from '../humanize';
-import { client } from '../useIntercodeApolloClient';
+import { apolloClientContext } from 'AppContexts';
 import { CreateFormDocument } from './mutations.generated';
 import { FormType } from '../graphqlTypes.generated';
 
@@ -18,12 +18,14 @@ function describeFormUsers(form: FormAdminQueryData['convention']['forms'][0]) {
   ];
 }
 
-export const loader: LoaderFunction = async () => {
+export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+  const client = context.get(apolloClientContext);
   const { data } = await client.query<FormAdminQueryData>({ query: FormAdminQueryDocument });
   return data;
 };
 
-export const action: ActionFunction = async ({ request }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ request, context }) => {
+  const client = context.get(apolloClientContext);
   try {
     const formData = await request.formData();
     const { data } = await client.mutate({

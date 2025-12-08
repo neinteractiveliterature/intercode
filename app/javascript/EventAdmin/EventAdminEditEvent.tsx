@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { LoaderFunction, useLoaderData, useRouteLoaderData, useSubmit } from 'react-router';
+import { LoaderFunction, RouterContextProvider, useLoaderData, useRouteLoaderData, useSubmit } from 'react-router';
 
 import useEventFormWithCategorySelection, { EventFormWithCategorySelection } from './useEventFormWithCategorySelection';
 import EditEvent from '../BuiltInForms/EditEvent';
@@ -14,14 +14,15 @@ import {
 } from './queries.generated';
 import { useImageAttachmentConfig } from '../BuiltInFormControls/MarkdownInput';
 import { NamedRoute } from '../AppRouter';
-import { client } from '../useIntercodeApolloClient';
+import { apolloClientContext } from 'AppContexts';
 import { UpdateEventOptions } from './$id';
 import { ActiveStorageAttachment } from 'graphqlTypes.generated';
 import { useAsyncFetcher } from 'useAsyncFetcher';
 
 type LoaderResult = WithFormResponse<EventAdminSingleEventQueryData['conventionByRequestHost']['event']>;
 
-export const loader: LoaderFunction = async ({ params: { eventId } }) => {
+export const loader: LoaderFunction<RouterContextProvider> = async ({ context, params: { eventId } }) => {
+  const client = context.get(apolloClientContext);
   const { data } = await client.query({
     query: EventAdminSingleEventQueryDocument,
     variables: { eventId: eventId ?? '' },
@@ -100,7 +101,7 @@ function EventAdminEditEvent() {
       validateForm={validateForm}
       updateEvent={() => {
         if (eventCategory) {
-          submit({ event, eventCategory, run } satisfies UpdateEventOptions, {
+          submit({ event, eventCategory, run } satisfies Omit<UpdateEventOptions, 'client'>, {
             method: 'PATCH',
             encType: 'application/json',
             action: `/admin_events/${eventCategory.id}/events/${event.id}`,

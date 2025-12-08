@@ -1,9 +1,10 @@
-import { ActionFunction, data } from 'react-router';
-import { client } from 'useIntercodeApolloClient';
+import { ActionFunction, RouterContextProvider, data } from 'react-router';
+import { apolloClientContext } from '../../AppContexts';
 import { MarkOrderPaidDocument } from './mutations.generated';
 import invariant from 'tiny-invariant';
 
-export const action: ActionFunction = async ({ params: { id }, request }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ context, params: { id }, request }) => {
+  const client = context.get(apolloClientContext);
   invariant(id != null);
 
   try {

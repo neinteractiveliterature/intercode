@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { ActionFunction, LoaderFunction, redirect, useFetcher, useLoaderData } from 'react-router';
+import { ActionFunction, LoaderFunction, redirect, useFetcher, useLoaderData, RouterContextProvider } from 'react-router';
 
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -13,7 +13,7 @@ import {
   UserActivityAlertsAdminQueryDocument,
 } from './queries.generated';
 import { CreateUserActivityAlertDocument, CreateUserActivityAlertMutationVariables } from './mutations.generated';
-import { client } from 'useIntercodeApolloClient';
+import { apolloClientContext } from 'AppContexts';
 import { Convention, NotificationEventKey } from 'graphqlTypes.generated';
 
 type LoaderResult = {
@@ -21,7 +21,8 @@ type LoaderResult = {
   userActivityAlertEvent: UserActivityAlertsAdminQueryData['notificationEvents'][number];
 };
 
-export const loader: LoaderFunction = async () => {
+export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+  const client = context.get(apolloClientContext);
   const { data } = await client.query({ query: UserActivityAlertsAdminQueryDocument });
 
   if (!data) {
@@ -38,7 +39,8 @@ export const loader: LoaderFunction = async () => {
   return { userActivityAlertEvent, convention: data.convention } satisfies LoaderResult;
 };
 
-export const action: ActionFunction = async ({ request }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
+  const client = context.get(apolloClientContext);
   try {
     if (request.method === 'POST') {
       const variables = (await request.json()) as CreateUserActivityAlertMutationVariables;

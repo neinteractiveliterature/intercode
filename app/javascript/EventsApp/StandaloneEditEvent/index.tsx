@@ -1,5 +1,5 @@
 import { useCallback, useMemo } from 'react';
-import { LoaderFunction, useLoaderData, useNavigate } from 'react-router';
+import { LoaderFunction, useLoaderData, useNavigate, RouterContextProvider } from 'react-router';
 
 import useEventForm, { EventForm } from '../../EventAdmin/useEventForm';
 import EditEvent from '../../BuiltInForms/EditEvent';
@@ -16,9 +16,10 @@ import FourOhFourPage from '../../FourOhFourPage';
 import { AuthorizationError } from '../../Authentication/useAuthorizationRequired';
 import buildEventUrl from '../buildEventUrl';
 import { useImageAttachmentConfig } from '../../BuiltInFormControls/MarkdownInput';
-import { client } from '../../useIntercodeApolloClient';
+import { apolloClientContext } from '../../AppContexts';
 import { StandaloneUpdateEventDocument } from './mutations.generated';
 import { useAsyncFetcher } from 'useAsyncFetcher';
+import { useApolloClient } from '@apollo/client/react';
 
 export type StandaloneEditEventFormProps = {
   initialEvent: WithFormResponse<StandaloneEditEventQueryData['convention']['event']>;
@@ -37,6 +38,7 @@ function StandaloneEditEventForm({
 }: StandaloneEditEventFormProps) {
   const navigate = useNavigate();
   const fetcher = useAsyncFetcher();
+  const client = useApolloClient();
 
   const imageAttachmentConfig = useImageAttachmentConfig(initialEvent.images, (blob) =>
     fetcher.submitAsync({ signed_blob_id: blob.signed_id }, { action: '../attach_image', method: 'PATCH' }),
@@ -59,7 +61,7 @@ function StandaloneEditEventForm({
         },
       },
     });
-  }, [event]);
+  }, [event, client]);
 
   return (
     <EditEvent
@@ -84,7 +86,8 @@ function StandaloneEditEventForm({
   );
 }
 
-export const loader: LoaderFunction = async ({ params: { eventId } }) => {
+export const loader: LoaderFunction<RouterContextProvider> = async ({ params: { eventId }, context }) => {
+  const client = context.get(apolloClientContext);
   const { data } = await client.query<StandaloneEditEventQueryData, StandaloneEditEventQueryVariables>({
     query: StandaloneEditEventQueryDocument,
     variables: { eventId: eventId ?? '' },

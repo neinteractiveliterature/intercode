@@ -1,8 +1,8 @@
-import { ActionFunction, Form, redirect, useActionData, useNavigation } from 'react-router';
+import { ActionFunction, Form, redirect, useActionData, useNavigation, RouterContextProvider } from 'react-router';
 
 import usePageTitle from '../usePageTitle';
 import DepartmentForm from './DepartmentForm';
-import { client } from '../useIntercodeApolloClient';
+import { apolloClientContext } from 'AppContexts';
 import { CreateDepartmentDocument } from './mutations.generated';
 import { useTranslation } from 'react-i18next';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
@@ -10,7 +10,8 @@ import { ErrorDisplay } from '@neinteractiveliterature/litform';
 import { buildDepartmentInputFromFormData } from './buildDepartmentInput';
 import { DepartmentAdminQueryDocument } from './queries.generated';
 
-export const action: ActionFunction = async ({ request }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
+  const client = context.get(apolloClientContext);
   try {
     const formData = await request.formData();
     await client.mutate({

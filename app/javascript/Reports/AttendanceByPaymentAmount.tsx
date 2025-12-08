@@ -5,8 +5,8 @@ import usePageTitle from '../usePageTitle';
 import { AttendanceByPaymentAmountQueryData, AttendanceByPaymentAmountQueryDocument } from './queries.generated';
 import { Money, Product } from '../graphqlTypes.generated';
 import assertNever from 'assert-never';
-import { LoaderFunction, useLoaderData } from 'react-router';
-import { client } from '../useIntercodeApolloClient';
+import { LoaderFunction, useLoaderData, RouterContextProvider } from 'react-router';
+import { apolloClientContext } from 'AppContexts';
 
 type RowType =
   AttendanceByPaymentAmountQueryData['convention']['reports']['sales_count_by_product_and_payment_amount'][number];
@@ -63,7 +63,8 @@ function descriptionCell(
   );
 }
 
-export const loader: LoaderFunction = async () => {
+export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+  const client = context.get(apolloClientContext);
   const { data } = await client.query<AttendanceByPaymentAmountQueryData>({
     query: AttendanceByPaymentAmountQueryDocument,
   });

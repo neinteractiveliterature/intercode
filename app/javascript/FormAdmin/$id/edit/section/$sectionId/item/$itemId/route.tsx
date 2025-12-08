@@ -1,7 +1,7 @@
 import { useContext, useMemo, useState, useCallback } from 'react';
 
 import { useApolloClient } from '@apollo/client/react';
-import { ActionFunction, redirect, useFetcher, useParams } from 'react-router';
+import { ActionFunction, RouterContextProvider, redirect, useFetcher, useParams } from 'react-router';
 // TODO: uncomment this when re-adding Prompt support below
 // import isEqual from 'lodash/isEqual';
 import { useDebouncedState, ErrorDisplay } from '@neinteractiveliterature/litform';
@@ -19,13 +19,18 @@ import { FormEditorContext, FormEditorFormItem, FormItemEditorContext } from 'Fo
 import { PreviewFormItemQueryDocument } from 'FormAdmin/queries.generated';
 import FormItemTools from 'FormAdmin/FormItemTools';
 import FormItemInput from 'FormPresenter/ItemInputs/FormItemInput';
-import { client } from 'useIntercodeApolloClient';
+import { apolloClientContext } from 'AppContexts';
 import { DeleteFormItemDocument, UpdateFormItemDocument } from 'FormAdmin/mutations.generated';
 import { FormItem } from 'graphqlTypes.generated';
 import FormItemEditorContent from './FormItemEditorContent';
 import styles from 'styles/form_editor.module.scss';
 
-export const action: ActionFunction = async ({ request, params: { id, sectionId, itemId } }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({
+  context,
+  request,
+  params: { id, sectionId, itemId },
+}) => {
+  const client = context.get(apolloClientContext);
   try {
     if (request.method === 'PATCH') {
       const json = await request.json();

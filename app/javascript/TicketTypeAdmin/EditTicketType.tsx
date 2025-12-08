@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react';
-import { ActionFunction, redirect, useFetcher, useLoaderData } from 'react-router';
+import { ActionFunction, redirect, useFetcher, useLoaderData, RouterContextProvider } from 'react-router';
 
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -9,11 +9,12 @@ import usePageTitle from '../usePageTitle';
 import AppRootContext from '../AppRootContext';
 import { SingleTicketTypeLoaderResult } from './loaders';
 import { TicketTypeInput } from 'graphqlTypes.generated';
-import { client } from 'useIntercodeApolloClient';
+import { apolloClientContext } from 'AppContexts';
 import { UpdateTicketTypeDocument } from './mutations.generated';
 import invariant from 'tiny-invariant';
 
-export const action: ActionFunction = async ({ request, params: { id } }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {
+  const client = context.get(apolloClientContext);
   invariant(id != null);
   try {
     const ticketType = (await request.json()) as TicketTypeInput;

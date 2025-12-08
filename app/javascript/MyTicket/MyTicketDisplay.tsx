@@ -1,5 +1,5 @@
 import { useContext } from 'react';
-import { LoaderFunction, replace, useLoaderData } from 'react-router';
+import { LoaderFunction, RouterContextProvider, replace, useLoaderData } from 'react-router';
 import { DateTime } from 'luxon';
 
 import formatMoney from '../formatMoney';
@@ -7,14 +7,15 @@ import usePageTitle from '../usePageTitle';
 import AppRootContext from '../AppRootContext';
 import { MyTicketDisplayQueryData, MyTicketDisplayQueryDocument } from './queries.generated';
 import { useAppDateTimeFormat } from '../TimeUtils';
-import { client } from '../useIntercodeApolloClient';
+import { apolloClientContext } from 'AppContexts';
 
 type LoaderResult = {
   convention: MyTicketDisplayQueryData['convention'];
   ticket: NonNullable<NonNullable<MyTicketDisplayQueryData['convention']['my_profile']>['ticket']>;
 };
 
-export const loader: LoaderFunction = async () => {
+export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+  const client = context.get(apolloClientContext);
   const { data } = await client.query<MyTicketDisplayQueryData>({ query: MyTicketDisplayQueryDocument });
   if (!data) {
     return new Response(null, { status: 404 });

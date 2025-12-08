@@ -1,7 +1,7 @@
 import { useMemo, useContext } from 'react';
-import { LoaderFunction, useLoaderData } from 'react-router';
+import { LoaderFunction, useLoaderData, RouterContextProvider } from 'react-router';
 
-import AuthenticityTokensManager from '../AuthenticityTokensContext';
+import { AuthenticityTokensContext } from '../AuthenticityTokensContext';
 import PermissionsPrompt from './PermissionsPrompt';
 import AuthenticationModalContext from '../Authentication/AuthenticationModalContext';
 import usePageTitle from '../usePageTitle';
@@ -10,7 +10,7 @@ import {
   OAuthAuthorizationPromptQueryDocument,
   OAuthAuthorizationPromptQueryVariables,
 } from './queries.generated';
-import { client } from '../useIntercodeApolloClient';
+import { apolloClientContext } from 'AppContexts';
 
 type AuthorizationParams = {
   client_id?: string;
@@ -28,7 +28,8 @@ type PreAuth = AuthorizationParams & {
   scope: string;
 };
 
-export const loader: LoaderFunction = async ({ request }) => {
+export const loader: LoaderFunction<RouterContextProvider> = async ({ request, context }) => {
+  const client = context.get(apolloClientContext);
   const url = new URL(request.url);
   const preAuthParamsJSON = JSON.stringify(
     [...url.searchParams].reduce((object, [field, value]) => ({ ...object, [field]: value }), {}),
@@ -70,6 +71,7 @@ function AuthorizationPrompt() {
     [preAuth],
   );
   const authenticationModal = useContext(AuthenticationModalContext);
+  const manager = useContext(AuthenticityTokensContext);
 
   usePageTitle('Authorization required');
 
@@ -108,13 +110,13 @@ function AuthorizationPrompt() {
   };
 
   const grantAuthorization = () => {
-    buildAndSubmitForm('POST', AuthenticityTokensManager.instance.tokens.grantAuthorization ?? '', authorizationParams);
+    buildAndSubmitForm('POST', manager.tokens?.grantAuthorization ?? '', authorizationParams);
   };
 
   const denyAuthorization = async () => {
     buildAndSubmitForm(
       'DELETE',
-      AuthenticityTokensManager.instance.tokens.denyAuthorization ?? '',
+      manager.tokens?.denyAuthorization ?? '',
       authorizationParams,
     );
   };

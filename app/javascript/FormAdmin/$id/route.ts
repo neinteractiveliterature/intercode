@@ -1,9 +1,10 @@
-import { ActionFunction, redirect } from 'react-router';
-import { client } from '../../useIntercodeApolloClient';
+import { ActionFunction, RouterContextProvider, redirect } from 'react-router';
+import { apolloClientContext } from '../../AppContexts';
 import { DeleteFormDocument } from '../mutations.generated';
 import { Form } from '../../graphqlTypes.generated';
 
-export const action: ActionFunction = async ({ params: { id }, request }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ context, params: { id }, request }) => {
+  const client = context.get(apolloClientContext);
   try {
     if (request.method === 'DELETE') {
       await client.mutate({

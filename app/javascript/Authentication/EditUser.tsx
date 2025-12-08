@@ -1,9 +1,9 @@
-import { useState, Suspense, useId } from 'react';
+import { useState, Suspense, useId, useContext } from 'react';
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { BootstrapFormInput, LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import { LoaderFunction, Navigate, useLoaderData } from 'react-router';
+import { LoaderFunction, RouterContextProvider, Navigate, useLoaderData } from 'react-router';
 import PasswordConfirmationInput from './PasswordConfirmationInput';
 import useAsyncFunction from '../useAsyncFunction';
 import AccountFormContent from './AccountFormContent';
@@ -11,8 +11,8 @@ import UserFormFields, { UserFormState } from './UserFormFields';
 import usePageTitle from '../usePageTitle';
 import { EditUserQueryData, EditUserQueryDocument } from './queries.generated';
 import humanize from '../humanize';
-import AuthenticityTokensManager from '../AuthenticityTokensContext';
-import { client } from '../useIntercodeApolloClient';
+import { AuthenticityTokensContext } from '../AuthenticityTokensContext';
+import { apolloClientContext } from 'AppContexts';
 import PasswordInputWithStrengthCheck from './PasswordInputWithStrengthCheck';
 
 async function updateUser(
@@ -58,7 +58,8 @@ async function updateUser(
   }
 }
 
-export const loader: LoaderFunction = async () => {
+export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+  const client = context.get(apolloClientContext);
   const { data } = await client.query<EditUserQueryData>({ query: EditUserQueryDocument });
   return data;
 };
@@ -66,7 +67,8 @@ export const loader: LoaderFunction = async () => {
 function EditUserForm() {
   const { currentUser: initialFormState } = useLoaderData() as EditUserQueryData;
   const { t } = useTranslation();
-  const authenticityToken = AuthenticityTokensManager.instance.tokens.updateUser;
+  const manager = useContext(AuthenticityTokensContext);
+  const authenticityToken = manager.tokens?.updateUser;
   const [formState, setFormState] = useState<UserFormState | undefined>(initialFormState ?? undefined);
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');

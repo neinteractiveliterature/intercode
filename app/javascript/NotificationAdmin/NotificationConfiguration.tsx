@@ -7,12 +7,13 @@ import {
   useActionData,
   useLoaderData,
   useNavigation,
+  RouterContextProvider,
 } from 'react-router';
 import { ErrorDisplay, usePropertySetters } from '@neinteractiveliterature/litform';
 
 import LiquidInput from '../BuiltInFormControls/LiquidInput';
 import { NotificationAdminQueryData, NotificationAdminQueryDocument } from './queries.generated';
-import { client } from '../useIntercodeApolloClient';
+import { apolloClientContext } from 'AppContexts';
 
 import { UpdateNotificationTemplateDocument } from './mutations.generated';
 import NotificationDestinationsConfig from './NotificationDestinationsConfig';
@@ -20,7 +21,8 @@ import { useTranslation } from 'react-i18next';
 import { useChangeSet } from 'ChangeSet';
 import { NotificationDestinationInput, NotificationEventKey } from 'graphqlTypes.generated';
 
-export const action: ActionFunction = async ({ params: { eventKey }, request }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ context, params: { eventKey }, request }) => {
+  const client = context.get(apolloClientContext);
   try {
     const formData = await request.formData();
     const addDestinations = JSON.parse(
@@ -66,7 +68,8 @@ type LoaderResult = {
   eventCategories: NotificationAdminQueryData['convention']['event_categories'];
 };
 
-export const loader: LoaderFunction = async ({ params }) => {
+export const loader: LoaderFunction<RouterContextProvider> = async ({ context, params }) => {
+  const client = context.get(apolloClientContext);
   const { eventKey } = params;
   const { data } = await client.query({ query: NotificationAdminQueryDocument });
   if (!data) {

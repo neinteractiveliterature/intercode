@@ -1,6 +1,6 @@
 import { useCallback, useState, useMemo, ReactNode } from 'react';
 
-import { useSuspenseQuery } from '@apollo/client/react';
+import { useApolloClient, useSuspenseQuery } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -13,7 +13,6 @@ import { ConventionForFormItemDisplay } from '../FormPresenter/ItemDisplays/Form
 import { CommonFormFieldsFragment } from '../Models/commonFormFragments.generated';
 import { parseResponseErrors } from '../parseResponseErrors';
 import { useImageAttachmentConfig } from '../BuiltInFormControls/MarkdownInput';
-import { client } from '../useIntercodeApolloClient';
 import {
   AttachImageToEventProposalDocument,
   SubmitEventProposalDocument,
@@ -42,6 +41,7 @@ function EventProposalFormInner({
   const [responseErrors, setResponseErrors] = useState({});
   const [submitError, setSubmitError] = useState<Error>();
   const [updateError, setUpdateError] = useState<Error>();
+  const client = useApolloClient();
 
   const imageAttachmentConfig = useImageAttachmentConfig(eventProposal.images, async (blob) => {
     const { data } = await client.mutate({

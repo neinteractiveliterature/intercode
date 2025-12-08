@@ -1,6 +1,14 @@
 import { useState } from 'react';
 import * as React from 'react';
-import { ActionFunction, redirect, useActionData, useLoaderData, useNavigation, useSubmit } from 'react-router';
+import {
+  ActionFunction,
+  redirect,
+  useActionData,
+  useLoaderData,
+  useNavigation,
+  useSubmit,
+  RouterContextProvider,
+} from 'react-router';
 import { ErrorDisplay, notEmpty } from '@neinteractiveliterature/litform';
 
 import { buildPermissionInput } from '../../Permissions/PermissionUtils';
@@ -9,10 +17,11 @@ import CmsContentGroupFormFields from './CmsContentGroupFormFields';
 import { CmsContentGroupsAdminQueryData } from './queries.generated';
 import { CmsContentTypeIndicator } from '../../graphqlTypes.generated';
 import { singleCmsContentGroupAdminLoader, SingleCmsContentGroupAdminLoaderResult } from './loaders';
-import { client } from '../../useIntercodeApolloClient';
+import { apolloClientContext } from '../../AppContexts';
 import { UpdateContentGroupDocument, UpdateContentGroupMutationVariables } from './mutations.generated';
 
-export const action: ActionFunction = async ({ params: { id }, request }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ params: { id }, request, context }) => {
+  const client = context.get(apolloClientContext);
   const variables = (await request.json()) as Omit<UpdateContentGroupMutationVariables, 'id'>;
 
   try {

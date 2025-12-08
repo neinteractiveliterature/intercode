@@ -9,9 +9,9 @@ import {
   EventHistoryQueryDocument,
   EventHistoryQueryVariables,
 } from './eventHistoryQuery.generated';
-import { LoaderFunction, useLoaderData } from 'react-router';
+import { LoaderFunction, useLoaderData, RouterContextProvider } from 'react-router';
 import buildEventUrl from '../buildEventUrl';
-import { client } from '../../useIntercodeApolloClient';
+import { apolloClientContext } from '../../AppContexts';
 
 const EXCLUDE_FIELDS = new Set([
   'minimum_age',
@@ -21,7 +21,8 @@ const EXCLUDE_FIELDS = new Set([
   'team_mailing_list_name',
 ]);
 
-export const loader: LoaderFunction = async ({ params: { eventId } }) => {
+export const loader: LoaderFunction<RouterContextProvider> = async ({ params: { eventId }, context }) => {
+  const client = context.get(apolloClientContext);
   const { data } = await client.query<EventHistoryQueryData, EventHistoryQueryVariables>({
     query: EventHistoryQueryDocument,
     variables: { id: eventId ?? '' },

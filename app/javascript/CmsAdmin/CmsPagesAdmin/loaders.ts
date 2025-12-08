@@ -1,9 +1,10 @@
-import { LoaderFunction, useRouteLoaderData } from 'react-router';
-import { client } from '../../useIntercodeApolloClient';
+import { LoaderFunction, RouterContextProvider, useRouteLoaderData } from 'react-router';
+import { apolloClientContext } from 'AppContexts';
 import { CmsPagesAdminQueryData, CmsPagesAdminQueryDocument } from './queries.generated';
 import { NamedRoute } from '../../AppRouter';
 
-export const cmsPagesAdminLoader: LoaderFunction = async () => {
+export const cmsPagesAdminLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+  const client = context.get(apolloClientContext);
   const { data } = await client.query<CmsPagesAdminQueryData>({ query: CmsPagesAdminQueryDocument });
   return data;
 };

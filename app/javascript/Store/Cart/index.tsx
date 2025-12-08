@@ -1,9 +1,9 @@
 import { useCallback, useState } from 'react';
-import { LoaderFunction, useFetcher, useLoaderData, useNavigate } from 'react-router';
+import { LoaderFunction, useFetcher, useLoaderData, useNavigate, RouterContextProvider } from 'react-router';
 
 import { useModal, useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 import { CartQueryData, CartQueryDocument } from './queries.generated';
-import { client } from 'useIntercodeApolloClient';
+import { apolloClientContext } from 'AppContexts';
 import usePageTitle from 'usePageTitle';
 import useLoginRequired from 'Authentication/useLoginRequired';
 import CartContents from './CartContents';
@@ -13,7 +13,8 @@ type OrderEntryType = NonNullable<
   NonNullable<CartQueryData['convention']['my_profile']>['current_pending_order']
 >['order_entries'][0];
 
-export const loader: LoaderFunction = async () => {
+export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+  const client = context.get(apolloClientContext);
   const { data } = await client.query<CartQueryData>({ query: CartQueryDocument });
   return data;
 };

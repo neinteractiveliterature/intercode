@@ -1,11 +1,12 @@
 import { Product } from 'graphqlTypes.generated';
-import { ActionFunction, data } from 'react-router';
+import { ActionFunction, data, RouterContextProvider } from 'react-router';
 import { parseProductFormData } from 'Store/buildProductInput';
 import invariant from 'tiny-invariant';
-import { client } from 'useIntercodeApolloClient';
+import { apolloClientContext } from 'AppContexts';
 import { DeleteProductDocument, UpdateProductDocument } from './mutations.generated';
 
-export const action: ActionFunction = async ({ params: { id }, request }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ params: { id }, request, context }) => {
+  const client = context.get(apolloClientContext);
   invariant(id != null);
   try {
     if (request.method === 'DELETE') {

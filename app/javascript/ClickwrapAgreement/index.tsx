@@ -7,6 +7,7 @@ import {
   useSubmit,
   useNavigation,
   useActionData,
+  RouterContextProvider,
 } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
@@ -14,22 +15,24 @@ import { ErrorDisplay } from '@neinteractiveliterature/litform';
 import parseCmsContent from '../parseCmsContent';
 import useLoginRequired from '../Authentication/useLoginRequired';
 import { ClickwrapAgreementQueryData, ClickwrapAgreementQueryDocument } from './queries.generated';
-import AuthenticityTokensManager from '../AuthenticityTokensContext';
-import { client } from '../useIntercodeApolloClient';
+import { apolloClientContext, authenticityTokensManagerContext } from '../AppContexts';
 import { AcceptClickwrapAgreementDocument } from './mutations.generated';
 
-export const action: ActionFunction = async () => {
+export const action: ActionFunction<RouterContextProvider> = async ({ context }) => {
+  const client = context.get(apolloClientContext);
+  const manager = context.get(authenticityTokensManagerContext);
   try {
     await client.mutate({ mutation: AcceptClickwrapAgreementDocument });
     return redirect('/my_profile/setup');
   } catch (err) {
-    await AuthenticityTokensManager.instance.refresh();
+    await manager.refresh();
     await client.resetStore();
     return err;
   }
 };
 
-export const loader: LoaderFunction = async () => {
+export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+  const client = context.get(apolloClientContext);
   const { data } = await client.query<ClickwrapAgreementQueryData>({ query: ClickwrapAgreementQueryDocument });
   if (data?.convention.my_profile?.accepted_clickwrap_agreement) {
     return replace('/');

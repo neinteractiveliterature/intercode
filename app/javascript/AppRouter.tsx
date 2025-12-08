@@ -1,5 +1,14 @@
 import { useContext } from 'react';
-import { RouteObject, replace, Outlet, LoaderFunction, redirect, useNavigate, useRouteError } from 'react-router';
+import {
+  RouteObject,
+  replace,
+  Outlet,
+  LoaderFunction,
+  redirect,
+  useNavigate,
+  useRouteError,
+  RouterContextProvider,
+} from 'react-router';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import FourOhFourPage from './FourOhFourPage';
@@ -7,7 +16,6 @@ import { SignupAutomationMode, SignupMode, SiteMode, TicketMode } from './graphq
 import AppRootContext, { AppRootContextValue } from './AppRootContext';
 import useAuthorizationRequired, { AbilityName } from './Authentication/useAuthorizationRequired';
 import { EventAdminEventsQueryDocument } from './EventAdmin/queries.generated';
-import { client } from './useIntercodeApolloClient';
 import buildEventCategoryUrl from './EventAdmin/buildEventCategoryUrl';
 import {
   adminSingleTicketTypeLoader,
@@ -33,6 +41,7 @@ import { cmsContentGroupsAdminLoader } from './CmsAdmin/CmsContentGroupsAdmin/lo
 import { departmentAdminLoader } from './DepartmentAdmin/loaders';
 import { eventCategoryAdminLoader } from './EventCategoryAdmin/loaders';
 import { eventAdminEventsLoader } from './EventAdmin/loaders';
+import { apolloClientContext } from 'AppContexts';
 
 export enum NamedRoute {
   AdminEditEventProposal = 'AdminEditEventProposal',
@@ -124,7 +133,8 @@ function AuthorizationRequiredRouteGuard({ abilities }: AuthorizationRequiredRou
   return <Outlet />;
 }
 
-const eventAdminRootRedirect: LoaderFunction = async () => {
+const eventAdminRootRedirect: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+  const client = context.get(apolloClientContext);
   const { data } = await client.query({ query: EventAdminEventsQueryDocument });
   const convention = data?.convention;
   if (!convention) {
@@ -191,7 +201,13 @@ const eventsRoutes: RouteObject[] = [
         path: 'schedule',
         children: [
           { path: ':day', lazy: () => import('./EventsApp/ScheduleApp') },
-          { index: true, loader: conventionDayLoader },
+          {
+            index: true,
+            loader: (async ({ params, request, context }) => {
+              const client = context.get(apolloClientContext);
+              return conventionDayLoader(client, { params, request });
+            }) satisfies LoaderFunction<RouterContextProvider>,
+          },
         ],
       },
       { path: 'schedule_by_room/*', loader: () => replace('../schedule') },
@@ -1052,14 +1068,17 @@ export const appLayoutRoutes: RouteObject[] = [
   { path: '*', element: <FourOhFourPage /> },
 ];
 
+const appRootLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+  const client = context.get(apolloClientContext);
+  const { data } = await client.query({ query: AppRootQueryDocument });
+  return data;
+};
+
 export const appRootRoutes: RouteObject[] = [
   {
     element: <AppRoot />,
     errorElement: <RouteErrorBoundary />,
-    loader: async () => {
-      const { data } = await client.query({ query: AppRootQueryDocument });
-      return data;
-    },
+    loader: appRootLoader,
     children: [
       {
         path: '/admin_forms/:id/edit',

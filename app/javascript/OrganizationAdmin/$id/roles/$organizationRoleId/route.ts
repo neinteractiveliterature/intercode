@@ -1,9 +1,10 @@
 import { OrganizationRole } from 'graphqlTypes.generated';
 import { DeleteOrganizationRoleDocument, UpdateOrganizationRoleDocument } from 'OrganizationAdmin/mutations.generated';
-import { ActionFunction, data, redirect } from 'react-router';
-import { client } from 'useIntercodeApolloClient';
+import { ActionFunction, RouterContextProvider, data, redirect } from 'react-router';
+import { apolloClientContext } from '../../../../AppContexts';
 
-export const action: ActionFunction = async ({ params: { id, organizationRoleId }, request }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ context, params: { id, organizationRoleId }, request }) => {
+  const client = context.get(apolloClientContext);
   try {
     if (request.method === 'DELETE') {
       const result = await client.mutate({

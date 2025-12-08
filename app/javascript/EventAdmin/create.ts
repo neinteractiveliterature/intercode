@@ -1,15 +1,19 @@
 import { buildEventInput, buildRunInput } from './InputBuilders';
 import { CreateEventDocument, CreateFillerEventDocument } from './mutations.generated';
 import { EventCategory, SchedulingUi } from '../graphqlTypes.generated';
-import { client } from '../useIntercodeApolloClient';
-import { ActionFunction, redirect } from 'react-router';
+import { apolloClientContext } from 'AppContexts';
+import { ActionFunction, RouterContextProvider, redirect } from 'react-router';
+import type { ApolloClient } from '@apollo/client';
 
 export type CreateRegularEventOptions = {
   event: Parameters<typeof buildEventInput>[0];
   signedImageBlobIds?: string[];
 };
 
-export async function createRegularEvent({ event, signedImageBlobIds }: CreateRegularEventOptions) {
+export async function createRegularEvent(
+  client: ApolloClient,
+  { event, signedImageBlobIds }: CreateRegularEventOptions,
+) {
   return await client.mutate({
     mutation: CreateEventDocument,
     variables: {
@@ -34,7 +38,10 @@ export type CreateSingleRunEventOptions = {
   signedImageBlobIds?: string[];
 };
 
-export async function createSingleRunEvent({ event, run, signedImageBlobIds }: CreateSingleRunEventOptions) {
+export async function createSingleRunEvent(
+  client: ApolloClient,
+  { event, run, signedImageBlobIds }: CreateSingleRunEventOptions,
+) {
   return await client.mutate({
     mutation: CreateFillerEventDocument,
     variables: {
@@ -68,21 +75,25 @@ export type CreateEventOptions = {
   signedImageBlobIds?: string[];
 };
 
-async function createEvent({ event, eventCategory, run, signedImageBlobIds }: CreateEventOptions) {
+async function createEvent(
+  client: ApolloClient,
+  { event, eventCategory, run, signedImageBlobIds }: CreateEventOptions,
+) {
   if (eventCategory.scheduling_ui === SchedulingUi.SingleRun) {
     if (!run) {
       throw new Error('When creating a single-run event, the run must be provided');
     }
-    return await createSingleRunEvent({ event, run, signedImageBlobIds });
+    return await createSingleRunEvent(client, { event, run, signedImageBlobIds });
   }
 
-  return await createRegularEvent({ event, signedImageBlobIds });
+  return await createRegularEvent(client, { event, signedImageBlobIds });
 }
 
-export const action: ActionFunction = async ({ request }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
+  const client = context.get(apolloClientContext);
   try {
     const options = (await request.json()) as CreateEventOptions;
-    await createEvent(options);
+    await createEvent(client, options);
     return redirect(`/admin_events/${options.eventCategory.id}`);
   } catch (error) {
     return error;

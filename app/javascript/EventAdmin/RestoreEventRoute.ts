@@ -1,9 +1,10 @@
-import { ActionFunction, redirect } from 'react-router';
-import { client } from '../useIntercodeApolloClient';
+import { ActionFunction, redirect, RouterContextProvider } from 'react-router';
+import { apolloClientContext } from '../AppContexts';
 import { RestoreDroppedEventDocument } from './mutations.generated';
 import { EventAdminEventsQueryDocument } from './queries.generated';
 
-export const action: ActionFunction = async ({ params: { eventId } }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ params: { eventId }, context }) => {
+  const client = context.get(apolloClientContext);
   try {
     await client.mutate({
       mutation: RestoreDroppedEventDocument,

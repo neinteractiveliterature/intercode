@@ -6,10 +6,11 @@ import usePageTitle from '../usePageTitle';
 import AppRootContext from '../AppRootContext';
 import { WaitlistMailingListsQueryData, WaitlistMailingListsQueryDocument } from './queries.generated';
 import { useAppDateTimeFormat } from '../TimeUtils';
-import { client } from '../useIntercodeApolloClient';
-import { LoaderFunction, useLoaderData } from 'react-router';
+import { apolloClientContext } from '../AppContexts';
+import { LoaderFunction, RouterContextProvider, useLoaderData } from 'react-router';
 
-export const loader: LoaderFunction = async () => {
+export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+  const client = context.get(apolloClientContext);
   const { data } = await client.query<WaitlistMailingListsQueryData>({ query: WaitlistMailingListsQueryDocument });
   return data;
 };

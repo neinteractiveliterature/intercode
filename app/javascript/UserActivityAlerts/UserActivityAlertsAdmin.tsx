@@ -1,4 +1,4 @@
-import { useMatches, Outlet, LoaderFunction } from 'react-router';
+import { useMatches, Outlet, LoaderFunction, RouterContextProvider } from 'react-router';
 
 import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
@@ -6,10 +6,11 @@ import LeafBreadcrumbItem from '../Breadcrumbs/LeafBreadcrumbItem';
 import { useTranslation } from 'react-i18next';
 import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
 import { NamedRoute } from '../AppRouter';
-import { client } from '../useIntercodeApolloClient';
+import { apolloClientContext } from 'AppContexts';
 import { UserActivityAlertsAdminQueryData, UserActivityAlertsAdminQueryDocument } from './queries.generated';
 
-export const loader: LoaderFunction = async () => {
+export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+  const client = context.get(apolloClientContext);
   const { data } = await client.query<UserActivityAlertsAdminQueryData>({
     query: UserActivityAlertsAdminQueryDocument,
   });

@@ -8,7 +8,7 @@ import { BootstrapFormInput, BootstrapFormCheckbox, ErrorDisplay } from '@neinte
 import AuthenticationModalContext from './AuthenticationModalContext';
 import useAsyncFunction from '../useAsyncFunction';
 import useAfterSessionChange from './useAfterSessionChange';
-import AuthenticityTokensManager from '../AuthenticityTokensContext';
+import { AuthenticityTokensContext } from '../AuthenticityTokensContext';
 import errorReporting from 'ErrorReporting';
 
 async function signIn(authenticityToken: string, email: string, password: string, rememberMe: boolean) {
@@ -50,6 +50,7 @@ function SignInForm(): React.JSX.Element {
     unauthenticatedError,
     setUnauthenticatedError,
   } = useContext(AuthenticationModalContext);
+  const manager = useContext(AuthenticityTokensContext);
   const [email, setEmail] = useState('');
   const [password, setPassword] = useState('');
   const [rememberMe, setRememberMe] = useState(false);
@@ -57,7 +58,7 @@ function SignInForm(): React.JSX.Element {
 
   const onSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
-    const { signIn: authenticityToken } = AuthenticityTokensManager.instance.tokens;
+    const authenticityToken = manager.tokens?.signIn;
 
     if (!authenticityToken) {
       throw new Error('No authenticity token received from server');

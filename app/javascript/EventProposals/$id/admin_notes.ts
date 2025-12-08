@@ -1,8 +1,9 @@
-import { ActionFunction } from 'react-router';
-import { client } from '../../useIntercodeApolloClient';
+import { ActionFunction, RouterContextProvider } from 'react-router';
+import { apolloClientContext } from '../../AppContexts';
 import { UpdateEventProposalAdminNotesDocument } from '../mutations.generated';
 
-export const action: ActionFunction = async ({ request, params: { id } }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {
+  const client = context.get(apolloClientContext);
   try {
     if (request.method === 'PATCH') {
       const formData = await request.formData();

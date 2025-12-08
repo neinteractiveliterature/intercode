@@ -7,7 +7,7 @@ import FileInputWithPreview from '../CmsAdmin/CmsFilesAdmin/FileInputWithPreview
 import { DirectUpload, DirectUploadDelegate, Blob } from '@rails/activestorage';
 import RailsDirectUploadsContext from '../RailsDirectUploadsContext';
 import classNames from 'classnames';
-import AuthenticityTokensManager from '../AuthenticityTokensContext';
+import { AuthenticityTokensContext } from '../AuthenticityTokensContext';
 
 function uploadFile(file: File, directUploadURL: string, onProgress?: (event: ProgressEvent<XMLHttpRequest>) => void) {
   return new Promise<Blob | undefined>((resolve, reject) => {
@@ -41,7 +41,8 @@ function FileUploadForm({ onUpload }: FileUploadFormProps): React.JSX.Element {
   const [progressPercent, setProgressPercent] = useState<number>(0);
   const [progressIndeterminate, setProgressIndeterminate] = useState(false);
   const { railsDirectUploadsUrl } = useContext(RailsDirectUploadsContext);
-  const { railsDirectUploads: directUploadsAuthenticityToken } = AuthenticityTokensManager.instance.tokens;
+  const manager = useContext(AuthenticityTokensContext);
+  const directUploadsAuthenticityToken = manager.tokens?.railsDirectUploads;
 
   const onProgress = useCallback((event: ProgressEvent<XMLHttpRequest>) => {
     setProgressIndeterminate(!event.lengthComputable);

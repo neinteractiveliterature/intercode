@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { ActionFunction, redirect, useFetcher, useRouteLoaderData } from 'react-router';
+import { ActionFunction, RouterContextProvider, redirect, useFetcher, useRouteLoaderData } from 'react-router';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import TicketForm from './TicketForm';
@@ -7,7 +7,7 @@ import usePageTitle from '../usePageTitle';
 import { UserConProfileAdminQueryData } from './queries.generated';
 import { TicketInput } from '../graphqlTypes.generated';
 import { NamedRoute } from '../AppRouter';
-import { client } from 'useIntercodeApolloClient';
+import { apolloClientContext } from '../AppContexts';
 import { UpdateTicketDocument } from './mutations.generated';
 
 type ActionInput = {
@@ -15,7 +15,8 @@ type ActionInput = {
   ticketInput: TicketInput;
 };
 
-export const action: ActionFunction = async ({ request, params: { id } }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {
+  const client = context.get(apolloClientContext);
   try {
     const { ticketId, ticketInput } = (await request.json()) as ActionInput;
     await client.mutate({

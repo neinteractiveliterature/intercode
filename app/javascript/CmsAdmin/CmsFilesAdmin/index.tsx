@@ -9,12 +9,13 @@ import { CmsFilesAdminQueryData, CmsFilesAdminQueryDocument } from './queries.ge
 import { useCallback } from 'react';
 import FileUploadForm from '../../BuiltInForms/FileUploadForm';
 import { Blob } from '@rails/activestorage';
-import { ActionFunction, LoaderFunction, redirect, useLoaderData } from 'react-router';
-import { client } from '../../useIntercodeApolloClient';
+import { ActionFunction, LoaderFunction, redirect, useLoaderData, RouterContextProvider } from 'react-router';
+import { apolloClientContext } from 'AppContexts';
 import { CreateCmsFileDocument, DeleteCmsFileDocument, RenameCmsFileDocument } from './mutations.generated';
 import { useSubmit } from 'react-router';
 
-export const action: ActionFunction = async ({ request }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ request, context }) => {
+  const client = context.get(apolloClientContext);
   const formData = await request.formData();
 
   try {
@@ -53,7 +54,8 @@ export const action: ActionFunction = async ({ request }) => {
   return redirect('/cms_files');
 };
 
-export const loader: LoaderFunction = async () => {
+export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+  const client = context.get(apolloClientContext);
   const { data } = await client.query<CmsFilesAdminQueryData>({ query: CmsFilesAdminQueryDocument });
   return data;
 };

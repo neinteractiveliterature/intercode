@@ -1,12 +1,13 @@
 import { useTranslation } from 'react-i18next';
-import { LoaderFunction, useLoaderData, useNavigate } from 'react-router';
+import { LoaderFunction, useLoaderData, useNavigate, RouterContextProvider } from 'react-router';
 import { Link } from 'react-router';
 import usePageTitle from '../usePageTitle';
 import EventProposalForm from './EventProposalForm';
 import { EventProposalQueryData, EventProposalQueryDocument, EventProposalQueryVariables } from './queries.generated';
-import { client } from '../useIntercodeApolloClient';
+import { apolloClientContext } from 'AppContexts';
 
-export const loader: LoaderFunction = async ({ params: { id } }) => {
+export const loader: LoaderFunction<RouterContextProvider> = async ({ params: { id }, context }) => {
+  const client = context.get(apolloClientContext);
   const { data } = await client.query<EventProposalQueryData, EventProposalQueryVariables>({
     query: EventProposalQueryDocument,
     variables: { eventProposalId: id ?? '' },

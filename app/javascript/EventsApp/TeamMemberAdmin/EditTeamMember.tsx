@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ActionFunction, Form, redirect, useLoaderData, useNavigation } from 'react-router';
+import { ActionFunction, Form, redirect, useLoaderData, useNavigation, RouterContextProvider } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import capitalize from 'lodash/capitalize';
 
@@ -8,12 +8,13 @@ import usePageTitle from '../../usePageTitle';
 import { TeamMembersQueryData, TeamMembersQueryDocument } from './queries.generated';
 import FourOhFourPage from '../../FourOhFourPage';
 import { singleTeamMemberLoader, SingleTeamMemberLoaderResult } from './loader';
-import { client } from '../../useIntercodeApolloClient';
+import { apolloClientContext } from '../../AppContexts';
 import { DeleteTeamMemberDocument, UpdateTeamMemberDocument } from './mutations.generated';
 
 export const loader = singleTeamMemberLoader;
 
-export const action: ActionFunction = async ({ params: { eventId, teamMemberId }, request }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ params: { eventId, teamMemberId }, request, context }) => {
+  const client = context.get(apolloClientContext);
   if (request.method === 'DELETE') {
     await client.mutate({
       mutation: DeleteTeamMemberDocument,

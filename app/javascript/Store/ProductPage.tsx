@@ -1,4 +1,4 @@
-import { LoaderFunction, useLoaderData, useNavigate } from 'react-router';
+import { LoaderFunction, RouterContextProvider, useLoaderData, useNavigate } from 'react-router';
 
 import ProductOrderForm from './ProductOrderForm';
 import SignInButton from '../Authentication/SignInButton';
@@ -9,10 +9,11 @@ import {
   OrderFormProductQueryDocument,
   OrderFormProductQueryVariables,
 } from './queries.generated';
-import { client } from '../useIntercodeApolloClient';
+import { apolloClientContext } from 'AppContexts';
 import { UserPricingStructureDescription } from './describePricingStructure';
 
-export const loader: LoaderFunction = async ({ params: { id } }) => {
+export const loader: LoaderFunction<RouterContextProvider> = async ({ context, params: { id } }) => {
+  const client = context.get(apolloClientContext);
   const { data } = await client.query<OrderFormProductQueryData, OrderFormProductQueryVariables>({
     query: OrderFormProductQueryDocument,
     variables: { productId: id ?? '' },

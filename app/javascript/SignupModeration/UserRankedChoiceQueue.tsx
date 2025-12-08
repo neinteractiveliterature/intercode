@@ -1,4 +1,4 @@
-import { LoaderFunction, useLoaderData } from 'react-router';
+import { LoaderFunction, useLoaderData, RouterContextProvider } from 'react-router';
 import UserSignupQueue from '../EventsApp/MySignupQueue/UserSignupQueue';
 import UserConProfileSignupsCard from '../EventsApp/SignupAdmin/UserConProfileSignupsCard';
 import {
@@ -6,9 +6,10 @@ import {
   SignupModerationAttendeeRankedChoicesQueryDocument,
   SignupModerationAttendeeRankedChoicesQueryVariables,
 } from './queries.generated';
-import { client } from '../useIntercodeApolloClient';
+import { apolloClientContext } from 'AppContexts';
 
-export const loader: LoaderFunction = async ({ params: { userConProfileId } }) => {
+export const loader: LoaderFunction<RouterContextProvider> = async ({ params: { userConProfileId }, context }) => {
+  const client = context.get(apolloClientContext);
   const { data } = await client.query<
     SignupModerationAttendeeRankedChoicesQueryData,
     SignupModerationAttendeeRankedChoicesQueryVariables

@@ -1,4 +1,4 @@
-import { LoaderFunction, useRouteLoaderData } from 'react-router';
+import { LoaderFunction, RouterContextProvider, useRouteLoaderData } from 'react-router';
 import {
   AdminSignupQueryData,
   AdminSignupQueryDocument,
@@ -7,10 +7,14 @@ import {
   SignupAdminEventQueryDocument,
   SignupAdminEventQueryVariables,
 } from './queries.generated';
-import { client } from '../../useIntercodeApolloClient';
+import { apolloClientContext } from 'AppContexts';
 import { NamedRoute } from '../../AppRouter';
 
-export const signupAdminEventLoader: LoaderFunction = async ({ params: { eventId } }) => {
+export const signupAdminEventLoader: LoaderFunction<RouterContextProvider> = async ({
+  context,
+  params: { eventId },
+}) => {
+  const client = context.get(apolloClientContext);
   const { data } = await client.query<SignupAdminEventQueryData, SignupAdminEventQueryVariables>({
     query: SignupAdminEventQueryDocument,
     variables: { eventId: eventId ?? '' },
@@ -18,7 +22,8 @@ export const signupAdminEventLoader: LoaderFunction = async ({ params: { eventId
   return data;
 };
 
-export const singleSignupLoader: LoaderFunction = async ({ params: { id } }) => {
+export const singleSignupLoader: LoaderFunction<RouterContextProvider> = async ({ context, params: { id } }) => {
+  const client = context.get(apolloClientContext);
   const { data } = await client.query<AdminSignupQueryData, AdminSignupQueryVariables>({
     query: AdminSignupQueryDocument,
     variables: { id: id ?? '' },

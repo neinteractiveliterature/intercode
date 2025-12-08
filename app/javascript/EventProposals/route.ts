@@ -1,8 +1,9 @@
-import { ActionFunction, redirect } from 'react-router';
-import { client } from '../useIntercodeApolloClient';
+import { ActionFunction, RouterContextProvider, redirect } from 'react-router';
+import { apolloClientContext } from '../AppContexts';
 import { CreateEventProposalDocument } from './mutations.generated';
 
-export const action: ActionFunction = async ({ request }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
+  const client = context.get(apolloClientContext);
   try {
     if (request.method === 'POST') {
       const formData = await request.formData();

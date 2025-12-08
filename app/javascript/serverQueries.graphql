@@ -1,0 +1,7 @@
+query ClientConfigurationQuery {
+  clientConfiguration {
+    rails_default_active_storage_service_name
+    rails_direct_uploads_url
+    recaptcha_site_key
+  }
+}

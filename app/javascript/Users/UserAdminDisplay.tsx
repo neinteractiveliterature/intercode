@@ -1,7 +1,7 @@
 import { useMemo } from 'react';
 import reverse from 'lodash/reverse';
 import sortBy from 'lodash/sortBy';
-import { LoaderFunction, useLoaderData } from 'react-router';
+import { LoaderFunction, useLoaderData, RouterContextProvider } from 'react-router';
 
 import usePageTitle from '../usePageTitle';
 import { UserAdminQueryData, UserAdminQueryDocument } from './queries.generated';
@@ -9,7 +9,7 @@ import { timespanFromConvention } from '../TimespanUtils';
 import { useAppDateTimeFormat } from '../TimeUtils';
 import humanize from '../humanize';
 import { useTranslation } from 'react-i18next';
-import { client } from '../useIntercodeApolloClient';
+import { apolloClientContext } from 'AppContexts';
 
 function sortByConventionDate(profiles: UserAdminQueryData['user']['user_con_profiles']) {
   return reverse(sortBy(profiles, (profile) => profile.convention.starts_at));
@@ -21,7 +21,8 @@ function buildProfileUrl(profile: UserAdminQueryData['user']['user_con_profiles'
   return profileUrl.toString();
 }
 
-export const loader: LoaderFunction = async ({ params: { id } }) => {
+export const loader: LoaderFunction<RouterContextProvider> = async ({ params: { id }, context }) => {
+  const client = context.get(apolloClientContext);
   const { data } = await client.query<UserAdminQueryData>({ query: UserAdminQueryDocument, variables: { id } });
   return data;
 };

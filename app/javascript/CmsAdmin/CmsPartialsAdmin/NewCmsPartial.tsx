@@ -1,15 +1,16 @@
 import { useState } from 'react';
-import { ActionFunction, Form, redirect, useActionData, useNavigation } from 'react-router';
+import { ActionFunction, Form, redirect, useActionData, useNavigation, RouterContextProvider } from 'react-router';
 
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { buildPartialInputFromFormData } from './buildPartialInput';
 import CmsPartialForm, { CmsPartialFormFields } from './CmsPartialForm';
 import usePageTitle from '../../usePageTitle';
-import { client } from '../../useIntercodeApolloClient';
+import { apolloClientContext } from '../../AppContexts';
 import { CreatePartialDocument } from './mutations.generated';
 
-export const action: ActionFunction = async ({ request }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ request, context }) => {
+  const client = context.get(apolloClientContext);
   const formData = await request.formData();
 
   try {

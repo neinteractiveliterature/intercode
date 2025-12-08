@@ -30,8 +30,8 @@ import { CommonConventionDataQueryData, CommonConventionDataQueryDocument } from
 import { getFilterableFormItems } from '../../useFilterableFormItems';
 import useMergeCategoriesIntoEvents from '../../useMergeCategoriesIntoEvents';
 import EventCatalogNavTabs from '../EventCatalogNavTabs';
-import { LoaderFunction, useLoaderData } from 'react-router';
-import { client } from '../../../useIntercodeApolloClient';
+import { LoaderFunction, useLoaderData, RouterContextProvider } from 'react-router';
+import { apolloClientContext } from '../../../AppContexts';
 import { FetchMoreFunction } from '@apollo/client/react/internal';
 
 const PAGE_SIZE = 20;
@@ -77,7 +77,8 @@ type LoaderResult = {
   filterableFormItems: ReturnType<typeof getFilterableFormItems>;
 };
 
-export const loader: LoaderFunction = async () => {
+export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+  const client = context.get(apolloClientContext);
   const { data } = await client.query<CommonConventionDataQueryData>({ query: CommonConventionDataQueryDocument });
   if (!data) {
     return new Response(null, { status: 404 });

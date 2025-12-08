@@ -17,8 +17,9 @@ import {
   useLoaderData,
   useNavigate,
   useNavigation,
+  RouterContextProvider,
 } from 'react-router';
-import { client } from '../useIntercodeApolloClient';
+import { apolloClientContext } from 'AppContexts';
 import { MergeUsersDocument } from './mutations.generated';
 import { i18n } from '../setupI18Next';
 
@@ -34,7 +35,8 @@ type ActionArgs = {
   winningProfileIds: Record<string, string>;
 };
 
-export const action: ActionFunction = async ({ request }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ request, context }) => {
+  const client = context.get(apolloClientContext);
   const { userIds, winningUserId, winningProfileIds } = (await request.json()) as ActionArgs;
   if (!userIds) {
     throw new Error(i18n.t('admin.users.merge.noUsers'));
@@ -64,7 +66,8 @@ export const action: ActionFunction = async ({ request }) => {
   return redirect('..');
 };
 
-export const loader: LoaderFunction = async ({ params: { ids } }) => {
+export const loader: LoaderFunction<RouterContextProvider> = async ({ params: { ids }, context }) => {
+  const client = context.get(apolloClientContext);
   const { data } = await client.query({
     query: MergeUsersModalQueryDocument,
     variables: { ids: ids?.split(',') ?? [] },
