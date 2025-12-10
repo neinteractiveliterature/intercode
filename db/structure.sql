@@ -5557,7 +5557,7 @@ ALTER TABLE ONLY public.event_ratings
 --
 
 ALTER TABLE ONLY public.oauth_openid_requests
-    ADD CONSTRAINT fk_rails_77114b3b09 FOREIGN KEY (access_grant_id) REFERENCES public.oauth_access_grants(id);
+    ADD CONSTRAINT fk_rails_77114b3b09 FOREIGN KEY (access_grant_id) REFERENCES public.oauth_access_grants(id) ON DELETE CASCADE;
 
 
 --
@@ -6135,6 +6135,7 @@ ALTER TABLE ONLY public.cms_files_pages
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20251210230514'),
 ('20251109200750'),
 ('20251001173716'),
 ('20250906190727'),
