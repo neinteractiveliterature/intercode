@@ -10,7 +10,7 @@ import { CreateCouponDocument } from './mutations.generated';
 import { useTranslation } from 'react-i18next';
 import { CouponInput } from 'graphqlTypes.generated';
 import { ActionFunction, redirect, RouterContextProvider } from 'react-router';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 import { Link, useFetcher } from 'react-router';
 
 export const action: ActionFunction<RouterContextProvider> = async ({ context, request }) => {

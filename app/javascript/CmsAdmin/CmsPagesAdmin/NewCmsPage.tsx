@@ -8,7 +8,7 @@ import CmsPageForm, { PageFormFields } from './CmsPageForm';
 import usePageTitle from '../../usePageTitle';
 import { CreatePageDocument } from './mutations.generated';
 import { useCmsPagesAdminLoader } from './loaders';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 
 export const action: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
   const client = context.get(apolloClientContext);

@@ -1,5 +1,5 @@
 import { ActionFunction, data, useNavigate, RouterContextProvider } from 'react-router';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 import { ForceConfirmSignupDocument } from '../mutations.generated';
 import { useEffect, useState } from 'react';
 import { useTranslation } from 'react-i18next';

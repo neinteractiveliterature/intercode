@@ -18,7 +18,7 @@ import usePageTitle from '../usePageTitle';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 import { ConventionAdminConventionQueryData, ConventionAdminConventionQueryDocument } from './queries.generated';
 import { ConventionInput } from '../graphqlTypes.generated';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 import { UpdateConventionDocument } from './mutations.generated';
 
 export const action: ActionFunction<RouterContextProvider> = async ({ context, request }) => {

@@ -10,7 +10,7 @@ import { useCallback } from 'react';
 import FileUploadForm from '../../BuiltInForms/FileUploadForm';
 import { Blob } from '@rails/activestorage';
 import { ActionFunction, LoaderFunction, redirect, useLoaderData, RouterContextProvider } from 'react-router';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 import { CreateCmsFileDocument, DeleteCmsFileDocument, RenameCmsFileDocument } from './mutations.generated';
 import { useSubmit } from 'react-router';
 

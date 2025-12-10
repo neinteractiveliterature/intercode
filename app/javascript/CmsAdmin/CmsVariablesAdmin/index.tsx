@@ -6,7 +6,7 @@ import ExistingVariableRow from './ExistingVariableRow';
 import usePageTitle from '../../usePageTitle';
 import { CmsVariablesQueryData, CmsVariablesQueryDocument } from './queries.generated';
 import { LoaderFunction, useLoaderData, RouterContextProvider } from 'react-router';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 
 export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
   const client = context.get(apolloClientContext);

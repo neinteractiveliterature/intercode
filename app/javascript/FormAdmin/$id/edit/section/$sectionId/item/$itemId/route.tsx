@@ -19,7 +19,7 @@ import { FormEditorContext, FormEditorFormItem, FormItemEditorContext } from 'Fo
 import { PreviewFormItemQueryDocument } from 'FormAdmin/queries.generated';
 import FormItemTools from 'FormAdmin/FormItemTools';
 import FormItemInput from 'FormPresenter/ItemInputs/FormItemInput';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 import { DeleteFormItemDocument, UpdateFormItemDocument } from 'FormAdmin/mutations.generated';
 import { FormItem } from 'graphqlTypes.generated';
 import FormItemEditorContent from './FormItemEditorContent';

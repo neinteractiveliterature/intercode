@@ -1,9 +1,9 @@
 import { useContext } from 'react';
 import {
-  RouteObject,
+  type RouteObject,
   replace,
   Outlet,
-  LoaderFunction,
+  type LoaderFunction,
   redirect,
   useNavigate,
   useRouteError,
@@ -13,8 +13,8 @@ import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import FourOhFourPage from './FourOhFourPage';
 import { SignupAutomationMode, SignupMode, SiteMode, TicketMode } from './graphqlTypes.generated';
-import AppRootContext, { AppRootContextValue } from './AppRootContext';
-import useAuthorizationRequired, { AbilityName } from './Authentication/useAuthorizationRequired';
+import AppRootContext, { type AppRootContextValue } from './AppRootContext';
+import useAuthorizationRequired, { type AbilityName } from './Authentication/useAuthorizationRequired';
 import { EventAdminEventsQueryDocument } from './EventAdmin/queries.generated';
 import buildEventCategoryUrl from './EventAdmin/buildEventCategoryUrl';
 import {
@@ -41,7 +41,7 @@ import { cmsContentGroupsAdminLoader } from './CmsAdmin/CmsContentGroupsAdmin/lo
 import { departmentAdminLoader } from './DepartmentAdmin/loaders';
 import { eventCategoryAdminLoader } from './EventCategoryAdmin/loaders';
 import { eventAdminEventsLoader } from './EventAdmin/loaders';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 
 export enum NamedRoute {
   AdminEditEventProposal = 'AdminEditEventProposal',

@@ -7,7 +7,7 @@ import { Link, LoaderFunction, useFetcher, useLoaderData, RouterContextProvider 
 import AppRootContext from '../AppRootContext';
 
 import { useTranslation } from 'react-i18next';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 import { NotificationsConfigQueryData, NotificationsConfigQueryDocument } from './queries.generated';
 import sortBy from 'lodash/sortBy';
 

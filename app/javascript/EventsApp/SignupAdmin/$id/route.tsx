@@ -7,7 +7,7 @@ import { DateTime } from 'luxon';
 import { useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 import snakeCase from 'lodash/snakeCase';
 import { AdminSignupQueryData, SignupFieldsFragment } from '../queries.generated';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 import { UpdateSignupCountedDocument } from '../mutations.generated';
 import { useSingleSignupLoader } from '../loaders';
 import AppRootContext from '../../../AppRootContext';

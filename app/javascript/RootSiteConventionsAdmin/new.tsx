@@ -1,6 +1,6 @@
 import { ActionFunction, LoaderFunction, redirect, useLoaderData, RouterContextProvider } from 'react-router';
 import NewConventionModal from './NewConventionModal';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 import { NewConventionModalQueryData, NewConventionModalQueryDocument } from './queries.generated';
 import { CreateConventionDocument } from './mutations.generated';
 

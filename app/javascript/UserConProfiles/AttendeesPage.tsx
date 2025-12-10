@@ -3,7 +3,7 @@ import usePageTitle from '../usePageTitle';
 import UserConProfilesTable from './UserConProfilesTable';
 import { LoaderFunction, Outlet, useLoaderData, RouterContextProvider } from 'react-router';
 import { AttendeesPageQueryData, AttendeesPageQueryDocument } from './queries.generated';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 
 export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
   const client = context.get(apolloClientContext);

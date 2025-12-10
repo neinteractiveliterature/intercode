@@ -3,7 +3,7 @@ import usePageTitle from '../usePageTitle';
 import { SignupCountsByStateQueryData, SignupCountsByStateQueryDocument } from './queries.generated';
 import { SignupState } from '../graphqlTypes.generated';
 import { LoaderFunction, useLoaderData, RouterContextProvider } from 'react-router';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 
 export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
   const client = context.get(apolloClientContext);

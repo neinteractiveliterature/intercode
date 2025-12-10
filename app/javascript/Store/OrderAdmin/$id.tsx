@@ -1,6 +1,6 @@
 import { OrderInput } from 'graphqlTypes.generated';
 import { ActionFunction, data, LoaderFunction, useLoaderData, useNavigate, RouterContextProvider } from 'react-router';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 import EditOrderModal from './EditOrderModal';
 import { AdminUpdateOrderDocument } from './mutations.generated';
 import { AdminOrderQueryData, AdminOrderQueryDocument } from './queries.generated';

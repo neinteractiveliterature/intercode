@@ -1,5 +1,5 @@
 import { LoaderFunction, RouterContextProvider } from 'react-router';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 import {
   OrganizationAdminOrganizationsQueryData,
   OrganizationAdminOrganizationsQueryDocument,

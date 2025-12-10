@@ -1,12 +1,25 @@
 import { ApolloClient } from '@apollo/client';
 import { ApolloProvider } from '@apollo/client/react';
-import { apolloClientContext, authenticityTokensManagerContext, clientConfigurationDataContext } from 'AppContexts';
-import { ProviderStack } from 'AppWrapper';
-import AuthenticityTokensManager, { AuthenticityTokensContext } from 'AuthenticityTokensContext';
-import { ClientConfiguration } from 'graphqlTypes.generated';
-import { StrictMode } from 'react';
-import { LoaderFunction, useLoaderData } from 'react-router';
-import { ClientConfigurationQueryData } from 'serverQueries.generated';
+import { ProviderStack } from '~/AppWrapper';
+import AuthenticityTokensManager, {
+  AuthenticityTokensContext,
+  getAuthenticityTokensURL,
+} from '~/AuthenticityTokensContext';
+import type { ClientConfiguration } from '~/graphqlTypes.generated';
+import { StrictMode, useContext, useMemo } from 'react';
+import { buildBrowserApolloClient } from '~/useIntercodeApolloClient';
+import type { Route } from './+types/root';
+import { apolloClientContext } from './AppContexts';
+import { ClientConfigurationQueryDocument, type ClientConfigurationQueryData } from './serverQueries.generated';
+
+export async function clientLoader({ context }: Route.ClientLoaderArgs) {
+  const client = context.get(apolloClientContext);
+  const { data } = await client.query({ query: ClientConfigurationQueryDocument });
+  if (!data) {
+    return new Response(null, { status: 500 });
+  }
+  return { clientConfiguration: data.clientConfiguration };
+}
 
 type RootLoaderData = {
   clientConfigurationData: ClientConfigurationQueryData;
@@ -44,5 +57,3 @@ export default function Root() {
     </StrictMode>
   );
 }
-
-export const Component = Root;

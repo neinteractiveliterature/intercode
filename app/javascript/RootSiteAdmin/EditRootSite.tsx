@@ -15,7 +15,7 @@ import {
   useLoaderData,
   useNavigation,
 } from 'react-router';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 import { Form } from 'react-router';
 import { UpdateRootSiteDocument } from './mutations.generated';
 

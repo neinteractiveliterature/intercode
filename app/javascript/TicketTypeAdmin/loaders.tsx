@@ -1,4 +1,4 @@
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 import {
   AdminTicketTypesQueryData,
   AdminTicketTypesQueryDocument,

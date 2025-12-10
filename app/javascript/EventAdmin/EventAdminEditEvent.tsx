@@ -14,7 +14,7 @@ import {
 } from './queries.generated';
 import { useImageAttachmentConfig } from '../BuiltInFormControls/MarkdownInput';
 import { NamedRoute } from '../AppRouter';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 import { UpdateEventOptions } from './$id';
 import { ActiveStorageAttachment } from 'graphqlTypes.generated';
 import { useAsyncFetcher } from 'useAsyncFetcher';

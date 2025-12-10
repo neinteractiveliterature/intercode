@@ -3,7 +3,7 @@ import { useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 import usePageTitle from '../usePageTitle';
 import { EventAdminEventsQueryData, EventAdminEventsQueryDocument } from './queries.generated';
 import { LoaderFunction, RouterContextProvider, useLoaderData } from 'react-router';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 import { useSubmit } from 'react-router';
 
 export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {

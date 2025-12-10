@@ -7,7 +7,7 @@ import StaffPositionForm, { EditingStaffPosition } from './StaffPositionForm';
 import usePageTitle from '../usePageTitle';
 import buildStaffPositionInput from './buildStaffPositionInput';
 import { StaffPositionsQueryDocument } from './queries.generated';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 import { StaffPositionInput } from 'graphqlTypes.generated';
 import { CreateStaffPositionDocument } from './mutations.generated';
 

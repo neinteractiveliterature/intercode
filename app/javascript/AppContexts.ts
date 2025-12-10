@@ -1,8 +1,8 @@
 import { ApolloClient } from '@apollo/client';
-import { Session, createContext } from 'react-router';
-import { ClientConfigurationQueryData } from 'serverQueries.generated';
-import { SessionData, SessionFlashData } from 'sessions';
-import AuthenticityTokensManager from 'AuthenticityTokensContext';
+import { type Session, createContext } from 'react-router';
+import type { ClientConfigurationQueryData } from '~/serverQueries.generated';
+import type { SessionData, SessionFlashData } from '~/sessions';
+import AuthenticityTokensManager from '~/AuthenticityTokensContext';
 
 export const authenticityTokensManagerContext = createContext<AuthenticityTokensManager>();
 export const apolloClientContext = createContext<ApolloClient>();

@@ -9,7 +9,7 @@ import useAuthorizationRequired from '../Authentication/useAuthorizationRequired
 import { RoomsAdminQueryData, RoomsAdminQueryDocument } from './queries.generated';
 import { useTranslation } from 'react-i18next';
 import { ActionFunction, LoaderFunction, RouterContextProvider, useActionData, useLoaderData } from 'react-router';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 import { useSubmit } from 'react-router';
 import { CreateRoomDocument } from './mutations.generated';
 

@@ -12,7 +12,7 @@ import {
 } from './queries.generated';
 import { useTranslation } from 'react-i18next';
 import { ActionFunction, LoaderFunction, RouterContextProvider, redirect, useLoaderData } from 'react-router';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 import { Link, useFetcher } from 'react-router';
 import { DeleteCouponDocument, UpdateCouponDocument } from './mutations.generated';
 import { CouponInput } from 'graphqlTypes.generated';

@@ -8,7 +8,7 @@ import CmsLayoutForm from './CmsLayoutForm';
 import usePageTitle from '../../usePageTitle';
 import { CmsLayout } from '../../graphqlTypes.generated';
 import { CreateLayoutDocument } from './mutations.generated';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 
 export const action: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
   const client = context.get(apolloClientContext);

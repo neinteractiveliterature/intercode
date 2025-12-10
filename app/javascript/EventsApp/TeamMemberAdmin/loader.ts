@@ -1,6 +1,6 @@
 import { LoaderFunction, RouterContextProvider, useRouteLoaderData } from 'react-router';
 import { TeamMembersQueryData, TeamMembersQueryDocument } from './queries.generated';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 import { NamedRoute } from '../../AppRouter';
 
 export const teamMembersLoader: LoaderFunction<RouterContextProvider> = async ({ context, params: { eventId } }) => {

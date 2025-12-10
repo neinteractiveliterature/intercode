@@ -18,7 +18,7 @@ import { useTranslation } from 'react-i18next';
 import { ActionFunction, data, Outlet, useNavigate, RouterContextProvider } from 'react-router';
 import { Link } from 'react-router';
 import { CreateOrderDocument, CreateOrderMutationVariables } from './mutations.generated';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 import { CreateCouponApplicationDocument } from 'Store/mutations.generated';
 
 export type CreateOrderActionInput = {

@@ -1,5 +1,5 @@
 import { LoaderFunction, RouterContextProvider } from 'react-router';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 import { UserConProfileAdminQueryData, UserConProfileAdminQueryDocument } from './queries.generated';
 
 export const loader: LoaderFunction<RouterContextProvider> = async ({ context, params: { id } }) => {

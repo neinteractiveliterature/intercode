@@ -2,19 +2,20 @@ import 'regenerator-runtime/runtime';
 
 import mountReactComponents from '../mountReactComponents';
 import { StrictMode, use, useEffect, useMemo, useState } from 'react';
-import AuthenticityTokensManager, { getAuthenticityTokensURL } from 'AuthenticityTokensContext';
+import AuthenticityTokensManager, { getAuthenticityTokensURL } from '~/AuthenticityTokensContext';
 import { createBrowserRouter, RouterContextProvider, RouterProvider } from 'react-router';
-import { buildBrowserApolloClient } from 'useIntercodeApolloClient';
+import { ProviderStack } from '~/AppWrapper';
+import { buildBrowserApolloClient } from '~/useIntercodeApolloClient';
 import {
   apolloClientContext,
   authenticityTokensManagerContext,
   clientConfigurationDataContext,
   fetchContext,
   sessionContext,
-} from 'AppContexts';
-import { ClientConfigurationQueryData } from 'serverQueries.generated';
-import { appRootRoutes } from 'AppRouter';
-import { ApolloClient, OperationVariables } from '@apollo/client';
+} from '~/AppContexts';
+import type { ClientConfigurationQueryData } from '~/serverQueries.generated';
+import { ApolloProvider } from '@apollo/client/react';
+import { appRootRoutes } from '~/AppRouter';
 
 const manager = new AuthenticityTokensManager(fetch, undefined, getAuthenticityTokensURL());
 const refreshPromise = manager.refresh();

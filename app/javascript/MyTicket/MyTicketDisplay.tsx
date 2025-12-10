@@ -7,7 +7,7 @@ import usePageTitle from '../usePageTitle';
 import AppRootContext from '../AppRootContext';
 import { MyTicketDisplayQueryData, MyTicketDisplayQueryDocument } from './queries.generated';
 import { useAppDateTimeFormat } from '../TimeUtils';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 
 type LoaderResult = {
   convention: MyTicketDisplayQueryData['convention'];

@@ -5,7 +5,7 @@ import useLoginRequired from '../Authentication/useLoginRequired';
 import usePageTitle from '../usePageTitle';
 import { TicketPurchaseFormQueryData, TicketPurchaseFormQueryDocument } from './queries.generated';
 import TicketPurchaseForm from './TicketPurchaseForm';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 
 export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
   const client = context.get(apolloClientContext);

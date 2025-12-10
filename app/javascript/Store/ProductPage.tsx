@@ -9,7 +9,7 @@ import {
   OrderFormProductQueryDocument,
   OrderFormProductQueryVariables,
 } from './queries.generated';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 import { UserPricingStructureDescription } from './describePricingStructure';
 
 export const loader: LoaderFunction<RouterContextProvider> = async ({ context, params: { id } }) => {

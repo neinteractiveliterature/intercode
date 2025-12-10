@@ -5,7 +5,7 @@ import OutletWithLoading from './OutletWithLoading';
 import NavigationBar from './NavigationBar';
 import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
 import { AppRootLayoutQueryData, AppRootLayoutQueryDocument } from './appRootQueries.generated';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 
 // Avoid unnecessary layout checks when moving between pages that can't change layout
 function normalizePathForLayout(path: string) {

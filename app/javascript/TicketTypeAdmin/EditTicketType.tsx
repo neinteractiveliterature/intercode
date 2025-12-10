@@ -9,7 +9,7 @@ import usePageTitle from '../usePageTitle';
 import AppRootContext from '../AppRootContext';
 import { SingleTicketTypeLoaderResult } from './loaders';
 import { TicketTypeInput } from 'graphqlTypes.generated';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 import { UpdateTicketTypeDocument } from './mutations.generated';
 import invariant from 'tiny-invariant';
 
