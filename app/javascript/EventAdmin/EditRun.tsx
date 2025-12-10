@@ -1,13 +1,24 @@
 import { useState } from 'react';
-import { useNavigate, LoaderFunction, useLoaderData, ActionFunction, redirect, RouterContextProvider } from 'react-router';
+import {
+  useNavigate,
+  LoaderFunction,
+  useLoaderData,
+  ActionFunction,
+  redirect,
+  RouterContextProvider,
+} from 'react-router';
 
 import EditRunModal, { EditingRun } from './EditRunModal';
 import { EventAdminEventsQueryData, EventAdminEventsQueryDocument } from './queries.generated';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 import { UpdateRunDocument } from './mutations.generated';
 import { buildRunInputFromFormData } from './buildRunInputFromFormData';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ params: { eventCategoryId, runId }, request, context }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({
+  params: { eventCategoryId, runId },
+  request,
+  context,
+}) => {
   const client = context.get(apolloClientContext);
   try {
     const formData = await request.formData();

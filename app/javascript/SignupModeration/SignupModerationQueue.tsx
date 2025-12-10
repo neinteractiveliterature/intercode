@@ -26,7 +26,7 @@ import { ParsedSignupRound, parseSignupRounds } from '../SignupRoundUtils';
 import { describeSignupRound } from '../SignupRoundsAdmin/describeSignupRound';
 import { describeDecision } from '../SignupRoundsAdmin/RankedChoiceSignupDecisionsPage';
 import sortBy from 'lodash/sortBy';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 
 type SignupModerationContextValue = {
   acceptClicked: (signupRequest: SignupModerationSignupRequestFieldsFragment) => void;

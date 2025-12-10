@@ -12,7 +12,7 @@ import usePageTitle from '../usePageTitle';
 import { EditUserQueryData, EditUserQueryDocument } from './queries.generated';
 import humanize from '../humanize';
 import { AuthenticityTokensContext } from '../AuthenticityTokensContext';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 import PasswordInputWithStrengthCheck from './PasswordInputWithStrengthCheck';
 
 async function updateUser(

@@ -13,7 +13,7 @@ import { Stripe } from '@stripe/stripe-js';
 import AuthenticationModalContext from './Authentication/AuthenticationModalContext';
 import { GraphQLNotAuthenticatedErrorEvent } from './useIntercodeApolloClient';
 import { reloadOnAppEntrypointHeadersMismatch } from './checkAppEntrypointHeadersMatch';
-import { initErrorReporting } from 'ErrorReporting';
+import { initErrorReporting } from '~/ErrorReporting';
 
 export function buildAppRootContextValue(
   data: AppRootQueryData | null | undefined,

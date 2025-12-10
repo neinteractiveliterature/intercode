@@ -1,5 +1,5 @@
 import { ActionFunction, RouterContextProvider, data } from 'react-router';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 import { AttachImageToEventDocument } from '../EventAdmin/mutations.generated';
 
 export const action: ActionFunction<RouterContextProvider> = async ({ context, params: { eventId }, request }) => {

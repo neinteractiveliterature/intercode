@@ -1,6 +1,6 @@
 import { LoaderFunction, useLoaderData, RouterContextProvider } from 'react-router';
 import NewConventionModal, { NewConventionModalProps } from './NewConventionModal';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 import {
   ConventionDisplayQueryDocument,
   NewConventionModalQueryData,

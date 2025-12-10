@@ -26,7 +26,7 @@ import ChoiceSetFilter from '../Tables/ChoiceSetFilter';
 import { TFunction } from 'i18next';
 import assertNever from 'assert-never';
 import { FilterCodecs, buildFieldFilterCodecs } from '../Tables/FilterUtils';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 
 export function describeDecision(decision: RankedChoiceDecisionValue, t: TFunction): string {
   if (decision === RankedChoiceDecisionValue.Signup) {

@@ -5,6 +5,7 @@ This document provides essential context about the Intercode codebase for AI ass
 ## Project Overview
 
 Intercode is a convention management system built with:
+
 - **Backend**: Ruby on Rails with GraphQL API
 - **Frontend**: React with TypeScript
 - **Routing**: React Router v7
@@ -24,7 +25,7 @@ React Router loaders and actions run during navigation and need to access the cl
 
 ```typescript
 import { LoaderFunction, RouterContextProvider } from 'react-router';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 
 export const loader: LoaderFunction<RouterContextProvider> = async ({ context, params }) => {
   const client = context.get(apolloClientContext);
@@ -46,6 +47,7 @@ export const action: ActionFunction<RouterContextProvider> = async ({ context, r
 ```
 
 **Key points:**
+
 - Always use `LoaderFunction<RouterContextProvider>` or `ActionFunction<RouterContextProvider>` as the type
 - Get client with `context.get(apolloClientContext)`
 - Import `apolloClientContext` from `'AppContexts'`
@@ -72,6 +74,7 @@ function MyComponent() {
 ```
 
 **Key points:**
+
 - Use `useApolloClient()` hook from `'@apollo/client/react'`
 - Call the hook inside the component/hook function body
 - Never try to use `useApolloClient()` in loaders or actions (they're not React components)
@@ -79,11 +82,13 @@ function MyComponent() {
 ### Common Mistakes to Avoid
 
 ❌ **Don't**: Import a global client instance
+
 ```typescript
 import { client } from 'useIntercodeApolloClient'; // This no longer exists
 ```
 
 ❌ **Don't**: Use `useApolloClient()` in loaders/actions
+
 ```typescript
 export const loader: LoaderFunction = async () => {
   const client = useApolloClient(); // Error: hooks can't be used here
@@ -91,6 +96,7 @@ export const loader: LoaderFunction = async () => {
 ```
 
 ❌ **Don't**: Try to access `client` directly in loaders without getting it from context
+
 ```typescript
 export const loader: LoaderFunction = async () => {
   const { data } = await client.query(...); // Error: client is not defined
@@ -118,6 +124,7 @@ export const loader: LoaderFunction = async () => {
 ### Route Structure
 
 Routes follow a file-based convention similar to Remix/React Router v7:
+
 - `route.tsx` or `index.tsx`: Default route component
 - `$id.ts`: Dynamic route segment
 - `loaders.ts`: Loader functions for the route
@@ -251,10 +258,7 @@ import { useAppDateTimeFormat } from './TimeUtils';
 
 function MyComponent() {
   const format = useAppDateTimeFormat();
-  const formatted = format(
-    DateTime.fromISO(isoString, { zone: timezoneName }),
-    'longWeekdayDateTimeWithZone'
-  );
+  const formatted = format(DateTime.fromISO(isoString, { zone: timezoneName }), 'longWeekdayDateTimeWithZone');
 }
 ```
 
@@ -269,6 +273,7 @@ const formattedPrice = formatMoney(priceInCents);
 ## Testing Considerations
 
 When modifying loader/action patterns:
+
 1. Ensure loaders use `LoaderFunction<RouterContextProvider>`
 2. Ensure actions use `ActionFunction<RouterContextProvider>`
 3. Always get the client from context in loaders/actions
@@ -297,14 +302,17 @@ yarn test
 ## Common Errors and Solutions
 
 ### "Cannot find name 'client'" in loader/action
+
 **Cause**: Trying to use a global `client` variable that doesn't exist.
 **Solution**: Get client from context using `context.get(apolloClientContext)`.
 
 ### "useApolloClient is defined but never used" in file with loader
+
 **Cause**: File has loader/action that needs context-based client, not hook-based.
 **Solution**: Remove `useApolloClient` import, add `apolloClientContext` import, update loader signature.
 
 ### "Property 'instance' does not exist on type 'typeof AuthenticityTokensManager'"
+
 **Cause**: Incorrect usage of AuthenticityTokensManager.
 **Solution**: Use `AuthenticityTokensContext` with `useContext` hook instead.
 

@@ -7,7 +7,7 @@ import EventCategoryForm, { EventCategoryForForm } from './EventCategoryForm';
 import usePageTitle from '../usePageTitle';
 import { EventCategoryFieldsFragmentDoc } from './queries.generated';
 import { useEventCategoryAdminLoader } from './loaders';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 import { CreateEventCategoryDocument } from './mutations.generated';
 import { buildEventCategoryFromFormData } from './buildEventCategoryInput';
 import { Convention } from '../graphqlTypes.generated';

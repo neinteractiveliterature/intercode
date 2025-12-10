@@ -10,7 +10,7 @@ import {
   OAuthAuthorizationPromptQueryDocument,
   OAuthAuthorizationPromptQueryVariables,
 } from './queries.generated';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 
 type AuthorizationParams = {
   client_id?: string;
@@ -114,11 +114,7 @@ function AuthorizationPrompt() {
   };
 
   const denyAuthorization = async () => {
-    buildAndSubmitForm(
-      'DELETE',
-      manager.tokens?.denyAuthorization ?? '',
-      authorizationParams,
-    );
+    buildAndSubmitForm('DELETE', manager.tokens?.denyAuthorization ?? '', authorizationParams);
   };
 
   return (

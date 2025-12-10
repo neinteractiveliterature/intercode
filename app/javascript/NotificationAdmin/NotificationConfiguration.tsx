@@ -13,7 +13,7 @@ import { ErrorDisplay, usePropertySetters } from '@neinteractiveliterature/litfo
 
 import LiquidInput from '../BuiltInFormControls/LiquidInput';
 import { NotificationAdminQueryData, NotificationAdminQueryDocument } from './queries.generated';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 
 import { UpdateNotificationTemplateDocument } from './mutations.generated';
 import NotificationDestinationsConfig from './NotificationDestinationsConfig';

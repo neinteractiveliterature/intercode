@@ -5,19 +5,20 @@ import { StrictMode, use, useMemo } from 'react';
 import AuthenticityTokensManager, {
   AuthenticityTokensContext,
   getAuthenticityTokensURL,
-} from 'AuthenticityTokensContext';
+} from '~/AuthenticityTokensContext';
 import { createBrowserRouter, RouterContextProvider, RouterProvider } from 'react-router';
-import { buildBrowserApolloClient } from 'useIntercodeApolloClient';
+import { ProviderStack } from '~/AppWrapper';
+import { buildBrowserApolloClient } from '~/useIntercodeApolloClient';
 import {
   apolloClientContext,
   authenticityTokensManagerContext,
   clientConfigurationDataContext,
   fetchContext,
   sessionContext,
-} from 'AppContexts';
-import { ClientConfigurationQueryData } from 'serverQueries.generated';
+} from '~/AppContexts';
+import type { ClientConfigurationQueryData } from '~/serverQueries.generated';
 import { ApolloProvider } from '@apollo/client/react';
-import { appRootRoutes } from 'AppRouter';
+import { appRootRoutes } from '~/AppRouter';
 
 const manager = new AuthenticityTokensManager(fetch, undefined, getAuthenticityTokensURL());
 const refreshPromise = manager.refresh();

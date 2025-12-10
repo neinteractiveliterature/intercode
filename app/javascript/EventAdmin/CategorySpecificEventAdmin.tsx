@@ -3,7 +3,7 @@ import { EventAdminEventsQueryData, EventAdminEventsQueryDocument } from './quer
 import EventAdminRunsTable from './EventAdminRunsTable';
 import RecurringEventAdmin from './RecurringEventAdmin';
 import SingleRunEventAdminList from './SingleRunEventAdminList';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 
 export const adminComponentsBySchedulingUi = {
   regular: EventAdminRunsTable,

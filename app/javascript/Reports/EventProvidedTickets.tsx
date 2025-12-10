@@ -7,7 +7,7 @@ import { sortByLocaleString, titleSort, useTabs, TabList, TabBody } from '@neint
 import usePageTitle from '../usePageTitle';
 import { EventProvidedTicketsQueryData, EventProvidedTicketsQueryDocument } from './queries.generated';
 import { LoaderFunction, useLoaderData, RouterContextProvider } from 'react-router';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 
 function EventProvidedTicketsByEvent({ data }: { data: EventProvidedTicketsQueryData }) {
   const sortedRows = titleSort(

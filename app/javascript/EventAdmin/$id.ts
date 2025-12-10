@@ -1,6 +1,6 @@
 import { buildEventInput, buildRunInput } from './InputBuilders';
 import { EventCategory, SchedulingUi } from '../graphqlTypes.generated';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 import { CreateOrUpdateRunForEventDocument, UpdateEventDocument } from './mutations.generated';
 import { ActionFunction, redirect, RouterContextProvider } from 'react-router';
 import { ApolloClient } from '@apollo/client';

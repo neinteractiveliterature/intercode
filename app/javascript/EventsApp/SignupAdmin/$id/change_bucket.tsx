@@ -6,7 +6,7 @@ import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { Link, useFetcher } from 'react-router';
 import { ActionFunction, data, useNavigate, RouterContextProvider } from 'react-router';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 import { ChangeSignupBucketDocument } from '../mutations.generated';
 import BucketInput from '../BucketInput';
 import { useSingleSignupLoader } from '../loaders';

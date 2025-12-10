@@ -6,7 +6,7 @@ import { AttendanceByPaymentAmountQueryData, AttendanceByPaymentAmountQueryDocum
 import { Money, Product } from '../graphqlTypes.generated';
 import assertNever from 'assert-never';
 import { LoaderFunction, useLoaderData, RouterContextProvider } from 'react-router';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 
 type RowType =
   AttendanceByPaymentAmountQueryData['convention']['reports']['sales_count_by_product_and_payment_amount'][number];

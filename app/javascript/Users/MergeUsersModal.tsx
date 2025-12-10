@@ -19,7 +19,7 @@ import {
   useNavigation,
   RouterContextProvider,
 } from 'react-router';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 import { MergeUsersDocument } from './mutations.generated';
 import { i18n } from '../setupI18Next';
 

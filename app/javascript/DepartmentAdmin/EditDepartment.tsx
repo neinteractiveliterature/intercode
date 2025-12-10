@@ -4,7 +4,7 @@ import usePageTitle from '../usePageTitle';
 import { buildDepartmentInputFromFormData } from './buildDepartmentInput';
 import DepartmentForm from './DepartmentForm';
 import { singleDepartmentAdminLoader, SingleDepartmentAdminLoaderResult } from './loaders';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 import { UpdateDepartmentDocument } from './mutations.generated';
 import { DepartmentAdminQueryDocument } from './queries.generated';
 import { useTranslation } from 'react-i18next';

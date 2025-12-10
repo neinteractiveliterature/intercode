@@ -5,7 +5,7 @@ import { OrderQuantityByStatus, OrderStatus } from '../graphqlTypes.generated';
 import { OrderSummaryQueryData, OrderSummaryQueryDocument } from './queries.generated';
 import humanize from '../humanize';
 import { LoaderFunction, useLoaderData, RouterContextProvider } from 'react-router';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 
 const ORDER_STATUSES = [OrderStatus.Paid, OrderStatus.Unpaid, OrderStatus.Cancelled];
 

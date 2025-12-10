@@ -1,19 +1,19 @@
 import { defineConfig } from 'vite';
-import react from '@vitejs/plugin-react-swc';
+import { reactRouter } from '@react-router/dev/vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import { fileURLToPath } from 'url';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
-import { globalDefines } from './globalDefines.mts';
+import { globalDefines } from './globalDefines';
 
 export function absolutePath(relativePath: string) {
   return fileURLToPath(new URL(relativePath, import.meta.url));
 }
 
 export default defineConfig({
-  plugins: [react(), tsconfigPaths(), nodePolyfills()],
-  resolve: {
-    mainFields: ['module'],
-  },
+  plugins: [reactRouter(), tsconfigPaths(), nodePolyfills()],
+  // resolve: {
+  //   mainFields: ['module'],
+  // },
   define: globalDefines,
   experimental: {
     renderBuiltUrl: (filename, { hostType }) => {

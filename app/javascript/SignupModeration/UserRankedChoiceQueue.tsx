@@ -6,7 +6,7 @@ import {
   SignupModerationAttendeeRankedChoicesQueryDocument,
   SignupModerationAttendeeRankedChoicesQueryVariables,
 } from './queries.generated';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 
 export const loader: LoaderFunction<RouterContextProvider> = async ({ params: { userConProfileId }, context }) => {
   const client = context.get(apolloClientContext);

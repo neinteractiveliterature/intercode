@@ -107,3 +107,5 @@ cookbooks
 # Autoscaling simulation output
 /scaling-graph.csv
 /scaling-graph.png
+
+/.react-router/

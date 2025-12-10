@@ -17,7 +17,7 @@ import { NamedRoute } from '../AppRouter';
 import { SingleOrganizationLoaderResult } from './loaders';
 import invariant from 'tiny-invariant';
 import { CreateOrganizationRoleDocument, CreateOrganizationRoleMutationVariables } from './mutations.generated';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 import { Organization } from 'graphqlTypes.generated';
 
 type ActionRequest = Omit<CreateOrganizationRoleMutationVariables, 'organizationId'>;

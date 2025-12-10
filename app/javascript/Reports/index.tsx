@@ -2,7 +2,7 @@ import { Link, LoaderFunction, useLoaderData, RouterContextProvider } from 'reac
 
 import usePageTitle from '../usePageTitle';
 import { ReportsMenuQueryData, ReportsMenuQueryDocument } from './queries.generated';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 import { useTranslation } from 'react-i18next';
 
 export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {

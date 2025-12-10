@@ -2,7 +2,7 @@ import { ActionFunction, Form, redirect, useActionData, useNavigation, RouterCon
 
 import usePageTitle from '../usePageTitle';
 import DepartmentForm from './DepartmentForm';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 import { CreateDepartmentDocument } from './mutations.generated';
 import { useTranslation } from 'react-i18next';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';

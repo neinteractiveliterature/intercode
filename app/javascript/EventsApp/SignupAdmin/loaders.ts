@@ -7,7 +7,7 @@ import {
   SignupAdminEventQueryDocument,
   SignupAdminEventQueryVariables,
 } from './queries.generated';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 import { NamedRoute } from '../../AppRouter';
 
 export const signupAdminEventLoader: LoaderFunction<RouterContextProvider> = async ({

@@ -1,5 +1,5 @@
 import { LoaderFunction, RouterContextProvider, useRouteLoaderData } from 'react-router';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 import { CmsContentGroupsAdminQueryData, CmsContentGroupsAdminQueryDocument } from './queries.generated';
 import { NamedRoute } from '../../AppRouter';
 

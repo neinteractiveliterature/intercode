@@ -11,7 +11,7 @@ import { titleSort } from '@neinteractiveliterature/litform';
 import usePageTitle from '../usePageTitle';
 import { EventsByChoiceQueryData, EventsByChoiceQueryDocument } from './queries.generated';
 import { LoaderFunction, useLoaderData, RouterContextProvider } from 'react-router';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 
 type ProcessedChoiceCount = {
   confirmed?: number;

@@ -2,7 +2,7 @@ import { Product } from 'graphqlTypes.generated';
 import { ActionFunction, data, RouterContextProvider } from 'react-router';
 import { parseProductFormData } from 'Store/buildProductInput';
 import invariant from 'tiny-invariant';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 import { DeleteProductDocument, UpdateProductDocument } from './mutations.generated';
 
 export const action: ActionFunction<RouterContextProvider> = async ({ params: { id }, request, context }) => {

@@ -1,29 +1,41 @@
 {
-  "compilerOptions": {
-    "outDir": "./dist/", // path to output directory
-    "sourceMap": true, // allow sourcemap support
-    "strictNullChecks": true, // enable strict null checks as a best practice
-    "module": "es2020", // specify module code generation
-    "moduleResolution": "Bundler",
-    "resolveJsonModule": true,
-    "jsx": "react-jsx", // use typescript to transpile jsx to js
-    "target": "es6", // specify ECMAScript target version
-    "allowJs": true, // allow a partial TypeScript and JavaScript codebase,
-    "allowSyntheticDefaultImports": true,
-    "lib": ["DOM", "DOM.Iterable", "ES2023"],
-    "noImplicitAny": true,
-    "skipLibCheck": true,
-    "maxNodeModuleJsDepth": 10,
-    "baseUrl": "./app/javascript",
-    "types": ["vitest/globals", "vite/client"]
-  },
   "include": [
-    "./app/javascript/",
-    "./script",
-    "./test/javascript/",
-    "script/buildTimezoneData.js",
-    "graphql.config.js",
-    "i18next-parser-english.config.cjs",
-    "i18next-parser-non-english.config.cjs"
-  ]
+    "**/*",
+    // "./app/javascript/",
+    // "./script",
+    // "./test/javascript/",
+    // "script/buildTimezoneData.js",
+    // "graphql.config.js",
+    // "i18next-parser-english.config.cjs",
+    // "i18next-parser-non-english.config.cjs",
+    "**/.server/**/*",
+    "**/.client/**/*",
+    ".react-router/types/**/*"
+  ],
+  "compilerOptions": {
+    "lib": ["DOM", "DOM.Iterable", "ES2023"],
+    "types": ["node", "vitest/globals", "vite/client"],
+    "target": "ES2022",
+    "module": "ES2022",
+    "moduleResolution": "bundler",
+    "jsx": "react-jsx",
+    "rootDirs": [".", "./.react-router/types"],
+    "baseUrl": ".",
+    "paths": {
+      "~/*": ["./app/javascript/*"]
+    },
+    "esModuleInterop": true,
+    // "verbatimModuleSyntax": true,
+    "noEmit": true,
+    "resolveJsonModule": true,
+    "skipLibCheck": true,
+    "strict": true
+    // "outDir": "./dist/", // path to output directory
+    // "sourceMap": true, // allow sourcemap support
+    // "strictNullChecks": true, // enable strict null checks as a best practice
+    // "allowJs": true, // allow a partial TypeScript and JavaScript codebase,
+    // "allowSyntheticDefaultImports": true,
+    // "noImplicitAny": true,
+    // "maxNodeModuleJsDepth": 10
+  }
 }

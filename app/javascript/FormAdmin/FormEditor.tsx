@@ -22,7 +22,7 @@ import { parseTypedFormItemObject } from './FormItemUtils';
 import usePageTitle from '../usePageTitle';
 import { FormEditorQueryData, FormEditorQueryDocument, FormEditorQueryVariables } from './queries.generated';
 import { useTranslation } from 'react-i18next';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext } from '~/AppContexts';
 import { UpdateFormDocument } from './mutations.generated';
 import styles from 'styles/form_editor.module.scss';
 
