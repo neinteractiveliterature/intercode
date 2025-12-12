@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback, Suspense } from 'react';
 import * as React from 'react';
 import classNames from 'classnames';
-import { useApolloClient, useSuspenseQuery } from "@apollo/client/react";
+import { useApolloClient, useSuspenseQuery } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 import { html } from '@codemirror/lang-html';
 import {
@@ -12,7 +12,7 @@ import {
   liquid,
 } from '@neinteractiveliterature/litform';
 import { Extension } from '@codemirror/state';
-import styles from 'styles/liquid_docs.module.scss';
+import styles from '~/styles/liquid_docs.module.scss';
 
 import MenuIcon from '../NavigationBar/MenuIcon';
 import { PreviewNotifierLiquidQueryDocument, PreviewLiquidQueryDocument } from './previewQueries.generated';

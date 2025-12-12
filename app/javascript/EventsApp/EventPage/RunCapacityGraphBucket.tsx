@@ -5,7 +5,7 @@ import BucketAvailabilityDisplay from './BucketAvailabilityDisplay';
 import { RunCardRegistrationPolicyFieldsFragment } from './queries.generated';
 import SignupCountData from '../SignupCountData';
 import { SignupState } from '../../graphqlTypes.generated';
-import styles from 'styles/run_capacity_graph.module.scss';
+import styles from '~/styles/run_capacity_graph.module.scss';
 
 function describeCapacity(
   bucket: RunCardRegistrationPolicyFieldsFragment['buckets'][0],

@@ -1,7 +1,7 @@
 import { ReactNode } from 'react';
 import { useTranslation } from 'react-i18next';
 import { ButtonWithTooltip } from '@neinteractiveliterature/litform';
-import styles from 'styles/event_ratings.module.scss';
+import styles from '~/styles/event_ratings.module.scss';
 
 import EventRatingIcon from './EventRatingIcon';
 

@@ -12,7 +12,7 @@ import {
 } from './StylingUtils';
 import { PIXELS_PER_LANE, LANE_GUTTER_HEIGHT } from './LayoutConstants';
 import Timespan from '../../Timespan';
-import styles from 'styles/schedule_grid.module.scss';
+import styles from '~/styles/schedule_grid.module.scss';
 
 export type FakeEventRunProps = {
   classifyEventsBy?: 'category' | 'fullness';

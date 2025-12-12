@@ -24,7 +24,7 @@ import { FormEditorQueryData, FormEditorQueryDocument, FormEditorQueryVariables 
 import { useTranslation } from 'react-i18next';
 import { apolloClientContext } from '~/AppContexts';
 import { UpdateFormDocument } from './mutations.generated';
-import styles from 'styles/form_editor.module.scss';
+import styles from '~/styles/form_editor.module.scss';
 
 export const loader: LoaderFunction<RouterContextProvider> = async ({ params: { id }, context }) => {
   const client = context.get(apolloClientContext);

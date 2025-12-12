@@ -1,7 +1,7 @@
 import { useState, useCallback, useMemo, useEffect, useRef } from 'react';
 import classNames from 'classnames';
 import { ResizeObserver } from '@juggle/resize-observer';
-import styles from 'styles/bucket_availability_display.module.scss';
+import styles from '~/styles/bucket_availability_display.module.scss';
 
 export type BucketAvailabilityDisplayProps = {
   className?: string;

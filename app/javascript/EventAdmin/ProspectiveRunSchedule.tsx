@@ -24,7 +24,7 @@ import { EventFieldsFragment, RunFieldsFragment } from './queries.generated';
 import { ScheduleGridEventFragment } from '../EventsApp/ScheduleGrid/queries.generated';
 import { ScheduleRun } from '../EventsApp/ScheduleGrid/Schedule';
 import { useEventAdminEventsLoader } from './loaders';
-import styles from 'styles/schedule_grid.module.scss';
+import styles from '~/styles/schedule_grid.module.scss';
 
 const SCHEDULE_GRID_CONFIG: ScheduleGridConfig = {
   key: 'con_schedule_by_room',

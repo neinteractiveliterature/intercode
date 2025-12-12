@@ -9,7 +9,7 @@ import { ScheduleGridConfig } from './ScheduleGridConfig';
 import SignupCountData, { EventForSignupCountData } from '../SignupCountData';
 import { RunDimensions, ScheduleLayoutResult } from './ScheduleLayout/ScheduleLayoutBlock';
 import { RegistrationPolicyForCapacityThresholds } from './getCapacityThresholds';
-import styles from 'styles/schedule_grid.module.scss';
+import styles from '~/styles/schedule_grid.module.scss';
 
 export enum SignupStatus {
   Confirmed = 'confirmed',

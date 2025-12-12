@@ -1,5 +1,5 @@
 import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
-import styles from 'styles/schedule_grid.module.scss';
+import styles from '~/styles/schedule_grid.module.scss';
 
 import { PIXELS_PER_HOUR, PIXELS_PER_LANE } from './LayoutConstants';
 
