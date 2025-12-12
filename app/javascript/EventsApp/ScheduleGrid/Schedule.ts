@@ -13,7 +13,7 @@ import { ScheduleGridConventionDataQueryData, ScheduleGridEventFragment } from '
 import { timespanFromRun } from '../../TimespanUtils';
 import { timeIsOnTheHour } from '../../TimeUtils';
 import { SchedulingUi } from '../../graphqlTypes.generated';
-import errorReporting from 'ErrorReporting';
+import errorReporting from '~/ErrorReporting';
 
 function expandTimespanToNearestHour(timespan: FiniteTimespan) {
   const start = timespan.start.set({ minute: 0, second: 0, millisecond: 0 });

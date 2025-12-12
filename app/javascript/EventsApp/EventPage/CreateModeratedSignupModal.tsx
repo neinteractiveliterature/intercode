@@ -17,7 +17,7 @@ import { SignupOption } from './buildSignupOptions';
 import { CreateSignupRankedChoiceDocument, CreateSignupRequestDocument } from './mutations.generated';
 import { useRevalidator } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import errorReporting from 'ErrorReporting';
+import errorReporting from '~/ErrorReporting';
 import { useApolloClient } from '@apollo/client/react';
 
 export type CreateModeratedSignupModalProps = {

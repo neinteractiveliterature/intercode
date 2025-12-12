@@ -4,7 +4,7 @@ import { useModal } from '@neinteractiveliterature/litform';
 import AppRootContext from '../AppRootContext';
 import { Money, OrderStatus, Product, Ticket, TicketType, UserConProfile } from '../graphqlTypes.generated';
 import { useTranslation } from 'react-i18next';
-import NewOrderModal from 'Store/OrderAdmin/NewOrderModal';
+import NewOrderModal from '~/Store/OrderAdmin/NewOrderModal';
 
 export type AddOrderToTicketButtonProps = {
   className?: string;

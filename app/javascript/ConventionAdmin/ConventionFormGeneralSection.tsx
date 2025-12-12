@@ -15,9 +15,9 @@ import { timezoneNameForConvention } from '../TimeUtils';
 import ConventionLanguageInput from './ConventionLanguageInput';
 import type { ConventionFormConvention } from './ConventionForm';
 import { SiteMode, TimezoneMode } from '../graphqlTypes.generated';
-import ConventionLocationMap from 'Maps/ConventionLocationMap';
-import { PhotonBackend } from 'Maps/geocodingBackends/photon';
-import { GeoJSONGeocodingResult } from 'Maps/geoJSONUtils';
+import ConventionLocationMap from '~/Maps/ConventionLocationMap';
+import { PhotonBackend } from '~/Maps/geocodingBackends/photon';
+import { GeoJSONGeocodingResult } from '~/Maps/geoJSONUtils';
 
 const geocodingBackend = new PhotonBackend();
 

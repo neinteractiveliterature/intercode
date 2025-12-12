@@ -5,7 +5,7 @@ import { assertNever } from 'assert-never';
 import { SignupStateDisplay } from './SignupStateCell';
 import { SignupChangeAction } from '../graphqlTypes.generated';
 import { CellContext } from '@tanstack/react-table';
-import { SignupChangeType } from 'EventsApp/SignupAdmin/RunSignupChangesTable';
+import { SignupChangeType } from '~/EventsApp/SignupAdmin/RunSignupChangesTable';
 
 export function describeAction(action: SignupChangeAction, t: TFunction): string {
   if (action === 'self_service_signup') {

@@ -1,19 +1,19 @@
-import { CmsPartial, CmsPartialBlockName } from 'graphqlTypes.generated';
+import { CmsPartial, CmsPartialBlockName } from '~/graphqlTypes.generated';
 import { DropdownMenu } from './DropdownMenu';
-import MenuIcon from 'NavigationBar/MenuIcon';
+import MenuIcon from '~/NavigationBar/MenuIcon';
 import { ErrorDisplay, useConfirm } from '@neinteractiveliterature/litform';
 import { useRevalidator } from 'react-router';
 import { useState } from 'react';
-import LiquidInput from 'BuiltInFormControls/LiquidInput';
+import LiquidInput from '~/BuiltInFormControls/LiquidInput';
 import { useTranslation } from 'react-i18next';
 import { useApolloClient, useMutation } from "@apollo/client/react";
 import {
   CreatePartialDocument,
   DeletePartialDocument,
   UpdatePartialDocument,
-} from 'CmsAdmin/CmsPartialsAdmin/mutations.generated';
-import parseCmsContent from 'parseCmsContent';
-import pageAdminDropdownStyles from 'styles/page_admin_dropdown.module.scss';
+} from '~/CmsAdmin/CmsPartialsAdmin/mutations.generated';
+import parseCmsContent from '~/parseCmsContent';
+import pageAdminDropdownStyles from '~/styles/page_admin_dropdown.module.scss';
 
 export type BlockPartialProps = {
   name: CmsPartialBlockName;

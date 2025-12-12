@@ -1,5 +1,5 @@
-import { OrganizationRole } from 'graphqlTypes.generated';
-import { DeleteOrganizationRoleDocument, UpdateOrganizationRoleDocument } from 'OrganizationAdmin/mutations.generated';
+import { OrganizationRole } from '~/graphqlTypes.generated';
+import { DeleteOrganizationRoleDocument, UpdateOrganizationRoleDocument } from '~/OrganizationAdmin/mutations.generated';
 import { ActionFunction, RouterContextProvider, data, redirect } from 'react-router';
 import { apolloClientContext } from '../../../../AppContexts';
 

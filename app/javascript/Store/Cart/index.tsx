@@ -4,10 +4,10 @@ import { LoaderFunction, useFetcher, useLoaderData, useNavigate, RouterContextPr
 import { useModal, useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 import { CartQueryData, CartQueryDocument } from './queries.generated';
 import { apolloClientContext } from '~/AppContexts';
-import usePageTitle from 'usePageTitle';
-import useLoginRequired from 'Authentication/useLoginRequired';
+import usePageTitle from '~/usePageTitle';
+import useLoginRequired from '~/Authentication/useLoginRequired';
 import CartContents from './CartContents';
-import OrderPaymentModal from 'Store/OrderPaymentModal';
+import OrderPaymentModal from '~/Store/OrderPaymentModal';
 
 type OrderEntryType = NonNullable<
   NonNullable<CartQueryData['convention']['my_profile']>['current_pending_order']

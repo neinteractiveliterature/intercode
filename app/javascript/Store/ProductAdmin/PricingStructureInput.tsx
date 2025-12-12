@@ -4,7 +4,7 @@ import * as React from 'react';
 import { PricingStructureModalContext } from './EditPricingStructureModal';
 import { EditingPricingStructure } from './EditingProductTypes';
 import { useTranslation } from 'react-i18next';
-import { AdminPricingStructureDescription } from 'Store/describePricingStructure';
+import { AdminPricingStructureDescription } from '~/Store/describePricingStructure';
 
 export type PricingStructureInputProps = {
   value?: EditingPricingStructure | null;

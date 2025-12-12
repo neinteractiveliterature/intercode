@@ -20,12 +20,12 @@ import {
   StandardItem,
   StandardItemIdentifier,
   TypedFormItem,
-} from 'FormAdmin/FormItemUtils';
-import { FormEditorContext } from 'FormAdmin/FormEditorContexts';
-import useAsyncFunction from 'useAsyncFunction';
-import buildNewFormItem from 'FormAdmin/buildNewFormItem';
-import humanize from 'humanize';
-import FormItemIdentifierInput from 'FormAdmin/ItemEditors/FormItemIdentifierInput';
+} from '~/FormAdmin/FormItemUtils';
+import { FormEditorContext } from '~/FormAdmin/FormEditorContexts';
+import useAsyncFunction from '~/useAsyncFunction';
+import buildNewFormItem from '~/FormAdmin/buildNewFormItem';
+import humanize from '~/humanize';
+import FormItemIdentifierInput from '~/FormAdmin/ItemEditors/FormItemIdentifierInput';
 
 const customItemTypes = Object.keys(FormItemDefaultProperties).filter((itemType) => itemType !== 'static_text');
 

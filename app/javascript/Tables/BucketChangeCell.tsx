@@ -2,7 +2,7 @@ import { useTranslation } from 'react-i18next';
 
 import { EventForFormatBucket, formatBucket } from '../EventsApp/SignupAdmin/SignupUtils';
 import { CellContext } from '@tanstack/react-table';
-import { SignupChangeType } from 'EventsApp/SignupAdmin/RunSignupChangesTable';
+import { SignupChangeType } from '~/EventsApp/SignupAdmin/RunSignupChangesTable';
 
 export type BucketChangeType = {
   signupChange: SignupChangeType;

@@ -8,7 +8,7 @@ import buildCouponInput from './buildCouponInput';
 import { AdminCouponFieldsFragment } from './queries.generated';
 import { CreateCouponDocument } from './mutations.generated';
 import { useTranslation } from 'react-i18next';
-import { CouponInput } from 'graphqlTypes.generated';
+import { CouponInput } from '~/graphqlTypes.generated';
 import { ActionFunction, redirect, RouterContextProvider } from 'react-router';
 import { apolloClientContext } from '~/AppContexts';
 import { Link, useFetcher } from 'react-router';

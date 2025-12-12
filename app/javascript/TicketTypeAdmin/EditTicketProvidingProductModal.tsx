@@ -9,7 +9,7 @@ import EditPricingStructureModal, {
   PricingStructureModalState,
 } from '../Store/ProductAdmin/EditPricingStructureModal';
 import { useFetcher } from 'react-router';
-import { buildProductFormData } from 'Store/buildProductInput';
+import { buildProductFormData } from '~/Store/buildProductInput';
 
 export type EditTicketProvidingProductModalProps = {
   visible: boolean;

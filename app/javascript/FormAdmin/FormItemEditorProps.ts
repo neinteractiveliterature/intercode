@@ -1,4 +1,4 @@
-import { ParsedFormItemWithGeneratedIds, TypedFormItem, WithRequiredProperties } from 'FormAdmin/FormItemUtils';
+import { ParsedFormItemWithGeneratedIds, TypedFormItem, WithRequiredProperties } from '~/FormAdmin/FormItemUtils';
 
 export type FormItemEditorProps<FormItemType extends TypedFormItem> = {
   formItem: ParsedFormItemWithGeneratedIds<WithRequiredProperties<FormItemType>>;

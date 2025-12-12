@@ -10,7 +10,7 @@ import { TicketTypeAdmin_TicketTypeFieldsFragmentDoc } from './queries.generated
 import AppRootContext from '../AppRootContext';
 import { TicketTypeLoaderResult } from './loaders';
 import { useTranslation } from 'react-i18next';
-import { Convention, TicketTypeInput } from 'graphqlTypes.generated';
+import { Convention, TicketTypeInput } from '~/graphqlTypes.generated';
 import { apolloClientContext } from '~/AppContexts';
 import { CreateTicketTypeDocument } from './mutations.generated';
 

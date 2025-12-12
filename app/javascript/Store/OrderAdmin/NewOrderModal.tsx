@@ -14,8 +14,8 @@ import {
   Product,
   ProductVariant,
   UserConProfile,
-} from 'graphqlTypes.generated';
-import AppRootContext from 'AppRootContext';
+} from '~/graphqlTypes.generated';
+import AppRootContext from '~/AppRootContext';
 import AdminOrderForm from './AdminOrderForm';
 import AdminOrderEntriesTable from './AdminOrderEntriesTable';
 import { CreateOrderMutationVariables } from './mutations.generated';

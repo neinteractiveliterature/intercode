@@ -7,7 +7,6 @@ import AuthenticityTokensManager, {
   getAuthenticityTokensURL,
 } from '~/AuthenticityTokensContext';
 import { createBrowserRouter, RouterContextProvider, RouterProvider } from 'react-router';
-import { ProviderStack } from '~/AppWrapper';
 import { buildBrowserApolloClient } from '~/useIntercodeApolloClient';
 import {
   apolloClientContext,
@@ -56,7 +55,7 @@ function DataModeApplicationEntry({
       createBrowserRouter(
         [
           {
-            lazy: () => import('root'),
+            lazy: () => import('~/root'),
             children: appRootRoutes,
           },
         ],

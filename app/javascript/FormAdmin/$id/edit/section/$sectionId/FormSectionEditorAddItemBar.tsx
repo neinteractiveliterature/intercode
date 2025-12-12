@@ -3,12 +3,12 @@ import { useNavigate, useParams } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { useFetcher } from 'react-router';
 import { useModal } from '@neinteractiveliterature/litform';
-import { FormEditorContext } from 'FormAdmin/FormEditorContexts';
-import { CreateFormItemMutationData } from 'FormAdmin/mutations.generated';
-import { buildFormItemInput, ParsedFormItem } from 'FormAdmin/FormItemUtils';
-import buildNewFormItem from 'FormAdmin/buildNewFormItem';
+import { FormEditorContext } from '~/FormAdmin/FormEditorContexts';
+import { CreateFormItemMutationData } from '~/FormAdmin/mutations.generated';
+import { buildFormItemInput, ParsedFormItem } from '~/FormAdmin/FormItemUtils';
+import buildNewFormItem from '~/FormAdmin/buildNewFormItem';
 import NewFormItemModal from './NewFormItemModal';
-import styles from 'styles/form_editor.module.scss';
+import styles from '~/styles/form_editor.module.scss';
 
 type FormSectionEditorAddItemBarProps = {
   sectionBottomRef: React.RefObject<HTMLElement | null>;

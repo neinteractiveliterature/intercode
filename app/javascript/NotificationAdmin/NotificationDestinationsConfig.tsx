@@ -1,6 +1,6 @@
 import { MultipleChoiceInput, useGraphQLConfirm } from '@neinteractiveliterature/litform';
-import { DefaultUserConProfilesQueryData } from 'BuiltInFormControls/selectDefaultQueries.generated';
-import UserConProfileSelect from 'BuiltInFormControls/UserConProfileSelect';
+import { DefaultUserConProfilesQueryData } from '~/BuiltInFormControls/selectDefaultQueries.generated';
+import UserConProfileSelect from '~/BuiltInFormControls/UserConProfileSelect';
 import {
   EventCategory,
   NotificationCondition,
@@ -8,7 +8,7 @@ import {
   NotificationDestination,
   NotificationDynamicDestination,
   StaffPosition,
-} from 'graphqlTypes.generated';
+} from '~/graphqlTypes.generated';
 import { useMemo, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import Select from 'react-select';

@@ -13,7 +13,7 @@ import { buildBlankProduct } from './TicketTypesList';
 import AppRootContext from '../AppRootContext';
 import { useFetcher } from 'react-router';
 
-import { buildProductFormData } from 'Store/buildProductInput';
+import { buildProductFormData } from '~/Store/buildProductInput';
 
 export type NewTicketProvidingProductModalProps = {
   visible: boolean;

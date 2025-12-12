@@ -12,7 +12,7 @@ import { getRealOrGeneratedId, hasRealId, realOrGeneratedIdsMatch } from '../../
 import AdminProductVariantDragOverlayDisplay from './AdminProductVariantDragOverlayDisplay';
 import { useSortableDndSensors } from '../../SortableUtils';
 import { useTranslation } from 'react-i18next';
-import { AdminPricingStructureDescription } from 'Store/describePricingStructure';
+import { AdminPricingStructureDescription } from '~/Store/describePricingStructure';
 
 function updateVariant(
   productVariants: EditingVariant[],

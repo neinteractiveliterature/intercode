@@ -15,7 +15,7 @@ import buildStaffPositionInput from './buildStaffPositionInput';
 import { StaffPositionsQueryData, StaffPositionsQueryDocument } from './queries.generated';
 import { UpdateStaffPositionDocument } from './mutations.generated';
 import { apolloClientContext } from '~/AppContexts';
-import { StaffPositionInput } from 'graphqlTypes.generated';
+import { StaffPositionInput } from '~/graphqlTypes.generated';
 
 export const action: ActionFunction<RouterContextProvider> = async ({ context, params: { id }, request }) => {
   const client = context.get(apolloClientContext);

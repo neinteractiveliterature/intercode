@@ -9,9 +9,9 @@ import NextRoundInfoBox from './NextRoundInfoBox';
 import UserSignupQueue from './UserSignupQueue';
 import { usePendingChoices } from './usePendingChoices';
 import { apolloClientContext } from '../../AppContexts';
-import useLoginRequired from 'Authentication/useLoginRequired';
-import BlockPartial from 'UIComponents/BlockPartial';
-import { CmsPartialBlockName } from 'graphqlTypes.generated';
+import useLoginRequired from '~/Authentication/useLoginRequired';
+import BlockPartial from '~/UIComponents/BlockPartial';
+import { CmsPartialBlockName } from '~/graphqlTypes.generated';
 
 export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
   const client = context.get(apolloClientContext);

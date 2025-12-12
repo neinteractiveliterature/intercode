@@ -15,7 +15,7 @@ import { ActionFunction, LoaderFunction, RouterContextProvider, redirect, useLoa
 import { apolloClientContext } from '~/AppContexts';
 import { Link, useFetcher } from 'react-router';
 import { DeleteCouponDocument, UpdateCouponDocument } from './mutations.generated';
-import { CouponInput } from 'graphqlTypes.generated';
+import { CouponInput } from '~/graphqlTypes.generated';
 
 export const action: ActionFunction<RouterContextProvider> = async ({ context, params: { id }, request }) => {
   const client = context.get(apolloClientContext);

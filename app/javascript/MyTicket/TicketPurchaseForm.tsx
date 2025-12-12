@@ -7,7 +7,7 @@ import AppRootContext from '../AppRootContext';
 import Checkmark from '../EventsApp/TeamMemberAdmin/Checkmark';
 import ProductOrderForm, { ProductOrderFormProps } from '../Store/ProductOrderForm';
 import { PricingStructure, Product, Run } from '../graphqlTypes.generated';
-import { UserPricingStructureDescription } from 'Store/describePricingStructure';
+import { UserPricingStructureDescription } from '~/Store/describePricingStructure';
 
 export type TicketPurchaseFormProps = {
   availableProducts: (Pick<Product, 'id' | 'name' | 'description_html'> & {

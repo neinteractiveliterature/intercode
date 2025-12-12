@@ -7,11 +7,11 @@ import {
   UpdateSignupRankedChoicePriorityDocument,
 } from './mutations.generated';
 import { Link, useRevalidator } from 'react-router';
-import { RankedChoiceDecisionReason, RankedChoiceFallbackAction } from 'graphqlTypes.generated';
+import { RankedChoiceDecisionReason, RankedChoiceFallbackAction } from '~/graphqlTypes.generated';
 import { ReactNode, useContext, useRef, useState } from 'react';
 import { flushSync } from 'react-dom';
 import RankedChoicePriorityIndicator from './RankedChoicePriorityIndicator';
-import buildEventUrl from 'EventsApp/buildEventUrl';
+import buildEventUrl from '~/EventsApp/buildEventUrl';
 import { useTranslation } from 'react-i18next';
 import {
   BootstrapFormCheckbox,
@@ -19,17 +19,17 @@ import {
   LoadingIndicator,
   useGraphQLConfirm,
 } from '@neinteractiveliterature/litform';
-import { useAppDateTimeFormat } from 'TimeUtils';
-import AppRootContext from 'AppRootContext';
+import { useAppDateTimeFormat } from '~/TimeUtils';
+import AppRootContext from '~/AppRootContext';
 import { DateTime } from 'luxon';
 import { usePendingChoices } from './usePendingChoices';
 import { UserConProfileRankedChoiceQueueFieldsFragment } from './queries.generated';
 import styles from './signup-queue.module.css';
 import { PrioritizeWaitlistConfirmation, SkipReason } from './SignupQueueMessages';
-import { DropdownMenu, DropdownMenuRef } from 'UIComponents/DropdownMenu';
-import MenuIcon from 'NavigationBar/MenuIcon';
+import { DropdownMenu, DropdownMenuRef } from '~/UIComponents/DropdownMenu';
+import MenuIcon from '~/NavigationBar/MenuIcon';
 import { useSortable } from '@dnd-kit/sortable';
-import { getSortableStyle } from 'SortableUtils';
+import { getSortableStyle } from '~/SortableUtils';
 
 export type UserSignupQueueItemProps = {
   userConProfile: UserConProfileRankedChoiceQueueFieldsFragment;

@@ -10,7 +10,7 @@ import {
   OrderEntryInput,
   UpdateOrderEntryInput,
   UpdateOrderInput,
-} from 'graphqlTypes.generated';
+} from '~/graphqlTypes.generated';
 import { useTranslation } from 'react-i18next';
 import { useFetcher } from 'react-router';
 

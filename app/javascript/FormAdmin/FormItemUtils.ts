@@ -16,7 +16,7 @@ import { FormEditorQueryData, FormEditorFormItemFieldsFragment, FormEditorQueryD
 import { TimeblockDefinition, TimeblockOmission, UnparsedTimeblockPreference } from '../FormPresenter/TimeblockTypes';
 import FormTypes from '../../../config/form_types.json';
 import { ArrayWithGeneratedIds, ArrayWithoutGeneratedIds } from '../GeneratedIdUtils';
-import errorReporting from 'ErrorReporting';
+import errorReporting from '~/ErrorReporting';
 
 // In order from lowest to highest rank.  Higher roles always include lower roles
 // Must be updated in sync with ROLE_VALUES in form_item.rb

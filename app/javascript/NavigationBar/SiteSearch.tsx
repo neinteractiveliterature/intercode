@@ -15,7 +15,7 @@ import { useAdminNavigationItems } from './AdminNavigationSection';
 import { useEventsNavigationItems } from './EventsNavigationSection';
 import { GeneratedNavigationItem } from './GeneratedNavigationSection';
 import { SelectInstance } from 'react-select';
-import searchStyles from 'styles/search.module.scss';
+import searchStyles from '~/styles/search.module.scss';
 import { useApolloClient } from '@apollo/client/react';
 
 type NavigationItemSearchDocument = GeneratedNavigationItem & {

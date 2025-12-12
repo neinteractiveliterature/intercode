@@ -18,7 +18,7 @@ import { WithFormResponse } from '../Models/deserializeFormResponse';
 import { parseResponseErrors } from '../parseResponseErrors';
 import { apolloClientContext } from '../AppContexts';
 import { UpdateUserConProfileDocument } from '../UserConProfiles/mutations.generated';
-import { AuthenticityTokensContext } from 'AuthenticityTokensContext';
+import { AuthenticityTokensContext } from '~/AuthenticityTokensContext';
 
 export const action: ActionFunction<RouterContextProvider> = async ({ request, context }) => {
   const client = context.get(apolloClientContext);

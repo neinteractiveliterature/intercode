@@ -5,7 +5,7 @@ import Timespan, { FiniteTimespan } from '../../../Timespan';
 import type Schedule from '../Schedule';
 import type { ScheduleEvent } from '../Schedule';
 import ColumnReservationSet from './ColumnReservationSet';
-import errorReporting from 'ErrorReporting';
+import errorReporting from '~/ErrorReporting';
 
 const MIN_LENGTH = 30 * 60 * 1000; // 30 minutes in milliseconds
 

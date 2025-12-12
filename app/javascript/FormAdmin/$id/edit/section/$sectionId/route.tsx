@@ -2,13 +2,13 @@ import { useContext, useRef, useMemo } from 'react';
 import { ActionFunction, redirect, RouterContextProvider } from 'react-router';
 import { apolloClientContext } from '~/AppContexts';
 import invariant from 'tiny-invariant';
-import { FormSection } from 'graphqlTypes.generated';
-import { DeleteFormSectionDocument, UpdateFormSectionDocument } from 'FormAdmin/mutations.generated';
-import { FormEditorContext } from 'FormAdmin/FormEditorContexts';
+import { FormSection } from '~/graphqlTypes.generated';
+import { DeleteFormSectionDocument, UpdateFormSectionDocument } from '~/FormAdmin/mutations.generated';
+import { FormEditorContext } from '~/FormAdmin/FormEditorContexts';
 import FormSectionNav from './FormSectionNav';
 import FormSectionEditorContent from './FormSectionEditorContent';
 import FormSectionEditorAddItemBar from './FormSectionEditorAddItemBar';
-import styles from 'styles/form_editor.module.scss';
+import styles from '~/styles/form_editor.module.scss';
 
 export const action: ActionFunction<RouterContextProvider> = async ({ request, params: { sectionId }, context }) => {
   const client = context.get(apolloClientContext);

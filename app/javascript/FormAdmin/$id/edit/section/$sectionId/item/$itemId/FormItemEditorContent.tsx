@@ -1,16 +1,16 @@
 import { useContext } from 'react';
 import { assertNever } from 'assert-never';
-import AgeRestrictionsEditor from 'FormAdmin/ItemEditors/AgeRestrictionsEditor';
-import DateEditor from 'FormAdmin/ItemEditors/DateEditor';
-import EventEmailEditor from 'FormAdmin/ItemEditors/EventEmailEditor';
-import { FormItemEditorContext } from 'FormAdmin/FormEditorContexts';
-import FreeTextEditor from 'FormAdmin/ItemEditors/FreeTextEditor';
-import MultipleChoiceEditor from 'FormAdmin/ItemEditors/MultipleChoiceEditor';
-import RegistrationPolicyItemEditor from 'FormAdmin/ItemEditors/RegistrationPolicyItemEditor';
-import StaticTextEditor from 'FormAdmin/ItemEditors/StaticTextEditor';
-import TimeblockPreferenceEditor from 'FormAdmin/ItemEditors/TimeblockPreferenceEditor';
-import TimespanEditor from 'FormAdmin/ItemEditors/TimespanEditor';
-import errorReporting from 'ErrorReporting';
+import AgeRestrictionsEditor from '~/FormAdmin/ItemEditors/AgeRestrictionsEditor';
+import DateEditor from '~/FormAdmin/ItemEditors/DateEditor';
+import EventEmailEditor from '~/FormAdmin/ItemEditors/EventEmailEditor';
+import { FormItemEditorContext } from '~/FormAdmin/FormEditorContexts';
+import FreeTextEditor from '~/FormAdmin/ItemEditors/FreeTextEditor';
+import MultipleChoiceEditor from '~/FormAdmin/ItemEditors/MultipleChoiceEditor';
+import RegistrationPolicyItemEditor from '~/FormAdmin/ItemEditors/RegistrationPolicyItemEditor';
+import StaticTextEditor from '~/FormAdmin/ItemEditors/StaticTextEditor';
+import TimeblockPreferenceEditor from '~/FormAdmin/ItemEditors/TimeblockPreferenceEditor';
+import TimespanEditor from '~/FormAdmin/ItemEditors/TimespanEditor';
+import errorReporting from '~/ErrorReporting';
 
 function FormItemEditorContent(): React.JSX.Element {
   const { formItem, setFormItem } = useContext(FormItemEditorContext);

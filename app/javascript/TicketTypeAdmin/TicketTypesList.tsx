@@ -16,7 +16,7 @@ import EditTicketProvidingProductModal, {
   EditTicketProvidingProductModalProps,
 } from './EditTicketProvidingProductModal';
 import { TicketTypeLoaderResult } from './loaders';
-import { AdminPricingStructureDescription } from 'Store/describePricingStructure';
+import { AdminPricingStructureDescription } from '~/Store/describePricingStructure';
 
 type TicketTypeType = AdminTicketTypesQueryData['convention']['ticket_types'][0];
 
