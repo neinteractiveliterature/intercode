@@ -1,5 +1,4 @@
 import { Suspense, useCallback, useRef, useEffect, ReactNode, useState, useMemo, useContext } from 'react';
-import * as React from 'react';
 import { Outlet } from 'react-router';
 import { i18n } from 'i18next';
 import { I18nextProvider } from 'react-i18next';
@@ -75,37 +74,35 @@ export function ProviderStack(props: AppWrapperProps) {
   );
 
   return (
-    <React.StrictMode>
-      <Confirm>
-        <RailsDirectUploadsContext.Provider value={railsDirectUploadsContextValue}>
-          {/* TODO bring this back when we re-add prompting getUserConfirmation={getUserConfirmation}> */}
-          <AuthenticationModalContext.Provider value={authenticationModalContextValue}>
-            <>
-              {!unauthenticatedError && (
-                <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
-                  <I18NextWrapper>
-                    {(i18nInstance) => (
-                      <AlertProvider okText={i18nInstance.t('buttons.ok', 'OK')}>
-                        <ToastProvider
-                          formatTimeAgo={(timeAgo) =>
-                            DateTime.now().minus(Duration.fromMillis(timeAgo.milliseconds)).toRelative()
-                          }
-                        >
-                          <ErrorBoundary placement="replace" errorType="plain">
-                            <Outlet />
-                          </ErrorBoundary>
-                        </ToastProvider>
-                      </AlertProvider>
-                    )}
-                  </I18NextWrapper>
-                </Suspense>
-              )}
-              <AuthenticationModal />
-            </>
-          </AuthenticationModalContext.Provider>
-        </RailsDirectUploadsContext.Provider>
-      </Confirm>
-    </React.StrictMode>
+    <Confirm>
+      <RailsDirectUploadsContext.Provider value={railsDirectUploadsContextValue}>
+        {/* TODO bring this back when we re-add prompting getUserConfirmation={getUserConfirmation}> */}
+        <AuthenticationModalContext.Provider value={authenticationModalContextValue}>
+          <>
+            {!unauthenticatedError && (
+              <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
+                <I18NextWrapper>
+                  {(i18nInstance) => (
+                    <AlertProvider okText={i18nInstance.t('buttons.ok', 'OK')}>
+                      <ToastProvider
+                        formatTimeAgo={(timeAgo) =>
+                          DateTime.now().minus(Duration.fromMillis(timeAgo.milliseconds)).toRelative()
+                        }
+                      >
+                        <ErrorBoundary placement="replace" errorType="plain">
+                          <Outlet />
+                        </ErrorBoundary>
+                      </ToastProvider>
+                    </AlertProvider>
+                  )}
+                </I18NextWrapper>
+              </Suspense>
+            )}
+            <AuthenticationModal />
+          </>
+        </AuthenticationModalContext.Provider>
+      </RailsDirectUploadsContext.Provider>
+    </Confirm>
   );
 }
 
