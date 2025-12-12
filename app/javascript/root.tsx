@@ -1,13 +1,23 @@
 import { ApolloProvider } from '@apollo/client/react';
+import { authenticityTokensManagerContext, clientConfigurationDataContext } from 'AppContexts';
 import { ProviderStack } from 'AppWrapper';
-import AuthenticityTokensManager, {
-  AuthenticityTokensContext,
-  getAuthenticityTokensURL,
-} from 'AuthenticityTokensContext';
+import AuthenticityTokensManager, { AuthenticityTokensContext } from 'AuthenticityTokensContext';
 import { ClientConfiguration } from 'graphqlTypes.generated';
-import { StrictMode, useContext, useMemo } from 'react';
-import { useLoaderData } from 'react-router';
+import { StrictMode, useMemo } from 'react';
+import { LoaderFunction, useLoaderData } from 'react-router';
+import { ClientConfigurationQueryData } from 'serverQueries.generated';
 import { buildBrowserApolloClient } from 'useIntercodeApolloClient';
+
+type RootLoaderData = {
+  clientConfigurationData: ClientConfigurationQueryData;
+  authenticityTokensManager: AuthenticityTokensManager;
+};
+
+export const loader: LoaderFunction = ({ context }) => {
+  const clientConfigurationData = context.get(clientConfigurationDataContext);
+  const authenticityTokensManager = context.get(authenticityTokensManagerContext);
+  return { clientConfigurationData, authenticityTokensManager } satisfies RootLoaderData;
+};
 
 function RootProviderStack({ clientConfiguration }: { clientConfiguration: ClientConfiguration }) {
   return (
@@ -19,26 +29,22 @@ function RootProviderStack({ clientConfiguration }: { clientConfiguration: Clien
   );
 }
 
-export function Root() {
-  const loaderData = useLoaderData();
-  const manager = useContext(AuthenticityTokensContext);
-  const client = useMemo(() => buildBrowserApolloClient(manager), [manager]);
-
-  return (
-    <ApolloProvider client={client}>
-      <RootProviderStack clientConfiguration={loaderData.clientConfiguration} />
-    </ApolloProvider>
+export default function Root() {
+  const loaderData = useLoaderData() as RootLoaderData;
+  const client = useMemo(
+    () => buildBrowserApolloClient(loaderData.authenticityTokensManager),
+    [loaderData.authenticityTokensManager],
   );
-}
-
-export function ClientEntry() {
-  const manager = useMemo(() => new AuthenticityTokensManager(fetch, undefined, getAuthenticityTokensURL()), []);
 
   return (
     <StrictMode>
-      <AuthenticityTokensContext.Provider value={manager}>
-        <Root />
+      <AuthenticityTokensContext.Provider value={loaderData.authenticityTokensManager}>
+        <ApolloProvider client={client}>
+          <RootProviderStack clientConfiguration={loaderData.clientConfigurationData.clientConfiguration} />
+        </ApolloProvider>
       </AuthenticityTokensContext.Provider>
     </StrictMode>
   );
 }
+
+export const Component = Root;

@@ -7,7 +7,6 @@ import AuthenticityTokensManager, {
   getAuthenticityTokensURL,
 } from 'AuthenticityTokensContext';
 import { createBrowserRouter, RouterContextProvider, RouterProvider } from 'react-router';
-import { ProviderStack } from 'AppWrapper';
 import { buildBrowserApolloClient } from 'useIntercodeApolloClient';
 import {
   apolloClientContext,
@@ -26,13 +25,13 @@ const refreshPromise = manager.refresh();
 export type DataModeApplicationEntryProps = {
   recaptchaSiteKey: string;
   railsDefaultActiveStorageServiceName: string;
-  railsDirectUploadsURL: string;
+  railsDirectUploadsUrl: string;
 };
 
 function DataModeApplicationEntry({
   recaptchaSiteKey,
   railsDefaultActiveStorageServiceName,
-  railsDirectUploadsURL,
+  railsDirectUploadsUrl,
 }: DataModeApplicationEntryProps) {
   use(refreshPromise);
 
@@ -45,10 +44,10 @@ function DataModeApplicationEntry({
         __typename: 'ClientConfiguration',
         recaptcha_site_key: recaptchaSiteKey,
         rails_default_active_storage_service_name: railsDefaultActiveStorageServiceName,
-        rails_direct_uploads_url: railsDirectUploadsURL,
+        rails_direct_uploads_url: railsDirectUploadsUrl,
       },
     }),
-    [recaptchaSiteKey, railsDefaultActiveStorageServiceName, railsDirectUploadsURL],
+    [recaptchaSiteKey, railsDefaultActiveStorageServiceName, railsDirectUploadsUrl],
   );
 
   const router = useMemo(
@@ -56,7 +55,7 @@ function DataModeApplicationEntry({
       createBrowserRouter(
         [
           {
-            Component: ProviderStack,
+            lazy: () => import('root'),
             children: appRootRoutes,
           },
         ],
