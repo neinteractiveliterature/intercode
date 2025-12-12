@@ -8,7 +8,7 @@ import { ErrorDisplay, FormGroupWithLabel } from '@neinteractiveliterature/litfo
 import DateTimeInput from '../BuiltInFormControls/DateTimeInput';
 import MaximumEventSignupsInput from './MaximumEventSignupsInput';
 
-import { SignupAutomationMode, SignupRoundAutomationAction } from 'graphqlTypes.generated';
+import { SignupAutomationMode, SignupRoundAutomationAction } from '~/graphqlTypes.generated';
 
 type CreateNewSignupRoundFormProps = {
   onCancel: () => void;

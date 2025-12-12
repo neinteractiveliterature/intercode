@@ -18,7 +18,7 @@ import buildEventUrl from '../buildEventUrl';
 import { useImageAttachmentConfig } from '../../BuiltInFormControls/MarkdownInput';
 import { apolloClientContext } from '../../AppContexts';
 import { StandaloneUpdateEventDocument } from './mutations.generated';
-import { useAsyncFetcher } from 'useAsyncFetcher';
+import { useAsyncFetcher } from '~/useAsyncFetcher';
 import { useApolloClient } from '@apollo/client/react';
 
 export type StandaloneEditEventFormProps = {

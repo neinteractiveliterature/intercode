@@ -9,7 +9,7 @@ import { EmailRouteFieldsFragment } from './queries.generated';
 import { ActionFunction, redirect, RouterContextProvider } from 'react-router';
 import { apolloClientContext } from '~/AppContexts';
 import { CreateEmailRouteDocument } from './mutations.generated';
-import { EmailRouteInput } from 'graphqlTypes.generated';
+import { EmailRouteInput } from '~/graphqlTypes.generated';
 import { Link, useFetcher } from 'react-router';
 import { useTranslation } from 'react-i18next';
 

@@ -23,7 +23,7 @@ import {
 } from './mutations.generated';
 import { apolloClientContext } from '~/AppContexts';
 import invariant from 'tiny-invariant';
-import { NotificationEventKey, UserActivityAlert } from 'graphqlTypes.generated';
+import { NotificationEventKey, UserActivityAlert } from '~/graphqlTypes.generated';
 
 export const action: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {
   const client = context.get(apolloClientContext);

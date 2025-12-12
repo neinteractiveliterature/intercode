@@ -1,5 +1,5 @@
 import { Feature } from 'geojson';
-import { GeocodingBackend, GeocodingResult } from 'Maps/LocationSelect';
+import { GeocodingBackend, GeocodingResult } from '~/Maps/LocationSelect';
 import { ReactNode } from 'react';
 
 type MapboxAPIFeature = {

@@ -18,7 +18,7 @@ import {
   CmsFilesAdminQueryData,
   CmsFilesAdminQueryDocument,
   CmsFilesAdminQueryVariables,
-} from 'CmsAdmin/CmsFilesAdmin/queries.generated';
+} from '~/CmsAdmin/CmsFilesAdmin/queries.generated';
 import { MockedResponse } from '@apollo/client/testing';
 
 const mockCmsFilesAdminQuery: MockedResponse<CmsFilesAdminQueryData, CmsFilesAdminQueryVariables> = {

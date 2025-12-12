@@ -5,7 +5,7 @@ import { useQuery } from "@apollo/client/react";
 import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import FourOhFourPage from '../FourOhFourPage';
-import { AdminProductsQueryData, AdminProductsQueryDocument } from 'Store/ProductAdmin/queries.generated';
+import { AdminProductsQueryData, AdminProductsQueryDocument } from '~/Store/ProductAdmin/queries.generated';
 
 export type ProductSelectProps<
   QueryType extends AdminProductsQueryData,

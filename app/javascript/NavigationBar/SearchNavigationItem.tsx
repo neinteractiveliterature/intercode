@@ -3,7 +3,7 @@ import { useTranslation } from 'react-i18next';
 
 import SiteSearch from './SiteSearch';
 import NavigationBarContext from './NavigationBarContext';
-import searchStyles from 'styles/search.module.scss';
+import searchStyles from '~/styles/search.module.scss';
 import { useTransitionState } from 'react-transition-state';
 
 function SearchNavigationItem(): React.JSX.Element {

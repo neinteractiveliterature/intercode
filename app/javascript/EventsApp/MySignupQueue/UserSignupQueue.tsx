@@ -3,7 +3,7 @@ import { InternalRefetchQueriesInclude } from '@apollo/client';
 import { useMutation } from "@apollo/client/react";
 import { usePendingChoices } from './usePendingChoices';
 import UserSignupQueueItem from './UserSignupQueueItem';
-import { useSortableDndSensors } from 'SortableUtils';
+import { useSortableDndSensors } from '~/SortableUtils';
 import { closestCorners, DndContext } from '@dnd-kit/core';
 import { useArrayBasicSortableHandlers } from '@neinteractiveliterature/litform';
 import { useCallback, useState } from 'react';

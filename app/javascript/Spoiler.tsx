@@ -1,7 +1,7 @@
 import { useState, ReactNode } from 'react';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import spoilerStyles from 'styles/spoiler.module.scss';
+import spoilerStyles from '~/styles/spoiler.module.scss';
 
 export type SpoilerProps = {
   content: ReactNode;

@@ -1,6 +1,6 @@
 import { buildOptimisticArrayForMove } from '@neinteractiveliterature/litform';
-import { MoveFormSectionDocument } from 'FormAdmin/mutations.generated';
-import { FormEditorQueryDocument } from 'FormAdmin/queries.generated';
+import { MoveFormSectionDocument } from '~/FormAdmin/mutations.generated';
+import { FormEditorQueryDocument } from '~/FormAdmin/queries.generated';
 import { ActionFunction, RouterContextProvider } from 'react-router';
 import invariant from 'tiny-invariant';
 import { apolloClientContext } from '../../../../../AppContexts';

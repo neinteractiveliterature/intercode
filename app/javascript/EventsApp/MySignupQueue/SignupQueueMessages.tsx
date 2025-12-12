@@ -1,11 +1,11 @@
-import { RankedChoiceDecisionReason, RankedChoiceFallbackAction, SignupState } from 'graphqlTypes.generated';
+import { RankedChoiceDecisionReason, RankedChoiceFallbackAction, SignupState } from '~/graphqlTypes.generated';
 import { DateTime } from 'luxon';
 import { Trans, useTranslation } from 'react-i18next';
-import { formatLCM, getDateTimeFormat } from 'TimeUtils';
+import { formatLCM, getDateTimeFormat } from '~/TimeUtils';
 import { UserConProfileRankedChoiceQueueFieldsFragment } from './queries.generated';
 import { usePendingChoices } from './usePendingChoices';
 import { useContext } from 'react';
-import AppRootContext from 'AppRootContext';
+import AppRootContext from '~/AppRootContext';
 
 type SkipReasonProps = {
   pendingChoice: ReturnType<typeof usePendingChoices>[number];

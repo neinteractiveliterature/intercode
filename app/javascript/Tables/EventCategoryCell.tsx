@@ -2,7 +2,7 @@ import { useContext, useMemo } from 'react';
 import { GetEventCategoryStylesOptions, getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
 import { QueryDataContext } from './useReactTableWithTheWorks';
 import { CellContext } from '@tanstack/react-table';
-import { EventCategory } from 'graphqlTypes.generated';
+import { EventCategory } from '~/graphqlTypes.generated';
 
 export default function EventCategoryCell<TData, TValue extends Pick<EventCategory, 'id'>>({
   getValue,

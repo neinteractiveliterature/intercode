@@ -1,4 +1,4 @@
-import { TicketType, TicketTypeInput } from 'graphqlTypes.generated';
+import { TicketType, TicketTypeInput } from '~/graphqlTypes.generated';
 import { ActionFunction, RouterContextProvider, data } from 'react-router';
 import invariant from 'tiny-invariant';
 import { apolloClientContext } from '../AppContexts';

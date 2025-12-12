@@ -1,6 +1,6 @@
-import { OrderEntry, OrderEntryInput } from 'graphqlTypes.generated';
+import { OrderEntry, OrderEntryInput } from '~/graphqlTypes.generated';
 import { ActionFunction, RouterContextProvider, data } from 'react-router';
-import { AdminDeleteOrderEntryDocument, AdminUpdateOrderEntryDocument } from 'Store/OrderAdmin/mutations.generated';
+import { AdminDeleteOrderEntryDocument, AdminUpdateOrderEntryDocument } from '~/Store/OrderAdmin/mutations.generated';
 import { apolloClientContext } from '../../../AppContexts';
 
 export const action: ActionFunction<RouterContextProvider> = async ({ context, params: { orderEntryId }, request }) => {

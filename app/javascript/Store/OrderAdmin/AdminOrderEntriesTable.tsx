@@ -12,12 +12,12 @@ import {
   PricingStructure,
   Product,
   ProductVariant,
-} from 'graphqlTypes.generated';
-import InPlaceEditor from 'BuiltInFormControls/InPlaceEditor';
-import InPlaceMoneyEditor from 'Store/InPlaceMoneyEditor';
-import formatMoney from 'formatMoney';
-import ProductSelect from 'BuiltInFormControls/ProductSelect';
-import ApplyCouponControl from 'Store/ApplyCouponControl';
+} from '~/graphqlTypes.generated';
+import InPlaceEditor from '~/BuiltInFormControls/InPlaceEditor';
+import InPlaceMoneyEditor from '~/Store/InPlaceMoneyEditor';
+import formatMoney from '~/formatMoney';
+import ProductSelect from '~/BuiltInFormControls/ProductSelect';
+import ApplyCouponControl from '~/Store/ApplyCouponControl';
 
 type ProductVariantType = Pick<ProductVariant, '__typename' | 'name'> & {
   id: string;

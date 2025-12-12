@@ -1,7 +1,7 @@
 import { ActionFunction, RouterContextProvider, redirect } from 'react-router';
 import { apolloClientContext } from '../AppContexts';
 import { RevokeAuthorizedApplicationDocument } from './mutations.generated';
-import { AuthorizedApplication } from 'graphqlTypes.generated';
+import { AuthorizedApplication } from '~/graphqlTypes.generated';
 
 export const action: ActionFunction<RouterContextProvider> = async ({ context, params: { uid }, request }) => {
   const client = context.get(apolloClientContext);

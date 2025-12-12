@@ -20,7 +20,7 @@ import { FiniteTimespan } from '../../Timespan';
 import useMergeCategoriesIntoEvents from '../useMergeCategoriesIntoEvents';
 import { useLoaderData } from 'react-router';
 import { ConventionDayLoaderResult } from '../conventionDayUrls';
-import BlockPartial from 'UIComponents/BlockPartial';
+import BlockPartial from '~/UIComponents/BlockPartial';
 
 const IS_MOBILE = ['iOS', 'Android OS'].includes(detect()?.os ?? '');
 

@@ -1,4 +1,4 @@
-import { OrderInput } from 'graphqlTypes.generated';
+import { OrderInput } from '~/graphqlTypes.generated';
 import { ActionFunction, data, LoaderFunction, useLoaderData, useNavigate, RouterContextProvider } from 'react-router';
 import { apolloClientContext } from '~/AppContexts';
 import EditOrderModal from './EditOrderModal';

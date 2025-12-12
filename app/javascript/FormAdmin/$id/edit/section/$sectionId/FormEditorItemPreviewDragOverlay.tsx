@@ -1,10 +1,10 @@
 import { useContext } from 'react';
 import classnames from 'classnames';
 import { ButtonWithTooltip } from '@neinteractiveliterature/litform';
-import { FormEditorContext } from 'FormAdmin/FormEditorContexts';
-import FormItemInput from 'FormPresenter/ItemInputs/FormItemInput';
-import { findStandardItem, TypedFormItem } from 'FormAdmin/FormItemUtils';
-import styles from 'styles/form_editor.module.scss';
+import { FormEditorContext } from '~/FormAdmin/FormEditorContexts';
+import FormItemInput from '~/FormPresenter/ItemInputs/FormItemInput';
+import { findStandardItem, TypedFormItem } from '~/FormAdmin/FormItemUtils';
+import styles from '~/styles/form_editor.module.scss';
 
 export type FormEditorItemPreviewDragOverlayProps = {
   formItem: TypedFormItem;

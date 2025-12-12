@@ -8,7 +8,7 @@ import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform
 import UserSelect from '../BuiltInFormControls/UserSelect';
 import { AddAttendeeUsersQueryData, AddAttendeeUsersQueryDocument } from './queries.generated';
 import { FormResponse } from '../FormPresenter/useFormResponse';
-import AppRootContext from 'AppRootContext';
+import AppRootContext from '~/AppRootContext';
 import { CreateUserConProfileDocument, CreateUserConProfileMutationVariables } from './mutations.generated';
 import { apolloClientContext } from '../AppContexts';
 

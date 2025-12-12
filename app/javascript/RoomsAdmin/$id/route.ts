@@ -1,6 +1,6 @@
-import { Room } from 'graphqlTypes.generated';
+import { Room } from '~/graphqlTypes.generated';
 import { ActionFunction, RouterContextProvider, data } from 'react-router';
-import { DeleteRoomDocument, UpdateRoomDocument } from 'RoomsAdmin/mutations.generated';
+import { DeleteRoomDocument, UpdateRoomDocument } from '~/RoomsAdmin/mutations.generated';
 import invariant from 'tiny-invariant';
 import { apolloClientContext } from '../../AppContexts';
 

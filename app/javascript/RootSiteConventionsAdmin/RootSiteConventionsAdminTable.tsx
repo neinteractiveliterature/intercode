@@ -4,18 +4,18 @@ import { Link, Outlet, useNavigate } from 'react-router';
 import { DateTime } from 'luxon';
 import { useTranslation } from 'react-i18next';
 
-import useReactTableWithTheWorks from 'Tables/useReactTableWithTheWorks';
-import ReactTableWithTheWorks from 'Tables/ReactTableWithTheWorks';
-import { buildFieldFilterCodecs } from 'Tables/FilterUtils';
-import FreeTextFilter from 'Tables/FreeTextFilter';
-import { describeTimespan, timespanFromConvention } from 'TimespanUtils';
-import TableHeader from 'Tables/TableHeader';
-import usePageTitle from 'usePageTitle';
+import useReactTableWithTheWorks from '~/Tables/useReactTableWithTheWorks';
+import ReactTableWithTheWorks from '~/Tables/ReactTableWithTheWorks';
+import { buildFieldFilterCodecs } from '~/Tables/FilterUtils';
+import FreeTextFilter from '~/Tables/FreeTextFilter';
+import { describeTimespan, timespanFromConvention } from '~/TimespanUtils';
+import TableHeader from '~/Tables/TableHeader';
+import usePageTitle from '~/usePageTitle';
 import {
   RootSiteConventionsAdminTableQueryData,
   RootSiteConventionsAdminTableQueryDocument,
 } from './queries.generated';
-import { getDateTimeFormat } from 'TimeUtils';
+import { getDateTimeFormat } from '~/TimeUtils';
 
 type ConventionType = RootSiteConventionsAdminTableQueryData['conventions_paginated']['entries'][0];
 

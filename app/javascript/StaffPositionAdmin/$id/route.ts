@@ -1,6 +1,6 @@
-import { StaffPosition } from 'graphqlTypes.generated';
+import { StaffPosition } from '~/graphqlTypes.generated';
 import { ActionFunction, RouterContextProvider, data } from 'react-router';
-import { DeleteStaffPositionDocument } from 'StaffPositionAdmin/mutations.generated';
+import { DeleteStaffPositionDocument } from '~/StaffPositionAdmin/mutations.generated';
 import { apolloClientContext } from '../../AppContexts';
 
 export const action: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {

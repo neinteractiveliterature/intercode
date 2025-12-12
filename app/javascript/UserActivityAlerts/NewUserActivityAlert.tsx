@@ -21,7 +21,7 @@ import {
 } from './queries.generated';
 import { CreateUserActivityAlertDocument, CreateUserActivityAlertMutationVariables } from './mutations.generated';
 import { apolloClientContext } from '~/AppContexts';
-import { Convention, NotificationEventKey } from 'graphqlTypes.generated';
+import { Convention, NotificationEventKey } from '~/graphqlTypes.generated';
 
 type LoaderResult = {
   convention: UserActivityAlertsAdminQueryData['convention'];

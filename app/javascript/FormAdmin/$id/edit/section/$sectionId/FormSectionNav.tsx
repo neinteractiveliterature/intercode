@@ -3,9 +3,9 @@ import { useFetcher } from 'react-router';
 import { useArrayBasicSortableHandlers } from '@neinteractiveliterature/litform';
 
 import { DndContext, DragOverlay } from '@dnd-kit/core';
-import useCollapse from 'NavigationBar/useCollapse';
-import { FormEditorContext } from 'FormAdmin/FormEditorContexts';
-import { useSortableDndSensors } from 'SortableUtils';
+import useCollapse from '~/NavigationBar/useCollapse';
+import { FormEditorContext } from '~/FormAdmin/FormEditorContexts';
+import { useSortableDndSensors } from '~/SortableUtils';
 import { SortableContext, verticalListSortingStrategy } from '@dnd-kit/sortable';
 import FormSectionNavItemDragOverlay from './FormSectionNavItemDragOverlay';
 import FormSectionNavItem from './FormSectionNavItem';

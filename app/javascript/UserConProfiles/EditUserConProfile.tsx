@@ -9,7 +9,7 @@ import usePageTitle from '../usePageTitle';
 import { UserConProfileQueryData, UserConProfileQueryDocument } from './queries.generated';
 import { apolloClientContext } from '../AppContexts';
 import { UpdateUserConProfileDocument } from './mutations.generated';
-import { UserConProfileInput } from 'graphqlTypes.generated';
+import { UserConProfileInput } from '~/graphqlTypes.generated';
 
 export const action: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {
   const client = context.get(apolloClientContext);

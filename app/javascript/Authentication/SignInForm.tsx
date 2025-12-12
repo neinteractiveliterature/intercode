@@ -9,7 +9,7 @@ import AuthenticationModalContext from './AuthenticationModalContext';
 import useAsyncFunction from '../useAsyncFunction';
 import useAfterSessionChange from './useAfterSessionChange';
 import { AuthenticityTokensContext } from '../AuthenticityTokensContext';
-import errorReporting from 'ErrorReporting';
+import errorReporting from '~/ErrorReporting';
 
 async function signIn(authenticityToken: string, email: string, password: string, rememberMe: boolean) {
   const formData = new FormData();

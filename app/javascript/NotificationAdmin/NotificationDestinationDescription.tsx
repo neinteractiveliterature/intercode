@@ -5,7 +5,7 @@ import {
   NotificationDestination,
   StaffPosition,
   UserConProfile,
-} from 'graphqlTypes.generated';
+} from '~/graphqlTypes.generated';
 import { TFunction } from 'i18next';
 import { useMemo } from 'react';
 import { Trans, useTranslation } from 'react-i18next';

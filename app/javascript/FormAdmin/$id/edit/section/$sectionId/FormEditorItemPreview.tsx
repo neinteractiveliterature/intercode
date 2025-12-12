@@ -3,11 +3,11 @@ import { Link, useParams, useSubmit } from 'react-router';
 import classnames from 'classnames';
 import { useConfirm, ButtonWithTooltip, ErrorDisplay } from '@neinteractiveliterature/litform';
 import { useSortable } from '@dnd-kit/sortable';
-import { FormEditorContext, FormEditorForm } from 'FormAdmin/FormEditorContexts';
-import { findStandardItem, StandardItem, TypedFormItem } from 'FormAdmin/FormItemUtils';
-import { getSortableStyle } from 'SortableUtils';
-import FormItemInput from 'FormPresenter/ItemInputs/FormItemInput';
-import styles from 'styles/form_editor.module.scss';
+import { FormEditorContext, FormEditorForm } from '~/FormAdmin/FormEditorContexts';
+import { findStandardItem, StandardItem, TypedFormItem } from '~/FormAdmin/FormItemUtils';
+import { getSortableStyle } from '~/SortableUtils';
+import FormItemInput from '~/FormPresenter/ItemInputs/FormItemInput';
+import styles from '~/styles/form_editor.module.scss';
 import { useTranslation } from 'react-i18next';
 
 function describeFormItemForDelete(formItem: TypedFormItem, standardItem: StandardItem | undefined) {

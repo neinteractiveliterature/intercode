@@ -2,8 +2,8 @@ import { NavLink, useParams, useSubmit } from 'react-router';
 import { useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { useSortable } from '@dnd-kit/sortable';
-import { FormEditorForm } from 'FormAdmin/FormEditorContexts';
-import { getSortableStyle } from 'SortableUtils';
+import { FormEditorForm } from '~/FormAdmin/FormEditorContexts';
+import { getSortableStyle } from '~/SortableUtils';
 
 export type FormSectionNavItemProps = {
   formSection: FormEditorForm['form_sections'][0];

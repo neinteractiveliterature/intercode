@@ -18,8 +18,8 @@ import { apolloClientContext } from '~/AppContexts';
 import { UpdateNotificationTemplateDocument } from './mutations.generated';
 import NotificationDestinationsConfig from './NotificationDestinationsConfig';
 import { useTranslation } from 'react-i18next';
-import { useChangeSet } from 'ChangeSet';
-import { NotificationDestinationInput, NotificationEventKey } from 'graphqlTypes.generated';
+import { useChangeSet } from '~/ChangeSet';
+import { NotificationDestinationInput, NotificationEventKey } from '~/graphqlTypes.generated';
 
 export const action: ActionFunction<RouterContextProvider> = async ({ context, params: { eventKey }, request }) => {
   const client = context.get(apolloClientContext);

@@ -13,10 +13,7 @@
 </script>
 <% if Rails.env.development? %>
   <script type="module">
-    import RefreshRuntime from <%=raw url_with_possible_host("/@react-refresh", ENV['ASSETS_HOST']).to_json %>
-    RefreshRuntime.injectIntoGlobalHook(window)
-    window.$RefreshReg$ = () => {}
-    window.$RefreshSig$ = () => (type) => type
+
     window.__vite_plugin_react_preamble_installed__ = true
   </script>
   <%= javascript_include_tag url_with_possible_host("/@vite/client", ENV['ASSETS_HOST']), type: 'module' %>

@@ -11,7 +11,7 @@ import SignInButton from './Authentication/SignInButton';
 import SignOutButton from './Authentication/SignOutButton';
 import SignUpButton from './Authentication/SignUpButton';
 import Spoiler from './Spoiler';
-import errorReporting from 'ErrorReporting';
+import errorReporting from '~/ErrorReporting';
 
 export type ComponentMap = {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any

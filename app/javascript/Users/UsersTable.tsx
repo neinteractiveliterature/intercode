@@ -12,7 +12,7 @@ import { UsersTableUsersQueryData, UsersTableUsersQueryDocument } from './querie
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
 import { useTranslation } from 'react-i18next';
 import { useMemo } from 'react';
-import { buildRowSelectColumn } from 'Tables/RowSelection';
+import { buildRowSelectColumn } from '~/Tables/RowSelection';
 
 type UserType = UsersTableUsersQueryData['users_paginated']['entries'][0];
 

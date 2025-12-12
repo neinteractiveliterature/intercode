@@ -15,9 +15,9 @@ import { duplicateProductForEditing, EditingProduct } from './EditingProductType
 import { getRealOrGeneratedId, realOrGeneratedIdsMatch } from '../../GeneratedIdUtils';
 import { ActionFunction, data, LoaderFunction, useLoaderData, RouterContextProvider } from 'react-router';
 import { apolloClientContext } from '~/AppContexts';
-import { Convention, TicketType } from 'graphqlTypes.generated';
-import { AdminProductFieldsFragmentDoc } from 'Store/adminProductFields.generated';
-import { parseProductFormData } from 'Store/buildProductInput';
+import { Convention, TicketType } from '~/graphqlTypes.generated';
+import { AdminProductFieldsFragmentDoc } from '~/Store/adminProductFields.generated';
+import { parseProductFormData } from '~/Store/buildProductInput';
 import { CreateProductDocument } from './mutations.generated';
 
 export const action: ActionFunction<RouterContextProvider> = async ({ request, context }) => {

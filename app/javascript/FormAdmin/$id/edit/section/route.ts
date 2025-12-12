@@ -1,5 +1,5 @@
-import { CreateFormSectionDocument } from 'FormAdmin/mutations.generated';
-import { FormEditorQueryDocument } from 'FormAdmin/queries.generated';
+import { CreateFormSectionDocument } from '~/FormAdmin/mutations.generated';
+import { FormEditorQueryDocument } from '~/FormAdmin/queries.generated';
 import { ActionFunction, RouterContextProvider, redirect } from 'react-router';
 import invariant from 'tiny-invariant';
 import { apolloClientContext } from '../../../../AppContexts';

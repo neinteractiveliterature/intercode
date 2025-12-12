@@ -1,9 +1,9 @@
-import AppRootContext from 'AppRootContext';
-import { Signup, Event, SignupState, SignupAutomationMode, Run } from 'graphqlTypes.generated';
+import AppRootContext from '~/AppRootContext';
+import { Signup, Event, SignupState, SignupAutomationMode, Run } from '~/graphqlTypes.generated';
 import { useCallback, useContext, useMemo, useState } from 'react';
 import Modal from 'react-bootstrap4-modal';
 import { Trans, useTranslation } from 'react-i18next';
-import { parseSignupRounds } from 'SignupRoundUtils';
+import { parseSignupRounds } from '~/SignupRoundUtils';
 import { DateTime } from 'luxon';
 import { BootstrapFormCheckbox, ErrorDisplay } from '@neinteractiveliterature/litform';
 import { WithdrawMySignupDocument } from './mutations.generated';

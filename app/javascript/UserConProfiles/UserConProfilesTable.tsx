@@ -27,7 +27,7 @@ import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
 import { formatLCM, getDateTimeFormat } from '../TimeUtils';
 import AppRootContext from '../AppRootContext';
 import humanize from '../humanize';
-import { TicketMode } from 'graphqlTypes.generated';
+import { TicketMode } from '~/graphqlTypes.generated';
 
 type UserConProfilesTableRow = NonNullable<
   UserConProfilesTableUserConProfilesQueryData['convention']

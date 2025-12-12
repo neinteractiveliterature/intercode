@@ -14,16 +14,16 @@ import {
   ParsedFormItem,
   parseTypedFormItemObject,
   TypedFormItem,
-} from 'FormAdmin/FormItemUtils';
-import { FormEditorContext, FormEditorFormItem, FormItemEditorContext } from 'FormAdmin/FormEditorContexts';
-import { PreviewFormItemQueryDocument } from 'FormAdmin/queries.generated';
-import FormItemTools from 'FormAdmin/FormItemTools';
-import FormItemInput from 'FormPresenter/ItemInputs/FormItemInput';
+} from '~/FormAdmin/FormItemUtils';
+import { FormEditorContext, FormEditorFormItem, FormItemEditorContext } from '~/FormAdmin/FormEditorContexts';
+import { PreviewFormItemQueryDocument } from '~/FormAdmin/queries.generated';
+import FormItemTools from '~/FormAdmin/FormItemTools';
+import FormItemInput from '~/FormPresenter/ItemInputs/FormItemInput';
 import { apolloClientContext } from '~/AppContexts';
-import { DeleteFormItemDocument, UpdateFormItemDocument } from 'FormAdmin/mutations.generated';
-import { FormItem } from 'graphqlTypes.generated';
+import { DeleteFormItemDocument, UpdateFormItemDocument } from '~/FormAdmin/mutations.generated';
+import { FormItem } from '~/graphqlTypes.generated';
 import FormItemEditorContent from './FormItemEditorContent';
-import styles from 'styles/form_editor.module.scss';
+import styles from '~/styles/form_editor.module.scss';
 
 export const action: ActionFunction<RouterContextProvider> = async ({
   context,

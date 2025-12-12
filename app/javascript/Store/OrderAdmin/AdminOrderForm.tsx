@@ -3,11 +3,11 @@ import * as React from 'react';
 import classNames from 'classnames';
 import { useConfirm, ErrorDisplay, ChoiceSet } from '@neinteractiveliterature/litform';
 
-import InPlaceEditor from 'BuiltInFormControls/InPlaceEditor';
-import InPlaceMoneyEditor from 'Store/InPlaceMoneyEditor';
-import UserConProfileSelect from 'BuiltInFormControls/UserConProfileSelect';
-import EnumTypes from 'enumTypes.json';
-import { Order, OrderStatus, UserConProfile } from 'graphqlTypes.generated';
+import InPlaceEditor from '~/BuiltInFormControls/InPlaceEditor';
+import InPlaceMoneyEditor from '~/Store/InPlaceMoneyEditor';
+import UserConProfileSelect from '~/BuiltInFormControls/UserConProfileSelect';
+import EnumTypes from '~/enumTypes.json';
+import { Order, OrderStatus, UserConProfile } from '~/graphqlTypes.generated';
 import { Trans, useTranslation } from 'react-i18next';
 import { useFetcher } from 'react-router';
 

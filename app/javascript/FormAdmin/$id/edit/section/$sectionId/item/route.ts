@@ -2,7 +2,7 @@ import { ActionFunction, RouterContextProvider, data } from 'react-router';
 import { FormItemInput, FormSection } from '../../../../../../graphqlTypes.generated';
 import { apolloClientContext } from '../../../../../../AppContexts';
 import { CreateFormItemDocument } from '../../../../../mutations.generated';
-import { FormEditorFormItemFieldsFragmentDoc } from 'FormAdmin/queries.generated';
+import { FormEditorFormItemFieldsFragmentDoc } from '~/FormAdmin/queries.generated';
 
 export const action: ActionFunction<RouterContextProvider> = async ({ context, request, params: { sectionId } }) => {
   const client = context.get(apolloClientContext);

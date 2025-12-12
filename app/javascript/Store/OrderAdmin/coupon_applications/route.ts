@@ -1,5 +1,5 @@
 import { ActionFunction, RouterContextProvider, data } from 'react-router';
-import { CreateCouponApplicationDocument } from 'Store/mutations.generated';
+import { CreateCouponApplicationDocument } from '~/Store/mutations.generated';
 import invariant from 'tiny-invariant';
 import { apolloClientContext } from '../../../AppContexts';
 

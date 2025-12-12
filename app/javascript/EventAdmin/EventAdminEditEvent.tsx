@@ -16,8 +16,8 @@ import { useImageAttachmentConfig } from '../BuiltInFormControls/MarkdownInput';
 import { NamedRoute } from '../AppRouter';
 import { apolloClientContext } from '~/AppContexts';
 import { UpdateEventOptions } from './$id';
-import { ActiveStorageAttachment } from 'graphqlTypes.generated';
-import { useAsyncFetcher } from 'useAsyncFetcher';
+import { ActiveStorageAttachment } from '~/graphqlTypes.generated';
+import { useAsyncFetcher } from '~/useAsyncFetcher';
 
 type LoaderResult = WithFormResponse<EventAdminSingleEventQueryData['conventionByRequestHost']['event']>;
 

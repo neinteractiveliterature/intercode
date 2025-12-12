@@ -1,4 +1,4 @@
-import { Convention } from 'graphqlTypes.generated';
+import { Convention } from '~/graphqlTypes.generated';
 import OpenLayersMap, { fromLonLat } from './OpenLayersMap';
 import { CSSProperties, useMemo } from 'react';
 import VectorLayer from 'ol/layer/Vector';

@@ -13,7 +13,7 @@ import { apolloClientContext } from '~/AppContexts';
 import { loadDocData, YardClass, YardDocs, YardMethod } from './DocData';
 import { NamedRoute } from '../AppRouter';
 import findLiquidTagName from './findLiquidTagName';
-import { NotificationEventKey } from 'graphqlTypes.generated';
+import { NotificationEventKey } from '~/graphqlTypes.generated';
 
 export type LiquidDocsLoaderResultCommonFields = {
   assigns: Record<string, LiquidAssignsQueryData['cmsParent']['liquidAssigns'][number]>;

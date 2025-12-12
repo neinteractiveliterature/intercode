@@ -5,7 +5,7 @@ import { PayWhatYouWantValue, PricingStrategy, PricingStructure, ScheduledMoneyV
 import assertNever from 'assert-never';
 import { Trans, useTranslation } from 'react-i18next';
 import { useContext } from 'react';
-import AppRootContext from 'AppRootContext';
+import AppRootContext from '~/AppRootContext';
 
 export type PayWhatYouWantRangeDescriptionProps = {
   value?: PayWhatYouWantValue | null;

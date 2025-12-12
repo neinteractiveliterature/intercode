@@ -1,6 +1,6 @@
-import { GeocodingBackend } from 'Maps/LocationSelect';
+import { GeocodingBackend } from '~/Maps/LocationSelect';
 import { FeatureCollection } from 'geojson';
-import { GeoJSONGeocodingResult } from 'Maps/geoJSONUtils';
+import { GeoJSONGeocodingResult } from '~/Maps/geoJSONUtils';
 
 const PHOTON_BASE_URL = 'https://photon.komoot.io/api/';
 

@@ -5,8 +5,8 @@ import { BootstrapFormInput, BootstrapFormCheckbox, usePropertySetters } from '@
 import UserSelect from '../BuiltInFormControls/UserSelect';
 import { UserActivityAlertsAdminQueryData } from './queries.generated';
 import { useTranslation } from 'react-i18next';
-import NotificationDestinationsConfig from 'NotificationAdmin/NotificationDestinationsConfig';
-import { NotificationEvent } from 'graphqlTypes.generated';
+import NotificationDestinationsConfig from '~/NotificationAdmin/NotificationDestinationsConfig';
+import { NotificationEvent } from '~/graphqlTypes.generated';
 
 type AlertType = UserActivityAlertsAdminQueryData['convention']['user_activity_alerts'][number];
 

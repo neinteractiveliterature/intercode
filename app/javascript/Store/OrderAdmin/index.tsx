@@ -2,24 +2,24 @@ import { useContext, useMemo } from 'react';
 import { CellContext, Column, createColumnHelper } from '@tanstack/react-table';
 import { DateTime } from 'luxon';
 
-import ArrayToSentenceCell from 'Tables/ArrayToSentenceCell';
-import ChoiceSetFilter from 'Tables/ChoiceSetFilter';
-import FreeTextFilter from 'Tables/FreeTextFilter';
-import MoneyCell from 'Tables/MoneyCell';
-import TableHeader from 'Tables/TableHeader';
-import useReactTableWithTheWorks, { QueryDataContext } from 'Tables/useReactTableWithTheWorks';
-import usePageTitle from 'usePageTitle';
-import { buildFieldFilterCodecs, FilterCodecs } from 'Tables/FilterUtils';
-import AppRootContext from 'AppRootContext';
+import ArrayToSentenceCell from '~/Tables/ArrayToSentenceCell';
+import ChoiceSetFilter from '~/Tables/ChoiceSetFilter';
+import FreeTextFilter from '~/Tables/FreeTextFilter';
+import MoneyCell from '~/Tables/MoneyCell';
+import TableHeader from '~/Tables/TableHeader';
+import useReactTableWithTheWorks, { QueryDataContext } from '~/Tables/useReactTableWithTheWorks';
+import usePageTitle from '~/usePageTitle';
+import { buildFieldFilterCodecs, FilterCodecs } from '~/Tables/FilterUtils';
+import AppRootContext from '~/AppRootContext';
 import { AdminOrdersQueryData, AdminOrdersQueryDocument } from './queries.generated';
-import ReactTableWithTheWorks from 'Tables/ReactTableWithTheWorks';
-import { useAppDateTimeFormat } from 'TimeUtils';
+import ReactTableWithTheWorks from '~/Tables/ReactTableWithTheWorks';
+import { useAppDateTimeFormat } from '~/TimeUtils';
 import { useTranslation } from 'react-i18next';
 import { ActionFunction, data, Outlet, useNavigate, RouterContextProvider } from 'react-router';
 import { Link } from 'react-router';
 import { CreateOrderDocument, CreateOrderMutationVariables } from './mutations.generated';
 import { apolloClientContext } from '~/AppContexts';
-import { CreateCouponApplicationDocument } from 'Store/mutations.generated';
+import { CreateCouponApplicationDocument } from '~/Store/mutations.generated';
 
 export type CreateOrderActionInput = {
   createOrderVariables: CreateOrderMutationVariables;

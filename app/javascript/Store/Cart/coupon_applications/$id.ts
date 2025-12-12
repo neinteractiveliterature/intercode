@@ -1,5 +1,5 @@
 import { ActionFunction, RouterContextProvider, data } from 'react-router';
-import { DeleteCouponApplicationDocument } from 'Store/mutations.generated';
+import { DeleteCouponApplicationDocument } from '~/Store/mutations.generated';
 import { apolloClientContext } from '../../../AppContexts';
 import { CartQueryDocument } from '../queries.generated';
 
