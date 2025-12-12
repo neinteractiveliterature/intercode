@@ -2,7 +2,6 @@ import { defineConfig } from 'vite';
 import { reactRouter } from '@react-router/dev/vite';
 import tsconfigPaths from 'vite-tsconfig-paths';
 import { fileURLToPath } from 'url';
-import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import { globalDefines } from './globalDefines';
 
 export function absolutePath(relativePath: string) {
@@ -10,10 +9,10 @@ export function absolutePath(relativePath: string) {
 }
 
 export default defineConfig({
-  plugins: [reactRouter(), tsconfigPaths(), nodePolyfills()],
-  // resolve: {
-  //   mainFields: ['module'],
-  // },
+  plugins: [reactRouter(), tsconfigPaths()],
+  resolve: {
+    mainFields: ['module'],
+  },
   define: globalDefines,
   experimental: {
     renderBuiltUrl: (filename, { hostType }) => {

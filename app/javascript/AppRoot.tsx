@@ -10,7 +10,7 @@ import getI18n from './setupI18Next';
 import { timespanFromConvention } from './TimespanUtils';
 import { LazyStripeContext } from './LazyStripe';
 import { Stripe } from '@stripe/stripe-js';
-import AuthenticationModalContext from './Authentication/AuthenticationModalContext';
+import AuthenticationModalContext from '~/Authentication/AuthenticationModalContext';
 import { GraphQLNotAuthenticatedErrorEvent } from './useIntercodeApolloClient';
 import { reloadOnAppEntrypointHeadersMismatch } from './checkAppEntrypointHeadersMatch';
 import { initErrorReporting } from '~/ErrorReporting';
