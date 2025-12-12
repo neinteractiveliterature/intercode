@@ -10,7 +10,7 @@ import { ScheduleLayoutResult, RunDimensions } from './ScheduleLayout/ScheduleLa
 import { SignupState } from '../../graphqlTypes.generated';
 import { useAppDateTimeFormat } from '../../TimeUtils';
 import { ScheduleGridConfig } from './ScheduleGridConfig';
-import styles from 'styles/schedule_grid.module.scss';
+import styles from '~/styles/schedule_grid.module.scss';
 
 export type RunDisplayProps = {
   event: ScheduleEvent;

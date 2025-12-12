@@ -1,6 +1,6 @@
 import SignupCountData, { EventForSignupCountData } from '../SignupCountData';
 import getCapacityThresholds, { RegistrationPolicyForCapacityThresholds } from './getCapacityThresholds';
-import styles from 'styles/schedule_grid.module.scss';
+import styles from '~/styles/schedule_grid.module.scss';
 
 export default function getFullnessClass(
   event: {

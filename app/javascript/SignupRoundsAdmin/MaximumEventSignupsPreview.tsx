@@ -6,7 +6,7 @@ import { TFunction } from 'i18next';
 import assertNever from 'assert-never';
 import { useTranslation } from 'react-i18next';
 import { SignupRoundsAdminQueryData } from './queries.generated';
-import styles from 'styles/scheduled_value_previews.module.scss';
+import styles from '~/styles/scheduled_value_previews.module.scss';
 import kebabCase from 'lodash/kebabCase';
 
 function getMaximumEventSignupsValueClassName(

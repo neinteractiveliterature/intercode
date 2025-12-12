@@ -21,7 +21,7 @@ import { FormItemExposeIn } from '../../../graphqlTypes.generated';
 import FormItemDisplay from '../../../FormPresenter/ItemDisplays/FormItemDisplay';
 import { parseTypedFormItemArray } from '../../../FormAdmin/FormItemUtils';
 import { CommonConventionDataFragment } from '../../queries.generated';
-import styles from 'styles/event_list.module.scss';
+import styles from '~/styles/event_list.module.scss';
 
 type ConventionType = NonNullable<EventListEventsQueryData['convention']>;
 type EventType = ConventionType['events_paginated']['entries'][0] & {

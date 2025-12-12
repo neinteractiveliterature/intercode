@@ -25,7 +25,7 @@ import { reactTableFiltersToTableResultsFilters } from '../Tables/TableUtils';
 import { LoaderFunction, useLoaderData, RouterContextProvider } from 'react-router';
 import { apolloClientContext } from '../AppContexts';
 import { conventionDayLoader, ConventionDayLoaderResult } from './conventionDayUrls';
-import styles from 'styles/schedule_grid.module.scss';
+import styles from '~/styles/schedule_grid.module.scss';
 
 const filterCodecs = buildFieldFilterCodecs({
   form_items: FilterCodecs.json,

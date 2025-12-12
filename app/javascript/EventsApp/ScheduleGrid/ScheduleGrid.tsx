@@ -10,7 +10,7 @@ import usePageTitle from '../../usePageTitle';
 import useLayoutForTimespan from './useLayoutForTimespan';
 import ScheduleGridEventRun from './ScheduleGridEventRun';
 import { FiniteTimespan } from '../../Timespan';
-import styles from 'styles/schedule_grid.module.scss';
+import styles from '~/styles/schedule_grid.module.scss';
 
 export type ScheduleGridProps = {
   timespan: FiniteTimespan;

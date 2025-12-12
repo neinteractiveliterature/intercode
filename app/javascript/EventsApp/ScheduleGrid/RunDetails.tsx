@@ -19,7 +19,7 @@ import { useAppDateTimeFormat } from '../../TimeUtils';
 import { FormItemExposeIn } from '../../graphqlTypes.generated';
 import FormItemDisplay from '../../FormPresenter/ItemDisplays/FormItemDisplay';
 import { parseTypedFormItemArray } from '../../FormAdmin/FormItemUtils';
-import scheduleGridStyles from 'styles/schedule_grid.module.scss';
+import scheduleGridStyles from '~/styles/schedule_grid.module.scss';
 
 export type RunDetailsProps = {
   placement?: Placement;

@@ -3,7 +3,7 @@ import { ReactNode, useContext } from 'react';
 import { ScheduleGridContext } from './ScheduleGridContext';
 import { PIXELS_PER_HOUR, PIXELS_PER_LANE } from './LayoutConstants';
 import { ScheduleLayoutResult } from './ScheduleLayout/ScheduleLayoutBlock';
-import styles from 'styles/schedule_grid.module.scss';
+import styles from '~/styles/schedule_grid.module.scss';
 
 export type ScheduleGridRowHeaderProps = {
   layoutResult: ScheduleLayoutResult;
