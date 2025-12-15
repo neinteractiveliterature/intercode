@@ -1,9 +1,9 @@
 import { Suspense, useMemo, useState, useEffect, useContext, RefObject, useRef } from 'react';
-import { useLocation, useNavigate, useLoaderData, Outlet, useNavigation } from 'react-router';
+import { useLocation, useNavigate, Outlet, useNavigation } from 'react-router';
 import { Settings } from 'luxon';
 import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
-import { AppRootQueryData } from './appRootQueries.generated';
+import { AppRootQueryData, AppRootQueryDocument } from './appRootQueries.generated';
 import AppRootContext, { AppRootContextValue } from './AppRootContext';
 import { timezoneNameForConvention } from './TimeUtils';
 import getI18n from './setupI18Next';
@@ -14,6 +14,8 @@ import AuthenticationModalContext from '~/Authentication/AuthenticationModalCont
 import { GraphQLNotAuthenticatedErrorEvent } from './useIntercodeApolloClient';
 import { reloadOnAppEntrypointHeadersMismatch } from './checkAppEntrypointHeadersMatch';
 import { initErrorReporting } from '~/ErrorReporting';
+import { Route } from './+types/AppRoot';
+import { apolloClientContext } from './AppContexts';
 
 export function buildAppRootContextValue(
   data: AppRootQueryData | null | undefined,
@@ -78,10 +80,18 @@ export function buildAppRootContextValue(
   };
 }
 
-function AppRoot(): React.JSX.Element {
+export async function clientLoader({ context }: Route.ClientLoaderArgs) {
+  const client = context.get(apolloClientContext);
+  const { data, error } = await client.query({ query: AppRootQueryDocument });
+  if (!data) {
+    throw error;
+  }
+  return data;
+}
+
+function AppRoot({ loaderData: data }: Route.ComponentProps): React.JSX.Element {
   const location = useLocation();
   const navigate = useNavigate();
-  const data = useLoaderData() as AppRootQueryData;
   const authenticationModal = useContext(AuthenticationModalContext);
   const navigation = useNavigation();
   const navigationBarRef = useRef<HTMLElement>(null);
@@ -154,7 +164,7 @@ function AppRoot(): React.JSX.Element {
           </div>
           {/* Disabling ScrollRestoration for now because it's breaking hash links within the same page (reproducible with Mac Chrome) */}
           {/* <ScrollRestoration /> */}
-          <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
+          <Suspense fallback={<PageLoadingIndicator visible />}>
             <Outlet />
           </Suspense>
         </div>

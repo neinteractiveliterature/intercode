@@ -1,11 +1,11 @@
 import { useEffect, useMemo, useState } from 'react';
-import { LoaderFunction, RouterContextProvider, useLoaderData } from 'react-router';
 import parseCmsContent, { CMS_COMPONENT_MAP } from './parseCmsContent';
 import OutletWithLoading from './OutletWithLoading';
 import NavigationBar from './NavigationBar';
 import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
-import { AppRootLayoutQueryData, AppRootLayoutQueryDocument } from './appRootQueries.generated';
+import { AppRootLayoutQueryDocument } from './appRootQueries.generated';
 import { apolloClientContext } from '~/AppContexts';
+import { Route } from './+types/AppRootLayout';
 
 // Avoid unnecessary layout checks when moving between pages that can't change layout
 function normalizePathForLayout(path: string) {
@@ -24,20 +24,22 @@ function normalizePathForLayout(path: string) {
   return '/non_cms_path'; // arbitrary path that's not a CMS page
 }
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ context, request }) => {
+export async function clientLoader({ context, request }: Route.ClientLoaderArgs) {
   const client = context.get(apolloClientContext);
   const url = new URL(request.url);
-  const { data } = await client.query({
+  const { data, error } = await client.query({
     query: AppRootLayoutQueryDocument,
     variables: { path: normalizePathForLayout(url.pathname) },
   });
+  if (!data) {
+    throw error;
+  }
   return data;
-};
+}
 
-function AppRootLayout() {
+function AppRootLayout({ loaderData: data }: Route.ComponentProps) {
   const [cachedCmsLayoutId, setCachedCmsLayoutId] = useState<string>();
   const [layoutChanged, setLayoutChanged] = useState(false);
-  const data = useLoaderData() as AppRootLayoutQueryData;
 
   const parsedCmsContent = useMemo(() => {
     return parseCmsContent(data.cmsParentByRequestHost.effectiveCmsLayout.content_html ?? '', {

@@ -9,6 +9,7 @@ import { SetContextLink } from '@apollo/client/link/context';
 import possibleTypes from './possibleTypes.json';
 import AuthenticityTokensManager from './AuthenticityTokensContext';
 import { GraphQLFormattedError } from 'graphql';
+import { getBackendBaseUrl } from './getBackendBaseUrl';
 
 // adapted from https://github.com/jaydenseric/apollo-upload-client/issues/63#issuecomment-392501449
 function isFile(value: unknown): value is Blob | File {
@@ -148,11 +149,7 @@ export function buildIntercodeApolloClient(
 }
 
 export function getClientURL(): URL {
-  if (typeof window !== 'undefined') {
-    return new URL('/graphql', window.location.href);
-  } else {
-    return new URL('/graphql', process.env.INTERCODE_BACKEND);
-  }
+  return new URL('/graphql', getBackendBaseUrl());
 }
 
 export function buildBrowserApolloClient(authenticityTokensManager: AuthenticityTokensManager) {

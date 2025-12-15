@@ -94,6 +94,7 @@ gem "tzinfo-data"
 gem "browser"
 gem "positioning"
 gem "stackprof"
+gem "rack-cors"
 
 gem "faker", group: "development", require: false
 
