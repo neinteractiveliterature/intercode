@@ -3,6 +3,8 @@ class ContentCloners::EarlyCmsContentCloner < ContentCloners::ContentClonerBase
   def clone(convention)
     clone_forms(convention)
     clone_cms_content_groups(convention)
+
+    convention.update!(user_con_profile_form: @id_maps[:forms][source_convention.user_con_profile_form_id])
   end
 
   private

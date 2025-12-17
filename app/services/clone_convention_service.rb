@@ -42,8 +42,8 @@ class CloneConventionService < CivilService::Service
         ContentCloners::DepartmentsCloner,
         ContentCloners::EventCategoriesCloner,
         ContentCloners::StaffPositionsCloner,
-        ContentCloners::UserActivityAlertsCloner,
         ContentCloners::CmsContentCloner,
+        ContentCloners::UserActivityAlertsCloner,
         ContentCloners::RoomsCloner,
         ContentCloners::TicketTypesCloner,
         ContentCloners::StoreContentCloner

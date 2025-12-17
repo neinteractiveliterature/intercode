@@ -45,16 +45,13 @@ class ContentCloners::ContentClonerBase
     shift_scheduled_value(value, convention.starts_at - source_convention.starts_at)
   end
 
-  def clone_user_con_profile(user_con_profile)
+  def clone_user_con_profile(convention, user_con_profile)
     @id_maps[:user_con_profiles] ||= {}
-    cloned_user_con_profile = @id_maps.fetch[:user_con_profiles][user_con_profile.id]
+    cloned_user_con_profile = @id_maps.fetch(:user_con_profiles)[user_con_profile.id]
     return cloned_user_con_profile if cloned_user_con_profile
 
     cloned_user_con_profile =
-      SetupUserConProfileService
-        .new(convention: cloned_source.convention, user: @id_maps.fetch(:users)[user_con_profile.user_id])
-        .call!
-        .user_con_profile
+      SetupUserConProfileService.new(convention:, user: User.find(user_con_profile.user_id)).call!.user_con_profile
     @id_maps[:user_con_profiles][user_con_profile.id] = cloned_user_con_profile
     cloned_user_con_profile
   end
@@ -66,7 +63,7 @@ class ContentCloners::ContentClonerBase
     ) do |notification_destination, cloned_notification_destination|
       if notification_destination.user_con_profile_id
         cloned_notification_destination.user_con_profile =
-          clone_user_con_profile(notification_destination.user_con_profile)
+          clone_user_con_profile(cloned_source.convention, notification_destination.user_con_profile)
       end
 
       cloned_notification_destination.staff_position =
