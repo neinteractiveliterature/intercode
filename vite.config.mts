@@ -24,23 +24,11 @@ export default defineConfig({
     },
   },
   build: {
-    copyPublicDir: false,
     rollupOptions: {
       // tree shaking is causing empty GraphQL document constants as of Rollup 4.27,
       // hopefully can remove this eventually
       treeshake: false,
-      input: {
-        application: absolutePath('./app/javascript/packs/applicationEntry.ts'),
-        'application-styles': absolutePath('./app/javascript/packs/applicationStyles.ts'),
-        ...(process.env.NODE_ENV === 'production'
-          ? {}
-          : {
-              'dev-mode-graphiql': absolutePath('./app/javascript/DevModeGraphiql.tsx'),
-            }),
-      },
       output: {
-        dir: absolutePath('./public/packs'),
-        entryFileNames: '[name].js',
         manualChunks: {
           apollo: ['@apollo/client', 'apollo-upload-client/UploadHttpLink.mjs'],
           codemirror: [
@@ -54,6 +42,7 @@ export default defineConfig({
           ],
           currencyCodes: ['@breezehr/currency-codes'],
           graphql: ['graphql'],
+          graphiql: ['graphiql', '@graphiql/toolkit'],
           i18next: ['i18next', 'react-i18next'],
           lodash: ['lodash'],
           luxon: ['luxon'],

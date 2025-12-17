@@ -45,7 +45,7 @@ export default class AuthenticityTokensManager {
     const response = await fetchAuthenticityTokens(this.fetcher, this.url);
     const json = await response.json();
 
-    this.setTokens(json);
+    this.setTokens(json as AuthenticityTokens);
     return this.tokens!;
   }
 

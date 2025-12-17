@@ -76,10 +76,12 @@ cookbooks
 
 # Dear god, don't look at node_modules
 /node_modules
+
+# build artifacts
+/build
 /public/packs
 /public/packs-test
 /public/packs-vite
-/node_modules
 
 # If the dev is keeping pgdumps around for debugging, ignore those
 /*.pgdump

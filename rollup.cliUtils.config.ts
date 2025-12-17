@@ -3,7 +3,7 @@ import swc from '@rollup/plugin-swc';
 import commonjs from '@rollup/plugin-commonjs';
 import nodeResolve from '@rollup/plugin-node-resolve';
 import replace from '@rollup/plugin-replace';
-import { globalDefines } from './globalDefines';
+import { globalDefines } from './globalDefines.ts';
 
 const replaceConfig = Object.entries(globalDefines).reduce<Record<string, string>>(
   (memo, [key, value]) => ({

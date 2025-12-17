@@ -4,6 +4,7 @@ import { AuthenticityTokensContext } from '~/AuthenticityTokensContext';
 import { ReactNode, StrictMode, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
 import type { Route } from './+types/root';
 import { apolloClientContext, authenticityTokensManagerContext, clientConfigurationDataContext } from './AppContexts';
+import './styles/application.scss';
 import {
   AlertProvider,
   Confirm,
