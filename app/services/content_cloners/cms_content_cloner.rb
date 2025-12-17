@@ -5,13 +5,12 @@ class ContentCloners::CmsContentCloner < ContentCloners::ContentClonerBase
     clone_pages(convention)
     clone_cms_navigation_items(convention)
     clone_cms_files(convention)
-    clone_cms_content_group_contents(convention)
+    clone_cms_content_group_contents
     clone_notification_templates(convention)
 
     convention.update!(
       root_page: @id_maps[:pages][source_convention.root_page_id],
-      default_layout: @id_maps[:cms_layouts][source_convention.default_layout_id],
-      user_con_profile_form: @id_maps[:forms][source_convention.user_con_profile_form_id]
+      default_layout: @id_maps[:cms_layouts][source_convention.default_layout_id]
     )
   end
 
@@ -60,10 +59,10 @@ class ContentCloners::CmsContentCloner < ContentCloners::ContentClonerBase
     end
   end
 
-  def clone_cms_content_group_contents(convention)
+  def clone_cms_content_group_contents
     Rails.logger.info("Cloning CMS content group contents")
 
-    convention.cms_content_groups.find_each do |cms_content_group|
+    source_convention.cms_content_groups.find_each do |cms_content_group|
       cloned_cms_content_group = @id_maps.fetch(:cms_content_groups).fetch(cms_content_group.id)
 
       %i[pages cms_partials cms_layouts].each do |content_type|
@@ -87,6 +86,7 @@ class ContentCloners::CmsContentCloner < ContentCloners::ContentClonerBase
 
       cloned_notification_template.notification_destinations.destroy_all
       destination_id_map = clone_notification_destinations(notification_template, cloned_notification_template)
+      @id_maps[:notification_destinations] = {}
       @id_maps[:notification_destinations].merge!(destination_id_map)
     end
   end
