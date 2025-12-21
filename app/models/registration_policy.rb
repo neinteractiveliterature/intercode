@@ -142,7 +142,7 @@ class RegistrationPolicy
   end
 
   def as_json(*)
-    super.merge(buckets: buckets.as_json(*))
+    super.merge("buckets" => buckets.as_json(*))
   end
 
   def blank?
