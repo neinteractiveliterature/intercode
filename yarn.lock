@@ -1814,14 +1814,14 @@ __metadata:
   linkType: hard
 
 "@codemirror/commands@npm:^6.0.0, @codemirror/commands@npm:^6.7.1, @codemirror/commands@npm:^6.8.0":
-  version: 6.10.0
-  resolution: "@codemirror/commands@npm:6.10.0"
+  version: 6.10.1
+  resolution: "@codemirror/commands@npm:6.10.1"
   dependencies:
     "@codemirror/language": "npm:^6.0.0"
     "@codemirror/state": "npm:^6.4.0"
     "@codemirror/view": "npm:^6.27.0"
     "@lezer/common": "npm:^1.1.0"
-  checksum: 10c0/5122c026ef3578049a9d166a0afe9cd66abcc20fd5a2a084c97a60b519db6f38e3b8f05af813e5bdbbf249d3a95dce07a52cd30f77083da4a2da660c1b424a88
+  checksum: 10c0/1841d8ad6751f0d10d10200e81333c5c9b0d6afb55692e41df85992a3737abc8c2ee97e14816ce624276381fbb0261e7aaf8474e170b74f796c3ba62500be3da
   languageName: node
   linkType: hard
 
@@ -1940,15 +1940,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/view@npm:6.38.7, @codemirror/view@npm:^6.0.0, @codemirror/view@npm:^6.17.0, @codemirror/view@npm:^6.23.0, @codemirror/view@npm:^6.27.0, @codemirror/view@npm:^6.36.3":
-  version: 6.38.7
-  resolution: "@codemirror/view@npm:6.38.7"
+"@codemirror/view@npm:6.39.4, @codemirror/view@npm:^6.0.0, @codemirror/view@npm:^6.17.0, @codemirror/view@npm:^6.23.0, @codemirror/view@npm:^6.27.0, @codemirror/view@npm:^6.36.3":
+  version: 6.39.4
+  resolution: "@codemirror/view@npm:6.39.4"
   dependencies:
     "@codemirror/state": "npm:^6.5.0"
     crelt: "npm:^1.0.6"
     style-mod: "npm:^4.1.0"
     w3c-keyname: "npm:^2.2.4"
-  checksum: 10c0/48e237f790d4f9e173e2428f73809c4f147dff401e616e8155397ce17ab296a8c69b0267ce7a565b93a3e1c531f9573e3666069b8f113ac0b98da4997c7e7f9b
+  checksum: 10c0/aa17cfbfb0714243cccc9e970f4f382c3e747435f2fc63d40125370379227436fb529473dde856a276b8b7df98f83c55f4cc5cd0c24a56335f24233103b7dfd0
   languageName: node
   linkType: hard
 
@@ -21711,7 +21711,7 @@ __metadata:
     "@codemirror/lang-markdown": "npm:6.5.0"
     "@codemirror/language": "npm:6.11.3"
     "@codemirror/state": "npm:6.5.2"
-    "@codemirror/view": "npm:6.38.7"
+    "@codemirror/view": "npm:6.39.4"
     "@dnd-kit/core": "npm:6.3.1"
     "@dnd-kit/sortable": "npm:10.0.0"
     "@dnd-kit/utilities": "npm:3.2.2"
