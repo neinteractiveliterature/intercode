@@ -17,6 +17,7 @@ module Intercode
     def cookie_domain(env)
       host = env['HTTP_HOST']&.split(':')&.first
       return :all unless host
+      return :all if Rails.env.test?
 
       # Safari blocks cross-domain cookies on .test domains :(
       if host =~ /\.test$/

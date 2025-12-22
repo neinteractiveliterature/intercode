@@ -171,6 +171,9 @@ group :intercode1_import do
 end
 
 group :test do
+  gem "capybara"
+  gem "cuprite"
+  gem "database_cleaner-active_record"
   gem "minitest-spec-rails"
   gem "minitest-reporters"
   gem "minitest-focus"

@@ -31,6 +31,22 @@ else
   Minitest::Reporters.use!(Minitest::Reporters::ProgressReporter.new, ENV, Minitest.backtrace_filter)
 end
 
+require "capybara/cuprite"
+Capybara.javascript_driver = :cuprite
+Capybara.register_driver(:cuprite) do |app|
+  Capybara::Cuprite::Driver.new(
+    app,
+    window_size: [1200, 800],
+    headless: %w[0 false].exclude?(ENV["HEADLESS"]),
+    js_errors: true
+  )
+end
+
+require "capybara/rails"
+require "capybara/minitest"
+
+DatabaseCleaner.strategy = :truncation
+
 class ActiveSupport::TestCase
   include FactoryBot::Syntax::Methods
   include ActionMailer::TestCase::ClearTestDeliveries
