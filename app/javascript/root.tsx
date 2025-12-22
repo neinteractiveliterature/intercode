@@ -1,22 +1,24 @@
+import { ApolloClient } from '@apollo/client';
 import { ApolloProvider } from '@apollo/client/react';
-import { authenticityTokensManagerContext, clientConfigurationDataContext } from 'AppContexts';
+import { apolloClientContext, authenticityTokensManagerContext, clientConfigurationDataContext } from 'AppContexts';
 import { ProviderStack } from 'AppWrapper';
 import AuthenticityTokensManager, { AuthenticityTokensContext } from 'AuthenticityTokensContext';
 import { ClientConfiguration } from 'graphqlTypes.generated';
-import { StrictMode, useMemo } from 'react';
+import { StrictMode } from 'react';
 import { LoaderFunction, useLoaderData } from 'react-router';
 import { ClientConfigurationQueryData } from 'serverQueries.generated';
-import { buildBrowserApolloClient } from 'useIntercodeApolloClient';
 
 type RootLoaderData = {
   clientConfigurationData: ClientConfigurationQueryData;
   authenticityTokensManager: AuthenticityTokensManager;
+  client: ApolloClient;
 };
 
 export const loader: LoaderFunction = ({ context }) => {
   const clientConfigurationData = context.get(clientConfigurationDataContext);
   const authenticityTokensManager = context.get(authenticityTokensManagerContext);
-  return { clientConfigurationData, authenticityTokensManager } satisfies RootLoaderData;
+  const client = context.get(apolloClientContext);
+  return { clientConfigurationData, client, authenticityTokensManager } satisfies RootLoaderData;
 };
 
 function RootProviderStack({ clientConfiguration }: { clientConfiguration: ClientConfiguration }) {
@@ -31,15 +33,11 @@ function RootProviderStack({ clientConfiguration }: { clientConfiguration: Clien
 
 export default function Root() {
   const loaderData = useLoaderData() as RootLoaderData;
-  const client = useMemo(
-    () => buildBrowserApolloClient(loaderData.authenticityTokensManager),
-    [loaderData.authenticityTokensManager],
-  );
 
   return (
     <StrictMode>
       <AuthenticityTokensContext.Provider value={loaderData.authenticityTokensManager}>
-        <ApolloProvider client={client}>
+        <ApolloProvider client={loaderData.client}>
           <RootProviderStack clientConfiguration={loaderData.clientConfigurationData.clientConfiguration} />
         </ApolloProvider>
       </AuthenticityTokensContext.Provider>

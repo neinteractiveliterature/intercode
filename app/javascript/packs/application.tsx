@@ -2,10 +2,7 @@ import 'regenerator-runtime/runtime';
 
 import mountReactComponents from '../mountReactComponents';
 import { StrictMode, use, useMemo } from 'react';
-import AuthenticityTokensManager, {
-  AuthenticityTokensContext,
-  getAuthenticityTokensURL,
-} from 'AuthenticityTokensContext';
+import AuthenticityTokensManager, { getAuthenticityTokensURL } from 'AuthenticityTokensContext';
 import { createBrowserRouter, RouterContextProvider, RouterProvider } from 'react-router';
 import { buildBrowserApolloClient } from 'useIntercodeApolloClient';
 import {
@@ -16,7 +13,6 @@ import {
   sessionContext,
 } from 'AppContexts';
 import { ClientConfigurationQueryData } from 'serverQueries.generated';
-import { ApolloProvider } from '@apollo/client/react';
 import { appRootRoutes } from 'AppRouter';
 
 const manager = new AuthenticityTokensManager(fetch, undefined, getAuthenticityTokensURL());
@@ -76,11 +72,7 @@ function DataModeApplicationEntry({
 
   return (
     <StrictMode>
-      <AuthenticityTokensContext.Provider value={manager}>
-        <ApolloProvider client={client}>
-          <RouterProvider router={router} />
-        </ApolloProvider>
-      </AuthenticityTokensContext.Provider>
+      <RouterProvider router={router} />
     </StrictMode>
   );
 }
