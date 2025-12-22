@@ -1,11 +1,11 @@
 require 'test_helper'
 
 class CreateTeamMemberServiceTest < ActiveSupport::TestCase
-  let(:convention) { create :convention, :with_notification_templates }
+  let(:convention) { create(:convention, :with_notification_templates) }
   let(:event_category) { create(:event_category, convention: convention, can_provide_tickets: true) }
-  let(:event) { create :event, convention: convention, event_category: event_category }
-  let(:the_run) { create :run, event: event }
-  let(:user_con_profile) { create :user_con_profile, convention: convention }
+  let(:event) { create(:event, convention: convention, event_category: event_category) }
+  let(:the_run) { create(:run, event: event) }
+  let(:user_con_profile) { create(:user_con_profile, convention: convention) }
   let(:user) { user_con_profile.user }
   let(:team_member_attrs) { {} }
   let(:provide_ticket_type_id) { nil }

@@ -24,7 +24,7 @@
 FactoryBot.define do
   factory :cms_file do
     file { Rack::Test::UploadedFile.new(File.expand_path('test/files/war_bond.png', Rails.root), 'image/png') }
-    association :parent, factory: :convention
-    association :uploader, factory: :user
+    parent factory: %i[convention]
+    uploader factory: %i[user]
   end
 end

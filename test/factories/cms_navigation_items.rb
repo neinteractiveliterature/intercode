@@ -29,6 +29,6 @@
 FactoryBot.define do
   factory :cms_navigation_item do
     sequence(:title) { |n| "navigation item #{n}" }
-    association :parent, factory: :convention
+    parent factory: %i[convention]
   end
 end

@@ -24,7 +24,7 @@
 
 FactoryBot.define do
   factory :maximum_event_provided_tickets_override do
-    association :event
+    event
     override_value { 42 }
 
     after(:build) do |mepto|

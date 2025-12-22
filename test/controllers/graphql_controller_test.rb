@@ -1,7 +1,7 @@
 require 'test_helper'
 
 class GraphqlControllerTest < ActionDispatch::IntegrationTest
-  let(:user_con_profile) { create :user_con_profile }
+  let(:user_con_profile) { create(:user_con_profile) }
   let(:convention) { user_con_profile.convention }
 
   setup do
@@ -25,7 +25,7 @@ class GraphqlControllerTest < ActionDispatch::IntegrationTest
     post graphql_url, params: { 'query' => query }
     assert_response :success
 
-    json = JSON.parse(response.body)
+    json = response.parsed_body
     refute json['errors'].present?, json['errors'].to_s
     assert_equal 'UserConProfile', json['data']['convention']['my_profile']['__typename']
     assert_equal user_con_profile.id.to_s, json['data']['convention']['my_profile']['id']

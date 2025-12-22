@@ -1,6 +1,6 @@
 require "test_helper"
 
-class Queries::AppRootQueryTest < ActiveSupport::TestCase
+class Queries::AppRootQueryTest < ActiveSupport::TestCase # rubocop:disable GraphQL/ObjectDescription
   let(:convention) { create(:convention, :with_standard_content) }
   let(:user_con_profile) { create(:user_con_profile, convention:) }
 

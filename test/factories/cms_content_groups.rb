@@ -19,6 +19,6 @@
 FactoryBot.define do
   factory :cms_content_group do
     sequence(:name) { |n| "content_group_#{n}" }
-    association :parent, factory: :convention
+    parent factory: %i[convention]
   end
 end

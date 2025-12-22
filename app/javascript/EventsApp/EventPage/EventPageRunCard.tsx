@@ -141,7 +141,7 @@ function EventPageRunCard({
         return response.data?.createMySignup.signup;
       }
     },
-    [event, run, revalidator],
+    [event, run, revalidator, client],
   );
 
   const createSignup = (signupOption: SignupOption) => {

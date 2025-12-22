@@ -26,7 +26,7 @@ describe ProvideEventTicketService do
     it 'fails' do
       result = service.call
       assert result.failure?
-      assert_match /already has a ticket/, result.errors.full_messages.join("\n")
+      assert_match(/already has a ticket/, result.errors.full_messages.join("\n"))
     end
   end
 
@@ -36,7 +36,7 @@ describe ProvideEventTicketService do
     it 'fails' do
       result = service.call
       assert result.failure?
-      assert_match /cannot provide tickets/, result.errors.full_messages.join("\n")
+      assert_match(/cannot provide tickets/, result.errors.full_messages.join("\n"))
     end
   end
 
@@ -46,7 +46,7 @@ describe ProvideEventTicketService do
     it 'fails' do
       result = service.call
       assert result.failure?
-      assert_match /cannot be provided/, result.errors.full_messages.join("\n")
+      assert_match(/cannot be provided/, result.errors.full_messages.join("\n"))
     end
   end
 
@@ -61,7 +61,7 @@ describe ProvideEventTicketService do
     it 'fails' do
       result = service.call
       assert result.failure?
-      assert_match /has already provided/, result.errors.full_messages.join("\n")
+      assert_match(/has already provided/, result.errors.full_messages.join("\n"))
     end
   end
 end

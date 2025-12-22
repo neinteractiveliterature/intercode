@@ -33,12 +33,12 @@
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
 
 FactoryBot.define do
-  factory :organization_permission, class: Permission do
-    association :organization_role
+  factory :organization_permission, class: 'Permission' do
+    organization_role
     permission { "manage_organization_access" }
   end
 
-  factory :event_category_permission, class: Permission do
+  factory :event_category_permission, class: 'Permission' do
     permission { "update_events" }
 
     before(:create) do |permission|

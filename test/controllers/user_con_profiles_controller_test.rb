@@ -1,7 +1,7 @@
 require 'test_helper'
 
 describe UserConProfilesController do
-  let(:user_con_profile) { create :user_con_profile }
+  let(:user_con_profile) { create(:user_con_profile) }
   let(:convention) { user_con_profile.convention }
   let(:con_admin_staff_position) { create(:admin_staff_position, convention: convention) }
   let(:con_admin_profile) do

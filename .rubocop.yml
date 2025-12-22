@@ -1,11 +1,12 @@
 inherit_from: .rubocop_todo.yml
 
-require:
+plugins:
   - rubocop-performance
   - rubocop-rails
   - rubocop-sequel
   - rubocop-factory_bot
   - rubocop-graphql
+  - rubocop-capybara
 
 inherit_gem:
   prettier: rubocop.yml

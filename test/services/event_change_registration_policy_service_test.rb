@@ -4,8 +4,8 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
   include ActiveJob::TestHelper
 
   let(:convention) { create(:convention, :with_notification_templates) }
-  let(:event) { create :event, convention: convention }
-  let(:the_run) { create :run, event: event }
+  let(:event) { create(:event, convention: convention) }
+  let(:the_run) { create(:run, event: event) }
   let(:new_registration_policy) do
     RegistrationPolicy.new(
       buckets: [
@@ -15,8 +15,8 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
       ]
     )
   end
-  let(:whodunit) { create :user_con_profile, convention: convention }
-  let(:team_member) { create :team_member, event: event, receive_signup_email: 'all_signups' }
+  let(:whodunit) { create(:user_con_profile, convention: convention) }
+  let(:team_member) { create(:team_member, event: event, receive_signup_email: 'all_signups') }
 
   subject { EventChangeRegistrationPolicyService.new(event, new_registration_policy, whodunit) }
 
@@ -40,7 +40,7 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
   end
 
   describe 'with existing signups in buckets that will be removed' do
-    let(:user_con_profile) { create :user_con_profile, convention: convention }
+    let(:user_con_profile) { create(:user_con_profile, convention: convention) }
     let(:signup) do
       create(
         :signup,
@@ -93,8 +93,8 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
       )
     end
 
-    let(:user_con_profile1) { create :user_con_profile, convention: convention }
-    let(:user_con_profile2) { create :user_con_profile, convention: convention }
+    let(:user_con_profile1) { create(:user_con_profile, convention: convention) }
+    let(:user_con_profile2) { create(:user_con_profile, convention: convention) }
 
     let(:signup1) do
       create(
@@ -156,7 +156,7 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
         )
       end
 
-      let(:user_con_profile3) { create :user_con_profile, convention: convention }
+      let(:user_con_profile3) { create(:user_con_profile, convention: convention) }
       let(:signup3) do
         create(
           :signup,
@@ -201,7 +201,7 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
     end
 
     describe 'with an impossible situation' do
-      let(:user_con_profile3) { create :user_con_profile, convention: convention }
+      let(:user_con_profile3) { create(:user_con_profile, convention: convention) }
       let(:signup3) do
         create(
           :signup,
@@ -250,8 +250,8 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
       )
     end
 
-    let(:user_con_profile1) { create :user_con_profile, convention: convention }
-    let(:user_con_profile2) { create :user_con_profile, convention: convention }
+    let(:user_con_profile1) { create(:user_con_profile, convention: convention) }
+    let(:user_con_profile2) { create(:user_con_profile, convention: convention) }
 
     let(:signup1) do
       create(
