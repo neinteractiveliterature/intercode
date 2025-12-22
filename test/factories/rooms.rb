@@ -21,7 +21,7 @@
 
 FactoryBot.define do
   factory :room do
-    association(:convention)
+    convention
     name { 'MyString' }
   end
 end

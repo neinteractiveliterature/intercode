@@ -29,7 +29,7 @@ class SignupRoundTest < ActiveSupport::TestCase
   describe "#execute!" do
     it "does nothing when automation_action is nil" do
       mock_service = Minitest::Mock.new
-      signup_round = FactoryBot.create(:signup_round, automation_action: nil)
+      signup_round = create(:signup_round, automation_action: nil)
 
       ExecuteRankedChoiceSignupRoundService.stub :new, mock_service do
         signup_round.execute!
@@ -41,9 +41,9 @@ class SignupRoundTest < ActiveSupport::TestCase
     it "runs ranked choice signups when configured to do so" do
       mock_service = Minitest::Mock.new
       mock_service.expect :call!, nil
-      convention = FactoryBot.create(:convention, signup_automation_mode: "ranked_choice")
+      convention = create(:convention, signup_automation_mode: "ranked_choice")
       signup_round =
-        FactoryBot.create(
+        create(
           :signup_round,
           convention:,
           automation_action: "execute_ranked_choice",
@@ -59,8 +59,8 @@ class SignupRoundTest < ActiveSupport::TestCase
 
     it "does not run ranked choice signups when automation_action is nil, even if in a ranked-choice con" do
       mock_service = Minitest::Mock.new
-      convention = FactoryBot.create(:convention, signup_automation_mode: "ranked_choice")
-      signup_round = FactoryBot.create(:signup_round, convention:, automation_action: nil)
+      convention = create(:convention, signup_automation_mode: "ranked_choice")
+      signup_round = create(:signup_round, convention:, automation_action: nil)
 
       ExecuteRankedChoiceSignupRoundService.stub :new, mock_service do
         signup_round.execute!

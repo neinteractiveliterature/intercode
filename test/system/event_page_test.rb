@@ -11,7 +11,9 @@ class EventPageTest < ApplicationSystemTestCase
 
   let(:root_site) { create(:root_site) }
   let(:convention) { create(:convention, :with_standard_content) }
-  let(:event_category) { create(:event_category, convention:, event_form: convention.forms.find_by!(title: "Regular event form")) }
+  let(:event_category) do
+    create(:event_category, convention:, event_form: convention.forms.find_by!(title: "Regular event form"))
+  end
   let(:signup_round) { create(:signup_round, convention:, start: 1.day.ago, maximum_event_signups: "unlimited") }
   let(:event) { create(:event, convention:, event_category: convention.event_categories.first) }
   let(:the_run) { create(:run, event:, starts_at: 1.day.from_now) }
@@ -40,7 +42,7 @@ class EventPageTest < ApplicationSystemTestCase
 
   it "lets you withdraw" do
     user_con_profile = create(:user_con_profile, convention:)
-    signup = create(:signup, user_con_profile:, run: the_run)
+    create(:signup, user_con_profile:, run: the_run)
     sign_in user_con_profile.user
 
     visit "/events/#{event.to_param}"

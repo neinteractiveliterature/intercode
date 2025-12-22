@@ -29,7 +29,7 @@ FactoryBot.define do
     name { 'Wrangler' }
   end
 
-  factory :admin_staff_position, class: StaffPosition do
+  factory :admin_staff_position, class: 'StaffPosition' do
     convention
     name { 'Chief Wrangler' }
     after(:create) do |staff_position|

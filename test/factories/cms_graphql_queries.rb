@@ -22,6 +22,6 @@ FactoryBot.define do
   factory :cms_graphql_query do
     sequence(:identifier) { |n| "graphql_query_#{n}" }
     query { "query { convention: conventionByRequestHost { id } }" }
-    association :parent, factory: :convention
+    parent factory: %i[convention]
   end
 end

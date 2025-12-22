@@ -126,7 +126,7 @@ jobs:
           path: coverage/*
   minitest-system:
     permissions: write-all
-    name: Minitest System Tests
+    name: Minitest system tests
     runs-on: ubuntu-latest
     env:
       TEST_DATABASE_URL: postgres://postgres:postgres@localhost/intercode_test
@@ -341,6 +341,7 @@ jobs:
           path: code-coverage-results.md
   update-release-draft:
     runs-on: ubuntu-latest
+    name: Update release draft
     if: github.event_name == 'push' && github.event.ref == 'refs/heads/main'
     needs:
       - typescript

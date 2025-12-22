@@ -22,7 +22,7 @@
 
 FactoryBot.define do
   factory :form do
-    association :convention
+    convention
   end
 
   factory :event_form, parent: :form do

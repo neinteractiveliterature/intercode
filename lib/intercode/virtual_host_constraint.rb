@@ -32,7 +32,7 @@ module Intercode
         )
         if ENV["FIND_VIRTUAL_HOST_DEBUG"].present?
           if env["intercode.convention"]
-            Rails.logger.info "Intercode::FindVirtualHost: request to #{request.host} mapped to \
+            Rails.logger.info "Intercode::FindVirtualHost: request to #{request.host} mapped to
 #{env["intercode.convention"].name}"
           else
             Rails.logger.info "Intercode::FindVirtualHost: request to #{request.host} mapped to root site"

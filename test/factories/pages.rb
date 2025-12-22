@@ -32,6 +32,6 @@ FactoryBot.define do
   factory :page do
     sequence(:name) { |n| "Page #{n}" }
     content { "MyText" }
-    association :parent, factory: :convention
+    parent factory: %i[convention]
   end
 end

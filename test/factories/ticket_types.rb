@@ -26,13 +26,13 @@
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
 FactoryBot.define do
-  factory :free_ticket_type, class: TicketType do
+  factory :free_ticket_type, class: 'TicketType' do
     convention
     name { 'free' }
     description { 'Free ticket' }
   end
 
-  factory :paid_ticket_type, class: TicketType do
+  factory :paid_ticket_type, class: 'TicketType' do
     convention
     name { 'paid' }
     description { 'Paid ticket' }
@@ -48,14 +48,14 @@ FactoryBot.define do
     end
   end
 
-  factory :event_provided_ticket_type, class: TicketType do
+  factory :event_provided_ticket_type, class: 'TicketType' do
     convention
     name { 'event_comp' }
     description { 'Comp ticket for event' }
     maximum_event_provided_tickets { 2 }
   end
 
-  factory :event_specific_ticket_type, class: TicketType do
+  factory :event_specific_ticket_type, class: 'TicketType' do
     event
     name { 'event_ticket' }
     description { 'Event-specific ticket' }
