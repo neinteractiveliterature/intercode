@@ -12,7 +12,7 @@ concurrency:
 
 jobs:
   typescript:
-    name: typescript
+    name: TypeScript check
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -31,7 +31,7 @@ jobs:
       - name: tsc on resulting generated files
         run: yarn run tsc --noEmit
   vitest:
-    name: vitest
+    name: Vitest
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v5
@@ -69,7 +69,7 @@ jobs:
           path: coverage/*
   minitest:
     permissions: write-all
-    name: minitest
+    name: Minitest
     runs-on: ubuntu-latest
     env:
       TEST_DATABASE_URL: postgres://postgres:postgres@localhost/intercode_test
@@ -126,7 +126,7 @@ jobs:
           path: coverage/*
   minitest-system:
     permissions: write-all
-    name: minitest
+    name: Minitest System Tests
     runs-on: ubuntu-latest
     env:
       TEST_DATABASE_URL: postgres://postgres:postgres@localhost/intercode_test
@@ -195,6 +195,7 @@ jobs:
           path: coverage/*
   docker-build:
     runs-on: ubuntu-latest
+    name: Build containers
     steps:
       - uses: actions/checkout@v5
       - name: Read .node-version
@@ -300,6 +301,7 @@ jobs:
           path: doc-site.tar.gz
   coverage-report:
     runs-on: ubuntu-latest
+    name: Test coverage report
     if: github.actor != 'dependabot[bot]'
     needs:
       - vitest
@@ -314,8 +316,8 @@ jobs:
       - name: Download Minitest system test coverage
         uses: actions/download-artifact@v6
         with:
-          name: minitest-coverage
-          path: minitest-coverage
+          name: minitest-system-coverage
+          path: minitest-system-coverage
       - name: Download Vitest coverage
         uses: actions/download-artifact@v6
         with:
