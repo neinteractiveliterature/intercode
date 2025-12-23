@@ -37,12 +37,18 @@ function isUpload({ variables }: ApolloLink.Operation) {
   return containsFile(variables, new Set([variables]));
 }
 
-const AddTimezoneLink = new ApolloLink((operation: ApolloLink.Operation, next: ApolloLink.ForwardFunction) => {
+const AddHeadersLink = new ApolloLink((operation: ApolloLink.Operation, next: ApolloLink.ForwardFunction) => {
+  const intercodeConventionHeaders: { 'X-Intercode-Convention-Domain'?: string } = {};
+  if (typeof window !== 'undefined') {
+    intercodeConventionHeaders['X-Intercode-Convention-Domain'] = window.location.hostname;
+  }
+
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   operation.setContext((context: Record<string, any>) => ({
     ...context,
     headers: {
       ...context.headers,
+      ...intercodeConventionHeaders,
       ...getIntercodeUserTimezoneHeader(),
     },
   }));
@@ -96,7 +102,7 @@ export function buildTerminatingApolloLink(options: BatchHttpLink.Options): Apol
 export function buildClientApolloLink(uri: URL, authenticityTokensManager: AuthenticityTokensManager): ApolloLink {
   return ApolloLink.from([
     buildAuthHeadersLink(authenticityTokensManager),
-    AddTimezoneLink,
+    AddHeadersLink,
     ErrorHandlerLink,
     buildTerminatingApolloLink({
       uri: uri.toString(),

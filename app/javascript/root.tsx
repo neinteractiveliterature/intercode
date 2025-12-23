@@ -1,19 +1,11 @@
-import { ApolloClient } from '@apollo/client';
 import { ApolloProvider } from '@apollo/client/react';
 import { AuthenticityTokensContext } from '~/AuthenticityTokensContext';
-import { ReactNode, StrictMode, Suspense, useCallback, useEffect, useMemo, useRef, useState } from 'react';
+import { StrictMode, useCallback, useEffect, useMemo, useRef } from 'react';
 import type { Route } from './+types/root';
 import { apolloClientContext, authenticityTokensManagerContext, clientConfigurationDataContext } from './AppContexts';
 import './styles/application.scss';
-import {
-  AlertProvider,
-  Confirm,
-  ErrorDisplay,
-  PageLoadingIndicator,
-  ToastProvider,
-} from '@neinteractiveliterature/litform';
+import { AlertProvider, Confirm, PageLoadingIndicator, ToastProvider } from '@neinteractiveliterature/litform';
 import { isRouteErrorResponse, Links, Meta, Outlet, Scripts, useRouteError } from 'react-router';
-import { i18n } from 'i18next';
 import getI18n from './setupI18Next';
 import { I18nextProvider } from 'react-i18next';
 import AuthenticationModalContext, {
@@ -23,9 +15,9 @@ import RailsDirectUploadsContext from './RailsDirectUploadsContext';
 import { DateTime, Duration } from 'luxon';
 import AuthenticationModal from './Authentication/AuthenticationModal';
 
-// export function HydrateFallback() {
-//   return <PageLoadingIndicator visible />;
-// }
+export function HydrateFallback() {
+  return <PageLoadingIndicator visible />;
+}
 
 export function ErrorBoundary() {
   const error = useRouteError();
@@ -53,33 +45,13 @@ export function ErrorBoundary() {
   }
 }
 
-export const clientLoader = ({ context }: Route.ClientLoaderArgs) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
+  const i18nInstance = await getI18n();
   const client = context.get(apolloClientContext);
   const clientConfigurationData = context.get(clientConfigurationDataContext);
   const authenticityTokensManager = context.get(authenticityTokensManagerContext);
-  return { client, clientConfigurationData, authenticityTokensManager };
+  return { client, clientConfigurationData, authenticityTokensManager, i18nInstance };
 };
-
-function I18NextWrapper({ children }: { children: (i18nInstance: i18n) => ReactNode }) {
-  const [i18nInstance, seti18nInstance] = useState<i18n>();
-  const [error, setError] = useState<Error>();
-
-  useEffect(() => {
-    getI18n()
-      .then((instance) => seti18nInstance(instance))
-      .catch((err) => setError(err));
-  }, []);
-
-  if (i18nInstance) {
-    return <I18nextProvider i18n={i18nInstance}>{children(i18nInstance)}</I18nextProvider>;
-  }
-
-  if (error) {
-    return <ErrorDisplay stringError={error.message} />;
-  }
-
-  return <PageLoadingIndicator visible />;
-}
 
 export function Layout({ children }: { children: React.ReactNode }) {
   return (
@@ -137,27 +109,22 @@ export default function App({ loaderData }: Route.ComponentProps) {
             <RailsDirectUploadsContext.Provider value={railsDirectUploadsContextValue}>
               {/* TODO bring this back when we re-add prompting getUserConfirmation={getUserConfirmation}> */}
               <AuthenticationModalContext.Provider value={authenticationModalContextValue}>
-                <>
-                  {!unauthenticatedError && (
-                    <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
-                      <I18NextWrapper>
-                        {(i18nInstance) => (
-                          <AlertProvider okText={i18nInstance.t('buttons.ok', 'OK')}>
-                            <ToastProvider
-                              formatTimeAgo={(timeAgo) =>
-                                DateTime.now().minus(Duration.fromMillis(timeAgo.milliseconds)).toRelative()
-                              }
-                            >
-                              {/* ErrorBoundary from Litform was here, seeing if we can replace it with our own instead */}
-                              <Outlet />
-                            </ToastProvider>
-                          </AlertProvider>
-                        )}
-                      </I18NextWrapper>
-                    </Suspense>
-                  )}
-                  <AuthenticationModal />
-                </>
+                <I18nextProvider i18n={loaderData.i18nInstance}>
+                  <AlertProvider okText={loaderData.i18nInstance.t('buttons.ok', 'OK')}>
+                    <ToastProvider
+                      formatTimeAgo={(timeAgo) =>
+                        DateTime.now()
+                          .setLocale(loaderData.i18nInstance.language)
+                          .minus(Duration.fromMillis(timeAgo.milliseconds))
+                          .toRelative()
+                      }
+                    >
+                      {/* ErrorBoundary from Litform was here, seeing if we can replace it with our own instead */}
+                      {!unauthenticatedError && <Outlet />}
+                    </ToastProvider>
+                  </AlertProvider>
+                </I18nextProvider>
+                <AuthenticationModal />
               </AuthenticationModalContext.Provider>
             </RailsDirectUploadsContext.Provider>
           </Confirm>

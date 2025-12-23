@@ -37,7 +37,7 @@ export async function clientLoader({ context, request }: Route.ClientLoaderArgs)
   return data;
 }
 
-function AppRootLayout({ loaderData: data }: Route.ComponentProps) {
+export default function AppRootLayout({ loaderData: data }: Route.ComponentProps) {
   const [cachedCmsLayoutId, setCachedCmsLayoutId] = useState<string>();
   const [layoutChanged, setLayoutChanged] = useState(false);
 
@@ -66,7 +66,7 @@ function AppRootLayout({ loaderData: data }: Route.ComponentProps) {
   }
 
   if (!parsedCmsContent?.bodyComponents) {
-    return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;
+    return <PageLoadingIndicator visible />;
   }
 
   return (
@@ -76,5 +76,3 @@ function AppRootLayout({ loaderData: data }: Route.ComponentProps) {
     </>
   );
 }
-
-export const Component = AppRootLayout;

@@ -1,12 +1,13 @@
 import { useMemo, useEffect, Suspense, useRef } from 'react';
-import { useNavigate, useLocation, LoaderFunction, RouterContextProvider, useLoaderData } from 'react-router';
+import { useNavigate, useLocation } from 'react-router';
 
 import usePageTitle from '../usePageTitle';
 import { lazyWithAppEntrypointHeadersCheck } from '../checkAppEntrypointHeadersMatch';
 import parseCmsContent from '../parseCmsContent';
-import { CmsPageQueryData, CmsPageQueryDocument, CmsPageQueryVariables } from './queries.generated';
+import { CmsPageQueryDocument, CmsPageQueryVariables } from './queries.generated';
 import { apolloClientContext } from '~/AppContexts';
 import pageAdminDropdownStyles from '~/styles/page_admin_dropdown.module.scss';
+import { Route } from './+types';
 
 const PageAdminDropdown = lazyWithAppEntrypointHeadersCheck(() => import('./PageAdminDropdown'));
 
@@ -15,7 +16,7 @@ export type CmsPageProps = {
   rootPage?: boolean;
 };
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ context, request }) => {
+export const clientLoader = async ({ context, request }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
   const slug = new URL(request.url).pathname.replace(/^\/pages\//, '').replace(/\/$/, '');
   let variables: CmsPageQueryVariables;
@@ -24,15 +25,14 @@ export const loader: LoaderFunction<RouterContextProvider> = async ({ context, r
   } else {
     variables = { rootPage: true };
   }
-  const { data } = await client.query<CmsPageQueryData, CmsPageQueryVariables>({
-    query: CmsPageQueryDocument,
-    variables,
-  });
+  const { data, error } = await client.query({ query: CmsPageQueryDocument, variables });
+  if (!data) {
+    throw error;
+  }
   return data;
 };
 
-function CmsPage(): React.JSX.Element {
-  const data = useLoaderData() as CmsPageQueryData;
+export default function CmsPage({ loaderData: data }: Route.ComponentProps): React.JSX.Element {
   const navigate = useNavigate();
   const location = useLocation();
   const lastHash = useRef('');
@@ -85,5 +85,3 @@ function CmsPage(): React.JSX.Element {
     </>
   );
 }
-
-export const Component = CmsPage;

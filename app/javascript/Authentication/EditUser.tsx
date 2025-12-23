@@ -108,7 +108,7 @@ function EditUserForm() {
             <label className="form-label" htmlFor={passwordFieldId}>
               {t('authentication.editUser.passwordLabel')}
             </label>
-            <Suspense fallback={<LoadingIndicator iconSet="bootstrap-icons" />}>
+            <Suspense fallback={<LoadingIndicator />}>
               <PasswordInputWithStrengthCheck id={passwordFieldId} value={password} onChange={setPassword} />
             </Suspense>
             <small className="form-text text-muted">{t('authentication.editUser.passwordHelpText')}</small>

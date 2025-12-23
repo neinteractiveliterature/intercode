@@ -28,8 +28,11 @@ module Intercode
       request = Rack::Request.new(env)
       unless request.path =~ %r{\A#{Rails.application.config.assets.prefix}/}
         env["intercode.convention"] ||= Convention.find_by(
-          domain: Intercode.overridden_virtual_host_domain || request.host
+          domain: Intercode.overridden_virtual_host_domain ||
+          request.get_header('HTTP_X_INTERCODE_CONVENTION_DOMAIN') ||
+          request.host
         )
+
         if ENV["FIND_VIRTUAL_HOST_DEBUG"].present?
           if env["intercode.convention"]
             Rails.logger.info "Intercode::FindVirtualHost: request to #{request.host} mapped to

@@ -69,7 +69,7 @@ function ResetPassword(): React.JSX.Element {
               <label className="form-label" htmlFor={passwordId}>
                 {t('authentication.resetPassword.passwordLabel')}
               </label>
-              <Suspense fallback={<LoadingIndicator iconSet="bootstrap-icons" />}>
+              <Suspense fallback={<LoadingIndicator />}>
                 <PasswordInputWithStrengthCheck value={password} onChange={setPassword} id={passwordId} />
               </Suspense>
             </div>

@@ -1,5 +1,66 @@
-import { type RouteConfig, layout, route } from '@react-router/dev/routes';
+import { type RouteConfig, index, layout, route } from '@react-router/dev/routes';
+
+export enum NamedRoute {
+  AdminEditEventProposal = 'AdminEditEventProposal',
+  AdminEventProposal = 'AdminEventProposal',
+  AdminForms = 'AdminForms',
+  AdminUserConProfile = 'AdminUserConProfile',
+  CmsAdmin = 'CmsAdmin',
+  CmsContentGroupsAdmin = 'CmsContentGroupsAdmin',
+  CmsFiles = 'CmsFiles',
+  CmsGraphqlQueriesAdmin = 'CmsGraphqlQueriesAdmin',
+  CmsLayoutsAdmin = 'CmsLayoutsAdmin',
+  CmsPagesAdmin = 'CmsPagesAdmin',
+  CmsPartialsAdmin = 'CmsPartialsAdmin',
+  DepartmentAdmin = 'DepartmentAdmin',
+  EditEventCategory = 'EditEventCategory',
+  EditOrganizationRole = 'EditOrganizationRole',
+  EditSignup = 'EditSignup',
+  EditStaffPosition = 'EditStaffPosition',
+  EditStaffPositionPermissions = 'EditStaffPositionPermissions',
+  EditTeamMember = 'EditTeamMember',
+  EditUserActivityAlert = 'EditUserActivityAlert',
+  Event = 'Event',
+  EventAdmin = 'EventAdmin',
+  EventCategoryAdmin = 'EventCategoryAdmin',
+  EventCategoryIndex = 'EventCategoryIndex',
+  EventPage = 'EventPage',
+  EventProposalAdminDisplay = 'EventProposalAdminDisplay',
+  EventProposalHistory = 'EventProposalHistory',
+  EventProposalHistoryChangeGroup = 'EventProposalHistoryChangeGroup',
+  FormAdminIndex = 'FormAdminIndex',
+  FormJSONEditor = 'FormJSONEditor',
+  LiquidDocs = 'LiquidDocs',
+  NewEventCategory = 'NewEventCategory',
+  NewOrganizationRole = 'NewOrganizationRole',
+  NewTeamMember = 'NewTeamMember',
+  Organization = 'Organization',
+  OrganizationAdmin = 'OrganizationAdmin',
+  OrganizationDisplay = 'OrganizationDisplay',
+  RootPage = 'RootPage',
+  RootSiteConventionDisplay = 'RootSiteConventionDisplay',
+  RootSiteConventionsAdmin = 'RootSiteConventionAdmin',
+  RootSiteConventionsAdminTable = 'RootSiteConventionsAdminTable',
+  RunEmailList = 'RunEmailList',
+  RunSignupChangesTable = 'RunSignupChangesTable',
+  RunSignupsTable = 'RunSignupsTable',
+  RunSignupSummary = 'RunSignupSummary',
+  SignupAdmin = 'SignupAdmin',
+  TeamMembers = 'TeamMembers',
+  TeamMembersIndex = 'TeamMembersIndex',
+  UserActivityAlerts = 'UserActivityAlerts',
+  UserAdmin = 'UserAdmin',
+  UserAdminDisplay = 'UserAdminDisplay',
+  UsersTable = 'UsersTable',
+}
+
+export type RouteName = keyof typeof NamedRoute & string;
 
 export default [
-  layout('./AppRoot.tsx', [layout('./AppRootLayout.tsx', [route('*', './FourOhFourPage.tsx')])]),
+  layout('./AppRoot.tsx', [
+    layout('./AppRootLayout.tsx', [
+      index('CmsPage/index.tsx', { id: NamedRoute.RootPage }),
+      route('*', './FourOhFourPage.tsx'),
+    ]),
+  ]),
 ] satisfies RouteConfig;
