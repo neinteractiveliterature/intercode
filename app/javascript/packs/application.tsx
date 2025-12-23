@@ -1,7 +1,7 @@
 import 'regenerator-runtime/runtime';
 
 import mountReactComponents from '../mountReactComponents';
-import { StrictMode, use, useMemo } from 'react';
+import { StrictMode, use, useEffect, useMemo, useState } from 'react';
 import AuthenticityTokensManager, { getAuthenticityTokensURL } from 'AuthenticityTokensContext';
 import { createBrowserRouter, RouterContextProvider, RouterProvider } from 'react-router';
 import { buildBrowserApolloClient } from 'useIntercodeApolloClient';
@@ -14,24 +14,41 @@ import {
 } from 'AppContexts';
 import { ClientConfigurationQueryData } from 'serverQueries.generated';
 import { appRootRoutes } from 'AppRouter';
+import { ApolloClient, OperationVariables } from '@apollo/client';
 
 const manager = new AuthenticityTokensManager(fetch, undefined, getAuthenticityTokensURL());
 const refreshPromise = manager.refresh();
+const client = buildBrowserApolloClient(manager);
 
 export type DataModeApplicationEntryProps = {
   recaptchaSiteKey: string;
   railsDefaultActiveStorageServiceName: string;
   railsDirectUploadsUrl: string;
+  queryData?: ApolloClient.WriteQueryOptions<unknown, OperationVariables>[];
 };
 
 function DataModeApplicationEntry({
   recaptchaSiteKey,
   railsDefaultActiveStorageServiceName,
   railsDirectUploadsUrl,
+  queryData,
 }: DataModeApplicationEntryProps) {
   use(refreshPromise);
 
-  const client = useMemo(() => buildBrowserApolloClient(manager), []);
+  const [queryPreloadComplete, setQueryPreloadComplete] = useState(false);
+  useEffect(() => {
+    if (queryData && Array.isArray(queryData)) {
+      for (const query of queryData) {
+        try {
+          client.writeQuery(query);
+        } catch {
+          // don't blow up if we get a malformed query
+        }
+      }
+    }
+
+    setQueryPreloadComplete(true);
+  }, [queryData]);
 
   const clientConfigurationData = useMemo<ClientConfigurationQueryData>(
     () => ({
@@ -48,6 +65,7 @@ function DataModeApplicationEntry({
 
   const router = useMemo(
     () =>
+      queryPreloadComplete &&
       createBrowserRouter(
         [
           {
@@ -67,14 +85,10 @@ function DataModeApplicationEntry({
           },
         },
       ),
-    [client, clientConfigurationData],
+    [clientConfigurationData, queryPreloadComplete],
   );
 
-  return (
-    <StrictMode>
-      <RouterProvider router={router} />
-    </StrictMode>
-  );
+  return <StrictMode>{router && <RouterProvider router={router} />}</StrictMode>;
 }
 
 mountReactComponents({ AppRoot: DataModeApplicationEntry });
