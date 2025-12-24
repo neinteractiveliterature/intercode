@@ -31,7 +31,7 @@ async function signIn(authenticityToken: string, email: string, password: string
 
   if (!response.ok) {
     if (response.headers.get('Content-type')?.startsWith('application/json')) {
-      throw new Error((await response.json()).error || response.statusText);
+      throw new Error(((await response.json()) as { error?: string }).error || response.statusText);
     }
 
     throw new Error((await response.text()) || response.statusText);
@@ -72,7 +72,7 @@ function SignInForm(): React.JSX.Element {
         autoDismissAfter: 1000 * 60,
       });
     } catch (e) {
-      if (!e.message.match(/invalid email or password/i)) {
+      if (e instanceof Error && !e.message.match(/invalid email or password/i)) {
         errorReporting().error(e);
       }
 
