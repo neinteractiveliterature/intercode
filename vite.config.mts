@@ -81,6 +81,34 @@ export default defineConfig({
     warmup: {
       clientFiles: [absolutePath('./app/javascript/packs/applicationEntry.ts')],
     },
+    proxy: {
+      // Proxy API requests to Rails backend
+      '/graphql': {
+        target: 'https://intercode.test:5050',
+        changeOrigin: true,
+        secure: false,
+      },
+      '/authenticity_tokens': {
+        target: 'https://intercode.test:5050',
+        changeOrigin: true,
+        secure: false,
+      },
+      '/custom_login': {
+        target: 'https://intercode.test:5050',
+        changeOrigin: true,
+        secure: false,
+      },
+      '/users': {
+        target: 'https://intercode.test:5050',
+        changeOrigin: true,
+        secure: false,
+      },
+      '/rails': {
+        target: 'https://intercode.test:5050',
+        changeOrigin: true,
+        secure: false,
+      },
+    },
   },
   preview: {
     port: 3135,
