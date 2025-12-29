@@ -24,7 +24,7 @@ async function buildInitialContext() {
 
   const authenticationManager = AuthenticationManager.deserializeFromBrowser();
 
-  const client = buildBrowserApolloClient(manager, authenticationManager);
+  const client = buildBrowserApolloClient(authenticationManager);
   const { data, error } = await client.query({ query: ClientConfigurationQueryDocument });
 
   if (!data) {
