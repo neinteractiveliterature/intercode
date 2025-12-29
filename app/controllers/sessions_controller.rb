@@ -4,9 +4,10 @@ class SessionsController < Devise::SessionsController
 
   prepend_before_action :set_return_to, only: %i[new create]
 
-  def new
-    respond_to { |format| format.html { redirect_with_authentication('signIn') } }
-  end
+  # def new
+  #   binding.pry
+  #   # respond_to { |format| format.html { redirect_with_authentication('signIn') } }
+  # end
 
   private
 

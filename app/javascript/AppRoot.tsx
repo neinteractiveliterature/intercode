@@ -15,7 +15,8 @@ import { GraphQLNotAuthenticatedErrorEvent } from './useIntercodeApolloClient';
 import { reloadOnAppEntrypointHeadersMismatch } from './checkAppEntrypointHeadersMatch';
 import { initErrorReporting } from '~/ErrorReporting';
 import { Route } from './+types/AppRoot';
-import { apolloClientContext } from './AppContexts';
+import { apolloClientContext, sessionContext } from './AppContexts';
+import { SessionContext } from './sessions';
 
 export function buildAppRootContextValue(
   data: AppRootQueryData | null | undefined,
@@ -82,14 +83,15 @@ export function buildAppRootContextValue(
 
 export async function clientLoader({ context }: Route.ClientLoaderArgs) {
   const client = context.get(apolloClientContext);
+  const session = context.get(sessionContext);
   const { data, error } = await client.query({ query: AppRootQueryDocument });
   if (!data) {
     throw error;
   }
-  return data;
+  return { data, session };
 }
 
-function AppRoot({ loaderData: data }: Route.ComponentProps): React.JSX.Element {
+function AppRoot({ loaderData: { data, session } }: Route.ComponentProps): React.JSX.Element {
   const location = useLocation();
   const navigate = useNavigate();
   const authenticationModal = useContext(AuthenticationModalContext);
@@ -146,30 +148,32 @@ function AppRoot({ loaderData: data }: Route.ComponentProps): React.JSX.Element 
   }, [authenticationModal, location.pathname]);
 
   return (
-    <AppRootContext.Provider value={appRootContextValue}>
-      <LazyStripeContext.Provider
-        value={{
-          publishableKey: data?.convention?.stripe_publishable_key ?? undefined,
-          accountId: data?.convention?.stripe_account_id ?? undefined,
-          stripePromise,
-          setStripePromise,
-        }}
-      >
-        <div className={navigation.state === 'idle' ? '' : 'cursor-wait'}>
-          <div
-            className="position-fixed d-flex flex-column justify-content-center"
-            style={{ zIndex: 1050, width: '100vw', height: '100vh', top: 0, left: 0, pointerEvents: 'none' }}
-          >
-            <PageLoadingIndicator visible={navigation.state === 'loading'} />
+    <SessionContext.Provider value={session}>
+      <AppRootContext.Provider value={appRootContextValue}>
+        <LazyStripeContext.Provider
+          value={{
+            publishableKey: data?.convention?.stripe_publishable_key ?? undefined,
+            accountId: data?.convention?.stripe_account_id ?? undefined,
+            stripePromise,
+            setStripePromise,
+          }}
+        >
+          <div className={navigation.state === 'idle' ? '' : 'cursor-wait'}>
+            <div
+              className="position-fixed d-flex flex-column justify-content-center"
+              style={{ zIndex: 1050, width: '100vw', height: '100vh', top: 0, left: 0, pointerEvents: 'none' }}
+            >
+              <PageLoadingIndicator visible={navigation.state === 'loading'} />
+            </div>
+            {/* Disabling ScrollRestoration for now because it's breaking hash links within the same page (reproducible with Mac Chrome) */}
+            {/* <ScrollRestoration /> */}
+            <Suspense fallback={<PageLoadingIndicator visible />}>
+              <Outlet />
+            </Suspense>
           </div>
-          {/* Disabling ScrollRestoration for now because it's breaking hash links within the same page (reproducible with Mac Chrome) */}
-          {/* <ScrollRestoration /> */}
-          <Suspense fallback={<PageLoadingIndicator visible />}>
-            <Outlet />
-          </Suspense>
-        </div>
-      </LazyStripeContext.Provider>
-    </AppRootContext.Provider>
+        </LazyStripeContext.Provider>
+      </AppRootContext.Provider>
+    </SessionContext.Provider>
   );
 }
 

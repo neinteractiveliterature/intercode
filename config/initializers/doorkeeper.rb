@@ -13,7 +13,16 @@ Doorkeeper.configure do
   orm :active_record
 
   # This block will be called to check whether the resource owner is authenticated or not.
-  resource_owner_authenticator { user_signed_in? ? current_user : NullResourceOwner.new }
+  resource_owner_authenticator do
+    if user_signed_in?
+      current_user
+    else
+      # Redirect to login page, preserving the OAuth parameters
+      session[:user_return_to] = request.fullpath
+      redirect_to new_user_session_url
+      nil
+    end
+  end
 
   # If you didn't skip applications controller from Doorkeeper routes in your application routes.rb
   # file then you need to declare this block in order to restrict access to the web interface for
@@ -202,9 +211,9 @@ Doorkeeper.configure do
   # so that the user skips the authorization step.
   # For example if dealing with a trusted application.
   #
-  # skip_authorization do |resource_owner, client|
-  #   client.superapp? or resource_owner.admin?
-  # end
+  skip_authorization do |resource_owner, client|
+    client.application&.is_intercode_frontend?
+  end
 
   # WWW-Authenticate Realm (default "Doorkeeper").
   #

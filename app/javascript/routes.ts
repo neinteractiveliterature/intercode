@@ -58,6 +58,7 @@ export type RouteName = keyof typeof NamedRoute & string;
 
 export default [
   layout('./AppRoot.tsx', [
+    route('oauth/callback', './Authentication/OAuthCallback.tsx'),
     layout('./AppRootLayout.tsx', [
       index('CmsPage/index.tsx', { id: NamedRoute.RootPage }),
       route('*', './FourOhFourPage.tsx'),

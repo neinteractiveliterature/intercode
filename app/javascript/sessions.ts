@@ -1,18 +1,35 @@
 // app/sessions.ts
-import { createCookieSessionStorage, Session } from 'react-router'; // or cloudflare/deno
+import { createContext } from 'react';
+import { createCookieSessionStorage, createSession, Session } from 'react-router';
 import { v4 } from 'uuid';
+import { parse, serialize } from 'cookie';
+import { PKCEChallengeData } from './Authentication/openid';
 
 export type SessionData = {
+  jwtToken?: string;
+  jwtRefreshToken?: string;
+  pkceChallenge?: PKCEChallengeData;
   tzName: string;
   uuid: string;
 };
 
 export type SessionFlashData = Record<string, never>;
 
+export type AppSession = Session<SessionData, SessionFlashData>;
+
+export const SessionContext = createContext<AppSession>(
+  createSession({
+    tzName: 'Etc/UTC',
+    uuid: '0',
+  }),
+);
+
+const SESSION_COOKIE_NAME = '__intercode_react_router_session';
+
 const { getSession, commitSession, destroySession } = createCookieSessionStorage<SessionData, SessionFlashData>({
   // a Cookie from `createCookie` or the CookieOptions to create one
   cookie: {
-    name: '__intercode_react_router_session',
+    name: SESSION_COOKIE_NAME,
 
     // all of these are optional
     // domain: 'remix.run',
@@ -24,10 +41,12 @@ const { getSession, commitSession, destroySession } = createCookieSessionStorage
     // maxAge: 60,
     // path: '/',
     // sameSite: 'lax',
-    secrets: [
-      process.env['SECRET_KEY_BASE'] ??
-        '28cb566d2224bf06b0b1d91292f2188f35d22a54e6e2c626c5f34a35d68067aaec889ccbabfb0109021f0ec8b1d73feae0f68f526a768b299332c95ee90c40be',
-    ],
+    ...(import.meta.env.SECRET_KEY_BASE
+      ? {
+          secrets: [import.meta.env.SECRET_KEY_BASE],
+        }
+      : {}),
+
     // secure: true,
   },
 });
@@ -41,6 +60,35 @@ export async function getSessionUuid(session: Session<SessionData, SessionFlashD
   }
 
   return uuid;
+}
+
+export async function getSessionFromBrowser() {
+  const cookieValue = await window.cookieStore.get(SESSION_COOKIE_NAME);
+  if (cookieValue?.value) {
+    return await getSession(serialize({ name: SESSION_COOKIE_NAME, value: cookieValue.value }));
+  } else {
+    return await getSession();
+  }
+}
+
+export async function commitSessionToBrowser(session: AppSession) {
+  if (typeof window === 'undefined') {
+    return;
+  }
+
+  const setCookieHeader = await commitSession(session);
+  const cookie = parse(setCookieHeader);
+  const cookieValue = cookie[SESSION_COOKIE_NAME];
+  if (cookieValue) {
+    await window.cookieStore.set({
+      name: SESSION_COOKIE_NAME,
+      value: cookieValue,
+      path: cookie.Path,
+      sameSite: cookie.SameSite === 'Lax' ? 'lax' : cookie.sameSite === 'None' ? 'none' : 'strict',
+    });
+  } else {
+    await window.cookieStore.delete(SESSION_COOKIE_NAME);
+  }
 }
 
 export { getSession, commitSession, destroySession };

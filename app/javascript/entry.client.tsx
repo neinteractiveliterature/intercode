@@ -12,6 +12,7 @@ import {
 } from './AppContexts';
 import { buildBrowserApolloClient } from './useIntercodeApolloClient';
 import { ClientConfigurationQueryDocument } from './serverQueries.generated';
+import { getSessionFromBrowser } from './sessions';
 
 import('./styles/application.scss');
 import('bootstrap');
@@ -20,7 +21,8 @@ async function buildInitialContext() {
   const manager = new AuthenticityTokensManager(fetch, undefined, getAuthenticityTokensURL());
   await manager.refresh();
 
-  const client = buildBrowserApolloClient(manager);
+  const session = await getSessionFromBrowser();
+  const client = buildBrowserApolloClient(manager, session);
   const { data, error } = await client.query({ query: ClientConfigurationQueryDocument });
 
   if (!data) {
@@ -32,7 +34,7 @@ async function buildInitialContext() {
   context.set(fetchContext, fetch);
   context.set(authenticityTokensManagerContext, manager);
   context.set(clientConfigurationDataContext, data);
-  context.set(sessionContext, undefined);
+  context.set(sessionContext, session);
   return context;
 }
 

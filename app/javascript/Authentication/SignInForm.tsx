@@ -1,46 +1,32 @@
-import { useState, useContext } from 'react';
+import { useContext } from 'react';
 
 import * as React from 'react';
 import { useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
-import { BootstrapFormInput, BootstrapFormCheckbox, ErrorDisplay } from '@neinteractiveliterature/litform';
+import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import AuthenticationModalContext from './AuthenticationModalContext';
 import useAsyncFunction from '../useAsyncFunction';
-import useAfterSessionChange from './useAfterSessionChange';
-import { AuthenticityTokensContext } from '../AuthenticityTokensContext';
-import errorReporting from '~/ErrorReporting';
+import { AppSession, commitSessionToBrowser, SessionContext } from '~/sessions';
+import { discoverOpenidConfig, generatePKCEChallenge, getAuthorizationRedirectURL } from './openid';
 
-async function signIn(authenticityToken: string, email: string, password: string, rememberMe: boolean) {
-  const formData = new FormData();
-  formData.append('user[email]', email);
-  formData.append('user[password]', password);
-  if (rememberMe) {
-    formData.append('user[remember_me]', '1');
+async function initiateOAuthFlow(session: AppSession, returnPath?: string) {
+  const config = await discoverOpenidConfig();
+  const pkceChallenge = await generatePKCEChallenge();
+
+  session.set('pkceChallenge', pkceChallenge);
+  await commitSessionToBrowser(session);
+
+  if (returnPath) {
+    sessionStorage.setItem('oauth_return_path', returnPath);
   }
 
-  const response = await fetch('/users/sign_in', {
-    method: 'POST',
-    body: formData,
-    credentials: 'include',
-    headers: {
-      Accept: 'application/json',
-      'X-CSRF-Token': authenticityToken,
-    },
-  });
-
-  if (!response.ok) {
-    if (response.headers.get('Content-type')?.startsWith('application/json')) {
-      throw new Error(((await response.json()) as { error?: string }).error || response.statusText);
-    }
-
-    throw new Error((await response.text()) || response.statusText);
-  }
-
-  return response.url;
+  const backendUrl = getAuthorizationRedirectURL(config, pkceChallenge);
+  window.location.href = backendUrl.toString();
 }
 
 function SignInForm(): React.JSX.Element {
+  const session = useContext(SessionContext);
   const { t } = useTranslation();
   const navigate = useNavigate();
   const {
@@ -50,36 +36,10 @@ function SignInForm(): React.JSX.Element {
     unauthenticatedError,
     setUnauthenticatedError,
   } = useContext(AuthenticationModalContext);
-  const manager = useContext(AuthenticityTokensContext);
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const [rememberMe, setRememberMe] = useState(false);
-  const afterSessionChange = useAfterSessionChange();
 
   const onSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
-    const authenticityToken = manager.tokens?.signIn;
-
-    if (!authenticityToken) {
-      throw new Error('No authenticity token received from server');
-    }
-
-    try {
-      const location = await signIn(authenticityToken, email, password, rememberMe);
-      await afterSessionChange(afterSignInPath || location, {
-        title: 'Login',
-        body: 'Logged in successfully!',
-        autoDismissAfter: 1000 * 60,
-      });
-    } catch (e) {
-      if (e instanceof Error && !e.message.match(/invalid email or password/i)) {
-        errorReporting().error(e);
-      }
-
-      // we're doing suppressError below specifically so that we can not capture invalid email
-      // or password errors
-      throw e;
-    }
+    await initiateOAuthFlow(session, afterSignInPath);
   };
 
   const onCancel = (event: React.SyntheticEvent) => {
@@ -105,29 +65,12 @@ function SignInForm(): React.JSX.Element {
         </div>
 
         <div className="modal-body">
-          <BootstrapFormInput
-            type="email"
-            label={t('authentication.signInForm.emailLabel')}
-            value={email}
-            onTextChange={setEmail}
-            disabled={submitInProgress}
-          />
-
-          <BootstrapFormInput
-            type="password"
-            label={t('authentication.signInForm.passwordLabel')}
-            value={password}
-            onTextChange={setPassword}
-            disabled={submitInProgress}
-          />
-
-          <BootstrapFormCheckbox
-            type="checkbox"
-            label={t('authentication.signInForm.rememberMeLabel')}
-            checked={rememberMe}
-            onCheckedChange={setRememberMe}
-            disabled={submitInProgress}
-          />
+          <p>
+            {t(
+              'authentication.signInForm.oauthDescription',
+              'You will be redirected to a secure login page to sign in.',
+            )}
+          </p>
 
           <ErrorDisplay stringError={(submitError || {}).message} />
         </div>

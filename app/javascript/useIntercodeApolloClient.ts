@@ -10,6 +10,7 @@ import possibleTypes from './possibleTypes.json';
 import AuthenticityTokensManager from './AuthenticityTokensContext';
 import { GraphQLFormattedError } from 'graphql';
 import { getBackendBaseUrl } from './getBackendBaseUrl';
+import { AppSession } from './sessions';
 
 // adapted from https://github.com/jaydenseric/apollo-upload-client/issues/63#issuecomment-392501449
 function isFile(value: unknown): value is Blob | File {
@@ -81,14 +82,25 @@ export function getIntercodeUserTimezoneHeader() {
   return { 'X-Intercode-User-Timezone': localTime.zoneName ?? '' };
 }
 
-export function buildAuthHeadersLink(authenticityTokensManager: AuthenticityTokensManager) {
+export function buildAuthHeadersLink(
+  authenticityTokensManager: AuthenticityTokensManager,
+  session: AppSession | undefined,
+) {
   return new SetContextLink((prevContext) => {
+    const token = session?.get('jwtToken');
+    const authHeaders: { Authorization?: string } = {};
+
+    if (token) {
+      authHeaders.Authorization = `Bearer ${token}`;
+    }
+
     return {
       ...prevContext,
       credentials: 'same-origin',
       headers: {
         ...prevContext.headers,
         'X-CSRF-Token': authenticityTokensManager.tokens?.graphql,
+        ...authHeaders,
       },
     };
   });
@@ -99,9 +111,13 @@ export function buildTerminatingApolloLink(options: BatchHttpLink.Options): Apol
   return ApolloLink.split(isUpload, new UploadHttpLink(options), new BatchHttpLink(options));
 }
 
-export function buildClientApolloLink(uri: URL, authenticityTokensManager: AuthenticityTokensManager): ApolloLink {
+export function buildClientApolloLink(
+  uri: URL,
+  authenticityTokensManager: AuthenticityTokensManager,
+  session: AppSession | undefined,
+): ApolloLink {
   return ApolloLink.from([
-    buildAuthHeadersLink(authenticityTokensManager),
+    buildAuthHeadersLink(authenticityTokensManager, session),
     AddHeadersLink,
     ErrorHandlerLink,
     buildTerminatingApolloLink({
@@ -111,8 +127,15 @@ export function buildClientApolloLink(uri: URL, authenticityTokensManager: Authe
   ]);
 }
 
-export function useIntercodeApolloLink(uri: URL, authenticityTokensManager: AuthenticityTokensManager): ApolloLink {
-  const link = useMemo(() => buildClientApolloLink(uri, authenticityTokensManager), [uri, authenticityTokensManager]);
+export function useIntercodeApolloLink(
+  uri: URL,
+  authenticityTokensManager: AuthenticityTokensManager,
+  session: AppSession | undefined,
+): ApolloLink {
+  const link = useMemo(
+    () => buildClientApolloLink(uri, authenticityTokensManager, session),
+    [uri, authenticityTokensManager, session],
+  );
 
   return link;
 }
@@ -158,6 +181,9 @@ export function getClientURL(): URL {
   return new URL('/graphql', getBackendBaseUrl());
 }
 
-export function buildBrowserApolloClient(authenticityTokensManager: AuthenticityTokensManager) {
-  return buildIntercodeApolloClient(buildClientApolloLink(getClientURL(), authenticityTokensManager));
+export function buildBrowserApolloClient(
+  authenticityTokensManager: AuthenticityTokensManager,
+  session: AppSession | undefined,
+) {
+  return buildIntercodeApolloClient(buildClientApolloLink(getClientURL(), authenticityTokensManager, session));
 }

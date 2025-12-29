@@ -1920,7 +1920,8 @@ CREATE TABLE public.oauth_applications (
     scopes character varying DEFAULT ''::character varying NOT NULL,
     confidential boolean DEFAULT true NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    is_intercode_frontend boolean DEFAULT false NOT NULL
 );
 
 
@@ -4602,6 +4603,13 @@ CREATE UNIQUE INDEX index_oauth_access_tokens_on_token ON public.oauth_access_to
 
 
 --
+-- Name: index_oauth_applications_on_is_intercode_frontend; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_oauth_applications_on_is_intercode_frontend ON public.oauth_applications USING btree (is_intercode_frontend) WHERE is_intercode_frontend;
+
+
+--
 -- Name: index_oauth_applications_on_uid; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -6135,6 +6143,7 @@ ALTER TABLE ONLY public.cms_files_pages
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20251228041527'),
 ('20251210230514'),
 ('20251109200750'),
 ('20251001173716'),

@@ -34,10 +34,10 @@ export async function clientLoader({ context, request }: Route.ClientLoaderArgs)
   if (!data) {
     throw error;
   }
-  return data;
+  return { data };
 }
 
-export default function AppRootLayout({ loaderData: data }: Route.ComponentProps) {
+export default function AppRootLayout({ loaderData: { data } }: Route.ComponentProps) {
   const [cachedCmsLayoutId, setCachedCmsLayoutId] = useState<string>();
   const [layoutChanged, setLayoutChanged] = useState(false);
 
