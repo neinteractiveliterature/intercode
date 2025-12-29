@@ -5,6 +5,7 @@ import AuthenticityTokensManager, { getAuthenticityTokensURL } from './Authentic
 import { RouterContextProvider } from 'react-router';
 import {
   apolloClientContext,
+  authenticationManagerContext,
   authenticityTokensManagerContext,
   clientConfigurationDataContext,
   fetchContext,
@@ -12,7 +13,7 @@ import {
 } from './AppContexts';
 import { buildBrowserApolloClient } from './useIntercodeApolloClient';
 import { ClientConfigurationQueryDocument } from './serverQueries.generated';
-import { getSessionFromBrowser } from './sessions';
+import { AuthenticationManager } from './Authentication/authenticationManager';
 
 import('./styles/application.scss');
 import('bootstrap');
@@ -21,8 +22,9 @@ async function buildInitialContext() {
   const manager = new AuthenticityTokensManager(fetch, undefined, getAuthenticityTokensURL());
   await manager.refresh();
 
-  const session = await getSessionFromBrowser();
-  const client = buildBrowserApolloClient(manager, session);
+  const authenticationManager = AuthenticationManager.deserializeFromBrowser();
+
+  const client = buildBrowserApolloClient(manager, authenticationManager);
   const { data, error } = await client.query({ query: ClientConfigurationQueryDocument });
 
   if (!data) {
@@ -33,8 +35,9 @@ async function buildInitialContext() {
   context.set(apolloClientContext, client);
   context.set(fetchContext, fetch);
   context.set(authenticityTokensManagerContext, manager);
+  context.set(authenticationManagerContext, authenticationManager);
   context.set(clientConfigurationDataContext, data);
-  context.set(sessionContext, session);
+  context.set(sessionContext, undefined);
   return context;
 }
 

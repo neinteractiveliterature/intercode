@@ -1,20 +1,16 @@
 import { useEffect, useState, useRef } from 'react';
-import { useNavigate, useSearchParams } from 'react-router';
+import { Link } from 'react-router';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 import { Route } from './+types/OAuthCallback';
-import { sessionContext } from '~/AppContexts';
-import { commitSessionToBrowser } from '~/sessions';
-import { discoverOpenidConfig, exchangeCodeForToken } from './openid';
+import { authenticationManagerContext } from '~/AppContexts';
 
 export async function clientLoader({ context }: Route.ClientLoaderArgs) {
-  const session = context.get(sessionContext);
-  return { session };
+  const authenticationManager = context.get(authenticationManagerContext);
+  return { authenticationManager };
 }
 
 function OAuthCallback({ loaderData }: Route.ComponentProps) {
-  const { session } = loaderData;
-  const [searchParams] = useSearchParams();
-  const navigate = useNavigate();
+  const { authenticationManager } = loaderData;
   const [error, setError] = useState<string | null>(null);
   const [processing, setProcessing] = useState(true);
   const hasRun = useRef(false);
@@ -28,41 +24,17 @@ function OAuthCallback({ loaderData }: Route.ComponentProps) {
 
     const handleCallback = async () => {
       try {
-        const pkceChallenge = session.get('pkceChallenge');
-
-        const storedState = pkceChallenge?.state;
-        if (!storedState) {
-          throw new Error('No stored state found - authorization flow corrupted');
-        }
-
-        const codeVerifier = pkceChallenge?.verifier;
-        if (!codeVerifier) {
-          throw new Error('No code verifier found - authorization flow corrupted');
-        }
-
-        const tokenResponse = await exchangeCodeForToken(await discoverOpenidConfig(), codeVerifier, storedState);
-
-        session.set('jwtToken', tokenResponse.access_token);
-        if (tokenResponse.refresh_token) {
-          session.set('jwtRefreshToken', tokenResponse.refresh_token);
-        }
-
-        const returnPath = sessionStorage.getItem('oauth_return_path') || '/';
-        sessionStorage.removeItem('oauth_return_path');
-
+        const { returnPath } = await authenticationManager.handleOauthCallback(new URL(window.location.href));
         window.location.href = returnPath;
       } catch (e) {
         console.error('OAuth callback error:', e);
         setError(e instanceof Error ? e.message : 'Authentication failed');
         setProcessing(false);
-      } finally {
-        session.unset('pkceChallenge');
-        await commitSessionToBrowser(session);
       }
     };
 
     handleCallback();
-  }, [searchParams, navigate, session]);
+  }, [authenticationManager]);
 
   if (processing) {
     return (
@@ -82,9 +54,9 @@ function OAuthCallback({ loaderData }: Route.ComponentProps) {
       <div className="alert alert-danger">
         <h4>Authentication Error</h4>
         <ErrorDisplay stringError={error} />
-        <button className="btn btn-primary mt-3" onClick={() => navigate('/')}>
+        <Link className="btn btn-primary mt-3" to="/">
           Return to Home
-        </button>
+        </Link>
       </div>
     </div>
   );

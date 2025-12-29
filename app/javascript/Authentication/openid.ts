@@ -46,11 +46,12 @@ export async function exchangeCodeForToken(
   config: Configuration,
   pkceCodeVerifier: string,
   expectedNonce: string,
+  callbackUrl: URL,
 ): Promise<{
   access_token: string;
   refresh_token?: string;
 }> {
-  const tokens = await authorizationCodeGrant(config, new URL(window.location.href), {
+  const tokens = await authorizationCodeGrant(config, callbackUrl, {
     pkceCodeVerifier,
     expectedNonce,
     idTokenExpected: true,

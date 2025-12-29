@@ -7,26 +7,15 @@ import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import AuthenticationModalContext from './AuthenticationModalContext';
 import useAsyncFunction from '../useAsyncFunction';
-import { AppSession, commitSessionToBrowser, SessionContext } from '~/sessions';
-import { discoverOpenidConfig, generatePKCEChallenge, getAuthorizationRedirectURL } from './openid';
+import { AuthenticationManager, AuthenticationManagerContext } from './authenticationManager';
 
-async function initiateOAuthFlow(session: AppSession, returnPath?: string) {
-  const config = await discoverOpenidConfig();
-  const pkceChallenge = await generatePKCEChallenge();
-
-  session.set('pkceChallenge', pkceChallenge);
-  await commitSessionToBrowser(session);
-
-  if (returnPath) {
-    sessionStorage.setItem('oauth_return_path', returnPath);
-  }
-
-  const backendUrl = getAuthorizationRedirectURL(config, pkceChallenge);
-  window.location.href = backendUrl.toString();
+async function initiateOAuthFlow(authenticationManager: AuthenticationManager, returnPath?: string) {
+  const { redirectUrl } = await authenticationManager.initiateAuthentication(returnPath);
+  window.location.href = redirectUrl.toString();
 }
 
 function SignInForm(): React.JSX.Element {
-  const session = useContext(SessionContext);
+  const authenticationManager = useContext(AuthenticationManagerContext);
   const { t } = useTranslation();
   const navigate = useNavigate();
   const {
@@ -39,7 +28,7 @@ function SignInForm(): React.JSX.Element {
 
   const onSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
-    await initiateOAuthFlow(session, afterSignInPath);
+    await initiateOAuthFlow(authenticationManager, afterSignInPath);
   };
 
   const onCancel = (event: React.SyntheticEvent) => {

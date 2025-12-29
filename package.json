@@ -90,7 +90,6 @@
     "caniuse-lite": "1.0.30001754",
     "classnames": "2.5.1",
     "codemirror": "^6.0.1",
-    "cookie": "^1.1.1",
     "core-js": "3.46.0",
     "crypto-browserify": "3.12.1",
     "cssnano": "7.1.2",
@@ -157,6 +156,7 @@
     "tinycolor2": "1.6.0",
     "tzdata": "1.0.46",
     "uuid": "13.0.0",
+    "zod": "^4.2.1",
     "zxcvbn": "4.4.2"
   },
   "devDependencies": {

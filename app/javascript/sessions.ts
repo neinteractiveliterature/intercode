@@ -1,14 +1,7 @@
-// app/sessions.ts
-import { createContext } from 'react';
-import { createCookieSessionStorage, createSession, Session } from 'react-router';
+import { createCookieSessionStorage, Session } from 'react-router';
 import { v4 } from 'uuid';
-import { parse, serialize } from 'cookie';
-import { PKCEChallengeData } from './Authentication/openid';
 
 export type SessionData = {
-  jwtToken?: string;
-  jwtRefreshToken?: string;
-  pkceChallenge?: PKCEChallengeData;
   tzName: string;
   uuid: string;
 };
@@ -16,13 +9,6 @@ export type SessionData = {
 export type SessionFlashData = Record<string, never>;
 
 export type AppSession = Session<SessionData, SessionFlashData>;
-
-export const SessionContext = createContext<AppSession>(
-  createSession({
-    tzName: 'Etc/UTC',
-    uuid: '0',
-  }),
-);
 
 const SESSION_COOKIE_NAME = '__intercode_react_router_session';
 
@@ -60,35 +46,6 @@ export async function getSessionUuid(session: Session<SessionData, SessionFlashD
   }
 
   return uuid;
-}
-
-export async function getSessionFromBrowser() {
-  const cookieValue = await window.cookieStore.get(SESSION_COOKIE_NAME);
-  if (cookieValue?.value) {
-    return await getSession(serialize({ name: SESSION_COOKIE_NAME, value: cookieValue.value }));
-  } else {
-    return await getSession();
-  }
-}
-
-export async function commitSessionToBrowser(session: AppSession) {
-  if (typeof window === 'undefined') {
-    return;
-  }
-
-  const setCookieHeader = await commitSession(session);
-  const cookie = parse(setCookieHeader);
-  const cookieValue = cookie[SESSION_COOKIE_NAME];
-  if (cookieValue) {
-    await window.cookieStore.set({
-      name: SESSION_COOKIE_NAME,
-      value: cookieValue,
-      path: cookie.Path,
-      sameSite: cookie.SameSite === 'Lax' ? 'lax' : cookie.sameSite === 'None' ? 'none' : 'strict',
-    });
-  } else {
-    await window.cookieStore.delete(SESSION_COOKIE_NAME);
-  }
 }
 
 export { getSession, commitSession, destroySession };

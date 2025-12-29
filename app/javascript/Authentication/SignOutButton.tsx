@@ -1,34 +1,14 @@
 import * as React from 'react';
 
 import useAfterSessionChange from './useAfterSessionChange';
-import { AppSession, commitSessionToBrowser, SessionContext } from '~/sessions';
 import { useContext } from 'react';
-import { discoverOpenidConfig } from './openid';
+import { AuthenticationManager, AuthenticationManagerContext } from './authenticationManager';
 
-async function signOut(session: AppSession) {
-  session.unset('jwtToken');
-  session.unset('jwtRefreshToken');
-  await commitSessionToBrowser(session);
-
-  const config = await discoverOpenidConfig();
-  const endSessionEndpoint = config.serverMetadata().end_session_endpoint;
+async function signOut(manager: AuthenticationManager) {
+  const { endSessionEndpoint } = await manager.signOut();
   if (endSessionEndpoint) {
     window.location.href = endSessionEndpoint;
   }
-
-  // const response = await fetch('/users/sign_out', {
-  //   method: 'DELETE',
-  //   credentials: 'include',
-  //   headers: {
-  //     // Accept: 'application/json',
-  //     'X-CSRF-Token': authenticityToken,
-  //   },
-  // });
-
-  // if (!response.ok) {
-  //   const responseJson = await response.json();
-  //   throw new Error(responseJson.error);
-  // }
 }
 
 export type SignOutButtonProps = {
@@ -38,11 +18,11 @@ export type SignOutButtonProps = {
 
 function SignOutButton({ className, caption }: SignOutButtonProps): React.JSX.Element {
   const afterSessionChange = useAfterSessionChange();
-  const session = useContext(SessionContext);
+  const authenticationManager = useContext(AuthenticationManagerContext);
 
   const onClick = async (event: React.SyntheticEvent) => {
     event.preventDefault();
-    await signOut(session);
+    await signOut(authenticationManager);
     await afterSessionChange('/', {
       title: 'Logout',
       body: 'Logged out.',
