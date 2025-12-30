@@ -13,7 +13,7 @@ import { LoaderFunction, Outlet, useLoaderData, RouterContextProvider } from 're
 import { apolloClientContext } from '../../AppContexts';
 import NamedRouteBreadcrumbItem from '../../Breadcrumbs/NamedRouteBreadcrumbItem';
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ params: { eventId, runId }, context }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ params: { eventId, runId }, context }) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query<RunHeaderRunInfoQueryData, RunHeaderRunInfoQueryVariables>({
     query: RunHeaderRunInfoQueryDocument,

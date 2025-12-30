@@ -11,7 +11,7 @@ import { apolloClientContext } from '../AppContexts';
 import { UpdateUserConProfileDocument } from './mutations.generated';
 import { UserConProfileInput } from '~/graphqlTypes.generated';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {
   const client = context.get(apolloClientContext);
   try {
     const userConProfile = (await request.json()) as UserConProfileInput;
@@ -25,7 +25,7 @@ export const action: ActionFunction<RouterContextProvider> = async ({ context, r
   }
 };
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ context, params: { id } }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context, params: { id } }) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query<UserConProfileQueryData>({
     query: UserConProfileQueryDocument,

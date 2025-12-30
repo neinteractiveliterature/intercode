@@ -4,7 +4,7 @@ import invariant from 'tiny-invariant';
 import { apolloClientContext } from '../AppContexts';
 import { DeleteTicketTypeDocument, UpdateTicketTypeDocument } from './mutations.generated';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ context, params: { id }, request }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, params: { id }, request }) => {
   const client = context.get(apolloClientContext);
   invariant(id != null);
   try {

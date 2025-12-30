@@ -12,7 +12,7 @@ import { apolloClientContext } from '../../AppContexts';
 import { UpdateCmsGraphqlQueryDocument } from './mutations.generated';
 import { buildCmsGraphqlQueryInputFromFormData } from './buildCmsGraphqlQueryInput';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ params: { id }, request, context }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ params: { id }, request, context }) => {
   const client = context.get(apolloClientContext);
   const formData = await request.formData();
 
@@ -32,7 +32,7 @@ export const action: ActionFunction<RouterContextProvider> = async ({ params: { 
   return redirect(formData.get('destination')?.toString() ?? '/cms_graphql_queries');
 };
 
-export const loader = singleCmsGraphqlQueryAdminLoader;
+export const clientLoader = singleCmsGraphqlQueryAdminLoader;
 
 function EditCmsGraphqlQuery() {
   const { graphqlQuery: initialQuery } = useLoaderData() as SingleCmsGraphqlQueryAdminLoaderResult;

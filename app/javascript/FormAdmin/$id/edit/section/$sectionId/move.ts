@@ -5,7 +5,7 @@ import { ActionFunction, RouterContextProvider } from 'react-router';
 import invariant from 'tiny-invariant';
 import { apolloClientContext } from '../../../../../AppContexts';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id, sectionId } }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id, sectionId } }) => {
   const client = context.get(apolloClientContext);
   try {
     const formData = await request.formData();

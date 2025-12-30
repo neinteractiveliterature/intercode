@@ -76,7 +76,7 @@ function NotificationPreviewModal({ visible, close, eventConfig }: NotificationP
   );
 }
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query({ query: NotificationsConfigQueryDocument });
   return data as NotificationsConfigQueryData;

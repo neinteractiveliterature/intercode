@@ -20,7 +20,7 @@ import { AdminProductFieldsFragmentDoc } from '~/Store/adminProductFields.genera
 import { parseProductFormData } from '~/Store/buildProductInput';
 import { CreateProductDocument } from './mutations.generated';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ request, context }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ request, context }) => {
   const client = context.get(apolloClientContext);
   try {
     if (request.method === 'POST') {
@@ -75,7 +75,7 @@ function generateBlankProduct(): EditingProduct {
   };
 }
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query<AdminProductsQueryData>({ query: AdminProductsQueryDocument });
   return data;

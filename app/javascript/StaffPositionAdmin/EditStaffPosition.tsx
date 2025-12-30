@@ -17,7 +17,7 @@ import { UpdateStaffPositionDocument } from './mutations.generated';
 import { apolloClientContext } from '~/AppContexts';
 import { StaffPositionInput } from '~/graphqlTypes.generated';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ context, params: { id }, request }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, params: { id }, request }) => {
   const client = context.get(apolloClientContext);
   try {
     const staffPosition = (await request.json()) as StaffPositionInput;
@@ -35,7 +35,7 @@ type LoaderResult = {
   initialStaffPosition: StaffPositionsQueryData['convention']['staff_positions'][number];
 };
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ context, params: { id } }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context, params: { id } }) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query<StaffPositionsQueryData>({ query: StaffPositionsQueryDocument });
   if (!data) {

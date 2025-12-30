@@ -3,7 +3,7 @@ import CmsContentGroupFormFields from './CmsContentGroupFormFields';
 import { useLoaderData } from 'react-router';
 import { singleCmsContentGroupAdminLoader, SingleCmsContentGroupAdminLoaderResult } from './loaders';
 
-export const loader = singleCmsContentGroupAdminLoader;
+export const clientLoader = singleCmsContentGroupAdminLoader;
 
 function ViewCmsContentGroup(): React.JSX.Element {
   const { data, contentGroup } = useLoaderData() as SingleCmsContentGroupAdminLoaderResult;

@@ -10,7 +10,7 @@ import FormSectionEditorContent from './FormSectionEditorContent';
 import FormSectionEditorAddItemBar from './FormSectionEditorAddItemBar';
 import styles from '~/styles/form_editor.module.scss';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ request, params: { sectionId }, context }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ request, params: { sectionId }, context }) => {
   const client = context.get(apolloClientContext);
   try {
     invariant(sectionId != null);

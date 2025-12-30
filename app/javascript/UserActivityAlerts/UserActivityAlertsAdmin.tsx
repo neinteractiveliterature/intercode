@@ -9,7 +9,7 @@ import { NamedRoute } from '../AppRouter';
 import { apolloClientContext } from '~/AppContexts';
 import { UserActivityAlertsAdminQueryData, UserActivityAlertsAdminQueryDocument } from './queries.generated';
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query<UserActivityAlertsAdminQueryData>({
     query: UserActivityAlertsAdminQueryDocument,

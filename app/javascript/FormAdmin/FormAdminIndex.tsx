@@ -26,13 +26,13 @@ function describeFormUsers(form: FormAdminQueryData['convention']['forms'][0]) {
   ];
 }
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query<FormAdminQueryData>({ query: FormAdminQueryDocument });
   return data;
 };
 
-export const action: ActionFunction<RouterContextProvider> = async ({ request, context }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ request, context }) => {
   const client = context.get(apolloClientContext);
   try {
     const formData = await request.formData();

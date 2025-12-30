@@ -3,7 +3,7 @@ import { apolloClientContext } from '../AppContexts';
 import { SendNotificationPreviewDocument } from './mutations.generated';
 import { NotificationEventKey } from '~/graphqlTypes.generated';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ context, params: { eventKey }, request }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, params: { eventKey }, request }) => {
   const client = context.get(apolloClientContext);
   try {
     const formData = await request.formData();

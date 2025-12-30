@@ -3,7 +3,7 @@ import { apolloClientContext } from '../AppContexts';
 import { UpdateEventAdminNotesDocument } from './mutations.generated';
 import { EventAdminEventsQueryDocument } from './queries.generated';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ request, params: { eventId }, context }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ request, params: { eventId }, context }) => {
   const client = context.get(apolloClientContext);
   try {
     const formData = await request.formData();

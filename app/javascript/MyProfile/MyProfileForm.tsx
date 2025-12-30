@@ -20,7 +20,7 @@ import { apolloClientContext } from '../AppContexts';
 import { UpdateUserConProfileDocument } from '../UserConProfiles/mutations.generated';
 import { AuthenticityTokensContext } from '~/AuthenticityTokensContext';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ request, context }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ request, context }) => {
   const client = context.get(apolloClientContext);
   const profile = (await request.json()) as LoaderResult['initialUserConProfile'];
 
@@ -53,7 +53,7 @@ type LoaderResult = {
   form: CommonFormFieldsFragment;
 };
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query<MyProfileQueryData>({ query: MyProfileQueryDocument });
   if (!data) {

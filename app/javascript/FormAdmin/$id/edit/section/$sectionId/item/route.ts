@@ -4,7 +4,7 @@ import { apolloClientContext } from '../../../../../../AppContexts';
 import { CreateFormItemDocument } from '../../../../../mutations.generated';
 import { FormEditorFormItemFieldsFragmentDoc } from '~/FormAdmin/queries.generated';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ context, request, params: { sectionId } }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request, params: { sectionId } }) => {
   const client = context.get(apolloClientContext);
   try {
     if (request.method === 'POST') {

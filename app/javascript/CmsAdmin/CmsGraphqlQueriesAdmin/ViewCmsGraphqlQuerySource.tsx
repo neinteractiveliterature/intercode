@@ -5,7 +5,7 @@ import 'graphiql/graphiql.css';
 import { useLoaderData } from 'react-router';
 import { singleCmsGraphqlQueryAdminLoader, SingleCmsGraphqlQueryAdminLoaderResult } from './loaders';
 
-export const loader = singleCmsGraphqlQueryAdminLoader;
+export const clientLoader = singleCmsGraphqlQueryAdminLoader;
 
 function ViewCmsGraphqlQuerySource() {
   const { graphqlQuery: query } = useLoaderData() as SingleCmsGraphqlQueryAdminLoaderResult;

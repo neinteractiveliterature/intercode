@@ -13,7 +13,7 @@ import { EmailRouteInput } from '~/graphqlTypes.generated';
 import { Link, useFetcher } from 'react-router';
 import { useTranslation } from 'react-i18next';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ request, context }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ request, context }) => {
   const client = context.get(apolloClientContext);
   try {
     if (request.method === 'POST') {

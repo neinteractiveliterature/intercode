@@ -3,7 +3,7 @@ import { apolloClientContext } from '../AppContexts';
 import { DeleteDepartmentDocument } from './mutations.generated';
 import { DepartmentAdminQueryDocument } from './queries.generated';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ request, params: { id }, context }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ request, params: { id }, context }) => {
   const client = context.get(apolloClientContext);
   if (request.method === 'DELETE') {
     await client.mutate({

@@ -18,7 +18,7 @@ import { UpdateEventCategoryDocument } from './mutations.generated';
 import { buildEventCategoryFromFormData } from './buildEventCategoryInput';
 import { useTranslation } from 'react-i18next';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {
   const client = context.get(apolloClientContext);
   try {
     const formData = await request.formData();
@@ -35,7 +35,7 @@ export const action: ActionFunction<RouterContextProvider> = async ({ context, r
   }
 };
 
-export const loader = singleEventCategoryAdminLoader;
+export const clientLoader = singleEventCategoryAdminLoader;
 
 function EditEventCategoryForm() {
   const {

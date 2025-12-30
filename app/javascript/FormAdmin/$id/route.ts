@@ -3,7 +3,7 @@ import { apolloClientContext } from '../../AppContexts';
 import { DeleteFormDocument } from '../mutations.generated';
 import { Form } from '../../graphqlTypes.generated';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ context, params: { id }, request }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, params: { id }, request }) => {
   const client = context.get(apolloClientContext);
   try {
     if (request.method === 'DELETE') {

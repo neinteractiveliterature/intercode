@@ -12,7 +12,7 @@ import AppRootContext from '~/AppRootContext';
 import { CreateUserConProfileDocument, CreateUserConProfileMutationVariables } from './mutations.generated';
 import { apolloClientContext } from '../AppContexts';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
   const client = context.get(apolloClientContext);
   try {
     const variables = (await request.json()) as CreateUserConProfileMutationVariables;

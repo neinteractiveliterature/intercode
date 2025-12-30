@@ -22,7 +22,7 @@ import { Organization } from '~/graphqlTypes.generated';
 
 type ActionRequest = Omit<CreateOrganizationRoleMutationVariables, 'organizationId'>;
 
-export const action: ActionFunction<RouterContextProvider> = async ({ request, params: { id }, context }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ request, params: { id }, context }) => {
   const client = context.get(apolloClientContext);
   try {
     if (request.method === 'POST') {

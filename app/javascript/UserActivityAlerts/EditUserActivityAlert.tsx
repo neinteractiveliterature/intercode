@@ -25,7 +25,7 @@ import { apolloClientContext } from '~/AppContexts';
 import invariant from 'tiny-invariant';
 import { NotificationEventKey, UserActivityAlert } from '~/graphqlTypes.generated';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {
   const client = context.get(apolloClientContext);
   invariant(id != null);
   try {
@@ -62,7 +62,7 @@ type LoaderResult = {
   userActivityAlertEvent: UserActivityAlertsAdminQueryData['notificationEvents'][number];
 };
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ context, params: { id } }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context, params: { id } }) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query({ query: UserActivityAlertsAdminQueryDocument });
 

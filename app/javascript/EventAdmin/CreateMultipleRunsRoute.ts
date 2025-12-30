@@ -3,7 +3,7 @@ import { RunInput } from '../graphqlTypes.generated';
 import { apolloClientContext } from '../AppContexts';
 import { CreateMultipleRunsDocument } from './mutations.generated';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ request, params: { eventId }, context }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ request, params: { eventId }, context }) => {
   const client = context.get(apolloClientContext);
   try {
     const requestJson = await request.json();

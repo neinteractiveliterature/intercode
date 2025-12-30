@@ -14,7 +14,7 @@ import { apolloClientContext } from '~/AppContexts';
 import { UpdateRunDocument } from './mutations.generated';
 import { buildRunInputFromFormData } from './buildRunInputFromFormData';
 
-export const action: ActionFunction<RouterContextProvider> = async ({
+export const clientAction: ActionFunction<RouterContextProvider> = async ({
   params: { eventCategoryId, runId },
   request,
   context,
@@ -43,7 +43,7 @@ type LoaderResult = {
   convention: EventAdminEventsQueryData['convention'];
 };
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ params: { eventId, runId }, context }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ params: { eventId, runId }, context }) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query<EventAdminEventsQueryData>({ query: EventAdminEventsQueryDocument });
   const convention = data?.convention;

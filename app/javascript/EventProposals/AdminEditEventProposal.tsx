@@ -6,7 +6,7 @@ import EventProposalForm from './EventProposalForm';
 import { EventProposalQueryData, EventProposalQueryDocument, EventProposalQueryVariables } from './queries.generated';
 import { apolloClientContext } from '~/AppContexts';
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ params: { id }, context }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ params: { id }, context }) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query<EventProposalQueryData, EventProposalQueryVariables>({
     query: EventProposalQueryDocument,

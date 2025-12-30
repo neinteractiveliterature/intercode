@@ -3,7 +3,7 @@ import { DeleteCouponApplicationDocument } from '~/Store/mutations.generated';
 import { apolloClientContext } from '../../../AppContexts';
 import { CartQueryDocument } from '../queries.generated';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ context, params: { id }, request }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, params: { id }, request }) => {
   const client = context.get(apolloClientContext);
   try {
     if (request.method === 'DELETE') {

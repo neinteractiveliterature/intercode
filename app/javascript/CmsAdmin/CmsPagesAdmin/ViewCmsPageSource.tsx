@@ -3,7 +3,7 @@ import usePageTitle from '../../usePageTitle';
 import { singleCmsPageAdminLoader, SingleCmsPageAdminLoaderResult } from './loaders';
 import { useLoaderData } from 'react-router';
 
-export const loader = singleCmsPageAdminLoader;
+export const clientLoader = singleCmsPageAdminLoader;
 
 function ViewCmsPageSource() {
   const { page, data } = useLoaderData() as SingleCmsPageAdminLoaderResult;

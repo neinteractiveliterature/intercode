@@ -36,7 +36,7 @@ function parseFormData(formData: FormData) {
   return formJSON;
 }
 
-export const action: ActionFunction<RouterContextProvider> = async ({ request, params, context }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ request, params, context }) => {
   const client = context.get(apolloClientContext);
   try {
     if (request.method === 'POST') {
@@ -98,7 +98,7 @@ type LoaderResult = {
   data: FormAdminQueryData;
 };
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ params: { id }, context }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ params: { id }, context }) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query<FormAdminQueryData>({ query: FormAdminQueryDocument });
   if (!data) {

@@ -13,7 +13,7 @@ import { apolloClientContext } from '~/AppContexts';
 import { useSubmit } from 'react-router';
 import { CreateRoomDocument } from './mutations.generated';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
   const client = context.get(apolloClientContext);
   try {
     if (request.method === 'POST') {
@@ -35,7 +35,7 @@ export const action: ActionFunction<RouterContextProvider> = async ({ context, r
   }
 };
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query<RoomsAdminQueryData>({ query: RoomsAdminQueryDocument });
   return data;

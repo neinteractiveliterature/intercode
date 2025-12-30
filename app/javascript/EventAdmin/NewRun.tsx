@@ -15,7 +15,7 @@ import { CreateRunDocument } from './mutations.generated';
 import { buildRunInputFromFormData } from './buildRunInputFromFormData';
 import { Event } from '../graphqlTypes.generated';
 
-export const action: ActionFunction<RouterContextProvider> = async ({
+export const clientAction: ActionFunction<RouterContextProvider> = async ({
   params: { eventCategoryId, eventId },
   request,
   context,
@@ -56,7 +56,7 @@ type LoaderResult = {
   convention: EventAdminEventsQueryData['convention'];
 };
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ params: { eventId }, context }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ params: { eventId }, context }) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query<EventAdminEventsQueryData>({ query: EventAdminEventsQueryDocument });
   const convention = data?.convention;

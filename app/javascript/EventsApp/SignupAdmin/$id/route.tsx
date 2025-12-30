@@ -94,7 +94,7 @@ export type EditSignupProps = {
   teamMembersUrl: string;
 };
 
-export const action: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {
   const client = context.get(apolloClientContext);
   const formData = await request.formData();
   const result = await client.mutate({

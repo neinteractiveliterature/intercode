@@ -3,7 +3,7 @@ import { ActionFunction, RouterContextProvider, data } from 'react-router';
 import { AdminDeleteOrderEntryDocument, AdminUpdateOrderEntryDocument } from '~/Store/OrderAdmin/mutations.generated';
 import { apolloClientContext } from '../../../AppContexts';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ context, params: { orderEntryId }, request }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, params: { orderEntryId }, request }) => {
   const client = context.get(apolloClientContext);
   try {
     if (request.method === 'DELETE') {

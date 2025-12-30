@@ -89,7 +89,7 @@ async function createEvent(
   return await createRegularEvent(client, { event, signedImageBlobIds });
 }
 
-export const action: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
   const client = context.get(apolloClientContext);
   try {
     const options = (await request.json()) as CreateEventOptions;

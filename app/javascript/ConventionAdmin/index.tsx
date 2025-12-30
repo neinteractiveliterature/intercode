@@ -21,7 +21,7 @@ import { ConventionInput } from '../graphqlTypes.generated';
 import { apolloClientContext } from '~/AppContexts';
 import { UpdateConventionDocument } from './mutations.generated';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
   const client = context.get(apolloClientContext);
   try {
     const formData = await request.formData();
@@ -79,7 +79,7 @@ export const action: ActionFunction<RouterContextProvider> = async ({ context, r
   return redirect('/');
 };
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query<ConventionAdminConventionQueryData>({
     query: ConventionAdminConventionQueryDocument,

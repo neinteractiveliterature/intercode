@@ -17,7 +17,7 @@ import { useTeamMembersLoader } from './loader';
 import { apolloClientContext } from '../../AppContexts';
 import { CreateTeamMemberDocument } from './mutations.generated';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ params: { eventId }, request, context }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ params: { eventId }, request, context }) => {
   const client = context.get(apolloClientContext);
   const formData = await request.formData();
   await client.mutate({

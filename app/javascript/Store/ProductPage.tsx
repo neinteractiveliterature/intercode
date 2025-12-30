@@ -12,7 +12,7 @@ import {
 import { apolloClientContext } from '~/AppContexts';
 import { UserPricingStructureDescription } from './describePricingStructure';
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ context, params: { id } }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context, params: { id } }) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query<OrderFormProductQueryData, OrderFormProductQueryVariables>({
     query: OrderFormProductQueryDocument,

@@ -2,7 +2,7 @@ import { ActionFunction, RouterContextProvider, data } from 'react-router';
 import { apolloClientContext } from '../../AppContexts';
 import { CreateMaximumEventProvidedTicketsOverrideDocument } from '../../EventAdmin/mutations.generated';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ context, request, params: { eventId } }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request, params: { eventId } }) => {
   const client = context.get(apolloClientContext);
   try {
     if (request.method === 'POST') {

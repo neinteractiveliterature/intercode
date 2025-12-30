@@ -19,7 +19,7 @@ import { apolloClientContext } from '~/AppContexts';
 import { Form } from 'react-router';
 import { UpdateRootSiteDocument } from './mutations.generated';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
   const client = context.get(apolloClientContext);
   try {
     const formData = await request.formData();
@@ -48,7 +48,7 @@ function useDirtyState<T>(initialState: T, setDirty: () => void) {
   ] as const;
 }
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query<RootSiteAdminQueryData>({ query: RootSiteAdminQueryDocument });
   return data;

@@ -11,9 +11,9 @@ import { singleTeamMemberLoader, SingleTeamMemberLoaderResult } from './loader';
 import { apolloClientContext } from '../../AppContexts';
 import { DeleteTeamMemberDocument, UpdateTeamMemberDocument } from './mutations.generated';
 
-export const loader = singleTeamMemberLoader;
+export const clientLoader = singleTeamMemberLoader;
 
-export const action: ActionFunction<RouterContextProvider> = async ({ params: { eventId, teamMemberId }, request, context }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ params: { eventId, teamMemberId }, request, context }) => {
   const client = context.get(apolloClientContext);
   if (request.method === 'DELETE') {
     await client.mutate({

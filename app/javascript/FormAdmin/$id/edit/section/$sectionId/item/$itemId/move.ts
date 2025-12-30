@@ -5,7 +5,7 @@ import invariant from 'tiny-invariant';
 import { FormEditorQueryDocument } from '~/FormAdmin/queries.generated';
 import { MoveFormItemDocument } from '~/FormAdmin/mutations.generated';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ context, params: { id, sectionId, itemId }, request }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, params: { id, sectionId, itemId }, request }) => {
   const client = context.get(apolloClientContext);
   try {
     const formData = await request.formData();

@@ -11,7 +11,7 @@ import { apolloClientContext } from '~/AppContexts';
 import { StaffPositionInput } from '~/graphqlTypes.generated';
 import { CreateStaffPositionDocument } from './mutations.generated';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
   const client = context.get(apolloClientContext);
   try {
     if (request.method === 'POST') {

@@ -18,7 +18,7 @@ import { ClickwrapAgreementQueryData, ClickwrapAgreementQueryDocument } from './
 import { apolloClientContext, authenticityTokensManagerContext } from '../AppContexts';
 import { AcceptClickwrapAgreementDocument } from './mutations.generated';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ context }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ context }) => {
   const client = context.get(apolloClientContext);
   const manager = context.get(authenticityTokensManagerContext);
   try {
@@ -31,7 +31,7 @@ export const action: ActionFunction<RouterContextProvider> = async ({ context })
   }
 };
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query<ClickwrapAgreementQueryData>({ query: ClickwrapAgreementQueryDocument });
   if (data?.convention.my_profile?.accepted_clickwrap_agreement) {

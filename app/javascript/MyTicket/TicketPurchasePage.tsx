@@ -7,7 +7,7 @@ import { TicketPurchaseFormQueryData, TicketPurchaseFormQueryDocument } from './
 import TicketPurchaseForm from './TicketPurchaseForm';
 import { apolloClientContext } from '~/AppContexts';
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query<TicketPurchaseFormQueryData>({ query: TicketPurchaseFormQueryDocument });
   if (!data) {

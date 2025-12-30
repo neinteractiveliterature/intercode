@@ -3,7 +3,7 @@ import { DeleteOrganizationRoleDocument, UpdateOrganizationRoleDocument } from '
 import { ActionFunction, RouterContextProvider, data, redirect } from 'react-router';
 import { apolloClientContext } from '../../../../AppContexts';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ context, params: { id, organizationRoleId }, request }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, params: { id, organizationRoleId }, request }) => {
   const client = context.get(apolloClientContext);
   try {
     if (request.method === 'DELETE') {

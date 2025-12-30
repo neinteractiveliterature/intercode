@@ -2,7 +2,7 @@ import { ActionFunction, RouterContextProvider, redirect } from 'react-router';
 import { apolloClientContext } from '../AppContexts';
 import { DropEventDocument } from '../EventAdmin/mutations.generated';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ context, params: { eventId }, request }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, params: { eventId }, request }) => {
   const client = context.get(apolloClientContext);
   try {
     if (request.method === 'PATCH') {

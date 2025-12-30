@@ -20,7 +20,7 @@ type ActionInput = {
   eventId: string | null;
 };
 
-export const action: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
   const client = context.get(apolloClientContext);
   try {
     const { ticketType, eventId, conventionId } = (await request.json()) as ActionInput;

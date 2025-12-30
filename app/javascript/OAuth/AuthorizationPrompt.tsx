@@ -28,7 +28,7 @@ type PreAuth = AuthorizationParams & {
   scope: string;
 };
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ request, context }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ request, context }) => {
   const client = context.get(apolloClientContext);
   const url = new URL(request.url);
   const preAuthParamsJSON = JSON.stringify(

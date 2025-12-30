@@ -5,7 +5,7 @@ import { ReportsMenuQueryData, ReportsMenuQueryDocument } from './queries.genera
 import { apolloClientContext } from '~/AppContexts';
 import { useTranslation } from 'react-i18next';
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query<ReportsMenuQueryData>({ query: ReportsMenuQueryDocument });
   return data;

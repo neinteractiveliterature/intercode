@@ -8,7 +8,7 @@ import {
 } from './queries.generated';
 import { apolloClientContext } from '~/AppContexts';
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ params: { userConProfileId }, context }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ params: { userConProfileId }, context }) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query<
     SignupModerationAttendeeRankedChoicesQueryData,

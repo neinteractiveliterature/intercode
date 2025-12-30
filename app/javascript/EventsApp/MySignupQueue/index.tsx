@@ -13,7 +13,7 @@ import useLoginRequired from '~/Authentication/useLoginRequired';
 import BlockPartial from '~/UIComponents/BlockPartial';
 import { CmsPartialBlockName } from '~/graphqlTypes.generated';
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query({ query: MySignupQueueQueryDocument });
   return data;

@@ -10,7 +10,7 @@ import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import Modal from 'react-bootstrap4-modal';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {
   const client = context.get(apolloClientContext);
   try {
     const formData = await request.formData();

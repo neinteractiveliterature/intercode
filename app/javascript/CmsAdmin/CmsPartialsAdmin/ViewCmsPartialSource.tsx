@@ -3,7 +3,7 @@ import usePageTitle from '../../usePageTitle';
 import { singleCmsPartialAdminLoader, SingleCmsPartialAdminLoaderResult } from './loaders';
 import { useLoaderData } from 'react-router';
 
-export const loader = singleCmsPartialAdminLoader;
+export const clientLoader = singleCmsPartialAdminLoader;
 
 function ViewCmsPartialSource() {
   const { partial } = useLoaderData() as SingleCmsPartialAdminLoaderResult;

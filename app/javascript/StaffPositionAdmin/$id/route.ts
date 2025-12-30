@@ -3,7 +3,7 @@ import { ActionFunction, RouterContextProvider, data } from 'react-router';
 import { DeleteStaffPositionDocument } from '~/StaffPositionAdmin/mutations.generated';
 import { apolloClientContext } from '../../AppContexts';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {
   const client = context.get(apolloClientContext);
   try {
     if (request.method === 'DELETE') {

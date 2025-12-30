@@ -26,7 +26,7 @@ import { apolloClientContext } from '~/AppContexts';
 import { UpdateFormDocument } from './mutations.generated';
 import styles from '~/styles/form_editor.module.scss';
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ params: { id }, context }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ params: { id }, context }) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query<FormEditorQueryData, FormEditorQueryVariables>({
     query: FormEditorQueryDocument,
@@ -35,7 +35,7 @@ export const loader: LoaderFunction<RouterContextProvider> = async ({ params: { 
   return data;
 };
 
-export const action: ActionFunction<RouterContextProvider> = async ({ params: { id }, request, context }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ params: { id }, request, context }) => {
   const client = context.get(apolloClientContext);
   try {
     const formData = await request.formData();

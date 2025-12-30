@@ -4,7 +4,7 @@ import { DeleteRoomDocument, UpdateRoomDocument } from '~/RoomsAdmin/mutations.g
 import invariant from 'tiny-invariant';
 import { apolloClientContext } from '../../AppContexts';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {
   const client = context.get(apolloClientContext);
   invariant(id != null);
 

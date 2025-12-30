@@ -86,7 +86,7 @@ function StandaloneEditEventForm({
   );
 }
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ params: { eventId }, context }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ params: { eventId }, context }) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query<StandaloneEditEventQueryData, StandaloneEditEventQueryVariables>({
     query: StandaloneEditEventQueryDocument,

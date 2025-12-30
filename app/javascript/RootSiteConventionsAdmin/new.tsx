@@ -4,7 +4,7 @@ import { apolloClientContext } from '~/AppContexts';
 import { NewConventionModalQueryData, NewConventionModalQueryDocument } from './queries.generated';
 import { CreateConventionDocument } from './mutations.generated';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ request, context }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ request, context }) => {
   const client = context.get(apolloClientContext);
   try {
     const variables = await request.json();
@@ -19,7 +19,7 @@ export const action: ActionFunction<RouterContextProvider> = async ({ request, c
   }
 };
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query({ query: NewConventionModalQueryDocument });
   return data;

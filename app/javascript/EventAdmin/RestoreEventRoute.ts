@@ -3,7 +3,7 @@ import { apolloClientContext } from '../AppContexts';
 import { RestoreDroppedEventDocument } from './mutations.generated';
 import { EventAdminEventsQueryDocument } from './queries.generated';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ params: { eventId }, context }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ params: { eventId }, context }) => {
   const client = context.get(apolloClientContext);
   try {
     await client.mutate({

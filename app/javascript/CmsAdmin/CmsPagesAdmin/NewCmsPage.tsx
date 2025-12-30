@@ -10,7 +10,7 @@ import { CreatePageDocument } from './mutations.generated';
 import { useCmsPagesAdminLoader } from './loaders';
 import { apolloClientContext } from '~/AppContexts';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
   const client = context.get(apolloClientContext);
   const formData = await request.formData();
 

@@ -21,7 +21,7 @@ import { useTranslation } from 'react-i18next';
 import { useChangeSet } from '~/ChangeSet';
 import { NotificationDestinationInput, NotificationEventKey } from '~/graphqlTypes.generated';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ context, params: { eventKey }, request }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, params: { eventKey }, request }) => {
   const client = context.get(apolloClientContext);
   try {
     const formData = await request.formData();
@@ -68,7 +68,7 @@ type LoaderResult = {
   eventCategories: NotificationAdminQueryData['convention']['event_categories'];
 };
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ context, params }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context, params }) => {
   const client = context.get(apolloClientContext);
   const { eventKey } = params;
   const { data } = await client.query({ query: NotificationAdminQueryDocument });

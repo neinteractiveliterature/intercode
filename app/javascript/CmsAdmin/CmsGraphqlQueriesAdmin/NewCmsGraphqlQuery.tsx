@@ -11,7 +11,7 @@ import { CreateCmsGraphqlQueryDocument } from './mutations.generated';
 import { apolloClientContext } from '../../AppContexts';
 import { buildCmsGraphqlQueryInputFromFormData } from './buildCmsGraphqlQueryInput';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ request, context }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ request, context }) => {
   const client = context.get(apolloClientContext);
   const formData = await request.formData();
 

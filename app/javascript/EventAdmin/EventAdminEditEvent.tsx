@@ -21,7 +21,7 @@ import { useAsyncFetcher } from '~/useAsyncFetcher';
 
 type LoaderResult = WithFormResponse<EventAdminSingleEventQueryData['conventionByRequestHost']['event']>;
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ context, params: { eventId } }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context, params: { eventId } }) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query({
     query: EventAdminSingleEventQueryDocument,

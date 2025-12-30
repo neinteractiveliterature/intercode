@@ -5,7 +5,7 @@ import {
   UpdateMaximumEventProvidedTicketsOverrideDocument,
 } from '../../EventAdmin/mutations.generated';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {
   const client = context.get(apolloClientContext);
   try {
     if (request.method === 'DELETE') {

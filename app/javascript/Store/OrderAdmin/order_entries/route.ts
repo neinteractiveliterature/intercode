@@ -4,7 +4,7 @@ import { apolloClientContext } from '../../../AppContexts';
 import { AdminCreateOrderEntryDocument } from '../mutations.generated';
 import { OrderEntryInput } from '~/graphqlTypes.generated';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {
   const client = context.get(apolloClientContext);
   invariant(id != null);
 

@@ -6,7 +6,7 @@ import { LoaderFunction, RouterContextProvider, useLoaderData } from 'react-rout
 import { apolloClientContext } from '~/AppContexts';
 import { useSubmit } from 'react-router';
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query({ query: EventAdminEventsQueryDocument });
   return data;

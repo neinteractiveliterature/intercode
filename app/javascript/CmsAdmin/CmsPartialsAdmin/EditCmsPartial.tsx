@@ -10,7 +10,7 @@ import { singleCmsPartialAdminLoader, SingleCmsPartialAdminLoaderResult } from '
 import { UpdatePartialDocument } from './mutations.generated';
 import { apolloClientContext } from '../../AppContexts';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ params: { id }, request, context }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ params: { id }, request, context }) => {
   const client = context.get(apolloClientContext);
   const formData = await request.formData();
 
@@ -30,7 +30,7 @@ export const action: ActionFunction<RouterContextProvider> = async ({ params: { 
   return redirect(formData.get('destination')?.toString() ?? '/cms_partials');
 };
 
-export const loader = singleCmsPartialAdminLoader;
+export const clientLoader = singleCmsPartialAdminLoader;
 
 function EditCmsPartialForm() {
   const { partial: initialPartial } = useLoaderData() as SingleCmsPartialAdminLoaderResult;

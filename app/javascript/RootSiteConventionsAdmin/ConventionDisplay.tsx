@@ -21,7 +21,7 @@ import {
 } from './queries.generated';
 import { SetConventionCanceledDocument } from './mutations.generated';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ context, params: { id }, request }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, params: { id }, request }) => {
   const client = context.get(apolloClientContext);
   try {
     const formData = await request.formData();
@@ -36,7 +36,7 @@ export const action: ActionFunction<RouterContextProvider> = async ({ context, p
   }
 };
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ context, params: { id } }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context, params: { id } }) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query<ConventionDisplayQueryData, ConventionDisplayQueryVariables>({
     query: ConventionDisplayQueryDocument,

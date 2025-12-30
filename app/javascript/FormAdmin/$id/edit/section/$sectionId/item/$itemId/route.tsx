@@ -25,7 +25,7 @@ import { FormItem } from '~/graphqlTypes.generated';
 import FormItemEditorContent from './FormItemEditorContent';
 import styles from '~/styles/form_editor.module.scss';
 
-export const action: ActionFunction<RouterContextProvider> = async ({
+export const clientAction: ActionFunction<RouterContextProvider> = async ({
   context,
   request,
   params: { id, sectionId, itemId },

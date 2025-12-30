@@ -12,7 +12,7 @@ import { DeleteEmailRouteDocument, UpdateEmailRouteDocument } from './mutations.
 import { EmailRouteInput } from '~/graphqlTypes.generated';
 import { Link, useFetcher } from 'react-router';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ params: { id }, request, context }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ params: { id }, request, context }) => {
   const client = context.get(apolloClientContext);
   try {
     if (request.method === 'DELETE') {
@@ -37,7 +37,7 @@ export const action: ActionFunction<RouterContextProvider> = async ({ params: { 
   }
 };
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ params: { id }, context }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ params: { id }, context }) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query({ query: RootSiteSingleEmailRouteQueryDocument, variables: { id: id ?? '' } });
   return data;

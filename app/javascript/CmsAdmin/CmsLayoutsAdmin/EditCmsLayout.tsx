@@ -10,7 +10,7 @@ import { singleCmsLayoutAdminLoader, SingleCmsLayoutAdminLoaderResult } from './
 import { apolloClientContext } from '../../AppContexts';
 import { UpdateLayoutDocument } from './mutations.generated';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ params: { id }, request, context }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ params: { id }, request, context }) => {
   const client = context.get(apolloClientContext);
   const formData = await request.formData();
 
@@ -30,7 +30,7 @@ export const action: ActionFunction<RouterContextProvider> = async ({ params: { 
   return redirect(formData.get('destination')?.toString() ?? '/cms_layouts');
 };
 
-export const loader = singleCmsLayoutAdminLoader;
+export const clientLoader = singleCmsLayoutAdminLoader;
 
 function EditCmsLayout() {
   const { layout: initialLayout } = useLoaderData() as SingleCmsLayoutAdminLoaderResult;
