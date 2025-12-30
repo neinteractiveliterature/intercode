@@ -9,7 +9,7 @@ import snakeCase from 'lodash/snakeCase';
 import { AdminSignupQueryData, SignupFieldsFragment } from '../queries.generated';
 import { apolloClientContext } from '~/AppContexts';
 import { UpdateSignupCountedDocument } from '../mutations.generated';
-import { useSingleSignupLoader } from '../loaders';
+import { singleSignupLoader, useSingleSignupLoader } from '../loaders';
 import AppRootContext from '../../../AppRootContext';
 import { useFormatRunTimespan } from '../../runTimeFormatting';
 import usePageTitle from '../../../usePageTitle';
@@ -18,6 +18,8 @@ import { ageAsOf } from '../../../TimeUtils';
 import Timespan from '../../../Timespan';
 import { getSignupStateLabel } from '../../../Tables/SignupStateCell';
 import humanize from '../../../humanize';
+
+export const clientLoader = singleSignupLoader;
 
 function cityState(userConProfile: SignupFieldsFragment['user_con_profile']) {
   return [userConProfile.city, userConProfile.state].filter((item) => item && item.trim() !== '').join(', ');

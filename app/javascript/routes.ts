@@ -73,40 +73,35 @@ export default [
     ]),
 
     // Liquid docs routes
-    route('liquid_docs', './LiquidDocs/index.tsx', { id: NamedRoute.LiquidDocs }, [
+    route('liquid_docs', './LiquidDocs/route.ts', { id: NamedRoute.LiquidDocs }, [
       route('assigns/:name', './LiquidDocs/AssignDoc.tsx'),
       route('filters/:name', './LiquidDocs/FilterDoc.tsx'),
       route('tags/:name', './LiquidDocs/LiquidTagDoc.tsx'),
-      index('./LiquidDocs/index.tsx', { id: 'LiquidDocsIndex' }),
+      index('./LiquidDocs/index.tsx'),
     ]),
 
     layout('./AppRootLayout.tsx', [
       // CMS Admin routes
-      layout('./CmsAdmin/index.tsx', { id: NamedRoute.CmsAdmin }, [
+      layout('./CmsAdmin/route.ts', { id: NamedRoute.CmsAdmin }, [
         // CMS Pages
-        route('cms_pages', './CmsAdmin/CmsPagesAdmin/CmsPagesAdminTable.tsx', { id: NamedRoute.CmsPagesAdmin }, [
+        route('cms_pages', './CmsAdmin/CmsPagesAdmin/route.ts', { id: NamedRoute.CmsPagesAdmin }, [
           route(':id', './CmsAdmin/CmsPagesAdmin/SinglePageRoute.tsx', [
             route('edit', './CmsAdmin/CmsPagesAdmin/EditCmsPage.tsx'),
             route('view_source', './CmsAdmin/CmsPagesAdmin/ViewCmsPageSource.tsx'),
           ]),
           route('new', './CmsAdmin/CmsPagesAdmin/NewCmsPage.tsx'),
-          index('./CmsAdmin/CmsPagesAdmin/CmsPagesAdminTable.tsx', { id: 'CmsPagesAdminIndex' }),
+          index('./CmsAdmin/CmsPagesAdmin/CmsPagesAdminTable.tsx'),
         ]),
 
         // CMS Partials
-        route(
-          'cms_partials',
-          './CmsAdmin/CmsPartialsAdmin/CmsPartialsAdminTable.tsx',
-          { id: NamedRoute.CmsPartialsAdmin },
-          [
-            route(':id', './CmsAdmin/CmsPartialsAdmin/SinglePartialRoute.tsx', [
-              route('edit', './CmsAdmin/CmsPartialsAdmin/EditCmsPartial.tsx'),
-              route('view_source', './CmsAdmin/CmsPartialsAdmin/ViewCmsPartialSource.tsx'),
-            ]),
-            route('new', './CmsAdmin/CmsPartialsAdmin/NewCmsPartial.tsx'),
-            index('./CmsAdmin/CmsPartialsAdmin/CmsPartialsAdminTable.tsx', { id: 'CmsPartialsAdminIndex' }),
-          ],
-        ),
+        route('cms_partials', './CmsAdmin/CmsPartialsAdmin/route.ts', { id: NamedRoute.CmsPartialsAdmin }, [
+          route(':id', './CmsAdmin/CmsPartialsAdmin/SinglePartialRoute.tsx', [
+            route('edit', './CmsAdmin/CmsPartialsAdmin/EditCmsPartial.tsx'),
+            route('view_source', './CmsAdmin/CmsPartialsAdmin/ViewCmsPartialSource.tsx'),
+          ]),
+          route('new', './CmsAdmin/CmsPartialsAdmin/NewCmsPartial.tsx'),
+          index('./CmsAdmin/CmsPartialsAdmin/CmsPartialsAdminTable.tsx'),
+        ]),
 
         // CMS Files
         route('cms_files', './CmsAdmin/CmsFilesAdmin/index.tsx', { id: NamedRoute.CmsFiles }),
@@ -115,19 +110,14 @@ export default [
         route('cms_navigation_items', './CmsAdmin/NavigationItemsAdmin/index.tsx'),
 
         // CMS Layouts
-        route(
-          'cms_layouts',
-          './CmsAdmin/CmsLayoutsAdmin/CmsLayoutsAdminTable.tsx',
-          { id: NamedRoute.CmsLayoutsAdmin },
-          [
-            route(':id', './CmsAdmin/CmsLayoutsAdmin/SingleLayoutRoute.tsx', [
-              route('edit', './CmsAdmin/CmsLayoutsAdmin/EditCmsLayout.tsx'),
-              route('view_source', './CmsAdmin/CmsLayoutsAdmin/ViewCmsLayoutSource.tsx'),
-            ]),
-            route('new', './CmsAdmin/CmsLayoutsAdmin/NewCmsLayout.tsx'),
-            index('./CmsAdmin/CmsLayoutsAdmin/CmsLayoutsAdminTable.tsx', { id: 'CmsLayoutsAdminIndex' }),
-          ],
-        ),
+        route('cms_layouts', './CmsAdmin/CmsLayoutsAdmin/route.ts', { id: NamedRoute.CmsLayoutsAdmin }, [
+          route(':id', './CmsAdmin/CmsLayoutsAdmin/SingleLayoutRoute.tsx', [
+            route('edit', './CmsAdmin/CmsLayoutsAdmin/EditCmsLayout.tsx'),
+            route('view_source', './CmsAdmin/CmsLayoutsAdmin/ViewCmsLayoutSource.tsx'),
+          ]),
+          route('new', './CmsAdmin/CmsLayoutsAdmin/NewCmsLayout.tsx'),
+          index('./CmsAdmin/CmsLayoutsAdmin/CmsLayoutsAdminTable.tsx'),
+        ]),
 
         // CMS Variables
         route('cms_variables', './CmsAdmin/CmsVariablesAdmin/index.tsx', [
@@ -137,7 +127,7 @@ export default [
         // CMS GraphQL Queries
         route(
           'cms_graphql_queries',
-          './CmsAdmin/CmsGraphqlQueriesAdmin/CmsGraphqlQueriesAdminTable.tsx',
+          './CmsAdmin/CmsGraphqlQueriesAdmin/route.ts',
           { id: NamedRoute.CmsGraphqlQueriesAdmin },
           [
             route(':id', './CmsAdmin/CmsGraphqlQueriesAdmin/SingleGraphqlQueryRoute.ts', [
@@ -145,14 +135,14 @@ export default [
               route('view_source', './CmsAdmin/CmsGraphqlQueriesAdmin/ViewCmsGraphqlQuerySource.tsx'),
             ]),
             route('new', './CmsAdmin/CmsGraphqlQueriesAdmin/NewCmsGraphqlQuery.tsx'),
-            index('./CmsAdmin/CmsGraphqlQueriesAdmin/CmsGraphqlQueriesAdminTable.tsx', { id: 'CmsGraphqlQueriesAdminIndex' }),
+            index('./CmsAdmin/CmsGraphqlQueriesAdmin/CmsGraphqlQueriesAdminTable.tsx'),
           ],
         ),
 
         // CMS Content Groups
         route(
           'cms_content_groups',
-          './CmsAdmin/CmsContentGroupsAdmin/CmsContentGroupsAdminTable.tsx',
+          './CmsAdmin/CmsContentGroupsAdmin/route.ts',
           { id: NamedRoute.CmsContentGroupsAdmin },
           [
             route(':id', './CmsAdmin/CmsContentGroupsAdmin/SingleCmsContentGroupRoute.ts', [
@@ -160,7 +150,7 @@ export default [
               index('./CmsAdmin/CmsContentGroupsAdmin/ViewCmsContentGroup.tsx'),
             ]),
             route('new', './CmsAdmin/CmsContentGroupsAdmin/NewCmsContentGroup.tsx'),
-            index('./CmsAdmin/CmsContentGroupsAdmin/CmsContentGroupsAdminTable.tsx', { id: 'CmsContentGroupsAdminIndex' }),
+            index('./CmsAdmin/CmsContentGroupsAdmin/CmsContentGroupsAdminTable.tsx'),
           ],
         ),
 
@@ -182,23 +172,18 @@ export default [
       // Common in-convention routes
       // Departments
       layout('./Authentication/guards/canUpdateDepartments.tsx', [
-        route(
-          'admin_departments',
-          './DepartmentAdmin/DepartmentAdminIndex.tsx',
-          { id: NamedRoute.DepartmentAdmin },
-          [
-            route(':id', './DepartmentAdmin/SingleDepartmentRoute.ts', [
-              route('edit', './DepartmentAdmin/EditDepartment.tsx'),
-              index('./DepartmentAdmin/redirectSingleDepartmentIndex.ts'),
-            ]),
-            route('new', './DepartmentAdmin/NewDepartment.tsx'),
-            index('./DepartmentAdmin/DepartmentAdminIndex.tsx', { id: 'DepartmentAdminIndexRoute' }),
-          ],
-        ),
+        route('admin_departments', './DepartmentAdmin/route.ts', { id: NamedRoute.DepartmentAdmin }, [
+          route(':id', './DepartmentAdmin/SingleDepartmentRoute.ts', [
+            route('edit', './DepartmentAdmin/EditDepartment.tsx'),
+            index('./DepartmentAdmin/redirectSingleDepartmentIndex.ts'),
+          ]),
+          route('new', './DepartmentAdmin/NewDepartment.tsx'),
+          index('./DepartmentAdmin/DepartmentAdminIndex.tsx'),
+        ]),
       ]),
 
       // Event Admin
-      route('admin_events', './EventAdmin/index.tsx', { id: NamedRoute.EventAdmin }, [
+      route('admin_events', './EventAdmin/route.ts', { id: NamedRoute.EventAdmin }, [
         // Dropped events and event creation (only in non-single-event mode)
         layout('./AppRootContext/guards/siteModeNotSingleEvent.tsx', { id: 'EventAdminSiteModeGuard' }, [
           route('dropped_events', './EventAdmin/DroppedEventAdmin.tsx'),
@@ -317,7 +302,7 @@ export default [
           ),
 
           // Team members
-          route('team_members', './EventsApp/TeamMemberAdmin/index.tsx', { id: NamedRoute.TeamMembers }, [
+          route('team_members', './EventsApp/TeamMemberAdmin/route.ts', { id: NamedRoute.TeamMembers }, [
             route('new', './EventsApp/TeamMemberAdmin/NewTeamMember.tsx', { id: NamedRoute.NewTeamMember }),
             route(':teamMemberId', './EventsApp/TeamMemberAdmin/EditTeamMember.tsx', { id: NamedRoute.EditTeamMember }),
             route('', './EventsApp/TeamMemberAdmin/TeamMembersIndex.tsx', { id: NamedRoute.TeamMembersIndex }, [
@@ -408,11 +393,15 @@ export default [
       layout('./AppRootContext/guards/signupModeModerated.tsx', [
         route('signup_moderation', './SignupModeration/index.tsx', [
           // Ranked choice queue (only in ranked choice automation mode)
-          layout('./AppRootContext/guards/signupAutomationModeRankedChoice.tsx', { id: 'SignupModerationRankedChoiceGuard' }, [
-            route('ranked_choice_queue', './SignupModeration/RankedChoiceQueue.tsx', [
-              route(':userConProfileId', './SignupModeration/UserRankedChoiceQueue.tsx'),
-            ]),
-          ]),
+          layout(
+            './AppRootContext/guards/signupAutomationModeRankedChoice.tsx',
+            { id: 'SignupModerationRankedChoiceGuard' },
+            [
+              route('ranked_choice_queue', './SignupModeration/RankedChoiceQueue.tsx', [
+                route(':userConProfileId', './SignupModeration/UserRankedChoiceQueue.tsx'),
+              ]),
+            ],
+          ),
           route('signup_requests/:id/accept', './SignupModeration/signup_requests/$id/accept.ts'),
           route('signup_requests/:id/reject', './SignupModeration/signup_requests/$id/reject.ts'),
           route('signup_rounds/:id/rerun', './SignupModeration/signup_rounds/$id/rerun.ts'),
@@ -451,10 +440,12 @@ export default [
       // Ticket Types Admin (only when ticket mode is RequiredForSignup)
       layout('./AppRootContext/guards/ticketModeRequiredForSignup.tsx', [
         layout('./Authentication/guards/canManageTicketTypes.tsx', [
-          route('ticket_types', './TicketTypeAdmin/TicketTypesList.tsx', { id: 'TicketTypesLayout' }, [
+          route('ticket_types', './TicketTypeAdmin/route.ts', { id: 'TicketTypesLayout' }, [
             route('new', './TicketTypeAdmin/NewTicketType.tsx', { id: 'AdminNewTicketType' }),
-            route(':id', './TicketTypeAdmin/$id.ts', [route('edit', './TicketTypeAdmin/EditTicketType.tsx', { id: 'AdminEditTicketType' })]),
-            index('./TicketTypeAdmin/TicketTypesList.tsx', { id: 'TicketTypesIndex' }),
+            route(':id', './TicketTypeAdmin/singleTicketTypeRoute.ts', [
+              route('edit', './TicketTypeAdmin/EditTicketType.tsx', { id: 'AdminEditTicketType' }),
+            ]),
+            index('./TicketTypeAdmin/TicketTypesList.tsx'),
           ]),
         ]),
       ]),
@@ -488,7 +479,7 @@ export default [
       // Convention mode routes
       // Event Proposals Admin
       route('admin_event_proposals', './EventProposals/EventProposalsAdmin.tsx', { id: 'EventProposalsAdminLayout' }, [
-        route(':id', './EventProposals/EventProposalsAdmin.tsx', { id: NamedRoute.AdminEventProposal }, [
+        route(':id', './EventProposals/route_with_loader.ts', { id: NamedRoute.AdminEventProposal }, [
           route('history', './EventProposals/EventProposalHistory.tsx', { id: NamedRoute.EventProposalHistory }, [
             route(':changeGroupId', './EventProposals/EventProposalHistory.tsx', {
               id: NamedRoute.EventProposalHistoryChangeGroup,
@@ -502,18 +493,13 @@ export default [
 
       // Event Categories Admin
       layout('./Authentication/guards/canUpdateEventCategories.tsx', [
-        route(
-          'event_categories',
-          './EventCategoryAdmin/EventCategoryIndex.tsx',
-          { id: NamedRoute.EventCategoryAdmin },
-          [
-            route('new', './EventCategoryAdmin/NewEventCategory.tsx', { id: NamedRoute.NewEventCategory }),
-            route(':id', './EventCategoryAdmin/$id.ts', [
-              route('edit', './EventCategoryAdmin/EditEventCategory.tsx', { id: NamedRoute.EditEventCategory }),
-            ]),
-            index('./EventCategoryAdmin/EventCategoryIndex.tsx', { id: NamedRoute.EventCategoryIndex }),
-          ],
-        ),
+        route('event_categories', './EventCategoryAdmin/route.ts', { id: NamedRoute.EventCategoryAdmin }, [
+          route('new', './EventCategoryAdmin/NewEventCategory.tsx', { id: NamedRoute.NewEventCategory }),
+          route(':id', './EventCategoryAdmin/$id.ts', [
+            route('edit', './EventCategoryAdmin/EditEventCategory.tsx', { id: NamedRoute.EditEventCategory }),
+          ]),
+          index('./EventCategoryAdmin/EventCategoryIndex.tsx', { id: NamedRoute.EventCategoryIndex }),
+        ]),
       ]),
 
       // Event Proposals (user-facing)
