@@ -1,13 +1,5 @@
 import { Suspense, useMemo, useState } from 'react';
-import {
-  ActionFunction,
-  Link,
-  replace,
-  RouterContextProvider,
-  useFetcher,
-  useParams,
-  useRouteLoaderData,
-} from 'react-router';
+import { Link, replace, useFetcher, useParams, useRouteLoaderData } from 'react-router';
 import {
   useConfirm,
   useModal,
@@ -34,8 +26,9 @@ import { DeleteUserConProfileDocument } from './mutations.generated';
 import invariant from 'tiny-invariant';
 import { UserConProfile } from '~/graphqlTypes.generated';
 import { apolloClientContext } from '~/AppContexts';
+import { Route } from './+types/UserConProfileAdminDisplay';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {
+export const clientAction = async ({ context, request, params: { id } }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   invariant(id != null);
   try {

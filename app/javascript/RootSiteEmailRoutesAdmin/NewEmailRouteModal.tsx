@@ -6,14 +6,15 @@ import { ErrorDisplay } from '@neinteractiveliterature/litform';
 import EmailRouteForm from './EmailRouteForm';
 import buildEmailRouteInput from './buildEmailRouteInput';
 import { EmailRouteFieldsFragment } from './queries.generated';
-import { ActionFunction, redirect, RouterContextProvider } from 'react-router';
+import { redirect } from 'react-router';
 import { apolloClientContext } from '~/AppContexts';
 import { CreateEmailRouteDocument } from './mutations.generated';
 import { EmailRouteInput } from '~/graphqlTypes.generated';
 import { Link, useFetcher } from 'react-router';
 import { useTranslation } from 'react-i18next';
+import { Route } from './+types/NewEmailRouteModal';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ request, context }) => {
+export const clientAction = async ({ request, context }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     if (request.method === 'POST') {

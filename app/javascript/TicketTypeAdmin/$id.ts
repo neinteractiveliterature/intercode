@@ -1,10 +1,11 @@
 import { TicketType, TicketTypeInput } from '~/graphqlTypes.generated';
-import { ActionFunction, RouterContextProvider, data } from 'react-router';
+import { data } from 'react-router';
 import invariant from 'tiny-invariant';
 import { apolloClientContext } from '../AppContexts';
 import { DeleteTicketTypeDocument, UpdateTicketTypeDocument } from './mutations.generated';
+import { Route } from './+types/$id';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, params: { id }, request }) => {
+export const clientAction = async ({ context, params: { id }, request }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   invariant(id != null);
   try {

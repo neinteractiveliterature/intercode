@@ -1,8 +1,8 @@
-import { ActionFunction, RouterContextProvider } from 'react-router';
 import { apolloClientContext } from '../../../AppContexts';
 import { AcceptSignupRequestDocument } from '../../mutations.generated';
+import { Route } from './+types/accept';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, params: { id } }) => {
+export const clientAction = async ({ context, params: { id } }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     return await client.mutate({

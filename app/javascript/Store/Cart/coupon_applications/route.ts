@@ -1,10 +1,11 @@
-import { ActionFunction, RouterContextProvider, data } from 'react-router';
+import { data } from 'react-router';
+import { Route } from './+types/route';
 import { CreateCouponApplicationDocument } from '~/Store/mutations.generated';
 import invariant from 'tiny-invariant';
 import { apolloClientContext } from '../../../AppContexts';
 import { CartQueryDocument } from '../queries.generated';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
+export const clientAction = async ({ context, request }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     if (request.method === 'POST') {

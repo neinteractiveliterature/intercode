@@ -1,9 +1,10 @@
-import { ActionFunction, RouterContextProvider, data } from 'react-router';
+import { data } from 'react-router';
+import { Route } from './+types/cancel';
 import { apolloClientContext } from '../../AppContexts';
 import { CancelOrderDocument } from './mutations.generated';
 import invariant from 'tiny-invariant';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, params: { id }, request }) => {
+export const clientAction = async ({ context, params: { id }, request }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   invariant(id != null);
 

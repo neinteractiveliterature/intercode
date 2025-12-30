@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
-import { ActionFunction, Form, redirect, useActionData, useLoaderData, useNavigation, RouterContextProvider } from 'react-router';
+import { Form, redirect, useActionData, useLoaderData, useNavigation } from 'react-router';
+import { Route } from './+types/EditCmsPartial';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { buildPartialInputFromFormData } from './buildPartialInput';
@@ -10,7 +11,7 @@ import { singleCmsPartialAdminLoader, SingleCmsPartialAdminLoaderResult } from '
 import { UpdatePartialDocument } from './mutations.generated';
 import { apolloClientContext } from '../../AppContexts';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ params: { id }, request, context }) => {
+export const clientAction = async ({ params: { id }, request, context }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   const formData = await request.formData();
 

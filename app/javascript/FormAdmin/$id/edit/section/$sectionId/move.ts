@@ -1,11 +1,11 @@
 import { buildOptimisticArrayForMove } from '@neinteractiveliterature/litform';
 import { MoveFormSectionDocument } from '~/FormAdmin/mutations.generated';
 import { FormEditorQueryDocument } from '~/FormAdmin/queries.generated';
-import { ActionFunction, RouterContextProvider } from 'react-router';
+import { Route } from './+types/move';
 import invariant from 'tiny-invariant';
 import { apolloClientContext } from '../../../../../AppContexts';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id, sectionId } }) => {
+export const clientAction = async ({ context, request, params: { id, sectionId } }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     const formData = await request.formData();

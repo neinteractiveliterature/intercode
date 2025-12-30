@@ -1,9 +1,10 @@
-import { ActionFunction, RouterContextProvider, data } from 'react-router';
+import { data } from 'react-router';
 import { apolloClientContext } from '../AppContexts';
 import { SendNotificationPreviewDocument } from './mutations.generated';
 import { NotificationEventKey } from '~/graphqlTypes.generated';
+import { Route } from './+types/preview';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, params: { eventKey }, request }) => {
+export const clientAction = async ({ context, params: { eventKey }, request }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     const formData = await request.formData();

@@ -3,15 +3,14 @@ import { useState } from 'react';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import {
-  ActionFunction,
   Form,
   redirect,
   useActionData,
   useLoaderData,
   useNavigation,
   useSearchParams,
-  RouterContextProvider,
 } from 'react-router';
+import { Route } from './+types/EditCmsPage';
 import { buildPageInputFromFormData } from './buildPageInput';
 import CmsPageForm from './CmsPageForm';
 import usePageTitle from '../../usePageTitle';
@@ -19,7 +18,7 @@ import { singleCmsPageAdminLoader, SingleCmsPageAdminLoaderResult } from './load
 import { UpdatePageDocument } from './mutations.generated';
 import { apolloClientContext } from '../../AppContexts';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ params: { id }, request, context }) => {
+export const clientAction = async ({ params: { id }, request, context }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   const formData = await request.formData();
 

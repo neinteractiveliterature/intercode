@@ -1,4 +1,4 @@
-import { ActionFunction, Form, redirect, useLoaderData, useNavigation, RouterContextProvider } from 'react-router';
+import { Form, redirect, useLoaderData, useNavigation } from 'react-router';
 
 import usePageTitle from '../usePageTitle';
 import { buildDepartmentInputFromFormData } from './buildDepartmentInput';
@@ -8,8 +8,9 @@ import { apolloClientContext } from '~/AppContexts';
 import { UpdateDepartmentDocument } from './mutations.generated';
 import { DepartmentAdminQueryDocument } from './queries.generated';
 import { useTranslation } from 'react-i18next';
+import { Route } from './+types/EditDepartment';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, params: { id }, request }) => {
+export const clientAction = async ({ context, params: { id }, request }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     const formData = await request.formData();

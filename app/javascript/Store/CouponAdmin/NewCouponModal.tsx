@@ -9,11 +9,12 @@ import { AdminCouponFieldsFragment } from './queries.generated';
 import { CreateCouponDocument } from './mutations.generated';
 import { useTranslation } from 'react-i18next';
 import { CouponInput } from '~/graphqlTypes.generated';
-import { ActionFunction, redirect, RouterContextProvider } from 'react-router';
+import { redirect } from 'react-router';
+import { Route } from './+types/NewCouponModal';
 import { apolloClientContext } from '~/AppContexts';
 import { Link, useFetcher } from 'react-router';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
+export const clientAction = async ({ context, request }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     if (request.method === 'POST') {

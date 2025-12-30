@@ -2,7 +2,8 @@ import { buildEventInput, buildRunInput } from './InputBuilders';
 import { CreateEventDocument, CreateFillerEventDocument } from './mutations.generated';
 import { EventCategory, SchedulingUi } from '../graphqlTypes.generated';
 import { apolloClientContext } from '~/AppContexts';
-import { ActionFunction, RouterContextProvider, redirect } from 'react-router';
+import { redirect } from 'react-router';
+import { Route } from './+types/create';
 import type { ApolloClient } from '@apollo/client';
 
 export type CreateRegularEventOptions = {
@@ -89,7 +90,7 @@ async function createEvent(
   return await createRegularEvent(client, { event, signedImageBlobIds });
 }
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
+export const clientAction = async ({ context, request }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     const options = (await request.json()) as CreateEventOptions;

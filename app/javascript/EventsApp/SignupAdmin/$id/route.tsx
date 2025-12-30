@@ -1,6 +1,7 @@
 import { useCallback, useContext } from 'react';
 import classNames from 'classnames';
-import { ActionFunction, data, Link, Outlet, useSubmit, RouterContextProvider } from 'react-router';
+import { data, Link, Outlet, useSubmit } from 'react-router';
+import { Route } from './+types/route';
 import { Trans, useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
 import { DateTime } from 'luxon';
@@ -96,7 +97,7 @@ export type EditSignupProps = {
   teamMembersUrl: string;
 };
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {
+export const clientAction = async ({ context, request, params: { id } }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   const formData = await request.formData();
   const result = await client.mutate({

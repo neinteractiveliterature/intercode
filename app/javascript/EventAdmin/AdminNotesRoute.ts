@@ -1,9 +1,10 @@
-import { ActionFunction, redirect, RouterContextProvider } from 'react-router';
+import { redirect } from 'react-router';
+import { Route } from './+types/AdminNotesRoute';
 import { apolloClientContext } from '../AppContexts';
 import { UpdateEventAdminNotesDocument } from './mutations.generated';
 import { EventAdminEventsQueryDocument } from './queries.generated';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ request, params: { eventId }, context }) => {
+export const clientAction = async ({ request, params: { eventId }, context }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     const formData = await request.formData();

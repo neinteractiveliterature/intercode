@@ -1,6 +1,7 @@
 import { useState } from 'react';
 
-import { ActionFunction, Form, redirect, useActionData, useNavigation, RouterContextProvider } from 'react-router';
+import { Form, redirect, useActionData, useNavigation } from 'react-router';
+import { Route } from './+types/NewCmsPage';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { buildPageInputFromFormData } from './buildPageInput';
@@ -10,7 +11,7 @@ import { CreatePageDocument } from './mutations.generated';
 import { useCmsPagesAdminLoader } from './loaders';
 import { apolloClientContext } from '~/AppContexts';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
+export const clientAction = async ({ context, request }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   const formData = await request.formData();
 

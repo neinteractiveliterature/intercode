@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { ActionFunction, Form, redirect, useActionData, useNavigation, RouterContextProvider } from 'react-router';
+import { Form, redirect, useActionData, useNavigation } from 'react-router';
+import { Route } from './+types/NewCmsGraphqlQuery';
 
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -11,7 +12,7 @@ import { CreateCmsGraphqlQueryDocument } from './mutations.generated';
 import { apolloClientContext } from '../../AppContexts';
 import { buildCmsGraphqlQueryInputFromFormData } from './buildCmsGraphqlQueryInput';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ request, context }) => {
+export const clientAction = async ({ request, context }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   const formData = await request.formData();
 

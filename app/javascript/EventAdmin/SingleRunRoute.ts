@@ -1,8 +1,9 @@
-import { ActionFunction, RouterContextProvider, redirect } from 'react-router';
+import { redirect } from 'react-router';
+import { Route } from './+types/SingleRunRoute';
 import { apolloClientContext } from '../AppContexts';
 import { DeleteRunDocument } from './mutations.generated';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, params: { eventCategoryId, eventId, runId }, request }) => {
+export const clientAction = async ({ context, params: { eventCategoryId, eventId, runId }, request }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     if (request.method === 'DELETE') {

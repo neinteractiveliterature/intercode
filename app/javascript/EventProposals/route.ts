@@ -1,8 +1,9 @@
-import { ActionFunction, RouterContextProvider, redirect } from 'react-router';
+import { redirect } from 'react-router';
 import { apolloClientContext } from '../AppContexts';
 import { CreateEventProposalDocument } from './mutations.generated';
+import { Route } from './+types/route';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
+export const clientAction = async ({ context, request }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     if (request.method === 'POST') {

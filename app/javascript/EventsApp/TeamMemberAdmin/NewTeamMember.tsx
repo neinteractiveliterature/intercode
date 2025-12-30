@@ -1,5 +1,6 @@
 import { useId, useState } from 'react';
-import { ActionFunction, Form, redirect, useNavigation, RouterContextProvider } from 'react-router';
+import { Form, redirect, useNavigation } from 'react-router';
+import { Route } from './+types/NewTeamMember';
 import { useTranslation } from 'react-i18next';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 import capitalize from 'lodash/capitalize';
@@ -17,7 +18,7 @@ import { useTeamMembersLoader } from './loader';
 import { apolloClientContext } from '../../AppContexts';
 import { CreateTeamMemberDocument } from './mutations.generated';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ params: { eventId }, request, context }) => {
+export const clientAction = async ({ params: { eventId }, request, context }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   const formData = await request.formData();
   await client.mutate({

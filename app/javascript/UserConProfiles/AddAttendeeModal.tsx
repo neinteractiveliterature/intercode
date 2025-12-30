@@ -1,6 +1,6 @@
 import { useContext, useState } from 'react';
 import { Modal } from 'react-bootstrap4-modal';
-import { ActionFunction, RouterContextProvider, redirect, useFetcher, useNavigate } from 'react-router';
+import { redirect, useFetcher, useNavigate } from 'react-router';
 
 import { useTranslation } from 'react-i18next';
 import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
@@ -11,8 +11,9 @@ import { FormResponse } from '../FormPresenter/useFormResponse';
 import AppRootContext from '~/AppRootContext';
 import { CreateUserConProfileDocument, CreateUserConProfileMutationVariables } from './mutations.generated';
 import { apolloClientContext } from '../AppContexts';
+import { Route } from './+types/AddAttendeeModal';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
+export const clientAction = async ({ context, request }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     const variables = (await request.json()) as CreateUserConProfileMutationVariables;

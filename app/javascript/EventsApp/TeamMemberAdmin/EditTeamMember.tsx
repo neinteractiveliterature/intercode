@@ -1,5 +1,6 @@
 import { useState } from 'react';
-import { ActionFunction, Form, redirect, useLoaderData, useNavigation, RouterContextProvider } from 'react-router';
+import { Form, redirect, useLoaderData, useNavigation } from 'react-router';
+import { Route } from './+types/EditTeamMember';
 import { useTranslation } from 'react-i18next';
 import capitalize from 'lodash/capitalize';
 
@@ -13,7 +14,7 @@ import { DeleteTeamMemberDocument, UpdateTeamMemberDocument } from './mutations.
 
 export const clientLoader = singleTeamMemberLoader;
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ params: { eventId, teamMemberId }, request, context }) => {
+export const clientAction = async ({ params: { eventId, teamMemberId }, request, context }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   if (request.method === 'DELETE') {
     await client.mutate({

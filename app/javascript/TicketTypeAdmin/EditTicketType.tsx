@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react';
-import { ActionFunction, redirect, useFetcher, useLoaderData, RouterContextProvider } from 'react-router';
+import { redirect, useFetcher, useLoaderData } from 'react-router';
 
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -12,8 +12,9 @@ import { TicketTypeInput } from '~/graphqlTypes.generated';
 import { apolloClientContext } from '~/AppContexts';
 import { UpdateTicketTypeDocument } from './mutations.generated';
 import invariant from 'tiny-invariant';
+import { Route } from './+types/EditTicketType';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {
+export const clientAction = async ({ context, request, params: { id } }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   invariant(id != null);
   try {

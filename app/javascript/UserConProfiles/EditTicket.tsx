@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { ActionFunction, RouterContextProvider, redirect, useFetcher, useRouteLoaderData } from 'react-router';
+import { redirect, useFetcher, useRouteLoaderData } from 'react-router';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import TicketForm from './TicketForm';
@@ -9,13 +9,14 @@ import { TicketInput } from '../graphqlTypes.generated';
 import { NamedRoute } from '../AppRouter';
 import { apolloClientContext } from '../AppContexts';
 import { UpdateTicketDocument } from './mutations.generated';
+import { Route } from './+types/EditTicket';
 
 type ActionInput = {
   ticketId: string;
   ticketInput: TicketInput;
 };
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {
+export const clientAction = async ({ context, request, params: { id } }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     const { ticketId, ticketInput } = (await request.json()) as ActionInput;

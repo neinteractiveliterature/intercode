@@ -7,15 +7,14 @@ import { getProvidableTicketTypes } from './ProvideTicketUtils';
 import ProvidableTicketTypeSelection from './ProvidableTicketTypeSelection';
 import TicketingStatusDescription from './TicketingStatusDescription';
 import {
-  ActionFunction,
   redirect,
   useFetcher,
   useLoaderData,
   useNavigate,
   useNavigation,
   useParams,
-  RouterContextProvider,
 } from 'react-router';
+import { Route } from './+types/ProvideTicketModal';
 import { singleTeamMemberLoader, SingleTeamMemberLoaderResult } from './loader';
 import { apolloClientContext } from '../../AppContexts';
 import { ProvideEventTicketDocument } from './mutations.generated';
@@ -24,7 +23,7 @@ import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 export const clientLoader = singleTeamMemberLoader;
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ params: { eventId }, request, context }) => {
+export const clientAction = async ({ params: { eventId }, request, context }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     const formData = await request.formData();

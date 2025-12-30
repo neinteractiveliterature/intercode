@@ -1,14 +1,13 @@
 import { useState } from 'react';
 import * as React from 'react';
 import {
-  ActionFunction,
   redirect,
   useActionData,
   useLoaderData,
   useNavigation,
   useSubmit,
-  RouterContextProvider,
 } from 'react-router';
+import { Route } from './+types/EditCmsContentGroup';
 import { ErrorDisplay, notEmpty } from '@neinteractiveliterature/litform';
 
 import { buildPermissionInput } from '../../Permissions/PermissionUtils';
@@ -20,7 +19,7 @@ import { singleCmsContentGroupAdminLoader, SingleCmsContentGroupAdminLoaderResul
 import { apolloClientContext } from '../../AppContexts';
 import { UpdateContentGroupDocument, UpdateContentGroupMutationVariables } from './mutations.generated';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ params: { id }, request, context }) => {
+export const clientAction = async ({ params: { id }, request, context }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   const variables = (await request.json()) as Omit<UpdateContentGroupMutationVariables, 'id'>;
 

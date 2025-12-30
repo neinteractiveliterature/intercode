@@ -1,10 +1,11 @@
 import { CreateFormSectionDocument } from '~/FormAdmin/mutations.generated';
 import { FormEditorQueryDocument } from '~/FormAdmin/queries.generated';
-import { ActionFunction, RouterContextProvider, redirect } from 'react-router';
+import { redirect } from 'react-router';
+import { Route } from './+types/route';
 import invariant from 'tiny-invariant';
 import { apolloClientContext } from '../../../../AppContexts';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {
+export const clientAction = async ({ context, request, params: { id } }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     invariant(id != null);

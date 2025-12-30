@@ -1,13 +1,5 @@
 import { useState } from 'react';
-import {
-  ActionFunction,
-  Form,
-  redirect,
-  useActionData,
-  useLoaderData,
-  useNavigation,
-  RouterContextProvider,
-} from 'react-router';
+import { Form, redirect, useActionData, useLoaderData, useNavigation } from 'react-router';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import EventCategoryForm from './EventCategoryForm';
@@ -17,8 +9,9 @@ import { apolloClientContext } from '~/AppContexts';
 import { UpdateEventCategoryDocument } from './mutations.generated';
 import { buildEventCategoryFromFormData } from './buildEventCategoryInput';
 import { useTranslation } from 'react-i18next';
+import { Route } from './+types/EditEventCategory';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {
+export const clientAction = async ({ context, request, params: { id } }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     const formData = await request.formData();

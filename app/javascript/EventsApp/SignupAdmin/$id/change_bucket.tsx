@@ -5,13 +5,14 @@ import { useTranslation } from 'react-i18next';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { Link, useFetcher } from 'react-router';
-import { ActionFunction, data, useNavigate, RouterContextProvider } from 'react-router';
+import { data, useNavigate } from 'react-router';
+import { Route } from './+types/change_bucket';
 import { apolloClientContext } from '~/AppContexts';
 import { ChangeSignupBucketDocument } from '../mutations.generated';
 import BucketInput from '../BucketInput';
 import { useSingleSignupLoader } from '../loaders';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {
+export const clientAction = async ({ context, request, params: { id } }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     const formData = await request.formData();

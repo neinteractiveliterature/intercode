@@ -1,9 +1,10 @@
 import { OrderEntry, OrderEntryInput } from '~/graphqlTypes.generated';
-import { ActionFunction, RouterContextProvider, data } from 'react-router';
+import { data } from 'react-router';
+import { Route } from './+types/$orderEntryId';
 import { AdminDeleteOrderEntryDocument, AdminUpdateOrderEntryDocument } from '~/Store/OrderAdmin/mutations.generated';
 import { apolloClientContext } from '../../../AppContexts';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, params: { orderEntryId }, request }) => {
+export const clientAction = async ({ context, params: { orderEntryId }, request }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     if (request.method === 'DELETE') {

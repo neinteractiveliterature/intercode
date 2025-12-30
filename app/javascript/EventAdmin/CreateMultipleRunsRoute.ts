@@ -1,9 +1,10 @@
-import { ActionFunction, data, RouterContextProvider } from 'react-router';
+import { data } from 'react-router';
+import { Route } from './+types/CreateMultipleRunsRoute';
 import { RunInput } from '../graphqlTypes.generated';
 import { apolloClientContext } from '../AppContexts';
 import { CreateMultipleRunsDocument } from './mutations.generated';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ request, params: { eventId }, context }) => {
+export const clientAction = async ({ request, params: { eventId }, context }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     const requestJson = await request.json();

@@ -1,5 +1,5 @@
 import { useCallback } from 'react';
-import { ActionFunction, RouterContextProvider, redirect, useFetcher, useRouteLoaderData } from 'react-router';
+import { redirect, useFetcher, useRouteLoaderData } from 'react-router';
 
 import TicketForm from './TicketForm';
 import usePageTitle from '../usePageTitle';
@@ -9,8 +9,9 @@ import { NamedRoute } from '../AppRouter';
 import { apolloClientContext } from '../AppContexts';
 import { CreateTicketDocument, CreateTicketMutationVariables } from './mutations.generated';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
+import { Route } from './+types/NewTicket';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
+export const clientAction = async ({ context, request }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     const variables = (await request.json()) as CreateTicketMutationVariables;

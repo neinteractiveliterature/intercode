@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ActionFunction, redirect, useFetcher, RouterContextProvider } from 'react-router';
+import { redirect, useFetcher } from 'react-router';
 
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -10,8 +10,9 @@ import { StaffPositionsQueryDocument } from './queries.generated';
 import { apolloClientContext } from '~/AppContexts';
 import { StaffPositionInput } from '~/graphqlTypes.generated';
 import { CreateStaffPositionDocument } from './mutations.generated';
+import { Route } from './+types/NewStaffPosition';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
+export const clientAction = async ({ context, request }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     if (request.method === 'POST') {

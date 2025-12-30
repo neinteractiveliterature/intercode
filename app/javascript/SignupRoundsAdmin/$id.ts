@@ -1,10 +1,11 @@
-import { ActionFunction, RouterContextProvider, redirect } from 'react-router';
+import { redirect } from 'react-router';
 import { apolloClientContext } from '../AppContexts';
 import { DeleteSignupRoundDocument, UpdateSignupRoundDocument } from './mutations.generated';
 import { SignupRound } from '../graphqlTypes.generated';
 import { buildSignupRoundInputFromFormData } from './buildSignupRoundInput';
+import { Route } from './+types/$id';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {
+export const clientAction = async ({ context, request, params: { id } }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     if (request.method === 'DELETE') {

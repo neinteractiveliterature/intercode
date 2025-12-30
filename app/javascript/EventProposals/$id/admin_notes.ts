@@ -1,8 +1,8 @@
-import { ActionFunction, RouterContextProvider } from 'react-router';
 import { apolloClientContext } from '../../AppContexts';
 import { UpdateEventProposalAdminNotesDocument } from '../mutations.generated';
+import { Route } from './+types/admin_notes';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {
+export const clientAction = async ({ context, request, params: { id } }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     if (request.method === 'PATCH') {

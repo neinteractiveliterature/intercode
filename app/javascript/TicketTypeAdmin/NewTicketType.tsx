@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { ActionFunction, replace, useFetcher, useLoaderData, RouterContextProvider } from 'react-router';
+import { replace, useFetcher, useLoaderData } from 'react-router';
 
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -13,6 +13,7 @@ import { useTranslation } from 'react-i18next';
 import { Convention, TicketTypeInput } from '~/graphqlTypes.generated';
 import { apolloClientContext } from '~/AppContexts';
 import { CreateTicketTypeDocument } from './mutations.generated';
+import { Route } from './+types/NewTicketType';
 
 type ActionInput = {
   ticketType: TicketTypeInput;
@@ -20,7 +21,7 @@ type ActionInput = {
   eventId: string | null;
 };
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
+export const clientAction = async ({ context, request }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     const { ticketType, eventId, conventionId } = (await request.json()) as ActionInput;
