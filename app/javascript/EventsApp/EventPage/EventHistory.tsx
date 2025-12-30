@@ -4,14 +4,11 @@ import { useTranslation } from 'react-i18next';
 import FormResponseChangeHistory from '../../FormPresenter/ItemChangeDisplays/FormResponseChangeHistory';
 import RouteActivatedBreadcrumbItem from '../../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import BreadcrumbItem from '../../Breadcrumbs/BreadcrumbItem';
-import {
-  EventHistoryQueryData,
-  EventHistoryQueryDocument,
-  EventHistoryQueryVariables,
-} from './eventHistoryQuery.generated';
-import { LoaderFunction, useLoaderData, RouterContextProvider } from 'react-router';
+import { EventHistoryQueryData, EventHistoryQueryDocument } from './eventHistoryQuery.generated';
+import { useLoaderData } from 'react-router';
 import buildEventUrl from '../buildEventUrl';
 import { apolloClientContext } from '../../AppContexts';
+import { Route } from './+types/EventHistory';
 
 const EXCLUDE_FIELDS = new Set([
   'minimum_age',
@@ -21,9 +18,9 @@ const EXCLUDE_FIELDS = new Set([
   'team_mailing_list_name',
 ]);
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ params: { eventId }, context }) => {
+export const clientLoader = async ({ params: { eventId }, context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<EventHistoryQueryData, EventHistoryQueryVariables>({
+  const { data } = await client.query({
     query: EventHistoryQueryDocument,
     variables: { id: eventId ?? '' },
   });

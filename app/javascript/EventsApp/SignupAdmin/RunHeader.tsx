@@ -3,19 +3,16 @@ import { useTranslation } from 'react-i18next';
 
 import { timespanFromRun } from '../../TimespanUtils';
 import AppRootContext from '../../AppRootContext';
-import {
-  RunHeaderRunInfoQueryData,
-  RunHeaderRunInfoQueryDocument,
-  RunHeaderRunInfoQueryVariables,
-} from './queries.generated';
+import { RunHeaderRunInfoQueryData, RunHeaderRunInfoQueryDocument } from './queries.generated';
 import { useFormatRunTimespan } from '../runTimeFormatting';
-import { LoaderFunction, Outlet, useLoaderData, RouterContextProvider } from 'react-router';
+import { Outlet, useLoaderData } from 'react-router';
 import { apolloClientContext } from '../../AppContexts';
 import NamedRouteBreadcrumbItem from '../../Breadcrumbs/NamedRouteBreadcrumbItem';
+import { Route } from './+types/RunHeader';
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ params: { eventId, runId }, context }) => {
+export const clientLoader = async ({ params: { eventId, runId }, context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<RunHeaderRunInfoQueryData, RunHeaderRunInfoQueryVariables>({
+  const { data } = await client.query({
     query: RunHeaderRunInfoQueryDocument,
     variables: { eventId: eventId ?? '', runId: runId ?? '' },
   });

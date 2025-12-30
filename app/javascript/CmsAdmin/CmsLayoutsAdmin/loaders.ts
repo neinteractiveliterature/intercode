@@ -1,11 +1,13 @@
-import { LoaderFunction, RouterContextProvider, useRouteLoaderData } from 'react-router';
+import { useRouteLoaderData } from 'react-router';
 import { apolloClientContext } from '~/AppContexts';
 import { CmsLayoutsAdminQueryData, CmsLayoutsAdminQueryDocument } from './queries.generated';
 import { NamedRoute } from '../../AppRouter';
+import { Route as RootRoute } from './+types/route';
+import { Route as SingleRoute } from './+types/SingleLayoutRoute';
 
-export const cmsLayoutsAdminLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const cmsLayoutsAdminLoader = async ({ context }: RootRoute.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<CmsLayoutsAdminQueryData>({ query: CmsLayoutsAdminQueryDocument });
+  const { data } = await client.query({ query: CmsLayoutsAdminQueryDocument });
   return data;
 };
 
@@ -18,9 +20,9 @@ export type SingleCmsLayoutAdminLoaderResult = {
   layout: CmsLayoutsAdminQueryData['cmsParent']['cmsLayouts'][number];
 };
 
-export const singleCmsLayoutAdminLoader: LoaderFunction = async ({ params: { id }, ...args }) => {
-  const data = (await cmsLayoutsAdminLoader({ params: {}, ...args })) as CmsLayoutsAdminQueryData;
-  const layout = data.cmsParent.cmsLayouts.find((layout) => layout.id === id);
+export const singleCmsLayoutAdminLoader = async ({ params: { id }, ...args }: SingleRoute.ClientLoaderArgs) => {
+  const data = await cmsLayoutsAdminLoader({ params: {}, ...args });
+  const layout = data?.cmsParent.cmsLayouts.find((layout) => layout.id === id);
 
   if (!layout) {
     throw new Response(null, { status: 404 });

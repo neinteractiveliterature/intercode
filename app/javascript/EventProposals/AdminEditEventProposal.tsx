@@ -1,14 +1,15 @@
 import { useTranslation } from 'react-i18next';
-import { LoaderFunction, useLoaderData, useNavigate, RouterContextProvider } from 'react-router';
+import { useLoaderData, useNavigate } from 'react-router';
 import { Link } from 'react-router';
 import usePageTitle from '../usePageTitle';
 import EventProposalForm from './EventProposalForm';
-import { EventProposalQueryData, EventProposalQueryDocument, EventProposalQueryVariables } from './queries.generated';
+import { EventProposalQueryData, EventProposalQueryDocument } from './queries.generated';
 import { apolloClientContext } from '~/AppContexts';
+import { Route } from './+types/AdminEditEventProposal';
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ params: { id }, context }) => {
+export const clientLoader = async ({ params: { id }, context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<EventProposalQueryData, EventProposalQueryVariables>({
+  const { data } = await client.query({
     query: EventProposalQueryDocument,
     variables: { eventProposalId: id ?? '' },
   });

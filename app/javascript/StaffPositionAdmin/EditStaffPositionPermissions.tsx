@@ -1,11 +1,4 @@
-import {
-  ActionFunction,
-  LoaderFunction,
-  redirect,
-  useFetcher,
-  useLoaderData,
-  RouterContextProvider,
-} from 'react-router';
+import { redirect, useFetcher, useLoaderData } from 'react-router';
 import { useTabs, TabList, TabBody, notEmpty, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
@@ -22,10 +15,11 @@ import {
   UpdateStaffPositionPermissionsDocument,
   UpdateStaffPositionPermissionsMutationVariables,
 } from './mutations.generated';
+import { Route } from './+types/EditStaffPositionPermissions';
 
 type ActionInput = Omit<UpdateStaffPositionPermissionsMutationVariables, 'staffPositionId'>;
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, params: { id }, request }) => {
+export const clientAction = async ({ context, params: { id }, request }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     const { grantPermissions, revokePermissions } = (await request.json()) as ActionInput;
@@ -48,9 +42,9 @@ type LoaderResult = {
   staffPosition: StaffPositionsQueryData['convention']['staff_positions'][number];
 };
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context, params: { id } }) => {
+export const clientLoader = async ({ context, params: { id } }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<StaffPositionsQueryData>({ query: StaffPositionsQueryDocument });
+  const { data } = await client.query({ query: StaffPositionsQueryDocument });
   if (!data) {
     return new Response(null, { status: 404 });
   }

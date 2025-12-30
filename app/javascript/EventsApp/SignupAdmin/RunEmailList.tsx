@@ -5,14 +5,11 @@ import snakeCase from 'lodash/snakeCase';
 import ChoiceSetFilter from '../../Tables/ChoiceSetFilter';
 import EmailList from '../../UIComponents/EmailList';
 import usePageTitle from '../../usePageTitle';
-import {
-  RunSignupsTableSignupsQueryData,
-  RunSignupsTableSignupsQueryDocument,
-  RunSignupsTableSignupsQueryVariables,
-} from './queries.generated';
+import { RunSignupsTableSignupsQueryData, RunSignupsTableSignupsQueryDocument } from './queries.generated';
 import humanize from '../../humanize';
-import { LoaderFunction, Navigate, useLoaderData, useParams, RouterContextProvider } from 'react-router';
+import { Navigate, useLoaderData, useParams } from 'react-router';
 import { apolloClientContext } from '../../AppContexts';
+import { Route } from './+types/RunEmailList';
 
 function getEmails({ data, includes }: { data: RunSignupsTableSignupsQueryData; includes: string[] }) {
   const teamMemberUserConProfileIds = data.convention.event.team_members.map(
@@ -48,9 +45,9 @@ function getEmails({ data, includes }: { data: RunSignupsTableSignupsQueryData; 
   }));
 }
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ params: { runId, eventId }, context }) => {
+export const clientLoader = async ({ params: { runId, eventId }, context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<RunSignupsTableSignupsQueryData, RunSignupsTableSignupsQueryVariables>({
+  const { data } = await client.query({
     query: RunSignupsTableSignupsQueryDocument,
     variables: {
       eventId: eventId ?? '',

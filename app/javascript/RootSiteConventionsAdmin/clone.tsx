@@ -1,4 +1,4 @@
-import { LoaderFunction, useLoaderData, RouterContextProvider } from 'react-router';
+import { useLoaderData } from 'react-router';
 import NewConventionModal, { NewConventionModalProps } from './NewConventionModal';
 import { apolloClientContext } from '~/AppContexts';
 import {
@@ -6,13 +6,14 @@ import {
   NewConventionModalQueryData,
   NewConventionModalQueryDocument,
 } from './queries.generated';
+import { Route } from './+types/clone';
 
 type LoaderResult = {
   data: NewConventionModalQueryData;
   cloneConvention: NonNullable<NewConventionModalProps['cloneConvention']>;
 };
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context, params: { id } }) => {
+export const clientLoader = async ({ context, params: { id } }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
   const [{ data: conventionData }, { data }] = await Promise.all([
     client.query({ query: ConventionDisplayQueryDocument, variables: { id: id ?? '' } }),

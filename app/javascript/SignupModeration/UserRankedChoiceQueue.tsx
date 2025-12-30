@@ -1,19 +1,16 @@
-import { LoaderFunction, useLoaderData, RouterContextProvider } from 'react-router';
+import { useLoaderData } from 'react-router';
 import UserSignupQueue from '../EventsApp/MySignupQueue/UserSignupQueue';
 import UserConProfileSignupsCard from '../EventsApp/SignupAdmin/UserConProfileSignupsCard';
 import {
   SignupModerationAttendeeRankedChoicesQueryData,
   SignupModerationAttendeeRankedChoicesQueryDocument,
-  SignupModerationAttendeeRankedChoicesQueryVariables,
 } from './queries.generated';
 import { apolloClientContext } from '~/AppContexts';
+import { Route } from './+types/UserRankedChoiceQueue';
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ params: { userConProfileId }, context }) => {
+export const clientLoader = async ({ params: { userConProfileId }, context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<
-    SignupModerationAttendeeRankedChoicesQueryData,
-    SignupModerationAttendeeRankedChoicesQueryVariables
-  >({
+  const { data } = await client.query({
     query: SignupModerationAttendeeRankedChoicesQueryDocument,
     variables: { userConProfileId: userConProfileId ?? '' },
   });

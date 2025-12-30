@@ -3,7 +3,7 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { BootstrapFormInput, LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import { LoaderFunction, RouterContextProvider, Navigate, useLoaderData } from 'react-router';
+import { useLoaderData, Navigate } from 'react-router';
 import PasswordConfirmationInput from './PasswordConfirmationInput';
 import useAsyncFunction from '../useAsyncFunction';
 import AccountFormContent from './AccountFormContent';
@@ -14,6 +14,7 @@ import humanize from '../humanize';
 import { AuthenticityTokensContext } from '../AuthenticityTokensContext';
 import { apolloClientContext } from '~/AppContexts';
 import PasswordInputWithStrengthCheck from './PasswordInputWithStrengthCheck';
+import { Route } from './+types/EditUser';
 
 async function updateUser(
   authenticityToken: string,
@@ -58,9 +59,9 @@ async function updateUser(
   }
 }
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<EditUserQueryData>({ query: EditUserQueryDocument });
+  const { data } = await client.query({ query: EditUserQueryDocument });
   return data;
 };
 

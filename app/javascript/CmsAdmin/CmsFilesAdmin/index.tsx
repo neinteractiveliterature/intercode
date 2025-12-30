@@ -9,12 +9,13 @@ import { CmsFilesAdminQueryData, CmsFilesAdminQueryDocument } from './queries.ge
 import { useCallback } from 'react';
 import FileUploadForm from '../../BuiltInForms/FileUploadForm';
 import { Blob } from '@rails/activestorage';
-import { ActionFunction, LoaderFunction, redirect, useLoaderData, RouterContextProvider } from 'react-router';
+import { redirect, useLoaderData } from 'react-router';
 import { apolloClientContext } from '~/AppContexts';
 import { CreateCmsFileDocument, DeleteCmsFileDocument, RenameCmsFileDocument } from './mutations.generated';
 import { useSubmit } from 'react-router';
+import { Route } from './+types/index';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ request, context }) => {
+export const clientAction = async ({ request, context }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   const formData = await request.formData();
 
@@ -54,9 +55,9 @@ export const clientAction: ActionFunction<RouterContextProvider> = async ({ requ
   return redirect('/cms_files');
 };
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<CmsFilesAdminQueryData>({ query: CmsFilesAdminQueryDocument });
+  const { data } = await client.query({ query: CmsFilesAdminQueryDocument });
   return data;
 };
 

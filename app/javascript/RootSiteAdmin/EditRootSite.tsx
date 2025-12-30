@@ -7,10 +7,7 @@ import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
 import usePageTitle from '../usePageTitle';
 import { RootSiteAdminQueryData, RootSiteAdminQueryDocument } from './queries.generated';
 import {
-  ActionFunction,
   data,
-  LoaderFunction,
-  RouterContextProvider,
   useActionData,
   useLoaderData,
   useNavigation,
@@ -18,8 +15,9 @@ import {
 import { apolloClientContext } from '~/AppContexts';
 import { Form } from 'react-router';
 import { UpdateRootSiteDocument } from './mutations.generated';
+import { Route } from './+types/EditRootSite';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
+export const clientAction = async ({ context, request }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     const formData = await request.formData();
@@ -48,9 +46,9 @@ function useDirtyState<T>(initialState: T, setDirty: () => void) {
   ] as const;
 }
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<RootSiteAdminQueryData>({ query: RootSiteAdminQueryDocument });
+  const { data } = await client.query({ query: RootSiteAdminQueryDocument });
   return data;
 };
 

@@ -1,11 +1,13 @@
-import { LoaderFunction, RouterContextProvider, useRouteLoaderData } from 'react-router';
+import { useRouteLoaderData } from 'react-router';
 import { apolloClientContext } from '~/AppContexts';
 import { CmsPartialsAdminQueryData, CmsPartialsAdminQueryDocument } from './queries.generated';
 import { NamedRoute } from '../../AppRouter';
+import { Route as RootRoute } from './+types/route';
+import { Route as SingleRoute } from './+types/SinglePartialRoute';
 
-export const cmsPartialsAdminLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const cmsPartialsAdminLoader = async ({ context }: RootRoute.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<CmsPartialsAdminQueryData>({ query: CmsPartialsAdminQueryDocument });
+  const { data } = await client.query({ query: CmsPartialsAdminQueryDocument });
   return data;
 };
 
@@ -18,9 +20,9 @@ export type SingleCmsPartialAdminLoaderResult = {
   partial: CmsPartialsAdminQueryData['cmsParent']['cmsPartials'][number];
 };
 
-export const singleCmsPartialAdminLoader: LoaderFunction = async ({ params: { id }, ...args }) => {
-  const data = (await cmsPartialsAdminLoader({ params: {}, ...args })) as CmsPartialsAdminQueryData;
-  const partial = data.cmsParent.cmsPartials.find((partial) => partial.id === id);
+export const singleCmsPartialAdminLoader = async ({ params: { id }, ...args }: SingleRoute.ClientLoaderArgs) => {
+  const data = await cmsPartialsAdminLoader({ params: {}, ...args });
+  const partial = data?.cmsParent.cmsPartials.find((partial) => partial.id === id);
 
   if (!partial) {
     throw new Response(null, { status: 404 });

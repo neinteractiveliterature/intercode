@@ -5,8 +5,9 @@ import {
   SignupRoundsAdminQueryDocument,
 } from './queries.generated';
 import { useContext, useMemo } from 'react';
-import { LoaderFunction, useLoaderData, useParams, RouterContextProvider } from 'react-router';
+import { useLoaderData, useParams } from 'react-router';
 import { describeSignupRound } from './describeSignupRound';
+import { Route } from './+types/RankedChoiceSignupDecisionsPage';
 import { parseSignupRounds } from '../SignupRoundUtils';
 import { useTranslation } from 'react-i18next';
 import { describeTimespan } from '../TimespanUtils';
@@ -250,9 +251,9 @@ function RankedChoiceSignupDecisionsTable({ signupRoundId }: RankedChoiceSignupD
   );
 }
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<SignupRoundsAdminQueryData>({ query: SignupRoundsAdminQueryDocument });
+  const { data } = await client.query({ query: SignupRoundsAdminQueryDocument });
   return data;
 };
 

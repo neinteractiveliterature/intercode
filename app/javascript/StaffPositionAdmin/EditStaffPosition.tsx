@@ -1,12 +1,5 @@
 import { useState } from 'react';
-import {
-  ActionFunction,
-  LoaderFunction,
-  redirect,
-  useFetcher,
-  useLoaderData,
-  RouterContextProvider,
-} from 'react-router';
+import { redirect, useFetcher, useLoaderData } from 'react-router';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import StaffPositionForm from './StaffPositionForm';
@@ -16,8 +9,9 @@ import { StaffPositionsQueryData, StaffPositionsQueryDocument } from './queries.
 import { UpdateStaffPositionDocument } from './mutations.generated';
 import { apolloClientContext } from '~/AppContexts';
 import { StaffPositionInput } from '~/graphqlTypes.generated';
+import { Route } from './+types/EditStaffPosition';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, params: { id }, request }) => {
+export const clientAction = async ({ context, params: { id }, request }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     const staffPosition = (await request.json()) as StaffPositionInput;
@@ -35,9 +29,9 @@ type LoaderResult = {
   initialStaffPosition: StaffPositionsQueryData['convention']['staff_positions'][number];
 };
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context, params: { id } }) => {
+export const clientLoader = async ({ context, params: { id } }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<StaffPositionsQueryData>({ query: StaffPositionsQueryDocument });
+  const { data } = await client.query({ query: StaffPositionsQueryDocument });
   if (!data) {
     return new Response(null, { status: 404 });
   }

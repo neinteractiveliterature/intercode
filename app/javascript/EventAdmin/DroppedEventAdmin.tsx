@@ -2,11 +2,12 @@ import { useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import usePageTitle from '../usePageTitle';
 import { EventAdminEventsQueryData, EventAdminEventsQueryDocument } from './queries.generated';
-import { LoaderFunction, RouterContextProvider, useLoaderData } from 'react-router';
+import { useLoaderData } from 'react-router';
 import { apolloClientContext } from '~/AppContexts';
 import { useSubmit } from 'react-router';
+import { Route } from './+types/DroppedEventAdmin';
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query({ query: EventAdminEventsQueryDocument });
   return data;

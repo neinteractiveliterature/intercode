@@ -1,19 +1,18 @@
-import { LoaderFunction, RouterContextProvider, useRouteLoaderData } from 'react-router';
+import { useRouteLoaderData } from 'react-router';
 import keyBy from 'lodash/keyBy';
 
 import {
   LiquidAssignsQueryData,
   LiquidAssignsQueryDocument,
-  LiquidAssignsQueryVariables,
   NotifierLiquidAssignsQueryData,
   NotifierLiquidAssignsQueryDocument,
-  NotifierLiquidAssignsQueryVariables,
 } from './queries.generated';
 import { apolloClientContext } from '~/AppContexts';
 import { loadDocData, YardClass, YardDocs, YardMethod } from './DocData';
 import { NamedRoute } from '../AppRouter';
 import findLiquidTagName from './findLiquidTagName';
 import { NotificationEventKey } from '~/graphqlTypes.generated';
+import { Route } from './+types/route';
 
 export type LiquidDocsLoaderResultCommonFields = {
   assigns: Record<string, LiquidAssignsQueryData['cmsParent']['liquidAssigns'][number]>;
@@ -53,13 +52,13 @@ function extractCommonFields(
   return { assigns, filters, tags, sortedAssigns, sortedFilters, sortedTags, docData };
 }
 
-export const liquidDocsLoader: LoaderFunction<RouterContextProvider> = async ({ context, request }) => {
+export const liquidDocsLoader = async ({ context, request }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
   const notifierEventKey = new URL(request.url).searchParams.get('notifier_event_key');
 
   if (notifierEventKey == null) {
     const [{ data }, docData] = await Promise.all([
-      client.query<LiquidAssignsQueryData, LiquidAssignsQueryVariables>({
+      client.query({
         query: LiquidAssignsQueryDocument,
       }),
       loadDocData(),
@@ -67,7 +66,7 @@ export const liquidDocsLoader: LoaderFunction<RouterContextProvider> = async ({ 
     return { notifierEventKey, ...extractCommonFields(data, docData) } satisfies LiquidDocsLoaderResult;
   } else {
     const [{ data }, docData] = await Promise.all([
-      client.query<NotifierLiquidAssignsQueryData, NotifierLiquidAssignsQueryVariables>({
+      client.query({
         query: NotifierLiquidAssignsQueryDocument,
         variables: { eventKey: notifierEventKey as NotificationEventKey },
       }),

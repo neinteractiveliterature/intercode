@@ -1,10 +1,11 @@
-import { LoaderFunction, RouterContextProvider, redirect } from 'react-router';
+import { redirect } from 'react-router';
 import { apolloClientContext } from '~/AppContexts';
 import { EventAdminEventsQueryDocument } from './queries.generated';
 import { SiteMode } from '../graphqlTypes.generated';
 import buildEventCategoryUrl from './buildEventCategoryUrl';
+import { Route } from './+types/redirectToRoot';
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query({ query: EventAdminEventsQueryDocument });
   const convention = data?.convention;

@@ -1,11 +1,13 @@
-import { LoaderFunction, RouterContextProvider, useRouteLoaderData } from 'react-router';
+import { useRouteLoaderData } from 'react-router';
 import { apolloClientContext } from '~/AppContexts';
 import { EventCategoryAdminQueryData, EventCategoryAdminQueryDocument } from './queries.generated';
 import { NamedRoute } from '../AppRouter';
+import { Route as RootRoute } from './+types/route';
+import { Route as SingleRoute } from './+types/SingleEventCategoryRoute';
 
-export const eventCategoryAdminLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const eventCategoryAdminLoader = async ({ context }: RootRoute.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<EventCategoryAdminQueryData>({ query: EventCategoryAdminQueryDocument });
+  const { data } = await client.query({ query: EventCategoryAdminQueryDocument });
   return data;
 };
 
@@ -18,9 +20,9 @@ export type SingleEventCategoryAdminLoaderResult = {
   eventCategory: EventCategoryAdminQueryData['convention']['event_categories'][number];
 };
 
-export const singleEventCategoryAdminLoader: LoaderFunction = async ({ params: { id }, ...args }) => {
-  const data = (await eventCategoryAdminLoader({ params: {}, ...args })) as EventCategoryAdminQueryData;
-  const eventCategory = data.convention.event_categories.find((eventCategory) => eventCategory.id === id);
+export const singleEventCategoryAdminLoader = async ({ params: { id }, ...args }: SingleRoute.ClientLoaderArgs) => {
+  const data = await eventCategoryAdminLoader({ params: {}, ...args });
+  const eventCategory = data?.convention.event_categories.find((eventCategory) => eventCategory.id === id);
 
   if (!eventCategory) {
     throw new Response(null, { status: 404 });

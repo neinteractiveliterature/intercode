@@ -4,9 +4,9 @@ import {
   AdminTicketTypesQueryDocument,
   EventTicketTypesQueryData,
   EventTicketTypesQueryDocument,
-  EventTicketTypesQueryVariables,
 } from './queries.generated';
-import { LoaderFunction, RouterContextProvider } from 'react-router';
+import { Route as AdminRoute } from './+types/route';
+import { Route as AdminSingleRoute } from './+types/singleTicketTypeRoute';
 
 export type TicketTypeLoaderResult = {
   parent: AdminTicketTypesQueryData['convention'] | EventTicketTypesQueryData['convention']['event'];
@@ -15,18 +15,18 @@ export type TicketTypeLoaderResult = {
     | EventTicketTypesQueryData['convention']['event']['ticket_types'];
 };
 
-export const adminTicketTypesLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const adminTicketTypesLoader = async ({ context }: AdminRoute.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<AdminTicketTypesQueryData>({ query: AdminTicketTypesQueryDocument });
+  const { data } = await client.query({ query: AdminTicketTypesQueryDocument });
   return { parent: data?.convention, ticketTypes: data?.convention.ticket_types } as TicketTypeLoaderResult;
 };
 
-export const eventTicketTypesLoader: LoaderFunction<RouterContextProvider> = async ({
+export const eventTicketTypesLoader = async ({
   context,
   params: { eventId },
-}) => {
+}: { context: any; params: { eventId?: string } }) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<EventTicketTypesQueryData, EventTicketTypesQueryVariables>({
+  const { data } = await client.query({
     query: EventTicketTypesQueryDocument,
     variables: { id: eventId ?? '' },
   });
@@ -44,32 +44,32 @@ function getSingleTicketType(ticketTypes: TicketTypeLoaderResult['ticketTypes'],
   return ticketType;
 }
 
-export const adminSingleTicketTypeLoader: LoaderFunction = async ({
+export const adminSingleTicketTypeLoader = async ({
   context,
   request,
   params: { id },
   unstable_pattern,
-}) => {
-  const { ticketTypes } = (await adminTicketTypesLoader({
+}: AdminSingleRoute.ClientLoaderArgs) => {
+  const { ticketTypes } = await adminTicketTypesLoader({
     params: {},
     request,
     context,
     unstable_pattern,
-  })) as TicketTypeLoaderResult;
+  });
   return getSingleTicketType(ticketTypes, id ?? '');
 };
 
-export const eventSingleTicketTypeLoader: LoaderFunction = async ({
+export const eventSingleTicketTypeLoader = async ({
   context,
   request,
   params: { id, eventId },
   unstable_pattern,
-}) => {
-  const { ticketTypes } = (await eventTicketTypesLoader({
+}: { context: any; request: any; params: { id?: string; eventId?: string }; unstable_pattern?: any }) => {
+  const { ticketTypes } = await eventTicketTypesLoader({
     params: { eventId },
     request,
     context,
     unstable_pattern,
-  })) as TicketTypeLoaderResult;
+  });
   return getSingleTicketType(ticketTypes, id ?? '');
 };

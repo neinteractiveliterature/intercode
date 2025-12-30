@@ -7,7 +7,6 @@ import {
   redirect,
   useNavigate,
   useRouteError,
-  RouterContextProvider,
 } from 'react-router';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -133,7 +132,7 @@ function AuthorizationRequiredRouteGuard({ abilities }: AuthorizationRequiredRou
   return <Outlet />;
 }
 
-const eventAdminRootRedirect: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+const eventAdminRootRedirect: LoaderFunction = async ({ context }) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query({ query: EventAdminEventsQueryDocument });
   const convention = data?.convention;
@@ -206,7 +205,7 @@ const eventsRoutes: RouteObject[] = [
             loader: (async ({ params, request, context }) => {
               const client = context.get(apolloClientContext);
               return conventionDayLoader(client, { params, request });
-            }) satisfies LoaderFunction<RouterContextProvider>,
+            }) satisfies LoaderFunction,
           },
         ],
       },
@@ -1068,7 +1067,7 @@ export const appLayoutRoutes: RouteObject[] = [
   { path: '*', element: <FourOhFourPage /> },
 ];
 
-const appRootLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+const appRootLoader: LoaderFunction = async ({ context }) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query({ query: AppRootQueryDocument });
   return data;

@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { LoaderFunction, RouterContextProvider, useLoaderData, useRouteLoaderData, useSubmit } from 'react-router';
+import { useLoaderData, useRouteLoaderData, useSubmit } from 'react-router';
 
 import useEventFormWithCategorySelection, { EventFormWithCategorySelection } from './useEventFormWithCategorySelection';
 import EditEvent from '../BuiltInForms/EditEvent';
@@ -18,10 +18,11 @@ import { apolloClientContext } from '~/AppContexts';
 import { UpdateEventOptions } from './$id';
 import { ActiveStorageAttachment } from '~/graphqlTypes.generated';
 import { useAsyncFetcher } from '~/useAsyncFetcher';
+import { Route } from './+types/EventAdminEditEvent';
 
 type LoaderResult = WithFormResponse<EventAdminSingleEventQueryData['conventionByRequestHost']['event']>;
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context, params: { eventId } }) => {
+export const clientLoader = async ({ context, params: { eventId } }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query({
     query: EventAdminSingleEventQueryDocument,

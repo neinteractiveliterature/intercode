@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import { Link, LoaderFunction, useLoaderData, RouterContextProvider } from 'react-router';
+import { Link, useLoaderData } from 'react-router';
 import { useTranslation, Trans } from 'react-i18next';
 
 import UserConProfileSignupsCard from '../EventsApp/SignupAdmin/UserConProfileSignupsCard';
@@ -13,6 +13,7 @@ import AdminWarning from '../UIComponents/AdminWarning';
 import { ConventionForTimespanUtils } from '../TimespanUtils';
 import { apolloClientContext } from '../AppContexts';
 import { TypedFormItem } from '../FormAdmin/FormItemUtils';
+import { Route } from './+types/MyProfileDisplay';
 
 type LoaderResult = {
   formResponse: Record<string, unknown>;
@@ -21,9 +22,9 @@ type LoaderResult = {
   myProfile: NonNullable<MyProfileQueryData['convention']['my_profile']>;
 };
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<MyProfileQueryData>({ query: MyProfileQueryDocument });
+  const { data } = await client.query({ query: MyProfileQueryDocument });
   if (!data) {
     return new Response(null, { status: 404 });
   }

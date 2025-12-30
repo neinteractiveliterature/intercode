@@ -4,8 +4,9 @@ import usePageTitle from '../usePageTitle';
 import { OrderQuantityByStatus, OrderStatus } from '../graphqlTypes.generated';
 import { OrderSummaryQueryData, OrderSummaryQueryDocument } from './queries.generated';
 import humanize from '../humanize';
-import { LoaderFunction, useLoaderData, RouterContextProvider } from 'react-router';
+import { useLoaderData } from 'react-router';
 import { apolloClientContext } from '~/AppContexts';
+import { Route } from './+types/OrderSummary';
 
 const ORDER_STATUSES = [OrderStatus.Paid, OrderStatus.Unpaid, OrderStatus.Cancelled];
 
@@ -27,9 +28,9 @@ function statusClass(status: OrderStatus) {
   }
 }
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<OrderSummaryQueryData>({ query: OrderSummaryQueryDocument });
+  const { data } = await client.query({ query: OrderSummaryQueryDocument });
   return data;
 };
 

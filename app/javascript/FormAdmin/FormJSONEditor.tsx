@@ -1,13 +1,10 @@
 import { useCallback, useMemo, useState } from 'react';
 import {
-  ActionFunction,
   Form,
-  LoaderFunction,
   redirect,
   useActionData,
   useLoaderData,
   useNavigation,
-  RouterContextProvider,
 } from 'react-router';
 
 import {
@@ -26,6 +23,7 @@ import { FormType } from '../graphqlTypes.generated';
 import { apolloClientContext } from '../AppContexts';
 import { CreateFormWithJsonDocument, UpdateFormWithJsonDocument } from './mutations.generated';
 import invariant from 'tiny-invariant';
+import { Route } from './+types/FormJSONEditor';
 
 function parseFormData(formData: FormData) {
   const formJSON = JSON.stringify({
@@ -36,7 +34,7 @@ function parseFormData(formData: FormData) {
   return formJSON;
 }
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ request, params, context }) => {
+export const clientAction = async ({ request, params, context }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     if (request.method === 'POST') {
@@ -98,9 +96,9 @@ type LoaderResult = {
   data: FormAdminQueryData;
 };
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ params: { id }, context }) => {
+export const clientLoader = async ({ params: { id }, context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<FormAdminQueryData>({ query: FormAdminQueryDocument });
+  const { data } = await client.query({ query: FormAdminQueryDocument });
   if (!data) {
     return new Response(null, { status: 404 });
   }

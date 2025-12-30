@@ -1,17 +1,18 @@
-import { LoaderFunction, Navigate, useActionData, useLoaderData, useNavigation, useSubmit } from 'react-router';
+import { Navigate, useActionData, useLoaderData, useNavigation, useSubmit } from 'react-router';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import useOrganizationRoleForm from './useOrganizationRoleForm';
 import usePageTitle from '../usePageTitle';
 import { OrganizationAdminOrganizationsQueryData } from './queries.generated';
 import { organizationsLoader } from './loaders';
+import { Route } from './+types/EditOrganizationRole';
 
 type LoaderResult = {
   organization: OrganizationAdminOrganizationsQueryData['organizations'][number];
   initialOrganizationRole: OrganizationAdminOrganizationsQueryData['organizations'][number]['organization_roles'][number];
 };
 
-export const clientLoader: LoaderFunction = async ({ params: { id, organizationRoleId }, ...args }) => {
+export const clientLoader = async ({ params: { id, organizationRoleId }, ...args }: Route.ClientLoaderArgs) => {
   const data = (await organizationsLoader({ params: {}, ...args })) as OrganizationAdminOrganizationsQueryData;
   const organization = data.organizations.find((org) => org.id === id);
   const initialOrganizationRole = organization?.organization_roles.find((role) => role.id === organizationRoleId);

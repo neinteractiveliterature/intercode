@@ -6,14 +6,11 @@ import snakeCase from 'lodash/snakeCase';
 import { findBucket, formatSignupState } from './SignupUtils';
 import usePageTitle from '../../usePageTitle';
 import Gravatar from '../../Gravatar';
-import {
-  RunSignupSummaryQueryData,
-  RunSignupSummaryQueryDocument,
-  RunSignupSummaryQueryVariables,
-} from './queries.generated';
+import { RunSignupSummaryQueryData, RunSignupSummaryQueryDocument } from './queries.generated';
 import humanize from '../../humanize';
-import { LoaderFunction, useLoaderData, RouterContextProvider } from 'react-router';
+import { useLoaderData } from 'react-router';
 import { apolloClientContext } from '../../AppContexts';
+import { Route } from './+types/RunSignupSummary';
 
 type EventType = RunSignupSummaryQueryData['convention']['event'];
 type SignupType = EventType['run']['signups_paginated']['entries'][0];
@@ -56,9 +53,9 @@ export type RunSignupSummaryProps = {
   eventPath: string;
 };
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ params: { eventId, runId }, context }) => {
+export const clientLoader = async ({ params: { eventId, runId }, context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<RunSignupSummaryQueryData, RunSignupSummaryQueryVariables>({
+  const { data } = await client.query({
     query: RunSignupSummaryQueryDocument,
     variables: { eventId: eventId ?? '', runId: runId ?? '' },
   });

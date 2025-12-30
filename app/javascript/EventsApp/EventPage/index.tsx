@@ -9,17 +9,18 @@ import LongFormEventDetails from './LongFormEventDetails';
 import RateEventControl from '../../EventRatings/RateEventControl';
 import AppRootContext from '../../AppRootContext';
 import useRateEvent from '../../EventRatings/useRateEvent';
-import { EventPageQueryData, EventPageQueryDocument, EventPageQueryVariables } from './queries.generated';
+import { EventPageQueryData, EventPageQueryDocument } from './queries.generated';
 import useSectionizedFormItems from './useSectionizedFormItems';
 import FormItemDisplay from '../../FormPresenter/ItemDisplays/FormItemDisplay';
 import { valueIsPresent } from './valueIsPresent';
-import { LoaderFunction, useLoaderData, RouterContextProvider } from 'react-router';
+import { useLoaderData } from 'react-router';
 import buildEventUrl from '../buildEventUrl';
 import { apolloClientContext } from '../../AppContexts';
+import { Route } from './+types/index';
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ params: { eventId }, context }) => {
+export const clientLoader = async ({ params: { eventId }, context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<EventPageQueryData, EventPageQueryVariables>({
+  const { data } = await client.query({
     query: EventPageQueryDocument,
     variables: { eventId: eventId ?? '' },
   });

@@ -1,13 +1,4 @@
-import {
-  ActionFunction,
-  Navigate,
-  redirect,
-  useActionData,
-  useNavigation,
-  useRouteLoaderData,
-  useSubmit,
-  RouterContextProvider,
-} from 'react-router';
+import { Navigate, redirect, useActionData, useNavigation, useRouteLoaderData, useSubmit } from 'react-router';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import useOrganizationRoleForm from './useOrganizationRoleForm';
@@ -19,10 +10,11 @@ import invariant from 'tiny-invariant';
 import { CreateOrganizationRoleDocument, CreateOrganizationRoleMutationVariables } from './mutations.generated';
 import { apolloClientContext } from '~/AppContexts';
 import { Organization } from '~/graphqlTypes.generated';
+import { Route } from './+types/NewOrganizationRole';
 
 type ActionRequest = Omit<CreateOrganizationRoleMutationVariables, 'organizationId'>;
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ request, params: { id }, context }) => {
+export const clientAction = async ({ request, params: { id }, context }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     if (request.method === 'POST') {

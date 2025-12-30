@@ -1,13 +1,10 @@
 import {
-  LoaderFunction,
   useLoaderData,
   replace,
-  ActionFunction,
   redirect,
   useSubmit,
   useNavigation,
   useActionData,
-  RouterContextProvider,
 } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
@@ -17,8 +14,9 @@ import useLoginRequired from '../Authentication/useLoginRequired';
 import { ClickwrapAgreementQueryData, ClickwrapAgreementQueryDocument } from './queries.generated';
 import { apolloClientContext, authenticityTokensManagerContext } from '../AppContexts';
 import { AcceptClickwrapAgreementDocument } from './mutations.generated';
+import { Route } from './+types/index';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context }) => {
+export const clientAction = async ({ context }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   const manager = context.get(authenticityTokensManagerContext);
   try {
@@ -31,9 +29,9 @@ export const clientAction: ActionFunction<RouterContextProvider> = async ({ cont
   }
 };
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<ClickwrapAgreementQueryData>({ query: ClickwrapAgreementQueryDocument });
+  const { data } = await client.query({ query: ClickwrapAgreementQueryDocument });
   if (data?.convention.my_profile?.accepted_clickwrap_agreement) {
     return replace('/');
   }

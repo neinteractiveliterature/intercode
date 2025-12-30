@@ -2,11 +2,12 @@ import TabbedMailingList from './TabbedMailingList';
 import usePageTitle from '../usePageTitle';
 import { TeamMembersMailingListQueryData, TeamMembersMailingListQueryDocument } from './queries.generated';
 import { apolloClientContext } from '../AppContexts';
-import { LoaderFunction, RouterContextProvider, useLoaderData } from 'react-router';
+import { useLoaderData } from 'react-router';
+import { Route } from './+types/TeamMembers';
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<TeamMembersMailingListQueryData>({ query: TeamMembersMailingListQueryDocument });
+  const { data } = await client.query({ query: TeamMembersMailingListQueryDocument });
   return data;
 };
 

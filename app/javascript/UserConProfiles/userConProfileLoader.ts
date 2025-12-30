@@ -1,12 +1,9 @@
-import { LoaderFunction, RouterContextProvider } from 'react-router';
 import { apolloClientContext } from '~/AppContexts';
-import { UserConProfileAdminQueryData, UserConProfileAdminQueryDocument } from './queries.generated';
+import { UserConProfileAdminQueryDocument } from './queries.generated';
+import { Route } from './+types/userConProfileLoader';
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context, params: { id } }) => {
+export const clientLoader = async ({ context, params: { id } }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<UserConProfileAdminQueryData>({
-    query: UserConProfileAdminQueryDocument,
-    variables: { id },
-  });
+  const { data } = await client.query({ query: UserConProfileAdminQueryDocument, variables: { id } });
   return data;
 };

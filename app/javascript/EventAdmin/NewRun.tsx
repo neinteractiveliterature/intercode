@@ -1,11 +1,8 @@
 import { useState } from 'react';
 import {
   useNavigate,
-  LoaderFunction,
   useLoaderData,
-  ActionFunction,
   redirect,
-  RouterContextProvider,
 } from 'react-router';
 
 import EditRunModal, { EditingRun } from './EditRunModal';
@@ -14,12 +11,13 @@ import { apolloClientContext } from '~/AppContexts';
 import { CreateRunDocument } from './mutations.generated';
 import { buildRunInputFromFormData } from './buildRunInputFromFormData';
 import { Event } from '../graphqlTypes.generated';
+import { Route } from './+types/NewRun';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({
+export const clientAction = async ({
   params: { eventCategoryId, eventId },
   request,
   context,
-}) => {
+}: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     const formData = await request.formData();
@@ -56,9 +54,9 @@ type LoaderResult = {
   convention: EventAdminEventsQueryData['convention'];
 };
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ params: { eventId }, context }) => {
+export const clientLoader = async ({ params: { eventId }, context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<EventAdminEventsQueryData>({ query: EventAdminEventsQueryDocument });
+  const { data } = await client.query({ query: EventAdminEventsQueryDocument });
   const convention = data?.convention;
   const events = convention?.events;
   const event = events?.find((e) => e.id.toString() === eventId);

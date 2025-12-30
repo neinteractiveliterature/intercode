@@ -1,5 +1,5 @@
 import { useCallback, useState } from 'react';
-import { LoaderFunction, useFetcher, useLoaderData, useNavigate, RouterContextProvider } from 'react-router';
+import { useFetcher, useLoaderData, useNavigate } from 'react-router';
 
 import { useModal, useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 import { CartQueryData, CartQueryDocument } from './queries.generated';
@@ -8,14 +8,15 @@ import usePageTitle from '~/usePageTitle';
 import useLoginRequired from '~/Authentication/useLoginRequired';
 import CartContents from './CartContents';
 import OrderPaymentModal from '~/Store/OrderPaymentModal';
+import { Route } from './+types/index';
 
 type OrderEntryType = NonNullable<
   NonNullable<CartQueryData['convention']['my_profile']>['current_pending_order']
 >['order_entries'][0];
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<CartQueryData>({ query: CartQueryDocument });
+  const { data } = await client.query({ query: CartQueryDocument });
   return data;
 };
 

@@ -5,10 +5,11 @@ import AddVariableRow, { AddingVariable } from './AddVariableRow';
 import ExistingVariableRow from './ExistingVariableRow';
 import usePageTitle from '../../usePageTitle';
 import { CmsVariablesQueryData, CmsVariablesQueryDocument } from './queries.generated';
-import { LoaderFunction, useLoaderData, RouterContextProvider } from 'react-router';
+import { useLoaderData } from 'react-router';
 import { apolloClientContext } from '~/AppContexts';
+import { Route } from './+types/index';
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query({ query: CmsVariablesQueryDocument });
   return data;

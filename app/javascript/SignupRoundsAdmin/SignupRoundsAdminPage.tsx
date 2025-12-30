@@ -8,12 +8,13 @@ import usePageTitle from '../usePageTitle';
 import MaximumEventSignupsPreview from './MaximumEventSignupsPreview';
 import SignupRoundScheduleTable from './SignupRoundScheduleTable';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
-import { LoaderFunction, useLoaderData, RouterContextProvider } from 'react-router';
+import { useLoaderData } from 'react-router';
 import { apolloClientContext } from '~/AppContexts';
+import { Route } from './+types/SignupRoundsAdminPage';
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<SignupRoundsAdminQueryData>({ query: SignupRoundsAdminQueryDocument });
+  const { data } = await client.query({ query: SignupRoundsAdminQueryDocument });
   return data;
 };
 

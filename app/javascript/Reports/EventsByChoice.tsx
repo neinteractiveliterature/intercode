@@ -10,8 +10,9 @@ import { titleSort } from '@neinteractiveliterature/litform';
 
 import usePageTitle from '../usePageTitle';
 import { EventsByChoiceQueryData, EventsByChoiceQueryDocument } from './queries.generated';
-import { LoaderFunction, useLoaderData, RouterContextProvider } from 'react-router';
+import { useLoaderData } from 'react-router';
 import { apolloClientContext } from '~/AppContexts';
+import { Route } from './+types/EventsByChoice';
 
 type ProcessedChoiceCount = {
   confirmed?: number;
@@ -36,9 +37,9 @@ function renderChoiceCounts(choiceData: ProcessedChoiceCount) {
   );
 }
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<EventsByChoiceQueryData>({ query: EventsByChoiceQueryDocument });
+  const { data } = await client.query({ query: EventsByChoiceQueryDocument });
   return data;
 };
 

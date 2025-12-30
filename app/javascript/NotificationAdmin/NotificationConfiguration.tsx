@@ -1,14 +1,5 @@
 import { useState, useEffect } from 'react';
-import {
-  ActionFunction,
-  Form,
-  LoaderFunction,
-  redirect,
-  useActionData,
-  useLoaderData,
-  useNavigation,
-  RouterContextProvider,
-} from 'react-router';
+import { Form, redirect, useActionData, useLoaderData, useNavigation } from 'react-router';
 import { ErrorDisplay, usePropertySetters } from '@neinteractiveliterature/litform';
 
 import LiquidInput from '../BuiltInFormControls/LiquidInput';
@@ -20,8 +11,9 @@ import NotificationDestinationsConfig from './NotificationDestinationsConfig';
 import { useTranslation } from 'react-i18next';
 import { useChangeSet } from '~/ChangeSet';
 import { NotificationDestinationInput, NotificationEventKey } from '~/graphqlTypes.generated';
+import { Route } from './+types/NotificationConfiguration';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, params: { eventKey }, request }) => {
+export const clientAction = async ({ context, params: { eventKey }, request }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     const formData = await request.formData();
@@ -68,7 +60,7 @@ type LoaderResult = {
   eventCategories: NotificationAdminQueryData['convention']['event_categories'];
 };
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context, params }) => {
+export const clientLoader = async ({ context, params }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
   const { eventKey } = params;
   const { data } = await client.query({ query: NotificationAdminQueryDocument });
@@ -114,7 +106,9 @@ function NotificationConfigurationForm() {
   );
 
   // if the page changes and we're still mounted
-  useEffect(() => setNotificationTemplate(initialNotificationTemplate), [initialNotificationTemplate]);
+  useEffect(() => {
+    setNotificationTemplate(initialNotificationTemplate);
+  }, [initialNotificationTemplate]);
 
   return (
     <Form method="PATCH">

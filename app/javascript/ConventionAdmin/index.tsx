@@ -1,9 +1,6 @@
 import { useMemo } from 'react';
 
 import {
-  ActionFunction,
-  LoaderFunction,
-  RouterContextProvider,
   redirect,
   useActionData,
   useLoaderData,
@@ -20,8 +17,9 @@ import { ConventionAdminConventionQueryData, ConventionAdminConventionQueryDocum
 import { ConventionInput } from '../graphqlTypes.generated';
 import { apolloClientContext } from '~/AppContexts';
 import { UpdateConventionDocument } from './mutations.generated';
+import { Route } from './+types/index';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
+export const clientAction = async ({ context, request }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     const formData = await request.formData();
@@ -79,9 +77,9 @@ export const clientAction: ActionFunction<RouterContextProvider> = async ({ cont
   return redirect('/');
 };
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<ConventionAdminConventionQueryData>({
+  const { data } = await client.query({
     query: ConventionAdminConventionQueryDocument,
   });
   return data;

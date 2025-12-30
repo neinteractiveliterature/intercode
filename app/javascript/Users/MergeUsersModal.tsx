@@ -9,21 +9,11 @@ import { ChoiceSet, ErrorDisplay } from '@neinteractiveliterature/litform';
 import { MergeUsersModalQueryData, MergeUsersModalQueryDocument } from './queries.generated';
 import humanize from '../humanize';
 import { Trans, useTranslation } from 'react-i18next';
-import {
-  ActionFunction,
-  LoaderFunction,
-  redirect,
-  useActionData,
-  useLoaderData,
-  useNavigate,
-  useNavigation,
-  RouterContextProvider,
-} from 'react-router';
+import { redirect, useActionData, useLoaderData, useNavigate, useNavigation, useSubmit } from 'react-router';
 import { apolloClientContext } from '~/AppContexts';
 import { MergeUsersDocument } from './mutations.generated';
 import { i18n } from '../setupI18Next';
-
-import { useSubmit } from 'react-router';
+import { Route } from './+types/MergeUsersModal';
 
 type UserType = MergeUsersModalQueryData['users'][0];
 type UserConProfileType = UserType['user_con_profiles'][0];
@@ -35,7 +25,7 @@ type ActionArgs = {
   winningProfileIds: Record<string, string>;
 };
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ request, context }) => {
+export const clientAction = async ({ request, context }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   const { userIds, winningUserId, winningProfileIds } = (await request.json()) as ActionArgs;
   if (!userIds) {
@@ -66,7 +56,7 @@ export const clientAction: ActionFunction<RouterContextProvider> = async ({ requ
   return redirect('..');
 };
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ params: { ids }, context }) => {
+export const clientLoader = async ({ params: { ids }, context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query({
     query: MergeUsersModalQueryDocument,

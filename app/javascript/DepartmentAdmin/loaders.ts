@@ -1,11 +1,13 @@
-import { LoaderFunction, RouterContextProvider, useRouteLoaderData } from 'react-router';
+import { useRouteLoaderData } from 'react-router';
 import { apolloClientContext } from '~/AppContexts';
 import { DepartmentAdminQueryData, DepartmentAdminQueryDocument } from './queries.generated';
 import { NamedRoute } from '../AppRouter';
+import { Route as RootRoute } from './+types/route';
+import { Route as SingleRoute } from './+types/SingleDepartmentRoute';
 
-export const departmentAdminLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const departmentAdminLoader = async ({ context }: RootRoute.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<DepartmentAdminQueryData>({ query: DepartmentAdminQueryDocument });
+  const { data } = await client.query({ query: DepartmentAdminQueryDocument });
   return data;
 };
 
@@ -18,9 +20,9 @@ export type SingleDepartmentAdminLoaderResult = {
   department: DepartmentAdminQueryData['convention']['departments'][number];
 };
 
-export const singleDepartmentAdminLoader: LoaderFunction = async ({ params: { id }, ...args }) => {
-  const data = (await departmentAdminLoader({ params: {}, ...args })) as DepartmentAdminQueryData;
-  const department = data.convention.departments.find((department) => department.id === id);
+export const singleDepartmentAdminLoader = async ({ params: { id }, ...args }: SingleRoute.ClientLoaderArgs) => {
+  const data = await departmentAdminLoader({ params: {}, ...args });
+  const department = data?.convention.departments.find((department) => department.id === id);
 
   if (!department) {
     throw new Response(null, { status: 404 });

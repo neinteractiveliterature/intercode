@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react';
-import { ActionFunction, Link, LoaderFunction, SubmitTarget, useFetcher, useLoaderData, useMatch, RouterContextProvider } from 'react-router';
+import { Link, SubmitTarget, useFetcher, useLoaderData, useMatch } from 'react-router';
 import md5 from 'md5';
 import { useTranslation, Trans } from 'react-i18next';
 import { BooleanInput, LoadingIndicator } from '@neinteractiveliterature/litform';
@@ -19,8 +19,9 @@ import { parseResponseErrors } from '../parseResponseErrors';
 import { apolloClientContext } from '../AppContexts';
 import { UpdateUserConProfileDocument } from '../UserConProfiles/mutations.generated';
 import { AuthenticityTokensContext } from '~/AuthenticityTokensContext';
+import { Route } from './+types/MyProfileForm';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ request, context }) => {
+export const clientAction = async ({ request, context }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   const profile = (await request.json()) as LoaderResult['initialUserConProfile'];
 
@@ -53,9 +54,9 @@ type LoaderResult = {
   form: CommonFormFieldsFragment;
 };
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<MyProfileQueryData>({ query: MyProfileQueryDocument });
+  const { data } = await client.query({ query: MyProfileQueryDocument });
   if (!data) {
     return new Response(null, { status: 404 });
   }

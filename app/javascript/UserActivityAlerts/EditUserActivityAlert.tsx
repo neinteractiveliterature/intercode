@@ -1,13 +1,5 @@
 import { useState, useMemo } from 'react';
-import {
-  ActionFunction,
-  LoaderFunction,
-  redirect,
-  replace,
-  useFetcher,
-  useLoaderData,
-  RouterContextProvider,
-} from 'react-router';
+import { redirect, replace, useFetcher, useLoaderData } from 'react-router';
 
 import { useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -24,8 +16,9 @@ import {
 import { apolloClientContext } from '~/AppContexts';
 import invariant from 'tiny-invariant';
 import { NotificationEventKey, UserActivityAlert } from '~/graphqlTypes.generated';
+import { Route } from './+types/EditUserActivityAlert';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {
+export const clientAction = async ({ context, request, params: { id } }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   invariant(id != null);
   try {
@@ -62,7 +55,7 @@ type LoaderResult = {
   userActivityAlertEvent: UserActivityAlertsAdminQueryData['notificationEvents'][number];
 };
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context, params: { id } }) => {
+export const clientLoader = async ({ context, params: { id } }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query({ query: UserActivityAlertsAdminQueryDocument });
 

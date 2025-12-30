@@ -3,16 +3,17 @@ import Timespan, { FiniteTimespan } from '../Timespan';
 import WhosFreeForm from './WhosFreeForm';
 import usePageTitle from '../usePageTitle';
 import { WhosFreeQueryData, WhosFreeQueryDocument } from './queries.generated';
-import { LoaderFunction, RouterContextProvider, useLoaderData } from 'react-router';
+import { useLoaderData } from 'react-router';
 import { apolloClientContext } from '~/AppContexts';
 import { useSearchParams } from 'react-router';
+import { Route } from './+types/WhosFree';
 
 type LoaderResult = {
   timespan?: FiniteTimespan;
   data?: WhosFreeQueryData;
 };
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context, request }) => {
+export const clientLoader = async ({ context, request }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
   const url = new URL(request.url);
   const start = url.searchParams.get('start');

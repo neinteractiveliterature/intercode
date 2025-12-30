@@ -1,5 +1,5 @@
 import { Fragment, useContext, useMemo, useState } from 'react';
-import { Link, LoaderFunction, useFetcher, useLoaderData, RouterContextProvider } from 'react-router';
+import { Link, useFetcher, useLoaderData } from 'react-router';
 import groupBy from 'lodash/groupBy';
 import flatMap from 'lodash/flatMap';
 import { assertNever } from 'assert-never';
@@ -15,6 +15,7 @@ import { DropdownMenu } from '../UIComponents/DropdownMenu';
 import { StaffPositionsQueryData, StaffPositionsQueryDocument } from './queries.generated';
 import { PolymorphicPermission } from '../Permissions/PermissionUtils';
 import { apolloClientContext } from '~/AppContexts';
+import { Route } from './+types/StaffPositionsTable';
 
 type UserConProfilesListProps = {
   userConProfiles: StaffPositionsQueryData['convention']['staff_positions'][0]['user_con_profiles'];
@@ -148,9 +149,9 @@ function PermissionsDescription({ permissions }: PermissionsDescriptionProps) {
   );
 }
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<StaffPositionsQueryData>({ query: StaffPositionsQueryDocument });
+  const { data } = await client.query({ query: StaffPositionsQueryDocument });
   return data;
 };
 
