@@ -1,16 +1,24 @@
 Rails.application.config.middleware.insert_before 0, Rack::Cors do
   allow do
     origins do |source, env|
-      return true if env["intercode.convention"]
+      if env["intercode.convention"]
+        true
+      else
+        source_uri =
+          begin
+            URI.parse(source)
+          rescue StandardError
+            nil
+          end
 
-      # Check if the origin's host matches INTERCODE_HOST
-      source_uri =
-        begin
-          URI.parse(source)
-        rescue StandardError
-          nil
+        host = source_uri&.host
+        if host == ENV["INTERCODE_HOST"]
+          true
+        else
+          # this might be a request to a backend-only domain where the browser is on a frontend page
+          Convention.find_by(domain: host).present?
         end
-      source_uri&.host == ENV["INTERCODE_HOST"]
+      end
     end
 
     resource "/authenticity_tokens", methods: %i[get], credentials: true, headers: :any

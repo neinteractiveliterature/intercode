@@ -1916,7 +1916,7 @@ CREATE TABLE public.oauth_applications (
     name character varying NOT NULL,
     uid character varying NOT NULL,
     secret character varying NOT NULL,
-    redirect_uri text NOT NULL,
+    redirect_uri text,
     scopes character varying DEFAULT ''::character varying NOT NULL,
     confidential boolean DEFAULT true NOT NULL,
     created_at timestamp without time zone NOT NULL,
@@ -6143,6 +6143,7 @@ ALTER TABLE ONLY public.cms_files_pages
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20251229184620'),
 ('20251228041527'),
 ('20251210230514'),
 ('20251109200750'),
