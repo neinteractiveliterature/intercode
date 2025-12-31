@@ -20,7 +20,7 @@ body_text: |-
   GMs: {{ signup.run.event.team_member_user_con_profiles | map: "name_without_nickname" | join: ", " }}
   Email: {{ signup.run.event.email }}
 
-  If you can't make it after all, please withdraw so that others can have a chance to get in.  You can withdraw via the event page: {{ signup.run.event.url | absolute_url }}
+  If you can't make it after all, please withdraw so that others can have a chance to get in.  You can do so via the event page: {{ signup.run.event.url | absolute_url }}
   {%- endif %}
 body_sms: |-
   {%- assign run = signup.run -%}
@@ -35,7 +35,7 @@ body_sms: |-
   GMs: {{ signup.run.event.team_member_user_con_profiles | map: "name_without_nickname" | join: ", " }}
   Email: {{ signup.run.event.email }}
 
-  If you can't make it after all, please withdraw so that others can have a chance to get in.  You can withdraw via the event page: {{ signup.run.event.url | absolute_url }}
+  If you can't make it after all, please withdraw so that others can have a chance to get in.  You can do so via the event page: {{ signup.run.event.url | absolute_url }}
   {%- endif %}
 ---
 {% assign run = signup.run %}
@@ -60,5 +60,5 @@ body_sms: |-
   Email: <a href="mailto:{{ signup.run.event.email }}">{{ signup.run.event.email }}</a>
 </p>
 
-<p>If you can't make it after all, please withdraw so that others can have a chance to get in.  You can <a href="{{ signup.run.event.url | absolute_url }}">withdraw via the event page</a>.</p>
+<p>If you can't make it after all, please withdraw so that others can have a chance to get in.  You can do so on <a href="{{ signup.run.event.url | absolute_url }}">the event page</a>.</p>
 {%- endif %}
