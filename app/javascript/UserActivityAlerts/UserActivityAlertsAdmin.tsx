@@ -43,4 +43,4 @@ function UserActivityAlertsAdmin(): React.JSX.Element {
   );
 }
 
-export const Component = UserActivityAlertsAdmin;
+export default UserActivityAlertsAdmin;

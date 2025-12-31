@@ -295,4 +295,4 @@ function ScheduleApp(): React.JSX.Element {
   );
 }
 
-export const Component = ScheduleApp;
+export default ScheduleApp;

@@ -129,4 +129,4 @@ function UserActivityAlertsList() {
   );
 }
 
-export const Component = UserActivityAlertsList;
+export default UserActivityAlertsList;

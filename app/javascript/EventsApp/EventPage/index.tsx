@@ -102,4 +102,4 @@ function EventPage(): React.JSX.Element {
   );
 }
 
-export const Component = EventPage;
+export default EventPage;

@@ -5,10 +5,7 @@ import { AuthenticityTokensContext } from '../AuthenticityTokensContext';
 import PermissionsPrompt from './PermissionsPrompt';
 import AuthenticationModalContext from '../Authentication/AuthenticationModalContext';
 import usePageTitle from '../usePageTitle';
-import {
-  OAuthAuthorizationPromptQueryData,
-  OAuthAuthorizationPromptQueryDocument,
-} from './queries.generated';
+import { OAuthAuthorizationPromptQueryData, OAuthAuthorizationPromptQueryDocument } from './queries.generated';
 import { apolloClientContext } from '~/AppContexts';
 import { Route } from './+types/AuthorizationPrompt';
 
@@ -157,4 +154,4 @@ function AuthorizationPrompt() {
   );
 }
 
-export const Component = AuthorizationPrompt;
+export default AuthorizationPrompt;

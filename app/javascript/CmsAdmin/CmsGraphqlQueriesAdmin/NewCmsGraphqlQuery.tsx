@@ -55,4 +55,4 @@ function NewCmsGraphqlQuery(): React.JSX.Element {
   );
 }
 
-export const Component = NewCmsGraphqlQuery;
+export default NewCmsGraphqlQuery;

@@ -1,10 +1,5 @@
 import { useMemo } from 'react';
-import {
-  Link,
-  redirect,
-  useLoaderData,
-  useSubmit,
-} from 'react-router';
+import { Link, redirect, useLoaderData, useSubmit } from 'react-router';
 import { useModal, useConfirm, ErrorDisplay, sortByLocaleString } from '@neinteractiveliterature/litform';
 
 import usePageTitle from '../usePageTitle';
@@ -121,4 +116,4 @@ function FormAdminIndex() {
   );
 }
 
-export const Component = FormAdminIndex;
+export default FormAdminIndex;

@@ -68,4 +68,4 @@ function EditEventCategoryForm() {
   );
 }
 
-export const Component = EditEventCategoryForm;
+export default EditEventCategoryForm;

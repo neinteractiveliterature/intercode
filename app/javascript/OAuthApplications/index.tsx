@@ -20,4 +20,4 @@ function OAuthApplications(): React.JSX.Element {
   );
 }
 
-export const Component = OAuthApplications;
+export default OAuthApplications;

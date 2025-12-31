@@ -68,4 +68,4 @@ function NewCouponModal(): React.JSX.Element {
   );
 }
 
-export const Component = NewCouponModal;
+export default NewCouponModal;

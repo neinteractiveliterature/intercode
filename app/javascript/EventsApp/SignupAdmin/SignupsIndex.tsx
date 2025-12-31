@@ -23,4 +23,4 @@ function SignupsIndex(): React.JSX.Element {
   );
 }
 
-export const Component = SignupsIndex;
+export default SignupsIndex;

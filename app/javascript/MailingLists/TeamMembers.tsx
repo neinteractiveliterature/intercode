@@ -28,4 +28,4 @@ function TeamMembers() {
   );
 }
 
-export const Component = TeamMembers;
+export default TeamMembers;

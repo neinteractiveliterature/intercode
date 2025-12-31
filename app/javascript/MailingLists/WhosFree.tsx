@@ -64,4 +64,4 @@ function WhosFree(): React.JSX.Element {
   );
 }
 
-export const Component = WhosFree;
+export default WhosFree;

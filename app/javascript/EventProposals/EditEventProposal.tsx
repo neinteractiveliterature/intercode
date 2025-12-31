@@ -1,10 +1,4 @@
-import {
-  Navigate,
-  useNavigate,
-  Link,
-  useLoaderData,
-  useSubmit,
-} from 'react-router';
+import { Navigate, useNavigate, Link, useLoaderData, useSubmit } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { ErrorDisplay, useConfirm } from '@neinteractiveliterature/litform';
 
@@ -89,4 +83,4 @@ function EditEventProposal() {
   );
 }
 
-export const Component = EditEventProposal;
+export default EditEventProposal;

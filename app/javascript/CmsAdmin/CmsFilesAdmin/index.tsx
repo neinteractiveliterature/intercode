@@ -139,4 +139,4 @@ function CmsFilesAdmin(): React.JSX.Element {
   );
 }
 
-export const Component = CmsFilesAdmin;
+export default CmsFilesAdmin;

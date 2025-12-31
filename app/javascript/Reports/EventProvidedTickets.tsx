@@ -114,4 +114,4 @@ function EventProvidedTickets() {
   );
 }
 
-export const Component = EventProvidedTickets;
+export default EventProvidedTickets;

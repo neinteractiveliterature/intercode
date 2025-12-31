@@ -28,4 +28,4 @@ function EventProposers() {
   );
 }
 
-export const Component = EventProposers;
+export default EventProposers;

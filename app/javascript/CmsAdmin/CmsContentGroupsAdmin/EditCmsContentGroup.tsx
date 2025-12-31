@@ -1,12 +1,6 @@
 import { useState } from 'react';
 import * as React from 'react';
-import {
-  redirect,
-  useActionData,
-  useLoaderData,
-  useNavigation,
-  useSubmit,
-} from 'react-router';
+import { redirect, useActionData, useLoaderData, useNavigation, useSubmit } from 'react-router';
 import { Route } from './+types/EditCmsContentGroup';
 import { ErrorDisplay, notEmpty } from '@neinteractiveliterature/litform';
 
@@ -105,4 +99,4 @@ function EditCmsContentGroupForm() {
   );
 }
 
-export const Component = EditCmsContentGroupForm;
+export default EditCmsContentGroupForm;

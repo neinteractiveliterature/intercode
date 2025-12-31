@@ -28,7 +28,7 @@ import EnumTypes from '../../enumTypes.json';
 import AppRootContext from '../../AppRootContext';
 import { NamedRoute } from '../../AppRouter';
 import { useGraphQLConfirm } from '@neinteractiveliterature/litform';
-import { useApolloClient } from "@apollo/client/react";
+import { useApolloClient } from '@apollo/client/react';
 import { FreezeBucketAssignmentsDocument } from './mutations.generated';
 import SignupStateCell from '../../Tables/SignupStateCell';
 
@@ -256,4 +256,4 @@ function RunSignupsTable(): React.JSX.Element {
   );
 }
 
-export const Component = RunSignupsTable;
+export default RunSignupsTable;

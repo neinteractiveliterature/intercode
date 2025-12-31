@@ -88,4 +88,4 @@ function NewTicket() {
   );
 }
 
-export const Component = NewTicket;
+export default NewTicket;

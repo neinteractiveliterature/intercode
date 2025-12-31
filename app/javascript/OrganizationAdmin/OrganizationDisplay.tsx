@@ -100,4 +100,4 @@ function OrganizationDisplay() {
   );
 }
 
-export const Component = OrganizationDisplay;
+export default OrganizationDisplay;

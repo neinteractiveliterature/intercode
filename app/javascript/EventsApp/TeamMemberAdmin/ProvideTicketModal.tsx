@@ -6,14 +6,7 @@ import capitalize from 'lodash/capitalize';
 import { getProvidableTicketTypes } from './ProvideTicketUtils';
 import ProvidableTicketTypeSelection from './ProvidableTicketTypeSelection';
 import TicketingStatusDescription from './TicketingStatusDescription';
-import {
-  redirect,
-  useFetcher,
-  useLoaderData,
-  useNavigate,
-  useNavigation,
-  useParams,
-} from 'react-router';
+import { redirect, useFetcher, useLoaderData, useNavigate, useNavigation, useParams } from 'react-router';
 import { Route } from './+types/ProvideTicketModal';
 import { singleTeamMemberLoader, SingleTeamMemberLoaderResult } from './loader';
 import { apolloClientContext } from '../../AppContexts';
@@ -113,4 +106,4 @@ function ProvideTicketModal(): React.JSX.Element {
   );
 }
 
-export const Component = ProvideTicketModal;
+export default ProvideTicketModal;

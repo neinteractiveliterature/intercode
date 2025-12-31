@@ -80,4 +80,4 @@ function RunHeader(): React.JSX.Element {
   );
 }
 
-export const Component = RunHeader;
+export default RunHeader;

@@ -100,4 +100,4 @@ function NewTicketType() {
   );
 }
 
-export const Component = NewTicketType;
+export default NewTicketType;

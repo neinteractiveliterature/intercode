@@ -237,4 +237,4 @@ function EventTable() {
   );
 }
 
-export const Component = EventTable;
+export default EventTable;

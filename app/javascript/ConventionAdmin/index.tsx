@@ -1,11 +1,6 @@
 import { useMemo } from 'react';
 
-import {
-  redirect,
-  useActionData,
-  useLoaderData,
-  useSubmit,
-} from 'react-router';
+import { redirect, useActionData, useLoaderData, useSubmit } from 'react-router';
 import pick from 'lodash/pick';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -136,4 +131,4 @@ function ConventionAdmin() {
   );
 }
 
-export const Component = ConventionAdmin;
+export default ConventionAdmin;

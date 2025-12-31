@@ -43,4 +43,4 @@ function CategorySpecificEventAdmin() {
   );
 }
 
-export const Component = CategorySpecificEventAdmin;
+export default CategorySpecificEventAdmin;

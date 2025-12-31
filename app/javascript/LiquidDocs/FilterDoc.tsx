@@ -42,4 +42,4 @@ function FilterDoc(): React.JSX.Element {
   );
 }
 
-export const Component = FilterDoc;
+export default FilterDoc;

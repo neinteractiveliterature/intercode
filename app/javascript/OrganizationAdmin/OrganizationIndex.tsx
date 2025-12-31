@@ -65,4 +65,4 @@ function OrganizationIndex() {
   );
 }
 
-export const Component = OrganizationIndex;
+export default OrganizationIndex;

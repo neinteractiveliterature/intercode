@@ -106,4 +106,4 @@ function EditCouponModal(): React.JSX.Element {
   );
 }
 
-export const Component = EditCouponModal;
+export default EditCouponModal;

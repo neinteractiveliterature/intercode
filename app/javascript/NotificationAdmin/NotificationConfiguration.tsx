@@ -200,4 +200,4 @@ function NotificationConfigurationForm() {
   );
 }
 
-export const Component = NotificationConfigurationForm;
+export default NotificationConfigurationForm;

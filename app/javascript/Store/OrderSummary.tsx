@@ -128,4 +128,4 @@ function OrderSummary() {
   );
 }
 
-export const Component = OrderSummary;
+export default OrderSummary;

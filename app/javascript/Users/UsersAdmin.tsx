@@ -26,4 +26,4 @@ function UsersAdmin(): React.JSX.Element {
   );
 }
 
-export const Component = UsersAdmin;
+export default UsersAdmin;

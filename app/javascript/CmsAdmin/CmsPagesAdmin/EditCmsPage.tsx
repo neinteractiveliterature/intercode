@@ -2,14 +2,7 @@ import { useState } from 'react';
 
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import {
-  Form,
-  redirect,
-  useActionData,
-  useLoaderData,
-  useNavigation,
-  useSearchParams,
-} from 'react-router';
+import { Form, redirect, useActionData, useLoaderData, useNavigation, useSearchParams } from 'react-router';
 import { Route } from './+types/EditCmsPage';
 import { buildPageInputFromFormData } from './buildPageInput';
 import CmsPageForm from './CmsPageForm';
@@ -71,4 +64,4 @@ function EditCmsPageForm() {
   );
 }
 
-export const Component = EditCmsPageForm;
+export default EditCmsPageForm;

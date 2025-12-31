@@ -60,4 +60,4 @@ function EditCmsPartialForm() {
   );
 }
 
-export const Component = EditCmsPartialForm;
+export default EditCmsPartialForm;

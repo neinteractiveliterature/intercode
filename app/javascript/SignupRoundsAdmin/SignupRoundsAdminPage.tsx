@@ -57,4 +57,4 @@ function SignupRoundsAdminPage() {
   );
 }
 
-export const Component = SignupRoundsAdminPage;
+export default SignupRoundsAdminPage;

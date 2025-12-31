@@ -11,4 +11,4 @@ function ViewCmsPartialSource() {
   return <CmsPartialForm partial={partial} readOnly />;
 }
 
-export const Component = ViewCmsPartialSource;
+export default ViewCmsPartialSource;

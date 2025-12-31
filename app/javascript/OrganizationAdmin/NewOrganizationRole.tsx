@@ -98,4 +98,4 @@ function NewOrganizationRole() {
   );
 }
 
-export const Component = NewOrganizationRole;
+export default NewOrganizationRole;

@@ -26,11 +26,7 @@ import { FormItem } from '~/graphqlTypes.generated';
 import FormItemEditorContent from './FormItemEditorContent';
 import styles from '~/styles/form_editor.module.scss';
 
-export const clientAction = async ({
-  context,
-  request,
-  params: { id, sectionId, itemId },
-}: Route.ClientActionArgs) => {
+export const clientAction = async ({ context, request, params: { id, sectionId, itemId } }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     if (request.method === 'PATCH') {
@@ -180,4 +176,4 @@ function FormItemEditorLayout(): React.JSX.Element {
   );
 }
 
-export const Component = FormItemEditorLayout;
+export default FormItemEditorLayout;

@@ -111,4 +111,4 @@ function ConventionDisplay() {
   );
 }
 
-export const Component = ConventionDisplay;
+export default ConventionDisplay;

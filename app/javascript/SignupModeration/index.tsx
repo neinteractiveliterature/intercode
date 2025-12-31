@@ -36,4 +36,4 @@ function SignupModeration(): React.JSX.Element {
   );
 }
 
-export const Component = SignupModeration;
+export default SignupModeration;

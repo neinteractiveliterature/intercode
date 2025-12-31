@@ -150,4 +150,4 @@ function RunSignupSummary(): React.JSX.Element {
   );
 }
 
-export const Component = RunSignupSummary;
+export default RunSignupSummary;

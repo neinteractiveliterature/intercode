@@ -78,4 +78,4 @@ function EditUserConProfile() {
   );
 }
 
-export const Component = EditUserConProfile;
+export default EditUserConProfile;

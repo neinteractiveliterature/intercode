@@ -79,4 +79,4 @@ function EditTicket() {
   );
 }
 
-export const Component = EditTicket;
+export default EditTicket;

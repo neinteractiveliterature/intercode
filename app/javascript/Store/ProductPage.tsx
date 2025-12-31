@@ -4,10 +4,7 @@ import ProductOrderForm from './ProductOrderForm';
 import SignInButton from '../Authentication/SignInButton';
 import usePageTitle from '../usePageTitle';
 import parseCmsContent from '../parseCmsContent';
-import {
-  OrderFormProductQueryData,
-  OrderFormProductQueryDocument,
-} from './queries.generated';
+import { OrderFormProductQueryData, OrderFormProductQueryDocument } from './queries.generated';
 import { apolloClientContext } from '~/AppContexts';
 import { UserPricingStructureDescription } from './describePricingStructure';
 import { Route } from './+types/ProductPage';
@@ -60,4 +57,4 @@ function ProductPage() {
   );
 }
 
-export const Component = ProductPage;
+export default ProductPage;

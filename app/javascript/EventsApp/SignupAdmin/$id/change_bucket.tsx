@@ -101,4 +101,4 @@ function ChangeBucketModal(): React.JSX.Element {
   );
 }
 
-export const Component = ChangeBucketModal;
+export default ChangeBucketModal;

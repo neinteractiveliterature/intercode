@@ -1,13 +1,5 @@
 import { useMemo } from 'react';
-import {
-  data,
-  Link,
-  Navigate,
-  Outlet,
-  useFetcher,
-  useLoaderData,
-  useParams,
-} from 'react-router';
+import { data, Link, Navigate, Outlet, useFetcher, useLoaderData, useParams } from 'react-router';
 import sortBy from 'lodash/sortBy';
 import flatMap from 'lodash/flatMap';
 import { notEmpty } from '@neinteractiveliterature/litform';
@@ -129,4 +121,4 @@ function FormEditor(): React.JSX.Element {
   );
 }
 
-export const Component = FormEditor;
+export default FormEditor;

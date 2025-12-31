@@ -2,10 +2,7 @@ import { useMemo } from 'react';
 import { useLoaderData } from 'react-router';
 
 import FormResponseChangeHistory from '../FormPresenter/ItemChangeDisplays/FormResponseChangeHistory';
-import {
-  EventProposalHistoryQueryData,
-  EventProposalHistoryQueryDocument,
-} from './queries.generated';
+import { EventProposalHistoryQueryData, EventProposalHistoryQueryDocument } from './queries.generated';
 import { FormType } from '../graphqlTypes.generated';
 import { apolloClientContext } from '~/AppContexts';
 import { Route } from './+types/EventProposalHistory';
@@ -56,4 +53,4 @@ function EventProposalHistory() {
   );
 }
 
-export const Component = EventProposalHistory;
+export default EventProposalHistory;

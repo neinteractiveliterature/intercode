@@ -169,4 +169,4 @@ function EditStaffPositionPermissions() {
   );
 }
 
-export const Component = EditStaffPositionPermissions;
+export default EditStaffPositionPermissions;

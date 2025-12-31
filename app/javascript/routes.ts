@@ -1,4 +1,4 @@
-import { type RouteConfig, index, layout, route } from '@react-router/dev/routes';
+import { type RouteConfig, index, layout, route, prefix } from '@react-router/dev/routes';
 
 export enum NamedRoute {
   AdminEditEventProposal = 'AdminEditEventProposal',
@@ -31,11 +31,12 @@ export enum NamedRoute {
   FormAdminIndex = 'FormAdminIndex',
   FormJSONEditor = 'FormJSONEditor',
   LiquidDocs = 'LiquidDocs',
+  MyProfileEdit = 'MyProfileEdit',
+  MyProfileSetup = 'MyProfileSetup',
   NewEventCategory = 'NewEventCategory',
   NewOrganizationRole = 'NewOrganizationRole',
   NewTeamMember = 'NewTeamMember',
   Organization = 'Organization',
-  OrganizationAdmin = 'OrganizationAdmin',
   OrganizationDisplay = 'OrganizationDisplay',
   RootPage = 'RootPage',
   RootSiteConventionDisplay = 'RootSiteConventionDisplay',
@@ -48,6 +49,9 @@ export enum NamedRoute {
   SignupAdmin = 'SignupAdmin',
   TeamMembers = 'TeamMembers',
   TeamMembersIndex = 'TeamMembersIndex',
+  TicketPerEventEditTicketType = 'TicketPerEventEditTicketType',
+  TicketPerEventNewTicketType = 'TicketPerEventNewTicketType',
+  TicketPerEventTicketTypesList = 'TicketPerEventTicketTypesList',
   UserActivityAlerts = 'UserActivityAlerts',
   UserAdmin = 'UserAdmin',
   UserAdminDisplay = 'UserAdminDisplay',
@@ -261,13 +265,10 @@ export default [
       route('convention/edit', './ConventionAdmin/index.tsx'),
 
       // Events routes
-      route('events', './EventsApp/EventCatalog/EventList/index.tsx', { id: 'EventsLayout' }, [
+      ...prefix('events', [
         // Schedule routes (only in non-single-event mode)
         layout('./AppRootContext/guards/siteModeNotSingleEvent.tsx', { id: 'EventsScheduleSiteModeGuard' }, [
-          route('schedule', './EventsApp/ScheduleApp.tsx', { id: 'ScheduleLayout' }, [
-            route(':day', './EventsApp/ScheduleApp.tsx', { id: 'ScheduleDay' }),
-            index('./EventsApp/schedule/index.ts'),
-          ]),
+          ...prefix('schedule', [route(':day', './EventsApp/ScheduleApp.tsx'), index('./EventsApp/schedule/index.ts')]),
           route('schedule_by_room/*', './EventsApp/schedule_by_room/route.ts'),
           route('schedule_with_counts/*', './EventsApp/schedule_with_counts/route.ts'),
           route('table', './EventsApp/EventCatalog/EventTable/index.tsx'),
@@ -285,9 +286,11 @@ export default [
           // Event ticket types (per-event tickets, only when TicketMode is TicketPerEvent)
           layout('./AppRootContext/guards/ticketModeTicketPerEvent.tsx', { id: 'EventTicketTypesGuard' }, [
             route('ticket_types', './EventsApp/EventTicketTypesWrapper.tsx', [
-              route('new', './TicketTypeAdmin/NewTicketType.tsx', { id: 'EventNewTicketType' }),
-              route(':id/edit', './TicketTypeAdmin/EditTicketType.tsx', { id: 'EventEditTicketType' }),
-              index('./TicketTypeAdmin/TicketTypesList.tsx', { id: 'EventTicketTypesIndex' }),
+              route('new', './TicketTypeAdmin/NewTicketType.tsx', { id: NamedRoute.TicketPerEventNewTicketType }),
+              route(':id/edit', './TicketTypeAdmin/EditTicketType.tsx', {
+                id: NamedRoute.TicketPerEventEditTicketType,
+              }),
+              index('./TicketTypeAdmin/TicketTypesList.tsx', { id: NamedRoute.TicketPerEventTicketTypesList }),
             ]),
           ]),
 
@@ -311,9 +314,7 @@ export default [
           ]),
 
           // Event history
-          route('history', './EventsApp/EventPage/EventHistory.tsx', { id: 'EventHistory' }, [
-            route(':changeGroupId', './EventsApp/EventPage/EventHistory.tsx', { id: 'EventHistoryChangeGroup' }),
-          ]),
+          ...prefix('history', [route(':changeGroupId', './EventsApp/EventPage/EventHistory.tsx')]),
 
           // Run admin and signup admin
           route('runs/:runId', './EventsApp/SignupAdmin/RunHeader.tsx', [
@@ -343,29 +344,29 @@ export default [
         ]),
 
         // Events index
-        index('./EventsApp/EventCatalog/EventList/index.tsx', { id: 'EventsIndex' }),
+        index('./EventsApp/EventCatalog/EventList/index.tsx'),
       ]),
 
       // Mailing Lists
       layout('./Authentication/guards/canReadAnyMailingList.tsx', [
-        route('mailing_lists', './MailingLists/index.tsx', { id: 'MailingListsLayout' }, [
+        ...prefix('mailing_lists', [
           route('ticketed_attendees', './MailingLists/TicketedAttendees.tsx'),
           route('event_proposers', './MailingLists/EventProposers.tsx'),
           route('team_members', './MailingLists/TeamMembers.tsx'),
           route('users_with_pending_bio', './MailingLists/UsersWithPendingBio.tsx'),
           route('waitlists', './MailingLists/WaitlistMailingLists.tsx'),
           route('whos_free', './MailingLists/WhosFree.tsx'),
-          index('./MailingLists/index.tsx', { id: 'MailingListsIndex' }),
+          index('./MailingLists/index.tsx'),
         ]),
       ]),
 
       // My Profile
       layout('./Authentication/LoginRequiredRouteGuard.tsx', [
-        route('my_profile', './MyProfile/MyProfileDisplay.tsx', { id: 'MyProfileLayout' }, [
+        ...prefix('my_profile', [
           route('edit_bio', './MyProfile/edit_bio.ts'),
-          route('edit', './MyProfile/MyProfileForm.tsx', { id: 'MyProfileEdit' }),
-          route('setup', './MyProfile/MyProfileForm.tsx', { id: 'MyProfileSetup' }),
-          index('./MyProfile/MyProfileDisplay.tsx', { id: 'MyProfileIndex' }),
+          route('edit', './MyProfile/MyProfileForm.tsx', { id: NamedRoute.MyProfileEdit }),
+          route('setup', './MyProfile/MyProfileForm.tsx', { id: NamedRoute.MyProfileSetup }),
+          index('./MyProfile/MyProfileDisplay.tsx'),
         ]),
       ]),
 
@@ -377,12 +378,12 @@ export default [
 
       // Reports
       layout('./Authentication/guards/canReadReports.tsx', [
-        route('reports', './Reports/index.tsx', { id: 'ReportsLayout' }, [
+        ...prefix('reports', [
           route('attendance_by_payment_amount', './Reports/AttendanceByPaymentAmount.tsx'),
           route('event_provided_tickets', './Reports/EventProvidedTickets.tsx'),
           route('events_by_choice', './Reports/EventsByChoice.tsx'),
           route('signup_spy', './Reports/SignupSpy.tsx'),
-          index('./Reports/index.tsx', { id: 'ReportsIndex' }),
+          index('./Reports/index.tsx'),
         ]),
       ]),
 
@@ -412,15 +413,15 @@ export default [
       ]),
 
       // Signup Rounds
-      route('signup_rounds', './SignupRoundsAdmin/SignupRoundsAdminPage.tsx', { id: 'SignupRoundsLayout' }, [
+      ...prefix('signup_rounds', [
         route(':id', './SignupRoundsAdmin/$id.ts', [
           route('results', './SignupRoundsAdmin/RankedChoiceSignupDecisionsPage.tsx'),
         ]),
-        index('./SignupRoundsAdmin/SignupRoundsAdminPage.tsx', { id: 'SignupRoundsIndex' }),
+        index('./SignupRoundsAdmin/SignupRoundsAdminPage.tsx'),
       ]),
 
       // Staff Positions
-      route('staff_positions', './StaffPositionAdmin/StaffPositionsTable.tsx', { id: 'StaffPositionsLayout' }, [
+      ...prefix('staff_positions', [
         route('new', './StaffPositionAdmin/NewStaffPosition.tsx'),
         route(':id', './StaffPositionAdmin/$id/route.ts', [
           route('edit', './StaffPositionAdmin/EditStaffPosition.tsx', { id: NamedRoute.EditStaffPosition }),
@@ -428,22 +429,19 @@ export default [
             id: NamedRoute.EditStaffPositionPermissions,
           }),
         ]),
-        index('./StaffPositionAdmin/StaffPositionsTable.tsx', { id: 'StaffPositionsIndex' }),
+        index('./StaffPositionAdmin/StaffPositionsTable.tsx'),
       ]),
 
       // Ticket
-      route('ticket', './MyTicket/MyTicketDisplay.tsx', { id: 'MyTicketLayout' }, [
-        route('new', './MyTicket/TicketPurchasePage.tsx'),
-        index('./MyTicket/MyTicketDisplay.tsx', { id: 'MyTicketIndex' }),
-      ]),
+      ...prefix('ticket', [route('new', './MyTicket/TicketPurchasePage.tsx'), index('./MyTicket/MyTicketDisplay.tsx')]),
 
       // Ticket Types Admin (only when ticket mode is RequiredForSignup)
       layout('./AppRootContext/guards/ticketModeRequiredForSignup.tsx', [
         layout('./Authentication/guards/canManageTicketTypes.tsx', [
-          route('ticket_types', './TicketTypeAdmin/route.ts', { id: 'TicketTypesLayout' }, [
-            route('new', './TicketTypeAdmin/NewTicketType.tsx', { id: 'AdminNewTicketType' }),
+          route('ticket_types', './TicketTypeAdmin/route.ts', [
+            route('new', './TicketTypeAdmin/NewTicketType.tsx'),
             route(':id', './TicketTypeAdmin/singleTicketTypeRoute.ts', [
-              route('edit', './TicketTypeAdmin/EditTicketType.tsx', { id: 'AdminEditTicketType' }),
+              route('edit', './TicketTypeAdmin/EditTicketType.tsx'),
             ]),
             index('./TicketTypeAdmin/TicketTypesList.tsx'),
           ]),
@@ -464,7 +462,7 @@ export default [
 
       // User Con Profiles
       layout('./Authentication/guards/canReadUserConProfiles.tsx', [
-        route('user_con_profiles', './UserConProfiles/AttendeesPage.tsx', { id: 'UserConProfilesLayout' }, [
+        ...prefix('user_con_profiles', [
           route(':id', './UserConProfiles/userConProfileLoader.ts', { id: NamedRoute.AdminUserConProfile }, [
             route('admin_ticket/new', './UserConProfiles/NewTicket.tsx'),
             route('admin_ticket/edit', './UserConProfiles/EditTicket.tsx'),
@@ -472,13 +470,13 @@ export default [
             index('./UserConProfiles/UserConProfileAdminDisplay.tsx'),
           ]),
           route('new', './UserConProfiles/AddAttendeeModal.tsx'),
-          index('./UserConProfiles/AttendeesPage.tsx', { id: 'UserConProfilesIndex' }),
+          index('./UserConProfiles/AttendeesPage.tsx'),
         ]),
       ]),
 
       // Convention mode routes
       // Event Proposals Admin
-      route('admin_event_proposals', './EventProposals/EventProposalsAdmin.tsx', { id: 'EventProposalsAdminLayout' }, [
+      route('admin_event_proposals', './EventProposals/EventProposalsAdmin.tsx', [
         route(':id', './EventProposals/route_with_loader.ts', { id: NamedRoute.AdminEventProposal }, [
           route('history', './EventProposals/EventProposalHistory.tsx', { id: NamedRoute.EventProposalHistory }, [
             route(':changeGroupId', './EventProposals/EventProposalHistory.tsx', {
@@ -539,7 +537,7 @@ export default [
       ]),
 
       // Organizations
-      route('organizations', './OrganizationAdmin/OrganizationIndex.tsx', { id: NamedRoute.OrganizationAdmin }, [
+      ...prefix('organizations', [
         route(':id', './OrganizationAdmin/OrganizationDisplay.tsx', { id: NamedRoute.Organization }, [
           route('roles/new', './OrganizationAdmin/NewOrganizationRole.tsx', { id: NamedRoute.NewOrganizationRole }),
           route('roles/:organizationRoleId', './OrganizationAdmin/$id/roles/$organizationRoleId/route.ts', [
@@ -547,7 +545,7 @@ export default [
           ]),
           index('./OrganizationAdmin/OrganizationDisplay.tsx', { id: NamedRoute.OrganizationDisplay }),
         ]),
-        index('./OrganizationAdmin/OrganizationIndex.tsx', { id: 'OrganizationAdminIndex' }),
+        index('./OrganizationAdmin/OrganizationIndex.tsx'),
       ]),
 
       // Users Admin
@@ -560,7 +558,7 @@ export default [
       ]),
 
       // CMS Pages (wildcard)
-      route('pages/*', './CmsPage/index.tsx', { id: 'CmsPageWildcard' }),
+      route('pages/*', './CmsPage/index.tsx'),
       index('./CmsPage/index.tsx', { id: NamedRoute.RootPage }),
 
       // 404 catchall

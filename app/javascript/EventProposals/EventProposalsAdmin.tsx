@@ -53,4 +53,4 @@ function EventProposalsAdmin(): React.JSX.Element {
   );
 }
 
-export const Component = EventProposalsAdmin;
+export default EventProposalsAdmin;

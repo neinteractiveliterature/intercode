@@ -300,4 +300,4 @@ function UserConProfileAdminDisplay(): React.JSX.Element {
   );
 }
 
-export const Component = UserConProfileAdminDisplay;
+export default UserConProfileAdminDisplay;

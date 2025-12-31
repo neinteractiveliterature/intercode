@@ -46,4 +46,4 @@ function TicketPurchasePage() {
   );
 }
 
-export const Component = TicketPurchasePage;
+export default TicketPurchasePage;

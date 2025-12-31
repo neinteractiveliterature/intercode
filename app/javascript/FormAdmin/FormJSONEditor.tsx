@@ -1,11 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
-import {
-  Form,
-  redirect,
-  useActionData,
-  useLoaderData,
-  useNavigation,
-} from 'react-router';
+import { Form, redirect, useActionData, useLoaderData, useNavigation } from 'react-router';
 
 import {
   BootstrapFormInput,
@@ -166,4 +160,4 @@ function FormJSONEditor() {
   );
 }
 
-export const Component = FormJSONEditor;
+export default FormJSONEditor;

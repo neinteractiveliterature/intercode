@@ -1,11 +1,4 @@
-import {
-  useLoaderData,
-  replace,
-  redirect,
-  useSubmit,
-  useNavigation,
-  useActionData,
-} from 'react-router';
+import { useLoaderData, replace, redirect, useSubmit, useNavigation, useActionData } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -85,4 +78,4 @@ function ClickwrapAgreement() {
   );
 }
 
-export const Component = ClickwrapAgreement;
+export default ClickwrapAgreement;

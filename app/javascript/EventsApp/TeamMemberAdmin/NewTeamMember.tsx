@@ -116,4 +116,4 @@ function NewTeamMember(): React.JSX.Element {
   );
 }
 
-export const Component = NewTeamMember;
+export default NewTeamMember;

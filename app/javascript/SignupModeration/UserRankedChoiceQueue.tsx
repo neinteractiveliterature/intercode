@@ -45,4 +45,4 @@ function UserRankedChoiceQueue() {
   );
 }
 
-export const Component = UserRankedChoiceQueue;
+export default UserRankedChoiceQueue;

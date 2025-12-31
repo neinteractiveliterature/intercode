@@ -1,9 +1,5 @@
 import { useState } from 'react';
-import {
-  useNavigate,
-  useLoaderData,
-  redirect,
-} from 'react-router';
+import { useNavigate, useLoaderData, redirect } from 'react-router';
 
 import EditRunModal, { EditingRun } from './EditRunModal';
 import { EventAdminEventsQueryData, EventAdminEventsQueryDocument, RunFieldsFragmentDoc } from './queries.generated';
@@ -106,4 +102,4 @@ function NewRun(): React.JSX.Element {
   );
 }
 
-export const Component = NewRun;
+export default NewRun;

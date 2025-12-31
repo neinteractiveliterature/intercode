@@ -144,4 +144,4 @@ function Cart() {
   );
 }
 
-export const Component = Cart;
+export default Cart;
