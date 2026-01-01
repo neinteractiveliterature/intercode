@@ -125,7 +125,7 @@
     "postcss-import": "16.1.1",
     "prop-types": "15.8.1",
     "punycode": "2.3.1",
-    "qs": "^6.13.0",
+    "qs": "^6.14.1",
     "react": "19.2.0",
     "react-bootstrap4-modal": "3.0.11",
     "react-color": "2.19.3",
