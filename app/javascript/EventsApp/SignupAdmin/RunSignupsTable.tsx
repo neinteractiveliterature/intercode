@@ -26,11 +26,12 @@ import buildEventUrl from '../buildEventUrl';
 import { SignupState } from '../../graphqlTypes.generated';
 import EnumTypes from '../../enumTypes.json';
 import AppRootContext from '../../AppRootContext';
-import { NamedRoute } from '../../AppRouter';
+import { NamedRoute } from '~/routes';
 import { useGraphQLConfirm } from '@neinteractiveliterature/litform';
 import { useApolloClient } from '@apollo/client/react';
 import { FreezeBucketAssignmentsDocument } from './mutations.generated';
 import SignupStateCell from '../../Tables/SignupStateCell';
+import { Route } from './+types/RunSignupsTable';
 
 const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({
   state: FilterCodecs.stringArray,
@@ -100,8 +101,8 @@ function BucketFilter<TData extends SignupType, TValue>({ column }: { column: Co
 // eslint-disable-next-line i18next/no-literal-string
 const defaultVisibleColumns = ['id', 'state', 'name', 'bucket', 'age_restrictions_check', 'email'];
 
-function RunSignupsTable(): React.JSX.Element {
-  const data = useRouteLoaderData(NamedRoute.SignupAdmin) as SignupAdminEventQueryData;
+function RunSignupsTable({ params }: Route.ComponentProps): React.JSX.Element {
+  const data = useRouteLoaderData(NamedRoute.SignupAdmin) as SignupAdminEventQueryData | undefined;
   const { runId } = useParams();
   const { t } = useTranslation();
   const navigate = useNavigate();
@@ -188,7 +189,7 @@ function RunSignupsTable(): React.JSX.Element {
     columns,
     query: RunSignupsTableSignupsQueryDocument,
     storageKeyPrefix: 'adminSignups',
-    variables: { eventId: data.convention.event.id, runId: runId ?? '' },
+    variables: { eventId: params.eventId, runId: params.runId },
   });
 
   usePageTitle(
@@ -212,7 +213,7 @@ function RunSignupsTable(): React.JSX.Element {
                     prompt: (
                       <Trans
                         i18nKey="events.signupAdmin.freezeBucketAssignments.prompt"
-                        values={{ eventTitle: data.convention.event.title }}
+                        values={{ eventTitle: data?.convention.event.title }}
                         components={{
                           ul: <ul />,
                           li: <li />,
@@ -222,7 +223,7 @@ function RunSignupsTable(): React.JSX.Element {
                     action: async () => {
                       await client.mutate({
                         mutation: FreezeBucketAssignmentsDocument,
-                        variables: { eventId: data.convention.event.id },
+                        variables: { eventId: params.eventId },
                       });
                       await client.resetStore();
                       revalidator.revalidate();
@@ -239,7 +240,9 @@ function RunSignupsTable(): React.JSX.Element {
           table={tableInstance}
           loading={tableLoading}
           onClickRow={(row) =>
-            navigate(`${buildEventUrl(data.convention.event)}/runs/${runId}/admin_signups/${row.original.id}`)
+            navigate(
+              `${buildEventUrl(data?.convention.event ?? { id: params.eventId })}/runs/${runId}/admin_signups/${row.original.id}`,
+            )
           }
           renderFilter={({ column }) => {
             if (column.id === 'state') {

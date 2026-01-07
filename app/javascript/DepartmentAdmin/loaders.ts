@@ -1,7 +1,7 @@
 import { useRouteLoaderData } from 'react-router';
 import { apolloClientContext } from '~/AppContexts';
 import { DepartmentAdminQueryData, DepartmentAdminQueryDocument } from './queries.generated';
-import { NamedRoute } from '../AppRouter';
+import { NamedRoute } from '~/routes';
 import { Route as RootRoute } from './+types/route';
 import { Route as SingleRoute } from './+types/SingleDepartmentRoute';
 

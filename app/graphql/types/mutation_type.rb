@@ -11,7 +11,10 @@ class Types::MutationType < Types::BaseObject # rubocop:disable GraphQL/ObjectDe
 
   # CSRF verification, but only for mutations
   def self.authorized?(_value, context)
-    raise ActionController::InvalidAuthenticityToken unless context[:verified_request]
+    unless context[:verified_request] || context[:pundit_user]&.doorkeeper_token
+      raise ActionController::InvalidAuthenticityToken
+    end
+
     true
   end
 

@@ -124,13 +124,17 @@ export class AuthenticationManager {
   }
 
   async signOut() {
-    this.jwtToken = undefined;
-    this.jwtRefreshToken = undefined;
-    await this.serialize();
+    await this.reset();
 
     const config = await this.getOpenidConfig();
     const endSessionEndpoint = config.serverMetadata().end_session_endpoint;
     return { endSessionEndpoint };
+  }
+
+  async reset() {
+    this.jwtToken = undefined;
+    this.jwtRefreshToken = undefined;
+    await this.serialize();
   }
 }
 

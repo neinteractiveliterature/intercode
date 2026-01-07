@@ -146,7 +146,7 @@ Routes follow a file-based convention similar to Remix/React Router v7:
 
 ```typescript
 import { useLoaderData, useRouteLoaderData } from 'react-router';
-import { NamedRoute } from './AppRouter';
+import { NamedRoute } from '~/routes';
 
 function MyComponent() {
   // For current route's loader data

@@ -9,7 +9,7 @@ import {
 } from './queries.generated';
 import { apolloClientContext } from '~/AppContexts';
 import { loadDocData, YardClass, YardDocs, YardMethod } from './DocData';
-import { NamedRoute } from '../AppRouter';
+import { NamedRoute } from '~/routes';
 import findLiquidTagName from './findLiquidTagName';
 import { NotificationEventKey } from '~/graphqlTypes.generated';
 import { Route } from './+types/route';

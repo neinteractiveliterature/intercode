@@ -5,7 +5,7 @@ import useAuthorizationRequired from '../Authentication/useAuthorizationRequired
 import LeafBreadcrumbItem from '../Breadcrumbs/LeafBreadcrumbItem';
 import { useTranslation } from 'react-i18next';
 import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
-import { NamedRoute } from '../AppRouter';
+import { NamedRoute } from '~/routes';
 import { apolloClientContext } from '~/AppContexts';
 import { UserActivityAlertsAdminQueryData, UserActivityAlertsAdminQueryDocument } from './queries.generated';
 import { Route } from './+types/UserActivityAlertsAdmin';

@@ -56,6 +56,7 @@ export enum NamedRoute {
   UserAdmin = 'UserAdmin',
   UserAdminDisplay = 'UserAdminDisplay',
   UsersTable = 'UsersTable',
+  EventHistory = 'EventHistory',
 }
 
 export type RouteName = keyof typeof NamedRoute & string;
@@ -280,7 +281,7 @@ export default [
         ]),
 
         // Individual event routes
-        route(':eventId', './EventsApp/EventPage/index.tsx', { id: NamedRoute.Event }, [
+        route(':eventId', './EventsApp/EventPage/route.tsx', { id: NamedRoute.Event }, [
           route('attach_image', './EventsApp/attach_image.ts'),
 
           // Event ticket types (per-event tickets, only when TicketMode is TicketPerEvent)
@@ -314,7 +315,10 @@ export default [
           ]),
 
           // Event history
-          ...prefix('history', [route(':changeGroupId', './EventsApp/EventPage/EventHistory.tsx')]),
+          route('history', './EventsApp/EventPage/EventHistory/route.ts', { id: NamedRoute.EventHistory }, [
+            route(':changeGroupId', './EventsApp/EventPage/EventHistory/:changeGroupId.tsx'),
+            index('./EventsApp/EventPage/EventHistory/index.tsx'),
+          ]),
 
           // Run admin and signup admin
           route('runs/:runId', './EventsApp/SignupAdmin/RunHeader.tsx', [

@@ -2,7 +2,7 @@ import { Outlet, useRouteLoaderData } from 'react-router';
 
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 import NamedRouteBreadcrumbItem from '../Breadcrumbs/NamedRouteBreadcrumbItem';
-import { NamedRoute } from '../AppRouter';
+import { NamedRoute } from '~/routes';
 import { ConventionDisplayQueryData } from './queries.generated';
 
 function RootSiteConventionsAdmin(): React.JSX.Element {

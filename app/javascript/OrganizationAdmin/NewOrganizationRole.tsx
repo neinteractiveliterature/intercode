@@ -4,7 +4,7 @@ import { ErrorDisplay } from '@neinteractiveliterature/litform';
 import useOrganizationRoleForm from './useOrganizationRoleForm';
 import usePageTitle from '../usePageTitle';
 import { OrganizationRoleFieldsFragmentDoc } from './queries.generated';
-import { NamedRoute } from '../AppRouter';
+import { NamedRoute } from '~/routes';
 import { SingleOrganizationLoaderResult } from './loaders';
 import invariant from 'tiny-invariant';
 import { CreateOrganizationRoleDocument, CreateOrganizationRoleMutationVariables } from './mutations.generated';

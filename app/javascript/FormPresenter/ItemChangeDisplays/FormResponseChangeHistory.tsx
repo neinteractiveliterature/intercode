@@ -1,29 +1,26 @@
 import { useMemo } from 'react';
-import { NavLink, useParams, Navigate } from 'react-router';
+import { NavLink, Navigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 
 import FormItemChangeGroup from './FormItemChangeGroup';
-import { buildChangeGroups, getTimespanForChangeGroup, ParseableFormResponseChange } from './FormItemChangeUtils';
+import { FormResponseChangeGroup, getTimespanForChangeGroup } from './FormItemChangeUtils';
 import { ConventionForFormItemChangeDisplay } from './FormItemChangeDisplay';
-import { CommonFormFieldsFragment } from '../../Models/commonFormFragments.generated';
 import { useAppDateTimeFormat } from '../../TimeUtils';
 
 export type FormResponseChangeHistoryProps = {
-  changes: ParseableFormResponseChange[];
+  changeGroups: FormResponseChangeGroup[];
+  changeGroupId: string;
   convention: ConventionForFormItemChangeDisplay;
-  form: CommonFormFieldsFragment;
   basePath: string;
 };
 
 function FormResponseChangeHistory({
-  changes,
+  changeGroupId,
   convention,
-  form,
+  changeGroups,
   basePath,
 }: FormResponseChangeHistoryProps): React.JSX.Element {
-  const { changeGroupId } = useParams();
   const { t } = useTranslation();
-  const changeGroups = useMemo(() => buildChangeGroups(changes, form), [changes, form]);
   const format = useAppDateTimeFormat();
 
   const renderTimespan = (changeGroup: (typeof changeGroups)[number]) => {

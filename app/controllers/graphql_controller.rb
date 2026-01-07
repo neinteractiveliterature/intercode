@@ -20,6 +20,8 @@ class GraphqlController < ApplicationController
 
     METHOD_CACHE = {}
 
+    delegate :[]=, :delete, to: :@values
+
     def initialize(controller, **values)
       @controller = controller
       @values = values
@@ -48,14 +50,6 @@ class GraphqlController < ApplicationController
     def fetch(key, default = nil)
       raise KeyError unless default || @values.key?(key) || METHODS.key?(key)
       self[key] || default
-    end
-
-    def []=(key, value)
-      @values[key] = value
-    end
-
-    def delete(key)
-      @values.delete(key)
     end
 
     def dup

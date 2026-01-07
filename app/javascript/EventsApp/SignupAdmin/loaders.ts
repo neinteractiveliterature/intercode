@@ -1,18 +1,11 @@
 import { useRouteLoaderData } from 'react-router';
-import {
-  AdminSignupQueryData,
-  AdminSignupQueryDocument,
-  SignupAdminEventQueryDocument,
-} from './queries.generated';
+import { AdminSignupQueryData, AdminSignupQueryDocument, SignupAdminEventQueryDocument } from './queries.generated';
 import { apolloClientContext } from '~/AppContexts';
-import { NamedRoute } from '../../AppRouter';
+import { NamedRoute } from '~/routes';
 import { Route as SignupAdminRoute } from './+types/route';
 import { Route as SingleSignupRoute } from './+types/singleSignupRoute';
 
-export const signupAdminEventLoader = async ({
-  context,
-  params: { eventId },
-}: SignupAdminRoute.ClientLoaderArgs) => {
+export const signupAdminEventLoader = async ({ context, params: { eventId } }: SignupAdminRoute.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query({
     query: SignupAdminEventQueryDocument,

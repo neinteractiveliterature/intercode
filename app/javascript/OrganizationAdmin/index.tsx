@@ -2,7 +2,7 @@ import { Outlet, useRouteLoaderData } from 'react-router';
 
 import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
-import { NamedRoute } from '../AppRouter';
+import { NamedRoute } from '~/routes';
 import { SingleOrganizationLoaderResult } from './loaders';
 import NamedRouteBreadcrumbItem from '../Breadcrumbs/NamedRouteBreadcrumbItem';
 

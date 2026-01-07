@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { ApolloClient, ApolloLink, CombinedGraphQLErrors, InMemoryCache } from '@apollo/client';
+import { ApolloClient, ApolloLink, CombinedGraphQLErrors, InMemoryCache, ServerError } from '@apollo/client';
 import { BatchHttpLink } from '@apollo/client/link/batch-http';
 import UploadHttpLink from 'apollo-upload-client/UploadHttpLink.mjs';
 import { DateTime } from 'luxon';
@@ -67,7 +67,9 @@ export class GraphQLNotAuthenticatedErrorEvent extends Event {
 }
 
 export const ErrorHandlerLink: ApolloLink = new ErrorLink(({ error }) => {
-  if (CombinedGraphQLErrors.is(error)) {
+  if (ServerError.is(error) && error.statusCode === 401) {
+    window.dispatchEvent(new GraphQLNotAuthenticatedErrorEvent(error));
+  } else if (CombinedGraphQLErrors.is(error)) {
     for (const err of error.errors) {
       if (err.extensions?.code === 'NOT_AUTHENTICATED') {
         window.dispatchEvent(new GraphQLNotAuthenticatedErrorEvent(err));

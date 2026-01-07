@@ -4,7 +4,7 @@ import { Link, useRouteLoaderData } from 'react-router';
 import usePageTitle from '../usePageTitle';
 import { UserActivityAlertsAdminQueryData } from './queries.generated';
 import humanize from '../humanize';
-import { NamedRoute } from '../AppRouter';
+import { NamedRoute } from '~/routes';
 
 function renderCriteriaList(criteria: React.ReactNode[], defaultText: React.ReactNode) {
   if (criteria.length > 0) {

@@ -1,7 +1,7 @@
 import { useRouteLoaderData } from 'react-router';
 import { TeamMembersQueryData, TeamMembersQueryDocument } from './queries.generated';
 import { apolloClientContext } from '~/AppContexts';
-import { NamedRoute } from '../../AppRouter';
+import { NamedRoute } from '~/routes';
 import { Route } from './+types/route';
 import { Route as EditTeamMemberRoute } from './+types/EditTeamMember';
 

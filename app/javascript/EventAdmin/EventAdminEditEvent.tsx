@@ -13,7 +13,7 @@ import {
   EventAdminSingleEventQueryDocument,
 } from './queries.generated';
 import { useImageAttachmentConfig } from '../BuiltInFormControls/MarkdownInput';
-import { NamedRoute } from '../AppRouter';
+import { NamedRoute } from '~/routes';
 import { apolloClientContext } from '~/AppContexts';
 import { UpdateEventOptions } from './$id';
 import { ActiveStorageAttachment } from '~/graphqlTypes.generated';

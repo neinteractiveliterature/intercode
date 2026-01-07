@@ -15,7 +15,7 @@ import { GraphQLNotAuthenticatedErrorEvent } from './useIntercodeApolloClient';
 import { reloadOnAppEntrypointHeadersMismatch } from './checkAppEntrypointHeadersMatch';
 import { initErrorReporting } from '~/ErrorReporting';
 import { Route } from './+types/AppRoot';
-import { apolloClientContext, sessionContext } from './AppContexts';
+import { apolloClientContext } from './AppContexts';
 
 export function buildAppRootContextValue(
   data: AppRootQueryData | null | undefined,

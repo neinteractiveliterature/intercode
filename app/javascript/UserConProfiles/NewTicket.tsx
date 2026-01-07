@@ -5,7 +5,7 @@ import TicketForm from './TicketForm';
 import usePageTitle from '../usePageTitle';
 import { UserConProfileAdminQueryData, UserConProfileAdminTicketFieldsFragmentDoc } from './queries.generated';
 import { TicketInput } from '../graphqlTypes.generated';
-import { NamedRoute } from '../AppRouter';
+import { NamedRoute } from '~/routes';
 import { apolloClientContext } from '../AppContexts';
 import { CreateTicketDocument, CreateTicketMutationVariables } from './mutations.generated';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';

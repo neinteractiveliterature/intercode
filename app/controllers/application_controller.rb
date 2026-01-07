@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 class ApplicationController < ActionController::Base
-  ASSUMED_IDENTITY_SESSION_LOGGING_OMIT_HEADERS = Set.new(%w[Cookie X-Csrf-Token])
+  ASSUMED_IDENTITY_SESSION_LOGGING_OMIT_HEADERS = Set.new(%w[Authorization Cookie X-Csrf-Token])
 
   include Pundit::Authorization
   include CmsContentHelpers
@@ -84,7 +84,11 @@ class ApplicationController < ActionController::Base
 
   def user_con_profile
     return unless convention && user_signed_in?
-    @user_con_profile ||= convention.user_con_profiles.find_by(user_id: current_user.id)
+    if defined?(@user_con_profile)
+      @user_con_profile
+    else
+      @user_con_profile = convention.user_con_profiles.find_by(user_id: current_user.id)
+    end
   end
   helper_method :user_con_profile
 
@@ -190,7 +194,7 @@ class ApplicationController < ActionController::Base
           .env
           .select { |k, _v| k.start_with? "HTTP_" }
           .transform_keys { |k| k.sub(/^HTTP_/, "").split("_").map(&:capitalize).join("-") }
-          .reject { |k, _v| ASSUMED_IDENTITY_SESSION_LOGGING_OMIT_HEADERS.include?(k) },
+          .except(*ASSUMED_IDENTITY_SESSION_LOGGING_OMIT_HEADERS),
       http_body: request.raw_post
     }
   end
@@ -206,7 +210,7 @@ class ApplicationController < ActionController::Base
                 allow_other_host: true,
                 alert:
                   "You used “become user” \
-on the #{assumed_identity_from_profile.convention.name} site to assume the identity of \
+on the #{assumed_identity_from_profile.convention.name} site to assume the identity of
 #{current_user.name} for this session.  In order to visit other conventions’ \
 sites, please use the “Revert to #{assumed_identity_from_profile.name}” option above."
   end
