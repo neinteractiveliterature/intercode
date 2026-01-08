@@ -300,6 +300,38 @@ class EventVacancyFillServiceTest < ActiveSupport::TestCase
 
         assert_equal 0, result.move_results.size
       end
+
+      describe "with green/blue buckets" do
+        let(:event) do
+          create(
+            :event,
+            convention:,
+            registration_policy: {
+              buckets: [
+                { key: "green", slots_limited: true, total_slots: 1 },
+                { key: "blue", slots_limited: true, total_slots: 1 }
+              ]
+            }
+          )
+        end
+        let(:bucket_key) { "green" }
+
+        it "will fill them in by moving aside no-preference signups" do
+          green_confirmed = create_signup(state: "confirmed", bucket_key: "green", requested_bucket_key: nil)
+          green_waitlist = create_signup(state: "waitlisted", requested_bucket_key: "green")
+          no_pref_waitlist = create_signup(state: "waitlisted", requested_bucket_key: nil)
+
+          result = subject.call!
+
+          assert_equal 2, result.move_results.size
+          assert_equal green_confirmed.reload, result.move_results[0].signup
+          assert_equal green_waitlist.reload, result.move_results[1].signup
+          assert_equal "blue", green_confirmed.bucket_key
+          assert_equal "confirmed", green_waitlist.state
+          assert_equal "green", green_waitlist.bucket_key
+          assert_equal "waitlisted", no_pref_waitlist.state
+        end
+      end
     end
 
     describe "drops in unlimited buckets" do
