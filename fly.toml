@@ -11,7 +11,7 @@ swap_size_mb = 512
 image = "ghcr.io/neinteractiveliterature/intercode:latest"
 
 [deploy]
-release_command = "bundle exec rails release:perform"
+release_command = "bundle exec rails release:perform --trace"
 strategy = "bluegreen"
 
 [env]
