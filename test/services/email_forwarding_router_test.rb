@@ -39,9 +39,8 @@ class EmailForwardingRouterTest < ActiveSupport::TestCase
         help_mapping = mappings.values.find { |m| m.inbound_email == "help@example.com" }
         support_mapping = mappings.values.find { |m| m.inbound_email == "support@example.com" }
 
-        expected_destinations = [user1.email, user2.email, "cc@example.com"].map do |addr|
-          EmailRoute.normalize_address(addr)
-        end
+        expected_destinations =
+          [user1.email, user2.email, "cc@example.com"].map { |addr| EmailRoute.normalize_address(addr) }
 
         assert_equal expected_destinations.sort, primary_mapping.destination_addresses.sort
         assert_equal expected_destinations.sort, help_mapping.destination_addresses.sort
@@ -50,14 +49,7 @@ class EmailForwardingRouterTest < ActiveSupport::TestCase
     end
 
     describe "without email aliases" do
-      let(:staff_position) do
-        create(
-          :staff_position,
-          convention:,
-          email: "staff@example.com",
-          email_aliases: []
-        )
-      end
+      let(:staff_position) { create(:staff_position, convention:, email: "staff@example.com", email_aliases: []) }
 
       setup { staff_position.user_con_profiles << user_con_profile1 }
 
@@ -72,21 +64,11 @@ class EmailForwardingRouterTest < ActiveSupport::TestCase
 
     describe "with multiple staff positions with aliases" do
       let(:staff_position1) do
-        create(
-          :staff_position,
-          convention:,
-          email: "staff1@example.com",
-          email_aliases: %w[help support]
-        )
+        create(:staff_position, convention:, email: "staff1@example.com", email_aliases: %w[help support])
       end
 
       let(:staff_position2) do
-        create(
-          :staff_position,
-          convention:,
-          email: "staff2@example.com",
-          email_aliases: ["info"]
-        )
+        create(:staff_position, convention:, email: "staff2@example.com", email_aliases: ["info"])
       end
 
       setup do
@@ -109,6 +91,26 @@ class EmailForwardingRouterTest < ActiveSupport::TestCase
 
         assert_equal 5, mapping_emails.size
       end
+    end
+  end
+
+  describe "deduplication" do
+    let(:staff_position) do
+      create(
+        :staff_position,
+        convention:,
+        email: "staff@example.com",
+        cc_addresses: %w[email.address1@example.com Email.Address1@example.com]
+      )
+    end
+
+    setup { staff_position }
+
+    it "deduplicates email addresses but does not modify them" do
+      mappings = EmailForwardingRouter.all_staff_position_mappings
+
+      assert_equal 1, mappings.values.size
+      assert_equal ["email.address1@example.com"], mappings.values.first.destination_addresses.map(&:downcase)
     end
   end
 end
