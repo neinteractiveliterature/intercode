@@ -84,7 +84,7 @@ class EventVacancyFillService < CivilService::Service
     return unless bucket
 
     bucket_has_vacancy = run.bucket_has_available_slots?(bucket_key)
-    waitlisted_signups = signups_ordered.reject(&:occupying_slot?)
+    waitlisted_signups = signups_ordered.select(&:waitlisted?)
 
     # Try to accommodate each waitlisted signup in order
     waitlisted_signups.each do |waitlisted_signup|
