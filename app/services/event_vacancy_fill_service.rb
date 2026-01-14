@@ -113,6 +113,10 @@ class EventVacancyFillService < CivilService::Service
       !signup_already_in_best_slot?(waitlisted_signup) && (bucket_has_vacancy || bucket.anything?)
   end
 
+  # Scenario: We have a vacancy in bucket_key, but the waitlisted signup wants a different bucket
+  # (their requested_bucket_key). Use the vacancy we have to make room in the bucket they actually want.
+  # This allows us to help waitlisted signups who want specific buckets, rather than just filling
+  # our vacancy with whoever fits.
   def try_make_room_in_requested_bucket(waitlisted_signup, bucket, bucket_key, bucket_has_vacancy)
     unless waitlisted_signup.requested_bucket_key && waitlisted_signup.requested_bucket_key != bucket_key &&
              bucket_has_vacancy
@@ -125,6 +129,11 @@ class EventVacancyFillService < CivilService::Service
     find_movable_no_pref_signup(requested_bucket.key, bucket)
   end
 
+  # Scenario: We're trying to fill bucket_key (which is currently FULL), and the waitlisted signup
+  # wants that specific bucket. Find a third bucket with space, move a no-preference signup there,
+  # creating a vacancy in bucket_key that the waitlisted signup can then fill.
+  # This differs from try_make_room_in_requested_bucket because we DON'T already have a vacancy -
+  # we need to create one.
   def try_make_room_for_waitlisted_signup(waitlisted_signup, bucket, bucket_key, bucket_has_vacancy)
     if bucket_has_vacancy || waitlisted_signup.requested_bucket_key != bucket_key || !counted_limited_bucket?(bucket) ||
          bucket.anything?
