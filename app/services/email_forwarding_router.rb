@@ -18,7 +18,7 @@ class EmailForwardingRouter
     def initialize(inbound_domain:, inbound_local:, destination_addresses:)
       @inbound_domain = EmailRoute.normalize_domain(inbound_domain)
       @inbound_local = EmailRoute.normalize_local(inbound_local)
-      @destination_addresses = destination_addresses.map { |address| EmailRoute.normalize_address(address) }.uniq
+      @destination_addresses = EmailForwardingRouter.deduplicate_destinations(destination_addresses)
     end
 
     def inbound_email
@@ -166,6 +166,11 @@ class EmailForwardingRouter
     all_mappings.values.flatten.uniq
   end
 
+  def self.deduplicate_destinations(destinations)
+    destinations_by_normalized_address = destinations.index_by { |dest| EmailRoute.normalize_address(dest) }
+    destinations_by_normalized_address.values
+  end
+
   attr_reader :address
 
   def initialize(address)
@@ -174,12 +179,12 @@ class EmailForwardingRouter
 
   def convention_by_domain
     return @convention_by_domain if defined?(@convention_by_domain)
-    @convention_by_domain ||= Convention.find_by(domain: Mail::Address.new(address).domain)
+    @convention_by_domain = Convention.find_by(domain: Mail::Address.new(address).domain)
   end
 
   def convention_by_events_domain
     return @convention_by_events_domain if defined?(@convention_by_events_domain)
-    @convention_by_events_domain ||= Convention.find_by(event_mailing_list_domain: Mail::Address.new(address).domain)
+    @convention_by_events_domain = Convention.find_by(event_mailing_list_domain: Mail::Address.new(address).domain)
   end
 
   def forward_addresses
