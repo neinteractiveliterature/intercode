@@ -48,7 +48,7 @@
   "devDependencies": {
     "@types/lodash": "4.17.20",
     "entities": "7.0.0",
-    "lodash": "4.17.21",
+    "lodash": "4.17.23",
     "ts-node": "10.9.2"
   }
 }

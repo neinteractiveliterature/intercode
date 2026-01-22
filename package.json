@@ -111,7 +111,7 @@
     "i18next-intervalplural-postprocessor": "3.0.0",
     "i18next-localstorage-backend": "^4.2.0",
     "js-search": "2.0.1",
-    "lodash": "4.17.21",
+    "lodash": "4.17.23",
     "luxon": "3.7.2",
     "md5": "2.3.0",
     "mini-css-extract-plugin": "2.9.4",
