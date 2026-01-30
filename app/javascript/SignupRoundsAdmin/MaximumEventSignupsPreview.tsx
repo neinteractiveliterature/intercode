@@ -99,7 +99,7 @@ export default function MaximumEventSignupsPreview({
   );
 
   const maximumEventSignups: EditingScheduledValue<string> = useMemo(() => {
-    const parsedSignupRounds = parseSignupRounds(signupRounds);
+    const parsedSignupRounds = parseSignupRounds(signupRounds, timezoneName);
     return {
       timespans: parsedSignupRounds.map((round) => ({
         start: round.timespan.start?.toISO(),
@@ -107,7 +107,7 @@ export default function MaximumEventSignupsPreview({
         value: round.maximum_event_signups?.toString() ?? 'not_yet',
       })),
     };
-  }, [signupRounds]);
+  }, [signupRounds, timezoneName]);
 
   return (
     <ScheduledValuePreview
