@@ -166,6 +166,11 @@ function ScheduledValuePreviewCalendar<ValueType>({
     return <></>;
   }
 
+  // If there's only a single change point (not a range), don't render a calendar
+  if (earliestChange.toMillis() === latestChange.toMillis()) {
+    return <></>;
+  }
+
   if (latestChange.diff(earliestChange, 'months').months > 6) {
     return <>{t('scheduledValuePreview.tooLong')}</>;
   }
@@ -259,6 +264,7 @@ function ScheduledValuePreview<ValueType>({
   const [arrow, setArrow] = useState<HTMLDivElement | null>(null);
   const dateElementMapRef = useRef(new Map<number, HTMLElement>());
 
+  // eslint-disable-next-line react-hooks/refs
   const focusedDateElement = focusedDate ? (dateElementMapRef.current.get(focusedDate.valueOf()) ?? null) : null;
 
   const { styles, attributes, state } = useLitformPopper(tooltip, focusedDateElement, arrow);
