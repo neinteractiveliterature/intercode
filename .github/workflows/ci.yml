@@ -332,7 +332,7 @@ jobs:
         with:
           filename: "merged-coverage.xml"
           fail_on_negative_difference: true
-          artifact_download_workflow_names: "ci,cron"
+          artifact_download_workflow_names: "Continuous integration"
           only_list_changed_files: true
       - name: Add Coverage PR Comment
         if: steps.code_coverage_report_action.outputs.file != '' && github.event_name == 'pull_request' && (success() || failure())
