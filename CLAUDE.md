@@ -5,6 +5,7 @@ This document provides essential context about the Intercode codebase for AI ass
 ## Project Overview
 
 Intercode is a convention management system built with:
+
 - **Backend**: Ruby on Rails with GraphQL API
 - **Frontend**: React with TypeScript
 - **Routing**: React Router v7
@@ -46,6 +47,7 @@ export const action: ActionFunction<RouterContextProvider> = async ({ context, r
 ```
 
 **Key points:**
+
 - Always use `LoaderFunction<RouterContextProvider>` or `ActionFunction<RouterContextProvider>` as the type
 - Get client with `context.get(apolloClientContext)`
 - Import `apolloClientContext` from `'AppContexts'`
@@ -72,6 +74,7 @@ function MyComponent() {
 ```
 
 **Key points:**
+
 - Use `useApolloClient()` hook from `'@apollo/client/react'`
 - Call the hook inside the component/hook function body
 - Never try to use `useApolloClient()` in loaders or actions (they're not React components)
@@ -79,11 +82,13 @@ function MyComponent() {
 ### Common Mistakes to Avoid
 
 ❌ **Don't**: Import a global client instance
+
 ```typescript
 import { client } from 'useIntercodeApolloClient'; // This no longer exists
 ```
 
 ❌ **Don't**: Use `useApolloClient()` in loaders/actions
+
 ```typescript
 export const loader: LoaderFunction = async () => {
   const client = useApolloClient(); // Error: hooks can't be used here
@@ -91,6 +96,7 @@ export const loader: LoaderFunction = async () => {
 ```
 
 ❌ **Don't**: Try to access `client` directly in loaders without getting it from context
+
 ```typescript
 export const loader: LoaderFunction = async () => {
   const { data } = await client.query(...); // Error: client is not defined
@@ -118,6 +124,7 @@ export const loader: LoaderFunction = async () => {
 ### Route Structure
 
 Routes follow a file-based convention similar to Remix/React Router v7:
+
 - `route.tsx` or `index.tsx`: Default route component
 - `$id.ts`: Dynamic route segment
 - `loaders.ts`: Loader functions for the route
@@ -251,10 +258,7 @@ import { useAppDateTimeFormat } from './TimeUtils';
 
 function MyComponent() {
   const format = useAppDateTimeFormat();
-  const formatted = format(
-    DateTime.fromISO(isoString, { zone: timezoneName }),
-    'longWeekdayDateTimeWithZone'
-  );
+  const formatted = format(DateTime.fromISO(isoString, { zone: timezoneName }), 'longWeekdayDateTimeWithZone');
 }
 ```
 
@@ -269,11 +273,110 @@ const formattedPrice = formatMoney(priceInCents);
 ## Testing Considerations
 
 When modifying loader/action patterns:
+
 1. Ensure loaders use `LoaderFunction<RouterContextProvider>`
 2. Ensure actions use `ActionFunction<RouterContextProvider>`
 3. Always get the client from context in loaders/actions
 4. Run `yarn run tsc --noEmit` to check for TypeScript errors
 5. Test actual navigation flows to ensure data loading works
+
+## End-to-End Testing with Playwright
+
+The project includes Playwright test infrastructure for browser-based end-to-end tests. The helpers are located in `playwright-tests/` and handle authentication, user creation, and permissions.
+
+### Quick Start
+
+```typescript
+import { test, expect } from '@playwright/test';
+import { setupAndLogin } from './helpers/login';
+
+test('can access admin page', async ({ page }) => {
+  const conventionDomain = 'myconvention.intercode.test';
+
+  await page.goto(`https://${conventionDomain}:5050/admin`);
+
+  // Creates test user with admin permissions and logs in
+  await setupAndLogin(page, conventionDomain, ['update_convention']);
+
+  await expect(page.locator('h1')).toBeVisible();
+});
+```
+
+### Key Helpers
+
+**`setupAndLogin(page, conventionDomain, permissions?)`**
+
+- Creates a test user in the database
+- Grants specified permissions (default: none)
+- Logs in via the UI
+- Reloads the page to ensure auth state is picked up
+
+**`ensureTestUser(conventionDomain, permissions?)`**
+
+- Creates/updates a test user via Rails
+- Grants permissions via staff positions
+- Returns credentials for manual login
+
+**`login(page, credentials)`**
+
+- Handles the UI login flow only
+- Waits for login modal, fills credentials, submits
+
+### Permission System
+
+Tests must explicitly request permissions. Common permissions:
+
+- `update_convention` - Admin access to convention settings
+- `read_schedule` - View schedules
+- `update_events` - Manage events
+- `manage_signups` - Manage user signups
+- `read_reports` - View reports
+
+See `config/permission_names.json` for all available permissions.
+
+### Examples
+
+```typescript
+// Regular user (no special permissions)
+await setupAndLogin(page, 'mycon.test');
+
+// Admin user
+await setupAndLogin(page, 'mycon.test', ['update_convention']);
+
+// Multiple permissions
+await setupAndLogin(page, 'mycon.test', ['update_events', 'read_schedule', 'manage_signups']);
+```
+
+### Environment Variables
+
+- `TEST_EMAIL` - Email for test user (default: `playwright-test@example.com`)
+- `TEST_PASSWORD` - Password (default: `TestPassword123!`)
+- `RAILS_ENV` - Rails environment (default: `development`)
+
+### Running Tests
+
+```bash
+# Run all tests
+yarn playwright test
+
+# Run specific test file
+yarn playwright test my-test.spec.ts
+
+# Run with visible browser
+yarn playwright test --headed
+
+# Debug mode
+yarn playwright test --debug
+```
+
+### Best Practices
+
+1. **Always specify convention domain** - No hardcoded defaults
+2. **Request minimum permissions** - Only grant what the test needs
+3. **Test users are persistent** - Created once and reused across runs
+4. **Use the UI for login** - Tests use actual login flow, not session manipulation
+
+See `playwright-tests/README.md` for comprehensive documentation.
 
 ## Build and Development
 
@@ -297,14 +400,17 @@ yarn test
 ## Common Errors and Solutions
 
 ### "Cannot find name 'client'" in loader/action
+
 **Cause**: Trying to use a global `client` variable that doesn't exist.
 **Solution**: Get client from context using `context.get(apolloClientContext)`.
 
 ### "useApolloClient is defined but never used" in file with loader
+
 **Cause**: File has loader/action that needs context-based client, not hook-based.
 **Solution**: Remove `useApolloClient` import, add `apolloClientContext` import, update loader signature.
 
 ### "Property 'instance' does not exist on type 'typeof AuthenticityTokensManager'"
+
 **Cause**: Incorrect usage of AuthenticityTokensManager.
 **Solution**: Use `AuthenticityTokensContext` with `useContext` hook instead.
 
