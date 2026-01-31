@@ -72,8 +72,11 @@ export async function ensureTestUser(
 export async function cleanupTestUser(email?: string): Promise<void> {
   const userEmail = email || process.env.TEST_EMAIL || 'playwright-test@example.com';
 
+  // Escape for safe inclusion in a Ruby single-quoted string: first backslashes, then single quotes
+  const escapedEmailForRuby = userEmail.replace(/\\/g, '\\\\').replace(/'/g, "\\'");
+
   const rubyScript = `
-    email = '${userEmail.replace(/'/g, "\\'")}'
+    email = '${escapedEmailForRuby}'
     user = User.find_by(email: email)
 
     if user
@@ -85,7 +88,9 @@ export async function cleanupTestUser(email?: string): Promise<void> {
   `;
 
   try {
-    const command = `bundle exec rails runner -e "${rubyScript}"`;
+    // Escape double quotes so the script is safe inside a double-quoted shell argument
+    const shellSafeRubyScript = rubyScript.replace(/"/g, '\\"');
+    const command = `bundle exec rails runner -e "${shellSafeRubyScript}"`;
     const { stdout } = await execAsync(command, {
       cwd: path.resolve(__dirname, '../../'), // Project root
       env: { ...process.env, RAILS_ENV: process.env.RAILS_ENV || 'development' },
