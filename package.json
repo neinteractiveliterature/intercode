@@ -167,6 +167,7 @@
     "@graphql-codegen/typescript-operations": "5.0.4",
     "@graphql-codegen/typescript-react-apollo": "4.3.3",
     "@graphql-eslint/eslint-plugin": "4.4.0",
+    "@playwright/test": "^1.58.1",
     "@prettier/plugin-ruby": "4.0.4",
     "@rollup/plugin-commonjs": "^29.0.0",
     "@rollup/plugin-node-resolve": "^16.0.0",
