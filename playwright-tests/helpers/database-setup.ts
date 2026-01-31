@@ -88,8 +88,8 @@ export async function cleanupTestUser(email?: string): Promise<void> {
   `;
 
   try {
-    // Escape double quotes so the script is safe inside a double-quoted shell argument
-    const shellSafeRubyScript = rubyScript.replace(/"/g, '\\"');
+    // Escape backslashes and double quotes so the script is safe inside a double-quoted shell argument
+    const shellSafeRubyScript = rubyScript.replace(/\\/g, '\\\\').replace(/"/g, '\\"');
     const command = `bundle exec rails runner -e "${shellSafeRubyScript}"`;
     const { stdout } = await execAsync(command, {
       cwd: path.resolve(__dirname, '../../'), // Project root
