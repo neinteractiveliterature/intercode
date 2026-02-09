@@ -272,7 +272,7 @@ GEM
       railties (>= 6.1.0)
     faker (3.5.2)
       i18n (>= 1.8.11, < 2)
-    faraday (2.14.0)
+    faraday (2.14.1)
       faraday-net_http (>= 2.0, < 3.5)
       json
       logger
@@ -335,7 +335,7 @@ GEM
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
     jmespath (1.6.2)
-    json (2.18.0)
+    json (2.18.1)
     jwt (2.10.2)
       base64
     language_server-protocol (3.17.0.5)
@@ -396,8 +396,8 @@ GEM
       bigdecimal
     nats-pure (2.4.0)
       concurrent-ruby (~> 1.0)
-    net-http (0.7.0)
-      uri
+    net-http (0.9.1)
+      uri (>= 0.11.1)
     net-imap (0.5.12)
       date
       net-protocol
