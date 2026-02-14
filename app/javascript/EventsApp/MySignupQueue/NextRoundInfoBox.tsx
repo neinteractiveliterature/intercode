@@ -8,12 +8,18 @@ import { Link } from 'react-router';
 import humanize from '../../humanize';
 import classNames from 'classnames';
 import { MySignupQueueQueryData } from './queries.generated';
+import { TicketMode } from '../../graphqlTypes.generated';
 
 function NextRoundInfoBox({ data }: { data: MySignupQueueQueryData }) {
   const { t } = useTranslation();
   const { ticketName, timezoneName } = useContext(AppRootContext);
 
   const ticketStatus = useMemo(() => {
+    // If the convention doesn't use tickets, no warning needed
+    if (data.convention.ticket_mode === TicketMode.Disabled) {
+      return 'ok' as const;
+    }
+
     if (data.convention.my_profile?.ticket) {
       if (data.convention.my_profile.ticket.ticket_type.allows_event_signups) {
         return 'ok' as const;
@@ -23,7 +29,7 @@ function NextRoundInfoBox({ data }: { data: MySignupQueueQueryData }) {
     } else {
       return 'noTicket';
     }
-  }, [data.convention.my_profile?.ticket]);
+  }, [data.convention.my_profile?.ticket, data.convention.ticket_mode]);
 
   const nextRound = useMemo(() => {
     const parsedRounds = parseSignupRounds(data.convention.signup_rounds);
