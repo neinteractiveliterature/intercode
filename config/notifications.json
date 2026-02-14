@@ -71,6 +71,17 @@
       ]
     },
     {
+      "key": "signup_queue",
+      "name": "Signup queue",
+      "events": [
+        {
+          "key": "no_ticket_reminder",
+          "name": "Reminder: queue items without ticket",
+          "destination_description": "Attendee with queue items"
+        }
+      ]
+    },
+    {
       "key": "signup_requests",
       "name": "Event signup requests",
       "events": [

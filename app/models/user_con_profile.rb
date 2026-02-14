@@ -26,6 +26,7 @@
 #  needs_update                  :boolean          default(FALSE), not null
 #  nickname                      :string
 #  preferred_contact             :string
+#  queue_no_ticket_reminded_at   :datetime
 #  ranked_choice_fallback_action :text             default("waitlist"), not null
 #  ranked_choice_ordering_boost  :integer
 #  receive_whos_free_emails      :boolean          default(TRUE), not null
