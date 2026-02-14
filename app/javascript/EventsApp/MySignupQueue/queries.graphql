@@ -85,6 +85,7 @@ query MySignupQueueQuery {
 
   convention: conventionByRequestHost {
     id
+    ticket_mode
 
     blockPartial(name: MY_SIGNUP_QUEUE_TEXT) {
       id
