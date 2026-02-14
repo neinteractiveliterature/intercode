@@ -1,18 +1,19 @@
 # frozen_string_literal: true
 class SignupQueue::NoTicketReminderNotifier < Notifier
-  attr_reader :user_con_profile
+  attr_reader :signup_ranked_choice
+  delegate :user_con_profile, to: :signup_ranked_choice
 
   dynamic_destination :signup_ranked_choice_user_con_profile do
-    { user_con_profile: }
+    { signup_ranked_choice: }
   end
 
-  def initialize(user_con_profile:)
-    @user_con_profile = user_con_profile
+  def initialize(signup_ranked_choice:)
+    @signup_ranked_choice = signup_ranked_choice
     super(convention: user_con_profile.convention, event_key: "signup_queue/no_ticket_reminder")
   end
 
   def initializer_options
-    { user_con_profile: }
+    { signup_ranked_choice: }
   end
 
   def liquid_assigns

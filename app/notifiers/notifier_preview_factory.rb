@@ -50,6 +50,11 @@ class NotifierPreviewFactory
       Order.new(user_con_profile: UserConProfile.new(convention: convention))
     when :signup
       Signup.new(run: Run.new(event: Event.new(convention: convention, title: "Event Title")))
+    when :signup_ranked_choice
+      SignupRankedChoice.new(
+        user_con_profile: UserConProfile.new(convention: convention),
+        target_run: Run.new(event: Event.new(convention: convention, title: "Event Title"))
+      )
     when :signup_request
       SignupRequest.new(target_run: Run.new(event: Event.new(convention: convention, title: "Event Title")))
     when :ticket
@@ -89,6 +94,8 @@ class NotifierPreviewFactory
       "refund-abc123"
     when :signup
       convention.signups.first
+    when :signup_ranked_choice
+      SignupRankedChoice.where(user_con_profile: convention.user_con_profiles.select(:id)).first
     when :signup_request
       convention.signup_requests.first
     when :ticket
