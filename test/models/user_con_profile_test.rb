@@ -25,6 +25,7 @@
 #  needs_update                  :boolean          default(FALSE), not null
 #  nickname                      :string
 #  preferred_contact             :string
+#  queue_no_ticket_reminded_at   :datetime
 #  ranked_choice_fallback_action :text             default("waitlist"), not null
 #  ranked_choice_ordering_boost  :integer
 #  receive_whos_free_emails      :boolean          default(TRUE), not null
@@ -47,11 +48,11 @@
 #  fk_rails_...  (user_id => users.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-require 'test_helper'
+require "test_helper"
 
 class UserConProfileTest < ActiveSupport::TestCase
-  describe 'is_team_member' do
-    it 'finds a user who is a team member for an event' do
+  describe "is_team_member" do
+    it "finds a user who is a team member for an event" do
       team_member = create(:team_member)
       assert UserConProfile.is_team_member.to_a.include?(team_member.user_con_profile)
     end
@@ -61,7 +62,7 @@ class UserConProfileTest < ActiveSupport::TestCase
       refute UserConProfile.is_team_member.to_a.include?(user_con_profile)
     end
 
-    it 'scopes correctly by convention' do
+    it "scopes correctly by convention" do
       team_member = create(:team_member)
       other_convention = create(:convention)
 

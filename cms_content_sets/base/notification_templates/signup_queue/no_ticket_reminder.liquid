@@ -1,0 +1,47 @@
+---
+subject: |
+  [{{ convention.name }}] Don't forget to get your {{ ticket_name }}!
+body_text: |-
+  Hi {{ user_con_profile.name_without_nickname }},
+
+  You have {{ queue_items.size }} event{% if queue_items.size != 1 %}s{% endif %} in your signup queue for {{ convention.name }}, but you don't have a {{ ticket_name }} yet. To be eligible for signup when your queue processes, you'll need to purchase a {{ ticket_name }}.
+
+  Your queue includes:
+  {%- for item in queue_items limit: 10 %}
+  - {{ item.target_run.event.title }}{% if item.target_run.title_suffix %} ({{ item.target_run.title_suffix }}){% endif %}
+  {%- endfor %}
+
+  {% if queue_items.size > 10 %}...and {{ queue_items.size | minus: 10 }} more{% endif %}
+
+  Get your {{ ticket_name }} now: {{ convention.url | append: '/ticket/new' | absolute_url }}
+
+  We hope to see you at {{ convention.name }}!
+---
+<h1>Don't forget to get your {{ ticket_name }}!</h1>
+
+<p>Hi {{ user_con_profile.name_without_nickname }},</p>
+
+<p>
+  You have <strong>{{ queue_items.size }} event{% if queue_items.size != 1 %}s{% endif %}</strong>
+  in your signup queue for {{ convention.name }}, but you don't have a {{ ticket_name }} yet.
+  To be eligible for signup when your queue processes, you'll need to purchase a {{ ticket_name }}.
+</p>
+
+<h2>Your queue includes:</h2>
+<ul>
+{%- for item in queue_items limit: 10 %}
+  <li>{{ item.target_run.event.title }}{% if item.target_run.title_suffix %} ({{ item.target_run.title_suffix }}){% endif %}</li>
+{%- endfor %}
+</ul>
+
+{% if queue_items.size > 10 %}
+<p><em>...and {{ queue_items.size | minus: 10 }} more</em></p>
+{% endif %}
+
+<p>
+  <a href="{{ convention.url | append: '/ticket/new' | absolute_url }}" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px;">
+    Get your {{ ticket_name }} now
+  </a>
+</p>
+
+<p>We hope to see you at {{ convention.name }}!</p>
