@@ -125,15 +125,15 @@ module Notifier::DynamicDestinations
   end
 
   class SignupRankedChoiceUserConProfileEvaluator < Evaluator
-    attr_reader :user_con_profile
+    attr_reader :signup_ranked_choice
 
-    def initialize(notifier:, user_con_profile:)
+    def initialize(notifier:, signup_ranked_choice:)
       super(notifier:)
-      @user_con_profile = user_con_profile
+      @signup_ranked_choice = signup_ranked_choice
     end
 
     def user_con_profiles
-      [user_con_profile]
+      [signup_ranked_choice.user_con_profile]
     end
   end
 end
