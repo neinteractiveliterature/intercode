@@ -11,6 +11,7 @@ class RemindQueueWithoutTicket < CivilService::Service
     success
   end
 
+  # rubocop:disable Metrics/MethodLength
   def signup_ranked_choices_to_remind
     reminder_window_start = 1.week.from_now.beginning_of_day
     reminder_window_end = 1.week.from_now.end_of_day
@@ -20,14 +21,11 @@ class RemindQueueWithoutTicket < CivilService::Service
         .joins(:user_con_profile)
         .joins(user_con_profile: :convention)
         .joins("LEFT JOIN tickets ON tickets.user_con_profile_id = user_con_profiles.id")
-        .joins(sanitize_sql_array([<<~SQL.squish, reminder_window_start, reminder_window_end]))
-                INNER JOIN signup_rounds ON signup_rounds.convention_id = conventions.id
-                AND signup_rounds.automation_action = 'execute_ranked_choice'
-                AND signup_rounds.executed_at IS NULL
-                AND signup_rounds.start BETWEEN ? AND ?
-              SQL
+        .joins("INNER JOIN signup_rounds ON signup_rounds.convention_id = conventions.id")
         .where(state: "pending")
         .where(tickets: { id: nil })
+        .where(signup_rounds: { automation_action: "execute_ranked_choice", executed_at: nil })
+        .where("signup_rounds.start BETWEEN ? AND ?", reminder_window_start, reminder_window_end)
         .where(
           conventions: {
             ticket_mode: %w[required_for_signup ticket_per_event],
@@ -38,8 +36,5 @@ class RemindQueueWithoutTicket < CivilService::Service
         .select("DISTINCT ON (user_con_profiles.id) signup_ranked_choices.*")
         .includes(user_con_profile: :convention)
   end
-
-  def sanitize_sql_array(array)
-    SignupRankedChoice.sanitize_sql_array(array)
-  end
+  # rubocop:enable Metrics/MethodLength
 end
