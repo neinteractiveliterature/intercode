@@ -26,7 +26,7 @@ class NotifierPreviewFactory
   # This is super not worth refactoring
   def synthesize_parameter_value(parameter_name) # rubocop:disable Metrics/AbcSize, Metrics/MethodLength
     case parameter_name
-    when :alert_user_con_profile
+    when :alert_user_con_profile, :user_con_profile
       UserConProfile.new(convention: convention)
     when :changes
       []
@@ -64,7 +64,7 @@ class NotifierPreviewFactory
   # This is super not worth refactoring
   def find_parameter_value(parameter_name) # rubocop:disable Metrics
     case parameter_name
-    when :alert_user_con_profile
+    when :alert_user_con_profile, :user_con_profile
       convention.user_con_profiles.first
     when :changes
       [
