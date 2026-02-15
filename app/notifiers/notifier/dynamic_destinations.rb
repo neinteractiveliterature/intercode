@@ -123,4 +123,17 @@ module Notifier::DynamicDestinations
       user_activity_alert.notification_destinations.flat_map { |destination| destination.user_con_profiles(notifier) }
     end
   end
+
+  class SignupRankedChoiceUserConProfileEvaluator < Evaluator
+    attr_reader :signup_ranked_choice
+
+    def initialize(notifier:, signup_ranked_choice:)
+      super(notifier:)
+      @signup_ranked_choice = signup_ranked_choice
+    end
+
+    def user_con_profiles
+      [signup_ranked_choice.user_con_profile]
+    end
+  end
 end

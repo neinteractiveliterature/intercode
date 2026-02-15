@@ -1,6 +1,7 @@
 # frozen_string_literal: true
-class RemindDraftEventProposalsJob < ApplicationJob
+class SendRemindersJob < ApplicationJob
   def perform
     RemindDraftEventProposals.new.call!
+    RemindQueueWithoutTicket.new.call!
   end
 end
