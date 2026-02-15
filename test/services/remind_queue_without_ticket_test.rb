@@ -58,7 +58,7 @@ class RemindQueueWithoutTicketTest < ActiveSupport::TestCase
 
     it "does not send a reminder" do
       assert_no_difference "ActionMailer::Base.deliveries.size" do
-        RemindQueueWithoutTicket.new.call!
+        perform_enqueued_jobs { RemindQueueWithoutTicket.new.call! }
       end
     end
   end
@@ -66,7 +66,7 @@ class RemindQueueWithoutTicketTest < ActiveSupport::TestCase
   describe "when user has no queue items" do
     it "does not send a reminder" do
       assert_no_difference "ActionMailer::Base.deliveries.size" do
-        RemindQueueWithoutTicket.new.call!
+        perform_enqueued_jobs { RemindQueueWithoutTicket.new.call! }
       end
     end
   end
@@ -79,7 +79,7 @@ class RemindQueueWithoutTicketTest < ActiveSupport::TestCase
 
     it "does not send a duplicate reminder" do
       assert_no_difference "ActionMailer::Base.deliveries.size" do
-        RemindQueueWithoutTicket.new.call!
+        perform_enqueued_jobs { RemindQueueWithoutTicket.new.call! }
       end
     end
   end
@@ -92,7 +92,7 @@ class RemindQueueWithoutTicketTest < ActiveSupport::TestCase
 
     it "does not send another reminder" do
       assert_no_difference "ActionMailer::Base.deliveries.size" do
-        RemindQueueWithoutTicket.new.call!
+        perform_enqueued_jobs { RemindQueueWithoutTicket.new.call! }
       end
     end
   end
@@ -109,7 +109,7 @@ class RemindQueueWithoutTicketTest < ActiveSupport::TestCase
 
     it "does not send a reminder" do
       assert_no_difference "ActionMailer::Base.deliveries.size" do
-        RemindQueueWithoutTicket.new.call!
+        perform_enqueued_jobs { RemindQueueWithoutTicket.new.call! }
       end
     end
   end
@@ -124,7 +124,7 @@ class RemindQueueWithoutTicketTest < ActiveSupport::TestCase
 
     it "does not send a reminder" do
       assert_no_difference "ActionMailer::Base.deliveries.size" do
-        RemindQueueWithoutTicket.new.call!
+        perform_enqueued_jobs { RemindQueueWithoutTicket.new.call! }
       end
     end
   end
@@ -143,7 +143,7 @@ class RemindQueueWithoutTicketTest < ActiveSupport::TestCase
 
     it "does not send a reminder" do
       assert_no_difference "ActionMailer::Base.deliveries.size" do
-        RemindQueueWithoutTicket.new.call!
+        perform_enqueued_jobs { RemindQueueWithoutTicket.new.call! }
       end
     end
   end
@@ -168,7 +168,7 @@ class RemindQueueWithoutTicketTest < ActiveSupport::TestCase
 
     it "does not send a reminder" do
       assert_no_difference "ActionMailer::Base.deliveries.size" do
-        RemindQueueWithoutTicket.new.call!
+        perform_enqueued_jobs { RemindQueueWithoutTicket.new.call! }
       end
     end
   end
