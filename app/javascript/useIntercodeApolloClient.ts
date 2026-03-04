@@ -9,6 +9,7 @@ import { SetContextLink } from '@apollo/client/link/context';
 import possibleTypes from './possibleTypes.json';
 import AuthenticityTokensManager from './AuthenticityTokensContext';
 import { GraphQLFormattedError } from 'graphql';
+import { EventsPagination } from 'graphqlTypes.generated';
 
 // adapted from https://github.com/jaydenseric/apollo-upload-client/issues/63#issuecomment-392501449
 function isFile(value: unknown): value is Blob | File {
@@ -127,6 +128,25 @@ export function buildIntercodeApolloCache(): InMemoryCache {
         fields: {
           rooms: { merge: true },
           room_names: { merge: true },
+        },
+      },
+      Convention: {
+        fields: {
+          events_paginated: {
+            keyArgs: false,
+            merge(existing: EventsPagination | null | undefined, incoming: EventsPagination, { args }) {
+              const merged = existing ? existing.entries.slice(0) : [];
+              const offset = ((args?.page ?? 1) - 1) * (args?.per_page ?? 20);
+              for (let i = 0; i < incoming.entries.length; ++i) {
+                merged[offset + i] = incoming.entries[i];
+              }
+
+              return {
+                ...incoming,
+                entries: merged,
+              };
+            },
+          },
         },
       },
       RegistrationPolicy: {
