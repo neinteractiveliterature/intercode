@@ -1,4 +1,4 @@
-import { Fragment, ReactNode, useContext } from 'react';
+import { Fragment, ReactNode, useContext, useMemo } from 'react';
 import { Waypoint } from 'react-waypoint';
 import { SortingState } from '@tanstack/react-table';
 import { DateTime } from 'luxon';
@@ -33,28 +33,44 @@ function EventListEvents({
 }: EventListEventsProps): React.JSX.Element {
   const format = useAppDateTimeFormat();
   const { timezoneName } = useContext(AppRootContext);
-  let previousConventionDay: FiniteTimespan | null = null;
-  let conventionDayTimespans: FiniteTimespan[] = [];
-  const conventionTimespan = timespanFromConvention(convention);
-  if (conventionTimespan.isFinite()) {
-    conventionDayTimespans = getConventionDayTimespans(conventionTimespan, timezoneName);
-  }
+
+  const conventionDayTimespans: FiniteTimespan[] = useMemo(() => {
+    const conventionTimespan = timespanFromConvention(convention);
+    if (conventionTimespan.isFinite()) {
+      return getConventionDayTimespans(conventionTimespan, timezoneName);
+    } else {
+      return [];
+    }
+  }, [convention, timezoneName]);
+
+  const conventionDayStartsByEventId = useMemo(() => {
+    const eventIds = new Map();
+    if (sortBy?.some((sort) => sort.id === 'first_scheduled_run_start')) {
+      let previousConventionDay: FiniteTimespan | null = null;
+      for (const event of eventsPaginated.entries) {
+        const runs = getSortedRuns(event);
+        if (runs.length > 0) {
+          const conventionDay = conventionDayTimespans.find((timespan) =>
+            timespan.includesTime(DateTime.fromISO(runs[0].starts_at, { zone: timezoneName })),
+          );
+          if (conventionDay && (previousConventionDay == null || !previousConventionDay.isSame(conventionDay))) {
+            previousConventionDay = conventionDay;
+          }
+          if (conventionDay && (previousConventionDay == null || !previousConventionDay.isSame(conventionDay))) {
+            eventIds.set(event.id, conventionDay.start);
+          }
+        }
+      }
+    }
+    return eventIds;
+  }, [conventionDayTimespans, eventsPaginated.entries, sortBy, timezoneName]);
 
   return (
     <>
       {eventsPaginated.entries.map((event, index) => {
         let preamble: ReactNode = null;
-        if (sortBy?.some((sort) => sort.id === 'first_scheduled_run_start')) {
-          const runs = getSortedRuns(event);
-          if (runs.length > 0) {
-            const conventionDay = conventionDayTimespans.find((timespan) =>
-              timespan.includesTime(DateTime.fromISO(runs[0].starts_at, { zone: timezoneName })),
-            );
-            if (conventionDay && (previousConventionDay == null || !previousConventionDay.isSame(conventionDay))) {
-              preamble = <h3 className="mt-4">{format(conventionDay.start, 'longWeekdayDate')}</h3>;
-              previousConventionDay = conventionDay;
-            }
-          }
+        if (conventionDayStartsByEventId.has(event.id)) {
+          preamble = <h3 className="mt-4">{format(conventionDayStartsByEventId.get(event.id), 'longWeekdayDate')}</h3>;
         }
 
         const eventContent = (

@@ -20,11 +20,7 @@ import usePageTitle from '../../../usePageTitle';
 import AppRootContext from '../../../AppRootContext';
 import EventListMyRatingSelector from './EventListMyRatingSelector';
 import useAsyncFunction from '../../../useAsyncFunction';
-import {
-  EventListEventsQueryData,
-  EventListEventsQueryDocument,
-  EventListEventsQueryVariables,
-} from './queries.generated';
+import { EventListEventsQueryDocument } from './queries.generated';
 import EventListFilterableFormItemDropdown from './EventListFilterableFormItemDropdown';
 import { CommonConventionDataQueryData, CommonConventionDataQueryDocument } from '../../queries.generated';
 import { getFilterableFormItems } from '../../useFilterableFormItems';
@@ -32,7 +28,6 @@ import useMergeCategoriesIntoEvents from '../../useMergeCategoriesIntoEvents';
 import EventCatalogNavTabs from '../EventCatalogNavTabs';
 import { LoaderFunction, useLoaderData, RouterContextProvider } from 'react-router';
 import { apolloClientContext } from '../../../AppContexts';
-import { FetchMoreFunction } from '@apollo/client/react/internal';
 
 const PAGE_SIZE = 20;
 
@@ -42,35 +37,6 @@ const filterCodecs = buildFieldFilterCodecs({
   text_search: FilterCodecs.nonEmptyString,
   form_items: FilterCodecs.json,
 });
-
-const fetchMoreEvents = async (
-  fetchMore: FetchMoreFunction<EventListEventsQueryData, EventListEventsQueryVariables>,
-  page: number,
-) => {
-  try {
-    await fetchMore({
-      variables: { page, pageSize: PAGE_SIZE },
-      updateQuery: (prev, { fetchMoreResult }) => {
-        const updatedQuery: EventListEventsQueryData = {
-          ...prev,
-          convention: {
-            ...prev.convention,
-            events_paginated: {
-              ...prev.convention.events_paginated,
-              entries: [
-                ...(prev.convention.events_paginated.entries ?? []),
-                ...(fetchMoreResult?.convention?.events_paginated.entries ?? []),
-              ],
-            },
-          },
-        };
-        return updatedQuery;
-      },
-    });
-  } catch {
-    // ignore, see https://github.com/apollographql/apollo-client/issues/4114#issuecomment-502111099
-  }
-};
 
 type LoaderResult = {
   convention: CommonConventionDataQueryData['convention'];
@@ -114,7 +80,13 @@ function EventList(): React.JSX.Element {
     [filterableFormItems],
   );
 
-  const { data, loading, error, fetchMore } = useQuery(EventListEventsQueryDocument, {
+  const {
+    data: currentData,
+    previousData,
+    loading,
+    error,
+    fetchMore,
+  } = useQuery(EventListEventsQueryDocument, {
     variables: {
       page: 1,
       pageSize: PAGE_SIZE,
@@ -123,20 +95,23 @@ function EventList(): React.JSX.Element {
       fetchFormItemIdentifiers: filterableFormItemIdentifiers,
     },
   });
-  const [fetchMoreEventsAsync, fetchMoreError, fetchMoreInProgress] = useAsyncFunction(fetchMoreEvents);
-
-  const loadedEntries: number = loading || error || !data ? 0 : (data.convention?.events_paginated.entries.length ?? 0);
-  const totalEntries: number = loading || error || !data ? 0 : (data.convention?.events_paginated.total_entries ?? 0);
+  const [fetchMoreEventsAsync, fetchMoreError, fetchMoreInProgress] = useAsyncFunction(() =>
+    fetchMore({
+      variables: { page: (data?.convention.events_paginated.current_page ?? 0) + 1, pageSize: PAGE_SIZE },
+      // the cache policy in useIntercodeApolloClient takes care of merging
+    }),
+  );
+  const data = loading && previousData ? previousData : currentData;
 
   const fetchMoreIfNeeded = useCallback(() => {
-    if (loadedEntries === 0) {
+    if (!data) {
       return;
     }
 
-    if (loadedEntries < totalEntries) {
-      fetchMoreEventsAsync(fetchMore as Parameters<typeof fetchMoreEventsAsync>[0], loadedEntries / PAGE_SIZE + 1);
+    if (data.convention.events_paginated.current_page < data.convention.events_paginated.total_pages) {
+      fetchMoreEventsAsync();
     }
-  }, [fetchMore, fetchMoreEventsAsync, loadedEntries, totalEntries]);
+  }, [fetchMoreEventsAsync, data]);
 
   const changeFilterValue = useCallback(
     (fieldId: string, value: unknown) => {
@@ -170,7 +145,7 @@ function EventList(): React.JSX.Element {
     return <ErrorDisplay graphQLError={error} />;
   }
 
-  const eventsPaginated = (loading || !data
+  const eventsPaginated = (!data
     ? undefined
     : { ...data.convention?.events_paginated, entries: eventsWithCategories }) ?? {
     __typename: 'EventsPagination',
@@ -254,8 +229,8 @@ function EventList(): React.JSX.Element {
         )}
       </div>
 
-      <PageLoadingIndicator visible={loading} />
-      {loading || !data ? null : (
+      <PageLoadingIndicator visible={!data} />
+      {data && (
         <>
           <EventListEvents
             convention={data.convention}
