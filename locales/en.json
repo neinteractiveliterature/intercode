@@ -160,7 +160,8 @@
         "SIGNUPS_WITHDRAW_CONFIRMATION": "Withdraw confirmation for event",
         "SIGNUPS_WITHDRAWAL": "Attendee withdrew from event",
         "TICKETS_PURCHASED": "Ticket purchase confirmation",
-        "USER_ACTIVITY_ALERTS_ALERT": "User activity alert"
+        "USER_ACTIVITY_ALERTS_ALERT": "User activity alert",
+        "SIGNUP_QUEUE_NO_TICKET_REMINDER": "Signup queue without ticket reminder"
       },
       "destinations": {
         "addDestination": {
@@ -192,7 +193,8 @@
           "SIGNUP_USER_CON_PROFILE": "Signed up attendee",
           "TICKET_USER_CON_PROFILE": "Attendee",
           "TRIGGERING_USER": "User who triggered the notification",
-          "USER_ACTIVITY_ALERT_DESTINATIONS": "Configured destinations for this user activity alert"
+          "USER_ACTIVITY_ALERT_DESTINATIONS": "Configured destinations for this user activity alert",
+          "SIGNUP_RANKED_CHOICE_USER_CON_PROFILE": "Attendee with ranked choice queue items"
         },
         "header": "Notification destinations",
         "removeButton": "Remove destination",
