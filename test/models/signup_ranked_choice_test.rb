@@ -38,7 +38,16 @@
 require "test_helper"
 
 class SignupRankedChoiceTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  let(:convention) { create(:convention) }
+  let(:user_con_profile) { create(:user_con_profile, convention: convention) }
+  let(:event) { create(:event, convention: convention) }
+  let(:event_run) { create(:run, event: event) }
+  let(:signup_ranked_choice) do
+    create(:signup_ranked_choice, user_con_profile: user_con_profile, target_run: event_run, state: "pending")
+  end
+
+  it "is convertible to a Liquid drop" do
+    drop = signup_ranked_choice.to_liquid
+    assert_instance_of SignupRankedChoiceDrop, drop
+  end
 end
