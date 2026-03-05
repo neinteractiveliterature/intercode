@@ -54,6 +54,10 @@ class SignupRankedChoice < ApplicationRecord
 
   positioned on: %i[user_con_profile state], column: :priority
 
+  def to_liquid
+    SignupRankedChoiceDrop.new(self)
+  end
+
   private
 
   def ensure_all_fields_point_at_the_same_convention
@@ -63,9 +67,5 @@ class SignupRankedChoice < ApplicationRecord
 
       errors.add field, "is in #{value.convention.name} but the attendee profile is in #{convention.name}"
     end
-  end
-
-  def to_liquid
-    SignupRankedChoiceDrop.new(self)
   end
 end
