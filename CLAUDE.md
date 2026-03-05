@@ -230,7 +230,7 @@ function MyComponent() {
 }
 ```
 
-Translation keys are defined in locale files and should be used instead of hardcoded strings.
+Translation keys are defined in `locales/en.json` and should always be used instead of hardcoded strings in React components. Never use literal strings in JSX or passed as props — always use `t('some.key')`. For JSX with mixed content (text + components), use the `<Trans>` component.
 
 ## Authentication Context
 

@@ -54,6 +54,7 @@ export const action: ActionFunction<RouterContextProvider> = async ({ context, r
         'ticket_mode',
         'clickwrap_agreement',
         'language',
+        'queue_no_ticket_reminder_advance_seconds',
       ]),
       defaultLayoutId: convention.defaultLayout?.id.toString(),
       rootPageId: convention.rootPage.id.toString(),

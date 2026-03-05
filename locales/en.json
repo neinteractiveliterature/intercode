@@ -54,7 +54,15 @@
       "ticketModeLabel": "{{ ticketName, capitalize }} sales",
       "ticketModeRequiredForSignup": "{{ ticketNamePlural, capitalize }} are sold and required for event signups",
       "ticketModeTicketPerEvent": "Each event in this convention sells {{ ticketNamePlural }} separately",
-      "ticketNameLabel": "Name for “ticket” at this convention"
+      "ticketNameLabel": "Name for “ticket” at this convention",
+      "queueNoTicketReminder": {
+        "caption": "Queue without ticket reminder",
+        "disabled": "Disabled (do not send reminders)",
+        "oneDay": "1 day before",
+        "threeDays": "3 days before",
+        "oneWeek": "1 week before",
+        "twoWeeks": "2 weeks before"
+      }
     },
     "emailRoutes": {
       "newEmailRoute": {

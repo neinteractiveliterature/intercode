@@ -1211,7 +1211,8 @@ CREATE TABLE public.conventions (
     open_graph_image text,
     favicon text,
     default_currency_code character varying,
-    signup_automation_mode character varying
+    signup_automation_mode character varying,
+    queue_no_ticket_reminder_advance_seconds integer
 );
 
 
@@ -6136,6 +6137,7 @@ ALTER TABLE ONLY public.cms_files_pages
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260305000000'),
 ('20260214191626'),
 ('20260214190735'),
 ('20251210230514'),

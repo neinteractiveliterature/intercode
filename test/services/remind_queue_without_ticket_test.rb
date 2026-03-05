@@ -7,7 +7,8 @@ class RemindQueueWithoutTicketTest < ActiveSupport::TestCase
       :convention,
       ticket_mode: "required_for_signup",
       signup_automation_mode: "ranked_choice",
-      starts_at: 2.weeks.from_now
+      starts_at: 2.weeks.from_now,
+      queue_no_ticket_reminder_advance_seconds: 1.week.to_i
     )
   end
   let(:user_con_profile) { create(:user_con_profile, convention: convention) }
@@ -91,6 +92,38 @@ class RemindQueueWithoutTicketTest < ActiveSupport::TestCase
     end
 
     it "does not send another reminder" do
+      assert_no_difference "ActionMailer::Base.deliveries.size" do
+        perform_enqueued_jobs { RemindQueueWithoutTicket.new.call! }
+      end
+    end
+  end
+
+  describe "when convention has no reminder advance time configured" do
+    let(:no_reminder_convention) do
+      create(
+        :convention,
+        ticket_mode: "required_for_signup",
+        signup_automation_mode: "ranked_choice",
+        starts_at: 2.weeks.from_now,
+        queue_no_ticket_reminder_advance_seconds: nil
+      )
+    end
+    let(:no_reminder_user) { create(:user_con_profile, convention: no_reminder_convention) }
+    let(:no_reminder_event) { create(:event, convention: no_reminder_convention) }
+    let(:no_reminder_run) { create(:run, event: no_reminder_event) }
+
+    before do
+      create(
+        :signup_round,
+        convention: no_reminder_convention,
+        automation_action: "execute_ranked_choice",
+        ranked_choice_order: "asc",
+        start: 1.week.from_now
+      )
+      create(:signup_ranked_choice, user_con_profile: no_reminder_user, target_run: no_reminder_run, state: "pending")
+    end
+
+    it "does not send a reminder" do
       assert_no_difference "ActionMailer::Base.deliveries.size" do
         perform_enqueued_jobs { RemindQueueWithoutTicket.new.call! }
       end

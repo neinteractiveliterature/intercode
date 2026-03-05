@@ -59,6 +59,12 @@ class Types::ConventionInputType < Types::BaseInputObject
       about OpenGraph, see https://ogp.me/.
     MARKDOWN
   end
+  argument :queue_no_ticket_reminder_advance_seconds, Integer, required: false, camelize: false do
+    description <<~MARKDOWN
+      How many seconds before the first automated signup round to send a reminder to attendees who have ranked choices
+      queued but no ticket.  If null, no reminders will be sent.
+    MARKDOWN
+  end
   argument :root_page_id, ID, required: false, camelize: true do
     description "The ID of the Page to serve at the root path (/) of this convention site."
   end

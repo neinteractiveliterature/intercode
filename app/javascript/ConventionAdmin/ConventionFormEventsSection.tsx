@@ -3,7 +3,7 @@ import { BooleanInput, MultipleChoiceInput, usePropertySetters } from '@neintera
 
 import type { ConventionFormConvention } from './ConventionForm';
 import { ShowSchedule, SignupAutomationMode, SignupMode } from '../graphqlTypes.generated';
-import { Trans } from 'react-i18next';
+import { Trans, useTranslation } from 'react-i18next';
 
 export type ConventionFormEventsSectionProps = {
   convention: ConventionFormConvention;
@@ -16,6 +16,16 @@ function ConventionFormEventsSection({
   setConvention,
   disabled,
 }: ConventionFormEventsSectionProps): React.JSX.Element {
+  const { t } = useTranslation();
+
+  const queueNoTicketReminderOptions = [
+    { value: '', label: t('admin.convention.queueNoTicketReminder.disabled') },
+    { value: '86400', label: t('admin.convention.queueNoTicketReminder.oneDay') },
+    { value: '259200', label: t('admin.convention.queueNoTicketReminder.threeDays') },
+    { value: '604800', label: t('admin.convention.queueNoTicketReminder.oneWeek') },
+    { value: '1209600', label: t('admin.convention.queueNoTicketReminder.twoWeeks') },
+  ];
+
   const [
     setSignupMode,
     setSignupAutomationMode,
@@ -23,6 +33,7 @@ function ConventionFormEventsSection({
     setAcceptingProposals,
     setShowEventList,
     setShowSchedule,
+    setQueueNoTicketReminderAdvanceSeconds,
   ] = usePropertySetters(
     setConvention,
     'signup_mode',
@@ -31,6 +42,7 @@ function ConventionFormEventsSection({
     'accepting_proposals',
     'show_event_list',
     'show_schedule',
+    'queue_no_ticket_reminder_advance_seconds',
   );
 
   return (
@@ -69,6 +81,21 @@ function ConventionFormEventsSection({
         ]}
         value={convention.signup_automation_mode}
         onChange={(newValue: string) => setSignupAutomationMode(newValue as SignupAutomationMode)}
+        disabled={disabled}
+      />
+
+      <MultipleChoiceInput
+        name="queue_no_ticket_reminder_advance_seconds"
+        caption={t('admin.convention.queueNoTicketReminder.caption')}
+        choices={queueNoTicketReminderOptions}
+        value={
+          convention.queue_no_ticket_reminder_advance_seconds == null
+            ? ''
+            : String(convention.queue_no_ticket_reminder_advance_seconds)
+        }
+        onChange={(newValue: string) =>
+          setQueueNoTicketReminderAdvanceSeconds(newValue === '' ? null : Number(newValue))
+        }
         disabled={disabled}
       />
 

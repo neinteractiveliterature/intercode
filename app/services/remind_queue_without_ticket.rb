@@ -13,9 +13,6 @@ class RemindQueueWithoutTicket < CivilService::Service
 
   # rubocop:disable Metrics/MethodLength
   def signup_ranked_choices_to_remind
-    reminder_window_start = 1.week.from_now.beginning_of_day
-    reminder_window_end = 1.week.from_now.end_of_day
-
     @signup_ranked_choices_to_remind ||=
       SignupRankedChoice
         .joins(:user_con_profile)
@@ -25,7 +22,13 @@ class RemindQueueWithoutTicket < CivilService::Service
         .where(state: "pending")
         .where(tickets: { id: nil })
         .where(signup_rounds: { automation_action: "execute_ranked_choice", executed_at: nil })
-        .where("signup_rounds.start BETWEEN ? AND ?", reminder_window_start, reminder_window_end)
+        .where.not(conventions: { queue_no_ticket_reminder_advance_seconds: nil })
+        .where(
+          "DATE_TRUNC('day', signup_rounds.start AT TIME ZONE 'UTC') = " \
+            "DATE_TRUNC('day', " \
+            "(NOW() + (conventions.queue_no_ticket_reminder_advance_seconds * INTERVAL '1 second')) " \
+            "AT TIME ZONE 'UTC')"
+        )
         .where(
           conventions: {
             ticket_mode: %w[required_for_signup ticket_per_event],
