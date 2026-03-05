@@ -4,44 +4,45 @@
 #
 # Table name: conventions
 #
-#  id                             :bigint           not null, primary key
-#  accepting_proposals            :boolean
-#  canceled                       :boolean          default(FALSE), not null
-#  clickwrap_agreement            :text
-#  default_currency_code          :string
-#  domain                         :string           not null
-#  email_from                     :text             not null
-#  email_mode                     :string           default("forward"), not null
-#  ends_at                        :datetime
-#  event_mailing_list_domain      :text
-#  favicon                        :text
-#  hidden                         :boolean          default(FALSE), not null
-#  language                       :string           not null
-#  location                       :jsonb
-#  maximum_tickets                :integer
-#  name                           :string
-#  open_graph_image               :text
-#  show_event_list                :string           default("no"), not null
-#  show_schedule                  :string           default("no"), not null
-#  signup_automation_mode         :string
-#  signup_mode                    :string           default("self_service"), not null
-#  signup_requests_open           :boolean          default(FALSE), not null
-#  site_mode                      :string           default("convention"), not null
-#  starts_at                      :datetime
-#  stripe_account_ready_to_charge :boolean          default(FALSE), not null
-#  ticket_mode                    :string           default("disabled"), not null
-#  ticket_name                    :string           default("ticket"), not null
-#  timezone_mode                  :string           not null
-#  timezone_name                  :string
-#  created_at                     :datetime
-#  updated_at                     :datetime
-#  catch_all_staff_position_id    :bigint
-#  default_layout_id              :bigint
-#  organization_id                :bigint
-#  root_page_id                   :bigint
-#  stripe_account_id              :text
-#  updated_by_id                  :bigint
-#  user_con_profile_form_id       :bigint
+#  id                                       :bigint           not null, primary key
+#  accepting_proposals                      :boolean
+#  canceled                                 :boolean          default(FALSE), not null
+#  clickwrap_agreement                      :text
+#  default_currency_code                    :string
+#  domain                                   :string           not null
+#  email_from                               :text             not null
+#  email_mode                               :string           default("forward"), not null
+#  ends_at                                  :datetime
+#  event_mailing_list_domain                :text
+#  favicon                                  :text
+#  hidden                                   :boolean          default(FALSE), not null
+#  language                                 :string           not null
+#  location                                 :jsonb
+#  maximum_tickets                          :integer
+#  name                                     :string
+#  open_graph_image                         :text
+#  queue_no_ticket_reminder_advance_seconds :integer
+#  show_event_list                          :string           default("no"), not null
+#  show_schedule                            :string           default("no"), not null
+#  signup_automation_mode                   :string
+#  signup_mode                              :string           default("self_service"), not null
+#  signup_requests_open                     :boolean          default(FALSE), not null
+#  site_mode                                :string           default("convention"), not null
+#  starts_at                                :datetime
+#  stripe_account_ready_to_charge           :boolean          default(FALSE), not null
+#  ticket_mode                              :string           default("disabled"), not null
+#  ticket_name                              :string           default("ticket"), not null
+#  timezone_mode                            :string           not null
+#  timezone_name                            :string
+#  created_at                               :datetime
+#  updated_at                               :datetime
+#  catch_all_staff_position_id              :bigint
+#  default_layout_id                        :bigint
+#  organization_id                          :bigint
+#  root_page_id                             :bigint
+#  stripe_account_id                        :text
+#  updated_by_id                            :bigint
+#  user_con_profile_form_id                 :bigint
 #
 # Indexes
 #
@@ -224,6 +225,8 @@ class Convention < ApplicationRecord
     signup_rounds.create!(maximum_event_signups: "not_yet", executed_at: Time.now)
   end
 
+  SCHEDULE_RELEASE_PERMISSIVITY_ORDER = %w[no priv gms yes].freeze
+
   private
 
   def maximum_event_signups_must_cover_all_time
@@ -258,11 +261,10 @@ other types of site, use the ticket_per_event mode."
       )
     end
 
-    return unless site_mode == "single_event" && events.count > 1
+    return unless site_mode == "single_event" && events.many?
     errors.add(:site_mode, "single_event is not valid because this convention has multiple events already")
   end
 
-  SCHEDULE_RELEASE_PERMISSIVITY_ORDER = %w[no priv gms yes].freeze
   def show_event_list_must_be_at_least_as_permissive_as_show_schedule
     show_event_list_permissivity = SCHEDULE_RELEASE_PERMISSIVITY_ORDER.index(show_event_list)
     show_schedule_permissivity = SCHEDULE_RELEASE_PERMISSIVITY_ORDER.index(show_schedule)
