@@ -84,7 +84,7 @@ class ConventionReportsPresenter
   end
 
   def new_and_returning_attendees
-    current_profiles = convention.user_con_profiles.joins(:tickets).distinct
+    current_profiles = convention.user_con_profiles.joins(:ticket).distinct
 
     return { new_attendees: current_profiles.to_a, returning_attendees: [] } unless convention.organization_id
 
@@ -92,7 +92,7 @@ class ConventionReportsPresenter
 
     org_attendance_counts =
       UserConProfile
-        .joins(:tickets)
+        .joins(:ticket)
         .joins("INNER JOIN conventions AS org_conventions ON org_conventions.id = user_con_profiles.convention_id")
         .where(user_id: current_attendee_user_ids)
         .where(org_conventions: { organization_id: convention.organization_id })
