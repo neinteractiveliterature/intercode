@@ -230,7 +230,7 @@ function MyComponent() {
 }
 ```
 
-Translation keys are defined in locale files and should be used instead of hardcoded strings.
+Translation keys are defined in `locales/en.json` and should always be used instead of hardcoded strings in React components. Never use literal strings in JSX or passed as props — always use `t('some.key')`. For JSX with mixed content (text + components), use the `<Trans>` component.
 
 ## Authentication Context
 
@@ -413,6 +413,25 @@ yarn test
 
 **Cause**: Incorrect usage of AuthenticityTokensManager.
 **Solution**: Use `AuthenticityTokensContext` with `useContext` hook instead.
+
+## Pull Request Labels
+
+When creating PRs, apply two kinds of labels:
+
+**Category labels** (used by release-drafter to group changes in release notes):
+
+- `enhancement` or `feature` — new features
+- `bug`, `bugfix`, or `fix` — bug fixes
+- `chore` — maintenance/refactoring with no user-facing change
+- `dependencies` — dependency updates
+
+**Version bump labels** (used by release-drafter to determine the next version number):
+
+- `major` — breaking changes (bumps major version, e.g. 1.x.x → 2.0.0)
+- `minor` — non-breaking new features (bumps minor version, e.g. 1.2.x → 1.3.0)
+- `patch` — bug fixes and small improvements (bumps patch version, e.g. 1.2.3 → 1.2.4)
+
+Every PR should have one category label and one version bump label. If no version bump label is set, release-drafter defaults to `patch`.
 
 ## Getting Help
 

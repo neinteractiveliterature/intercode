@@ -26,6 +26,7 @@ fragment ConventionAdminConventionFields on Convention {
   signup_mode
   signup_automation_mode
   signup_requests_open
+  queue_no_ticket_reminder_advance_seconds
   stripe_account_ready_to_charge
 
   favicon {

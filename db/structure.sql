@@ -1211,7 +1211,8 @@ CREATE TABLE public.conventions (
     open_graph_image text,
     favicon text,
     default_currency_code character varying,
-    signup_automation_mode character varying
+    signup_automation_mode character varying,
+    queue_no_ticket_reminder_advance_seconds integer
 );
 
 
@@ -2955,7 +2956,8 @@ CREATE TABLE public.user_con_profiles (
     allow_sms boolean DEFAULT true NOT NULL,
     lottery_number integer NOT NULL,
     ranked_choice_ordering_boost integer,
-    ranked_choice_fallback_action text DEFAULT 'waitlist'::text NOT NULL
+    ranked_choice_fallback_action text DEFAULT 'waitlist'::text NOT NULL,
+    queue_no_ticket_reminded_at timestamp(6) without time zone
 );
 
 
@@ -6135,6 +6137,9 @@ ALTER TABLE ONLY public.cms_files_pages
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260305000000'),
+('20260214191626'),
+('20260214190735'),
 ('20251210230514'),
 ('20251109200750'),
 ('20251001173716'),

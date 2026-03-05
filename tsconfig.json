@@ -16,7 +16,8 @@
     "maxNodeModuleJsDepth": 10,
     "baseUrl": "./app/javascript",
     "types": ["vitest/globals", "vite/client"],
-    "incremental": true
+    "incremental": true,
+    "tsBuildInfoFile": ".tsbuildinfo"
   },
   "include": [
     "./app/javascript/",

@@ -229,6 +229,12 @@ class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassL
       description "If true, only returns products that provide the buyer a ticket to this convention."
     end
   end
+  field :queue_no_ticket_reminder_advance_seconds, Integer, null: true do
+    description <<~MARKDOWN
+      How many seconds before the first automated signup round to send a reminder to attendees who have ranked choices
+      queued but no ticket.  If null, no reminders will be sent.
+    MARKDOWN
+  end
   field :reports, Types::ConventionReportsType, null: false do
     description "A sub-object containing various reports that can be generated for this convention."
     authorize_action :view_reports

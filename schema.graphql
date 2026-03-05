@@ -223,9 +223,23 @@ type ChoiceCount {
   state: SignupState!
 }
 
+"""
+Client-side configuration values needed for frontend initialization
+"""
 type ClientConfiguration {
+  """
+  The default Active Storage service name configured in Rails
+  """
   rails_default_active_storage_service_name: String!
+
+  """
+  The URL endpoint for Rails Direct Uploads
+  """
   rails_direct_uploads_url: String!
+
+  """
+  The reCAPTCHA site key for client-side verification
+  """
   recaptcha_site_key: String!
 }
 
@@ -1130,6 +1144,12 @@ type Convention implements CmsParent {
   ): [Product!]!
 
   """
+  How many seconds before the first automated signup round to send a reminder to attendees who have ranked choices
+  queued but no ticket.  If null, no reminders will be sent.
+  """
+  queue_no_ticket_reminder_advance_seconds: Int
+
+  """
   A sub-object containing various reports that can be generated for this convention.
   """
   reports: ConventionReports!
@@ -1547,6 +1567,12 @@ input ConventionInput {
   about OpenGraph, see https://ogp.me/.
   """
   openGraphImage: Upload
+
+  """
+  How many seconds before the first automated signup round to send a reminder to attendees who have ranked choices
+  queued but no ticket.  If null, no reminders will be sent.
+  """
+  queue_no_ticket_reminder_advance_seconds: Int
 
   """
   The ID of the Page to serve at the root path (/) of this convention site.
@@ -5223,6 +5249,7 @@ enum NotificationDynamicDestination {
   EVENT_PROPOSAL_OWNER
   EVENT_TEAM_MEMBERS
   ORDER_USER_CON_PROFILE
+  SIGNUP_RANKED_CHOICE_USER_CON_PROFILE
   SIGNUP_REQUEST_USER_CON_PROFILE
   SIGNUP_USER_CON_PROFILE
   TICKET_USER_CON_PROFILE
@@ -5278,6 +5305,7 @@ enum NotificationEventKey {
   SIGNUPS_USER_SIGNUP_MOVED
   SIGNUPS_WITHDRAWAL
   SIGNUPS_WITHDRAW_CONFIRMATION
+  SIGNUP_QUEUE_NO_TICKET_REMINDER
   SIGNUP_REQUESTS_NEW_SIGNUP_REQUEST
   SIGNUP_REQUESTS_REQUEST_ACCEPTED
   TICKETS_PURCHASED
@@ -6976,8 +7004,18 @@ enum SchedulingUi {
   single_run
 }
 
+"""
+A paginated search result containing matching entries and total count
+"""
 type SearchResult {
+  """
+  The results of the search
+  """
   entries: [SearchResultEntry!]!
+
+  """
+  The total number of entries matching the search query
+  """
   total_entries: Int!
 }
 

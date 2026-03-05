@@ -298,10 +298,14 @@ export type ChoiceCount = {
   state: SignupState;
 };
 
+/** Client-side configuration values needed for frontend initialization */
 export type ClientConfiguration = {
   __typename: 'ClientConfiguration';
+  /** The default Active Storage service name configured in Rails */
   rails_default_active_storage_service_name: Scalars['String']['output'];
+  /** The URL endpoint for Rails Direct Uploads */
   rails_direct_uploads_url: Scalars['String']['output'];
+  /** The reCAPTCHA site key for client-side verification */
   recaptcha_site_key: Scalars['String']['output'];
 };
 
@@ -856,6 +860,11 @@ export type Convention = CmsParent & {
   product: Product;
   /** Returns the products in this convention. */
   products: Array<Product>;
+  /**
+   * How many seconds before the first automated signup round to send a reminder to attendees who have ranked choices
+   * queued but no ticket.  If null, no reminders will be sent.
+   */
+  queue_no_ticket_reminder_advance_seconds?: Maybe<Scalars['Int']['output']>;
   /** A sub-object containing various reports that can be generated for this convention. */
   reports: ConventionReports;
   /** All the rooms in this convention. */
@@ -1479,6 +1488,11 @@ export type ConventionInput = {
    * about OpenGraph, see https://ogp.me/.
    */
   openGraphImage?: InputMaybe<Scalars['Upload']['input']>;
+  /**
+   * How many seconds before the first automated signup round to send a reminder to attendees who have ranked choices
+   * queued but no ticket.  If null, no reminders will be sent.
+   */
+  queue_no_ticket_reminder_advance_seconds?: InputMaybe<Scalars['Int']['input']>;
   /** The ID of the Page to serve at the root path (/) of this convention site. */
   rootPageId?: InputMaybe<Scalars['ID']['input']>;
   /** Who should be able to see the event catalog? */
@@ -4319,6 +4333,7 @@ export enum NotificationDynamicDestination {
   EventProposalOwner = 'EVENT_PROPOSAL_OWNER',
   EventTeamMembers = 'EVENT_TEAM_MEMBERS',
   OrderUserConProfile = 'ORDER_USER_CON_PROFILE',
+  SignupRankedChoiceUserConProfile = 'SIGNUP_RANKED_CHOICE_USER_CON_PROFILE',
   SignupRequestUserConProfile = 'SIGNUP_REQUEST_USER_CON_PROFILE',
   SignupUserConProfile = 'SIGNUP_USER_CON_PROFILE',
   TicketUserConProfile = 'TICKET_USER_CON_PROFILE',
@@ -4357,6 +4372,7 @@ export enum NotificationEventKey {
   SignupsUserSignupMoved = 'SIGNUPS_USER_SIGNUP_MOVED',
   SignupsWithdrawal = 'SIGNUPS_WITHDRAWAL',
   SignupsWithdrawConfirmation = 'SIGNUPS_WITHDRAW_CONFIRMATION',
+  SignupQueueNoTicketReminder = 'SIGNUP_QUEUE_NO_TICKET_REMINDER',
   SignupRequestsNewSignupRequest = 'SIGNUP_REQUESTS_NEW_SIGNUP_REQUEST',
   SignupRequestsRequestAccepted = 'SIGNUP_REQUESTS_REQUEST_ACCEPTED',
   TicketsPurchased = 'TICKETS_PURCHASED',
@@ -5514,9 +5530,12 @@ export enum SchedulingUi {
   SingleRun = 'single_run'
 }
 
+/** A paginated search result containing matching entries and total count */
 export type SearchResult = {
   __typename: 'SearchResult';
+  /** The results of the search */
   entries: Array<SearchResultEntry>;
+  /** The total number of entries matching the search query */
   total_entries: Scalars['Int']['output'];
 };
 

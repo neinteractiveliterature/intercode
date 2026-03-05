@@ -2010,13 +2010,13 @@
         {
           "kind": "OBJECT",
           "name": "ClientConfiguration",
-          "description": null,
+          "description": "Client-side configuration values needed for frontend initialization",
           "interfaces": [],
           "possibleTypes": null,
           "fields": [
             {
               "name": "rails_default_active_storage_service_name",
-              "description": null,
+              "description": "The default Active Storage service name configured in Rails",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -2032,7 +2032,7 @@
             },
             {
               "name": "rails_direct_uploads_url",
-              "description": null,
+              "description": "The URL endpoint for Rails Direct Uploads",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -2048,7 +2048,7 @@
             },
             {
               "name": "recaptcha_site_key",
-              "description": null,
+              "description": "The reCAPTCHA site key for client-side verification",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -5651,6 +5651,18 @@
               ]
             },
             {
+              "name": "queue_no_ticket_reminder_advance_seconds",
+              "description": "How many seconds before the first automated signup round to send a reminder to attendees who have ranked choices\nqueued but no ticket.  If null, no reminders will be sent.\n",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Int",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
               "name": "reports",
               "description": "A sub-object containing various reports that can be generated for this convention.",
               "type": {
@@ -6915,6 +6927,18 @@
               "type": {
                 "kind": "SCALAR",
                 "name": "Upload",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "queue_no_ticket_reminder_advance_seconds",
+              "description": "How many seconds before the first automated signup round to send a reminder to attendees who have ranked choices\nqueued but no ticket.  If null, no reminders will be sent.\n",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Int",
                 "ofType": null
               },
               "defaultValue": null,
@@ -24044,6 +24068,12 @@
               "deprecationReason": null
             },
             {
+              "name": "SIGNUP_RANKED_CHOICE_USER_CON_PROFILE",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "SIGNUP_REQUEST_USER_CON_PROFILE",
               "description": null,
               "isDeprecated": false,
@@ -24253,6 +24283,12 @@
             },
             {
               "name": "SIGNUPS_HOLD_EXPIRED",
+              "description": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "SIGNUP_QUEUE_NO_TICKET_REMINDER",
               "description": null,
               "isDeprecated": false,
               "deprecationReason": null
@@ -31210,13 +31246,13 @@
         {
           "kind": "OBJECT",
           "name": "SearchResult",
-          "description": null,
+          "description": "A paginated search result containing matching entries and total count",
           "interfaces": [],
           "possibleTypes": null,
           "fields": [
             {
               "name": "entries",
-              "description": null,
+              "description": "The results of the search",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -31240,7 +31276,7 @@
             },
             {
               "name": "total_entries",
-              "description": null,
+              "description": "The total number of entries matching the search query",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,

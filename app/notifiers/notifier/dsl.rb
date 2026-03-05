@@ -5,6 +5,7 @@ module Notifier::Dsl
     event_proposal_owner: Notifier::DynamicDestinations::EventProposalOwnerEvaluator,
     event_team_members: Notifier::DynamicDestinations::EventTeamMembersEvaluator,
     order_user_con_profile: Notifier::DynamicDestinations::OrderUserConProfileEvaluator,
+    signup_ranked_choice_user_con_profile: Notifier::DynamicDestinations::SignupRankedChoiceUserConProfileEvaluator,
     signup_request_user_con_profile: Notifier::DynamicDestinations::SignupRequestUserConProfileEvaluator,
     signup_user_con_profile: Notifier::DynamicDestinations::SignupUserConProfileEvaluator,
     ticket_user_con_profile: Notifier::DynamicDestinations::TicketUserConProfileEvaluator,
@@ -63,8 +64,10 @@ module Notifier::Dsl
     self.class.allowed_conditions.index_with { |condition| self.class.evaluator_for_condition(condition, self) }
   end
 
+  # rubocop:disable Naming/PredicateMethod
   def evaluate_condition(condition_type, condition_value)
     @condition_evaluators ||= condition_evaluators
     @condition_evaluators.fetch(condition_type.to_sym).matches?(condition_value)
   end
+  # rubocop:enable Naming/PredicateMethod
 end
