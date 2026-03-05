@@ -8,7 +8,7 @@ body_text: |-
 
   Your queue includes:
   {%- for item in queue_items limit: 10 %}
-  - {{ item.target_run.event.title }}{% if item.target_run.title_suffix %} ({{ item.target_run.title_suffix }}){% endif %}
+  - {{ item.target_run.event.title }}{% if item.target_run.title_suffix != blank %} ({{ item.target_run.title_suffix }}){% endif %}
   {%- endfor %}
 
   {% if queue_items.size > 10 %}...and {{ queue_items.size | minus: 10 }} more{% endif %}
@@ -30,7 +30,7 @@ body_text: |-
 <h2>Your queue includes:</h2>
 <ul>
 {%- for item in queue_items limit: 10 %}
-  <li>{{ item.target_run.event.title }}{% if item.target_run.title_suffix %} ({{ item.target_run.title_suffix }}){% endif %}</li>
+  <li>{{ item.target_run.event.title }}{% if item.target_run.title_suffix != blank %} ({{ item.target_run.title_suffix }}){% endif %}</li>
 {%- endfor %}
 </ul>
 
