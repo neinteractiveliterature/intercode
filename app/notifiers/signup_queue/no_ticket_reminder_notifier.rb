@@ -20,7 +20,7 @@ class SignupQueue::NoTicketReminderNotifier < Notifier
     super.merge(
       "user_con_profile" => user_con_profile,
       "ticket_name" => convention.ticket_name,
-      "queue_items" => user_con_profile.signup_ranked_choices.where(state: "pending")
+      "queue_items" => user_con_profile.signup_ranked_choices.where(state: "pending").to_a
     )
   end
 

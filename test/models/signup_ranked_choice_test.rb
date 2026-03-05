@@ -38,7 +38,28 @@
 require "test_helper"
 
 class SignupRankedChoiceTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  let(:convention) { create(:convention) }
+  let(:user_con_profile) { create(:user_con_profile, convention: convention) }
+  let(:event) { create(:event, convention: convention) }
+  let(:event_run) { create(:run, event: event) }
+  let(:signup_ranked_choice) do
+    create(:signup_ranked_choice, user_con_profile: user_con_profile, target_run: event_run, state: "pending")
+  end
+
+  it "is convertible to a Liquid drop" do
+    drop = signup_ranked_choice.to_liquid
+    assert_instance_of SignupRankedChoiceDrop, drop
+  end
+
+  describe "cross-convention validation" do
+    let(:other_convention) { create(:convention) }
+    let(:other_event) { create(:event, convention: other_convention) }
+    let(:other_run) { create(:run, event: other_event) }
+
+    it "is invalid when target_run belongs to a different convention" do
+      choice = build(:signup_ranked_choice, user_con_profile: user_con_profile, target_run: other_run, state: "pending")
+      assert_not choice.valid?
+      assert choice.errors[:target_run].any?
+    end
+  end
 end

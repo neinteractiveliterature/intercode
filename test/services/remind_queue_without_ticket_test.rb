@@ -43,6 +43,13 @@ class RemindQueueWithoutTicketTest < ActiveSupport::TestCase
       end
     end
 
+    it "renders the reminder without Liquid errors" do
+      perform_enqueued_jobs { RemindQueueWithoutTicket.new.call! }
+      delivery = ActionMailer::Base.deliveries.last
+      assert_no_match(/Liquid error/i, delivery.text_part.body.to_s)
+      assert_no_match(/Liquid error/i, delivery.html_part.body.to_s)
+    end
+
     it "updates queue_no_ticket_reminded_at timestamp" do
       RemindQueueWithoutTicket.new.call!
       user_con_profile.reload
