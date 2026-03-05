@@ -13,7 +13,7 @@ body_text: |-
 
   {% if queue_items.size > 10 %}...and {{ queue_items.size | minus: 10 }} more{% endif %}
 
-  Get your {{ ticket_name }} now: {{ convention.url | append: '/ticket/new' | absolute_url }}
+  Get your {{ ticket_name }} now: {{ '/ticket/new' | absolute_url }}
 
   We hope to see you at {{ convention.name }}!
 ---
@@ -39,7 +39,7 @@ body_text: |-
 {% endif %}
 
 <p>
-  <a href="{{ convention.url | append: '/ticket/new' | absolute_url }}" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px;">
+  <a href="{{ '/ticket/new' | absolute_url }}" style="display: inline-block; padding: 10px 20px; background-color: #007bff; color: white; text-decoration: none; border-radius: 5px;">
     Get your {{ ticket_name }} now
   </a>
 </p>

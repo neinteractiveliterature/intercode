@@ -19,7 +19,7 @@ class RunDrop < Liquid::Drop
   #                                         database (by being scheduled by con staff)
   # @!method length_seconds
   #   @return [Integer] The length of this run in seconds
-  delegate :id, :event, :starts_at, :ends_at, :created_at, :length_seconds, to: :run
+  delegate :id, :event, :starts_at, :ends_at, :created_at, :length_seconds, :title_suffix, to: :run
 
   # @api
   def initialize(run)

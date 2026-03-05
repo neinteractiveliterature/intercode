@@ -64,4 +64,8 @@ class SignupRankedChoice < ApplicationRecord
       errors.add field, "is in #{value.convention.name} but the attendee profile is in #{convention.name}"
     end
   end
+
+  def to_liquid
+    SignupRankedChoiceDrop.new(self)
+  end
 end
