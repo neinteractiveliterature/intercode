@@ -266,6 +266,7 @@ export default typescriptEslint.config(
               'GroupedSignupCount',
               'LiquidAssign',
               'MailingLists',
+              'NewAndReturningAttendees',
               'Money',
               'Mutation',
               'NotificationCondition',

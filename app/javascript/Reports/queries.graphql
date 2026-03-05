@@ -9,6 +9,27 @@ query ReportsMenuQuery {
   }
 }
 
+query NewAndReturningAttendeesQuery {
+  convention: conventionByRequestHost {
+    id
+
+    reports {
+      new_and_returning_attendees {
+        new_attendees {
+          id
+          name_inverted
+          email
+        }
+        returning_attendees {
+          id
+          name_inverted
+          email
+        }
+      }
+    }
+  }
+}
+
 query AttendanceByPaymentAmountQuery {
   convention: conventionByRequestHost {
     id

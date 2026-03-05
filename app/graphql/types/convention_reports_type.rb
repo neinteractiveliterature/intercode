@@ -13,6 +13,10 @@ class Types::ConventionReportsType < Types::BaseObject
   field :events_by_choice, [Types::EventWithChoiceCountsType], null: false do
     description "A report of events people signed up for along with which numbered choice they were for that person."
   end
+  field :new_and_returning_attendees, Types::NewAndReturningAttendeesType, null: false do
+    description "A report of attendees split into those who are new to this organization's conventions " \
+                  "and those who have attended before."
+  end
   field :sales_count_by_product_and_payment_amount, [Types::SalesCountByProductAndPaymentAmountType], null: false do
     description "A breakdown of all product and ticket sales in this convention."
   end

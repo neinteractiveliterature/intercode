@@ -20,7 +20,7 @@ class ConventionReportsPresenter
               "COALESCE(price_per_item_cents, 0)",
               "COALESCE(price_per_item_currency, #{ActiveRecord::Base.connection.quote(convention.default_currency_code_or_site_default)})"
             )
-            .where("product_id IS NOT NULL")
+            .where.not(product_id: nil)
             .pluck(
               :product_id,
               :status,
@@ -81,6 +81,29 @@ class ConventionReportsPresenter
       .to_a
       .group_by(&:provided_by_event)
       .map { |provided_by_event, event_tickets| { provided_by_event: provided_by_event, tickets: event_tickets } }
+  end
+
+  def new_and_returning_attendees
+    current_profiles = convention.user_con_profiles.joins(:tickets).distinct
+
+    return { new_attendees: current_profiles.to_a, returning_attendees: [] } unless convention.organization_id
+
+    current_attendee_user_ids = current_profiles.pluck(:user_id)
+
+    org_attendance_counts =
+      UserConProfile
+        .joins(:tickets)
+        .joins("INNER JOIN conventions AS org_conventions ON org_conventions.id = user_con_profiles.convention_id")
+        .where(user_id: current_attendee_user_ids)
+        .where(org_conventions: { organization_id: convention.organization_id })
+        .group(:user_id)
+        .count("DISTINCT user_con_profiles.id")
+
+    profiles = current_profiles.to_a
+    new_attendees = profiles.select { |p| (org_attendance_counts[p.user_id] || 0) <= 1 }
+    returning_attendees = profiles.select { |p| (org_attendance_counts[p.user_id] || 0) > 1 }
+
+    { new_attendees: new_attendees, returning_attendees: returning_attendees }
   end
 
   def events_by_choice

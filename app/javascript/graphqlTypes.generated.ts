@@ -1526,6 +1526,8 @@ export type ConventionReports = {
   event_provided_tickets: Array<EventProvidedTicketList>;
   /** A report of events people signed up for along with which numbered choice they were for that person. */
   events_by_choice: Array<EventWithChoiceCounts>;
+  /** A report of attendees split into those who are new to this organization's conventions and those who have attended before. */
+  new_and_returning_attendees: NewAndReturningAttendees;
   /** A breakdown of all product and ticket sales in this convention. */
   sales_count_by_product_and_payment_amount: Array<SalesCountByProductAndPaymentAmount>;
   /** The total revenue taken in by this convention, optionally filtered by various parameters. */
@@ -4269,6 +4271,14 @@ export type MutationWithdrawSignupRequestArgs = {
 
 export type MutationWithdrawUserSignupArgs = {
   input: WithdrawUserSignupInput;
+};
+
+export type NewAndReturningAttendees = {
+  __typename: 'NewAndReturningAttendees';
+  /** Attendees who have never attended a convention in this organization before. */
+  new_attendees: Array<UserConProfile>;
+  /** Attendees who have attended at least one previous convention in this organization. */
+  returning_attendees: Array<UserConProfile>;
 };
 
 /** A condition that must be met for a notification to be sent to a destination. */

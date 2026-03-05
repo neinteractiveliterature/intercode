@@ -40,6 +40,9 @@ function ReportsMenu() {
               <Link to="/reports/events_by_choice">Events by choice</Link>
             </li>
             <li>
+              <Link to="/reports/new_and_returning_attendees">New and returning attendees</Link>
+            </li>
+            <li>
               <Link to="/reports/signup_spy">Signup spy</Link>
             </li>
           </ul>
