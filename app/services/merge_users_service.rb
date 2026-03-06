@@ -12,6 +12,7 @@ class MergeUsersService < CivilService::Service
     { model: Order, field: :user_con_profile_id },
     { model: Signup, field: :user_con_profile_id },
     { model: SignupChange, field: :user_con_profile_id },
+    { model: SignupRankedChoice, field: :user_con_profile_id },
     { model: SignupRequest, field: :user_con_profile_id },
     { model: TeamMember, field: :user_con_profile_id },
     { model: Ticket, field: :user_con_profile_id }
@@ -25,6 +26,7 @@ class MergeUsersService < CivilService::Service
     { model: Run, field: :updated_by_id },
     { model: Signup, field: :updated_by_id },
     { model: SignupChange, field: :updated_by_id },
+    { model: SignupRankedChoice, field: :updated_by_id },
     { model: SignupRequest, field: :updated_by_id },
     { model: UserActivityAlert, field: :user_id }
   ].freeze
