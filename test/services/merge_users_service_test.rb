@@ -1,14 +1,15 @@
-require 'test_helper'
+require "test_helper"
 
 class MergeUsersServiceTest < ActiveSupport::TestCase
-  it 'merges two users' do
+  it "merges two users" do
     profile1, profile2 = create_list(:user_con_profile, 2)
     user_id1, user_id2 = [profile1, profile2].map(&:user_id)
 
     MergeUsersService.new(
       user_ids: [user_id1, user_id2],
       winning_user_id: user_id1,
-      winning_user_con_profile_ids_by_convention_id: {}
+      winning_user_con_profile_ids_by_convention_id: {
+      }
     ).call!
 
     assert UserConProfile.find_by(id: profile1.id)
@@ -18,7 +19,25 @@ class MergeUsersServiceTest < ActiveSupport::TestCase
     assert_nil User.find_by(id: user_id2)
   end
 
-  it 'merges two profiles from the same convention' do
+  it "reassigns signup_ranked_choices updated_by to winning user" do
+    profile1, profile2 = create_list(:user_con_profile, 2)
+    user1 = profile1.user
+    user2 = profile2.user
+    run = create(:run, event: create(:event, convention: profile2.convention))
+    choice = create(:signup_ranked_choice, user_con_profile: profile2, target_run: run, updated_by: user2)
+
+    MergeUsersService.new(
+      user_ids: [user1.id, user2.id],
+      winning_user_id: user1.id,
+      winning_user_con_profile_ids_by_convention_id: {
+      }
+    ).call!
+
+    assert_equal user1.id, choice.reload.updated_by_id
+    assert_nil User.find_by(id: user2.id)
+  end
+
+  it "merges two profiles from the same convention" do
     profile1, profile2 = create_list(:user_con_profile, 2)
     user_id1, user_id2 = [profile1, profile2].map(&:user_id)
     profile3 = create(:user_con_profile, convention: profile1.convention, user: profile2.user)
