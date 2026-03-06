@@ -12,7 +12,6 @@ class MergeUsersService < CivilService::Service
     { model: Order, field: :user_con_profile_id },
     { model: Signup, field: :user_con_profile_id },
     { model: SignupChange, field: :user_con_profile_id },
-    { model: SignupRankedChoice, field: :user_con_profile_id },
     { model: SignupRequest, field: :user_con_profile_id },
     { model: TeamMember, field: :user_con_profile_id },
     { model: Ticket, field: :user_con_profile_id }
@@ -77,9 +76,23 @@ class MergeUsersService < CivilService::Service
       model.where(field => profile.id).update_all(field => winning_profile_for_convention.id)
     end
 
+    merge_signup_ranked_choices(profile, winning_profile_for_convention)
+
     profile.staff_positions.each { |staff_position| winning_profile_for_convention.staff_positions << staff_position }
 
     profile.destroy!
+  end
+
+  def merge_signup_ranked_choices(losing_profile, winning_profile)
+    losing_choices_by_state =
+      SignupRankedChoice.where(user_con_profile: losing_profile).order(:priority).group_by(&:state)
+
+    losing_choices_by_state.each do |state, choices|
+      max_priority = SignupRankedChoice.where(user_con_profile: winning_profile, state: state).maximum(:priority) || 0
+      choices.each_with_index do |choice, index|
+        choice.update_columns(user_con_profile_id: winning_profile.id, priority: max_priority + index + 1)
+      end
+    end
   end
 
   def merge_record_keeping_fields
