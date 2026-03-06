@@ -308,6 +308,8 @@ jobs:
       - minitest
       - minitest-system
     steps:
+      - name: Check out repository
+        uses: actions/checkout@v5
       - name: Download Minitest coverage
         uses: actions/download-artifact@v6
         with:
@@ -323,10 +325,8 @@ jobs:
         with:
           name: vitest-coverage
           path: vitest-coverage
-      - name: Check out repository
-        uses: actions/checkout@v5
       - name: Merge coverage reports
-        run: ruby scripts/merge_coverage.rb merged-coverage.xml minitest-coverage/coverage/coverage.xml vitest-coverage/coverage/cobertura-coverage.xml minitest-system-coverage/coverage/coverage.xml
+        run: ruby scripts/merge_coverage.rb merged-coverage.xml minitest-coverage/coverage.xml vitest-coverage/cobertura-coverage.xml minitest-system-coverage/coverage.xml
       - name: Generate Coverage Report
         uses: clearlyip/code-coverage-report-action@v6
         id: code_coverage_report_action
