@@ -18,6 +18,8 @@ input_paths = ARGV[1..]
 file_lines = Hash.new { |h, k| h[k] = Hash.new(0) }
 
 input_paths.each do |path|
+  abort "Error: coverage file not found: #{path}" unless File.exist?(path)
+
   doc = REXML::Document.new(File.read(path))
   doc
     .elements
@@ -27,7 +29,7 @@ input_paths.each do |path|
         .elements
         .each("lines/line") { |line| file_lines[fname][line.attributes["number"].to_i] += line.attributes["hits"].to_i }
     end
-rescue StandardError => e
+rescue REXML::ParseException => e
   warn "Warning: could not parse #{path}: #{e}"
 end
 
