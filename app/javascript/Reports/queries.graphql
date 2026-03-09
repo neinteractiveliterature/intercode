@@ -9,6 +9,31 @@ query ReportsMenuQuery {
   }
 }
 
+query NewAndReturningAttendeesQuery {
+  convention: conventionByRequestHost {
+    id
+
+    reports {
+      new_and_returning_attendees {
+        organization_attendance_counts {
+          user_id
+          current_convention_user_con_profile {
+            id
+            name_inverted
+            email
+          }
+          attended_conventions {
+            id
+            name
+            starts_at
+            domain
+          }
+        }
+      }
+    }
+  }
+}
+
 query AttendanceByPaymentAmountQuery {
   convention: conventionByRequestHost {
     id

@@ -682,6 +682,7 @@ const commonInConventionRoutes: RouteObject[] = [
     path: '/reports',
     element: <AuthorizationRequiredRouteGuard abilities={['can_read_reports']} />,
     children: [
+      { path: 'new_and_returning_attendees', lazy: () => import('./Reports/NewAndReturningAttendees') },
       { path: 'attendance_by_payment_amount', lazy: () => import('./Reports/AttendanceByPaymentAmount') },
       { path: 'event_provided_tickets', lazy: () => import('./Reports/EventProvidedTickets') },
       { path: 'events_by_choice', lazy: () => import('./Reports/EventsByChoice') },

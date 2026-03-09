@@ -1650,6 +1650,11 @@ type ConventionReports {
   events_by_choice: [EventWithChoiceCounts!]!
 
   """
+  A report of attendees split into those who are new to this organization's conventions and those who have attended before.
+  """
+  new_and_returning_attendees: NewAndReturningAttendees!
+
+  """
   A breakdown of all product and ticket sales in this convention.
   """
   sales_count_by_product_and_payment_amount: [SalesCountByProductAndPaymentAmount!]!
@@ -5144,6 +5149,17 @@ type Mutation {
 }
 
 """
+A report grouping convention attendees into those new to the organization and those who have attended before.
+"""
+type NewAndReturningAttendees {
+  """
+  Attendance counts per attendee across all conventions in the organization,
+  used to distinguish new attendees from returning ones.
+  """
+  organization_attendance_counts: [OrganizationAttendanceCount!]!
+}
+
+"""
 A condition that must be met for a notification to be sent to a destination.
 """
 type NotificationCondition {
@@ -5472,6 +5488,31 @@ type Organization {
   id: ID!
   name: String!
   organization_roles: [OrganizationRole!]!
+}
+
+"""
+Attendance data for a single attendee across all conventions in the organization.
+"""
+type OrganizationAttendanceCount {
+  """
+  All conventions in the organization that this attendee has attended.
+  """
+  attended_conventions: [Convention!]!
+
+  """
+  The attendee's profile for the current convention.
+  """
+  current_convention_user_con_profile: UserConProfile!
+
+  """
+  IDs of all the attendee's profiles across conventions in the organization.
+  """
+  user_con_profiles: [UserConProfile!]!
+
+  """
+  The ID of the user account for this attendee.
+  """
+  user_id: ID!
 }
 
 type OrganizationRole {
