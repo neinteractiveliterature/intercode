@@ -222,6 +222,7 @@
       "newAndReturningAttendees": {
         "conventionsHeader": "Conventions",
         "emailHeader": "Email",
+        "exportCsvButton": "Export CSV",
         "moreConventions_one": "and {{ count }} more",
         "moreConventions_other": "and {{ count }} more",
         "nameHeader": "Name",

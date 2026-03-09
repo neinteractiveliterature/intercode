@@ -1,10 +1,12 @@
 import { LoaderFunction, useLoaderData, RouterContextProvider, Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
+import { stringify as csvStringify } from 'csv-stringify/browser/esm/sync';
+import { saveAs } from 'file-saver';
 
 import usePageTitle from '../usePageTitle';
 import { NewAndReturningAttendeesQueryData, NewAndReturningAttendeesQueryDocument } from './queries.generated';
 import { apolloClientContext } from 'AppContexts';
-import { ReactNode, useMemo, useState } from 'react';
+import { ReactNode, useCallback, useMemo, useState } from 'react';
 import sortBy from 'lodash/sortBy';
 import { joinReact } from 'RenderingUtils';
 import { Convention } from 'graphqlTypes.generated';
@@ -208,9 +210,31 @@ function NewAndReturningAttendees() {
     [organization_attendance_counts],
   );
 
+  const exportCSV = useCallback(() => {
+    const rows = [
+      [
+        t('admin.reports.newAndReturningAttendees.nameHeader'),
+        t('admin.reports.newAndReturningAttendees.emailHeader'),
+        t('admin.reports.newAndReturningAttendees.conventionsHeader'),
+      ],
+      ...organization_attendance_counts.map((attendee) => [
+        attendee.current_convention_user_con_profile.name_inverted,
+        attendee.current_convention_user_con_profile.email,
+        attendee.attended_conventions.length,
+      ]),
+    ];
+    const blob = new Blob([csvStringify(rows)], { type: 'text/csv; charset=utf-8' });
+    saveAs(blob, 'attendance_history.csv');
+  }, [organization_attendance_counts, t]);
+
   return (
     <>
-      <h1 className="mb-4">{t('admin.reports.newAndReturningAttendees.title')}</h1>
+      <div className="d-flex align-items-baseline mb-4">
+        <h1 className="flex-grow-1">{t('admin.reports.newAndReturningAttendees.title')}</h1>
+        <button type="button" className="btn btn-outline-primary" onClick={exportCSV}>
+          <i className="bi-file-earmark-spreadsheet" /> {t('admin.reports.newAndReturningAttendees.exportCsvButton')}
+        </button>
+      </div>
 
       <div className="card mb-4">
         <div className="card-body">
