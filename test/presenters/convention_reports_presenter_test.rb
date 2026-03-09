@@ -6,6 +6,21 @@ class ConventionReportsPresenterTest < ActiveSupport::TestCase
   let(:other_convention) { create(:convention, organization:, ticket_mode: "required_for_signup") }
   let(:presenter) { ConventionReportsPresenter.new(convention) }
 
+  describe "#sales_count_by_product_and_payment_amount" do
+    it "counts completed order entries grouped by product" do
+      profile = create(:user_con_profile, convention:)
+      product = create(:product, convention:)
+      order = create(:order, user_con_profile: profile, status: "paid")
+      create(:order_entry, order:, product:, quantity: 2, price_per_item_cents: 1000, price_per_item_currency: "USD")
+
+      result = presenter.sales_count_by_product_and_payment_amount
+
+      assert_equal 1, result.length
+      assert_equal product.id, result.first[:product_id]
+      assert_equal 2, result.first[:count]
+    end
+  end
+
   describe "#new_and_returning_attendees" do
     it "returns a new attendee who only has a ticket at this convention" do
       profile = create(:user_con_profile, convention:)

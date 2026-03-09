@@ -26,14 +26,14 @@ class ConventionReportsPresenter
             .completed
             .left_joins(:order_entries)
             .group(
-              :product_id,
+              "order_entries.product_id",
               :status,
               "COALESCE(price_per_item_cents, 0)",
               "COALESCE(price_per_item_currency, #{ActiveRecord::Base.connection.quote(convention.default_currency_code_or_site_default)})"
             )
-            .where.not(product_id: nil)
+            .where.not(order_entries: { product_id: nil })
             .pluck(
-              :product_id,
+              "order_entries.product_id",
               :status,
               Arel.sql("COALESCE(price_per_item_cents, 0)"),
               Arel.sql(
