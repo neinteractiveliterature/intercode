@@ -1,10 +1,12 @@
 import { LoaderFunction, useLoaderData, RouterContextProvider, Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
+import { stringify as csvStringify } from 'csv-stringify/browser/esm/sync';
+import { saveAs } from 'file-saver';
 
 import usePageTitle from '../usePageTitle';
 import { NewAndReturningAttendeesQueryData, NewAndReturningAttendeesQueryDocument } from './queries.generated';
 import { apolloClientContext } from 'AppContexts';
-import { ReactNode, useMemo, useState } from 'react';
+import { ReactNode, useCallback, useMemo, useState } from 'react';
 import sortBy from 'lodash/sortBy';
 import { joinReact } from 'RenderingUtils';
 import { Convention } from 'graphqlTypes.generated';
@@ -151,45 +153,69 @@ function AttendeeTable({ attendees }: { attendees: AttendeeProfile[] }) {
     }
   }, [attendees, reverse, sortColumn]);
 
+  const exportCSV = useCallback(() => {
+    const rows = [
+      [
+        t('admin.reports.newAndReturningAttendees.nameHeader'),
+        t('admin.reports.newAndReturningAttendees.emailHeader'),
+        t('admin.reports.newAndReturningAttendees.conventionsHeader'),
+      ],
+      ...attendeesSorted.map((attendee) => [
+        attendee.current_convention_user_con_profile.name_inverted,
+        attendee.current_convention_user_con_profile.email,
+        attendee.attended_conventions.length,
+      ]),
+    ];
+    const blob = new Blob([csvStringify(rows)], { type: 'text/csv; charset=utf-8' });
+    saveAs(blob, 'attendance_history.csv');
+  }, [attendeesSorted, t]);
+
   return (
-    <table className="table table-striped">
-      <thead>
-        <tr>
-          <SortableHeader
-            columnName="name"
-            sortColumn={sortColumn}
-            reverse={reverse}
-            setSortColumn={setSortColumn}
-            setReverse={setReverse}
-          >
-            {t('admin.reports.newAndReturningAttendees.nameHeader')}
-          </SortableHeader>
-          <SortableHeader
-            columnName="email"
-            sortColumn={sortColumn}
-            reverse={reverse}
-            setSortColumn={setSortColumn}
-            setReverse={setReverse}
-          >
-            {t('admin.reports.newAndReturningAttendees.emailHeader')}
-          </SortableHeader>
-          <SortableHeader
-            columnName="conventions"
-            sortColumn={sortColumn}
-            reverse={reverse}
-            setSortColumn={setSortColumn}
-            setReverse={setReverse}
-          >
-            {t('admin.reports.newAndReturningAttendees.conventionsHeader')}
-          </SortableHeader>
-        </tr>
-      </thead>
-      <tbody>
-        {attendeesSorted.map((attendee) => (
-          <AttendeeRow key={attendee.user_id} attendee={attendee} />
-        ))}
-      </tbody>
-    </table>
+    <>
+      <div className="mb-2">
+        <button type="button" className="btn btn-outline-primary" onClick={exportCSV}>
+          <i className="bi-file-earmark-spreadsheet" /> {t('admin.reports.newAndReturningAttendees.exportCsvButton')}
+        </button>
+      </div>
+      <table className="table table-striped">
+        <thead>
+          <tr>
+            <SortableHeader
+              columnName="name"
+              sortColumn={sortColumn}
+              reverse={reverse}
+              setSortColumn={setSortColumn}
+              setReverse={setReverse}
+            >
+              {t('admin.reports.newAndReturningAttendees.nameHeader')}
+            </SortableHeader>
+            <SortableHeader
+              columnName="email"
+              sortColumn={sortColumn}
+              reverse={reverse}
+              setSortColumn={setSortColumn}
+              setReverse={setReverse}
+            >
+              {t('admin.reports.newAndReturningAttendees.emailHeader')}
+            </SortableHeader>
+            <SortableHeader
+              columnName="conventions"
+              sortColumn={sortColumn}
+              reverse={reverse}
+              setSortColumn={setSortColumn}
+              setReverse={setReverse}
+            >
+              {t('admin.reports.newAndReturningAttendees.conventionsHeader')}
+            </SortableHeader>
+          </tr>
+        </thead>
+        <tbody>
+          {attendeesSorted.map((attendee) => (
+            <AttendeeRow key={attendee.user_id} attendee={attendee} />
+          ))}
+        </tbody>
+      </table>
+    </>
   );
 }
 
