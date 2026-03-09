@@ -218,6 +218,12 @@
         "deprecationReason": null
       },
       {
+        "name": "SIGNUP_RANKED_CHOICE_USER_CON_PROFILE",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
         "name": "SIGNUP_REQUEST_USER_CON_PROFILE",
         "description": null,
         "isDeprecated": false,
@@ -320,6 +326,12 @@
       },
       {
         "name": "SIGNUPS_HOLD_EXPIRED",
+        "description": null,
+        "isDeprecated": false,
+        "deprecationReason": null
+      },
+      {
+        "name": "SIGNUP_QUEUE_NO_TICKET_REMINDER",
         "description": null,
         "isDeprecated": false,
         "deprecationReason": null

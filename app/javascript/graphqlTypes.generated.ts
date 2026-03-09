@@ -4273,12 +4273,14 @@ export type MutationWithdrawUserSignupArgs = {
   input: WithdrawUserSignupInput;
 };
 
+/** A report grouping convention attendees into those new to the organization and those who have attended before. */
 export type NewAndReturningAttendees = {
   __typename: 'NewAndReturningAttendees';
-  /** Attendees who have never attended a convention in this organization before. */
-  new_attendees: Array<UserConProfile>;
-  /** Attendees who have attended at least one previous convention in this organization. */
-  returning_attendees: Array<UserConProfile>;
+  /**
+   * Attendance counts per attendee across all conventions in the organization,
+   * used to distinguish new attendees from returning ones.
+   */
+  organization_attendance_counts: Array<OrganizationAttendanceCount>;
 };
 
 /** A condition that must be met for a notification to be sent to a destination. */
@@ -4512,6 +4514,19 @@ export type Organization = {
   id: Scalars['ID']['output'];
   name: Scalars['String']['output'];
   organization_roles: Array<OrganizationRole>;
+};
+
+/** Attendance data for a single attendee across all conventions in the organization. */
+export type OrganizationAttendanceCount = {
+  __typename: 'OrganizationAttendanceCount';
+  /** All conventions in the organization that this attendee has attended. */
+  attended_conventions: Array<Convention>;
+  /** The attendee's profile for the current convention. */
+  current_convention_user_con_profile: UserConProfile;
+  /** IDs of all the attendee's profiles across conventions in the organization. */
+  user_con_profiles: Array<UserConProfile>;
+  /** The ID of the user account for this attendee. */
+  user_id: Scalars['ID']['output'];
 };
 
 export type OrganizationRole = {

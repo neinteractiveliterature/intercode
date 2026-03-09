@@ -5148,16 +5148,15 @@ type Mutation {
   ): WithdrawUserSignupPayload!
 }
 
+"""
+A report grouping convention attendees into those new to the organization and those who have attended before.
+"""
 type NewAndReturningAttendees {
   """
-  Attendees who have never attended a convention in this organization before.
+  Attendance counts per attendee across all conventions in the organization,
+  used to distinguish new attendees from returning ones.
   """
-  new_attendees: [UserConProfile!]!
-
-  """
-  Attendees who have attended at least one previous convention in this organization.
-  """
-  returning_attendees: [UserConProfile!]!
+  organization_attendance_counts: [OrganizationAttendanceCount!]!
 }
 
 """
@@ -5489,6 +5488,31 @@ type Organization {
   id: ID!
   name: String!
   organization_roles: [OrganizationRole!]!
+}
+
+"""
+Attendance data for a single attendee across all conventions in the organization.
+"""
+type OrganizationAttendanceCount {
+  """
+  All conventions in the organization that this attendee has attended.
+  """
+  attended_conventions: [Convention!]!
+
+  """
+  The attendee's profile for the current convention.
+  """
+  current_convention_user_con_profile: UserConProfile!
+
+  """
+  IDs of all the attendee's profiles across conventions in the organization.
+  """
+  user_con_profiles: [UserConProfile!]!
+
+  """
+  The ID of the user account for this attendee.
+  """
+  user_id: ID!
 }
 
 type OrganizationRole {

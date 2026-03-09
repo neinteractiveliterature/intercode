@@ -204,6 +204,19 @@
         "userConProfile": "<strong>User:</strong> {{ name }}"
       }
     },
+    "reports": {
+      "newAndReturningAttendees": {
+        "conventionsHeader": "Conventions",
+        "emailHeader": "Email",
+        "moreConventions_one": "and {{ count }} more",
+        "moreConventions_other": "and {{ count }} more",
+        "nameHeader": "Name",
+        "newAttendeesLabel": "New attendees",
+        "returningAttendeesLabel": "Returning attendees",
+        "title": "New and returning attendees",
+        "totalLabel": "Total"
+      }
+    },
     "rooms": {
       "addRoomLabel": "Add room",
       "deleteConfirmation": "Are you sure you want to delete this room?",

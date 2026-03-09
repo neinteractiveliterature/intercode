@@ -1,4 +1,15 @@
 class ConventionReportsPresenter
+  class OrganizationAttendanceCount
+    attr_reader :user_id, :current_convention_user_con_profile, :user_con_profile_ids, :attended_convention_ids
+
+    def initialize(user_id:, current_convention_user_con_profile:, user_con_profile_ids:, attended_convention_ids:)
+      @user_id = user_id
+      @current_convention_user_con_profile = current_convention_user_con_profile
+      @user_con_profile_ids = user_con_profile_ids
+      @attended_convention_ids = attended_convention_ids
+    end
+  end
+
   attr_reader :convention
 
   def initialize(convention)
@@ -83,27 +94,37 @@ class ConventionReportsPresenter
       .map { |provided_by_event, event_tickets| { provided_by_event: provided_by_event, tickets: event_tickets } }
   end
 
-  def new_and_returning_attendees
-    current_profiles = convention.user_con_profiles.joins(:ticket).distinct
+  def new_and_returning_attendees # rubocop:disable Metrics/MethodLength
+    current_profiles = convention.user_con_profiles.joins(:ticket).includes(:staff_positions, :team_members).distinct
 
-    return { new_attendees: current_profiles.to_a, returning_attendees: [] } unless convention.organization_id
+    return { organization_attendance_counts: [] } unless convention.organization_id
 
-    current_attendee_user_ids = current_profiles.pluck(:user_id)
+    current_profiles_by_user_id = current_profiles.index_by(&:user_id)
 
     org_attendance_counts =
       UserConProfile
         .joins(:ticket)
         .joins("INNER JOIN conventions AS org_conventions ON org_conventions.id = user_con_profiles.convention_id")
-        .where(user_id: current_attendee_user_ids)
+        .where(user_id: current_profiles_by_user_id.keys)
         .where(org_conventions: { organization_id: convention.organization_id })
         .group(:user_id)
-        .count("DISTINCT user_con_profiles.id")
+        .select(
+          :user_id,
+          "array_agg(DISTINCT user_con_profiles.id) user_con_profile_ids",
+          "array_agg(DISTINCT org_conventions.id) attended_convention_ids"
+        )
 
-    profiles = current_profiles.to_a
-    new_attendees = profiles.select { |p| (org_attendance_counts[p.user_id] || 0) <= 1 }
-    returning_attendees = profiles.select { |p| (org_attendance_counts[p.user_id] || 0) > 1 }
-
-    { new_attendees: new_attendees, returning_attendees: returning_attendees }
+    {
+      organization_attendance_counts:
+        org_attendance_counts.map do |org_attendance_count|
+          OrganizationAttendanceCount.new(
+            user_id: org_attendance_count.user_id,
+            current_convention_user_con_profile: current_profiles_by_user_id[org_attendance_count.user_id],
+            user_con_profile_ids: org_attendance_count.user_con_profile_ids,
+            attended_convention_ids: org_attendance_count.attended_convention_ids
+          )
+        end
+    }
   end
 
   def events_by_choice
