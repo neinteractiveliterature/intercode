@@ -27,26 +27,26 @@ function ReportsMenu() {
         <div className="card-body">
           <ul className="mb-0">
             {data.convention.ticket_mode !== 'disabled' && (
-              <>
-                <li>
-                  <Link to="/reports/attendance_by_payment_amount">
-                    {t('admin.reports.menu.attendanceByPaymentAmount')}
-                  </Link>
-                </li>
-                <li>
-                  <Link to="/reports/event_provided_tickets">
-                    {t('admin.reports.menu.eventProvidedTickets', {
-                      ticketNamePlural: data.convention.ticketNamePlural,
-                    })}
-                  </Link>
-                </li>
-              </>
+              <li>
+                <Link to="/reports/attendance_by_payment_amount">
+                  {t('admin.reports.menu.attendanceByPaymentAmount')}
+                </Link>
+              </li>
+            )}
+            <li>
+              <Link to="/reports/new_and_returning_attendees">{t('admin.reports.menu.newAndReturningAttendees')}</Link>
+            </li>
+            {data.convention.ticket_mode !== 'disabled' && (
+              <li>
+                <Link to="/reports/event_provided_tickets">
+                  {t('admin.reports.menu.eventProvidedTickets', {
+                    ticketNamePlural: data.convention.ticketNamePlural,
+                  })}
+                </Link>
+              </li>
             )}
             <li>
               <Link to="/reports/events_by_choice">{t('admin.reports.menu.eventsByChoice')}</Link>
-            </li>
-            <li>
-              <Link to="/reports/new_and_returning_attendees">{t('admin.reports.menu.newAndReturningAttendees')}</Link>
             </li>
             <li>
               <Link to="/reports/signup_spy">{t('admin.reports.menu.signupSpy')}</Link>
