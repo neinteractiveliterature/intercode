@@ -211,7 +211,7 @@
         "attendanceByPaymentAmount": "Attendance by payment amount",
         "eventProvidedTickets": "Event-provided {{ ticketNamePlural }}",
         "eventsByChoice": "Events by choice",
-        "newAndReturningAttendees": "New and returning attendees",
+        "newAndReturningAttendees": "Attendance history",
         "signupSpy": "Signup spy",
         "eventsByTime": "Events by time",
         "perEventReport": "Per event report",
@@ -227,7 +227,7 @@
         "nameHeader": "Name",
         "newAttendeesLabel": "New attendees",
         "returningAttendeesLabel": "Returning attendees",
-        "title": "New and returning attendees",
+        "title": "Attendance history",
         "totalLabel": "Total"
       }
     },
