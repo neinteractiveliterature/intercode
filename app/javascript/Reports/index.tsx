@@ -23,59 +23,65 @@ function ReportsMenu() {
       </header>
 
       <div className="card mt-4">
-        <div className="card-header">Regular reports</div>
+        <div className="card-header">{t('admin.reports.menu.regularReportsHeader')}</div>
         <div className="card-body">
           <ul className="mb-0">
             {data.convention.ticket_mode !== 'disabled' && (
               <>
                 <li>
-                  <Link to="/reports/attendance_by_payment_amount">Attendance by payment amount</Link>
+                  <Link to="/reports/attendance_by_payment_amount">
+                    {t('admin.reports.menu.attendanceByPaymentAmount')}
+                  </Link>
                 </li>
                 <li>
-                  <Link to="/reports/event_provided_tickets">Event-provided {data.convention.ticketNamePlural}</Link>
+                  <Link to="/reports/event_provided_tickets">
+                    {t('admin.reports.menu.eventProvidedTickets', {
+                      ticketNamePlural: data.convention.ticketNamePlural,
+                    })}
+                  </Link>
                 </li>
               </>
             )}
             <li>
-              <Link to="/reports/events_by_choice">Events by choice</Link>
+              <Link to="/reports/events_by_choice">{t('admin.reports.menu.eventsByChoice')}</Link>
             </li>
             <li>
-              <Link to="/reports/new_and_returning_attendees">New and returning attendees</Link>
+              <Link to="/reports/new_and_returning_attendees">{t('admin.reports.menu.newAndReturningAttendees')}</Link>
             </li>
             <li>
-              <Link to="/reports/signup_spy">Signup spy</Link>
+              <Link to="/reports/signup_spy">{t('admin.reports.menu.signupSpy')}</Link>
             </li>
           </ul>
         </div>
       </div>
 
       <div className="card mt-4">
-        <div className="card-header">Printable reports</div>
+        <div className="card-header">{t('admin.reports.menu.printableReportsHeader')}</div>
         <div className="card-body">
           <ul className="mb-0">
             <li>
               <a href="/reports/events_by_time" target="_blank" rel="noopener noreferrer">
-                Events by time
+                {t('admin.reports.menu.eventsByTime')}
               </a>
             </li>
             <li>
               <a href="/reports/per_event" target="_blank" rel="noopener noreferrer">
-                Per event report
+                {t('admin.reports.menu.perEventReport')}
               </a>
             </li>
             <li>
               <a href="/reports/per_room" target="_blank" rel="noopener noreferrer">
-                Per room report
+                {t('admin.reports.menu.perRoomReport')}
               </a>
             </li>
             <li>
               <a href="/reports/per_user" target="_blank" rel="noopener noreferrer">
-                Per user report
+                {t('admin.reports.menu.perUserReport')}
               </a>
             </li>
             <li>
               <a href="/reports/volunteer_events" target="_blank" rel="noopener noreferrer">
-                Volunteer event signups
+                {t('admin.reports.menu.volunteerEventSignups')}
               </a>
             </li>
           </ul>

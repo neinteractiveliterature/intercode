@@ -205,6 +205,20 @@
       }
     },
     "reports": {
+      "menu": {
+        "regularReportsHeader": "Regular reports",
+        "printableReportsHeader": "Printable reports",
+        "attendanceByPaymentAmount": "Attendance by payment amount",
+        "eventProvidedTickets": "Event-provided {{ ticketNamePlural }}",
+        "eventsByChoice": "Events by choice",
+        "newAndReturningAttendees": "New and returning attendees",
+        "signupSpy": "Signup spy",
+        "eventsByTime": "Events by time",
+        "perEventReport": "Per event report",
+        "perRoomReport": "Per room report",
+        "perUserReport": "Per user report",
+        "volunteerEventSignups": "Volunteer event signups"
+      },
       "newAndReturningAttendees": {
         "conventionsHeader": "Conventions",
         "emailHeader": "Email",
