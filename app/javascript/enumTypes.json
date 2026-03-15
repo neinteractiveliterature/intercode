@@ -581,6 +581,12 @@
         "description": "The user is a team member for this event and should sign up manually.",
         "isDeprecated": false,
         "deprecationReason": null
+      },
+      {
+        "name": "WAITLIST_POSITION_CAP_EXCEEDED",
+        "description": "The waitlist position the user would receive exceeds the cap they've set on this choice",
+        "isDeprecated": false,
+        "deprecationReason": null
       }
     ]
   },

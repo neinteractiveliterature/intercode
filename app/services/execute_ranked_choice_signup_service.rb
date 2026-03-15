@@ -81,7 +81,23 @@ class ExecuteRankedChoiceSignupService < CivilService::Service
       )
     end
 
-    return SkipReason.new(:full) if !actual_bucket && !signup_ranked_choice.prioritize_waitlist && !allow_waitlist
+    if !actual_bucket && !allow_waitlist
+      return SkipReason.new(:full) unless signup_ranked_choice.prioritize_waitlist
+
+      if signup_ranked_choice.waitlist_position_cap.present?
+        waitlist_count = signup_ranked_choice.target_run.signups.where(state: "waitlisted").count
+        next_position = waitlist_count + 1
+        if next_position > signup_ranked_choice.waitlist_position_cap
+          return(
+            SkipReason.new(
+              :waitlist_position_cap_exceeded,
+              waitlist_position: next_position,
+              waitlist_position_cap: signup_ranked_choice.waitlist_position_cap
+            )
+          )
+        end
+      end
+    end
 
     nil
   end

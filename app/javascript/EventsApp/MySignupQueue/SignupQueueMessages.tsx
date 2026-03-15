@@ -79,6 +79,21 @@ export function SkipReason({ pendingChoice, simulatedSkipReason, userConProfile 
           .join(', ')}
       </>
     );
+  } else if (simulatedSkipReason.reason === RankedChoiceDecisionReason.WaitlistPositionCapExceeded) {
+    const extra = simulatedSkipReason.extra as { waitlist_position: number; waitlist_position_cap: number };
+    return (
+      <>
+        <i className="bi-exclamation-circle-fill" />{' '}
+        <Trans
+          i18nKey="signups.mySignupQueue.simulatedSkip.waitlistPositionCapExceeded"
+          values={{
+            eventTitle: pendingChoice.target_run.event.title,
+            waitlistPosition: extra.waitlist_position,
+            waitlistPositionCap: extra.waitlist_position_cap,
+          }}
+        />
+      </>
+    );
   } else if (simulatedSkipReason.reason === RankedChoiceDecisionReason.Full) {
     if (userConProfile.ranked_choice_fallback_action === RankedChoiceFallbackAction.Waitlist) {
       if (pendingChoice.prioritize_waitlist) {

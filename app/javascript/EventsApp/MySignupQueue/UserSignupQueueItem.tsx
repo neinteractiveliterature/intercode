@@ -1,5 +1,5 @@
 import { InternalRefetchQueriesInclude } from '@apollo/client';
-import { useMutation } from "@apollo/client/react";
+import { useMutation } from '@apollo/client/react';
 import classNames from 'classnames';
 import {
   DeleteSignupRankedChoiceDocument,
@@ -194,6 +194,37 @@ export default function UserSignupQueueItem({
                     label={t('signups.mySignupQueue.prioritizeWaitlist.label')}
                     type="checkbox"
                   />
+                  {pendingChoice.prioritize_waitlist && (
+                    <div className="mt-1">
+                      <label className="form-label mb-1 small" htmlFor={`waitlist-position-cap-${pendingChoice.id}`}>
+                        {t('signups.mySignupQueue.waitlistPositionCap.label')}
+                      </label>
+                      <select
+                        id={`waitlist-position-cap-${pendingChoice.id}`}
+                        className="form-select form-select-sm"
+                        disabled={setPrioritizeWaitlistLoading}
+                        value={pendingChoice.waitlist_position_cap ?? ''}
+                        onChange={(event) => {
+                          const cap = event.target.value === '' ? null : parseInt(event.target.value, 10);
+                          setPrioritizeWaitlist({
+                            variables: {
+                              id: pendingChoice.id,
+                              prioritizeWaitlist: true,
+                              waitlistPositionCap: cap,
+                            },
+                            onCompleted: () => revalidator.revalidate(),
+                          });
+                        }}
+                      >
+                        <option value="">{t('signups.mySignupQueue.waitlistPositionCap.anyPosition')}</option>
+                        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => (
+                          <option key={n} value={n}>
+                            {t('signups.mySignupQueue.waitlistPositionCap.positionN', { n })}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
                 </div>
               </DropdownMenu>
             </div>

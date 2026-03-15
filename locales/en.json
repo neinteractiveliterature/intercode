@@ -1315,6 +1315,11 @@
         "confirmNotPrioritized": "Success!  If <i>{{ eventTitle }}</i> is full, we’ll try to sign you up for <i>{{ nextEventTitle }}</i>.",
         "label": "If full, waitlist instead of skipping"
       },
+      "waitlistPositionCap": {
+        "label": "Only waitlist if position would be:",
+        "anyPosition": "Regardless of position",
+        "positionN": "{{ n }} or lower"
+      },
       "remove": "Remove",
       "removeConfirmPrompt": "Are you sure you want to remove {{ eventTitle }} from your signup queue?",
       "settingsSection": {
@@ -1328,7 +1333,8 @@
         "fullWaitlist": "Waitlist: <i>{{ eventTitle }}</i> is full. If there are no other available options, you may be put on the waitlist for this event.",
         "fullWaitlistPrioritized": "Waitlist: <i>{{ eventTitle }}</i> is full. If this choice is processed, you will be put on the waitlist.",
         "maxSignupsInTimespan": "Skip: You set a limit for signups on {{ timespan }}, and that limit has been reached",
-        "maxSignupsTotal": "Skip: You set a limit for total signups, and that limit has been reached"
+        "maxSignupsTotal": "Skip: You set a limit for total signups, and that limit has been reached",
+        "waitlistPositionCapExceeded": "Skip: <i>{{ eventTitle }}</i> is full and you would be at waitlist position {{ waitlistPosition }}, which exceeds your cap of {{ waitlistPositionCap }}"
       },
       "ticketStatus": {
         "noTicket": "You do not have a {{ ticketName }}.  You will not be able to sign up for games until you have purchased a {{ ticketName }}.",
@@ -1493,7 +1499,8 @@
         "missingTicket": "{{ ticketName }} required",
         "noMoreSignupsAllowed": "no more signups allowed",
         "noPendingChoices": "user constraints",
-        "teamMember": "team member"
+        "teamMember": "team member",
+        "waitlistPositionCapExceeded": "waitlist position cap exceeded"
       }
     },
     "rowSelection": {

@@ -43,6 +43,7 @@ fragment UserConProfileRankedChoiceQueueFields on UserConProfile {
     id
     state
     prioritize_waitlist
+    waitlist_position_cap
     priority
     requested_bucket_key
 
