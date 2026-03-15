@@ -237,15 +237,7 @@ export default function UserSignupQueueItem({
                       </select>
                     </div>
                   )}
-                  <div className="d-flex gap-2 mt-2">
-                    <button
-                      type="button"
-                      className="btn btn-primary btn-sm"
-                      disabled={setPrioritizeWaitlistLoading}
-                      onClick={handleAdvancedOk}
-                    >
-                      {setPrioritizeWaitlistLoading ? <LoadingIndicator size={14} /> : t('buttons.ok')}
-                    </button>
+                  <div className="d-flex gap-2 mt-2 justify-content-end">
                     <button
                       type="button"
                       className="btn btn-secondary btn-sm"
@@ -253,6 +245,14 @@ export default function UserSignupQueueItem({
                       onClick={handleAdvancedCancel}
                     >
                       {t('buttons.cancel')}
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-primary btn-sm"
+                      disabled={setPrioritizeWaitlistLoading}
+                      onClick={handleAdvancedOk}
+                    >
+                      {setPrioritizeWaitlistLoading ? <LoadingIndicator size={14} /> : t('buttons.ok')}
                     </button>
                   </div>
                 </div>
