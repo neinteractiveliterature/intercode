@@ -6,6 +6,7 @@ import { UserConProfileRankedChoiceQueueFieldsFragment } from './queries.generat
 import { usePendingChoices } from './usePendingChoices';
 import { useContext } from 'react';
 import AppRootContext from 'AppRootContext';
+import { ParseKeys } from 'i18next';
 
 type SkipReasonProps = {
   pendingChoice: ReturnType<typeof usePendingChoices>[number];
@@ -155,13 +156,17 @@ export function PrioritizeWaitlistConfirmation({
   const nextPendingChoice = pendingChoices[index + 1];
 
   if (prioritizeWaitlist) {
-    const i18nKey = nextPendingChoice
+    const i18nKey: ParseKeys = nextPendingChoice
       ? waitlistPositionCap != null
-        ? 'signups.mySignupQueue.prioritizeWaitlist.confirmPrioritizedWithCap'
-        : 'signups.mySignupQueue.prioritizeWaitlist.confirmPrioritized'
+        ? // eslint-disable-next-line i18next/no-literal-string
+          'signups.mySignupQueue.prioritizeWaitlist.confirmPrioritizedWithCap'
+        : // eslint-disable-next-line i18next/no-literal-string
+          'signups.mySignupQueue.prioritizeWaitlist.confirmPrioritized'
       : waitlistPositionCap != null
-        ? 'signups.mySignupQueue.prioritizeWaitlist.confirmPrioritizedLastWithCap'
-        : 'signups.mySignupQueue.prioritizeWaitlist.confirmPrioritizedLast';
+        ? // eslint-disable-next-line i18next/no-literal-string
+          'signups.mySignupQueue.prioritizeWaitlist.confirmPrioritizedLastWithCap'
+        : // eslint-disable-next-line i18next/no-literal-string
+          'signups.mySignupQueue.prioritizeWaitlist.confirmPrioritizedLast';
     return (
       <Trans
         i18nKey={i18nKey}
