@@ -118,6 +118,9 @@ export default function UserSignupQueueItem({
               index={index}
               userConProfile={userConProfile}
               prioritizeWaitlist={data.setSignupRankedChoicePrioritzeWaitlist.signup_ranked_choice.prioritize_waitlist}
+              waitlistPositionCap={
+                data.setSignupRankedChoicePrioritzeWaitlist.signup_ranked_choice.waitlist_position_cap ?? null
+              }
             />
             <button
               type="button"

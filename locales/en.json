@@ -1312,7 +1312,9 @@
       "noLimit": "No limit",
       "prioritizeWaitlist": {
         "confirmPrioritized": "Success!  If <i>{{ eventTitle }}</i> is full, we’ll put you on the waitlist for it rather than trying to sign you up for <i>{{ nextEventTitle }}</i>.",
+        "confirmPrioritizedWithCap": "Success!  If <i>{{ eventTitle }}</i> is full and you’d be at position {{ cap }} or lower, we’ll put you on the waitlist for it rather than trying to sign you up for <i>{{ nextEventTitle }}</i>.",
         "confirmPrioritizedLast": "Success!  If <i>{{ eventTitle }}</i> is full, we’ll put you on the waitlist for it.",
+        "confirmPrioritizedLastWithCap": "Success!  If <i>{{ eventTitle }}</i> is full and you’d be at position {{ cap }} or lower, we’ll put you on the waitlist for it.",
         "confirmNotPrioritized": "Success!  If <i>{{ eventTitle }}</i> is full, we’ll try to sign you up for <i>{{ nextEventTitle }}</i>.",
         "confirmNotPrioritizedLast": "Success!  If <i>{{ eventTitle }}</i> is full, we’ll skip it.",
         "label": "If full, waitlist instead of skipping"

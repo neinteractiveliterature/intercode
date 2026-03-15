@@ -139,6 +139,7 @@ export function SkipReason({ pendingChoice, simulatedSkipReason, userConProfile 
 
 type PrioritizeWaitlistConfirmationProps = {
   prioritizeWaitlist: boolean;
+  waitlistPositionCap: number | null;
   index: number;
   userConProfile: UserConProfileRankedChoiceQueueFieldsFragment;
 };
@@ -146,6 +147,7 @@ type PrioritizeWaitlistConfirmationProps = {
 export function PrioritizeWaitlistConfirmation({
   index,
   prioritizeWaitlist,
+  waitlistPositionCap,
   userConProfile,
 }: PrioritizeWaitlistConfirmationProps) {
   const pendingChoices = usePendingChoices(userConProfile);
@@ -153,16 +155,20 @@ export function PrioritizeWaitlistConfirmation({
   const nextPendingChoice = pendingChoices[index + 1];
 
   if (prioritizeWaitlist) {
+    const i18nKey = nextPendingChoice
+      ? waitlistPositionCap != null
+        ? 'signups.mySignupQueue.prioritizeWaitlist.confirmPrioritizedWithCap'
+        : 'signups.mySignupQueue.prioritizeWaitlist.confirmPrioritized'
+      : waitlistPositionCap != null
+        ? 'signups.mySignupQueue.prioritizeWaitlist.confirmPrioritizedLastWithCap'
+        : 'signups.mySignupQueue.prioritizeWaitlist.confirmPrioritizedLast';
     return (
       <Trans
-        i18nKey={
-          nextPendingChoice
-            ? 'signups.mySignupQueue.prioritizeWaitlist.confirmPrioritized'
-            : 'signups.mySignupQueue.prioritizeWaitlist.confirmPrioritizedLast'
-        }
+        i18nKey={i18nKey}
         values={{
           eventTitle: pendingChoice.target_run.event.title,
           nextEventTitle: nextPendingChoice?.target_run.event.title,
+          cap: waitlistPositionCap,
         }}
       />
     );
