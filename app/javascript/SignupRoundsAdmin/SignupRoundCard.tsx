@@ -4,6 +4,7 @@ import { RankedChoiceOrder, SignupAutomationMode, SignupRoundAutomationAction } 
 import { useTranslation } from 'react-i18next';
 import MaximumEventSignupsInput from './MaximumEventSignupsInput';
 import {
+  BootstrapFormCheckbox,
   BootstrapFormSelect,
   ErrorDisplay,
   FormGroupWithLabel,
@@ -49,7 +50,8 @@ function SignupRoundCard({ rounds, roundIndex }: SignupRoundCardProps) {
     () =>
       editingRound.maximum_event_signups !== round.maximum_event_signups ||
       editingRound.automation_action != round.automation_action ||
-      editingRound.ranked_choice_order !== round.ranked_choice_order,
+      editingRound.ranked_choice_order !== round.ranked_choice_order ||
+      editingRound.rerandomize_lottery_numbers !== round.rerandomize_lottery_numbers,
     [editingRound, round],
   );
 
@@ -152,6 +154,19 @@ function SignupRoundCard({ rounds, roundIndex }: SignupRoundCardProps) {
                   </option>
                 </BootstrapFormSelect>
               )}
+              <BootstrapFormCheckbox
+                type="checkbox"
+                name="rerandomize_lottery_numbers"
+                value="true"
+                label={t('signups.signupRounds.rerandomizeLotteryNumbers')}
+                checked={editingRound.rerandomize_lottery_numbers}
+                onCheckedChange={(checked) =>
+                  setEditingRound((prevEditingRound) => ({
+                    ...prevEditingRound,
+                    rerandomize_lottery_numbers: checked,
+                  }))
+                }
+              />
               <div className="">
                 {editingRound.executed_at ? (
                   <>
