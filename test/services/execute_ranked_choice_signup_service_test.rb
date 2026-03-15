@@ -71,6 +71,66 @@ describe ExecuteRankedChoiceSignupService do
     assert_equal "waitlisted", signup_ranked_choice.state
   end
 
+  describe "with a waitlist_position_cap" do
+    let(:full_event) do
+      create(
+        :event,
+        convention:,
+        registration_policy:
+          RegistrationPolicy.new(buckets: [RegistrationPolicy::Bucket.new(slots_limited: true, total_slots: 0)])
+      )
+    end
+
+    it "waitlists if the resulting position would be within the cap" do
+      the_run = create(:run, event: full_event)
+      # One existing waitlisted signup, so the next position would be 2
+      create(:signup, run: the_run, state: "waitlisted")
+      signup_ranked_choice =
+        create(:signup_ranked_choice, target_run: the_run, prioritize_waitlist: true, waitlist_position_cap: 3)
+
+      result = ExecuteRankedChoiceSignupService.new(signup_round:, signup_ranked_choice:, whodunit: nil).call!
+
+      signup_ranked_choice.reload
+      assert_equal "waitlist", result.decision.decision
+      assert_equal "waitlisted", result.decision.signup.state
+      assert_equal "waitlisted", signup_ranked_choice.state
+    end
+
+    it "skips if the resulting waitlist position would exceed the cap" do
+      the_run = create(:run, event: full_event)
+      # Two existing waitlisted signups, so the next position would be 3
+      create(:signup, run: the_run, state: "waitlisted")
+      create(:signup, run: the_run, state: "waitlisted")
+      signup_ranked_choice =
+        create(:signup_ranked_choice, target_run: the_run, prioritize_waitlist: true, waitlist_position_cap: 2)
+
+      result = ExecuteRankedChoiceSignupService.new(signup_round:, signup_ranked_choice:, whodunit: nil).call!
+
+      signup_ranked_choice.reload
+      assert_equal "skip_choice", result.decision.decision
+      assert_equal "waitlist_position_cap_exceeded", result.decision.reason
+      assert_equal 3, result.decision.extra["waitlist_position"]
+      assert_equal 2, result.decision.extra["waitlist_position_cap"]
+      assert_nil result.decision.signup
+      assert_equal "pending", signup_ranked_choice.state
+    end
+
+    it "waitlists at exactly the cap position" do
+      the_run = create(:run, event: full_event)
+      # One existing waitlisted signup, so the next position would be 2
+      create(:signup, run: the_run, state: "waitlisted")
+      signup_ranked_choice =
+        create(:signup_ranked_choice, target_run: the_run, prioritize_waitlist: true, waitlist_position_cap: 2)
+
+      result = ExecuteRankedChoiceSignupService.new(signup_round:, signup_ranked_choice:, whodunit: nil).call!
+
+      signup_ranked_choice.reload
+      assert_equal "waitlist", result.decision.decision
+      assert_equal "waitlisted", result.decision.signup.state
+      assert_equal "waitlisted", signup_ranked_choice.state
+    end
+  end
+
   it "waitlists if there's no room in the run and waitlisting is allowed" do
     event =
       create(

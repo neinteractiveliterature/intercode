@@ -24,3 +24,7 @@ Intercode is a convention management system built with:
 
 - **TypeScript**: Run `yarn run tsc --noEmit` after making changes
 - **Ruby**: Run the relevant test suite before committing
+
+## Testing Requirements
+
+Whenever changing signup-related functionality (signup services, ranked choice, waitlists, etc.), always add or update tests in the relevant test file under `test/services/` or `test/models/`.
