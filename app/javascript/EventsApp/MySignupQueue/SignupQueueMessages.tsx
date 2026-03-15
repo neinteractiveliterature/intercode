@@ -155,20 +155,28 @@ export function PrioritizeWaitlistConfirmation({
   if (prioritizeWaitlist) {
     return (
       <Trans
-        i18nKey="signups.mySignupQueue.prioritizeWaitlist.confirmPrioritized"
+        i18nKey={
+          nextPendingChoice
+            ? 'signups.mySignupQueue.prioritizeWaitlist.confirmPrioritized'
+            : 'signups.mySignupQueue.prioritizeWaitlist.confirmPrioritizedLast'
+        }
         values={{
           eventTitle: pendingChoice.target_run.event.title,
-          nextEventTitle: nextPendingChoice.target_run.event.title,
+          nextEventTitle: nextPendingChoice?.target_run.event.title,
         }}
       />
     );
   } else {
     return (
       <Trans
-        i18nKey="signups.mySignupQueue.prioritizeWaitlist.confirmNotPrioritized"
+        i18nKey={
+          nextPendingChoice
+            ? 'signups.mySignupQueue.prioritizeWaitlist.confirmNotPrioritized'
+            : 'signups.mySignupQueue.prioritizeWaitlist.confirmNotPrioritizedLast'
+        }
         values={{
           eventTitle: pendingChoice.target_run.event.title,
-          nextEventTitle: nextPendingChoice.target_run.event.title,
+          nextEventTitle: nextPendingChoice?.target_run.event.title,
         }}
       />
     );
