@@ -425,16 +425,73 @@ describe ExecuteRankedChoiceSignupRoundService do
 
       perform_enqueued_jobs do
         result =
-          ExecuteRankedChoiceSignupRoundService.new(
-            signup_round:,
-            whodunit: nil,
-            suppress_notifications: true
-          ).call!
+          ExecuteRankedChoiceSignupRoundService.new(signup_round:, whodunit: nil, suppress_notifications: true).call!
         assert result.success?
 
         # No emails should be sent when notifications are suppressed
         assert_equal 0, ActionMailer::Base.deliveries.size
       end
+    end
+  end
+
+  describe "rerandomize_lottery_numbers" do
+    it "reassigns lottery numbers before executing the round and uses them for ordering" do
+      signup_round =
+        create(
+          :signup_round,
+          convention:,
+          ranked_choice_order: "asc",
+          start: 1.day.ago,
+          rerandomize_lottery_numbers: true
+        )
+      user_a = create(:user_con_profile, convention:, lottery_number: 1, ranked_choice_fallback_action: "none")
+      user_b = create(:user_con_profile, convention:, lottery_number: 2, ranked_choice_fallback_action: "none")
+      create(:signup_ranked_choice, user_con_profile: user_a, target_run: the_run)
+      create(:signup_ranked_choice, user_con_profile: user_b, target_run: the_run)
+
+      result = ExecuteRankedChoiceSignupRoundService.new(signup_round:, whodunit: nil).call!
+      assert result.success?
+
+      new_a = user_a.reload.lottery_number
+      new_b = user_b.reload.lottery_number
+
+      # Both lottery numbers should now be in the 1..10000 range
+      assert_includes 1..10_000, new_a
+      assert_includes 1..10_000, new_b
+      assert_not_equal new_a, new_b
+
+      # The user with the lower new lottery number should have won the slot (ascending order)
+      signup_decisions = result.decisions.select { |d| d.decision == "signup" }
+      assert_equal 1, signup_decisions.size
+      expected_winner = new_a < new_b ? user_a : user_b
+      assert_equal expected_winner, signup_decisions.first.user_con_profile
+    end
+
+    it "does not reassign lottery numbers when rerandomize_lottery_numbers is false" do
+      signup_round =
+        create(
+          :signup_round,
+          convention:,
+          ranked_choice_order: "asc",
+          start: 1.day.ago,
+          rerandomize_lottery_numbers: false
+        )
+      user_a = create(:user_con_profile, convention:, lottery_number: 1, ranked_choice_fallback_action: "none")
+      user_b = create(:user_con_profile, convention:, lottery_number: 2, ranked_choice_fallback_action: "none")
+      create(:signup_ranked_choice, user_con_profile: user_a, target_run: the_run)
+      create(:signup_ranked_choice, user_con_profile: user_b, target_run: the_run)
+
+      result = ExecuteRankedChoiceSignupRoundService.new(signup_round:, whodunit: nil).call!
+
+      assert result.success?
+      # user_a has lower lottery number so goes first in ascending order
+      signup_decisions = result.decisions.select { |d| d.decision == "signup" }
+      assert_equal 1, signup_decisions.size
+      assert_equal user_a, signup_decisions.first.user_con_profile
+
+      # Lottery numbers should be unchanged
+      assert_equal 1, user_a.reload.lottery_number
+      assert_equal 2, user_b.reload.lottery_number
     end
   end
 end

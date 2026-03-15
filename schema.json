@@ -33618,6 +33618,22 @@
               "args": []
             },
             {
+              "name": "rerandomize_lottery_numbers",
+              "description": "If true, the automation will reassign random lottery numbers to all attendees in the convention before\nexecuting this signup round.\n",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
               "name": "start",
               "description": "When this SignupRound starts.",
               "type": {
@@ -33704,6 +33720,18 @@
               "type": {
                 "kind": "ENUM",
                 "name": "RankedChoiceOrder",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "rerandomize_lottery_numbers",
+              "description": "If true, the automation will reassign random lottery numbers to all attendees before executing this round",
+              "type": {
+                "kind": "SCALAR",
+                "name": "Boolean",
                 "ofType": null
               },
               "defaultValue": null,

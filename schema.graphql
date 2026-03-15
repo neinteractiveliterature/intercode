@@ -7623,6 +7623,12 @@ type SignupRound {
   ranked_choice_order: RankedChoiceOrder
 
   """
+  If true, the automation will reassign random lottery numbers to all attendees in the convention before
+  executing this signup round.
+  """
+  rerandomize_lottery_numbers: Boolean!
+
+  """
   When this SignupRound starts.
   """
   start: Date
@@ -7661,6 +7667,11 @@ input SignupRoundInput {
   For ranked-choice conventions, the order to execute signup choices in
   """
   ranked_choice_order: RankedChoiceOrder
+
+  """
+  If true, the automation will reassign random lottery numbers to all attendees before executing this round
+  """
+  rerandomize_lottery_numbers: Boolean
 
   """
   The time that this signup round starts

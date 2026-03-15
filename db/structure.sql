@@ -2667,6 +2667,7 @@ CREATE TABLE public.signup_rounds (
     ranked_choice_order text,
     executed_at timestamp without time zone,
     automation_action text,
+    rerandomize_lottery_numbers boolean DEFAULT false NOT NULL,
     CONSTRAINT chk_rails_4c92d587c4 CHECK (((maximum_event_signups = ANY (ARRAY['not_yet'::text, 'not_now'::text, 'unlimited'::text])) OR ((maximum_event_signups)::integer >= 1))),
     CONSTRAINT require_order_for_ranked_choice_rounds CHECK (((automation_action <> 'execute_ranked_choice'::text) OR (ranked_choice_order IS NOT NULL)))
 );
@@ -6138,6 +6139,7 @@ ALTER TABLE ONLY public.cms_files_pages
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260315200824'),
 ('20260315182359'),
 ('20260305000000'),
 ('20260214191626'),

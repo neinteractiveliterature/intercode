@@ -3,15 +3,16 @@
 #
 # Table name: signup_rounds
 #
-#  id                    :bigint           not null, primary key
-#  automation_action     :text
-#  executed_at           :datetime
-#  maximum_event_signups :text             not null
-#  ranked_choice_order   :text
-#  start                 :datetime
-#  created_at            :datetime         not null
-#  updated_at            :datetime         not null
-#  convention_id         :bigint           not null
+#  id                          :bigint           not null, primary key
+#  automation_action           :text
+#  executed_at                 :datetime
+#  maximum_event_signups       :text             not null
+#  ranked_choice_order         :text
+#  rerandomize_lottery_numbers :boolean          default(FALSE), not null
+#  start                       :datetime
+#  created_at                  :datetime         not null
+#  updated_at                  :datetime         not null
+#  convention_id               :bigint           not null
 #
 # Indexes
 #
@@ -43,12 +44,7 @@ class SignupRoundTest < ActiveSupport::TestCase
       mock_service.expect :call!, nil
       convention = create(:convention, signup_automation_mode: "ranked_choice")
       signup_round =
-        create(
-          :signup_round,
-          convention:,
-          automation_action: "execute_ranked_choice",
-          ranked_choice_order: "asc"
-        )
+        create(:signup_round, convention:, automation_action: "execute_ranked_choice", ranked_choice_order: "asc")
 
       ExecuteRankedChoiceSignupRoundService.stub :new, mock_service do
         signup_round.execute!

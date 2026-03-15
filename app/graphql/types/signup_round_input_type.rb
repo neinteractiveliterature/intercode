@@ -14,5 +14,11 @@ class Types::SignupRoundInputType < Types::BaseInputObject
            required: false,
            camelize: false,
            description: "For ranked-choice conventions, the order to execute signup choices in"
+  argument :rerandomize_lottery_numbers,
+           Boolean,
+           required: false,
+           camelize: false,
+           description:
+             "If true, the automation will reassign random lottery numbers to all attendees before executing this round"
   argument :start, Types::DateType, required: false, description: "The time that this signup round starts"
 end

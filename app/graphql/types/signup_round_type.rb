@@ -33,6 +33,12 @@ module Types
         In ranked-choice signup conventions, the order to use for executing users' ranked choices in this round.
       MARKDOWN
     end
+    field :rerandomize_lottery_numbers, Boolean, null: false, camelize: false do
+      description <<~MARKDOWN
+        If true, the automation will reassign random lottery numbers to all attendees in the convention before
+        executing this signup round.
+      MARKDOWN
+    end
     field :start, Types::DateType, description: "When this SignupRound starts."
     field :updated_at, Types::DateType, null: false, description: "When this SignupRound was last modified."
 
