@@ -50,6 +50,12 @@ module Types
     field :user_con_profile, Types::UserConProfileType, null: false do
       description "The user whose queue this choice is part of"
     end
+    field :waitlist_position_cap, Integer, null: true do
+      description <<~MARKDOWN
+        If set, this ranked choice will only prioritize waitlisting if the attendee would be at this position or lower
+        on the waitlist.  Only relevant when prioritize_waitlist is true.
+      MARKDOWN
+    end
 
     association_loaders SignupRankedChoice,
                         :user_con_profile,

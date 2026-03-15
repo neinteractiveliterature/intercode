@@ -1,5 +1,5 @@
 import { InternalRefetchQueriesInclude } from '@apollo/client';
-import { useMutation } from "@apollo/client/react";
+import { useMutation } from '@apollo/client/react';
 import classNames from 'classnames';
 import {
   DeleteSignupRankedChoiceDocument,
@@ -96,7 +96,50 @@ export default function UserSignupQueueItem({
     },
   );
 
+  const [draftPrioritizeWaitlist, setDraftPrioritizeWaitlist] = useState(pendingChoice.prioritize_waitlist);
+  const [draftWaitlistPositionCap, setDraftWaitlistPositionCap] = useState<number | null>(
+    pendingChoice.waitlist_position_cap ?? null,
+  );
+
   const advancedMenuRef = useRef<DropdownMenuRef>(undefined);
+
+  const handleAdvancedOk = () => {
+    setPrioritizeWaitlist({
+      variables: {
+        id: pendingChoice.id,
+        prioritizeWaitlist: draftPrioritizeWaitlist,
+        waitlistPositionCap: draftWaitlistPositionCap,
+      },
+      onCompleted(data) {
+        advancedMenuRef.current?.setDropdownOpen(false);
+        setConfirmMessage(
+          <div className="alert alert-success alert-dismissible">
+            <PrioritizeWaitlistConfirmation
+              index={index}
+              userConProfile={userConProfile}
+              prioritizeWaitlist={data.setSignupRankedChoicePrioritzeWaitlist.signup_ranked_choice.prioritize_waitlist}
+              waitlistPositionCap={
+                data.setSignupRankedChoicePrioritzeWaitlist.signup_ranked_choice.waitlist_position_cap ?? null
+              }
+            />
+            <button
+              type="button"
+              className="btn-close"
+              onClick={() => setConfirmMessage(undefined)}
+              aria-label="Close"
+            />
+          </div>,
+        );
+        revalidator.revalidate();
+      },
+    });
+  };
+
+  const handleAdvancedCancel = () => {
+    setDraftPrioritizeWaitlist(pendingChoice.prioritize_waitlist);
+    setDraftWaitlistPositionCap(pendingChoice.waitlist_position_cap ?? null);
+    advancedMenuRef.current?.setDropdownOpen(false);
+  };
 
   return (
     <li
@@ -161,39 +204,57 @@ export default function UserSignupQueueItem({
                   modifiers: [],
                 }}
               >
-                <div className="px-2">
+                <div className="px-2 py-1">
                   <BootstrapFormCheckbox
-                    checked={pendingChoice.prioritize_waitlist}
+                    checked={draftPrioritizeWaitlist}
                     disabled={setPrioritizeWaitlistLoading}
-                    onChange={(event) =>
-                      setPrioritizeWaitlist({
-                        variables: { id: pendingChoice.id, prioritizeWaitlist: event.target.checked },
-                        onCompleted(data) {
-                          advancedMenuRef.current?.setDropdownOpen(false);
-                          setConfirmMessage(
-                            <div className="alert alert-success alert-dismissible">
-                              <PrioritizeWaitlistConfirmation
-                                index={index}
-                                userConProfile={userConProfile}
-                                prioritizeWaitlist={
-                                  data.setSignupRankedChoicePrioritzeWaitlist.signup_ranked_choice.prioritize_waitlist
-                                }
-                              />
-                              <button
-                                type="button"
-                                className="btn-close"
-                                onClick={() => setConfirmMessage(undefined)}
-                                aria-label="Close"
-                              />
-                            </div>,
-                          );
-                          revalidator.revalidate();
-                        },
-                      })
-                    }
+                    onChange={(event) => setDraftPrioritizeWaitlist(event.target.checked)}
                     label={t('signups.mySignupQueue.prioritizeWaitlist.label')}
                     type="checkbox"
                   />
+                  {draftPrioritizeWaitlist && (
+                    <div className="mt-1">
+                      <label className="form-label mb-1 small" htmlFor={`waitlist-position-cap-${pendingChoice.id}`}>
+                        {t('signups.mySignupQueue.waitlistPositionCap.label')}
+                      </label>
+                      <select
+                        id={`waitlist-position-cap-${pendingChoice.id}`}
+                        className="form-select form-select-sm"
+                        disabled={setPrioritizeWaitlistLoading}
+                        value={draftWaitlistPositionCap ?? ''}
+                        onChange={(event) => {
+                          setDraftWaitlistPositionCap(
+                            event.target.value === '' ? null : parseInt(event.target.value, 10),
+                          );
+                        }}
+                      >
+                        <option value="">{t('signups.mySignupQueue.waitlistPositionCap.anyPosition')}</option>
+                        {[1, 2, 3, 4, 5, 6, 7, 8, 9, 10].map((n) => (
+                          <option key={n} value={n}>
+                            {t('signups.mySignupQueue.waitlistPositionCap.positionN', { n })}
+                          </option>
+                        ))}
+                      </select>
+                    </div>
+                  )}
+                  <div className="d-flex gap-2 mt-2 justify-content-end">
+                    <button
+                      type="button"
+                      className="btn btn-secondary btn-sm"
+                      disabled={setPrioritizeWaitlistLoading}
+                      onClick={handleAdvancedCancel}
+                    >
+                      {t('buttons.cancel')}
+                    </button>
+                    <button
+                      type="button"
+                      className="btn btn-primary btn-sm"
+                      disabled={setPrioritizeWaitlistLoading}
+                      onClick={handleAdvancedOk}
+                    >
+                      {setPrioritizeWaitlistLoading ? <LoadingIndicator size={14} /> : t('buttons.ok')}
+                    </button>
+                  </div>
                 </div>
               </DropdownMenu>
             </div>

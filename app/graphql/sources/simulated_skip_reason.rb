@@ -14,14 +14,14 @@ class Sources::SimulatedSkipReason < GraphQL::Dataloader::Source
     ActiveRecord::Base.transaction do
       result =
         keys.map do |signup_ranked_choice|
-          signup_ranked_choice.prioritize_waitlist = false
           ExecuteRankedChoiceSignupService.new(
             signup_round: nil,
             whodunit: nil,
             signup_ranked_choice:,
-            # Always simulate a skip if the user would be waitlisted, so that the frontend can show the appropriate
-            # message about it
+            # simulate: true makes the service always return a reason for full events (so the frontend can show the
+            # appropriate message), while still correctly reporting waitlist_position_cap_exceeded when applicable
             allow_waitlist: false,
+            simulate_waitlist_cap: true,
             constraints:
           ).skip_reason
         end

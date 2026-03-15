@@ -102,6 +102,10 @@ export function describeReason(reason: RankedChoiceDecisionReason, ticketName: s
     return t('tables.rankedChoiceDecision.reasons.teamMember');
   }
 
+  if (reason === RankedChoiceDecisionReason.WaitlistPositionCapExceeded) {
+    return t('tables.rankedChoiceDecision.reasons.waitlistPositionCapExceeded');
+  }
+
   assertNever(reason, true);
   return reason;
 }

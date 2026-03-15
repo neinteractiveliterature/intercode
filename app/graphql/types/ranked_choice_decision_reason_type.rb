@@ -17,4 +17,7 @@ class Types::RankedChoiceDecisionReasonType < Types::BaseEnum
 )",
         value: "ranked_choice_user_constraints"
   value "TEAM_MEMBER", "The user is a team member for this event and should sign up manually.", value: "team_member"
+  value "WAITLIST_POSITION_CAP_EXCEEDED",
+        "The waitlist position the user would receive exceeds the cap they've set on this choice",
+        value: "waitlist_position_cap_exceeded"
 end

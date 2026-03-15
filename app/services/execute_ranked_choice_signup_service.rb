@@ -20,7 +20,8 @@ class ExecuteRankedChoiceSignupService < CivilService::Service
               :skip_locking,
               :suppress_notifications,
               :decisions,
-              :allow_waitlist
+              :allow_waitlist,
+              :simulate_waitlist_cap
   delegate :user_con_profile, to: :signup_ranked_choice
   delegate :convention, to: :user_con_profile
 
@@ -29,6 +30,7 @@ class ExecuteRankedChoiceSignupService < CivilService::Service
     whodunit:,
     signup_ranked_choice:,
     allow_waitlist: false,
+    simulate_waitlist_cap: false,
     constraints: nil,
     skip_locking: false,
     suppress_notifications: false
@@ -37,6 +39,7 @@ class ExecuteRankedChoiceSignupService < CivilService::Service
     @whodunit = whodunit
     @signup_ranked_choice = signup_ranked_choice
     @allow_waitlist = allow_waitlist
+    @simulate_waitlist_cap = simulate_waitlist_cap
     @constraints = constraints || UserSignupConstraints.new(user_con_profile)
     @skip_locking = skip_locking
     @suppress_notifications = suppress_notifications
@@ -81,7 +84,23 @@ class ExecuteRankedChoiceSignupService < CivilService::Service
       )
     end
 
-    return SkipReason.new(:full) if !actual_bucket && !signup_ranked_choice.prioritize_waitlist && !allow_waitlist
+    if !actual_bucket && !allow_waitlist
+      if signup_ranked_choice.prioritize_waitlist && signup_ranked_choice.waitlist_position_cap.present?
+        waitlist_count = signup_ranked_choice.target_run.signups.where(state: "waitlisted").count
+        next_position = waitlist_count + 1
+        if next_position > signup_ranked_choice.waitlist_position_cap
+          return(
+            SkipReason.new(
+              :waitlist_position_cap_exceeded,
+              waitlist_position: next_position,
+              waitlist_position_cap: signup_ranked_choice.waitlist_position_cap
+            )
+          )
+        end
+      end
+
+      return SkipReason.new(:full) if !signup_ranked_choice.prioritize_waitlist || simulate_waitlist_cap
+    end
 
     nil
   end

@@ -2592,7 +2592,8 @@ CREATE TABLE public.signup_ranked_choices (
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
     result_signup_request_id bigint,
-    prioritize_waitlist boolean DEFAULT false NOT NULL
+    prioritize_waitlist boolean DEFAULT false NOT NULL,
+    waitlist_position_cap integer
 );
 
 
@@ -6137,6 +6138,7 @@ ALTER TABLE ONLY public.cms_files_pages
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260315182359'),
 ('20260305000000'),
 ('20260214191626'),
 ('20260214190735'),

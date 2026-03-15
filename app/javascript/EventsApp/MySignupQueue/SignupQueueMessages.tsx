@@ -6,6 +6,7 @@ import { UserConProfileRankedChoiceQueueFieldsFragment } from './queries.generat
 import { usePendingChoices } from './usePendingChoices';
 import { useContext } from 'react';
 import AppRootContext from 'AppRootContext';
+import { ParseKeys } from 'i18next';
 
 type SkipReasonProps = {
   pendingChoice: ReturnType<typeof usePendingChoices>[number];
@@ -79,16 +80,38 @@ export function SkipReason({ pendingChoice, simulatedSkipReason, userConProfile 
           .join(', ')}
       </>
     );
+  } else if (simulatedSkipReason.reason === RankedChoiceDecisionReason.WaitlistPositionCapExceeded) {
+    const extra = simulatedSkipReason.extra as { waitlist_position: number; waitlist_position_cap: number };
+    return (
+      <>
+        <i className="bi-exclamation-circle-fill" />{' '}
+        <Trans
+          i18nKey="signups.mySignupQueue.simulatedSkip.waitlistPositionCapExceeded"
+          values={{
+            eventTitle: pendingChoice.target_run.event.title,
+            waitlistPosition: extra.waitlist_position,
+            waitlistPositionCap: extra.waitlist_position_cap,
+          }}
+        />
+      </>
+    );
   } else if (simulatedSkipReason.reason === RankedChoiceDecisionReason.Full) {
     if (userConProfile.ranked_choice_fallback_action === RankedChoiceFallbackAction.Waitlist) {
       if (pendingChoice.prioritize_waitlist) {
+        const i18nKey: ParseKeys =
+          pendingChoice.waitlist_position_cap != null
+            ? // eslint-disable-next-line i18next/no-literal-string
+              'signups.mySignupQueue.simulatedSkip.fullWaitlistPrioritizedWithCap'
+            : // eslint-disable-next-line i18next/no-literal-string
+              'signups.mySignupQueue.simulatedSkip.fullWaitlistPrioritized';
         return (
           <>
             <i className="bi-hourglass-split" />{' '}
             <Trans
-              i18nKey="signups.mySignupQueue.simulatedSkip.fullWaitlistPrioritized"
+              i18nKey={i18nKey}
               values={{
                 eventTitle: pendingChoice.target_run.event.title,
+                cap: pendingChoice.waitlist_position_cap,
               }}
             />
           </>
@@ -124,6 +147,7 @@ export function SkipReason({ pendingChoice, simulatedSkipReason, userConProfile 
 
 type PrioritizeWaitlistConfirmationProps = {
   prioritizeWaitlist: boolean;
+  waitlistPositionCap: number | null;
   index: number;
   userConProfile: UserConProfileRankedChoiceQueueFieldsFragment;
 };
@@ -131,6 +155,7 @@ type PrioritizeWaitlistConfirmationProps = {
 export function PrioritizeWaitlistConfirmation({
   index,
   prioritizeWaitlist,
+  waitlistPositionCap,
   userConProfile,
 }: PrioritizeWaitlistConfirmationProps) {
   const pendingChoices = usePendingChoices(userConProfile);
@@ -138,22 +163,38 @@ export function PrioritizeWaitlistConfirmation({
   const nextPendingChoice = pendingChoices[index + 1];
 
   if (prioritizeWaitlist) {
+    const i18nKey: ParseKeys = nextPendingChoice
+      ? waitlistPositionCap != null
+        ? // eslint-disable-next-line i18next/no-literal-string
+          'signups.mySignupQueue.prioritizeWaitlist.confirmPrioritizedWithCap'
+        : // eslint-disable-next-line i18next/no-literal-string
+          'signups.mySignupQueue.prioritizeWaitlist.confirmPrioritized'
+      : waitlistPositionCap != null
+        ? // eslint-disable-next-line i18next/no-literal-string
+          'signups.mySignupQueue.prioritizeWaitlist.confirmPrioritizedLastWithCap'
+        : // eslint-disable-next-line i18next/no-literal-string
+          'signups.mySignupQueue.prioritizeWaitlist.confirmPrioritizedLast';
     return (
       <Trans
-        i18nKey="signups.mySignupQueue.prioritizeWaitlist.confirmPrioritized"
+        i18nKey={i18nKey}
         values={{
           eventTitle: pendingChoice.target_run.event.title,
-          nextEventTitle: nextPendingChoice.target_run.event.title,
+          nextEventTitle: nextPendingChoice?.target_run.event.title,
+          cap: waitlistPositionCap,
         }}
       />
     );
   } else {
     return (
       <Trans
-        i18nKey="signups.mySignupQueue.prioritizeWaitlist.confirmNotPrioritized"
+        i18nKey={
+          nextPendingChoice
+            ? 'signups.mySignupQueue.prioritizeWaitlist.confirmNotPrioritized'
+            : 'signups.mySignupQueue.prioritizeWaitlist.confirmNotPrioritizedLast'
+        }
         values={{
           eventTitle: pendingChoice.target_run.event.title,
-          nextEventTitle: nextPendingChoice.target_run.event.title,
+          nextEventTitle: nextPendingChoice?.target_run.event.title,
         }}
       />
     );

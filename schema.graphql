@@ -6226,6 +6226,11 @@ enum RankedChoiceDecisionReason {
   The user is a team member for this event and should sign up manually.
   """
   TEAM_MEMBER
+
+  """
+  The waitlist position the user would receive exceeds the cap they've set on this choice
+  """
+  WAITLIST_POSITION_CAP_EXCEEDED
 }
 
 """
@@ -7168,6 +7173,12 @@ input SetSignupRankedChoicePrioritizeWaitlistInput {
   Should this SignupRankedChoice prioritize itself for full events?
   """
   prioritizeWaitlist: Boolean!
+
+  """
+  Only prioritize waitlisting if the resulting position would be at or below
+  this number. Null means no cap.  Only relevant when prioritize_waitlist is true.
+  """
+  waitlistPositionCap: Int
 }
 
 """
@@ -7395,6 +7406,12 @@ type SignupRankedChoice {
   The user whose queue this choice is part of
   """
   user_con_profile: UserConProfile!
+
+  """
+  If set, this ranked choice will only prioritize waitlisting if the attendee would be at this position or lower
+  on the waitlist.  Only relevant when prioritize_waitlist is true.
+  """
+  waitlist_position_cap: Int
 }
 
 """
