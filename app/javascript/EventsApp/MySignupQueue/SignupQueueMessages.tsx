@@ -98,13 +98,20 @@ export function SkipReason({ pendingChoice, simulatedSkipReason, userConProfile 
   } else if (simulatedSkipReason.reason === RankedChoiceDecisionReason.Full) {
     if (userConProfile.ranked_choice_fallback_action === RankedChoiceFallbackAction.Waitlist) {
       if (pendingChoice.prioritize_waitlist) {
+        const i18nKey: ParseKeys =
+          pendingChoice.waitlist_position_cap != null
+            ? // eslint-disable-next-line i18next/no-literal-string
+              'signups.mySignupQueue.simulatedSkip.fullWaitlistPrioritizedWithCap'
+            : // eslint-disable-next-line i18next/no-literal-string
+              'signups.mySignupQueue.simulatedSkip.fullWaitlistPrioritized';
         return (
           <>
             <i className="bi-hourglass-split" />{' '}
             <Trans
-              i18nKey="signups.mySignupQueue.simulatedSkip.fullWaitlistPrioritized"
+              i18nKey={i18nKey}
               values={{
                 eventTitle: pendingChoice.target_run.event.title,
+                cap: pendingChoice.waitlist_position_cap,
               }}
             />
           </>
