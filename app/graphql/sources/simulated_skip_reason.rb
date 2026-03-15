@@ -21,7 +21,7 @@ class Sources::SimulatedSkipReason < GraphQL::Dataloader::Source
             # simulate: true makes the service always return a reason for full events (so the frontend can show the
             # appropriate message), while still correctly reporting waitlist_position_cap_exceeded when applicable
             allow_waitlist: false,
-            simulate: true,
+            simulate_waitlist_cap: true,
             constraints:
           ).skip_reason
         end

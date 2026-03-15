@@ -21,7 +21,7 @@ class ExecuteRankedChoiceSignupService < CivilService::Service
               :suppress_notifications,
               :decisions,
               :allow_waitlist,
-              :simulate
+              :simulate_waitlist_cap
   delegate :user_con_profile, to: :signup_ranked_choice
   delegate :convention, to: :user_con_profile
 
@@ -30,7 +30,7 @@ class ExecuteRankedChoiceSignupService < CivilService::Service
     whodunit:,
     signup_ranked_choice:,
     allow_waitlist: false,
-    simulate: false,
+    simulate_waitlist_cap: false,
     constraints: nil,
     skip_locking: false,
     suppress_notifications: false
@@ -39,7 +39,7 @@ class ExecuteRankedChoiceSignupService < CivilService::Service
     @whodunit = whodunit
     @signup_ranked_choice = signup_ranked_choice
     @allow_waitlist = allow_waitlist
-    @simulate = simulate
+    @simulate_waitlist_cap = simulate_waitlist_cap
     @constraints = constraints || UserSignupConstraints.new(user_con_profile)
     @skip_locking = skip_locking
     @suppress_notifications = suppress_notifications
@@ -99,7 +99,7 @@ class ExecuteRankedChoiceSignupService < CivilService::Service
         end
       end
 
-      return SkipReason.new(:full) if !signup_ranked_choice.prioritize_waitlist || simulate
+      return SkipReason.new(:full) if !signup_ranked_choice.prioritize_waitlist || simulate_waitlist_cap
     end
 
     nil
