@@ -125,6 +125,7 @@ query CreateSignupRunCardQuery($userConProfileId: ID!, $eventId: ID!) {
       id
       start
       maximum_event_signups
+      rerandomize_lottery_numbers
     }
 
     event(id: $eventId) {
@@ -215,6 +216,7 @@ query SignupModerationQueuePageQuery {
       id
       start
       maximum_event_signups
+      rerandomize_lottery_numbers
     }
   }
 }

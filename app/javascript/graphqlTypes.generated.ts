@@ -5917,6 +5917,11 @@ export type SignupRound = {
   ranked_choice_decisions_paginated: RankedChoiceDecisionsPagination;
   /** In ranked-choice signup conventions, the order to use for executing users' ranked choices in this round. */
   ranked_choice_order?: Maybe<RankedChoiceOrder>;
+  /**
+   * If true, the automation will reassign random lottery numbers to all attendees in the convention before
+   * executing this signup round.
+   */
+  rerandomize_lottery_numbers: Scalars['Boolean']['output'];
   /** When this SignupRound starts. */
   start?: Maybe<Scalars['Date']['output']>;
   /** When this SignupRound was last modified. */
@@ -5952,6 +5957,8 @@ export type SignupRoundInput = {
   maximum_event_signups?: InputMaybe<Scalars['String']['input']>;
   /** For ranked-choice conventions, the order to execute signup choices in */
   ranked_choice_order?: InputMaybe<RankedChoiceOrder>;
+  /** If true, the automation will reassign random lottery numbers to all attendees before executing this round */
+  rerandomize_lottery_numbers?: InputMaybe<Scalars['Boolean']['input']>;
   /** The time that this signup round starts */
   start?: InputMaybe<Scalars['Date']['input']>;
 };

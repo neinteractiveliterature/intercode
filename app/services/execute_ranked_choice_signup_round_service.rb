@@ -18,7 +18,7 @@ class ExecuteRankedChoiceSignupRoundService < CivilService::Service
     @decisions = []
   end
 
-  def inner_call # rubocop:disable Metrics/MethodLength
+  def inner_call # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
     prev_round =
       signup_round
         .convention
@@ -34,6 +34,7 @@ class ExecuteRankedChoiceSignupRoundService < CivilService::Service
 
     with_relevant_locks do
       ActiveRecord::Base.transaction do
+        rerandomize_lottery_numbers! if signup_round.rerandomize_lottery_numbers?
         pass_number = 0
         loop do
           executed_choices_this_pass = execute_pass(pass_number)
@@ -56,6 +57,20 @@ class ExecuteRankedChoiceSignupRoundService < CivilService::Service
 
   def with_relevant_locks(&)
     with_advisory_lock_unless_skip_locking("signup_round_#{signup_round.id}", &)
+  end
+
+  def rerandomize_lottery_numbers!
+    profiles = convention.user_con_profiles.order(:id).to_a
+    return if profiles.empty?
+
+    new_numbers = (1..10_000).to_a.sample(profiles.size)
+    value_list = profiles.zip(new_numbers).map { |p, n| "(#{p.id}, #{n})" }.join(", ")
+    UserConProfile.connection.execute(<<~SQL)
+      UPDATE user_con_profiles
+        SET lottery_number = new_numbers.new_lottery_number
+        FROM (VALUES #{value_list}) AS new_numbers(id, new_lottery_number)
+        WHERE user_con_profiles.id = new_numbers.id
+    SQL
   end
 
   def ordered_user_con_profiles

@@ -3,15 +3,16 @@
 #
 # Table name: signup_rounds
 #
-#  id                    :bigint           not null, primary key
-#  automation_action     :text
-#  executed_at           :datetime
-#  maximum_event_signups :text             not null
-#  ranked_choice_order   :text
-#  start                 :datetime
-#  created_at            :datetime         not null
-#  updated_at            :datetime         not null
-#  convention_id         :bigint           not null
+#  id                          :bigint           not null, primary key
+#  automation_action           :text
+#  executed_at                 :datetime
+#  maximum_event_signups       :text             not null
+#  ranked_choice_order         :text
+#  rerandomize_lottery_numbers :boolean          default(FALSE), not null
+#  start                       :datetime
+#  created_at                  :datetime         not null
+#  updated_at                  :datetime         not null
+#  convention_id               :bigint           not null
 #
 # Indexes
 #

@@ -21,6 +21,7 @@ export function buildSignupRoundInputFromFormData(formData: FormData): SignupRou
     maximum_event_signups: formData.get('maximum_event_signups')?.toString(),
     automation_action: (automationActionValue || null) as SignupRoundAutomationAction | null,
     ranked_choice_order: formData.get('ranked_choice_order')?.toString() as RankedChoiceOrder | undefined,
+    rerandomize_lottery_numbers: formData.get('rerandomize_lottery_numbers') != null,
     start: formData.get('start')?.toString(),
   };
 }
