@@ -65,7 +65,7 @@ function EditEmailRouteModal(): React.JSX.Element {
   }, [initialEmailRoute]);
 
   return (
-    <Modal visible dialogClassName="modal-lg">
+    <Modal visible={!confirm.visible} dialogClassName="modal-lg">
       <div className="modal-header">
         <div className="flex-grow-1">Edit email route</div>
         <button
