@@ -1,9 +1,11 @@
 # frozen_string_literal: true
 class Mutations::UpdateEvent < Mutations::BaseMutation
-  field :event, Types::EventType, null: false
+  description "Update an event"
 
-  argument :event, Types::EventInputType, required: false
-  argument :id, ID, required: false
+  field :event, Types::EventType, null: false, description: "The updated event"
+
+  argument :event, Types::EventInputType, required: false, description: "The event attributes to update"
+  argument :id, ID, required: false, description: "The ID of the event to update"
 
   load_and_authorize_convention_associated_model :events, :id, :update
 
@@ -28,11 +30,12 @@ class Mutations::UpdateEvent < Mutations::BaseMutation
     new_registration_policy = RegistrationPolicy.new(registration_policy_attributes)
     return {} if event.registration_policy == new_registration_policy
 
+    old_registration_policy = event.registration_policy
     EventChangeRegistrationPolicyService.new(event, new_registration_policy, current_user).call!
 
     event.reload
 
-    { "registration_policy" => [event.registration_policy.as_json, new_registration_policy.as_json] }
+    { "registration_policy" => [old_registration_policy.as_json, new_registration_policy.as_json] }
   end
 
   def apply_form_response_attrs(event, form_response_attrs)
