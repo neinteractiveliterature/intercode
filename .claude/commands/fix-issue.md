@@ -1,7 +1,7 @@
 ---
 description: Read a GitHub issue, branch, plan, fix, and open a PR
 argument-hint: [issue-number]
-allowed-tools: Bash(gh issue view:*), Bash(gh issue list:*), Bash(gh project item-add:*), Bash(gh project item-edit:*), Bash(git checkout:*), Bash(git branch:*), Bash(git add:*), Bash(git commit:*), Bash(git push:*), Bash(gh pr create:*), Bash(gh pr edit:*), Bash(gh api:*), Bash(git status:*), Bash(git diff:*), Bash(git rev-parse:*), Bash(git log:*), Bash(yarn run tsc:*), Bash(bin/rails test:*), Bash(bundle exec rubocop:*), Bash(python3:*), Read, Write, Edit, Glob, Grep
+allowed-tools: Bash(gh issue view:*), Bash(gh issue list:*), Bash(gh project item-add:*), Bash(gh project item-edit:*), Bash(git checkout:*), Bash(git branch:*), Bash(git add:*), Bash(git commit:*), Bash(git push:*), Bash(gh pr create:*), Bash(gh pr edit:*), Bash(gh api:*), Bash(git status:*), Bash(git diff:*), Bash(git rev-parse:*), Bash(git log:*), Bash(yarn run tsc:*), Bash(bin/rails test:*), Bash(bundle exec rubocop:*), Bash(python3:*), Bash(.claude/scripts/move-issue-to-in-progress.sh:*), Read, Write, Edit, Glob, Grep
 ---
 
 ## Issue to fix
@@ -19,9 +19,7 @@ Issue content: !`gh issue view $ARGUMENTS --json title,body,labels,comments`
 Add the issue to the Intercode project board and set its status to "In Progress":
 
 ```bash
-ISSUE_URL=$(gh issue view $ARGUMENTS --json url --jq '.url')
-ITEM_ID=$(gh project item-add 1 --owner neinteractiveliterature --url "$ISSUE_URL" --format json | python3 -c "import sys,json; print(json.load(sys.stdin)['id'])")
-gh project item-edit --id "$ITEM_ID" --field-id PVTSSF_lADOABuqO84AAdTMzgAPetE --project-id PVT_kwDOABuqO84AAdTM --single-select-option-id 47fc9ee4
+.claude/scripts/move-issue-to-in-progress.sh $ARGUMENTS
 ```
 
 ## Step 3: Create a branch
