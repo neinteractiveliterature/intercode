@@ -24,7 +24,7 @@ class ProductDrop < Liquid::Drop
 
   # @return [String] The description of the product, as HTML
   def description
-    product.description_template&.render(self)
+    product.description_template&.render(@context)
   end
 
   # @return [PricingStructureDrop] The pricing structure for this product
@@ -34,8 +34,9 @@ class ProductDrop < Liquid::Drop
 
   # @return [String] The URL of the product image, if present
   def image_url
-    return unless product.image && @context.registers['controller']
-    @context.registers['controller'].cdn_upload_url(product.image)
+    # present? is required because broken ActiveStorage attachments return a non-null attachment object
+    return unless product.image.present? && @context.registers["controller"]
+    @context.registers["controller"].cdn_upload_url(product.image)
   end
 
   # @return [String] The base price for the product
