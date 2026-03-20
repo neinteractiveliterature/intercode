@@ -145,7 +145,7 @@ pg_dump #{pull_options.join(" ")} -v -x --no-owner -Fp \"#{database_url}\" \
     puts cmd
     sh cmd
 
-    exec_tool("load_production_db #{docker_compose ? "--docker-compose" : ""}")
+    exec_tool("load_production_db #{"--docker-compose" if docker_compose}")
   end
 end
 
@@ -214,7 +214,7 @@ console: Base64.encode64(ActiveStorage::Blob.signed_id_verifier.instance_variabl
 
   def download_attachment(attachment, verifier)
     prod_url =
-      "https://www.neilhosting.net/rails/active_storage/blobs/redirect/#{
+      "https://uploads.neilhosting.net/rails/active_storage/blobs/redirect/#{
         verifier.generate(attachment.blob.id, purpose: :blob_id)
       }/#{Rack::Utils.escape attachment.blob.filename}"
     actual_url = Net::HTTP.get_response(URI.parse(prod_url))["location"]
