@@ -111,6 +111,7 @@
       "prospectiveRunSchedule": {
         "title": "Prospective run schedule"
       },
+      "editPageTitle": "Editing \"{{ title }}\"",
       "runsColumn": "Runs",
       "titleColumn": "Title",
       "bucketKeyRemapping": {

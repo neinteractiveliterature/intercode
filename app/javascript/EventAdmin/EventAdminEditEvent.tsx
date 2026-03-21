@@ -1,5 +1,6 @@
 import { useState, useMemo, useCallback } from 'react';
 import { LoaderFunction, RouterContextProvider, useLoaderData, useRouteLoaderData, useSubmit } from 'react-router';
+import { useTranslation } from 'react-i18next';
 
 import useEventFormWithCategorySelection, { EventFormWithCategorySelection } from './useEventFormWithCategorySelection';
 import EditEvent from '../BuiltInForms/EditEvent';
@@ -37,6 +38,7 @@ export const loader: LoaderFunction<RouterContextProvider> = async ({ context, p
 };
 
 function EventAdminEditEvent() {
+  const { t } = useTranslation();
   const { convention, currentAbility } = useRouteLoaderData(NamedRoute.EventAdmin) as EventAdminEventsQueryData;
   const initialEvent = useLoaderData() as LoaderResult;
   const submit = useSubmit();
@@ -127,7 +129,7 @@ function EventAdminEditEvent() {
     }
   }, [event, initialEvent, submitEvent]);
 
-  usePageTitle(`Editing "${initialEvent.title}"`);
+  usePageTitle(t('admin.events.editPageTitle', { title: initialEvent.title }));
 
   const donePath = convention?.site_mode === 'single_event' ? '/' : '../..';
 
