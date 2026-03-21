@@ -101,7 +101,7 @@ class EventChangeRegistrationPolicyService < CivilService::Service
       destination_bucket = no_preference_bucket_finder.prioritized_buckets_with_capacity_except(from_bucket).first
 
       build_move_result(movable_signup, destination_bucket)
-      log "Moving signup for #{movable_signup.user_con_profile.name_without_nickname} to \
+      log "Moving signup for #{movable_signup.user_con_profile.name_without_nickname} to 
 #{destination_bucket.key}"
 
       movable_signup.bucket_key = destination_bucket.key
@@ -122,10 +122,10 @@ class EventChangeRegistrationPolicyService < CivilService::Service
       return unless logger
 
       if destination_bucket.key == signup.bucket_key
-        log "Signup for #{signup.user_con_profile.name_without_nickname} remains in \
+        log "Signup for #{signup.user_con_profile.name_without_nickname} remains in 
 #{destination_bucket.key}"
       else
-        log "Signup for #{signup.user_con_profile.name_without_nickname} placed in \
+        log "Signup for #{signup.user_con_profile.name_without_nickname} placed in 
 #{destination_bucket.key} (was #{signup.bucket_key})"
       end
     end
@@ -146,12 +146,13 @@ class EventChangeRegistrationPolicyService < CivilService::Service
 
   include SkippableAdvisoryLock
 
-  attr_reader :event, :new_registration_policy, :whodunit, :move_results
+  attr_reader :event, :new_registration_policy, :whodunit, :bucket_key_mappings, :move_results
 
-  def initialize(event, new_registration_policy, whodunit)
+  def initialize(event, new_registration_policy, whodunit, bucket_key_mappings = nil)
     @event = event
     @new_registration_policy = new_registration_policy
     @whodunit = whodunit
+    @bucket_key_mappings = (bucket_key_mappings || []).index_by { |mapping| mapping[:from_key] }
     @move_results = []
   end
 
@@ -203,19 +204,65 @@ class EventChangeRegistrationPolicyService < CivilService::Service
       check_for_move signup, new_signup
       apply_changes_for_signup signup, new_signup
     end
+
+    apply_requested_bucket_key_mappings_for_signups(signups_by_id.values)
+    apply_requested_bucket_key_mappings_for_signup_requests
+    apply_requested_bucket_key_mappings_for_signup_ranked_choices
   end
 
   def apply_changes_for_signup(signup, new_signup)
     identical =
-      (
-        new_signup.state == signup.state && new_signup.bucket_key == signup.bucket_key &&
-          new_signup.counted == signup.counted
-      )
+      new_signup.state == signup.state && new_signup.bucket_key == signup.bucket_key &&
+        new_signup.counted == signup.counted
     return if identical
 
     # Do a direct SQL update, bypassing validations, since we haven't updated
     # the registration policy yet
     signup.update_columns(state: new_signup.state, bucket_key: new_signup.bucket_key, counted: new_signup.counted)
+  end
+
+  def apply_requested_bucket_key_mappings_for_signups(signups)
+    signups.each do |signup|
+      new_requested_bucket_key = mapped_bucket_key(signup.requested_bucket_key)
+      next if new_requested_bucket_key == signup.requested_bucket_key
+
+      signup.update_columns(requested_bucket_key: new_requested_bucket_key)
+    end
+  end
+
+  def apply_requested_bucket_key_mappings_for_signup_requests
+    run_ids = event.runs.pluck(:id)
+    SignupRequest
+      .where(target_run_id: run_ids)
+      .where(requested_bucket_key: removed_bucket_keys)
+      .find_each do |request|
+        request.update_columns(requested_bucket_key: mapped_bucket_key(request.requested_bucket_key))
+      end
+  end
+
+  def apply_requested_bucket_key_mappings_for_signup_ranked_choices
+    run_ids = event.runs.pluck(:id)
+    SignupRankedChoice
+      .where(target_run_id: run_ids)
+      .where(requested_bucket_key: removed_bucket_keys)
+      .find_each do |choice|
+        choice.update_columns(requested_bucket_key: mapped_bucket_key(choice.requested_bucket_key))
+      end
+  end
+
+  def removed_bucket_keys
+    @removed_bucket_keys ||=
+      begin
+        old_keys = event.registration_policy.buckets.to_set(&:key)
+        new_keys = new_registration_policy.buckets.to_set(&:key)
+        (old_keys - new_keys).to_a
+      end
+  end
+
+  def mapped_bucket_key(old_key)
+    return old_key unless old_key && removed_bucket_keys.include?(old_key)
+
+    bucket_key_mappings[old_key]&.fetch(:to_key, nil)
   end
 
   def check_for_move(signup, new_signup)

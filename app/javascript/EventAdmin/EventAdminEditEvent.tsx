@@ -1,4 +1,4 @@
-import { useState, useMemo } from 'react';
+import { useState, useMemo, useCallback } from 'react';
 import { LoaderFunction, RouterContextProvider, useLoaderData, useRouteLoaderData, useSubmit } from 'react-router';
 
 import useEventFormWithCategorySelection, { EventFormWithCategorySelection } from './useEventFormWithCategorySelection';
@@ -16,8 +16,9 @@ import { useImageAttachmentConfig } from '../BuiltInFormControls/MarkdownInput';
 import { NamedRoute } from '../AppRouter';
 import { apolloClientContext } from 'AppContexts';
 import { UpdateEventOptions } from './$id';
-import { ActiveStorageAttachment } from 'graphqlTypes.generated';
+import { ActiveStorageAttachment, BucketKeyMappingInput } from 'graphqlTypes.generated';
 import { useAsyncFetcher } from 'useAsyncFetcher';
+import BucketKeyRemappingModal from './BucketKeyRemappingModal';
 
 type LoaderResult = WithFormResponse<EventAdminSingleEventQueryData['conventionByRequestHost']['event']>;
 
@@ -42,6 +43,10 @@ function EventAdminEditEvent() {
   const fetcher = useAsyncFetcher();
 
   const [run, setRun] = useState(initialEvent?.runs[0] || {});
+  const [remappingModalVisible, setRemappingModalVisible] = useState(false);
+  const [removedBucketsNeedingRemapping, setRemovedBucketsNeedingRemapping] = useState<
+    { key: string; name?: string | null }[]
+  >([]);
 
   const imageAttachmentConfig = useImageAttachmentConfig(initialEvent.images, async (blob) => {
     const data = await fetcher.submitAsync<ActiveStorageAttachment>(
@@ -78,6 +83,7 @@ function EventAdminEditEvent() {
         },
       },
       maximum_event_provided_tickets_overrides: [],
+      bucket_keys_with_pending_signups_or_requests: [],
       runs: [run],
       images: event.images,
     }),
@@ -88,45 +94,86 @@ function EventAdminEditEvent() {
     submit({}, { method: 'PATCH', action: `../events/${event.id}/drop`, relative: 'route' });
   };
 
-  usePageTitle(`Editing “${initialEvent.title}”`);
+  const submitEvent = useCallback(
+    (bucketKeyMappings?: BucketKeyMappingInput[]) => {
+      if (eventCategory) {
+        const eventWithMappings = bucketKeyMappings ? { ...event, bucket_key_mappings: bucketKeyMappings } : event;
+        submit({ event: eventWithMappings, eventCategory, run } satisfies Omit<UpdateEventOptions, 'client'>, {
+          method: 'PATCH',
+          encType: 'application/json',
+          action: `/admin_events/${eventCategory.id}/events/${event.id}`,
+        });
+      }
+    },
+    [event, eventCategory, run, submit],
+  );
+
+  const updateEvent = useCallback(() => {
+    const currentBuckets: { key: string; name?: string | null }[] =
+      (event.form_response_attrs.registration_policy as { buckets?: { key: string; name?: string | null }[] } | null)
+        ?.buckets ?? [];
+    const currentBucketKeys = new Set(currentBuckets.map((b) => b.key));
+
+    const originalBuckets = initialEvent.registration_policy?.buckets ?? [];
+    const keysWithRecords = new Set(initialEvent.bucket_keys_with_pending_signups_or_requests);
+
+    const removedBuckets = originalBuckets.filter((b) => !currentBucketKeys.has(b.key) && keysWithRecords.has(b.key));
+
+    if (removedBuckets.length > 0) {
+      setRemovedBucketsNeedingRemapping(removedBuckets);
+      setRemappingModalVisible(true);
+    } else {
+      submitEvent();
+    }
+  }, [event, initialEvent, submitEvent]);
+
+  usePageTitle(`Editing "${initialEvent.title}"`);
 
   const donePath = convention?.site_mode === 'single_event' ? '/' : '../..';
 
-  return (
-    <EditEvent
-      cancelPath={donePath}
-      showDropButton={convention?.site_mode !== 'single_event'}
-      event={event}
-      dropEvent={dropEvent}
-      validateForm={validateForm}
-      updateEvent={() => {
-        if (eventCategory) {
-          submit({ event, eventCategory, run } satisfies Omit<UpdateEventOptions, 'client'>, {
-            method: 'PATCH',
-            encType: 'application/json',
-            action: `/admin_events/${eventCategory.id}/events/${event.id}`,
-          });
-        }
-      }}
-    >
-      <>
-        <EventFormWithCategorySelection {...eventFormWithCategorySelectionProps} />
-        {currentAbility.can_override_maximum_event_provided_tickets &&
-          convention?.ticket_mode !== 'disabled' &&
-          convention?.site_mode === 'convention' && (
-            <MaximumEventProvidedTicketsOverrideEditor
-              ticketTypes={convention.ticket_types}
-              ticketName={convention.ticket_name}
-              overrides={initialEvent.maximum_event_provided_tickets_overrides}
-              eventId={initialEvent.id}
-            />
-          )}
+  const newPolicyBuckets: { key: string; name?: string | null }[] =
+    (event.form_response_attrs.registration_policy as { buckets?: { key: string; name?: string | null }[] } | null)
+      ?.buckets ?? [];
 
-        {eventCategory?.scheduling_ui === 'single_run' && event.form_response_attrs.length_seconds && (
-          <RunFormFields convention={convention} run={run} event={eventForRunFormFields} onChange={setRun} />
-        )}
-      </>
-    </EditEvent>
+  return (
+    <>
+      <EditEvent
+        cancelPath={donePath}
+        showDropButton={convention?.site_mode !== 'single_event'}
+        event={event}
+        dropEvent={dropEvent}
+        validateForm={validateForm}
+        updateEvent={updateEvent}
+      >
+        <>
+          <EventFormWithCategorySelection {...eventFormWithCategorySelectionProps} />
+          {currentAbility.can_override_maximum_event_provided_tickets &&
+            convention?.ticket_mode !== 'disabled' &&
+            convention?.site_mode === 'convention' && (
+              <MaximumEventProvidedTicketsOverrideEditor
+                ticketTypes={convention.ticket_types}
+                ticketName={convention.ticket_name}
+                overrides={initialEvent.maximum_event_provided_tickets_overrides}
+                eventId={initialEvent.id}
+              />
+            )}
+
+          {eventCategory?.scheduling_ui === 'single_run' && event.form_response_attrs.length_seconds && (
+            <RunFormFields convention={convention} run={run} event={eventForRunFormFields} onChange={setRun} />
+          )}
+        </>
+      </EditEvent>
+      <BucketKeyRemappingModal
+        visible={remappingModalVisible}
+        removedBuckets={removedBucketsNeedingRemapping}
+        newPolicyBuckets={newPolicyBuckets}
+        onConfirm={(mappings) => {
+          setRemappingModalVisible(false);
+          submitEvent(mappings);
+        }}
+        onCancel={() => setRemappingModalVisible(false)}
+      />
+    </>
   );
 }
 

@@ -146,6 +146,7 @@ function NewEvent() {
             length_seconds: event.form_response_attrs.length_seconds,
             event_category: eventCategory,
             maximum_event_provided_tickets_overrides: [],
+            bucket_keys_with_pending_signups_or_requests: [],
             runs: [],
             images: [],
           }}

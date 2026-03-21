@@ -11,10 +11,11 @@ class Mutations::UpdateEvent < Mutations::BaseMutation
 
   def resolve(**args)
     event_attrs = args[:event].to_h.merge(updated_by: user_con_profile.user).stringify_keys
+    bucket_key_changes = event_attrs.delete("bucket_key_mappings")
     form_response_attrs = JSON.parse(event_attrs.delete("form_response_attrs_json"))
     registration_policy_attributes = form_response_attrs.delete("registration_policy")
 
-    changes = apply_registration_policy(event, registration_policy_attributes)
+    changes = apply_registration_policy(event, registration_policy_attributes, bucket_key_changes)
     changes.update(apply_form_response_attrs(event, form_response_attrs))
     event.assign_attributes(event_attrs)
     event.save!
@@ -26,12 +27,12 @@ class Mutations::UpdateEvent < Mutations::BaseMutation
 
   private
 
-  def apply_registration_policy(event, registration_policy_attributes)
+  def apply_registration_policy(event, registration_policy_attributes, bucket_key_mappings)
     new_registration_policy = RegistrationPolicy.new(registration_policy_attributes)
     return {} if event.registration_policy == new_registration_policy
 
     old_registration_policy = event.registration_policy
-    EventChangeRegistrationPolicyService.new(event, new_registration_policy, current_user).call!
+    EventChangeRegistrationPolicyService.new(event, new_registration_policy, current_user, bucket_key_mappings).call!
 
     event.reload
 
