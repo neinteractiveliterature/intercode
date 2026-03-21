@@ -180,38 +180,4 @@ class Types::EventType < Types::BaseObject
   def images
     dataloader.with(Sources::ActiveStorageAttachment, Event, :images).load(object)
   end
-
-  def bucket_keys_with_pending_signups_or_requests
-    run_ids = object.runs.pluck(:id)
-    return [] if run_ids.empty?
-
-    (signup_requested_bucket_keys(run_ids) + request_bucket_keys(run_ids) + ranked_choice_bucket_keys(run_ids)).uniq
-  end
-
-  private
-
-  def signup_requested_bucket_keys(run_ids)
-    Signup
-      .where.not(state: "withdrawn")
-      .where(run_id: run_ids)
-      .where.not(requested_bucket_key: nil)
-      .distinct
-      .pluck(:requested_bucket_key)
-  end
-
-  def request_bucket_keys(run_ids)
-    SignupRequest
-      .where(target_run_id: run_ids, state: "pending")
-      .where.not(requested_bucket_key: nil)
-      .distinct
-      .pluck(:requested_bucket_key)
-  end
-
-  def ranked_choice_bucket_keys(run_ids)
-    SignupRankedChoice
-      .where(target_run_id: run_ids)
-      .where.not(requested_bucket_key: nil)
-      .distinct
-      .pluck(:requested_bucket_key)
-  end
 end
