@@ -40,6 +40,15 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
   end
 
   describe "with existing signups in buckets that will be removed" do
+    subject do
+      EventChangeRegistrationPolicyService.new(
+        event,
+        new_registration_policy,
+        whodunit,
+        [{ from_key: "unlimited", to_key: nil }]
+      )
+    end
+
     let(:user_con_profile) { create(:user_con_profile, convention: convention) }
     let(:signup) do
       create(
@@ -284,12 +293,17 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
     end
 
     describe "without bucket_key_mappings" do
-      it "sets requested_bucket_key to nil (no preference) on affected records" do
-        subject.call!
+      it "fails with an error about the missing mapping" do
+        result = subject.call
 
-        assert_nil signup.reload.requested_bucket_key
-        assert_nil signup_request.reload.requested_bucket_key
-        assert_nil signup_ranked_choice.reload.requested_bucket_key
+        assert result.failure?
+        assert_match(
+          /\ABucket key "unlimited" was removed but no mapping was provided/,
+          result.errors.full_messages.join("\n")
+        )
+        assert_equal "unlimited", signup.reload.requested_bucket_key
+        assert_equal "unlimited", signup_request.reload.requested_bucket_key
+        assert_equal "unlimited", signup_ranked_choice.reload.requested_bucket_key
       end
     end
 

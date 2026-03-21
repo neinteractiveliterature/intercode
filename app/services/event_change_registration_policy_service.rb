@@ -160,6 +160,8 @@ class EventChangeRegistrationPolicyService < CivilService::Service
 
   def inner_call
     lock_all_runs do
+      return failure(errors) if unmapped_bucket_key_errors.any?
+
       immovable_signups, new_signups_by_signup_id = simulate_signups
 
       if immovable_signups.any?
@@ -257,6 +259,27 @@ class EventChangeRegistrationPolicyService < CivilService::Service
         new_keys = new_registration_policy.buckets.to_set(&:key)
         (old_keys - new_keys).to_a
       end
+  end
+
+  def unmapped_bucket_key_errors
+    unmapped_removed_bucket_keys.each_with_object(errors) do |key, errs|
+      errs.add(:base, "Bucket key #{key.inspect} was removed but no mapping was provided")
+    end
+  end
+
+  def unmapped_removed_bucket_keys
+    run_ids = event.runs.pluck(:id)
+    return [] if run_ids.empty? || removed_bucket_keys.empty?
+
+    referenced_removed_keys =
+      (
+        Signup.where.not(state: "withdrawn").where(run_id: run_ids).where(requested_bucket_key: removed_bucket_keys) +
+          SignupRequest.where(target_run_id: run_ids, state: "pending").where(
+            requested_bucket_key: removed_bucket_keys
+          ) + SignupRankedChoice.where(target_run_id: run_ids).where(requested_bucket_key: removed_bucket_keys)
+      ).map(&:requested_bucket_key).uniq
+
+    referenced_removed_keys.reject { |key| bucket_key_mappings.key?(key) }
   end
 
   def mapped_bucket_key(old_key)
