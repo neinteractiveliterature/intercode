@@ -226,10 +226,9 @@ class EventChangeRegistrationPolicyService < CivilService::Service
   def apply_requested_bucket_key_mappings_for_signups(signups)
     signups.each do |signup|
       new_requested_bucket_key = mapped_bucket_key(signup.requested_bucket_key)
-      new_bucket_key = mapped_bucket_key(signup.bucket_key)
-      next if new_requested_bucket_key == signup.requested_bucket_key && new_bucket_key == signup.bucket_key
+      next if new_requested_bucket_key == signup.requested_bucket_key
 
-      signup.update_columns(requested_bucket_key: new_requested_bucket_key, bucket_key: new_bucket_key)
+      signup.update_columns(requested_bucket_key: new_requested_bucket_key)
     end
   end
 

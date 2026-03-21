@@ -47,6 +47,7 @@ class Signup < ApplicationRecord
 
   validates :state, inclusion: { in: STATES }
   validates :bucket_key, presence: { if: ->(signup) { signup.counted? && signup.occupying_slot? } }
+  validates :bucket_key, absence: { unless: ->(signup) { signup.occupying_slot? } }
   validate :must_be_in_existing_bucket
   validate :user_con_profile_and_run_must_be_in_same_convention
 

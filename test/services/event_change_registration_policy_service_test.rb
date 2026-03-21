@@ -324,22 +324,6 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
         assert_equal "dogs", signup_request.reload.requested_bucket_key
         assert_equal "dogs", signup_ranked_choice.reload.requested_bucket_key
       end
-
-      it "updates bucket_key on signups that still reference the removed bucket after simulation" do
-        waitlisted_signup =
-          create(
-            :signup,
-            user_con_profile: create(:user_con_profile, convention: convention),
-            state: "waitlisted",
-            requested_bucket_key: "unlimited",
-            bucket_key: "unlimited",
-            run: the_run
-          )
-
-        subject.call!
-
-        assert_equal "dogs", waitlisted_signup.reload.bucket_key
-      end
     end
 
     describe "with bucket_key_mappings mapping to nil (no preference)" do
