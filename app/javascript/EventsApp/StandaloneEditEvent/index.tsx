@@ -67,6 +67,7 @@ function StandaloneEditEventForm({
           },
         },
       });
+      await client.clearStore();
       navigate(eventPath);
     },
     [event, client, navigate, eventPath],

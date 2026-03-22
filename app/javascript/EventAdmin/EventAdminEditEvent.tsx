@@ -107,6 +107,7 @@ function EventAdminEditEvent() {
           run: run as UpdateEventOptions['run'],
           client,
         });
+        await client.clearStore();
         navigate(donePath);
       }
     },
