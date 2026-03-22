@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from 'react';
-import { LoaderFunction, RouterContextProvider, useLoaderData, useRouteLoaderData, useSubmit } from 'react-router';
+import { LoaderFunction, RouterContextProvider, useLoaderData, useNavigate, useRouteLoaderData } from 'react-router';
 import { useTranslation } from 'react-i18next';
 
 import useEventFormWithCategorySelection, { EventFormWithCategorySelection } from './useEventFormWithCategorySelection';
@@ -16,8 +16,9 @@ import {
 import { useImageAttachmentConfig } from '../BuiltInFormControls/MarkdownInput';
 import { NamedRoute } from '../AppRouter';
 import { apolloClientContext } from 'AppContexts';
-import { UpdateEventOptions } from './$id';
+import { updateEvent as updateEventMutation, UpdateEventOptions } from './$id';
 import { ActiveStorageAttachment, BucketKeyMappingInput } from 'graphqlTypes.generated';
+import { useApolloClient } from '@apollo/client/react';
 import { useAsyncFetcher } from 'useAsyncFetcher';
 import useBucketKeyRemapping from './useBucketKeyRemapping';
 import BucketKeyRemappingModal from './BucketKeyRemappingModal';
@@ -42,7 +43,8 @@ function EventAdminEditEvent() {
   const { t } = useTranslation();
   const { convention, currentAbility } = useRouteLoaderData(NamedRoute.EventAdmin) as EventAdminEventsQueryData;
   const initialEvent = useLoaderData() as LoaderResult;
-  const submit = useSubmit();
+  const navigate = useNavigate();
+  const client = useApolloClient();
   const fetcher = useAsyncFetcher();
 
   const [run, setRun] = useState(initialEvent?.runs[0] || {});
@@ -89,29 +91,31 @@ function EventAdminEditEvent() {
     [run, event],
   );
 
+  const donePath = convention?.site_mode === 'single_event' ? '/' : '../..';
+
   const dropEvent = () => {
-    submit({}, { method: 'PATCH', action: `../events/${event.id}/drop`, relative: 'route' });
+    fetcher.submit({}, { method: 'PATCH', action: `../events/${event.id}/drop`, relative: 'route' });
   };
 
   const submitEvent = useCallback(
-    (bucketKeyMappings?: BucketKeyMappingInput[]) => {
+    async (bucketKeyMappings?: BucketKeyMappingInput[]) => {
       if (eventCategory) {
         const eventWithMappings = bucketKeyMappings ? { ...event, bucket_key_mappings: bucketKeyMappings } : event;
-        submit({ event: eventWithMappings, eventCategory, run } satisfies Omit<UpdateEventOptions, 'client'>, {
-          method: 'PATCH',
-          encType: 'application/json',
-          action: `/admin_events/${eventCategory.id}/events/${event.id}`,
+        await updateEventMutation({
+          event: eventWithMappings as UpdateEventOptions['event'],
+          eventCategory,
+          run: run as UpdateEventOptions['run'],
+          client,
         });
+        navigate(donePath);
       }
     },
-    [event, eventCategory, run, submit],
+    [event, eventCategory, run, client, navigate, donePath],
   );
 
   const { updateEvent, remappingModalProps } = useBucketKeyRemapping({ event, initialEvent, onSubmit: submitEvent });
 
   usePageTitle(t('admin.events.editPageTitle', { title: initialEvent.title }));
-
-  const donePath = convention?.site_mode === 'single_event' ? '/' : '../..';
 
   return (
     <>
