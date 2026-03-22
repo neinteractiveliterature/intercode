@@ -72,6 +72,28 @@ On macOS, you should have [Homebrew](https://brew.sh/) installed. Homebrew will 
 brew install mysql-client postgresql
 ```
 
+In order to connect to your local PostgreSQL instance and set up Intercode, you'll need to have a user with enough permissions to log in and create databases. First, run this:
+
+```sh
+sudo -u postgres psql postgres
+```
+
+This should bring you into a Postgres command prompt. You'll need to run a few commands that include your local username on your Linux or macOS machine:
+
+```sql
+CREATE ROLE [your username];
+ALTER USER [your username] login;
+ALTER USER [your username] createdb;
+```
+
+Now exit the Postgres command prompt using Ctrl-D, and run:
+
+```sh
+psql postgres
+```
+
+This should let you into Postgres, this time as your local user account.
+
 ### Setting up Intercode
 
 First, clone this repository:
