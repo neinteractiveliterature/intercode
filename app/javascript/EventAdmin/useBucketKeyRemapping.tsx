@@ -1,4 +1,4 @@
-import { useState, useCallback, useMemo } from 'react';
+import { useState, useCallback, useMemo, useRef } from 'react';
 import { BucketKeyMappingInput } from '../graphqlTypes.generated';
 import { BucketKeyRemappingModalProps } from './BucketKeyRemappingModal';
 
@@ -21,6 +21,8 @@ type UseBucketKeyRemappingOptions = {
 export default function useBucketKeyRemapping({ event, initialEvent, onSubmit }: UseBucketKeyRemappingOptions) {
   const [remappingModalVisible, setRemappingModalVisible] = useState(false);
   const [removedBucketsNeedingRemapping, setRemovedBucketsNeedingRemapping] = useState<Bucket[]>([]);
+  const pendingResolveRef = useRef<(() => void) | null>(null);
+  const pendingRejectRef = useRef<((reason?: unknown) => void) | null>(null);
 
   const newPolicyBuckets = useMemo(() => bucketsFromFormResponseAttrs(event.form_response_attrs), [event]);
 
@@ -34,6 +36,10 @@ export default function useBucketKeyRemapping({ event, initialEvent, onSubmit }:
     if (removedBuckets.length > 0) {
       setRemovedBucketsNeedingRemapping(removedBuckets);
       setRemappingModalVisible(true);
+      return new Promise<void>((resolve, reject) => {
+        pendingResolveRef.current = resolve;
+        pendingRejectRef.current = reject;
+      });
     } else {
       await onSubmit();
     }
@@ -45,9 +51,22 @@ export default function useBucketKeyRemapping({ event, initialEvent, onSubmit }:
     newPolicyBuckets,
     onConfirm: async (mappings) => {
       setRemappingModalVisible(false);
-      await onSubmit(mappings);
+      try {
+        await onSubmit(mappings);
+        pendingResolveRef.current?.();
+      } catch (e) {
+        pendingRejectRef.current?.(e);
+      } finally {
+        pendingResolveRef.current = null;
+        pendingRejectRef.current = null;
+      }
     },
-    onCancel: () => setRemappingModalVisible(false),
+    onCancel: () => {
+      setRemappingModalVisible(false);
+      pendingResolveRef.current?.();
+      pendingResolveRef.current = null;
+      pendingRejectRef.current = null;
+    },
   };
 
   return { updateEvent, remappingModalProps };
