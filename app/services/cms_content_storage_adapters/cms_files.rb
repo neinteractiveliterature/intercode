@@ -1,6 +1,6 @@
 class CmsContentStorageAdapters::CmsFiles < CmsContentStorageAdapters::Base
   def subdir
-    'files'
+    "files"
   end
 
   def cms_parent_association
@@ -8,7 +8,7 @@ class CmsContentStorageAdapters::CmsFiles < CmsContentStorageAdapters::Base
   end
 
   def identifier_attribute
-    'file'
+    "file"
   end
 
   def read_item_attrs(item)
@@ -16,18 +16,18 @@ class CmsContentStorageAdapters::CmsFiles < CmsContentStorageAdapters::Base
   end
 
   def identifier_for_path(_content_set, path)
-    basename_without_extension(path, '')
+    basename_without_extension(path, "")
   end
 
   def identifier_for_model(model)
-    model.file.identifier
+    model.file.filename.to_s
   end
 
   def path_for_identifier(content_set, identifier)
-    content_set.content_path(File.join('files', identifier))
+    content_set.content_path(File.join("files", identifier))
   end
 
   def serialize_item(item, io)
-    io.write(item.model.file.read)
+    io.write(item.model.file.download)
   end
 end
