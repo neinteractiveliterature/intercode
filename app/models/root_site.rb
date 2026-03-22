@@ -74,6 +74,10 @@ class RootSite < ApplicationRecord
     Rails.application.config.action_mailer.default_url_options[:host]
   end
 
+  def name
+    "Root site"
+  end
+
   def url
     Rails.application.routes.url_helpers.root_url(Rails.application.config.action_mailer.default_url_options)
   end

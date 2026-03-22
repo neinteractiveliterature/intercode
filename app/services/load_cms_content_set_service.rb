@@ -60,7 +60,7 @@ class LoadCmsContentSetService < CivilService::Service
   end
 
   def cms_parent
-    @cms_parent ||= convention || RootSite.instance
+    @cms_parent ||= convention || RootSite.instance || RootSite.new
   end
 
   def ensure_content_set_exists
