@@ -1,4 +1,4 @@
-import { useCallback, useMemo, useState } from 'react';
+import { useCallback, useMemo } from 'react';
 import { LoaderFunction, useLoaderData, useNavigate, RouterContextProvider } from 'react-router';
 
 import useEventForm, { EventForm } from '../../EventAdmin/useEventForm';
@@ -20,7 +20,7 @@ import { apolloClientContext } from '../../AppContexts';
 import { StandaloneUpdateEventDocument } from './mutations.generated';
 import { useAsyncFetcher } from 'useAsyncFetcher';
 import { useApolloClient } from '@apollo/client/react';
-import BucketKeyRemappingModal from '../../EventAdmin/BucketKeyRemappingModal';
+import useBucketKeyRemapping from '../../EventAdmin/useBucketKeyRemapping';
 import { BucketKeyMappingInput } from '../../graphqlTypes.generated';
 
 export type StandaloneEditEventFormProps = {
@@ -41,11 +41,6 @@ function StandaloneEditEventForm({
   const navigate = useNavigate();
   const fetcher = useAsyncFetcher();
   const client = useApolloClient();
-  const [remappingModalVisible, setRemappingModalVisible] = useState(false);
-  const [removedBucketsNeedingRemapping, setRemovedBucketsNeedingRemapping] = useState<
-    { key: string; name?: string | null }[]
-  >([]);
-
   const imageAttachmentConfig = useImageAttachmentConfig(initialEvent.images, (blob) =>
     fetcher.submitAsync({ signed_blob_id: blob.signed_id }, { action: '../attach_image', method: 'PATCH' }),
   );
@@ -71,40 +66,12 @@ function StandaloneEditEventForm({
           },
         },
       });
+      navigate(eventPath);
     },
-    [event, client],
+    [event, client, navigate, eventPath],
   );
 
-  const updateEvent = useCallback(async () => {
-    const currentBuckets: { key: string; name?: string | null }[] =
-      (event.form_response_attrs.registration_policy as { buckets?: { key: string; name?: string | null }[] } | null)
-        ?.buckets ?? [];
-    const currentBucketKeys = new Set(currentBuckets.map((b) => b.key));
-
-    const originalBuckets =
-      (
-        initialEvent.form_response_attrs.registration_policy as {
-          buckets?: { key: string; name?: string | null }[];
-        } | null
-      )?.buckets ?? [];
-    const keysWithRecords = new Set(initialEvent.bucket_keys_with_pending_signups_or_requests);
-
-    const removedBuckets = originalBuckets.filter(
-      (b: { key: string; name?: string | null }) => !currentBucketKeys.has(b.key) && keysWithRecords.has(b.key),
-    );
-
-    if (removedBuckets.length > 0) {
-      setRemovedBucketsNeedingRemapping(removedBuckets);
-      setRemappingModalVisible(true);
-    } else {
-      await submitEvent();
-      navigate(eventPath);
-    }
-  }, [event, initialEvent, submitEvent, navigate, eventPath]);
-
-  const newPolicyBuckets: { key: string; name?: string | null }[] =
-    (event.form_response_attrs.registration_policy as { buckets?: { key: string; name?: string | null }[] } | null)
-      ?.buckets ?? [];
+  const { updateEvent, remappingModal } = useBucketKeyRemapping({ event, initialEvent, onSubmit: submitEvent });
 
   return (
     <>
@@ -127,17 +94,7 @@ function StandaloneEditEventForm({
           />
         )}
       </EditEvent>
-      <BucketKeyRemappingModal
-        visible={remappingModalVisible}
-        removedBuckets={removedBucketsNeedingRemapping}
-        newPolicyBuckets={newPolicyBuckets}
-        onConfirm={async (mappings) => {
-          setRemappingModalVisible(false);
-          await submitEvent(mappings);
-          navigate(eventPath);
-        }}
-        onCancel={() => setRemappingModalVisible(false)}
-      />
+      {remappingModal}
     </>
   );
 }

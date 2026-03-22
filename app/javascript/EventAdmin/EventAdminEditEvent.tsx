@@ -19,7 +19,7 @@ import { apolloClientContext } from 'AppContexts';
 import { UpdateEventOptions } from './$id';
 import { ActiveStorageAttachment, BucketKeyMappingInput } from 'graphqlTypes.generated';
 import { useAsyncFetcher } from 'useAsyncFetcher';
-import BucketKeyRemappingModal from './BucketKeyRemappingModal';
+import useBucketKeyRemapping from './useBucketKeyRemapping';
 
 type LoaderResult = WithFormResponse<EventAdminSingleEventQueryData['conventionByRequestHost']['event']>;
 
@@ -45,10 +45,6 @@ function EventAdminEditEvent() {
   const fetcher = useAsyncFetcher();
 
   const [run, setRun] = useState(initialEvent?.runs[0] || {});
-  const [remappingModalVisible, setRemappingModalVisible] = useState(false);
-  const [removedBucketsNeedingRemapping, setRemovedBucketsNeedingRemapping] = useState<
-    { key: string; name?: string | null }[]
-  >([]);
 
   const imageAttachmentConfig = useImageAttachmentConfig(initialEvent.images, async (blob) => {
     const data = await fetcher.submitAsync<ActiveStorageAttachment>(
@@ -110,32 +106,11 @@ function EventAdminEditEvent() {
     [event, eventCategory, run, submit],
   );
 
-  const updateEvent = useCallback(() => {
-    const currentBuckets: { key: string; name?: string | null }[] =
-      (event.form_response_attrs.registration_policy as { buckets?: { key: string; name?: string | null }[] } | null)
-        ?.buckets ?? [];
-    const currentBucketKeys = new Set(currentBuckets.map((b) => b.key));
-
-    const originalBuckets = initialEvent.registration_policy?.buckets ?? [];
-    const keysWithRecords = new Set(initialEvent.bucket_keys_with_pending_signups_or_requests);
-
-    const removedBuckets = originalBuckets.filter((b) => !currentBucketKeys.has(b.key) && keysWithRecords.has(b.key));
-
-    if (removedBuckets.length > 0) {
-      setRemovedBucketsNeedingRemapping(removedBuckets);
-      setRemappingModalVisible(true);
-    } else {
-      submitEvent();
-    }
-  }, [event, initialEvent, submitEvent]);
+  const { updateEvent, remappingModal } = useBucketKeyRemapping({ event, initialEvent, onSubmit: submitEvent });
 
   usePageTitle(t('admin.events.editPageTitle', { title: initialEvent.title }));
 
   const donePath = convention?.site_mode === 'single_event' ? '/' : '../..';
-
-  const newPolicyBuckets: { key: string; name?: string | null }[] =
-    (event.form_response_attrs.registration_policy as { buckets?: { key: string; name?: string | null }[] } | null)
-      ?.buckets ?? [];
 
   return (
     <>
@@ -165,16 +140,7 @@ function EventAdminEditEvent() {
           )}
         </>
       </EditEvent>
-      <BucketKeyRemappingModal
-        visible={remappingModalVisible}
-        removedBuckets={removedBucketsNeedingRemapping}
-        newPolicyBuckets={newPolicyBuckets}
-        onConfirm={(mappings) => {
-          setRemappingModalVisible(false);
-          submitEvent(mappings);
-        }}
-        onCancel={() => setRemappingModalVisible(false)}
-      />
+      {remappingModal}
     </>
   );
 }
