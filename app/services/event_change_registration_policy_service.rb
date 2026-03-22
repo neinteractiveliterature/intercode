@@ -162,6 +162,7 @@ class EventChangeRegistrationPolicyService < CivilService::Service
     lock_all_runs do
       return failure(errors) if unmapped_bucket_key_errors.any?
 
+      apply_bucket_key_mappings
       immovable_signups, new_signups_by_signup_id = simulate_signups
 
       if immovable_signups.any?
@@ -171,7 +172,7 @@ class EventChangeRegistrationPolicyService < CivilService::Service
 
         return failure(errors)
       else
-        apply_all_changes new_signups_by_signup_id
+        apply_simulation_changes(new_signups_by_signup_id)
       end
 
       event.allow_registration_policy_change = true
@@ -199,17 +200,19 @@ class EventChangeRegistrationPolicyService < CivilService::Service
     [immovable_signups, new_signups_by_signup_id]
   end
 
-  def apply_all_changes(new_signups_by_signup_id)
+  def apply_bucket_key_mappings
+    apply_requested_bucket_key_mappings_for_signups(all_signups)
+    apply_requested_bucket_key_mappings_for_signup_requests
+    apply_requested_bucket_key_mappings_for_signup_ranked_choices
+  end
+
+  def apply_simulation_changes(new_signups_by_signup_id)
     signups_by_id = all_signups.index_by(&:id)
     new_signups_by_signup_id.each do |signup_id, new_signup|
       signup = signups_by_id[signup_id]
       check_for_move signup, new_signup
       apply_changes_for_signup signup, new_signup
     end
-
-    apply_requested_bucket_key_mappings_for_signups(signups_by_id.values)
-    apply_requested_bucket_key_mappings_for_signup_requests
-    apply_requested_bucket_key_mappings_for_signup_ranked_choices
   end
 
   def apply_changes_for_signup(signup, new_signup)
