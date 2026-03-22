@@ -2,6 +2,7 @@ import { useState } from 'react';
 import * as React from 'react';
 import { Modal } from 'react-bootstrap4-modal';
 import { useTranslation } from 'react-i18next';
+import { LoadingIndicator } from '@neinteractiveliterature/litform';
 import { BucketKeyMappingInput } from '../graphqlTypes.generated';
 
 type BucketOption = {
@@ -13,7 +14,7 @@ export type BucketKeyRemappingModalProps = {
   visible: boolean;
   removedBuckets: BucketOption[];
   newPolicyBuckets: BucketOption[];
-  onConfirm: (mappings: BucketKeyMappingInput[]) => void;
+  onConfirm: (mappings: BucketKeyMappingInput[]) => Promise<void>;
   onCancel: () => void;
 };
 
@@ -28,17 +29,23 @@ function BucketKeyRemappingModal({
   const [mappings, setMappings] = useState<Record<string, string | null>>(() =>
     Object.fromEntries(removedBuckets.map((bucket) => [bucket.key, null])),
   );
+  const [isSubmitting, setIsSubmitting] = useState(false);
 
   const setMapping = (fromKey: string, toKey: string | null) => {
     setMappings((prev) => ({ ...prev, [fromKey]: toKey }));
   };
 
-  const handleConfirm = () => {
+  const handleConfirm = async () => {
     const bucketKeyMappings: BucketKeyMappingInput[] = Object.entries(mappings).map(([fromKey, toKey]) => ({
       from_key: fromKey,
       to_key: toKey ?? undefined,
     }));
-    onConfirm(bucketKeyMappings);
+    setIsSubmitting(true);
+    try {
+      await onConfirm(bucketKeyMappings);
+    } finally {
+      setIsSubmitting(false);
+    }
   };
 
   return (
@@ -64,6 +71,7 @@ function BucketKeyRemappingModal({
                     className="form-select"
                     value={mappings[bucket.key] ?? ''}
                     onChange={(e) => setMapping(bucket.key, e.target.value || null)}
+                    disabled={isSubmitting}
                   >
                     <option value="">{t('admin.events.bucketKeyRemapping.noPreferenceOption')}</option>
                     {newPolicyBuckets.map((newBucket) => (
@@ -79,11 +87,15 @@ function BucketKeyRemappingModal({
         </table>
       </div>
       <div className="modal-footer">
-        <button type="button" className="btn btn-secondary" onClick={onCancel}>
+        <button type="button" className="btn btn-secondary" onClick={onCancel} disabled={isSubmitting}>
           {t('buttons.cancel')}
         </button>
-        <button type="button" className="btn btn-primary" onClick={handleConfirm}>
-          {t('admin.events.bucketKeyRemapping.confirmButton')}
+        <button type="button" className="btn btn-primary" onClick={handleConfirm} disabled={isSubmitting}>
+          {isSubmitting ? (
+            <LoadingIndicator iconSet="bootstrap-icons" />
+          ) : (
+            t('admin.events.bucketKeyRemapping.confirmButton')
+          )}
         </button>
       </div>
     </Modal>

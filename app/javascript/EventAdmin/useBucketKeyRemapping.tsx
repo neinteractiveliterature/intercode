@@ -50,9 +50,9 @@ export default function useBucketKeyRemapping({ event, initialEvent, onSubmit }:
     removedBuckets: removedBucketsNeedingRemapping,
     newPolicyBuckets,
     onConfirm: async (mappings) => {
-      setRemappingModalVisible(false);
       try {
         await onSubmit(mappings);
+        setRemappingModalVisible(false);
         pendingResolveRef.current?.();
       } catch (e) {
         pendingRejectRef.current?.(e);
