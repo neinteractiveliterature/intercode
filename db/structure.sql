@@ -2707,7 +2707,8 @@ CREATE TABLE public.signups (
     state character varying DEFAULT 'confirmed'::character varying NOT NULL,
     counted boolean,
     requested_bucket_key character varying,
-    expires_at timestamp without time zone
+    expires_at timestamp without time zone,
+    CONSTRAINT bucket_key_null_for_non_slot_occupying_states CHECK (((bucket_key IS NULL) OR ((state)::text = ANY ((ARRAY['confirmed'::character varying, 'ticket_purchase_hold'::character varying])::text[]))))
 );
 
 
@@ -6139,6 +6140,7 @@ ALTER TABLE ONLY public.cms_files_pages
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260321193050'),
 ('20260315200824'),
 ('20260315182359'),
 ('20260305000000'),

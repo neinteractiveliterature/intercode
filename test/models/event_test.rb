@@ -48,10 +48,60 @@
 #  fk_rails_...  (updated_by_id => users.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-require 'test_helper'
+require "test_helper"
 
 class EventTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  let(:convention) { create(:convention) }
+  let(:event) do
+    create(
+      :event,
+      convention: convention,
+      registration_policy:
+        RegistrationPolicy.new(
+          buckets: [
+            { key: "dogs", slots_limited: true, total_slots: 2 },
+            { key: "cats", slots_limited: true, total_slots: 2 },
+            { key: "anything", slots_limited: true, total_slots: 2, anything: true }
+          ]
+        )
+    )
+  end
+  let(:the_run) { create(:run, event: event) }
+
+  describe "#bucket_keys_with_pending_signups_or_requests" do
+    it "returns an empty array for an event with no runs" do
+      assert_equal [], event.bucket_keys_with_pending_signups_or_requests
+    end
+
+    it "returns an empty array for an event with runs but no signups" do
+      the_run
+      assert_equal [], event.bucket_keys_with_pending_signups_or_requests
+    end
+
+    it "includes requested_bucket_key from active signups" do
+      create(:signup, run: the_run, requested_bucket_key: "dogs", bucket_key: "dogs")
+      assert_includes event.bucket_keys_with_pending_signups_or_requests, "dogs"
+    end
+
+    it "excludes withdrawn signups" do
+      create(:signup, run: the_run, requested_bucket_key: "dogs", bucket_key: nil, state: "withdrawn")
+      assert_equal [], event.bucket_keys_with_pending_signups_or_requests
+    end
+
+    it "includes requested_bucket_key from pending signup requests" do
+      create(:signup_request, target_run: the_run, requested_bucket_key: "cats")
+      assert_includes event.bucket_keys_with_pending_signups_or_requests, "cats"
+    end
+
+    it "includes requested_bucket_key from signup ranked choices" do
+      create(:signup_ranked_choice, target_run: the_run, requested_bucket_key: "anything")
+      assert_includes event.bucket_keys_with_pending_signups_or_requests, "anything"
+    end
+
+    it "deduplicates keys across all three sources" do
+      create(:signup, run: the_run, requested_bucket_key: "dogs", bucket_key: "dogs")
+      create(:signup_request, target_run: the_run, requested_bucket_key: "dogs")
+      assert_equal ["dogs"], event.bucket_keys_with_pending_signups_or_requests
+    end
+  end
 end

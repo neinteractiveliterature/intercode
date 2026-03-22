@@ -222,6 +222,30 @@ class Event < ApplicationRecord
     super.where.not(event_id: id)
   end
 
+  def bucket_keys_with_pending_signups_or_requests
+    run_ids = runs.pluck(:id)
+    return [] if run_ids.empty?
+
+    (
+      Signup
+        .where.not(state: "withdrawn")
+        .where(run_id: run_ids)
+        .where.not(requested_bucket_key: nil)
+        .distinct
+        .pluck(:requested_bucket_key) +
+        SignupRequest
+          .where(target_run_id: run_ids, state: "pending")
+          .where.not(requested_bucket_key: nil)
+          .distinct
+          .pluck(:requested_bucket_key) +
+        SignupRankedChoice
+          .where(target_run_id: run_ids)
+          .where.not(requested_bucket_key: nil)
+          .distinct
+          .pluck(:requested_bucket_key)
+    ).uniq
+  end
+
   private
 
   def validate_registration_policy
@@ -254,7 +278,7 @@ Use EventChangeRegistrationPolicyService instead."
     return if convention == event_category.convention
 
     errors.add :event_category,
-               "is from #{event_category.convention.name} but this event is in \
+               "is from #{event_category.convention.name} but this event is in 
 #{convention.name}"
   end
 

@@ -119,6 +119,7 @@ fragment EventFields on Event {
   id
   title
   author
+  bucket_keys_with_pending_signups_or_requests
   description
   organization
   url

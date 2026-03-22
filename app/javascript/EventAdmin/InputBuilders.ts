@@ -1,9 +1,10 @@
 import { FormResponse } from '../FormPresenter/useFormResponse';
-import { EventInput, Run, RunInput } from '../graphqlTypes.generated';
+import { BucketKeyMappingInput, EventInput, Run, RunInput } from '../graphqlTypes.generated';
 
 export function buildEventInput(
   event: FormResponse & {
     event_category: { id: string };
+    bucket_key_mappings?: BucketKeyMappingInput[] | null;
   },
   defaultFormResponseAttrs: Record<string, unknown> = {},
 ): { event: EventInput } {
@@ -16,6 +17,7 @@ export function buildEventInput(
         ...defaultFormResponseAttrs,
         ...formResponseAttrs,
       }),
+      bucket_key_mappings: event.bucket_key_mappings,
     },
   };
 }

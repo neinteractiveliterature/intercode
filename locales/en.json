@@ -111,8 +111,17 @@
       "prospectiveRunSchedule": {
         "title": "Prospective run schedule"
       },
+      "editPageTitle": "Editing \"{{ title }}\"",
       "runsColumn": "Runs",
-      "titleColumn": "Title"
+      "titleColumn": "Title",
+      "bucketKeyRemapping": {
+        "title": "Remap bucket assignments",
+        "description": "Some attendees have signed up for, requested, or queued for specific buckets that are being removed. Please indicate where to move them, or choose \"No preference\" to allow them to go to any bucket.",
+        "removedBucketColumn": "Removed bucket",
+        "newBucketColumn": "Move attendees to",
+        "noPreferenceOption": "No preference",
+        "confirmButton": "Apply and save event"
+      }
     },
     "forms": {
       "addItem": "Add item",

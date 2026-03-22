@@ -1,5 +1,6 @@
-import { useState, useMemo } from 'react';
-import { LoaderFunction, RouterContextProvider, useLoaderData, useRouteLoaderData, useSubmit } from 'react-router';
+import { useState, useMemo, useCallback } from 'react';
+import { LoaderFunction, RouterContextProvider, useLoaderData, useNavigate, useRouteLoaderData } from 'react-router';
+import { useTranslation } from 'react-i18next';
 
 import useEventFormWithCategorySelection, { EventFormWithCategorySelection } from './useEventFormWithCategorySelection';
 import EditEvent from '../BuiltInForms/EditEvent';
@@ -15,9 +16,12 @@ import {
 import { useImageAttachmentConfig } from '../BuiltInFormControls/MarkdownInput';
 import { NamedRoute } from '../AppRouter';
 import { apolloClientContext } from 'AppContexts';
-import { UpdateEventOptions } from './$id';
-import { ActiveStorageAttachment } from 'graphqlTypes.generated';
+import { updateEvent as updateEventMutation, UpdateEventOptions } from './$id';
+import { ActiveStorageAttachment, BucketKeyMappingInput } from 'graphqlTypes.generated';
+import { useApolloClient } from '@apollo/client/react';
 import { useAsyncFetcher } from 'useAsyncFetcher';
+import useBucketKeyRemapping from './useBucketKeyRemapping';
+import BucketKeyRemappingModal from './BucketKeyRemappingModal';
 
 type LoaderResult = WithFormResponse<EventAdminSingleEventQueryData['conventionByRequestHost']['event']>;
 
@@ -36,9 +40,11 @@ export const loader: LoaderFunction<RouterContextProvider> = async ({ context, p
 };
 
 function EventAdminEditEvent() {
+  const { t } = useTranslation();
   const { convention, currentAbility } = useRouteLoaderData(NamedRoute.EventAdmin) as EventAdminEventsQueryData;
   const initialEvent = useLoaderData() as LoaderResult;
-  const submit = useSubmit();
+  const navigate = useNavigate();
+  const client = useApolloClient();
   const fetcher = useAsyncFetcher();
 
   const [run, setRun] = useState(initialEvent?.runs[0] || {});
@@ -78,55 +84,70 @@ function EventAdminEditEvent() {
         },
       },
       maximum_event_provided_tickets_overrides: [],
+      bucket_keys_with_pending_signups_or_requests: [],
       runs: [run],
       images: event.images,
     }),
     [run, event],
   );
 
-  const dropEvent = () => {
-    submit({}, { method: 'PATCH', action: `../events/${event.id}/drop`, relative: 'route' });
-  };
-
-  usePageTitle(`Editing “${initialEvent.title}”`);
-
   const donePath = convention?.site_mode === 'single_event' ? '/' : '../..';
 
-  return (
-    <EditEvent
-      cancelPath={donePath}
-      showDropButton={convention?.site_mode !== 'single_event'}
-      event={event}
-      dropEvent={dropEvent}
-      validateForm={validateForm}
-      updateEvent={() => {
-        if (eventCategory) {
-          submit({ event, eventCategory, run } satisfies Omit<UpdateEventOptions, 'client'>, {
-            method: 'PATCH',
-            encType: 'application/json',
-            action: `/admin_events/${eventCategory.id}/events/${event.id}`,
-          });
-        }
-      }}
-    >
-      <>
-        <EventFormWithCategorySelection {...eventFormWithCategorySelectionProps} />
-        {currentAbility.can_override_maximum_event_provided_tickets &&
-          convention?.ticket_mode !== 'disabled' &&
-          convention?.site_mode === 'convention' && (
-            <MaximumEventProvidedTicketsOverrideEditor
-              ticketTypes={convention.ticket_types}
-              ticketName={convention.ticket_name}
-              overrides={initialEvent.maximum_event_provided_tickets_overrides}
-              eventId={initialEvent.id}
-            />
-          )}
+  const dropEvent = () => {
+    fetcher.submit({}, { method: 'PATCH', action: `../events/${event.id}/drop`, relative: 'route' });
+  };
 
-        {eventCategory?.scheduling_ui === 'single_run' && event.form_response_attrs.length_seconds && (
-          <RunFormFields convention={convention} run={run} event={eventForRunFormFields} onChange={setRun} />
-        )}
-      </>
-    </EditEvent>
+  const submitEvent = useCallback(
+    async (bucketKeyMappings?: BucketKeyMappingInput[]) => {
+      if (eventCategory) {
+        const eventWithMappings = bucketKeyMappings ? { ...event, bucket_key_mappings: bucketKeyMappings } : event;
+        await updateEventMutation({
+          event: eventWithMappings as UpdateEventOptions['event'],
+          eventCategory,
+          run: run as UpdateEventOptions['run'],
+          client,
+        });
+        await client.clearStore();
+        navigate(donePath);
+      }
+    },
+    [event, eventCategory, run, client, navigate, donePath],
+  );
+
+  const { updateEvent, remappingModalProps } = useBucketKeyRemapping({ event, initialEvent, onSubmit: submitEvent });
+
+  usePageTitle(t('admin.events.editPageTitle', { title: initialEvent.title }));
+
+  return (
+    <>
+      <EditEvent
+        cancelPath={donePath}
+        showDropButton={convention?.site_mode !== 'single_event'}
+        event={event}
+        dropEvent={dropEvent}
+        validateForm={validateForm}
+        updateEvent={updateEvent}
+      >
+        <>
+          <EventFormWithCategorySelection {...eventFormWithCategorySelectionProps} />
+          {currentAbility.can_override_maximum_event_provided_tickets &&
+            convention?.ticket_mode !== 'disabled' &&
+            convention?.site_mode === 'convention' && (
+              <MaximumEventProvidedTicketsOverrideEditor
+                ticketTypes={convention.ticket_types}
+                ticketName={convention.ticket_name}
+                overrides={initialEvent.maximum_event_provided_tickets_overrides}
+                eventId={initialEvent.id}
+              />
+            )}
+
+          {eventCategory?.scheduling_ui === 'single_run' && event.form_response_attrs.length_seconds && (
+            <RunFormFields convention={convention} run={run} event={eventForRunFormFields} onChange={setRun} />
+          )}
+        </>
+      </EditEvent>
+      <BucketKeyRemappingModal {...remappingModalProps} />
+    </>
   );
 }
 

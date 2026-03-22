@@ -64,7 +64,7 @@ export type UpdateEventOptions = {
   client: ApolloClient;
 };
 
-async function updateEvent({ event, eventCategory, run, client }: UpdateEventOptions) {
+export async function updateEvent({ event, eventCategory, run, client }: UpdateEventOptions) {
   if (eventCategory.scheduling_ui === SchedulingUi.SingleRun) {
     if (!run) {
       throw new Error('When updating a single-run event, the run must be provided');
