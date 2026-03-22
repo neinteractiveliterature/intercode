@@ -1,6 +1,6 @@
-import { useState, useCallback } from 'react';
-import BucketKeyRemappingModal from './BucketKeyRemappingModal';
+import { useState, useCallback, useMemo } from 'react';
 import { BucketKeyMappingInput } from '../graphqlTypes.generated';
+import { BucketKeyRemappingModalProps } from './BucketKeyRemappingModal';
 
 type Bucket = { key: string; name?: string | null };
 type RegistrationPolicyLike = { buckets?: Bucket[] } | null;
@@ -22,7 +22,7 @@ export default function useBucketKeyRemapping({ event, initialEvent, onSubmit }:
   const [remappingModalVisible, setRemappingModalVisible] = useState(false);
   const [removedBucketsNeedingRemapping, setRemovedBucketsNeedingRemapping] = useState<Bucket[]>([]);
 
-  const newPolicyBuckets = bucketsFromFormResponseAttrs(event.form_response_attrs);
+  const newPolicyBuckets = useMemo(() => bucketsFromFormResponseAttrs(event.form_response_attrs), [event]);
 
   const updateEvent = useCallback(async () => {
     const currentBucketKeys = new Set(newPolicyBuckets.map((b) => b.key));
@@ -37,21 +37,18 @@ export default function useBucketKeyRemapping({ event, initialEvent, onSubmit }:
     } else {
       await onSubmit();
     }
-    // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [event, initialEvent, onSubmit]);
+  }, [newPolicyBuckets, initialEvent, onSubmit]);
 
-  const remappingModal = (
-    <BucketKeyRemappingModal
-      visible={remappingModalVisible}
-      removedBuckets={removedBucketsNeedingRemapping}
-      newPolicyBuckets={newPolicyBuckets}
-      onConfirm={async (mappings) => {
-        setRemappingModalVisible(false);
-        await onSubmit(mappings);
-      }}
-      onCancel={() => setRemappingModalVisible(false)}
-    />
-  );
+  const remappingModalProps: BucketKeyRemappingModalProps = {
+    visible: remappingModalVisible,
+    removedBuckets: removedBucketsNeedingRemapping,
+    newPolicyBuckets,
+    onConfirm: async (mappings) => {
+      setRemappingModalVisible(false);
+      await onSubmit(mappings);
+    },
+    onCancel: () => setRemappingModalVisible(false),
+  };
 
-  return { updateEvent, remappingModal };
+  return { updateEvent, remappingModalProps };
 }

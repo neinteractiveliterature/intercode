@@ -21,6 +21,7 @@ import { StandaloneUpdateEventDocument } from './mutations.generated';
 import { useAsyncFetcher } from 'useAsyncFetcher';
 import { useApolloClient } from '@apollo/client/react';
 import useBucketKeyRemapping from '../../EventAdmin/useBucketKeyRemapping';
+import BucketKeyRemappingModal from '../../EventAdmin/BucketKeyRemappingModal';
 import { BucketKeyMappingInput } from '../../graphqlTypes.generated';
 
 export type StandaloneEditEventFormProps = {
@@ -71,7 +72,7 @@ function StandaloneEditEventForm({
     [event, client, navigate, eventPath],
   );
 
-  const { updateEvent, remappingModal } = useBucketKeyRemapping({ event, initialEvent, onSubmit: submitEvent });
+  const { updateEvent, remappingModalProps } = useBucketKeyRemapping({ event, initialEvent, onSubmit: submitEvent });
 
   return (
     <>
@@ -94,7 +95,7 @@ function StandaloneEditEventForm({
           />
         )}
       </EditEvent>
-      {remappingModal}
+      <BucketKeyRemappingModal {...remappingModalProps} />
     </>
   );
 }

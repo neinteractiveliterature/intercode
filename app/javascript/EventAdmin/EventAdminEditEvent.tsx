@@ -20,6 +20,7 @@ import { UpdateEventOptions } from './$id';
 import { ActiveStorageAttachment, BucketKeyMappingInput } from 'graphqlTypes.generated';
 import { useAsyncFetcher } from 'useAsyncFetcher';
 import useBucketKeyRemapping from './useBucketKeyRemapping';
+import BucketKeyRemappingModal from './BucketKeyRemappingModal';
 
 type LoaderResult = WithFormResponse<EventAdminSingleEventQueryData['conventionByRequestHost']['event']>;
 
@@ -106,7 +107,7 @@ function EventAdminEditEvent() {
     [event, eventCategory, run, submit],
   );
 
-  const { updateEvent, remappingModal } = useBucketKeyRemapping({ event, initialEvent, onSubmit: submitEvent });
+  const { updateEvent, remappingModalProps } = useBucketKeyRemapping({ event, initialEvent, onSubmit: submitEvent });
 
   usePageTitle(t('admin.events.editPageTitle', { title: initialEvent.title }));
 
@@ -140,7 +141,7 @@ function EventAdminEditEvent() {
           )}
         </>
       </EditEvent>
-      {remappingModal}
+      <BucketKeyRemappingModal {...remappingModalProps} />
     </>
   );
 }
