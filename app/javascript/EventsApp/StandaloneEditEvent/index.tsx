@@ -1,4 +1,4 @@
-import { useCallback, useMemo } from 'react';
+import { useCallback, useMemo, useState } from 'react';
 import { LoaderFunction, useLoaderData, useNavigate, RouterContextProvider } from 'react-router';
 
 import useEventForm, { EventForm } from '../../EventAdmin/useEventForm';
@@ -20,6 +20,8 @@ import { apolloClientContext } from '../../AppContexts';
 import { StandaloneUpdateEventDocument } from './mutations.generated';
 import { useAsyncFetcher } from 'useAsyncFetcher';
 import { useApolloClient } from '@apollo/client/react';
+import BucketKeyRemappingModal from '../../EventAdmin/BucketKeyRemappingModal';
+import { BucketKeyMappingInput } from '../../graphqlTypes.generated';
 
 export type StandaloneEditEventFormProps = {
   initialEvent: WithFormResponse<StandaloneEditEventQueryData['convention']['event']>;
@@ -39,6 +41,10 @@ function StandaloneEditEventForm({
   const navigate = useNavigate();
   const fetcher = useAsyncFetcher();
   const client = useApolloClient();
+  const [remappingModalVisible, setRemappingModalVisible] = useState(false);
+  const [removedBucketsNeedingRemapping, setRemovedBucketsNeedingRemapping] = useState<
+    { key: string; name?: string | null }[]
+  >([]);
 
   const imageAttachmentConfig = useImageAttachmentConfig(initialEvent.images, (blob) =>
     fetcher.submitAsync({ signed_blob_id: blob.signed_id }, { action: '../attach_image', method: 'PATCH' }),
@@ -51,38 +57,88 @@ function StandaloneEditEventForm({
     imageAttachmentConfig,
   });
 
-  const updateEvent = useCallback(async () => {
-    await client.mutate({
-      mutation: StandaloneUpdateEventDocument,
-      variables: {
-        input: {
-          event: { form_response_attrs_json: JSON.stringify(event.form_response_attrs) },
-          id: event.id,
+  const submitEvent = useCallback(
+    async (bucketKeyMappings?: BucketKeyMappingInput[]) => {
+      await client.mutate({
+        mutation: StandaloneUpdateEventDocument,
+        variables: {
+          input: {
+            event: {
+              form_response_attrs_json: JSON.stringify(event.form_response_attrs),
+              bucket_key_mappings: bucketKeyMappings,
+            },
+            id: event.id,
+          },
         },
-      },
-    });
-  }, [event, client]);
+      });
+    },
+    [event, client],
+  );
+
+  const updateEvent = useCallback(async () => {
+    const currentBuckets: { key: string; name?: string | null }[] =
+      (event.form_response_attrs.registration_policy as { buckets?: { key: string; name?: string | null }[] } | null)
+        ?.buckets ?? [];
+    const currentBucketKeys = new Set(currentBuckets.map((b) => b.key));
+
+    const originalBuckets =
+      (
+        initialEvent.form_response_attrs.registration_policy as {
+          buckets?: { key: string; name?: string | null }[];
+        } | null
+      )?.buckets ?? [];
+    const keysWithRecords = new Set(initialEvent.bucket_keys_with_pending_signups_or_requests);
+
+    const removedBuckets = originalBuckets.filter(
+      (b: { key: string; name?: string | null }) => !currentBucketKeys.has(b.key) && keysWithRecords.has(b.key),
+    );
+
+    if (removedBuckets.length > 0) {
+      setRemovedBucketsNeedingRemapping(removedBuckets);
+      setRemappingModalVisible(true);
+    } else {
+      await submitEvent();
+      navigate(eventPath);
+    }
+  }, [event, initialEvent, submitEvent, navigate, eventPath]);
+
+  const newPolicyBuckets: { key: string; name?: string | null }[] =
+    (event.form_response_attrs.registration_policy as { buckets?: { key: string; name?: string | null }[] } | null)
+      ?.buckets ?? [];
 
   return (
-    <EditEvent
-      event={event}
-      validateForm={validateForm}
-      updateEvent={updateEvent}
-      onSave={() => {
-        navigate(eventPath);
-      }}
-    >
-      <EventForm {...eventFormProps} />
-      {currentAbility.can_override_maximum_event_provided_tickets && convention.ticket_mode !== 'disabled' && (
-        <MaximumEventProvidedTicketsOverrideEditor
-          ticketName={convention.ticket_name}
-          ticketTypes={convention.ticket_types}
-          // we use initialEvent here because we want it to be controlled by the query result
-          overrides={initialEvent.maximum_event_provided_tickets_overrides}
-          eventId={initialEvent.id}
-        />
-      )}
-    </EditEvent>
+    <>
+      <EditEvent
+        event={event}
+        validateForm={validateForm}
+        updateEvent={updateEvent}
+        onSave={() => {
+          navigate(eventPath);
+        }}
+      >
+        <EventForm {...eventFormProps} />
+        {currentAbility.can_override_maximum_event_provided_tickets && convention.ticket_mode !== 'disabled' && (
+          <MaximumEventProvidedTicketsOverrideEditor
+            ticketName={convention.ticket_name}
+            ticketTypes={convention.ticket_types}
+            // we use initialEvent here because we want it to be controlled by the query result
+            overrides={initialEvent.maximum_event_provided_tickets_overrides}
+            eventId={initialEvent.id}
+          />
+        )}
+      </EditEvent>
+      <BucketKeyRemappingModal
+        visible={remappingModalVisible}
+        removedBuckets={removedBucketsNeedingRemapping}
+        newPolicyBuckets={newPolicyBuckets}
+        onConfirm={async (mappings) => {
+          setRemappingModalVisible(false);
+          await submitEvent(mappings);
+          navigate(eventPath);
+        }}
+        onCancel={() => setRemappingModalVisible(false)}
+      />
+    </>
   );
 }
 

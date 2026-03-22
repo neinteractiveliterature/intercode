@@ -23,6 +23,7 @@ fragment StandaloneEditEvent_EventFields on Event {
   form_response_attrs_json
   current_user_form_item_viewer_role
   current_user_form_item_writer_role
+  bucket_keys_with_pending_signups_or_requests
 
   images {
     id
