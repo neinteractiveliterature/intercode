@@ -23,8 +23,8 @@
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
 
 class RootSite < ApplicationRecord
-  belongs_to :root_page, class_name: "Page"
-  belongs_to :default_layout, class_name: "CmsLayout"
+  belongs_to :root_page, class_name: "Page", optional: true
+  belongs_to :default_layout, class_name: "CmsLayout", optional: true
 
   def self.instance
     RootSite.first

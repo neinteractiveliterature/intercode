@@ -13,7 +13,7 @@ Intercode is a web application that:
 
 Intercode 2 was a ground-up rewrite of Intercode, making it more robust, more flexible, and more modern. Starting at version 3.0.0, we've used [semantic versioning](https://semver.org/) for our releases.
 
-# Overall Architecture
+## Overall Architecture
 
 - **Backend**: Ruby on Rails application exposing a GraphQL API and an OpenID Connect-enabled OAuth2 server
 - **Frontend**: React and Apollo-based single-page JavaScript app
@@ -21,16 +21,16 @@ Intercode 2 was a ground-up rewrite of Intercode, making it more robust, more fl
 - **Background queue system**: Amazon SQS + Shoryuken (this might change in the future)
 - **Production infrastructure**: For [New England Interactive Literature](http://interactiveliterature.org)'s installation of Intercode, we're hosting it on [Fly](https://fly.io).
 
-# Getting Started with Developing Intercode
+## Getting Started with Developing Intercode
 
 - Intercode in development mode uses `intercode.test` as its cookie domain. If you use `localhost` to visit the site, that will mysteriously fail. I'm going to try to make the site detect the wrong domain and redirect you, but for now, please just use the `intercode.test` domain name.
 - We used to support a Docker Compose-based development workflow, but this has been deprecated. Please run Rails locally using the instructions below.
 
-## Developer Setup with local Rails
+### Developer Setup with local Rails
 
 This is the classic Rails development setup, and should work for Mac and Linux users. Windows users should use WSL.
 
-### Dev tooling setup using mise
+#### Dev tooling setup using mise
 
 In this tutorial, we're going to set up [mise-en-place](https://mise.jdx.dev) to manage the versions of Ruby and Node.js used to run Intercode. This will be a globally-installed tool on your system, so if you don't want to do it this way, know that there are other options such as [rbenv](https://github.com/sstephenson/rbenv#readme).
 
@@ -58,12 +58,12 @@ mise settings ruby.compile=false
 
 (The last one isn't strictly necessary but it should save a lot of time on the installation.)
 
-### Setting up other dependencies
+#### Setting up other dependencies
 
 On Linux and WSL, you'll need to have a few packages installed before setting up Intercode. For Debian and Ubuntu, this command should do it:
 
 ```sh
-sudo apt install git postgresql libmariadb-dev libvips zlib1g-dev libffi-dev libssl-dev libyaml-dev
+sudo apt install build-essential git postgresql libmariadb-dev libvips zlib1g-dev libffi-dev libssl-dev libyaml-dev
 ```
 
 On macOS, you should have [Homebrew](https://brew.sh/) installed. Homebrew will also guide you through installing the Xcode command line tools. Once that's done, run this:
@@ -94,7 +94,7 @@ psql postgres
 
 This should let you into Postgres, this time as your local user account.
 
-### Setting up Intercode
+#### Setting up Intercode
 
 First, clone this repository:
 
@@ -123,6 +123,47 @@ corepack enable
 yarn install
 ```
 
+#### Setting up the database
+
+In theory, it should be possible to set up your local database using this command:
+
+```sh
+bin/rails db:create db:migrate db:seed
+```
+
+There are a few things that can go wrong here. Let's go through some common types of errors and how you can fix them:
+
+<details>
+
+<summary>`PG::ConnectionBad: connection to server at "::1", port 5432 failed: fe_sendauth: no password supplied (PG::ConnectionBad)`</summary>
+
+If you're seeing something like this, you probably need to force Rails to connect to the database server using a UNIX socket as opposed to trying to connect via localhost TCP port 5432. To do this, we'll need to change the `DATABASE_URL` environment variables. Start by copying these lines from `.env.development` into `.env.development.local`:
+
+```text
+DEVELOPMENT_DATABASE_URL=postgresql://localhost/intercode_development
+TEST_DATABASE_URL=postgresql://localhost/intercode_test
+```
+
+Then, add the path to the UNIX socket as a `?host=` parameter at the end of both URLs. On Debian, the path to the socket is `/var/run/postgresql`, so these lines would become:
+
+```text
+DEVELOPMENT_DATABASE_URL=postgresql://localhost/intercode_development?host=/var/run/postgresql
+TEST_DATABASE_URL=postgresql://localhost/intercode_test?host=/var/run/postgresql
+```
+
+</details>
+
+<details>
+
+<summary>`psql:/home/debian/intercode/db/structure.sql:4: ERROR:  unrecognized configuration parameter "transaction_timeout"`</summary>
+
+If you're seeing something like this, you're probably running an older version of PostgreSQL than the one Intercode supports. We tend to track new PostgreSQL releases pretty closely, so you probably
+need the latest version available.
+
+</details>
+
+#### Setting up weird web serving nonsense
+
 Intercode uses a somewhat unfortunate custom setup for local HTTP. Because some features require HTTPS, we generate a self-signed CA and certificate. In addition, Intercode expects to have different domain names for each convention it hosts, so we set up \*.intercode.test as a private fake DNS namespace for the local copy of Intercode to use.
 
 First, let's generate the self-signed certificates:
@@ -136,18 +177,23 @@ On macOS, the above command will prompt for your password and install the CA in 
 
 Now, let's set up the private DNS namespace. The setup for this differs somewhat between different operating systems:
 
-#### macOS
+<details>
+<summary>macOS</summary>
 
 On macOS, create a file called `/etc/resolver/intercode.test` with the following contents:
 
-```
+```text
 domain intercode.test
 nameserver 127.0.0.1
 ```
 
 To test that this is working, try running `ping randomname.intercode.test`. It should start pinging your local machine on 127.0.0.1.
 
-#### Linux
+</details>
+
+<details>
+
+<summary>Linux</summary>
 
 On Linux, there's no built-in way to do wildcard domain resolution like there is with macOS's resolver. But, we can use dnsmasq as a DNS resolver proxy and configure it to resolve \*.intercode.test to 127.0.0.1. First, install dnsmasq:
 
@@ -157,20 +203,20 @@ sudo apt install dnsmasq
 
 Then create a file called `/etc/dnsmasq.d/dnsmasq-intercode.conf` with the following contents:
 
-```
+```text
 address=/intercode.test/127.0.0.1
 ```
 
 Now we need to get dnsmasq to play nice with systemd, which at least in Debian's setup, it won't do by default. First, edit `/etc/dnsmasq.conf` and add these lines:
 
-```
+```text
 listen-address=127.0.0.2
 bind-interfaces
 ```
 
 This will make dnsmasq listen on 127.0.0.2, which won't conflict with systemd-resolved. We also need to get it to stop trying to listen on 127.0.0.1. To do that, edit `/etc/default/dnsmasq` and find the commented-out line that says `DNSMASQ_EXCEPT="lo"`. Uncomment it:
 
-```
+```text
 DNSMASQ_EXCEPT="lo"
 ```
 
@@ -182,7 +228,7 @@ sudo systemctl restart dnsmasq
 
 Once that's done, edit `/etc/systemd/resolved.conf` and find the commented-out line that begins with `DNS=`. Change it to say:
 
-```
+```text
 DNS=127.0.0.2
 ```
 
@@ -194,7 +240,20 @@ sudo systemctl restart systemd-resolved.service
 
 To test that this is working, try running `ping randomname.intercode.test`. It should start pinging your local machine on 127.0.0.1.
 
-### Starting Intercode for the first time
+</details>
+
+<details>
+<summary>Windows</summary>
+
+On Windows, there's no built-in way to do wildcard domain resolution like there is with macOS's resolver. But, we can use a DNS resolver proxy such as [Acrylic](https://mayakron.altervista.org/support/acrylic/Home.htm) and configure it to resolve \*.intercode.test to 127.0.0.1.
+
+I have not personally tried this, but if someone does and would like to contribute instructions to this README, I would be forever grateful!
+
+<3, Nat
+
+</details>
+
+#### Starting Intercode for the first time
 
 You'll need two terminals (or two terminal tabs) for this. In the first, start up the Rails backend server:
 
@@ -236,17 +295,17 @@ If you want to test how the app runs in production, but using your local develop
 4. Run something like the following command, changing the asset host as necessary for your setup: `docker run -it -p 5051:3000 -e DATABASE_URL=postgresql://postgres@docker.for.mac.localhost/intercode_development -e RAILS_LOG_TO_STDOUT=true -e ASSETS_HOST=//intercont.intercode.test:5050 -e RAILS_SERVE_STATIC_FILES=true local-intercode-production bin/rails`
 5. Visit <https://some-convention-domain.intercode.test:5050>, probably using Firefox (it seems to deal better than Chrome with self-signed certificates these days).
 
-# Contacting us
+## Contacting us
 
 To contact the Intercode project team, you can:
 
 - [File an issue or feature request here](https://github.com/neinteractiveliterature/intercode/issues)
 - [Email Nat Budin](mailto:natbudin@gmail.com).
 
-# Code of Conduct
+## Code of Conduct
 
 Participants in the Intercode project are expected to follow the Contributor Covenant. For details, [see CODE_OF_CONDUCT.md](https://github.com/neinteractiveliterature/intercode/blob/main/CODE_OF_CONDUCT.md).
 
-# License
+## License
 
 Intercode is released under the terms and conditions of the MIT license. Please see the LICENSE file for the full legalese.

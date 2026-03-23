@@ -2708,7 +2708,7 @@ CREATE TABLE public.signups (
     counted boolean,
     requested_bucket_key character varying,
     expires_at timestamp without time zone,
-    CONSTRAINT bucket_key_null_for_non_slot_occupying_states CHECK (((bucket_key IS NULL) OR ((state)::text = ANY ((ARRAY['confirmed'::character varying, 'ticket_purchase_hold'::character varying])::text[]))))
+    CONSTRAINT bucket_key_null_for_non_slot_occupying_states CHECK (((bucket_key IS NULL) OR ((state)::text = ANY (ARRAY[('confirmed'::character varying)::text, ('ticket_purchase_hold'::character varying)::text]))))
 );
 
 
