@@ -269,21 +269,25 @@ yarn run start
 
 You should now be able to go to <https://intercode.test:5050> and see the app running!
 
-Now let's make you a local administrator. Click the user icon in the upper right of the navigation bar and choose "Sign up" to sign up for an account in your local copy of Intercode.
+If you don't, you probably need to import the self-signed CA to your local keychain. In Chrome and Chromium-based browsers, you'll probably get an error that allows you to go ahead and trust the CA, which you should do.
 
-To make yourself a superadmin in your local copy, open a third terminal and run:
+In Firefox, the browser will likely hang forever when trying to load the page. You'll have to go into Firefox's security settings and go to Certificates, and import the `dev_ca.crt` file (generated in a previous step) as a trusted CA for websites.
+
+#### Making yourself a local admin
+
+Now let's make you a local administrator. Open a third terminal and run:
 
 ```sh
 bin/rails console
 ```
 
-At the Rails console prompt, type:
+At the Rails console prompt, use a command like this to create an admin user:
 
 ```ruby
-User.first.update!(site_admin: true)
+User.create!(email: 'your email address here', first_name: 'your first name here', last_name: 'your last name', password: 'your password', site_admin: true)
 ```
 
-This will set the `site_admin` flag on your account in the database, giving you superadmin powers.
+This will create an account for you in your local database with the `site_admin` flag turned on. You should now be able to log into your local copy of Intercode and access all the admin functionality.
 
 ## Testing production builds
 
