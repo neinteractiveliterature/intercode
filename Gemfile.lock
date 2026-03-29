@@ -28,7 +28,7 @@ GIT
 GEM
   remote: https://rubygems.org/
   specs:
-    action_text-trix (2.1.17)
+    action_text-trix (2.1.18)
       railties
     actioncable (8.1.2)
       actionpack (= 8.1.2)
@@ -170,7 +170,7 @@ GEM
     base64 (0.3.0)
     bcrypt (3.1.22)
     benchmark-ips (2.14.0)
-    bigdecimal (4.0.1)
+    bigdecimal (4.1.0)
     bootsnap (1.19.0)
       msgpack (~> 1.2)
     browser (6.2.0)
@@ -336,7 +336,7 @@ GEM
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
     jmespath (1.6.2)
-    json (2.19.2)
+    json (2.19.3)
     jwt (2.10.2)
       base64
     language_server-protocol (3.17.0.5)
@@ -409,9 +409,9 @@ GEM
     net-smtp (0.5.1)
       net-protocol
     nio4r (2.7.5)
-    nokogiri (1.19.1-arm64-darwin)
+    nokogiri (1.19.2-arm64-darwin)
       racc (~> 1.4)
-    nokogiri (1.19.1-x86_64-linux-gnu)
+    nokogiri (1.19.2-x86_64-linux-gnu)
       racc (~> 1.4)
     oj (3.16.12)
       bigdecimal (>= 3.0)
