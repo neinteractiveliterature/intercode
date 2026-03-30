@@ -5,3 +5,6 @@
 #
 #   cities = City.create([{ name: 'Chicago' }, { name: 'Copenhagen' }])
 #   Mayor.create(name: 'Emanuel', city: cities.first)
+
+LoadCmsContentSetService.new(convention: nil, content_set_name: "root_site").call!
+RootSite.instance.update!(site_name: "Root site")

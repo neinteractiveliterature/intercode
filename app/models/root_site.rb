@@ -23,8 +23,8 @@
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
 
 class RootSite < ApplicationRecord
-  belongs_to :root_page, class_name: 'Page'
-  belongs_to :default_layout, class_name: 'CmsLayout'
+  belongs_to :root_page, class_name: "Page", optional: true
+  belongs_to :default_layout, class_name: "CmsLayout", optional: true
 
   def self.instance
     RootSite.first
@@ -62,8 +62,20 @@ class RootSite < ApplicationRecord
     CmsGraphqlQuery.global
   end
 
+  def notification_templates
+    NotificationTemplate.none
+  end
+
+  def forms
+    Form.none
+  end
+
   def host
     Rails.application.config.action_mailer.default_url_options[:host]
+  end
+
+  def name
+    "Root site"
   end
 
   def url

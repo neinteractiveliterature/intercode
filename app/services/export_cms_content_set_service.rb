@@ -2,7 +2,7 @@
 class ExportCmsContentSetService < CivilService::Service
   attr_reader :convention, :content_set, :content_set_name, :inherit
 
-  validates_presence_of :convention, :content_set_name
+  validates_presence_of :content_set_name
   validate :ensure_no_conflicting_folder
 
   def initialize(convention:, content_set_name:, inherit: ["standard"])
@@ -27,7 +27,7 @@ class ExportCmsContentSetService < CivilService::Service
       CmsContentStorageAdapters::CmsGraphqlQueries,
       CmsContentStorageAdapters::Forms,
       CmsContentStorageAdapters::CmsFiles
-    ].each { |adapter_class| export_content_from_adapter(adapter_class.new(convention, content_set)) }
+    ].each { |adapter_class| export_content_from_adapter(adapter_class.new(cms_parent, content_set)) }
 
     success
   end
@@ -65,8 +65,8 @@ class ExportCmsContentSetService < CivilService::Service
       metadata = {
         "inherit" => inherit,
         "navigation_items" => serialize_root_navigation_items,
-        "root_page_slug" => convention.root_page&.slug,
-        "default_layout_name" => convention.default_layout&.name,
+        "root_page_slug" => cms_parent.root_page&.slug,
+        "default_layout_name" => cms_parent.default_layout&.name,
         "variables" => serialize_variables
       }.compact
 
@@ -80,7 +80,7 @@ class ExportCmsContentSetService < CivilService::Service
   end
 
   def serialize_root_navigation_items
-    serialize_navigation_items(convention.cms_navigation_items.root.order(:position))
+    serialize_navigation_items(cms_parent.cms_navigation_items.root.order(:position))
   end
 
   def serialize_navigation_items(items)
@@ -95,7 +95,7 @@ class ExportCmsContentSetService < CivilService::Service
   end
 
   def serialize_variables
-    convention.cms_variables.order(:key).each_with_object({}) { |variable, hash| hash[variable.key] = variable.value }
+    cms_parent.cms_variables.order(:key).each_with_object({}) { |variable, hash| hash[variable.key] = variable.value }
   end
 
   def inherited_content_sets
@@ -105,5 +105,9 @@ class ExportCmsContentSetService < CivilService::Service
   def ensure_no_conflicting_folder
     return unless Dir.exist?(content_set.root_path)
     errors.add(:base, "Folder called #{content_set.root_path} already exists")
+  end
+
+  def cms_parent
+    @cms_parent ||= convention || RootSite.instance
   end
 end
