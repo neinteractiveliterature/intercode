@@ -15,12 +15,12 @@ function castSingleValue(value: FormItemValueType<MultipleChoiceFormItem> | null
     return null;
   }
 
-  if (typeof value === 'string') {
-    return value;
+  if (typeof value === 'string' || typeof value === 'boolean') {
+    return value.toString();
   }
 
   if (Array.isArray(value)) {
-    return value.length > 0 ? value[0] : null;
+    return value.length > 0 ? value[0].toString() : null;
   }
 
   assertNever(value);
@@ -30,11 +30,11 @@ function castMultipleValue(value: FormItemValueType<MultipleChoiceFormItem> | nu
   let arrayValue: string[];
 
   if (Array.isArray(value)) {
-    arrayValue = value;
+    arrayValue = value.map((item) => item.toString());
   } else if (value == null) {
     arrayValue = [];
   } else {
-    arrayValue = [value];
+    arrayValue = [value.toString()];
   }
 
   return arrayValue;
