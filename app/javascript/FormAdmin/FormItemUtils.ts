@@ -157,7 +157,7 @@ export type MultipleChoiceProperties = CommonQuestionProperties & {
 };
 
 export type MultipleChoiceFormItem = WithRequiredIdentifier<
-  ParsedFormItem<MultipleChoiceProperties, string | string[], 'multiple_choice'>
+  ParsedFormItem<MultipleChoiceProperties, string | boolean | (string | boolean)[], 'multiple_choice'>
 >;
 
 export function valueIsMultipleChoiceValue(value: unknown): value is FormItemValueType<MultipleChoiceFormItem> {

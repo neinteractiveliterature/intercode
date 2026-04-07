@@ -62,6 +62,8 @@ function FormItemChangeDisplay<FormItemType extends TypedFormItem>({
       typeof change.new_value === 'string' ||
       typeof change.previous_value === 'number' ||
       typeof change.new_value === 'number' ||
+      typeof change.previous_value === 'boolean' ||
+      typeof change.new_value === 'boolean' ||
       Array.isArray(change.previous_value) ||
       Array.isArray(change.new_value)
     ) {
