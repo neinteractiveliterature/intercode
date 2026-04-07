@@ -161,12 +161,12 @@ export type MultipleChoiceFormItem = WithRequiredIdentifier<
 >;
 
 export function valueIsMultipleChoiceValue(value: unknown): value is FormItemValueType<MultipleChoiceFormItem> {
-  if (typeof value === 'string') {
+  if (typeof value === 'string' || typeof value === 'boolean') {
     return true;
   }
 
   if (Array.isArray(value)) {
-    return value.every((item) => typeof item === 'string');
+    return value.every((item) => typeof item === 'string' || typeof item === 'boolean');
   }
 
   return false;
