@@ -42,7 +42,8 @@ function AddAttendeeModal(): React.JSX.Element {
     navigate('/user_con_profiles', { replace: true });
   };
 
-  const userSelected = (newUser: UserType) => {
+  const userSelected = (newUser: UserType | null) => {
+    if (!newUser) return;
     setUser(newUser);
     setUserConProfile({
       __typename: 'UserConProfile',

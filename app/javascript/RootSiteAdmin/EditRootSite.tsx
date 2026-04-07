@@ -100,7 +100,7 @@ function EditRootSite() {
         getOptionValue={(option) => option.id.toString()}
         getOptionLabel={(option) => option.name ?? ''}
         options={data.rootSite.cmsLayouts}
-        onChange={(newValue: (typeof data)['rootSite']['cmsLayouts'][0]) => setDefaultLayout(newValue)}
+        onChange={(newValue) => setDefaultLayout(newValue)}
         isDisabled={updateInProgress}
       />
 
@@ -112,7 +112,7 @@ function EditRootSite() {
         getOptionValue={(option) => option.id.toString()}
         getOptionLabel={(option) => option.name ?? ''}
         options={data.rootSite.cmsPages}
-        onChange={(newValue: (typeof data)['rootSite']['rootPage']) => setRootPage(newValue)}
+        onChange={(newValue) => setRootPage(newValue)}
         isDisabled={updateInProgress}
       />
 

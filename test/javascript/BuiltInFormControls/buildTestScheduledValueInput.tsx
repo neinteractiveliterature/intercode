@@ -1,7 +1,7 @@
 import * as React from 'react';
 
 export default function buildTestScheduledValueInput(
-  value: string,
+  value: string | number | undefined,
   onChange: React.Dispatch<string>,
 ): React.JSX.Element {
   const processChangeEvent = (event: React.ChangeEvent<HTMLInputElement>) => {

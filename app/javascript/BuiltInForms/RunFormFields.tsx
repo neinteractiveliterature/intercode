@@ -130,7 +130,7 @@ function RunFormFields<RunType extends RunForRunFormFields>({
             rooms={convention.rooms ?? []}
             isMulti
             value={run.rooms}
-            onChange={(rooms: RoomForSelect[]) => onChange((prevRun) => ({ ...prevRun, rooms }))}
+            onChange={(rooms) => onChange((prevRun) => ({ ...prevRun, rooms: [...rooms] }))}
           />
         )}
       </FormGroupWithLabel>

@@ -83,7 +83,7 @@ function CreateEventProposalModal({
           value={department || (eventCategory && eventCategory.department == null ? eventCategory : null)}
           getOptionValue={(option) => `${option.__typename}:${option.id}`}
           getOptionLabel={(option) => option.name}
-          onChange={(entity: (typeof topLevelEntities)[0]) => {
+          onChange={(entity) => {
             if (!entity) {
               setDepartment(undefined);
               setEventCategory(undefined);
@@ -111,9 +111,7 @@ function CreateEventProposalModal({
               value={eventCategory}
               getOptionValue={(option) => option.id.toString()}
               getOptionLabel={(option) => option.name}
-              onChange={(category: (typeof departmentEventCategories)[0]) => {
-                setEventCategory(category);
-              }}
+              onChange={(category) => setEventCategory(category ?? undefined)}
             />
           </>
         )}
@@ -142,9 +140,7 @@ function CreateEventProposalModal({
           value={cloneEventProposal}
           getOptionValue={(option) => option.id.toString()}
           getOptionLabel={(option) => `${option.title} (${option.event_category.name}, ${option.convention.name})`}
-          onChange={(proposal: (typeof userEventProposals)[0]) => {
-            setCloneEventProposal(proposal);
-          }}
+          onChange={(proposal) => setCloneEventProposal(proposal ?? undefined)}
         />
 
         {cloneEventProposal &&

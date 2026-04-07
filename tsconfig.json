@@ -14,10 +14,12 @@
     "noImplicitAny": true,
     "skipLibCheck": true,
     "maxNodeModuleJsDepth": 10,
-    "baseUrl": "./app/javascript",
     "types": ["vitest/globals", "vite/client"],
     "incremental": true,
-    "tsBuildInfoFile": ".tsbuildinfo"
+    "tsBuildInfoFile": ".tsbuildinfo",
+    "paths": {
+      "*": ["./app/javascript/*"]
+    }
   },
   "include": [
     "./app/javascript/",

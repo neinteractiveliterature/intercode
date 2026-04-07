@@ -5,7 +5,7 @@ import { render, fireEvent, waitFor } from '../testUtils';
 import GraphQLAsyncSelect, {
   GraphQLAsyncSelectProps,
 } from '../../../app/javascript/BuiltInFormControls/GraphQLAsyncSelect';
-import { ResultOf } from '@graphql-typed-document-node/core';
+import { ResultOf, VariablesOf } from '@graphql-typed-document-node/core';
 import { FakeQueryData, FakeQueryDocument, FakeQueryVariables } from './graphQLAsyncSelect.queries.generated';
 
 const defaultQueryMock: MockedResponse<FakeQueryData, FakeQueryVariables> = {
@@ -48,11 +48,11 @@ describe('GraphQLAsyncSelect', () => {
   ) =>
     render(
       <GraphQLAsyncSelect
-        query={FakeQueryDocument}
+        query={FakeQueryDocument as QueryType}
         getOptions={(data) => data.convention.user_con_profiles_paginated.entries as OptionType[]}
         getOptionLabel={(option) => option.name_without_nickname}
         getOptionValue={(option) => option.id}
-        getVariables={(input) => ({ name: input })}
+        getVariables={(input) => ({ name: input }) as VariablesOf<QueryType>}
         {...props}
       />,
       { apolloMocks: mocks ?? defaultMocks },

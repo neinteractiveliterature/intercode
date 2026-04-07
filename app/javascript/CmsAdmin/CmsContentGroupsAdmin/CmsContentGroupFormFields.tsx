@@ -84,8 +84,8 @@ function CmsContentGroupFormFields({
             name="contents"
             value={contentGroup.contents}
             inputId={id}
-            onChange={(contents: CmsContentOption[]) =>
-              setContentGroup && setContentGroup({ ...contentGroup, contents })
+            onChange={(contents) =>
+              setContentGroup && setContentGroup({ ...contentGroup, contents: [...contents] })
             }
             isDisabled={disabled || readOnly}
           />
@@ -122,7 +122,7 @@ function CmsContentGroupFormFields({
               options={convention?.staff_positions ?? []}
               getOptionValue={(staffPosition) => staffPosition.id.toString()}
               getOptionLabel={(staffPosition) => staffPosition.name}
-              onChange={addRole}
+              onChange={(role) => role && addRole(role)}
             />
           )}
         </div>

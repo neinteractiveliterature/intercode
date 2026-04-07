@@ -4,12 +4,12 @@ import RegistrationPolicyEditor, {
   EditingRegistrationPolicy,
   RegistrationPolicyEditorProps,
 } from '../../../app/javascript/RegistrationPolicy/RegistrationPolicyEditor';
-import { RegistrationPolicy, RegistrationPolicyBucket } from '../../../app/javascript/graphqlTypes.generated';
+import { RegistrationPolicyBucket } from '../../../app/javascript/graphqlTypes.generated';
 import { EditingRegistrationBucket } from '../../../app/javascript/RegistrationPolicy/RegistrationBucketRow';
 import { vi } from 'vitest';
 
 describe('RegistrationPolicyEditor', () => {
-  const onChange = vi.fn<(rp: RegistrationPolicy) => void>();
+  const onChange = vi.fn<(rp: EditingRegistrationPolicy<EditingRegistrationBucket>) => void>();
   beforeEach(onChange.mockReset);
 
   const defaultRegistrationPolicyBucket: RegistrationPolicyBucket = {

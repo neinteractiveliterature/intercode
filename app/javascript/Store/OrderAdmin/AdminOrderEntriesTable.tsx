@@ -260,7 +260,7 @@ function AdminOrderEntriesTable<
                 <Select
                   options={addingItem.product?.product_variants ?? []}
                   value={addingItem.product_variant}
-                  onChange={setAddingItemProductVariant}
+                  onChange={(variant) => setAddingItemProductVariant(variant ?? null)}
                   getOptionValue={(variant) => variant?.id?.toString() ?? ''}
                   getOptionLabel={(variant) => variant?.name ?? ''}
                   isClearable

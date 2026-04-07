@@ -195,7 +195,7 @@ export default function NewConventionModal({ data, cloneConvention }: NewConvent
             label="Initial CMS content set"
             options={CMS_CONTENT_SET_OPTIONS}
             value={cmsContentSet}
-            onChange={(newValue: (typeof CMS_CONTENT_SET_OPTIONS)[0]) => setCmsContentSet(newValue)}
+            onChange={(newValue) => setCmsContentSet(newValue)}
             getOptionLabel={(option) => option.label}
             getOptionValue={(option) => option.name}
           />
