@@ -74,7 +74,9 @@ function EditRootSite() {
 
   useEffect(() => {
     if (navigation.state === 'idle' && actionData != null && !error) {
+      // eslint-disable-next-line react-hooks/set-state-in-effect
       setSuccess(true);
+       
       setEdited(false);
     }
   }, [actionData, error, navigation.state]);
@@ -100,7 +102,7 @@ function EditRootSite() {
         getOptionValue={(option) => option.id.toString()}
         getOptionLabel={(option) => option.name ?? ''}
         options={data.rootSite.cmsLayouts}
-        onChange={(newValue) => setDefaultLayout(newValue)}
+        onChange={(newValue) => newValue && setDefaultLayout(newValue)}
         isDisabled={updateInProgress}
       />
 
@@ -112,7 +114,7 @@ function EditRootSite() {
         getOptionValue={(option) => option.id.toString()}
         getOptionLabel={(option) => option.name ?? ''}
         options={data.rootSite.cmsPages}
-        onChange={(newValue) => setRootPage(newValue)}
+        onChange={(newValue) => newValue && setRootPage(newValue)}
         isDisabled={updateInProgress}
       />
 

@@ -59,7 +59,7 @@ function ConventionFormWebsiteSection({
         getOptionValue={(option) => option?.id.toString() ?? ''}
         getOptionLabel={(option) => option?.name ?? ''}
         options={cmsLayouts}
-        onChange={(newValue) => setDefaultLayout(newValue)}
+        onChange={(newValue) => newValue && setDefaultLayout(newValue)}
         styles={selectStyles}
         isDisabled={disabled}
       />
@@ -71,7 +71,7 @@ function ConventionFormWebsiteSection({
         getOptionValue={(option) => option?.id.toString() ?? ''}
         getOptionLabel={(option) => option?.name ?? ''}
         options={pages}
-        onChange={(newValue) => setRootPage(newValue)}
+        onChange={(newValue) => newValue && setRootPage(newValue)}
         styles={selectStyles}
         isDisabled={disabled}
       />
