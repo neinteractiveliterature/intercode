@@ -81,7 +81,7 @@ class Client implements CadmusNavbarAdminClient {
       });
       return data!.cmsParent.cmsNavigationItems.map(graphqlNavigationItemToCadmusNavbarAdminObject);
     } catch (error) {
-      this.onError(error);
+      this.onError(error as Error);
       throw error;
     } finally {
       this.requestsInProgress.loadingNavigationItems = false;
@@ -105,7 +105,7 @@ class Client implements CadmusNavbarAdminClient {
         name: page.name ?? 'Untitled page',
       }));
     } catch (error) {
-      this.onError(error);
+      this.onError(error as Error);
       throw error;
     } finally {
       this.requestsInProgress.loadingPages = false;
@@ -150,7 +150,7 @@ class Client implements CadmusNavbarAdminClient {
       await this.apolloClient.resetStore();
       return graphqlNavigationItemToCadmusNavbarAdminObject(mutationResponse.cms_navigation_item);
     } catch (error) {
-      this.onError(error);
+      this.onError(error as Error);
       throw error;
     } finally {
       this.requestsInProgress.savingNavigationItem = false;
@@ -168,7 +168,7 @@ class Client implements CadmusNavbarAdminClient {
       });
       await this.apolloClient.resetStore();
     } catch (error) {
-      this.onError(error);
+      this.onError(error as Error);
       throw error;
     } finally {
       this.requestsInProgress.deletingNavigationItem = false;
@@ -193,7 +193,7 @@ class Client implements CadmusNavbarAdminClient {
 
       await this.apolloClient.resetStore();
     } catch (error) {
-      this.onError(error);
+      this.onError(error as Error);
       throw error;
     } finally {
       this.requestsInProgress.sortingNavigationItems = false;

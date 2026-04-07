@@ -81,7 +81,7 @@ function EventProposalFormInner({
       setUpdatePromise(promise);
       await promise;
     } catch (e) {
-      setUpdateError(e);
+      setUpdateError(e instanceof Error ? e : undefined);
       setResponseErrors(parseResponseErrors(e, ['updateEventProposal']));
     } finally {
       setUpdatePromise(undefined);
@@ -102,7 +102,7 @@ function EventProposalFormInner({
       setSubmitPromise(promise);
       await promise;
     } catch (e) {
-      setSubmitError(e);
+      setSubmitError(e instanceof Error ? e : undefined);
     } finally {
       setSubmitPromise(undefined);
     }

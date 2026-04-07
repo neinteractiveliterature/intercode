@@ -66,7 +66,7 @@ export function OrderPaymentModalContents({ onCancel, onComplete, onError, order
         await submit({ totalPrice, paymentMode, orderId: order.id, submitOrder });
         onComplete();
       } catch (error) {
-        onError(error);
+        onError(error as Error);
       }
     },
     { suppressError: true },
@@ -173,11 +173,12 @@ function OrderPaymentModal({
         result.data?.convention.my_profile?.current_pending_order?.payment_intent_client_secret,
       );
     } catch (error) {
-      onErrorRef.current(error);
+      onErrorRef.current(error as Error);
     }
   }, [client]);
 
   useEffect(() => {
+    // eslint-disable-next-line react-hooks/set-state-in-effect
     setPaymentIntentClientSecret(undefined);
 
     if (paymentIntentClientSecretNeeded) {
