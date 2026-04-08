@@ -9,7 +9,7 @@ import PricingStructureForm, { PricingStructureFormProps } from './PricingStruct
 import { useTranslation } from 'react-i18next';
 import { ModalData } from '@neinteractiveliterature/litform';
 
-type EditingPricingStructure = PricingStructureFormProps['pricingStructure'];
+type EditingPricingStructure = NonNullable<PricingStructureFormProps['pricingStructure']>;
 
 export const PRICING_STRATEGIES = EnumTypes.PricingStrategy.enumValues.map(({ name, description }) => ({
   value: name,
@@ -35,15 +35,23 @@ export const PricingStructureModalContext = React.createContext<PricingStructure
   setState: () => {},
 });
 
-export const buildScheduledMoneyValueInput = (value: Money | null | undefined, onChange: React.Dispatch<Money>) => (
-  <MoneyInput value={value} onChange={onChange} />
+export const buildScheduledMoneyValueInput = (
+  value: Money | null | undefined,
+  onChange: React.Dispatch<Money | undefined>,
+) => (
+  <MoneyInput
+    value={value}
+    onChange={(newValue) => onChange(typeof newValue === 'function' ? newValue(value ?? undefined) : newValue)}
+  />
 );
 
 export type EditPricingStructureModalProps = Pick<PricingStructureModalContextValue, 'visible' | 'state' | 'close'>;
 
 function EditPricingStructureModal({ visible, state, close }: EditPricingStructureModalProps): React.JSX.Element {
   const { t } = useTranslation();
-  const [pricingStructure, setPricingStructure] = useState(state?.value);
+  const [pricingStructure, setPricingStructure] = useState<EditingPricingStructure | undefined>(
+    state?.value ?? undefined,
+  );
 
   const okClicked = () => {
     if (pricingStructure && state?.onChange) {

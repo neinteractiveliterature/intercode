@@ -1,7 +1,7 @@
 import { useContext } from 'react';
 import * as React from 'react';
 
-import { PricingStructureModalContext } from './EditPricingStructureModal';
+import { PricingStructureModalContext, PricingStructureModalState } from './EditPricingStructureModal';
 import { EditingPricingStructure } from './EditingProductTypes';
 import { useTranslation } from 'react-i18next';
 import { AdminPricingStructureDescription } from 'Store/describePricingStructure';
@@ -21,7 +21,13 @@ function PricingStructureInput({ value, onChange }: PricingStructureInputProps):
       <button
         type="button"
         className="btn btn-link py-0"
-        onClick={() => pricingStructureModal.open({ value, onChange, opened: new Date() })}
+        onClick={() =>
+          pricingStructureModal.open({
+            value,
+            onChange: onChange as unknown as PricingStructureModalState['onChange'],
+            opened: new Date(),
+          })
+        }
       >
         <i className="bi-pencil-fill" />
         <span className="visually-hidden">{t('buttons.edit')}</span>

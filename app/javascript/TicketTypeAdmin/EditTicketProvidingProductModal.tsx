@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react';
+import * as React from 'react';
 import { ErrorDisplay, useModal } from '@neinteractiveliterature/litform';
 import { useTranslation } from 'react-i18next';
 import Modal from 'react-bootstrap4-modal';
@@ -61,7 +62,7 @@ export default function EditTicketProvidingProductModal({
                 hideVariants
                 ticketTypes={state ? [state.ticketType] : []}
                 product={product}
-                setProduct={setProduct}
+                setProduct={setProduct as React.Dispatch<React.SetStateAction<EditingProductBase>>}
               />
             )}
           </PricingStructureModalContext.Provider>

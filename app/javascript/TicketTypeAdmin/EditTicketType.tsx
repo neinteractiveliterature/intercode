@@ -1,10 +1,11 @@
 import { useState, useContext } from 'react';
+import * as React from 'react';
 import { ActionFunction, redirect, useFetcher, useLoaderData, RouterContextProvider } from 'react-router';
 
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import buildTicketTypeInput from './buildTicketTypeInput';
-import TicketTypeForm from './TicketTypeForm';
+import TicketTypeForm, { EditingTicketType } from './TicketTypeForm';
 import usePageTitle from '../usePageTitle';
 import AppRootContext from '../AppRootContext';
 import { SingleTicketTypeLoaderResult } from './loaders';
@@ -49,7 +50,10 @@ function EditTicketTypeForm() {
       <h1 className="mb-4">
         Editing {ticketName} type “{initialTicketType.name}”
       </h1>
-      <TicketTypeForm ticketType={ticketType} onChange={setTicketType} />
+      <TicketTypeForm
+        ticketType={ticketType}
+        onChange={setTicketType as React.Dispatch<React.SetStateAction<EditingTicketType>>}
+      />
       <button type="button" className="btn btn-primary" onClick={saveClicked} disabled={inProgress}>
         Save changes
       </button>
