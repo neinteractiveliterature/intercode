@@ -56,7 +56,7 @@ function FormSectionEditorContent(): React.JSX.Element {
           <div className="card-header">
             <InPlaceEditor
               className="d-flex align-items-start w-100"
-              value={currentSection.title}
+              value={currentSection.title ?? null}
               onChange={updateSectionTitle}
             >
               <h4 className="m-0">{currentSection.title}</h4>

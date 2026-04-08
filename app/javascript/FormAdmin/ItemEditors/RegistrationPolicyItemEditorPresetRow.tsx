@@ -11,7 +11,7 @@ import { getSortableStyle } from '../../SortableUtils';
 type PresetWithId = WithGeneratedId<RegistrationPolicyPreset, string>;
 
 function usePresetPropertyUpdater<PropertyName extends keyof RegistrationPolicyPreset>(
-  onChange: (generatedId: string, preset: React.SetStateAction<PresetWithId>) => void,
+  onChange: (generatedId: string, updater: (prev: PresetWithId) => PresetWithId) => void,
   generatedId: string,
   property: PropertyName,
 ) {
@@ -28,7 +28,7 @@ function usePresetPropertyUpdater<PropertyName extends keyof RegistrationPolicyP
 export type RegistrationPolicyItemEditorPresetRowProps = {
   preset: PresetWithId;
   deletePreset: (generatedId: string) => void;
-  onChange: (generatedId: string, preset: React.SetStateAction<PresetWithId>) => void;
+  onChange: (generatedId: string, updater: (prev: PresetWithId) => PresetWithId) => void;
 };
 
 function RegistrationPolicyItemEditorPresetRow({
@@ -43,7 +43,8 @@ function RegistrationPolicyItemEditorPresetRow({
   });
 
   const presetChanged = useCallback(
-    (newPreset: PresetWithId) => onChange(preset.generatedId, () => newPreset),
+    (newPreset: RegistrationPolicyPreset) =>
+      onChange(preset.generatedId, () => ({ ...newPreset, generatedId: preset.generatedId })),
     [onChange, preset.generatedId],
   );
   const presetNameChanged = usePresetPropertyUpdater(onChange, preset.generatedId, 'name');

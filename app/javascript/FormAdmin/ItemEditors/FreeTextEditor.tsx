@@ -2,7 +2,7 @@ import { useContext, useId } from 'react';
 import { BootstrapFormInput, BootstrapFormSelect, parseIntOrNull } from '@neinteractiveliterature/litform';
 
 import LiquidInput from '../../BuiltInFormControls/LiquidInput';
-import { formItemPropertyUpdater, FreeTextFormItem } from '../FormItemUtils';
+import { formItemPropertyUpdater, FreeTextFormItem, FreeTextProperties } from '../FormItemUtils';
 import { FormItemEditorContext } from '../FormEditorContexts';
 import { FormItemEditorProps } from '../FormItemEditorProps';
 
@@ -12,13 +12,16 @@ function FreeTextEditor({ formItem, setFormItem }: FreeTextEditorProps): React.J
   const captionInputId = useId();
   const responseFormat =
     formItem.properties.format === 'markdown' ? 'markdown' : formItem.properties.free_text_type || 'text';
-  const setResponseFormat = (newResponseFormat: typeof responseFormat) => {
+  const setResponseFormat = (newResponseFormat: string) => {
     setFormItem((prevFormItem) => ({
       ...prevFormItem,
       properties: {
         ...prevFormItem.properties,
         format: newResponseFormat === 'markdown' ? 'markdown' : 'text',
-        free_text_type: newResponseFormat === 'markdown' ? null : newResponseFormat,
+        free_text_type:
+          newResponseFormat === 'markdown'
+            ? null
+            : (newResponseFormat as NonNullable<FreeTextProperties['free_text_type']>),
       },
     }));
   };
