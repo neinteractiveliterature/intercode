@@ -28337,6 +28337,18 @@
               "args": []
             },
             {
+              "name": "target_run",
+              "description": "The run this ranked choice was attempting to sign up for.",
+              "type": {
+                "kind": "OBJECT",
+                "name": "Run",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
               "name": "updated_at",
               "description": "The time this RankedChoiceDecision was last modified.",
               "type": {

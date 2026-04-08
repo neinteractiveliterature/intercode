@@ -29,6 +29,7 @@ module Types
     field :signup_round, Types::SignupRoundType, null: false do # rubocop:disable GraphQL/ExtractType
       description "The signup round in which this decision was made."
     end
+    field :target_run, Types::RunType, description: "The run this ranked choice was attempting to sign up for."
     field :updated_at, Types::DateType, null: false do
       description "The time this RankedChoiceDecision was last modified."
     end
@@ -41,6 +42,7 @@ module Types
                         :signup_ranked_choice,
                         :signup_round,
                         :signup,
-                        :signup_request
+                        :signup_request,
+                        :target_run
   end
 end
