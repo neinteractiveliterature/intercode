@@ -1,7 +1,7 @@
 import React, { useCallback, useContext, useEffect } from 'react';
 import { GraphiQL } from 'graphiql';
 import { parse } from 'graphql';
-import { Fetcher } from '@graphiql/toolkit';
+import { Fetcher, FetcherParams } from '@graphiql/toolkit';
 
 import { ApolloLink, execute } from '@apollo/client';
 import { useIntercodeApolloLink } from './useIntercodeApolloClient';
@@ -27,15 +27,15 @@ function DevModeGraphiql({ authenticityTokens }: DevModeGraphiqlProps): React.JS
   const link = useIntercodeApolloLink(new URL('/graphql', window.location.href), manager);
   const client = useApolloClient();
 
-  const fetcher: Fetcher = useCallback(
-    (operation) => {
+  const fetcher = useCallback(
+    (operation: FetcherParams) => {
       const operationAsGraphQLRequest = operation as unknown as ApolloLink.Request;
 
       operationAsGraphQLRequest.query = parse(operation.query);
       return execute(link, operationAsGraphQLRequest, { client });
     },
     [link, client],
-  );
+  ) as unknown as Fetcher;
 
   return <GraphiQL fetcher={fetcher} editorTheme="intercode" />;
 }
