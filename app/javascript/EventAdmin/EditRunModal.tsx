@@ -58,7 +58,12 @@ function EditRunModal({
         </div>
         {run && (
           <div className="modal-body">
-            <RunFormFields convention={convention} run={run} event={event} onChange={editingRunChanged} />
+            <RunFormFields
+              convention={convention}
+              run={run as RunFieldsFragment}
+              event={event}
+              onChange={editingRunChanged as React.Dispatch<React.SetStateAction<RunFieldsFragment>>}
+            />
           </div>
         )}
         <div className="modal-footer">

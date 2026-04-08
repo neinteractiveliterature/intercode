@@ -1,5 +1,14 @@
 import { useState, useContext } from 'react';
-import { ActionFunction, Link, LoaderFunction, SubmitTarget, useFetcher, useLoaderData, useMatch, RouterContextProvider } from 'react-router';
+import {
+  ActionFunction,
+  Link,
+  LoaderFunction,
+  SubmitTarget,
+  useFetcher,
+  useLoaderData,
+  useMatch,
+  RouterContextProvider,
+} from 'react-router';
 import md5 from 'md5';
 import { useTranslation, Trans } from 'react-i18next';
 import { BooleanInput, LoadingIndicator } from '@neinteractiveliterature/litform';
@@ -131,7 +140,7 @@ function MyProfileForm() {
     currentUserWriterRole: initialUserConProfile.current_user_form_item_writer_role,
     response: userConProfile,
     responseErrors,
-    responseValuesChanged,
+    responseValuesChanged: responseValuesChanged as (newValues: Record<string, unknown>) => void,
   };
 
   return (

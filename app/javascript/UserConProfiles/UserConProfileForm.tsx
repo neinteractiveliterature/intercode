@@ -22,7 +22,7 @@ function UserConProfileForm<
   UserConProfileType extends FormResponse &
     Pick<UserConProfile, 'current_user_form_item_viewer_role' | 'current_user_form_item_writer_role'>,
 >(props: UserConProfileFormProps<UserConProfileType>): React.JSX.Element {
-  const formResponseValuesChanged = (newResponseValues: UserConProfileType['form_response_attrs']) => {
+  const formResponseValuesChanged = (newResponseValues: Record<string, unknown>) => {
     props.onChange((prevUserConProfile) => ({
       ...prevUserConProfile,
       form_response_attrs: {
