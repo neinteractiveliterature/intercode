@@ -35,8 +35,7 @@ export type UseReactTableWithTheWorksOptions<
   UseLocalStorageReactTableOptions &
   UseReactRouterReactTableOptions & {
     defaultState?: Partial<TableState>;
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    columns: ColumnDef<RowType, any>[];
+    columns: ColumnDef<RowType>[];
     storageKeyPrefix: string;
     rowSelect?: boolean;
   } & {

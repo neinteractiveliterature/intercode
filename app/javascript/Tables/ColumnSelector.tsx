@@ -8,8 +8,7 @@ import { useMemo } from 'react';
 
 export type ColumnSelectorProps<TData> = {
   alwaysVisibleColumns: string[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  possibleColumns: ColumnDef<TData, any>[];
+  possibleColumns: ColumnDef<TData>[];
   columnVisibility: TableState['columnVisibility'];
   setColumnVisibility: React.Dispatch<React.SetStateAction<TableState['columnVisibility']>>;
 };

@@ -6,8 +6,7 @@ import ExportButton from './ExportButton';
 import { UseColumnSelectionResult } from './useColumnSelection';
 
 export type TableHeaderProps<TData> = {
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  columns: ColumnDef<TData, any>[];
+  columns: ColumnDef<TData>[];
   columnSelectionProps: UseColumnSelectionResult;
   exportButton?: ReactNode;
   exportUrl?: string;

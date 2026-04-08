@@ -149,44 +149,43 @@ function UserConProfilesTable({
     const formItems = getSortedParsedFormItems(attendeesPageQueryData.convention.user_con_profile_form);
     const columnHelper = createColumnHelper<UserConProfilesTableRow>();
 
-    // eslint-disable-next-line @typescript-eslint/no-explicit-any
-    const columns: ColumnDef<UserConProfilesTableRow, any>[] = [
+    const columns: ColumnDef<UserConProfilesTableRow>[] = [
       columnHelper.accessor('id', {
         header: t('admin.userConProfiles.id'),
         id: 'id',
         size: 70,
-      }),
+      }) as ColumnDef<UserConProfilesTableRow>,
       columnHelper.accessor('user_id', {
         header: t('admin.userConProfiles.userId'),
         id: 'user_id',
         size: 70,
-      }),
+      }) as ColumnDef<UserConProfilesTableRow>,
       columnHelper.accessor((userConProfile) => userConProfile, {
         header: t('admin.userConProfiles.name'),
         id: 'name',
         enableColumnFilter: true,
         enableSorting: true,
         cell: UserConProfileWithGravatarCell,
-      }),
+      }) as ColumnDef<UserConProfilesTableRow>,
       columnHelper.accessor('first_name', {
         header: t('admin.userConProfiles.firstName'),
         id: 'first_name',
         enableColumnFilter: true,
         enableSorting: true,
-      }),
+      }) as ColumnDef<UserConProfilesTableRow>,
       columnHelper.accessor('last_name', {
         header: t('admin.userConProfiles.lastName'),
         id: 'last_name',
         enableColumnFilter: true,
         enableSorting: true,
-      }),
+      }) as ColumnDef<UserConProfilesTableRow>,
       columnHelper.accessor('email', {
         header: t('admin.userConProfiles.email'),
         id: 'email',
         enableColumnFilter: true,
         enableSorting: true,
         cell: EmailCell,
-      }),
+      }) as ColumnDef<UserConProfilesTableRow>,
     ];
 
     if (attendeesPageQueryData.convention.ticket_mode !== TicketMode.Disabled && canReadTickets) {
@@ -198,7 +197,7 @@ function UserConProfilesTable({
           enableColumnFilter: true,
           enableSorting: true,
           cell: TicketStatusWithPaymentAmountCell,
-        }),
+        }) as ColumnDef<UserConProfilesTableRow>,
         columnHelper.accessor('ticket', {
           header: t('admin.userConProfiles.ticketType', {
             ticketName: humanize(attendeesPageQueryData.convention.ticket_name || 'ticket'),
@@ -208,7 +207,7 @@ function UserConProfilesTable({
           enableColumnFilter: true,
           enableSorting: true,
           cell: TicketStatusCell,
-        }),
+        }) as ColumnDef<UserConProfilesTableRow>,
         columnHelper.accessor('ticket', {
           header: t('admin.userConProfiles.paymentAmount'),
           id: 'payment_amount',
@@ -216,7 +215,7 @@ function UserConProfilesTable({
           enableColumnFilter: true,
           enableSorting: true,
           cell: TicketPaymentAmountCell,
-        }),
+        }) as ColumnDef<UserConProfilesTableRow>,
       );
     }
 
@@ -227,7 +226,7 @@ function UserConProfilesTable({
         size: 150,
         enableColumnFilter: true,
         cell: BooleanCell,
-      }),
+      }) as ColumnDef<UserConProfilesTableRow>,
     );
 
     if (canReadTickets) {
@@ -238,7 +237,7 @@ function UserConProfilesTable({
           size: 150,
           enableColumnFilter: true,
           cell: BooleanCell,
-        }),
+        }) as ColumnDef<UserConProfilesTableRow>,
       );
     }
 
@@ -255,7 +254,7 @@ function UserConProfilesTable({
             enableSorting: true,
             cell: TicketStatusChangeCell,
           },
-        ),
+        ) as ColumnDef<UserConProfilesTableRow>,
       );
     }
 
@@ -266,11 +265,11 @@ function UserConProfilesTable({
         enableColumnFilter: true,
         enableSorting: true,
         cell: PrivilegesCell,
-      }),
+      }) as ColumnDef<UserConProfilesTableRow>,
       columnHelper.accessor('order_summary', {
         header: t('admin.userConProfiles.orderSummary'),
         id: 'order_summary',
-      }),
+      }) as ColumnDef<UserConProfilesTableRow>,
     );
 
     const existingColumnIds = new Set(columns.map((column) => column.id));
@@ -299,7 +298,7 @@ function UserConProfilesTable({
             id: identifier,
             cell: FormItemCell,
           },
-        ),
+        ) as ColumnDef<UserConProfilesTableRow>,
       );
     });
 

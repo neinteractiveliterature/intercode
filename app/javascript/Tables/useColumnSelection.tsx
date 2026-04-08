@@ -17,8 +17,7 @@ export function columnVisibilityToVisibleColumnIds(columnVisibility: TableState[
 
 export function visibleColumnIdsToColumnVisibility<TData>(
   visibleColumnIds: Set<string>,
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  columns: ColumnDef<TData, any>[],
+  columns: ColumnDef<TData>[],
 ): TableState['columnVisibility'] {
   return columns.reduce((acc, column) => {
     if (column.id) {
@@ -32,8 +31,7 @@ export function visibleColumnIdsToColumnVisibility<TData>(
 export type UseColumnSelectionOptions<RowType extends Record<string, unknown>> = {
   alwaysVisibleColumns?: string[];
   defaultVisibleColumns?: string[];
-  // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  columns: ColumnDef<RowType, any>[];
+  columns: ColumnDef<RowType>[];
 };
 
 export type UseColumnSelectionResult = {
