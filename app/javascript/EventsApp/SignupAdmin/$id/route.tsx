@@ -1,6 +1,6 @@
 import { useCallback, useContext } from 'react';
 import classNames from 'classnames';
-import { ActionFunction, data, Link, Outlet, useSubmit, RouterContextProvider } from 'react-router';
+import { ActionFunction, data, Link, Outlet, useParams, useSubmit, RouterContextProvider } from 'react-router';
 import { Trans, useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
 import { DateTime } from 'luxon';
@@ -90,10 +90,6 @@ function getToggleCountedConfirmPrompt(signup: SignupFieldsFragment) {
   return getMakeCountedConfirmPrompt(signup);
 }
 
-export type EditSignupProps = {
-  teamMembersUrl: string;
-};
-
 export const action: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {
   const client = context.get(apolloClientContext);
   const formData = await request.formData();
@@ -107,8 +103,10 @@ export const action: ActionFunction<RouterContextProvider> = async ({ context, r
   return data(result.data);
 };
 
-function EditSignup({ teamMembersUrl }: EditSignupProps): React.JSX.Element {
+function EditSignup(): React.JSX.Element {
   const data = useSingleSignupLoader();
+  const { eventId } = useParams();
+  const teamMembersUrl = `/events/${eventId}/team_members`;
   const { timezoneName, ticketName } = useContext(AppRootContext);
   const confirm = useConfirm();
   const { t } = useTranslation();
