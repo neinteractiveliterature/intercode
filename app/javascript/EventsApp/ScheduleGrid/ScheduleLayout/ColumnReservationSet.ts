@@ -34,9 +34,9 @@ function compareReservationsForSort(a: ColumnReservation | null, b: ColumnReserv
 }
 
 class ColumnReservationSet {
-  reservations: (ColumnReservation | null)[];
+  reservations!: (ColumnReservation | null)[];
 
-  columnNumberByRunId: Map<string, number>;
+  columnNumberByRunId!: Map<string, number>;
 
   constructor() {
     this.clear();

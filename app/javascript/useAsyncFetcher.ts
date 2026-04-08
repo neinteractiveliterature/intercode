@@ -11,7 +11,7 @@ export function useAsyncFetcher() {
         if (resolveRef.current) {
           reject(new Error('Request already in progress'));
         } else {
-          resolveRef.current = resolve;
+          resolveRef.current = resolve as (data: unknown) => void;
           fetcher.load(...args);
         }
       }),
@@ -24,7 +24,7 @@ export function useAsyncFetcher() {
         if (resolveRef.current) {
           reject(new Error('Request already in progress'));
         } else {
-          resolveRef.current = resolve;
+          resolveRef.current = resolve as (data: unknown) => void;
           fetcher.submit(...args);
         }
       }),
