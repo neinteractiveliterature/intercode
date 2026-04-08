@@ -13,7 +13,7 @@ import { ErrorDisplay, notEmpty } from '@neinteractiveliterature/litform';
 
 import { buildPermissionInput } from '../../Permissions/PermissionUtils';
 import { useChangeSet } from '../../ChangeSet';
-import CmsContentGroupFormFields from './CmsContentGroupFormFields';
+import CmsContentGroupFormFields, { CmsContentGroupFormFieldsProps } from './CmsContentGroupFormFields';
 import { CmsContentGroupsAdminQueryData } from './queries.generated';
 import { CmsContentTypeIndicator } from '../../graphqlTypes.generated';
 import { singleCmsContentGroupAdminLoader, SingleCmsContentGroupAdminLoaderResult } from './loaders';
@@ -89,7 +89,7 @@ function EditCmsContentGroupForm() {
         disabled={submitInProgress}
         convention={convention}
         permissionsChangeSet={permissionsChangeSet}
-        addPermission={addPermission}
+        addPermission={addPermission as unknown as CmsContentGroupFormFieldsProps['addPermission']}
         removePermission={removePermission}
       />
 

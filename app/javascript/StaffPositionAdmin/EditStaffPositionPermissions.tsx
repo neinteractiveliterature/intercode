@@ -1,4 +1,11 @@
-import { ActionFunction, LoaderFunction, redirect, useFetcher, useLoaderData, RouterContextProvider } from 'react-router';
+import {
+  ActionFunction,
+  LoaderFunction,
+  redirect,
+  useFetcher,
+  useLoaderData,
+  RouterContextProvider,
+} from 'react-router';
 import { useTabs, TabList, TabBody, notEmpty, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
@@ -9,7 +16,7 @@ import usePageTitle from '../usePageTitle';
 import { getPermissionNamesForModelType, buildPermissionInput } from '../Permissions/PermissionUtils';
 import { PermissionedModelTypeIndicator } from '../graphqlTypes.generated';
 import { StaffPositionsQueryData, StaffPositionsQueryDocument } from './queries.generated';
-import { PermissionWithId } from '../Permissions/usePermissionsChangeSet';
+import { PermissionWithId, UsePermissionsChangeSetOptions } from '../Permissions/usePermissionsChangeSet';
 import { apolloClientContext } from 'AppContexts';
 import {
   UpdateStaffPositionPermissionsDocument,
@@ -76,7 +83,7 @@ function EditStaffPositionPermissions() {
           role={staffPosition}
           model={convention}
           changeSet={conventionChangeSet}
-          add={conventionAdd}
+          add={conventionAdd as unknown as UsePermissionsChangeSetOptions['add']}
           remove={conventionRemove}
           reset={conventionReset}
           header={convention.name}
@@ -94,7 +101,7 @@ function EditStaffPositionPermissions() {
           role={staffPosition}
           rows={convention.event_categories}
           changeSet={eventCategoriesChangeSet}
-          add={eventCategoriesAdd}
+          add={eventCategoriesAdd as unknown as UsePermissionsChangeSetOptions['add']}
           remove={eventCategoriesRemove}
           rowsHeader="Event Category"
           formatRowHeader={(eventCategory) => (
@@ -116,7 +123,7 @@ function EditStaffPositionPermissions() {
           role={staffPosition}
           rows={convention.cmsContentGroups}
           changeSet={contentGroupsChangeSet}
-          add={contentGroupsAdd}
+          add={contentGroupsAdd as unknown as UsePermissionsChangeSetOptions['add']}
           remove={contentGroupsRemove}
           rowsHeader="CMS Content Group"
           formatRowHeader={(contentGroup) => contentGroup.name}

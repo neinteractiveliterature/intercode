@@ -3,7 +3,7 @@ import * as React from 'react';
 import uniqWith from 'lodash/uniqWith';
 import { BootstrapFormInput, FormGroupWithLabel, notEmpty } from '@neinteractiveliterature/litform';
 
-import CmsContentSelect, { CmsContentOption } from './CmsContentSelect';
+import CmsContentSelect from './CmsContentSelect';
 import PermissionsTableInput from '../../Permissions/PermissionsTableInput';
 import SelectWithLabel from '../../BuiltInFormControls/SelectWithLabel';
 import { permissionEquals, getPermissionNamesForModelType } from '../../Permissions/PermissionUtils';
@@ -84,9 +84,7 @@ function CmsContentGroupFormFields({
             name="contents"
             value={contentGroup.contents}
             inputId={id}
-            onChange={(contents) =>
-              setContentGroup && setContentGroup({ ...contentGroup, contents: [...contents] })
-            }
+            onChange={(contents) => setContentGroup && setContentGroup({ ...contentGroup, contents: [...contents] })}
             isDisabled={disabled || readOnly}
           />
         )}
@@ -111,7 +109,7 @@ function CmsContentGroupFormFields({
               }}
               readOnly={readOnly}
               changeSet={permissionsChangeSet}
-              add={addPermission}
+              add={addPermission as UsePermissionsChangeSetOptions['add']}
               remove={removePermission}
             />
           )}

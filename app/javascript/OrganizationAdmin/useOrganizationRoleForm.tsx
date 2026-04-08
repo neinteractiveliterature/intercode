@@ -7,7 +7,7 @@ import UserSelect from '../BuiltInFormControls/UserSelect';
 import PermissionNames from '../../../config/permission_names.json';
 import PermissionsTableInput from '../Permissions/PermissionsTableInput';
 import { OrganizationAdminOrganizationsQueryData } from './queries.generated';
-import { PermissionWithId } from '../Permissions/usePermissionsChangeSet';
+import { PermissionWithId, UsePermissionsChangeSetOptions } from '../Permissions/usePermissionsChangeSet';
 
 const OrganizationRolePermissionNames = flatMap(
   PermissionNames.filter((permissionNameGroup) => permissionNameGroup.role_type === 'OrganizationRole'),
@@ -69,7 +69,7 @@ export default function useOrganizationRoleForm(initialOrganizationRole: Organiz
           rows={[initialOrganizationRole]}
           model={undefined}
           changeSet={permissionsChangeSet}
-          add={addPermission}
+          add={addPermission as unknown as UsePermissionsChangeSetOptions['add']}
           remove={removePermission}
           formatRowHeader={() => 'Permitted?'}
         />
