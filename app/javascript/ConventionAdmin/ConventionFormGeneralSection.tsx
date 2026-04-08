@@ -124,7 +124,11 @@ function ConventionFormGeneralSection({
         disabled={disabled}
       />
 
-      <ConventionLanguageInput value={convention.language} onChange={setLanguage} disabled={disabled} />
+      <ConventionLanguageInput
+        value={convention.language}
+        onChange={setLanguage as React.Dispatch<React.SetStateAction<string | null | undefined>>}
+        disabled={disabled}
+      />
 
       <BootstrapFormInput
         name="domain"

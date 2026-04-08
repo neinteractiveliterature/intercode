@@ -103,7 +103,11 @@ function EditUserForm() {
         <div className="card-header">{t('authentication.editUser.accountDataHeader')}</div>
 
         <div className="card-body">
-          <UserFormFields formState={formState} setFormState={setFormState} showNameWarning />
+          <UserFormFields
+            formState={formState}
+            setFormState={setFormState as React.Dispatch<React.SetStateAction<UserFormState>>}
+            showNameWarning
+          />
           <div className="mb-3">
             <label className="form-label" htmlFor={passwordFieldId}>
               {t('authentication.editUser.passwordLabel')}

@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import * as React from 'react';
 import { useLocation } from 'react-router';
 
 import { DropdownMenu } from '../../../UIComponents/DropdownMenu';
@@ -54,7 +55,12 @@ function EventListFilterableFormItemDropdown({
       dropdownClassName="p-2"
       shouldAutoCloseOnNavigate={shouldAutoCloseOnNavigate}
     >
-      <FormItemFilter convention={convention} formItem={formItem} onChange={onChange} value={value} />
+      <FormItemFilter
+        convention={convention}
+        formItem={formItem}
+        onChange={onChange as React.Dispatch<React.SetStateAction<string[] | undefined | null>>}
+        value={value}
+      />
     </DropdownMenu>
   );
 }

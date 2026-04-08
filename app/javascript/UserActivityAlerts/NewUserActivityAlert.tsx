@@ -1,5 +1,13 @@
 import { useState, useMemo } from 'react';
-import { ActionFunction, LoaderFunction, redirect, useFetcher, useLoaderData, RouterContextProvider } from 'react-router';
+import * as React from 'react';
+import {
+  ActionFunction,
+  LoaderFunction,
+  redirect,
+  useFetcher,
+  useLoaderData,
+  RouterContextProvider,
+} from 'react-router';
 
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -128,7 +136,14 @@ function NewUserActivityAlert() {
         userActivityAlert={combinedUserActivityAlert}
         convention={convention}
         onChange={setUserActivityAlert}
-        onAddNotificationDestination={addNotificationDestination}
+        onAddNotificationDestination={
+          addNotificationDestination as React.Dispatch<
+            Omit<
+              UserActivityAlertsAdminQueryData['convention']['user_activity_alerts'][number]['notification_destinations'][number],
+              'id'
+            >
+          >
+        }
         onRemoveNotificationDestination={removeNotificationDestination}
         disabled={createInProgress}
         userActivityAlertEvent={userActivityAlertEvent}

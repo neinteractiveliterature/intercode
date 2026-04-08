@@ -1,4 +1,5 @@
 import { useState, useMemo } from 'react';
+import * as React from 'react';
 import { Modal } from 'react-bootstrap4-modal';
 
 import { Link, useFetcher } from 'react-router';
@@ -150,7 +151,10 @@ export default function NewConventionModal({ data, cloneConvention }: NewConvent
           isClearable
         />
 
-        <ConventionLanguageInput value={convention.language} onChange={setLanguage} />
+        <ConventionLanguageInput
+          value={convention.language}
+          onChange={setLanguage as React.Dispatch<React.SetStateAction<string | null | undefined>>}
+        />
 
         <MultipleChoiceInput
           caption="Date and time display mode"

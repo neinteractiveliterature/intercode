@@ -33,7 +33,9 @@ export default class AuthenticityTokensManager {
 
     if (
       Object.keys(newTokens).length === Object.keys(prevTokens ?? {}).length &&
-      Object.keys(prevTokens).every((key: keyof typeof prevTokens) => newTokens[key] !== prevTokens[key])
+      Object.keys(prevTokens).every(
+        (key) => newTokens[key as keyof typeof prevTokens] !== prevTokens[key as keyof typeof prevTokens],
+      )
     ) {
       return;
     }
