@@ -6,7 +6,8 @@ import ExportButton from './ExportButton';
 import { UseColumnSelectionResult } from './useColumnSelection';
 
 export type TableHeaderProps<TData> = {
-  columns: ColumnDef<TData>[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  columns: ColumnDef<TData, any>[];
   columnSelectionProps: UseColumnSelectionResult;
   exportButton?: ReactNode;
   exportUrl?: string;
@@ -27,7 +28,7 @@ function TableHeader<TData>({
   sortBy,
 }: TableHeaderProps<TData>): React.JSX.Element {
   const visibleColumnIds = useMemo(() => {
-    return Object.entries(columnSelectionProps.columnVisibility).reduce((acc, [id, visible]) => {
+    return Object.entries(columnSelectionProps.columnVisibility).reduce((acc: string[], [id, visible]) => {
       if (visible) {
         return [...acc, id];
       } else {

@@ -149,7 +149,8 @@ function UserConProfilesTable({
     const formItems = getSortedParsedFormItems(attendeesPageQueryData.convention.user_con_profile_form);
     const columnHelper = createColumnHelper<UserConProfilesTableRow>();
 
-    const columns: ColumnDef<UserConProfilesTableRow>[] = [
+    // eslint-disable-next-line @typescript-eslint/no-explicit-any
+    const columns: ColumnDef<UserConProfilesTableRow, any>[] = [
       columnHelper.accessor('id', {
         header: t('admin.userConProfiles.id'),
         id: 'id',

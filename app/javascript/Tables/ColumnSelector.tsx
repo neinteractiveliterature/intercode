@@ -8,7 +8,8 @@ import { useMemo } from 'react';
 
 export type ColumnSelectorProps<TData> = {
   alwaysVisibleColumns: string[];
-  possibleColumns: ColumnDef<TData>[];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  possibleColumns: ColumnDef<TData, any>[];
   columnVisibility: TableState['columnVisibility'];
   setColumnVisibility: React.Dispatch<React.SetStateAction<TableState['columnVisibility']>>;
 };
@@ -42,7 +43,7 @@ function ColumnSelector<TData>({
   };
 
   const visibleColumnIds = useMemo(() => {
-    return Object.entries(columnVisibility).reduce((acc, [id, visible]) => {
+    return Object.entries(columnVisibility).reduce((acc: string[], [id, visible]) => {
       if (visible) {
         return [...acc, id];
       } else {
