@@ -24,7 +24,7 @@ class RankedChoiceDecisionPolicy < ApplicationPolicy
   end
 
   class Scope < Scope
-    def resolve
+    def resolve # rubocop:disable Metrics/MethodLength
       return scope.all if site_admin?
 
       decision_scope =
@@ -41,8 +41,10 @@ class RankedChoiceDecisionPolicy < ApplicationPolicy
         end
 
       if assumed_identity_from_profile
-        decision_scope.where(
-          target_run: Run.where(event: Event.where(convention_id: assumed_identity_from_profile.convention_id))
+        decision_scope.joins(signup_ranked_choice: :target_run).where(
+          runs: {
+            id: Run.where(event: Event.where(convention_id: assumed_identity_from_profile.convention_id)).select(:id)
+          }
         )
       else
         decision_scope

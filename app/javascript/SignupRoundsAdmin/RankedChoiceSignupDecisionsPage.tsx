@@ -174,7 +174,7 @@ function RankedChoiceSignupDecisionsTable({ signupRoundId }: RankedChoiceSignupD
         enableColumnFilter: true,
         enableSorting: true,
       }),
-      columnHelper.accessor('signup_ranked_choice.target_run.event.title', {
+      columnHelper.accessor('target_run.event.title', {
         header: 'Event',
         id: 'event_title',
         enableColumnFilter: true,

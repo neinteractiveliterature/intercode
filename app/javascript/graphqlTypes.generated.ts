@@ -5072,6 +5072,8 @@ export type RankedChoiceDecision = {
   signup_request?: Maybe<SignupRequest>;
   /** The signup round in which this decision was made. */
   signup_round: SignupRound;
+  /** The run this ranked choice was attempting to sign up for. */
+  target_run?: Maybe<Run>;
   /** The time this RankedChoiceDecision was last modified. */
   updated_at: Scalars['Date']['output'];
   /** The user profile this decision pertains to, if any. */

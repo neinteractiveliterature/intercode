@@ -6426,6 +6426,11 @@ type RankedChoiceDecision {
   signup_round: SignupRound!
 
   """
+  The run this ranked choice was attempting to sign up for.
+  """
+  target_run: Run
+
+  """
   The time this RankedChoiceDecision was last modified.
   """
   updated_at: Date!

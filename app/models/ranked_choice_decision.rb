@@ -43,7 +43,7 @@ class RankedChoiceDecision < ApplicationRecord
   belongs_to :after_signup_ranked_choice, class_name: "SignupRankedChoice", optional: true
   belongs_to :signup, optional: true
   belongs_to :signup_request, optional: true
-  has_one :target_run, through: :signup_request
+  has_one :target_run, through: :signup_ranked_choice
   has_one :event, through: :target_run
 
   DECISIONS = Types::RankedChoiceDecisionValueType.values.values.map(&:value).freeze

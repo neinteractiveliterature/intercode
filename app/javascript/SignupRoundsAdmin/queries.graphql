@@ -43,21 +43,14 @@ query SignupRoundRankedChoiceDecisionsTableQuery(
             name_without_nickname
           }
 
-          signup_ranked_choice {
+          target_run {
             id
-            priority
-            requested_bucket_key
-            state
+            starts_at
+            title_suffix
 
-            target_run {
+            event {
               id
-              starts_at
-              title_suffix
-
-              event {
-                id
-                title
-              }
+              title
             }
           }
         }
