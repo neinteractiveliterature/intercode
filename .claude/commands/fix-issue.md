@@ -48,6 +48,10 @@ Before writing any code:
 
 - Stage all changes with `git add`
 - Write a concise, descriptive commit message referencing the issue (e.g. `Fix login bug (#1234)`)
+- The commit message must end with a co-author line:
+  ```
+  Co-Authored-By: Claude Sonnet 4.6 <noreply@anthropic.com>
+  ```
 - Commit the changes
 
 ## Step 7: Open a PR
@@ -56,6 +60,7 @@ Before writing any code:
 2. Create a PR with `gh pr create`:
    - Title should summarize the fix
    - Body should reference the issue (`Fixes #<issue-number>`) and briefly describe what changed
+   - Body must end with: `🤖 Generated with [Claude Code](https://claude.com/claude-code)`
 3. Add labels using the GitHub REST API (required — gh pr edit is broken):
 
    ```
