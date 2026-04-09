@@ -1,17 +1,6 @@
 # frozen_string_literal: true
 class CsvExportsController < ApplicationController
   class RunSignupsFilenameFinder
-    PRIORITIZED_FILENAME_GENERATORS = [
-      ->(run) { run.event.title },
-      ->(run) { "#{run.event.title} (#{run.title_suffix})" },
-      ->(run) { "#{run.event.title} (#{format_run_start_day(run)})" },
-      ->(run) { "#{run.event.title} (#{format_run_start_time(run)})" },
-      ->(run) { "#{run.event.title} (#{format_run_rooms(run)})" },
-      ->(run) { "#{run.event.title} (#{format_run_start_day(run)} in #{format_run_rooms(run)})" },
-      ->(run) { "#{run.event.title} (#{format_run_start_time(run)} in #{format_run_rooms(run)})" },
-      ->(run) { "#{run.event.title} (run #{run.id})" }
-    ].freeze
-
     def format_run_start_day(run)
       run.starts_at.strftime("%a")
     end
@@ -28,12 +17,27 @@ class CsvExportsController < ApplicationController
     # strategies
     def unique_filename(event, run, suffix)
       filename_generator =
-        PRIORITIZED_FILENAME_GENERATORS.find do |generator|
+        filename_generators.find do |generator|
           filenames = event.runs.map { |r| generator.call(r) }
           filenames.uniq.size == filenames.size
         end
 
       "#{filename_generator.call(run)} #{suffix}"
+    end
+
+    private
+
+    def filename_generators # rubocop:disable Metrics/AbcSize
+      [
+        ->(r) { r.event.title },
+        ->(r) { "#{r.event.title} (#{r.title_suffix})" },
+        ->(r) { "#{r.event.title} (#{format_run_start_day(r)})" },
+        ->(r) { "#{r.event.title} (#{format_run_start_time(r)})" },
+        ->(r) { "#{r.event.title} (#{format_run_rooms(r)})" },
+        ->(r) { "#{r.event.title} (#{format_run_start_day(r)} in #{format_run_rooms(r)})" },
+        ->(r) { "#{r.event.title} (#{format_run_start_time(r)} in #{format_run_rooms(r)})" },
+        ->(r) { "#{r.event.title} (run #{r.id})" }
+      ]
     end
   end
 
