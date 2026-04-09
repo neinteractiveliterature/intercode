@@ -41,14 +41,14 @@ class UserSignupConstraints
   def concurrent_signups_for_run(run)
     current_signups_including_not_counted.select do |signup|
       other_run = signup.run
-      !other_run.event.can_play_concurrently? && run.overlaps?(other_run)
+      other_run == run || (!other_run.event.can_play_concurrently? && run.overlaps?(other_run))
     end
   end
 
   def concurrent_signup_requests_for_run(run)
     pending_signup_requests_including_not_counted.select do |signup_request|
       other_run = signup_request.target_run
-      !other_run.event.can_play_concurrently? && run.overlaps?(other_run)
+      other_run == run || (!other_run.event.can_play_concurrently? && run.overlaps?(other_run))
     end
   end
 
