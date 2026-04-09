@@ -3743,6 +3743,14 @@ ALTER TABLE ONLY public.forms
 
 
 --
+-- Name: user_con_profiles index_user_con_profiles_on_convention_id_and_lottery_number; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.user_con_profiles
+    ADD CONSTRAINT index_user_con_profiles_on_convention_id_and_lottery_number UNIQUE (convention_id, lottery_number) DEFERRABLE INITIALLY DEFERRED;
+
+
+--
 -- Name: maximum_event_provided_tickets_overrides maximum_event_provided_tickets_overrides_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5118,13 +5126,6 @@ CREATE INDEX index_user_activity_alerts_on_user_id ON public.user_activity_alert
 
 
 --
--- Name: index_user_con_profiles_on_convention_id_and_lottery_number; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_user_con_profiles_on_convention_id_and_lottery_number ON public.user_con_profiles USING btree (convention_id, lottery_number);
-
-
---
 -- Name: index_user_con_profiles_on_convention_id_and_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -6140,6 +6141,7 @@ ALTER TABLE ONLY public.cms_files_pages
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260409003354'),
 ('20260321193050'),
 ('20260315200824'),
 ('20260315182359'),

@@ -51,6 +51,7 @@ class RankedChoiceDecision < ApplicationRecord
 
   validates :decision, inclusion: { in: DECISIONS }
   validates :reason, inclusion: { in: REASONS, allow_nil: true }
+  validates :signup_ranked_choice, presence: { unless: ->(record) { record.decision == "skip_user" } }
 
   private
 

@@ -30,7 +30,7 @@ lower(user_con_profiles.first_name) #{direction}"
     ilike_column_filter :title, association_name: :event
 
     def generate_csv_cell(decision)
-      decision.event.title
+      decision.event&.title
     end
   end
 
