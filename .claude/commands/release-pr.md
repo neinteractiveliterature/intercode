@@ -42,15 +42,23 @@ gh run watch <run-id> --interval 30
 
 The `update-release-draft` job at the end of CI creates or updates the draft release. If any job on `main` fails, stop and report to the user.
 
-## Step 4: Find the draft release
+## Step 4: Find the draft release and check the version bump
 
-List recent releases to find the draft that was just updated:
+List recent releases to find the draft and the last published release:
 
 ```bash
 gh release list --limit 5 --json tagName,name,isDraft
 ```
 
-Identify the draft release (isDraft: true). Confirm its name with the user before publishing.
+Identify the draft release (isDraft: true) and the most recent non-draft release. Parse their
+semantic version numbers (e.g. `v1.2.3`) and determine whether the bump from the previous release
+to the draft is a **patch** (only the third number changed), **minor** (second number changed), or
+**major** (first number changed).
+
+- If the bump is **minor or major**, stop and explicitly ask the user: "The draft release is
+  `<draft-name>`, which is a [minor/major] bump from `<previous-name>`. Is that correct?" Do not
+  proceed until the user confirms.
+- If the bump is **patch**, proceed without asking.
 
 ## Step 5: Publish the draft release
 
