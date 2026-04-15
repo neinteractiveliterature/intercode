@@ -190,4 +190,4 @@ end
 gem "sentry-ruby", "~> 6.0"
 gem "sentry-rails", "~> 6.0"
 
-gem "openssl", "~> 3.3"
+gem "openssl", "~> 4.0"
