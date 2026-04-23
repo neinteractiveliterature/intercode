@@ -25,5 +25,8 @@
       "enabled": false
     }
   ],
-  "postUpdateOptions": ["yarnDedupeHighest"]
+  "postUpdateOptions": ["yarnDedupeHighest"],
+  "toolSettings": {
+    "nodeMaxMemory": 2048
+  }
 }
