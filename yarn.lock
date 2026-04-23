@@ -21100,9 +21100,9 @@ __metadata:
   linkType: hard
 
 "protocol-buffers-schema@npm:^3.3.1":
-  version: 3.4.0
-  resolution: "protocol-buffers-schema@npm:3.4.0"
-  checksum: 10c0/4ecfb9ddb8d191879d7dae8f73ab9f7495e916639273fcbb769e5f5ef68d03b11a211eb2258ec2d74e0acd071848965bda2a64d0001f67861df73e26e7fdcc1a
+  version: 3.6.1
+  resolution: "protocol-buffers-schema@npm:3.6.1"
+  checksum: 10c0/e0a6858d085aa1a6719c924c0be52000dafc24bf3b0d0b1a6e1e68c8b95f8efe3d4069902e14270a2101f2144374eeefc11381dff07ad9909386a4fbc70c7ebd
   languageName: node
   linkType: hard
 
@@ -21186,12 +21186,21 @@ __metadata:
   languageName: node
   linkType: hard
 
-"qs@npm:^6.12.3, qs@npm:^6.14.2":
+"qs@npm:^6.12.3":
   version: 6.14.2
   resolution: "qs@npm:6.14.2"
   dependencies:
     side-channel: "npm:^1.1.0"
   checksum: 10c0/646110124476fc9acf3c80994c8c3a0600cbad06a4ede1c9e93341006e8426d64e85e048baf8f0c4995f0f1bf0f37d1f3acc5ec1455850b81978792969a60ef6
+  languageName: node
+  linkType: hard
+
+"qs@npm:^6.15.0":
+  version: 6.15.1
+  resolution: "qs@npm:6.15.1"
+  dependencies:
+    side-channel: "npm:^1.1.0"
+  checksum: 10c0/19ee504f0ebff72598503e38cd6d9bd7b52a8ab62ae18b1e6bee3d4db58469bd65871ef1893a881bafb0f80ef2f9ab586e1f255cf25cc8d816c0f5a704721d97
   languageName: node
   linkType: hard
 
@@ -22600,7 +22609,7 @@ __metadata:
     prettier: "npm:3.6.2"
     prop-types: "npm:15.8.1"
     punycode: "npm:2.3.1"
-    qs: "npm:^6.14.2"
+    qs: "npm:^6.15.0"
     react: "npm:19.2.0"
     react-bootstrap4-modal: "npm:3.0.11"
     react-color: "npm:2.19.3"
@@ -26045,8 +26054,8 @@ __metadata:
   linkType: hard
 
 "ws@npm:^7.3.1":
-  version: 7.5.4
-  resolution: "ws@npm:7.5.4"
+  version: 7.5.10
+  resolution: "ws@npm:7.5.10"
   peerDependencies:
     bufferutil: ^4.0.1
     utf-8-validate: ^5.0.2
@@ -26055,7 +26064,7 @@ __metadata:
       optional: true
     utf-8-validate:
       optional: true
-  checksum: 10c0/407f4a86ec6910ec87a900488f7baa47f090ceb2f0fd8e648a27e720b42434ac676b4ee76846dc77d0a4a4eef584331518321efddf4b4f26d52c9bbb2e39e9c9
+  checksum: 10c0/bd7d5f4aaf04fae7960c23dcb6c6375d525e00f795dd20b9385902bd008c40a94d3db3ce97d878acc7573df852056ca546328b27b39f47609f80fb22a0a9b61d
   languageName: node
   linkType: hard
 
