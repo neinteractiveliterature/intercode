@@ -207,7 +207,7 @@ GEM
     database_cleaner-core (2.0.1)
     date (3.5.1)
     dead_end (4.0.0)
-    debug (1.11.0)
+    debug (1.11.1)
       irb (~> 1.10)
       reline (>= 0.3.8)
     derailed_benchmarks (2.2.1)
