@@ -416,7 +416,7 @@ GEM
     oj (3.16.12)
       bigdecimal (>= 3.0)
       ostruct (>= 0.2)
-    openssl (3.3.2)
+    openssl (4.0.1)
     optimist (3.1.0)
     orm_adapter (0.5.0)
     ostruct (0.6.3)
@@ -744,7 +744,7 @@ DEPENDENCIES
   money-rails
   mysql2 (~> 0.5.3)
   oj (~> 3.16.0)
-  openssl (~> 3.3)
+  openssl (~> 4.0)
   parallel
   pg
   pg_search
