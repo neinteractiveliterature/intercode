@@ -16780,10 +16780,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-cookie@npm:^2.2.1":
-  version: 2.2.1
-  resolution: "js-cookie@npm:2.2.1"
-  checksum: 10c0/ee67fc0f8495d0800b851910b5eb5bf49d3033adff6493d55b5c097ca6da46f7fe666b10e2ecb13cfcaf5b88d71c205ce00a7e646de791689bfd053bbb36a376
+"js-cookie@npm:^3.0.5":
+  version: 3.0.5
+  resolution: "js-cookie@npm:3.0.5"
+  checksum: 10c0/04a0e560407b4489daac3a63e231d35f4e86f78bff9d792011391b49c59f721b513411cd75714c418049c8dc9750b20fcddad1ca5a2ca616c3aca4874cce5b3a
   languageName: node
   linkType: hard
 
@@ -21367,14 +21367,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-cookie-consent@npm:9.0.0":
-  version: 9.0.0
-  resolution: "react-cookie-consent@npm:9.0.0"
+"react-cookie-consent@npm:10.0.1":
+  version: 10.0.1
+  resolution: "react-cookie-consent@npm:10.0.1"
   dependencies:
-    js-cookie: "npm:^2.2.1"
+    js-cookie: "npm:^3.0.5"
   peerDependencies:
-    react: ">=16"
-  checksum: 10c0/8cf336c2b43c2ad6524e28076613bfe11bcf22b9f1837c47e180af0aa1710c823f5b1c878e2708fd69e8546e5eab816ba3095e44541909a4fbe2a14bf9edb4ae
+    react: ">=18"
+    react-dom: ">=18"
+  checksum: 10c0/76977fea75885a815d002a279845e892dc42c3b9c0482859f0ab2077ac1ada68a07192557731b2b4393796f753770a30319905d184896fcc623d5fa69d2a0f8c
   languageName: node
   linkType: hard
 
@@ -22623,7 +22624,7 @@ __metadata:
     react: "npm:19.2.0"
     react-bootstrap4-modal: "npm:3.0.11"
     react-color: "npm:2.19.3"
-    react-cookie-consent: "npm:9.0.0"
+    react-cookie-consent: "npm:10.0.1"
     react-dom: "npm:19.2.0"
     react-google-recaptcha: "npm:3.1.0"
     react-html-id: "npm:0.1.5"
