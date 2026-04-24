@@ -7279,12 +7279,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rails/activestorage@npm:8.1.100":
-  version: 8.1.100
-  resolution: "@rails/activestorage@npm:8.1.100"
+"@rails/activestorage@npm:8.1.300":
+  version: 8.1.300
+  resolution: "@rails/activestorage@npm:8.1.300"
   dependencies:
     spark-md5: "npm:^3.0.1"
-  checksum: 10c0/6c9fa3dec8f8c18f829826d9266b134ad26f5f35cfba8c7ec2d2512f967f50cac103bb20a46a1c6f7b60616b13a8de8c93a825c28f10c00777550e6693c1a09f
+  checksum: 10c0/eacb07a0bccc98c4586cc34d933e481dd8c0c6c3be155816ea5bd8c1e805c78f4bbb8ad65920760888d881a3aa0d2dd9036b50299cc3d1036ce6b4571387a1fa
   languageName: node
   linkType: hard
 
@@ -22480,7 +22480,7 @@ __metadata:
     "@playwright/test": "npm:^1.58.1"
     "@popperjs/core": "npm:^2.11.8"
     "@prettier/plugin-ruby": "npm:4.0.4"
-    "@rails/activestorage": "npm:8.1.100"
+    "@rails/activestorage": "npm:8.1.300"
     "@rollup/plugin-commonjs": "npm:^29.0.0"
     "@rollup/plugin-node-resolve": "npm:^16.0.0"
     "@rollup/plugin-replace": "npm:^6.0.1"
