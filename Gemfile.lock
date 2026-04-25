@@ -370,8 +370,8 @@ GEM
     mini_magick (4.13.2)
     mini_mime (1.1.5)
     minitest (5.27.0)
-    minitest-focus (1.4.0)
-      minitest (>= 4, < 6)
+    minitest-focus (1.4.1)
+      minitest (> 5.0)
     minitest-reporters (1.7.1)
       ansi
       builder
