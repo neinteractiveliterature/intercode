@@ -194,7 +194,7 @@
     "@vitest/eslint-plugin": "^1.1.24",
     "@vitest/ui": "^4.0.0",
     "core-js-compat": "3.46.0",
-    "eslint": "9.39.1",
+    "eslint": "9.39.4",
     "eslint-config-airbnb": "19.0.4",
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-config-airbnb-typescript": "18.0.0",
