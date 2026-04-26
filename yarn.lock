@@ -22649,7 +22649,7 @@ __metadata:
     typed-scss-modules: "npm:^8.1.1"
     typescript: "npm:5.9.3"
     typescript-eslint: "npm:^8.36.0"
-    tzdata: "npm:1.0.46"
+    tzdata: "npm:1.0.49"
     uuid: "npm:14.0.0"
     vite: "npm:^7.0.0"
     vite-bundle-visualizer: "npm:^1.2.1"
@@ -24735,10 +24735,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"tzdata@npm:1.0.46":
-  version: 1.0.46
-  resolution: "tzdata@npm:1.0.46"
-  checksum: 10c0/92a01cdb48cc46723523a98ccd5f0f0cef434bdec2648956f73fa69e527d20deca86ca519712794f6b7cbfdd90bbfb124a45ae4403851882114b10d8a4ecbfec
+"tzdata@npm:1.0.49":
+  version: 1.0.49
+  resolution: "tzdata@npm:1.0.49"
+  checksum: 10c0/7c58cc72adc426a28b4cbd3210d9b7618499846ffbc212af9dc0b452700103afe6deabc2f4cd65e545c8c5fc9b756d844e909dbdf1c3111a1ab7d65356a93528
   languageName: node
   linkType: hard
 
