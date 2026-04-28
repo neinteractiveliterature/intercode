@@ -598,7 +598,7 @@ GEM
       bigdecimal
       concurrent-ruby (~> 1.0, >= 1.0.2)
       logger
-    sequel (5.98.0)
+    sequel (5.103.0)
       bigdecimal
     set (1.0.3)
     shoryuken (6.2.1)
