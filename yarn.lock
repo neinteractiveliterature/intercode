@@ -21755,17 +21755,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-i18next@npm:16.3.3":
-  version: 16.3.3
-  resolution: "react-i18next@npm:16.3.3"
+"react-i18next@npm:16.6.6":
+  version: 16.6.6
+  resolution: "react-i18next@npm:16.6.6"
   dependencies:
-    "@babel/runtime": "npm:^7.27.6"
+    "@babel/runtime": "npm:^7.29.2"
     html-parse-stringify: "npm:^3.0.1"
     use-sync-external-store: "npm:^1.6.0"
   peerDependencies:
-    i18next: ">= 25.6.2"
+    i18next: ">= 25.10.9"
     react: ">= 16.8.0"
-    typescript: ^5
+    typescript: ^5 || ^6
   peerDependenciesMeta:
     react-dom:
       optional: true
@@ -21773,7 +21773,7 @@ __metadata:
       optional: true
     typescript:
       optional: true
-  checksum: 10c0/9c898c76d19c2f9046287824a0ab1317a39e5c29bad798793d9f89f516c818fedb0783e7bc75556e0554b3d6ee9d671d4ebc18e7f4f802ce259be2c7c3317885
+  checksum: 10c0/7d6660d382a529d4dc56e7a7bbab59689ac0f435b3a18bba81d6bbf52c87b2a41fd5d1bffcf60b92b5e6e2a1ad9443949fcf16329d9c63d582316557199a7d32
   languageName: node
   linkType: hard
 
@@ -23000,7 +23000,7 @@ __metadata:
     react-dom: "npm:19.2.0"
     react-google-recaptcha: "npm:3.1.0"
     react-html-id: "npm:0.1.5"
-    react-i18next: "npm:16.3.3"
+    react-i18next: "npm:16.6.6"
     react-onclickoutside: "npm:6.13.2"
     react-popper: "npm:2.3.0"
     react-router: "npm:7.12.0"
