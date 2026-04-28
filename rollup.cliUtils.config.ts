@@ -24,7 +24,10 @@ export default defineConfig({
         return module !== 'rollbar';
       },
     }),
-    swc(),
+    // inputSourceMap: false works around @swc/core 1.15.8 panicking on missing source maps
+    // from deps that reference .map files not included in their npm packages.
+    // Remove once @swc/core restores the documented "silently discarded" behavior.
+    swc({ swc: { inputSourceMap: false } }),
   ],
   input: {
     diffTranslations: './script/diffTranslations.ts',

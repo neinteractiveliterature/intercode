@@ -10,7 +10,18 @@ export function absolutePath(relativePath: string) {
 }
 
 export default defineConfig({
-  plugins: [react(), tsconfigPaths(), nodePolyfills()],
+  plugins: [
+    react({
+      // @swc/core 1.15.8 introduced a regression where it panics instead of silently discarding
+      // missing source maps referenced by //# sourceMappingURL= comments in dependencies.
+      // Remove this once a @swc/core release restores the documented "silently discarded" behavior.
+      useAtYourOwnRisk_mutateSwcOptions: (options) => {
+        options.inputSourceMap = false;
+      },
+    }),
+    tsconfigPaths(),
+    nodePolyfills(),
+  ],
   resolve: {
     mainFields: ['module'],
   },
