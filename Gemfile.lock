@@ -409,9 +409,9 @@ GEM
     net-smtp (0.5.1)
       net-protocol
     nio4r (2.7.5)
-    nokogiri (1.19.2-arm64-darwin)
+    nokogiri (1.19.3-arm64-darwin)
       racc (~> 1.4)
-    nokogiri (1.19.2-x86_64-linux-gnu)
+    nokogiri (1.19.3-x86_64-linux-gnu)
       racc (~> 1.4)
     oj (3.16.12)
       bigdecimal (>= 3.0)
@@ -653,7 +653,7 @@ GEM
     toml (0.3.0)
       parslet (>= 1.8.0, < 3.0.0)
     tsort (0.2.0)
-    twilio-ruby (7.8.6)
+    twilio-ruby (7.10.5)
       faraday (>= 0.9, < 3.0)
       jwt (>= 1.5, < 4.0)
       nokogiri (>= 1.6, < 2.0)
@@ -791,7 +791,7 @@ DEPENDENCIES
   syntax_tree-haml
   syntax_tree-rbs
   term-ansicolor
-  twilio-ruby (~> 7.8.0)
+  twilio-ruby (~> 7.10.0)
   typeprof
   tzinfo-data
   webrick
