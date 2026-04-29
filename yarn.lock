@@ -17922,14 +17922,14 @@ __metadata:
   linkType: hard
 
 "mini-css-extract-plugin@npm:^2.10.0, mini-css-extract-plugin@npm:^2.9.2":
-  version: 2.10.0
-  resolution: "mini-css-extract-plugin@npm:2.10.0"
+  version: 2.10.2
+  resolution: "mini-css-extract-plugin@npm:2.10.2"
   dependencies:
     schema-utils: "npm:^4.0.0"
     tapable: "npm:^2.2.1"
   peerDependencies:
     webpack: ^5.0.0
-  checksum: 10c0/5fb0654471f4fb695629d96324d327d4d3a05069a95b83770d070e8f48a07d5b5f8da61adabdd56e3119cf6b17eef058c4ba6ab4cd31a7b2af48624621fe0520
+  checksum: 10c0/ba58afb1c090be144b423a3621c4e0d09a9f8f4875410d3bc108915dfcf8e2fd6e550a7f3ba129eb07fd76599157650f86186b09f3ae2c34ccc5b50e82da0aa3
   languageName: node
   linkType: hard
 
