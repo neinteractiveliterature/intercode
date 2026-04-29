@@ -122,7 +122,7 @@ GEM
       activerecord (>= 6.0.0)
       activesupport (>= 6.0.0)
     ansi (1.5.0)
-    apollo_upload_server (2.1.7)
+    apollo_upload_server (2.1.8)
       actionpack (>= 6.1.6)
       graphql (>= 1.8)
     ast (2.4.3)
@@ -695,7 +695,7 @@ DEPENDENCIES
   activerecord-session_store
   ahoy_matey
   annotaterb
-  apollo_upload_server (= 2.1.7)
+  apollo_upload_server (= 2.1.8)
   aws-actionmailer-ses
   aws-sdk-rails
   aws-sdk-s3

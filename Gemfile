@@ -55,7 +55,7 @@ gem "pg_search"
 
 # GraphQL server
 gem "graphql"
-gem "apollo_upload_server", "2.1.7"
+gem "apollo_upload_server", "2.1.8"
 gem "graphql-rails_logger", groups: %i[development test]
 
 # Email stuff
