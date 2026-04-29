@@ -664,7 +664,7 @@ GEM
       rbs (>= 3.6.0)
     tzinfo (2.0.6)
       concurrent-ruby (~> 1.0)
-    tzinfo-data (1.2025.2)
+    tzinfo-data (1.2026.2)
       tzinfo (>= 1.0.0)
     unicode-display_width (2.6.0)
     uri (1.1.1)
