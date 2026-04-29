@@ -13092,12 +13092,12 @@ __metadata:
   linkType: hard
 
 "eslint-plugin-i18next@npm:^6.1.1":
-  version: 6.1.3
-  resolution: "eslint-plugin-i18next@npm:6.1.3"
+  version: 6.1.4
+  resolution: "eslint-plugin-i18next@npm:6.1.4"
   dependencies:
     lodash: "npm:^4.17.21"
     requireindex: "npm:~1.1.0"
-  checksum: 10c0/d9a05e677b426d6e4a93458424f453ec3d58566b3163dffb1fad4c17392abbe83c736c781f517438c108bfe87629de7a17b1dcb32a4774cba4465a39b6392cde
+  checksum: 10c0/789bf5639a608e798b64f60f9ef5937a515c4444bcd1fe5892dd0a1f24dcf088dab86ff1948f54794d114535f9495ad0090c0357565b22017cc593f75921d51a
   languageName: node
   linkType: hard
 
