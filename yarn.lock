@@ -10233,7 +10233,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"browserslist@npm:^4.0.0, browserslist@npm:^4.23.0, browserslist@npm:^4.24.0, browserslist@npm:^4.24.5, browserslist@npm:^4.25.0, browserslist@npm:^4.26.3, browserslist@npm:^4.27.0, browserslist@npm:^4.28.1, browserslist@npm:^4.28.2":
+"browserslist@npm:^4.0.0, browserslist@npm:^4.23.0, browserslist@npm:^4.24.0, browserslist@npm:^4.24.5, browserslist@npm:^4.25.0, browserslist@npm:^4.27.0, browserslist@npm:^4.28.1, browserslist@npm:^4.28.2":
   version: 4.28.2
   resolution: "browserslist@npm:4.28.2"
   dependencies:
@@ -11190,12 +11190,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js-compat@npm:3.46.0, core-js-compat@npm:^3.38.0, core-js-compat@npm:^3.38.1":
-  version: 3.46.0
-  resolution: "core-js-compat@npm:3.46.0"
+"core-js-compat@npm:3.49.0, core-js-compat@npm:^3.38.0, core-js-compat@npm:^3.38.1":
+  version: 3.49.0
+  resolution: "core-js-compat@npm:3.49.0"
   dependencies:
-    browserslist: "npm:^4.26.3"
-  checksum: 10c0/d50f8870e14434477acac1f9f52929b6298fd86313386c4105be0d43978708ad10ab3b80b9b54d77b93761dbc5430e3151de0c792dabd117b58c25b551b78e20
+    browserslist: "npm:^4.28.1"
+  checksum: 10c0/546e64b7ce45f724825bc13c1347f35c0459a6e71c0dcccff3ec21fbff463f5b0b97fc1220e6d90302153863489301793276fe2bf96f46001ff555ead4140308
   languageName: node
   linkType: hard
 
@@ -21985,7 +21985,7 @@ __metadata:
     classnames: "npm:2.5.1"
     codemirror: "npm:^6.0.1"
     core-js: "npm:3.49.0"
-    core-js-compat: "npm:3.46.0"
+    core-js-compat: "npm:3.49.0"
     crypto-browserify: "npm:3.12.1"
     cssnano: "npm:7.1.2"
     csv-stringify: "npm:^6.5.1"
