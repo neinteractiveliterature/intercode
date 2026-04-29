@@ -22052,6 +22052,9 @@ __metadata:
     vitest: "npm:^4.0.0"
     wrangler: "npm:^4.59.1"
     zxcvbn: "npm:4.4.2"
+  dependenciesMeta:
+    sharp:
+      built: true
   languageName: unknown
   linkType: soft
 
