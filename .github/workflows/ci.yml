@@ -338,7 +338,7 @@ jobs:
           only_list_changed_files: true
       - name: Add Coverage PR Comment
         if: steps.code_coverage_report_action.outputs.file != '' && github.event_name == 'pull_request' && (success() || failure())
-        uses: marocchino/sticky-pull-request-comment@v2
+        uses: marocchino/sticky-pull-request-comment@v3.0.4
         with:
           recreate: true
           path: code-coverage-results.md
