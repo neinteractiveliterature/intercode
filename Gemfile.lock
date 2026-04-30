@@ -240,7 +240,7 @@ GEM
       devise
       doorkeeper
       rails
-    devise-encryptable (0.2.0)
+    devise-encryptable (0.3.0)
       devise (>= 2.1.0)
     docile (1.4.1)
     domain_prefix (1.0.20241203)
