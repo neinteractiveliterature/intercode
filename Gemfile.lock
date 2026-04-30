@@ -119,7 +119,7 @@ GEM
       cgi
       device_detector (>= 1)
       safely_block (>= 0.4)
-    annotaterb (4.20.0)
+    annotaterb (4.22.0)
       activerecord (>= 6.0.0)
       activesupport (>= 6.0.0)
     ansi (1.5.0)
@@ -649,7 +649,7 @@ GEM
       tins (~> 1)
     thor (1.5.0)
     tilt (2.3.0)
-    timeout (0.4.4)
+    timeout (0.6.1)
     tins (1.33.0)
       bigdecimal
       sync
