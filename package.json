@@ -237,6 +237,11 @@
     "react-bootstrap4-modal": "3.0.11",
     "rollup": "4.59.0"
   },
+  "dependenciesMeta": {
+    "sharp": {
+      "built": true
+    }
+  },
   "graphdoc": {
     "logo": "<h1 style=\"font-family: Helvetica, Arial; letter-spacing: -4px; font-size: 60px; font-weight: bold;\">Intercode</h1>"
   },
@@ -251,5 +256,5 @@
   "cacheDirectories": [
     ".yarn/cache"
   ],
-  "packageManager": "yarn@4.12.0"
+  "packageManager": "yarn@4.14.1"
 }

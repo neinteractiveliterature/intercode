@@ -2,7 +2,7 @@
 # Manual changes might be lost - proceed with caution!
 
 __metadata:
-  version: 8
+  version: 9
   cacheKey: 10c0
 
 "@aashutoshrathi/word-wrap@npm:^1.2.3":
@@ -22052,6 +22052,9 @@ __metadata:
     vitest: "npm:^4.0.0"
     wrangler: "npm:^4.59.1"
     zxcvbn: "npm:4.4.2"
+  dependenciesMeta:
+    sharp:
+      built: true
   languageName: unknown
   linkType: soft
 
