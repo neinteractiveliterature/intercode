@@ -114,8 +114,9 @@ GEM
       activerecord (>= 3.0)
     addressable (2.9.0)
       public_suffix (>= 2.0.2, < 8.0)
-    ahoy_matey (5.4.1)
-      activesupport (>= 7.1)
+    ahoy_matey (5.5.0)
+      activesupport (>= 7.2)
+      cgi
       device_detector (>= 1)
       safely_block (>= 0.4)
     annotaterb (4.20.0)
@@ -587,7 +588,7 @@ GEM
       ffi (~> 1.12)
       logger
     ruby2_keywords (0.0.5)
-    safely_block (0.4.1)
+    safely_block (0.5.0)
     scheduled_value (1.4.0)
       sorted_set (~> 1.0)
     securerandom (0.4.1)
