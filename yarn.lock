@@ -7399,10 +7399,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stripe/stripe-js@npm:8.11.0":
-  version: 8.11.0
-  resolution: "@stripe/stripe-js@npm:8.11.0"
-  checksum: 10c0/7bada2f8a1c71867b2a0cc31f02e1347ba50b30c6c564635ed5f63d480e093f83902c98311fabc6744bd14dc4cf0fc9122769a4f021a691b70d6fbaf4581c824
+"@stripe/stripe-js@npm:9.4.0":
+  version: 9.4.0
+  resolution: "@stripe/stripe-js@npm:9.4.0"
+  checksum: 10c0/68f7880b8f4e7f1bb5e0a4d135c766fcba46a2bdc3e04228d0ed327f0122222065140d4fa2e2727dbf43edebd2dd0016e6389d8ccce5ee8352a55eed92cef725
   languageName: node
   linkType: hard
 
@@ -21656,7 +21656,7 @@ __metadata:
     "@sentry/browser": "npm:^10.0.0"
     "@sentry/types": "npm:^10.0.0"
     "@stripe/react-stripe-js": "npm:5.6.1"
-    "@stripe/stripe-js": "npm:8.11.0"
+    "@stripe/stripe-js": "npm:9.4.0"
     "@swc/core": "npm:^1.14.0"
     "@tanstack/react-table": "npm:^8.20.6"
     "@testing-library/dom": "npm:^10.4.1"
