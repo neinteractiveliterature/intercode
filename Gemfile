@@ -98,7 +98,7 @@ gem "stackprof"
 gem "faker", group: "development", require: false
 
 gem "rollbar"
-gem "oj", "~> 3.16.0"
+gem "oj", "~> 3.17.0"
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", ">= 1.1.0", require: false
