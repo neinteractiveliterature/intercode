@@ -16,7 +16,7 @@ import { useAppDateTimeFormat } from '../TimeUtils';
 import useReactTableWithTheWorks, { QueryDataContext } from '../Tables/useReactTableWithTheWorks';
 import TableHeader from '../Tables/TableHeader';
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
-import { CellContext, Column, createColumnHelper } from '@tanstack/react-table';
+import { CellContext, Column, ColumnDef, createColumnHelper } from '@tanstack/react-table';
 import usePageTitle from '../usePageTitle';
 import { SingleLineTimestampCell } from '../Tables/TimestampCell';
 import FreeTextFilter from '../Tables/FreeTextFilter';
@@ -161,11 +161,11 @@ type RankedChoiceSignupDecisionsTableProps = {
 function RankedChoiceSignupDecisionsTable({ signupRoundId }: RankedChoiceSignupDecisionsTableProps) {
   const { t } = useTranslation();
 
-  const columns = useMemo(() => {
-    const columnHelper =
-      createColumnHelper<
-        SignupRoundRankedChoiceDecisionsTableQueryData['convention']['signup_round']['ranked_choice_decisions_paginated']['entries'][number]
-      >();
+  type RankedChoiceDecisionType =
+    SignupRoundRankedChoiceDecisionsTableQueryData['convention']['signup_round']['ranked_choice_decisions_paginated']['entries'][number];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const columns = useMemo((): ColumnDef<RankedChoiceDecisionType, any>[] => {
+    const columnHelper = createColumnHelper<RankedChoiceDecisionType>();
 
     return [
       columnHelper.accessor('user_con_profile.name_without_nickname', {

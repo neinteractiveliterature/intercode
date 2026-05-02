@@ -1,4 +1,4 @@
-import { CellContext, createColumnHelper } from '@tanstack/react-table';
+import { CellContext, ColumnDef, createColumnHelper } from '@tanstack/react-table';
 
 import describeCoupon from '../describeCoupon';
 import useReactTableWithTheWorks from '../../Tables/useReactTableWithTheWorks';
@@ -37,7 +37,8 @@ function CouponAdminTable(): React.JSX.Element {
   const { t } = useTranslation();
   const navigate = useNavigate();
 
-  const columns = useMemo(() => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const columns = useMemo((): ColumnDef<CouponType, any>[] => {
     const columnHelper = createColumnHelper<CouponType>();
     return [
       columnHelper.accessor('code', {

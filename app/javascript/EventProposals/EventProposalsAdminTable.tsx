@@ -1,5 +1,5 @@
 import { Link, useNavigate } from 'react-router';
-import { CellContext, Column, createColumnHelper } from '@tanstack/react-table';
+import { CellContext, Column, ColumnDef, createColumnHelper } from '@tanstack/react-table';
 
 import ChoiceSetFilter from '../Tables/ChoiceSetFilter';
 import { buildFieldFilterCodecs, FilterCodecs } from '../Tables/FilterUtils';
@@ -74,7 +74,8 @@ const alwaysVisibleColumns = ['_extra'];
 
 function EventProposalsAdminTable(): React.JSX.Element {
   const navigate = useNavigate();
-  const columns = useMemo(() => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const columns = useMemo((): ColumnDef<EventProposalType, any>[] => {
     const columnHelper = createColumnHelper<EventProposalType>();
 
     return [

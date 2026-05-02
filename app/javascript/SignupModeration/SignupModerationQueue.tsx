@@ -1,6 +1,6 @@
 import { createContext, useContext, useMemo } from 'react';
 import { assertNever } from 'assert-never';
-import { CellContext, createColumnHelper } from '@tanstack/react-table';
+import { CellContext, ColumnDef, createColumnHelper } from '@tanstack/react-table';
 import { useConfirm, ErrorDisplay, useGraphQLConfirm } from '@neinteractiveliterature/litform';
 
 import AppRootContext from '../AppRootContext';
@@ -210,7 +210,7 @@ function SignupRankedChoiceCell<TData, TValue extends SignupModerationSignupRequ
   const finalDecision = useMemo(() => {
     if (value?.signup_ranked_choice?.ranked_choice_decisions) {
       return sortBy(
-        value?.signup_ranked_choice.ranked_choice_decisions.filter(
+        value?.signup_ranked_choice?.ranked_choice_decisions.filter(
           (decision) => decision.decision !== RankedChoiceDecisionValue.SkipChoice,
         ) ?? [],
         (decision) => new Date(decision.created_at).getTime() * -1,
@@ -280,11 +280,10 @@ function SignupModerationQueue(): React.JSX.Element {
     [pageData.convention.signup_rounds],
   );
 
-  const columns = useMemo(() => {
-    const columnHelper =
-      createColumnHelper<
-        SignupModerationQueueQueryData['convention']['signup_requests_paginated']['entries'][number]
-      >();
+  type SignupRequestType = SignupModerationQueueQueryData['convention']['signup_requests_paginated']['entries'][number];
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const columns = useMemo((): ColumnDef<SignupRequestType, any>[] => {
+    const columnHelper = createColumnHelper<SignupRequestType>();
 
     return [
       columnHelper.accessor('user_con_profile', {

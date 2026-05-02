@@ -1,4 +1,4 @@
-import { createColumnHelper } from '@tanstack/react-table';
+import { ColumnDef, createColumnHelper } from '@tanstack/react-table';
 
 import useReactTableWithTheWorks, { QueryDataContext } from '../Tables/useReactTableWithTheWorks';
 import RefreshButton from '../EventsApp/ScheduleGrid/RefreshButton';
@@ -30,7 +30,8 @@ const defaultState = {
 };
 
 function SignupSpyTable(): React.JSX.Element {
-  const columns = useMemo(() => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const columns = useMemo((): ColumnDef<SignupChangeType, any>[] => {
     const columnHelper = createColumnHelper<SignupChangeType>();
     return [
       columnHelper.accessor('user_con_profile', {
