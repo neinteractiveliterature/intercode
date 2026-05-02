@@ -18,7 +18,7 @@ export type UserActivityAlertFormProps = {
   disabled?: boolean;
   userActivityAlert: AlertType;
   onChange: React.Dispatch<React.SetStateAction<AlertType>>;
-  onAddNotificationDestination: React.Dispatch<Omit<AlertType['notification_destinations'][number], 'id'>>;
+  onAddNotificationDestination: React.Dispatch<AlertType['notification_destinations'][number]>;
   onRemoveNotificationDestination: React.Dispatch<string>;
   userActivityAlertEvent: Pick<NotificationEvent, 'allowed_condition_types' | 'allowed_dynamic_destinations'>;
 };

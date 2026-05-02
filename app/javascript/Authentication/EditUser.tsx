@@ -69,7 +69,7 @@ function EditUserForm() {
   const { t } = useTranslation();
   const manager = useContext(AuthenticityTokensContext);
   const authenticityToken = manager.tokens?.updateUser;
-  const [formState, setFormState] = useState<UserFormState | undefined>(initialFormState ?? undefined);
+  const [formState, setFormState] = useState<UserFormState>(initialFormState ?? {});
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const [currentPassword, setCurrentPassword] = useState('');

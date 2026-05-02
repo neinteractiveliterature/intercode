@@ -20,7 +20,8 @@ function DefaultAnswerModal<FormItemType extends TypedFormItem>({
   const { convention, formTypeIdentifier } = useContext(FormEditorContext);
   const { previewFormItem } = useContext(FormItemEditorContext);
   const [defaultValue, setDefaultValue] = useState<FormItemType['default_value']>(formItem.default_value);
-  const inputChanged = (identifier: string, newValue: typeof defaultValue) => setDefaultValue(newValue);
+  const inputChanged = (identifier: string, newValue: unknown) =>
+    setDefaultValue(newValue as FormItemType['default_value']);
 
   const setDefaultAnswer = () => {
     setFormItem({ ...formItem, default_value: defaultValue });

@@ -1,4 +1,4 @@
-import { CellContext, createColumnHelper } from '@tanstack/react-table';
+import { CellContext, ColumnDef, createColumnHelper } from '@tanstack/react-table';
 
 import useReactTableWithTheWorks from '../Tables/useReactTableWithTheWorks';
 import { buildFieldFilterCodecs } from '../Tables/FilterUtils';
@@ -28,7 +28,8 @@ const defaultVisibleColumns = ['receiver_address', 'forward_addresses'];
 function RootSiteEmailRoutesAdminTable(): React.JSX.Element {
   const authorizationWarning = useAuthorizationRequired('can_manage_email_routes');
 
-  const columns = useMemo(() => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const columns = useMemo((): ColumnDef<EmailRouteType, any>[] => {
     const columnHelper = createColumnHelper<EmailRouteType>();
     return [
       columnHelper.accessor('receiver_address', {

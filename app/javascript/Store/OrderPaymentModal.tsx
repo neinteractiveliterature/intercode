@@ -1,7 +1,7 @@
-import { useState, useCallback, useMemo, useContext, useEffect, useRef } from 'react';
+import { useState, useMemo, useContext, useEffect, useRef } from 'react';
 import { Modal } from 'react-bootstrap4-modal';
 
-import { useApolloClient } from '@apollo/client/react';
+import { useQuery } from '@apollo/client/react';
 import { LinkAuthenticationElement, PaymentElement } from '@stripe/react-stripe-js';
 import { ErrorDisplay, MultipleChoiceInput } from '@neinteractiveliterature/litform';
 
@@ -66,7 +66,7 @@ export function OrderPaymentModalContents({ onCancel, onComplete, onError, order
         await submit({ totalPrice, paymentMode, orderId: order.id, submitOrder });
         onComplete();
       } catch (error) {
-        onError(error);
+        onError(error as Error);
       }
     },
     { suppressError: true },
@@ -153,42 +153,24 @@ function OrderPaymentModal({
   onComplete,
   order,
 }: OrderPaymentModalProps): React.JSX.Element {
-  const [paymentIntentClientSecret, setPaymentIntentClientSecret] = useState<string>();
-  const client = useApolloClient();
   const onErrorRef = useRef(onError);
-
-  const paymentIntentClientSecretNeeded = useMemo(() => order != null && order.total_price.fractional > 0, [order]);
-
-  useEffect(() => {
-    onErrorRef.current = onError;
-  }, [onError]);
-
-  const refreshPaymentIntentClientSecret = useCallback(async () => {
-    try {
-      const result = await client.query({
-        query: CurrentPendingOrderPaymentIntentClientSecretQueryDocument,
-        fetchPolicy: 'no-cache',
-      });
-      setPaymentIntentClientSecret(
-        result.data?.convention.my_profile?.current_pending_order?.payment_intent_client_secret,
-      );
-    } catch (error) {
-      onErrorRef.current(error);
-    }
-  }, [client]);
+  const clientSecretNeeded = order != null && order.total_price.fractional > 0;
+  const clientSecretResult = useQuery(CurrentPendingOrderPaymentIntentClientSecretQueryDocument, {
+    skip: !clientSecretNeeded,
+  });
+  const clientSecret =
+    clientSecretResult.data?.convention.my_profile?.current_pending_order?.payment_intent_client_secret;
 
   useEffect(() => {
-    setPaymentIntentClientSecret(undefined);
-
-    if (paymentIntentClientSecretNeeded) {
-      refreshPaymentIntentClientSecret();
+    if (clientSecretResult.error) {
+      onErrorRef.current(clientSecretResult.error as Error);
     }
-  }, [paymentIntentClientSecretNeeded, refreshPaymentIntentClientSecret]);
+  }, [clientSecretResult.error]);
 
   return (
     <Modal visible={visible && order != null} dialogClassName="modal-lg">
-      {visible && order != null && (paymentIntentClientSecret || !paymentIntentClientSecretNeeded) && (
-        <LazyStripeElementsContainer options={{ clientSecret: paymentIntentClientSecret }}>
+      {visible && order != null && (clientSecret || !clientSecretNeeded) && (
+        <LazyStripeElementsContainer options={{ clientSecret }}>
           <OrderPaymentModalContents onCancel={onCancel} onComplete={onComplete} onError={onError} order={order} />
         </LazyStripeElementsContainer>
       )}

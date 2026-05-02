@@ -138,7 +138,7 @@ function jsxAttributeKeyForHtmlKey(htmlKey: string) {
 function jsxAttributesFromHTMLAttributes(node: Element, attributes: Attr[]) {
   const testingNode = document.createElement(node.tagName);
 
-  return attributes.reduce((result: { [key: string]: string }, attribute: Attr) => {
+  return attributes.reduce<{ [key: string]: string | (() => void) | CSSProperties }>((result, attribute) => {
     const key = jsxAttributeKeyForHtmlKey(attribute.name);
     if (key === 'style') {
       return { ...result, [key]: createStyleJsonFromString(attribute.value) };
@@ -306,21 +306,28 @@ function traverseWithInstructions(
   return list.length <= 1 ? list[0] : list;
 }
 
-function buildProcessingInstructions(componentMap: ComponentMap): ProcessingInstruction<unknown>[] {
+type AnyProcessingInstruction = ProcessingInstruction<unknown>;
+
+function buildProcessingInstructions(componentMap: ComponentMap): AnyProcessingInstruction[] {
   return [
-    ...AUTHENTICATION_LINK_PROCESSING_INSTRUCTIONS,
+    ...(AUTHENTICATION_LINK_PROCESSING_INSTRUCTIONS as AnyProcessingInstruction[]),
     {
       shouldProcessNode: (node) => nodeIsElement(node) && node.nodeName.toLowerCase() === 'a',
-      processNode: processCmsLinkNode,
+      processNode: processCmsLinkNode as unknown as AnyProcessingInstruction['processNode'],
     },
     {
       shouldProcessNode: (node) => nodeIsElement(node) && node.attributes.getNamedItem('data-react-class') != null,
-      processNode: (node: Element, children: ReactNode[], index: number) =>
-        processReactComponentNode(node, children, index, componentMap),
+      processNode: ((node: Element, children: ReactNode[], index: number) =>
+        processReactComponentNode(
+          node,
+          children,
+          index,
+          componentMap,
+        )) as unknown as AnyProcessingInstruction['processNode'],
     },
     {
       shouldProcessNode: () => true,
-      processNode: processDefaultNode,
+      processNode: processDefaultNode as unknown as AnyProcessingInstruction['processNode'],
     },
   ];
 }

@@ -44,7 +44,7 @@ function NewFormModal({ visible, close }: NewFormModalProps): React.JSX.Element 
             disabled={inProgress}
           >
             <option value="">{t('admin.forms.newForm.formTypePlaceholder')}</option>
-            {Object.keys(FormTypes).map((value: keyof typeof FormTypes) => (
+            {(Object.keys(FormTypes) as (keyof typeof FormTypes)[]).map((value) => (
               <option value={value} key={value}>
                 {t(`admin.forms.formTypes.${value}`)}
               </option>

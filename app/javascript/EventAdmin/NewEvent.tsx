@@ -116,7 +116,7 @@ function NewEvent() {
         encType: 'application/json',
       });
     } catch (error) {
-      setCreateError(error);
+      setCreateError(error instanceof Error ? error : undefined);
       throw error;
     }
   };

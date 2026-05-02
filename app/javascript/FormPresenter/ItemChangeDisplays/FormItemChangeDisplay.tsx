@@ -78,7 +78,12 @@ function FormItemChangeDisplay<FormItemType extends TypedFormItem>({
       return <TextDiffDisplay before={stringifiedPreviousValue} after={stringifiedNewValue} />;
     }
 
-    return <ObjectDiffDisplay before={change.previous_value} after={change.new_value} />;
+    return (
+      <ObjectDiffDisplay
+        before={change.previous_value as Record<string, { toString(): string } | null | undefined>}
+        after={change.new_value as Record<string, { toString(): string } | null | undefined>}
+      />
+    );
   }
 
   switch (formItem.item_type) {

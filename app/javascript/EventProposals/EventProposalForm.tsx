@@ -51,18 +51,18 @@ function EventProposalFormInner({
     return data?.attachImageToEventProposal.attachment;
   });
 
-  const responseValuesChanged = useCallback(
-    (newResponseValues: (typeof initialEventProposal)['form_response_attrs']) => {
-      setEventProposal((prevEventProposal) => ({
-        ...prevEventProposal,
-        form_response_attrs: {
-          ...prevEventProposal.form_response_attrs,
-          ...newResponseValues,
-        },
-      }));
-    },
-    [],
-  );
+  const responseValuesChanged = useCallback((newResponseValues: Record<string, unknown>) => {
+    setEventProposal(
+      (prevEventProposal) =>
+        ({
+          ...prevEventProposal,
+          form_response_attrs: {
+            ...prevEventProposal.form_response_attrs,
+            ...newResponseValues,
+          },
+        }) as typeof prevEventProposal,
+    );
+  }, []);
 
   const commitResponse = useCallback(async (proposal: typeof eventProposal) => {
     try {
@@ -81,7 +81,7 @@ function EventProposalFormInner({
       setUpdatePromise(promise);
       await promise;
     } catch (e) {
-      setUpdateError(e);
+      setUpdateError(e instanceof Error ? e : undefined);
       setResponseErrors(parseResponseErrors(e, ['updateEventProposal']));
     } finally {
       setUpdatePromise(undefined);
@@ -102,7 +102,7 @@ function EventProposalFormInner({
       setSubmitPromise(promise);
       await promise;
     } catch (e) {
-      setSubmitError(e);
+      setSubmitError(e instanceof Error ? e : undefined);
     } finally {
       setSubmitPromise(undefined);
     }

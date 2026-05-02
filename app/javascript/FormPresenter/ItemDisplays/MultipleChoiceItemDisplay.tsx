@@ -25,7 +25,8 @@ function MultipleChoiceItemDisplay({
   value: uncastValue,
 }: MultipleChoiceItemDisplayProps): React.JSX.Element {
   const value = castValue(uncastValue);
-  const isValueOther = (v: string) => !formItem.rendered_properties.choices.some((choice) => choice.value === v);
+  const isValueOther = (v: CastedValue): v is string =>
+    typeof v === 'string' && !formItem.rendered_properties.choices.some((choice) => choice.value === v);
 
   if (Array.isArray(value)) {
     const selectedChoiceLabels = formItem.rendered_properties.choices

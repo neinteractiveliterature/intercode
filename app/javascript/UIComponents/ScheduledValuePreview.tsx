@@ -289,8 +289,9 @@ function ScheduledValuePreview<ValueType>({
       <MemoizedScheduledValuePreviewCalendar
         scheduledValue={scheduledValue}
         timezoneName={timezoneName}
-        getClassNameForValue={getClassNameForValue}
-        getDescriptionForValue={getDescriptionForValue}
+        // these casts are needed because React.memo loses the generic
+        getClassNameForValue={getClassNameForValue as (value: unknown, nextValue: unknown) => string}
+        getDescriptionForValue={getDescriptionForValue as (value: unknown) => ReactNode}
         focusDate={focusDate}
         blurDate={blurDate}
         dateElementMapRef={dateElementMapRef}

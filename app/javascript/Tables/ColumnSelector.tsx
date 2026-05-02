@@ -42,7 +42,7 @@ function ColumnSelector<TData>({
   };
 
   const visibleColumnIds = useMemo(() => {
-    return Object.entries(columnVisibility).reduce((acc, [id, visible]) => {
+    return Object.entries(columnVisibility).reduce((acc: string[], [id, visible]) => {
       if (visible) {
         return [...acc, id];
       } else {

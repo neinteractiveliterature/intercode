@@ -4,7 +4,7 @@ import { ActionFunction, redirect, useFetcher, useLoaderData, RouterContextProvi
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import buildTicketTypeInput from './buildTicketTypeInput';
-import TicketTypeForm from './TicketTypeForm';
+import TicketTypeForm, { EditingTicketType } from './TicketTypeForm';
 import usePageTitle from '../usePageTitle';
 import AppRootContext from '../AppRootContext';
 import { SingleTicketTypeLoaderResult } from './loaders';
@@ -35,7 +35,7 @@ function EditTicketTypeForm() {
   const initialTicketType = useLoaderData() as SingleTicketTypeLoaderResult;
   const { ticketName } = useContext(AppRootContext);
   usePageTitle(`Editing “${initialTicketType.name}”`);
-  const [ticketType, setTicketType] = useState(initialTicketType);
+  const [ticketType, setTicketType] = useState<EditingTicketType>(initialTicketType);
   const fetcher = useFetcher();
   const error = fetcher.data instanceof Error ? fetcher.data : undefined;
   const inProgress = fetcher.state !== 'idle';

@@ -13,9 +13,9 @@ import { hasRealId } from '../GeneratedIdUtils';
 import invariant from 'tiny-invariant';
 
 function buildPricingStructureInput(
-  pricingStructure: Pick<PricingStructure, 'pricing_strategy' | 'value'> | null | undefined,
+  pricingStructure: Partial<PricingStructure> | null | undefined,
 ): PricingStructureInput | null {
-  if (!pricingStructure) {
+  if (!pricingStructure || !pricingStructure.pricing_strategy) {
     return null;
   }
 

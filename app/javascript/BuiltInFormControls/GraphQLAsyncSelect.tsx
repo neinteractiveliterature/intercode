@@ -5,16 +5,25 @@ import { useApolloClient } from '@apollo/client/react';
 
 // This will be a lot more useful once https://github.com/microsoft/TypeScript/issues/36981
 // is fixed
-export type GraphQLAsyncSelectProps<QueryType extends TypedDocumentNode, OptionType, IsMulti extends boolean> = Omit<
-  AsyncProps<OptionType, IsMulti, GroupBase<OptionType>>,
-  'loadOptions'
-> & {
+// TypedDocumentNode<any, any> is needed because TypeScript 6 now correctly checks variance
+// of phantom type parameters in TypedDocumentNode, and only `any` bypasses this constraint.
+export type GraphQLAsyncSelectProps<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  QueryType extends TypedDocumentNode<any, any>,
+  OptionType,
+  IsMulti extends boolean,
+> = Omit<AsyncProps<OptionType, IsMulti, GroupBase<OptionType>>, 'loadOptions'> & {
   query: QueryType;
   getVariables: (inputValue: string) => VariablesOf<QueryType>;
   getOptions: (results: ResultOf<QueryType>) => OptionType[];
 };
 
-function GraphQLAsyncSelect<QueryType extends TypedDocumentNode, OptionType, IsMulti extends boolean = false>({
+function GraphQLAsyncSelect<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  QueryType extends TypedDocumentNode<any, any>,
+  OptionType,
+  IsMulti extends boolean = false,
+>({
   query,
   getOptions,
   getVariables,

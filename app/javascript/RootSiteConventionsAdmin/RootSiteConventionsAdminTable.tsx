@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { CellContext, createColumnHelper } from '@tanstack/react-table';
+import { CellContext, ColumnDef, createColumnHelper } from '@tanstack/react-table';
 import { Link, Outlet, useNavigate } from 'react-router';
 import { DateTime } from 'luxon';
 import { useTranslation } from 'react-i18next';
@@ -74,7 +74,8 @@ const defaultVisibleColumns = ['name', 'organization_name', 'starts_at'];
 function RootSiteConventionsAdminTable(): React.JSX.Element {
   const navigate = useNavigate();
 
-  const columns = useMemo(() => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const columns = useMemo((): ColumnDef<ConventionType, any>[] => {
     const columnHelper = createColumnHelper<ConventionType>();
     return [
       columnHelper.accessor('name', {

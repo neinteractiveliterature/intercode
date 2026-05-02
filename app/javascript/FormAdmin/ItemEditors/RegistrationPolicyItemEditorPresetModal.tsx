@@ -7,7 +7,7 @@ import { RegistrationPolicyPreset } from '../FormItemUtils';
 
 export type RegistrationPolicyItemEditorPresetModalProps = {
   initialPreset: RegistrationPolicyPreset;
-  onChange: React.Dispatch<React.SetStateAction<RegistrationPolicyPreset>>;
+  onChange: (preset: RegistrationPolicyPreset) => void;
   visible: boolean;
   close: () => void;
 };

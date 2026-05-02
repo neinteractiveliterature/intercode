@@ -193,7 +193,8 @@ function SiteSearch({ visible, setVisible, visibilityChangeComplete }: SiteSearc
   }, [keyDownListener]);
 
   const optionSelected = useCallback(
-    (entry: SiteSearchOptionType) => {
+    (entry: SiteSearchOptionType | null) => {
+      if (!entry) return;
       const { model } = entry;
       if (model.__typename === 'Page') {
         navigate(`/pages/${(model as { slug: string }).slug}`);

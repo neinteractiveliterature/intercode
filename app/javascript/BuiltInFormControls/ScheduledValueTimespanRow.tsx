@@ -41,7 +41,7 @@ function ScheduledValueTimespanRow<ValueType>({
   );
 
   const valueChanged = useCallback(
-    (value: ValueType) => valueDidChange(rowIdentifier, value),
+    (value: ValueType | undefined) => valueDidChange(rowIdentifier, value),
     [valueDidChange, rowIdentifier],
   );
 

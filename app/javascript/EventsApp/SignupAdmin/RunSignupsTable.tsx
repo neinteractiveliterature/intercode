@@ -1,5 +1,5 @@
 import { useContext, useMemo } from 'react';
-import { CellContext, Column, createColumnHelper } from '@tanstack/react-table';
+import { CellContext, Column, ColumnDef, createColumnHelper } from '@tanstack/react-table';
 import { useNavigate, useParams, useRouteLoaderData, useRevalidator } from 'react-router';
 import { Trans, useTranslation } from 'react-i18next';
 import { DateTime } from 'luxon';
@@ -28,7 +28,7 @@ import EnumTypes from '../../enumTypes.json';
 import AppRootContext from '../../AppRootContext';
 import { NamedRoute } from '../../AppRouter';
 import { useGraphQLConfirm } from '@neinteractiveliterature/litform';
-import { useApolloClient } from "@apollo/client/react";
+import { useApolloClient } from '@apollo/client/react';
 import { FreezeBucketAssignmentsDocument } from './mutations.generated';
 import SignupStateCell from '../../Tables/SignupStateCell';
 
@@ -109,7 +109,8 @@ function RunSignupsTable(): React.JSX.Element {
   const client = useApolloClient();
   const revalidator = useRevalidator();
 
-  const columns = useMemo(() => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const columns = useMemo((): ColumnDef<SignupType, any>[] => {
     const columnHelper = createColumnHelper<SignupType>();
     return [
       columnHelper.accessor('id', {

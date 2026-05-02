@@ -1,4 +1,5 @@
 import { useMemo } from 'react';
+import * as React from 'react';
 import { useLocation } from 'react-router';
 
 import { DropdownMenu } from '../../../UIComponents/DropdownMenu';
@@ -12,7 +13,7 @@ export type EventListFilterableFormItemDropdownProps = {
   convention: ConventionForFormItemFilter;
   formItem: TypedFormItem;
   value: string[];
-  onChange: React.Dispatch<string[]>;
+  onChange: React.Dispatch<React.SetStateAction<string[] | null | undefined>>;
 };
 
 function EventListFilterableFormItemDropdown({

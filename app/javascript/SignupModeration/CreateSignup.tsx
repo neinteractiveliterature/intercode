@@ -32,7 +32,7 @@ function CreateSignup(): React.JSX.Element {
           <EventSelect
             id={id}
             value={event}
-            onChange={(newEvent: EventType) => setEvent(newEvent)}
+            onChange={(newEvent) => setEvent(newEvent ?? undefined)}
             eventsQuery={CreateSignupEventsQueryDocument}
           />
         )}
@@ -43,7 +43,7 @@ function CreateSignup(): React.JSX.Element {
           <UserConProfileSelect
             id={id}
             value={userConProfile}
-            onChange={(newUserConProfile: UserConProfileType) => setUserConProfile(newUserConProfile)}
+            onChange={(newUserConProfile) => setUserConProfile(newUserConProfile ?? undefined)}
           />
         )}
       </FormGroupWithLabel>

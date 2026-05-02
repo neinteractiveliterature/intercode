@@ -11,7 +11,6 @@ type UserNameLabelProps<OptionType, IsMulti extends boolean> = MultiValueGeneric
     name?: string;
   };
   children: ReactNode;
-  [x: string]: unknown;
 };
 
 function UserNameLabel<OptionType, IsMulti extends boolean>({

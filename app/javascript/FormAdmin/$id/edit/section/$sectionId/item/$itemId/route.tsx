@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { useContext, useMemo, useState, useCallback } from 'react';
 
 import { useApolloClient } from '@apollo/client/react';
@@ -84,7 +85,10 @@ function FormItemEditorLayout(): React.JSX.Element {
   );
   const [previewFormItem, setPreviewFormItem] = useState(() => formItemsById.get(initialFormItem?.id ?? ''));
   const refreshRenderedFormItem = useCallback(
-    async (newFormItem: FormEditorFormItem) => {
+    async (newFormItem: FormEditorFormItem | undefined) => {
+      if (!newFormItem) {
+        return;
+      }
       if (!currentSection?.id) {
         return;
       }
@@ -103,7 +107,7 @@ function FormItemEditorLayout(): React.JSX.Element {
         setPreviewFormItem(responseFormItem);
       }
     },
-    [apolloClient, currentSection?.id, form.id],
+    [apolloClient, currentSection, form.id],
   );
   const updateFetcher = useFetcher();
   const updateError = updateFetcher.data instanceof Error ? updateFetcher.data : undefined;
@@ -143,7 +147,7 @@ function FormItemEditorLayout(): React.JSX.Element {
       value={{
         disabled: updateInProgress,
         formItem,
-        setFormItem,
+        setFormItem: setFormItem as React.Dispatch<React.SetStateAction<FormEditorFormItem>>,
         standardItem,
         previewFormItem,
       }}

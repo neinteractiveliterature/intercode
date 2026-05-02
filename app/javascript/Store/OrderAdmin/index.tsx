@@ -1,5 +1,5 @@
 import { useContext, useMemo } from 'react';
-import { CellContext, Column, createColumnHelper } from '@tanstack/react-table';
+import { CellContext, Column, ColumnDef, createColumnHelper } from '@tanstack/react-table';
 import { DateTime } from 'luxon';
 
 import ArrayToSentenceCell from 'Tables/ArrayToSentenceCell';
@@ -97,7 +97,8 @@ function OrderAdmin(): React.JSX.Element {
   usePageTitle(t('admin.store.orders.title'));
   const navigate = useNavigate();
 
-  const columns = useMemo(() => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const columns = useMemo((): ColumnDef<OrderType, any>[] => {
     const columnHelper = createColumnHelper<OrderType>();
     return [
       columnHelper.accessor('id', {

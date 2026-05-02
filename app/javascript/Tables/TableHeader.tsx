@@ -27,7 +27,7 @@ function TableHeader<TData>({
   sortBy,
 }: TableHeaderProps<TData>): React.JSX.Element {
   const visibleColumnIds = useMemo(() => {
-    return Object.entries(columnSelectionProps.columnVisibility).reduce((acc, [id, visible]) => {
+    return Object.entries(columnSelectionProps.columnVisibility).reduce((acc: string[], [id, visible]) => {
       if (visible) {
         return [...acc, id];
       } else {

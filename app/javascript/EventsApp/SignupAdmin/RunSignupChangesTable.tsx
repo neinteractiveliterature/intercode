@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { createColumnHelper } from '@tanstack/react-table';
+import { ColumnDef, createColumnHelper } from '@tanstack/react-table';
 import { useTranslation } from 'react-i18next';
 
 import useReactTableWithTheWorks, { QueryDataContext } from '../../Tables/useReactTableWithTheWorks';
@@ -21,7 +21,7 @@ import {
 } from './queries.generated';
 import ReactTableWithTheWorks from '../../Tables/ReactTableWithTheWorks';
 import { useParams } from 'react-router';
-import { useSuspenseQuery } from "@apollo/client/react";
+import { useSuspenseQuery } from '@apollo/client/react';
 
 const FILTER_CODECS = buildFieldFilterCodecs({
   action: FilterCodecs.stringArray,
@@ -37,7 +37,8 @@ function RunSignupChangesTable(): React.JSX.Element {
 
   const pageData = useSuspenseQuery(RunSignupChangesPageQueryDocument, { variables: { runId: runId ?? '' } });
 
-  const columns = useMemo(() => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const columns = useMemo((): ColumnDef<SignupChangeType, any>[] => {
     const columnHelper = createColumnHelper<SignupChangeType>();
     return [
       columnHelper.accessor('user_con_profile', {
@@ -67,7 +68,7 @@ function RunSignupChangesTable(): React.JSX.Element {
         cell: TimestampCell,
       }),
     ];
-  }, [t]);
+  }, [t, pageData.data.convention.run.event]);
 
   const {
     table: tableInstance,

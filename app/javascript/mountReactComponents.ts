@@ -2,7 +2,8 @@ import * as React from 'react';
 import { createRoot } from 'react-dom/client';
 
 // adapted from webpacker-react
-export default function mountReactComponents(components: { [name: string]: React.ComponentType<unknown> }): void {
+// eslint-disable-next-line @typescript-eslint/no-explicit-any
+export default function mountReactComponents(components: { [name: string]: React.ComponentType<any> }): void {
   const toMount = document.querySelectorAll('[data-react-class]');
   toMount.forEach((container) => {
     const reactClassName = container.getAttribute('data-react-class');

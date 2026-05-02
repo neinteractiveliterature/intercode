@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import * as React from 'react';
 
 import { BootstrapFormInput, ErrorDisplay } from '@neinteractiveliterature/litform';
@@ -72,12 +72,10 @@ function EditRootSite() {
   const [defaultLayout, setDefaultLayout] = useDirtyState(data.rootSite.defaultLayout, setDirty);
   const [rootPage, setRootPage] = useDirtyState(data.rootSite.rootPage, setDirty);
 
-  useEffect(() => {
-    if (navigation.state === 'idle' && actionData != null && !error) {
-      setSuccess(true);
-      setEdited(false);
-    }
-  }, [actionData, error, navigation.state]);
+  if (navigation.state === 'idle' && actionData != null && !error) {
+    setSuccess(true);
+    setEdited(false);
+  }
 
   usePageTitle('Root Site Settings');
 
@@ -100,7 +98,7 @@ function EditRootSite() {
         getOptionValue={(option) => option.id.toString()}
         getOptionLabel={(option) => option.name ?? ''}
         options={data.rootSite.cmsLayouts}
-        onChange={(newValue: (typeof data)['rootSite']['cmsLayouts'][0]) => setDefaultLayout(newValue)}
+        onChange={(newValue) => newValue && setDefaultLayout(newValue)}
         isDisabled={updateInProgress}
       />
 
@@ -112,7 +110,7 @@ function EditRootSite() {
         getOptionValue={(option) => option.id.toString()}
         getOptionLabel={(option) => option.name ?? ''}
         options={data.rootSite.cmsPages}
-        onChange={(newValue: (typeof data)['rootSite']['rootPage']) => setRootPage(newValue)}
+        onChange={(newValue) => newValue && setRootPage(newValue)}
         isDisabled={updateInProgress}
       />
 

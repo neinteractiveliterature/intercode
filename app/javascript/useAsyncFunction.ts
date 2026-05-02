@@ -31,7 +31,7 @@ export default function useAsyncFunction<T, A extends unknown[]>(
           return await func(...args);
         } catch (e) {
           if (isMounted.current) {
-            setError(e);
+            setError(e as Error);
           }
           if (!suppressError) {
             throw e;

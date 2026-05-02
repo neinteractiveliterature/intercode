@@ -80,7 +80,7 @@ const i18nInitPromise = i18nObject.init(initOptions).then(() => {
   );
   i18nObject.services.formatter?.add(
     'datetimenamed',
-    (value: DateTime | string | undefined | null, lng: string, options: { format: DateTimeFormatKey }) => {
+    (value: DateTime | string | undefined | null, lng: string | undefined, options: { format: DateTimeFormatKey }) => {
       let dateTimeValue: DateTime;
       if (value == null) {
         return '';

@@ -1,5 +1,5 @@
 import { Outlet, useNavigate } from 'react-router';
-import { createColumnHelper } from '@tanstack/react-table';
+import { ColumnDef, createColumnHelper } from '@tanstack/react-table';
 
 import { buildFieldFilterCodecs } from '../Tables/FilterUtils';
 import EmailCell from '../Tables/EmailCell';
@@ -28,7 +28,8 @@ function UsersTable(): React.JSX.Element {
   const navigate = useNavigate();
   usePageTitle(t('navigation.admin.users'));
 
-  const columns = useMemo(() => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const columns = useMemo((): ColumnDef<UserType, any>[] => {
     const columnHelper = createColumnHelper<UserType>();
     return [
       buildRowSelectColumn(columnHelper),

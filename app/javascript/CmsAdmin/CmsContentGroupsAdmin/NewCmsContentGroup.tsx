@@ -6,7 +6,7 @@ import { ErrorDisplay } from '@neinteractiveliterature/litform';
 import { buildPermissionInput } from '../../Permissions/PermissionUtils';
 import { useChangeSet } from '../../ChangeSet';
 import usePageTitle from '../../usePageTitle';
-import CmsContentGroupFormFields from './CmsContentGroupFormFields';
+import CmsContentGroupFormFields, { CmsContentGroupFormFieldsProps } from './CmsContentGroupFormFields';
 import { CmsContentGroupsAdminQueryData } from './queries.generated';
 import { CmsContentTypeIndicator, CreateCmsContentGroupInput } from '../../graphqlTypes.generated';
 import { useCmsContentGroupsAdminLoader } from './loaders';
@@ -79,7 +79,7 @@ function NewCmsContentGroup(): React.JSX.Element {
         disabled={createInProgress}
         convention={data.convention}
         permissionsChangeSet={permissionsChangeSet}
-        addPermission={addPermission}
+        addPermission={addPermission as unknown as CmsContentGroupFormFieldsProps['addPermission']}
         removePermission={removePermission}
       />
 

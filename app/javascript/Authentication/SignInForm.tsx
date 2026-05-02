@@ -72,8 +72,8 @@ function SignInForm(): React.JSX.Element {
         autoDismissAfter: 1000 * 60,
       });
     } catch (e) {
-      if (!e.message.match(/invalid email or password/i)) {
-        errorReporting().error(e);
+      if (!(e instanceof Error && e.message.match(/invalid email or password/i))) {
+        errorReporting().error(e as string | Error);
       }
 
       // we're doing suppressError below specifically so that we can not capture invalid email

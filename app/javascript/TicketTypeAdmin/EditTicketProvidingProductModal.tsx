@@ -61,7 +61,7 @@ export default function EditTicketProvidingProductModal({
                 hideVariants
                 ticketTypes={state ? [state.ticketType] : []}
                 product={product}
-                setProduct={setProduct}
+                setProduct={(value) => setProduct(typeof value === 'function' ? (prev) => value(prev!) : value)}
               />
             )}
           </PricingStructureModalContext.Provider>

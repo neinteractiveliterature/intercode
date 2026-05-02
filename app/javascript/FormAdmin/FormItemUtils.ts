@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { v4 as uuidv4 } from 'uuid';
 import { ApolloCache } from '@apollo/client';
 import { assertNever } from 'assert-never';
@@ -417,7 +418,7 @@ export function formItemPropertyUpdater<
   PropertiesType extends Record<string, unknown>,
   FormItemType extends ParsedFormItem<PropertiesType, unknown>,
   PropertyName extends keyof PropertiesType,
->(property: PropertyName, onChange: (mutator: (prevFormItem: FormItemType) => FormItemType) => void) {
+>(property: PropertyName, onChange: React.Dispatch<React.SetStateAction<FormItemType>>) {
   return (newValue: PropertiesType[PropertyName]): void =>
     onChange((prevFormItem) => {
       const newFormItem = {

@@ -252,7 +252,7 @@ function AdminOrderEntriesTable<
             <td>
               <ProductSelect
                 value={addingItem.product}
-                onChange={setAddingItemProduct}
+                onChange={setAddingItemProduct as unknown as Parameters<typeof ProductSelect>[0]['onChange']}
                 isClearable
                 isDisabled={createInProgress}
               />
@@ -260,7 +260,7 @@ function AdminOrderEntriesTable<
                 <Select
                   options={addingItem.product?.product_variants ?? []}
                   value={addingItem.product_variant}
-                  onChange={setAddingItemProductVariant}
+                  onChange={(variant) => setAddingItemProductVariant(variant ?? null)}
                   getOptionValue={(variant) => variant?.id?.toString() ?? ''}
                   getOptionLabel={(variant) => variant?.name ?? ''}
                   isClearable

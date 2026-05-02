@@ -236,7 +236,7 @@ function NewFormItemModal<FormType extends FormTypeDefinition>({
           <BootstrapFormSelect
             label="Item type"
             value={itemType || ''}
-            onValueChange={(newValue: TypedFormItem['item_type']) => setItemType(newValue)}
+            onValueChange={(newValue) => setItemType(newValue as TypedFormItem['item_type'])}
           >
             <option aria-hidden value="">
               {t('admin.forms.newFormItem.itemTypeSelectPlaceholder')}

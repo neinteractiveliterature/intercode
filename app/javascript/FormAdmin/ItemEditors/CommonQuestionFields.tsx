@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { useContext } from 'react';
 import { BootstrapFormInput, BooleanInput, useModal, MultipleChoiceInput } from '@neinteractiveliterature/litform';
 import { useTranslation } from 'react-i18next';
@@ -87,7 +88,7 @@ function CommonQuestionFields({ formItem, setFormItem }: CommonQuestionFieldsPro
             value={!!formItem.properties.required}
             onChange={formItemPropertyUpdater<CommonQuestionProperties, QuestionFormItem, 'required'>(
               'required',
-              setFormItem,
+              setFormItem as React.Dispatch<React.SetStateAction<QuestionFormItem>>,
             )}
           />
         ))}

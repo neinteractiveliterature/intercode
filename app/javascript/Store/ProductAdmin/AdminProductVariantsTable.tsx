@@ -37,7 +37,7 @@ type AdminProductVariantsTableCommonProps = {
 
 type AdminProductVariantsTableEditingProps = AdminProductVariantsTableCommonProps & {
   editing: boolean;
-  onChange: React.Dispatch<EditingVariant[]>;
+  onChange: React.Dispatch<React.SetStateAction<EditingVariant[]>>;
   deleteVariant: React.Dispatch<string>;
 };
 
@@ -124,11 +124,13 @@ function AdminProductVariantsTable(props: AdminProductVariantsTableProps): React
 
   const { draggingItem, ...sortableHandlers } = useBasicSortableHandlers(
     useCallback(
-      (id: string) => sortedVariants.find((variant) => getRealOrGeneratedId(variant).toString() === id),
+      (id: string | number) =>
+        sortedVariants.find((variant) => getRealOrGeneratedId(variant).toString() === id.toString()),
       [sortedVariants],
     ),
     useCallback(
-      (id: string) => sortedVariants.findIndex((variant) => getRealOrGeneratedId(variant).toString() === id),
+      (id: string | number) =>
+        sortedVariants.findIndex((variant) => getRealOrGeneratedId(variant).toString() === id.toString()),
       [sortedVariants],
     ),
     moveVariant,

@@ -45,7 +45,7 @@ export function WithdrawMySignupModal({ close, event, run, signup, signupRounds 
       close();
     } catch (error) {
       setBusy(false);
-      setError(error);
+      setError(error instanceof Error ? error : undefined);
     }
   };
 

@@ -1,3 +1,4 @@
+import * as React from 'react';
 import { useContext, useId, useRef, useState } from 'react';
 import { useFetcher, useNavigate, useParams } from 'react-router';
 
@@ -5,7 +6,7 @@ import { Modal } from 'react-bootstrap4-modal';
 import { useModal, MultipleChoiceInput, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { FormItemEditorContext, FormEditorContext } from './FormEditorContexts';
-import CommonQuestionFields from './ItemEditors/CommonQuestionFields';
+import CommonQuestionFields, { CommonQuestionFieldsProps } from './ItemEditors/CommonQuestionFields';
 import useCollapse from '../NavigationBar/useCollapse';
 import humanize from '../humanize';
 
@@ -173,7 +174,10 @@ function FormItemTools({ saveFormItem }: FormItemToolsProps): React.JSX.Element 
         <i className={collapsed ? 'bi-caret-right' : 'bi-caret-down'} /> Tools
       </button>
       <div id={collapseId} className={`${collapseClassName} d-lg-block`} ref={collapseRef} {...otherCollapseProps}>
-        <CommonQuestionFields formItem={formItem} setFormItem={setFormItem} />
+        <CommonQuestionFields
+          formItem={formItem}
+          setFormItem={setFormItem as React.Dispatch<React.SetStateAction<CommonQuestionFieldsProps['formItem']>>}
+        />
         <button className="btn btn-secondary mt-2" type="button" onClick={moveModal.open}>
           Move to another section
         </button>

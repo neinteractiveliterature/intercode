@@ -8,7 +8,7 @@ import { AdminPricingStructureDescription } from 'Store/describePricingStructure
 
 export type PricingStructureInputProps = {
   value?: EditingPricingStructure | null;
-  onChange: React.Dispatch<EditingPricingStructure>;
+  onChange: React.Dispatch<EditingPricingStructure | undefined>;
 };
 
 function PricingStructureInput({ value, onChange }: PricingStructureInputProps): React.JSX.Element {
@@ -21,7 +21,13 @@ function PricingStructureInput({ value, onChange }: PricingStructureInputProps):
       <button
         type="button"
         className="btn btn-link py-0"
-        onClick={() => pricingStructureModal.open({ value, onChange, opened: new Date() })}
+        onClick={() =>
+          pricingStructureModal.open({
+            value,
+            onChange,
+            opened: new Date(),
+          })
+        }
       >
         <i className="bi-pencil-fill" />
         <span className="visually-hidden">{t('buttons.edit')}</span>

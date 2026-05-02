@@ -106,7 +106,12 @@ function CouponForm<T extends Omit<AdminCouponFieldsFragment, 'id'>>({
               id={id}
               value={value.fixed_amount}
               onChange={(newFixedAmount) => {
-                setFixedAmount(newFixedAmount ?? buildBlankFixedAmount(defaultCurrencyCode));
+                const amount = typeof newFixedAmount === 'function' ? undefined : newFixedAmount;
+                setFixedAmount(
+                  (amount ?? buildBlankFixedAmount(defaultCurrencyCode)) as unknown as Parameters<
+                    typeof setFixedAmount
+                  >[0],
+                );
               }}
             />
           )}

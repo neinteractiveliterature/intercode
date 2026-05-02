@@ -138,9 +138,11 @@ function ConvertToEventProvidedTicketModal({
 
         <EventSelect
           value={event}
-          onChange={(value: DefaultEventSelectOptionType) => {
-            setEvent(value);
-            setTicketTypeId(undefined);
+          onChange={(value) => {
+            if (value) {
+              setEvent(value);
+              setTicketTypeId(undefined);
+            }
           }}
           isDisabled={inProgress}
         />

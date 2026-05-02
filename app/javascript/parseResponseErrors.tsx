@@ -10,7 +10,7 @@ export class FormValidationError extends Error {
   }
 }
 
-export function parseResponseErrors(error: Error, errorPath: readonly (string | number)[]) {
+export function parseResponseErrors(error: unknown, errorPath: readonly (string | number)[]) {
   if (CombinedGraphQLErrors.is(error)) {
     const updateError = error.errors.find((graphQLError) => isEqual(graphQLError.path, errorPath));
     const validationErrors = (updateError?.extensions?.validationErrors as Record<string, string[]>) ?? {};

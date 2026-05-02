@@ -24,9 +24,10 @@ import { Convention, TimezoneMode } from '../graphqlTypes.generated';
 
 type CreatingConvention = Pick<
   Convention,
-  'name' | 'domain' | 'email_from' | 'language' | 'starts_at' | 'ends_at' | 'timezone_mode' | 'timezone_name'
+  'name' | 'domain' | 'email_from' | 'starts_at' | 'ends_at' | 'timezone_mode' | 'timezone_name'
 > & {
   organization?: { id: string; name: string } | null;
+  language?: Convention['language'] | null;
 };
 
 const DEFAULT_PROPS: CreatingConvention = {
@@ -195,7 +196,7 @@ export default function NewConventionModal({ data, cloneConvention }: NewConvent
             label="Initial CMS content set"
             options={CMS_CONTENT_SET_OPTIONS}
             value={cmsContentSet}
-            onChange={(newValue: (typeof CMS_CONTENT_SET_OPTIONS)[0]) => setCmsContentSet(newValue)}
+            onChange={(newValue) => setCmsContentSet(newValue)}
             getOptionLabel={(option) => option.label}
             getOptionValue={(option) => option.name}
           />

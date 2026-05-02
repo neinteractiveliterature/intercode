@@ -14,7 +14,13 @@ type DO<QueryType extends DefaultUserConProfilesQueryData> = NonNullable<
   QueryType['convention']
 >['user_con_profiles_paginated']['entries'][0];
 
-export type UserConProfileSelectProps<QueryType extends TypedDocumentNode, OptionType, IsMulti extends boolean> = Omit<
+// TypedDocumentNode<any, any> needed because TypeScript 6 variance checks require it
+export type UserConProfileSelectProps<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  QueryType extends TypedDocumentNode<any, any>,
+  OptionType,
+  IsMulti extends boolean,
+> = Omit<
   GraphQLAsyncSelectProps<QueryType, OptionType, IsMulti>,
   'isClearable' | 'getOptions' | 'getVariables' | 'getOptionValue' | 'formatOptionLabel' | 'query'
 > & {

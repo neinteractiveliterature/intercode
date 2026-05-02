@@ -115,19 +115,17 @@ export const timesAreSameOrBothNull = (a?: DateTime | null, b?: DateTime | null)
   return (a == null && b == null) || a?.valueOf() === b?.valueOf();
 };
 
-export const compareTimesAscending = (a: DateTime, b: DateTime): number => {
-  if (a < b) {
-    return -1;
-  }
-
-  if (b < a) {
-    return 1;
-  }
-
+export const compareTimesAscending = (a: DateTime | null | undefined, b: DateTime | null | undefined): number => {
+  if (a == null && b == null) return 0;
+  if (a == null) return -1; // null = -infinity, sorts before real times
+  if (b == null) return 1;
+  if (a < b) return -1;
+  if (b < a) return 1;
   return 0;
 };
 
-export const compareTimesDescending = (a: DateTime, b: DateTime): number => compareTimesAscending(b, a);
+export const compareTimesDescending = (a: DateTime | null | undefined, b: DateTime | null | undefined): number =>
+  compareTimesAscending(b, a);
 
 export function ageAsOf(birthDate?: DateTime | null, date?: DateTime | null): number | null {
   if (!birthDate || !date || !birthDate.isValid || !date.isValid) {

@@ -50,6 +50,12 @@ type PermissionsTableInputProps<RowsType extends BaseRowType[]> = RowsType exten
     ? PermissionsTableInputRoleRowProps<RowsType>
     : never;
 
+function PermissionsTableInput<RowsType extends (Pick<PermissionedModel, '__typename'> & { id: string })[]>(
+  props: PermissionsTableInputModelRowProps<RowsType>,
+): React.JSX.Element;
+function PermissionsTableInput<RowsType extends (Pick<PermissionedRole, '__typename'> & { id: string })[]>(
+  props: PermissionsTableInputRoleRowProps<RowsType>,
+): React.JSX.Element;
 function PermissionsTableInput<RowsType extends BaseRowType[]>(
   props: PermissionsTableInputProps<RowsType>,
 ): React.JSX.Element {

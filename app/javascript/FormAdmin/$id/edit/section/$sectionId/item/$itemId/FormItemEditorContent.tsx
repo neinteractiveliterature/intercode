@@ -17,23 +17,68 @@ function FormItemEditorContent(): React.JSX.Element {
 
   switch (formItem.item_type) {
     case 'age_restrictions':
-      return <AgeRestrictionsEditor formItem={formItem} setFormItem={setFormItem} />;
+      return (
+        <AgeRestrictionsEditor
+          formItem={formItem}
+          setFormItem={setFormItem as React.Dispatch<React.SetStateAction<typeof formItem>>}
+        />
+      );
     case 'date':
-      return <DateEditor formItem={formItem} setFormItem={setFormItem} />;
+      return (
+        <DateEditor
+          formItem={formItem}
+          setFormItem={setFormItem as React.Dispatch<React.SetStateAction<typeof formItem>>}
+        />
+      );
     case 'event_email':
-      return <EventEmailEditor formItem={formItem} setFormItem={setFormItem} />;
+      return (
+        <EventEmailEditor
+          formItem={formItem}
+          setFormItem={setFormItem as React.Dispatch<React.SetStateAction<typeof formItem>>}
+        />
+      );
     case 'free_text':
-      return <FreeTextEditor formItem={formItem} setFormItem={setFormItem} />;
+      return (
+        <FreeTextEditor
+          formItem={formItem}
+          setFormItem={setFormItem as React.Dispatch<React.SetStateAction<typeof formItem>>}
+        />
+      );
     case 'multiple_choice':
-      return <MultipleChoiceEditor formItem={formItem} setFormItem={setFormItem} />;
+      return (
+        <MultipleChoiceEditor
+          formItem={formItem}
+          setFormItem={setFormItem as React.Dispatch<React.SetStateAction<typeof formItem>>}
+        />
+      );
     case 'registration_policy':
-      return <RegistrationPolicyItemEditor formItem={formItem} setFormItem={setFormItem} />;
+      return (
+        <RegistrationPolicyItemEditor
+          formItem={formItem}
+          setFormItem={setFormItem as React.Dispatch<React.SetStateAction<typeof formItem>>}
+        />
+      );
     case 'static_text':
-      return <StaticTextEditor formItem={formItem} setFormItem={setFormItem} />;
+      return (
+        <StaticTextEditor
+          formItem={formItem}
+          setFormItem={setFormItem as React.Dispatch<React.SetStateAction<typeof formItem>>}
+        />
+      );
     case 'timeblock_preference':
-      return <TimeblockPreferenceEditor formItem={formItem} setFormItem={setFormItem} />;
+      return (
+        <TimeblockPreferenceEditor
+          formItem={formItem}
+          setFormItem={setFormItem as React.Dispatch<React.SetStateAction<typeof formItem>>}
+        />
+      );
     case 'timespan':
-      return <TimespanEditor formItem={formItem} setFormItem={setFormItem} />;
+      return (
+        <TimespanEditor
+          formItem={formItem}
+          setFormItem={setFormItem as React.Dispatch<React.SetStateAction<typeof formItem>>}
+        />
+      );
     default:
       assertNever(formItem, true);
       errorReporting().warning(`Unknown form item type: ${formItem.item_type}`);

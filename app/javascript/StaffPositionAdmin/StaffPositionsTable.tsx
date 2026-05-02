@@ -57,7 +57,7 @@ function describePermissionAbilities(modelPermissions: Pick<PolymorphicPermissio
   const typename = modelPermissions[0].model.__typename;
   const permissionNameGroups = PermissionNames.filter((group) => group.model_type === typename);
   const permissionNamesForType = flatMap(permissionNameGroups, (group) => group.permissions);
-  const abilities = permissionNamesForType.reduce((acc, { permission, name }) => {
+  const abilities = permissionNamesForType.reduce<string[]>((acc, { permission, name }) => {
     if (modelPermissions.some((modelPermission) => modelPermission.permission === permission)) {
       return [...acc, name];
     }

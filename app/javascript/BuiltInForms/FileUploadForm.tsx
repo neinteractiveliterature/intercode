@@ -9,7 +9,11 @@ import RailsDirectUploadsContext from '../RailsDirectUploadsContext';
 import classNames from 'classnames';
 import { AuthenticityTokensContext } from '../AuthenticityTokensContext';
 
-function uploadFile(file: File, directUploadURL: string, onProgress?: (event: ProgressEvent<XMLHttpRequest>) => void) {
+function uploadFile(
+  file: File,
+  directUploadURL: string,
+  onProgress?: (event: ProgressEvent<XMLHttpRequestEventTarget>) => void,
+) {
   return new Promise<Blob | undefined>((resolve, reject) => {
     const delegate: DirectUploadDelegate = {
       directUploadWillStoreFileWithXHR: (xhr) => {
@@ -44,7 +48,7 @@ function FileUploadForm({ onUpload }: FileUploadFormProps): React.JSX.Element {
   const manager = useContext(AuthenticityTokensContext);
   const directUploadsAuthenticityToken = manager.tokens?.railsDirectUploads;
 
-  const onProgress = useCallback((event: ProgressEvent<XMLHttpRequest>) => {
+  const onProgress = useCallback((event: ProgressEvent<XMLHttpRequestEventTarget>) => {
     setProgressIndeterminate(!event.lengthComputable);
     if (event.lengthComputable) {
       setProgressPercent((event.loaded / event.total) * 100);

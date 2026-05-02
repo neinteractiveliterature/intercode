@@ -25,7 +25,7 @@ function RankedChoiceQueue() {
           <UserConProfileSelect
             id={id}
             value={userConProfile}
-            onChange={(newUserConProfile: UserConProfileType) => setUserConProfile(newUserConProfile)}
+            onChange={(newUserConProfile) => setUserConProfile(newUserConProfile ?? undefined)}
           />
         )}
       </FormGroupWithLabel>
