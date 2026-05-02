@@ -7,7 +7,7 @@ import { FilterCodecs, buildFieldFilterCodecs } from '../../../Tables/FilterUtil
 import TableHeader from '../../../Tables/TableHeader';
 import ReactTableWithTheWorks from '../../../Tables/ReactTableWithTheWorks';
 import { LoaderFunction, useLoaderData, useNavigate, RouterContextProvider } from 'react-router';
-import { CellContext, createColumnHelper } from '@tanstack/react-table';
+import { CellContext, ColumnDef, createColumnHelper } from '@tanstack/react-table';
 import EventCategoryCell from '../../../Tables/EventCategoryCell';
 import EventCategoryFilter from '../../../Tables/EventCategoryFilter';
 import { useContext, useMemo } from 'react';
@@ -74,7 +74,8 @@ function EventTable() {
   const navigate = useNavigate();
   usePageTitle('Table View - Event Catalog');
 
-  const columns = useMemo(() => {
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
+  const columns = useMemo((): ColumnDef<RunType, any>[] => {
     const columnHelper = createColumnHelper<RunType>();
     return [
       columnHelper.accessor('event.event_category', {
