@@ -152,7 +152,6 @@ export default function UserSignupQueueItem({
       })}
       style={{
         ...style,
-        // @ts-expect-error awaiting fix for https://github.com/frenic/csstype/issues/193
         viewTransitionName: `queue-item-${pendingChoice.id}`,
       }}
       ref={setNodeRef}
