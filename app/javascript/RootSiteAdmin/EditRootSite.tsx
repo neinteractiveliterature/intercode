@@ -1,4 +1,4 @@
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
 import * as React from 'react';
 
 import { BootstrapFormInput, ErrorDisplay } from '@neinteractiveliterature/litform';
@@ -72,14 +72,10 @@ function EditRootSite() {
   const [defaultLayout, setDefaultLayout] = useDirtyState(data.rootSite.defaultLayout, setDirty);
   const [rootPage, setRootPage] = useDirtyState(data.rootSite.rootPage, setDirty);
 
-  useEffect(() => {
-    if (navigation.state === 'idle' && actionData != null && !error) {
-      // eslint-disable-next-line react-hooks/set-state-in-effect
-      setSuccess(true);
-       
-      setEdited(false);
-    }
-  }, [actionData, error, navigation.state]);
+  if (navigation.state === 'idle' && actionData != null && !error) {
+    setSuccess(true);
+    setEdited(false);
+  }
 
   usePageTitle('Root Site Settings');
 

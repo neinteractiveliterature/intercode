@@ -1,5 +1,4 @@
 import { useState, useContext } from 'react';
-import * as React from 'react';
 import { ActionFunction, redirect, useFetcher, useLoaderData, RouterContextProvider } from 'react-router';
 
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
@@ -36,7 +35,7 @@ function EditTicketTypeForm() {
   const initialTicketType = useLoaderData() as SingleTicketTypeLoaderResult;
   const { ticketName } = useContext(AppRootContext);
   usePageTitle(`Editing “${initialTicketType.name}”`);
-  const [ticketType, setTicketType] = useState(initialTicketType);
+  const [ticketType, setTicketType] = useState<EditingTicketType>(initialTicketType);
   const fetcher = useFetcher();
   const error = fetcher.data instanceof Error ? fetcher.data : undefined;
   const inProgress = fetcher.state !== 'idle';
@@ -50,10 +49,7 @@ function EditTicketTypeForm() {
       <h1 className="mb-4">
         Editing {ticketName} type “{initialTicketType.name}”
       </h1>
-      <TicketTypeForm
-        ticketType={ticketType}
-        onChange={setTicketType as React.Dispatch<React.SetStateAction<EditingTicketType>>}
-      />
+      <TicketTypeForm ticketType={ticketType} onChange={setTicketType} />
       <button type="button" className="btn btn-primary" onClick={saveClicked} disabled={inProgress}>
         Save changes
       </button>

@@ -7,8 +7,8 @@ import { useApolloClient } from '@apollo/client/react';
 // is fixed
 // TypedDocumentNode<any, any> is needed because TypeScript 6 now correctly checks variance
 // of phantom type parameters in TypedDocumentNode, and only `any` bypasses this constraint.
-/* eslint-disable @typescript-eslint/no-explicit-any */
 export type GraphQLAsyncSelectProps<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   QueryType extends TypedDocumentNode<any, any>,
   OptionType,
   IsMulti extends boolean,
@@ -19,6 +19,7 @@ export type GraphQLAsyncSelectProps<
 };
 
 function GraphQLAsyncSelect<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   QueryType extends TypedDocumentNode<any, any>,
   OptionType,
   IsMulti extends boolean = false,
@@ -28,7 +29,6 @@ function GraphQLAsyncSelect<
   getVariables,
   ...otherProps
 }: GraphQLAsyncSelectProps<QueryType, OptionType, IsMulti>): React.JSX.Element {
-  /* eslint-enable @typescript-eslint/no-explicit-any */
   const client = useApolloClient();
   const loadOptions = async (inputValue: string) => {
     try {

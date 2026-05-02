@@ -106,6 +106,7 @@ export const action: ActionFunction<RouterContextProvider> = async ({ context, r
 function EditSignup(): React.JSX.Element {
   const data = useSingleSignupLoader();
   const { eventId } = useParams();
+  // eslint-disable-next-line i18next/no-literal-string
   const teamMembersUrl = `/events/${eventId}/team_members`;
   const { timezoneName, ticketName } = useContext(AppRootContext);
   const confirm = useConfirm();

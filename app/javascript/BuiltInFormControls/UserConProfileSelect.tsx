@@ -14,9 +14,9 @@ type DO<QueryType extends DefaultUserConProfilesQueryData> = NonNullable<
   QueryType['convention']
 >['user_con_profiles_paginated']['entries'][0];
 
-/* eslint-disable @typescript-eslint/no-explicit-any */
 // TypedDocumentNode<any, any> needed because TypeScript 6 variance checks require it
 export type UserConProfileSelectProps<
+  // eslint-disable-next-line @typescript-eslint/no-explicit-any
   QueryType extends TypedDocumentNode<any, any>,
   OptionType,
   IsMulti extends boolean,
@@ -26,7 +26,6 @@ export type UserConProfileSelectProps<
 > & {
   userConProfilesQuery?: DocumentNode;
 };
-/* eslint-enable @typescript-eslint/no-explicit-any */
 
 function UserConProfileSelect<
   IsMulti extends boolean = false,

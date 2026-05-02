@@ -5,11 +5,10 @@ import { Modal } from 'react-bootstrap4-modal';
 import EnumTypes from '../../enumTypes.json';
 import MoneyInput from '../MoneyInput';
 import { Money } from '../../graphqlTypes.generated';
-import PricingStructureForm, { PricingStructureFormProps } from './PricingStructureForm';
+import PricingStructureForm from './PricingStructureForm';
 import { useTranslation } from 'react-i18next';
 import { ModalData } from '@neinteractiveliterature/litform';
-
-type EditingPricingStructure = NonNullable<PricingStructureFormProps['pricingStructure']>;
+import { EditingPricingStructure } from './EditingProductTypes';
 
 export const PRICING_STRATEGIES = EnumTypes.PricingStrategy.enumValues.map(({ name, description }) => ({
   value: name,

@@ -13,7 +13,7 @@ export type EventListFilterableFormItemDropdownProps = {
   convention: ConventionForFormItemFilter;
   formItem: TypedFormItem;
   value: string[];
-  onChange: React.Dispatch<string[]>;
+  onChange: React.Dispatch<React.SetStateAction<string[] | null | undefined>>;
 };
 
 function EventListFilterableFormItemDropdown({
@@ -55,12 +55,7 @@ function EventListFilterableFormItemDropdown({
       dropdownClassName="p-2"
       shouldAutoCloseOnNavigate={shouldAutoCloseOnNavigate}
     >
-      <FormItemFilter
-        convention={convention}
-        formItem={formItem}
-        onChange={onChange as React.Dispatch<React.SetStateAction<string[] | undefined | null>>}
-        value={value}
-      />
+      <FormItemFilter convention={convention} formItem={formItem} onChange={onChange} value={value} />
     </DropdownMenu>
   );
 }

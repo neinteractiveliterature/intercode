@@ -259,11 +259,7 @@ function processCmsLinkNode(node: Element, children: ReactNode[], index: number)
 
   if (href && !href.startsWith('#') && getURLOrigin(href) === window.location.origin) {
     return (
-      <Link
-        to={href}
-        key={index}
-        {...(jsxAttributesFromHTMLAttributes(node, otherAttributes) as React.AnchorHTMLAttributes<HTMLAnchorElement>)}
-      >
+      <Link to={href} key={index} {...jsxAttributesFromHTMLAttributes(node, otherAttributes)}>
         {children}
       </Link>
     );

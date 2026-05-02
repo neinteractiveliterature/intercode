@@ -1,7 +1,6 @@
 import 'regenerator-runtime/runtime';
 
 import mountReactComponents from '../mountReactComponents';
-import * as React from 'react';
 import { StrictMode, use, useEffect, useMemo, useState } from 'react';
 import AuthenticityTokensManager, { getAuthenticityTokensURL } from 'AuthenticityTokensContext';
 import { createBrowserRouter, RouterContextProvider, RouterProvider } from 'react-router';
@@ -92,4 +91,4 @@ function DataModeApplicationEntry({
   return <StrictMode>{router && <RouterProvider router={router} />}</StrictMode>;
 }
 
-mountReactComponents({ AppRoot: DataModeApplicationEntry as React.ComponentType<unknown> });
+mountReactComponents({ AppRoot: DataModeApplicationEntry });

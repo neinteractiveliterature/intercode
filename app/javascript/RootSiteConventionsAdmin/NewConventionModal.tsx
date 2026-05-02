@@ -1,5 +1,4 @@
 import { useState, useMemo } from 'react';
-import * as React from 'react';
 import { Modal } from 'react-bootstrap4-modal';
 
 import { Link, useFetcher } from 'react-router';
@@ -25,9 +24,10 @@ import { Convention, TimezoneMode } from '../graphqlTypes.generated';
 
 type CreatingConvention = Pick<
   Convention,
-  'name' | 'domain' | 'email_from' | 'language' | 'starts_at' | 'ends_at' | 'timezone_mode' | 'timezone_name'
+  'name' | 'domain' | 'email_from' | 'starts_at' | 'ends_at' | 'timezone_mode' | 'timezone_name'
 > & {
   organization?: { id: string; name: string } | null;
+  language?: Convention['language'] | null;
 };
 
 const DEFAULT_PROPS: CreatingConvention = {
@@ -151,10 +151,7 @@ export default function NewConventionModal({ data, cloneConvention }: NewConvent
           isClearable
         />
 
-        <ConventionLanguageInput
-          value={convention.language}
-          onChange={setLanguage as React.Dispatch<React.SetStateAction<string | null | undefined>>}
-        />
+        <ConventionLanguageInput value={convention.language} onChange={setLanguage} />
 
         <MultipleChoiceInput
           caption="Date and time display mode"

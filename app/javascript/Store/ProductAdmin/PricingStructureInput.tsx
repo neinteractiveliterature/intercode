@@ -1,14 +1,14 @@
 import { useContext } from 'react';
 import * as React from 'react';
 
-import { PricingStructureModalContext, PricingStructureModalState } from './EditPricingStructureModal';
+import { PricingStructureModalContext } from './EditPricingStructureModal';
 import { EditingPricingStructure } from './EditingProductTypes';
 import { useTranslation } from 'react-i18next';
 import { AdminPricingStructureDescription } from 'Store/describePricingStructure';
 
 export type PricingStructureInputProps = {
   value?: EditingPricingStructure | null;
-  onChange: React.Dispatch<EditingPricingStructure>;
+  onChange: React.Dispatch<EditingPricingStructure | undefined>;
 };
 
 function PricingStructureInput({ value, onChange }: PricingStructureInputProps): React.JSX.Element {
@@ -24,7 +24,7 @@ function PricingStructureInput({ value, onChange }: PricingStructureInputProps):
         onClick={() =>
           pricingStructureModal.open({
             value,
-            onChange: onChange as unknown as PricingStructureModalState['onChange'],
+            onChange,
             opened: new Date(),
           })
         }

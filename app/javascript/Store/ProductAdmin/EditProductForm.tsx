@@ -14,7 +14,7 @@ import { WithRealOrGeneratedId } from '../../GeneratedIdUtils';
 import { PricingStrategy } from '../../graphqlTypes.generated';
 import AdminProductVariantsTable from './AdminProductVariantsTable';
 import { EditingProductBase } from './EditingProductTypes';
-import PricingStructureForm, { PricingStructureFormProps } from './PricingStructureForm';
+import PricingStructureForm from './PricingStructureForm';
 import { AdminProductsQueryData } from './queries.generated';
 
 export type EditProductFormProps<ProductType extends WithRealOrGeneratedId<EditingProductBase, string>> = {
@@ -198,7 +198,7 @@ export default function EditProductForm<ProductType extends WithRealOrGeneratedI
                   },
                 }
               }
-              setPricingStructure={setPricingStructure as unknown as PricingStructureFormProps['setPricingStructure']}
+              setPricingStructure={setPricingStructure}
             />
           </div>
         </section>

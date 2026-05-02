@@ -1,5 +1,4 @@
 import { useState, useMemo } from 'react';
-import * as React from 'react';
 import {
   ActionFunction,
   LoaderFunction,
@@ -136,14 +135,7 @@ function NewUserActivityAlert() {
         userActivityAlert={combinedUserActivityAlert}
         convention={convention}
         onChange={setUserActivityAlert}
-        onAddNotificationDestination={
-          addNotificationDestination as React.Dispatch<
-            Omit<
-              UserActivityAlertsAdminQueryData['convention']['user_activity_alerts'][number]['notification_destinations'][number],
-              'id'
-            >
-          >
-        }
+        onAddNotificationDestination={addNotificationDestination}
         onRemoveNotificationDestination={removeNotificationDestination}
         disabled={createInProgress}
         userActivityAlertEvent={userActivityAlertEvent}

@@ -84,7 +84,7 @@ export function PayWhatYouWantValueDescription({ value }: PayWhatYouWantValueDes
 }
 
 export type AdminPricingStructureDescriptionProps = {
-  pricingStructure?: Pick<PricingStructure, 'pricing_strategy' | 'value'> | null;
+  pricingStructure?: Partial<PricingStructure> | null;
 };
 
 export function AdminPricingStructureDescription({
@@ -92,7 +92,7 @@ export function AdminPricingStructureDescription({
 }: AdminPricingStructureDescriptionProps): React.JSX.Element {
   const { t } = useTranslation();
 
-  if (!pricingStructure) {
+  if (!pricingStructure || !pricingStructure.pricing_strategy) {
     return <></>;
   }
 
