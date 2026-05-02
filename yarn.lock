@@ -12645,10 +12645,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"diff@npm:*, diff@npm:8.0.4":
-  version: 8.0.4
-  resolution: "diff@npm:8.0.4"
-  checksum: 10c0/7ee5d03926db4039be7252ac3b0abaae1bd122a2ca971e5ca7270e444e36ff83dd906fad1a719740ca347e97ed5dc8f458a76a8391dbcd7aff363bdafb348a00
+"diff@npm:*, diff@npm:9.0.0":
+  version: 9.0.0
+  resolution: "diff@npm:9.0.0"
+  checksum: 10c0/a971cc88f66071a33bd3942db2f51b57d484e9856265ae45cf44fb28ab2fde91f132d9c26d8be0fb6082d2be94d29e1295c1adb251b7461935d6a2dd304cd161
   languageName: node
   linkType: hard
 
@@ -22641,7 +22641,7 @@ __metadata:
     custom-event-polyfill: "npm:1.0.7"
     debounce-promise: "npm:3.1.2"
     detect-browser: "npm:5.3.0"
-    diff: "npm:8.0.4"
+    diff: "npm:9.0.0"
     eslint: "npm:9.39.4"
     eslint-config-airbnb: "npm:19.0.4"
     eslint-config-airbnb-base: "npm:15.0.0"
