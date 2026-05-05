@@ -95,6 +95,9 @@ gem "browser"
 gem "positioning"
 gem "stackprof"
 
+# Remove this once platform-api adds this as a dependency
+gem "multi_json"
+
 gem "faker", group: "development", require: false
 
 gem "rollbar"

@@ -394,6 +394,7 @@ GEM
       money (~> 7.0)
       railties (>= 7.0)
     msgpack (1.8.0)
+    multi_json (1.21.1)
     mutex_m (0.3.0)
     mysql2 (0.5.7)
       bigdecimal
@@ -745,6 +746,7 @@ DEPENDENCIES
   minitest-reporters
   minitest-spec-rails
   money-rails
+  multi_json
   mysql2 (~> 0.5.3)
   oj (~> 3.17.0)
   openssl (~> 4.0)
