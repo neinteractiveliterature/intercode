@@ -36,19 +36,23 @@ export const action: ActionFunction<RouterContextProvider> = async ({ request, c
               fragmentName: 'AdminProductFields',
               data: product,
             });
-            cache.modify<Convention>({
-              id: cache.identify(product.convention),
-              fields: {
-                products: (value) => [...value, ref],
-              },
-            });
-            if (product.provides_ticket_type) {
-              cache.modify<TicketType>({
-                id: cache.identify(product.provides_ticket_type),
+
+            if (ref) {
+              cache.modify<Convention>({
+                id: cache.identify(product.convention),
                 fields: {
-                  providing_products: (value) => [...value, ref],
+                  products: (value) => [...value, ref],
                 },
               });
+
+              if (product.provides_ticket_type) {
+                cache.modify<TicketType>({
+                  id: cache.identify(product.provides_ticket_type),
+                  fields: {
+                    providing_products: (value) => [...value, ref],
+                  },
+                });
+              }
             }
           }
         },

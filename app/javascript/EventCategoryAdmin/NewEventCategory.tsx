@@ -25,12 +25,14 @@ export const action: ActionFunction<RouterContextProvider> = async ({ context, r
         const eventCategory = result.data?.createEventCategory.event_category;
         if (eventCategory) {
           const ref = cache.writeFragment({ fragment: EventCategoryFieldsFragmentDoc, data: eventCategory });
-          cache.modify<Convention>({
-            id: cache.identify(eventCategory.convention),
-            fields: {
-              event_categories: (value) => [...value, ref],
-            },
-          });
+          if (ref) {
+            cache.modify<Convention>({
+              id: cache.identify(eventCategory.convention),
+              fields: {
+                event_categories: (value) => [...value, ref],
+              },
+            });
+          }
         }
       },
     });

@@ -1,5 +1,12 @@
 import { useState } from 'react';
-import { useNavigate, LoaderFunction, useLoaderData, ActionFunction, redirect, RouterContextProvider } from 'react-router';
+import {
+  useNavigate,
+  LoaderFunction,
+  useLoaderData,
+  ActionFunction,
+  redirect,
+  RouterContextProvider,
+} from 'react-router';
 
 import EditRunModal, { EditingRun } from './EditRunModal';
 import { EventAdminEventsQueryData, EventAdminEventsQueryDocument, RunFieldsFragmentDoc } from './queries.generated';
@@ -8,7 +15,11 @@ import { CreateRunDocument } from './mutations.generated';
 import { buildRunInputFromFormData } from './buildRunInputFromFormData';
 import { Event } from '../graphqlTypes.generated';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ params: { eventCategoryId, eventId }, request, context }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({
+  params: { eventCategoryId, eventId },
+  request,
+  context,
+}) => {
   const client = context.get(apolloClientContext);
   try {
     const formData = await request.formData();
@@ -24,12 +35,14 @@ export const action: ActionFunction<RouterContextProvider> = async ({ params: { 
         const run = result.data?.createRun.run;
         if (run) {
           const runRef = cache.writeFragment({ data: run, fragment: RunFieldsFragmentDoc, fragmentName: 'RunFields' });
-          cache.modify<Event>({
-            id: cache.identify({ __typename: 'Event', id: eventId }),
-            fields: {
-              runs: (value) => [...value, runRef],
-            },
-          });
+          if (runRef) {
+            cache.modify<Event>({
+              id: cache.identify({ __typename: 'Event', id: eventId }),
+              fields: {
+                runs: (value) => [...value, runRef],
+              },
+            });
+          }
         }
       },
     });

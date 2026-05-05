@@ -23,12 +23,14 @@ export const action: ActionFunction<RouterContextProvider> = async ({ context, r
               fragment: FormEditorFormItemFieldsFragmentDoc,
               fragmentName: 'FormEditorFormItemFields',
             });
-            cache.modify<FormSection>({
-              id: cache.identify({ __typename: 'FormSection', id: sectionId ?? '' }),
-              fields: {
-                form_items: (value) => [...value, itemRef],
-              },
-            });
+            if (itemRef) {
+              cache.modify<FormSection>({
+                id: cache.identify({ __typename: 'FormSection', id: sectionId ?? '' }),
+                fields: {
+                  form_items: (value) => [...value, itemRef],
+                },
+              });
+            }
           }
         },
       });
