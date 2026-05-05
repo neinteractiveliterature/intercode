@@ -11696,9 +11696,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cssnano-preset-default@npm:^7.0.16":
-  version: 7.0.16
-  resolution: "cssnano-preset-default@npm:7.0.16"
+"cssnano-preset-default@npm:^7.0.17":
+  version: 7.0.17
+  resolution: "cssnano-preset-default@npm:7.0.17"
   dependencies:
     browserslist: "npm:^4.28.2"
     css-declaration-sorter: "npm:^7.2.0"
@@ -11715,7 +11715,7 @@ __metadata:
     postcss-minify-font-values: "npm:^7.0.3"
     postcss-minify-gradients: "npm:^7.0.5"
     postcss-minify-params: "npm:^7.0.9"
-    postcss-minify-selectors: "npm:^7.1.1"
+    postcss-minify-selectors: "npm:^7.1.2"
     postcss-normalize-charset: "npm:^7.0.3"
     postcss-normalize-display-values: "npm:^7.0.3"
     postcss-normalize-positions: "npm:^7.0.4"
@@ -11732,7 +11732,7 @@ __metadata:
     postcss-unique-selectors: "npm:^7.0.7"
   peerDependencies:
     postcss: ^8.5.13
-  checksum: 10c0/394b8ea8e3591188172a233222d1572dc116198dfaffbabbf710130de3b4d73b8294d05f5e9979bf3f6120d1875de9ef0f126eaa615e35d05d245ff24a5b7059
+  checksum: 10c0/92b69d1d4b85ead9dc4efaaa9c8be90d5da2125b7928b133f7b73cd8f631fd76b3e7e5cb779ca32c4d9ffa50602cb7e844e4139519e5deac4c7c60f4a0d58822
   languageName: node
   linkType: hard
 
@@ -11754,15 +11754,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cssnano@npm:7.1.8":
-  version: 7.1.8
-  resolution: "cssnano@npm:7.1.8"
+"cssnano@npm:7.1.9":
+  version: 7.1.9
+  resolution: "cssnano@npm:7.1.9"
   dependencies:
-    cssnano-preset-default: "npm:^7.0.16"
+    cssnano-preset-default: "npm:^7.0.17"
     lilconfig: "npm:^3.1.3"
   peerDependencies:
     postcss: ^8.5.13
-  checksum: 10c0/e207f1d2755393c28f151bb8feee8d4a140d9dc898c4d403746b7d25d2bc3f21847f1caf6adde935f64ba9bca7fe5b7c5a7b3e467e1ec1336615ae23d39016ef
+  checksum: 10c0/4c944405c4c319be63ea19ce488548487d8fbfba46ef6a6fb504b6ce62d4549d0137f99a8ade2a2843e192ae7981751f66b0dc982421d56390488c332baca5af
   languageName: node
   linkType: hard
 
@@ -19759,9 +19759,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"postcss-minify-selectors@npm:^7.1.1":
-  version: 7.1.1
-  resolution: "postcss-minify-selectors@npm:7.1.1"
+"postcss-minify-selectors@npm:^7.1.2":
+  version: 7.1.2
+  resolution: "postcss-minify-selectors@npm:7.1.2"
   dependencies:
     browserslist: "npm:^4.28.1"
     caniuse-api: "npm:^3.0.0"
@@ -19769,7 +19769,7 @@ __metadata:
     postcss-selector-parser: "npm:^7.1.1"
   peerDependencies:
     postcss: ^8.5.13
-  checksum: 10c0/5a5995baf77d4a49fd9782ff91aba8744d8d5cbda8fc587b033c32d608152410679b3714d62dceaba1932f9c119a2bbb5447a07a29594586f60f1eac3adb2620
+  checksum: 10c0/b7be4f2f6b84c8ab3d6ee7524821a8917f15f7c2e78241c1eefc72aba6998e328d8281c723e74a816e2334f8e0110d540b8f61c69d8cf620e20fb33597e52234
   languageName: node
   linkType: hard
 
@@ -22018,7 +22018,7 @@ __metadata:
     core-js: "npm:3.49.0"
     core-js-compat: "npm:3.49.0"
     crypto-browserify: "npm:3.12.1"
-    cssnano: "npm:7.1.8"
+    cssnano: "npm:7.1.9"
     csv-stringify: "npm:^6.5.1"
     custom-event-polyfill: "npm:1.0.7"
     debounce-promise: "npm:3.1.2"
