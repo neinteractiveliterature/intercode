@@ -61,12 +61,14 @@ export const action: ActionFunction<RouterContextProvider> = async ({ context, r
               fragment: UserActivityAlertFieldsFragmentDoc,
               data: userActivityAlert,
             });
-            cache.modify<Convention>({
-              id: cache.identify({ __typename: 'Convention', id: userActivityAlert.convention.id }),
-              fields: {
-                user_activity_alerts: (value) => [...value, ref],
-              },
-            });
+            if (ref) {
+              cache.modify<Convention>({
+                id: cache.identify({ __typename: 'Convention', id: userActivityAlert.convention.id }),
+                fields: {
+                  user_activity_alerts: (value) => [...value, ref],
+                },
+              });
+            }
           }
         },
       });

@@ -39,12 +39,14 @@ export const action: ActionFunction<RouterContextProvider> = async ({ request, p
           const organizationRole = result.data?.createOrganizationRole.organization_role;
           if (organizationRole != null) {
             const ref = cache.writeFragment({ fragment: OrganizationRoleFieldsFragmentDoc, data: organizationRole });
-            cache.modify<Organization>({
-              id: cache.identify({ __typename: 'Organization', id }),
-              fields: {
-                organization_roles: (value) => [...value, ref],
-              },
-            });
+            if (ref) {
+              cache.modify<Organization>({
+                id: cache.identify({ __typename: 'Organization', id }),
+                fields: {
+                  organization_roles: (value) => [...value, ref],
+                },
+              });
+            }
           }
         },
       });

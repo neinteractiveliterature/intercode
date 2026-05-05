@@ -37,14 +37,16 @@ export const action: ActionFunction<RouterContextProvider> = async ({ context, r
             fragmentName: 'TicketTypeAdmin_TicketTypeFields',
             data: ticketType,
           });
-          cache.modify<Convention | Event>({
-            id: cache.identify(
-              eventId ? { __typename: 'Event', id: eventId } : { __typename: 'Convention', id: conventionId },
-            ),
-            fields: {
-              ticket_types: (value) => [...value, ref],
-            },
-          });
+          if (ref) {
+            cache.modify<Convention | Event>({
+              id: cache.identify(
+                eventId ? { __typename: 'Event', id: eventId } : { __typename: 'Convention', id: conventionId },
+              ),
+              fields: {
+                ticket_types: (value) => [...value, ref],
+              },
+            });
+          }
         }
       },
     });
