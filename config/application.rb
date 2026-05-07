@@ -10,6 +10,10 @@ Bundler.require(*Rails.groups)
 
 module Intercode
   class Application < Rails::Application
+    # Ruby 4.0 + Zeitwerk reentrant loading bug causes active_storage engine to initialize
+    # incompletely, leaving queues as nil. Initialize it before load_defaults runs.
+    config.active_storage.queues = ActiveSupport::InheritableOptions.new if config.active_storage.queues.nil?
+
     config.load_defaults 7.1
 
     # Please, add to the `ignore` list any other `lib` subdirectories that do

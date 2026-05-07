@@ -13,7 +13,7 @@ inherit_gem:
 
 AllCops:
   NewCops: enable
-  TargetRubyVersion: 3.3
+  TargetRubyVersion: 4.0
   ParserEngine: parser_prism
   Exclude:
     - bin/bundle

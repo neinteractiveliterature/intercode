@@ -3,6 +3,9 @@ source "https://rubygems.org"
 ruby File.read(File.expand_path(".ruby-version", __dir__)).strip
 gem "rails", "8.1.3"
 
+# benchmark was removed from Ruby's default gems in Ruby 4.0; required by mini_magick
+gem "benchmark"
+
 gem "pg"
 gem "puma"
 
@@ -137,7 +140,7 @@ group :development do
   gem "debug"
 
   # Linting
-  gem "rubocop", "1.86.1"
+  gem "rubocop"
   gem "rubocop-performance"
   gem "rubocop-rails"
   gem "rubocop-sequel"
@@ -191,3 +194,5 @@ gem "sentry-ruby", "~> 6.0"
 gem "sentry-rails", "~> 6.0"
 
 gem "openssl", "~> 4.0"
+
+gem "readline", "~> 0.0.4"
