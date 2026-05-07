@@ -15156,17 +15156,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next@npm:25.10.10":
-  version: 25.10.10
-  resolution: "i18next@npm:25.10.10"
-  dependencies:
-    "@babel/runtime": "npm:^7.29.2"
+"i18next@npm:26.0.8":
+  version: 26.0.8
+  resolution: "i18next@npm:26.0.8"
   peerDependencies:
     typescript: ^5 || ^6
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10c0/6ff601b52363c9c974ef293af4a6de04d9f76b4bf2ad9a56c8546235aaf19ff1a7c2109ddba3a73922d418e208ec5b688e5afb323eba6e27c75d629e93827ae1
+  checksum: 10c0/48bcb3f8731a17ab586d7371a6d4d155cd8eeaec1a237466d21ffe7b32a6e98432481171a53b0583b397b4ac65c3342b8a64d01cd672b6a1686028329d0c0d8e
   languageName: node
   linkType: hard
 
@@ -22049,7 +22047,7 @@ __metadata:
     history: "npm:5.3.0"
     html-to-react: "npm:1.7.0"
     husky: "npm:9.1.7"
-    i18next: "npm:25.10.10"
+    i18next: "npm:26.0.8"
     i18next-chained-backend: "npm:^4.6.2"
     i18next-intervalplural-postprocessor: "npm:3.0.0"
     i18next-localstorage-backend: "npm:^4.2.0"
