@@ -187,6 +187,24 @@ domain intercode.test
 nameserver 127.0.0.1
 ```
 
+This tells macOS that for intercode.test and all its subdomains, it should use the DNS server running on your local machine to resolve them. Next, we'll need to put a DNS server on your local machine. Run this to install dnsmasq:
+
+```text
+brew install dnsmasq
+```
+
+Edit the file at /opt/homebrew/etc/dnsmasq.conf and add the following content:
+
+```text
+address=/intercode.test/127.0.0.1
+```
+
+Finally, run this to get dnsmasq started and configure it to automatically start whenever your computer starts:
+
+```text
+sudo brew services start dnsmasq
+```
+
 To test that this is working, try running `ping randomname.intercode.test`. It should start pinging your local machine on 127.0.0.1.
 
 </details>
@@ -195,7 +213,7 @@ To test that this is working, try running `ping randomname.intercode.test`. It s
 
 <summary>Linux</summary>
 
-On Linux, there's no built-in way to do wildcard domain resolution like there is with macOS's resolver. But, we can use dnsmasq as a DNS resolver proxy and configure it to resolve \*.intercode.test to 127.0.0.1. First, install dnsmasq:
+On Linux, there's no built-in way to do host-specific DNS resolution like there is with macOS's resolver. But, we can use dnsmasq as a DNS resolver proxy and configure it to resolve \*.intercode.test to 127.0.0.1. First, install dnsmasq:
 
 ```sh
 sudo apt install dnsmasq
@@ -245,7 +263,7 @@ To test that this is working, try running `ping randomname.intercode.test`. It s
 <details>
 <summary>Windows</summary>
 
-On Windows, there's no built-in way to do wildcard domain resolution like there is with macOS's resolver. But, we can use a DNS resolver proxy such as [Acrylic](https://mayakron.altervista.org/support/acrylic/Home.htm) and configure it to resolve \*.intercode.test to 127.0.0.1.
+On Windows, there's no built-in way to do host-specific DNS resolution like there is with macOS's resolver. But, we can use a DNS resolver proxy such as [Acrylic](https://mayakron.altervista.org/support/acrylic/Home.htm) and configure it to resolve \*.intercode.test to 127.0.0.1.
 
 I have not personally tried this, but if someone does and would like to contribute instructions to this README, I would be forever grateful!
 
