@@ -181,6 +181,7 @@ group :test do
   gem "minitest-spec-rails"
   gem "minitest-reporters"
   gem "minitest-focus"
+  gem "minitest-mock"
   gem "factory_bot"
   gem "factory_bot_rails"
   gem "simplecov"
