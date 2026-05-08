@@ -606,7 +606,6 @@ GEM
       logger
     sequel (5.104.0)
       bigdecimal
-    set (1.0.3)
     shoryuken (6.2.1)
       aws-sdk-core (>= 2)
       concurrent-ruby
@@ -624,9 +623,8 @@ GEM
     skylight (7.1.1)
       activesupport (>= 7.2.0)
     slop (3.6.0)
-    sorted_set (1.0.3)
+    sorted_set (1.1.0)
       rbtree
-      set (~> 1.0)
     sprockets (4.2.1)
       concurrent-ruby (~> 1.0)
       rack (>= 2.2.4, < 4)
