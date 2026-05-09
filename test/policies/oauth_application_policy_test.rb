@@ -33,7 +33,7 @@ class OAuthApplicationPolicyTest < ActiveSupport::TestCase
 
     it "returns all applications for site admins" do
       user = create(:user, site_admin: true)
-      resolved_applications = OAuthApplicationPolicy::Scope.new(user, Doorkeeper::Application.all).resolve
+      resolved_applications = OAuthApplicationPolicy::Scope.new(user, OAuthApplication.all).resolve
 
       assert_equal applications.sort, resolved_applications.sort
     end
@@ -45,14 +45,14 @@ class OAuthApplicationPolicyTest < ActiveSupport::TestCase
       # for existence
       pundit_user = AuthorizationInfo.new(user, {})
 
-      resolved_applications = OAuthApplicationPolicy::Scope.new(pundit_user, Doorkeeper::Application.all).resolve
+      resolved_applications = OAuthApplicationPolicy::Scope.new(pundit_user, OAuthApplication.all).resolve
 
       assert_equal [], resolved_applications.sort
     end
 
     it "returns no applications for anyone else" do
       user = create(:user)
-      resolved_applications = OAuthApplicationPolicy::Scope.new(user, Doorkeeper::Application.all).resolve
+      resolved_applications = OAuthApplicationPolicy::Scope.new(user, OAuthApplication.all).resolve
 
       assert_equal [], resolved_applications.sort
     end

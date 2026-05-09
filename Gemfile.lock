@@ -372,9 +372,7 @@ GEM
     mini_histogram (0.3.1)
     mini_magick (4.13.2)
     mini_mime (1.1.5)
-    minitest (6.0.6)
-      drb (~> 2.0)
-      prism (~> 1.5)
+    minitest (5.27.0)
     minitest-focus (1.4.1)
       minitest (> 5.0)
     minitest-reporters (1.8.0)
@@ -752,6 +750,7 @@ DEPENDENCIES
   listen
   lograge
   memory_profiler
+  minitest (~> 5)
   minitest-focus
   minitest-reporters
   minitest-spec-rails
