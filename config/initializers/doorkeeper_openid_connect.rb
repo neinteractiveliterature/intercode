@@ -1,9 +1,7 @@
 Doorkeeper::OpenidConnect.configure do
-  issuer(
-    "#{Rails.env.production? ? 'https' : 'http'}://#{Rails.application.config.action_mailer.default_url_options[:host]}"
-  )
+  issuer { Rails.application.routes.url_helpers.root_url(Rails.application.config.action_mailer.default_url_options) }
 
-  signing_key ENV.fetch('OPENID_CONNECT_SIGNING_KEY', nil)&.gsub('\n', "\n")
+  signing_key ENV.fetch("OPENID_CONNECT_SIGNING_KEY", nil)&.gsub('\n', "\n")
 
   subject_types_supported [:public]
 
@@ -19,11 +17,11 @@ Doorkeeper::OpenidConnect.configure do
 
   subject { |resource_owner, _application| resource_owner.id }
 
+  end_session_endpoint { destroy_user_session_url }
+
   # Protocol to use when generating URIs for the discovery endpoint,
   # for example if you also use HTTPS in development
-  # protocol do
-  #   :https
-  # end
+  protocol { :https }
 
   # Expiration time on or after which the ID Token MUST NOT be accepted for processing. (default 120 seconds).
   # expiration 600

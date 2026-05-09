@@ -79,6 +79,9 @@ Rails/NotNullColumn:
 GraphQL/ObjectDescription:
   Exclude:
     - app/graphql/sources/**/*.rb
+    - app/graphql/mutations/revoke_authorized_application.rb
+    - app/graphql/types/ability_type.rb
+    - app/graphql/types/query_type.rb
 
 # prettier and rubocop are fighting about this one, let prettier win
 Style/StringLiteralsInInterpolation:

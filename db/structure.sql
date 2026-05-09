@@ -1211,8 +1211,7 @@ CREATE TABLE public.conventions (
     open_graph_image text,
     favicon text,
     default_currency_code character varying,
-    signup_automation_mode character varying,
-    queue_no_ticket_reminder_advance_seconds integer
+    signup_automation_mode character varying
 );
 
 
@@ -1917,11 +1916,12 @@ CREATE TABLE public.oauth_applications (
     name character varying NOT NULL,
     uid character varying NOT NULL,
     secret character varying NOT NULL,
-    redirect_uri text NOT NULL,
+    redirect_uri text,
     scopes character varying DEFAULT ''::character varying NOT NULL,
     confidential boolean DEFAULT true NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    is_intercode_frontend boolean DEFAULT false NOT NULL
 );
 
 
@@ -2592,8 +2592,7 @@ CREATE TABLE public.signup_ranked_choices (
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
     result_signup_request_id bigint,
-    prioritize_waitlist boolean DEFAULT false NOT NULL,
-    waitlist_position_cap integer
+    prioritize_waitlist boolean DEFAULT false NOT NULL
 );
 
 
@@ -2667,7 +2666,6 @@ CREATE TABLE public.signup_rounds (
     ranked_choice_order text,
     executed_at timestamp without time zone,
     automation_action text,
-    rerandomize_lottery_numbers boolean DEFAULT false NOT NULL,
     CONSTRAINT chk_rails_4c92d587c4 CHECK (((maximum_event_signups = ANY (ARRAY['not_yet'::text, 'not_now'::text, 'unlimited'::text])) OR ((maximum_event_signups)::integer >= 1))),
     CONSTRAINT require_order_for_ranked_choice_rounds CHECK (((automation_action <> 'execute_ranked_choice'::text) OR (ranked_choice_order IS NOT NULL)))
 );
@@ -2707,8 +2705,7 @@ CREATE TABLE public.signups (
     state character varying DEFAULT 'confirmed'::character varying NOT NULL,
     counted boolean,
     requested_bucket_key character varying,
-    expires_at timestamp without time zone,
-    CONSTRAINT bucket_key_null_for_non_slot_occupying_states CHECK (((bucket_key IS NULL) OR ((state)::text = ANY (ARRAY[('confirmed'::character varying)::text, ('ticket_purchase_hold'::character varying)::text]))))
+    expires_at timestamp without time zone
 );
 
 
@@ -2959,8 +2956,7 @@ CREATE TABLE public.user_con_profiles (
     allow_sms boolean DEFAULT true NOT NULL,
     lottery_number integer NOT NULL,
     ranked_choice_ordering_boost integer,
-    ranked_choice_fallback_action text DEFAULT 'waitlist'::text NOT NULL,
-    queue_no_ticket_reminded_at timestamp(6) without time zone
+    ranked_choice_fallback_action text DEFAULT 'waitlist'::text NOT NULL
 );
 
 
@@ -3740,14 +3736,6 @@ ALTER TABLE ONLY public.form_sections
 
 ALTER TABLE ONLY public.forms
     ADD CONSTRAINT forms_pkey PRIMARY KEY (id);
-
-
---
--- Name: user_con_profiles index_user_con_profiles_on_convention_id_and_lottery_number; Type: CONSTRAINT; Schema: public; Owner: -
---
-
-ALTER TABLE ONLY public.user_con_profiles
-    ADD CONSTRAINT index_user_con_profiles_on_convention_id_and_lottery_number UNIQUE (convention_id, lottery_number) DEFERRABLE INITIALLY DEFERRED;
 
 
 --
@@ -4615,6 +4603,13 @@ CREATE UNIQUE INDEX index_oauth_access_tokens_on_token ON public.oauth_access_to
 
 
 --
+-- Name: index_oauth_applications_on_is_intercode_frontend; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_oauth_applications_on_is_intercode_frontend ON public.oauth_applications USING btree (is_intercode_frontend) WHERE is_intercode_frontend;
+
+
+--
 -- Name: index_oauth_applications_on_uid; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -5123,6 +5118,13 @@ CREATE INDEX index_user_activity_alerts_on_convention_id ON public.user_activity
 --
 
 CREATE INDEX index_user_activity_alerts_on_user_id ON public.user_activity_alerts USING btree (user_id);
+
+
+--
+-- Name: index_user_con_profiles_on_convention_id_and_lottery_number; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_user_con_profiles_on_convention_id_and_lottery_number ON public.user_con_profiles USING btree (convention_id, lottery_number);
 
 
 --
@@ -6141,13 +6143,8 @@ ALTER TABLE ONLY public.cms_files_pages
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
-('20260409003354'),
-('20260321193050'),
-('20260315200824'),
-('20260315182359'),
-('20260305000000'),
-('20260214191626'),
-('20260214190735'),
+('20251229184620'),
+('20251228041527'),
 ('20251210230514'),
 ('20251109200750'),
 ('20251001173716'),

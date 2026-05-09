@@ -1,10 +1,7 @@
 source "https://rubygems.org"
 
 ruby File.read(File.expand_path(".ruby-version", __dir__)).strip
-gem "rails", "8.1.3"
-
-# benchmark was removed from Ruby's default gems in Ruby 4.0; required by mini_magick
-gem "benchmark"
+gem "rails", "8.1.1"
 
 gem "pg"
 gem "puma"
@@ -19,7 +16,7 @@ gem "with_advisory_lock"
 gem "devise"
 gem "pundit"
 gem "recaptcha", require: "recaptcha/rails"
-gem "doorkeeper", "5.9.0"
+gem "doorkeeper", "5.8.2"
 gem "devise-doorkeeper"
 gem "devise-encryptable"
 gem "doorkeeper-jwt"
@@ -58,7 +55,7 @@ gem "pg_search"
 
 # GraphQL server
 gem "graphql"
-gem "apollo_upload_server", "2.1.8"
+gem "apollo_upload_server", "2.1.7"
 gem "graphql-rails_logger", groups: %i[development test]
 
 # Email stuff
@@ -71,7 +68,7 @@ gem "aws-sdk-sns"
 gem "redcarpet"
 
 # SMS and phone support
-gem "twilio-ruby", "~> 7.10.0"
+gem "twilio-ruby", "~> 7.8.0"
 gem "phonelib"
 
 # Background workers and scheduling
@@ -97,11 +94,12 @@ gem "tzinfo-data"
 gem "browser"
 gem "positioning"
 gem "stackprof"
+gem "rack-cors"
 
 gem "faker", group: "development", require: false
 
 gem "rollbar"
-gem "oj", "~> 3.17.0"
+gem "oj", "~> 3.16.0"
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", ">= 1.1.0", require: false
@@ -140,7 +138,7 @@ group :development do
   gem "debug"
 
   # Linting
-  gem "rubocop"
+  gem "rubocop", ">= 1.82"
   gem "rubocop-performance"
   gem "rubocop-rails"
   gem "rubocop-sequel"
@@ -181,7 +179,6 @@ group :test do
   gem "minitest-spec-rails"
   gem "minitest-reporters"
   gem "minitest-focus"
-  gem "minitest-mock"
   gem "factory_bot"
   gem "factory_bot_rails"
   gem "simplecov"
@@ -194,6 +191,4 @@ end
 gem "sentry-ruby", "~> 6.0"
 gem "sentry-rails", "~> 6.0"
 
-gem "openssl", "~> 4.0"
-
-gem "readline", "~> 0.0.4"
+gem "openssl", "~> 3.3"
