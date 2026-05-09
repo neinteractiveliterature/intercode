@@ -40,7 +40,6 @@ gem "civil_service", github: "neinteractiveliterature/civil_service", branch: "n
 gem "aws-sdk-s3"
 gem "ruby-vips"
 gem "image_processing", "~> 1.2"
-gem "active_storage_svg_sanitizer"
 
 # Filthy lucre
 gem "money-rails"
@@ -192,3 +191,5 @@ gem "sentry-ruby", "~> 6.0"
 gem "sentry-rails", "~> 6.0"
 
 gem "openssl", "~> 3.3"
+
+gem "readline", "~> 0.0.4"

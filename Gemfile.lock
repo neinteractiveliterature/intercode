@@ -74,8 +74,6 @@ GEM
       erubi (~> 1.11)
       rails-dom-testing (~> 2.2)
       rails-html-sanitizer (~> 1.6)
-    active_storage_svg_sanitizer (0.1.0)
-      rails (>= 5.2)
     activejob (8.1.1)
       activesupport (= 8.1.1)
       globalid (>= 0.3.6)
@@ -534,6 +532,8 @@ GEM
       erb
       psych (>= 4.0.0)
       tsort
+    readline (0.0.4)
+      reline
     recaptcha (5.21.2)
     redcarpet (3.6.1)
     regexp_parser (2.12.0)
@@ -701,7 +701,6 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  active_storage_svg_sanitizer
   activerecord-session_store
   ahoy_matey
   annotaterb
@@ -776,6 +775,7 @@ DEPENDENCIES
   rails (= 8.1.1)
   rails-controller-testing
   rbtrace
+  readline (~> 0.0.4)
   recaptcha
   redcarpet
   reverse_markdown
