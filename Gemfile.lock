@@ -375,6 +375,7 @@ GEM
     minitest (5.27.0)
     minitest-focus (1.4.1)
       minitest (> 5.0)
+    minitest-mock (5.27.0)
     minitest-reporters (1.8.0)
       ansi
       builder
@@ -750,8 +751,8 @@ DEPENDENCIES
   listen
   lograge
   memory_profiler
-  minitest (~> 5)
   minitest-focus
+  minitest-mock
   minitest-reporters
   minitest-spec-rails
   money-rails

@@ -178,7 +178,7 @@ group :test do
   gem "capybara"
   gem "cuprite"
   gem "database_cleaner-active_record"
-  gem "minitest", "~> 5"
+  gem "minitest-mock"
   gem "minitest-spec-rails"
   gem "minitest-reporters"
   gem "minitest-focus"
