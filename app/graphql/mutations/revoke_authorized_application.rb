@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class Mutations::RevokeAuthorizedApplication < Mutations::BaseMutation
+  description "Revokes all tokens and grants for an OAuth application for the current user."
+
   argument :uid, ID, required: true
 
   require_user

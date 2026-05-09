@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class Types::QueryType < Types::BaseObject
+  description "The root query type for the Intercode GraphQL API."
+
   field_class Types::BaseField # Camelize fields in this type
 
   field :convention_by_domain, Types::ConventionType, null: false do

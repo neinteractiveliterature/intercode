@@ -2,6 +2,8 @@
 # rubocop:disable Naming/PredicateMethod
 #
 class Types::AbilityType < Types::BaseObject
+  description "Describes what actions the current user is permitted to perform."
+
   field :can_become_user_con_profile, Boolean, null: false do
     argument :user_con_profile_id, ID, required: false, camelize: true
   end
