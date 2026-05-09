@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class Types::QueryType < Types::BaseObject
+  description "The root query type for the Intercode GraphQL API."
+
   field_class Types::BaseField # Camelize fields in this type
 
   field :convention_by_domain, Types::ConventionType, null: false do
@@ -240,7 +242,7 @@ represented as a JSON object."
 
   def my_authorized_applications
     return [] unless current_user
-    Doorkeeper::Application.authorized_for(current_user)
+    Doorkeeper.config.application_model.authorized_for(current_user)
   end
 
   def current_user
@@ -289,8 +291,8 @@ represented as a JSON object."
     context[:cadmus_renderer].render(Liquid::Template.parse(partial.content), :html)
   end
 
-  def has_oauth_applications # rubocop:disable Naming/PredicateName
-    Doorkeeper::Application.any?
+  def has_oauth_applications # rubocop:disable Naming/PredicateMethod, Naming/PredicatePrefix
+    Doorkeeper.config.application_model.any?
   end
 
   def oauth_pre_auth(query_params:)

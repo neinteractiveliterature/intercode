@@ -23,6 +23,7 @@ export type Scalars = {
   Upload: { input: File; output: File; }
 };
 
+/** Describes what actions the current user is permitted to perform. */
 export type Ability = {
   __typename: 'Ability';
   can_become_user_con_profile: Scalars['Boolean']['output'];
@@ -88,86 +89,103 @@ export type Ability = {
 };
 
 
+/** Describes what actions the current user is permitted to perform. */
 export type AbilityCan_Become_User_Con_ProfileArgs = {
   userConProfileId?: InputMaybe<Scalars['ID']['input']>;
 };
 
 
+/** Describes what actions the current user is permitted to perform. */
 export type AbilityCan_Delete_EventArgs = {
   eventId?: InputMaybe<Scalars['ID']['input']>;
 };
 
 
+/** Describes what actions the current user is permitted to perform. */
 export type AbilityCan_Delete_Event_ProposalArgs = {
   eventProposalId?: InputMaybe<Scalars['ID']['input']>;
 };
 
 
+/** Describes what actions the current user is permitted to perform. */
 export type AbilityCan_Delete_TicketArgs = {
   ticketId?: InputMaybe<Scalars['ID']['input']>;
 };
 
 
+/** Describes what actions the current user is permitted to perform. */
 export type AbilityCan_Delete_User_Con_ProfileArgs = {
   userConProfileId?: InputMaybe<Scalars['ID']['input']>;
 };
 
 
+/** Describes what actions the current user is permitted to perform. */
 export type AbilityCan_Force_Confirm_SignupArgs = {
   signupId?: InputMaybe<Scalars['ID']['input']>;
 };
 
 
+/** Describes what actions the current user is permitted to perform. */
 export type AbilityCan_Read_Admin_Notes_On_Event_ProposalArgs = {
   eventProposalId?: InputMaybe<Scalars['ID']['input']>;
 };
 
 
+/** Describes what actions the current user is permitted to perform. */
 export type AbilityCan_Read_Event_SignupsArgs = {
   eventId?: InputMaybe<Scalars['ID']['input']>;
 };
 
 
+/** Describes what actions the current user is permitted to perform. */
 export type AbilityCan_Update_Admin_Notes_On_Event_ProposalArgs = {
   eventProposalId?: InputMaybe<Scalars['ID']['input']>;
 };
 
 
+/** Describes what actions the current user is permitted to perform. */
 export type AbilityCan_Update_Bucket_SignupArgs = {
   signupId?: InputMaybe<Scalars['ID']['input']>;
 };
 
 
+/** Describes what actions the current user is permitted to perform. */
 export type AbilityCan_Update_Counted_SignupArgs = {
   signupId?: InputMaybe<Scalars['ID']['input']>;
 };
 
 
+/** Describes what actions the current user is permitted to perform. */
 export type AbilityCan_Update_EventArgs = {
   eventId?: InputMaybe<Scalars['ID']['input']>;
 };
 
 
+/** Describes what actions the current user is permitted to perform. */
 export type AbilityCan_Update_Event_ProposalArgs = {
   eventProposalId?: InputMaybe<Scalars['ID']['input']>;
 };
 
 
+/** Describes what actions the current user is permitted to perform. */
 export type AbilityCan_Update_SignupArgs = {
   signupId?: InputMaybe<Scalars['ID']['input']>;
 };
 
 
+/** Describes what actions the current user is permitted to perform. */
 export type AbilityCan_Update_TicketArgs = {
   ticketId?: InputMaybe<Scalars['ID']['input']>;
 };
 
 
+/** Describes what actions the current user is permitted to perform. */
 export type AbilityCan_Update_User_Con_ProfileArgs = {
   userConProfileId?: InputMaybe<Scalars['ID']['input']>;
 };
 
 
+/** Describes what actions the current user is permitted to perform. */
 export type AbilityCan_Withdraw_All_User_Con_Profile_SignupsArgs = {
   userConProfileId?: InputMaybe<Scalars['ID']['input']>;
 };
@@ -3539,6 +3557,7 @@ export type Mutation = {
    */
   rerunModeratedRankedChoiceSignupRound: RerunModeratedRankedChoiceSignupRoundPayload;
   restoreDroppedEvent: RestoreDroppedEventPayload;
+  /** Revokes all tokens and grants for an OAuth application for the current user. */
   revokeAuthorizedApplication: RevokeAuthorizedApplicationPayload;
   /** Sends a preview of a given notification template to the current user. */
   sendNotificationPreview: SendNotificationPreviewPayload;
@@ -4883,6 +4902,7 @@ export type ProvideEventTicketPayload = {
   ticket: Ticket;
 };
 
+/** The root query type for the Intercode GraphQL API. */
 export type Query = {
   __typename: 'Query';
   /**
@@ -4993,21 +5013,25 @@ export type Query = {
 };
 
 
+/** The root query type for the Intercode GraphQL API. */
 export type QueryCmsParentByDomainArgs = {
   domain: Scalars['String']['input'];
 };
 
 
+/** The root query type for the Intercode GraphQL API. */
 export type QueryConventionByDomainArgs = {
   domain: Scalars['String']['input'];
 };
 
 
+/** The root query type for the Intercode GraphQL API. */
 export type QueryConventionByIdArgs = {
   id?: InputMaybe<Scalars['ID']['input']>;
 };
 
 
+/** The root query type for the Intercode GraphQL API. */
 export type QueryConventions_PaginatedArgs = {
   filters?: InputMaybe<ConventionFiltersInput>;
   page?: InputMaybe<Scalars['Int']['input']>;
@@ -5016,11 +5040,13 @@ export type QueryConventions_PaginatedArgs = {
 };
 
 
+/** The root query type for the Intercode GraphQL API. */
 export type QueryEmail_RouteArgs = {
   id: Scalars['ID']['input'];
 };
 
 
+/** The root query type for the Intercode GraphQL API. */
 export type QueryEmail_Routes_PaginatedArgs = {
   filters?: InputMaybe<EmailRouteFiltersInput>;
   page?: InputMaybe<Scalars['Int']['input']>;
@@ -5029,21 +5055,25 @@ export type QueryEmail_Routes_PaginatedArgs = {
 };
 
 
+/** The root query type for the Intercode GraphQL API. */
 export type QueryOauthPreAuthArgs = {
   queryParams: Scalars['Json']['input'];
 };
 
 
+/** The root query type for the Intercode GraphQL API. */
 export type QueryUserArgs = {
   id?: InputMaybe<Scalars['ID']['input']>;
 };
 
 
+/** The root query type for the Intercode GraphQL API. */
 export type QueryUsersArgs = {
   ids?: InputMaybe<Array<Scalars['ID']['input']>>;
 };
 
 
+/** The root query type for the Intercode GraphQL API. */
 export type QueryUsers_PaginatedArgs = {
   filters?: InputMaybe<UserFiltersInput>;
   page?: InputMaybe<Scalars['Int']['input']>;

@@ -1,7 +1,8 @@
+# frozen_string_literal: true
 source "https://rubygems.org"
 
 ruby File.read(File.expand_path(".ruby-version", __dir__)).strip
-gem "rails", "8.1.3"
+gem "rails", "8.1.1"
 
 # benchmark was removed from Ruby's default gems in Ruby 4.0; required by mini_magick
 gem "benchmark"
@@ -17,13 +18,13 @@ gem "with_advisory_lock"
 
 # Devise for authentication, pundit for authorization, doorkeeper for OAuth providership
 gem "devise"
-gem "pundit"
-gem "recaptcha", require: "recaptcha/rails"
-gem "doorkeeper", "5.9.0"
 gem "devise-doorkeeper"
 gem "devise-encryptable"
+gem "doorkeeper", "5.8.2"
 gem "doorkeeper-jwt"
 gem "doorkeeper-openid_connect"
+gem "pundit"
+gem "recaptcha", require: "recaptcha/rails"
 
 # Let's store sessions in the database, shall we?
 gem "activerecord-session_store"
@@ -41,24 +42,23 @@ gem "civil_service", github: "neinteractiveliterature/civil_service", branch: "n
 
 # File uploading
 gem "aws-sdk-s3"
-gem "ruby-vips"
 gem "image_processing", "~> 1.2"
-gem "active_storage_svg_sanitizer"
+gem "ruby-vips"
 
 # Filthy lucre
-gem "money-rails"
-gem "eu_central_bank"
-gem "stripe"
 gem "business_time"
+gem "eu_central_bank"
 gem "holidays"
+gem "money-rails"
+gem "stripe"
 
 # Pagination and search
-gem "will_paginate"
 gem "pg_search"
+gem "will_paginate"
 
 # GraphQL server
+gem "apollo_upload_server", "2.1.7"
 gem "graphql"
-gem "apollo_upload_server", "2.1.8"
 gem "graphql-rails_logger", groups: %i[development test]
 
 # Email stuff
@@ -71,13 +71,13 @@ gem "aws-sdk-sns"
 gem "redcarpet"
 
 # SMS and phone support
-gem "twilio-ruby", "~> 7.10.0"
 gem "phonelib"
+gem "twilio-ruby", "~> 7.8.0"
 
 # Background workers and scheduling
-gem "shoryuken"
 gem "aws-sdk-sqs"
 gem "cloudwatch_scheduler", github: "paul/cloudwatch_scheduler"
+gem "shoryuken"
 
 # Privacy-respecting metrics
 gem "ahoy_matey"
@@ -86,22 +86,23 @@ gem "ahoy_matey"
 gem "lograge"
 
 # Miscellany
+gem "browser"
 gem "csv"
 gem "dalli"
 gem "domain_prefix"
 gem "faraday"
+gem "fly.io-rails"
 gem "icalendar"
 gem "platform-api"
-gem "fly.io-rails"
-gem "tzinfo-data"
-gem "browser"
 gem "positioning"
+gem "rack-cors"
 gem "stackprof"
+gem "tzinfo-data"
 
 gem "faker", group: "development", require: false
 
+gem "oj", "~> 3.16.0"
 gem "rollbar"
-gem "oj", "~> 3.17.0"
 
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", ">= 1.1.0", require: false
@@ -110,9 +111,9 @@ gem "parallel", groups: %i[development intercode1_import]
 
 # Production profiling
 group :skylight do
+  gem "rbtrace"
   gem "skylight"
   gem "webrick" # we don't actually use it, but Skylight needs it on boot
-  gem "rbtrace"
 end
 
 group :development do
@@ -140,20 +141,20 @@ group :development do
   gem "debug"
 
   # Linting
-  gem "rubocop"
-  gem "rubocop-performance"
-  gem "rubocop-rails"
-  gem "rubocop-sequel"
-  gem "rubocop-factory_bot", require: false
-  gem "rubocop-graphql", require: false
-  gem "rubocop-rspec", require: false
-  gem "rubocop-capybara", require: false
   gem "prettier", "4.0.4"
   gem "prettier_print"
+  gem "prism"
+  gem "rubocop", ">= 1.82"
+  gem "rubocop-capybara", require: false
+  gem "rubocop-factory_bot", require: false
+  gem "rubocop-graphql", require: false
+  gem "rubocop-performance"
+  gem "rubocop-rails"
+  gem "rubocop-rspec", require: false
+  gem "rubocop-sequel"
   gem "syntax_tree"
   gem "syntax_tree-haml"
   gem "syntax_tree-rbs"
-  gem "prism"
 
   # Find missing `end` statements
   gem "dead_end"
@@ -168,22 +169,22 @@ group :development, :test do
 end
 
 group :intercode1_import do
+  gem "mysql2", "~> 0.5.3"
+  gem "reverse_markdown"
   gem "sequel"
   gem "term-ansicolor"
-  gem "reverse_markdown"
-  gem "mysql2", "~> 0.5.3"
 end
 
 group :test do
   gem "capybara"
   gem "cuprite"
   gem "database_cleaner-active_record"
-  gem "minitest-spec-rails"
-  gem "minitest-reporters"
-  gem "minitest-focus"
-  gem "minitest-mock"
   gem "factory_bot"
   gem "factory_bot_rails"
+  gem "minitest-focus"
+  gem "minitest-mock"
+  gem "minitest-reporters"
+  gem "minitest-spec-rails"
   gem "simplecov"
   gem "simplecov-cobertura"
 
@@ -191,9 +192,9 @@ group :test do
   gem "rails-controller-testing"
 end
 
-gem "sentry-ruby", "~> 6.0"
 gem "sentry-rails", "~> 6.0"
+gem "sentry-ruby", "~> 6.0"
 
-gem "openssl", "~> 4.0"
+gem "openssl", "~> 3.3"
 
 gem "readline", "~> 0.0.4"

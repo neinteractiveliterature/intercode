@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Doorkeeper::ApplicationPolicy < ApplicationPolicy
+class OAuthApplicationPolicy < ApplicationPolicy
   # Only accessible by site admins, and only with a real cookie session (so no doorkeeper_token)
 
   def read?

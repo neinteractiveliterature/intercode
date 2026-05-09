@@ -11,13 +11,6 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- Name: public; Type: SCHEMA; Schema: -; Owner: -
---
-
--- *not* creating schema, since initdb creates it
-
-
---
 -- Name: pg_trgm; Type: EXTENSION; Schema: -; Owner: -
 --
 
@@ -783,7 +776,7 @@ CREATE TABLE public.ar_internal_metadata (
 
 CREATE TABLE public.assumed_identity_request_logs (
     id bigint NOT NULL,
-    assumed_identity_session_id bigint NOT NULL,
+    assumed_identity_session_id bigint CONSTRAINT assumed_identity_request_lo_assumed_identity_session_i_not_null NOT NULL,
     controller_name text NOT NULL,
     action_name text NOT NULL,
     http_method text NOT NULL,
@@ -1737,7 +1730,7 @@ CREATE TABLE public.maximum_event_provided_tickets_overrides (
     id bigint NOT NULL,
     event_id bigint,
     ticket_type_id bigint,
-    override_value integer NOT NULL,
+    override_value integer CONSTRAINT maximum_event_provided_tickets_override_override_value_not_null NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -1917,11 +1910,12 @@ CREATE TABLE public.oauth_applications (
     name character varying NOT NULL,
     uid character varying NOT NULL,
     secret character varying NOT NULL,
-    redirect_uri text NOT NULL,
+    redirect_uri text,
     scopes character varying DEFAULT ''::character varying NOT NULL,
     confidential boolean DEFAULT true NOT NULL,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    is_intercode_frontend boolean DEFAULT false NOT NULL
 );
 
 
@@ -2897,7 +2891,7 @@ CREATE TABLE public.user_activity_alerts (
     user_id bigint,
     partial_name text,
     email text,
-    trigger_on_user_con_profile_create boolean DEFAULT false NOT NULL,
+    trigger_on_user_con_profile_create boolean DEFAULT false CONSTRAINT user_activity_alerts_trigger_on_user_con_profile_creat_not_null NOT NULL,
     trigger_on_ticket_create boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
@@ -4615,6 +4609,13 @@ CREATE UNIQUE INDEX index_oauth_access_tokens_on_token ON public.oauth_access_to
 
 
 --
+-- Name: index_oauth_applications_on_is_intercode_frontend; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_oauth_applications_on_is_intercode_frontend ON public.oauth_applications USING btree (is_intercode_frontend) WHERE is_intercode_frontend;
+
+
+--
 -- Name: index_oauth_applications_on_uid; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -6148,6 +6149,8 @@ INSERT INTO "schema_migrations" (version) VALUES
 ('20260305000000'),
 ('20260214191626'),
 ('20260214190735'),
+('20251229184620'),
+('20251228041527'),
 ('20251210230514'),
 ('20251109200750'),
 ('20251001173716'),

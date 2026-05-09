@@ -12,7 +12,7 @@
         {
           "kind": "OBJECT",
           "name": "Ability",
-          "description": null,
+          "description": "Describes what actions the current user is permitted to perform.",
           "interfaces": [],
           "possibleTypes": null,
           "fields": [
@@ -22127,7 +22127,7 @@
             },
             {
               "name": "revokeAuthorizedApplication",
-              "description": null,
+              "description": "Revokes all tokens and grants for an OAuth application for the current user.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -27487,7 +27487,7 @@
         {
           "kind": "OBJECT",
           "name": "Query",
-          "description": null,
+          "description": "The root query type for the Intercode GraphQL API.",
           "interfaces": [],
           "possibleTypes": null,
           "fields": [

@@ -13,14 +13,23 @@ Doorkeeper.configure do
   orm :active_record
 
   # This block will be called to check whether the resource owner is authenticated or not.
-  resource_owner_authenticator { user_signed_in? ? current_user : NullResourceOwner.new }
+  resource_owner_authenticator do
+    if user_signed_in?
+      current_user
+    else
+      # Redirect to login page, preserving the OAuth parameters
+      session[:user_return_to] = request.fullpath
+      redirect_to new_user_session_url
+      nil
+    end
+  end
 
   # If you didn't skip applications controller from Doorkeeper routes in your application routes.rb
   # file then you need to declare this block in order to restrict access to the web interface for
   # adding oauth authorized applications. In other case it will return 403 Forbidden response
   # every time somebody will try to access the admin web interface.
   #
-  admin_authenticator { authorize Doorkeeper::Application.new, :manage? }
+  admin_authenticator { authorize Doorkeeper.config.application_model.new, :manage? }
 
   # If you are planning to use Doorkeeper in Rails 5 API-only application, then you might
   # want to use API mode that will skip all the views management and change the way how
@@ -62,6 +71,8 @@ Doorkeeper.configure do
   # Defaults to ActionController::Base.
   # See https://github.com/doorkeeper-gem/doorkeeper#custom-base-controller
   base_controller "ApplicationController"
+
+  application_class "OAuthApplication"
 
   # Reuse access token for the same resource owner within an application (disabled by default)
   # Rationale: https://github.com/doorkeeper-gem/doorkeeper/issues/383
@@ -202,9 +213,7 @@ Doorkeeper.configure do
   # so that the user skips the authorization step.
   # For example if dealing with a trusted application.
   #
-  # skip_authorization do |resource_owner, client|
-  #   client.superapp? or resource_owner.admin?
-  # end
+  skip_authorization { |_resource_owner, client| client.application&.is_intercode_frontend? }
 
   # WWW-Authenticate Realm (default "Doorkeeper").
   #

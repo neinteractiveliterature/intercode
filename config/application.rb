@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative "boot"
 
 require "rails/all"
@@ -10,10 +12,6 @@ Bundler.require(*Rails.groups)
 
 module Intercode
   class Application < Rails::Application
-    # Ruby 4.0 + Zeitwerk reentrant loading bug causes active_storage engine to initialize
-    # incompletely, leaving queues as nil. Initialize it before load_defaults runs.
-    config.active_storage.queues = ActiveSupport::InheritableOptions.new if config.active_storage.queues.nil?
-
     config.load_defaults 7.1
 
     # Please, add to the `ignore` list any other `lib` subdirectories that do
@@ -36,7 +34,7 @@ module Intercode
     config.active_job.queue_name_prefix = "intercode_#{Rails.env}"
 
     config.middleware.use Intercode::DynamicCookieDomain
-    config.middleware.use Intercode::FindVirtualHost
+    config.middleware.insert_after ActionDispatch::Executor, Intercode::FindVirtualHost
     config.middleware.use Rack::Deflater
 
     config.skylight.probes += %w[active_job graphql] if config.respond_to?(:skylight)
