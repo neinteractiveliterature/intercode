@@ -1,3 +1,6 @@
+"""
+Describes what actions the current user is permitted to perform.
+"""
 type Ability {
   can_become_user_con_profile(userConProfileId: ID): Boolean!
   can_create_cms_content_groups: Boolean!
@@ -5007,6 +5010,10 @@ type Mutation {
     """
     input: RestoreDroppedEventInput!
   ): RestoreDroppedEventPayload!
+
+  """
+  Revokes all tokens and grants for an OAuth application for the current user.
+  """
   revokeAuthorizedApplication(
     """
     Parameters for RevokeAuthorizedApplication
@@ -6126,6 +6133,9 @@ type ProvideEventTicketPayload {
   ticket: Ticket!
 }
 
+"""
+The root query type for the Intercode GraphQL API.
+"""
 type Query {
   """
   If there is a CMS partial on the root site called `account_form_text`, renders it to HTML
