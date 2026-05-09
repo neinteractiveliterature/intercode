@@ -57,7 +57,7 @@ gem "pg_search"
 gem "will_paginate"
 
 # GraphQL server
-gem "apollo_upload_server", "2.1.7"
+gem "apollo_upload_server", "2.1.8"
 gem "graphql"
 gem "graphql-rails_logger", groups: %i[development test]
 
