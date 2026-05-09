@@ -11,13 +11,6 @@ SET client_min_messages = warning;
 SET row_security = off;
 
 --
--- Name: public; Type: SCHEMA; Schema: -; Owner: -
---
-
--- *not* creating schema, since initdb creates it
-
-
---
 -- Name: pg_trgm; Type: EXTENSION; Schema: -; Owner: -
 --
 
@@ -783,7 +776,7 @@ CREATE TABLE public.ar_internal_metadata (
 
 CREATE TABLE public.assumed_identity_request_logs (
     id bigint NOT NULL,
-    assumed_identity_session_id bigint NOT NULL,
+    assumed_identity_session_id bigint CONSTRAINT assumed_identity_request_lo_assumed_identity_session_i_not_null NOT NULL,
     controller_name text NOT NULL,
     action_name text NOT NULL,
     http_method text NOT NULL,
@@ -1211,7 +1204,8 @@ CREATE TABLE public.conventions (
     open_graph_image text,
     favicon text,
     default_currency_code character varying,
-    signup_automation_mode character varying
+    signup_automation_mode character varying,
+    queue_no_ticket_reminder_advance_seconds integer
 );
 
 
@@ -1736,7 +1730,7 @@ CREATE TABLE public.maximum_event_provided_tickets_overrides (
     id bigint NOT NULL,
     event_id bigint,
     ticket_type_id bigint,
-    override_value integer NOT NULL,
+    override_value integer CONSTRAINT maximum_event_provided_tickets_override_override_value_not_null NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
 );
@@ -2592,7 +2586,8 @@ CREATE TABLE public.signup_ranked_choices (
     created_at timestamp(6) without time zone NOT NULL,
     updated_at timestamp(6) without time zone NOT NULL,
     result_signup_request_id bigint,
-    prioritize_waitlist boolean DEFAULT false NOT NULL
+    prioritize_waitlist boolean DEFAULT false NOT NULL,
+    waitlist_position_cap integer
 );
 
 
@@ -2666,6 +2661,7 @@ CREATE TABLE public.signup_rounds (
     ranked_choice_order text,
     executed_at timestamp without time zone,
     automation_action text,
+    rerandomize_lottery_numbers boolean DEFAULT false NOT NULL,
     CONSTRAINT chk_rails_4c92d587c4 CHECK (((maximum_event_signups = ANY (ARRAY['not_yet'::text, 'not_now'::text, 'unlimited'::text])) OR ((maximum_event_signups)::integer >= 1))),
     CONSTRAINT require_order_for_ranked_choice_rounds CHECK (((automation_action <> 'execute_ranked_choice'::text) OR (ranked_choice_order IS NOT NULL)))
 );
@@ -2705,7 +2701,8 @@ CREATE TABLE public.signups (
     state character varying DEFAULT 'confirmed'::character varying NOT NULL,
     counted boolean,
     requested_bucket_key character varying,
-    expires_at timestamp without time zone
+    expires_at timestamp without time zone,
+    CONSTRAINT bucket_key_null_for_non_slot_occupying_states CHECK (((bucket_key IS NULL) OR ((state)::text = ANY (ARRAY[('confirmed'::character varying)::text, ('ticket_purchase_hold'::character varying)::text]))))
 );
 
 
@@ -2894,7 +2891,7 @@ CREATE TABLE public.user_activity_alerts (
     user_id bigint,
     partial_name text,
     email text,
-    trigger_on_user_con_profile_create boolean DEFAULT false NOT NULL,
+    trigger_on_user_con_profile_create boolean DEFAULT false CONSTRAINT user_activity_alerts_trigger_on_user_con_profile_creat_not_null NOT NULL,
     trigger_on_ticket_create boolean DEFAULT false NOT NULL,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL
@@ -2956,7 +2953,8 @@ CREATE TABLE public.user_con_profiles (
     allow_sms boolean DEFAULT true NOT NULL,
     lottery_number integer NOT NULL,
     ranked_choice_ordering_boost integer,
-    ranked_choice_fallback_action text DEFAULT 'waitlist'::text NOT NULL
+    ranked_choice_fallback_action text DEFAULT 'waitlist'::text NOT NULL,
+    queue_no_ticket_reminded_at timestamp(6) without time zone
 );
 
 
@@ -3736,6 +3734,14 @@ ALTER TABLE ONLY public.form_sections
 
 ALTER TABLE ONLY public.forms
     ADD CONSTRAINT forms_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: user_con_profiles index_user_con_profiles_on_convention_id_and_lottery_number; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.user_con_profiles
+    ADD CONSTRAINT index_user_con_profiles_on_convention_id_and_lottery_number UNIQUE (convention_id, lottery_number) DEFERRABLE INITIALLY DEFERRED;
 
 
 --
@@ -5121,13 +5127,6 @@ CREATE INDEX index_user_activity_alerts_on_user_id ON public.user_activity_alert
 
 
 --
--- Name: index_user_con_profiles_on_convention_id_and_lottery_number; Type: INDEX; Schema: public; Owner: -
---
-
-CREATE UNIQUE INDEX index_user_con_profiles_on_convention_id_and_lottery_number ON public.user_con_profiles USING btree (convention_id, lottery_number);
-
-
---
 -- Name: index_user_con_profiles_on_convention_id_and_user_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -6143,6 +6142,13 @@ ALTER TABLE ONLY public.cms_files_pages
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260409003354'),
+('20260321193050'),
+('20260315200824'),
+('20260315182359'),
+('20260305000000'),
+('20260214191626'),
+('20260214190735'),
 ('20251229184620'),
 ('20251228041527'),
 ('20251210230514'),

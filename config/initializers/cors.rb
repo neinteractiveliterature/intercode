@@ -1,4 +1,6 @@
-Rails.application.config.middleware.insert_before 0, Rack::Cors do
+# FindVirtualHost is inserted after ActionDispatch::Executor in application.rb, so
+# env["intercode.convention"] is set before Rack::Cors runs its origin check.
+Rails.application.config.middleware.insert_after Intercode::FindVirtualHost, Rack::Cors do
   allow do
     origins do |source, env|
       if env["intercode.convention"]
@@ -33,4 +35,3 @@ Rails.application.config.middleware.insert_before 0, Rack::Cors do
   #   resource "*", headers: :any, methods: %i[get]
   # end
 end
-Rails.application.config.middleware.insert_before 0, Intercode::FindVirtualHost

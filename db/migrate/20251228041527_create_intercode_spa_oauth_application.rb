@@ -13,7 +13,7 @@ class CreateIntercodeSpaOAuthApplication < ActiveRecord::Migration[8.1]
               name: "Intercode Frontend",
               is_intercode_frontend: true,
               redirect_uri: "http://localhost:3135/oauth/callback\nhttps://intercode.test:3135/oauth/callback",
-              scopes: Doorkeeper.configuration.scopes.join(" "),
+              scopes: Doorkeeper.configuration.scopes.to_s,
               confidential: false
             )
 
