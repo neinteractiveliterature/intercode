@@ -7,6 +7,10 @@ gem "rails", "8.1.1"
 # benchmark was removed from Ruby's default gems in Ruby 4.0; required by mini_magick
 gem "benchmark"
 
+# locking to connection_pool 2.x until ActiveSupport's memcachestore supports the v3 API
+# see https://github.com/mperham/connection_pool/issues/212
+gem "connection_pool", "< 3"
+
 gem "pg"
 gem "puma"
 
