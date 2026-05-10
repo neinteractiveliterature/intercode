@@ -168,7 +168,6 @@ GEM
       aws-eventstream (~> 1, >= 1.0.2)
     base64 (0.3.0)
     bcrypt (3.1.22)
-    benchmark (0.5.0)
     benchmark-ips (2.14.0)
     bigdecimal (4.1.2)
     bootsnap (1.24.3)
@@ -711,7 +710,6 @@ DEPENDENCIES
   aws-sdk-ses
   aws-sdk-sns
   aws-sdk-sqs
-  benchmark
   bootsnap (>= 1.1.0)
   browser
   business_time
@@ -815,7 +813,7 @@ DEPENDENCIES
   yard
 
 RUBY VERSION
-   ruby 4.0.3p0
+   ruby 3.4.9p82
 
 BUNDLED WITH
    2.6.2
