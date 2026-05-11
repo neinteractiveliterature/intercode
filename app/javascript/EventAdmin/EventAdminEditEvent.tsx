@@ -68,25 +68,13 @@ function EventAdminEditEvent() {
     () => ({
       __typename: 'Event',
       id: event.id,
+      title: typeof event.form_response_attrs.title === 'string' ? event.form_response_attrs.title : null,
       length_seconds:
         typeof event.form_response_attrs.length_seconds === 'number' ? event.form_response_attrs.length_seconds : 0,
-      current_user_form_item_viewer_role: event.current_user_form_item_viewer_role,
-      current_user_form_item_writer_role: event.current_user_form_item_writer_role,
       can_play_concurrently: event.can_play_concurrently ?? false,
-      event_category: {
-        __typename: 'EventCategory',
-        id: '',
-        name: 'fake category for single-run event UI',
-        event_form: {
-          __typename: 'Form',
-          form_sections: [],
-          id: '',
-        },
-      },
-      maximum_event_provided_tickets_overrides: [],
-      bucket_keys_with_pending_signups_or_requests: [],
+      event_category: { __typename: 'EventCategory' as const, id: '' },
+      registration_policy: null,
       runs: [run],
-      images: event.images,
     }),
     [run, event],
   );

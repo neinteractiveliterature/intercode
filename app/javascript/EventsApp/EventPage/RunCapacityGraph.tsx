@@ -2,14 +2,14 @@ import { useTranslation } from 'react-i18next';
 
 import RunCapacityGraphBucket from './RunCapacityGraphBucket';
 import SignupCountData from '../SignupCountData';
-import sortBuckets from './sortBuckets';
+import sortBuckets, { RunCapacityBucket } from './sortBuckets';
 import BucketAvailabilityDisplay from './BucketAvailabilityDisplay';
 import { EventPageQueryData } from './queries.generated';
 import styles from 'styles/run_capacity_graph.module.scss';
 
 export type RunCapacityGraphProps = {
   run: Pick<EventPageQueryData['convention']['event']['runs'][0], 'grouped_signup_counts'>;
-  event: Pick<EventPageQueryData['convention']['event'], 'registration_policy'>;
+  event: { registration_policy?: { buckets: RunCapacityBucket[] } | null };
   signupsAvailable: boolean;
 };
 

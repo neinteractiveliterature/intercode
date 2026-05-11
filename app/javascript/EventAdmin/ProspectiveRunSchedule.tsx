@@ -20,7 +20,6 @@ import AvailabilityBar from '../EventsApp/ScheduleGrid/AvailabilityBar';
 import AppRootContext from '../AppRootContext';
 import { RunDimensions, ScheduleLayoutResult } from '../EventsApp/ScheduleGrid/ScheduleLayout/ScheduleLayoutBlock';
 import { ScheduleGridConfig } from '../EventsApp/ScheduleGrid/ScheduleGridConfig';
-import { RunFieldsFragment } from './queries.generated';
 import { ScheduleEventInput, ScheduleRun } from '../EventsApp/ScheduleGrid/Schedule';
 import { useEventAdminEventsLoader } from './loaders';
 import styles from 'styles/schedule_grid.module.scss';
@@ -142,16 +141,11 @@ function ProspectiveRunScheduleEventRun({
 
 export type ProspectiveRunScheduleProps = {
   day?: DateTime;
-  runs: Omit<
-    RunFieldsFragment,
-    | 'grouped_signup_counts'
-    | 'confirmed_signup_count'
-    | 'not_counted_signup_count'
-    | 'room_names'
-    | 'my_signups'
-    | 'my_signup_requests'
-    | 'my_signup_ranked_choices'
-  >[];
+  runs: Array<{
+    id: string;
+    starts_at: string;
+    rooms?: Array<{ name?: string | null }> | null;
+  }>;
   event: ScheduleEventInput;
 };
 
