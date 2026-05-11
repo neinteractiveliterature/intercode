@@ -41,6 +41,7 @@ function NewStaffPosition(): React.JSX.Element {
     id: '',
     name: '',
     email: '',
+    visible: null,
     user_con_profiles: [],
     cc_addresses: [],
     email_aliases: [],

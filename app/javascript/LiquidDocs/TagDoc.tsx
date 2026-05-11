@@ -43,7 +43,12 @@ const ReturnTagWithClassDoc = ({ tag, assignName, returnClassName, prefix }: Ret
     <div className="d-flex align-items-start">
       <div className="h3 me-1">↳</div>
       <AssignDocLink
-        assign={{ __typename: 'LiquidAssign', name: assignName, drop_class_name: returnClassName }}
+        assign={{
+          __typename: 'LiquidAssign',
+          name: assignName,
+          drop_class_name: returnClassName,
+          cms_variable_value_json: null,
+        }}
         compact
         prefix={prefix}
       />

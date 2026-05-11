@@ -116,8 +116,7 @@ function SignupRoundCard({ rounds, roundIndex }: SignupRoundCardProps) {
                 value={editingRound.automation_action ?? undefined}
                 onValueChange={(newValue) =>
                   setEditingRound((prevEditingRound) => {
-                    const newAction =
-                      newValue === SignupRoundAutomationAction.ExecuteRankedChoice ? newValue : undefined;
+                    const newAction = newValue === SignupRoundAutomationAction.ExecuteRankedChoice ? newValue : null;
                     return { ...prevEditingRound, automation_action: newAction };
                   })
                 }
@@ -135,9 +134,7 @@ function SignupRoundCard({ rounds, roundIndex }: SignupRoundCardProps) {
                   onValueChange={(newValue) =>
                     setEditingRound((prevEditingRound) => {
                       const newOrder =
-                        newValue === RankedChoiceOrder.Asc || newValue === RankedChoiceOrder.Desc
-                          ? newValue
-                          : undefined;
+                        newValue === RankedChoiceOrder.Asc || newValue === RankedChoiceOrder.Desc ? newValue : null;
 
                       return { ...prevEditingRound, ranked_choice_order: newOrder };
                     })
