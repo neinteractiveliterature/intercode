@@ -25,6 +25,7 @@ fragment AdminOrderFieldsFragment on Order {
   user_con_profile {
     id
     name_without_nickname
+    email
   }
 
   total_price {

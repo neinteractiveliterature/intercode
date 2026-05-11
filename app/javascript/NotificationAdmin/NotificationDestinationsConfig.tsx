@@ -1,11 +1,9 @@
 import { MultipleChoiceInput, useGraphQLConfirm } from '@neinteractiveliterature/litform';
-import { DefaultUserConProfilesQueryData } from 'BuiltInFormControls/selectDefaultQueries.generated';
 import UserConProfileSelect from 'BuiltInFormControls/UserConProfileSelect';
 import {
   EventCategory,
   NotificationCondition,
   NotificationConditionType,
-  NotificationDestination,
   NotificationDynamicDestination,
   StaffPosition,
 } from 'graphqlTypes.generated';
@@ -16,14 +14,22 @@ import NotificationDestinationDescription, { describeCondition } from './Notific
 import sortBy from 'lodash/sortBy';
 import assertNever from 'assert-never';
 
-type NotificationDestinationType = Pick<
-  NotificationDestination,
-  'id' | '__typename' | 'dynamic_destination' | 'conditions'
-> & {
+type NotificationDestinationType = {
+  __typename: 'NotificationDestination';
+  id: string;
+  dynamic_destination?: NotificationDynamicDestination | null;
+  conditions?: Array<{
+    __typename: 'NotificationCondition';
+    condition_type: NotificationConditionType;
+    value?: string | null;
+  }> | null;
   staff_position?: Pick<StaffPosition, 'id' | 'name' | '__typename'> | null;
-  user_con_profile?:
-    | NonNullable<DefaultUserConProfilesQueryData['convention']>['user_con_profiles_paginated']['entries'][number]
-    | null;
+  user_con_profile?: {
+    __typename: 'UserConProfile';
+    id: string;
+    name_without_nickname: string;
+    email?: string | null;
+  } | null;
 };
 
 type AddConditionFormProps = {
@@ -203,7 +209,12 @@ function AddDestinationForm<T extends NotificationDestinationType>({
 
           {destinationType === 'user_con_profile' && (
             <UserConProfileSelect
-              value={destination.user_con_profile}
+              value={
+                destination.user_con_profile as
+                  | { __typename: 'UserConProfile'; id: string; name_without_nickname: string; email: string | null }
+                  | null
+                  | undefined
+              }
               onChange={(userConProfile) => {
                 setDestination((prevDestination) => ({ ...prevDestination, user_con_profile: userConProfile }));
               }}

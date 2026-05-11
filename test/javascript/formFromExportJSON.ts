@@ -37,6 +37,7 @@ export default function formFromExportJSON(exportJSON: any): CommonFormFieldsFra
         rendered_properties: JSON.stringify(properties),
         visibility: FormItemRole.Normal,
         writeability: FormItemRole.Normal,
+        expose_in: null,
       });
       formItemId += 1;
     });

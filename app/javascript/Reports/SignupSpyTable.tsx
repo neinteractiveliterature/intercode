@@ -1,4 +1,4 @@
-import { ColumnDef, createColumnHelper } from '@tanstack/react-table';
+import { CellContext, ColumnDef, createColumnHelper } from '@tanstack/react-table';
 
 import useReactTableWithTheWorks, { QueryDataContext } from '../Tables/useReactTableWithTheWorks';
 import RefreshButton from '../EventsApp/ScheduleGrid/RefreshButton';
@@ -48,7 +48,9 @@ function SignupSpyTable(): React.JSX.Element {
       columnHelper.accessor((signupChange) => signupChange, {
         header: 'Change',
         id: 'action',
-        cell: SignupChangeCell,
+        cell: SignupChangeCell as unknown as (
+          props: CellContext<SignupChangeType, SignupChangeType>,
+        ) => React.JSX.Element,
         enableColumnFilter: true,
       }),
       columnHelper.accessor((signupChange) => ({ signupChange, event: signupChange.run.event }), {

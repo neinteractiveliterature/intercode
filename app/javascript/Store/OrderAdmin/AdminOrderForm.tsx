@@ -7,7 +7,7 @@ import InPlaceEditor from 'BuiltInFormControls/InPlaceEditor';
 import InPlaceMoneyEditor from 'Store/InPlaceMoneyEditor';
 import UserConProfileSelect from 'BuiltInFormControls/UserConProfileSelect';
 import EnumTypes from 'enumTypes.json';
-import { Order, OrderStatus, UserConProfile } from 'graphqlTypes.generated';
+import { Money, OrderStatus } from 'graphqlTypes.generated';
 import { Trans, useTranslation } from 'react-i18next';
 import { useFetcher } from 'react-router';
 
@@ -15,8 +15,18 @@ const ORDER_STATUS_CHOICES = EnumTypes.OrderStatus.enumValues
   .map((enumValue) => ({ label: enumValue.name, value: enumValue.name }))
   .filter((choice) => choice.value !== 'pending');
 
-export type AdminOrderType = Pick<Order, 'status' | 'charge_id' | 'paid_at' | 'payment_amount' | 'payment_note'> & {
-  user_con_profile?: Pick<UserConProfile, 'id' | '__typename' | 'name_without_nickname'>;
+export type AdminOrderType = {
+  status: OrderStatus;
+  charge_id?: string | null;
+  paid_at?: string | null;
+  payment_amount?: Money | null;
+  payment_note?: string | null;
+  user_con_profile?: {
+    __typename: 'UserConProfile';
+    id: string;
+    name_without_nickname: string;
+    email: string | null;
+  };
 };
 
 export type AdminOrderTypeWithId = AdminOrderType & { id: string };
@@ -146,7 +156,7 @@ function AdminOrderForm<T extends AdminOrderType>({ order, updateOrder }: AdminO
           ) : (
             <UserConProfileSelect
               value={order.user_con_profile}
-              onChange={(value) => updateOrder({ user_con_profile: value } as Partial<T>)}
+              onChange={(value) => updateOrder({ user_con_profile: value } as unknown as Partial<T>)}
             />
           )}
         </dd>

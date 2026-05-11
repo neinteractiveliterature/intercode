@@ -1,8 +1,15 @@
 import { useState } from 'react';
-import { ActionFunction, LoaderFunction, redirect, useFetcher, useLoaderData, RouterContextProvider } from 'react-router';
+import {
+  ActionFunction,
+  LoaderFunction,
+  redirect,
+  useFetcher,
+  useLoaderData,
+  RouterContextProvider,
+} from 'react-router';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import StaffPositionForm from './StaffPositionForm';
+import StaffPositionForm, { EditingStaffPosition } from './StaffPositionForm';
 import usePageTitle from '../usePageTitle';
 import buildStaffPositionInput from './buildStaffPositionInput';
 import { StaffPositionsQueryData, StaffPositionsQueryDocument } from './queries.generated';
@@ -44,7 +51,7 @@ export const loader: LoaderFunction<RouterContextProvider> = async ({ context, p
 
 function EditStaffPosition() {
   const { initialStaffPosition } = useLoaderData() as LoaderResult;
-  const [staffPosition, setStaffPosition] = useState(initialStaffPosition);
+  const [staffPosition, setStaffPosition] = useState<EditingStaffPosition>(initialStaffPosition);
   const fetcher = useFetcher();
   const updateError = fetcher.data instanceof Error ? fetcher.data : undefined;
   const requestInProgress = fetcher.state !== 'idle';

@@ -30,7 +30,7 @@ type TicketAdminControlsProps = {
     ticket_name: string;
     ticket_types: AddOrderToTicketButtonProps['convention']['ticket_types'];
   };
-  userConProfile: Pick<UserConProfileData, 'id' | '__typename' | 'name' | 'name_without_nickname'> & {
+  userConProfile: Pick<UserConProfileData, 'id' | '__typename' | 'name' | 'name_without_nickname' | 'email'> & {
     ticket?:
       | null
       | (Pick<TicketData, 'id' | 'created_at' | 'updated_at'> & {

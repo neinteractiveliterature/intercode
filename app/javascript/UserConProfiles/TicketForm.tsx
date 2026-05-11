@@ -21,7 +21,7 @@ export type TicketFormProps = {
   convention: UserConProfileAdminQueryData['convention'];
   onSubmit: (ticketInput: TicketInput) => Promise<void>;
   submitCaption: string;
-  userConProfile: Pick<UserConProfile, 'id' | '__typename' | 'name_without_nickname'>;
+  userConProfile: Pick<UserConProfile, 'id' | '__typename' | 'name_without_nickname'> & { email: string | null };
 };
 
 function TicketForm({

@@ -134,8 +134,8 @@ function NewFormItemModal<FormType extends FormTypeDefinition>({
       __typename: 'FormItem',
       identifier,
       default_value: (standardItem || {}).default_value,
-      admin_description: (standardItem || {}).admin_description,
-      public_description: (standardItem || {}).public_description,
+      admin_description: (standardItem || {}).admin_description ?? null,
+      public_description: (standardItem || {}).public_description ?? null,
       properties: {
         ...newFormItem.properties,
         ...standardItemProperties(standardItem, itemType),

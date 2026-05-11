@@ -50,7 +50,11 @@ export const FormEditorContext = React.createContext<FormEditorContextValue>({
     __typename: 'Convention',
     id: '',
     name: '',
+    starts_at: null,
+    ends_at: null,
+    timezone_name: null,
     timezone_mode: TimezoneMode.UserLocal,
+    event_mailing_list_domain: null,
     form: {
       __typename: 'Form',
       id: '',
@@ -86,6 +90,10 @@ export const FormItemEditorContext = React.createContext<FormItemEditorContextVa
     id: '',
     position: 1,
     item_type: 'static_text',
+    identifier: null,
+    admin_description: null,
+    public_description: null,
+    expose_in: null,
     properties: {
       content: '',
       style: 'normal',
@@ -102,6 +110,10 @@ export const FormItemEditorContext = React.createContext<FormItemEditorContextVa
     id: '',
     position: 1,
     item_type: 'static_text',
+    identifier: null,
+    admin_description: null,
+    public_description: null,
+    expose_in: null,
     rendered_properties: {
       content: '',
       style: 'normal',
