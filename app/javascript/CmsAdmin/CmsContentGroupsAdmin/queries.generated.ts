@@ -1,12 +1,16 @@
 /* eslint-disable */
+/** Internal type. DO NOT USE DIRECTLY. */
+type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+/** Internal type. DO NOT USE DIRECTLY. */
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 import * as Types from '../../graphqlTypes.generated';
 
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
-export type CmsContentFields_CmsLayout_Fragment = { __typename: 'CmsLayout', id: string, name?: string | null };
+export type CmsContentFields_CmsLayout_Fragment = { __typename: 'CmsLayout', id: string, name: string | null };
 
-export type CmsContentFields_CmsPartial_Fragment = { __typename: 'CmsPartial', id: string, name?: string | null };
+export type CmsContentFields_CmsPartial_Fragment = { __typename: 'CmsPartial', id: string, name: string | null };
 
-export type CmsContentFields_Page_Fragment = { __typename: 'Page', id: string, name?: string | null };
+export type CmsContentFields_Page_Fragment = { __typename: 'Page', id: string, name: string | null };
 
 export type CmsContentFieldsFragment =
   | CmsContentFields_CmsLayout_Fragment
@@ -15,63 +19,63 @@ export type CmsContentFieldsFragment =
 ;
 
 export type CmsContentGroupFieldsFragment = { __typename: 'CmsContentGroup', id: string, name: string, current_ability_can_update: boolean, current_ability_can_delete: boolean, contents: Array<
-    | { __typename: 'CmsLayout', id: string, name?: string | null }
-    | { __typename: 'CmsPartial', id: string, name?: string | null }
-    | { __typename: 'Page', id: string, name?: string | null }
+    | { __typename: 'CmsLayout', id: string, name: string | null }
+    | { __typename: 'CmsPartial', id: string, name: string | null }
+    | { __typename: 'Page', id: string, name: string | null }
   >, permissions: Array<{ __typename: 'Permission', id: string, permission: string, model:
       | { __typename: 'CmsContentGroup', id: string, name: string }
       | { __typename: 'Convention', id: string, name: string }
-      | { __typename: 'EventCategory', id: string, name: string, default_color?: string | null }
+      | { __typename: 'EventCategory', id: string, name: string, default_color: string | null }
     , role:
       | { __typename: 'OrganizationRole', id: string, name: string }
       | { __typename: 'StaffPosition', id: string, name: string }
      }> };
 
-export type CmsContentGroupsAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type CmsContentGroupsAdminQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CmsContentGroupsAdminQueryData = { __typename: 'Query', convention?: { __typename: 'Convention', id: string, name: string, staff_positions: Array<{ __typename: 'StaffPosition', id: string, name: string }> } | null, cmsParent:
+export type CmsContentGroupsAdminQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, staff_positions: Array<{ __typename: 'StaffPosition', id: string, name: string }> } | null, cmsParent:
     | { __typename: 'Convention', id: string, cmsContentGroups: Array<{ __typename: 'CmsContentGroup', id: string, name: string, current_ability_can_update: boolean, current_ability_can_delete: boolean, contents: Array<
-          | { __typename: 'CmsLayout', id: string, name?: string | null }
-          | { __typename: 'CmsPartial', id: string, name?: string | null }
-          | { __typename: 'Page', id: string, name?: string | null }
+          | { __typename: 'CmsLayout', id: string, name: string | null }
+          | { __typename: 'CmsPartial', id: string, name: string | null }
+          | { __typename: 'Page', id: string, name: string | null }
         >, permissions: Array<{ __typename: 'Permission', id: string, permission: string, model:
             | { __typename: 'CmsContentGroup', id: string, name: string }
             | { __typename: 'Convention', id: string, name: string }
-            | { __typename: 'EventCategory', id: string, name: string, default_color?: string | null }
+            | { __typename: 'EventCategory', id: string, name: string, default_color: string | null }
           , role:
             | { __typename: 'OrganizationRole', id: string, name: string }
             | { __typename: 'StaffPosition', id: string, name: string }
            }> }> }
     | { __typename: 'RootSite', id: string, cmsContentGroups: Array<{ __typename: 'CmsContentGroup', id: string, name: string, current_ability_can_update: boolean, current_ability_can_delete: boolean, contents: Array<
-          | { __typename: 'CmsLayout', id: string, name?: string | null }
-          | { __typename: 'CmsPartial', id: string, name?: string | null }
-          | { __typename: 'Page', id: string, name?: string | null }
+          | { __typename: 'CmsLayout', id: string, name: string | null }
+          | { __typename: 'CmsPartial', id: string, name: string | null }
+          | { __typename: 'Page', id: string, name: string | null }
         >, permissions: Array<{ __typename: 'Permission', id: string, permission: string, model:
             | { __typename: 'CmsContentGroup', id: string, name: string }
             | { __typename: 'Convention', id: string, name: string }
-            | { __typename: 'EventCategory', id: string, name: string, default_color?: string | null }
+            | { __typename: 'EventCategory', id: string, name: string, default_color: string | null }
           , role:
             | { __typename: 'OrganizationRole', id: string, name: string }
             | { __typename: 'StaffPosition', id: string, name: string }
            }> }> }
   , currentAbility: { __typename: 'Ability', can_create_cms_content_groups: boolean } };
 
-export type SearchCmsContentQueryVariables = Types.Exact<{
-  name?: Types.InputMaybe<Types.Scalars['String']['input']>;
+export type SearchCmsContentQueryVariables = Exact<{
+  name?: string | null | undefined;
 }>;
 
 
 export type SearchCmsContentQueryData = { __typename: 'Query', cmsParent:
     | { __typename: 'Convention', id: string, typeaheadSearchCmsContent: Array<
-        | { __typename: 'CmsLayout', id: string, name?: string | null }
-        | { __typename: 'CmsPartial', id: string, name?: string | null }
-        | { __typename: 'Page', id: string, name?: string | null }
+        | { __typename: 'CmsLayout', id: string, name: string | null }
+        | { __typename: 'CmsPartial', id: string, name: string | null }
+        | { __typename: 'Page', id: string, name: string | null }
       > }
     | { __typename: 'RootSite', id: string, typeaheadSearchCmsContent: Array<
-        | { __typename: 'CmsLayout', id: string, name?: string | null }
-        | { __typename: 'CmsPartial', id: string, name?: string | null }
-        | { __typename: 'Page', id: string, name?: string | null }
+        | { __typename: 'CmsLayout', id: string, name: string | null }
+        | { __typename: 'CmsPartial', id: string, name: string | null }
+        | { __typename: 'Page', id: string, name: string | null }
       > }
    };
 

@@ -1,24 +1,34 @@
 /* eslint-disable */
+/** Internal type. DO NOT USE DIRECTLY. */
+type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+/** Internal type. DO NOT USE DIRECTLY. */
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 import * as Types from '../../graphqlTypes.generated';
 
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
-export type CreateCmsGraphqlQueryMutationVariables = Types.Exact<{
+export type CmsGraphqlQueryInput = {
+  admin_notes?: string | null | undefined;
+  identifier?: string | null | undefined;
+  query?: string | null | undefined;
+};
+
+export type CreateCmsGraphqlQueryMutationVariables = Exact<{
   query: Types.CmsGraphqlQueryInput;
 }>;
 
 
-export type CreateCmsGraphqlQueryMutationData = { __typename: 'Mutation', createCmsGraphqlQuery: { __typename: 'CreateCmsGraphqlQueryPayload', query: { __typename: 'CmsGraphqlQuery', id: string, identifier: string, query: string, admin_notes?: string | null, current_ability_can_update: boolean, current_ability_can_delete: boolean } } };
+export type CreateCmsGraphqlQueryMutationData = { __typename: 'Mutation', createCmsGraphqlQuery: { __typename: 'CreateCmsGraphqlQueryPayload', query: { __typename: 'CmsGraphqlQuery', id: string, identifier: string, query: string, admin_notes: string | null, current_ability_can_update: boolean, current_ability_can_delete: boolean } } };
 
-export type UpdateCmsGraphqlQueryMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID']['input'];
+export type UpdateCmsGraphqlQueryMutationVariables = Exact<{
+  id: string | number;
   query: Types.CmsGraphqlQueryInput;
 }>;
 
 
-export type UpdateCmsGraphqlQueryMutationData = { __typename: 'Mutation', updateCmsGraphqlQuery: { __typename: 'UpdateCmsGraphqlQueryPayload', query: { __typename: 'CmsGraphqlQuery', id: string, identifier: string, query: string, admin_notes?: string | null, current_ability_can_update: boolean, current_ability_can_delete: boolean } } };
+export type UpdateCmsGraphqlQueryMutationData = { __typename: 'Mutation', updateCmsGraphqlQuery: { __typename: 'UpdateCmsGraphqlQueryPayload', query: { __typename: 'CmsGraphqlQuery', id: string, identifier: string, query: string, admin_notes: string | null, current_ability_can_update: boolean, current_ability_can_delete: boolean } } };
 
-export type DeleteCmsGraphqlQueryMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID']['input'];
+export type DeleteCmsGraphqlQueryMutationVariables = Exact<{
+  id: string | number;
 }>;
 
 

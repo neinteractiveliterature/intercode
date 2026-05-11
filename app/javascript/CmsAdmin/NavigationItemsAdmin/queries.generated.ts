@@ -1,15 +1,19 @@
 /* eslint-disable */
+/** Internal type. DO NOT USE DIRECTLY. */
+type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+/** Internal type. DO NOT USE DIRECTLY. */
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 import * as Types from '../../graphqlTypes.generated';
 
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
-export type AdminNavigationItemFieldsFragment = { __typename: 'CmsNavigationItem', id: string, position?: number | null, title?: string | null, page?: { __typename: 'Page', id: string } | null, navigation_section?: { __typename: 'CmsNavigationItem', id: string } | null };
+export type AdminNavigationItemFieldsFragment = { __typename: 'CmsNavigationItem', id: string, position: number | null, title: string | null, page: { __typename: 'Page', id: string } | null, navigation_section: { __typename: 'CmsNavigationItem', id: string } | null };
 
-export type NavigationItemsAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type NavigationItemsAdminQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type NavigationItemsAdminQueryData = { __typename: 'Query', convention?: { __typename: 'Convention', id: string, name: string } | null, cmsParent:
-    | { __typename: 'Convention', id: string, cmsPages: Array<{ __typename: 'Page', id: string, name?: string | null }>, cmsNavigationItems: Array<{ __typename: 'CmsNavigationItem', id: string, position?: number | null, title?: string | null, page?: { __typename: 'Page', id: string } | null, navigation_section?: { __typename: 'CmsNavigationItem', id: string } | null }> }
-    | { __typename: 'RootSite', id: string, cmsPages: Array<{ __typename: 'Page', id: string, name?: string | null }>, cmsNavigationItems: Array<{ __typename: 'CmsNavigationItem', id: string, position?: number | null, title?: string | null, page?: { __typename: 'Page', id: string } | null, navigation_section?: { __typename: 'CmsNavigationItem', id: string } | null }> }
+export type NavigationItemsAdminQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string } | null, cmsParent:
+    | { __typename: 'Convention', id: string, cmsPages: Array<{ __typename: 'Page', id: string, name: string | null }>, cmsNavigationItems: Array<{ __typename: 'CmsNavigationItem', id: string, position: number | null, title: string | null, page: { __typename: 'Page', id: string } | null, navigation_section: { __typename: 'CmsNavigationItem', id: string } | null }> }
+    | { __typename: 'RootSite', id: string, cmsPages: Array<{ __typename: 'Page', id: string, name: string | null }>, cmsNavigationItems: Array<{ __typename: 'CmsNavigationItem', id: string, position: number | null, title: string | null, page: { __typename: 'Page', id: string } | null, navigation_section: { __typename: 'CmsNavigationItem', id: string } | null }> }
    };
 
 export const AdminNavigationItemFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AdminNavigationItemFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsNavigationItem"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"position"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"page"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"navigation_section"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<AdminNavigationItemFieldsFragment, unknown>;

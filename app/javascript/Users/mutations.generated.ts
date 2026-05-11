@@ -1,15 +1,40 @@
 /* eslint-disable */
+/** Internal type. DO NOT USE DIRECTLY. */
+type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+/** Internal type. DO NOT USE DIRECTLY. */
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 import * as Types from '../graphqlTypes.generated';
 
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
-export type MergeUsersMutationVariables = Types.Exact<{
-  userIds: Array<Types.Scalars['ID']['input']> | Types.Scalars['ID']['input'];
-  winningUserId: Types.Scalars['ID']['input'];
+export type SignupState =
+  /** Attendee's spot is confirmed */
+  | 'confirmed'
+  /** Attendee's spot is held temporarily while the attendee finishes paying for their ticket */
+  | 'ticket_purchase_hold'
+  /** Attendee is on the waitlist for this event and may be pulled in automatically */
+  | 'waitlisted'
+  /** Attendee has withdrawn from this event (and this signup is no longer valid) */
+  | 'withdrawn';
+
+export type TimezoneMode =
+  /** Display dates and times using convention’s local time zone */
+  | 'convention_local'
+  /** Display dates and times using user’s local time zone */
+  | 'user_local';
+
+export type WinningUserConProfileInput = {
+  conventionId?: string | number | null | undefined;
+  userConProfileId?: string | number | null | undefined;
+};
+
+export type MergeUsersMutationVariables = Exact<{
+  userIds: Array<string | number> | string | number;
+  winningUserId: string | number;
   winningUserConProfiles: Array<Types.WinningUserConProfileInput> | Types.WinningUserConProfileInput;
 }>;
 
 
-export type MergeUsersMutationData = { __typename: 'Mutation', mergeUsers: { __typename: 'MergeUsersPayload', user: { __typename: 'User', id: string, name?: string | null, first_name?: string | null, last_name?: string | null, email?: string | null, privileges?: Array<string> | null, user_con_profiles: Array<{ __typename: 'UserConProfile', id: string, email?: string | null, ticket?: { __typename: 'Ticket', id: string } | null, signups: Array<{ __typename: 'Signup', id: string, state: Types.SignupState }>, convention: { __typename: 'Convention', id: string, name: string, domain?: string | null, starts_at?: string | null, ticket_name: string, timezone_name?: string | null, timezone_mode: Types.TimezoneMode }, staff_positions: Array<{ __typename: 'StaffPosition', id: string, name: string }> }> } } };
+export type MergeUsersMutationData = { __typename: 'Mutation', mergeUsers: { __typename: 'MergeUsersPayload', user: { __typename: 'User', id: string, name: string | null, first_name: string | null, last_name: string | null, email: string | null, privileges: Array<string> | null, user_con_profiles: Array<{ __typename: 'UserConProfile', id: string, email: string | null, ticket: { __typename: 'Ticket', id: string } | null, signups: Array<{ __typename: 'Signup', id: string, state: Types.SignupState }>, convention: { __typename: 'Convention', id: string, name: string, domain: string | null, starts_at: string | null, ticket_name: string, timezone_name: string | null, timezone_mode: Types.TimezoneMode }, staff_positions: Array<{ __typename: 'StaffPosition', id: string, name: string }> }> } } };
 
 
 export const MergeUsersDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"MergeUsers"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"userIds"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"winningUserId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"winningUserConProfiles"}},"type":{"kind":"NonNullType","type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"WinningUserConProfileInput"}}}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"mergeUsers"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"userIds"},"value":{"kind":"Variable","name":{"kind":"Name","value":"userIds"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"winningUserId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"winningUserId"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"winningUserConProfiles"},"value":{"kind":"Variable","name":{"kind":"Name","value":"winningUserConProfiles"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"user"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"DetailedUserFields"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"DetailedUserFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"User"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"first_name"}},{"kind":"Field","name":{"kind":"Name","value":"last_name"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"privileges"}},{"kind":"Field","name":{"kind":"Name","value":"user_con_profiles"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"ticket"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"signups"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"state"}}]}},{"kind":"Field","name":{"kind":"Name","value":"convention"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"domain"}},{"kind":"Field","name":{"kind":"Name","value":"starts_at"}},{"kind":"Field","name":{"kind":"Name","value":"ticket_name"}},{"kind":"Field","name":{"kind":"Name","value":"timezone_name"}},{"kind":"Field","name":{"kind":"Name","value":"timezone_mode"}}]}},{"kind":"Field","name":{"kind":"Name","value":"staff_positions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]} as unknown as DocumentNode<MergeUsersMutationData, MergeUsersMutationVariables>;

@@ -1,77 +1,187 @@
 /* eslint-disable */
+/** Internal type. DO NOT USE DIRECTLY. */
+type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+/** Internal type. DO NOT USE DIRECTLY. */
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 import * as Types from '../../graphqlTypes.generated';
 
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
-export type SignupFieldsFragment = { __typename: 'Signup', id: string, state: Types.SignupState, counted: boolean, bucket_key?: string | null, requested_bucket_key?: string | null, run: { __typename: 'Run', id: string, title_suffix?: string | null, starts_at: string, ends_at: string, rooms: Array<{ __typename: 'Room', id: string, name?: string | null }>, event: { __typename: 'Event', id: string, title?: string | null, event_category: { __typename: 'EventCategory', id: string, team_member_name: string, teamMemberNamePlural: string }, registration_policy?: { __typename: 'RegistrationPolicy', buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null, anything: boolean }> } | null, team_members: Array<{ __typename: 'TeamMember', id: string, user_con_profile: { __typename: 'UserConProfile', id: string } }> } }, user_con_profile: { __typename: 'UserConProfile', id: string, name_without_nickname: string, nickname?: string | null, birth_date?: string | null, email?: string | null, address?: string | null, city?: string | null, state?: string | null, zipcode?: string | null, country?: string | null, mobile_phone?: string | null, gravatar_enabled: boolean, gravatar_url: string } };
+export type FormItemExposeIn =
+  | 'event_catalog'
+  | 'schedule_popup';
 
-export type UserConProfileSignupsFragment = { __typename: 'UserConProfile', id: string, signups: Array<{ __typename: 'Signup', id: string, state: Types.SignupState, counted: boolean, bucket_key?: string | null, requested_bucket_key?: string | null, user_con_profile: { __typename: 'UserConProfile', id: string }, run: { __typename: 'Run', id: string, starts_at: string, event: { __typename: 'Event', id: string, title?: string | null, length_seconds: number, event_category: { __typename: 'EventCategory', id: string, team_member_name: string }, registration_policy?: { __typename: 'RegistrationPolicy', buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null }> } | null, team_members: Array<{ __typename: 'TeamMember', id: string, user_con_profile: { __typename: 'UserConProfile', id: string } }> }, rooms: Array<{ __typename: 'Room', id: string, name?: string | null }> } }> };
+export type FormItemRole =
+  | 'admin'
+  | 'all_profiles_basic_access'
+  | 'confirmed_attendee'
+  | 'normal'
+  | 'team_member';
 
-export type SignupAdminEventQueryVariables = Types.Exact<{
-  eventId: Types.Scalars['ID']['input'];
+export type SchedulingUi =
+  | 'recurring'
+  | 'regular'
+  | 'single_run';
+
+/**
+ * The automation behavior to use for event signups in a Convention.  Currently, we only support one type of
+ * automated signups, the "ranked choice" behavior.  Conventions can also disable automation entirely using the
+ * "none" value.
+ */
+export type SignupAutomationMode =
+  /** Signups are fully manual */
+  | 'none'
+  /** Attendees make a ranked list of choices and the site attempts to give everyone what they want */
+  | 'ranked_choice';
+
+/** The action taken that caused a signup to change. */
+export type SignupChangeAction =
+  | 'accept_signup_ranked_choice'
+  | 'accept_signup_request'
+  | 'admin_create_signup'
+  | 'change_registration_policy'
+  | 'freeze_bucket_assignments'
+  | 'hold_expired'
+  | 'self_service_signup'
+  | 'ticket_purchase'
+  | 'unknown'
+  | 'vacancy_fill'
+  | 'withdraw';
+
+export type SignupChangeFiltersInput = {
+  action?: Array<string> | null | undefined;
+  event_title?: string | null | undefined;
+  name?: string | null | undefined;
+};
+
+export type SignupFiltersInput = {
+  bucket?: Array<string> | null | undefined;
+  email?: string | null | undefined;
+  name?: string | null | undefined;
+  state?: Array<string> | null | undefined;
+};
+
+export type SignupMode =
+  /** Attendees can request signups and signup changes but con staff must approve them */
+  | 'moderated'
+  /** Attendees can sign themselves up for events */
+  | 'self_service';
+
+export type SignupState =
+  /** Attendee's spot is confirmed */
+  | 'confirmed'
+  /** Attendee's spot is held temporarily while the attendee finishes paying for their ticket */
+  | 'ticket_purchase_hold'
+  /** Attendee is on the waitlist for this event and may be pulled in automatically */
+  | 'waitlisted'
+  /** Attendee has withdrawn from this event (and this signup is no longer valid) */
+  | 'withdrawn';
+
+export type SiteMode =
+  /** Site behaves as a convention with multiple events */
+  | 'convention'
+  /** Site behaves as a series of standalone events */
+  | 'event_series'
+  /** Site behaves as a single standalone event */
+  | 'single_event';
+
+/**
+ * A description of a field to sort a result set by. This is typically used in pagination
+ * fields to specify how the results should be ordered.
+ */
+export type SortInput = {
+  /**
+   * If true, the field will be sorted in descending order. If false, it will be sorted in
+   * ascending order.
+   */
+  desc: boolean;
+  /** The name of the field to sort by. */
+  field: string;
+};
+
+export type TicketMode =
+  /** Tickets are neither sold nor required in this convention */
+  | 'disabled'
+  /** A valid ticket is required to sign up for events in this convention */
+  | 'required_for_signup'
+  /** Each event in this convention sells tickets separately */
+  | 'ticket_per_event';
+
+export type TimezoneMode =
+  /** Display dates and times using convention’s local time zone */
+  | 'convention_local'
+  /** Display dates and times using user’s local time zone */
+  | 'user_local';
+
+export type SignupFieldsFragment = { __typename: 'Signup', id: string, state: Types.SignupState, counted: boolean, bucket_key: string | null, requested_bucket_key: string | null, run: { __typename: 'Run', id: string, title_suffix: string | null, starts_at: string, ends_at: string, rooms: Array<{ __typename: 'Room', id: string, name: string | null }>, event: { __typename: 'Event', id: string, title: string | null, event_category: { __typename: 'EventCategory', id: string, team_member_name: string, teamMemberNamePlural: string }, registration_policy: { __typename: 'RegistrationPolicy', buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name: string | null, anything: boolean }> } | null, team_members: Array<{ __typename: 'TeamMember', id: string, user_con_profile: { __typename: 'UserConProfile', id: string } }> } }, user_con_profile: { __typename: 'UserConProfile', id: string, name_without_nickname: string, nickname: string | null, birth_date: string | null, email: string | null, address: string | null, city: string | null, state: string | null, zipcode: string | null, country: string | null, mobile_phone: string | null, gravatar_enabled: boolean, gravatar_url: string } };
+
+export type UserConProfileSignupsFragment = { __typename: 'UserConProfile', id: string, signups: Array<{ __typename: 'Signup', id: string, state: Types.SignupState, counted: boolean, bucket_key: string | null, requested_bucket_key: string | null, user_con_profile: { __typename: 'UserConProfile', id: string }, run: { __typename: 'Run', id: string, starts_at: string, event: { __typename: 'Event', id: string, title: string | null, length_seconds: number, event_category: { __typename: 'EventCategory', id: string, team_member_name: string }, registration_policy: { __typename: 'RegistrationPolicy', buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name: string | null }> } | null, team_members: Array<{ __typename: 'TeamMember', id: string, user_con_profile: { __typename: 'UserConProfile', id: string } }> }, rooms: Array<{ __typename: 'Room', id: string, name: string | null }> } }> };
+
+export type SignupAdminEventQueryVariables = Exact<{
+  eventId: string | number;
 }>;
 
 
-export type SignupAdminEventQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, starts_at?: string | null, ends_at?: string | null, signup_mode: Types.SignupMode, signup_automation_mode: Types.SignupAutomationMode, site_mode: Types.SiteMode, timezone_name?: string | null, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, event: { __typename: 'Event', id: string, title?: string | null }, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string, scheduling_ui: Types.SchedulingUi, default_color?: string | null, full_color?: string | null, signed_up_color?: string | null, team_member_name: string, teamMemberNamePlural: string, event_form: { __typename: 'Form', id: string, form_sections: Array<{ __typename: 'FormSection', id: string, form_items: Array<{ __typename: 'FormItem', id: string, public_description?: string | null, default_value?: string | null, position: number, identifier?: string | null, item_type: string, rendered_properties: string, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in?: Array<Types.FormItemExposeIn> | null }> }> } }> } };
+export type SignupAdminEventQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, starts_at: string | null, ends_at: string | null, signup_mode: Types.SignupMode, signup_automation_mode: Types.SignupAutomationMode, site_mode: Types.SiteMode, timezone_name: string | null, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, event: { __typename: 'Event', id: string, title: string | null }, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string, scheduling_ui: Types.SchedulingUi, default_color: string | null, full_color: string | null, signed_up_color: string | null, team_member_name: string, teamMemberNamePlural: string, event_form: { __typename: 'Form', id: string, form_sections: Array<{ __typename: 'FormSection', id: string, form_items: Array<{ __typename: 'FormItem', id: string, public_description: string | null, default_value: string | null, position: number, identifier: string | null, item_type: string, rendered_properties: string, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in: Array<Types.FormItemExposeIn> | null }> }> } }> } };
 
-export type AdminSignupQueryVariables = Types.Exact<{
-  id: Types.Scalars['ID']['input'];
+export type AdminSignupQueryVariables = Exact<{
+  id: string | number;
 }>;
 
 
-export type AdminSignupQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, starts_at?: string | null, ends_at?: string | null, signup_mode: Types.SignupMode, signup_automation_mode: Types.SignupAutomationMode, site_mode: Types.SiteMode, timezone_name?: string | null, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, signup: { __typename: 'Signup', id: string, state: Types.SignupState, counted: boolean, bucket_key?: string | null, requested_bucket_key?: string | null, run: { __typename: 'Run', id: string, title_suffix?: string | null, starts_at: string, ends_at: string, rooms: Array<{ __typename: 'Room', id: string, name?: string | null }>, event: { __typename: 'Event', id: string, title?: string | null, event_category: { __typename: 'EventCategory', id: string, team_member_name: string, teamMemberNamePlural: string }, registration_policy?: { __typename: 'RegistrationPolicy', buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null, anything: boolean }> } | null, team_members: Array<{ __typename: 'TeamMember', id: string, user_con_profile: { __typename: 'UserConProfile', id: string } }> } }, user_con_profile: { __typename: 'UserConProfile', id: string, name_without_nickname: string, nickname?: string | null, birth_date?: string | null, email?: string | null, address?: string | null, city?: string | null, state?: string | null, zipcode?: string | null, country?: string | null, mobile_phone?: string | null, gravatar_enabled: boolean, gravatar_url: string } }, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string, scheduling_ui: Types.SchedulingUi, default_color?: string | null, full_color?: string | null, signed_up_color?: string | null, team_member_name: string, teamMemberNamePlural: string, event_form: { __typename: 'Form', id: string, form_sections: Array<{ __typename: 'FormSection', id: string, form_items: Array<{ __typename: 'FormItem', id: string, public_description?: string | null, default_value?: string | null, position: number, identifier?: string | null, item_type: string, rendered_properties: string, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in?: Array<Types.FormItemExposeIn> | null }> }> } }> }, currentAbility: { __typename: 'Ability', can_update_bucket_signup: boolean, can_force_confirm_signup: boolean, can_update_counted_signup: boolean } };
+export type AdminSignupQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, starts_at: string | null, ends_at: string | null, signup_mode: Types.SignupMode, signup_automation_mode: Types.SignupAutomationMode, site_mode: Types.SiteMode, timezone_name: string | null, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, signup: { __typename: 'Signup', id: string, state: Types.SignupState, counted: boolean, bucket_key: string | null, requested_bucket_key: string | null, run: { __typename: 'Run', id: string, title_suffix: string | null, starts_at: string, ends_at: string, rooms: Array<{ __typename: 'Room', id: string, name: string | null }>, event: { __typename: 'Event', id: string, title: string | null, event_category: { __typename: 'EventCategory', id: string, team_member_name: string, teamMemberNamePlural: string }, registration_policy: { __typename: 'RegistrationPolicy', buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name: string | null, anything: boolean }> } | null, team_members: Array<{ __typename: 'TeamMember', id: string, user_con_profile: { __typename: 'UserConProfile', id: string } }> } }, user_con_profile: { __typename: 'UserConProfile', id: string, name_without_nickname: string, nickname: string | null, birth_date: string | null, email: string | null, address: string | null, city: string | null, state: string | null, zipcode: string | null, country: string | null, mobile_phone: string | null, gravatar_enabled: boolean, gravatar_url: string } }, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string, scheduling_ui: Types.SchedulingUi, default_color: string | null, full_color: string | null, signed_up_color: string | null, team_member_name: string, teamMemberNamePlural: string, event_form: { __typename: 'Form', id: string, form_sections: Array<{ __typename: 'FormSection', id: string, form_items: Array<{ __typename: 'FormItem', id: string, public_description: string | null, default_value: string | null, position: number, identifier: string | null, item_type: string, rendered_properties: string, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in: Array<Types.FormItemExposeIn> | null }> }> } }> }, currentAbility: { __typename: 'Ability', can_update_bucket_signup: boolean, can_force_confirm_signup: boolean, can_update_counted_signup: boolean } };
 
-export type RunSignupsTableSignupsQueryVariables = Types.Exact<{
-  eventId: Types.Scalars['ID']['input'];
-  runId: Types.Scalars['ID']['input'];
-  page?: Types.InputMaybe<Types.Scalars['Int']['input']>;
-  perPage?: Types.InputMaybe<Types.Scalars['Int']['input']>;
-  filters?: Types.InputMaybe<Types.SignupFiltersInput>;
-  sort?: Types.InputMaybe<Array<Types.SortInput> | Types.SortInput>;
+export type RunSignupsTableSignupsQueryVariables = Exact<{
+  eventId: string | number;
+  runId: string | number;
+  page?: number | null | undefined;
+  perPage?: number | null | undefined;
+  filters?: Types.SignupFiltersInput | null | undefined;
+  sort?: Array<Types.SortInput> | Types.SortInput | null | undefined;
 }>;
 
 
-export type RunSignupsTableSignupsQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, event: { __typename: 'Event', id: string, title?: string | null, event_category: { __typename: 'EventCategory', id: string, team_member_name: string, teamMemberNamePlural: string }, team_members: Array<{ __typename: 'TeamMember', id: string, user_con_profile: { __typename: 'UserConProfile', id: string } }>, registration_policy?: { __typename: 'RegistrationPolicy', buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null }> } | null, run: { __typename: 'Run', id: string, signups_paginated: { __typename: 'SignupsPagination', total_entries: number, total_pages: number, current_page: number, per_page: number, entries: Array<{ __typename: 'Signup', id: string, state: Types.SignupState, counted: boolean, bucket_key?: string | null, requested_bucket_key?: string | null, age_restrictions_check: string, run: { __typename: 'Run', id: string, starts_at: string }, user_con_profile: { __typename: 'UserConProfile', id: string, name_inverted: string, name_without_nickname: string, gravatar_enabled: boolean, gravatar_url: string, email?: string | null, birth_date?: string | null } }> } } } } };
+export type RunSignupsTableSignupsQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, event: { __typename: 'Event', id: string, title: string | null, event_category: { __typename: 'EventCategory', id: string, team_member_name: string, teamMemberNamePlural: string }, team_members: Array<{ __typename: 'TeamMember', id: string, user_con_profile: { __typename: 'UserConProfile', id: string } }>, registration_policy: { __typename: 'RegistrationPolicy', buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name: string | null }> } | null, run: { __typename: 'Run', id: string, signups_paginated: { __typename: 'SignupsPagination', total_entries: number, total_pages: number, current_page: number, per_page: number, entries: Array<{ __typename: 'Signup', id: string, state: Types.SignupState, counted: boolean, bucket_key: string | null, requested_bucket_key: string | null, age_restrictions_check: string, run: { __typename: 'Run', id: string, starts_at: string }, user_con_profile: { __typename: 'UserConProfile', id: string, name_inverted: string, name_without_nickname: string, gravatar_enabled: boolean, gravatar_url: string, email: string | null, birth_date: string | null } }> } } } } };
 
-export type RunHeaderRunInfoQueryVariables = Types.Exact<{
-  eventId: Types.Scalars['ID']['input'];
-  runId: Types.Scalars['ID']['input'];
+export type RunHeaderRunInfoQueryVariables = Exact<{
+  eventId: string | number;
+  runId: string | number;
 }>;
 
 
-export type RunHeaderRunInfoQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, starts_at?: string | null, ends_at?: string | null, signup_mode: Types.SignupMode, signup_automation_mode: Types.SignupAutomationMode, site_mode: Types.SiteMode, timezone_name?: string | null, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, event: { __typename: 'Event', id: string, title?: string | null, length_seconds: number, registration_policy?: { __typename: 'RegistrationPolicy', total_slots?: number | null, slots_limited?: boolean | null, buckets: Array<{ __typename: 'RegistrationPolicyBucket', name?: string | null, total_slots?: number | null }> } | null, run: { __typename: 'Run', id: string, starts_at: string, title_suffix?: string | null } }, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string, scheduling_ui: Types.SchedulingUi, default_color?: string | null, full_color?: string | null, signed_up_color?: string | null, team_member_name: string, teamMemberNamePlural: string, event_form: { __typename: 'Form', id: string, form_sections: Array<{ __typename: 'FormSection', id: string, form_items: Array<{ __typename: 'FormItem', id: string, public_description?: string | null, default_value?: string | null, position: number, identifier?: string | null, item_type: string, rendered_properties: string, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in?: Array<Types.FormItemExposeIn> | null }> }> } }> } };
+export type RunHeaderRunInfoQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, starts_at: string | null, ends_at: string | null, signup_mode: Types.SignupMode, signup_automation_mode: Types.SignupAutomationMode, site_mode: Types.SiteMode, timezone_name: string | null, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, event: { __typename: 'Event', id: string, title: string | null, length_seconds: number, registration_policy: { __typename: 'RegistrationPolicy', total_slots: number | null, slots_limited: boolean | null, buckets: Array<{ __typename: 'RegistrationPolicyBucket', name: string | null, total_slots: number | null }> } | null, run: { __typename: 'Run', id: string, starts_at: string, title_suffix: string | null } }, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string, scheduling_ui: Types.SchedulingUi, default_color: string | null, full_color: string | null, signed_up_color: string | null, team_member_name: string, teamMemberNamePlural: string, event_form: { __typename: 'Form', id: string, form_sections: Array<{ __typename: 'FormSection', id: string, form_items: Array<{ __typename: 'FormItem', id: string, public_description: string | null, default_value: string | null, position: number, identifier: string | null, item_type: string, rendered_properties: string, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in: Array<Types.FormItemExposeIn> | null }> }> } }> } };
 
-export type RunSignupSummaryQueryVariables = Types.Exact<{
-  eventId: Types.Scalars['ID']['input'];
-  runId: Types.Scalars['ID']['input'];
+export type RunSignupSummaryQueryVariables = Exact<{
+  eventId: string | number;
+  runId: string | number;
 }>;
 
 
-export type RunSignupSummaryQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, starts_at?: string | null, ends_at?: string | null, signup_mode: Types.SignupMode, signup_automation_mode: Types.SignupAutomationMode, site_mode: Types.SiteMode, timezone_name?: string | null, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, event: { __typename: 'Event', id: string, title?: string | null, event_category: { __typename: 'EventCategory', id: string, team_member_name: string }, registration_policy?: { __typename: 'RegistrationPolicy', buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null, expose_attendees: boolean }> } | null, team_members: Array<{ __typename: 'TeamMember', id: string, user_con_profile: { __typename: 'UserConProfile', id: string } }>, runs: Array<{ __typename: 'Run', id: string, starts_at: string }>, run: { __typename: 'Run', id: string, signups_paginated: { __typename: 'SignupsPagination', entries: Array<{ __typename: 'Signup', id: string, state: Types.SignupState, bucket_key?: string | null, waitlist_position?: number | null, user_con_profile: { __typename: 'UserConProfile', id: string, name_inverted: string, gravatar_enabled: boolean, gravatar_url: string } }> } } }, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string, scheduling_ui: Types.SchedulingUi, default_color?: string | null, full_color?: string | null, signed_up_color?: string | null, team_member_name: string, teamMemberNamePlural: string, event_form: { __typename: 'Form', id: string, form_sections: Array<{ __typename: 'FormSection', id: string, form_items: Array<{ __typename: 'FormItem', id: string, public_description?: string | null, default_value?: string | null, position: number, identifier?: string | null, item_type: string, rendered_properties: string, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in?: Array<Types.FormItemExposeIn> | null }> }> } }> }, currentAbility: { __typename: 'Ability', can_read_schedule: boolean } };
+export type RunSignupSummaryQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, starts_at: string | null, ends_at: string | null, signup_mode: Types.SignupMode, signup_automation_mode: Types.SignupAutomationMode, site_mode: Types.SiteMode, timezone_name: string | null, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, event: { __typename: 'Event', id: string, title: string | null, event_category: { __typename: 'EventCategory', id: string, team_member_name: string }, registration_policy: { __typename: 'RegistrationPolicy', buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name: string | null, expose_attendees: boolean }> } | null, team_members: Array<{ __typename: 'TeamMember', id: string, user_con_profile: { __typename: 'UserConProfile', id: string } }>, runs: Array<{ __typename: 'Run', id: string, starts_at: string }>, run: { __typename: 'Run', id: string, signups_paginated: { __typename: 'SignupsPagination', entries: Array<{ __typename: 'Signup', id: string, state: Types.SignupState, bucket_key: string | null, waitlist_position: number | null, user_con_profile: { __typename: 'UserConProfile', id: string, name_inverted: string, gravatar_enabled: boolean, gravatar_url: string } }> } } }, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string, scheduling_ui: Types.SchedulingUi, default_color: string | null, full_color: string | null, signed_up_color: string | null, team_member_name: string, teamMemberNamePlural: string, event_form: { __typename: 'Form', id: string, form_sections: Array<{ __typename: 'FormSection', id: string, form_items: Array<{ __typename: 'FormItem', id: string, public_description: string | null, default_value: string | null, position: number, identifier: string | null, item_type: string, rendered_properties: string, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in: Array<Types.FormItemExposeIn> | null }> }> } }> }, currentAbility: { __typename: 'Ability', can_read_schedule: boolean } };
 
-export type UserConProfileSignupsQueryVariables = Types.Exact<{
-  id: Types.Scalars['ID']['input'];
+export type UserConProfileSignupsQueryVariables = Exact<{
+  id: string | number;
 }>;
 
 
-export type UserConProfileSignupsQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, starts_at?: string | null, ends_at?: string | null, signup_mode: Types.SignupMode, signup_automation_mode: Types.SignupAutomationMode, site_mode: Types.SiteMode, timezone_name?: string | null, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, my_profile?: { __typename: 'UserConProfile', id: string, ability?: { __typename: 'Ability', can_withdraw_all_user_con_profile_signups: boolean } | null } | null, user_con_profile: { __typename: 'UserConProfile', id: string, name_without_nickname: string, ical_secret?: string | null, team_members: Array<{ __typename: 'TeamMember', id: string, event: { __typename: 'Event', id: string, title?: string | null, status?: string | null } }>, signups: Array<{ __typename: 'Signup', id: string, state: Types.SignupState, counted: boolean, bucket_key?: string | null, requested_bucket_key?: string | null, user_con_profile: { __typename: 'UserConProfile', id: string }, run: { __typename: 'Run', id: string, starts_at: string, event: { __typename: 'Event', id: string, title?: string | null, length_seconds: number, event_category: { __typename: 'EventCategory', id: string, team_member_name: string }, registration_policy?: { __typename: 'RegistrationPolicy', buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null }> } | null, team_members: Array<{ __typename: 'TeamMember', id: string, user_con_profile: { __typename: 'UserConProfile', id: string } }> }, rooms: Array<{ __typename: 'Room', id: string, name?: string | null }> } }> }, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string, scheduling_ui: Types.SchedulingUi, default_color?: string | null, full_color?: string | null, signed_up_color?: string | null, team_member_name: string, teamMemberNamePlural: string, event_form: { __typename: 'Form', id: string, form_sections: Array<{ __typename: 'FormSection', id: string, form_items: Array<{ __typename: 'FormItem', id: string, public_description?: string | null, default_value?: string | null, position: number, identifier?: string | null, item_type: string, rendered_properties: string, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in?: Array<Types.FormItemExposeIn> | null }> }> } }> } };
+export type UserConProfileSignupsQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, starts_at: string | null, ends_at: string | null, signup_mode: Types.SignupMode, signup_automation_mode: Types.SignupAutomationMode, site_mode: Types.SiteMode, timezone_name: string | null, timezone_mode: Types.TimezoneMode, ticket_name: string, ticket_mode: Types.TicketMode, my_profile: { __typename: 'UserConProfile', id: string, ability: { __typename: 'Ability', can_withdraw_all_user_con_profile_signups: boolean } | null } | null, user_con_profile: { __typename: 'UserConProfile', id: string, name_without_nickname: string, ical_secret: string | null, team_members: Array<{ __typename: 'TeamMember', id: string, event: { __typename: 'Event', id: string, title: string | null, status: string | null } }>, signups: Array<{ __typename: 'Signup', id: string, state: Types.SignupState, counted: boolean, bucket_key: string | null, requested_bucket_key: string | null, user_con_profile: { __typename: 'UserConProfile', id: string }, run: { __typename: 'Run', id: string, starts_at: string, event: { __typename: 'Event', id: string, title: string | null, length_seconds: number, event_category: { __typename: 'EventCategory', id: string, team_member_name: string }, registration_policy: { __typename: 'RegistrationPolicy', buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name: string | null }> } | null, team_members: Array<{ __typename: 'TeamMember', id: string, user_con_profile: { __typename: 'UserConProfile', id: string } }> }, rooms: Array<{ __typename: 'Room', id: string, name: string | null }> } }> }, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string, scheduling_ui: Types.SchedulingUi, default_color: string | null, full_color: string | null, signed_up_color: string | null, team_member_name: string, teamMemberNamePlural: string, event_form: { __typename: 'Form', id: string, form_sections: Array<{ __typename: 'FormSection', id: string, form_items: Array<{ __typename: 'FormItem', id: string, public_description: string | null, default_value: string | null, position: number, identifier: string | null, item_type: string, rendered_properties: string, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in: Array<Types.FormItemExposeIn> | null }> }> } }> } };
 
-export type RunSignupChangesPageQueryVariables = Types.Exact<{
-  runId: Types.Scalars['ID']['input'];
+export type RunSignupChangesPageQueryVariables = Exact<{
+  runId: string | number;
 }>;
 
 
-export type RunSignupChangesPageQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, timezone_name?: string | null, run: { __typename: 'Run', id: string, event: { __typename: 'Event', id: string, title?: string | null, event_category: { __typename: 'EventCategory', id: string, team_member_name: string }, registration_policy?: { __typename: 'RegistrationPolicy', buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null, anything: boolean }> } | null, team_members: Array<{ __typename: 'TeamMember', id: string, user_con_profile: { __typename: 'UserConProfile', id: string } }> } } } };
+export type RunSignupChangesPageQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, timezone_name: string | null, run: { __typename: 'Run', id: string, event: { __typename: 'Event', id: string, title: string | null, event_category: { __typename: 'EventCategory', id: string, team_member_name: string }, registration_policy: { __typename: 'RegistrationPolicy', buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name: string | null, anything: boolean }> } | null, team_members: Array<{ __typename: 'TeamMember', id: string, user_con_profile: { __typename: 'UserConProfile', id: string } }> } } } };
 
-export type RunSignupChangesQueryVariables = Types.Exact<{
-  runId: Types.Scalars['ID']['input'];
-  filters?: Types.InputMaybe<Types.SignupChangeFiltersInput>;
-  sort?: Types.InputMaybe<Array<Types.SortInput> | Types.SortInput>;
-  page?: Types.InputMaybe<Types.Scalars['Int']['input']>;
-  perPage?: Types.InputMaybe<Types.Scalars['Int']['input']>;
+export type RunSignupChangesQueryVariables = Exact<{
+  runId: string | number;
+  filters?: Types.SignupChangeFiltersInput | null | undefined;
+  sort?: Array<Types.SortInput> | Types.SortInput | null | undefined;
+  page?: number | null | undefined;
+  perPage?: number | null | undefined;
 }>;
 
 
-export type RunSignupChangesQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, run: { __typename: 'Run', id: string, signup_changes_paginated: { __typename: 'SignupChangesPagination', total_entries: number, total_pages: number, current_page: number, per_page: number, entries: Array<{ __typename: 'SignupChange', id: string, state: Types.SignupState, counted: boolean, bucket_key?: string | null, action: Types.SignupChangeAction, created_at: string, previous_signup_change?: { __typename: 'SignupChange', id: string, state: Types.SignupState, counted: boolean, bucket_key?: string | null } | null, signup: { __typename: 'Signup', id: string, requested_bucket_key?: string | null }, user_con_profile: { __typename: 'UserConProfile', id: string, name_inverted: string, gravatar_enabled: boolean, gravatar_url: string } }> } } } };
+export type RunSignupChangesQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, run: { __typename: 'Run', id: string, signup_changes_paginated: { __typename: 'SignupChangesPagination', total_entries: number, total_pages: number, current_page: number, per_page: number, entries: Array<{ __typename: 'SignupChange', id: string, state: Types.SignupState, counted: boolean, bucket_key: string | null, action: Types.SignupChangeAction, created_at: string, previous_signup_change: { __typename: 'SignupChange', id: string, state: Types.SignupState, counted: boolean, bucket_key: string | null } | null, signup: { __typename: 'Signup', id: string, requested_bucket_key: string | null }, user_con_profile: { __typename: 'UserConProfile', id: string, name_inverted: string, gravatar_enabled: boolean, gravatar_url: string } }> } } } };
 
 export const SignupFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"SignupFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Signup"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"state"}},{"kind":"Field","name":{"kind":"Name","value":"counted"}},{"kind":"Field","name":{"kind":"Name","value":"bucket_key"}},{"kind":"Field","name":{"kind":"Name","value":"requested_bucket_key"}},{"kind":"Field","name":{"kind":"Name","value":"run"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title_suffix"}},{"kind":"Field","name":{"kind":"Name","value":"starts_at"}},{"kind":"Field","name":{"kind":"Name","value":"ends_at"}},{"kind":"Field","name":{"kind":"Name","value":"rooms"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"event"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"event_category"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"team_member_name"}},{"kind":"Field","name":{"kind":"Name","value":"teamMemberNamePlural"}}]}},{"kind":"Field","name":{"kind":"Name","value":"registration_policy"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"buckets"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"anything"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"team_members"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"user_con_profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"user_con_profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name_without_nickname"}},{"kind":"Field","name":{"kind":"Name","value":"nickname"}},{"kind":"Field","name":{"kind":"Name","value":"birth_date"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"address"}},{"kind":"Field","name":{"kind":"Name","value":"city"}},{"kind":"Field","name":{"kind":"Name","value":"state"}},{"kind":"Field","name":{"kind":"Name","value":"zipcode"}},{"kind":"Field","name":{"kind":"Name","value":"country"}},{"kind":"Field","name":{"kind":"Name","value":"mobile_phone"}},{"kind":"Field","name":{"kind":"Name","value":"gravatar_enabled"}},{"kind":"Field","name":{"kind":"Name","value":"gravatar_url"}}]}}]}}]} as unknown as DocumentNode<SignupFieldsFragment, unknown>;
 export const UserConProfileSignupsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"UserConProfileSignupsFragment"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"UserConProfile"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"signups"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"state"}},{"kind":"Field","name":{"kind":"Name","value":"counted"}},{"kind":"Field","name":{"kind":"Name","value":"bucket_key"}},{"kind":"Field","name":{"kind":"Name","value":"requested_bucket_key"}},{"kind":"Field","name":{"kind":"Name","value":"user_con_profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"run"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"starts_at"}},{"kind":"Field","name":{"kind":"Name","value":"event"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"length_seconds"}},{"kind":"Field","name":{"kind":"Name","value":"event_category"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"team_member_name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"registration_policy"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"buckets"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"key"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"team_members"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"user_con_profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"rooms"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]}}]}}]} as unknown as DocumentNode<UserConProfileSignupsFragment, unknown>;

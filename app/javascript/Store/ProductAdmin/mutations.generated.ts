@@ -1,52 +1,114 @@
 /* eslint-disable */
+/** Internal type. DO NOT USE DIRECTLY. */
+type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+/** Internal type. DO NOT USE DIRECTLY. */
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 import * as Types from '../../graphqlTypes.generated';
 
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
-export type CreateProductMutationVariables = Types.Exact<{
+export type MoneyInput = {
+  currency_code: string;
+  fractional: number;
+};
+
+export type PayWhatYouWantInput = {
+  allowedCurrencyCodes?: Array<string> | null | undefined;
+  maximumAmount?: MoneyInput | null | undefined;
+  minimumAmount?: MoneyInput | null | undefined;
+  suggestedAmount?: MoneyInput | null | undefined;
+};
+
+export type PricingStrategy =
+  /** Fixed price */
+  | 'fixed'
+  /** Pay-what-you-want price */
+  | 'pay_what_you_want'
+  /** Price that changes over time */
+  | 'scheduled_value';
+
+export type PricingStructureInput = {
+  fixed_value?: MoneyInput | null | undefined;
+  pay_what_you_want_value?: PayWhatYouWantInput | null | undefined;
+  pricing_strategy: PricingStrategy;
+  scheduled_value?: ScheduledMoneyValueInput | null | undefined;
+};
+
+export type ProductInput = {
+  available?: boolean | null | undefined;
+  clickwrapAgreement?: string | null | undefined;
+  deleteVariantIds?: Array<string | number> | null | undefined;
+  description?: string | null | undefined;
+  image?: File | null | undefined;
+  name?: string | null | undefined;
+  payment_options?: Array<string> | null | undefined;
+  pricing_structure?: PricingStructureInput | null | undefined;
+  product_variants?: Array<ProductVariantInput> | null | undefined;
+  providesTicketTypeId?: string | number | null | undefined;
+};
+
+export type ProductVariantInput = {
+  description?: string | null | undefined;
+  id?: string | number | null | undefined;
+  image?: File | null | undefined;
+  name?: string | null | undefined;
+  override_pricing_structure?: PricingStructureInput | null | undefined;
+};
+
+export type ScheduledMoneyValueInput = {
+  timespans: Array<TimespanWithMoneyValueInput>;
+};
+
+export type TimespanWithMoneyValueInput = {
+  finish?: string | null | undefined;
+  start?: string | null | undefined;
+  value: MoneyInput;
+};
+
+export type CreateProductMutationVariables = Exact<{
   product: Types.ProductInput;
 }>;
 
 
-export type CreateProductMutationData = { __typename: 'Mutation', createProduct: { __typename: 'CreateProductPayload', product: { __typename: 'Product', id: string, name: string, description?: string | null, description_html?: string | null, available: boolean, payment_options: Array<string>, clickwrap_agreement?: string | null, clickwrap_agreement_html?: string | null, convention: { __typename: 'Convention', id: string }, image?: { __typename: 'ActiveStorageAttachment', id: string, url: string } | null, pricing_structure: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: { __typename: 'Money', fractional: number, currency_code: string } | null, value:
+export type CreateProductMutationData = { __typename: 'Mutation', createProduct: { __typename: 'CreateProductPayload', product: { __typename: 'Product', id: string, name: string, description: string | null, description_html: string | null, available: boolean, payment_options: Array<string>, clickwrap_agreement: string | null, clickwrap_agreement_html: string | null, convention: { __typename: 'Convention', id: string }, image: { __typename: 'ActiveStorageAttachment', id: string, url: string } | null, pricing_structure: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price: { __typename: 'Money', fractional: number, currency_code: string } | null, value:
           | { __typename: 'Money', fractional: number, currency_code: string }
-          | { __typename: 'PayWhatYouWantValue', allowed_currency_codes?: Array<string> | null, maximum_amount?: { __typename: 'Money', currency_code: string, fractional: number } | null, minimum_amount?: { __typename: 'Money', currency_code: string, fractional: number } | null, suggested_amount?: { __typename: 'Money', currency_code: string, fractional: number } | null }
-          | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: string | null, finish?: string | null, value: { __typename: 'Money', fractional: number, currency_code: string } }> }
-         }, product_variants: Array<{ __typename: 'ProductVariant', id: string, name: string, description?: string | null, position?: number | null, image?: { __typename: 'ActiveStorageAttachment', id: string, url: string } | null, override_pricing_structure?: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: { __typename: 'Money', fractional: number, currency_code: string } | null, value:
+          | { __typename: 'PayWhatYouWantValue', allowed_currency_codes: Array<string> | null, maximum_amount: { __typename: 'Money', currency_code: string, fractional: number } | null, minimum_amount: { __typename: 'Money', currency_code: string, fractional: number } | null, suggested_amount: { __typename: 'Money', currency_code: string, fractional: number } | null }
+          | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start: string | null, finish: string | null, value: { __typename: 'Money', fractional: number, currency_code: string } }> }
+         }, product_variants: Array<{ __typename: 'ProductVariant', id: string, name: string, description: string | null, position: number | null, image: { __typename: 'ActiveStorageAttachment', id: string, url: string } | null, override_pricing_structure: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price: { __typename: 'Money', fractional: number, currency_code: string } | null, value:
             | { __typename: 'Money', fractional: number, currency_code: string }
-            | { __typename: 'PayWhatYouWantValue', allowed_currency_codes?: Array<string> | null, maximum_amount?: { __typename: 'Money', currency_code: string, fractional: number } | null, minimum_amount?: { __typename: 'Money', currency_code: string, fractional: number } | null, suggested_amount?: { __typename: 'Money', currency_code: string, fractional: number } | null }
-            | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: string | null, finish?: string | null, value: { __typename: 'Money', fractional: number, currency_code: string } }> }
-           } | null }>, provides_ticket_type?: { __typename: 'TicketType', id: string, description?: string | null } | null } } };
+            | { __typename: 'PayWhatYouWantValue', allowed_currency_codes: Array<string> | null, maximum_amount: { __typename: 'Money', currency_code: string, fractional: number } | null, minimum_amount: { __typename: 'Money', currency_code: string, fractional: number } | null, suggested_amount: { __typename: 'Money', currency_code: string, fractional: number } | null }
+            | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start: string | null, finish: string | null, value: { __typename: 'Money', fractional: number, currency_code: string } }> }
+           } | null }>, provides_ticket_type: { __typename: 'TicketType', id: string, description: string | null } | null } } };
 
-export type UpdateProductMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID']['input'];
+export type UpdateProductMutationVariables = Exact<{
+  id: string | number;
   product: Types.ProductInput;
 }>;
 
 
-export type UpdateProductMutationData = { __typename: 'Mutation', updateProduct: { __typename: 'UpdateProductPayload', product: { __typename: 'Product', id: string, name: string, description?: string | null, description_html?: string | null, available: boolean, payment_options: Array<string>, clickwrap_agreement?: string | null, clickwrap_agreement_html?: string | null, image?: { __typename: 'ActiveStorageAttachment', id: string, url: string } | null, pricing_structure: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: { __typename: 'Money', fractional: number, currency_code: string } | null, value:
+export type UpdateProductMutationData = { __typename: 'Mutation', updateProduct: { __typename: 'UpdateProductPayload', product: { __typename: 'Product', id: string, name: string, description: string | null, description_html: string | null, available: boolean, payment_options: Array<string>, clickwrap_agreement: string | null, clickwrap_agreement_html: string | null, image: { __typename: 'ActiveStorageAttachment', id: string, url: string } | null, pricing_structure: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price: { __typename: 'Money', fractional: number, currency_code: string } | null, value:
           | { __typename: 'Money', fractional: number, currency_code: string }
-          | { __typename: 'PayWhatYouWantValue', allowed_currency_codes?: Array<string> | null, maximum_amount?: { __typename: 'Money', currency_code: string, fractional: number } | null, minimum_amount?: { __typename: 'Money', currency_code: string, fractional: number } | null, suggested_amount?: { __typename: 'Money', currency_code: string, fractional: number } | null }
-          | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: string | null, finish?: string | null, value: { __typename: 'Money', fractional: number, currency_code: string } }> }
-         }, product_variants: Array<{ __typename: 'ProductVariant', id: string, name: string, description?: string | null, position?: number | null, image?: { __typename: 'ActiveStorageAttachment', id: string, url: string } | null, override_pricing_structure?: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: { __typename: 'Money', fractional: number, currency_code: string } | null, value:
+          | { __typename: 'PayWhatYouWantValue', allowed_currency_codes: Array<string> | null, maximum_amount: { __typename: 'Money', currency_code: string, fractional: number } | null, minimum_amount: { __typename: 'Money', currency_code: string, fractional: number } | null, suggested_amount: { __typename: 'Money', currency_code: string, fractional: number } | null }
+          | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start: string | null, finish: string | null, value: { __typename: 'Money', fractional: number, currency_code: string } }> }
+         }, product_variants: Array<{ __typename: 'ProductVariant', id: string, name: string, description: string | null, position: number | null, image: { __typename: 'ActiveStorageAttachment', id: string, url: string } | null, override_pricing_structure: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price: { __typename: 'Money', fractional: number, currency_code: string } | null, value:
             | { __typename: 'Money', fractional: number, currency_code: string }
-            | { __typename: 'PayWhatYouWantValue', allowed_currency_codes?: Array<string> | null, maximum_amount?: { __typename: 'Money', currency_code: string, fractional: number } | null, minimum_amount?: { __typename: 'Money', currency_code: string, fractional: number } | null, suggested_amount?: { __typename: 'Money', currency_code: string, fractional: number } | null }
-            | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: string | null, finish?: string | null, value: { __typename: 'Money', fractional: number, currency_code: string } }> }
-           } | null }>, provides_ticket_type?: { __typename: 'TicketType', id: string, description?: string | null } | null } } };
+            | { __typename: 'PayWhatYouWantValue', allowed_currency_codes: Array<string> | null, maximum_amount: { __typename: 'Money', currency_code: string, fractional: number } | null, minimum_amount: { __typename: 'Money', currency_code: string, fractional: number } | null, suggested_amount: { __typename: 'Money', currency_code: string, fractional: number } | null }
+            | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start: string | null, finish: string | null, value: { __typename: 'Money', fractional: number, currency_code: string } }> }
+           } | null }>, provides_ticket_type: { __typename: 'TicketType', id: string, description: string | null } | null } } };
 
-export type DeleteProductMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID']['input'];
+export type DeleteProductMutationVariables = Exact<{
+  id: string | number;
 }>;
 
 
-export type DeleteProductMutationData = { __typename: 'Mutation', deleteProduct: { __typename: 'DeleteProductPayload', product: { __typename: 'Product', id: string, name: string, description?: string | null, description_html?: string | null, available: boolean, payment_options: Array<string>, clickwrap_agreement?: string | null, clickwrap_agreement_html?: string | null, image?: { __typename: 'ActiveStorageAttachment', id: string, url: string } | null, pricing_structure: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: { __typename: 'Money', fractional: number, currency_code: string } | null, value:
+export type DeleteProductMutationData = { __typename: 'Mutation', deleteProduct: { __typename: 'DeleteProductPayload', product: { __typename: 'Product', id: string, name: string, description: string | null, description_html: string | null, available: boolean, payment_options: Array<string>, clickwrap_agreement: string | null, clickwrap_agreement_html: string | null, image: { __typename: 'ActiveStorageAttachment', id: string, url: string } | null, pricing_structure: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price: { __typename: 'Money', fractional: number, currency_code: string } | null, value:
           | { __typename: 'Money', fractional: number, currency_code: string }
-          | { __typename: 'PayWhatYouWantValue', allowed_currency_codes?: Array<string> | null, maximum_amount?: { __typename: 'Money', currency_code: string, fractional: number } | null, minimum_amount?: { __typename: 'Money', currency_code: string, fractional: number } | null, suggested_amount?: { __typename: 'Money', currency_code: string, fractional: number } | null }
-          | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: string | null, finish?: string | null, value: { __typename: 'Money', fractional: number, currency_code: string } }> }
-         }, product_variants: Array<{ __typename: 'ProductVariant', id: string, name: string, description?: string | null, position?: number | null, image?: { __typename: 'ActiveStorageAttachment', id: string, url: string } | null, override_pricing_structure?: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price?: { __typename: 'Money', fractional: number, currency_code: string } | null, value:
+          | { __typename: 'PayWhatYouWantValue', allowed_currency_codes: Array<string> | null, maximum_amount: { __typename: 'Money', currency_code: string, fractional: number } | null, minimum_amount: { __typename: 'Money', currency_code: string, fractional: number } | null, suggested_amount: { __typename: 'Money', currency_code: string, fractional: number } | null }
+          | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start: string | null, finish: string | null, value: { __typename: 'Money', fractional: number, currency_code: string } }> }
+         }, product_variants: Array<{ __typename: 'ProductVariant', id: string, name: string, description: string | null, position: number | null, image: { __typename: 'ActiveStorageAttachment', id: string, url: string } | null, override_pricing_structure: { __typename: 'PricingStructure', pricing_strategy: Types.PricingStrategy, price: { __typename: 'Money', fractional: number, currency_code: string } | null, value:
             | { __typename: 'Money', fractional: number, currency_code: string }
-            | { __typename: 'PayWhatYouWantValue', allowed_currency_codes?: Array<string> | null, maximum_amount?: { __typename: 'Money', currency_code: string, fractional: number } | null, minimum_amount?: { __typename: 'Money', currency_code: string, fractional: number } | null, suggested_amount?: { __typename: 'Money', currency_code: string, fractional: number } | null }
-            | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start?: string | null, finish?: string | null, value: { __typename: 'Money', fractional: number, currency_code: string } }> }
-           } | null }>, provides_ticket_type?: { __typename: 'TicketType', id: string, description?: string | null } | null } } };
+            | { __typename: 'PayWhatYouWantValue', allowed_currency_codes: Array<string> | null, maximum_amount: { __typename: 'Money', currency_code: string, fractional: number } | null, minimum_amount: { __typename: 'Money', currency_code: string, fractional: number } | null, suggested_amount: { __typename: 'Money', currency_code: string, fractional: number } | null }
+            | { __typename: 'ScheduledMoneyValue', timespans: Array<{ __typename: 'TimespanWithMoneyValue', start: string | null, finish: string | null, value: { __typename: 'Money', fractional: number, currency_code: string } }> }
+           } | null }>, provides_ticket_type: { __typename: 'TicketType', id: string, description: string | null } | null } } };
 
 
 export const CreateProductDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateProduct"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"product"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ProductInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createProduct"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"product"},"value":{"kind":"Variable","name":{"kind":"Name","value":"product"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"product"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"AdminProductFields"}},{"kind":"Field","name":{"kind":"Name","value":"convention"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"PricingStructureFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"PricingStructure"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"pricing_strategy"}},{"kind":"Field","name":{"kind":"Name","value":"price"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"fractional"}},{"kind":"Field","name":{"kind":"Name","value":"currency_code"}}]}},{"kind":"Field","name":{"kind":"Name","value":"value"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"__typename"}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Money"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"fractional"}},{"kind":"Field","name":{"kind":"Name","value":"currency_code"}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ScheduledMoneyValue"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"timespans"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"start"}},{"kind":"Field","name":{"kind":"Name","value":"finish"}},{"kind":"Field","name":{"kind":"Name","value":"value"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"fractional"}},{"kind":"Field","name":{"kind":"Name","value":"currency_code"}}]}}]}}]}},{"kind":"InlineFragment","typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"PayWhatYouWantValue"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"maximum_amount"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"currency_code"}},{"kind":"Field","name":{"kind":"Name","value":"fractional"}}]}},{"kind":"Field","name":{"kind":"Name","value":"minimum_amount"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"currency_code"}},{"kind":"Field","name":{"kind":"Name","value":"fractional"}}]}},{"kind":"Field","name":{"kind":"Name","value":"suggested_amount"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"currency_code"}},{"kind":"Field","name":{"kind":"Name","value":"fractional"}}]}},{"kind":"Field","name":{"kind":"Name","value":"allowed_currency_codes"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"AdminProductFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Product"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"description_html"}},{"kind":"Field","name":{"kind":"Name","value":"available"}},{"kind":"Field","name":{"kind":"Name","value":"payment_options"}},{"kind":"Field","name":{"kind":"Name","value":"clickwrap_agreement"}},{"kind":"Field","name":{"kind":"Name","value":"clickwrap_agreement_html"}},{"kind":"Field","name":{"kind":"Name","value":"image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}}]}},{"kind":"Field","name":{"kind":"Name","value":"pricing_structure"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PricingStructureFields"}}]}},{"kind":"Field","name":{"kind":"Name","value":"product_variants"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"description"}},{"kind":"Field","name":{"kind":"Name","value":"position"}},{"kind":"Field","name":{"kind":"Name","value":"image"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"url"}}]}},{"kind":"Field","name":{"kind":"Name","value":"override_pricing_structure"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"PricingStructureFields"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"provides_ticket_type"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"description"}}]}}]}}]} as unknown as DocumentNode<CreateProductMutationData, CreateProductMutationVariables>;

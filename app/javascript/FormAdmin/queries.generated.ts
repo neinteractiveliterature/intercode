@@ -1,35 +1,76 @@
 /* eslint-disable */
+/** Internal type. DO NOT USE DIRECTLY. */
+type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+/** Internal type. DO NOT USE DIRECTLY. */
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 import * as Types from '../graphqlTypes.generated';
 
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
+export type FormItemExposeIn =
+  | 'event_catalog'
+  | 'schedule_popup';
+
+export type FormItemInput = {
+  admin_description?: string | null | undefined;
+  default_value?: string | null | undefined;
+  expose_in?: Array<FormItemExposeIn> | null | undefined;
+  identifier?: string | null | undefined;
+  item_type?: string | null | undefined;
+  properties?: string | null | undefined;
+  public_description?: string | null | undefined;
+  visibility?: FormItemRole | null | undefined;
+  writeability?: FormItemRole | null | undefined;
+};
+
+export type FormItemRole =
+  | 'admin'
+  | 'all_profiles_basic_access'
+  | 'confirmed_attendee'
+  | 'normal'
+  | 'team_member';
+
+export type FormType =
+  /** Event form */
+  | 'event'
+  /** Event proposal form */
+  | 'event_proposal'
+  /** User profile form */
+  | 'user_con_profile';
+
+export type TimezoneMode =
+  /** Display dates and times using convention’s local time zone */
+  | 'convention_local'
+  /** Display dates and times using user’s local time zone */
+  | 'user_local';
+
 export type FormFieldsFragment = { __typename: 'Form', id: string, title: string, form_type: Types.FormType, export_json: string, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string }>, proposal_event_categories: Array<{ __typename: 'EventCategory', id: string, name: string }>, user_con_profile_conventions: Array<{ __typename: 'Convention', id: string, name: string }> };
 
-export type FormEditorFormItemFieldsFragment = { __typename: 'FormItem', id: string, admin_description?: string | null, public_description?: string | null, properties: string, position: number, identifier?: string | null, item_type: string, rendered_properties: string, default_value?: string | null, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in?: Array<Types.FormItemExposeIn> | null };
+export type FormEditorFormItemFieldsFragment = { __typename: 'FormItem', id: string, admin_description: string | null, public_description: string | null, properties: string, position: number, identifier: string | null, item_type: string, rendered_properties: string, default_value: string | null, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in: Array<Types.FormItemExposeIn> | null };
 
-export type FormEditorFormSectionFieldsFragment = { __typename: 'FormSection', id: string, title?: string | null, position: number, form_items: Array<{ __typename: 'FormItem', id: string, admin_description?: string | null, public_description?: string | null, properties: string, position: number, identifier?: string | null, item_type: string, rendered_properties: string, default_value?: string | null, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in?: Array<Types.FormItemExposeIn> | null }> };
+export type FormEditorFormSectionFieldsFragment = { __typename: 'FormSection', id: string, title: string | null, position: number, form_items: Array<{ __typename: 'FormItem', id: string, admin_description: string | null, public_description: string | null, properties: string, position: number, identifier: string | null, item_type: string, rendered_properties: string, default_value: string | null, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in: Array<Types.FormItemExposeIn> | null }> };
 
-export type FormEditorDataFragment = { __typename: 'Form', id: string, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: string, title?: string | null, position: number, form_items: Array<{ __typename: 'FormItem', id: string, admin_description?: string | null, public_description?: string | null, properties: string, position: number, identifier?: string | null, item_type: string, rendered_properties: string, default_value?: string | null, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in?: Array<Types.FormItemExposeIn> | null }> }> };
+export type FormEditorDataFragment = { __typename: 'Form', id: string, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: string, title: string | null, position: number, form_items: Array<{ __typename: 'FormItem', id: string, admin_description: string | null, public_description: string | null, properties: string, position: number, identifier: string | null, item_type: string, rendered_properties: string, default_value: string | null, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in: Array<Types.FormItemExposeIn> | null }> }> };
 
-export type FormAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type FormAdminQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type FormAdminQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, forms: Array<{ __typename: 'Form', id: string, title: string, form_type: Types.FormType, export_json: string, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string }>, proposal_event_categories: Array<{ __typename: 'EventCategory', id: string, name: string }>, user_con_profile_conventions: Array<{ __typename: 'Convention', id: string, name: string }> }> } };
 
-export type FormEditorQueryVariables = Types.Exact<{
-  id: Types.Scalars['ID']['input'];
+export type FormEditorQueryVariables = Exact<{
+  id: string | number;
 }>;
 
 
-export type FormEditorQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, starts_at?: string | null, ends_at?: string | null, timezone_name?: string | null, timezone_mode: Types.TimezoneMode, event_mailing_list_domain?: string | null, form: { __typename: 'Form', id: string, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: string, title?: string | null, position: number, form_items: Array<{ __typename: 'FormItem', id: string, admin_description?: string | null, public_description?: string | null, properties: string, position: number, identifier?: string | null, item_type: string, rendered_properties: string, default_value?: string | null, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in?: Array<Types.FormItemExposeIn> | null }> }> } } };
+export type FormEditorQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, starts_at: string | null, ends_at: string | null, timezone_name: string | null, timezone_mode: Types.TimezoneMode, event_mailing_list_domain: string | null, form: { __typename: 'Form', id: string, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: string, title: string | null, position: number, form_items: Array<{ __typename: 'FormItem', id: string, admin_description: string | null, public_description: string | null, properties: string, position: number, identifier: string | null, item_type: string, rendered_properties: string, default_value: string | null, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in: Array<Types.FormItemExposeIn> | null }> }> } } };
 
-export type PreviewFormItemQueryVariables = Types.Exact<{
-  formId: Types.Scalars['ID']['input'];
-  formSectionId: Types.Scalars['ID']['input'];
+export type PreviewFormItemQueryVariables = Exact<{
+  formId: string | number;
+  formSectionId: string | number;
   formItem: Types.FormItemInput;
 }>;
 
 
-export type PreviewFormItemQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, form: { __typename: 'Form', id: string, form_section: { __typename: 'FormSection', id: string, preview_form_item: { __typename: 'FormItem', id: string, admin_description?: string | null, public_description?: string | null, properties: string, position: number, identifier?: string | null, item_type: string, rendered_properties: string, default_value?: string | null, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in?: Array<Types.FormItemExposeIn> | null } } } } };
+export type PreviewFormItemQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, form: { __typename: 'Form', id: string, form_section: { __typename: 'FormSection', id: string, preview_form_item: { __typename: 'FormItem', id: string, admin_description: string | null, public_description: string | null, properties: string, position: number, identifier: string | null, item_type: string, rendered_properties: string, default_value: string | null, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in: Array<Types.FormItemExposeIn> | null } } } } };
 
 export const FormFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"FormFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Form"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"form_type"}},{"kind":"Field","name":{"kind":"Name","value":"export_json"}},{"kind":"Field","name":{"kind":"Name","value":"event_categories"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"proposal_event_categories"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"user_con_profile_conventions"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]}}]} as unknown as DocumentNode<FormFieldsFragment, unknown>;
 export const FormEditorFormItemFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"FormEditorFormItemFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"FormItem"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"admin_description"}},{"kind":"Field","name":{"kind":"Name","value":"public_description"}},{"kind":"Field","name":{"kind":"Name","value":"properties"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"CommonFormItemFields"}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CommonFormItemFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"FormItem"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"position"}},{"kind":"Field","name":{"kind":"Name","value":"identifier"}},{"kind":"Field","name":{"kind":"Name","value":"item_type"}},{"kind":"Field","name":{"kind":"Name","value":"rendered_properties"}},{"kind":"Field","name":{"kind":"Name","value":"default_value"}},{"kind":"Field","name":{"kind":"Name","value":"visibility"}},{"kind":"Field","name":{"kind":"Name","value":"writeability"}},{"kind":"Field","name":{"kind":"Name","value":"expose_in"}}]}}]} as unknown as DocumentNode<FormEditorFormItemFieldsFragment, unknown>;

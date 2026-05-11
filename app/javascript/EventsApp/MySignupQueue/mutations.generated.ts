@@ -1,52 +1,75 @@
 /* eslint-disable */
+/** Internal type. DO NOT USE DIRECTLY. */
+type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+/** Internal type. DO NOT USE DIRECTLY. */
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 import * as Types from '../../graphqlTypes.generated';
 
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
-export type DeleteSignupRankedChoiceMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID']['input'];
+/**
+ * A user-defined constraint on how many events the ranked choice algorithm should sign them up for.  This can be
+ * time-bounded, and a user can have as many or as few of these as they like.
+ */
+export type RankedChoiceUserConstraintInput = {
+  /**
+   * The time at which this constraint stops applying (non-inclusive).  If null, this constraint is unbounded on the
+   * finish side.
+   */
+  finish?: string | null | undefined;
+  /** The maximum number of counted signups to be allowed in the timespan described by this constraint. */
+  maximumSignups?: number | null | undefined;
+  /**
+   * The time at which this constraint starts applying (inclusive).  If null, this constraint is unbounded on the
+   * start side.
+   */
+  start?: string | null | undefined;
+};
+
+export type DeleteSignupRankedChoiceMutationVariables = Exact<{
+  id: string | number;
 }>;
 
 
-export type DeleteSignupRankedChoiceMutationData = { __typename: 'Mutation', deleteSignupRankedChoice: { __typename: 'DeleteSignupRankedChoicePayload', clientMutationId?: string | null } };
+export type DeleteSignupRankedChoiceMutationData = { __typename: 'Mutation', deleteSignupRankedChoice: { __typename: 'DeleteSignupRankedChoicePayload', clientMutationId: string | null } };
 
-export type UpdateSignupRankedChoicePriorityMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID']['input'];
-  priority: Types.Scalars['Int']['input'];
+export type UpdateSignupRankedChoicePriorityMutationVariables = Exact<{
+  id: string | number;
+  priority: number;
 }>;
 
 
-export type UpdateSignupRankedChoicePriorityMutationData = { __typename: 'Mutation', updateSignupRankedChoicePriority: { __typename: 'UpdateSignupRankedChoicePriorityPayload', clientMutationId?: string | null } };
+export type UpdateSignupRankedChoicePriorityMutationData = { __typename: 'Mutation', updateSignupRankedChoicePriority: { __typename: 'UpdateSignupRankedChoicePriorityPayload', clientMutationId: string | null } };
 
-export type SetSignupRankedChoicePrioritizeWaitlistMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID']['input'];
-  prioritizeWaitlist: Types.Scalars['Boolean']['input'];
-  waitlistPositionCap?: Types.InputMaybe<Types.Scalars['Int']['input']>;
+export type SetSignupRankedChoicePrioritizeWaitlistMutationVariables = Exact<{
+  id: string | number;
+  prioritizeWaitlist: boolean;
+  waitlistPositionCap?: number | null | undefined;
 }>;
 
 
-export type SetSignupRankedChoicePrioritizeWaitlistMutationData = { __typename: 'Mutation', setSignupRankedChoicePrioritzeWaitlist: { __typename: 'SetSignupRankedChoicePrioritizeWaitlistPayload', clientMutationId?: string | null, signup_ranked_choice: { __typename: 'SignupRankedChoice', id: string, prioritize_waitlist: boolean, waitlist_position_cap?: number | null } } };
+export type SetSignupRankedChoicePrioritizeWaitlistMutationData = { __typename: 'Mutation', setSignupRankedChoicePrioritzeWaitlist: { __typename: 'SetSignupRankedChoicePrioritizeWaitlistPayload', clientMutationId: string | null, signup_ranked_choice: { __typename: 'SignupRankedChoice', id: string, prioritize_waitlist: boolean, waitlist_position_cap: number | null } } };
 
-export type CreateMyRankedChoiceUserConstraintMutationVariables = Types.Exact<{
+export type CreateMyRankedChoiceUserConstraintMutationVariables = Exact<{
   rankedChoiceUserConstraint: Types.RankedChoiceUserConstraintInput;
 }>;
 
 
-export type CreateMyRankedChoiceUserConstraintMutationData = { __typename: 'Mutation', createRankedChoiceUserConstraint: { __typename: 'CreateRankedChoiceUserConstraintPayload', ranked_choice_user_constraint: { __typename: 'RankedChoiceUserConstraint', id: string, start?: string | null, finish?: string | null, maximum_signups: number } } };
+export type CreateMyRankedChoiceUserConstraintMutationData = { __typename: 'Mutation', createRankedChoiceUserConstraint: { __typename: 'CreateRankedChoiceUserConstraintPayload', ranked_choice_user_constraint: { __typename: 'RankedChoiceUserConstraint', id: string, start: string | null, finish: string | null, maximum_signups: number } } };
 
-export type UpdateRankedChoiceUserConstraintMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID']['input'];
+export type UpdateRankedChoiceUserConstraintMutationVariables = Exact<{
+  id: string | number;
   rankedChoiceUserConstraint: Types.RankedChoiceUserConstraintInput;
 }>;
 
 
-export type UpdateRankedChoiceUserConstraintMutationData = { __typename: 'Mutation', updateRankedChoiceUserConstraint: { __typename: 'UpdateRankedChoiceUserConstraintPayload', ranked_choice_user_constraint: { __typename: 'RankedChoiceUserConstraint', id: string, start?: string | null, finish?: string | null, maximum_signups: number } } };
+export type UpdateRankedChoiceUserConstraintMutationData = { __typename: 'Mutation', updateRankedChoiceUserConstraint: { __typename: 'UpdateRankedChoiceUserConstraintPayload', ranked_choice_user_constraint: { __typename: 'RankedChoiceUserConstraint', id: string, start: string | null, finish: string | null, maximum_signups: number } } };
 
-export type DeleteRankedChoiceUserConstraintMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID']['input'];
+export type DeleteRankedChoiceUserConstraintMutationVariables = Exact<{
+  id: string | number;
 }>;
 
 
-export type DeleteRankedChoiceUserConstraintMutationData = { __typename: 'Mutation', deleteRankedChoiceUserConstraint: { __typename: 'DeleteRankedChoiceUserConstraintPayload', clientMutationId?: string | null } };
+export type DeleteRankedChoiceUserConstraintMutationData = { __typename: 'Mutation', deleteRankedChoiceUserConstraint: { __typename: 'DeleteRankedChoiceUserConstraintPayload', clientMutationId: string | null } };
 
 
 export const DeleteSignupRankedChoiceDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"DeleteSignupRankedChoice"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"id"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"deleteSignupRankedChoice"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"id"},"value":{"kind":"Variable","name":{"kind":"Name","value":"id"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"clientMutationId"}}]}}]}}]} as unknown as DocumentNode<DeleteSignupRankedChoiceMutationData, DeleteSignupRankedChoiceMutationVariables>;

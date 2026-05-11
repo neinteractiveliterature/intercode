@@ -1,4 +1,6 @@
 /* eslint-disable */
+/** Internal type. DO NOT USE DIRECTLY. */
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 import * as Types from '../graphqlTypes.generated';
 
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
@@ -6,7 +8,7 @@ export type PermissionedModelFields_CmsContentGroup_Fragment = { __typename: 'Cm
 
 export type PermissionedModelFields_Convention_Fragment = { __typename: 'Convention', id: string, name: string };
 
-export type PermissionedModelFields_EventCategory_Fragment = { __typename: 'EventCategory', id: string, name: string, default_color?: string | null };
+export type PermissionedModelFields_EventCategory_Fragment = { __typename: 'EventCategory', id: string, name: string, default_color: string | null };
 
 export type PermissionedModelFieldsFragment =
   | PermissionedModelFields_CmsContentGroup_Fragment

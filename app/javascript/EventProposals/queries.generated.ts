@@ -1,53 +1,103 @@
 /* eslint-disable */
+/** Internal type. DO NOT USE DIRECTLY. */
+type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+/** Internal type. DO NOT USE DIRECTLY. */
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 import * as Types from '../graphqlTypes.generated';
 
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
-export type EventProposalFieldsFragment = { __typename: 'EventProposal', id: string, title?: string | null, status: string, form_response_attrs_json?: string | null, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, images: Array<{ __typename: 'ActiveStorageAttachment', id: string, filename: string, url: string, content_type: string, byte_size: number }>, event_category: { __typename: 'EventCategory', id: string, name: string, event_proposal_form?: { __typename: 'Form', id: string, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: string, title?: string | null, position: number, form_items: Array<{ __typename: 'FormItem', id: string, admin_description?: string | null, position: number, identifier?: string | null, item_type: string, rendered_properties: string, default_value?: string | null, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in?: Array<Types.FormItemExposeIn> | null }> }> } | null }, event?: { __typename: 'Event', id: string } | null };
+export type EventProposalFiltersInput = {
+  event_category?: Array<number | null | undefined> | null | undefined;
+  owner?: string | null | undefined;
+  status?: Array<string | null | undefined> | null | undefined;
+  title?: string | null | undefined;
+};
 
-export type EventProposalFormDataFragment = { __typename: 'Convention', id: string, starts_at?: string | null, ends_at?: string | null, timezone_name?: string | null, timezone_mode: Types.TimezoneMode, event_mailing_list_domain?: string | null };
+export type FormItemExposeIn =
+  | 'event_catalog'
+  | 'schedule_popup';
 
-export type EventProposalQueryVariables = Types.Exact<{
-  eventProposalId: Types.Scalars['ID']['input'];
+export type FormItemRole =
+  | 'admin'
+  | 'all_profiles_basic_access'
+  | 'confirmed_attendee'
+  | 'normal'
+  | 'team_member';
+
+export type FormType =
+  /** Event form */
+  | 'event'
+  /** Event proposal form */
+  | 'event_proposal'
+  /** User profile form */
+  | 'user_con_profile';
+
+/**
+ * A description of a field to sort a result set by. This is typically used in pagination
+ * fields to specify how the results should be ordered.
+ */
+export type SortInput = {
+  /**
+   * If true, the field will be sorted in descending order. If false, it will be sorted in
+   * ascending order.
+   */
+  desc: boolean;
+  /** The name of the field to sort by. */
+  field: string;
+};
+
+export type TimezoneMode =
+  /** Display dates and times using convention’s local time zone */
+  | 'convention_local'
+  /** Display dates and times using user’s local time zone */
+  | 'user_local';
+
+export type EventProposalFieldsFragment = { __typename: 'EventProposal', id: string, title: string | null, status: string, form_response_attrs_json: string | null, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, images: Array<{ __typename: 'ActiveStorageAttachment', id: string, filename: string, url: string, content_type: string, byte_size: number }>, event_category: { __typename: 'EventCategory', id: string, name: string, event_proposal_form: { __typename: 'Form', id: string, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: string, title: string | null, position: number, form_items: Array<{ __typename: 'FormItem', id: string, admin_description: string | null, position: number, identifier: string | null, item_type: string, rendered_properties: string, default_value: string | null, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in: Array<Types.FormItemExposeIn> | null }> }> } | null }, event: { __typename: 'Event', id: string } | null };
+
+export type EventProposalFormDataFragment = { __typename: 'Convention', id: string, starts_at: string | null, ends_at: string | null, timezone_name: string | null, timezone_mode: Types.TimezoneMode, event_mailing_list_domain: string | null };
+
+export type EventProposalQueryVariables = Exact<{
+  eventProposalId: string | number;
 }>;
 
 
-export type EventProposalQueryData = { __typename: 'Query', currentAbility: { __typename: 'Ability', can_delete_event_proposal: boolean }, convention: { __typename: 'Convention', id: string, starts_at?: string | null, ends_at?: string | null, timezone_name?: string | null, timezone_mode: Types.TimezoneMode, event_mailing_list_domain?: string | null, event_proposal: { __typename: 'EventProposal', id: string, title?: string | null, status: string, form_response_attrs_json?: string | null, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, images: Array<{ __typename: 'ActiveStorageAttachment', id: string, filename: string, url: string, content_type: string, byte_size: number }>, event_category: { __typename: 'EventCategory', id: string, name: string, event_proposal_form?: { __typename: 'Form', id: string, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: string, title?: string | null, position: number, form_items: Array<{ __typename: 'FormItem', id: string, admin_description?: string | null, position: number, identifier?: string | null, item_type: string, rendered_properties: string, default_value?: string | null, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in?: Array<Types.FormItemExposeIn> | null }> }> } | null }, event?: { __typename: 'Event', id: string } | null } } };
+export type EventProposalQueryData = { __typename: 'Query', currentAbility: { __typename: 'Ability', can_delete_event_proposal: boolean }, convention: { __typename: 'Convention', id: string, starts_at: string | null, ends_at: string | null, timezone_name: string | null, timezone_mode: Types.TimezoneMode, event_mailing_list_domain: string | null, event_proposal: { __typename: 'EventProposal', id: string, title: string | null, status: string, form_response_attrs_json: string | null, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, images: Array<{ __typename: 'ActiveStorageAttachment', id: string, filename: string, url: string, content_type: string, byte_size: number }>, event_category: { __typename: 'EventCategory', id: string, name: string, event_proposal_form: { __typename: 'Form', id: string, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: string, title: string | null, position: number, form_items: Array<{ __typename: 'FormItem', id: string, admin_description: string | null, position: number, identifier: string | null, item_type: string, rendered_properties: string, default_value: string | null, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in: Array<Types.FormItemExposeIn> | null }> }> } | null }, event: { __typename: 'Event', id: string } | null } } };
 
-export type EventProposalQueryWithOwnerQueryVariables = Types.Exact<{
-  eventProposalId: Types.Scalars['ID']['input'];
+export type EventProposalQueryWithOwnerQueryVariables = Exact<{
+  eventProposalId: string | number;
 }>;
 
 
-export type EventProposalQueryWithOwnerQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, starts_at?: string | null, ends_at?: string | null, timezone_name?: string | null, timezone_mode: Types.TimezoneMode, event_mailing_list_domain?: string | null, event_proposal: { __typename: 'EventProposal', id: string, form_response_attrs_json_with_rendered_markdown?: string | null, title?: string | null, status: string, form_response_attrs_json?: string | null, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, owner: { __typename: 'UserConProfile', id: string, name: string, email?: string | null, gravatar_enabled: boolean, gravatar_url: string }, images: Array<{ __typename: 'ActiveStorageAttachment', id: string, filename: string, url: string, content_type: string, byte_size: number }>, event_category: { __typename: 'EventCategory', id: string, name: string, event_proposal_form?: { __typename: 'Form', id: string, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: string, title?: string | null, position: number, form_items: Array<{ __typename: 'FormItem', id: string, admin_description?: string | null, position: number, identifier?: string | null, item_type: string, rendered_properties: string, default_value?: string | null, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in?: Array<Types.FormItemExposeIn> | null }> }> } | null }, event?: { __typename: 'Event', id: string } | null } }, currentAbility: { __typename: 'Ability', can_update_event_proposal: boolean, can_read_admin_notes_on_event_proposal: boolean } };
+export type EventProposalQueryWithOwnerQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, starts_at: string | null, ends_at: string | null, timezone_name: string | null, timezone_mode: Types.TimezoneMode, event_mailing_list_domain: string | null, event_proposal: { __typename: 'EventProposal', id: string, form_response_attrs_json_with_rendered_markdown: string | null, title: string | null, status: string, form_response_attrs_json: string | null, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole, owner: { __typename: 'UserConProfile', id: string, name: string, email: string | null, gravatar_enabled: boolean, gravatar_url: string }, images: Array<{ __typename: 'ActiveStorageAttachment', id: string, filename: string, url: string, content_type: string, byte_size: number }>, event_category: { __typename: 'EventCategory', id: string, name: string, event_proposal_form: { __typename: 'Form', id: string, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: string, title: string | null, position: number, form_items: Array<{ __typename: 'FormItem', id: string, admin_description: string | null, position: number, identifier: string | null, item_type: string, rendered_properties: string, default_value: string | null, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in: Array<Types.FormItemExposeIn> | null }> }> } | null }, event: { __typename: 'Event', id: string } | null } }, currentAbility: { __typename: 'Ability', can_update_event_proposal: boolean, can_read_admin_notes_on_event_proposal: boolean } };
 
-export type EventProposalAdminNotesQueryVariables = Types.Exact<{
-  eventProposalId: Types.Scalars['ID']['input'];
+export type EventProposalAdminNotesQueryVariables = Exact<{
+  eventProposalId: string | number;
 }>;
 
 
-export type EventProposalAdminNotesQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, event_proposal: { __typename: 'EventProposal', id: string, admin_notes?: string | null } } };
+export type EventProposalAdminNotesQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, event_proposal: { __typename: 'EventProposal', id: string, admin_notes: string | null } } };
 
-export type ProposeEventButtonQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type ProposeEventButtonQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type ProposeEventButtonQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, my_profile?: { __typename: 'UserConProfile', id: string, user?: { __typename: 'User', id: string, event_proposals: Array<{ __typename: 'EventProposal', id: string, title?: string | null, status: string, created_at: string, event_category: { __typename: 'EventCategory', id: string, name: string }, convention: { __typename: 'Convention', id: string, name: string } }> } | null } | null, departments: Array<{ __typename: 'Department', id: string, name: string, proposal_description?: string | null, event_categories: Array<{ __typename: 'EventCategory', id: string }> }>, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string, proposable: boolean, proposal_description?: string | null, department?: { __typename: 'Department', id: string } | null }> } };
+export type ProposeEventButtonQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, my_profile: { __typename: 'UserConProfile', id: string, user: { __typename: 'User', id: string, event_proposals: Array<{ __typename: 'EventProposal', id: string, title: string | null, status: string, created_at: string, event_category: { __typename: 'EventCategory', id: string, name: string }, convention: { __typename: 'Convention', id: string, name: string } }> } | null } | null, departments: Array<{ __typename: 'Department', id: string, name: string, proposal_description: string | null, event_categories: Array<{ __typename: 'EventCategory', id: string }> }>, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string, proposable: boolean, proposal_description: string | null, department: { __typename: 'Department', id: string } | null }> } };
 
-export type EventProposalsAdminQueryVariables = Types.Exact<{
-  page?: Types.InputMaybe<Types.Scalars['Int']['input']>;
-  perPage?: Types.InputMaybe<Types.Scalars['Int']['input']>;
-  filters?: Types.InputMaybe<Types.EventProposalFiltersInput>;
-  sort?: Types.InputMaybe<Array<Types.SortInput> | Types.SortInput>;
+export type EventProposalsAdminQueryVariables = Exact<{
+  page?: number | null | undefined;
+  perPage?: number | null | undefined;
+  filters?: Types.EventProposalFiltersInput | null | undefined;
+  sort?: Array<Types.SortInput> | Types.SortInput | null | undefined;
 }>;
 
 
-export type EventProposalsAdminQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, timezone_name?: string | null, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string, default_color?: string | null }>, event_proposals_paginated: { __typename: 'EventProposalsPagination', total_entries: number, total_pages: number, current_page: number, per_page: number, entries: Array<{ __typename: 'EventProposal', id: string, title?: string | null, length_seconds?: number | null, status: string, submitted_at?: string | null, updated_at: string, event_category: { __typename: 'EventCategory', id: string, name: string, default_color?: string | null }, registration_policy?: { __typename: 'RegistrationPolicy', minimum_slots?: number | null, total_slots?: number | null, slots_limited?: boolean | null } | null, owner: { __typename: 'UserConProfile', id: string, name_inverted: string, gravatar_enabled: boolean, gravatar_url: string } }> } } };
+export type EventProposalsAdminQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, timezone_name: string | null, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string, default_color: string | null }>, event_proposals_paginated: { __typename: 'EventProposalsPagination', total_entries: number, total_pages: number, current_page: number, per_page: number, entries: Array<{ __typename: 'EventProposal', id: string, title: string | null, length_seconds: number | null, status: string, submitted_at: string | null, updated_at: string, event_category: { __typename: 'EventCategory', id: string, name: string, default_color: string | null }, registration_policy: { __typename: 'RegistrationPolicy', minimum_slots: number | null, total_slots: number | null, slots_limited: boolean | null } | null, owner: { __typename: 'UserConProfile', id: string, name_inverted: string, gravatar_enabled: boolean, gravatar_url: string } }> } } };
 
-export type EventProposalHistoryQueryVariables = Types.Exact<{
-  id: Types.Scalars['ID']['input'];
+export type EventProposalHistoryQueryVariables = Exact<{
+  id: string | number;
 }>;
 
 
-export type EventProposalHistoryQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, starts_at?: string | null, ends_at?: string | null, timezone_name?: string | null, timezone_mode: Types.TimezoneMode, event_proposal: { __typename: 'EventProposal', id: string, title?: string | null, owner: { __typename: 'UserConProfile', id: string }, event_category: { __typename: 'EventCategory', id: string, event_proposal_form?: { __typename: 'Form', id: string, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: string, title?: string | null, position: number, form_items: Array<{ __typename: 'FormItem', id: string, admin_description?: string | null, position: number, identifier?: string | null, item_type: string, rendered_properties: string, default_value?: string | null, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in?: Array<Types.FormItemExposeIn> | null }> }> } | null }, form_response_changes: Array<{ __typename: 'FormResponseChange', field_identifier: string, previous_value?: string | null, new_value?: string | null, created_at: string, updated_at: string, user_con_profile: { __typename: 'UserConProfile', id: string, name_without_nickname: string } }> } } };
+export type EventProposalHistoryQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, starts_at: string | null, ends_at: string | null, timezone_name: string | null, timezone_mode: Types.TimezoneMode, event_proposal: { __typename: 'EventProposal', id: string, title: string | null, owner: { __typename: 'UserConProfile', id: string }, event_category: { __typename: 'EventCategory', id: string, event_proposal_form: { __typename: 'Form', id: string, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: string, title: string | null, position: number, form_items: Array<{ __typename: 'FormItem', id: string, admin_description: string | null, position: number, identifier: string | null, item_type: string, rendered_properties: string, default_value: string | null, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in: Array<Types.FormItemExposeIn> | null }> }> } | null }, form_response_changes: Array<{ __typename: 'FormResponseChange', field_identifier: string, previous_value: string | null, new_value: string | null, created_at: string, updated_at: string, user_con_profile: { __typename: 'UserConProfile', id: string, name_without_nickname: string } }> } } };
 
 export const EventProposalFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"EventProposalFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"EventProposal"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"status"}},{"kind":"Field","name":{"kind":"Name","value":"form_response_attrs_json"}},{"kind":"Field","name":{"kind":"Name","value":"current_user_form_item_viewer_role"}},{"kind":"Field","name":{"kind":"Name","value":"current_user_form_item_writer_role"}},{"kind":"Field","name":{"kind":"Name","value":"images"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"filename"}},{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"content_type"}},{"kind":"Field","name":{"kind":"Name","value":"byte_size"}}]}},{"kind":"Field","name":{"kind":"Name","value":"event_category"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"event_proposal_form"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"CommonFormFields"}},{"kind":"Field","name":{"kind":"Name","value":"form_sections"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"form_items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"admin_description"}}]}}]}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"event"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CommonFormItemFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"FormItem"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"position"}},{"kind":"Field","name":{"kind":"Name","value":"identifier"}},{"kind":"Field","name":{"kind":"Name","value":"item_type"}},{"kind":"Field","name":{"kind":"Name","value":"rendered_properties"}},{"kind":"Field","name":{"kind":"Name","value":"default_value"}},{"kind":"Field","name":{"kind":"Name","value":"visibility"}},{"kind":"Field","name":{"kind":"Name","value":"writeability"}},{"kind":"Field","name":{"kind":"Name","value":"expose_in"}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CommonFormSectionFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"FormSection"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"position"}},{"kind":"Field","name":{"kind":"Name","value":"form_items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"CommonFormItemFields"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CommonFormFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Form"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"form_type"}},{"kind":"Field","name":{"kind":"Name","value":"form_sections"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"CommonFormSectionFields"}}]}}]}}]} as unknown as DocumentNode<EventProposalFieldsFragment, unknown>;
 export const EventProposalFormDataFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"EventProposalFormData"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Convention"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"starts_at"}},{"kind":"Field","name":{"kind":"Name","value":"ends_at"}},{"kind":"Field","name":{"kind":"Name","value":"timezone_name"}},{"kind":"Field","name":{"kind":"Name","value":"timezone_mode"}},{"kind":"Field","name":{"kind":"Name","value":"event_mailing_list_domain"}}]}}]} as unknown as DocumentNode<EventProposalFormDataFragment, unknown>;

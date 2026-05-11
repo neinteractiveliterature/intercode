@@ -1,15 +1,19 @@
 /* eslint-disable */
+/** Internal type. DO NOT USE DIRECTLY. */
+type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+/** Internal type. DO NOT USE DIRECTLY. */
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 import * as Types from '../../graphqlTypes.generated';
 
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
-export type CmsPartialFieldsFragment = { __typename: 'CmsPartial', id: string, name?: string | null, content?: string | null, admin_notes?: string | null, current_ability_can_update: boolean, current_ability_can_delete: boolean };
+export type CmsPartialFieldsFragment = { __typename: 'CmsPartial', id: string, name: string | null, content: string | null, admin_notes: string | null, current_ability_can_update: boolean, current_ability_can_delete: boolean };
 
-export type CmsPartialsAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type CmsPartialsAdminQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CmsPartialsAdminQueryData = { __typename: 'Query', convention?: { __typename: 'Convention', id: string, name: string } | null, currentAbility: { __typename: 'Ability', can_create_cms_partials: boolean }, cmsParent:
-    | { __typename: 'Convention', id: string, cmsPartials: Array<{ __typename: 'CmsPartial', id: string, name?: string | null, content?: string | null, admin_notes?: string | null, current_ability_can_update: boolean, current_ability_can_delete: boolean }> }
-    | { __typename: 'RootSite', id: string, cmsPartials: Array<{ __typename: 'CmsPartial', id: string, name?: string | null, content?: string | null, admin_notes?: string | null, current_ability_can_update: boolean, current_ability_can_delete: boolean }> }
+export type CmsPartialsAdminQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string } | null, currentAbility: { __typename: 'Ability', can_create_cms_partials: boolean }, cmsParent:
+    | { __typename: 'Convention', id: string, cmsPartials: Array<{ __typename: 'CmsPartial', id: string, name: string | null, content: string | null, admin_notes: string | null, current_ability_can_update: boolean, current_ability_can_delete: boolean }> }
+    | { __typename: 'RootSite', id: string, cmsPartials: Array<{ __typename: 'CmsPartial', id: string, name: string | null, content: string | null, admin_notes: string | null, current_ability_can_update: boolean, current_ability_can_delete: boolean }> }
    };
 
 export const CmsPartialFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CmsPartialFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsPartial"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"admin_notes"}},{"kind":"Field","name":{"kind":"Name","value":"current_ability_can_update"}},{"kind":"Field","name":{"kind":"Name","value":"current_ability_can_delete"}}]}}]} as unknown as DocumentNode<CmsPartialFieldsFragment, unknown>;

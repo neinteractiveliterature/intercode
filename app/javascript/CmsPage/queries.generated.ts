@@ -1,26 +1,30 @@
 /* eslint-disable */
+/** Internal type. DO NOT USE DIRECTLY. */
+type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+/** Internal type. DO NOT USE DIRECTLY. */
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 import * as Types from '../graphqlTypes.generated';
 
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
-export type CmsPageQueryVariables = Types.Exact<{
-  slug?: Types.InputMaybe<Types.Scalars['String']['input']>;
-  rootPage?: Types.InputMaybe<Types.Scalars['Boolean']['input']>;
+export type CmsPageQueryVariables = Exact<{
+  slug?: string | null | undefined;
+  rootPage?: boolean | null | undefined;
 }>;
 
 
-export type CmsPageQueryData = { __typename: 'Query', convention?: { __typename: 'Convention', id: string, name: string, clickwrap_agreement?: string | null, my_profile?: { __typename: 'UserConProfile', id: string, accepted_clickwrap_agreement?: boolean | null } | null } | null, cmsParent:
-    | { __typename: 'Convention', id: string, cmsPage: { __typename: 'Page', id: string, name?: string | null, content_html: string, current_ability_can_update: boolean, current_ability_can_delete: boolean, skip_clickwrap_agreement?: boolean | null } }
-    | { __typename: 'RootSite', id: string, cmsPage: { __typename: 'Page', id: string, name?: string | null, content_html: string, current_ability_can_update: boolean, current_ability_can_delete: boolean, skip_clickwrap_agreement?: boolean | null } }
+export type CmsPageQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, clickwrap_agreement: string | null, my_profile: { __typename: 'UserConProfile', id: string, accepted_clickwrap_agreement: boolean | null } | null } | null, cmsParent:
+    | { __typename: 'Convention', id: string, cmsPage: { __typename: 'Page', id: string, name: string | null, content_html: string, current_ability_can_update: boolean, current_ability_can_delete: boolean, skip_clickwrap_agreement: boolean | null } }
+    | { __typename: 'RootSite', id: string, cmsPage: { __typename: 'Page', id: string, name: string | null, content_html: string, current_ability_can_update: boolean, current_ability_can_delete: boolean, skip_clickwrap_agreement: boolean | null } }
   , currentAbility: { __typename: 'Ability', can_manage_any_cms_content: boolean } };
 
-export type PageAdminDropdownQueryVariables = Types.Exact<{
-  id: Types.Scalars['ID']['input'];
+export type PageAdminDropdownQueryVariables = Exact<{
+  id: string | number;
 }>;
 
 
 export type PageAdminDropdownQueryData = { __typename: 'Query', cmsParent:
-    | { __typename: 'Convention', id: string, defaultLayout: { __typename: 'CmsLayout', id: string, name?: string | null }, cmsPage: { __typename: 'Page', id: string, cms_layout?: { __typename: 'CmsLayout', id: string, name?: string | null } | null, referenced_partials: Array<{ __typename: 'CmsPartial', id: string, name?: string | null }> } }
-    | { __typename: 'RootSite', id: string, root_site_default_layout: { __typename: 'CmsLayout', id: string, name?: string | null }, cmsPage: { __typename: 'Page', id: string, cms_layout?: { __typename: 'CmsLayout', id: string, name?: string | null } | null, referenced_partials: Array<{ __typename: 'CmsPartial', id: string, name?: string | null }> } }
+    | { __typename: 'Convention', id: string, defaultLayout: { __typename: 'CmsLayout', id: string, name: string | null }, cmsPage: { __typename: 'Page', id: string, cms_layout: { __typename: 'CmsLayout', id: string, name: string | null } | null, referenced_partials: Array<{ __typename: 'CmsPartial', id: string, name: string | null }> } }
+    | { __typename: 'RootSite', id: string, root_site_default_layout: { __typename: 'CmsLayout', id: string, name: string | null }, cmsPage: { __typename: 'Page', id: string, cms_layout: { __typename: 'CmsLayout', id: string, name: string | null } | null, referenced_partials: Array<{ __typename: 'CmsPartial', id: string, name: string | null }> } }
    };
 
 

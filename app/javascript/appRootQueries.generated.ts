@@ -1,23 +1,66 @@
 /* eslint-disable */
+/** Internal type. DO NOT USE DIRECTLY. */
+type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+/** Internal type. DO NOT USE DIRECTLY. */
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 import * as Types from './graphqlTypes.generated';
 
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
-export type AppRootQueryVariables = Types.Exact<{ [key: string]: never; }>;
+/**
+ * The automation behavior to use for event signups in a Convention.  Currently, we only support one type of
+ * automated signups, the "ranked choice" behavior.  Conventions can also disable automation entirely using the
+ * "none" value.
+ */
+export type SignupAutomationMode =
+  /** Signups are fully manual */
+  | 'none'
+  /** Attendees make a ranked list of choices and the site attempts to give everyone what they want */
+  | 'ranked_choice';
+
+export type SignupMode =
+  /** Attendees can request signups and signup changes but con staff must approve them */
+  | 'moderated'
+  /** Attendees can sign themselves up for events */
+  | 'self_service';
+
+export type SiteMode =
+  /** Site behaves as a convention with multiple events */
+  | 'convention'
+  /** Site behaves as a series of standalone events */
+  | 'event_series'
+  /** Site behaves as a single standalone event */
+  | 'single_event';
+
+export type TicketMode =
+  /** Tickets are neither sold nor required in this convention */
+  | 'disabled'
+  /** A valid ticket is required to sign up for events in this convention */
+  | 'required_for_signup'
+  /** Each event in this convention sells tickets separately */
+  | 'ticket_per_event';
+
+export type TimezoneMode =
+  /** Display dates and times using convention’s local time zone */
+  | 'convention_local'
+  /** Display dates and times using user’s local time zone */
+  | 'user_local';
+
+export type AppRootQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type AppRootQueryData = { __typename: 'Query', hasOauthApplications: boolean, defaultCurrencyCode: string, supportedCurrencyCodes: Array<string>, cmsParentByRequestHost:
-    | { __typename: 'Convention', id: string, cmsNavigationItems: Array<{ __typename: 'CmsNavigationItem', id: string, position?: number | null, title?: string | null, navigation_section?: { __typename: 'CmsNavigationItem', id: string } | null, page?: { __typename: 'Page', id: string, slug?: string | null } | null }> }
-    | { __typename: 'RootSite', id: string, cmsNavigationItems: Array<{ __typename: 'CmsNavigationItem', id: string, position?: number | null, title?: string | null, navigation_section?: { __typename: 'CmsNavigationItem', id: string } | null, page?: { __typename: 'Page', id: string, slug?: string | null } | null }> }
-  , currentAbility: { __typename: 'Ability', can_read_schedule: boolean, can_read_schedule_with_counts: boolean, can_list_events: boolean, can_read_user_con_profiles: boolean, can_manage_conventions: boolean, can_update_convention: boolean, can_update_departments: boolean, can_manage_email_routes: boolean, can_update_event_categories: boolean, can_read_event_proposals: boolean, can_manage_runs: boolean, can_manage_forms: boolean, can_read_any_mailing_list: boolean, can_update_notification_templates: boolean, can_manage_oauth_applications: boolean, can_read_reports: boolean, can_manage_rooms: boolean, can_manage_signups: boolean, can_manage_any_cms_content: boolean, can_manage_staff_positions: boolean, can_read_orders: boolean, can_manage_ticket_types: boolean, can_read_user_activity_alerts: boolean, can_read_organizations: boolean, can_read_users: boolean }, currentUser?: { __typename: 'User', id: string, name?: string | null } | null, assumedIdentityFromProfile?: { __typename: 'UserConProfile', id: string, name_without_nickname: string } | null, convention?: { __typename: 'Convention', id: string, name: string, domain?: string | null, default_currency_code?: string | null, accepting_proposals?: boolean | null, canceled: boolean, language: string, site_mode: Types.SiteMode, signup_mode: Types.SignupMode, signup_automation_mode: Types.SignupAutomationMode, starts_at?: string | null, stripe_account_id?: string | null, stripe_publishable_key?: string | null, ends_at?: string | null, ticket_mode: Types.TicketMode, timezone_name?: string | null, timezone_mode: Types.TimezoneMode, clickwrap_agreement?: string | null, tickets_available_for_purchase: boolean, ticket_name: string, ticketNamePlural: string, ticket_types: Array<{ __typename: 'TicketType', id: string, providing_products: Array<{ __typename: 'Product', id: string, available: boolean }> }>, my_profile?: { __typename: 'UserConProfile', id: string, name: string, email?: string | null, mobile_phone?: string | null, accepted_clickwrap_agreement?: boolean | null, name_without_nickname: string, first_name: string, last_name: string, gravatar_enabled: boolean, gravatar_url: string, ticket?: { __typename: 'Ticket', id: string } | null, current_pending_order?: { __typename: 'Order', id: string, order_entries: Array<{ __typename: 'OrderEntry', id: string, quantity: number }> } | null } | null } | null, rootSite: { __typename: 'RootSite', id: string, site_name: string } };
+    | { __typename: 'Convention', id: string, cmsNavigationItems: Array<{ __typename: 'CmsNavigationItem', id: string, position: number | null, title: string | null, navigation_section: { __typename: 'CmsNavigationItem', id: string } | null, page: { __typename: 'Page', id: string, slug: string | null } | null }> }
+    | { __typename: 'RootSite', id: string, cmsNavigationItems: Array<{ __typename: 'CmsNavigationItem', id: string, position: number | null, title: string | null, navigation_section: { __typename: 'CmsNavigationItem', id: string } | null, page: { __typename: 'Page', id: string, slug: string | null } | null }> }
+  , currentAbility: { __typename: 'Ability', can_read_schedule: boolean, can_read_schedule_with_counts: boolean, can_list_events: boolean, can_read_user_con_profiles: boolean, can_manage_conventions: boolean, can_update_convention: boolean, can_update_departments: boolean, can_manage_email_routes: boolean, can_update_event_categories: boolean, can_read_event_proposals: boolean, can_manage_runs: boolean, can_manage_forms: boolean, can_read_any_mailing_list: boolean, can_update_notification_templates: boolean, can_manage_oauth_applications: boolean, can_read_reports: boolean, can_manage_rooms: boolean, can_manage_signups: boolean, can_manage_any_cms_content: boolean, can_manage_staff_positions: boolean, can_read_orders: boolean, can_manage_ticket_types: boolean, can_read_user_activity_alerts: boolean, can_read_organizations: boolean, can_read_users: boolean }, currentUser: { __typename: 'User', id: string, name: string | null } | null, assumedIdentityFromProfile: { __typename: 'UserConProfile', id: string, name_without_nickname: string } | null, convention: { __typename: 'Convention', id: string, name: string, domain: string | null, default_currency_code: string | null, accepting_proposals: boolean | null, canceled: boolean, language: string, site_mode: Types.SiteMode, signup_mode: Types.SignupMode, signup_automation_mode: Types.SignupAutomationMode, starts_at: string | null, stripe_account_id: string | null, stripe_publishable_key: string | null, ends_at: string | null, ticket_mode: Types.TicketMode, timezone_name: string | null, timezone_mode: Types.TimezoneMode, clickwrap_agreement: string | null, tickets_available_for_purchase: boolean, ticket_name: string, ticketNamePlural: string, ticket_types: Array<{ __typename: 'TicketType', id: string, providing_products: Array<{ __typename: 'Product', id: string, available: boolean }> }>, my_profile: { __typename: 'UserConProfile', id: string, name: string, email: string | null, mobile_phone: string | null, accepted_clickwrap_agreement: boolean | null, name_without_nickname: string, first_name: string, last_name: string, gravatar_enabled: boolean, gravatar_url: string, ticket: { __typename: 'Ticket', id: string } | null, current_pending_order: { __typename: 'Order', id: string, order_entries: Array<{ __typename: 'OrderEntry', id: string, quantity: number }> } | null } | null } | null, rootSite: { __typename: 'RootSite', id: string, site_name: string } };
 
-export type AppRootLayoutQueryVariables = Types.Exact<{
-  path: Types.Scalars['String']['input'];
+export type AppRootLayoutQueryVariables = Exact<{
+  path: string;
 }>;
 
 
 export type AppRootLayoutQueryData = { __typename: 'Query', cmsParentByRequestHost:
-    | { __typename: 'Convention', id: string, effectiveCmsLayout: { __typename: 'CmsLayout', id: string, content_html?: string | null } }
-    | { __typename: 'RootSite', id: string, effectiveCmsLayout: { __typename: 'CmsLayout', id: string, content_html?: string | null } }
+    | { __typename: 'Convention', id: string, effectiveCmsLayout: { __typename: 'CmsLayout', id: string, content_html: string | null } }
+    | { __typename: 'RootSite', id: string, effectiveCmsLayout: { __typename: 'CmsLayout', id: string, content_html: string | null } }
    };
 
 

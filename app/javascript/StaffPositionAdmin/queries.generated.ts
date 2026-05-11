@@ -1,23 +1,27 @@
 /* eslint-disable */
+/** Internal type. DO NOT USE DIRECTLY. */
+type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+/** Internal type. DO NOT USE DIRECTLY. */
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 import * as Types from '../graphqlTypes.generated';
 
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
-export type StaffPositionFieldsFragment = { __typename: 'StaffPosition', id: string, name: string, email?: string | null, visible?: boolean | null, email_aliases: Array<string>, cc_addresses: Array<string>, user_con_profiles: Array<{ __typename: 'UserConProfile', id: string, name_without_nickname: string, gravatar_url: string, gravatar_enabled: boolean }>, permissions: Array<{ __typename: 'Permission', id: string, permission: string, model:
+export type StaffPositionFieldsFragment = { __typename: 'StaffPosition', id: string, name: string, email: string | null, visible: boolean | null, email_aliases: Array<string>, cc_addresses: Array<string>, user_con_profiles: Array<{ __typename: 'UserConProfile', id: string, name_without_nickname: string, gravatar_url: string, gravatar_enabled: boolean }>, permissions: Array<{ __typename: 'Permission', id: string, permission: string, model:
       | { __typename: 'CmsContentGroup', id: string, name: string }
       | { __typename: 'Convention', id: string, name: string }
-      | { __typename: 'EventCategory', id: string, name: string, default_color?: string | null }
+      | { __typename: 'EventCategory', id: string, name: string, default_color: string | null }
     , role:
       | { __typename: 'OrganizationRole', id: string, name: string }
       | { __typename: 'StaffPosition', id: string, name: string }
      }> };
 
-export type StaffPositionsQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type StaffPositionsQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type StaffPositionsQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string, default_color?: string | null }>, cmsContentGroups: Array<{ __typename: 'CmsContentGroup', id: string, name: string }>, staff_positions: Array<{ __typename: 'StaffPosition', id: string, name: string, email?: string | null, visible?: boolean | null, email_aliases: Array<string>, cc_addresses: Array<string>, user_con_profiles: Array<{ __typename: 'UserConProfile', id: string, name_without_nickname: string, gravatar_url: string, gravatar_enabled: boolean }>, permissions: Array<{ __typename: 'Permission', id: string, permission: string, model:
+export type StaffPositionsQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, event_categories: Array<{ __typename: 'EventCategory', id: string, name: string, default_color: string | null }>, cmsContentGroups: Array<{ __typename: 'CmsContentGroup', id: string, name: string }>, staff_positions: Array<{ __typename: 'StaffPosition', id: string, name: string, email: string | null, visible: boolean | null, email_aliases: Array<string>, cc_addresses: Array<string>, user_con_profiles: Array<{ __typename: 'UserConProfile', id: string, name_without_nickname: string, gravatar_url: string, gravatar_enabled: boolean }>, permissions: Array<{ __typename: 'Permission', id: string, permission: string, model:
           | { __typename: 'CmsContentGroup', id: string, name: string }
           | { __typename: 'Convention', id: string, name: string }
-          | { __typename: 'EventCategory', id: string, name: string, default_color?: string | null }
+          | { __typename: 'EventCategory', id: string, name: string, default_color: string | null }
         , role:
           | { __typename: 'OrganizationRole', id: string, name: string }
           | { __typename: 'StaffPosition', id: string, name: string }
