@@ -11,9 +11,12 @@ import {
 import { lazyWithAppEntrypointHeadersCheck } from '../../checkAppEntrypointHeadersMatch';
 import { getIntercodeUserTimezoneHeader } from '../../useIntercodeApolloClient';
 import { AuthenticityTokensContext } from '../../AuthenticityTokensContext';
+import type { GraphiQLProps } from 'graphiql';
 
-const GraphiQL = lazyWithAppEntrypointHeadersCheck(() =>
-  import(/* webpackChunkName: 'graphiql' */ 'graphiql').then((m) => ({ default: m.GraphiQL })),
+const GraphiQL = lazyWithAppEntrypointHeadersCheck<GraphiQLProps>(() =>
+  import(/* webpackChunkName: 'graphiql' */ 'graphiql').then((m) => ({
+    default: m.GraphiQL as React.ComponentType<GraphiQLProps>,
+  })),
 );
 
 type CmsGraphqlQueryFormFields = {
