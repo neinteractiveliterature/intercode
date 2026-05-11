@@ -53,23 +53,22 @@ export default defineConfig({
       output: {
         dir: absolutePath('./public/packs'),
         entryFileNames: '[name].js',
-        manualChunks: {
-          apollo: ['@apollo/client', 'apollo-upload-client/UploadHttpLink.mjs'],
-          codemirror: [
-            '@codemirror/state',
-            '@codemirror/view',
-            '@codemirror/language',
-            '@codemirror/lang-html',
-            '@codemirror/lang-json',
-            '@codemirror/lang-markdown',
-            '@lezer/common',
-          ],
-          currencyCodes: ['@breezehr/currency-codes'],
-          graphql: ['graphql'],
-          i18next: ['i18next', 'react-i18next'],
-          lodash: ['lodash'],
-          luxon: ['luxon'],
-          reactRouter: ['react-router'],
+        manualChunks: (id) => {
+          const chunks: Array<[string, string[]]> = [
+            ['apollo', ['@apollo/client', 'apollo-upload-client']],
+            ['codemirror', ['@codemirror/state', '@codemirror/view', '@codemirror/language', '@codemirror/lang-html', '@codemirror/lang-json', '@codemirror/lang-markdown', '@lezer/common']],
+            ['currencyCodes', ['@breezehr/currency-codes']],
+            ['graphql', ['graphql']],
+            ['i18next', ['i18next', 'react-i18next']],
+            ['lodash', ['lodash']],
+            ['luxon', ['luxon']],
+            ['reactRouter', ['react-router']],
+          ];
+          for (const [chunk, pkgs] of chunks) {
+            if (pkgs.some((pkg) => id.includes(`/${pkg}/`) || id.includes(`/${pkg}@`))) {
+              return chunk;
+            }
+          }
         },
       },
     },
