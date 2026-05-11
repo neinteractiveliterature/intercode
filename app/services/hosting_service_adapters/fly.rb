@@ -1,12 +1,14 @@
-class HostingServiceAdapters::Fly < HostingServiceAdapters::Base
-  SMALL_GUEST = { "cpu_kind" => "shared", "cpus" => 1, "memory_mb" => 512 }
-  MEDIUM_GUEST = { "cpu_kind" => "shared", "cpus" => 4, "memory_mb" => 1024 }
-  LARGE_GUEST = { "cpu_kind" => "performance", "cpus" => 1, "memory_mb" => 2048 }
+# frozen_string_literal: true
+class HostingServiceAdapters::Fly < HostingServiceAdapters::Base # rubocop:disable Metrics/ClassLength
+  SMALL_GUEST = { "cpu_kind" => "shared", "cpus" => 1, "memory_mb" => 1024 }.freeze
+  # SMALL_GUEST = { "cpu_kind" => "shared", "cpus" => 1, "memory_mb" => 512 }
+  MEDIUM_GUEST = { "cpu_kind" => "shared", "cpus" => 4, "memory_mb" => 1024 }.freeze
+  LARGE_GUEST = { "cpu_kind" => "performance", "cpus" => 1, "memory_mb" => 2048 }.freeze
 
   class Machine < HostingServiceAdapters::Instance
     attr_reader :id, :state, :config, :region, :instance_id, :name
 
-    def initialize(id:, instance_id:, state:, config:, region:, name:, **args)
+    def initialize(id:, instance_id:, state:, config:, region:, name:, **args) # rubocop:disable Metrics/ParameterLists
       super(**args)
       @id = id
       @instance_id = instance_id
