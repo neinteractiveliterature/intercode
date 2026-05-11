@@ -1,4 +1,4 @@
-import { useState, useMemo, ReactNode, SetStateAction, useId } from 'react';
+import { useState, useMemo, ReactNode, useId } from 'react';
 
 import * as React from 'react';
 import Select from 'react-select';
@@ -48,7 +48,7 @@ function getFormattedOffset(zoneName: string) {
 export type TimezoneSelectProps = {
   label: ReactNode;
   value?: string | null;
-  onChange: React.Dispatch<SetStateAction<string | null | undefined>>;
+  onChange: (value: string | null) => void;
 };
 
 function TimezoneSelect(props: TimezoneSelectProps): React.JSX.Element {
@@ -92,7 +92,7 @@ function TimezoneSelect(props: TimezoneSelectProps): React.JSX.Element {
         value={value && isValidZone(value) ? timezoneSelectData.zones[value] : undefined}
         onInputChange={(input) => filterOptions(input)}
         onChange={(newValue: ZoneData | null) => {
-          onChange(newValue?.name);
+          onChange(newValue?.name ?? null);
         }}
         getOptionValue={(zone) => zone.name}
         filterOption={() => true}

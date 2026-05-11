@@ -20,8 +20,8 @@ import AvailabilityBar from '../EventsApp/ScheduleGrid/AvailabilityBar';
 import AppRootContext from '../AppRootContext';
 import { RunDimensions, ScheduleLayoutResult } from '../EventsApp/ScheduleGrid/ScheduleLayout/ScheduleLayoutBlock';
 import { ScheduleGridConfig } from '../EventsApp/ScheduleGrid/ScheduleGridConfig';
-import { EventFieldsFragment, RunFieldsFragment } from './queries.generated';
-import { ScheduleRun } from '../EventsApp/ScheduleGrid/Schedule';
+import { RunFieldsFragment } from './queries.generated';
+import { ScheduleEventInput, ScheduleRun } from '../EventsApp/ScheduleGrid/Schedule';
 import { useEventAdminEventsLoader } from './loaders';
 import styles from 'styles/schedule_grid.module.scss';
 
@@ -152,7 +152,7 @@ export type ProspectiveRunScheduleProps = {
     | 'my_signup_requests'
     | 'my_signup_ranked_choices'
   >[];
-  event: EventFieldsFragment;
+  event: ScheduleEventInput;
 };
 
 export default function ProspectiveRunSchedule({ day, runs, event }: ProspectiveRunScheduleProps): React.JSX.Element {
