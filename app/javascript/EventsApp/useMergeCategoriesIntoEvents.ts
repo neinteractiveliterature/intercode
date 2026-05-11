@@ -1,29 +1,20 @@
 import { useMemo } from 'react';
-import { ScheduleGridConventionDataQueryData } from './ScheduleGrid/queries.generated';
+import { ScheduleGridEventCategory } from './ScheduleGrid/ScheduleGridTypes';
 
-type EventCategoryType = ScheduleGridConventionDataQueryData['convention']['event_categories'][number];
-
-export default function useMergeCategoriesIntoEvents<T extends { event_category: { id: string } }>(
-  eventCategories: EventCategoryType[],
-  events: T[],
-) {
+export default function useMergeCategoriesIntoEvents<
+  TCategory extends ScheduleGridEventCategory,
+  TEvent extends { event_category: { id: string } },
+>(eventCategories: TCategory[], events: TEvent[]): (TEvent & { event_category: TCategory })[] {
   const eventCategoriesById = useMemo(() => {
-    const eventCategoriesById = new Map<
-      string,
-      ScheduleGridConventionDataQueryData['convention']['event_categories'][number]
-    >();
+    const map = new Map<string, TCategory>();
     eventCategories.forEach((category) => {
-      eventCategoriesById.set(category.id, category);
+      map.set(category.id, category);
     });
-    return eventCategoriesById;
+    return map;
   }, [eventCategories]);
 
-  const eventsWithCategories = useMemo(
-    () =>
-       
-      events?.map((event) => ({ ...event, event_category: eventCategoriesById.get(event.event_category.id)! })) ?? [],
+  return useMemo(
+    () => events.map((event) => ({ ...event, event_category: eventCategoriesById.get(event.event_category.id)! })),
     [events, eventCategoriesById],
   );
-
-  return eventsWithCategories;
 }

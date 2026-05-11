@@ -1,15 +1,12 @@
-import { RegistrationPolicy } from '../../graphqlTypes.generated';
-
-export type RegistrationPolicyForCapacityThresholds = Pick<
-  RegistrationPolicy,
-  | 'only_uncounted'
-  | 'total_slots'
-  | 'preferred_slots'
-  | 'minimum_slots'
-  | 'total_slots_including_not_counted'
-  | 'preferred_slots_including_not_counted'
-  | 'minimum_slots_including_not_counted'
->;
+export type RegistrationPolicyForCapacityThresholds = {
+  only_uncounted?: boolean | null;
+  total_slots?: number | null;
+  preferred_slots?: number | null;
+  minimum_slots?: number | null;
+  total_slots_including_not_counted?: number | null;
+  preferred_slots_including_not_counted?: number | null;
+  minimum_slots_including_not_counted?: number | null;
+};
 
 export default function getCapacityThresholds(
   registrationPolicy: RegistrationPolicyForCapacityThresholds,

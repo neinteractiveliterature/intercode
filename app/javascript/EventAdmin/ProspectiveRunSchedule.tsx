@@ -21,7 +21,6 @@ import AppRootContext from '../AppRootContext';
 import { RunDimensions, ScheduleLayoutResult } from '../EventsApp/ScheduleGrid/ScheduleLayout/ScheduleLayoutBlock';
 import { ScheduleGridConfig } from '../EventsApp/ScheduleGrid/ScheduleGridConfig';
 import { EventFieldsFragment, RunFieldsFragment } from './queries.generated';
-import { ScheduleGridEventFragment } from '../EventsApp/ScheduleGrid/queries.generated';
 import { ScheduleRun } from '../EventsApp/ScheduleGrid/Schedule';
 import { useEventAdminEventsLoader } from './loaders';
 import styles from 'styles/schedule_grid.module.scss';
@@ -184,7 +183,7 @@ export default function ProspectiveRunSchedule({ day, runs, event }: Prospective
     [runs, event.id],
   );
 
-  const eventsForSchedule: ScheduleGridEventFragment[] | undefined = useMemo(() => {
+  const eventsForSchedule = useMemo(() => {
     const filteredEvents = data.convention.events.map((e) => {
       if (e.id === event.id) {
         return {
@@ -227,11 +226,7 @@ export default function ProspectiveRunSchedule({ day, runs, event }: Prospective
     return conventionDayTimespans?.find((cdt) => cdt.overlapsTimespan(dayTimespan));
   }, [conventionDayTimespans, day]);
 
-  const scheduleGridProviderValue = useScheduleGridProvider(
-    SCHEDULE_GRID_CONFIG,
-    data?.convention ?? undefined,
-    eventsForSchedule,
-  );
+  const scheduleGridProviderValue = useScheduleGridProvider(SCHEDULE_GRID_CONFIG, data.convention, eventsForSchedule);
   const layout = useLayoutForTimespan(scheduleGridProviderValue.schedule, conventionDayTimespan);
 
   if (!layout) {

@@ -78,7 +78,7 @@ export default React.forwardRef<HTMLInputElement, MoneyInputProps>(function Mone
   return (
     <div className={inputGroupClassName || 'input-group'}>
       <span className="input-group-text">{getCurrencySymbol(navigator.language, currency.code)}</span>
-      { }
+      {}
       <input
         type="text"
         className={className ?? 'form-control'}
@@ -91,7 +91,7 @@ export default React.forwardRef<HTMLInputElement, MoneyInputProps>(function Mone
         <CurrencySelect
           aria-label="Currency"
           className="form-select flex-shrink-1"
-          value={value?.currency_code}
+          value={value?.currency_code ?? null}
           allowedCurrencyCodes={allowedCurrencyCodes}
           onChange={(newCurrencyCode) =>
             onChange((prevValue) => ({

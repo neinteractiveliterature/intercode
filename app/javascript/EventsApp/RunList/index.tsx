@@ -18,12 +18,13 @@ import {
   ScheduleGridEventsQueryDocument,
 } from '../ScheduleGrid/queries.generated';
 import { findConflictingRuns } from '../ScheduleGrid/Schedule';
+import { ScheduleGridEventCategory } from '../ScheduleGrid/ScheduleGridTypes';
 import SignupCountData from '../SignupCountData';
 import RunListEventRun from './RunListEventRun';
 import { EventFiltersInput } from '../../graphqlTypes.generated';
 import useMergeCategoriesIntoEvents from '../useMergeCategoriesIntoEvents';
 import { useConventionDayUrlPortion } from '../conventionDayUrls';
-import { useSuspenseQuery } from "@apollo/client/react";
+import { useSuspenseQuery } from '@apollo/client/react';
 
 // http://stackoverflow.com/questions/123999/how-to-tell-if-a-dom-element-is-visible-in-the-current-viewport
 function isElementInViewport(el: HTMLElement) {
@@ -104,7 +105,7 @@ export default function RunList({
     const eventMap = new Map<
       string,
       (typeof data)['convention']['events'][number] & {
-        event_category: ScheduleGridConventionDataQueryData['convention']['event_categories'][number];
+        event_category: ScheduleGridEventCategory;
       }
     >();
     eventsWithCategories.forEach((event) => {
