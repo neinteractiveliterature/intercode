@@ -14,7 +14,19 @@ import EmailAliasInput from '../BuiltInFormControls/EmailAliasInput';
 import { StringArrayEditor } from '../BuiltInFormControls/ArrayEditor';
 import { StaffPositionsQueryData } from './queries.generated';
 
-export type EditingStaffPosition = StaffPositionsQueryData['convention']['staff_positions'][0];
+export type EditingStaffPosition = Omit<
+  StaffPositionsQueryData['convention']['staff_positions'][0],
+  'user_con_profiles'
+> & {
+  user_con_profiles: Array<{
+    __typename: 'UserConProfile';
+    id: string;
+    name_without_nickname: string;
+    email: string | null;
+    gravatar_url?: string;
+    gravatar_enabled?: boolean;
+  }>;
+};
 
 export type StaffPositionFormProps = {
   staffPosition: EditingStaffPosition;

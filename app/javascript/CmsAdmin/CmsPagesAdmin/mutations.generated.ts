@@ -1,28 +1,64 @@
 /* eslint-disable */
+/** Internal type. DO NOT USE DIRECTLY. */
+type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+/** Internal type. DO NOT USE DIRECTLY. */
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 import * as Types from '../../graphqlTypes.generated';
 
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
-export type CreatePageMutationVariables = Types.Exact<{
+/** A CMS page. */
+export type PageInput = {
+  /** Notes on this page that will be visible to site admins */
+  admin_notes?: string | null | undefined;
+  /**
+   * If present, the ID of the layout to use for rendering this page.  If not, this page will use the default layout for
+   * its CMS parent.
+   */
+  cmsLayoutId?: string | number | null | undefined;
+  /** The content of this page, in Liquid format */
+  content?: string | null | undefined;
+  /** If true, this page will not be indexed for full-text search. */
+  hidden_from_search?: boolean | null | undefined;
+  /**
+   * If present, this value will be used in the `<meta property="og:description">` and
+   * `<meta name="description">` tags in the `<head>` of this page, which are used as the
+   * preview text for links to this page on web sites such as Facebook, Twitter, etc.
+   *
+   * If absent, the description text will be automatically generated from the page content.
+   */
+  metaDescription?: string | null | undefined;
+  /** The title of this page */
+  name?: string | null | undefined;
+  /**
+   * If true, this page will not require the user to agree to the site's clickwrap agreement (if applicable) in order to
+   * view it.  This should be used on any pages referenced in the clickwrap agreement, such as site policies.
+   */
+  skip_clickwrap_agreement?: boolean | null | undefined;
+  /** The URL portion after `/pages/` at which this page can be viewed */
+  slug?: string | null | undefined;
+};
+
+export type CreatePageMutationVariables = Exact<{
   page: Types.PageInput;
 }>;
 
 
-export type CreatePageMutationData = { __typename: 'Mutation', createPage: { __typename: 'CreatePagePayload', page: { __typename: 'Page', id: string, name?: string | null, slug?: string | null, content?: string | null, admin_notes?: string | null, skip_clickwrap_agreement?: boolean | null, hidden_from_search: boolean, current_ability_can_update: boolean, current_ability_can_delete: boolean, meta_description?: string | null, cms_layout?: { __typename: 'CmsLayout', id: string, name?: string | null } | null } } };
+export type CreatePageMutationData = { __typename: 'Mutation', createPage: { __typename: 'CreatePagePayload', page: { __typename: 'Page', id: string, name: string | null, slug: string | null, content: string | null, admin_notes: string | null, skip_clickwrap_agreement: boolean | null, hidden_from_search: boolean, current_ability_can_update: boolean, current_ability_can_delete: boolean, meta_description: string | null, cms_layout: { __typename: 'CmsLayout', id: string, name: string | null } | null } } };
 
-export type UpdatePageMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID']['input'];
+export type UpdatePageMutationVariables = Exact<{
+  id: string | number;
   page: Types.PageInput;
 }>;
 
 
-export type UpdatePageMutationData = { __typename: 'Mutation', updatePage: { __typename: 'UpdatePagePayload', page: { __typename: 'Page', id: string, name?: string | null, slug?: string | null, content?: string | null, admin_notes?: string | null, skip_clickwrap_agreement?: boolean | null, hidden_from_search: boolean, current_ability_can_update: boolean, current_ability_can_delete: boolean, meta_description?: string | null, cms_layout?: { __typename: 'CmsLayout', id: string, name?: string | null } | null } } };
+export type UpdatePageMutationData = { __typename: 'Mutation', updatePage: { __typename: 'UpdatePagePayload', page: { __typename: 'Page', id: string, name: string | null, slug: string | null, content: string | null, admin_notes: string | null, skip_clickwrap_agreement: boolean | null, hidden_from_search: boolean, current_ability_can_update: boolean, current_ability_can_delete: boolean, meta_description: string | null, cms_layout: { __typename: 'CmsLayout', id: string, name: string | null } | null } } };
 
-export type DeletePageMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID']['input'];
+export type DeletePageMutationVariables = Exact<{
+  id: string | number;
 }>;
 
 
-export type DeletePageMutationData = { __typename: 'Mutation', deletePage: { __typename: 'DeletePagePayload', clientMutationId?: string | null } };
+export type DeletePageMutationData = { __typename: 'Mutation', deletePage: { __typename: 'DeletePagePayload', clientMutationId: string | null } };
 
 
 export const CreatePageDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreatePage"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"page"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"PageInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createPage"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"page"},"value":{"kind":"Variable","name":{"kind":"Name","value":"page"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"page"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"CmsPageFields"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CmsPageAdminLayoutFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsLayout"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CmsPageFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Page"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"slug"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"admin_notes"}},{"kind":"Field","name":{"kind":"Name","value":"skip_clickwrap_agreement"}},{"kind":"Field","name":{"kind":"Name","value":"hidden_from_search"}},{"kind":"Field","name":{"kind":"Name","value":"current_ability_can_update"}},{"kind":"Field","name":{"kind":"Name","value":"current_ability_can_delete"}},{"kind":"Field","name":{"kind":"Name","value":"meta_description"}},{"kind":"Field","name":{"kind":"Name","value":"cms_layout"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"CmsPageAdminLayoutFields"}}]}}]}}]} as unknown as DocumentNode<CreatePageMutationData, CreatePageMutationVariables>;

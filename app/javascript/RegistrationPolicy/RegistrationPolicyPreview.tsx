@@ -15,9 +15,16 @@ function RegistrationPolicyPreview({ registrationPolicy }: RegistrationPolicyPre
     const { buckets, ...otherProps } = registrationPolicy;
     return {
       __typename: 'RegistrationPolicy' as const,
+      slots_limited: null,
+      total_slots_including_not_counted: null,
       buckets: buckets.map((bucket) => ({
         __typename: 'RegistrationPolicyBucket' as const,
         ...bucket,
+        name: bucket.name ?? null,
+        description: bucket.description ?? null,
+        minimum_slots: bucket.minimum_slots ?? null,
+        preferred_slots: bucket.preferred_slots ?? null,
+        total_slots: bucket.total_slots ?? null,
       })),
       ...otherProps,
     };

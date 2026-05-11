@@ -73,10 +73,16 @@ function describeRequestedBucket(signupRequest: SignupModerationSignupRequestFie
     : t('signups.noPreference');
 }
 
+type SignupModerationRunDetailsRun = NonNullable<
+  SignupModerationQueueQueryData['convention']
+>['signup_requests_paginated']['entries'][0]['target_run'];
+
 type SignupModerationRunDetailsProps = {
-  run: NonNullable<
-    SignupModerationQueueQueryData['convention']
-  >['signup_requests_paginated']['entries'][0]['target_run'];
+  run: Omit<SignupModerationRunDetailsRun, 'event'> & {
+    event: Omit<SignupModerationRunDetailsRun['event'], 'registration_policy'> & {
+      registration_policy?: SignupModerationRunDetailsRun['event']['registration_policy'];
+    };
+  };
   showRequestedBucket?: boolean;
   requestedBucketKey?: string;
 };

@@ -1,15 +1,19 @@
 /* eslint-disable */
+/** Internal type. DO NOT USE DIRECTLY. */
+type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+/** Internal type. DO NOT USE DIRECTLY. */
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 import * as Types from '../../graphqlTypes.generated';
 
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
-export type CmsFileFieldsFragment = { __typename: 'CmsFile', id: string, current_ability_can_delete: boolean, file: { __typename: 'ActiveStorageAttachment', id: string, filename: string, url: string, content_type: string, byte_size: number, thumbnailUrl?: string | null } };
+export type CmsFileFieldsFragment = { __typename: 'CmsFile', id: string, current_ability_can_delete: boolean, file: { __typename: 'ActiveStorageAttachment', id: string, filename: string, url: string, content_type: string, byte_size: number, thumbnailUrl: string | null } };
 
-export type CmsFilesAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type CmsFilesAdminQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CmsFilesAdminQueryData = { __typename: 'Query', convention?: { __typename: 'Convention', id: string, name: string } | null, currentAbility: { __typename: 'Ability', can_create_cms_files: boolean }, cmsParent:
-    | { __typename: 'Convention', id: string, cmsFiles: Array<{ __typename: 'CmsFile', id: string, current_ability_can_delete: boolean, file: { __typename: 'ActiveStorageAttachment', id: string, filename: string, url: string, content_type: string, byte_size: number, thumbnailUrl?: string | null } }> }
-    | { __typename: 'RootSite', id: string, cmsFiles: Array<{ __typename: 'CmsFile', id: string, current_ability_can_delete: boolean, file: { __typename: 'ActiveStorageAttachment', id: string, filename: string, url: string, content_type: string, byte_size: number, thumbnailUrl?: string | null } }> }
+export type CmsFilesAdminQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string } | null, currentAbility: { __typename: 'Ability', can_create_cms_files: boolean }, cmsParent:
+    | { __typename: 'Convention', id: string, cmsFiles: Array<{ __typename: 'CmsFile', id: string, current_ability_can_delete: boolean, file: { __typename: 'ActiveStorageAttachment', id: string, filename: string, url: string, content_type: string, byte_size: number, thumbnailUrl: string | null } }> }
+    | { __typename: 'RootSite', id: string, cmsFiles: Array<{ __typename: 'CmsFile', id: string, current_ability_can_delete: boolean, file: { __typename: 'ActiveStorageAttachment', id: string, filename: string, url: string, content_type: string, byte_size: number, thumbnailUrl: string | null } }> }
    };
 
 export const CmsFileFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CmsFileFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsFile"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"current_ability_can_delete"}},{"kind":"Field","name":{"kind":"Name","value":"file"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"filename"}},{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"content_type"}},{"kind":"Field","name":{"kind":"Name","value":"byte_size"}},{"kind":"Field","alias":{"kind":"Name","value":"thumbnailUrl"},"name":{"kind":"Name","value":"resized_url"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"maxWidth"},"value":{"kind":"IntValue","value":"100"}},{"kind":"Argument","name":{"kind":"Name","value":"maxHeight"},"value":{"kind":"IntValue","value":"100"}}]}]}}]}}]} as unknown as DocumentNode<CmsFileFieldsFragment, unknown>;

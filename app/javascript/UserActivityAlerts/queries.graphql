@@ -18,6 +18,7 @@ fragment UserActivityAlertFields on UserActivityAlert {
   user {
     id
     name
+    email
   }
 
   notification_destinations {

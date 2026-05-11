@@ -82,6 +82,7 @@ function AdminProductVariantsTable(props: AdminProductVariantsTableProps): React
         name: '',
         description: '',
         position,
+        image: null,
       },
     ]);
   };

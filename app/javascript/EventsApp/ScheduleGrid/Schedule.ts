@@ -9,7 +9,8 @@ import {
   isCatchAllMatchRule,
   buildCategoryMatchRules,
 } from './ScheduleGridConfig';
-import { ScheduleGridConventionDataQueryData, ScheduleGridEventFragment } from './queries.generated';
+import { ScheduleGridEventFragment } from './queries.generated';
+import { ScheduleGridEventCategory } from './ScheduleGridTypes';
 import { timespanFromRun } from '../../TimespanUtils';
 import { timeIsOnTheHour } from '../../TimeUtils';
 import { SchedulingUi } from '../../graphqlTypes.generated';
@@ -52,15 +53,39 @@ export function findConflictingRuns<T extends EventForConflictingRuns>(events: T
   return conflictingRuns;
 }
 
-export type ScheduleEvent = ScheduleGridEventFragment & {
+// registration_policy: slots_limited and buckets are always present; the extended capacity
+// fields are optional because not all callers (e.g. EventAdmin) fetch them.
+type ScheduleEventRegistrationPolicy = Pick<
+  NonNullable<ScheduleGridEventFragment['registration_policy']>,
+  'slots_limited' | 'buckets'
+> &
+  Partial<Omit<NonNullable<ScheduleGridEventFragment['registration_policy']>, 'slots_limited' | 'buckets'>>;
+
+export type ScheduleEvent = Omit<
+  ScheduleGridEventFragment,
+  | 'event_category'
+  | 'registration_policy'
+  | 'my_rating'
+  | 'short_blurb_html'
+  | 'form_response_attrs_json_with_rendered_markdown'
+> & {
   displayTitle?: string;
   fake?: boolean;
-  event_category: ScheduleGridConventionDataQueryData['convention']['event_categories'][number];
+  event_category: ScheduleGridEventCategory;
+  my_rating?: number | null;
+  short_blurb_html?: string | null;
+  form_response_attrs_json_with_rendered_markdown?: string | null;
+  registration_policy: ScheduleEventRegistrationPolicy | null;
 };
 
 export type ScheduleRun = ScheduleEvent['runs'][0] & {
   event_id: string;
   disableDetailsPopup?: boolean;
+};
+
+// Events before useMergeCategoriesIntoEvents fills in the full category — only the id is available.
+export type ScheduleEventInput = Omit<ScheduleEvent, 'event_category'> & {
+  event_category: { id: string };
 };
 
 export type ScheduleGroup = {
@@ -319,6 +344,8 @@ export default class Schedule {
       id: fakeRunId,
       disableDetailsPopup: true,
       event_id: fakeRunId,
+      schedule_note: null,
+      title_suffix: null,
       my_signups: [],
       my_signup_requests: [],
       my_signup_ranked_choices: [],
@@ -342,6 +369,7 @@ export default class Schedule {
         id: uuidv4(),
         name: 'Fake events',
         default_color: 'rgba(0, 0, 0, 0.1)',
+        full_color: null,
         signed_up_color: 'transparent',
         scheduling_ui: SchedulingUi.Regular,
         event_form: {
@@ -353,7 +381,6 @@ export default class Schedule {
         teamMemberNamePlural: 'team members',
       },
       registration_policy: {
-        __typename: 'RegistrationPolicy',
         buckets: [],
         total_slots: 0,
         slots_limited: true,

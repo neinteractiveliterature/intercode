@@ -73,9 +73,14 @@ function generateBlankProduct(): EditingProduct {
     payment_options: [],
     generatedId: uuidv4(),
     name: '',
-    description: '',
+    description: null,
+    description_html: null,
     product_variants: [],
     available: true,
+    image: null,
+    clickwrap_agreement: null,
+    clickwrap_agreement_html: null,
+    provides_ticket_type: null,
   };
 }
 

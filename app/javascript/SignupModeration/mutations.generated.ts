@@ -1,45 +1,81 @@
 /* eslint-disable */
+/** Internal type. DO NOT USE DIRECTLY. */
+type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+/** Internal type. DO NOT USE DIRECTLY. */
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 import * as Types from '../graphqlTypes.generated';
 
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
-export type CreateUserSignupMutationVariables = Types.Exact<{
-  runId: Types.Scalars['ID']['input'];
-  userConProfileId: Types.Scalars['ID']['input'];
-  requestedBucketKey?: Types.InputMaybe<Types.Scalars['String']['input']>;
-  noRequestedBucket?: Types.InputMaybe<Types.Scalars['Boolean']['input']>;
+/** The decision the ranked choice automation algorithm made when evaluating a particular choice. */
+export type RankedChoiceDecisionValue =
+  /** Sign the user up for the chosen event */
+  | 'SIGNUP'
+  /** Skip this choice but continue evaluating this user's ranked choices */
+  | 'SKIP_CHOICE'
+  /** Skip all remaining choices for this user */
+  | 'SKIP_USER'
+  /** Sign the user up in the waitlist for the chosen event */
+  | 'WAITLIST';
+
+/** The processing state of a SignupRequest */
+export type SignupRequestState =
+  /** The request has been accepted and the requester has been signed up (see the result_signup field for the actual signup) */
+  | 'accepted'
+  /** The request has not yet been reviewed by a moderator */
+  | 'pending'
+  /** The request has been rejected and the requester has not been signed up */
+  | 'rejected'
+  /** The requester withdrew their request before it was accepted or rejected */
+  | 'withdrawn';
+
+export type SignupState =
+  /** Attendee's spot is confirmed */
+  | 'confirmed'
+  /** Attendee's spot is held temporarily while the attendee finishes paying for their ticket */
+  | 'ticket_purchase_hold'
+  /** Attendee is on the waitlist for this event and may be pulled in automatically */
+  | 'waitlisted'
+  /** Attendee has withdrawn from this event (and this signup is no longer valid) */
+  | 'withdrawn';
+
+export type CreateUserSignupMutationVariables = Exact<{
+  runId: string | number;
+  userConProfileId: string | number;
+  requestedBucketKey?: string | null | undefined;
+  noRequestedBucket?: boolean | null | undefined;
 }>;
 
 
-export type CreateUserSignupMutationData = { __typename: 'Mutation', createUserSignup: { __typename: 'CreateUserSignupPayload', clientMutationId?: string | null } };
+export type CreateUserSignupMutationData = { __typename: 'Mutation', createUserSignup: { __typename: 'CreateUserSignupPayload', clientMutationId: string | null } };
 
-export type WithdrawUserSignupMutationVariables = Types.Exact<{
-  runId: Types.Scalars['ID']['input'];
-  userConProfileId: Types.Scalars['ID']['input'];
+export type WithdrawUserSignupMutationVariables = Exact<{
+  runId: string | number;
+  userConProfileId: string | number;
 }>;
 
 
-export type WithdrawUserSignupMutationData = { __typename: 'Mutation', withdrawUserSignup: { __typename: 'WithdrawUserSignupPayload', clientMutationId?: string | null } };
+export type WithdrawUserSignupMutationData = { __typename: 'Mutation', withdrawUserSignup: { __typename: 'WithdrawUserSignupPayload', clientMutationId: string | null } };
 
-export type AcceptSignupRequestMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID']['input'];
+export type AcceptSignupRequestMutationVariables = Exact<{
+  id: string | number;
 }>;
 
 
-export type AcceptSignupRequestMutationData = { __typename: 'Mutation', acceptSignupRequest: { __typename: 'AcceptSignupRequestPayload', signup_request: { __typename: 'SignupRequest', id: string, state: Types.SignupRequestState, requested_bucket_key?: string | null, created_at: string, user_con_profile: { __typename: 'UserConProfile', id: string, name: string, name_inverted: string, name_without_nickname: string, gravatar_enabled: boolean, gravatar_url: string }, replace_signup?: { __typename: 'Signup', id: string, run: { __typename: 'Run', id: string, title_suffix?: string | null, starts_at: string, grouped_signup_counts: Array<{ __typename: 'GroupedSignupCount', bucket_key?: string | null, count: number, counted: boolean, state: Types.SignupState, team_member: boolean }>, event: { __typename: 'Event', id: string, title?: string | null, length_seconds: number } } } | null, target_run: { __typename: 'Run', id: string, title_suffix?: string | null, starts_at: string, event: { __typename: 'Event', id: string, title?: string | null, length_seconds: number, registration_policy?: { __typename: 'RegistrationPolicy', prevent_no_preference_signups: boolean, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null, total_slots?: number | null, slots_limited: boolean, anything: boolean, not_counted: boolean }> } | null }, grouped_signup_counts: Array<{ __typename: 'GroupedSignupCount', bucket_key?: string | null, count: number, counted: boolean, state: Types.SignupState, team_member: boolean }> }, result_signup?: { __typename: 'Signup', id: string, state: Types.SignupState, waitlist_position?: number | null } | null, signup_ranked_choice?: { __typename: 'SignupRankedChoice', id: string, ranked_choice_decisions: Array<{ __typename: 'RankedChoiceDecision', id: string, decision: Types.RankedChoiceDecisionValue, created_at: string, signup_round: { __typename: 'SignupRound', id: string } }> } | null } } };
+export type AcceptSignupRequestMutationData = { __typename: 'Mutation', acceptSignupRequest: { __typename: 'AcceptSignupRequestPayload', signup_request: { __typename: 'SignupRequest', id: string, state: Types.SignupRequestState, requested_bucket_key: string | null, created_at: string, user_con_profile: { __typename: 'UserConProfile', id: string, name: string, name_inverted: string, name_without_nickname: string, gravatar_enabled: boolean, gravatar_url: string }, replace_signup: { __typename: 'Signup', id: string, run: { __typename: 'Run', id: string, title_suffix: string | null, starts_at: string, grouped_signup_counts: Array<{ __typename: 'GroupedSignupCount', bucket_key: string | null, count: number, counted: boolean, state: Types.SignupState, team_member: boolean }>, event: { __typename: 'Event', id: string, title: string | null, length_seconds: number } } } | null, target_run: { __typename: 'Run', id: string, title_suffix: string | null, starts_at: string, event: { __typename: 'Event', id: string, title: string | null, length_seconds: number, registration_policy: { __typename: 'RegistrationPolicy', prevent_no_preference_signups: boolean, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name: string | null, total_slots: number | null, slots_limited: boolean, anything: boolean, not_counted: boolean }> } | null }, grouped_signup_counts: Array<{ __typename: 'GroupedSignupCount', bucket_key: string | null, count: number, counted: boolean, state: Types.SignupState, team_member: boolean }> }, result_signup: { __typename: 'Signup', id: string, state: Types.SignupState, waitlist_position: number | null } | null, signup_ranked_choice: { __typename: 'SignupRankedChoice', id: string, ranked_choice_decisions: Array<{ __typename: 'RankedChoiceDecision', id: string, decision: Types.RankedChoiceDecisionValue, created_at: string, signup_round: { __typename: 'SignupRound', id: string } }> } | null } } };
 
-export type RejectSignupRequestMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID']['input'];
+export type RejectSignupRequestMutationVariables = Exact<{
+  id: string | number;
 }>;
 
 
-export type RejectSignupRequestMutationData = { __typename: 'Mutation', rejectSignupRequest: { __typename: 'RejectSignupRequestPayload', signup_request: { __typename: 'SignupRequest', id: string, state: Types.SignupRequestState, requested_bucket_key?: string | null, created_at: string, user_con_profile: { __typename: 'UserConProfile', id: string, name: string, name_inverted: string, name_without_nickname: string, gravatar_enabled: boolean, gravatar_url: string }, replace_signup?: { __typename: 'Signup', id: string, run: { __typename: 'Run', id: string, title_suffix?: string | null, starts_at: string, grouped_signup_counts: Array<{ __typename: 'GroupedSignupCount', bucket_key?: string | null, count: number, counted: boolean, state: Types.SignupState, team_member: boolean }>, event: { __typename: 'Event', id: string, title?: string | null, length_seconds: number } } } | null, target_run: { __typename: 'Run', id: string, title_suffix?: string | null, starts_at: string, event: { __typename: 'Event', id: string, title?: string | null, length_seconds: number, registration_policy?: { __typename: 'RegistrationPolicy', prevent_no_preference_signups: boolean, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name?: string | null, total_slots?: number | null, slots_limited: boolean, anything: boolean, not_counted: boolean }> } | null }, grouped_signup_counts: Array<{ __typename: 'GroupedSignupCount', bucket_key?: string | null, count: number, counted: boolean, state: Types.SignupState, team_member: boolean }> }, result_signup?: { __typename: 'Signup', id: string, state: Types.SignupState, waitlist_position?: number | null } | null, signup_ranked_choice?: { __typename: 'SignupRankedChoice', id: string, ranked_choice_decisions: Array<{ __typename: 'RankedChoiceDecision', id: string, decision: Types.RankedChoiceDecisionValue, created_at: string, signup_round: { __typename: 'SignupRound', id: string } }> } | null } } };
+export type RejectSignupRequestMutationData = { __typename: 'Mutation', rejectSignupRequest: { __typename: 'RejectSignupRequestPayload', signup_request: { __typename: 'SignupRequest', id: string, state: Types.SignupRequestState, requested_bucket_key: string | null, created_at: string, user_con_profile: { __typename: 'UserConProfile', id: string, name: string, name_inverted: string, name_without_nickname: string, gravatar_enabled: boolean, gravatar_url: string }, replace_signup: { __typename: 'Signup', id: string, run: { __typename: 'Run', id: string, title_suffix: string | null, starts_at: string, grouped_signup_counts: Array<{ __typename: 'GroupedSignupCount', bucket_key: string | null, count: number, counted: boolean, state: Types.SignupState, team_member: boolean }>, event: { __typename: 'Event', id: string, title: string | null, length_seconds: number } } } | null, target_run: { __typename: 'Run', id: string, title_suffix: string | null, starts_at: string, event: { __typename: 'Event', id: string, title: string | null, length_seconds: number, registration_policy: { __typename: 'RegistrationPolicy', prevent_no_preference_signups: boolean, buckets: Array<{ __typename: 'RegistrationPolicyBucket', key: string, name: string | null, total_slots: number | null, slots_limited: boolean, anything: boolean, not_counted: boolean }> } | null }, grouped_signup_counts: Array<{ __typename: 'GroupedSignupCount', bucket_key: string | null, count: number, counted: boolean, state: Types.SignupState, team_member: boolean }> }, result_signup: { __typename: 'Signup', id: string, state: Types.SignupState, waitlist_position: number | null } | null, signup_ranked_choice: { __typename: 'SignupRankedChoice', id: string, ranked_choice_decisions: Array<{ __typename: 'RankedChoiceDecision', id: string, decision: Types.RankedChoiceDecisionValue, created_at: string, signup_round: { __typename: 'SignupRound', id: string } }> } | null } } };
 
-export type RerunModeratedRankedChoiceSignupRoundMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID']['input'];
+export type RerunModeratedRankedChoiceSignupRoundMutationVariables = Exact<{
+  id: string | number;
 }>;
 
 
-export type RerunModeratedRankedChoiceSignupRoundMutationData = { __typename: 'Mutation', rerunModeratedRankedChoiceSignupRound: { __typename: 'RerunModeratedRankedChoiceSignupRoundPayload', clientMutationId?: string | null } };
+export type RerunModeratedRankedChoiceSignupRoundMutationData = { __typename: 'Mutation', rerunModeratedRankedChoiceSignupRound: { __typename: 'RerunModeratedRankedChoiceSignupRoundPayload', clientMutationId: string | null } };
 
 
 export const CreateUserSignupDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateUserSignup"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"runId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"userConProfileId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"requestedBucketKey"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"noRequestedBucket"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createUserSignup"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"runId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"runId"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"userConProfileId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"userConProfileId"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"requested_bucket_key"},"value":{"kind":"Variable","name":{"kind":"Name","value":"requestedBucketKey"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"no_requested_bucket"},"value":{"kind":"Variable","name":{"kind":"Name","value":"noRequestedBucket"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"suppress_notifications"},"value":{"kind":"BooleanValue","value":true}},{"kind":"ObjectField","name":{"kind":"Name","value":"suppress_confirmation"},"value":{"kind":"BooleanValue","value":true}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"clientMutationId"}}]}}]}}]} as unknown as DocumentNode<CreateUserSignupMutationData, CreateUserSignupMutationVariables>;

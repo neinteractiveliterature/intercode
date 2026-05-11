@@ -311,14 +311,14 @@ export function parseFormItemObject<PropertiesType, ValueType>(
       default_value: parsedDefaultValue,
       properties: JSON.parse(formItem.properties) as PropertiesType,
       rendered_properties: JSON.parse(formItem.rendered_properties) as PropertiesType,
-    };
+    } as ParsedFormItem<PropertiesType, ValueType>;
   }
 
   return {
     ...formItem,
     default_value: parsedDefaultValue,
     rendered_properties: JSON.parse(formItem.rendered_properties) as PropertiesType,
-  };
+  } as unknown as ParsedFormItem<PropertiesType, ValueType>;
 }
 
 export function parseTypedFormItemObject(formItem: CommonFormItemFieldsFragment): TypedFormItem | undefined {
@@ -352,6 +352,7 @@ export function parseFormSectionObject(
 ): ParsedFormSection {
   return {
     ...formSection,
+    title: formSection.title ?? null,
     form_items: formSection.form_items.map(parseFormItemObject),
   };
 }

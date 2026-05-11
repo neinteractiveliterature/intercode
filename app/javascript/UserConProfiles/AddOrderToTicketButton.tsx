@@ -21,7 +21,7 @@ export type AddOrderToTicketButtonProps = {
       })[];
     }[];
   };
-  userConProfile: Pick<UserConProfile, 'id' | '__typename' | 'name_without_nickname'>;
+  userConProfile: Pick<UserConProfile, 'id' | '__typename' | 'name_without_nickname'> & { email: string | null };
 };
 
 function AddOrderToTicketButton({

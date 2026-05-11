@@ -14,6 +14,7 @@ import { EventAdminEventsQueryData } from '../EventAdmin/queries.generated';
 import { Run } from '../graphqlTypes.generated';
 import { useAppDateTimeFormat } from '../TimeUtils';
 import Timespan from '../Timespan';
+import { ScheduleEventInput } from '../EventsApp/ScheduleGrid/Schedule';
 
 export type RunForRunFormFields = Pick<Run, '__typename' | 'title_suffix' | 'schedule_note'> & {
   id: string;
@@ -28,7 +29,7 @@ type WithStartsAt<RunType extends RunForRunFormFields> = Omit<RunType, 'starts_a
 export type RunFormFieldsProps<RunType extends RunForRunFormFields> = {
   run: RunType;
   convention: EventAdminEventsQueryData['convention'];
-  event: EventAdminEventsQueryData['convention']['events'][0];
+  event: ScheduleEventInput;
   onChange: React.Dispatch<React.SetStateAction<RunType>>;
 };
 

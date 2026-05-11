@@ -1,17 +1,50 @@
 /* eslint-disable */
+/** Internal type. DO NOT USE DIRECTLY. */
+type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+/** Internal type. DO NOT USE DIRECTLY. */
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 import * as Types from '../../../graphqlTypes.generated';
 
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
-export type EventListEventsQueryVariables = Types.Exact<{
-  page?: Types.InputMaybe<Types.Scalars['Int']['input']>;
-  pageSize?: Types.InputMaybe<Types.Scalars['Int']['input']>;
-  filters?: Types.InputMaybe<Types.EventFiltersInput>;
-  sort?: Types.InputMaybe<Array<Types.SortInput> | Types.SortInput>;
-  fetchFormItemIdentifiers?: Types.InputMaybe<Array<Types.Scalars['String']['input']> | Types.Scalars['String']['input']>;
+export type EventFiltersInput = {
+  category?: Array<number | null | undefined> | null | undefined;
+  form_items?: unknown;
+  my_rating?: Array<number> | null | undefined;
+  text_search?: string | null | undefined;
+  title?: string | null | undefined;
+  title_prefix?: string | null | undefined;
+};
+
+/**
+ * A description of a field to sort a result set by. This is typically used in pagination
+ * fields to specify how the results should be ordered.
+ */
+export type SortInput = {
+  /**
+   * If true, the field will be sorted in descending order. If false, it will be sorted in
+   * ascending order.
+   */
+  desc: boolean;
+  /** The name of the field to sort by. */
+  field: string;
+};
+
+export type TimezoneMode =
+  /** Display dates and times using convention’s local time zone */
+  | 'convention_local'
+  /** Display dates and times using user’s local time zone */
+  | 'user_local';
+
+export type EventListEventsQueryVariables = Exact<{
+  page?: number | null | undefined;
+  pageSize?: number | null | undefined;
+  filters?: Types.EventFiltersInput | null | undefined;
+  sort?: Array<Types.SortInput> | Types.SortInput | null | undefined;
+  fetchFormItemIdentifiers?: Array<string> | string | null | undefined;
 }>;
 
 
-export type EventListEventsQueryData = { __typename: 'Query', currentAbility: { __typename: 'Ability', can_read_schedule: boolean }, convention: { __typename: 'Convention', id: string, timezone_mode: Types.TimezoneMode, events_paginated: { __typename: 'EventsPagination', total_entries: number, total_pages: number, current_page: number, per_page: number, entries: Array<{ __typename: 'Event', id: string, title?: string | null, created_at?: string | null, short_blurb_html?: string | null, form_response_attrs_json_with_rendered_markdown?: string | null, my_rating?: number | null, length_seconds: number, event_category: { __typename: 'EventCategory', id: string }, runs: Array<{ __typename: 'Run', id: string, starts_at: string }>, team_members: Array<{ __typename: 'TeamMember', id: string, display_team_member: boolean, user_con_profile: { __typename: 'UserConProfile', id: string, last_name: string, name_without_nickname: string, gravatar_enabled: boolean, gravatar_url: string } }>, registration_policy?: { __typename: 'RegistrationPolicy', slots_limited?: boolean | null, total_slots?: number | null, minimum_slots?: number | null } | null }> } } };
+export type EventListEventsQueryData = { __typename: 'Query', currentAbility: { __typename: 'Ability', can_read_schedule: boolean }, convention: { __typename: 'Convention', id: string, timezone_mode: Types.TimezoneMode, events_paginated: { __typename: 'EventsPagination', total_entries: number, total_pages: number, current_page: number, per_page: number, entries: Array<{ __typename: 'Event', id: string, title: string | null, created_at: string | null, short_blurb_html: string | null, form_response_attrs_json_with_rendered_markdown: string | null, my_rating: number | null, length_seconds: number, event_category: { __typename: 'EventCategory', id: string }, runs: Array<{ __typename: 'Run', id: string, starts_at: string }>, team_members: Array<{ __typename: 'TeamMember', id: string, display_team_member: boolean, user_con_profile: { __typename: 'UserConProfile', id: string, last_name: string, name_without_nickname: string, gravatar_enabled: boolean, gravatar_url: string } }>, registration_policy: { __typename: 'RegistrationPolicy', slots_limited: boolean | null, total_slots: number | null, minimum_slots: number | null } | null }> } } };
 
 
 export const EventListEventsQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"EventListEventsQuery"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"page"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"pageSize"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Int"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"filters"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"EventFiltersInput"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"sort"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"SortInput"}}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"fetchFormItemIdentifiers"}},"type":{"kind":"ListType","type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"currentAbility"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"can_read_schedule"}}]}},{"kind":"Field","alias":{"kind":"Name","value":"convention"},"name":{"kind":"Name","value":"conventionByRequestHost"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"timezone_mode"}},{"kind":"Field","name":{"kind":"Name","value":"events_paginated"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"page"},"value":{"kind":"Variable","name":{"kind":"Name","value":"page"}}},{"kind":"Argument","name":{"kind":"Name","value":"per_page"},"value":{"kind":"Variable","name":{"kind":"Name","value":"pageSize"}}},{"kind":"Argument","name":{"kind":"Name","value":"filters"},"value":{"kind":"Variable","name":{"kind":"Name","value":"filters"}}},{"kind":"Argument","name":{"kind":"Name","value":"sort"},"value":{"kind":"Variable","name":{"kind":"Name","value":"sort"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"total_entries"}},{"kind":"Field","name":{"kind":"Name","value":"total_pages"}},{"kind":"Field","name":{"kind":"Name","value":"current_page"}},{"kind":"Field","name":{"kind":"Name","value":"per_page"}},{"kind":"Field","name":{"kind":"Name","value":"entries"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"created_at"}},{"kind":"Field","name":{"kind":"Name","value":"short_blurb_html"}},{"kind":"Field","name":{"kind":"Name","value":"form_response_attrs_json_with_rendered_markdown"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"itemIdentifiers"},"value":{"kind":"Variable","name":{"kind":"Name","value":"fetchFormItemIdentifiers"}}}]},{"kind":"Field","name":{"kind":"Name","value":"my_rating"}},{"kind":"Field","name":{"kind":"Name","value":"length_seconds"}},{"kind":"Field","name":{"kind":"Name","value":"event_category"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"runs"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"starts_at"}}]}},{"kind":"Field","name":{"kind":"Name","value":"team_members"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"display_team_member"}},{"kind":"Field","name":{"kind":"Name","value":"user_con_profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"last_name"}},{"kind":"Field","name":{"kind":"Name","value":"name_without_nickname"}},{"kind":"Field","name":{"kind":"Name","value":"gravatar_enabled"}},{"kind":"Field","name":{"kind":"Name","value":"gravatar_url"}}]}}]}},{"kind":"Field","name":{"kind":"Name","value":"registration_policy"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"slots_limited"}},{"kind":"Field","name":{"kind":"Name","value":"total_slots"}},{"kind":"Field","name":{"kind":"Name","value":"minimum_slots"}}]}}]}}]}}]}}]}}]} as unknown as DocumentNode<EventListEventsQueryData, EventListEventsQueryVariables>;

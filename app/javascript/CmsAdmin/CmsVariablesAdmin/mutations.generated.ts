@@ -1,17 +1,21 @@
 /* eslint-disable */
+/** Internal type. DO NOT USE DIRECTLY. */
+type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+/** Internal type. DO NOT USE DIRECTLY. */
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 import * as Types from '../../graphqlTypes.generated';
 
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
-export type SetCmsVariableMutationVariables = Types.Exact<{
-  key: Types.Scalars['String']['input'];
-  value_json: Types.Scalars['String']['input'];
+export type SetCmsVariableMutationVariables = Exact<{
+  key: string;
+  value_json: string;
 }>;
 
 
 export type SetCmsVariableMutationData = { __typename: 'Mutation', setCmsVariable: { __typename: 'SetCmsVariablePayload', cms_variable: { __typename: 'CmsVariable', id: string, key: string, value_json: string, current_ability_can_update: boolean, current_ability_can_delete: boolean } } };
 
-export type DeleteCmsVariableMutationVariables = Types.Exact<{
-  key: Types.Scalars['String']['input'];
+export type DeleteCmsVariableMutationVariables = Exact<{
+  key: string;
 }>;
 
 

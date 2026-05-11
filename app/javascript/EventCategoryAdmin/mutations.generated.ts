@@ -1,28 +1,59 @@
 /* eslint-disable */
+/** Internal type. DO NOT USE DIRECTLY. */
+type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+/** Internal type. DO NOT USE DIRECTLY. */
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 import * as Types from '../graphqlTypes.generated';
 
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
-export type CreateEventCategoryMutationVariables = Types.Exact<{
+export type EventCategoryInput = {
+  can_provide_tickets?: boolean | null | undefined;
+  default_color?: string | null | undefined;
+  departmentId?: string | number | null | undefined;
+  eventFormId?: string | number | null | undefined;
+  eventProposalFormId?: string | number | null | undefined;
+  full_color?: string | null | undefined;
+  name?: string | null | undefined;
+  proposal_description?: string | null | undefined;
+  scheduling_ui?: SchedulingUi | null | undefined;
+  signed_up_color?: string | null | undefined;
+  team_member_name?: string | null | undefined;
+};
+
+export type FormType =
+  /** Event form */
+  | 'event'
+  /** Event proposal form */
+  | 'event_proposal'
+  /** User profile form */
+  | 'user_con_profile';
+
+export type SchedulingUi =
+  | 'recurring'
+  | 'regular'
+  | 'single_run';
+
+export type CreateEventCategoryMutationVariables = Exact<{
   eventCategory: Types.EventCategoryInput;
 }>;
 
 
-export type CreateEventCategoryMutationData = { __typename: 'Mutation', createEventCategory: { __typename: 'CreateEventCategoryPayload', event_category: { __typename: 'EventCategory', id: string, name: string, team_member_name: string, proposal_description?: string | null, scheduling_ui: Types.SchedulingUi, default_color?: string | null, signed_up_color?: string | null, full_color?: string | null, can_provide_tickets: boolean, events_paginated: { __typename: 'EventsPagination', total_entries: number }, department?: { __typename: 'Department', id: string, name: string } | null, event_form: { __typename: 'Form', id: string, title: string, form_type: Types.FormType }, event_proposal_form?: { __typename: 'Form', id: string, title: string, form_type: Types.FormType } | null, convention: { __typename: 'Convention', id: string } } } };
+export type CreateEventCategoryMutationData = { __typename: 'Mutation', createEventCategory: { __typename: 'CreateEventCategoryPayload', event_category: { __typename: 'EventCategory', id: string, name: string, team_member_name: string, proposal_description: string | null, scheduling_ui: Types.SchedulingUi, default_color: string | null, signed_up_color: string | null, full_color: string | null, can_provide_tickets: boolean, events_paginated: { __typename: 'EventsPagination', total_entries: number }, department: { __typename: 'Department', id: string, name: string } | null, event_form: { __typename: 'Form', id: string, title: string, form_type: Types.FormType }, event_proposal_form: { __typename: 'Form', id: string, title: string, form_type: Types.FormType } | null, convention: { __typename: 'Convention', id: string } } } };
 
-export type UpdateEventCategoryMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID']['input'];
+export type UpdateEventCategoryMutationVariables = Exact<{
+  id: string | number;
   eventCategory: Types.EventCategoryInput;
 }>;
 
 
-export type UpdateEventCategoryMutationData = { __typename: 'Mutation', updateEventCategory: { __typename: 'UpdateEventCategoryPayload', event_category: { __typename: 'EventCategory', id: string, name: string, team_member_name: string, proposal_description?: string | null, scheduling_ui: Types.SchedulingUi, default_color?: string | null, signed_up_color?: string | null, full_color?: string | null, can_provide_tickets: boolean, events_paginated: { __typename: 'EventsPagination', total_entries: number }, department?: { __typename: 'Department', id: string, name: string } | null, event_form: { __typename: 'Form', id: string, title: string, form_type: Types.FormType }, event_proposal_form?: { __typename: 'Form', id: string, title: string, form_type: Types.FormType } | null, convention: { __typename: 'Convention', id: string } } } };
+export type UpdateEventCategoryMutationData = { __typename: 'Mutation', updateEventCategory: { __typename: 'UpdateEventCategoryPayload', event_category: { __typename: 'EventCategory', id: string, name: string, team_member_name: string, proposal_description: string | null, scheduling_ui: Types.SchedulingUi, default_color: string | null, signed_up_color: string | null, full_color: string | null, can_provide_tickets: boolean, events_paginated: { __typename: 'EventsPagination', total_entries: number }, department: { __typename: 'Department', id: string, name: string } | null, event_form: { __typename: 'Form', id: string, title: string, form_type: Types.FormType }, event_proposal_form: { __typename: 'Form', id: string, title: string, form_type: Types.FormType } | null, convention: { __typename: 'Convention', id: string } } } };
 
-export type DeleteEventCategoryMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID']['input'];
+export type DeleteEventCategoryMutationVariables = Exact<{
+  id: string | number;
 }>;
 
 
-export type DeleteEventCategoryMutationData = { __typename: 'Mutation', deleteEventCategory: { __typename: 'DeleteEventCategoryPayload', clientMutationId?: string | null } };
+export type DeleteEventCategoryMutationData = { __typename: 'Mutation', deleteEventCategory: { __typename: 'DeleteEventCategoryPayload', clientMutationId: string | null } };
 
 
 export const CreateEventCategoryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateEventCategory"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"eventCategory"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"EventCategoryInput"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createEventCategory"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"event_category"},"value":{"kind":"Variable","name":{"kind":"Name","value":"eventCategory"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"event_category"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"EventCategoryFields"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"EventCategoryFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"EventCategory"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"team_member_name"}},{"kind":"Field","name":{"kind":"Name","value":"proposal_description"}},{"kind":"Field","name":{"kind":"Name","value":"scheduling_ui"}},{"kind":"Field","name":{"kind":"Name","value":"default_color"}},{"kind":"Field","name":{"kind":"Name","value":"signed_up_color"}},{"kind":"Field","name":{"kind":"Name","value":"full_color"}},{"kind":"Field","name":{"kind":"Name","value":"can_provide_tickets"}},{"kind":"Field","name":{"kind":"Name","value":"events_paginated"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"total_entries"}}]}},{"kind":"Field","name":{"kind":"Name","value":"department"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"event_form"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"form_type"}}]}},{"kind":"Field","name":{"kind":"Name","value":"event_proposal_form"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"form_type"}}]}},{"kind":"Field","name":{"kind":"Name","value":"convention"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}}]} as unknown as DocumentNode<CreateEventCategoryMutationData, CreateEventCategoryMutationVariables>;

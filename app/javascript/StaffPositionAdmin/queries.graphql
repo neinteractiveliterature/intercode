@@ -11,6 +11,7 @@ fragment StaffPositionFields on StaffPosition {
   user_con_profiles {
     id
     name_without_nickname
+    email
     gravatar_url
     gravatar_enabled
   }

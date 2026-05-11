@@ -2,13 +2,13 @@ import { useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
 
 import BucketAvailabilityDisplay from './BucketAvailabilityDisplay';
-import { RunCardRegistrationPolicyFieldsFragment } from './queries.generated';
+import { RunCapacityBucket } from './sortBuckets';
 import SignupCountData from '../SignupCountData';
 import { SignupState } from '../../graphqlTypes.generated';
 import styles from 'styles/run_capacity_graph.module.scss';
 
 function describeCapacity(
-  bucket: RunCardRegistrationPolicyFieldsFragment['buckets'][0],
+  bucket: RunCapacityBucket,
   signupCount: number,
   signupsAvailable: boolean,
   t: TFunction,
@@ -42,7 +42,7 @@ function describeCapacity(
 }
 
 export type RunCapacityGraphBucketProps = {
-  bucket: RunCardRegistrationPolicyFieldsFragment['buckets'][0];
+  bucket: RunCapacityBucket;
   signupCountData: SignupCountData;
   signupsAvailable: boolean;
   bucketIndex: number;

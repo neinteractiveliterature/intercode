@@ -1,26 +1,77 @@
 /* eslint-disable */
+/** Internal type. DO NOT USE DIRECTLY. */
+type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+/** Internal type. DO NOT USE DIRECTLY. */
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 import * as Types from '../graphqlTypes.generated';
 
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
-export type RootSiteConventionsAdminTableQueryVariables = Types.Exact<{
-  page?: Types.InputMaybe<Types.Scalars['Int']['input']>;
-  filters?: Types.InputMaybe<Types.ConventionFiltersInput>;
-  sort?: Types.InputMaybe<Array<Types.SortInput> | Types.SortInput>;
+export type ConventionFiltersInput = {
+  name?: string | null | undefined;
+  organization_name?: string | null | undefined;
+};
+
+export type ShowSchedule =
+  | 'gms'
+  | 'no'
+  | 'priv'
+  | 'yes';
+
+export type SiteMode =
+  /** Site behaves as a convention with multiple events */
+  | 'convention'
+  /** Site behaves as a series of standalone events */
+  | 'event_series'
+  /** Site behaves as a single standalone event */
+  | 'single_event';
+
+/**
+ * A description of a field to sort a result set by. This is typically used in pagination
+ * fields to specify how the results should be ordered.
+ */
+export type SortInput = {
+  /**
+   * If true, the field will be sorted in descending order. If false, it will be sorted in
+   * ascending order.
+   */
+  desc: boolean;
+  /** The name of the field to sort by. */
+  field: string;
+};
+
+export type TicketMode =
+  /** Tickets are neither sold nor required in this convention */
+  | 'disabled'
+  /** A valid ticket is required to sign up for events in this convention */
+  | 'required_for_signup'
+  /** Each event in this convention sells tickets separately */
+  | 'ticket_per_event';
+
+export type TimezoneMode =
+  /** Display dates and times using convention’s local time zone */
+  | 'convention_local'
+  /** Display dates and times using user’s local time zone */
+  | 'user_local';
+
+export type RootSiteConventionsAdminTableQueryVariables = Exact<{
+  page?: number | null | undefined;
+  filters?: Types.ConventionFiltersInput | null | undefined;
+  sort?: Array<Types.SortInput> | Types.SortInput | null | undefined;
 }>;
 
 
-export type RootSiteConventionsAdminTableQueryData = { __typename: 'Query', conventions_paginated: { __typename: 'ConventionsPagination', total_entries: number, total_pages: number, entries: Array<{ __typename: 'Convention', id: string, name: string, starts_at?: string | null, ends_at?: string | null, timezone_name?: string | null, timezone_mode: Types.TimezoneMode, organization?: { __typename: 'Organization', id: string, name: string } | null }> } };
+export type RootSiteConventionsAdminTableQueryData = { __typename: 'Query', conventions_paginated: { __typename: 'ConventionsPagination', total_entries: number, total_pages: number, entries: Array<{ __typename: 'Convention', id: string, name: string, starts_at: string | null, ends_at: string | null, timezone_name: string | null, timezone_mode: Types.TimezoneMode, organization: { __typename: 'Organization', id: string, name: string } | null }> } };
 
-export type ConventionDisplayFieldsFragment = { __typename: 'Convention', id: string, name: string, starts_at?: string | null, ends_at?: string | null, canceled: boolean, timezone_name?: string | null, timezone_mode: Types.TimezoneMode, domain?: string | null, site_mode: Types.SiteMode, ticket_mode: Types.TicketMode, show_event_list?: Types.ShowSchedule | null, show_schedule?: Types.ShowSchedule | null, email_from: string, hidden: boolean, language: string, signup_rounds: Array<{ __typename: 'SignupRound', id: string, start?: string | null, maximum_event_signups: string }>, organization?: { __typename: 'Organization', id: string, name: string } | null };
+export type ConventionDisplayFieldsFragment = { __typename: 'Convention', id: string, name: string, starts_at: string | null, ends_at: string | null, canceled: boolean, timezone_name: string | null, timezone_mode: Types.TimezoneMode, domain: string | null, site_mode: Types.SiteMode, ticket_mode: Types.TicketMode, show_event_list: Types.ShowSchedule | null, show_schedule: Types.ShowSchedule | null, email_from: string, hidden: boolean, language: string, signup_rounds: Array<{ __typename: 'SignupRound', id: string, start: string | null, maximum_event_signups: string }>, organization: { __typename: 'Organization', id: string, name: string } | null };
 
-export type ConventionDisplayQueryVariables = Types.Exact<{
-  id: Types.Scalars['ID']['input'];
+export type ConventionDisplayQueryVariables = Exact<{
+  id: string | number;
 }>;
 
 
-export type ConventionDisplayQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, starts_at?: string | null, ends_at?: string | null, canceled: boolean, timezone_name?: string | null, timezone_mode: Types.TimezoneMode, domain?: string | null, site_mode: Types.SiteMode, ticket_mode: Types.TicketMode, show_event_list?: Types.ShowSchedule | null, show_schedule?: Types.ShowSchedule | null, email_from: string, hidden: boolean, language: string, signup_rounds: Array<{ __typename: 'SignupRound', id: string, start?: string | null, maximum_event_signups: string }>, organization?: { __typename: 'Organization', id: string, name: string } | null } };
+export type ConventionDisplayQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, starts_at: string | null, ends_at: string | null, canceled: boolean, timezone_name: string | null, timezone_mode: Types.TimezoneMode, domain: string | null, site_mode: Types.SiteMode, ticket_mode: Types.TicketMode, show_event_list: Types.ShowSchedule | null, show_schedule: Types.ShowSchedule | null, email_from: string, hidden: boolean, language: string, signup_rounds: Array<{ __typename: 'SignupRound', id: string, start: string | null, maximum_event_signups: string }>, organization: { __typename: 'Organization', id: string, name: string } | null } };
 
-export type NewConventionModalQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type NewConventionModalQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type NewConventionModalQueryData = { __typename: 'Query', organizations: Array<{ __typename: 'Organization', id: string, name: string }> };

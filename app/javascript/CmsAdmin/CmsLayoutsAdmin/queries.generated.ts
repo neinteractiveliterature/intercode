@@ -1,15 +1,19 @@
 /* eslint-disable */
+/** Internal type. DO NOT USE DIRECTLY. */
+type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+/** Internal type. DO NOT USE DIRECTLY. */
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 import * as Types from '../../graphqlTypes.generated';
 
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
-export type CmsLayoutFieldsFragment = { __typename: 'CmsLayout', id: string, name?: string | null, content?: string | null, navbar_classes?: string | null, admin_notes?: string | null, current_ability_can_update: boolean, current_ability_can_delete: boolean };
+export type CmsLayoutFieldsFragment = { __typename: 'CmsLayout', id: string, name: string | null, content: string | null, navbar_classes: string | null, admin_notes: string | null, current_ability_can_update: boolean, current_ability_can_delete: boolean };
 
-export type CmsLayoutsAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type CmsLayoutsAdminQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type CmsLayoutsAdminQueryData = { __typename: 'Query', convention?: { __typename: 'Convention', id: string, name: string } | null, currentAbility: { __typename: 'Ability', can_create_cms_layouts: boolean }, cmsParent:
-    | { __typename: 'Convention', id: string, cmsLayouts: Array<{ __typename: 'CmsLayout', id: string, name?: string | null, content?: string | null, navbar_classes?: string | null, admin_notes?: string | null, current_ability_can_update: boolean, current_ability_can_delete: boolean }> }
-    | { __typename: 'RootSite', id: string, cmsLayouts: Array<{ __typename: 'CmsLayout', id: string, name?: string | null, content?: string | null, navbar_classes?: string | null, admin_notes?: string | null, current_ability_can_update: boolean, current_ability_can_delete: boolean }> }
+export type CmsLayoutsAdminQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string } | null, currentAbility: { __typename: 'Ability', can_create_cms_layouts: boolean }, cmsParent:
+    | { __typename: 'Convention', id: string, cmsLayouts: Array<{ __typename: 'CmsLayout', id: string, name: string | null, content: string | null, navbar_classes: string | null, admin_notes: string | null, current_ability_can_update: boolean, current_ability_can_delete: boolean }> }
+    | { __typename: 'RootSite', id: string, cmsLayouts: Array<{ __typename: 'CmsLayout', id: string, name: string | null, content: string | null, navbar_classes: string | null, admin_notes: string | null, current_ability_can_update: boolean, current_ability_can_delete: boolean }> }
    };
 
 export const CmsLayoutFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CmsLayoutFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsLayout"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"content"}},{"kind":"Field","name":{"kind":"Name","value":"navbar_classes"}},{"kind":"Field","name":{"kind":"Name","value":"admin_notes"}},{"kind":"Field","name":{"kind":"Name","value":"current_ability_can_update"}},{"kind":"Field","name":{"kind":"Name","value":"current_ability_can_delete"}}]}}]} as unknown as DocumentNode<CmsLayoutFieldsFragment, unknown>;

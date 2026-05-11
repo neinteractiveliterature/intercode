@@ -66,10 +66,11 @@ function CouponForm<T extends Omit<AdminCouponFieldsFragment, 'id'>>({
   const discountMode = useMemo(() => DISCOUNT_MODES.find((mode) => value[mode] != null), [value]);
 
   const setDiscountMode = <F extends DiscountMode>(newDiscountMode: F) => {
-    const discountFields = DISCOUNT_MODES.reduce<Pick<AdminCouponFieldsFragment, DiscountMode>>(
-      (fields, mode) => ({ ...fields, [mode]: null }),
-      {},
-    );
+    const discountFields: Pick<AdminCouponFieldsFragment, DiscountMode> = {
+      fixed_amount: null,
+      percent_discount: null,
+      provides_product: null,
+    };
     if (newDiscountMode === 'fixed_amount') {
       discountFields.fixed_amount = buildBlankFixedAmount(defaultCurrencyCode);
     } else if (newDiscountMode === 'percent_discount') {

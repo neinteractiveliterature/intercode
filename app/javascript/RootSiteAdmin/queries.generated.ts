@@ -1,17 +1,21 @@
 /* eslint-disable */
+/** Internal type. DO NOT USE DIRECTLY. */
+type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+/** Internal type. DO NOT USE DIRECTLY. */
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 import * as Types from '../graphqlTypes.generated';
 
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
-export type PageFieldsFragment = { __typename: 'Page', id: string, name?: string | null };
+export type PageFieldsFragment = { __typename: 'Page', id: string, name: string | null };
 
-export type RootSiteAdminLayoutFieldsFragment = { __typename: 'CmsLayout', id: string, name?: string | null };
+export type RootSiteAdminLayoutFieldsFragment = { __typename: 'CmsLayout', id: string, name: string | null };
 
-export type RootSiteFieldsFragment = { __typename: 'RootSite', id: string, site_name: string, rootPage: { __typename: 'Page', id: string, name?: string | null }, defaultLayout: { __typename: 'CmsLayout', id: string, name?: string | null }, cmsPages: Array<{ __typename: 'Page', id: string, name?: string | null }>, cmsLayouts: Array<{ __typename: 'CmsLayout', id: string, name?: string | null }> };
+export type RootSiteFieldsFragment = { __typename: 'RootSite', id: string, site_name: string, rootPage: { __typename: 'Page', id: string, name: string | null }, defaultLayout: { __typename: 'CmsLayout', id: string, name: string | null }, cmsPages: Array<{ __typename: 'Page', id: string, name: string | null }>, cmsLayouts: Array<{ __typename: 'CmsLayout', id: string, name: string | null }> };
 
-export type RootSiteAdminQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type RootSiteAdminQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type RootSiteAdminQueryData = { __typename: 'Query', rootSite: { __typename: 'RootSite', id: string, site_name: string, rootPage: { __typename: 'Page', id: string, name?: string | null }, defaultLayout: { __typename: 'CmsLayout', id: string, name?: string | null }, cmsPages: Array<{ __typename: 'Page', id: string, name?: string | null }>, cmsLayouts: Array<{ __typename: 'CmsLayout', id: string, name?: string | null }> } };
+export type RootSiteAdminQueryData = { __typename: 'Query', rootSite: { __typename: 'RootSite', id: string, site_name: string, rootPage: { __typename: 'Page', id: string, name: string | null }, defaultLayout: { __typename: 'CmsLayout', id: string, name: string | null }, cmsPages: Array<{ __typename: 'Page', id: string, name: string | null }>, cmsLayouts: Array<{ __typename: 'CmsLayout', id: string, name: string | null }> } };
 
 export const PageFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"PageFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Page"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]} as unknown as DocumentNode<PageFieldsFragment, unknown>;
 export const RootSiteAdminLayoutFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"RootSiteAdminLayoutFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsLayout"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}}]} as unknown as DocumentNode<RootSiteAdminLayoutFieldsFragment, unknown>;

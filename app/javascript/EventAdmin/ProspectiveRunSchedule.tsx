@@ -20,9 +20,7 @@ import AvailabilityBar from '../EventsApp/ScheduleGrid/AvailabilityBar';
 import AppRootContext from '../AppRootContext';
 import { RunDimensions, ScheduleLayoutResult } from '../EventsApp/ScheduleGrid/ScheduleLayout/ScheduleLayoutBlock';
 import { ScheduleGridConfig } from '../EventsApp/ScheduleGrid/ScheduleGridConfig';
-import { EventFieldsFragment, RunFieldsFragment } from './queries.generated';
-import { ScheduleGridEventFragment } from '../EventsApp/ScheduleGrid/queries.generated';
-import { ScheduleRun } from '../EventsApp/ScheduleGrid/Schedule';
+import { ScheduleEventInput, ScheduleRun } from '../EventsApp/ScheduleGrid/Schedule';
 import { useEventAdminEventsLoader } from './loaders';
 import styles from 'styles/schedule_grid.module.scss';
 
@@ -143,17 +141,12 @@ function ProspectiveRunScheduleEventRun({
 
 export type ProspectiveRunScheduleProps = {
   day?: DateTime;
-  runs: Omit<
-    RunFieldsFragment,
-    | 'grouped_signup_counts'
-    | 'confirmed_signup_count'
-    | 'not_counted_signup_count'
-    | 'room_names'
-    | 'my_signups'
-    | 'my_signup_requests'
-    | 'my_signup_ranked_choices'
-  >[];
-  event: EventFieldsFragment;
+  runs: Array<{
+    id: string;
+    starts_at: string;
+    rooms?: Array<{ name?: string | null }> | null;
+  }>;
+  event: ScheduleEventInput;
 };
 
 export default function ProspectiveRunSchedule({ day, runs, event }: ProspectiveRunScheduleProps): React.JSX.Element {
@@ -184,7 +177,7 @@ export default function ProspectiveRunSchedule({ day, runs, event }: Prospective
     [runs, event.id],
   );
 
-  const eventsForSchedule: ScheduleGridEventFragment[] | undefined = useMemo(() => {
+  const eventsForSchedule = useMemo(() => {
     const filteredEvents = data.convention.events.map((e) => {
       if (e.id === event.id) {
         return {
@@ -227,11 +220,7 @@ export default function ProspectiveRunSchedule({ day, runs, event }: Prospective
     return conventionDayTimespans?.find((cdt) => cdt.overlapsTimespan(dayTimespan));
   }, [conventionDayTimespans, day]);
 
-  const scheduleGridProviderValue = useScheduleGridProvider(
-    SCHEDULE_GRID_CONFIG,
-    data?.convention ?? undefined,
-    eventsForSchedule,
-  );
+  const scheduleGridProviderValue = useScheduleGridProvider(SCHEDULE_GRID_CONFIG, data.convention, eventsForSchedule);
   const layout = useLayoutForTimespan(scheduleGridProviderValue.schedule, conventionDayTimespan);
 
   if (!layout) {

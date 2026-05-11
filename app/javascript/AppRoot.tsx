@@ -1,4 +1,4 @@
-import { Suspense, useMemo, useState, useEffect, useContext, RefObject, useRef } from 'react';
+import { Suspense, useMemo, useState, useEffect, useContext, useRef } from 'react';
 import { useLocation, useNavigate, useLoaderData, Outlet, useNavigation } from 'react-router';
 import { Settings } from 'luxon';
 import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
@@ -17,12 +17,11 @@ import { initErrorReporting } from 'ErrorReporting';
 
 export function buildAppRootContextValue(
   data: AppRootQueryData | null | undefined,
-  navigationBarRef: RefObject<HTMLElement | null>,
-): AppRootContextValue {
+): Omit<AppRootContextValue, 'navigationBarRef'> {
   return {
     assumedIdentityFromProfile: data?.assumedIdentityFromProfile,
     cmsNavigationItems: data?.cmsParentByRequestHost.cmsNavigationItems ?? [],
-    convention: data?.convention,
+    convention: data?.convention ?? null,
     conventionAcceptingProposals: data?.convention?.accepting_proposals,
     conventionCanceled: data?.convention?.canceled,
     conventionName: data?.convention?.name,
@@ -63,7 +62,6 @@ export function buildAppRootContextValue(
     // eslint-disable-next-line i18next/no-literal-string
     language: data?.convention?.language ?? 'en',
     myProfile: data?.convention?.my_profile,
-    navigationBarRef,
     rootSiteName: data?.rootSite?.site_name,
     siteMode: data?.convention?.site_mode,
     signupMode: data?.convention?.signup_mode,
@@ -96,7 +94,10 @@ function AppRoot(): React.JSX.Element {
     reloadOnAppEntrypointHeadersMismatch();
   }, [location.pathname]);
 
-  const appRootContextValue = useMemo(() => buildAppRootContextValue(data, navigationBarRef), [data]);
+  const appRootContextValue = useMemo(
+    () => ({ ...buildAppRootContextValue(data), navigationBarRef }),
+    [data, navigationBarRef],
+  );
 
   useEffect(() => {
     if (

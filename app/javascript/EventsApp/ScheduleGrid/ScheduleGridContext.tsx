@@ -1,6 +1,6 @@
 import { createContext, Suspense, useState, useMemo, useCallback, useContext, useEffect, ReactNode } from 'react';
 import { detect } from 'detect-browser';
-import { useApolloClient, useQuery } from "@apollo/client/react";
+import { useApolloClient, useQuery } from '@apollo/client/react';
 import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
 import ConventionDayTabContainer from './ConventionDayTabContainer';
@@ -10,12 +10,10 @@ import useCachedLoadableValue from '../../useCachedLoadableValue';
 import ScheduleGridSkeleton from './ScheduleGridSkeleton';
 import AppRootContext from '../../AppRootContext';
 import { ScheduleGridConfig } from './ScheduleGridConfig';
+import { ScheduleEventInput } from './Schedule';
 import { CmsPartialBlockName, EventFiltersInput, TimezoneMode } from '../../graphqlTypes.generated';
-import {
-  ScheduleGridConventionDataQueryData,
-  ScheduleGridEventFragment,
-  ScheduleGridEventsQueryDocument,
-} from './queries.generated';
+import { ScheduleGridConventionDataQueryData, ScheduleGridEventsQueryDocument } from './queries.generated';
+import { ScheduleGridConventionInput } from './ScheduleGridTypes';
 import { FiniteTimespan } from '../../Timespan';
 import useMergeCategoriesIntoEvents from '../useMergeCategoriesIntoEvents';
 import { useLoaderData } from 'react-router';
@@ -101,8 +99,8 @@ function checkRunDetailsVisibity(
 
 export function useScheduleGridProvider(
   config: ScheduleGridConfig | undefined,
-  convention: ScheduleGridConventionDataQueryData['convention'] | undefined,
-  events: ScheduleGridEventFragment[] | undefined,
+  convention: ScheduleGridConventionInput | undefined,
+  events: ScheduleEventInput[] | undefined,
   myRatingFilter?: number[],
   hideConflicts?: boolean,
 ): ScheduleGridContextValue {

@@ -19,9 +19,9 @@ import {
   CmsFilesAdminQueryDocument,
   CmsFilesAdminQueryVariables,
 } from 'CmsAdmin/CmsFilesAdmin/queries.generated';
-import { MockedResponse } from '@apollo/client/testing';
+import { MockLink } from '@apollo/client/testing';
 
-const mockCmsFilesAdminQuery: MockedResponse<CmsFilesAdminQueryData, CmsFilesAdminQueryVariables> = {
+const mockCmsFilesAdminQuery: MockLink.MockedResponse<CmsFilesAdminQueryData, CmsFilesAdminQueryVariables> = {
   request: { query: CmsFilesAdminQueryDocument },
   result: {
     data: {
@@ -31,6 +31,11 @@ const mockCmsFilesAdminQuery: MockedResponse<CmsFilesAdminQueryData, CmsFilesAdm
         __typename: 'Ability',
         can_create_cms_files: true,
       },
+      convention: {
+        __typename: 'Convention',
+        id: '0',
+        name: 'TestCon',
+      },
     },
   },
 };
@@ -39,15 +44,25 @@ describe('ConventionForm', () => {
   const defaultInitialConvention: ConventionFormConvention = {
     __typename: 'Convention',
     canceled: false,
+    clickwrap_agreement: null,
     cmsLayouts: [],
     defaultLayout: {
       __typename: 'CmsLayout',
       id: '0',
+      name: 'Default layout',
     },
+    default_currency_code: 'USD',
     email_from: 'noreply@convention.test',
+    event_mailing_list_domain: null,
     id: '0',
     language: 'en',
+    location: null,
     cmsPages: [],
+    open_graph_image: null,
+    catch_all_staff_position: null,
+    favicon: null,
+    queue_no_ticket_reminder_advance_seconds: null,
+    stripe_account: null,
     signup_requests_open: false,
     stripe_account_ready_to_charge: true,
     ticket_mode: TicketMode.RequiredForSignup,
@@ -64,7 +79,15 @@ describe('ConventionForm', () => {
     show_schedule: ShowSchedule.No,
     show_event_list: ShowSchedule.No,
     hidden: false,
-    signup_rounds: [{ __typename: 'SignupRound', id: '0', start: null, maximum_event_signups: 'unlimited' }],
+    signup_rounds: [
+      {
+        __typename: 'SignupRound',
+        id: '0',
+        start: null,
+        maximum_event_signups: 'unlimited',
+        ranked_choice_order: null,
+      },
+    ],
     maximum_tickets: null,
     ticket_name: 'ticket',
     ticketNamePlural: 'tickets',
@@ -73,6 +96,7 @@ describe('ConventionForm', () => {
     rootPage: {
       __typename: 'Page',
       id: '0',
+      name: 'Default layout',
     },
   };
 
@@ -108,8 +132,20 @@ describe('ConventionForm', () => {
         accepting_proposals: true,
         show_schedule: ShowSchedule.Gms,
         signup_rounds: [
-          { __typename: 'SignupRound', id: '1', start: null, maximum_event_signups: 'not_yet' },
-          { __typename: 'SignupRound', id: '2', start: now, maximum_event_signups: 'unlimited' },
+          {
+            __typename: 'SignupRound',
+            id: '1',
+            start: null,
+            maximum_event_signups: 'not_yet',
+            ranked_choice_order: null,
+          },
+          {
+            __typename: 'SignupRound',
+            id: '2',
+            start: now,
+            maximum_event_signups: 'unlimited',
+            ranked_choice_order: null,
+          },
         ],
         maximum_tickets: 100,
       },

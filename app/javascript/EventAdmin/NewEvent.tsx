@@ -138,17 +138,12 @@ function NewEvent() {
           event={{
             __typename: 'Event',
             id: '',
-            // if you're on the event admin app, you're an admin for events by definition
-            current_user_form_item_viewer_role: FormItemRole.Admin,
-            current_user_form_item_writer_role: FormItemRole.Admin,
             can_play_concurrently: event.form_response_attrs.can_play_concurrently ?? false,
-            title: event.form_response_attrs.title,
+            title: event.form_response_attrs.title ?? null,
             length_seconds: event.form_response_attrs.length_seconds,
             event_category: eventCategory,
-            maximum_event_provided_tickets_overrides: [],
-            bucket_keys_with_pending_signups_or_requests: [],
+            registration_policy: null,
             runs: [],
-            images: [],
           }}
           onChange={setRun}
         />

@@ -1,28 +1,32 @@
 /* eslint-disable */
+/** Internal type. DO NOT USE DIRECTLY. */
+type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+/** Internal type. DO NOT USE DIRECTLY. */
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 import * as Types from '../../graphqlTypes.generated';
 
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
-export type CreateCmsFileMutationVariables = Types.Exact<{
-  signedBlobId: Types.Scalars['ID']['input'];
+export type CreateCmsFileMutationVariables = Exact<{
+  signedBlobId: string | number;
 }>;
 
 
-export type CreateCmsFileMutationData = { __typename: 'Mutation', createCmsFile: { __typename: 'CreateCmsFilePayload', cms_file: { __typename: 'CmsFile', id: string, current_ability_can_delete: boolean, file: { __typename: 'ActiveStorageAttachment', id: string, filename: string, url: string, content_type: string, byte_size: number, thumbnailUrl?: string | null } } } };
+export type CreateCmsFileMutationData = { __typename: 'Mutation', createCmsFile: { __typename: 'CreateCmsFilePayload', cms_file: { __typename: 'CmsFile', id: string, current_ability_can_delete: boolean, file: { __typename: 'ActiveStorageAttachment', id: string, filename: string, url: string, content_type: string, byte_size: number, thumbnailUrl: string | null } } } };
 
-export type RenameCmsFileMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID']['input'];
-  filename: Types.Scalars['String']['input'];
+export type RenameCmsFileMutationVariables = Exact<{
+  id: string | number;
+  filename: string;
 }>;
 
 
-export type RenameCmsFileMutationData = { __typename: 'Mutation', renameCmsFile: { __typename: 'RenameCmsFilePayload', cms_file: { __typename: 'CmsFile', id: string, current_ability_can_delete: boolean, file: { __typename: 'ActiveStorageAttachment', id: string, filename: string, url: string, content_type: string, byte_size: number, thumbnailUrl?: string | null } } } };
+export type RenameCmsFileMutationData = { __typename: 'Mutation', renameCmsFile: { __typename: 'RenameCmsFilePayload', cms_file: { __typename: 'CmsFile', id: string, current_ability_can_delete: boolean, file: { __typename: 'ActiveStorageAttachment', id: string, filename: string, url: string, content_type: string, byte_size: number, thumbnailUrl: string | null } } } };
 
-export type DeleteCmsFileMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID']['input'];
+export type DeleteCmsFileMutationVariables = Exact<{
+  id: string | number;
 }>;
 
 
-export type DeleteCmsFileMutationData = { __typename: 'Mutation', deleteCmsFile: { __typename: 'DeleteCmsFilePayload', clientMutationId?: string | null } };
+export type DeleteCmsFileMutationData = { __typename: 'Mutation', deleteCmsFile: { __typename: 'DeleteCmsFilePayload', clientMutationId: string | null } };
 
 
 export const CreateCmsFileDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateCmsFile"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"signedBlobId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createCmsFile"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"signedBlobId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"signedBlobId"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"cms_file"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"CmsFileFields"}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CmsFileFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"CmsFile"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"current_ability_can_delete"}},{"kind":"Field","name":{"kind":"Name","value":"file"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"filename"}},{"kind":"Field","name":{"kind":"Name","value":"url"}},{"kind":"Field","name":{"kind":"Name","value":"content_type"}},{"kind":"Field","name":{"kind":"Name","value":"byte_size"}},{"kind":"Field","alias":{"kind":"Name","value":"thumbnailUrl"},"name":{"kind":"Name","value":"resized_url"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"maxWidth"},"value":{"kind":"IntValue","value":"100"}},{"kind":"Argument","name":{"kind":"Name","value":"maxHeight"},"value":{"kind":"IntValue","value":"100"}}]}]}}]}}]} as unknown as DocumentNode<CreateCmsFileMutationData, CreateCmsFileMutationVariables>;

@@ -1,8 +1,12 @@
 /* eslint-disable */
+/** Internal type. DO NOT USE DIRECTLY. */
+type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+/** Internal type. DO NOT USE DIRECTLY. */
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 import * as Types from './graphqlTypes.generated';
 
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
-export type ClientConfigurationQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type ClientConfigurationQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type ClientConfigurationQueryData = { __typename: 'Query', clientConfiguration: { __typename: 'ClientConfiguration', rails_default_active_storage_service_name: string, rails_direct_uploads_url: string, recaptcha_site_key: string } };

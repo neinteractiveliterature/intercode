@@ -36,7 +36,7 @@ export type CreatingOrder = Omit<OrderInput, 'payment_amount'> & {
       code: string;
     };
   })[];
-  user_con_profile?: Pick<UserConProfile, 'id' | '__typename' | 'name_without_nickname'>;
+  user_con_profile?: Pick<UserConProfile, 'id' | '__typename' | 'name_without_nickname'> & { email: string | null };
 };
 
 type OrderEntryType = CreatingOrder['order_entries'][0];

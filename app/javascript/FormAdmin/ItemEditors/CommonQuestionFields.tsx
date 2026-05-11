@@ -75,7 +75,9 @@ function CommonQuestionFields({ formItem, setFormItem }: CommonQuestionFieldsPro
       {formItemIsQuestion(formItem) && !standardItem && (
         <FormItemIdentifierInput
           value={formItem.identifier ?? undefined}
-          onChange={(identifier) => setFormItem((prevFormItem) => ({ ...prevFormItem, identifier }))}
+          onChange={(identifier) =>
+            setFormItem((prevFormItem) => ({ ...prevFormItem, identifier: identifier ?? null }))
+          }
           formType={formType}
         />
       )}

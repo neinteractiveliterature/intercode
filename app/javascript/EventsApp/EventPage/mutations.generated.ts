@@ -1,46 +1,82 @@
 /* eslint-disable */
+/** Internal type. DO NOT USE DIRECTLY. */
+type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+/** Internal type. DO NOT USE DIRECTLY. */
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 import * as Types from '../../graphqlTypes.generated';
 
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
-export type CreateMySignupMutationVariables = Types.Exact<{
-  runId: Types.Scalars['ID']['input'];
-  requestedBucketKey?: Types.InputMaybe<Types.Scalars['String']['input']>;
-  noRequestedBucket?: Types.InputMaybe<Types.Scalars['Boolean']['input']>;
+/** The processing state of a SignupRankedChoice */
+export type SignupRankedChoiceState =
+  /** We have not yet attempted to process this choice */
+  | 'pending'
+  /** The attendee has had a signup request put in (see the result_signup_request field for the actual signup request) */
+  | 'requested'
+  /** The attendee has been signed up (see the result_signup field for the actual signup) */
+  | 'signed_up'
+  /** The attendee has been waitlisted (see the result_signup field for the actual signup) */
+  | 'waitlisted';
+
+/** The processing state of a SignupRequest */
+export type SignupRequestState =
+  /** The request has been accepted and the requester has been signed up (see the result_signup field for the actual signup) */
+  | 'accepted'
+  /** The request has not yet been reviewed by a moderator */
+  | 'pending'
+  /** The request has been rejected and the requester has not been signed up */
+  | 'rejected'
+  /** The requester withdrew their request before it was accepted or rejected */
+  | 'withdrawn';
+
+export type SignupState =
+  /** Attendee's spot is confirmed */
+  | 'confirmed'
+  /** Attendee's spot is held temporarily while the attendee finishes paying for their ticket */
+  | 'ticket_purchase_hold'
+  /** Attendee is on the waitlist for this event and may be pulled in automatically */
+  | 'waitlisted'
+  /** Attendee has withdrawn from this event (and this signup is no longer valid) */
+  | 'withdrawn';
+
+export type CreateMySignupMutationVariables = Exact<{
+  runId: string | number;
+  requestedBucketKey?: string | null | undefined;
+  noRequestedBucket?: boolean | null | undefined;
 }>;
 
 
-export type CreateMySignupMutationData = { __typename: 'Mutation', createMySignup: { __typename: 'CreateMySignupPayload', signup: { __typename: 'Signup', id: string, state: Types.SignupState, waitlist_position?: number | null, counted: boolean, expires_at?: string | null, run: { __typename: 'Run', id: string, title_suffix?: string | null, starts_at: string, current_ability_can_signup_summary_run: boolean, grouped_signup_counts: Array<{ __typename: 'GroupedSignupCount', bucket_key?: string | null, count: number, counted: boolean, state: Types.SignupState, team_member: boolean }>, rooms: Array<{ __typename: 'Room', id: string, name?: string | null }>, my_signups: Array<{ __typename: 'Signup', id: string, state: Types.SignupState, waitlist_position?: number | null, counted: boolean, expires_at?: string | null }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: string, state: Types.SignupRequestState, requested_bucket_key?: string | null, target_run: { __typename: 'Run', id: string }, replace_signup?: { __typename: 'Signup', id: string } | null }>, my_signup_ranked_choices: Array<{ __typename: 'SignupRankedChoice', id: string, state: Types.SignupRankedChoiceState, priority: number, requested_bucket_key?: string | null, target_run: { __typename: 'Run', id: string } }> } } } };
+export type CreateMySignupMutationData = { __typename: 'Mutation', createMySignup: { __typename: 'CreateMySignupPayload', signup: { __typename: 'Signup', id: string, state: Types.SignupState, waitlist_position: number | null, counted: boolean, expires_at: string | null, run: { __typename: 'Run', id: string, title_suffix: string | null, starts_at: string, current_ability_can_signup_summary_run: boolean, grouped_signup_counts: Array<{ __typename: 'GroupedSignupCount', bucket_key: string | null, count: number, counted: boolean, state: Types.SignupState, team_member: boolean }>, rooms: Array<{ __typename: 'Room', id: string, name: string | null }>, my_signups: Array<{ __typename: 'Signup', id: string, state: Types.SignupState, waitlist_position: number | null, counted: boolean, expires_at: string | null }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: string, state: Types.SignupRequestState, requested_bucket_key: string | null, target_run: { __typename: 'Run', id: string }, replace_signup: { __typename: 'Signup', id: string } | null }>, my_signup_ranked_choices: Array<{ __typename: 'SignupRankedChoice', id: string, state: Types.SignupRankedChoiceState, priority: number, requested_bucket_key: string | null, target_run: { __typename: 'Run', id: string } }> } } } };
 
-export type WithdrawMySignupMutationVariables = Types.Exact<{
-  runId: Types.Scalars['ID']['input'];
+export type WithdrawMySignupMutationVariables = Exact<{
+  runId: string | number;
 }>;
 
 
-export type WithdrawMySignupMutationData = { __typename: 'Mutation', withdrawMySignup: { __typename: 'WithdrawMySignupPayload', signup: { __typename: 'Signup', id: string, state: Types.SignupState, waitlist_position?: number | null, counted: boolean, expires_at?: string | null, run: { __typename: 'Run', id: string, title_suffix?: string | null, starts_at: string, current_ability_can_signup_summary_run: boolean, grouped_signup_counts: Array<{ __typename: 'GroupedSignupCount', bucket_key?: string | null, count: number, counted: boolean, state: Types.SignupState, team_member: boolean }>, rooms: Array<{ __typename: 'Room', id: string, name?: string | null }>, my_signups: Array<{ __typename: 'Signup', id: string, state: Types.SignupState, waitlist_position?: number | null, counted: boolean, expires_at?: string | null }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: string, state: Types.SignupRequestState, requested_bucket_key?: string | null, target_run: { __typename: 'Run', id: string }, replace_signup?: { __typename: 'Signup', id: string } | null }>, my_signup_ranked_choices: Array<{ __typename: 'SignupRankedChoice', id: string, state: Types.SignupRankedChoiceState, priority: number, requested_bucket_key?: string | null, target_run: { __typename: 'Run', id: string } }> } } } };
+export type WithdrawMySignupMutationData = { __typename: 'Mutation', withdrawMySignup: { __typename: 'WithdrawMySignupPayload', signup: { __typename: 'Signup', id: string, state: Types.SignupState, waitlist_position: number | null, counted: boolean, expires_at: string | null, run: { __typename: 'Run', id: string, title_suffix: string | null, starts_at: string, current_ability_can_signup_summary_run: boolean, grouped_signup_counts: Array<{ __typename: 'GroupedSignupCount', bucket_key: string | null, count: number, counted: boolean, state: Types.SignupState, team_member: boolean }>, rooms: Array<{ __typename: 'Room', id: string, name: string | null }>, my_signups: Array<{ __typename: 'Signup', id: string, state: Types.SignupState, waitlist_position: number | null, counted: boolean, expires_at: string | null }>, my_signup_requests: Array<{ __typename: 'SignupRequest', id: string, state: Types.SignupRequestState, requested_bucket_key: string | null, target_run: { __typename: 'Run', id: string }, replace_signup: { __typename: 'Signup', id: string } | null }>, my_signup_ranked_choices: Array<{ __typename: 'SignupRankedChoice', id: string, state: Types.SignupRankedChoiceState, priority: number, requested_bucket_key: string | null, target_run: { __typename: 'Run', id: string } }> } } } };
 
-export type CreateSignupRequestMutationVariables = Types.Exact<{
-  targetRunId: Types.Scalars['ID']['input'];
-  requestedBucketKey?: Types.InputMaybe<Types.Scalars['String']['input']>;
-  replaceSignupId?: Types.InputMaybe<Types.Scalars['ID']['input']>;
+export type CreateSignupRequestMutationVariables = Exact<{
+  targetRunId: string | number;
+  requestedBucketKey?: string | null | undefined;
+  replaceSignupId?: string | number | null | undefined;
 }>;
 
 
-export type CreateSignupRequestMutationData = { __typename: 'Mutation', createSignupRequest: { __typename: 'CreateSignupRequestPayload', signup_request: { __typename: 'SignupRequest', id: string, state: Types.SignupRequestState, requested_bucket_key?: string | null, target_run: { __typename: 'Run', id: string }, replace_signup?: { __typename: 'Signup', id: string } | null } } };
+export type CreateSignupRequestMutationData = { __typename: 'Mutation', createSignupRequest: { __typename: 'CreateSignupRequestPayload', signup_request: { __typename: 'SignupRequest', id: string, state: Types.SignupRequestState, requested_bucket_key: string | null, target_run: { __typename: 'Run', id: string }, replace_signup: { __typename: 'Signup', id: string } | null } } };
 
-export type WithdrawSignupRequestMutationVariables = Types.Exact<{
-  id: Types.Scalars['ID']['input'];
+export type WithdrawSignupRequestMutationVariables = Exact<{
+  id: string | number;
 }>;
 
 
-export type WithdrawSignupRequestMutationData = { __typename: 'Mutation', withdrawSignupRequest: { __typename: 'WithdrawSignupRequestPayload', signup_request: { __typename: 'SignupRequest', id: string, state: Types.SignupRequestState, requested_bucket_key?: string | null, target_run: { __typename: 'Run', id: string }, replace_signup?: { __typename: 'Signup', id: string } | null } } };
+export type WithdrawSignupRequestMutationData = { __typename: 'Mutation', withdrawSignupRequest: { __typename: 'WithdrawSignupRequestPayload', signup_request: { __typename: 'SignupRequest', id: string, state: Types.SignupRequestState, requested_bucket_key: string | null, target_run: { __typename: 'Run', id: string }, replace_signup: { __typename: 'Signup', id: string } | null } } };
 
-export type CreateSignupRankedChoiceMutationVariables = Types.Exact<{
-  targetRunId: Types.Scalars['ID']['input'];
-  requestedBucketKey?: Types.InputMaybe<Types.Scalars['String']['input']>;
+export type CreateSignupRankedChoiceMutationVariables = Exact<{
+  targetRunId: string | number;
+  requestedBucketKey?: string | null | undefined;
 }>;
 
 
-export type CreateSignupRankedChoiceMutationData = { __typename: 'Mutation', createSignupRankedChoice: { __typename: 'CreateSignupRankedChoicePayload', signup_ranked_choice: { __typename: 'SignupRankedChoice', id: string, state: Types.SignupRankedChoiceState, requested_bucket_key?: string | null, priority: number, target_run: { __typename: 'Run', id: string } } } };
+export type CreateSignupRankedChoiceMutationData = { __typename: 'Mutation', createSignupRankedChoice: { __typename: 'CreateSignupRankedChoicePayload', signup_ranked_choice: { __typename: 'SignupRankedChoice', id: string, state: Types.SignupRankedChoiceState, requested_bucket_key: string | null, priority: number, target_run: { __typename: 'Run', id: string } } } };
 
 
 export const CreateMySignupDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"mutation","name":{"kind":"Name","value":"CreateMySignup"},"variableDefinitions":[{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"runId"}},"type":{"kind":"NonNullType","type":{"kind":"NamedType","name":{"kind":"Name","value":"ID"}}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"requestedBucketKey"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"String"}}},{"kind":"VariableDefinition","variable":{"kind":"Variable","name":{"kind":"Name","value":"noRequestedBucket"}},"type":{"kind":"NamedType","name":{"kind":"Name","value":"Boolean"}}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"createMySignup"},"arguments":[{"kind":"Argument","name":{"kind":"Name","value":"input"},"value":{"kind":"ObjectValue","fields":[{"kind":"ObjectField","name":{"kind":"Name","value":"runId"},"value":{"kind":"Variable","name":{"kind":"Name","value":"runId"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"requested_bucket_key"},"value":{"kind":"Variable","name":{"kind":"Name","value":"requestedBucketKey"}}},{"kind":"ObjectField","name":{"kind":"Name","value":"no_requested_bucket"},"value":{"kind":"Variable","name":{"kind":"Name","value":"noRequestedBucket"}}}]}}],"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"signup"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"MySignupFields"}},{"kind":"Field","name":{"kind":"Name","value":"run"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"EventPageRunFields"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"RunBasicSignupData"}}]}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"MySignupFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Signup"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"state"}},{"kind":"Field","name":{"kind":"Name","value":"waitlist_position"}},{"kind":"Field","name":{"kind":"Name","value":"counted"}},{"kind":"Field","name":{"kind":"Name","value":"expires_at"}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"MySignupRequestFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"SignupRequest"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"state"}},{"kind":"Field","name":{"kind":"Name","value":"target_run"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"requested_bucket_key"}},{"kind":"Field","name":{"kind":"Name","value":"replace_signup"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"MySignupRankedChoiceFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"SignupRankedChoice"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"state"}},{"kind":"Field","name":{"kind":"Name","value":"target_run"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}}]}},{"kind":"Field","name":{"kind":"Name","value":"requested_bucket_key"}},{"kind":"Field","name":{"kind":"Name","value":"priority"}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"EventPageRunFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Run"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title_suffix"}},{"kind":"Field","name":{"kind":"Name","value":"starts_at"}},{"kind":"Field","name":{"kind":"Name","value":"current_ability_can_signup_summary_run"}},{"kind":"Field","name":{"kind":"Name","value":"grouped_signup_counts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"bucket_key"}},{"kind":"Field","name":{"kind":"Name","value":"count"}},{"kind":"Field","name":{"kind":"Name","value":"counted"}},{"kind":"Field","name":{"kind":"Name","value":"state"}},{"kind":"Field","name":{"kind":"Name","value":"team_member"}}]}},{"kind":"Field","name":{"kind":"Name","value":"rooms"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}}]}},{"kind":"Field","name":{"kind":"Name","value":"my_signups"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"MySignupFields"}}]}},{"kind":"Field","name":{"kind":"Name","value":"my_signup_requests"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"MySignupRequestFields"}}]}},{"kind":"Field","name":{"kind":"Name","value":"my_signup_ranked_choices"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"MySignupRankedChoiceFields"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"RunBasicSignupData"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Run"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"grouped_signup_counts"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"bucket_key"}},{"kind":"Field","name":{"kind":"Name","value":"count"}},{"kind":"Field","name":{"kind":"Name","value":"counted"}},{"kind":"Field","name":{"kind":"Name","value":"state"}},{"kind":"Field","name":{"kind":"Name","value":"team_member"}}]}},{"kind":"Field","name":{"kind":"Name","value":"my_signups"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"state"}}]}},{"kind":"Field","name":{"kind":"Name","value":"my_signup_requests"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"state"}}]}},{"kind":"Field","name":{"kind":"Name","value":"my_signup_ranked_choices"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"state"}},{"kind":"Field","name":{"kind":"Name","value":"priority"}}]}}]}}]} as unknown as DocumentNode<CreateMySignupMutationData, CreateMySignupMutationVariables>;

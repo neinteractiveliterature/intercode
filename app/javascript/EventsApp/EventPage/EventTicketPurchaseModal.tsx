@@ -4,7 +4,7 @@ import { useContext, useState } from 'react';
 import Modal from 'react-bootstrap4-modal';
 import { useTranslation } from 'react-i18next';
 import AppRootContext from '../../AppRootContext';
-import { Run, Signup } from '../../graphqlTypes.generated';
+import { Run } from '../../graphqlTypes.generated';
 import { LazyStripeElementsContainer } from '../../LazyStripe';
 import TicketPurchaseForm, { TicketPurchaseFormProps } from '../../MyTicket/TicketPurchaseForm';
 import { OrderPaymentModalContents, OrderPaymentModalContentsProps } from '../../Store/OrderPaymentModal';
@@ -19,7 +19,7 @@ export type EventTicketPurchaseModalProps = {
   availableProducts: TicketPurchaseFormProps['availableProducts'];
   eventTitle: string;
   run?: Pick<Run, 'id'>;
-  signup?: Pick<Signup, 'expires_at'>;
+  signup?: { expires_at?: string | null };
 };
 
 export default function EventTicketPurchaseModal({

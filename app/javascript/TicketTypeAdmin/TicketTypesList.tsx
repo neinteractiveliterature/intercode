@@ -62,8 +62,14 @@ export function buildBlankProduct(currencyCode: string) {
     delete_variant_ids: [],
     generatedId: uuidv4(),
     name: '',
+    description: null,
+    description_html: null,
     payment_options: ['stripe'],
     product_variants: [],
+    image: null,
+    clickwrap_agreement: null,
+    clickwrap_agreement_html: null,
+    provides_ticket_type: null,
     pricing_structure: {
       __typename: 'PricingStructure' as const,
       pricing_strategy: PricingStrategy.Fixed,
@@ -179,7 +185,11 @@ function TicketTypeDisplay({
                           initialProduct: {
                             ...buildBlankProduct(defaultCurrencyCode),
                             ...product,
-                            provides_ticket_type: { __typename: 'TicketType', id: ticketType.id },
+                            provides_ticket_type: {
+                              __typename: 'TicketType',
+                              id: ticketType.id,
+                              description: ticketType.description,
+                            },
                           },
                           opened: new Date(),
                         })

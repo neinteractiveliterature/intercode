@@ -58,6 +58,7 @@ function findAssign(
       __typename: 'LiquidAssign',
       drop_class_name: traversalResult.yardClass.name,
       name: traversalResult.name,
+      cms_variable_value_json: null,
     };
   } else {
     return assign;

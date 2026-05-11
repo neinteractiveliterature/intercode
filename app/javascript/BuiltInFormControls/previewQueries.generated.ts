@@ -1,9 +1,35 @@
 /* eslint-disable */
+/** Internal type. DO NOT USE DIRECTLY. */
+type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+/** Internal type. DO NOT USE DIRECTLY. */
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 import * as Types from '../graphqlTypes.generated';
 
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
-export type PreviewLiquidQueryVariables = Types.Exact<{
-  liquid: Types.Scalars['String']['input'];
+/** An event that can trigger a notification. */
+export type NotificationEventKey =
+  | 'EVENTS_EVENT_UPDATED'
+  | 'EVENT_PROPOSALS_NEW_PROPOSAL'
+  | 'EVENT_PROPOSALS_PROPOSAL_SUBMIT_CONFIRMATION'
+  | 'EVENT_PROPOSALS_PROPOSAL_UPDATED'
+  | 'EVENT_PROPOSALS_UNFINISHED_DRAFT_REMINDER'
+  | 'ORDERS_CANCELLED'
+  | 'ORDERS_PURCHASED'
+  | 'SIGNUPS_HOLD_EXPIRED'
+  | 'SIGNUPS_NEW_SIGNUP'
+  | 'SIGNUPS_REGISTRATION_POLICY_CHANGE_MOVED_SIGNUPS'
+  | 'SIGNUPS_SIGNUP_CONFIRMATION'
+  | 'SIGNUPS_USER_SIGNUP_MOVED'
+  | 'SIGNUPS_WITHDRAWAL'
+  | 'SIGNUPS_WITHDRAW_CONFIRMATION'
+  | 'SIGNUP_QUEUE_NO_TICKET_REMINDER'
+  | 'SIGNUP_REQUESTS_NEW_SIGNUP_REQUEST'
+  | 'SIGNUP_REQUESTS_REQUEST_ACCEPTED'
+  | 'TICKETS_PURCHASED'
+  | 'USER_ACTIVITY_ALERTS_ALERT';
+
+export type PreviewLiquidQueryVariables = Exact<{
+  liquid: string;
 }>;
 
 
@@ -12,10 +38,10 @@ export type PreviewLiquidQueryData = { __typename: 'Query', cmsParent:
     | { __typename: 'RootSite', id: string, previewLiquid: string }
    };
 
-export type PreviewMarkdownQueryVariables = Types.Exact<{
-  markdown: Types.Scalars['String']['input'];
-  eventId?: Types.InputMaybe<Types.Scalars['ID']['input']>;
-  eventProposalId?: Types.InputMaybe<Types.Scalars['ID']['input']>;
+export type PreviewMarkdownQueryVariables = Exact<{
+  markdown: string;
+  eventId?: string | number | null | undefined;
+  eventProposalId?: string | number | null | undefined;
 }>;
 
 
@@ -24,9 +50,9 @@ export type PreviewMarkdownQueryData = { __typename: 'Query', cmsParent:
     | { __typename: 'RootSite', id: string, previewMarkdown: string }
    };
 
-export type PreviewNotifierLiquidQueryVariables = Types.Exact<{
+export type PreviewNotifierLiquidQueryVariables = Exact<{
   eventKey: Types.NotificationEventKey;
-  liquid: Types.Scalars['String']['input'];
+  liquid: string;
 }>;
 
 

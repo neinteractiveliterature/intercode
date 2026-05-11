@@ -15,8 +15,8 @@ export function useAllowedCurrencies(allowedCurrencyCodes?: string[]): CurrencyC
 }
 
 export type CurrencySelectProps = Omit<HTMLProps<HTMLSelectElement>, 'value' | 'onChange'> & {
-  value: string | undefined;
-  onChange: React.Dispatch<string | undefined>;
+  value: string | null;
+  onChange: React.Dispatch<string | null>;
   allowedCurrencyCodes?: string[];
 };
 
@@ -25,7 +25,7 @@ export default function CurrencySelect({ value, onChange, allowedCurrencyCodes, 
   const allowedCurrencies = useAllowedCurrencies(allowedCurrencyCodes);
 
   return (
-    <select value={value} onChange={(event) => onChange(event.target.value)} {...inputProps}>
+    <select value={value ?? undefined} onChange={(event) => onChange(event.target.value)} {...inputProps}>
       <option value={undefined} aria-label={t('store.currencySelect.noCurrencySelected')} />
       {allowedCurrencies.map((currency) => (
         <option value={currency.code} key={currency.code}>

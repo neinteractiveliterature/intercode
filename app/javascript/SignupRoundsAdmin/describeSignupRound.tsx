@@ -1,9 +1,9 @@
 import { ParsedSignupRound } from '../SignupRoundUtils';
-import { SignupRoundsAdminQueryData } from './queries.generated';
+import { SignupRound } from '../graphqlTypes.generated';
 import { TFunction } from 'i18next';
 
 export function describeSignupRound(
-  rounds: ParsedSignupRound<SignupRoundsAdminQueryData['convention']['signup_rounds'][number]>[],
+  rounds: ParsedSignupRound<Pick<SignupRound, 'start' | 'maximum_event_signups'>>[],
   roundIndex: number,
   t: TFunction,
 ) {

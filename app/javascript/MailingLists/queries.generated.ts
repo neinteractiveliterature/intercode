@@ -1,53 +1,71 @@
 /* eslint-disable */
+/** Internal type. DO NOT USE DIRECTLY. */
+type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+/** Internal type. DO NOT USE DIRECTLY. */
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 import * as Types from '../graphqlTypes.generated';
 
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
-export type ContactEmailFieldsFragment = { __typename: 'ContactEmail', email: string, formatted_address: string, name?: string | null, metadata_json: string };
+export type TicketMode =
+  /** Tickets are neither sold nor required in this convention */
+  | 'disabled'
+  /** A valid ticket is required to sign up for events in this convention */
+  | 'required_for_signup'
+  /** Each event in this convention sells tickets separately */
+  | 'ticket_per_event';
 
-export type MailingListsResultFieldsFragment = { __typename: 'MailingListsResult', metadata_fields: Array<string>, emails: Array<{ __typename: 'ContactEmail', email: string, formatted_address: string, name?: string | null, metadata_json: string }> };
+export type TimezoneMode =
+  /** Display dates and times using convention’s local time zone */
+  | 'convention_local'
+  /** Display dates and times using user’s local time zone */
+  | 'user_local';
 
-export type MailingListsMenuQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type ContactEmailFieldsFragment = { __typename: 'ContactEmail', email: string, formatted_address: string, name: string | null, metadata_json: string };
+
+export type MailingListsResultFieldsFragment = { __typename: 'MailingListsResult', metadata_fields: Array<string>, emails: Array<{ __typename: 'ContactEmail', email: string, formatted_address: string, name: string | null, metadata_json: string }> };
+
+export type MailingListsMenuQueryVariables = Exact<{ [key: string]: never; }>;
 
 
 export type MailingListsMenuQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, ticket_mode: Types.TicketMode, ticket_name: string } };
 
-export type TicketedAttendeesQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type TicketedAttendeesQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type TicketedAttendeesQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, ticket_name: string, mailing_lists: { __typename: 'MailingLists', ticketed_attendees: { __typename: 'MailingListsResult', metadata_fields: Array<string>, emails: Array<{ __typename: 'ContactEmail', email: string, formatted_address: string, name?: string | null, metadata_json: string }> } } } };
+export type TicketedAttendeesQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, ticket_name: string, mailing_lists: { __typename: 'MailingLists', ticketed_attendees: { __typename: 'MailingListsResult', metadata_fields: Array<string>, emails: Array<{ __typename: 'ContactEmail', email: string, formatted_address: string, name: string | null, metadata_json: string }> } } } };
 
-export type EventProposersQueryVariables = Types.Exact<{ [key: string]: never; }>;
-
-
-export type EventProposersQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, mailing_lists: { __typename: 'MailingLists', event_proposers: { __typename: 'MailingListsResult', metadata_fields: Array<string>, emails: Array<{ __typename: 'ContactEmail', email: string, formatted_address: string, name?: string | null, metadata_json: string }> } } } };
-
-export type TeamMembersMailingListQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type EventProposersQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type TeamMembersMailingListQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, mailing_lists: { __typename: 'MailingLists', team_members: { __typename: 'MailingListsResult', metadata_fields: Array<string>, emails: Array<{ __typename: 'ContactEmail', email: string, formatted_address: string, name?: string | null, metadata_json: string }> } } } };
+export type EventProposersQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, mailing_lists: { __typename: 'MailingLists', event_proposers: { __typename: 'MailingListsResult', metadata_fields: Array<string>, emails: Array<{ __typename: 'ContactEmail', email: string, formatted_address: string, name: string | null, metadata_json: string }> } } } };
 
-export type UsersWithPendingBioQueryVariables = Types.Exact<{ [key: string]: never; }>;
-
-
-export type UsersWithPendingBioQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, mailing_lists: { __typename: 'MailingLists', users_with_pending_bio: { __typename: 'MailingListsResult', metadata_fields: Array<string>, emails: Array<{ __typename: 'ContactEmail', email: string, formatted_address: string, name?: string | null, metadata_json: string }> } } } };
-
-export type WaitlistMailingListsQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type TeamMembersMailingListQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type WaitlistMailingListsQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, timezone_name?: string | null, mailing_lists: { __typename: 'MailingLists', waitlists: Array<{ __typename: 'MailingListsWaitlistsResult', metadata_fields: Array<string>, emails: Array<{ __typename: 'ContactEmail', email: string, formatted_address: string, name?: string | null, metadata_json: string }>, run: { __typename: 'Run', id: string, starts_at: string, title_suffix?: string | null, event: { __typename: 'Event', id: string, title?: string | null } } }> } } };
+export type TeamMembersMailingListQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, mailing_lists: { __typename: 'MailingLists', team_members: { __typename: 'MailingListsResult', metadata_fields: Array<string>, emails: Array<{ __typename: 'ContactEmail', email: string, formatted_address: string, name: string | null, metadata_json: string }> } } } };
 
-export type WhosFreeFormConventionQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type UsersWithPendingBioQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type WhosFreeFormConventionQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, starts_at?: string | null, ends_at?: string | null, timezone_name?: string | null, timezone_mode: Types.TimezoneMode } };
+export type UsersWithPendingBioQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, mailing_lists: { __typename: 'MailingLists', users_with_pending_bio: { __typename: 'MailingListsResult', metadata_fields: Array<string>, emails: Array<{ __typename: 'ContactEmail', email: string, formatted_address: string, name: string | null, metadata_json: string }> } } } };
 
-export type WhosFreeQueryVariables = Types.Exact<{
-  start: Types.Scalars['Date']['input'];
-  finish: Types.Scalars['Date']['input'];
+export type WaitlistMailingListsQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type WaitlistMailingListsQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, timezone_name: string | null, mailing_lists: { __typename: 'MailingLists', waitlists: Array<{ __typename: 'MailingListsWaitlistsResult', metadata_fields: Array<string>, emails: Array<{ __typename: 'ContactEmail', email: string, formatted_address: string, name: string | null, metadata_json: string }>, run: { __typename: 'Run', id: string, starts_at: string, title_suffix: string | null, event: { __typename: 'Event', id: string, title: string | null } } }> } } };
+
+export type WhosFreeFormConventionQueryVariables = Exact<{ [key: string]: never; }>;
+
+
+export type WhosFreeFormConventionQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, starts_at: string | null, ends_at: string | null, timezone_name: string | null, timezone_mode: Types.TimezoneMode } };
+
+export type WhosFreeQueryVariables = Exact<{
+  start: string;
+  finish: string;
 }>;
 
 
-export type WhosFreeQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, mailing_lists: { __typename: 'MailingLists', whos_free: { __typename: 'MailingListsResult', metadata_fields: Array<string>, emails: Array<{ __typename: 'ContactEmail', email: string, formatted_address: string, name?: string | null, metadata_json: string }> } } } };
+export type WhosFreeQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, mailing_lists: { __typename: 'MailingLists', whos_free: { __typename: 'MailingListsResult', metadata_fields: Array<string>, emails: Array<{ __typename: 'ContactEmail', email: string, formatted_address: string, name: string | null, metadata_json: string }> } } } };
 
 export const ContactEmailFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ContactEmailFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ContactEmail"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"formatted_address"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"metadata_json"}}]}}]} as unknown as DocumentNode<ContactEmailFieldsFragment, unknown>;
 export const MailingListsResultFieldsFragmentDoc = {"kind":"Document","definitions":[{"kind":"FragmentDefinition","name":{"kind":"Name","value":"MailingListsResultFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"MailingListsResult"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"emails"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"FragmentSpread","name":{"kind":"Name","value":"ContactEmailFields"}}]}},{"kind":"Field","name":{"kind":"Name","value":"metadata_fields"}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"ContactEmailFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"ContactEmail"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"formatted_address"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"metadata_json"}}]}}]} as unknown as DocumentNode<MailingListsResultFieldsFragment, unknown>;

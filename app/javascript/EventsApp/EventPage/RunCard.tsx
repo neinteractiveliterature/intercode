@@ -14,14 +14,37 @@ import AppRootContext from '../../AppRootContext';
 import useAsyncFunction from '../../useAsyncFunction';
 import WithdrawSignupButton from './WithdrawSignupButton';
 import AuthenticationModalContext from '../../Authentication/AuthenticationModalContext';
-import { EventPageQueryData } from './queries.generated';
+import {
+  EventPageQueryData,
+  MySignupFieldsFragment,
+  RunCardRegistrationPolicyFieldsFragment,
+} from './queries.generated';
 import { PartitionedSignupOptions, SignupOption } from './buildSignupOptions';
 import { useFormatRunTimespan } from '../runTimeFormatting';
 import { Signup, SignupState } from '../../graphqlTypes.generated';
 import EventTicketPurchaseModal from './EventTicketPurchaseModal';
+import { TicketPurchaseFormProps } from '../../MyTicket/TicketPurchaseForm';
+import { RunCapacityBucket } from './sortBuckets';
+
+type RunCardEvent = {
+  id: string;
+  title?: string | null;
+  length_seconds: number;
+  private_signup_list?: boolean | null;
+  registration_policy?:
+    | (Omit<RunCardRegistrationPolicyFieldsFragment, 'buckets'> & { buckets: RunCapacityBucket[] })
+    | null;
+  runs: Array<unknown>;
+  ticket_types: Array<{ providing_products: TicketPurchaseFormProps['availableProducts'] }>;
+};
+
+type RunCardMySignup = Pick<MySignupFieldsFragment, 'id' | 'state' | 'counted'> & {
+  waitlist_position?: number | null;
+  expires_at?: string | null;
+};
 
 function describeSignupState(
-  mySignup: EventPageQueryData['convention']['event']['runs'][0]['my_signups'][0],
+  mySignup: { state: string; waitlist_position?: number | null },
   t: TFunction,
   ticketName: string,
 ): string {
@@ -44,16 +67,21 @@ function describeSignupState(
 
 export type RunCardProps = {
   run: EventPageQueryData['convention']['event']['runs'][0];
-  event: EventPageQueryData['convention']['event'];
+  event: RunCardEvent;
   signupOptions: PartitionedSignupOptions;
   currentAbility: EventPageQueryData['currentAbility'];
   myProfile?: Record<string, unknown> | null;
-  mySignup?: EventPageQueryData['convention']['event']['runs'][0]['my_signups'][0] | null;
-  myPendingSignupRequest?: EventPageQueryData['convention']['event']['runs'][0]['my_signup_requests'][0] | null;
+  mySignup?: RunCardMySignup | null;
+  myPendingSignupRequest?: {
+    id: string;
+    state: EventPageQueryData['convention']['event']['runs'][0]['my_signup_requests'][0]['state'];
+  } | null;
   showViewSignups?: boolean;
   createSignup: (
     signupOption: SignupOption,
-  ) => Promise<undefined | null | Pick<Signup, '__typename' | 'id' | 'state' | 'expires_at' | 'counted'>>;
+  ) => Promise<
+    undefined | null | Pick<Signup, '__typename' | 'id' | 'state' | 'expires_at' | 'counted' | 'waitlist_position'>
+  >;
   withdrawSignup: () => unknown;
   withdrawPendingSignupRequest: () => Promise<unknown>;
 };

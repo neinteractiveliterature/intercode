@@ -110,7 +110,7 @@ function ConventionFormBillingSection({
           <CurrencySelect
             id={id}
             className="form-select"
-            value={convention.default_currency_code ?? undefined}
+            value={convention.default_currency_code}
             onChange={setDefaultCurrencyCode}
           />
         )}

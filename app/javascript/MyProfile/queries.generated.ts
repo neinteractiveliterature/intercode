@@ -1,11 +1,40 @@
 /* eslint-disable */
+/** Internal type. DO NOT USE DIRECTLY. */
+type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
+/** Internal type. DO NOT USE DIRECTLY. */
+export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
 import * as Types from '../graphqlTypes.generated';
 
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
-export type MyProfileQueryVariables = Types.Exact<{ [key: string]: never; }>;
+export type FormItemExposeIn =
+  | 'event_catalog'
+  | 'schedule_popup';
+
+export type FormItemRole =
+  | 'admin'
+  | 'all_profiles_basic_access'
+  | 'confirmed_attendee'
+  | 'normal'
+  | 'team_member';
+
+export type FormType =
+  /** Event form */
+  | 'event'
+  /** Event proposal form */
+  | 'event_proposal'
+  /** User profile form */
+  | 'user_con_profile';
+
+export type TimezoneMode =
+  /** Display dates and times using convention’s local time zone */
+  | 'convention_local'
+  /** Display dates and times using user’s local time zone */
+  | 'user_local';
+
+export type MyProfileQueryVariables = Exact<{ [key: string]: never; }>;
 
 
-export type MyProfileQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, starts_at?: string | null, ends_at?: string | null, timezone_name?: string | null, timezone_mode: Types.TimezoneMode, my_profile?: { __typename: 'UserConProfile', id: string, email?: string | null, form_response_attrs_json?: string | null, can_have_bio: boolean, gravatar_url: string, gravatar_enabled: boolean, bio?: string | null, show_nickname_in_bio?: boolean | null, bio_name?: string | null, bio_html?: string | null, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole } | null, user_con_profile_form: { __typename: 'Form', id: string, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: string, title?: string | null, position: number, form_items: Array<{ __typename: 'FormItem', id: string, admin_description?: string | null, position: number, identifier?: string | null, item_type: string, rendered_properties: string, default_value?: string | null, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in?: Array<Types.FormItemExposeIn> | null }> }> } } };
+export type MyProfileQueryData = { __typename: 'Query', convention: { __typename: 'Convention', id: string, name: string, starts_at: string | null, ends_at: string | null, timezone_name: string | null, timezone_mode: Types.TimezoneMode, my_profile: { __typename: 'UserConProfile', id: string, email: string | null, form_response_attrs_json: string | null, can_have_bio: boolean, gravatar_url: string, gravatar_enabled: boolean, bio: string | null, show_nickname_in_bio: boolean | null, bio_name: string | null, bio_html: string | null, current_user_form_item_viewer_role: Types.FormItemRole, current_user_form_item_writer_role: Types.FormItemRole } | null, user_con_profile_form: { __typename: 'Form', id: string, title: string, form_type: Types.FormType, form_sections: Array<{ __typename: 'FormSection', id: string, title: string | null, position: number, form_items: Array<{ __typename: 'FormItem', id: string, admin_description: string | null, position: number, identifier: string | null, item_type: string, rendered_properties: string, default_value: string | null, visibility: Types.FormItemRole, writeability: Types.FormItemRole, expose_in: Array<Types.FormItemExposeIn> | null }> }> } } };
 
 
 export const MyProfileQueryDocument = {"kind":"Document","definitions":[{"kind":"OperationDefinition","operation":"query","name":{"kind":"Name","value":"MyProfileQuery"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","alias":{"kind":"Name","value":"convention"},"name":{"kind":"Name","value":"conventionByRequestHost"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"name"}},{"kind":"Field","name":{"kind":"Name","value":"starts_at"}},{"kind":"Field","name":{"kind":"Name","value":"ends_at"}},{"kind":"Field","name":{"kind":"Name","value":"timezone_name"}},{"kind":"Field","name":{"kind":"Name","value":"timezone_mode"}},{"kind":"Field","name":{"kind":"Name","value":"my_profile"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"email"}},{"kind":"Field","name":{"kind":"Name","value":"form_response_attrs_json"}},{"kind":"Field","name":{"kind":"Name","value":"can_have_bio"}},{"kind":"Field","name":{"kind":"Name","value":"gravatar_url"}},{"kind":"Field","name":{"kind":"Name","value":"gravatar_enabled"}},{"kind":"Field","name":{"kind":"Name","value":"bio"}},{"kind":"Field","name":{"kind":"Name","value":"show_nickname_in_bio"}},{"kind":"Field","name":{"kind":"Name","value":"bio_name"}},{"kind":"Field","name":{"kind":"Name","value":"bio_html"}},{"kind":"Field","name":{"kind":"Name","value":"current_user_form_item_viewer_role"}},{"kind":"Field","name":{"kind":"Name","value":"current_user_form_item_writer_role"}}]}},{"kind":"Field","name":{"kind":"Name","value":"user_con_profile_form"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"CommonFormFields"}},{"kind":"Field","name":{"kind":"Name","value":"form_sections"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"form_items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"admin_description"}}]}}]}}]}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CommonFormItemFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"FormItem"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"position"}},{"kind":"Field","name":{"kind":"Name","value":"identifier"}},{"kind":"Field","name":{"kind":"Name","value":"item_type"}},{"kind":"Field","name":{"kind":"Name","value":"rendered_properties"}},{"kind":"Field","name":{"kind":"Name","value":"default_value"}},{"kind":"Field","name":{"kind":"Name","value":"visibility"}},{"kind":"Field","name":{"kind":"Name","value":"writeability"}},{"kind":"Field","name":{"kind":"Name","value":"expose_in"}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CommonFormSectionFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"FormSection"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"position"}},{"kind":"Field","name":{"kind":"Name","value":"form_items"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"CommonFormItemFields"}}]}}]}},{"kind":"FragmentDefinition","name":{"kind":"Name","value":"CommonFormFields"},"typeCondition":{"kind":"NamedType","name":{"kind":"Name","value":"Form"}},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"Field","name":{"kind":"Name","value":"title"}},{"kind":"Field","name":{"kind":"Name","value":"form_type"}},{"kind":"Field","name":{"kind":"Name","value":"form_sections"},"selectionSet":{"kind":"SelectionSet","selections":[{"kind":"Field","name":{"kind":"Name","value":"id"}},{"kind":"FragmentSpread","name":{"kind":"Name","value":"CommonFormSectionFields"}}]}}]}}]} as unknown as DocumentNode<MyProfileQueryData, MyProfileQueryVariables>;
