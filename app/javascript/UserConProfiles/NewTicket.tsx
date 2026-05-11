@@ -76,6 +76,7 @@ function NewTicket() {
         initialTicket={{
           ticket_type: undefined,
           provided_by_event: null,
+          order_entry: null,
         }}
         onSubmit={onSubmit}
         submitCaption={`Create ${convention.ticket_name}`}

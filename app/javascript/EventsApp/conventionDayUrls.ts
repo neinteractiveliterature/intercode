@@ -78,7 +78,7 @@ export async function conventionDayLoader(
   { params, request }: { params: { day?: string }; request: Request },
 ) {
   const { data } = await client.query<AppRootQueryData>({ query: AppRootQueryDocument });
-  const { conventionTimespan, timezoneName, siteMode } = buildAppRootContextValue(data, { current: null });
+  const { conventionTimespan, timezoneName, siteMode } = buildAppRootContextValue(data);
   const { t } = await getI18n();
 
   const conventionDayTimespans = conventionTimespan?.isFinite()

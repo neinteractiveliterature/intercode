@@ -5,7 +5,7 @@ import { Modal } from 'react-bootstrap4-modal';
 import { useMutation, useSuspenseQuery } from '@apollo/client/react';
 import { ErrorDisplay, LoadingIndicator } from '@neinteractiveliterature/litform';
 
-import EventSelect, { DefaultEventSelectOptionType } from '../BuiltInFormControls/EventSelect';
+import EventSelect from '../BuiltInFormControls/EventSelect';
 import ProvidableTicketTypeSelection from '../EventsApp/TeamMemberAdmin/ProvidableTicketTypeSelection';
 import TicketingStatusDescription, {
   TicketingStatusDescriptionProps,
@@ -109,7 +109,7 @@ function ConvertToEventProvidedTicketModal({
               ...cachedData.convention,
               user_con_profile: {
                 ...cachedData.convention.user_con_profile,
-                ticket: result.data?.convertTicketToEventProvided?.ticket,
+                ticket: result.data?.convertTicketToEventProvided?.ticket ?? null,
               },
             },
           },

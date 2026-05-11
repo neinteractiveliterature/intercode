@@ -1,5 +1,5 @@
 /* eslint-disable @typescript-eslint/no-explicit-any */
- 
+
 import { FormItemRole } from '../../app/javascript/graphqlTypes.generated';
 import {
   CommonFormFieldsFragment,
