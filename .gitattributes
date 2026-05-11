@@ -1,0 +1,4 @@
+app/javascript/**/*.generated.ts linguist-generated
+app/graphql/graphql_operations_generated.json linguist-generated
+schema.graphql linguist-generated
+schema.json linguist-generated
