@@ -12,7 +12,9 @@ import { lazyWithAppEntrypointHeadersCheck } from '../../checkAppEntrypointHeade
 import { getIntercodeUserTimezoneHeader } from '../../useIntercodeApolloClient';
 import { AuthenticityTokensContext } from '../../AuthenticityTokensContext';
 
-const GraphiQL = lazyWithAppEntrypointHeadersCheck(() => import(/* webpackChunkName: 'graphiql' */ 'graphiql'));
+const GraphiQL = lazyWithAppEntrypointHeadersCheck(() =>
+  import(/* webpackChunkName: 'graphiql' */ 'graphiql').then((m) => ({ default: m.GraphiQL })),
+);
 
 type CmsGraphqlQueryFormFields = {
   identifier: string;
@@ -63,13 +65,7 @@ function CmsGraphqlQueryForm<T extends CmsGraphqlQueryFormFields>({
 
       <div className="border" style={{ height: '40em' }}>
         <Suspense fallback={<LoadingIndicator iconSet="bootstrap-icons" />}>
-          <GraphiQL
-            query={value.query}
-            onEditQuery={setQuery}
-            fetcher={fetcher}
-            readOnly={readOnly}
-            editorTheme="intercode"
-          />
+          <GraphiQL defaultQuery={value.query} onEditQuery={setQuery} fetcher={fetcher} />
         </Suspense>
         <input type="hidden" name="query" value={value.query} />
       </div>

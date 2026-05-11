@@ -37,7 +37,7 @@ function DevModeGraphiql({ authenticityTokens }: DevModeGraphiqlProps): React.JS
     [link, client],
   ) as unknown as Fetcher;
 
-  return <GraphiQL fetcher={fetcher} editorTheme="intercode" />;
+  return <GraphiQL fetcher={fetcher} />;
 }
 
 mountReactComponents({ DevModeGraphiql: DevModeGraphiql as React.FC<unknown> });
