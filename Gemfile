@@ -105,7 +105,7 @@ gem "tzinfo-data"
 
 gem "faker", group: "development", require: false
 
-gem "oj", "~> 3.16.0"
+gem "oj", "~> 3.17.0"
 gem "rollbar"
 
 # Reduces boot times through caching; required in config/boot.rb

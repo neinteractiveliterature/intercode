@@ -418,7 +418,7 @@ GEM
       racc (~> 1.4)
     nokogiri (1.19.3-x86_64-linux-gnu)
       racc (~> 1.4)
-    oj (3.16.17)
+    oj (3.17.0)
       bigdecimal (>= 3.0)
       ostruct (>= 0.2)
     openssl (3.3.2)
@@ -758,7 +758,7 @@ DEPENDENCIES
   minitest-spec-rails
   money-rails
   mysql2 (~> 0.5.3)
-  oj (~> 3.16.0)
+  oj (~> 3.17.0)
   openssl (~> 3.3)
   parallel
   pg
