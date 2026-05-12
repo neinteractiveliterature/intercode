@@ -48,15 +48,15 @@ export const adminSingleTicketTypeLoader: LoaderFunction = async ({
   context,
   request,
   params: { id },
-  unstable_pattern,
-  unstable_url,
+  pattern,
+  url,
 }) => {
   const { ticketTypes } = (await adminTicketTypesLoader({
     params: {},
     request,
     context,
-    unstable_pattern,
-    unstable_url,
+    pattern,
+    url,
   })) as TicketTypeLoaderResult;
   return getSingleTicketType(ticketTypes, id ?? '');
 };
@@ -65,15 +65,15 @@ export const eventSingleTicketTypeLoader: LoaderFunction = async ({
   context,
   request,
   params: { id, eventId },
-  unstable_pattern,
-  unstable_url,
+  pattern,
+  url,
 }) => {
   const { ticketTypes } = (await eventTicketTypesLoader({
     params: { eventId },
     request,
     context,
-    unstable_pattern,
-    unstable_url,
+    pattern,
+    url,
   })) as TicketTypeLoaderResult;
   return getSingleTicketType(ticketTypes, id ?? '');
 };
