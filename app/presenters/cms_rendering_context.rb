@@ -65,12 +65,7 @@ class CmsRenderingContext
     doc = Nokogiri::HTML.parse("<!DOCTYPE html><html><head>#{assigns["content_for_head"]}</head><body></body></html>")
     doc.xpath("//body/*").remove
     doc.xpath("//body").first.inner_html =
-      (assigns["browser_warning"] || "") + NOSCRIPT_WARNING +
-        tag.div(
-          "",
-          "data-react-class" => "AppRoot",
-          "data-react-props" => (controller&.app_component_props || {}).to_json
-        )
+      (assigns["browser_warning"] || "") + NOSCRIPT_WARNING + tag.div("", "data-react-class" => "AppRoot")
     doc.to_s.html_safe # rubocop:disable Rails/OutputSafety
   rescue StandardError => e
     ErrorReporting.warn(e)
