@@ -2,21 +2,12 @@ import * as React from 'react';
 import { useContext } from 'react';
 
 import useAfterSessionChange from './useAfterSessionChange';
-import { AuthenticityTokensContext } from '../AuthenticityTokensContext';
+import { AuthenticationManager, AuthenticationManagerContext } from './authenticationManager';
 
-async function signOut(authenticityToken: string) {
-  const response = await fetch('/users/sign_out', {
-    method: 'DELETE',
-    credentials: 'include',
-    headers: {
-      // Accept: 'application/json',
-      'X-CSRF-Token': authenticityToken,
-    },
-  });
-
-  if (!response.ok) {
-    const responseJson = await response.json();
-    throw new Error(responseJson.error);
+async function signOut(manager: AuthenticationManager) {
+  const { endSessionEndpoint } = await manager.signOut();
+  if (endSessionEndpoint) {
+    window.location.href = endSessionEndpoint;
   }
 }
 
@@ -27,13 +18,11 @@ export type SignOutButtonProps = {
 
 function SignOutButton({ className, caption }: SignOutButtonProps): React.JSX.Element {
   const afterSessionChange = useAfterSessionChange();
-  const manager = useContext(AuthenticityTokensContext);
+  const authenticationManager = useContext(AuthenticationManagerContext);
 
   const onClick = async (event: React.SyntheticEvent) => {
-    const authenticityToken = manager.tokens?.signOut;
-
     event.preventDefault();
-    await signOut(authenticityToken ?? '');
+    await signOut(authenticationManager);
     await afterSessionChange('/', {
       title: 'Logout',
       body: 'Logged out.',

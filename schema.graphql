@@ -246,6 +246,16 @@ Client-side configuration values needed for frontend initialization
 """
 type ClientConfiguration {
   """
+  The OAuth application UID for the Intercode frontend SPA (used for PKCE auth)
+  """
+  oauth_frontend_application_uid: String
+
+  """
+  The OIDC issuer URL (used as the base for OpenID Connect discovery)
+  """
+  oidc_issuer_url: String
+
+  """
   The default Active Storage service name configured in Rails
   """
   rails_default_active_storage_service_name: String!

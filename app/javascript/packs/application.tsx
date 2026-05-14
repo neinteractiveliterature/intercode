@@ -1,7 +1,7 @@
 import 'regenerator-runtime/runtime';
 
 import mountReactComponents from '../mountReactComponents';
-import { StrictMode, use, useEffect, useMemo, useState } from 'react';
+import { StrictMode, use, useEffect, useMemo } from 'react';
 import AuthenticityTokensManager, { getAuthenticityTokensURL } from 'AuthenticityTokensContext';
 import { createBrowserRouter, RouterContextProvider, RouterProvider } from 'react-router';
 import { buildBrowserApolloClient } from 'useIntercodeApolloClient';
@@ -15,15 +15,19 @@ import {
 import { ClientConfigurationQueryData } from 'serverQueries.generated';
 import { appRootRoutes } from 'AppRouter';
 import { ApolloClient, OperationVariables } from '@apollo/client';
+import { AuthenticationManager, AuthenticationManagerContext } from '../Authentication/authenticationManager';
 
 const manager = new AuthenticityTokensManager(fetch, undefined, getAuthenticityTokensURL());
 const refreshPromise = manager.refresh();
-const client = buildBrowserApolloClient(manager);
+const authManager = AuthenticationManager.deserializeFromBrowser();
+const client = buildBrowserApolloClient(manager, authManager);
 
 export type DataModeApplicationEntryProps = {
   recaptchaSiteKey: string;
   railsDefaultActiveStorageServiceName: string;
   railsDirectUploadsUrl: string;
+  oauthFrontendApplicationUid?: string;
+  oidcIssuerUrl?: string;
   queryData?: ApolloClient.WriteQueryOptions<unknown, OperationVariables>[];
 };
 
@@ -31,24 +35,16 @@ function DataModeApplicationEntry({
   recaptchaSiteKey,
   railsDefaultActiveStorageServiceName,
   railsDirectUploadsUrl,
-  queryData,
+  oauthFrontendApplicationUid,
+  oidcIssuerUrl,
 }: DataModeApplicationEntryProps) {
   use(refreshPromise);
 
-  const [queryPreloadComplete, setQueryPreloadComplete] = useState(false);
+  // Set auth manager config from Rails props once available
   useEffect(() => {
-    if (queryData && Array.isArray(queryData)) {
-      for (const query of queryData) {
-        try {
-          client.writeQuery(query);
-        } catch {
-          // don't blow up if we get a malformed query
-        }
-      }
-    }
-
-    setQueryPreloadComplete(true);
-  }, [queryData]);
+    authManager.clientId = oauthFrontendApplicationUid;
+    authManager.issuerUrl = oidcIssuerUrl;
+  }, [oauthFrontendApplicationUid, oidcIssuerUrl]);
 
   const clientConfigurationData = useMemo<ClientConfigurationQueryData>(
     () => ({
@@ -58,14 +54,22 @@ function DataModeApplicationEntry({
         recaptcha_site_key: recaptchaSiteKey,
         rails_default_active_storage_service_name: railsDefaultActiveStorageServiceName,
         rails_direct_uploads_url: railsDirectUploadsUrl,
+        oauth_frontend_application_uid: oauthFrontendApplicationUid ?? null,
+        oidc_issuer_url: oidcIssuerUrl ?? null,
       },
     }),
-    [recaptchaSiteKey, railsDefaultActiveStorageServiceName, railsDirectUploadsUrl],
+    [
+      recaptchaSiteKey,
+      railsDefaultActiveStorageServiceName,
+      railsDirectUploadsUrl,
+      oauthFrontendApplicationUid,
+      oidcIssuerUrl,
+    ],
   );
 
   const router = useMemo(
     () =>
-      queryPreloadComplete &&
+      // queryPreloadComplete &&
       createBrowserRouter(
         [
           {
@@ -85,10 +89,16 @@ function DataModeApplicationEntry({
           },
         },
       ),
-    [clientConfigurationData, queryPreloadComplete],
+    [clientConfigurationData],
   );
 
-  return <StrictMode>{router && <RouterProvider router={router} />}</StrictMode>;
+  return (
+    <StrictMode>
+      <AuthenticationManagerContext.Provider value={authManager}>
+        {router && <RouterProvider router={router} />}
+      </AuthenticationManagerContext.Provider>
+    </StrictMode>
+  );
 }
 
 mountReactComponents({ AppRoot: DataModeApplicationEntry });

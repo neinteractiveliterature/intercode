@@ -1,6 +1,15 @@
+# frozen_string_literal: true
 class Types::ClientConfigurationType < Types::BaseObject
   description "Client-side configuration values needed for frontend initialization"
 
+  field :oauth_frontend_application_uid,
+        String,
+        null: true,
+        description: "The OAuth application UID for the Intercode frontend SPA (used for PKCE auth)"
+  field :oidc_issuer_url,
+        String,
+        null: true,
+        description: "The OIDC issuer URL (used as the base for OpenID Connect discovery)"
   field :rails_default_active_storage_service_name,
         String,
         null: false,
@@ -20,5 +29,14 @@ class Types::ClientConfigurationType < Types::BaseObject
 
   def recaptcha_site_key
     Recaptcha.configuration.site_key
+  end
+
+  def oauth_frontend_application_uid
+    Doorkeeper::Application.find_by(is_intercode_frontend: true)&.uid
+  end
+
+  def oidc_issuer_url
+    issuer = Doorkeeper::OpenidConnect.configuration.issuer
+    issuer.respond_to?(:call) ? issuer.call : issuer
   end
 end

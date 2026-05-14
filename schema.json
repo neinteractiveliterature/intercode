@@ -2054,6 +2054,30 @@
           "possibleTypes": null,
           "fields": [
             {
+              "name": "oauth_frontend_application_uid",
+              "description": "The OAuth application UID for the Intercode frontend SPA (used for PKCE auth)",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "oidc_issuer_url",
+              "description": "The OIDC issuer URL (used as the base for OpenID Connect discovery)",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
               "name": "rails_default_active_storage_service_name",
               "description": "The default Active Storage service name configured in Rails",
               "type": {

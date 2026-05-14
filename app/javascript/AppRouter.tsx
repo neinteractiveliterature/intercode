@@ -476,6 +476,7 @@ const commonRoutes: RouteObject[] = [
   },
   { path: '/oauth/applications-embed', lazy: () => import('./OAuthApplications') },
   { path: '/oauth/authorize', lazy: () => import('./OAuth/AuthorizationPrompt') },
+  { path: '/oauth/callback', lazy: () => import('./Authentication/OAuthCallback') },
   {
     path: '/oauth/authorized_applications',
     lazy: () => import('./OAuth/AuthorizedApplications'),

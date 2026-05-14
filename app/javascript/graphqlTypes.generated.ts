@@ -322,6 +322,10 @@ export type ChoiceCount = {
 /** Client-side configuration values needed for frontend initialization */
 export type ClientConfiguration = {
   __typename: 'ClientConfiguration';
+  /** The OAuth application UID for the Intercode frontend SPA (used for PKCE auth) */
+  oauth_frontend_application_uid?: Maybe<Scalars['String']['output']>;
+  /** The OIDC issuer URL (used as the base for OpenID Connect discovery) */
+  oidc_issuer_url?: Maybe<Scalars['String']['output']>;
   /** The default Active Storage service name configured in Rails */
   rails_default_active_storage_service_name: Scalars['String']['output'];
   /** The URL endpoint for Rails Direct Uploads */
