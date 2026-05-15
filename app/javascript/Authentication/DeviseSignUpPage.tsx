@@ -1,5 +1,6 @@
 import { useState, useContext, Suspense, useId } from 'react';
 import * as React from 'react';
+import { Link } from 'react-router';
 import ReCAPTCHA from 'react-google-recaptcha';
 import arrayToSentence from 'array-to-sentence';
 import { useTranslation } from 'react-i18next';
@@ -118,12 +119,12 @@ function DeviseSignUpPage(): React.JSX.Element {
               </div>
               <div className="card-footer bg-light d-flex justify-content-between align-items-center">
                 <div className="d-flex flex-column align-items-start">
-                  <a href="/users/sign_in" className="btn btn-link p-0 mb-1">
+                  <Link to="/users/sign_in" className="btn btn-link p-0 mb-1">
                     {t('authentication.logInLink')}
-                  </a>
-                  <a href="/users/password/new" className="btn btn-link p-0">
+                  </Link>
+                  <Link to="/users/password/new" className="btn btn-link p-0">
                     {t('authentication.forgotPasswordLink')}
-                  </a>
+                  </Link>
                 </div>
                 <button type="submit" className="btn btn-primary" disabled={submitInProgress}>
                   {t('authentication.signUpForm.signUpButton')}

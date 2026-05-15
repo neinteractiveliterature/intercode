@@ -1,24 +1,29 @@
 import { useContext } from 'react';
+import { Link } from 'react-router';
+import { useTranslation } from 'react-i18next';
 import { AuthenticityTokensContext } from '../AuthenticityTokensContext';
 import usePageTitle from '../usePageTitle';
 
 function DeviseSignInPage() {
+  const { t } = useTranslation();
   const manager = useContext(AuthenticityTokensContext);
   const authenticityToken = manager.tokens?.signIn;
-  usePageTitle('Sign In');
+  usePageTitle(t('authentication.signInForm.header'));
 
   return (
     <div className="container mt-5">
       <div className="row justify-content-center">
         <div className="col-sm-8 col-md-6 col-lg-4">
           <div className="card shadow-sm">
+            <div className="card-header bg-light">
+              <div className="lead">{t('authentication.signInForm.header')}</div>
+            </div>
             <div className="card-body p-4">
-              <h2 className="card-title h4 mb-4">Sign In</h2>
               <form action="/users/sign_in" method="post">
                 <input type="hidden" name="authenticity_token" value={authenticityToken ?? ''} />
                 <div className="mb-3">
                   <label htmlFor="user_email" className="form-label">
-                    Email
+                    {t('authentication.signInForm.emailLabel')}
                   </label>
                   {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
                   <input
@@ -32,7 +37,7 @@ function DeviseSignInPage() {
                 </div>
                 <div className="mb-3">
                   <label htmlFor="user_password" className="form-label">
-                    Password
+                    {t('authentication.signInForm.passwordLabel')}
                   </label>
                   {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
                   <input
@@ -43,12 +48,35 @@ function DeviseSignInPage() {
                     className="form-control"
                   />
                 </div>
+                <div className="mb-3 form-check">
+                  {/* eslint-disable-next-line jsx-a11y/control-has-associated-label */}
+                  <input
+                    type="checkbox"
+                    id="user_remember_me"
+                    name="user[remember_me]"
+                    value="1"
+                    className="form-check-input"
+                  />
+                  <label htmlFor="user_remember_me" className="form-check-label">
+                    {t('authentication.signInForm.rememberMeLabel')}
+                  </label>
+                </div>
                 <div className="d-grid">
                   <button type="submit" className="btn btn-primary" disabled={!authenticityToken}>
-                    Log in
+                    {t('authentication.signInForm.logInButton')}
                   </button>
                 </div>
               </form>
+            </div>
+            <div className="card-footer bg-light">
+              <div className="d-flex flex-column align-items-start">
+                <Link to="/users/sign_up" className="btn btn-link p-0 mb-1">
+                  {t('authentication.signUpLink')}
+                </Link>
+                <Link to="/users/password/new" className="btn btn-link p-0">
+                  {t('authentication.forgotPasswordLink')}
+                </Link>
+              </div>
             </div>
           </div>
         </div>

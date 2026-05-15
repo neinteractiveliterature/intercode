@@ -1,5 +1,6 @@
 import { useState, useContext } from 'react';
 import * as React from 'react';
+import { Link } from 'react-router';
 import { useTranslation, Trans } from 'react-i18next';
 import { BootstrapFormInput, ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -94,12 +95,12 @@ function DeviseForgotPasswordPage(): React.JSX.Element {
               </div>
               <div className="card-footer bg-light d-flex justify-content-between align-items-center">
                 <div className="d-flex flex-column align-items-start">
-                  <a href="/users/sign_up" className="btn btn-link p-0 mb-1">
+                  <Link to="/users/sign_up" className="btn btn-link p-0 mb-1">
                     {t('authentication.signUpLink')}
-                  </a>
-                  <a href="/users/sign_in" className="btn btn-link p-0">
+                  </Link>
+                  <Link to="/users/sign_in" className="btn btn-link p-0">
                     {t('authentication.logInLink')}
-                  </a>
+                  </Link>
                 </div>
                 <div>
                   {success ? (
