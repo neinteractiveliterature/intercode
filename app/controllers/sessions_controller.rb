@@ -7,7 +7,7 @@ class SessionsController < Devise::SessionsController
 
   def new
     if oauth_authorize_flow?
-      render "devise/sessions/new", layout: "application"
+      render html: "", layout: "application"
     else
       respond_to { |format| format.html { redirect_with_authentication("signIn") } }
     end

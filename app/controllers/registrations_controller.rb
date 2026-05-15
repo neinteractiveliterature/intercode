@@ -6,7 +6,7 @@ class RegistrationsController < Devise::RegistrationsController
   prepend_before_action :disable_destroy, only: [:destroy] # rubocop:disable Rails/LexicallyScopedActionFilter
 
   def new
-    render html: "".html_safe, layout: "application"
+    render html: "", layout: "application"
   end
 
   private

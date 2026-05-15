@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 class PasswordsController < Devise::PasswordsController
   def new
-    render html: "".html_safe, layout: "application"
+    render html: "", layout: "application"
   end
 
   def create
