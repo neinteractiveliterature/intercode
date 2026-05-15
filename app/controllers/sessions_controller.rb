@@ -14,9 +14,9 @@ class SessionsController < Devise::SessionsController
   end
 
   # Override to allow cross-host redirect back to the convention subdomain after sign-out.
-  def respond_to_on_destroy
+  def respond_to_on_destroy(non_navigational_status: :no_content)
     respond_to do |format|
-      format.all { head :no_content }
+      format.all { head non_navigational_status }
       format.any(*navigational_formats) do
         redirect_to after_sign_out_path_for(resource_name),
                     status: Devise.responder.redirect_status,
