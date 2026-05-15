@@ -51,7 +51,7 @@ class SessionsController < Devise::SessionsController
   end
 
   def sign_in_layout
-    oauth_authorize_flow? ? "devise" : false
+    oauth_authorize_flow? ? "cms_devise" : false
   end
 
   def set_return_to

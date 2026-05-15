@@ -1,0 +1,8 @@
+<%
+  cms_layout = effective_cms_layout(request.path)
+  assigns = cms_rendering_context.liquid_assigns_for_single_page_app(cms_layout).merge(
+    'content_for_head' => render('layouts/head'),
+    'content_for_layout' => yield.to_s.html_safe
+  )
+-%>
+<%= cms_rendering_context.render_layout_content(cms_layout, assigns) %>
