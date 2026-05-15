@@ -78,6 +78,20 @@ function DeviseSignUpPage(): React.JSX.Element {
     }
 
     await signUp(authenticityToken, formState, password, passwordConfirmation, captchaValue ?? '');
+
+    const userReturnTo = new URLSearchParams(window.location.search).get('user_return_to');
+    if (userReturnTo) {
+      try {
+        const returnUrl = new URL(userReturnTo);
+        if (returnUrl.origin === window.location.origin) {
+          window.location.href = returnUrl.toString();
+          return;
+        }
+      } catch {
+        // not a valid absolute URL, fall through
+      }
+    }
+
     await afterSessionChange(window.location.href, {
       title: 'Account signup',
       body: 'Account created.  Welcome!',

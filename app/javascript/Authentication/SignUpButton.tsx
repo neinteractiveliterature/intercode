@@ -1,28 +1,29 @@
-import { useContext, useEffect } from 'react';
+import { useContext, useCallback } from 'react';
 import * as React from 'react';
 
-import AuthenticationModalContext from './AuthenticationModalContext';
+import { AuthenticationManagerContext } from './authenticationManager';
 
 export type SignUpButtonProps = {
   className?: string;
   caption?: React.ReactNode;
-  initiallyOpen?: boolean;
 };
 
-function SignUpButton({ className, caption, initiallyOpen }: SignUpButtonProps): React.JSX.Element {
-  const { open } = useContext(AuthenticationModalContext);
-  useEffect(() => {
-    if (initiallyOpen) {
-      open({ currentView: 'signUp' });
-    }
-  }, [initiallyOpen, open]);
+function SignUpButton({ className, caption }: SignUpButtonProps): React.JSX.Element {
+  const authenticationManager = useContext(AuthenticationManagerContext);
+
+  const onClick = useCallback(
+    async (event: React.SyntheticEvent) => {
+      event.preventDefault();
+      const { redirectUrl } = await authenticationManager.initiateAuthentication(window.location.href);
+      const signUpUrl = new URL('/users/sign_up', authenticationManager.issuerUrl ?? window.location.origin);
+      signUpUrl.searchParams.set('user_return_to', redirectUrl.toString());
+      window.location.href = signUpUrl.toString();
+    },
+    [authenticationManager],
+  );
 
   return (
-    <button
-      className={className ?? 'btn btn-primary btn-sm'}
-      type="button"
-      onClick={() => open({ currentView: 'signUp' })}
-    >
+    <button className={className ?? 'btn btn-primary btn-sm'} type="button" onClick={onClick}>
       {caption ?? 'Sign up'}
     </button>
   );

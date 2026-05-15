@@ -1,32 +1,30 @@
-import { useContext, useEffect, useCallback } from 'react';
+import { useContext, useCallback } from 'react';
 import * as React from 'react';
 
-import AuthenticationModalContext from './AuthenticationModalContext';
+import { AuthenticationManagerContext } from './authenticationManager';
 
 export type SignInButtonProps = {
   className?: string;
   caption?: React.ReactNode;
-  initiallyOpen?: boolean;
   afterSignInPath?: string;
 };
 
-function SignInButton({ className, caption, initiallyOpen, afterSignInPath }: SignInButtonProps): React.JSX.Element {
-  const { open, setAfterSignInPath } = useContext(AuthenticationModalContext);
-  const openModal = useCallback(() => {
-    open({ currentView: 'signIn' });
-    if (afterSignInPath) {
-      setAfterSignInPath(afterSignInPath);
-    }
-  }, [afterSignInPath, open, setAfterSignInPath]);
+function SignInButton({ className, caption, afterSignInPath }: SignInButtonProps): React.JSX.Element {
+  const authenticationManager = useContext(AuthenticationManagerContext);
 
-  useEffect(() => {
-    if (initiallyOpen) {
-      openModal();
-    }
-  }, [initiallyOpen, openModal]);
+  const onClick = useCallback(
+    async (event: React.SyntheticEvent) => {
+      event.preventDefault();
+      const { redirectUrl } = await authenticationManager.initiateAuthentication(
+        afterSignInPath ?? window.location.href,
+      );
+      window.location.href = redirectUrl.toString();
+    },
+    [afterSignInPath, authenticationManager],
+  );
 
   return (
-    <button className={className ?? 'btn btn-link'} type="button" onClick={openModal}>
+    <button className={className ?? 'btn btn-link'} type="button" onClick={onClick}>
       {caption ?? 'Log in'}
     </button>
   );
