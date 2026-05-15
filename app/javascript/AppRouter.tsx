@@ -482,6 +482,7 @@ const commonRoutes: RouteObject[] = [
     lazy: () => import('./OAuth/AuthorizedApplications'),
     children: [{ path: ':uid', lazy: () => import('./OAuth/$uid') }],
   },
+  { path: '/users/sign_in', lazy: () => import('./Authentication/DeviseSignInPage') },
   { path: '/users/edit', lazy: () => import('./Authentication/EditUser') },
   { path: '/users/password/edit', lazy: () => import('./Authentication/ResetPassword') },
 ];

@@ -2,12 +2,12 @@
 class SessionsController < Devise::SessionsController
   include RedirectWithAuthentication
 
-  layout :sign_in_layout
+  layout false
   prepend_before_action :set_return_to, only: [:new]
 
   def new
     if oauth_authorize_flow?
-      super
+      render "devise/sessions/new", layout: "application"
     else
       respond_to { |format| format.html { redirect_with_authentication("signIn") } }
     end
@@ -48,10 +48,6 @@ class SessionsController < Devise::SessionsController
     intercode_host = ENV.fetch("INTERCODE_HOST", nil)
     host == intercode_host || (intercode_host && host&.end_with?(".#{intercode_host}")) ||
       Convention.exists?(domain: host)
-  end
-
-  def sign_in_layout
-    oauth_authorize_flow? ? "cms_devise" : false
   end
 
   def set_return_to
