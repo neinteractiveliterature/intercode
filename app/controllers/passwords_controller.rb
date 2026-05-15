@@ -1,5 +1,9 @@
 # frozen_string_literal: true
 class PasswordsController < Devise::PasswordsController
+  def new
+    render html: "".html_safe, layout: "application"
+  end
+
   def create
     self.resource =
       resource_class.find_or_initialize_with_errors(resource_class.reset_password_keys, resource_params, :not_found)

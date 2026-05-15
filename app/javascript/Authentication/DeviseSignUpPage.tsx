@@ -1,0 +1,140 @@
+import { useState, useContext, Suspense, useId } from 'react';
+import * as React from 'react';
+import ReCAPTCHA from 'react-google-recaptcha';
+import arrayToSentence from 'array-to-sentence';
+import { useTranslation } from 'react-i18next';
+import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
+
+import useAsyncFunction from '../useAsyncFunction';
+import AccountFormContent from './AccountFormContent';
+import UserFormFields, { UserFormState } from './UserFormFields';
+import PasswordConfirmationInput from './PasswordConfirmationInput';
+import useAfterSessionChange from './useAfterSessionChange';
+import humanize from '../humanize';
+import { AuthenticityTokensContext } from '../AuthenticityTokensContext';
+import PasswordInputWithStrengthCheck from './PasswordInputWithStrengthCheck';
+import AuthenticationModalContext from './AuthenticationModalContext';
+import usePageTitle from '../usePageTitle';
+
+async function signUp(
+  authenticityToken: string,
+  formState: UserFormState,
+  password: string,
+  passwordConfirmation: string,
+  captchaValue: string,
+) {
+  const formData = new FormData();
+  formData.append('user[first_name]', formState.first_name ?? '');
+  formData.append('user[last_name]', formState.last_name ?? '');
+  formData.append('user[email]', formState.email ?? '');
+  formData.append('user[password]', password);
+  formData.append('user[password_confirmation]', passwordConfirmation);
+  formData.append('g-recaptcha-response', captchaValue);
+
+  const response = await fetch('/users', {
+    method: 'POST',
+    body: formData,
+    credentials: 'include',
+    headers: {
+      Accept: 'application/json',
+      'X-CSRF-Token': authenticityToken,
+    },
+  });
+
+  if (!response.ok) {
+    const responseJson = await response.json();
+    if (responseJson.errors) {
+      throw new Error(
+        Object.entries(responseJson.errors)
+          .map(([key, errors]) => `${humanize(key)} ${arrayToSentence(errors as string[])}`)
+          .join(', '),
+      );
+    } else if (responseJson.error) {
+      throw new Error(responseJson.error);
+    }
+
+    throw new Error(response.statusText);
+  }
+}
+
+function DeviseSignUpPage(): React.JSX.Element {
+  const { t } = useTranslation();
+  const { recaptchaSiteKey } = useContext(AuthenticationModalContext);
+  const manager = useContext(AuthenticityTokensContext);
+  const [formState, setFormState] = useState<UserFormState>({});
+  const [password, setPassword] = useState('');
+  const [passwordConfirmation, setPasswordConfirmation] = useState('');
+  const [captchaValue, setCaptchaValue] = useState<string | null>(null);
+  const passwordFieldId = useId();
+  const afterSessionChange = useAfterSessionChange();
+  usePageTitle(t('authentication.signUpForm.header'));
+
+  const onSubmit = async (event: React.SyntheticEvent) => {
+    const authenticityToken = manager.tokens?.signUp;
+    event.preventDefault();
+    if (!authenticityToken) {
+      throw new Error('No authenticity token received from server');
+    }
+
+    await signUp(authenticityToken, formState, password, passwordConfirmation, captchaValue ?? '');
+    await afterSessionChange(window.location.href, {
+      title: 'Account signup',
+      body: 'Account created.  Welcome!',
+      autoDismissAfter: 1000 * 60,
+    });
+  };
+
+  const [submit, submitError, submitInProgress] = useAsyncFunction(onSubmit, {
+    suppressError: true,
+  });
+
+  return (
+    <div className="container mt-5">
+      <div className="row justify-content-center">
+        <div className="col-sm-10 col-md-8 col-lg-6">
+          <div className="card shadow-sm">
+            <div className="card-header bg-light">
+              <div className="lead">{t('authentication.signUpForm.header')}</div>
+            </div>
+            <form onSubmit={submit}>
+              <div className="card-body p-4">
+                <AccountFormContent />
+                <UserFormFields formState={formState} setFormState={setFormState} />
+                <div className="mb-3">
+                  <label className="form-label" htmlFor={passwordFieldId}>
+                    {t('authentication.signUpForm.passwordLabel')}
+                  </label>
+                  <Suspense fallback={<LoadingIndicator iconSet="bootstrap-icons" />}>
+                    <PasswordInputWithStrengthCheck id={passwordFieldId} value={password} onChange={setPassword} />
+                  </Suspense>
+                </div>
+                <PasswordConfirmationInput
+                  password={password}
+                  value={passwordConfirmation}
+                  onChange={setPasswordConfirmation}
+                />
+                <ReCAPTCHA sitekey={recaptchaSiteKey ?? ''} onChange={setCaptchaValue} />
+                <ErrorDisplay stringError={(submitError || {}).message} />
+              </div>
+              <div className="card-footer bg-light d-flex justify-content-between align-items-center">
+                <div className="d-flex flex-column align-items-start">
+                  <a href="/users/sign_in" className="btn btn-link p-0 mb-1">
+                    {t('authentication.logInLink')}
+                  </a>
+                  <a href="/users/password/new" className="btn btn-link p-0">
+                    {t('authentication.forgotPasswordLink')}
+                  </a>
+                </div>
+                <button type="submit" className="btn btn-primary" disabled={submitInProgress}>
+                  {t('authentication.signUpForm.signUpButton')}
+                </button>
+              </div>
+            </form>
+          </div>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+export const Component = DeviseSignUpPage;
