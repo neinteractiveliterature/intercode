@@ -2,14 +2,7 @@ import * as React from 'react';
 import { useContext } from 'react';
 
 import useAfterSessionChange from './useAfterSessionChange';
-import { AuthenticationManager, AuthenticationManagerContext } from './authenticationManager';
-
-async function signOut(manager: AuthenticationManager) {
-  const { endSessionEndpoint } = await manager.signOut();
-  if (endSessionEndpoint) {
-    window.location.href = endSessionEndpoint;
-  }
-}
+import { AuthenticationManagerContext } from './authenticationManager';
 
 export type SignOutButtonProps = {
   className?: string;
@@ -22,12 +15,16 @@ function SignOutButton({ className, caption }: SignOutButtonProps): React.JSX.El
 
   const onClick = async (event: React.SyntheticEvent) => {
     event.preventDefault();
-    await signOut(authenticationManager);
-    await afterSessionChange('/', {
-      title: 'Logout',
-      body: 'Logged out.',
-      autoDismissAfter: 1000 * 60,
-    });
+    const { endSessionEndpoint } = await authenticationManager.signOut();
+    if (endSessionEndpoint) {
+      window.location.href = endSessionEndpoint;
+    } else {
+      await afterSessionChange('/', {
+        title: 'Logout',
+        body: 'Logged out.',
+        autoDismissAfter: 1000 * 60,
+      });
+    }
   };
 
   return (
