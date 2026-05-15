@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+# rubocop:disable Metrics/ClassLength
 class Types::UserConProfileType < Types::BaseObject
   description <<~MARKDOWN
     A UserConProfile is a user's profile in a particular convention web site.  Most convention-level objects are
@@ -53,6 +54,7 @@ class Types::UserConProfileType < Types::BaseObject
   field :name_without_nickname, String, null: false do # rubocop:disable GraphQL/ExtractType
     description "This user profile's full name, not including their nickname."
   end
+  field :needs_update, Boolean, null: false, description: "Does this profile need to be updated by the user?"
   field :nickname, String, null: true, description: "This user profile's nickname."
   field :order_summary, String, null: false, description: "A human-readable summary of all this profile's orders."
   field :orders, [Types::OrderType], null: false, description: "All the orders placed by this profile."
@@ -227,3 +229,4 @@ class Types::UserConProfileType < Types::BaseObject
     convention.user_con_profile_form
   end
 end
+# rubocop:enable Metrics/ClassLength

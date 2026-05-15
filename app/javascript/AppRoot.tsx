@@ -2,6 +2,7 @@ import { Suspense, useMemo, useState, useEffect, useContext, useRef } from 'reac
 import { useLocation, useNavigate, useLoaderData, Outlet, useNavigation } from 'react-router';
 import { Settings } from 'luxon';
 import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
+import { useApolloClient } from '@apollo/client/react';
 
 import { AppRootQueryData } from './appRootQueries.generated';
 import AppRootContext, { AppRootContextValue } from './AppRootContext';
@@ -14,6 +15,7 @@ import AuthenticationModalContext from './Authentication/AuthenticationModalCont
 import { GraphQLNotAuthenticatedErrorEvent } from './useIntercodeApolloClient';
 import { reloadOnAppEntrypointHeadersMismatch } from './checkAppEntrypointHeadersMatch';
 import { initErrorReporting } from 'ErrorReporting';
+import { SetupMyProfileDocument } from './Authentication/mutations.generated';
 
 export function buildAppRootContextValue(
   data: AppRootQueryData | null | undefined,
@@ -85,6 +87,8 @@ function AppRoot(): React.JSX.Element {
   const navigationBarRef = useRef<HTMLElement>(null);
 
   const [stripePromise, setStripePromise] = useState<Promise<Stripe | null> | null>(null);
+  const client = useApolloClient();
+  const setupProfileInitiated = useRef(false);
 
   useEffect(() => {
     initErrorReporting(data.currentUser?.id);
@@ -111,6 +115,24 @@ function AppRoot(): React.JSX.Element {
       navigate('/clickwrap_agreement', { replace: true });
     }
   }, [data, navigate, location]);
+
+  useEffect(() => {
+    if (!data.currentUser || !data.convention) return;
+    if (location.pathname === '/my_profile/setup') return;
+
+    if (!data.convention.my_profile) {
+      if (setupProfileInitiated.current) return;
+      setupProfileInitiated.current = true;
+      client.mutate({ mutation: SetupMyProfileDocument }).then(() => {
+        navigate('/my_profile/setup', { replace: true });
+      });
+      return;
+    }
+
+    if (data.convention.my_profile.needs_update) {
+      navigate('/my_profile/setup', { replace: true });
+    }
+  }, [data, navigate, location, client]);
 
   useEffect(() => {
     if (appRootContextValue?.language) {
