@@ -521,8 +521,9 @@ GEM
     rb-fsevent (0.11.2)
     rb-inotify (0.11.1)
       ffi (~> 1.0)
-    rbs (3.9.5)
+    rbs (3.10.4)
       logger
+      tsort
     rbtrace (0.5.3)
       ffi (>= 1.0.6)
       msgpack (>= 0.4.3)
@@ -666,7 +667,7 @@ GEM
       faraday (>= 2.0, < 3.0)
       jwt (>= 1.5, < 4.0)
       nokogiri (>= 1.6, < 2.0)
-    typeprof (0.31.1)
+    typeprof (0.32.0)
       prism (>= 1.4.0)
       rbs (>= 3.6.0)
     tzinfo (2.0.6)
