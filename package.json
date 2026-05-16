@@ -209,7 +209,7 @@
     "globals": "^17.0.0",
     "husky": "9.1.7",
     "jsdom": "^29.0.0",
-    "lint-staged": "17.0.4",
+    "lint-staged": "17.0.5",
     "node-addon-api": "^8.5.0",
     "node-gyp": "^12.2.0",
     "prettier": "3.8.3",
