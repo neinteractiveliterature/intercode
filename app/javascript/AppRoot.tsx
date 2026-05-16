@@ -1,4 +1,4 @@
-import { Suspense, useMemo, useState, useEffect, useContext, useRef } from 'react';
+import { Suspense, useMemo, useState, useEffect, useRef } from 'react';
 import { useLocation, useLoaderData, Outlet, useNavigation } from 'react-router';
 import { Settings } from 'luxon';
 import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
@@ -10,8 +10,6 @@ import getI18n from './setupI18Next';
 import { timespanFromConvention } from './TimespanUtils';
 import { LazyStripeContext } from './LazyStripe';
 import { Stripe } from '@stripe/stripe-js';
-import AuthenticationModalContext from './Authentication/AuthenticationModalContext';
-import { GraphQLNotAuthenticatedErrorEvent } from './useIntercodeApolloClient';
 import { reloadOnAppEntrypointHeadersMismatch } from './checkAppEntrypointHeadersMatch';
 import { initErrorReporting } from 'ErrorReporting';
 
@@ -79,7 +77,6 @@ export function buildAppRootContextValue(
 function AppRoot(): React.JSX.Element {
   const location = useLocation();
   const data = useLoaderData() as AppRootQueryData;
-  const authenticationModal = useContext(AuthenticationModalContext);
   const navigation = useNavigation();
   const navigationBarRef = useRef<HTMLElement>(null);
 
@@ -106,21 +103,6 @@ function AppRoot(): React.JSX.Element {
       });
     }
   }, [appRootContextValue]);
-
-  useEffect(() => {
-    const unauthenticatedHandler = () => {
-      if (!authenticationModal.visible) {
-        authenticationModal.open({ currentView: 'signIn' });
-        authenticationModal.setAfterSignInPath(location.pathname);
-      }
-    };
-
-    window.addEventListener(GraphQLNotAuthenticatedErrorEvent.type, unauthenticatedHandler);
-
-    return () => {
-      window.removeEventListener(GraphQLNotAuthenticatedErrorEvent.type, unauthenticatedHandler);
-    };
-  }, [authenticationModal, location.pathname]);
 
   return (
     <AppRootContext.Provider value={appRootContextValue}>

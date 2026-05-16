@@ -4,7 +4,7 @@ import mountReactComponents from '../mountReactComponents';
 import { StrictMode, Suspense, use, useEffect, useMemo } from 'react';
 import AuthenticityTokensManager, { getAuthenticityTokensURL } from 'AuthenticityTokensContext';
 import { createBrowserRouter, RouterContextProvider, RouterProvider } from 'react-router';
-import { buildBrowserApolloClient } from 'useIntercodeApolloClient';
+import { buildBrowserApolloClient, GraphQLNotAuthenticatedErrorEvent } from 'useIntercodeApolloClient';
 import {
   apolloClientContext,
   authenticityTokensManagerContext,
@@ -21,6 +21,11 @@ const manager = new AuthenticityTokensManager(fetch, undefined, getAuthenticityT
 const refreshPromise = manager.refresh();
 const authManager = AuthenticationManager.deserializeFromBrowser();
 const client = buildBrowserApolloClient(manager, authManager);
+
+window.addEventListener(GraphQLNotAuthenticatedErrorEvent.type, async () => {
+  const { redirectUrl } = await authManager.initiateAuthentication(window.location.href);
+  window.location.href = redirectUrl.toString();
+});
 const clientConfigurationQuery = client.query({ query: ClientConfigurationQueryDocument });
 
 function DataModeApplicationEntry() {
