@@ -7,7 +7,7 @@ import { BootstrapFormInput, ErrorDisplay } from '@neinteractiveliterature/litfo
 import useAsyncFunction from '../useAsyncFunction';
 import humanize from '../humanize';
 import { AuthenticityTokensContext } from '../AuthenticityTokensContext';
-import AppRootContext from '../AppRootContext';
+import { useSignInConventionName } from './useSignInConventionName';
 import usePageTitle from '../usePageTitle';
 
 function parseRailsErrorHash(errors: Record<string, string[]> | undefined) {
@@ -46,7 +46,7 @@ async function resetPassword(authenticityToken: string, email: string) {
 function DeviseForgotPasswordPage(): React.JSX.Element {
   const { t } = useTranslation();
   const manager = useContext(AuthenticityTokensContext);
-  const { conventionName } = useContext(AppRootContext);
+  const conventionName = useSignInConventionName();
   const authenticityToken = manager.tokens?.resetPassword;
   const [email, setEmail] = useState('');
   const [success, setSuccess] = useState(false);

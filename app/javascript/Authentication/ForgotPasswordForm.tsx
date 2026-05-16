@@ -4,7 +4,7 @@ import { useTranslation, Trans } from 'react-i18next';
 import { BootstrapFormInput, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import AuthenticationModalContext from './AuthenticationModalContext';
-import AppRootContext from '../AppRootContext';
+import { useSignInConventionName } from './useSignInConventionName';
 import useAsyncFunction from '../useAsyncFunction';
 import humanize from '../humanize';
 import { AuthenticityTokensContext } from '../AuthenticityTokensContext';
@@ -45,7 +45,7 @@ async function resetPassword(authenticityToken: string, email: string) {
 function ForgotPasswordForm(): React.JSX.Element {
   const { t } = useTranslation();
   const { close: closeModal, setCurrentView } = useContext(AuthenticationModalContext);
-  const { conventionName } = useContext(AppRootContext);
+  const conventionName = useSignInConventionName();
   const manager = useContext(AuthenticityTokensContext);
   const authenticityToken = manager.tokens?.resetPassword;
   const [email, setEmail] = useState('');

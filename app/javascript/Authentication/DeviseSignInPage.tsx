@@ -2,14 +2,14 @@ import { useContext } from 'react';
 import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { AuthenticityTokensContext } from '../AuthenticityTokensContext';
-import AppRootContext from '../AppRootContext';
+import { useSignInConventionName } from './useSignInConventionName';
 import usePageTitle from '../usePageTitle';
 
 function DeviseSignInPage() {
   const { t } = useTranslation();
   const manager = useContext(AuthenticityTokensContext);
   const authenticityToken = manager.tokens?.signIn;
-  const { conventionName } = useContext(AppRootContext);
+  const conventionName = useSignInConventionName();
   const header = conventionName
     ? t('authentication.signInForm.headerWithConvention', { conventionName })
     : t('authentication.signInForm.header');

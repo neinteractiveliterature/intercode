@@ -1,3 +1,10 @@
+query SignInConventionQuery {
+  signInConvention: conventionByOauthReturnIfPresent {
+    id
+    name
+  }
+}
+
 query AccountFormContentQuery {
   currentAbility {
     can_create_cms_partials

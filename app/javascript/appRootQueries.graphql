@@ -58,11 +58,6 @@ query AppRootQuery {
     name_without_nickname
   }
 
-  signInConvention: conventionByOauthReturnIfPresent {
-    id
-    name
-  }
-
   convention: conventionByRequestHostIfPresent {
     id
     name

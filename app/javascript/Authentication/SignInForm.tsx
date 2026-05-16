@@ -8,7 +8,7 @@ import { ErrorDisplay } from '@neinteractiveliterature/litform';
 import AuthenticationModalContext from './AuthenticationModalContext';
 import useAsyncFunction from '../useAsyncFunction';
 import { AuthenticationManager, AuthenticationManagerContext } from './authenticationManager';
-import AppRootContext from '../AppRootContext';
+import { useSignInConventionName } from './useSignInConventionName';
 
 async function initiateOAuthFlow(authenticationManager: AuthenticationManager, returnPath?: string) {
   const { redirectUrl } = await authenticationManager.initiateAuthentication(returnPath);
@@ -18,7 +18,7 @@ async function initiateOAuthFlow(authenticationManager: AuthenticationManager, r
 function SignInForm(): React.JSX.Element {
   const authenticationManager = useContext(AuthenticationManagerContext);
   const { t } = useTranslation();
-  const { conventionName } = useContext(AppRootContext);
+  const conventionName = useSignInConventionName();
   const navigate = useNavigate();
   const {
     close: closeModal,

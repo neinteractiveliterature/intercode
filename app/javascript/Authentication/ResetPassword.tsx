@@ -7,7 +7,7 @@ import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform
 import PasswordConfirmationInput from './PasswordConfirmationInput';
 import useAsyncFunction from '../useAsyncFunction';
 import { AuthenticityTokensContext } from '../AuthenticityTokensContext';
-import AppRootContext from '../AppRootContext';
+import { useSignInConventionName } from './useSignInConventionName';
 import PasswordInputWithStrengthCheck from './PasswordInputWithStrengthCheck';
 
 async function changePassword(
@@ -38,7 +38,7 @@ async function changePassword(
 
 function ResetPassword(): React.JSX.Element {
   const { t } = useTranslation();
-  const { conventionName } = useContext(AppRootContext);
+  const conventionName = useSignInConventionName();
   const location = useLocation();
   const resetPasswordToken = useMemo(
     () => new URLSearchParams(location.search).get('reset_password_token') ?? '',

@@ -15,7 +15,7 @@ import humanize from '../humanize';
 import { AuthenticityTokensContext } from '../AuthenticityTokensContext';
 import PasswordInputWithStrengthCheck from './PasswordInputWithStrengthCheck';
 import AuthenticationModalContext from './AuthenticationModalContext';
-import AppRootContext from '../AppRootContext';
+import { useSignInConventionName } from './useSignInConventionName';
 import usePageTitle from '../usePageTitle';
 
 async function signUp(
@@ -63,7 +63,7 @@ function DeviseSignUpPage(): React.JSX.Element {
   const { t } = useTranslation();
   const { recaptchaSiteKey } = useContext(AuthenticationModalContext);
   const manager = useContext(AuthenticityTokensContext);
-  const { conventionName } = useContext(AppRootContext);
+  const conventionName = useSignInConventionName();
   const [formState, setFormState] = useState<UserFormState>({});
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
