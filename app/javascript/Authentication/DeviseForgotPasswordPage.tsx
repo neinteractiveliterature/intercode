@@ -7,6 +7,7 @@ import { BootstrapFormInput, ErrorDisplay } from '@neinteractiveliterature/litfo
 import useAsyncFunction from '../useAsyncFunction';
 import humanize from '../humanize';
 import { AuthenticityTokensContext } from '../AuthenticityTokensContext';
+import AppRootContext from '../AppRootContext';
 import usePageTitle from '../usePageTitle';
 
 function parseRailsErrorHash(errors: Record<string, string[]> | undefined) {
@@ -45,11 +46,15 @@ async function resetPassword(authenticityToken: string, email: string) {
 function DeviseForgotPasswordPage(): React.JSX.Element {
   const { t } = useTranslation();
   const manager = useContext(AuthenticityTokensContext);
+  const { conventionName } = useContext(AppRootContext);
   const authenticityToken = manager.tokens?.resetPassword;
   const [email, setEmail] = useState('');
   const [success, setSuccess] = useState(false);
   const [resetPasswordAsync, resetPasswordError, resetPasswordInProgress] = useAsyncFunction(resetPassword);
-  usePageTitle(t('authentication.forgotPasswordForm.header'));
+  const header = conventionName
+    ? t('authentication.forgotPasswordForm.headerWithConvention', { conventionName })
+    : t('authentication.forgotPasswordForm.header');
+  usePageTitle(header);
 
   const onSubmit = async (event: React.SyntheticEvent) => {
     event.preventDefault();
@@ -67,7 +72,7 @@ function DeviseForgotPasswordPage(): React.JSX.Element {
         <div className="col-sm-8 col-md-6 col-lg-4">
           <div className="card shadow-sm">
             <div className="card-header bg-light">
-              <div className="lead">{t('authentication.forgotPasswordForm.header')}</div>
+              <div className="lead">{header}</div>
             </div>
             <form onSubmit={onSubmit}>
               <div className="card-body p-4">

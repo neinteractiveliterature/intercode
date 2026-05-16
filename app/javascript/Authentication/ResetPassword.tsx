@@ -7,6 +7,7 @@ import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform
 import PasswordConfirmationInput from './PasswordConfirmationInput';
 import useAsyncFunction from '../useAsyncFunction';
 import { AuthenticityTokensContext } from '../AuthenticityTokensContext';
+import AppRootContext from '../AppRootContext';
 import PasswordInputWithStrengthCheck from './PasswordInputWithStrengthCheck';
 
 async function changePassword(
@@ -37,6 +38,7 @@ async function changePassword(
 
 function ResetPassword(): React.JSX.Element {
   const { t } = useTranslation();
+  const { conventionName } = useContext(AppRootContext);
   const location = useLocation();
   const resetPasswordToken = useMemo(
     () => new URLSearchParams(location.search).get('reset_password_token') ?? '',
@@ -61,7 +63,11 @@ function ResetPassword(): React.JSX.Element {
 
   return (
     <>
-      <h1 className="mb-4">{t('authentication.resetPassword.header')}</h1>
+      <h1 className="mb-4">
+        {conventionName
+          ? t('authentication.resetPassword.headerWithConvention', { conventionName })
+          : t('authentication.resetPassword.header')}
+      </h1>
       <form onSubmit={onSubmit}>
         <div className="card">
           <div className="card-body">

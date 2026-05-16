@@ -2,13 +2,18 @@ import { useContext } from 'react';
 import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { AuthenticityTokensContext } from '../AuthenticityTokensContext';
+import AppRootContext from '../AppRootContext';
 import usePageTitle from '../usePageTitle';
 
 function DeviseSignInPage() {
   const { t } = useTranslation();
   const manager = useContext(AuthenticityTokensContext);
   const authenticityToken = manager.tokens?.signIn;
-  usePageTitle(t('authentication.signInForm.header'));
+  const { conventionName } = useContext(AppRootContext);
+  const header = conventionName
+    ? t('authentication.signInForm.headerWithConvention', { conventionName })
+    : t('authentication.signInForm.header');
+  usePageTitle(header);
 
   return (
     <div className="container mt-5">
@@ -16,7 +21,7 @@ function DeviseSignInPage() {
         <div className="col-sm-8 col-md-6 col-lg-4">
           <div className="card shadow-sm">
             <div className="card-header bg-light">
-              <div className="lead">{t('authentication.signInForm.header')}</div>
+              <div className="lead">{header}</div>
             </div>
             <div className="card-body p-4">
               <form action="/users/sign_in" method="post">

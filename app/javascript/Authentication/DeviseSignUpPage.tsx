@@ -15,6 +15,7 @@ import humanize from '../humanize';
 import { AuthenticityTokensContext } from '../AuthenticityTokensContext';
 import PasswordInputWithStrengthCheck from './PasswordInputWithStrengthCheck';
 import AuthenticationModalContext from './AuthenticationModalContext';
+import AppRootContext from '../AppRootContext';
 import usePageTitle from '../usePageTitle';
 
 async function signUp(
@@ -62,13 +63,17 @@ function DeviseSignUpPage(): React.JSX.Element {
   const { t } = useTranslation();
   const { recaptchaSiteKey } = useContext(AuthenticationModalContext);
   const manager = useContext(AuthenticityTokensContext);
+  const { conventionName } = useContext(AppRootContext);
   const [formState, setFormState] = useState<UserFormState>({});
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const [captchaValue, setCaptchaValue] = useState<string | null>(null);
   const passwordFieldId = useId();
   const afterSessionChange = useAfterSessionChange();
-  usePageTitle(t('authentication.signUpForm.header'));
+  const header = conventionName
+    ? t('authentication.signUpForm.headerWithConvention', { conventionName })
+    : t('authentication.signUpForm.header');
+  usePageTitle(header);
 
   const onSubmit = async (event: React.SyntheticEvent) => {
     const authenticityToken = manager.tokens?.signUp;
@@ -109,7 +114,7 @@ function DeviseSignUpPage(): React.JSX.Element {
         <div className="col-sm-10 col-md-8 col-lg-6">
           <div className="card shadow-sm">
             <div className="card-header bg-light">
-              <div className="lead">{t('authentication.signUpForm.header')}</div>
+              <div className="lead">{header}</div>
             </div>
             <form onSubmit={submit}>
               <div className="card-body p-4">
@@ -128,7 +133,7 @@ function DeviseSignUpPage(): React.JSX.Element {
                   value={passwordConfirmation}
                   onChange={setPasswordConfirmation}
                 />
-                <ReCAPTCHA sitekey={recaptchaSiteKey ?? ''} onChange={setCaptchaValue} />
+                {recaptchaSiteKey && <ReCAPTCHA sitekey={recaptchaSiteKey} onChange={setCaptchaValue} />}
                 <ErrorDisplay stringError={(submitError || {}).message} />
               </div>
               <div className="card-footer bg-light d-flex justify-content-between align-items-center">

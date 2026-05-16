@@ -49,7 +49,7 @@ export function ProviderStack(props: AppWrapperProps) {
   // TODO bring this back when we re-add prompting
   // const confirm = useConfirm();
   const manager = useContext(AuthenticityTokensContext);
-  const authenticationModalContextValue = useAuthenticationModalProvider(recaptchaSiteKey);
+  const authenticationModalContextValue = useAuthenticationModalProvider(recaptchaSiteKey ?? undefined);
   const {
     open: openAuthenticationModal,
     unauthenticatedError,
@@ -110,5 +110,5 @@ export type AppWrapperProps = {
   queryData?: ApolloClient.WriteQueryOptions<unknown, OperationVariables>[];
   railsDefaultActiveStorageServiceName: string;
   railsDirectUploadsUrl: string;
-  recaptchaSiteKey: string;
+  recaptchaSiteKey?: string | null;
 };

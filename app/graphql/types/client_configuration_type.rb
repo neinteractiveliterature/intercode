@@ -17,7 +17,10 @@ class Types::ClientConfigurationType < Types::BaseObject
   # rubocop:disable GraphQL/ExtractType
   field :rails_direct_uploads_url, String, null: false, description: "The URL endpoint for Rails Direct Uploads"
   # rubocop:enable GraphQL/ExtractType
-  field :recaptcha_site_key, String, null: false, description: "The reCAPTCHA site key for client-side verification"
+  field :recaptcha_site_key,
+        String,
+        null: true,
+        description: "The reCAPTCHA site key for client-side verification, or null if reCAPTCHA is disabled"
 
   def rails_default_active_storage_service_name
     Rails.application.config.active_storage.service.to_s

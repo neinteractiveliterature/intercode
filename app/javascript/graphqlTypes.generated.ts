@@ -330,8 +330,8 @@ export type ClientConfiguration = {
   rails_default_active_storage_service_name: Scalars['String']['output'];
   /** The URL endpoint for Rails Direct Uploads */
   rails_direct_uploads_url: Scalars['String']['output'];
-  /** The reCAPTCHA site key for client-side verification */
-  recaptcha_site_key: Scalars['String']['output'];
+  /** The reCAPTCHA site key for client-side verification, or null if reCAPTCHA is disabled */
+  recaptcha_site_key?: Maybe<Scalars['String']['output']>;
 };
 
 export type CmsContent = CmsLayout | CmsPartial | Page;
