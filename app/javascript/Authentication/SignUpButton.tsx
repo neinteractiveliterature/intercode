@@ -1,5 +1,6 @@
 import { useContext, useCallback } from 'react';
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { AuthenticationManagerContext } from './authenticationManager';
 
@@ -9,6 +10,7 @@ export type SignUpButtonProps = {
 };
 
 function SignUpButton({ className, caption }: SignUpButtonProps): React.JSX.Element {
+  const { t } = useTranslation();
   const authenticationManager = useContext(AuthenticationManagerContext);
 
   const onClick = useCallback(
@@ -24,7 +26,7 @@ function SignUpButton({ className, caption }: SignUpButtonProps): React.JSX.Elem
 
   return (
     <button className={className ?? 'btn btn-primary btn-sm'} type="button" onClick={onClick}>
-      {caption ?? 'Sign up'}
+      {caption ?? t('navigation.authentication.signUp')}
     </button>
   );
 }

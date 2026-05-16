@@ -23,6 +23,6 @@ class RegistrationsController < Devise::RegistrationsController
   end
 
   def disable_destroy
-    redirect_to root_path, alert: "To delete your account, please email the site administrators." # rubocop:disable Rails/I18nLocaleTexts
+    redirect_to root_path, alert: t("registrations.disable_destroy")
   end
 end

@@ -1,5 +1,6 @@
 import * as React from 'react';
 import { useContext } from 'react';
+import { useTranslation } from 'react-i18next';
 
 import useAfterSessionChange from './useAfterSessionChange';
 import { AuthenticationManagerContext } from './authenticationManager';
@@ -10,6 +11,7 @@ export type SignOutButtonProps = {
 };
 
 function SignOutButton({ className, caption }: SignOutButtonProps): React.JSX.Element {
+  const { t } = useTranslation();
   const afterSessionChange = useAfterSessionChange();
   const authenticationManager = useContext(AuthenticationManagerContext);
 
@@ -20,8 +22,8 @@ function SignOutButton({ className, caption }: SignOutButtonProps): React.JSX.El
       window.location.href = endSessionEndpoint;
     } else {
       await afterSessionChange('/', {
-        title: 'Logout',
-        body: 'Logged out.',
+        title: t('authentication.signOut.successTitle'),
+        body: t('authentication.signOut.successBody'),
         autoDismissAfter: 1000 * 60,
       });
     }
@@ -29,7 +31,7 @@ function SignOutButton({ className, caption }: SignOutButtonProps): React.JSX.El
 
   return (
     <button className={className ?? 'btn btn-link'} type="button" onClick={onClick}>
-      {caption ?? 'Log out'}
+      {caption ?? t('navigation.user.logOut')}
     </button>
   );
 }

@@ -70,6 +70,11 @@
     },
     "forgotPasswordLink": "¿Olvidaste tu contraseña?",
     "logInLink": "Iniciar sesión con una cuenta existente",
+    "oauthCallback": {
+      "authenticationError": "Authentication Error",
+      "completingLogin": "Completing login...",
+      "returnToHome": "Return to Home"
+    },
     "passwordInput": {
       "fair": "razonable",
       "good": "buena",
@@ -89,6 +94,14 @@
       "logInButton": "Iniciar sesión",
       "passwordLabel": "Contraseña",
       "rememberMeLabel": "Recordarme"
+    },
+    "signOut": {
+      "successBody": "Logged out.",
+      "successTitle": "Logout"
+    },
+    "signUp": {
+      "successBody": "Account created.  Welcome!",
+      "successTitle": "Account signup"
     },
     "signUpForm": {
       "header": "Registro",

@@ -93,8 +93,8 @@ function DeviseSignUpPage(): React.JSX.Element {
     }
 
     await afterSessionChange(window.location.href, {
-      title: 'Account signup',
-      body: 'Account created.  Welcome!',
+      title: t('authentication.signUp.successTitle'),
+      body: t('authentication.signUp.successBody'),
       autoDismissAfter: 1000 * 60,
     });
   };

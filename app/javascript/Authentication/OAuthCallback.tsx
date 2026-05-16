@@ -1,9 +1,11 @@
 import { useEffect, useState, useRef, useContext } from 'react';
 import { Link } from 'react-router';
+import { useTranslation } from 'react-i18next';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 import { AuthenticationManagerContext } from './authenticationManager';
 
 function OAuthCallback() {
+  const { t } = useTranslation();
   const authenticationManager = useContext(AuthenticationManagerContext);
   const [error, setError] = useState<string | null>(null);
   const [processing, setProcessing] = useState(true);
@@ -35,9 +37,9 @@ function OAuthCallback() {
       <div className="container mt-4">
         <div className="text-center">
           <div className="spinner-border" role="status">
-            <span className="visually-hidden">Completing login...</span>
+            <span className="visually-hidden">{t('authentication.oauthCallback.completingLogin')}</span>
           </div>
-          <p className="mt-3">Completing login...</p>
+          <p className="mt-3">{t('authentication.oauthCallback.completingLogin')}</p>
         </div>
       </div>
     );
@@ -46,10 +48,10 @@ function OAuthCallback() {
   return (
     <div className="container mt-4">
       <div className="alert alert-danger">
-        <h4>Authentication Error</h4>
+        <h4>{t('authentication.oauthCallback.authenticationError')}</h4>
         <ErrorDisplay stringError={error} />
         <Link className="btn btn-primary mt-3" to="/">
-          Return to Home
+          {t('authentication.oauthCallback.returnToHome')}
         </Link>
       </div>
     </div>

@@ -85,6 +85,8 @@ en:
       team_members_cannot_be_counted: "Team members must sign up as non-counted"
       ticket_does_not_allow_signups: "You have a %{ticket_type_description}, but these do not allow event signups.  If you want to sign up for events, please contact %{convention_name} staff."
       wrong_signup_mode: "%{convention_name} does not allow self-service signups."
+  registrations:
+    disable_destroy: "To delete your account, please email the site administrators."
   signup_requests:
     errors:
       closed: "Signup requests are closed."

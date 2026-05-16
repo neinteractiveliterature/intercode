@@ -596,6 +596,11 @@
     },
     "forgotPasswordLink": "Forgot your password?",
     "logInLink": "Log in to an existing account",
+    "oauthCallback": {
+      "authenticationError": "Authentication Error",
+      "completingLogin": "Completing login...",
+      "returnToHome": "Return to Home"
+    },
     "passwordInput": {
       "fair": "fair",
       "good": "good",
@@ -615,6 +620,14 @@
       "logInButton": "Log in",
       "passwordLabel": "Password",
       "rememberMeLabel": "Remember me"
+    },
+    "signOut": {
+      "successBody": "Logged out.",
+      "successTitle": "Logout"
+    },
+    "signUp": {
+      "successBody": "Account created.  Welcome!",
+      "successTitle": "Account signup"
     },
     "signUpForm": {
       "header": "Sign up",
