@@ -206,7 +206,7 @@ represented as a JSON object."
   end
 
   def convention_by_oauth_return_if_present
-    return_to = context[:controller].session[:user_return_to]
+    return_to = context[:controller].session[:user_return_to] || context[:controller].params[:user_return_to]
     return unless return_to
 
     return_to_uri = URI.parse(return_to)
