@@ -4942,6 +4942,13 @@ export type Query = {
   /** Finds a convention by ID. If a matching one can't be found, the request will error out. */
   conventionById: Convention;
   /**
+   * Returns the convention associated with the current OAuth sign-in flow, if any. Parses the
+   * `redirect_uri` from the stored OAuth return URL in the session to determine which convention
+   * the user is signing into. Useful on the root-domain sign-in page where
+   * `conventionByRequestHostIfPresent` returns null.
+   */
+  conventionByOauthReturnIfPresent?: Maybe<Convention>;
+  /**
    * Returns the convention associated with the domain name of this HTTP request. If one is not
    * present, the request will error out. (For a version that will return null instead of
    * erroring out, use `conventionByRequestHostIfPresent`.)
@@ -5781,6 +5788,7 @@ export type SetupMyProfilePayload = {
   __typename: 'SetupMyProfilePayload';
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
+  /** The created or existing profile. */
   my_profile: UserConProfile;
 };
 

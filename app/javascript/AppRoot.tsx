@@ -22,7 +22,7 @@ export function buildAppRootContextValue(
     convention: data?.convention ?? null,
     conventionAcceptingProposals: data?.convention?.accepting_proposals,
     conventionCanceled: data?.convention?.canceled,
-    conventionName: data?.convention?.name,
+    conventionName: data?.convention?.name ?? data?.signInConvention?.name,
     conventionDomain: data?.convention?.domain,
     conventionTimespan: data?.convention ? timespanFromConvention(data.convention) : undefined,
     currentAbility: data?.currentAbility ?? {

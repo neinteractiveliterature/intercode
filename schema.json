@@ -2111,15 +2111,11 @@
             },
             {
               "name": "recaptcha_site_key",
-              "description": "The reCAPTCHA site key for client-side verification",
+              "description": "The reCAPTCHA site key for client-side verification, or null if reCAPTCHA is disabled",
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null,
@@ -27700,6 +27696,18 @@
               ]
             },
             {
+              "name": "conventionByOauthReturnIfPresent",
+              "description": "Returns the convention associated with the current OAuth sign-in flow, if any. Parses the\n`redirect_uri` from the stored OAuth return URL in the session to determine which convention\nthe user is signing into. Useful on the root-domain sign-in page where\n`conventionByRequestHostIfPresent` returns null.\n",
+              "type": {
+                "kind": "OBJECT",
+                "name": "Convention",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
               "name": "conventionByRequestHost",
               "description": "Returns the convention associated with the domain name of this HTTP request. If one is not\npresent, the request will error out. (For a version that will return null instead of\nerroring out, use `conventionByRequestHostIfPresent`.)\n",
               "type": {
@@ -32104,7 +32112,7 @@
             },
             {
               "name": "my_profile",
-              "description": null,
+              "description": "The created or existing profile.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,

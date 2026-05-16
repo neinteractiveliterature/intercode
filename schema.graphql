@@ -266,9 +266,9 @@ type ClientConfiguration {
   rails_direct_uploads_url: String!
 
   """
-  The reCAPTCHA site key for client-side verification
+  The reCAPTCHA site key for client-side verification, or null if reCAPTCHA is disabled
   """
-  recaptcha_site_key: String!
+  recaptcha_site_key: String
 }
 
 union CmsContent = CmsLayout | CmsPartial | Page
@@ -6205,6 +6205,14 @@ type Query {
   conventionById(id: ID): Convention!
 
   """
+  Returns the convention associated with the current OAuth sign-in flow, if any. Parses the
+  `redirect_uri` from the stored OAuth return URL in the session to determine which convention
+  the user is signing into. Useful on the root-domain sign-in page where
+  `conventionByRequestHostIfPresent` returns null.
+  """
+  conventionByOauthReturnIfPresent: Convention
+
+  """
   Returns the convention associated with the domain name of this HTTP request. If one is not
   present, the request will error out. (For a version that will return null instead of
   erroring out, use `conventionByRequestHostIfPresent`.)
@@ -7522,6 +7530,10 @@ type SetupMyProfilePayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
+
+  """
+  The created or existing profile.
+  """
   my_profile: UserConProfile!
 }
 

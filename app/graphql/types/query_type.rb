@@ -32,6 +32,15 @@ class Types::QueryType < Types::BaseObject
     MARKDOWN
   end
 
+  field :convention_by_oauth_return_if_present, Types::ConventionType, null: true do
+    description <<~MARKDOWN
+      Returns the convention associated with the current OAuth sign-in flow, if any. Parses the
+      `redirect_uri` from the stored OAuth return URL in the session to determine which convention
+      the user is signing into. Useful on the root-domain sign-in page where
+      `conventionByRequestHostIfPresent` returns null.
+    MARKDOWN
+  end
+
   field :convention_by_id, Types::ConventionType, null: false do
     argument :id, ID, required: false, camelize: true
     description <<~MARKDOWN
@@ -194,6 +203,20 @@ represented as a JSON object."
 
   def convention_by_request_host_if_present
     context[:convention]
+  end
+
+  def convention_by_oauth_return_if_present
+    return_to = context[:controller].session[:user_return_to]
+    return unless return_to
+
+    return_to_uri = URI.parse(return_to)
+    redirect_uri_str = Rack::Utils.parse_query(return_to_uri.query)["redirect_uri"]
+    return unless redirect_uri_str
+
+    redirect_uri = URI.parse(redirect_uri_str)
+    Convention.find_by(domain: redirect_uri.host)
+  rescue URI::InvalidURIError, ArgumentError
+    nil
   end
 
   def convention_by_id(id: nil)
