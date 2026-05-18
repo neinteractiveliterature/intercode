@@ -1,11 +1,3 @@
-# Fake out Doorkeeper so it will render the authorization screen even if not logged in, so that
-# the React code can show a login prompt
-class NullResourceOwner
-  def id
-    nil
-  end
-end
-
 Doorkeeper.configure do
   Devise::Doorkeeper.configure_doorkeeper(self)
 
@@ -13,7 +5,15 @@ Doorkeeper.configure do
   orm :active_record
 
   # This block will be called to check whether the resource owner is authenticated or not.
-  resource_owner_authenticator { user_signed_in? ? current_user : NullResourceOwner.new }
+  resource_owner_authenticator do
+    if user_signed_in?
+      current_user
+    else
+      session[:user_return_to] = request.fullpath
+      redirect_to new_user_session_url
+      nil
+    end
+  end
 
   # If you didn't skip applications controller from Doorkeeper routes in your application routes.rb
   # file then you need to declare this block in order to restrict access to the web interface for

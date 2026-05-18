@@ -37,13 +37,21 @@ class OAuthApplication < ApplicationRecord
   private
 
   def frontend_redirect_uris_for_host(host)
+    schemes = localhost_host?(host) ? %w[https http] : %w[https]
+    schemes.flat_map { |scheme| frontend_ports.map { |port| callback_uri(scheme, host, port) } }
+  end
+
+  def localhost_host?(host)
+    host == "localhost" || host&.start_with?("localhost:")
+  end
+
+  def frontend_ports
     app_port = ActionMailer::Base.default_url_options[:port]&.to_s
     assets_port = ENV["ASSETS_HOST"]&.match(/:(\d+)\Z/)&.then { |m| m[1] }
+    [nil, app_port.presence, assets_port.presence].compact
+  end
 
-    [
-      "https://#{host}/oauth/callback",
-      ("https://#{host}:#{app_port}/oauth/callback" if app_port.present?),
-      ("https://#{host}:#{assets_port}/oauth/callback" if assets_port.present?)
-    ].compact
+  def callback_uri(scheme, host, port)
+    port ? "#{scheme}://#{host}:#{port}/oauth/callback" : "#{scheme}://#{host}/oauth/callback"
   end
 end
