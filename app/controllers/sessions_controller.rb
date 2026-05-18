@@ -2,10 +2,10 @@
 class SessionsController < Devise::SessionsController
   include RedirectWithAuthentication
 
-  prepend_before_action :set_return_to, only: %i[new create]
+  prepend_before_action :set_return_to, only: [:new]
 
   def new
-    respond_to { |format| format.html { redirect_with_authentication('signIn') } }
+    respond_to { |format| format.html { redirect_with_authentication("signIn") } }
   end
 
   private
