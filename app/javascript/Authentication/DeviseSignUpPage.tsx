@@ -15,7 +15,7 @@ import humanize from '../humanize';
 import { AuthenticityTokensContext } from '../AuthenticityTokensContext';
 import PasswordInputWithStrengthCheck from './PasswordInputWithStrengthCheck';
 import AuthenticationModalContext from './AuthenticationModalContext';
-import { useSignInConventionName } from './useSignInConventionName';
+import { useSignInContext } from './useSignInContext';
 import usePageTitle from '../usePageTitle';
 
 async function signUp(
@@ -63,7 +63,7 @@ function DeviseSignUpPage(): React.JSX.Element {
   const { t } = useTranslation();
   const { recaptchaSiteKey } = useContext(AuthenticationModalContext);
   const manager = useContext(AuthenticityTokensContext);
-  const conventionName = useSignInConventionName();
+  const { conventionName, oauthAppName } = useSignInContext();
   const [formState, setFormState] = useState<UserFormState>({});
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
@@ -72,7 +72,9 @@ function DeviseSignUpPage(): React.JSX.Element {
   const afterSessionChange = useAfterSessionChange();
   const header = conventionName
     ? t('authentication.signUpForm.headerWithConvention', { conventionName })
-    : t('authentication.signUpForm.header');
+    : oauthAppName
+      ? t('authentication.signUpForm.headerWithOAuthApp', { appName: oauthAppName })
+      : t('authentication.signUpForm.header');
   usePageTitle(header);
 
   const onSubmit = async (event: React.SyntheticEvent) => {

@@ -28023,6 +28023,18 @@
               "args": []
             },
             {
+              "name": "oauthApplicationByCurrentRequest",
+              "description": "Returns the OAuth application initiating the current sign-in flow, if any. Parses the\n`client_id` from the stored OAuth return URL in the session or params to identify which\napplication the user is signing in to use.\n",
+              "type": {
+                "kind": "OBJECT",
+                "name": "AuthorizedApplication",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
               "name": "oauthPreAuth",
               "description": "Given a set of valid OAuth query parameters for the `/oauth/authorize` endpoint, returns a\nJSON object containing the necessary data for rendering the pre-authorization screen that\nchecks if you want to allow an application to access Intercode on your behalf.\n\nThis essentially emulates the JSON behavior of\n[Doorkeeper](https://github.com/doorkeeper-gem/doorkeeper)'s API-only mode if you go to\n`/oauth/authorize` with query parameters. The only reason this query exists, rather than\nsimply having clients actually call `/oauth/authorize`, is that we're running Doorkeeper\nin regular mode so that we can get the server-rendered HTML admin views.\n\nWhen we've implemented our own admin screens for OAuth\n(see [this Github issue](https://github.com/neinteractiveliterature/intercode/issues/2740)),\nthis query will be deprecated.\n",
               "type": {

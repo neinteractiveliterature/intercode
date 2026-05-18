@@ -1,0 +1,71 @@
+<!DOCTYPE html>
+<html lang="en">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <title><%= t('doorkeeper.authorizations.new.title') %></title>
+    <link
+      rel="stylesheet"
+      href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.8/dist/css/bootstrap.min.css"
+      integrity="sha384-QWTKZJVSK200a5HS7PzM+7BqQ2p8VTXqkwOapzjW5oaaSflz4xfP2gGJQPKFH0v"
+      crossorigin="anonymous"
+    />
+  </head>
+  <body class="bg-light">
+    <div class="container mt-5">
+      <div class="row justify-content-center">
+        <div class="col-sm-8 col-md-6 col-lg-5">
+          <div class="card shadow-sm">
+            <div class="card-header bg-light">
+              <% if convention %>
+                <div class="text-muted small mb-1"><%= convention.name %></div>
+              <% end %>
+              <div class="lead"><%= t('doorkeeper.authorizations.new.title') %></div>
+            </div>
+            <div class="card-body p-4">
+              <p>
+                <%= t('doorkeeper.authorizations.new.prompt', client_name: @pre_auth.client.name) %>
+              </p>
+
+              <% if @pre_auth.scopes.present? %>
+                <p class="fw-semibold mb-1"><%= t('doorkeeper.authorizations.new.able_to') %>:</p>
+                <ul class="mb-3">
+                  <% @pre_auth.scopes.each do |scope| %>
+                    <li><%= t("doorkeeper.scopes.#{scope}", default: scope) %></li>
+                  <% end %>
+                </ul>
+              <% end %>
+            </div>
+            <div class="card-footer bg-light d-flex justify-content-end gap-2">
+              <%= link_to(
+                t('doorkeeper.authorizations.buttons.deny'),
+                oauth_authorization_path(
+                  client_id: @pre_auth.client_id,
+                  redirect_uri: @pre_auth.redirect_uri,
+                  state: @pre_auth.state,
+                  response_type: @pre_auth.response_type,
+                  scope: @pre_auth.scope,
+                  nonce: @pre_auth.nonce,
+                ),
+                method: :delete,
+                class: 'btn btn-secondary',
+                data: { turbo_method: :delete }
+              ) %>
+              <%= form_tag(oauth_authorization_path, method: :post, class: 'd-inline') do %>
+                <%= hidden_field_tag :client_id, @pre_auth.client_id %>
+                <%= hidden_field_tag :redirect_uri, @pre_auth.redirect_uri %>
+                <%= hidden_field_tag :state, @pre_auth.state %>
+                <%= hidden_field_tag :response_type, @pre_auth.response_type %>
+                <%= hidden_field_tag :scope, @pre_auth.scope %>
+                <%= hidden_field_tag :nonce, @pre_auth.nonce %>
+                <%= hidden_field_tag :code_challenge, @pre_auth.code_challenge %>
+                <%= hidden_field_tag :code_challenge_method, @pre_auth.code_challenge_method %>
+                <%= submit_tag t('doorkeeper.authorizations.buttons.authorize'), class: 'btn btn-primary' %>
+              <% end %>
+            </div>
+          </div>
+        </div>
+      </div>
+    </div>
+  </body>
+</html>

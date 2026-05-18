@@ -7,7 +7,7 @@ import { BootstrapFormInput, ErrorDisplay } from '@neinteractiveliterature/litfo
 import useAsyncFunction from '../useAsyncFunction';
 import humanize from '../humanize';
 import { AuthenticityTokensContext } from '../AuthenticityTokensContext';
-import { useSignInConventionName } from './useSignInConventionName';
+import { useSignInContext } from './useSignInContext';
 import usePageTitle from '../usePageTitle';
 
 function parseRailsErrorHash(errors: Record<string, string[]> | undefined) {
@@ -46,14 +46,16 @@ async function resetPassword(authenticityToken: string, email: string) {
 function DeviseForgotPasswordPage(): React.JSX.Element {
   const { t } = useTranslation();
   const manager = useContext(AuthenticityTokensContext);
-  const conventionName = useSignInConventionName();
+  const { conventionName, oauthAppName } = useSignInContext();
   const authenticityToken = manager.tokens?.resetPassword;
   const [email, setEmail] = useState('');
   const [success, setSuccess] = useState(false);
   const [resetPasswordAsync, resetPasswordError, resetPasswordInProgress] = useAsyncFunction(resetPassword);
   const header = conventionName
     ? t('authentication.forgotPasswordForm.headerWithConvention', { conventionName })
-    : t('authentication.forgotPasswordForm.header');
+    : oauthAppName
+      ? t('authentication.forgotPasswordForm.headerWithOAuthApp', { appName: oauthAppName })
+      : t('authentication.forgotPasswordForm.header');
   usePageTitle(header);
 
   const onSubmit = async (event: React.SyntheticEvent) => {

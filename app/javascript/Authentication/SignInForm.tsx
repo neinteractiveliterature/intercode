@@ -8,7 +8,7 @@ import { ErrorDisplay } from '@neinteractiveliterature/litform';
 import AuthenticationModalContext from './AuthenticationModalContext';
 import useAsyncFunction from '../useAsyncFunction';
 import { AuthenticationManager, AuthenticationManagerContext } from './authenticationManager';
-import { useSignInConventionName } from './useSignInConventionName';
+import { useSignInContext } from './useSignInContext';
 
 async function initiateOAuthFlow(authenticationManager: AuthenticationManager, returnPath?: string) {
   const { redirectUrl } = await authenticationManager.initiateAuthentication(returnPath);
@@ -18,7 +18,7 @@ async function initiateOAuthFlow(authenticationManager: AuthenticationManager, r
 function SignInForm(): React.JSX.Element {
   const authenticationManager = useContext(AuthenticationManagerContext);
   const { t } = useTranslation();
-  const conventionName = useSignInConventionName();
+  const { conventionName, oauthAppName } = useSignInContext();
   const navigate = useNavigate();
   const {
     close: closeModal,
@@ -55,7 +55,9 @@ function SignInForm(): React.JSX.Element {
           <div className="lead flex-grow-1">
             {conventionName
               ? t('authentication.signInForm.headerWithConvention', { conventionName })
-              : t('authentication.signInForm.header')}
+              : oauthAppName
+                ? t('authentication.signInForm.headerWithOAuthApp', { appName: oauthAppName })
+                : t('authentication.signInForm.header')}
           </div>
         </div>
 

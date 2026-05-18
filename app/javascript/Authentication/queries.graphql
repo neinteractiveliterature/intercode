@@ -1,6 +1,10 @@
-query SignInConventionQuery {
+query SignInContextQuery {
   signInConvention: conventionByOauthReturnIfPresent {
     id
+    name
+  }
+  signInOAuthApplication: oauthApplicationByCurrentRequest {
+    uid
     name
   }
 }

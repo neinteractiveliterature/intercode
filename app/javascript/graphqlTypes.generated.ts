@@ -4993,6 +4993,12 @@ export type Query = {
   /** Returns a list of all notification events that are available in this instance of Intercode. */
   notificationEvents: Array<NotificationEvent>;
   /**
+   * Returns the OAuth application initiating the current sign-in flow, if any. Parses the
+   * `client_id` from the stored OAuth return URL in the session or params to identify which
+   * application the user is signing in to use.
+   */
+  oauthApplicationByCurrentRequest?: Maybe<AuthorizedApplication>;
+  /**
    * Given a set of valid OAuth query parameters for the `/oauth/authorize` endpoint, returns a
    * JSON object containing the necessary data for rendering the pre-authorization screen that
    * checks if you want to allow an application to access Intercode on your behalf.

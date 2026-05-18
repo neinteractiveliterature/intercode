@@ -41,6 +41,14 @@ class Types::QueryType < Types::BaseObject
     MARKDOWN
   end
 
+  field :oauth_application_by_current_request, Types::AuthorizedApplicationType, null: true do
+    description <<~MARKDOWN
+      Returns the OAuth application initiating the current sign-in flow, if any. Parses the
+      `client_id` from the stored OAuth return URL in the session or params to identify which
+      application the user is signing in to use.
+    MARKDOWN
+  end
+
   field :convention_by_id, Types::ConventionType, null: false do
     argument :id, ID, required: false, camelize: true
     description <<~MARKDOWN
@@ -215,6 +223,19 @@ represented as a JSON object."
 
     redirect_uri = URI.parse(redirect_uri_str)
     Convention.find_by(domain: redirect_uri.host)
+  rescue URI::InvalidURIError, ArgumentError
+    nil
+  end
+
+  def oauth_application_by_current_request
+    return_to = context[:controller].session[:user_return_to] || context[:controller].params[:user_return_to]
+    return unless return_to
+
+    return_to_uri = URI.parse(return_to)
+    client_id = Rack::Utils.parse_query(return_to_uri.query)["client_id"]
+    return unless client_id
+
+    Doorkeeper::Application.find_by(uid: client_id)
   rescue URI::InvalidURIError, ArgumentError
     nil
   end

@@ -7,7 +7,7 @@ import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform
 import PasswordConfirmationInput from './PasswordConfirmationInput';
 import useAsyncFunction from '../useAsyncFunction';
 import { AuthenticityTokensContext } from '../AuthenticityTokensContext';
-import { useSignInConventionName } from './useSignInConventionName';
+import { useSignInContext } from './useSignInContext';
 import PasswordInputWithStrengthCheck from './PasswordInputWithStrengthCheck';
 
 async function changePassword(
@@ -38,7 +38,7 @@ async function changePassword(
 
 function ResetPassword(): React.JSX.Element {
   const { t } = useTranslation();
-  const conventionName = useSignInConventionName();
+  const { conventionName, oauthAppName } = useSignInContext();
   const location = useLocation();
   const resetPasswordToken = useMemo(
     () => new URLSearchParams(location.search).get('reset_password_token') ?? '',
@@ -66,7 +66,9 @@ function ResetPassword(): React.JSX.Element {
       <h1 className="mb-4">
         {conventionName
           ? t('authentication.resetPassword.headerWithConvention', { conventionName })
-          : t('authentication.resetPassword.header')}
+          : oauthAppName
+            ? t('authentication.resetPassword.headerWithOAuthApp', { appName: oauthAppName })
+            : t('authentication.resetPassword.header')}
       </h1>
       <form onSubmit={onSubmit}>
         <div className="card">

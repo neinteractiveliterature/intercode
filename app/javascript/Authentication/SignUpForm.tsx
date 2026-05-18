@@ -7,7 +7,7 @@ import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform
 
 import useAsyncFunction from '../useAsyncFunction';
 import AuthenticationModalContext from './AuthenticationModalContext';
-import { useSignInConventionName } from './useSignInConventionName';
+import { useSignInContext } from './useSignInContext';
 import AccountFormContent from './AccountFormContent';
 import UserFormFields, { UserFormState } from './UserFormFields';
 import PasswordConfirmationInput from './PasswordConfirmationInput';
@@ -60,7 +60,7 @@ async function signUp(
 function SignUpForm(): React.JSX.Element {
   const { t } = useTranslation();
   const { close: closeModal, setCurrentView, recaptchaSiteKey } = useContext(AuthenticationModalContext);
-  const conventionName = useSignInConventionName();
+  const { conventionName, oauthAppName } = useSignInContext();
   const manager = useContext(AuthenticityTokensContext);
   const [formState, setFormState] = useState({});
   const [password, setPassword] = useState('');
@@ -96,7 +96,9 @@ function SignUpForm(): React.JSX.Element {
           <div className="lead flex-grow-1">
             {conventionName
               ? t('authentication.signUpForm.headerWithConvention', { conventionName })
-              : t('authentication.signUpForm.header')}
+              : oauthAppName
+                ? t('authentication.signUpForm.headerWithOAuthApp', { appName: oauthAppName })
+                : t('authentication.signUpForm.header')}
           </div>
         </div>
 
