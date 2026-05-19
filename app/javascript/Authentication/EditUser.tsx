@@ -74,6 +74,7 @@ function EditUserForm() {
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const [currentPassword, setCurrentPassword] = useState('');
   const [updateUserAsync, updateUserError, updateUserInProgress] = useAsyncFunction(updateUser);
+  const [saved, setSaved] = useState(false);
   const passwordFieldId = useId();
   usePageTitle('Update Your Account');
 
@@ -92,7 +93,7 @@ function EditUserForm() {
     }
 
     await updateUserAsync(authenticityToken, formState, password, passwordConfirmation, currentPassword);
-    window.location.href = '/';
+    setSaved(true);
   };
 
   return (
@@ -130,15 +131,14 @@ function EditUserForm() {
         </div>
 
         <div className="card-footer text-end">
-          <div>
-            <input
-              type="submit"
-              className="btn btn-primary"
-              disabled={updateUserInProgress}
-              value={t('authentication.editUser.updateAccountButton').toString()}
-              aria-label={t('authentication.editUser.updateAccountButton')}
-            />
-          </div>
+          <input
+            type="submit"
+            className="btn btn-primary"
+            disabled={updateUserInProgress}
+            value={t('authentication.editUser.updateAccountButton').toString()}
+            aria-label={t('authentication.editUser.updateAccountButton')}
+          />
+          {saved ? ' Saved!' : null}
         </div>
       </form>
     </>
