@@ -9,7 +9,7 @@ gem "benchmark"
 
 # locking to connection_pool 2.x until ActiveSupport's memcachestore supports the v3 API
 # see https://github.com/mperham/connection_pool/issues/212
-gem "connection_pool", "< 3"
+gem "connection_pool", "< 4"
 
 gem "pg"
 gem "puma"
