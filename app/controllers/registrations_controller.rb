@@ -9,6 +9,10 @@ class RegistrationsController < Devise::RegistrationsController
     render html: "", layout: "application"
   end
 
+  def edit
+    render html: "", layout: "application"
+  end
+
   private
 
   def check_captcha
