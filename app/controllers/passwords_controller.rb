@@ -24,7 +24,12 @@ class PasswordsController < Devise::PasswordsController
   def actually_do_reset
     return unless resource.persisted?
 
-    resource.reset_password_mail_options = { host: request.host, port: request.port, protocol: request.protocol }
+    mailer_url_options = ActionMailer::Base.default_url_options
+    resource.reset_password_mail_options = {
+      host: mailer_url_options[:host],
+      port: mailer_url_options[:port],
+      protocol: mailer_url_options[:protocol] || request.protocol
+    }
 
     resource.send_reset_password_instructions
   end
