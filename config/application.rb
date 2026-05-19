@@ -33,7 +33,6 @@ module Intercode
     config.active_job.queue_adapter = :shoryuken
     config.active_job.queue_name_prefix = "intercode_#{Rails.env}"
 
-    # config.middleware.use Intercode::DynamicCookieDomain
     config.middleware.insert_after ActionDispatch::Executor, Intercode::FindVirtualHost
     config.middleware.use Rack::Deflater
 
