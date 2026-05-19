@@ -5434,6 +5434,7 @@ export type RoomInput = {
 
 export type RootSite = CmsParent & {
   __typename: 'RootSite';
+  auth_layout?: Maybe<CmsLayout>;
   /** Returns the content block partial for the given content block name */
   blockPartial?: Maybe<CmsPartial>;
   /**
@@ -5546,6 +5547,7 @@ export type RootSiteTypeaheadSearchCmsContentArgs = {
 };
 
 export type RootSiteInput = {
+  authLayoutId?: InputMaybe<Scalars['ID']['input']>;
   defaultLayoutId?: InputMaybe<Scalars['ID']['input']>;
   rootPageId?: InputMaybe<Scalars['ID']['input']>;
   site_name?: InputMaybe<Scalars['String']['input']>;

@@ -29893,6 +29893,18 @@
           "possibleTypes": null,
           "fields": [
             {
+              "name": "auth_layout",
+              "description": null,
+              "type": {
+                "kind": "OBJECT",
+                "name": "CmsLayout",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
               "name": "blockPartial",
               "description": "Returns the content block partial for the given content block name",
               "type": {
@@ -30524,6 +30536,18 @@
           "possibleTypes": null,
           "fields": null,
           "inputFields": [
+            {
+              "name": "authLayoutId",
+              "description": null,
+              "type": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
             {
               "name": "defaultLayoutId",
               "description": null,

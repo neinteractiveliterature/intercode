@@ -6978,6 +6978,8 @@ input RoomInput {
 }
 
 type RootSite implements CmsParent {
+  auth_layout: CmsLayout
+
   """
   Returns the content block partial for the given content block name
   """
@@ -7153,6 +7155,7 @@ type RootSite implements CmsParent {
 }
 
 input RootSiteInput {
+  authLayoutId: ID
   defaultLayoutId: ID
   rootPageId: ID
   site_name: String

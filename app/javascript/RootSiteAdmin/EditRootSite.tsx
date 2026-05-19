@@ -26,6 +26,7 @@ export const action: ActionFunction<RouterContextProvider> = async ({ context, r
     const result = await client.mutate({
       mutation: UpdateRootSiteDocument,
       variables: {
+        authLayoutId: formData.get('auth_layout_id')?.toString(),
         defaultLayoutId: formData.get('default_layout_id')?.toString(),
         rootPageId: formData.get('root_page_id')?.toString(),
         siteName: formData.get('site_name')?.toString(),
@@ -69,6 +70,7 @@ function EditRootSite() {
   };
 
   const [siteName, setSiteName] = useDirtyState(data.rootSite.site_name, setDirty);
+  const [authLayout, setAuthLayout] = useDirtyState(data.rootSite.auth_layout, setDirty);
   const [defaultLayout, setDefaultLayout] = useDirtyState(data.rootSite.defaultLayout, setDirty);
   const [rootPage, setRootPage] = useDirtyState(data.rootSite.rootPage, setDirty);
 
@@ -88,6 +90,19 @@ function EditRootSite() {
         value={siteName}
         onTextChange={setSiteName}
         disabled={updateInProgress}
+      />
+
+      <SelectWithLabel
+        name="auth_layout_id"
+        label="Layout for authentication pages"
+        helpText="Used for sign-in, sign-up, password reset, and account edit pages. Falls back to the default layout if not set."
+        value={authLayout}
+        isClearable
+        getOptionValue={(option) => option.id.toString()}
+        getOptionLabel={(option) => option.name ?? ''}
+        options={data.rootSite.cmsLayouts}
+        onChange={(newValue) => setAuthLayout(newValue ?? null)}
+        isDisabled={updateInProgress}
       />
 
       <SelectWithLabel
