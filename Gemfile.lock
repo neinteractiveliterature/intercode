@@ -194,7 +194,7 @@ GEM
     cgi (0.4.2)
     coderay (1.1.3)
     concurrent-ruby (1.3.6)
-    connection_pool (2.5.5)
+    connection_pool (3.0.2)
     crass (1.0.6)
     csv (3.3.5)
     cuprite (0.17)
@@ -721,7 +721,7 @@ DEPENDENCIES
   capybara
   civil_service!
   cloudwatch_scheduler!
-  connection_pool (< 3)
+  connection_pool (< 4)
   csv
   cuprite
   dalli
