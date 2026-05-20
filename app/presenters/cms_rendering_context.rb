@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+# rubocop:disable Metrics/ClassLength
 class CmsRenderingContext
   include Cadmus::RenderingHelper
   include Cadmus::Renderable
@@ -61,20 +62,11 @@ class CmsRenderingContext
   # We do this so that the doc that gets rendered will end up with the right stuff in <head>, but
   # not have its body content duplicated
   def render_app_root_content(cms_layout, assigns)
-    graphql_presend_presenter = GraphqlPresendPresenter.new(controller: controller, cms_parent: cms_parent)
     doc = Nokogiri::HTML.parse("<!DOCTYPE html><html><head>#{assigns["content_for_head"]}</head><body></body></html>")
     doc.xpath("//body/*").remove
     doc.xpath("//body").first.inner_html =
-      (assigns["browser_warning"] || "") + NOSCRIPT_WARNING +
-        tag.div(
-          "",
-          "data-react-class" => "AppRoot",
-          "data-react-props" =>
-            (controller&.app_component_props || {}).merge(
-              queryData: graphql_presend_presenter.graphql_presend_data
-            ).to_json
-        )
-    doc.to_s.html_safe
+      (assigns["browser_warning"] || "") + NOSCRIPT_WARNING + tag.div("", "data-react-class" => "AppRoot")
+    doc.to_s.html_safe # rubocop:disable Rails/OutputSafety
   rescue StandardError => e
     ErrorReporting.warn(e)
     Rails.logger.warn e
@@ -163,3 +155,4 @@ class CmsRenderingContext
       cms_parent.cms_variables.pluck(:key, :value).each_with_object({}) { |(key, value), hash| hash[key] = value }
   end
 end
+# rubocop:enable Metrics/ClassLength

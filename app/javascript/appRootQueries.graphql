@@ -95,6 +95,7 @@ query AppRootQuery {
       email
       mobile_phone
       accepted_clickwrap_agreement
+      needs_update
       name_without_nickname
       first_name
       last_name

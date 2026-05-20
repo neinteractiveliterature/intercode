@@ -7,6 +7,7 @@ import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform
 
 import useAsyncFunction from '../useAsyncFunction';
 import AuthenticationModalContext from './AuthenticationModalContext';
+import { useSignInContext } from './useSignInContext';
 import AccountFormContent from './AccountFormContent';
 import UserFormFields, { UserFormState } from './UserFormFields';
 import PasswordConfirmationInput from './PasswordConfirmationInput';
@@ -59,6 +60,7 @@ async function signUp(
 function SignUpForm(): React.JSX.Element {
   const { t } = useTranslation();
   const { close: closeModal, setCurrentView, recaptchaSiteKey } = useContext(AuthenticationModalContext);
+  const { conventionName, oauthAppName } = useSignInContext();
   const manager = useContext(AuthenticityTokensContext);
   const [formState, setFormState] = useState({});
   const [password, setPassword] = useState('');
@@ -91,7 +93,13 @@ function SignUpForm(): React.JSX.Element {
     <>
       <form onSubmit={submit}>
         <div className="modal-header bg-light align-items-center">
-          <div className="lead flex-grow-1">{t('authentication.signUpForm.header')}</div>
+          <div className="lead flex-grow-1">
+            {conventionName
+              ? t('authentication.signUpForm.headerWithConvention', { conventionName })
+              : oauthAppName
+                ? t('authentication.signUpForm.headerWithOAuthApp', { appName: oauthAppName })
+                : t('authentication.signUpForm.header')}
+          </div>
         </div>
 
         <div className="modal-body">
@@ -110,7 +118,7 @@ function SignUpForm(): React.JSX.Element {
             value={passwordConfirmation}
             onChange={setPasswordConfirmation}
           />
-          <ReCAPTCHA sitekey={recaptchaSiteKey ?? ''} onChange={setCaptchaValue} />
+          {recaptchaSiteKey && <ReCAPTCHA sitekey={recaptchaSiteKey} onChange={setCaptchaValue} />}
 
           <ErrorDisplay stringError={(submitError || {}).message} />
         </div>

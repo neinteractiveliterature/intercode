@@ -53,11 +53,18 @@ class ApplicationController < ActionController::Base
   end
   helper_method :graphql_authenticity_token
 
+  def oidc_issuer_url
+    issuer = Doorkeeper::OpenidConnect.configuration.issuer
+    issuer.respond_to?(:call) ? issuer.call : issuer
+  end
+
   def app_component_props
     {
       recaptchaSiteKey: Recaptcha.configuration.site_key,
       railsDirectUploadsUrl: rails_direct_uploads_url,
-      railsDefaultActiveStorageServiceName: Rails.application.config.active_storage.service.to_s
+      railsDefaultActiveStorageServiceName: Rails.application.config.active_storage.service.to_s,
+      oauthFrontendApplicationUid: Doorkeeper::Application.find_by(is_intercode_frontend: true)&.uid,
+      oidcIssuerUrl: oidc_issuer_url
     }
   end
   helper_method :app_component_props

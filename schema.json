@@ -2054,6 +2054,30 @@
           "possibleTypes": null,
           "fields": [
             {
+              "name": "oauth_frontend_application_uid",
+              "description": "The OAuth application UID for the Intercode frontend SPA (used for PKCE auth)",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "oidc_issuer_url",
+              "description": "The OIDC issuer URL (used as the base for OpenID Connect discovery)",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
               "name": "rails_default_active_storage_service_name",
               "description": "The default Active Storage service name configured in Rails",
               "type": {
@@ -2087,15 +2111,11 @@
             },
             {
               "name": "recaptcha_site_key",
-              "description": "The reCAPTCHA site key for client-side verification",
+              "description": "The reCAPTCHA site key for client-side verification, or null if reCAPTCHA is disabled",
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null,
@@ -22291,6 +22311,39 @@
               ]
             },
             {
+              "name": "setupMyProfile",
+              "description": "Creates a UserConProfile for the currently signed-in user in the current convention.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "SetupMyProfilePayload",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": [
+                {
+                  "name": "input",
+                  "description": "Parameters for SetupMyProfile",
+                  "type": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "INPUT_OBJECT",
+                      "name": "SetupMyProfileInput",
+                      "ofType": null
+                    }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ]
+            },
+            {
               "name": "sortCmsNavigationItems",
               "description": null,
               "type": {
@@ -27643,6 +27696,18 @@
               ]
             },
             {
+              "name": "conventionByOauthReturnIfPresent",
+              "description": "Returns the convention associated with the current OAuth sign-in flow, if any. Parses the\n`redirect_uri` from the stored OAuth return URL in the session to determine which convention\nthe user is signing into. Useful on the root-domain sign-in page where\n`conventionByRequestHostIfPresent` returns null.\n",
+              "type": {
+                "kind": "OBJECT",
+                "name": "Convention",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
               "name": "conventionByRequestHost",
               "description": "Returns the convention associated with the domain name of this HTTP request. If one is not\npresent, the request will error out. (For a version that will return null instead of\nerroring out, use `conventionByRequestHostIfPresent`.)\n",
               "type": {
@@ -27952,6 +28017,18 @@
                     }
                   }
                 }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "oauthApplicationByCurrentRequest",
+              "description": "Returns the OAuth application initiating the current sign-in flow, if any. Parses the\n`client_id` from the stored OAuth return URL in the session or params to identify which\napplication the user is signing in to use.\n",
+              "type": {
+                "kind": "OBJECT",
+                "name": "AuthorizedApplication",
+                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null,
@@ -31992,6 +32069,68 @@
                 "ofType": {
                   "kind": "OBJECT",
                   "name": "SignupRankedChoice",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            }
+          ],
+          "inputFields": null,
+          "enumValues": null
+        },
+        {
+          "kind": "INPUT_OBJECT",
+          "name": "SetupMyProfileInput",
+          "description": "Autogenerated input type of SetupMyProfile",
+          "interfaces": null,
+          "possibleTypes": null,
+          "fields": null,
+          "inputFields": [
+            {
+              "name": "clientMutationId",
+              "description": "A unique identifier for the client performing the mutation.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            }
+          ],
+          "enumValues": null
+        },
+        {
+          "kind": "OBJECT",
+          "name": "SetupMyProfilePayload",
+          "description": "Autogenerated return type of SetupMyProfile.",
+          "interfaces": [],
+          "possibleTypes": null,
+          "fields": [
+            {
+              "name": "clientMutationId",
+              "description": "A unique identifier for the client performing the mutation.",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "my_profile",
+              "description": "The created or existing profile.",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "OBJECT",
+                  "name": "UserConProfile",
                   "ofType": null
                 }
               },
@@ -40467,6 +40606,22 @@
                 "ofType": {
                   "kind": "SCALAR",
                   "name": "String",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
+              "name": "needs_update",
+              "description": "Does this profile need to be updated by the user?",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
                   "ofType": null
                 }
               },

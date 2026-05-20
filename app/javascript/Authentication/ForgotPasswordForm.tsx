@@ -4,6 +4,7 @@ import { useTranslation, Trans } from 'react-i18next';
 import { BootstrapFormInput, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import AuthenticationModalContext from './AuthenticationModalContext';
+import { useSignInContext } from './useSignInContext';
 import useAsyncFunction from '../useAsyncFunction';
 import humanize from '../humanize';
 import { AuthenticityTokensContext } from '../AuthenticityTokensContext';
@@ -44,6 +45,7 @@ async function resetPassword(authenticityToken: string, email: string) {
 function ForgotPasswordForm(): React.JSX.Element {
   const { t } = useTranslation();
   const { close: closeModal, setCurrentView } = useContext(AuthenticationModalContext);
+  const { conventionName, oauthAppName } = useSignInContext();
   const manager = useContext(AuthenticityTokensContext);
   const authenticityToken = manager.tokens?.resetPassword;
   const [email, setEmail] = useState('');
@@ -64,7 +66,13 @@ function ForgotPasswordForm(): React.JSX.Element {
     <>
       <form onSubmit={onSubmit}>
         <div className="modal-header bg-light align-items-center">
-          <div className="lead flex-grow-1">{t('authentication.forgotPasswordForm.header')}</div>
+          <div className="lead flex-grow-1">
+            {conventionName
+              ? t('authentication.forgotPasswordForm.headerWithConvention', { conventionName })
+              : oauthAppName
+                ? t('authentication.forgotPasswordForm.headerWithOAuthApp', { appName: oauthAppName })
+                : t('authentication.forgotPasswordForm.header')}
+          </div>
         </div>
 
         <div className="modal-body">

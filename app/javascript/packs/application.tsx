@@ -1,10 +1,10 @@
 import 'regenerator-runtime/runtime';
 
 import mountReactComponents from '../mountReactComponents';
-import { StrictMode, use, useEffect, useMemo, useState } from 'react';
+import { StrictMode, Suspense, use, useEffect, useMemo } from 'react';
 import AuthenticityTokensManager, { getAuthenticityTokensURL } from 'AuthenticityTokensContext';
 import { createBrowserRouter, RouterContextProvider, RouterProvider } from 'react-router';
-import { buildBrowserApolloClient } from 'useIntercodeApolloClient';
+import { buildBrowserApolloClient, GraphQLNotAuthenticatedErrorEvent } from 'useIntercodeApolloClient';
 import {
   apolloClientContext,
   authenticityTokensManagerContext,
@@ -12,60 +12,34 @@ import {
   fetchContext,
   sessionContext,
 } from 'AppContexts';
-import { ClientConfigurationQueryData } from 'serverQueries.generated';
+import { ClientConfigurationQueryDocument } from 'serverQueries.generated';
 import { appRootRoutes } from 'AppRouter';
-import { ApolloClient, OperationVariables } from '@apollo/client';
+import { AuthenticationManager, AuthenticationManagerContext } from '../Authentication/authenticationManager';
+import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
 const manager = new AuthenticityTokensManager(fetch, undefined, getAuthenticityTokensURL());
 const refreshPromise = manager.refresh();
-const client = buildBrowserApolloClient(manager);
+const authManager = AuthenticationManager.deserializeFromBrowser();
+const client = buildBrowserApolloClient(manager, authManager);
 
-export type DataModeApplicationEntryProps = {
-  recaptchaSiteKey: string;
-  railsDefaultActiveStorageServiceName: string;
-  railsDirectUploadsUrl: string;
-  queryData?: ApolloClient.WriteQueryOptions<unknown, OperationVariables>[];
-};
+window.addEventListener(GraphQLNotAuthenticatedErrorEvent.type, async () => {
+  const { redirectUrl } = await authManager.initiateAuthentication(window.location.href);
+  window.location.href = redirectUrl.toString();
+});
+const clientConfigurationQuery = client.query({ query: ClientConfigurationQueryDocument });
 
-function DataModeApplicationEntry({
-  recaptchaSiteKey,
-  railsDefaultActiveStorageServiceName,
-  railsDirectUploadsUrl,
-  queryData,
-}: DataModeApplicationEntryProps) {
+function DataModeApplicationEntry() {
   use(refreshPromise);
+  const clientConfiguration = use(clientConfigurationQuery);
 
-  const [queryPreloadComplete, setQueryPreloadComplete] = useState(false);
+  // Set auth manager config from Rails props once available
   useEffect(() => {
-    if (queryData && Array.isArray(queryData)) {
-      for (const query of queryData) {
-        try {
-          client.writeQuery(query);
-        } catch {
-          // don't blow up if we get a malformed query
-        }
-      }
-    }
-
-    setQueryPreloadComplete(true);
-  }, [queryData]);
-
-  const clientConfigurationData = useMemo<ClientConfigurationQueryData>(
-    () => ({
-      __typename: 'Query',
-      clientConfiguration: {
-        __typename: 'ClientConfiguration',
-        recaptcha_site_key: recaptchaSiteKey,
-        rails_default_active_storage_service_name: railsDefaultActiveStorageServiceName,
-        rails_direct_uploads_url: railsDirectUploadsUrl,
-      },
-    }),
-    [recaptchaSiteKey, railsDefaultActiveStorageServiceName, railsDirectUploadsUrl],
-  );
+    authManager.clientId = clientConfiguration.data?.clientConfiguration.oauth_frontend_application_uid ?? undefined;
+    authManager.issuerUrl = clientConfiguration.data?.clientConfiguration.oidc_issuer_url ?? undefined;
+  }, [clientConfiguration.data]);
 
   const router = useMemo(
     () =>
-      queryPreloadComplete &&
       createBrowserRouter(
         [
           {
@@ -79,16 +53,36 @@ function DataModeApplicationEntry({
             context.set(apolloClientContext, client);
             context.set(fetchContext, fetch);
             context.set(authenticityTokensManagerContext, manager);
-            context.set(clientConfigurationDataContext, clientConfigurationData);
+            if (clientConfiguration.data) {
+              context.set(clientConfigurationDataContext, clientConfiguration.data);
+            }
             context.set(sessionContext, undefined);
             return context;
           },
         },
       ),
-    [clientConfigurationData, queryPreloadComplete],
+    [clientConfiguration.data],
   );
 
-  return <StrictMode>{router && <RouterProvider router={router} />}</StrictMode>;
+  return (
+    <StrictMode>
+      <AuthenticationManagerContext.Provider value={authManager}>
+        {clientConfiguration.error ? (
+          <ErrorDisplay graphQLError={clientConfiguration.error} />
+        ) : (
+          <RouterProvider router={router} />
+        )}
+      </AuthenticationManagerContext.Provider>
+    </StrictMode>
+  );
 }
 
-mountReactComponents({ AppRoot: DataModeApplicationEntry });
+function DataModeApplicationEntrySuspenseWrapper() {
+  return (
+    <Suspense fallback={<PageLoadingIndicator visible />}>
+      <DataModeApplicationEntry />
+    </Suspense>
+  );
+}
+
+mountReactComponents({ AppRoot: DataModeApplicationEntrySuspenseWrapper });

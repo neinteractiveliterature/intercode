@@ -2,11 +2,11 @@
 class RegistrationsController < Devise::RegistrationsController
   include RedirectWithAuthentication
 
-  prepend_before_action :check_captcha, only: [:create]
-  prepend_before_action :disable_destroy, only: [:destroy]
+  prepend_before_action :check_captcha, only: [:create] # rubocop:disable Rails/LexicallyScopedActionFilter
+  prepend_before_action :disable_destroy, only: [:destroy] # rubocop:disable Rails/LexicallyScopedActionFilter
 
   def new
-    respond_to { |format| format.html { redirect_with_authentication("signUp") } }
+    render html: "", layout: "application"
   end
 
   private
@@ -23,6 +23,6 @@ class RegistrationsController < Devise::RegistrationsController
   end
 
   def disable_destroy
-    redirect_to root_path, alert: "To delete your account, please email the site administrators."
+    redirect_to root_path, alert: t("registrations.disable_destroy")
   end
 end
