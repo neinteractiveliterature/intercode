@@ -608,10 +608,11 @@ GEM
       logger
     sequel (5.104.0)
       bigdecimal
-    shoryuken (6.2.1)
-      aws-sdk-core (>= 2)
+    shoryuken (7.0.2)
+      aws-sdk-sqs (>= 1.66.0)
       concurrent-ruby
       thor
+      zeitwerk (~> 2.6)
     simplecov (0.22.0)
       docile (~> 1.1)
       simplecov-html (~> 0.11)
