@@ -1,22 +1,21 @@
 import { useContext, useEffect } from 'react';
 import { useLocation } from 'react-router';
 
-import AuthenticationModalContext from './AuthenticationModalContext';
 import AppRootContext from '../AppRootContext';
+import { AuthenticationManagerContext } from './authenticationManager';
 
 export default function useLoginRequired(): boolean {
-  const authenticationModal = useContext(AuthenticationModalContext);
+  const authenticationManager = useContext(AuthenticationManagerContext);
   const { currentUser } = useContext(AppRootContext);
   const location = useLocation();
 
   useEffect(() => {
     if (!currentUser) {
-      if (!authenticationModal.visible) {
-        authenticationModal.open({ currentView: 'signIn' });
-        authenticationModal.setAfterSignInPath(location.pathname);
-      }
+      authenticationManager.initiateAuthentication(location.pathname).then(({ redirectUrl }) => {
+        window.location.href = redirectUrl.toString();
+      });
     }
-  }, [authenticationModal, currentUser, location.pathname]);
+  }, [authenticationManager, currentUser, location.pathname]);
 
   return !currentUser;
 }

@@ -13,7 +13,7 @@ import ViewSignupsOptions from './ViewSignupsOptions';
 import AppRootContext from '../../AppRootContext';
 import useAsyncFunction from '../../useAsyncFunction';
 import WithdrawSignupButton from './WithdrawSignupButton';
-import AuthenticationModalContext from '../../Authentication/AuthenticationModalContext';
+import { AuthenticationManagerContext } from '../../Authentication/authenticationManager';
 import {
   EventPageQueryData,
   MySignupFieldsFragment,
@@ -123,16 +123,16 @@ function RunCard({
   const [signupButtonClicked, signupError, mutationInProgress] = useAsyncFunction(performSignup, {
     suppressError: true,
   });
-  const { setAfterSignInPath, open: openAuthenticationModal } = useContext(AuthenticationModalContext);
+  const authenticationManager = useContext(AuthenticationManagerContext);
 
   const renderMainSignupSection = () => {
     if (!myProfile) {
       return (
         <button
           type="button"
-          onClick={() => {
-            setAfterSignInPath(location.pathname);
-            openAuthenticationModal({ currentView: 'signIn' });
+          onClick={async () => {
+            const { redirectUrl } = await authenticationManager.initiateAuthentication(location.pathname);
+            window.location.href = redirectUrl.toString();
           }}
           className="btn btn-outline-primary"
           style={{ whiteSpace: 'normal' }}

@@ -1,4 +1,4 @@
-import { Suspense, useCallback, useRef, useEffect, ReactNode, useState, useMemo, useContext } from 'react';
+import { Suspense, ReactNode, useState, useMemo } from 'react';
 import { Outlet } from 'react-router';
 import { i18n } from 'i18next';
 import { I18nextProvider } from 'react-i18next';
@@ -17,7 +17,6 @@ import AuthenticationModalContext, {
   useAuthenticationModalProvider,
 } from './Authentication/AuthenticationModalContext';
 import AuthenticationModal from './Authentication/AuthenticationModal';
-import { AuthenticityTokensContext } from './AuthenticityTokensContext';
 import getI18n from './setupI18Next';
 import RailsDirectUploadsContext from './RailsDirectUploadsContext';
 import { DateTime, Duration } from 'luxon';
@@ -48,22 +47,8 @@ export function ProviderStack(props: AppWrapperProps) {
   const { recaptchaSiteKey } = props;
   // TODO bring this back when we re-add prompting
   // const confirm = useConfirm();
-  const manager = useContext(AuthenticityTokensContext);
   const authenticationModalContextValue = useAuthenticationModalProvider(recaptchaSiteKey ?? undefined);
-  const {
-    open: openAuthenticationModal,
-    unauthenticatedError,
-    setUnauthenticatedError,
-  } = authenticationModalContextValue;
-  const openSignIn = useCallback(async () => {
-    setUnauthenticatedError(true);
-    await manager.refresh();
-    openAuthenticationModal({ currentView: 'signIn' });
-  }, [openAuthenticationModal, setUnauthenticatedError, manager]);
-  const onUnauthenticatedRef = useRef(openSignIn);
-  useEffect(() => {
-    onUnauthenticatedRef.current = openSignIn;
-  }, [openSignIn]);
+  const { unauthenticatedError } = authenticationModalContextValue;
 
   const railsDirectUploadsContextValue = useMemo(
     () => ({
