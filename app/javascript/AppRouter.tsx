@@ -483,11 +483,6 @@ const commonRoutes: RouteObject[] = [
     lazy: () => import('./OAuth/AuthorizedApplications'),
     children: [{ path: ':uid', lazy: () => import('./OAuth/$uid') }],
   },
-  { path: '/users/sign_in', lazy: () => import('./Authentication/DeviseSignInPage') },
-  { path: '/users/sign_up', lazy: () => import('./Authentication/DeviseSignUpPage') },
-  { path: '/users/password/new', lazy: () => import('./Authentication/DeviseForgotPasswordPage') },
-  { path: '/users/edit', lazy: () => import('./Authentication/EditUser') },
-  { path: '/users/password/edit', lazy: () => import('./Authentication/ResetPassword') },
 ];
 
 const commonInConventionRoutes: RouteObject[] = [
@@ -948,6 +943,11 @@ const conventionModeRoutes: RouteObject[] = [
 const singleEventModeRoutes: RouteObject[] = [];
 
 const rootSiteRoutes: RouteObject[] = [
+  { path: '/users/sign_in', lazy: () => import('./Authentication/DeviseSignInPage') },
+  { path: '/users/sign_up', lazy: () => import('./Authentication/DeviseSignUpPage') },
+  { path: '/users/password/new', lazy: () => import('./Authentication/DeviseForgotPasswordPage') },
+  { path: '/users/edit', lazy: () => import('./Authentication/EditUser') },
+  { path: '/users/password/edit', lazy: () => import('./Authentication/ResetPassword') },
   {
     path: '/conventions',
     id: NamedRoute.RootSiteConventionsAdmin,

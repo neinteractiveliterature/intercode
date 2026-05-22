@@ -190,6 +190,7 @@ type AttachImageToEventProposalPayload {
 }
 
 type AuthorizedApplication {
+  is_intercode_frontend: Boolean!
   name: String!
   scopes: [String!]!
   uid: ID!
@@ -6977,7 +6978,13 @@ input RoomInput {
   name: String
 }
 
+"""
+The root site, which hosts global CMS content and authentication pages.
+"""
 type RootSite implements CmsParent {
+  """
+  CMS layout used for authentication pages.
+  """
   auth_layout: CmsLayout
 
   """
@@ -7091,7 +7098,15 @@ type RootSite implements CmsParent {
     """
     query: String!
   ): SearchResult!
+
+  """
+  The hostname of the root site.
+  """
   host: String!
+
+  """
+  A fixed identifier for the singleton root site.
+  """
   id: ID!
 
   """
@@ -7135,6 +7150,10 @@ type RootSite implements CmsParent {
   The CMS page used for the root path (/) of this domain.
   """
   rootPage: Page!
+
+  """
+  The display name shown in the navigation bar.
+  """
   site_name: String!
 
   """
@@ -7151,13 +7170,35 @@ type RootSite implements CmsParent {
     """
     name: String
   ): [CmsContent!]!
+
+  """
+  The base URL of the root site.
+  """
   url: String!
 }
 
+"""
+Input type for updating root site settings.
+"""
 input RootSiteInput {
+  """
+  ID of the CMS layout to use for authentication pages.
+  """
   authLayoutId: ID
+
+  """
+  ID of the default CMS layout for pages.
+  """
   defaultLayoutId: ID
+
+  """
+  ID of the root page.
+  """
   rootPageId: ID
+
+  """
+  Display name shown in the navigation bar.
+  """
   site_name: String
 }
 

@@ -283,6 +283,7 @@ export type AttachImageToEventProposalPayload = {
 
 export type AuthorizedApplication = {
   __typename: 'AuthorizedApplication';
+  is_intercode_frontend: Scalars['Boolean']['output'];
   name: Scalars['String']['output'];
   scopes: Array<Scalars['String']['output']>;
   uid: Scalars['ID']['output'];
@@ -5432,8 +5433,10 @@ export type RoomInput = {
   name?: InputMaybe<Scalars['String']['input']>;
 };
 
+/** The root site, which hosts global CMS content and authentication pages. */
 export type RootSite = CmsParent & {
   __typename: 'RootSite';
+  /** CMS layout used for authentication pages. */
   auth_layout?: Maybe<CmsLayout>;
   /** Returns the content block partial for the given content block name */
   blockPartial?: Maybe<CmsPartial>;
@@ -5476,7 +5479,9 @@ export type RootSite = CmsParent & {
   effectiveCmsLayout: CmsLayout;
   /** Does a full-text search within this domain. */
   fullTextSearch: SearchResult;
+  /** The hostname of the root site. */
   host: Scalars['String']['output'];
+  /** A fixed identifier for the singleton root site. */
   id: Scalars['ID']['output'];
   /**
    * Returns all the Liquid assigns for regular CMS page rendering in the current domain name.
@@ -5490,6 +5495,7 @@ export type RootSite = CmsParent & {
   previewMarkdown: Scalars['String']['output'];
   /** The CMS page used for the root path (/) of this domain. */
   rootPage: Page;
+  /** The display name shown in the navigation bar. */
   site_name: Scalars['String']['output'];
   /**
    * Finds CMS content by partial name, case-insensitive, within the current domain's CMS content.
@@ -5499,20 +5505,24 @@ export type RootSite = CmsParent & {
    * This query is always limited to a maximum of 10 results.
    */
   typeaheadSearchCmsContent: Array<CmsContent>;
+  /** The base URL of the root site. */
   url: Scalars['String']['output'];
 };
 
 
+/** The root site, which hosts global CMS content and authentication pages. */
 export type RootSiteBlockPartialArgs = {
   name: CmsPartialBlockName;
 };
 
 
+/** The root site, which hosts global CMS content and authentication pages. */
 export type RootSiteCmsContentGroupArgs = {
   id: Scalars['ID']['input'];
 };
 
 
+/** The root site, which hosts global CMS content and authentication pages. */
 export type RootSiteCmsPageArgs = {
   id?: InputMaybe<Scalars['ID']['input']>;
   rootPage?: InputMaybe<Scalars['Boolean']['input']>;
@@ -5520,21 +5530,25 @@ export type RootSiteCmsPageArgs = {
 };
 
 
+/** The root site, which hosts global CMS content and authentication pages. */
 export type RootSiteEffectiveCmsLayoutArgs = {
   path: Scalars['String']['input'];
 };
 
 
+/** The root site, which hosts global CMS content and authentication pages. */
 export type RootSiteFullTextSearchArgs = {
   query: Scalars['String']['input'];
 };
 
 
+/** The root site, which hosts global CMS content and authentication pages. */
 export type RootSitePreviewLiquidArgs = {
   content: Scalars['String']['input'];
 };
 
 
+/** The root site, which hosts global CMS content and authentication pages. */
 export type RootSitePreviewMarkdownArgs = {
   eventId?: InputMaybe<Scalars['ID']['input']>;
   eventProposalId?: InputMaybe<Scalars['ID']['input']>;
@@ -5542,14 +5556,20 @@ export type RootSitePreviewMarkdownArgs = {
 };
 
 
+/** The root site, which hosts global CMS content and authentication pages. */
 export type RootSiteTypeaheadSearchCmsContentArgs = {
   name?: InputMaybe<Scalars['String']['input']>;
 };
 
+/** Input type for updating root site settings. */
 export type RootSiteInput = {
+  /** ID of the CMS layout to use for authentication pages. */
   authLayoutId?: InputMaybe<Scalars['ID']['input']>;
+  /** ID of the default CMS layout for pages. */
   defaultLayoutId?: InputMaybe<Scalars['ID']['input']>;
+  /** ID of the root page. */
   rootPageId?: InputMaybe<Scalars['ID']['input']>;
+  /** Display name shown in the navigation bar. */
   site_name?: InputMaybe<Scalars['String']['input']>;
 };
 

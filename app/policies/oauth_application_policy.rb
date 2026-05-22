@@ -16,7 +16,7 @@ class OAuthApplicationPolicy < ApplicationPolicy
 
   class Scope < Scope
     def resolve
-      return scope.all if user&.site_admin? && !doorkeeper_token
+      return scope.all if user&.site_admin?
 
       scope.none
     end

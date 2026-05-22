@@ -1783,6 +1783,22 @@
           "possibleTypes": null,
           "fields": [
             {
+              "name": "is_intercode_frontend",
+              "description": null,
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "Boolean",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
               "name": "name",
               "description": null,
               "type": {
@@ -29882,7 +29898,7 @@
         {
           "kind": "OBJECT",
           "name": "RootSite",
-          "description": null,
+          "description": "The root site, which hosts global CMS content and authentication pages.",
           "interfaces": [
             {
               "kind": "INTERFACE",
@@ -29894,7 +29910,7 @@
           "fields": [
             {
               "name": "auth_layout",
-              "description": null,
+              "description": "CMS layout used for authentication pages.",
               "type": {
                 "kind": "OBJECT",
                 "name": "CmsLayout",
@@ -30295,7 +30311,7 @@
             },
             {
               "name": "host",
-              "description": null,
+              "description": "The hostname of the root site.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -30311,7 +30327,7 @@
             },
             {
               "name": "id",
-              "description": null,
+              "description": "A fixed identifier for the singleton root site.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -30457,7 +30473,7 @@
             },
             {
               "name": "site_name",
-              "description": null,
+              "description": "The display name shown in the navigation bar.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -30510,7 +30526,7 @@
             },
             {
               "name": "url",
-              "description": null,
+              "description": "The base URL of the root site.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -30531,14 +30547,14 @@
         {
           "kind": "INPUT_OBJECT",
           "name": "RootSiteInput",
-          "description": null,
+          "description": "Input type for updating root site settings.",
           "interfaces": null,
           "possibleTypes": null,
           "fields": null,
           "inputFields": [
             {
               "name": "authLayoutId",
-              "description": null,
+              "description": "ID of the CMS layout to use for authentication pages.",
               "type": {
                 "kind": "SCALAR",
                 "name": "ID",
@@ -30550,7 +30566,7 @@
             },
             {
               "name": "defaultLayoutId",
-              "description": null,
+              "description": "ID of the default CMS layout for pages.",
               "type": {
                 "kind": "SCALAR",
                 "name": "ID",
@@ -30562,7 +30578,7 @@
             },
             {
               "name": "rootPageId",
-              "description": null,
+              "description": "ID of the root page.",
               "type": {
                 "kind": "SCALAR",
                 "name": "ID",
@@ -30574,7 +30590,7 @@
             },
             {
               "name": "site_name",
-              "description": null,
+              "description": "Display name shown in the navigation bar.",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",

@@ -6,6 +6,7 @@ query SignInContextQuery {
   signInOAuthApplication: oauthApplicationByCurrentRequest {
     uid
     name
+    is_intercode_frontend
   }
 }
 

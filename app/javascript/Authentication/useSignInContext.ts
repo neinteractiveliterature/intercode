@@ -15,6 +15,6 @@ export function useSignInContext(): SignInContext {
   });
   return {
     conventionName: conventionName ?? data?.signInConvention?.name,
-    oauthAppName: data?.signInOAuthApplication?.name,
+    oauthAppName: data?.signInOAuthApplication?.is_intercode_frontend ? undefined : data?.signInOAuthApplication?.name,
   };
 }
