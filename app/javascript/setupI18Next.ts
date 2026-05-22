@@ -1,6 +1,5 @@
-import i18next, { BackendModule, i18n, InitOptions, ResourceKey } from 'i18next';
+import i18next, { BackendModule, InitOptions, ResourceKey } from 'i18next';
 import ChainedBackend, { ChainedBackendOptions } from 'i18next-chained-backend';
-// import LocalStorageBackend from 'i18next-localstorage-backend';
 import { DateTime } from 'luxon';
 import { initReactI18next } from 'react-i18next';
 import { DateTimeFormatKey } from './DateTimeFormats';
@@ -96,7 +95,7 @@ const i18nInitPromise = i18nObject.init(initOptions).then(() => {
   ready = true;
 });
 
-async function getI18n(): Promise<i18n> {
+async function getI18n(): Promise<typeof i18nObject> {
   if (ready) {
     return i18nObject;
   }
