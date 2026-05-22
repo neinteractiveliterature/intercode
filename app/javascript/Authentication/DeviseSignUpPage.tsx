@@ -1,6 +1,6 @@
 import { useState, useContext, Suspense, useId } from 'react';
 import * as React from 'react';
-import { Link } from 'react-router';
+import { Link, LoaderFunction, useLoaderData } from 'react-router';
 import ReCAPTCHA from 'react-google-recaptcha';
 import arrayToSentence from 'array-to-sentence';
 import { useTranslation } from 'react-i18next';
@@ -14,9 +14,20 @@ import useAfterSessionChange from './useAfterSessionChange';
 import humanize from '../humanize';
 import { AuthenticityTokensContext } from '../AuthenticityTokensContext';
 import PasswordInputWithStrengthCheck from './PasswordInputWithStrengthCheck';
-import AuthenticationModalContext from './AuthenticationModalContext';
 import { useSignInContext } from './useSignInContext';
 import usePageTitle from '../usePageTitle';
+import { clientConfigurationDataContext } from '../AppContexts';
+
+type DeviseSignUpPageLoaderData = {
+  recaptchaSiteKey: string | null;
+};
+
+export const loader: LoaderFunction = ({ context }) => {
+  const clientConfigurationData = context.get(clientConfigurationDataContext);
+  return {
+    recaptchaSiteKey: clientConfigurationData.clientConfiguration.recaptcha_site_key,
+  } satisfies DeviseSignUpPageLoaderData;
+};
 
 async function signUp(
   authenticityToken: string,
@@ -61,7 +72,7 @@ async function signUp(
 
 function DeviseSignUpPage(): React.JSX.Element {
   const { t } = useTranslation();
-  const { recaptchaSiteKey } = useContext(AuthenticationModalContext);
+  const { recaptchaSiteKey } = useLoaderData() as DeviseSignUpPageLoaderData;
   const manager = useContext(AuthenticityTokensContext);
   const { conventionName, oauthAppName } = useSignInContext();
   const [formState, setFormState] = useState<UserFormState>({});

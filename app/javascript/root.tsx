@@ -26,7 +26,6 @@ function RootProviderStack({ clientConfiguration }: { clientConfiguration: Clien
     <ProviderStack
       railsDefaultActiveStorageServiceName={clientConfiguration.rails_default_active_storage_service_name}
       railsDirectUploadsUrl={clientConfiguration.rails_direct_uploads_url}
-      recaptchaSiteKey={clientConfiguration.recaptcha_site_key}
     />
   );
 }
