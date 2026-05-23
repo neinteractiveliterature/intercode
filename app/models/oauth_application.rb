@@ -34,6 +34,14 @@ class OAuthApplication < ApplicationRecord
       .join("\n")
   end
 
+  def scopes
+    if is_intercode_frontend?
+      Doorkeeper.application.scopes
+    else
+      super
+    end
+  end
+
   private
 
   def frontend_redirect_uris_for_host(host)
