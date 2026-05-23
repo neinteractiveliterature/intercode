@@ -4,10 +4,11 @@ class RootSitePolicy < ApplicationPolicy
     true
   end
 
-  # Can't alter the root site unless you have a real session cookie and are not an identity assumer
+  # Can't alter the root site unless you are not an identity assumer,
+  # and either have a real session cookie or a token with the manage_intercode scope
   def manage?
     return false if assumed_identity_from_profile
-    site_admin?
+    oauth_scope?(:manage_intercode) && site_admin?
   end
 
   class Scope < Scope

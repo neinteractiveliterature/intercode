@@ -39,7 +39,7 @@ export function getAuthorizationRedirectURL(
     client_id: clientId,
     redirect_uri: `${window.location.origin}/oauth/callback`,
     scope:
-      'public openid email profile read_profile read_signups read_events read_conventions read_organizations read_email_routing manage_profile manage_signups manage_events manage_conventions manage_organizations manage_email_routing',
+      'public openid email profile read_profile read_signups read_events read_conventions read_organizations read_email_routing manage_profile manage_signups manage_events manage_conventions manage_organizations manage_email_routing manage_intercode',
     nonce: pkceChallenge.state,
     code_challenge: pkceChallenge.challenge,
     code_challenge_method: 'S256',
