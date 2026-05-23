@@ -93,19 +93,6 @@ function EditRootSite() {
       />
 
       <SelectWithLabel
-        name="auth_layout_id"
-        label="Layout for authentication pages"
-        helpText="Used for sign-in, sign-up, password reset, and account edit pages. Falls back to the default layout if not set."
-        value={authLayout}
-        isClearable
-        getOptionValue={(option) => option.id.toString()}
-        getOptionLabel={(option) => option.name ?? ''}
-        options={data.rootSite.cmsLayouts}
-        onChange={(newValue) => setAuthLayout(newValue ?? null)}
-        isDisabled={updateInProgress}
-      />
-
-      <SelectWithLabel
         name="default_layout_id"
         label="Default layout for pages"
         value={defaultLayout}
@@ -126,6 +113,19 @@ function EditRootSite() {
         getOptionLabel={(option) => option.name ?? ''}
         options={data.rootSite.cmsPages}
         onChange={(newValue) => newValue && setRootPage(newValue)}
+        isDisabled={updateInProgress}
+      />
+
+      <SelectWithLabel
+        name="auth_layout_id"
+        label="Layout for authentication pages"
+        helpText="Used for sign-in, sign-up, password reset, and account edit pages. Falls back to the default layout if not set."
+        value={authLayout}
+        isClearable
+        getOptionValue={(option) => option.id.toString()}
+        getOptionLabel={(option) => option.name ?? ''}
+        options={data.rootSite.cmsLayouts}
+        onChange={(newValue) => setAuthLayout(newValue ?? null)}
         isDisabled={updateInProgress}
       />
 

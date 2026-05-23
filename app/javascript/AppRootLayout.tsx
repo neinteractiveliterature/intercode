@@ -35,7 +35,7 @@ export const loader: LoaderFunction<RouterContextProvider> = async ({ context, r
 };
 
 function AppRootLayout() {
-  const cachedCmsLayoutId = useRef<string>();
+  const cachedCmsLayoutId = useRef<string>(undefined);
   const data = useLoaderData() as AppRootLayoutQueryData;
 
   const parsedCmsContent = useMemo(() => {
