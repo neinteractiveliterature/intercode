@@ -132,7 +132,7 @@ function EditUserForm() {
                 <ErrorDisplay stringError={(updateUserError || {}).message} />
               </div>
               <div className="card-footer bg-light text-end">
-                {saved ? <span className="text-success">Saved! </span> : null}
+                {saved ? <span className="text-success">{t('buttons.saved')} </span> : null}
                 <input
                   type="submit"
                   className="btn btn-primary"

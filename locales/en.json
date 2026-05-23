@@ -677,7 +677,8 @@
     "save": "Save",
     "saveChanges": "Save changes",
     "selectAll": "Select all",
-    "selectNone": "Select none"
+    "selectNone": "Select none",
+    "saved": "Saved!"
   },
   "clickwrap": {
     "agreeButton": "I agree",
@@ -1571,5 +1572,11 @@
     "infiniteBothEnds": "anytime",
     "infiniteFinish": "from {{ start }} indefinitely",
     "infiniteStart": "anytime up to {{ finish }}"
+  },
+  "rootSiteAdmin": {
+    "editRootSite": {
+      "authLayoutHelpText": "Used for sign-in, sign-up, password reset, and account edit pages. Falls back to the default layout if not set.",
+      "authLayoutLabel": "Layout for authentication pages"
+    }
   }
 }

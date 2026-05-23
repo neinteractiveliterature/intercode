@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import * as React from 'react';
+import { useTranslation } from 'react-i18next';
 
 import { BootstrapFormInput, ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -61,6 +62,7 @@ function EditRootSite() {
   const error = actionData instanceof Error ? actionData : undefined;
   const navigation = useNavigation();
   const updateInProgress = navigation.state !== 'idle';
+  const { t } = useTranslation();
 
   const [edited, setEdited] = useState(false);
   const [success, setSuccess] = useState(false);
@@ -118,8 +120,8 @@ function EditRootSite() {
 
       <SelectWithLabel
         name="auth_layout_id"
-        label="Layout for authentication pages"
-        helpText="Used for sign-in, sign-up, password reset, and account edit pages. Falls back to the default layout if not set."
+        label={t('rootSiteAdmin.editRootSite.authLayoutLabel')}
+        helpText={t('rootSiteAdmin.editRootSite.authLayoutHelpText')}
         value={authLayout}
         isClearable
         getOptionValue={(option) => option.id.toString()}
@@ -135,7 +137,7 @@ function EditRootSite() {
         Save changes
       </button>
 
-      {success ? ' Saved!' : null}
+      {success ? <span className="text-success ms-2">{t('buttons.saved')}</span> : null}
     </Form>
   );
 }
