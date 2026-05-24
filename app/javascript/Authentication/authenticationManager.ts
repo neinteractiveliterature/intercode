@@ -4,6 +4,7 @@ import {
   exchangeCodeForToken,
   generatePKCEChallenge,
   getAuthorizationRedirectURL,
+  refreshTokens,
 } from './openid';
 import { createContext } from 'react';
 import * as z from 'zod/mini';
@@ -11,6 +12,22 @@ import * as z from 'zod/mini';
 const CURRENT_LOGIN_FLOW_DATA_KEY = 'intercode.currentLoginFlowData';
 const JWT_TOKEN_KEY = 'intercode.jwtToken';
 const JWT_REFRESH_TOKEN_KEY = 'intercode.jwtRefreshToken';
+
+// Treat the access token as expired if it's within this many seconds of its
+// JWT `exp` claim, so we refresh slightly before the server would reject it.
+const ACCESS_TOKEN_REFRESH_BUFFER_SECONDS = 30;
+
+function decodeJwtPayload(token: string): { exp?: number } | null {
+  try {
+    const [, payloadB64] = token.split('.');
+    if (!payloadB64) return null;
+    const normalized = payloadB64.replace(/-/g, '+').replace(/_/g, '/');
+    const padded = normalized + '='.repeat((4 - (normalized.length % 4)) % 4);
+    return JSON.parse(atob(padded));
+  } catch {
+    return null;
+  }
+}
 
 const PKCEChallengeDataSchema = z.object({
   verifier: z.string(),
@@ -33,6 +50,7 @@ export class AuthenticationManager {
   jwtToken?: string;
   jwtRefreshToken?: string;
   private serializer: (manager: AuthenticationManager) => void | Promise<void>;
+  private refreshPromise?: Promise<void>;
 
   constructor(serializer: AuthenticationManager['serializer'], clientId?: string) {
     this.serializer = serializer;
@@ -126,6 +144,52 @@ export class AuthenticationManager {
       return { returnPath };
     } finally {
       this.currentLoginFlowData = undefined;
+      await this.serialize();
+    }
+  }
+
+  // Returns a usable access token, refreshing it via the refresh token first if
+  // the current one is near expiration. Concurrent callers share a single
+  // refresh request. If we have no refresh token, or refresh fails, this clears
+  // local auth state and resolves to undefined so the caller falls through to
+  // an anonymous request (the GraphQL endpoint tolerates a missing bearer).
+  async ensureFreshAccessToken(): Promise<string | undefined> {
+    if (this.jwtToken && !this.isAccessTokenExpired()) {
+      return this.jwtToken;
+    }
+    if (!this.jwtRefreshToken) {
+      return undefined;
+    }
+    if (!this.refreshPromise) {
+      this.refreshPromise = this.performRefresh().finally(() => {
+        this.refreshPromise = undefined;
+      });
+    }
+    await this.refreshPromise;
+    return this.jwtToken;
+  }
+
+  private isAccessTokenExpired(): boolean {
+    if (!this.jwtToken) return true;
+    const payload = decodeJwtPayload(this.jwtToken);
+    // No exp claim → assume the server is authoritative; don't proactively refresh.
+    if (!payload || typeof payload.exp !== 'number') return false;
+    return Date.now() / 1000 + ACCESS_TOKEN_REFRESH_BUFFER_SECONDS >= payload.exp;
+  }
+
+  private async performRefresh(): Promise<void> {
+    const refreshToken = this.jwtRefreshToken;
+    if (!refreshToken) return;
+    try {
+      const config = await this.getOpenidConfig();
+      const tokens = await refreshTokens(config, refreshToken);
+      this.jwtToken = tokens.access_token;
+      this.jwtRefreshToken = tokens.refresh_token ?? this.jwtRefreshToken;
+    } catch (e) {
+      console.warn('Refresh-token grant failed; clearing local auth state', e);
+      this.jwtToken = undefined;
+      this.jwtRefreshToken = undefined;
+    } finally {
       await this.serialize();
     }
   }

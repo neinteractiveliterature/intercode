@@ -5,6 +5,7 @@ import {
   Configuration,
   randomPKCECodeVerifier,
   calculatePKCECodeChallenge,
+  refreshTokenGrant,
 } from 'openid-client';
 
 export type PKCEChallengeData = {
@@ -61,5 +62,16 @@ export async function exchangeCodeForToken(
     idTokenExpected: true,
   });
 
+  return tokens;
+}
+
+export async function refreshTokens(
+  config: Configuration,
+  refreshToken: string,
+): Promise<{
+  access_token: string;
+  refresh_token?: string;
+}> {
+  const tokens = await refreshTokenGrant(config, refreshToken);
   return tokens;
 }
