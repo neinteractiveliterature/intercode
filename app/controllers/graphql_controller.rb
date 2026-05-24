@@ -16,9 +16,9 @@ class GraphqlController < ApplicationController
       assumed_identity_from_profile: :assumed_identity_from_profile,
       verified_request: :verified_request?,
       timezone_for_request: :timezone_for_request
-    }
+    }.freeze
 
-    METHOD_CACHE = {}
+    METHOD_CACHE = {} # rubocop:disable Style/MutableConstant -- memoizes resolved instance methods
 
     def initialize(controller, **values)
       @controller = controller
@@ -63,6 +63,12 @@ class GraphqlController < ApplicationController
     end
   end
 
+  # Strip a stale/revoked bearer token before any before_action reads `current_user`,
+  # so Devise's Doorkeeper strategy doesn't reject the whole request with 401. We'd
+  # rather degrade to an anonymous request and let the SPA notice via the missing
+  # `currentUser` and re-auth.
+  prepend_before_action :ignore_unacceptable_bearer_token
+
   skip_before_action :verify_authenticity_token # We're doing this in MutationType.authorized?
   skip_before_action :ensure_user_con_profile_exists
   skip_before_action :redirect_if_user_con_profile_needs_update
@@ -86,6 +92,19 @@ class GraphqlController < ApplicationController
   end
 
   private
+
+  def ignore_unacceptable_bearer_token
+    return unless request.authorization&.start_with?("Bearer ")
+
+    token = Doorkeeper.authenticate(request)
+    return if token&.acceptable?(Doorkeeper.configuration.default_scopes)
+
+    request.env.delete("HTTP_AUTHORIZATION")
+    # Signal to the SPA that we ignored its bearer so it can refresh and retry
+    # — needed when the client's clock skew makes a JWT *look* fresh locally
+    # but the server still considers it expired/revoked.
+    response.headers["X-Bearer-Token-Rejected"] = "true"
+  end
 
   def execute_from_params(params)
     context = Context.new(self)
