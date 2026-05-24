@@ -1,17 +1,15 @@
 import { Configuration } from 'openid-client';
-import {
-  discoverOpenidConfig,
-  exchangeCodeForToken,
-  generatePKCEChallenge,
-  getAuthorizationRedirectURL,
-  refreshTokens,
-} from './openid';
+import { discoverOpenidConfig, generatePKCEChallenge, getAuthorizationRedirectURL } from './openid';
 import { createContext } from 'react';
 import * as z from 'zod/mini';
 
 const CURRENT_LOGIN_FLOW_DATA_KEY = 'intercode.currentLoginFlowData';
-const JWT_TOKEN_KEY = 'intercode.jwtToken';
-const JWT_REFRESH_TOKEN_KEY = 'intercode.jwtRefreshToken';
+
+// Legacy localStorage keys from before cookie-swap. We clear these on boot so
+// users who upgrade don't carry around dead bearer tokens that the SPA would
+// otherwise ignore but that still take up storage and risk leaking via XSS.
+const LEGACY_JWT_TOKEN_KEY = 'intercode.jwtToken';
+const LEGACY_JWT_REFRESH_TOKEN_KEY = 'intercode.jwtRefreshToken';
 
 // Treat the access token as expired if it's within this many seconds of its
 // JWT `exp` claim, so we refresh slightly before the server would reject it.
@@ -42,23 +40,30 @@ const LoginFlowDataSchema = z.object({
 
 export type LoginFlowData = z.infer<typeof LoginFlowDataSchema>;
 
+type TokenResponseBody = {
+  access_token: string;
+  token_type: string;
+  expires_in: number;
+  scope: string;
+};
+
+// The refresh token lives in an HttpOnly `__Host-` cookie set by the
+// `/oauth_session/*` endpoints. The SPA only handles the access token
+// (in memory, not persisted) and the PKCE challenge during sign-in.
 export class AuthenticationManager {
   clientId?: string;
   issuerUrl?: string;
   openidConfig?: Configuration;
   currentLoginFlowData?: LoginFlowData;
   jwtToken?: string;
-  jwtRefreshToken?: string;
-  private serializer: (manager: AuthenticationManager) => void | Promise<void>;
   private refreshPromise?: Promise<void>;
 
-  constructor(serializer: AuthenticationManager['serializer'], clientId?: string) {
-    this.serializer = serializer;
+  constructor(clientId?: string) {
     this.clientId = clientId;
   }
 
   static deserializeFromBrowser(clientId?: string): AuthenticationManager {
-    const manager = new AuthenticationManager(AuthenticationManager.serializeToBrowser, clientId);
+    const manager = new AuthenticationManager(clientId);
 
     const currentLoginFlowDataJSON = sessionStorage.getItem(CURRENT_LOGIN_FLOW_DATA_KEY);
     if (currentLoginFlowDataJSON) {
@@ -69,34 +74,20 @@ export class AuthenticationManager {
       }
     }
 
-    manager.jwtToken = localStorage.getItem(JWT_TOKEN_KEY) ?? undefined;
-    manager.jwtRefreshToken = localStorage.getItem(JWT_REFRESH_TOKEN_KEY) ?? undefined;
+    // One-time cleanup: drop access/refresh tokens from the pre-cookie-swap
+    // architecture. They're unreadable by the server now anyway.
+    localStorage.removeItem(LEGACY_JWT_TOKEN_KEY);
+    localStorage.removeItem(LEGACY_JWT_REFRESH_TOKEN_KEY);
 
     return manager;
   }
 
-  static serializeToBrowser(manager: AuthenticationManager): void {
-    if (manager.currentLoginFlowData) {
-      sessionStorage.setItem(CURRENT_LOGIN_FLOW_DATA_KEY, JSON.stringify(manager.currentLoginFlowData));
+  private serializeLoginFlowData(): void {
+    if (this.currentLoginFlowData) {
+      sessionStorage.setItem(CURRENT_LOGIN_FLOW_DATA_KEY, JSON.stringify(this.currentLoginFlowData));
     } else {
       sessionStorage.removeItem(CURRENT_LOGIN_FLOW_DATA_KEY);
     }
-
-    if (manager.jwtToken) {
-      localStorage.setItem(JWT_TOKEN_KEY, manager.jwtToken);
-    } else {
-      localStorage.removeItem(JWT_TOKEN_KEY);
-    }
-
-    if (manager.jwtRefreshToken) {
-      localStorage.setItem(JWT_REFRESH_TOKEN_KEY, manager.jwtRefreshToken);
-    } else {
-      localStorage.removeItem(JWT_REFRESH_TOKEN_KEY);
-    }
-  }
-
-  async serialize(): Promise<void> {
-    await this.serializer(this);
   }
 
   async getOpenidConfig(): Promise<Configuration> {
@@ -120,7 +111,7 @@ export class AuthenticationManager {
       pkceChallenge,
       returnPath,
     };
-    await this.serialize();
+    this.serializeLoginFlowData();
 
     const redirectUrl = getAuthorizationRedirectURL(config, pkceChallenge, this.clientId!);
     return { redirectUrl };
@@ -133,32 +124,50 @@ export class AuthenticationManager {
         throw new Error('No current login flow found');
       }
 
-      const { state, verifier } = loginFlowData.pkceChallenge;
-      const tokenResponse = await exchangeCodeForToken(await this.getOpenidConfig(), verifier, state, callbackUrl);
+      const code = callbackUrl.searchParams.get('code');
+      if (!code) {
+        throw new Error('No authorization code in callback');
+      }
+
+      const { verifier } = loginFlowData.pkceChallenge;
+      const redirectUri = `${window.location.origin}/oauth/callback`;
+      const tokenResponse = await this.postToTokenEndpoint('/oauth_session/exchange', {
+        code,
+        code_verifier: verifier,
+        redirect_uri: redirectUri,
+      });
 
       this.jwtToken = tokenResponse.access_token;
-      this.jwtRefreshToken = tokenResponse.refresh_token;
 
       const returnPath = loginFlowData.returnPath || '/';
-
       return { returnPath };
     } finally {
       this.currentLoginFlowData = undefined;
-      await this.serialize();
+      this.serializeLoginFlowData();
     }
   }
 
-  // Returns a usable access token, refreshing it via the refresh token first if
-  // the current one is near expiration. Concurrent callers share a single
-  // refresh request. If we have no refresh token, or refresh fails, this clears
-  // local auth state and resolves to undefined so the caller falls through to
-  // an anonymous request (the GraphQL endpoint tolerates a missing bearer).
+  // Pulls an access token from the HttpOnly cookie session on cold boot. If
+  // there's no session cookie or it's been revoked, returns false and the
+  // caller continues unauthenticated.
+  async bootstrapFromCookie(): Promise<boolean> {
+    try {
+      const tokenResponse = await this.postToTokenEndpoint('/oauth_session/refresh', {});
+      this.jwtToken = tokenResponse.access_token;
+      return true;
+    } catch {
+      this.jwtToken = undefined;
+      return false;
+    }
+  }
+
+  // Returns a usable access token, refreshing via the cookie if the current
+  // one is near expiry. Concurrent callers share a single refresh request.
+  // On refresh failure (cookie missing/revoked), clears state and resolves to
+  // undefined so the caller falls through to an anonymous request.
   async ensureFreshAccessToken(): Promise<string | undefined> {
     if (this.jwtToken && !this.isAccessTokenExpired()) {
       return this.jwtToken;
-    }
-    if (!this.jwtRefreshToken) {
-      return undefined;
     }
     if (!this.refreshPromise) {
       this.refreshPromise = this.performRefresh().finally(() => {
@@ -178,24 +187,28 @@ export class AuthenticationManager {
   }
 
   private async performRefresh(): Promise<void> {
-    const refreshToken = this.jwtRefreshToken;
-    if (!refreshToken) return;
     try {
-      const config = await this.getOpenidConfig();
-      const tokens = await refreshTokens(config, refreshToken);
-      this.jwtToken = tokens.access_token;
-      this.jwtRefreshToken = tokens.refresh_token ?? this.jwtRefreshToken;
+      const tokenResponse = await this.postToTokenEndpoint('/oauth_session/refresh', {});
+      this.jwtToken = tokenResponse.access_token;
     } catch (e) {
-      console.warn('Refresh-token grant failed; clearing local auth state', e);
+      // Cookie missing, revoked, or server unreachable. Either way the user
+      // is no longer authenticated locally; let the caller fall through.
+      console.warn('Cookie-backed refresh failed; clearing in-memory access token', e);
       this.jwtToken = undefined;
-      this.jwtRefreshToken = undefined;
-    } finally {
-      await this.serialize();
     }
   }
 
   async signOut(): Promise<{ endSessionEndpoint?: string }> {
-    await this.reset();
+    // Tell the server to revoke the refresh-token row and clear the cookie
+    // *before* navigating away, so a copy of the access token can't be used
+    // after sign-out.
+    try {
+      await fetch('/oauth_session/sign_out', { method: 'POST', credentials: 'same-origin' });
+    } catch (e) {
+      console.warn('Failed to revoke OAuth session server-side', e);
+    }
+
+    this.jwtToken = undefined;
 
     const config = await this.getOpenidConfig();
     const endSessionEndpoint = config.serverMetadata().end_session_endpoint;
@@ -204,9 +217,20 @@ export class AuthenticationManager {
 
   async reset(): Promise<void> {
     this.jwtToken = undefined;
-    this.jwtRefreshToken = undefined;
-    await this.serialize();
+  }
+
+  private async postToTokenEndpoint(path: string, body: Record<string, string>): Promise<TokenResponseBody> {
+    const response = await fetch(path, {
+      method: 'POST',
+      credentials: 'same-origin',
+      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+      body: JSON.stringify(body),
+    });
+    if (!response.ok) {
+      throw new Error(`${path} failed: HTTP ${response.status}`);
+    }
+    return (await response.json()) as TokenResponseBody;
   }
 }
 
-export const AuthenticationManagerContext = createContext<AuthenticationManager>(new AuthenticationManager(() => {}));
+export const AuthenticationManagerContext = createContext<AuthenticationManager>(new AuthenticationManager());

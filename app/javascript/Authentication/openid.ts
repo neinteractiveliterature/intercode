@@ -1,11 +1,9 @@
 import {
   discovery,
   buildAuthorizationUrl,
-  authorizationCodeGrant,
   Configuration,
   randomPKCECodeVerifier,
   calculatePKCECodeChallenge,
-  refreshTokenGrant,
 } from 'openid-client';
 
 export type PKCEChallengeData = {
@@ -45,33 +43,4 @@ export function getAuthorizationRedirectURL(
     code_challenge: pkceChallenge.challenge,
     code_challenge_method: 'S256',
   });
-}
-
-export async function exchangeCodeForToken(
-  config: Configuration,
-  pkceCodeVerifier: string,
-  expectedNonce: string,
-  callbackUrl: URL,
-): Promise<{
-  access_token: string;
-  refresh_token?: string;
-}> {
-  const tokens = await authorizationCodeGrant(config, callbackUrl, {
-    pkceCodeVerifier,
-    expectedNonce,
-    idTokenExpected: true,
-  });
-
-  return tokens;
-}
-
-export async function refreshTokens(
-  config: Configuration,
-  refreshToken: string,
-): Promise<{
-  access_token: string;
-  refresh_token?: string;
-}> {
-  const tokens = await refreshTokenGrant(config, refreshToken);
-  return tokens;
 }
