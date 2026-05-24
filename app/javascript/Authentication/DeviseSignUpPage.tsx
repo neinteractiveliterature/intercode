@@ -16,16 +16,16 @@ import { AuthenticityTokensContext } from '../AuthenticityTokensContext';
 import PasswordInputWithStrengthCheck from './PasswordInputWithStrengthCheck';
 import { useSignInContext } from './useSignInContext';
 import usePageTitle from '../usePageTitle';
-import { clientConfigurationDataContext } from '../AppContexts';
+import { clientConfigurationContext } from '../AppContexts';
 
 type DeviseSignUpPageLoaderData = {
   recaptchaSiteKey: string | null;
 };
 
 export const loader: LoaderFunction = ({ context }) => {
-  const clientConfigurationData = context.get(clientConfigurationDataContext);
+  const clientConfiguration = context.get(clientConfigurationContext);
   return {
-    recaptchaSiteKey: clientConfigurationData.clientConfiguration.recaptcha_site_key,
+    recaptchaSiteKey: clientConfiguration.recaptcha_site_key,
   } satisfies DeviseSignUpPageLoaderData;
 };
 

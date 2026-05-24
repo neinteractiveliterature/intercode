@@ -1,24 +1,27 @@
 import { ApolloClient } from '@apollo/client';
 import { ApolloProvider } from '@apollo/client/react';
-import { apolloClientContext, authenticityTokensManagerContext, clientConfigurationDataContext } from 'AppContexts';
+import {
+  apolloClientContext,
+  authenticityTokensManagerContext,
+  clientConfigurationContext,
+  ClientConfiguration,
+} from 'AppContexts';
 import { ProviderStack } from 'AppWrapper';
 import AuthenticityTokensManager, { AuthenticityTokensContext } from 'AuthenticityTokensContext';
-import { ClientConfiguration } from 'graphqlTypes.generated';
 import { StrictMode } from 'react';
 import { LoaderFunction, useLoaderData } from 'react-router';
-import { ClientConfigurationQueryData } from 'serverQueries.generated';
 
 type RootLoaderData = {
-  clientConfigurationData: ClientConfigurationQueryData;
+  clientConfiguration: ClientConfiguration;
   authenticityTokensManager: AuthenticityTokensManager;
   client: ApolloClient;
 };
 
 export const loader: LoaderFunction = ({ context }) => {
-  const clientConfigurationData = context.get(clientConfigurationDataContext);
+  const clientConfiguration = context.get(clientConfigurationContext);
   const authenticityTokensManager = context.get(authenticityTokensManagerContext);
   const client = context.get(apolloClientContext);
-  return { clientConfigurationData, client, authenticityTokensManager } satisfies RootLoaderData;
+  return { clientConfiguration, client, authenticityTokensManager } satisfies RootLoaderData;
 };
 
 function RootProviderStack({ clientConfiguration }: { clientConfiguration: ClientConfiguration }) {
@@ -37,7 +40,7 @@ export default function Root() {
     <StrictMode>
       <AuthenticityTokensContext.Provider value={loaderData.authenticityTokensManager}>
         <ApolloProvider client={loaderData.client}>
-          <RootProviderStack clientConfiguration={loaderData.clientConfigurationData.clientConfiguration} />
+          <RootProviderStack clientConfiguration={loaderData.clientConfiguration} />
         </ApolloProvider>
       </AuthenticityTokensContext.Provider>
     </StrictMode>

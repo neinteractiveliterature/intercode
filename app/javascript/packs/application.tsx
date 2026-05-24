@@ -1,42 +1,61 @@
 import 'regenerator-runtime/runtime';
 
 import mountReactComponents from '../mountReactComponents';
-import { StrictMode, Suspense, use, useEffect, useMemo } from 'react';
+import { StrictMode, Suspense, use, useMemo } from 'react';
 import AuthenticityTokensManager, { getAuthenticityTokensURL } from 'AuthenticityTokensContext';
 import { createBrowserRouter, RouterContextProvider, RouterProvider } from 'react-router';
 import { buildBrowserApolloClient, GraphQLNotAuthenticatedErrorEvent } from 'useIntercodeApolloClient';
 import {
   apolloClientContext,
   authenticityTokensManagerContext,
-  clientConfigurationDataContext,
+  clientConfigurationContext,
   fetchContext,
   sessionContext,
+  ClientConfiguration,
 } from 'AppContexts';
-import { ClientConfigurationQueryDocument } from 'serverQueries.generated';
 import { appRootRoutes } from 'AppRouter';
 import { AuthenticationManager, AuthenticationManagerContext } from '../Authentication/authenticationManager';
-import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/litform';
+import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
+import { ApolloClient } from '@apollo/client';
 
-const manager = new AuthenticityTokensManager(fetch, undefined, getAuthenticityTokensURL());
-const refreshPromise = manager.refresh();
-const authManager = AuthenticationManager.deserializeFromBrowser();
-const client = buildBrowserApolloClient(manager, authManager);
+type Bootstrap = {
+  clientConfiguration: ClientConfiguration;
+  authenticityTokensManager: AuthenticityTokensManager;
+  authManager: AuthenticationManager;
+  client: ApolloClient;
+};
 
-window.addEventListener(GraphQLNotAuthenticatedErrorEvent.type, async () => {
-  const { redirectUrl } = await authManager.initiateAuthentication(window.location.href);
-  window.location.href = redirectUrl.toString();
-});
-const clientConfigurationQuery = client.query({ query: ClientConfigurationQueryDocument });
+// Fetch /client_configuration *first*, then stand up the auth manager and
+// Apollo client using its values. This lets the AuthenticationManager refresh
+// expired access tokens on cold boot (which requires the OAuth clientId and
+// OIDC issuer URL) without depending on server-rendered HTML.
+const bootstrapPromise: Promise<Bootstrap> = (async () => {
+  const configResponse = await fetch('/client_configuration', { credentials: 'same-origin' });
+  if (!configResponse.ok) {
+    throw new Error(`Failed to load /client_configuration (HTTP ${configResponse.status})`);
+  }
+  const clientConfiguration = (await configResponse.json()) as ClientConfiguration;
+
+  const authenticityTokensManager = new AuthenticityTokensManager(fetch, undefined, getAuthenticityTokensURL());
+  await authenticityTokensManager.refresh();
+
+  const authManager = AuthenticationManager.deserializeFromBrowser(
+    clientConfiguration.oauth_frontend_application_uid ?? undefined,
+  );
+  authManager.issuerUrl = clientConfiguration.oidc_issuer_url ?? undefined;
+
+  const client = buildBrowserApolloClient(authenticityTokensManager, authManager);
+
+  window.addEventListener(GraphQLNotAuthenticatedErrorEvent.type, async () => {
+    const { redirectUrl } = await authManager.initiateAuthentication(window.location.href);
+    window.location.href = redirectUrl.toString();
+  });
+
+  return { clientConfiguration, authenticityTokensManager, authManager, client };
+})();
 
 function DataModeApplicationEntry() {
-  use(refreshPromise);
-  const clientConfiguration = use(clientConfigurationQuery);
-
-  // Set auth manager config from Rails props once available
-  useEffect(() => {
-    authManager.clientId = clientConfiguration.data?.clientConfiguration.oauth_frontend_application_uid ?? undefined;
-    authManager.issuerUrl = clientConfiguration.data?.clientConfiguration.oidc_issuer_url ?? undefined;
-  }, [clientConfiguration.data]);
+  const bootstrap = use(bootstrapPromise);
 
   const router = useMemo(
     () =>
@@ -50,28 +69,22 @@ function DataModeApplicationEntry() {
         {
           getContext: () => {
             const context = new RouterContextProvider();
-            context.set(apolloClientContext, client);
+            context.set(apolloClientContext, bootstrap.client);
             context.set(fetchContext, fetch);
-            context.set(authenticityTokensManagerContext, manager);
-            if (clientConfiguration.data) {
-              context.set(clientConfigurationDataContext, clientConfiguration.data);
-            }
+            context.set(authenticityTokensManagerContext, bootstrap.authenticityTokensManager);
+            context.set(clientConfigurationContext, bootstrap.clientConfiguration);
             context.set(sessionContext, undefined);
             return context;
           },
         },
       ),
-    [clientConfiguration.data],
+    [bootstrap],
   );
 
   return (
     <StrictMode>
-      <AuthenticationManagerContext.Provider value={authManager}>
-        {clientConfiguration.error ? (
-          <ErrorDisplay graphQLError={clientConfiguration.error} />
-        ) : (
-          <RouterProvider router={router} />
-        )}
+      <AuthenticationManagerContext.Provider value={bootstrap.authManager}>
+        <RouterProvider router={router} />
       </AuthenticationManagerContext.Provider>
     </StrictMode>
   );
