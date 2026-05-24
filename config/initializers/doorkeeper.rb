@@ -40,7 +40,7 @@ Doorkeeper.configure do
   # Access token expiration time (default 2 hours).
   # If you want to disable expiration, set this to nil.
   #
-  access_token_expires_in nil
+  # access_token_expires_in 2.hours
 
   # Assign custom TTL for access tokens. Will be used instead of access_token_expires_in
   # option if defined. `context` has the following properties available
@@ -49,9 +49,9 @@ Doorkeeper.configure do
   # `grant_type` - the grant type of the request (see Doorkeeper::OAuth)
   # `scopes` - the requested scopes (see Doorkeeper::OAuth::Scopes)
   #
-  # custom_access_token_expires_in do |context|
-  #   context.client.application.additional_settings.implicit_oauth_expiration
-  # end
+  custom_access_token_expires_in do |context|
+    context.scopes.any? { |scope| scope.start_with? "manage_" } ? 30.minutes : 2.weeks
+  end
 
   # Use a custom class for generating the access token.
   # See https://github.com/doorkeeper-gem/doorkeeper#custom-access-token-generator
@@ -79,7 +79,7 @@ Doorkeeper.configure do
   # `grant_type` - the grant type of the request (see Doorkeeper::OAuth)
   # `scopes` - the requested scopes (see Doorkeeper::OAuth::Scopes)
   #
-  # use_refresh_token
+  use_refresh_token
 
   # Forbids creating/updating applications with arbitrary scopes that are
   # not in configuration, i.e. `default_scopes` or `optional_scopes`.
