@@ -17,6 +17,16 @@ class SessionsController < Devise::SessionsController
     redirect_to path, allow_other_host: uri&.host.present? && trusted_origin?(uri.host)
   end
 
+  # Revoke the user's intercode-frontend access tokens before Devise tears down
+  # the session, so any JWT copy that may have been exfiltrated (e.g. via XSS)
+  # stops working at sign-out time. This also revokes the refresh tokens that
+  # share the same DB row. Intentionally revokes across all of the user's
+  # browser sessions, since signing out is a "secure my account" action.
+  def destroy
+    revoke_frontend_access_tokens_for(current_user) if current_user
+    super
+  end
+
   # Override to allow cross-host redirect back to the convention subdomain after sign-out.
   def respond_to_on_destroy(non_navigational_status: :no_content)
     respond_to do |format|
@@ -59,5 +69,19 @@ class SessionsController < Devise::SessionsController
   def set_return_to
     return if params[:user_return_to].blank?
     session[:user_return_to] = params[:user_return_to]
+  end
+
+  def revoke_frontend_access_tokens_for(user)
+    frontend_app = OAuthApplication.find_by(is_intercode_frontend: true)
+    return unless frontend_app
+
+    # rubocop:disable Rails/SkipsModelValidations -- Doorkeeper's own `AccessToken#revoke` uses `update_column`;
+    # no validations need to run when stamping revoked_at, and a single UPDATE is cheaper than per-row `.revoke`.
+    Doorkeeper::AccessToken.where(
+      resource_owner_id: user.id,
+      application_id: frontend_app.id,
+      revoked_at: nil
+    ).update_all(revoked_at: Time.current)
+    # rubocop:enable Rails/SkipsModelValidations
   end
 end
