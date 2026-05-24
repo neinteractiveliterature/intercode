@@ -281,11 +281,16 @@ export type AttachImageToEventProposalPayload = {
   event_proposal: EventProposal;
 };
 
+/** An OAuth application that a user has authorized. */
 export type AuthorizedApplication = {
   __typename: 'AuthorizedApplication';
+  /** Whether this is the built-in Intercode frontend application. */
   is_intercode_frontend: Scalars['Boolean']['output'];
+  /** The display name of the OAuth application. */
   name: Scalars['String']['output'];
+  /** The OAuth scopes granted to this application. */
   scopes: Array<Scalars['String']['output']>;
+  /** The OAuth application's unique identifier. */
   uid: Scalars['ID']['output'];
 };
 
@@ -318,21 +323,6 @@ export type ChoiceCount = {
   choice: Scalars['Int']['output'];
   count: Scalars['Int']['output'];
   state: SignupState;
-};
-
-/** Client-side configuration values needed for frontend initialization */
-export type ClientConfiguration = {
-  __typename: 'ClientConfiguration';
-  /** The OAuth application UID for the Intercode frontend SPA (used for PKCE auth) */
-  oauth_frontend_application_uid?: Maybe<Scalars['String']['output']>;
-  /** The OIDC issuer URL (used as the base for OpenID Connect discovery) */
-  oidc_issuer_url?: Maybe<Scalars['String']['output']>;
-  /** The default Active Storage service name configured in Rails */
-  rails_default_active_storage_service_name: Scalars['String']['output'];
-  /** The URL endpoint for Rails Direct Uploads */
-  rails_direct_uploads_url: Scalars['String']['output'];
-  /** The reCAPTCHA site key for client-side verification, or null if reCAPTCHA is disabled */
-  recaptcha_site_key?: Maybe<Scalars['String']['output']>;
 };
 
 export type CmsContent = CmsLayout | CmsPartial | Page;
@@ -4926,8 +4916,6 @@ export type Query = {
    * the actual profile of the signed-in account. If not, returns null.
    */
   assumedIdentityFromProfile?: Maybe<UserConProfile>;
-  /** Returns the client configuration data for this instance of Intercode */
-  clientConfiguration: ClientConfiguration;
   /**
    * Returns the CMS parent object associated with a given domain name. In a
    * convention domain, this is the `Convention` itself. Otherwise, it's the `RootSite`.

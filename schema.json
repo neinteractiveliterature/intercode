@@ -1778,13 +1778,13 @@
         {
           "kind": "OBJECT",
           "name": "AuthorizedApplication",
-          "description": null,
+          "description": "An OAuth application that a user has authorized.",
           "interfaces": [],
           "possibleTypes": null,
           "fields": [
             {
               "name": "is_intercode_frontend",
-              "description": null,
+              "description": "Whether this is the built-in Intercode frontend application.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -1800,7 +1800,7 @@
             },
             {
               "name": "name",
-              "description": null,
+              "description": "The display name of the OAuth application.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -1816,7 +1816,7 @@
             },
             {
               "name": "scopes",
-              "description": null,
+              "description": "The OAuth scopes granted to this application.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -1840,7 +1840,7 @@
             },
             {
               "name": "uid",
-              "description": null,
+              "description": "The OAuth application's unique identifier.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -2053,85 +2053,6 @@
                   "name": "SignupState",
                   "ofType": null
                 }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "args": []
-            }
-          ],
-          "inputFields": null,
-          "enumValues": null
-        },
-        {
-          "kind": "OBJECT",
-          "name": "ClientConfiguration",
-          "description": "Client-side configuration values needed for frontend initialization",
-          "interfaces": [],
-          "possibleTypes": null,
-          "fields": [
-            {
-              "name": "oauth_frontend_application_uid",
-              "description": "The OAuth application UID for the Intercode frontend SPA (used for PKCE auth)",
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "args": []
-            },
-            {
-              "name": "oidc_issuer_url",
-              "description": "The OIDC issuer URL (used as the base for OpenID Connect discovery)",
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "args": []
-            },
-            {
-              "name": "rails_default_active_storage_service_name",
-              "description": "The default Active Storage service name configured in Rails",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "args": []
-            },
-            {
-              "name": "rails_direct_uploads_url",
-              "description": "The URL endpoint for Rails Direct Uploads",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
-              },
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "args": []
-            },
-            {
-              "name": "recaptcha_site_key",
-              "description": "The reCAPTCHA site key for client-side verification, or null if reCAPTCHA is disabled",
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
               },
               "isDeprecated": false,
               "deprecationReason": null,
@@ -27579,22 +27500,6 @@
                 "kind": "OBJECT",
                 "name": "UserConProfile",
                 "ofType": null
-              },
-              "isDeprecated": false,
-              "deprecationReason": null,
-              "args": []
-            },
-            {
-              "name": "clientConfiguration",
-              "description": "Returns the client configuration data for this instance of Intercode",
-              "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "OBJECT",
-                  "name": "ClientConfiguration",
-                  "ofType": null
-                }
               },
               "isDeprecated": false,
               "deprecationReason": null,

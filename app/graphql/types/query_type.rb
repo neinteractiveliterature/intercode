@@ -162,10 +162,6 @@ represented as a JSON object."
   MARKDOWN
   end
 
-  field :client_configuration, Types::ClientConfigurationType, null: false do
-    description "Returns the client configuration data for this instance of Intercode"
-  end
-
   field :default_currency_code, String, null: false do
     description "Returns the default currency for this site"
   end
@@ -188,11 +184,6 @@ represented as a JSON object."
     description <<~MARKDOWN
     Finds up to 25 users by ID. If any of the IDs don't match an existing user, errors out.
   MARKDOWN
-  end
-
-  def client_configuration
-    # details of this are handled inside the ClientConfigurationType
-    {}
   end
 
   def convention_by_domain(domain:)
