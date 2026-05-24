@@ -1,5 +1,7 @@
+# frozen_string_literal: true
 require "intercode/virtual_host_constraint"
 
+# rubocop:disable Metrics/BlockLength
 Intercode::Application.routes.draw do
   use_doorkeeper_openid_connect
   use_doorkeeper
@@ -9,6 +11,7 @@ Intercode::Application.routes.draw do
   post "/graphql", to: "graphql#execute"
   devise_for :users, controllers: { passwords: "passwords", registrations: "registrations", sessions: "sessions" }
   get "/authenticity_tokens", to: "authenticity_tokens#show"
+  get "/client_configuration", to: "client_configuration#show"
   post "/sns_notifications", to: "sns_notifications#create"
   post "/stripe_webhook/account", to: "stripe_webhooks#account"
   post "/stripe_webhook/connect", to: "stripe_webhooks#connect"
@@ -83,3 +86,4 @@ Intercode::Application.routes.draw do
         extra: %r{(?!(rails/active_storage|uploads|packs|assets)/).*}
       }
 end
+# rubocop:enable Metrics/BlockLength
