@@ -12,6 +12,9 @@ Intercode::Application.routes.draw do
   devise_for :users, controllers: { passwords: "passwords", registrations: "registrations", sessions: "sessions" }
   get "/authenticity_tokens", to: "authenticity_tokens#show"
   get "/client_configuration", to: "client_configuration#show"
+  post "/oauth_session/exchange", to: "oauth_sessions#exchange"
+  post "/oauth_session/refresh", to: "oauth_sessions#refresh"
+  post "/oauth_session/sign_out", to: "oauth_sessions#sign_out"
   post "/sns_notifications", to: "sns_notifications#create"
   post "/stripe_webhook/account", to: "stripe_webhooks#account"
   post "/stripe_webhook/connect", to: "stripe_webhooks#connect"
