@@ -36,7 +36,7 @@ class OAuthApplication < ApplicationRecord
 
   def scopes
     if is_intercode_frontend?
-      Doorkeeper.application.scopes
+      Doorkeeper.config.scopes
     else
       super
     end
