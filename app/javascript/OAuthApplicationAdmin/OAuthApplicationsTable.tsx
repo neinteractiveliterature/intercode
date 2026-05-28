@@ -112,7 +112,15 @@ function OAuthApplicationsTable() {
                   <RedirectUriList redirectUri={application.redirect_uri} />
                 </td>
                 <td className="align-middle">
-                  {application.confidential ? t('general.booleans.yes') : t('general.booleans.no')}
+                  {application.confidential ? (
+                    <i className="bi-lock-fill text-success">
+                      <span className="visually-hidden">{t('general.booleans.yes')}</span>
+                    </i>
+                  ) : (
+                    <i className="bi-unlock text-secondary">
+                      <span className="visually-hidden">{t('general.booleans.no')}</span>
+                    </i>
+                  )}
                 </td>
                 <td className="align-middle text-end">
                   <Link to={`${application.id}/edit`} className="btn btn-sm btn-outline-primary me-2">
