@@ -26,7 +26,11 @@ function RedirectUriList({ redirectUri }: RedirectUriListProps) {
     <>
       <button className="hidden-button text-start" type="button" onClick={() => setExpanded((prev) => !prev)}>
         <DisclosureTriangle expanded={expanded} /> <code className="small">{uris[0]}</code>
-        {!expanded && <span className="text-secondary ms-1">+{uris.length - COLLAPSED_URI_COUNT} more&hellip;</span>}
+        {!expanded && (
+          <span className="text-secondary ms-1">
+            {t('general.moreCount', { count: uris.length - COLLAPSED_URI_COUNT })}
+          </span>
+        )}
       </button>
       {expanded && (
         <ul className="list-unstyled mb-0 mt-1">
