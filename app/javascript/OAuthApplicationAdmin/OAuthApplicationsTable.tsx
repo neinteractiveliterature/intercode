@@ -1,10 +1,45 @@
+import { useState } from 'react';
 import { Link, LoaderFunction, RouterContextProvider, useFetcher, useLoaderData } from 'react-router';
-import { useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
+import { useConfirm, ErrorDisplay, DisclosureTriangle } from '@neinteractiveliterature/litform';
 import { useTranslation } from 'react-i18next';
 
 import usePageTitle from '../usePageTitle';
 import { apolloClientContext } from '../AppContexts';
 import { OAuthApplicationsQueryData, OAuthApplicationsQueryDocument } from './queries.generated';
+
+const COLLAPSED_URI_COUNT = 1;
+
+type RedirectUriListProps = {
+  redirectUri: string | null | undefined;
+};
+
+function RedirectUriList({ redirectUri }: RedirectUriListProps) {
+  const [expanded, setExpanded] = useState(false);
+  const uris = (redirectUri ?? '').split(/\s+/).filter(Boolean);
+
+  if (uris.length === 0) return null;
+  if (uris.length <= COLLAPSED_URI_COUNT) {
+    return <code className="small">{uris[0]}</code>;
+  }
+
+  return (
+    <>
+      <button className="hidden-button text-start" type="button" onClick={() => setExpanded((prev) => !prev)}>
+        <DisclosureTriangle expanded={expanded} /> <code className="small">{uris[0]}</code>
+        {!expanded && <span className="text-secondary ms-1">+{uris.length - COLLAPSED_URI_COUNT} more&hellip;</span>}
+      </button>
+      {expanded && (
+        <ul className="list-unstyled mb-0 mt-1">
+          {uris.slice(1).map((uri) => (
+            <li key={uri}>
+              <code className="small">{uri}</code>
+            </li>
+          ))}
+        </ul>
+      )}
+    </>
+  );
+}
 
 type LoaderResult = {
   applications: OAuthApplicationsQueryData['oauth_applications'];
@@ -69,7 +104,7 @@ function OAuthApplicationsTable() {
               <tr key={application.id}>
                 <td className="align-middle">{application.name}</td>
                 <td className="align-middle">
-                  <pre className="mb-0 small">{application.redirect_uri}</pre>
+                  <RedirectUriList redirectUri={application.redirect_uri} />
                 </td>
                 <td className="align-middle">
                   {application.confidential ? t('general.booleans.yes') : t('general.booleans.no')}
