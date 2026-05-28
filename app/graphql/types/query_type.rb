@@ -335,8 +335,7 @@ represented as a JSON object."
   end
 
   def oauth_applications
-    authorize OAuthApplication.new, :read?
-    OAuthApplication.order(:name)
+    policy_scope(OAuthApplication).order(:name)
   end
 
   def oauth_pre_auth(query_params:)
