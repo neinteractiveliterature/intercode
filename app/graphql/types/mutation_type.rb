@@ -291,6 +291,7 @@ class Types::MutationType < Types::BaseObject # rubocop:disable GraphQL/ObjectDe
   field :acceptClickwrapAgreement, null: false, mutation: Mutations::AcceptClickwrapAgreement
   field :createUserConProfile, null: false, mutation: Mutations::CreateUserConProfile
   field :deleteUserConProfile, null: false, mutation: Mutations::DeleteUserConProfile
+  field :setupMyProfile, null: false, mutation: Mutations::SetupMyProfile
   field :updateUserConProfile, null: false, mutation: Mutations::UpdateUserConProfile
   field :withdrawAllUserConProfileSignups, null: false, mutation: Mutations::WithdrawAllUserConProfileSignups
 end

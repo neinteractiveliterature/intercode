@@ -1,9 +1,9 @@
-import { useMemo, useContext } from 'react';
+import { useMemo, useContext, useEffect } from 'react';
 import { LoaderFunction, useLoaderData, RouterContextProvider } from 'react-router';
 
 import { AuthenticityTokensContext } from '../AuthenticityTokensContext';
 import PermissionsPrompt from './PermissionsPrompt';
-import AuthenticationModalContext from '../Authentication/AuthenticationModalContext';
+import { AuthenticationManagerContext } from '../Authentication/authenticationManager';
 import usePageTitle from '../usePageTitle';
 import {
   OAuthAuthorizationPromptQueryData,
@@ -70,17 +70,20 @@ function AuthorizationPrompt() {
       ),
     [preAuth],
   );
-  const authenticationModal = useContext(AuthenticationModalContext);
+  const authenticationManager = useContext(AuthenticationManagerContext);
   const manager = useContext(AuthenticityTokensContext);
 
   usePageTitle('Authorization required');
 
-  if (!data.currentUser) {
-    if (!authenticationModal.visible) {
-      authenticationModal.open({ currentView: 'signIn' });
-      authenticationModal.setAfterSignInPath(window.location.href);
+  useEffect(() => {
+    if (!data.currentUser) {
+      authenticationManager.initiateAuthentication(window.location.href).then(({ redirectUrl }) => {
+        window.location.href = redirectUrl.toString();
+      });
     }
+  }, [authenticationManager, data.currentUser]);
 
+  if (!data.currentUser) {
     return <></>;
   }
 
@@ -114,11 +117,7 @@ function AuthorizationPrompt() {
   };
 
   const denyAuthorization = async () => {
-    buildAndSubmitForm(
-      'DELETE',
-      manager.tokens?.denyAuthorization ?? '',
-      authorizationParams,
-    );
+    buildAndSubmitForm('DELETE', manager.tokens?.denyAuthorization ?? '', authorizationParams);
   };
 
   return (

@@ -32,6 +32,23 @@ class Types::QueryType < Types::BaseObject
     MARKDOWN
   end
 
+  field :convention_by_oauth_return_if_present, Types::ConventionType, null: true do
+    description <<~MARKDOWN
+      Returns the convention associated with the current OAuth sign-in flow, if any. Parses the
+      `redirect_uri` from the stored OAuth return URL in the session to determine which convention
+      the user is signing into. Useful on the root-domain sign-in page where
+      `conventionByRequestHostIfPresent` returns null.
+    MARKDOWN
+  end
+
+  field :oauth_application_by_current_request, Types::AuthorizedApplicationType, null: true do
+    description <<~MARKDOWN
+      Returns the OAuth application initiating the current sign-in flow, if any. Parses the
+      `client_id` from the stored OAuth return URL in the session or params to identify which
+      application the user is signing in to use.
+    MARKDOWN
+  end
+
   field :convention_by_id, Types::ConventionType, null: false do
     argument :id, ID, required: false, camelize: true
     description <<~MARKDOWN
@@ -145,10 +162,6 @@ represented as a JSON object."
   MARKDOWN
   end
 
-  field :client_configuration, Types::ClientConfigurationType, null: false do
-    description "Returns the client configuration data for this instance of Intercode"
-  end
-
   field :default_currency_code, String, null: false do
     description "Returns the default currency for this site"
   end
@@ -173,11 +186,6 @@ represented as a JSON object."
   MARKDOWN
   end
 
-  def client_configuration
-    # details of this are handled inside the ClientConfigurationType
-    {}
-  end
-
   def convention_by_domain(domain:)
     return context[:convention] if context[:convention]&.domain == domain
 
@@ -194,6 +202,33 @@ represented as a JSON object."
 
   def convention_by_request_host_if_present
     context[:convention]
+  end
+
+  def convention_by_oauth_return_if_present
+    return_to = context[:controller].session[:user_return_to] || context[:controller].params[:user_return_to]
+    return unless return_to
+
+    return_to_uri = URI.parse(return_to)
+    redirect_uri_str = Rack::Utils.parse_query(return_to_uri.query)["redirect_uri"]
+    return unless redirect_uri_str
+
+    redirect_uri = URI.parse(redirect_uri_str)
+    Convention.find_by(domain: redirect_uri.host)
+  rescue URI::InvalidURIError, ArgumentError
+    nil
+  end
+
+  def oauth_application_by_current_request
+    return_to = context[:controller].session[:user_return_to] || context[:controller].params[:user_return_to]
+    return unless return_to
+
+    return_to_uri = URI.parse(return_to)
+    client_id = Rack::Utils.parse_query(return_to_uri.query)["client_id"]
+    return unless client_id
+
+    Doorkeeper::Application.find_by(uid: client_id)
+  rescue URI::InvalidURIError, ArgumentError
+    nil
   end
 
   def convention_by_id(id: nil)

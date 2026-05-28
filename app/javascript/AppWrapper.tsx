@@ -1,4 +1,4 @@
-import { Suspense, useCallback, useRef, useEffect, ReactNode, useState, useMemo, useContext } from 'react';
+import { Suspense, ReactNode, useState, useMemo, useEffect } from 'react';
 import { Outlet } from 'react-router';
 import { i18n } from 'i18next';
 import { I18nextProvider } from 'react-i18next';
@@ -13,11 +13,6 @@ import {
   ToastProvider,
 } from '@neinteractiveliterature/litform';
 
-import AuthenticationModalContext, {
-  useAuthenticationModalProvider,
-} from './Authentication/AuthenticationModalContext';
-import AuthenticationModal from './Authentication/AuthenticationModal';
-import { AuthenticityTokensContext } from './AuthenticityTokensContext';
 import getI18n from './setupI18Next';
 import RailsDirectUploadsContext from './RailsDirectUploadsContext';
 import { DateTime, Duration } from 'luxon';
@@ -45,25 +40,8 @@ function I18NextWrapper({ children }: { children: (i18nInstance: i18n) => ReactN
 }
 
 export function ProviderStack(props: AppWrapperProps) {
-  const { recaptchaSiteKey } = props;
   // TODO bring this back when we re-add prompting
   // const confirm = useConfirm();
-  const manager = useContext(AuthenticityTokensContext);
-  const authenticationModalContextValue = useAuthenticationModalProvider(recaptchaSiteKey);
-  const {
-    open: openAuthenticationModal,
-    unauthenticatedError,
-    setUnauthenticatedError,
-  } = authenticationModalContextValue;
-  const openSignIn = useCallback(async () => {
-    setUnauthenticatedError(true);
-    await manager.refresh();
-    openAuthenticationModal({ currentView: 'signIn' });
-  }, [openAuthenticationModal, setUnauthenticatedError, manager]);
-  const onUnauthenticatedRef = useRef(openSignIn);
-  useEffect(() => {
-    onUnauthenticatedRef.current = openSignIn;
-  }, [openSignIn]);
 
   const railsDirectUploadsContextValue = useMemo(
     () => ({
@@ -77,30 +55,23 @@ export function ProviderStack(props: AppWrapperProps) {
     <Confirm>
       <RailsDirectUploadsContext.Provider value={railsDirectUploadsContextValue}>
         {/* TODO bring this back when we re-add prompting getUserConfirmation={getUserConfirmation}> */}
-        <AuthenticationModalContext.Provider value={authenticationModalContextValue}>
-          <>
-            {!unauthenticatedError && (
-              <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
-                <I18NextWrapper>
-                  {(i18nInstance) => (
-                    <AlertProvider okText={i18nInstance.t('buttons.ok', 'OK')}>
-                      <ToastProvider
-                        formatTimeAgo={(timeAgo) =>
-                          DateTime.now().minus(Duration.fromMillis(timeAgo.milliseconds)).toRelative()
-                        }
-                      >
-                        <ErrorBoundary placement="replace" errorType="plain">
-                          <Outlet />
-                        </ErrorBoundary>
-                      </ToastProvider>
-                    </AlertProvider>
-                  )}
-                </I18NextWrapper>
-              </Suspense>
+        <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
+          <I18NextWrapper>
+            {(i18nInstance) => (
+              <AlertProvider okText={i18nInstance.t('buttons.ok', 'OK')}>
+                <ToastProvider
+                  formatTimeAgo={(timeAgo) =>
+                    DateTime.now().minus(Duration.fromMillis(timeAgo.milliseconds)).toRelative()
+                  }
+                >
+                  <ErrorBoundary placement="replace" errorType="plain">
+                    <Outlet />
+                  </ErrorBoundary>
+                </ToastProvider>
+              </AlertProvider>
             )}
-            <AuthenticationModal />
-          </>
-        </AuthenticationModalContext.Provider>
+          </I18NextWrapper>
+        </Suspense>
       </RailsDirectUploadsContext.Provider>
     </Confirm>
   );
@@ -110,5 +81,4 @@ export type AppWrapperProps = {
   queryData?: ApolloClient.WriteQueryOptions<unknown, OperationVariables>[];
   railsDefaultActiveStorageServiceName: string;
   railsDirectUploadsUrl: string;
-  recaptchaSiteKey: string;
 };

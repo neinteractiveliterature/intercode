@@ -1,6 +1,5 @@
-import { useEffect, useContext, useRef } from 'react';
+import { useEffect, useRef } from 'react';
 import { useLocation } from 'react-router';
-import AuthenticationModalContext from '../Authentication/AuthenticationModalContext';
 
 type LocationType = ReturnType<typeof useLocation>;
 
@@ -9,7 +8,6 @@ export default function useAutoCloseOnNavigate(
   shouldAutoClose?: (prevLocation: LocationType, location: LocationType) => boolean,
 ): void {
   const location = useLocation();
-  const { visible: authenticationModalVisible } = useContext(AuthenticationModalContext);
   const prevLocation = useRef<LocationType>(undefined);
 
   useEffect(() => {
@@ -17,5 +15,5 @@ export default function useAutoCloseOnNavigate(
       setOpen(false);
     }
     prevLocation.current = location;
-  }, [location, authenticationModalVisible, setOpen, shouldAutoClose]);
+  }, [location, setOpen, shouldAutoClose]);
 }

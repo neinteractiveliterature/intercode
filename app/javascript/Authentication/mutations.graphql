@@ -1,0 +1,8 @@
+mutation SetupMyProfile {
+  setupMyProfile(input: {}) {
+    my_profile {
+      id
+      needs_update
+    }
+  }
+}

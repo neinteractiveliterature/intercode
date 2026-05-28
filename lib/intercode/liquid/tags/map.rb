@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Intercode
   module Liquid
     module Tags
@@ -26,7 +27,7 @@ module Intercode
         def render(context)
           component_props = props(context)
 
-          render_low_level_component_tag(component_name(context), merge_controller_props(context, component_props))
+          render_low_level_component_tag(component_name(context), component_props)
         end
 
         def component_name(_context)

@@ -28,16 +28,30 @@ class OAuthApplication < ApplicationRecord
   def redirect_uri
     return super unless is_intercode_frontend?
 
-    assets_port =
-      if (match = ENV["ASSETS_HOST"].match(/:(\d+)\Z/))
-        match[1]
-      end
-
     [*Convention.pluck(:domain), ENV.fetch("INTERCODE_HOST", nil)].compact
-      .map do |host|
-        host = "#{host}:#{assets_port}" if assets_port.present?
-        "https://#{host}/oauth/callback"
-      end
+      .flat_map { |host| frontend_redirect_uris_for_host(host) }
+      .uniq
       .join("\n")
+  end
+
+  def scopes
+    if is_intercode_frontend?
+      Doorkeeper.config.scopes
+    else
+      super
+    end
+  end
+
+  private
+
+  def frontend_redirect_uris_for_host(host)
+    app_port = ActionMailer::Base.default_url_options[:port]&.to_s
+    assets_port = ENV["ASSETS_HOST"]&.match(/:(\d+)\Z/)&.then { |m| m[1] }
+
+    [
+      "https://#{host}/oauth/callback",
+      ("https://#{host}:#{app_port}/oauth/callback" if app_port.present?),
+      ("https://#{host}:#{assets_port}/oauth/callback" if assets_port.present?)
+    ].compact
   end
 end

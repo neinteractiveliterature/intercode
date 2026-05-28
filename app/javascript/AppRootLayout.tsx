@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useEffect, useMemo, useRef } from 'react';
 import { LoaderFunction, RouterContextProvider, useLoaderData } from 'react-router';
 import parseCmsContent, { CMS_COMPONENT_MAP } from './parseCmsContent';
 import OutletWithLoading from './OutletWithLoading';
@@ -9,7 +9,7 @@ import { apolloClientContext } from 'AppContexts';
 
 // Avoid unnecessary layout checks when moving between pages that can't change layout
 function normalizePathForLayout(path: string) {
-  if (path.startsWith('/pages/') || path === '/') {
+  if (path.startsWith('/pages/') || path.startsWith('/users/') || path.startsWith('/oauth/authorize') || path === '/') {
     return path;
   }
 
@@ -35,8 +35,7 @@ export const loader: LoaderFunction<RouterContextProvider> = async ({ context, r
 };
 
 function AppRootLayout() {
-  const [cachedCmsLayoutId, setCachedCmsLayoutId] = useState<string>();
-  const [layoutChanged, setLayoutChanged] = useState(false);
+  const cachedCmsLayoutId = useRef<string>(undefined);
   const data = useLoaderData() as AppRootLayoutQueryData;
 
   const parsedCmsContent = useMemo(() => {
@@ -48,20 +47,14 @@ function AppRootLayout() {
   }, [data.cmsParentByRequestHost.effectiveCmsLayout.content_html]);
 
   useEffect(() => {
-    if (cachedCmsLayoutId !== data.cmsParentByRequestHost.effectiveCmsLayout.id) {
-      if (cachedCmsLayoutId) {
-        // if the layout changed we need a full page reload to rerender the <head>
-        setLayoutChanged(true);
-        window.location.reload();
-      } else {
-        setCachedCmsLayoutId(data.cmsParentByRequestHost.effectiveCmsLayout.id);
-      }
+    const currentId = data.cmsParentByRequestHost.effectiveCmsLayout.id;
+    if (cachedCmsLayoutId.current && cachedCmsLayoutId.current !== currentId) {
+      // if the layout changed we need a full page reload to rerender the <head>
+      window.location.reload();
+    } else {
+      cachedCmsLayoutId.current = currentId;
     }
   }, [cachedCmsLayoutId, data]);
-
-  if (layoutChanged) {
-    return <></>;
-  }
 
   if (!parsedCmsContent?.bodyComponents) {
     return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;

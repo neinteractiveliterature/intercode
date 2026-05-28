@@ -592,10 +592,17 @@
     "forgotPasswordForm": {
       "emailLabel": "Email",
       "header": "Forgot your password?",
-      "successMessage": "<0>Please check your email.  You should receive instructions on how to reset your password shortly.</0><1>If you don’t receive instructions, please email <2>our web team</2> for help resetting your password.</1>"
+      "headerWithConvention": "Forgot your password for {{conventionName}}?",
+      "successMessage": "<0>Please check your email.  You should receive instructions on how to reset your password shortly.</0><1>If you don’t receive instructions, please email <2>our web team</2> for help resetting your password.</1>",
+      "headerWithOAuthApp": "Forgot your password for {{appName}}?"
     },
     "forgotPasswordLink": "Forgot your password?",
     "logInLink": "Log in to an existing account",
+    "oauthCallback": {
+      "authenticationError": "Authentication Error",
+      "completingLogin": "Completing login...",
+      "returnToHome": "Return to Home"
+    },
     "passwordInput": {
       "fair": "fair",
       "good": "good",
@@ -606,20 +613,34 @@
     },
     "resetPassword": {
       "header": "Reset password",
+      "headerWithConvention": "Reset your {{conventionName}} password",
       "passwordLabel": "Password",
-      "setPasswordButton": "Set password"
+      "setPasswordButton": "Set password",
+      "headerWithOAuthApp": "Reset your password for {{appName}}"
     },
     "signInForm": {
       "emailLabel": "Email",
       "header": "Log in",
+      "headerWithConvention": "Log in to {{conventionName}}",
       "logInButton": "Log in",
       "passwordLabel": "Password",
-      "rememberMeLabel": "Remember me"
+      "rememberMeLabel": "Remember me",
+      "headerWithOAuthApp": "Log in to use {{appName}}"
+    },
+    "signOut": {
+      "successBody": "Logged out.",
+      "successTitle": "Logout"
+    },
+    "signUp": {
+      "successBody": "Account created.  Welcome!",
+      "successTitle": "Account signup"
     },
     "signUpForm": {
       "header": "Sign up",
+      "headerWithConvention": "Sign up for {{conventionName}}",
       "passwordLabel": "Password",
-      "signUpButton": "Sign up"
+      "signUpButton": "Sign up",
+      "headerWithOAuthApp": "Sign up to use {{appName}}"
     },
     "signUpLink": "Sign up for an account",
     "userForm": {
@@ -656,7 +677,8 @@
     "save": "Save",
     "saveChanges": "Save changes",
     "selectAll": "Select all",
-    "selectNone": "Select none"
+    "selectNone": "Select none",
+    "saved": "Saved!"
   },
   "clickwrap": {
     "agreeButton": "I agree",
@@ -1550,5 +1572,11 @@
     "infiniteBothEnds": "anytime",
     "infiniteFinish": "from {{ start }} indefinitely",
     "infiniteStart": "anytime up to {{ finish }}"
+  },
+  "rootSiteAdmin": {
+    "editRootSite": {
+      "authLayoutHelpText": "Used for sign-in, sign-up, password reset, and account edit pages. Falls back to the default layout if not set.",
+      "authLayoutLabel": "Layout for authentication pages"
+    }
   }
 }

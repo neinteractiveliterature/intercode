@@ -1,11 +1,3 @@
-# Fake out Doorkeeper so it will render the authorization screen even if not logged in, so that
-# the React code can show a login prompt
-class NullResourceOwner
-  def id
-    nil
-  end
-end
-
 Doorkeeper.configure do
   Devise::Doorkeeper.configure_doorkeeper(self)
 
@@ -13,7 +5,15 @@ Doorkeeper.configure do
   orm :active_record
 
   # This block will be called to check whether the resource owner is authenticated or not.
-  resource_owner_authenticator { user_signed_in? ? current_user : NullResourceOwner.new }
+  resource_owner_authenticator do
+    if user_signed_in?
+      current_user
+    else
+      session[:user_return_to] = request.fullpath
+      redirect_to new_user_session_url
+      nil
+    end
+  end
 
   # If you didn't skip applications controller from Doorkeeper routes in your application routes.rb
   # file then you need to declare this block in order to restrict access to the web interface for
@@ -40,7 +40,7 @@ Doorkeeper.configure do
   # Access token expiration time (default 2 hours).
   # If you want to disable expiration, set this to nil.
   #
-  access_token_expires_in nil
+  # access_token_expires_in 2.hours
 
   # Assign custom TTL for access tokens. Will be used instead of access_token_expires_in
   # option if defined. `context` has the following properties available
@@ -49,9 +49,9 @@ Doorkeeper.configure do
   # `grant_type` - the grant type of the request (see Doorkeeper::OAuth)
   # `scopes` - the requested scopes (see Doorkeeper::OAuth::Scopes)
   #
-  # custom_access_token_expires_in do |context|
-  #   context.client.application.additional_settings.implicit_oauth_expiration
-  # end
+  custom_access_token_expires_in do |context|
+    context.scopes.any? { |scope| scope.start_with? "manage_" } ? 30.minutes : 2.weeks
+  end
 
   # Use a custom class for generating the access token.
   # See https://github.com/doorkeeper-gem/doorkeeper#custom-access-token-generator
@@ -79,7 +79,7 @@ Doorkeeper.configure do
   # `grant_type` - the grant type of the request (see Doorkeeper::OAuth)
   # `scopes` - the requested scopes (see Doorkeeper::OAuth::Scopes)
   #
-  # use_refresh_token
+  use_refresh_token
 
   # Forbids creating/updating applications with arbitrary scopes that are
   # not in configuration, i.e. `default_scopes` or `optional_scopes`.
@@ -111,7 +111,8 @@ Doorkeeper.configure do
                   :manage_events,
                   :manage_conventions,
                   :manage_organizations,
-                  :manage_email_routing
+                  :manage_email_routing,
+                  :manage_intercode
 
   # Change the way client credentials are retrieved from the request object.
   # By default it retrieves first from the `HTTP_AUTHORIZATION` header, then
@@ -174,6 +175,11 @@ Doorkeeper.configure do
   #   http://tools.ietf.org/html/rfc6819#section-4.4.3
   #
   grant_flows %w[authorization_code client_credentials implicit_oidc]
+
+  # Require PKCE for all authorization_code grants. Without this, a grant
+  # created without a code_challenge can be exchanged without a code_verifier,
+  # bypassing the PKCE protection added in the enable_pkce migration.
+  force_pkce
 
   # Hook into the strategies' request & response life-cycle in case your
   # application needs advanced customization or logging:

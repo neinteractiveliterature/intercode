@@ -74,6 +74,7 @@ function EditUserForm() {
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const [currentPassword, setCurrentPassword] = useState('');
   const [updateUserAsync, updateUserError, updateUserInProgress] = useAsyncFunction(updateUser);
+  const [saved, setSaved] = useState(false);
   const passwordFieldId = useId();
   usePageTitle('Update Your Account');
 
@@ -92,56 +93,59 @@ function EditUserForm() {
     }
 
     await updateUserAsync(authenticityToken, formState, password, passwordConfirmation, currentPassword);
-    window.location.href = '/';
+    setSaved(true);
   };
 
   return (
-    <>
-      <h1 className="mb-4">{t('authentication.editUser.header')}</h1>
-      <AccountFormContent />
-      <form onSubmit={onSubmit} className="card">
-        <div className="card-header">{t('authentication.editUser.accountDataHeader')}</div>
-
-        <div className="card-body">
-          <UserFormFields formState={formState} setFormState={setFormState} showNameWarning />
-          <div className="mb-3">
-            <label className="form-label" htmlFor={passwordFieldId}>
-              {t('authentication.editUser.passwordLabel')}
-            </label>
-            <Suspense fallback={<LoadingIndicator iconSet="bootstrap-icons" />}>
-              <PasswordInputWithStrengthCheck id={passwordFieldId} value={password} onChange={setPassword} />
-            </Suspense>
-            <small className="form-text text-muted">{t('authentication.editUser.passwordHelpText')}</small>
+    <div className="container mt-5">
+      <div className="row justify-content-center">
+        <div className="col-sm-10 col-md-8 col-lg-6">
+          <div className="card shadow-sm">
+            <div className="card-header bg-light">
+              <div className="lead">{t('authentication.editUser.header')}</div>
+            </div>
+            <form onSubmit={onSubmit}>
+              <div className="card-body p-4">
+                <AccountFormContent />
+                <UserFormFields formState={formState} setFormState={setFormState} showNameWarning />
+                <div className="mb-3">
+                  <label className="form-label" htmlFor={passwordFieldId}>
+                    {t('authentication.editUser.passwordLabel')}
+                  </label>
+                  <Suspense fallback={<LoadingIndicator iconSet="bootstrap-icons" />}>
+                    <PasswordInputWithStrengthCheck id={passwordFieldId} value={password} onChange={setPassword} />
+                  </Suspense>
+                  <small className="form-text text-muted">{t('authentication.editUser.passwordHelpText')}</small>
+                </div>
+                <PasswordConfirmationInput
+                  password={password}
+                  value={passwordConfirmation}
+                  onChange={setPasswordConfirmation}
+                />
+                <BootstrapFormInput
+                  label={t('authentication.editUser.currentPasswordLabel')}
+                  helpText={t('authentication.editUser.currentPasswordHelpText')}
+                  type="password"
+                  value={currentPassword}
+                  onTextChange={setCurrentPassword}
+                />
+                <ErrorDisplay stringError={(updateUserError || {}).message} />
+              </div>
+              <div className="card-footer bg-light text-end">
+                {saved ? <span className="text-success">{t('buttons.saved')} </span> : null}
+                <input
+                  type="submit"
+                  className="btn btn-primary"
+                  disabled={updateUserInProgress}
+                  value={t('authentication.editUser.updateAccountButton').toString()}
+                  aria-label={t('authentication.editUser.updateAccountButton')}
+                />
+              </div>
+            </form>
           </div>
-          <PasswordConfirmationInput
-            password={password}
-            value={passwordConfirmation}
-            onChange={setPasswordConfirmation}
-          />
-          <BootstrapFormInput
-            label={t('authentication.editUser.currentPasswordLabel')}
-            helpText={t('authentication.editUser.currentPasswordHelpText')}
-            type="password"
-            value={currentPassword}
-            onTextChange={setCurrentPassword}
-          />
-
-          <ErrorDisplay stringError={(updateUserError || {}).message} />
         </div>
-
-        <div className="card-footer text-end">
-          <div>
-            <input
-              type="submit"
-              className="btn btn-primary"
-              disabled={updateUserInProgress}
-              value={t('authentication.editUser.updateAccountButton').toString()}
-              aria-label={t('authentication.editUser.updateAccountButton')}
-            />
-          </div>
-        </div>
-      </form>
-    </>
+      </div>
+    </div>
   );
 }
 

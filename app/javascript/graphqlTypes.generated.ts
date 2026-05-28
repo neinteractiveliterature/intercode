@@ -281,10 +281,16 @@ export type AttachImageToEventProposalPayload = {
   event_proposal: EventProposal;
 };
 
+/** An OAuth application that a user has authorized. */
 export type AuthorizedApplication = {
   __typename: 'AuthorizedApplication';
+  /** Whether this is the built-in Intercode frontend application. */
+  is_intercode_frontend: Scalars['Boolean']['output'];
+  /** The display name of the OAuth application. */
   name: Scalars['String']['output'];
+  /** The OAuth scopes granted to this application. */
   scopes: Array<Scalars['String']['output']>;
+  /** The OAuth application's unique identifier. */
   uid: Scalars['ID']['output'];
 };
 
@@ -317,17 +323,6 @@ export type ChoiceCount = {
   choice: Scalars['Int']['output'];
   count: Scalars['Int']['output'];
   state: SignupState;
-};
-
-/** Client-side configuration values needed for frontend initialization */
-export type ClientConfiguration = {
-  __typename: 'ClientConfiguration';
-  /** The default Active Storage service name configured in Rails */
-  rails_default_active_storage_service_name: Scalars['String']['output'];
-  /** The URL endpoint for Rails Direct Uploads */
-  rails_direct_uploads_url: Scalars['String']['output'];
-  /** The reCAPTCHA site key for client-side verification */
-  recaptcha_site_key: Scalars['String']['output'];
 };
 
 export type CmsContent = CmsLayout | CmsPartial | Page;
@@ -3560,6 +3555,8 @@ export type Mutation = {
   setConventionCanceled: SetConventionCanceledPayload;
   /** Set whether or not a SignupRankedChoice should prioritize itself if an event is full */
   setSignupRankedChoicePrioritzeWaitlist: SetSignupRankedChoicePrioritizeWaitlistPayload;
+  /** Creates a UserConProfile for the currently signed-in user in the current convention. */
+  setupMyProfile: SetupMyProfilePayload;
   sortCmsNavigationItems: SortCmsNavigationItemsPayload;
   submitEventProposal: SubmitEventProposalPayload;
   /** Submit an order.  This triggers payment, unless the order is free. */
@@ -4109,6 +4106,11 @@ export type MutationSetConventionCanceledArgs = {
 
 export type MutationSetSignupRankedChoicePrioritzeWaitlistArgs = {
   input: SetSignupRankedChoicePrioritizeWaitlistInput;
+};
+
+
+export type MutationSetupMyProfileArgs = {
+  input: SetupMyProfileInput;
 };
 
 
@@ -4914,8 +4916,6 @@ export type Query = {
    * the actual profile of the signed-in account. If not, returns null.
    */
   assumedIdentityFromProfile?: Maybe<UserConProfile>;
-  /** Returns the client configuration data for this instance of Intercode */
-  clientConfiguration: ClientConfiguration;
   /**
    * Returns the CMS parent object associated with a given domain name. In a
    * convention domain, this is the `Convention` itself. Otherwise, it's the `RootSite`.
@@ -4930,6 +4930,13 @@ export type Query = {
   conventionByDomain: Convention;
   /** Finds a convention by ID. If a matching one can't be found, the request will error out. */
   conventionById: Convention;
+  /**
+   * Returns the convention associated with the current OAuth sign-in flow, if any. Parses the
+   * `redirect_uri` from the stored OAuth return URL in the session to determine which convention
+   * the user is signing into. Useful on the root-domain sign-in page where
+   * `conventionByRequestHostIfPresent` returns null.
+   */
+  conventionByOauthReturnIfPresent?: Maybe<Convention>;
   /**
    * Returns the convention associated with the domain name of this HTTP request. If one is not
    * present, the request will error out. (For a version that will return null instead of
@@ -4974,6 +4981,12 @@ export type Query = {
   myAuthorizedApplications: Array<AuthorizedApplication>;
   /** Returns a list of all notification events that are available in this instance of Intercode. */
   notificationEvents: Array<NotificationEvent>;
+  /**
+   * Returns the OAuth application initiating the current sign-in flow, if any. Parses the
+   * `client_id` from the stored OAuth return URL in the session or params to identify which
+   * application the user is signing in to use.
+   */
+  oauthApplicationByCurrentRequest?: Maybe<AuthorizedApplication>;
   /**
    * Given a set of valid OAuth query parameters for the `/oauth/authorize` endpoint, returns a
    * JSON object containing the necessary data for rendering the pre-authorization screen that
@@ -5408,8 +5421,11 @@ export type RoomInput = {
   name?: InputMaybe<Scalars['String']['input']>;
 };
 
+/** The root site, which hosts global CMS content and authentication pages. */
 export type RootSite = CmsParent & {
   __typename: 'RootSite';
+  /** CMS layout used for authentication pages. */
+  auth_layout?: Maybe<CmsLayout>;
   /** Returns the content block partial for the given content block name */
   blockPartial?: Maybe<CmsPartial>;
   /**
@@ -5451,7 +5467,9 @@ export type RootSite = CmsParent & {
   effectiveCmsLayout: CmsLayout;
   /** Does a full-text search within this domain. */
   fullTextSearch: SearchResult;
+  /** The hostname of the root site. */
   host: Scalars['String']['output'];
+  /** A fixed identifier for the singleton root site. */
   id: Scalars['ID']['output'];
   /**
    * Returns all the Liquid assigns for regular CMS page rendering in the current domain name.
@@ -5465,6 +5483,7 @@ export type RootSite = CmsParent & {
   previewMarkdown: Scalars['String']['output'];
   /** The CMS page used for the root path (/) of this domain. */
   rootPage: Page;
+  /** The display name shown in the navigation bar. */
   site_name: Scalars['String']['output'];
   /**
    * Finds CMS content by partial name, case-insensitive, within the current domain's CMS content.
@@ -5474,20 +5493,24 @@ export type RootSite = CmsParent & {
    * This query is always limited to a maximum of 10 results.
    */
   typeaheadSearchCmsContent: Array<CmsContent>;
+  /** The base URL of the root site. */
   url: Scalars['String']['output'];
 };
 
 
+/** The root site, which hosts global CMS content and authentication pages. */
 export type RootSiteBlockPartialArgs = {
   name: CmsPartialBlockName;
 };
 
 
+/** The root site, which hosts global CMS content and authentication pages. */
 export type RootSiteCmsContentGroupArgs = {
   id: Scalars['ID']['input'];
 };
 
 
+/** The root site, which hosts global CMS content and authentication pages. */
 export type RootSiteCmsPageArgs = {
   id?: InputMaybe<Scalars['ID']['input']>;
   rootPage?: InputMaybe<Scalars['Boolean']['input']>;
@@ -5495,21 +5518,25 @@ export type RootSiteCmsPageArgs = {
 };
 
 
+/** The root site, which hosts global CMS content and authentication pages. */
 export type RootSiteEffectiveCmsLayoutArgs = {
   path: Scalars['String']['input'];
 };
 
 
+/** The root site, which hosts global CMS content and authentication pages. */
 export type RootSiteFullTextSearchArgs = {
   query: Scalars['String']['input'];
 };
 
 
+/** The root site, which hosts global CMS content and authentication pages. */
 export type RootSitePreviewLiquidArgs = {
   content: Scalars['String']['input'];
 };
 
 
+/** The root site, which hosts global CMS content and authentication pages. */
 export type RootSitePreviewMarkdownArgs = {
   eventId?: InputMaybe<Scalars['ID']['input']>;
   eventProposalId?: InputMaybe<Scalars['ID']['input']>;
@@ -5517,13 +5544,20 @@ export type RootSitePreviewMarkdownArgs = {
 };
 
 
+/** The root site, which hosts global CMS content and authentication pages. */
 export type RootSiteTypeaheadSearchCmsContentArgs = {
   name?: InputMaybe<Scalars['String']['input']>;
 };
 
+/** Input type for updating root site settings. */
 export type RootSiteInput = {
+  /** ID of the CMS layout to use for authentication pages. */
+  authLayoutId?: InputMaybe<Scalars['ID']['input']>;
+  /** ID of the default CMS layout for pages. */
   defaultLayoutId?: InputMaybe<Scalars['ID']['input']>;
+  /** ID of the root page. */
   rootPageId?: InputMaybe<Scalars['ID']['input']>;
+  /** Display name shown in the navigation bar. */
   site_name?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -5757,6 +5791,21 @@ export type SetSignupRankedChoicePrioritizeWaitlistPayload = {
   clientMutationId?: Maybe<Scalars['String']['output']>;
   /** The SignupRankedChoice that has just been modified */
   signup_ranked_choice: SignupRankedChoice;
+};
+
+/** Autogenerated input type of SetupMyProfile */
+export type SetupMyProfileInput = {
+  /** A unique identifier for the client performing the mutation. */
+  clientMutationId?: InputMaybe<Scalars['String']['input']>;
+};
+
+/** Autogenerated return type of SetupMyProfile. */
+export type SetupMyProfilePayload = {
+  __typename: 'SetupMyProfilePayload';
+  /** A unique identifier for the client performing the mutation. */
+  clientMutationId?: Maybe<Scalars['String']['output']>;
+  /** The created or existing profile. */
+  my_profile: UserConProfile;
 };
 
 export enum ShowSchedule {
@@ -7122,6 +7171,8 @@ export type UserConProfile = {
   name_inverted: Scalars['String']['output'];
   /** This user profile's full name, not including their nickname. */
   name_without_nickname: Scalars['String']['output'];
+  /** Does this profile need to be updated by the user? */
+  needs_update: Scalars['Boolean']['output'];
   /** This user profile's nickname. */
   nickname?: Maybe<Scalars['String']['output']>;
   /** A human-readable summary of all this profile's orders. */

@@ -10,6 +10,7 @@ import SignInButton from '../Authentication/SignInButton';
 import SignUpButton from '../Authentication/SignUpButton';
 import AppRootContext from '../AppRootContext';
 import NavigationItem from './NavigationItem';
+import { AuthenticationManagerContext } from '../Authentication/authenticationManager';
 import Gravatar from '../Gravatar';
 import CartContents from 'Store/Cart/CartContents';
 import MenuIcon from './MenuIcon';
@@ -139,6 +140,8 @@ function RevertAssumedIdentityButton() {
 function UserNavigationSection(): React.JSX.Element {
   const { t } = useTranslation();
   const { conventionName, currentUser, myProfile, hasOAuthApplications } = useContext(AppRootContext);
+  const authenticationManager = useContext(AuthenticationManagerContext);
+  const editAccountUrl = new URL('/users/edit', authenticationManager.issuerUrl ?? window.location.origin).toString();
 
   const [referenceElement, setReferenceElement] = useState<HTMLButtonElement | null>(null);
   const [dropdownMenu, setDropdownMenu] = useState<HTMLDivElement | null>(null);
@@ -175,12 +178,10 @@ function UserNavigationSection(): React.JSX.Element {
               {...attributes.popper}
             >
               {currentUser && (
-                <NavigationItem
-                  inSection
-                  label={t('navigation.user.myAccount')}
-                  url="/users/edit"
-                  icon="bi-card-heading"
-                />
+                <a href={editAccountUrl} className="dropdown-item" target="_blank" rel="noreferrer">
+                  <MenuIcon icon="bi-card-heading" />
+                  {t('navigation.user.myAccount')}
+                </a>
               )}
               {myProfile && (
                 <NavigationItem

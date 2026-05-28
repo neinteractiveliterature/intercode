@@ -17,6 +17,11 @@ fragment RootSiteFields on RootSite {
     ...PageFields
   }
 
+  auth_layout {
+    id
+    ...RootSiteAdminLayoutFields
+  }
+
   defaultLayout {
     id
     ...RootSiteAdminLayoutFields

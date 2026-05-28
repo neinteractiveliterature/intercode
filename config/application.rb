@@ -3,7 +3,6 @@
 require_relative "boot"
 
 require "rails/all"
-require File.expand_path("lib/intercode/dynamic_cookie_domain", Rails.root)
 require File.expand_path("lib/intercode/virtual_host_constraint", Rails.root)
 
 # Require the gems listed in Gemfile, including any gems
@@ -33,7 +32,6 @@ module Intercode
     config.active_job.queue_adapter = :shoryuken
     config.active_job.queue_name_prefix = "intercode_#{Rails.env}"
 
-    config.middleware.use Intercode::DynamicCookieDomain
     config.middleware.insert_after ActionDispatch::Executor, Intercode::FindVirtualHost
     config.middleware.use Rack::Deflater
 

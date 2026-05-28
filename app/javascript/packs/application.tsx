@@ -1,71 +1,75 @@
 import 'regenerator-runtime/runtime';
 
 import mountReactComponents from '../mountReactComponents';
-import { StrictMode, use, useEffect, useMemo, useState } from 'react';
+import { StrictMode, Suspense, use, useMemo } from 'react';
 import AuthenticityTokensManager, { getAuthenticityTokensURL } from 'AuthenticityTokensContext';
 import { createBrowserRouter, RouterContextProvider, RouterProvider } from 'react-router';
-import { buildBrowserApolloClient } from 'useIntercodeApolloClient';
+import { buildBrowserApolloClient, GraphQLNotAuthenticatedErrorEvent } from 'useIntercodeApolloClient';
 import {
   apolloClientContext,
   authenticityTokensManagerContext,
-  clientConfigurationDataContext,
+  clientConfigurationContext,
   fetchContext,
   sessionContext,
+  ClientConfiguration,
 } from 'AppContexts';
-import { ClientConfigurationQueryData } from 'serverQueries.generated';
 import { appRootRoutes } from 'AppRouter';
-import { ApolloClient, OperationVariables } from '@apollo/client';
+import { AuthenticationManager, AuthenticationManagerContext } from '../Authentication/authenticationManager';
+import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
+import { ApolloClient } from '@apollo/client';
 
-const manager = new AuthenticityTokensManager(fetch, undefined, getAuthenticityTokensURL());
-const refreshPromise = manager.refresh();
-const client = buildBrowserApolloClient(manager);
-
-export type DataModeApplicationEntryProps = {
-  recaptchaSiteKey: string;
-  railsDefaultActiveStorageServiceName: string;
-  railsDirectUploadsUrl: string;
-  queryData?: ApolloClient.WriteQueryOptions<unknown, OperationVariables>[];
+type Bootstrap = {
+  clientConfiguration: ClientConfiguration;
+  authenticityTokensManager: AuthenticityTokensManager;
+  authManager: AuthenticationManager;
+  client: ApolloClient;
 };
 
-function DataModeApplicationEntry({
-  recaptchaSiteKey,
-  railsDefaultActiveStorageServiceName,
-  railsDirectUploadsUrl,
-  queryData,
-}: DataModeApplicationEntryProps) {
-  use(refreshPromise);
+// Fetch /client_configuration *first*, then stand up the auth manager and
+// Apollo client using its values. This lets the AuthenticationManager refresh
+// expired access tokens on cold boot (which requires the OAuth clientId and
+// OIDC issuer URL) without depending on server-rendered HTML.
+const bootstrapPromise: Promise<Bootstrap> = (async () => {
+  // /client_configuration is needed to construct the auth manager; the
+  // authenticity-tokens refresh is independent and can run in parallel.
+  const [configResponse, authenticityTokensManager] = await Promise.all([
+    fetch('/client_configuration', { credentials: 'same-origin' }),
+    (async () => {
+      const mgr = new AuthenticityTokensManager(fetch, undefined, getAuthenticityTokensURL());
+      await mgr.refresh();
+      return mgr;
+    })(),
+  ]);
+  if (!configResponse.ok) {
+    throw new Error(`Failed to load /client_configuration (HTTP ${configResponse.status})`);
+  }
+  const clientConfiguration = (await configResponse.json()) as ClientConfiguration;
 
-  const [queryPreloadComplete, setQueryPreloadComplete] = useState(false);
-  useEffect(() => {
-    if (queryData && Array.isArray(queryData)) {
-      for (const query of queryData) {
-        try {
-          client.writeQuery(query);
-        } catch {
-          // don't blow up if we get a malformed query
-        }
-      }
-    }
-
-    setQueryPreloadComplete(true);
-  }, [queryData]);
-
-  const clientConfigurationData = useMemo<ClientConfigurationQueryData>(
-    () => ({
-      __typename: 'Query',
-      clientConfiguration: {
-        __typename: 'ClientConfiguration',
-        recaptcha_site_key: recaptchaSiteKey,
-        rails_default_active_storage_service_name: railsDefaultActiveStorageServiceName,
-        rails_direct_uploads_url: railsDirectUploadsUrl,
-      },
-    }),
-    [recaptchaSiteKey, railsDefaultActiveStorageServiceName, railsDirectUploadsUrl],
+  const authManager = AuthenticationManager.deserializeFromBrowser(
+    clientConfiguration.oauth_frontend_application_uid ?? undefined,
   );
+  authManager.issuerUrl = clientConfiguration.oidc_issuer_url ?? undefined;
+
+  // Try to redeem the refresh cookie for an access token before we build the
+  // Apollo client, so the first GraphQL query goes out authenticated when the
+  // user already has a session. 401 means "no session yet" — keep going.
+  await authManager.bootstrapFromCookie();
+
+  const client = buildBrowserApolloClient(authenticityTokensManager, authManager);
+
+  window.addEventListener(GraphQLNotAuthenticatedErrorEvent.type, async () => {
+    const { redirectUrl } = await authManager.initiateAuthentication(window.location.href);
+    window.location.href = redirectUrl.toString();
+  });
+
+  return { clientConfiguration, authenticityTokensManager, authManager, client };
+})();
+
+function DataModeApplicationEntry() {
+  const bootstrap = use(bootstrapPromise);
 
   const router = useMemo(
     () =>
-      queryPreloadComplete &&
       createBrowserRouter(
         [
           {
@@ -76,19 +80,33 @@ function DataModeApplicationEntry({
         {
           getContext: () => {
             const context = new RouterContextProvider();
-            context.set(apolloClientContext, client);
+            context.set(apolloClientContext, bootstrap.client);
             context.set(fetchContext, fetch);
-            context.set(authenticityTokensManagerContext, manager);
-            context.set(clientConfigurationDataContext, clientConfigurationData);
+            context.set(authenticityTokensManagerContext, bootstrap.authenticityTokensManager);
+            context.set(clientConfigurationContext, bootstrap.clientConfiguration);
             context.set(sessionContext, undefined);
             return context;
           },
         },
       ),
-    [clientConfigurationData, queryPreloadComplete],
+    [bootstrap],
   );
 
-  return <StrictMode>{router && <RouterProvider router={router} />}</StrictMode>;
+  return (
+    <StrictMode>
+      <AuthenticationManagerContext.Provider value={bootstrap.authManager}>
+        <RouterProvider router={router} />
+      </AuthenticationManagerContext.Provider>
+    </StrictMode>
+  );
 }
 
-mountReactComponents({ AppRoot: DataModeApplicationEntry });
+function DataModeApplicationEntrySuspenseWrapper() {
+  return (
+    <Suspense fallback={<PageLoadingIndicator visible />}>
+      <DataModeApplicationEntry />
+    </Suspense>
+  );
+}
+
+mountReactComponents({ AppRoot: DataModeApplicationEntrySuspenseWrapper });

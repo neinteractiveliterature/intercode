@@ -1,3 +1,15 @@
+query SignInContextQuery {
+  signInConvention: conventionByOauthReturnIfPresent {
+    id
+    name
+  }
+  signInOAuthApplication: oauthApplicationByCurrentRequest {
+    uid
+    name
+    is_intercode_frontend
+  }
+}
+
 query AccountFormContentQuery {
   currentAbility {
     can_create_cms_partials

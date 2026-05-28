@@ -1841,7 +1841,9 @@ CREATE TABLE public.oauth_access_grants (
     redirect_uri text NOT NULL,
     created_at timestamp without time zone NOT NULL,
     revoked_at timestamp without time zone,
-    scopes character varying
+    scopes character varying,
+    code_challenge character varying,
+    code_challenge_method character varying
 );
 
 
@@ -2430,7 +2432,8 @@ CREATE TABLE public.root_sites (
     site_name text,
     root_page_id bigint,
     default_layout_id bigint,
-    disable_captcha boolean DEFAULT false NOT NULL
+    disable_captcha boolean DEFAULT false NOT NULL,
+    auth_layout_id bigint
 );
 
 
@@ -4847,6 +4850,13 @@ CREATE UNIQUE INDEX index_rooms_runs_on_run_id_and_room_id ON public.rooms_runs 
 
 
 --
+-- Name: index_root_sites_on_auth_layout_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_root_sites_on_auth_layout_id ON public.root_sites USING btree (auth_layout_id);
+
+
+--
 -- Name: index_root_sites_on_default_layout_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -5712,6 +5722,14 @@ ALTER TABLE ONLY public.team_members
 
 
 --
+-- Name: root_sites fk_rails_92607ed736; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.root_sites
+    ADD CONSTRAINT fk_rails_92607ed736 FOREIGN KEY (auth_layout_id) REFERENCES public.cms_layouts(id);
+
+
+--
 -- Name: cms_navigation_items fk_rails_92d572d3d8; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6142,6 +6160,8 @@ ALTER TABLE ONLY public.cms_files_pages
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260524175914'),
+('20260519000000'),
 ('20260409003354'),
 ('20260321193050'),
 ('20260315200824'),

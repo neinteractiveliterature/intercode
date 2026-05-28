@@ -34,6 +34,7 @@ import { cmsPagesAdminLoader } from './CmsAdmin/CmsPagesAdmin/loaders';
 import { cmsPartialsAdminLoader } from './CmsAdmin/CmsPartialsAdmin/loaders';
 import AppRoot from './AppRoot';
 import { AppRootQueryDocument } from './appRootQueries.generated';
+import { SetupMyProfileDocument } from './Authentication/mutations.generated';
 import { liquidDocsLoader } from './LiquidDocs/loader';
 import { cmsLayoutsAdminLoader } from './CmsAdmin/CmsLayoutsAdmin/loaders';
 import { cmsGraphqlQueriesAdminLoader } from './CmsAdmin/CmsGraphqlQueriesAdmin/loaders';
@@ -476,13 +477,12 @@ const commonRoutes: RouteObject[] = [
   },
   { path: '/oauth/applications-embed', lazy: () => import('./OAuthApplications') },
   { path: '/oauth/authorize', lazy: () => import('./OAuth/AuthorizationPrompt') },
+  { path: '/oauth/callback', lazy: () => import('./Authentication/OAuthCallback') },
   {
     path: '/oauth/authorized_applications',
     lazy: () => import('./OAuth/AuthorizedApplications'),
     children: [{ path: ':uid', lazy: () => import('./OAuth/$uid') }],
   },
-  { path: '/users/edit', lazy: () => import('./Authentication/EditUser') },
-  { path: '/users/password/edit', lazy: () => import('./Authentication/ResetPassword') },
 ];
 
 const commonInConventionRoutes: RouteObject[] = [
@@ -943,6 +943,11 @@ const conventionModeRoutes: RouteObject[] = [
 const singleEventModeRoutes: RouteObject[] = [];
 
 const rootSiteRoutes: RouteObject[] = [
+  { path: '/users/sign_in', lazy: () => import('./Authentication/DeviseSignInPage') },
+  { path: '/users/sign_up', lazy: () => import('./Authentication/DeviseSignUpPage') },
+  { path: '/users/password/new', lazy: () => import('./Authentication/DeviseForgotPasswordPage') },
+  { path: '/users/edit', lazy: () => import('./Authentication/EditUser') },
+  { path: '/users/password/edit', lazy: () => import('./Authentication/ResetPassword') },
   {
     path: '/conventions',
     id: NamedRoute.RootSiteConventionsAdmin,
@@ -1069,9 +1074,45 @@ export const appLayoutRoutes: RouteObject[] = [
   { path: '*', element: <FourOhFourPage /> },
 ];
 
-const appRootLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+const appRootLoader: LoaderFunction<RouterContextProvider> = async ({ context, request }) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query({ query: AppRootQueryDocument });
+
+  if (!data) return data;
+
+  const { pathname } = new URL(request.url);
+
+  if (data.currentUser && data.convention) {
+    const myProfile = data.convention.my_profile;
+    let freshlyCreated = false;
+
+    if (!myProfile) {
+      try {
+        await client.mutate({ mutation: SetupMyProfileDocument });
+        freshlyCreated = true;
+      } catch {
+        return data;
+      }
+    }
+
+    const clickwrapRequired = (data.convention.clickwrap_agreement || '').trim() !== '';
+    const acceptedClickwrap = freshlyCreated ? false : (myProfile?.accepted_clickwrap_agreement ?? false);
+    const needsUpdate = freshlyCreated || (myProfile?.needs_update ?? false);
+
+    const clickwrapNeeded =
+      clickwrapRequired &&
+      !acceptedClickwrap &&
+      pathname !== '/clickwrap_agreement' &&
+      pathname !== '/' &&
+      !pathname.startsWith('/pages');
+
+    if (clickwrapNeeded) return redirect('/clickwrap_agreement');
+
+    if (needsUpdate && pathname !== '/my_profile/setup' && pathname !== '/clickwrap_agreement') {
+      return redirect('/my_profile/setup');
+    }
+  }
+
   return data;
 };
 
