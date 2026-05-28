@@ -14,6 +14,7 @@ type RedirectUriListProps = {
 };
 
 function RedirectUriList({ redirectUri }: RedirectUriListProps) {
+  const { t } = useTranslation();
   const [expanded, setExpanded] = useState(false);
   const uris = (redirectUri ?? '').split(/\s+/).filter(Boolean);
 
