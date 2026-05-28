@@ -3,11 +3,11 @@ class OAuthApplicationPolicy < ApplicationPolicy
   # Only accessible by site admins via a cookie session or a token with the manage_intercode scope
 
   def read?
-    oauth_scope?(:manage_intercode) && site_admin_read?
+    oauth_scope?(:manage_intercode) && site_admin?
   end
 
   def manage?
-    oauth_scope?(:manage_intercode) && site_admin_manage?
+    oauth_scope?(:manage_intercode) && site_admin?
   end
 
   class Scope < Scope
