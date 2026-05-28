@@ -4,6 +4,7 @@ import groupBy from 'lodash/groupBy';
 import flatMap from 'lodash/flatMap';
 import { assertNever } from 'assert-never';
 import { useConfirm, ErrorDisplay, sortByLocaleString, DisclosureTriangle } from '@neinteractiveliterature/litform';
+import { useTranslation } from 'react-i18next';
 
 import PermissionNames from '../../../config/permission_names.json';
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
@@ -21,6 +22,7 @@ type UserConProfilesListProps = {
 };
 
 function UserConProfilesList({ userConProfiles }: UserConProfilesListProps) {
+  const { t } = useTranslation();
   const [expanded, setExpanded] = useState(false);
   const userConProfilesSorted = useMemo(
     () => sortByLocaleString(userConProfiles, (ucp) => ucp.name_without_nickname),
@@ -46,7 +48,11 @@ function UserConProfilesList({ userConProfiles }: UserConProfilesListProps) {
         onClick={() => setExpanded((prevExpanded) => !prevExpanded)}
       >
         <DisclosureTriangle expanded={expanded} /> {joinReact(fullList.slice(0, 2), ', ')}
-        {expanded ? ', ' : <>&hellip;</>}
+        {expanded ? (
+          ', '
+        ) : (
+          <span className="text-secondary ms-1">{t('general.moreCount', { count: fullList.length - 2 })}</span>
+        )}
       </button>
       {expanded && joinReact(fullList.slice(2), ', ')}
     </>

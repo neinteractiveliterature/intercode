@@ -1,6 +1,8 @@
 import sortBy from 'lodash/sortBy';
 import { Link, LoaderFunction, RouterContextProvider, useLoaderData } from 'react-router';
 import { sortByLocaleString } from '@neinteractiveliterature/litform';
+import { useTranslation } from 'react-i18next';
+import { TFunction } from 'i18next';
 
 import usePageTitle from '../usePageTitle';
 import {
@@ -9,13 +11,16 @@ import {
 } from './queries.generated';
 import { apolloClientContext } from 'AppContexts';
 
-function renderOrganizationConventions(organization: OrganizationAdminOrganizationsQueryData['organizations'][0]) {
+function renderOrganizationConventions(
+  organization: OrganizationAdminOrganizationsQueryData['organizations'][0],
+  t: TFunction,
+) {
   const sortedConventions = sortBy(organization.conventions, [(convention) => convention.starts_at]);
   sortedConventions.reverse();
 
   const conventionNames = sortedConventions.slice(0, 3).map((convention) => convention.name);
   if (sortedConventions.length > 3) {
-    return `${conventionNames.join(', ')}, and ${sortedConventions.length - 3} more`;
+    return `${conventionNames.join(', ')}, ${t('general.moreCount', { count: sortedConventions.length - 3 })}`;
   }
 
   return conventionNames.join(', ');
@@ -30,6 +35,7 @@ export const loader: LoaderFunction<RouterContextProvider> = async ({ context })
 };
 
 function OrganizationIndex() {
+  const { t } = useTranslation();
   const data = useLoaderData() as OrganizationAdminOrganizationsQueryData;
   usePageTitle('Organizations');
 
@@ -57,7 +63,7 @@ function OrganizationIndex() {
                   organization.name
                 )}
               </td>
-              <td>{renderOrganizationConventions(organization)}</td>
+              <td>{renderOrganizationConventions(organization, t)}</td>
             </tr>
           ))}
         </tbody>

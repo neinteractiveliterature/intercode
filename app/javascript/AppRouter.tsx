@@ -56,6 +56,7 @@ export enum NamedRoute {
   CmsPagesAdmin = 'CmsPagesAdmin',
   CmsPartialsAdmin = 'CmsPartialsAdmin',
   DepartmentAdmin = 'DepartmentAdmin',
+  EditOAuthApplication = 'EditOAuthApplication',
   EditEventCategory = 'EditEventCategory',
   EditOrganizationRole = 'EditOrganizationRole',
   EditSignup = 'EditSignup',
@@ -475,7 +476,25 @@ const commonRoutes: RouteObject[] = [
       },
     ],
   },
-  { path: '/oauth/applications-embed', lazy: () => import('./OAuthApplications') },
+  {
+    path: '/admin_oauth_applications',
+    lazy: () => import('./OAuthApplicationAdmin'),
+    children: [
+      { path: 'new', lazy: () => import('./OAuthApplicationAdmin/NewOAuthApplication') },
+      {
+        path: ':id',
+        lazy: () => import('./OAuthApplicationAdmin/$id/route'),
+        children: [
+          {
+            path: 'edit',
+            id: NamedRoute.EditOAuthApplication,
+            lazy: () => import('./OAuthApplicationAdmin/EditOAuthApplication'),
+          },
+        ],
+      },
+      { index: true, lazy: () => import('./OAuthApplicationAdmin/OAuthApplicationsTable') },
+    ],
+  },
   { path: '/oauth/authorize', lazy: () => import('./OAuth/AuthorizationPrompt') },
   { path: '/oauth/callback', lazy: () => import('./Authentication/OAuthCallback') },
   {

@@ -1,0 +1,38 @@
+#import "./queries.graphql"
+
+mutation CreateOAuthApplication($input: CreateOAuthApplicationInput!) {
+  createOAuthApplication(input: $input) {
+    oauth_application {
+      id
+      ...OAuthApplicationFields
+    }
+    secret
+  }
+}
+
+mutation UpdateOAuthApplication($input: UpdateOAuthApplicationInput!) {
+  updateOAuthApplication(input: $input) {
+    oauth_application {
+      id
+      ...OAuthApplicationFields
+    }
+  }
+}
+
+mutation DeleteOAuthApplication($input: DeleteOAuthApplicationInput!) {
+  deleteOAuthApplication(input: $input) {
+    oauth_application {
+      id
+    }
+  }
+}
+
+mutation RegenerateOAuthApplicationSecret($input: RegenerateOAuthApplicationSecretInput!) {
+  regenerateOAuthApplicationSecret(input: $input) {
+    oauth_application {
+      id
+      ...OAuthApplicationFields
+    }
+    secret
+  }
+}

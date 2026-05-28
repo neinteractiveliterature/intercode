@@ -1,0 +1,16 @@
+fragment OAuthApplicationFields on OAuthApplication {
+  id
+  name
+  uid
+  redirect_uri
+  scopes
+  confidential
+  is_intercode_frontend
+}
+
+query OAuthApplicationsQuery {
+  oauth_applications {
+    id
+    ...OAuthApplicationFields
+  }
+}

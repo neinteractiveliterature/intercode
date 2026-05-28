@@ -25,7 +25,7 @@ function generateOAuthApplicationsNavigationItem(
   return (
     currentAbility.can_manage_oauth_applications && {
       label: t('navigation.admin.oauth2Applications'),
-      url: '/oauth/applications-embed',
+      url: '/admin_oauth_applications',
       icon: 'bi-code-slash',
     }
   );
