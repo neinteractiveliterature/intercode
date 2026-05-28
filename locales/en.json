@@ -1069,8 +1069,7 @@
       "yes": "yes"
     },
     "breadcrumbAriaLabel": "Breadcrumb navigation",
-    "moreCount_one": "+1 more…",
-    "moreCount_other": "+{{ count }} more…",
+    "moreCount": "+{{ count }} more…",
     "editors": {
       "markdownHelpText": "Use <1>Markdown syntax</1> for formatting."
     },
