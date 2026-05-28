@@ -22,6 +22,13 @@ class Types::MutationType < Types::BaseObject # rubocop:disable GraphQL/ObjectDe
 
   field :revokeAuthorizedApplication, null: false, mutation: Mutations::RevokeAuthorizedApplication
 
+  ### OAuthApplication
+
+  field :createOAuthApplication, null: false, mutation: Mutations::CreateOAuthApplication
+  field :deleteOAuthApplication, null: false, mutation: Mutations::DeleteOAuthApplication
+  field :regenerateOAuthApplicationSecret, null: false, mutation: Mutations::RegenerateOAuthApplicationSecret
+  field :updateOAuthApplication, null: false, mutation: Mutations::UpdateOAuthApplication
+
   ### CmsContentGroup
 
   field :createCmsContentGroup, null: false, mutation: Mutations::CreateCmsContentGroup

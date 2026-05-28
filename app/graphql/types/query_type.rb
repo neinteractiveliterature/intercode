@@ -119,6 +119,10 @@ class Types::QueryType < Types::BaseObject
     MARKDOWN
   end
 
+  field :oauth_applications, [Types::OAuthApplicationType], null: false, camelize: false do
+    description "Returns all OAuth2 applications registered in this Intercode instance (site admin only)."
+  end
+
   field :notification_events, [Types::NotificationEventType], null: false do
     description <<~MARKDOWN
       Returns a list of all notification events that are available in this instance of Intercode.
@@ -328,6 +332,11 @@ represented as a JSON object."
 
   def has_oauth_applications # rubocop:disable Naming/PredicateMethod, Naming/PredicatePrefix
     Doorkeeper.config.application_model.any?
+  end
+
+  def oauth_applications
+    authorize OAuthApplication.new, :read?
+    OAuthApplication.order(:name)
   end
 
   def oauth_pre_auth(query_params:)
