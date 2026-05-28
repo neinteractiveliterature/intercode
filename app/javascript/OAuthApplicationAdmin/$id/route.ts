@@ -4,7 +4,8 @@ import { DeleteOAuthApplicationDocument } from '../mutations.generated';
 import { apolloClientContext } from '../../AppContexts';
 import { OAuthApplication } from '../../graphqlTypes.generated';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({ context, request, params }) => {
+  const id = params.id!;
   const client = context.get(apolloClientContext);
   try {
     if (request.method === 'DELETE') {

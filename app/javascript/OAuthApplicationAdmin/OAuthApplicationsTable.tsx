@@ -13,7 +13,7 @@ type LoaderResult = {
 export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query<OAuthApplicationsQueryData>({ query: OAuthApplicationsQueryDocument });
-  return { applications: data.oauth_applications } satisfies LoaderResult;
+  return { applications: data?.oauth_applications ?? [] } satisfies LoaderResult;
 };
 
 function OAuthApplicationsTable() {
