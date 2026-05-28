@@ -117,7 +117,7 @@ function OAuthApplicationsTable() {
                       <span className="visually-hidden">{t('general.booleans.yes')}</span>
                     </i>
                   ) : (
-                    <i className="bi-unlock text-secondary">
+                    <i className="bi-unlock-fill text-danger">
                       <span className="visually-hidden">{t('general.booleans.no')}</span>
                     </i>
                   )}
