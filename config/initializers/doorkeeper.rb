@@ -176,6 +176,11 @@ Doorkeeper.configure do
   #
   grant_flows %w[authorization_code client_credentials implicit_oidc]
 
+  # Require PKCE for all authorization_code grants. Without this, a grant
+  # created without a code_challenge can be exchanged without a code_verifier,
+  # bypassing the PKCE protection added in the enable_pkce migration.
+  force_pkce
+
   # Hook into the strategies' request & response life-cycle in case your
   # application needs advanced customization or logging:
   #

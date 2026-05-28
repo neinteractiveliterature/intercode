@@ -7,14 +7,17 @@
 #   POST /oauth_session/refresh   — rotate the cookie, mint a new access token
 #   POST /oauth_session/sign_out  — revoke the row, clear the cookie
 #
-# CSRF: the cookie is `SameSite=Strict` so the browser will never attach it to
-# a cross-origin request, including top-level navigation from an attacker's
-# page. That's the CSRF defense for this controller, hence the
-# `skip_before_action :verify_authenticity_token`.
+# CSRF: `refresh` and `sign_out` both read the SameSite=Strict HttpOnly cookie,
+# so SameSite=Strict alone stops cross-site requests from doing anything useful
+# (the cookie won't be sent). `exchange` *sets* that cookie, so SameSite alone
+# is not sufficient — a cross-origin form POST would still be processed and the
+# response Set-Cookie header would be accepted by the browser. We therefore
+# validate the Origin header on `exchange` against known trusted hosts.
 class OAuthSessionsController < ApplicationController
   COOKIE_NAME = "__Host-intercode_refresh"
 
   skip_before_action :verify_authenticity_token
+  before_action :verify_trusted_origin!, only: :exchange
   skip_before_action :ensure_user_con_profile_exists
   skip_before_action :redirect_if_user_con_profile_needs_update
   skip_before_action :ensure_clickwrap_agreement_accepted
@@ -109,5 +112,26 @@ class OAuthSessionsController < ApplicationController
     body = { error: error_code }
     body[:error_description] = description if description
     render json: body, status: status
+  end
+
+  def verify_trusted_origin!
+    origin = request.origin
+    # Requests without an Origin header (e.g., direct server-to-server calls)
+    # are allowed; browsers always send Origin on cross-origin POSTs.
+    return if origin.blank?
+
+    host = URI.parse(origin).host
+    return if trusted_origin?(host)
+
+    render_oauth_error(:invalid_request, "untrusted origin", status: :forbidden)
+  rescue URI::InvalidURIError
+    render_oauth_error(:invalid_request, "invalid origin", status: :forbidden)
+  end
+
+  def trusted_origin?(host)
+    return false if host.blank?
+    intercode_host = ENV.fetch("INTERCODE_HOST", nil)
+    host == intercode_host || (intercode_host.present? && host.end_with?(".#{intercode_host}")) ||
+      Convention.exists?(domain: host)
   end
 end
