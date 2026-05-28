@@ -1,5 +1,6 @@
 import { Link, LoaderFunction, RouterContextProvider, useFetcher, useLoaderData } from 'react-router';
 import { useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
+import { useTranslation } from 'react-i18next';
 
 import usePageTitle from '../usePageTitle';
 import { apolloClientContext } from '../AppContexts';
@@ -16,16 +17,17 @@ export const loader: LoaderFunction<RouterContextProvider> = async ({ context })
 };
 
 function OAuthApplicationsTable() {
+  const { t } = useTranslation();
   const { applications } = useLoaderData() as LoaderResult;
   const fetcher = useFetcher();
   const confirm = useConfirm();
   const deleteError = fetcher.data instanceof Error ? fetcher.data : undefined;
 
-  usePageTitle('OAuth2 applications');
+  usePageTitle(t('navigation.admin.oauth2Applications'));
 
   const deleteClicked = (application: OAuthApplicationsQueryData['oauth_applications'][number]) => {
     confirm({
-      prompt: `Are you sure you want to delete "${application.name}"? This will invalidate all existing tokens for this application.`,
+      prompt: t('admin.oauthApplications.deletePrompt', { name: application.name }),
       action: () =>
         fetcher.submit(
           {},
@@ -42,23 +44,23 @@ function OAuthApplicationsTable() {
   return (
     <div>
       <div className="d-flex align-items-center mb-4">
-        <h1 className="flex-grow-1">OAuth2 applications</h1>
+        <h1 className="flex-grow-1">{t('navigation.admin.oauth2Applications')}</h1>
         <Link to="new" className="btn btn-success">
-          New application
+          {t('admin.oauthApplications.newApplication')}
         </Link>
       </div>
 
       <ErrorDisplay graphQLError={deleteError} />
 
       {applications.length === 0 ? (
-        <p className="text-secondary">No applications yet.</p>
+        <p className="text-secondary">{t('admin.oauthApplications.noApplications')}</p>
       ) : (
         <table className="table table-striped">
           <thead>
             <tr>
-              <th>Name</th>
-              <th>Redirect URI(s)</th>
-              <th>Confidential</th>
+              <th>{t('admin.oauthApplications.tableHeaders.name')}</th>
+              <th>{t('admin.oauthApplications.tableHeaders.redirectUris')}</th>
+              <th>{t('admin.oauthApplications.tableHeaders.confidential')}</th>
               <th />
             </tr>
           </thead>
@@ -69,10 +71,12 @@ function OAuthApplicationsTable() {
                 <td className="align-middle">
                   <pre className="mb-0 small">{application.redirect_uri}</pre>
                 </td>
-                <td className="align-middle">{application.confidential ? 'Yes' : 'No'}</td>
+                <td className="align-middle">
+                  {application.confidential ? t('general.booleans.yes') : t('general.booleans.no')}
+                </td>
                 <td className="align-middle text-end">
                   <Link to={`${application.id}/edit`} className="btn btn-sm btn-outline-primary me-2">
-                    Edit
+                    {t('buttons.edit')}
                   </Link>
                   {!application.is_intercode_frontend && (
                     <button
@@ -80,7 +84,7 @@ function OAuthApplicationsTable() {
                       className="btn btn-sm btn-outline-danger"
                       onClick={() => deleteClicked(application)}
                     >
-                      Delete
+                      {t('buttons.delete')}
                     </button>
                   )}
                 </td>

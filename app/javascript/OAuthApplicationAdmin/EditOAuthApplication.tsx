@@ -8,6 +8,7 @@ import {
   useFetcher,
 } from 'react-router';
 import { CopyToClipboardButton, ErrorDisplay, useConfirm } from '@neinteractiveliterature/litform';
+import { useTranslation } from 'react-i18next';
 
 import usePageTitle from '../usePageTitle';
 import { apolloClientContext } from '../AppContexts';
@@ -18,6 +19,8 @@ import {
   RegenerateOAuthApplicationSecretMutationData,
 } from './mutations.generated';
 import OAuthApplicationForm, { EditingOAuthApplication } from './OAuthApplicationForm';
+
+const FRONTEND_APP_READONLY_FIELDS = ['redirect_uri', 'scopes'];
 
 type LoaderResult = {
   initialApplication: OAuthApplicationsQueryData['oauth_applications'][number];
@@ -61,6 +64,7 @@ export const action: ActionFunction<RouterContextProvider> = async ({ context, p
 };
 
 function EditOAuthApplication() {
+  const { t } = useTranslation();
   const { initialApplication } = useLoaderData() as LoaderResult;
   const [application, setApplication] = useState<EditingOAuthApplication>({
     name: initialApplication.name,
@@ -81,7 +85,7 @@ function EditOAuthApplication() {
       : undefined;
   const saveInProgress = saveFetcher.state !== 'idle';
 
-  usePageTitle(`Editing "${initialApplication.name}"`);
+  usePageTitle(t('admin.oauthApplications.editingTitle', { name: initialApplication.name }));
 
   const saveClicked = () => {
     saveFetcher.submit(application, { encType: 'application/json', method: 'PATCH' });
@@ -89,29 +93,28 @@ function EditOAuthApplication() {
 
   const regenerateClicked = () => {
     confirm({
-      prompt:
-        'Are you sure you want to regenerate the secret for this application? Any existing integrations using the old secret will break.',
+      prompt: t('admin.oauthApplications.regeneratePrompt'),
       action: () => regenerateFetcher.submit({}, { encType: 'application/json', method: 'POST' }),
       renderError: (err) => <ErrorDisplay graphQLError={err} />,
     });
   };
 
-  const readOnlyFields = initialApplication.is_intercode_frontend ? ['redirect_uri', 'scopes'] : [];
+  const readOnlyFields = initialApplication.is_intercode_frontend ? FRONTEND_APP_READONLY_FIELDS : [];
 
   return (
     <div>
-      <h1 className="mb-4">Editing {initialApplication.name}</h1>
+      <h1 className="mb-4">{t('admin.oauthApplications.editingTitle', { name: initialApplication.name })}</h1>
 
       <div className="mb-4">
-        <div className="fw-bold mb-1">Application ID (Client ID)</div>
+        <div className="fw-bold mb-1">{t('admin.oauthApplications.applicationId')}</div>
         <div className="d-flex align-items-center gap-2">
           <code className="bg-light px-2 py-1 rounded">{initialApplication.uid}</code>
           <CopyToClipboardButton
             className="btn btn-sm btn-outline-secondary"
             text={initialApplication.uid}
             copiedProps={{ className: 'btn btn-sm btn-outline-success' }}
-            defaultText="Copy"
-            copiedText="Copied!"
+            defaultText={t('copyToClipboard.defaultText')}
+            copiedText={t('copyToClipboard.defaultSuccess')}
             iconSet="bootstrap-icons"
           />
         </div>
@@ -119,28 +122,26 @@ function EditOAuthApplication() {
 
       {newSecret ? (
         <div className="alert alert-warning mb-4">
-          <p className="fw-bold">New secret generated — copy it now, it will not be shown again.</p>
+          <p className="fw-bold">{t('admin.oauthApplications.secretNewGenerated')}</p>
           <div className="d-flex align-items-center gap-2">
             <code className="bg-light px-2 py-1 rounded flex-grow-1">{newSecret}</code>
             <CopyToClipboardButton
               className="btn btn-sm btn-outline-secondary"
               text={newSecret}
               copiedProps={{ className: 'btn btn-sm btn-outline-success' }}
-              defaultText="Copy"
-              copiedText="Copied!"
+              defaultText={t('copyToClipboard.defaultText')}
+              copiedText={t('copyToClipboard.defaultSuccess')}
               iconSet="bootstrap-icons"
             />
           </div>
         </div>
       ) : (
         <div className="mb-4">
-          <div className="fw-bold mb-1">Client Secret</div>
-          <p className="text-secondary mb-1">
-            The secret is not displayed after creation. If you&apos;ve lost it, regenerate it below.
-          </p>
+          <div className="fw-bold mb-1">{t('admin.oauthApplications.clientSecret')}</div>
+          <p className="text-secondary mb-1">{t('admin.oauthApplications.secretHidden')}</p>
           <ErrorDisplay graphQLError={regenerateError} />
           <button type="button" className="btn btn-sm btn-outline-danger" onClick={regenerateClicked}>
-            Regenerate secret
+            {t('admin.oauthApplications.regenerateSecret')}
           </button>
         </div>
       )}
@@ -148,7 +149,7 @@ function EditOAuthApplication() {
       <OAuthApplicationForm value={application} onChange={setApplication} readOnlyFields={readOnlyFields} />
       <ErrorDisplay graphQLError={saveError} />
       <button type="button" className="btn btn-primary" onClick={saveClicked} disabled={saveInProgress}>
-        Save changes
+        {t('buttons.saveChanges')}
       </button>
     </div>
   );

@@ -150,6 +150,38 @@
         "titleLabel": "Title"
       }
     },
+    "oauthApplications": {
+      "applicationCreated": "Application created",
+      "applicationId": "Application ID (Client ID)",
+      "backToList": "Back to list",
+      "clientSecret": "Client Secret",
+      "confidentialHelpText": "Confidential applications can keep their client secret confidential. Non-confidential (public) applications are for use with native apps or single-page applications that cannot keep a secret.",
+      "createButton": "Create application",
+      "createSuccessSuffix": "was created successfully. Copy your application's credentials below — the secret will not be shown again.",
+      "deletePrompt": "Are you sure you want to delete \"{{name}}\"? This will invalidate all existing tokens for this application.",
+      "editApplication": "Edit application",
+      "editingTitle": "Editing \"{{name}}\"",
+      "fields": {
+        "confidential": "Confidential",
+        "name": "Name",
+        "redirectUri": "Redirect URI",
+        "redirectUriHelp": "Enter one redirect URI per line.",
+        "scopes": "Scopes",
+        "scopesAllIntercodeFrontend": "All scopes (Intercode frontend)"
+      },
+      "newApplication": "New application",
+      "newApplicationTitle": "New OAuth2 application",
+      "noApplications": "No applications yet.",
+      "regeneratePrompt": "Are you sure you want to regenerate the secret for this application? Any existing integrations using the old secret will break.",
+      "regenerateSecret": "Regenerate secret",
+      "secretHidden": "The secret is not displayed after creation. If you've lost it, regenerate it below.",
+      "secretNewGenerated": "New secret generated — copy it now, it will not be shown again.",
+      "tableHeaders": {
+        "confidential": "Confidential",
+        "name": "Name",
+        "redirectUris": "Redirect URI(s)"
+      }
+    },
     "notifications": {
       "events": {
         "EVENT_PROPOSALS_NEW_PROPOSAL": "New event proposal submitted",
@@ -1169,6 +1201,7 @@
       "manage_events": "Update events and event proposals you manage",
       "manage_organizations": "Update privileged data about organizations on the site",
       "manage_profile": "Update your personal profile data",
+      "manage_intercode": "Full site administration access",
       "manage_signups": "Sign you up and withdraw you from events",
       "openid": "Authenticate you using your account",
       "profile": "Access your personal profile data",

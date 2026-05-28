@@ -1,6 +1,7 @@
 import { useState } from 'react';
 import { ActionFunction, RouterContextProvider, useFetcher } from 'react-router';
 import { CopyToClipboardButton, ErrorDisplay } from '@neinteractiveliterature/litform';
+import { useTranslation } from 'react-i18next';
 
 import usePageTitle from '../usePageTitle';
 import { apolloClientContext } from '../AppContexts';
@@ -39,6 +40,7 @@ export const action: ActionFunction<RouterContextProvider> = async ({ context, r
 };
 
 function NewOAuthApplication() {
+  const { t } = useTranslation();
   const fetcher = useFetcher();
   const error = fetcher.data instanceof Error ? fetcher.data : undefined;
   const created = fetcher.data && !(fetcher.data instanceof Error) ? (fetcher.data as CreatedApplication) : undefined;
@@ -51,7 +53,7 @@ function NewOAuthApplication() {
     confidential: true,
   });
 
-  usePageTitle('New OAuth2 application');
+  usePageTitle(t('admin.oauthApplications.newApplicationTitle'));
 
   const saveClicked = () => {
     fetcher.submit(application, { method: 'POST', encType: 'application/json' });
@@ -60,39 +62,38 @@ function NewOAuthApplication() {
   if (created) {
     return (
       <div>
-        <h1 className="mb-4">Application created</h1>
+        <h1 className="mb-4">{t('admin.oauthApplications.applicationCreated')}</h1>
         <div className="alert alert-success mb-4">
           <p>
-            <strong>{created.name}</strong> was created successfully. Copy your application&apos;s credentials below —
-            the secret will not be shown again.
+            <strong>{created.name}</strong> {t('admin.oauthApplications.createSuccessSuffix')}
           </p>
         </div>
         <div className="card mb-4">
           <div className="card-body">
             <div className="mb-3">
-              <div className="fw-bold mb-1">Application ID (Client ID)</div>
+              <div className="fw-bold mb-1">{t('admin.oauthApplications.applicationId')}</div>
               <div className="d-flex align-items-center gap-2">
                 <code className="bg-light px-2 py-1 rounded flex-grow-1">{created.uid}</code>
                 <CopyToClipboardButton
                   className="btn btn-sm btn-outline-secondary"
                   text={created.uid}
                   copiedProps={{ className: 'btn btn-sm btn-outline-success' }}
-                  defaultText="Copy"
-                  copiedText="Copied!"
+                  defaultText={t('copyToClipboard.defaultText')}
+                  copiedText={t('copyToClipboard.defaultSuccess')}
                   iconSet="bootstrap-icons"
                 />
               </div>
             </div>
             <div>
-              <div className="fw-bold mb-1">Client Secret</div>
+              <div className="fw-bold mb-1">{t('admin.oauthApplications.clientSecret')}</div>
               <div className="d-flex align-items-center gap-2">
                 <code className="bg-light px-2 py-1 rounded flex-grow-1">{created.secret}</code>
                 <CopyToClipboardButton
                   className="btn btn-sm btn-outline-secondary"
                   text={created.secret}
                   copiedProps={{ className: 'btn btn-sm btn-outline-success' }}
-                  defaultText="Copy"
-                  copiedText="Copied!"
+                  defaultText={t('copyToClipboard.defaultText')}
+                  copiedText={t('copyToClipboard.defaultSuccess')}
                   iconSet="bootstrap-icons"
                 />
               </div>
@@ -101,10 +102,10 @@ function NewOAuthApplication() {
         </div>
         <div className="d-flex gap-2">
           <a href={`/admin_oauth_applications/${created.id}/edit`} className="btn btn-primary">
-            Edit application
+            {t('admin.oauthApplications.editApplication')}
           </a>
           <a href="/admin_oauth_applications" className="btn btn-secondary">
-            Back to list
+            {t('admin.oauthApplications.backToList')}
           </a>
         </div>
       </div>
@@ -113,11 +114,11 @@ function NewOAuthApplication() {
 
   return (
     <div>
-      <h1 className="mb-4">New OAuth2 application</h1>
+      <h1 className="mb-4">{t('admin.oauthApplications.newApplicationTitle')}</h1>
       <OAuthApplicationForm value={application} onChange={setApplication} />
       <ErrorDisplay graphQLError={error} />
       <button type="button" className="btn btn-primary" onClick={saveClicked} disabled={inProgress}>
-        Create application
+        {t('admin.oauthApplications.createButton')}
       </button>
     </div>
   );

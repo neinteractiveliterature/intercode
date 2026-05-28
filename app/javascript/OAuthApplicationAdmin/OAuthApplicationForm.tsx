@@ -1,5 +1,7 @@
+import { useTranslation } from 'react-i18next';
+
 import { OAuthApplicationInput } from '../graphqlTypes.generated';
-import SCOPE_DESCRIPTIONS from './scopeDescriptions';
+import OAUTH_SCOPES from './scopeDescriptions';
 
 export type EditingOAuthApplication = Pick<OAuthApplicationInput, 'name' | 'redirect_uri' | 'scopes' | 'confidential'>;
 
@@ -10,6 +12,7 @@ type OAuthApplicationFormProps = {
 };
 
 function OAuthApplicationForm({ value, onChange, readOnlyFields = [] }: OAuthApplicationFormProps) {
+  const { t } = useTranslation();
   const scopes = value.scopes ?? [];
 
   const toggleScope = (scope: string) => {
@@ -21,10 +24,10 @@ function OAuthApplicationForm({ value, onChange, readOnlyFields = [] }: OAuthApp
     <div>
       <div className="mb-3">
         <label htmlFor="oauth-application-name" className="form-label fw-bold">
-          Name
+          {t('admin.oauthApplications.fields.name')}
         </label>
         <input
-          aria-label="Name"
+          aria-label={t('admin.oauthApplications.fields.name')}
           id="oauth-application-name"
           type="text"
           className="form-control"
@@ -37,26 +40,26 @@ function OAuthApplicationForm({ value, onChange, readOnlyFields = [] }: OAuthApp
       {!readOnlyFields.includes('redirect_uri') && (
         <div className="mb-3">
           <label htmlFor="oauth-application-redirect-uri" className="form-label fw-bold">
-            Redirect URI
+            {t('admin.oauthApplications.fields.redirectUri')}
           </label>
           <textarea
-            aria-label="Redirect URI"
+            aria-label={t('admin.oauthApplications.fields.redirectUri')}
             id="oauth-application-redirect-uri"
             className="form-control"
             value={value.redirect_uri ?? ''}
             onChange={(e) => onChange({ ...value, redirect_uri: e.target.value })}
             rows={3}
           />
-          <div className="form-text text-secondary">Enter one redirect URI per line.</div>
+          <div className="form-text text-secondary">{t('admin.oauthApplications.fields.redirectUriHelp')}</div>
         </div>
       )}
 
       <div className="mb-3">
-        <div className="form-label fw-bold">Scopes</div>
+        <div className="form-label fw-bold">{t('admin.oauthApplications.fields.scopes')}</div>
         {!readOnlyFields.includes('scopes') ? (
           <div className="card">
             <div className="card-body">
-              {SCOPE_DESCRIPTIONS.map(({ scope, description }) => (
+              {OAUTH_SCOPES.map((scope) => (
                 <div className="form-check" key={scope}>
                   <input
                     aria-label={scope}
@@ -67,7 +70,7 @@ function OAuthApplicationForm({ value, onChange, readOnlyFields = [] }: OAuthApp
                     onChange={() => toggleScope(scope)}
                   />
                   <label className="form-check-label" htmlFor={`scope-${scope}`}>
-                    <code>{scope}</code> — {description}
+                    <code>{scope}</code> — {t(`oauth.permissions.${scope}`)}
                   </label>
                 </div>
               ))}
@@ -82,7 +85,7 @@ function OAuthApplicationForm({ value, onChange, readOnlyFields = [] }: OAuthApp
                 </code>
               ))
             ) : (
-              <em className="text-secondary">All scopes (Intercode frontend)</em>
+              <em className="text-secondary">{t('admin.oauthApplications.fields.scopesAllIntercodeFrontend')}</em>
             )}
           </p>
         )}
@@ -91,7 +94,7 @@ function OAuthApplicationForm({ value, onChange, readOnlyFields = [] }: OAuthApp
       {!readOnlyFields.includes('confidential') && (
         <div className="mb-3 form-check">
           <input
-            aria-label="Confidential"
+            aria-label={t('admin.oauthApplications.fields.confidential')}
             id="oauth-application-confidential"
             type="checkbox"
             className="form-check-input"
@@ -99,12 +102,9 @@ function OAuthApplicationForm({ value, onChange, readOnlyFields = [] }: OAuthApp
             onChange={(e) => onChange({ ...value, confidential: e.target.checked })}
           />
           <label htmlFor="oauth-application-confidential" className="form-check-label fw-bold">
-            Confidential
+            {t('admin.oauthApplications.fields.confidential')}
           </label>
-          <div className="form-text text-secondary">
-            Confidential applications can keep their client secret confidential. Non-confidential (public) applications
-            are for use with native apps or single-page applications that cannot keep a secret.
-          </div>
+          <div className="form-text text-secondary">{t('admin.oauthApplications.confidentialHelpText')}</div>
         </div>
       )}
     </div>
