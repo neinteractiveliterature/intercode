@@ -2,7 +2,7 @@
 
 Litform (`@neinteractiveliterature/litform`) is the shared React component library used throughout Intercode's frontend. It provides Bootstrap-based form controls, modals, hooks, and utilities.
 
-**Full reference:** `~/src/litform/AGENT.md` — read this before writing any new form or UI component. It covers every component, required props, gotchas, and a quick-pick table.
+**Full reference:** [AGENT.md in neinteractiveliterature/litform](https://github.com/neinteractiveliterature/litform/blob/main/AGENT.md) — read this before writing any new form or UI component. It covers every component, required props, gotchas, and a quick-pick table.
 
 ## Key points
 

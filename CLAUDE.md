@@ -17,7 +17,7 @@ Intercode is a convention management system built with:
 
 - [Apollo Client Usage Patterns](agent-docs/apollo-client.md) — How to access the Apollo Client in loaders, actions, and components; common mistakes and errors
 - [Frontend Patterns](agent-docs/frontend-patterns.md) — File organization, React Router, GraphQL, forms, modals, i18n, auth, utilities
-- [Litform Component Library](agent-docs/litform.md) — Available UI components, form inputs, modal hooks, and usage examples; points to full reference in `~/src/litform/AGENT.md`
+- [Litform Component Library](agent-docs/litform.md) — Available UI components, form inputs, modal hooks, and usage examples; points to full reference on GitHub
 - [Testing](agent-docs/testing.md) — Minitest considerations, Playwright end-to-end tests
 - [Development](agent-docs/development.md) — Build commands, PR labels, tips
 
