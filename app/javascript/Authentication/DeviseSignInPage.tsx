@@ -9,7 +9,7 @@ function DeviseSignInPage() {
   const { t } = useTranslation();
   const manager = useContext(AuthenticityTokensContext);
   const authenticityToken = manager.tokens?.signIn;
-  const { conventionName, oauthAppName } = useSignInContext();
+  const { conventionName, oauthAppName, siteName } = useSignInContext();
   const header = conventionName
     ? t('authentication.signInForm.headerWithConvention', { conventionName })
     : oauthAppName
@@ -26,6 +26,19 @@ function DeviseSignInPage() {
               <div className="lead">{header}</div>
             </div>
             <div className="card-body p-4">
+              {siteName && conventionName && (
+                <p className="text-secondary small mb-4">
+                  {t('authentication.signInForm.hostingExplanationWithConvention', { conventionName, siteName })}
+                </p>
+              )}
+              {siteName && oauthAppName && (
+                <p className="text-secondary small mb-4">
+                  {t('authentication.signInForm.hostingExplanationWithOAuthApp', {
+                    appName: oauthAppName,
+                    siteName,
+                  })}
+                </p>
+              )}
               <form action="/users/sign_in" method="post">
                 <input type="hidden" name="authenticity_token" value={authenticityToken ?? ''} />
                 <div className="mb-3">

@@ -654,6 +654,8 @@
       "emailLabel": "Email",
       "header": "Log in",
       "headerWithConvention": "Log in to {{conventionName}}",
+      "hostingExplanationWithConvention": "{{conventionName}} uses {{siteName}} to manage user accounts. You'll be directed back to the {{conventionName}} website after signing in.",
+      "hostingExplanationWithOAuthApp": "{{appName}} uses {{siteName}} to manage user accounts. You'll be directed back to {{appName}} after signing in.",
       "logInButton": "Log in",
       "passwordLabel": "Password",
       "rememberMeLabel": "Remember me",

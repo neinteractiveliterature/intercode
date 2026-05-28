@@ -6,6 +6,7 @@ import { SignInContextQueryDocument } from './queries.generated';
 export type SignInContext = {
   conventionName: string | null | undefined;
   oauthAppName: string | null | undefined;
+  siteName: string | null | undefined;
 };
 
 export function useSignInContext(): SignInContext {
@@ -16,5 +17,6 @@ export function useSignInContext(): SignInContext {
   return {
     conventionName: conventionName ?? data?.signInConvention?.name,
     oauthAppName: data?.signInOAuthApplication?.is_intercode_frontend ? undefined : data?.signInOAuthApplication?.name,
+    siteName: data?.rootSite?.site_name,
   };
 }
