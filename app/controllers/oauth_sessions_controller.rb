@@ -105,7 +105,7 @@ class OAuthSessionsController < ApplicationController
   # `__Host-` prefix requires `Secure`, no `Domain`, and `Path=/`. Browsers
   # reject cookies with that prefix that don't meet these conditions.
   def cookie_attributes
-    { httponly: true, secure: true, same_site: :strict, path: "/" }
+    { httponly: true, secure: true, same_site: :strict, path: "/", max_age: 90.days.to_i }
   end
 
   def render_oauth_error(error_code, description = nil, status:)
