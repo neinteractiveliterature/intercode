@@ -230,7 +230,6 @@
     "vite": "^8.0.0",
     "vite-bundle-visualizer": "^1.2.1",
     "vite-plugin-node-polyfills": "^0.28.0",
-    "vite-tsconfig-paths": "^6.0.0",
     "vitest": "^4.0.0",
     "wrangler": "^4.59.1"
   },
