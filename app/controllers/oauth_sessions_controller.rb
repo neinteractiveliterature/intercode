@@ -99,13 +99,13 @@ class OAuthSessionsController < ApplicationController
   # rubocop:enable Naming/AccessorMethodName
 
   def clear_refresh_cookie
-    cookies.delete(COOKIE_NAME, **cookie_attributes)
+    cookies.delete(COOKIE_NAME, **cookie_attributes.except(:max_age))
   end
 
   # `__Host-` prefix requires `Secure`, no `Domain`, and `Path=/`. Browsers
   # reject cookies with that prefix that don't meet these conditions.
   def cookie_attributes
-    { httponly: true, secure: true, same_site: :strict, path: "/" }
+    { httponly: true, secure: true, same_site: :strict, path: "/", max_age: 90.days.to_i }
   end
 
   def render_oauth_error(error_code, description = nil, status:)
