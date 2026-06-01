@@ -99,7 +99,7 @@ class OAuthSessionsController < ApplicationController
   # rubocop:enable Naming/AccessorMethodName
 
   def clear_refresh_cookie
-    cookies.delete(COOKIE_NAME, **cookie_attributes)
+    cookies.delete(COOKIE_NAME, **cookie_attributes.except(:max_age))
   end
 
   # `__Host-` prefix requires `Secure`, no `Domain`, and `Path=/`. Browsers
