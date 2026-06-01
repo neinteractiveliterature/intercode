@@ -8,6 +8,10 @@ query SignInContextQuery {
     name
     is_intercode_frontend
   }
+  rootSite {
+    id
+    site_name
+  }
 }
 
 query AccountFormContentQuery {
