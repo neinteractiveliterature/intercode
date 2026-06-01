@@ -6,12 +6,12 @@
 #
 #  id                       :bigint           not null, primary key
 #  admin_notes              :text
+#  cached_og_description    :text
 #  content                  :text
 #  hidden_from_search       :boolean          default(FALSE), not null
 #  invariant                :boolean          default(FALSE), not null
 #  meta_description         :text
 #  name                     :text
-#  og_description           :text
 #  parent_type              :string
 #  skip_clickwrap_agreement :boolean          default(FALSE), not null
 #  slug                     :string
