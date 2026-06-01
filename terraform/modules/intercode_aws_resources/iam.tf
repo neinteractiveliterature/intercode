@@ -2,10 +2,10 @@ locals {
   region     = data.aws_region.current.region
   account_id = data.aws_caller_identity.current.account_id
 
-  s3_object_arns = [
+  s3_object_arns = compact([
     "${aws_s3_bucket.uploads.arn}/*",
-    "${aws_s3_bucket.inbox.arn}/*",
-  ]
+    var.inbox_bucket_arn != null ? "${var.inbox_bucket_arn}/*" : null,
+  ])
 }
 
 resource "aws_iam_group" "this" {
@@ -84,18 +84,18 @@ resource "aws_iam_group_policy" "this" {
           Resource = "*"
         },
       ],
-      [{
+      var.inbox_sns_topic_arn != null ? [{
         Sid      = "SnsInboxAccess"
         Effect   = "Allow"
         Action   = ["sns:ConfirmSubscription"]
-        Resource = aws_sns_topic.inbox_deliveries.arn
-      }],
-      [{
+        Resource = var.inbox_sns_topic_arn
+      }] : [],
+      var.kms_key_arn != null ? [{
         Sid      = "KmsAccess"
         Effect   = "Allow"
         Action   = "kms:Decrypt"
-        Resource = "arn:aws:kms:${local.region}:${local.account_id}:alias/aws/ses"
-      }],
+        Resource = var.kms_key_arn
+      }] : [],
     )
   })
 }

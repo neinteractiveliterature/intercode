@@ -1,3 +1,20 @@
+terraform {
+  required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = ">= 5.0"
+    }
+  }
+}
+
+data "aws_region" "current" {}
+data "aws_caller_identity" "current" {}
+
+locals {
+  region     = data.aws_region.current.region
+  account_id = data.aws_caller_identity.current.account_id
+}
+
 # ---------------------------------------------------------------------------
 # SES receiving infrastructure
 # ---------------------------------------------------------------------------
