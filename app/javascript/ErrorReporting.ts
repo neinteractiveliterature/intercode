@@ -25,10 +25,10 @@ class ErrorReporting {
     return ErrorReporting.instance!;
   }
 
-  constructor(currentUserId: string | undefined) {
-    if (window.sentryFrontendDSN) {
+  constructor(currentUserId: string | undefined, sentryDsn?: string | null, rollbarToken?: string | null) {
+    if (sentryDsn) {
       import('@sentry/browser').then((Sentry) => {
-        const instance = Sentry.init({ dsn: window.sentryFrontendDSN });
+        const instance = Sentry.init({ dsn: sentryDsn });
         if (instance != null) {
           this.sentry = {
             instance,
@@ -42,10 +42,10 @@ class ErrorReporting {
       });
     }
 
-    if (window.rollbarClientAccessToken) {
+    if (rollbarToken) {
       import('rollbar').then((Rollbar) => {
         this.rollbar = Rollbar.default.init({
-          accessToken: window.rollbarClientAccessToken,
+          accessToken: rollbarToken,
           captureUncaught: true,
           captureUnhandledRejections: true,
           captureIp: 'anonymize',

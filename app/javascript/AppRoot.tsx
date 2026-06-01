@@ -1,5 +1,5 @@
 import { Suspense, useMemo, useState, useEffect, useRef } from 'react';
-import { useLocation, useLoaderData, Outlet, useNavigation } from 'react-router';
+import { useLocation, useLoaderData, useRouteLoaderData, Outlet, useNavigation } from 'react-router';
 import { Settings } from 'luxon';
 import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
@@ -12,6 +12,7 @@ import { LazyStripeContext } from './LazyStripe';
 import { Stripe } from '@stripe/stripe-js';
 import { reloadOnAppEntrypointHeadersMismatch } from './checkAppEntrypointHeadersMatch';
 import { initErrorReporting } from 'ErrorReporting';
+import { RootLoaderData } from 'root';
 
 export function buildAppRootContextValue(
   data: AppRootQueryData | null | undefined,
@@ -81,10 +82,15 @@ function AppRoot(): React.JSX.Element {
   const navigationBarRef = useRef<HTMLElement>(null);
 
   const [stripePromise, setStripePromise] = useState<Promise<Stripe | null> | null>(null);
+  const rootLoaderData = useRouteLoaderData('root') as RootLoaderData | undefined;
 
   useEffect(() => {
-    initErrorReporting(data.currentUser?.id);
-  }, [data?.currentUser?.id]);
+    initErrorReporting(
+      data.currentUser?.id,
+      rootLoaderData?.clientConfiguration?.sentry_frontend_dsn,
+      rootLoaderData?.clientConfiguration?.rollbar_client_access_token,
+    );
+  }, [data?.currentUser?.id, rootLoaderData?.clientConfiguration]);
 
   useEffect(() => {
     reloadOnAppEntrypointHeadersMismatch();

@@ -11,7 +11,7 @@ import AuthenticityTokensManager, { AuthenticityTokensContext } from 'Authentici
 import { StrictMode } from 'react';
 import { LoaderFunction, useLoaderData } from 'react-router';
 
-type RootLoaderData = {
+export type RootLoaderData = {
   clientConfiguration: ClientConfiguration;
   authenticityTokensManager: AuthenticityTokensManager;
   client: ApolloClient;

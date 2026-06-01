@@ -6,6 +6,7 @@
 #
 #  id                       :bigint           not null, primary key
 #  admin_notes              :text
+#  cached_og_description    :text
 #  content                  :text
 #  hidden_from_search       :boolean          default(FALSE), not null
 #  invariant                :boolean          default(FALSE), not null
@@ -46,6 +47,7 @@ class Page < ApplicationRecord
 
   before_commit :set_performance_metadata, on: %i[create update]
   after_commit :touch_parent
+  after_commit :enqueue_cache_og_description_job, on: %i[create update]
 
   multisearchable(
     against: %i[name content_for_search],
@@ -84,6 +86,17 @@ class Page < ApplicationRecord
     ""
   end
 
+  def compute_og_description
+    convention = parent.is_a?(Convention) ? parent : nil
+    strip_tags(CmsContentFinder.new(convention).cms_rendering_context.render_page_content(self))
+      .gsub(/\s+/, " ")
+      .strip
+      .truncate(160)
+  rescue StandardError => e
+    Rails.logger.debug e
+    ""
+  end
+
   private
 
   def set_performance_metadata
@@ -94,5 +107,9 @@ class Page < ApplicationRecord
 
   def touch_parent
     parent.touch if parent&.persisted?
+  end
+
+  def enqueue_cache_og_description_job
+    CachePageOgDescriptionJob.perform_later(self)
   end
 end

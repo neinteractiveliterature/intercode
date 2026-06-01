@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
@@ -5,6 +6,7 @@
 #
 #  id                       :bigint           not null, primary key
 #  admin_notes              :text
+#  cached_og_description    :text
 #  content                  :text
 #  hidden_from_search       :boolean          default(FALSE), not null
 #  invariant                :boolean          default(FALSE), not null
