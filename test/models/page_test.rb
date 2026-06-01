@@ -33,7 +33,37 @@
 require "test_helper"
 
 class PageTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  include ActiveJob::TestHelper
+
+  let(:convention) { create(:convention) }
+
+  describe "#compute_og_description" do
+    it "strips HTML tags and truncates to 160 characters" do
+      page = create(:page, parent: convention, content: "<p>#{"a" * 200}</p>")
+      result = page.compute_og_description
+      assert_equal 160, result.length
+      assert_no_match(%r{</?p>}, result)
+    end
+
+    it "returns the plain text content for short pages" do
+      page = create(:page, parent: convention, content: "Hello world")
+      assert_equal "Hello world", page.compute_og_description
+    end
+
+    it "returns an empty string if rendering raises" do
+      page = create(:page, parent: convention, content: "Hello world")
+      CmsContentFinder.stub(:new, ->(*) { raise "boom" }) { assert_equal "", page.compute_og_description }
+    end
+  end
+
+  describe "after save" do
+    it "enqueues CachePageOgDescriptionJob on create" do
+      assert_enqueued_with(job: CachePageOgDescriptionJob) { create(:page, parent: convention) }
+    end
+
+    it "enqueues CachePageOgDescriptionJob on update" do
+      page = create(:page, parent: convention)
+      assert_enqueued_with(job: CachePageOgDescriptionJob) { page.update!(name: "Updated") }
+    end
+  end
 end
