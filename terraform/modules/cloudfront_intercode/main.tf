@@ -175,18 +175,32 @@ resource "aws_cloudfront_distribution" "this" {
     viewer_protocol_policy = "redirect-to-https"
   }
 
-  # No-cache pass-through behaviours for API/auth endpoints.
+  # No-cache pass-through behaviours for all non-shell Rails routes.
   dynamic "ordered_cache_behavior" {
     for_each = [
-      "/client_configuration",
-      "/authenticity_tokens",
+      # Auth / session
+      "/users/*",
+      "/oauth/*",
       "/oauth_session/*",
-      "/rails/active_storage/*",
-      "/uploads/*",
+      "/authenticity_tokens",
+      "/client_configuration",
+      # App-server APIs
+      "/graphql",
+      "/graphiql",
+      "/email_forwarders/*",
       "/sns_notifications",
       "/stripe_webhook/*",
-      "/graphql",
+      "/stripe_account/*",
       "/healthz",
+      "/sitemap.xml",
+      # Convention-scoped HTML routes
+      "/reports/*",
+      "/calendars/*",
+      "/csv_exports/*",
+      "/user_con_profiles/*",
+      # Active Storage / uploads
+      "/rails/active_storage/*",
+      "/uploads/*",
     ]
     content {
       path_pattern           = ordered_cache_behavior.value
