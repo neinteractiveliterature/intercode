@@ -12,3 +12,8 @@ variable "sns_notification_endpoint" {
   description = "HTTPS URL that SES delivery notifications are POSTed to (e.g. 'https://www.neilhosting.net/sns_notifications')."
   type        = string
 }
+
+variable "iam_group_name" {
+  description = "Name of the IAM group to attach the email-receiving policy to (from intercode_aws_resources.iam_group_name)."
+  type        = string
+}

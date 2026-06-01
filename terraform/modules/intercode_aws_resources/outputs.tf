@@ -1,3 +1,8 @@
+output "iam_group_name" {
+  description = "Name of the IAM group for the app. Pass to email-receiving modules so they can attach their own policies."
+  value       = aws_iam_group.this.name
+}
+
 output "s3_bucket_name" {
   description = "Name of the uploads S3 bucket."
   value       = aws_s3_bucket.uploads.bucket

@@ -13,7 +13,3 @@ output "inbox_deliveries_sns_topic_arn" {
   value       = aws_sns_topic.inbox_deliveries.arn
 }
 
-output "kms_key_arn" {
-  description = "ARN of the KMS key used to encrypt emails in S3 (the AWS-managed SES key)."
-  value       = "arn:aws:kms:${local.region}:${local.account_id}:alias/aws/ses"
-}
