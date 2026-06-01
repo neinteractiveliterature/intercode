@@ -2,11 +2,10 @@ locals {
   region     = data.aws_region.current.region
   account_id = data.aws_caller_identity.current.account_id
 
-  # Build the list of S3 resource ARNs the app needs object-level access to.
-  s3_object_arns = compact([
+  s3_object_arns = [
     "${aws_s3_bucket.uploads.arn}/*",
-    var.inbox_bucket_arn != null ? "${var.inbox_bucket_arn}/*" : null,
-  ])
+    "${aws_s3_bucket.inbox.arn}/*",
+  ]
 }
 
 resource "aws_iam_group" "this" {
@@ -85,20 +84,18 @@ resource "aws_iam_group_policy" "this" {
           Resource = "*"
         },
       ],
-      # Optional: SNS ConfirmSubscription for the inbox deliveries topic
-      var.inbox_sns_topic_arn != null ? [{
+      [{
         Sid      = "SnsInboxAccess"
         Effect   = "Allow"
         Action   = ["sns:ConfirmSubscription"]
-        Resource = var.inbox_sns_topic_arn
-      }] : [],
-      # Optional: KMS Decrypt for SES
-      var.kms_key_arn != null ? [{
+        Resource = aws_sns_topic.inbox_deliveries.arn
+      }],
+      [{
         Sid      = "KmsAccess"
         Effect   = "Allow"
         Action   = "kms:Decrypt"
-        Resource = var.kms_key_arn
-      }] : [],
+        Resource = "arn:aws:kms:${local.region}:${local.account_id}:alias/aws/ses"
+      }],
     )
   })
 }
