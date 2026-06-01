@@ -26,6 +26,13 @@ Intercode is a convention management system built with:
 - **TypeScript**: Run `yarn run tsc --noEmit` after making changes
 - **Ruby**: Run the relevant test suite before committing
 
+## Deployment Model
+
+Intercode is shipped as a Docker container with the frontend assets **pre-built at image build time**. Environment variables (including `ASSETS_HOST`, `SENTRY_FRONTEND_DSN`, `ROLLBAR_CLIENT_ACCESS_TOKEN`, etc.) are injected at **container runtime**, not at build time. This means:
+
+- Do not use Vite `define`, `import.meta.env`, or any other build-time constant substitution for runtime env vars.
+- Runtime configuration must be delivered to the browser via a server-rendered response (e.g. the `GET /client_configuration` endpoint) or a server-rendered HTML attribute, never baked into the JS bundle.
+
 ## Testing Requirements
 
 Whenever changing signup-related functionality (signup services, ranked choice, waitlists, etc.), always add or update tests in the relevant test file under `test/services/` or `test/models/`.

@@ -1,16 +1,5 @@
 <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
 <title><%= page_title %></title>
-<script type="application/javascript">
-  <% if ENV['ASSETS_HOST'].present? -%>
-    window.intercodeAssetsHost = <%=raw ENV['ASSETS_HOST'].to_json %>;
-  <% end -%>
-  <% if ENV['SENTRY_FRONTEND_DSN'].present? -%>
-    window.sentryFrontendDSN = <%=raw ENV['SENTRY_FRONTEND_DSN'].to_json %>;
-  <% end -%>
-  <% if ENV["ROLLBAR_CLIENT_ACCESS_TOKEN"].present? -%>
-    window.rollbarClientAccessToken = <%=raw ENV['ROLLBAR_CLIENT_ACCESS_TOKEN'].to_json %>;
-  <% end -%>
-</script>
 <% if Rails.env.development? %>
   <script type="module">
     import RefreshRuntime from <%=raw url_with_possible_host("/@react-refresh", ENV['ASSETS_HOST']).to_json %>

@@ -13,6 +13,9 @@ export type ClientConfiguration = {
   rails_default_active_storage_service_name: string;
   rails_direct_uploads_url: string;
   recaptcha_site_key: string | null;
+  assets_host: string | null;
+  sentry_frontend_dsn: string | null;
+  rollbar_client_access_token: string | null;
 };
 
 export const authenticityTokensManagerContext = createContext<AuthenticityTokensManager>();

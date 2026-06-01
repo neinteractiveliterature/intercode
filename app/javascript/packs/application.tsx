@@ -62,6 +62,11 @@ const bootstrapPromise: Promise<Bootstrap> = (async () => {
     window.location.href = redirectUrl.toString();
   });
 
+  // Make the CDN host available for lazy chunk loading (renderBuiltUrl reads this at call time).
+  if (clientConfiguration.assets_host) {
+    window.intercodeAssetsHost = clientConfiguration.assets_host;
+  }
+
   return { clientConfiguration, authenticityTokensManager, authManager, client };
 })();
 
@@ -73,6 +78,7 @@ function DataModeApplicationEntry() {
       createBrowserRouter(
         [
           {
+            id: 'root',
             lazy: () => import('root'),
             children: appRootRoutes,
           },
