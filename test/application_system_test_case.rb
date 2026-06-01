@@ -1,7 +1,10 @@
+# frozen_string_literal: true
 require "test_helper"
 
 class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
   include Devise::Test::IntegrationHelpers
+
+  Capybara.default_max_wait_time = 10
 
   driven_by :cuprite,
             screen_size: [1200, 800],
