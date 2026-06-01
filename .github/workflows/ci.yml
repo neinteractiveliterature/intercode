@@ -328,7 +328,7 @@ jobs:
       - name: Merge coverage reports
         run: ruby scripts/merge_coverage.rb merged-coverage.xml minitest-coverage/coverage.xml vitest-coverage/cobertura-coverage.xml minitest-system-coverage/coverage.xml
       - name: Generate Coverage Report
-        uses: clearlyip/code-coverage-report-action@v6
+        uses: clearlyip/code-coverage-report-action@v7
         id: code_coverage_report_action
         if: ${{ github.actor != 'dependabot[bot]'}}
         with:
