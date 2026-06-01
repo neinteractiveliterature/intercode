@@ -20,11 +20,18 @@ import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
 import EnumTypes from '../enumTypes.json';
 import ConventionLanguageInput from '../ConventionAdmin/ConventionLanguageInput';
 import { NewConventionModalQueryData, RootSiteConventionsAdminTableQueryData } from './queries.generated';
-import { Convention, TimezoneMode } from '../graphqlTypes.generated';
+import { Convention, SignupAutomationMode, TimezoneMode } from '../graphqlTypes.generated';
 
 type CreatingConvention = Pick<
   Convention,
-  'name' | 'domain' | 'email_from' | 'starts_at' | 'ends_at' | 'timezone_mode' | 'timezone_name'
+  | 'name'
+  | 'domain'
+  | 'email_from'
+  | 'starts_at'
+  | 'ends_at'
+  | 'timezone_mode'
+  | 'timezone_name'
+  | 'signup_automation_mode'
 > & {
   organization?: { id: string; name: string } | null;
   language?: Convention['language'] | null;
@@ -36,6 +43,7 @@ const DEFAULT_PROPS: CreatingConvention = {
   name: '',
   domain: '',
   timezone_mode: TimezoneMode.ConventionLocal,
+  signup_automation_mode: SignupAutomationMode.None,
 };
 
 const CMS_CONTENT_SET_OPTIONS = [
@@ -66,17 +74,26 @@ export default function NewConventionModal({ data, cloneConvention }: NewConvent
   const createError = fetcher.data instanceof Error ? fetcher.data : undefined;
   const createInProgress = fetcher.state !== 'idle';
 
-  const [setName, setDomain, setEmailFrom, setOrganization, setLanguage, setTimezoneName, setEndsAt] =
-    usePropertySetters(
-      setConvention,
-      'name',
-      'domain',
-      'email_from',
-      'organization',
-      'language',
-      'timezone_name',
-      'ends_at',
-    );
+  const [
+    setName,
+    setDomain,
+    setEmailFrom,
+    setOrganization,
+    setLanguage,
+    setTimezoneName,
+    setEndsAt,
+    setSignupAutomationMode,
+  ] = usePropertySetters(
+    setConvention,
+    'name',
+    'domain',
+    'email_from',
+    'organization',
+    'language',
+    'timezone_name',
+    'ends_at',
+    'signup_automation_mode',
+  );
 
   const setTimezoneMode = (timezoneMode: TimezoneMode) => {
     setConvention((prevConvention) => ({
@@ -125,6 +142,7 @@ export default function NewConventionModal({ data, cloneConvention }: NewConvent
           ends_at: convention.ends_at ?? null,
           timezone_name: convention.timezone_name ?? null,
           timezone_mode: convention.timezone_mode,
+          signup_automation_mode: convention.signup_automation_mode,
         },
       },
       { action: `/conventions/new`, method: 'POST', encType: 'application/json' },
@@ -201,6 +219,24 @@ export default function NewConventionModal({ data, cloneConvention }: NewConvent
             getOptionValue={(option) => option.name}
           />
         )}
+
+        <MultipleChoiceInput
+          name="signup_automation_mode"
+          caption="Signup automation mode"
+          choices={[
+            {
+              value: 'none',
+              label: 'Signups are fully manual',
+            },
+            {
+              value: 'ranked_choice',
+              label:
+                'Ranked choice (attendees make a ranked list of choices and the site attempts to give everyone what they want)',
+            },
+          ]}
+          value={convention.signup_automation_mode}
+          onChange={(newValue: string) => setSignupAutomationMode(newValue as SignupAutomationMode)}
+        />
 
         <ErrorDisplay graphQLError={createError} />
       </div>
