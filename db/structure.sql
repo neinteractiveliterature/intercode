@@ -2136,7 +2136,8 @@ CREATE TABLE public.pages (
     invariant boolean DEFAULT false NOT NULL,
     skip_clickwrap_agreement boolean DEFAULT false NOT NULL,
     hidden_from_search boolean DEFAULT false NOT NULL,
-    meta_description text
+    meta_description text,
+    cached_og_description text
 );
 
 
@@ -6160,6 +6161,7 @@ ALTER TABLE ONLY public.cms_files_pages
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260601000000'),
 ('20260524175914'),
 ('20260519000000'),
 ('20260409003354'),

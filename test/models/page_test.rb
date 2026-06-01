@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
@@ -10,6 +11,7 @@
 #  invariant                :boolean          default(FALSE), not null
 #  meta_description         :text
 #  name                     :text
+#  og_description           :text
 #  parent_type              :string
 #  skip_clickwrap_agreement :boolean          default(FALSE), not null
 #  slug                     :string

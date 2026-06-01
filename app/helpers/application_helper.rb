@@ -18,13 +18,7 @@ module ApplicationHelper
   end
 
   def open_graph_description_for_page(page)
-    return page.meta_description if page.meta_description.present?
-
-    Rails
-      .cache
-      .fetch(["open_graph_description", page], expires_in: 1.day) do
-        strip_tags(cms_rendering_context.render_page_content(@page)).gsub(/\s+/, " ").strip.truncate(160)
-      end
+    page.meta_description.presence || page.cached_og_description
   end
 
   def application_entry_path
