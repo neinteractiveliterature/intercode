@@ -3261,6 +3261,15 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@emotion/is-prop-valid@npm:*":
+  version: 1.4.0
+  resolution: "@emotion/is-prop-valid@npm:1.4.0"
+  dependencies:
+    "@emotion/memoize": "npm:^0.9.0"
+  checksum: 10c0/5f857814ec7d8c7e727727346dfb001af6b1fb31d621a3ce9c3edf944a484d8b0d619546c30899ae3ade2f317c76390ba4394449728e9bf628312defc2c41ac3
+  languageName: node
+  linkType: hard
+
 "@emotion/memoize@npm:^0.9.0":
   version: 0.9.0
   resolution: "@emotion/memoize@npm:0.9.0"
