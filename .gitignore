@@ -109,3 +109,8 @@ cookbooks
 # Autoscaling simulation output
 /scaling-graph.csv
 /scaling-graph.png
+
+# Terraform
+**/.terraform/
+**/.terraform.lock.hcl
+**/og_router.zip

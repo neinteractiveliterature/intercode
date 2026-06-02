@@ -1,0 +1,29 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <meta content="text/html; charset=UTF-8" http-equiv="Content-Type"/>
+  <% if @event -%>
+    <title><%= @event.title %></title>
+    <meta property="og:title" content="<%= @event.title %>">
+    <meta name="description" content="<%= strip_tags @event.short_blurb %>">
+    <meta property="og:description" content="<%= strip_tags @event.short_blurb %>">
+  <% elsif @page -%>
+    <title><%= @page.name %><%= " - #{convention.name}" if convention %></title>
+    <meta property="og:title" content="<%= @page.name %>">
+    <% if @page.cached_og_description.present? -%>
+      <meta name="description" content="<%= @page.cached_og_description %>">
+      <meta property="og:description" content="<%= @page.cached_og_description %>">
+    <% end -%>
+  <% elsif convention -%>
+    <title><%= convention.name %></title>
+    <meta property="og:title" content="<%= convention.name %>">
+  <% end -%>
+  <meta property="og:url" content="<%= @og_url %>">
+  <meta property="og:type" content="website"/>
+  <% if convention&.open_graph_image&.attachment -%>
+    <meta property="og:image" content="<%= cdn_upload_url(convention.open_graph_image) %>">
+  <% end -%>
+  <link rel="canonical" href="<%= @og_url %>">
+</head>
+<body></body>
+</html>

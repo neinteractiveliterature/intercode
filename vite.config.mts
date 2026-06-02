@@ -1,6 +1,5 @@
 import { defineConfig } from 'vite';
 import react from '@vitejs/plugin-react-swc';
-import tsconfigPaths from 'vite-tsconfig-paths';
 import { fileURLToPath } from 'url';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import { globalDefines } from './globalDefines.mts';
@@ -19,11 +18,11 @@ export default defineConfig({
         options.inputSourceMap = false;
       },
     }),
-    tsconfigPaths(),
     nodePolyfills(),
   ],
   resolve: {
     mainFields: ['module'],
+    tsconfigPaths: true,
   },
   define: globalDefines,
   experimental: {
@@ -56,7 +55,18 @@ export default defineConfig({
         manualChunks: (id) => {
           const chunks: Array<[string, string[]]> = [
             ['apollo', ['@apollo/client', 'apollo-upload-client']],
-            ['codemirror', ['@codemirror/state', '@codemirror/view', '@codemirror/language', '@codemirror/lang-html', '@codemirror/lang-json', '@codemirror/lang-markdown', '@lezer/common']],
+            [
+              'codemirror',
+              [
+                '@codemirror/state',
+                '@codemirror/view',
+                '@codemirror/language',
+                '@codemirror/lang-html',
+                '@codemirror/lang-json',
+                '@codemirror/lang-markdown',
+                '@lezer/common',
+              ],
+            ],
             ['currencyCodes', ['@breezehr/currency-codes']],
             ['graphql', ['graphql']],
             ['i18next', ['i18next', 'react-i18next']],
