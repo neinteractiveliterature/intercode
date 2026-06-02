@@ -189,7 +189,7 @@ resource "aws_ses_receipt_rule" "store_and_notify" {
 
 # SES configuration set with CloudWatch event tracking.
 resource "aws_ses_configuration_set" "default" {
-  name = "${var.name}-default"
+  name = var.configuration_set_name
 }
 
 resource "aws_ses_event_destination" "cloudwatch" {
