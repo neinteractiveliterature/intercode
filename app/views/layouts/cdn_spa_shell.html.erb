@@ -27,6 +27,8 @@
   <% end -%>
 </head>
 <body>
-  <%= yield %>
+  <%= browser_warning %>
+  <%= CmsRenderingContext::NOSCRIPT_WARNING %>
+  <div data-react-class="AppRoot"></div>
 </body>
 </html>
