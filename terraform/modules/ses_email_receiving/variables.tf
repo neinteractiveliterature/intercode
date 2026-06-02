@@ -17,3 +17,9 @@ variable "iam_group_name" {
   description = "Name of the IAM group to attach the email-receiving policy to (from intercode_aws_resources.iam_group_name)."
   type        = string
 }
+
+variable "configuration_set_name" {
+  description = "Name of the SES configuration set. Defaults to 'default' to match the pre-existing account configuration."
+  type        = string
+  default     = "default"
+}
