@@ -179,7 +179,7 @@
     "@testing-library/dom": "^10.4.1",
     "@testing-library/jest-dom": "6.9.1",
     "@testing-library/user-event": "^14.6.1",
-    "@types/bootstrap": "5.2.10",
+    "@types/bootstrap": "5.2.11",
     "@types/events": "3.0.3",
     "@types/md5": "^2",
     "@types/node": "24.10.1",
