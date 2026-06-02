@@ -47,6 +47,7 @@ Lint/NoReturnInBeginEndBlocks:
 # AllowedMethods: refine
 Metrics/BlockLength:
   Exclude:
+    - 'config/environments/production.rb'
     - 'config/initializers/doorkeeper.rb'
 
 # Offense count: 4
