@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require File.expand_path("lib/intercode/disable_caching_for_specific_assets", Rails.root)
 
 Rails.application.configure do
@@ -61,14 +62,15 @@ Rails.application.configure do
     config.cache_store =
       :mem_cache_store,
       ENV["MEMCACHEDCLOUD_SERVERS"].split(","),
-      { username: ENV["MEMCACHEDCLOUD_USERNAME"], password: ENV["MEMCACHEDCLOUD_PASSWORD"] }
+      { username: ENV.fetch("MEMCACHEDCLOUD_USERNAME", nil), password: ENV.fetch("MEMCACHEDCLOUD_PASSWORD", nil) }
   end
 
   # Use a real queuing backend for Active Job (and separate queues per environment)
   # config.active_job.queue_adapter     = :resque
   # config.active_job.queue_name_prefix = "intercode_#{Rails.env}"
 
-  config.action_mailer.delivery_method = :ses
+  config.action_mailer.delivery_method = :ses_v2
+  config.action_mailer.ses_v2_settings = { configuration_set_name: ENV["SES_CONFIGURATION_SET"].presence }.compact
   config.action_mailer.perform_caching = false
 
   # Ignore bad email addresses and do not raise email delivery errors.
@@ -101,14 +103,14 @@ Rails.application.configure do
   config.active_support.deprecation = :notify
 
   # Use default logging formatter so that PID and timestamp are not suppressed.
-  config.log_formatter = ::Logger::Formatter.new unless ENV["JSON_LOGGING"]
+  config.log_formatter = Logger::Formatter.new unless ENV["JSON_LOGGING"]
 
   # Use a different logger for distributed setups.
   # require 'syslog/logger'
   # config.logger = ActiveSupport::TaggedLogging.new(Syslog::Logger.new 'app-name')
 
   if ENV["RAILS_LOG_TO_STDOUT"].present?
-    logger = ActiveSupport::Logger.new(STDOUT)
+    logger = ActiveSupport::Logger.new($stdout)
     logger.formatter = config.log_formatter
     config.logger = (ENV["JSON_LOGGING"] ? logger : ActiveSupport::TaggedLogging.new(logger))
   end
