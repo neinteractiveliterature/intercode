@@ -9,6 +9,7 @@ class CdnSpaShellController < ApplicationController
   skip_before_action :ensure_clickwrap_agreement_accepted
 
   def show
+    expires_in 1.day, public: true
     render html: "".html_safe, layout: "cdn_spa_shell"
   end
 end
