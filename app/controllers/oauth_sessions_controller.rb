@@ -83,6 +83,12 @@ class OAuthSessionsController < ApplicationController
     end
 
     body = response.body
+    # Temporary diagnostic: log whether Doorkeeper returned a refresh_token so we
+    # can tell whether the missing Set-Cookie is a server-side or infra problem.
+    Rails.logger.info(
+      "[OAuthSessions] token body keys=#{body.keys.inspect} " \
+        "refresh_token_present=#{body["refresh_token"].present?}"
+    )
     set_refresh_cookie(body["refresh_token"]) if body["refresh_token"].present?
     render json: {
              access_token: body["access_token"],
