@@ -40,6 +40,28 @@ resource "aws_cloudfront_origin_request_policy" "forward_host" {
   }
 }
 
+# Like forward_host, but also passes the HttpOnly refresh-token cookie so
+# /oauth_session/* endpoints can read it on the Rails side.
+resource "aws_cloudfront_origin_request_policy" "forward_host_with_refresh_cookie" {
+  name = "${var.name}-forward-host-refresh-cookie"
+
+  cookies_config {
+    cookie_behavior = "whitelist"
+    cookies {
+      items = ["__Host-intercode_refresh"]
+    }
+  }
+
+  query_strings_config { query_string_behavior = "none" }
+
+  headers_config {
+    header_behavior = "whitelist"
+    headers {
+      items = ["Host"]
+    }
+  }
+}
+
 # /og-shell: forward Host + the `path` query param so each path caches
 # separately per convention domain.
 resource "aws_cloudfront_origin_request_policy" "og_shell" {
@@ -175,13 +197,24 @@ resource "aws_cloudfront_distribution" "this" {
     viewer_protocol_policy = "redirect-to-https"
   }
 
+  # /oauth_session/* — cookie-exchange endpoints that need the refresh token cookie forwarded.
+  ordered_cache_behavior {
+    path_pattern           = "/oauth_session/*"
+    target_origin_id       = local.rails_origin_id
+    allowed_methods        = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
+    cached_methods         = ["GET", "HEAD"]
+    compress               = true
+    cache_policy_id        = aws_cloudfront_cache_policy.no_cache.id
+    origin_request_policy_id = aws_cloudfront_origin_request_policy.forward_host_with_refresh_cookie.id
+    viewer_protocol_policy = "redirect-to-https"
+  }
+
   # No-cache pass-through behaviours for all non-shell Rails routes.
   dynamic "ordered_cache_behavior" {
     for_each = [
       # Auth / session
       "/users/*",
       "/oauth/*",
-      "/oauth_session/*",
       "/authenticity_tokens",
       "/client_configuration",
       # App-server APIs
