@@ -32,6 +32,10 @@ module ApplicationHelper
   end
 
   def browser_warning
+    # CloudFront strips all cookies before forwarding to the origin, so the
+    # suppressBrowserWarning cookie is never visible to Rails on proxied requests.
+    # The warning also can't be dismissed there. Skip it entirely.
+    return nil if request.headers["Via"].to_s.include?("CloudFront")
     return nil if request.cookies["suppressBrowserWarning"] == "true"
 
     presenter = BrowserWarningPresenter.new(request.user_agent)
