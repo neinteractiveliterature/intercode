@@ -3,6 +3,12 @@ import GraphQLQueryEditor from './CmsAdmin/CmsGraphqlQueriesAdmin/GraphQLQueryEd
 import mountReactComponents from './mountReactComponents';
 import { AuthenticityTokensContext } from './AuthenticityTokensContext';
 
+ 
+console.log(
+  '[DevModeGraphiql] module loaded, querySelectorAll result:',
+  document.querySelectorAll('[data-react-class]').length,
+);
+
 export type DevModeGraphiqlProps = {
   authenticityTokens: {
     graphql: string;
@@ -51,4 +57,6 @@ function DevModeGraphiql({ authenticityTokens }: DevModeGraphiqlProps): React.JS
   );
 }
 
+ 
+console.log('[DevModeGraphiql] calling mountReactComponents');
 mountReactComponents({ DevModeGraphiql: DevModeGraphiql as React.FC<unknown> });
