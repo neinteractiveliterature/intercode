@@ -48,9 +48,17 @@ export default function GraphQLQueryEditor({ defaultQuery, onEditQuery }: GraphQ
   const queryValueRef = useRef(defaultQuery ?? '');
   const variablesValueRef = useRef('');
 
-  const queryExtensions = useMemo(() => [graphql()], []);
+  const fillHeight = useMemo(
+    () => EditorView.theme({ '&': { height: '100%' }, '.cm-scroller': { overflow: 'auto' } }),
+    [],
+  );
+
+  const queryExtensions = useMemo(() => [graphql(), fillHeight], [fillHeight]);
   const variablesExtensions = useMemo(() => [json()], []);
-  const responseExtensions = useMemo(() => [json(), EditorState.readOnly.of(true), EditorView.editable.of(false)], []);
+  const responseExtensions = useMemo(
+    () => [json(), EditorState.readOnly.of(true), EditorView.editable.of(false), fillHeight],
+    [fillHeight],
+  );
 
   const [queryEditorRef, editorView] = useStandardCodeMirror({
     extensions: queryExtensions,
