@@ -1693,6 +1693,18 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@codemirror/autocomplete@npm:^6.20.3":
+  version: 6.20.3
+  resolution: "@codemirror/autocomplete@npm:6.20.3"
+  dependencies:
+    "@codemirror/language": "npm:^6.0.0"
+    "@codemirror/state": "npm:^6.0.0"
+    "@codemirror/view": "npm:^6.17.0"
+    "@lezer/common": "npm:^1.0.0"
+  checksum: 10c0/c8aa358d25cde007a7073fb39fd268d1908aa0f664047cc44af0f7a6b2835f227c9bd60f0c7cde5914cf2c9ef9c014fee6e322832e83d9f1c1b55872d2300b69
+  languageName: node
+  linkType: hard
+
 "@codemirror/commands@npm:^6.0.0, @codemirror/commands@npm:^6.7.1, @codemirror/commands@npm:^6.8.0":
   version: 6.10.3
   resolution: "@codemirror/commands@npm:6.10.3"
@@ -1800,6 +1812,17 @@ __metadata:
   languageName: node
   linkType: hard
 
+"@codemirror/lint@npm:^6.9.6":
+  version: 6.9.6
+  resolution: "@codemirror/lint@npm:6.9.6"
+  dependencies:
+    "@codemirror/state": "npm:^6.0.0"
+    "@codemirror/view": "npm:^6.42.0"
+    crelt: "npm:^1.0.5"
+  checksum: 10c0/6b79d04e7a05ecda934b4e4fc465688a044661eb5086b60911a40755e5bfd612f843d87f6a45e2a2e294da9aac172e8b603da0e87b0e5ba364a9cce6560113ec
+  languageName: node
+  linkType: hard
+
 "@codemirror/search@npm:^6.0.0":
   version: 6.5.8
   resolution: "@codemirror/search@npm:6.5.8"
@@ -1820,7 +1843,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/view@npm:6.43.0, @codemirror/view@npm:^6.0.0, @codemirror/view@npm:^6.17.0, @codemirror/view@npm:^6.23.0, @codemirror/view@npm:^6.27.0, @codemirror/view@npm:^6.36.3":
+"@codemirror/view@npm:6.43.0, @codemirror/view@npm:^6.0.0, @codemirror/view@npm:^6.17.0, @codemirror/view@npm:^6.23.0, @codemirror/view@npm:^6.27.0, @codemirror/view@npm:^6.36.3, @codemirror/view@npm:^6.42.0":
   version: 6.43.0
   resolution: "@codemirror/view@npm:6.43.0"
   dependencies:
@@ -11198,6 +11221,23 @@ __metadata:
   languageName: node
   linkType: hard
 
+"cm6-graphql@npm:^0.2.1":
+  version: 0.2.1
+  resolution: "cm6-graphql@npm:0.2.1"
+  dependencies:
+    graphql-language-service: "npm:^5.3.0"
+  peerDependencies:
+    "@codemirror/autocomplete": ^6.0.0
+    "@codemirror/language": ^6.0.0
+    "@codemirror/lint": ^6.0.0
+    "@codemirror/state": ^6.0.0
+    "@codemirror/view": ^6.0.0
+    "@lezer/highlight": ^1.0.0
+    graphql: ^15.5.0 || ^16.0.0 || ^17.0.0
+  checksum: 10c0/33b4d4634e25f67a126a8e0a9d4f4c927b4554f0fe7e0b512f494703ee0c600a332c7ad673c1968174e08f305c767c6d6cd6f59d88bceee10c7f16507504fca7
+  languageName: node
+  linkType: hard
+
 "codemirror@npm:^6.0.1":
   version: 6.0.2
   resolution: "codemirror@npm:6.0.2"
@@ -14730,7 +14770,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-language-service@npm:^5.5.1":
+"graphql-language-service@npm:^5.3.0, graphql-language-service@npm:^5.5.1":
   version: 5.5.1
   resolution: "graphql-language-service@npm:5.5.1"
   dependencies:
@@ -22321,11 +22361,13 @@ __metadata:
   dependencies:
     "@apollo/client": "npm:4.2.0"
     "@breezehr/currency-codes": "npm:^2.2.1"
+    "@codemirror/autocomplete": "npm:^6.20.3"
     "@codemirror/commands": "npm:^6.7.1"
     "@codemirror/lang-html": "npm:6.4.11"
     "@codemirror/lang-json": "npm:6.0.2"
     "@codemirror/lang-markdown": "npm:6.5.0"
     "@codemirror/language": "npm:6.12.3"
+    "@codemirror/lint": "npm:^6.9.6"
     "@codemirror/state": "npm:6.6.0"
     "@codemirror/view": "npm:6.43.0"
     "@dnd-kit/core": "npm:6.3.1"
@@ -22415,6 +22457,7 @@ __metadata:
     cadmus-navbar-admin: "npm:6.0.0"
     caniuse-lite: "npm:1.0.30001793"
     classnames: "npm:2.5.1"
+    cm6-graphql: "npm:^0.2.1"
     codemirror: "npm:^6.0.1"
     core-js: "npm:3.49.0"
     core-js-compat: "npm:3.49.0"

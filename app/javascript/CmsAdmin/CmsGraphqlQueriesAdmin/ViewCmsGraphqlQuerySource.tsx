@@ -1,7 +1,6 @@
 import CmsGraphqlQueryForm from './CmsGraphqlQueryForm';
 import usePageTitle from '../../usePageTitle';
 
-import 'graphiql/graphiql.css';
 import { useLoaderData } from 'react-router';
 import { singleCmsGraphqlQueryAdminLoader, SingleCmsGraphqlQueryAdminLoaderResult } from './loaders';
 

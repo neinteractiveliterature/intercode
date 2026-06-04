@@ -6,7 +6,6 @@ import { ErrorDisplay } from '@neinteractiveliterature/litform';
 import CmsGraphqlQueryForm from './CmsGraphqlQueryForm';
 import usePageTitle from '../../usePageTitle';
 
-import 'graphiql/graphiql.css';
 import { CreateCmsGraphqlQueryDocument } from './mutations.generated';
 import { apolloClientContext } from '../../AppContexts';
 import { buildCmsGraphqlQueryInputFromFormData } from './buildCmsGraphqlQueryInput';

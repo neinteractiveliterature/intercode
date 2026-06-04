@@ -1,12 +1,19 @@
 import { useState } from 'react';
 
-import { ActionFunction, Form, redirect, useActionData, useLoaderData, useNavigation, RouterContextProvider } from 'react-router';
+import {
+  ActionFunction,
+  Form,
+  redirect,
+  useActionData,
+  useLoaderData,
+  useNavigation,
+  RouterContextProvider,
+} from 'react-router';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import CmsGraphqlQueryForm from './CmsGraphqlQueryForm';
 import usePageTitle from '../../usePageTitle';
 
-import 'graphiql/graphiql.css';
 import { singleCmsGraphqlQueryAdminLoader, SingleCmsGraphqlQueryAdminLoaderResult } from './loaders';
 import { apolloClientContext } from '../../AppContexts';
 import { UpdateCmsGraphqlQueryDocument } from './mutations.generated';
