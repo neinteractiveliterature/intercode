@@ -43,6 +43,7 @@ function DevModeGraphiql({ authenticityTokens }: DevModeGraphiqlProps): React.JS
 
   return (
     <ErrorBoundary>
+      <p style={{ color: 'red' }}>mounted</p>
       <div style={{ height: '100vh', padding: '1rem', boxSizing: 'border-box' }}>
         <GraphQLQueryEditor />
       </div>
