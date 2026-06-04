@@ -9,6 +9,7 @@
   "scripts": {
     "analyze": "vite-bundle-visualizer",
     "build": "yarn run build:web && yarn run build:cli",
+    "check-graphql-documents": "tsx scripts/check-graphql-documents.mts",
     "build:web": "vite build",
     "build:cli": "rollup -c rollup.cliUtils.config.ts --configPlugin swc && chmod +x ./bin/*.cjs",
     "build:timezone_data": "node script/buildTimezoneData.js",

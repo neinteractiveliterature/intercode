@@ -12,14 +12,6 @@ fragment MailingListsResultFields on MailingListsResult {
   metadata_fields
 }
 
-query MailingListsMenuQuery {
-  convention: conventionByRequestHost {
-    id
-    ticket_mode
-    ticket_name
-  }
-}
-
 query TicketedAttendeesQuery {
   convention: conventionByRequestHost {
     id
@@ -96,17 +88,6 @@ query WaitlistMailingListsQuery {
         }
       }
     }
-  }
-}
-
-query WhosFreeFormConventionQuery {
-  convention: conventionByRequestHost {
-    id
-    name
-    starts_at
-    ends_at
-    timezone_name
-    timezone_mode
   }
 }
 

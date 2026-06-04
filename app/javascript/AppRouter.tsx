@@ -1153,6 +1153,10 @@ export const appRootRoutes: RouteObject[] = [
                 path: ':sectionId',
                 children: [
                   {
+                    path: 'move',
+                    lazy: () => import('./FormAdmin/$id/edit/section/$sectionId/move'),
+                  },
+                  {
                     path: 'item',
                     lazy: () => import('./FormAdmin/$id/edit/section/$sectionId/item/route'),
                     children: [

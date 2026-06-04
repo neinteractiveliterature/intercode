@@ -34,6 +34,18 @@ jobs:
           skip_install: true
           use_bundler: true
           only_changed: true
+  check-graphql-documents:
+    name: check-graphql-documents
+    runs-on: ubuntu-latest
+    if: github.actor != 'dependabot[bot]'
+    steps:
+      - uses: actions/checkout@v6
+      - uses: actions/setup-node@v6
+        with:
+          cache: yarn
+      - run: yarn install
+      - run: yarn build:web
+      - run: yarn check-graphql-documents
   eslint:
     name: eslint
     runs-on: ubuntu-latest
