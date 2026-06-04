@@ -2,6 +2,7 @@ import React, { Component, useContext, useLayoutEffect } from 'react';
 import GraphQLQueryEditor from './CmsAdmin/CmsGraphqlQueriesAdmin/GraphQLQueryEditor';
 import mountReactComponents from './mountReactComponents';
 import { AuthenticityTokensContext } from './AuthenticityTokensContext';
+import './styles/application.scss';
 
 export type DevModeGraphiqlProps = {
   authenticityTokens: {
