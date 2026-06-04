@@ -3165,7 +3165,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@docusaurus/utils@npm:3.10.1, @docusaurus/utils@npm:>=3.9.2":
+"@docusaurus/utils@npm:3.10.1":
   version: 3.10.1
   resolution: "@docusaurus/utils@npm:3.10.1"
   dependencies:
@@ -4520,46 +4520,43 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-markdown/cli@npm:^0.7.1":
-  version: 0.7.1
-  resolution: "@graphql-markdown/cli@npm:0.7.1"
+"@graphql-markdown/cli@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "@graphql-markdown/cli@npm:1.0.0"
   dependencies:
-    "@graphql-markdown/core": "npm:^1.20.0"
-    "@graphql-markdown/logger": "npm:^1.0.6"
-    "@graphql-markdown/printer-legacy": "npm:^1.15.0"
-    "@graphql-markdown/types": "npm:^1.12.0"
+    "@graphql-markdown/core": "npm:^1.21.0"
+    "@graphql-markdown/logger": "npm:^1.0.7"
+    "@graphql-markdown/types": "npm:^1.13.0"
     commander: "npm:^5.1.0"
     graphql-config: "npm:5.1.6"
   bin:
     gqlmd: dist/main.js
-  checksum: 10c0/8389c6b6df0eba939148adbbb736ac706072ab40bb3505352eaaf75a5edc3e9ba677b2752c163a72a8175759dfb37f0c9398afa2f5f419401f85d70336dfb2b4
+  checksum: 10c0/3aa311f60c7595225105af08a4318fd7f84168cb9d14d53b2001128080a1309bc6e72cef8bafe204dfc0717edf610ee2e27a54adcb8d83c067d9bf7a85492986
   languageName: node
   linkType: hard
 
-"@graphql-markdown/core@npm:^1.20.0":
-  version: 1.20.0
-  resolution: "@graphql-markdown/core@npm:1.20.0"
+"@graphql-markdown/core@npm:^1.21.0":
+  version: 1.21.0
+  resolution: "@graphql-markdown/core@npm:1.21.0"
   dependencies:
     "@fastify/deepmerge": "npm:^3.2.1"
-    "@graphql-markdown/graphql": "npm:^1.2.1"
-    "@graphql-markdown/logger": "npm:^1.0.6"
-    "@graphql-markdown/types": "npm:^1.12.0"
-    "@graphql-markdown/utils": "npm:^1.11.0"
+    "@graphql-markdown/graphql": "npm:^1.2.2"
+    "@graphql-markdown/logger": "npm:^1.0.7"
+    "@graphql-markdown/printer-legacy": "npm:^1.16.0"
+    "@graphql-markdown/types": "npm:^1.13.0"
+    "@graphql-markdown/utils": "npm:^1.12.0"
   peerDependencies:
-    "@graphql-markdown/diff": ^1.1.14
-    "@graphql-markdown/helpers": ^1.0.13
-    "@graphql-markdown/printer-legacy": ^1.15.0
+    "@graphql-markdown/diff": ^1.1.15
+    "@graphql-markdown/helpers": ^1.1.0
     graphql-config: 5.1.6
   peerDependenciesMeta:
     "@graphql-markdown/diff":
       optional: true
     "@graphql-markdown/helpers":
       optional: true
-    "@graphql-markdown/printer-legacy":
-      optional: true
     graphql-config:
       optional: true
-  checksum: 10c0/d0258f07827497de1add7afd256762f2bbad97a07347ce44d967e9cfa266b873b0767b68c235495cd9b2f4b7385646c5794dc02b04f89de6104cb25b02be509e
+  checksum: 10c0/8d5dfebc3a4df78332052605353745d43d9cc2ba42134208e0c2c1dae95ac7138be5d0f07b6229e64df44c93632b50e3a0740c90677f1f9c5c904531dda5911f
   languageName: node
   linkType: hard
 
@@ -4577,71 +4574,97 @@ __metadata:
   linkType: hard
 
 "@graphql-markdown/docusaurus@npm:^1.24.1":
-  version: 1.34.0
-  resolution: "@graphql-markdown/docusaurus@npm:1.34.0"
+  version: 1.35.0
+  resolution: "@graphql-markdown/docusaurus@npm:1.35.0"
   dependencies:
-    "@docusaurus/utils": "npm:>=3.9.2"
-    "@graphql-markdown/cli": "npm:^0.7.1"
-    "@graphql-markdown/logger": "npm:^1.0.6"
-    "@graphql-markdown/types": "npm:^1.12.0"
-    "@graphql-markdown/utils": "npm:^1.11.0"
+    "@docusaurus/utils": "npm:3.10.1"
+    "@graphql-markdown/cli": "npm:^1.0.0"
+    "@graphql-markdown/formatters": "npm:^1.0.0"
+    "@graphql-markdown/logger": "npm:^1.0.7"
+    "@graphql-markdown/types": "npm:^1.13.0"
+    "@graphql-markdown/utils": "npm:^1.12.0"
   peerDependencies:
     "@docusaurus/logger": "*"
-  checksum: 10c0/71e419d06eb5b73812796d976c76c4954dec7ad9bf3a9def71e4349b8e66bbddf4f1a8fa8808407c9388ed9518f87ad36fbc37ed5da54083d1019470d2e38e66
+  checksum: 10c0/124ab2cc98f60999b3e7cdec624f35b930277293f11a03e7ca75620cc82fe094889248ae1bfc6fea3d5dcd7e6dd152c1bbf28570b5aa1096fb5768e4bcb4874a
   languageName: node
   linkType: hard
 
-"@graphql-markdown/graphql@npm:^1.1.5, @graphql-markdown/graphql@npm:^1.2.1":
-  version: 1.2.1
-  resolution: "@graphql-markdown/graphql@npm:1.2.1"
+"@graphql-markdown/formatters@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "@graphql-markdown/formatters@npm:1.0.0"
   dependencies:
-    "@graphql-markdown/types": "npm:^1.12.0"
-    "@graphql-markdown/utils": "npm:^1.11.0"
-    "@graphql-tools/load": "npm:8.1.8"
+    "@graphql-markdown/helpers": "npm:^1.1.0"
+    "@graphql-markdown/types": "npm:^1.13.0"
+    "@graphql-markdown/utils": "npm:^1.12.0"
+  checksum: 10c0/c5413441bdbc8dcc9f7f883f75deb7fd820862e1646d2c0355df94cded07db68d812bd52a0d10f8dd653b218f477785702c2435b98cadf9a8231e70638943c5f
+  languageName: node
+  linkType: hard
+
+"@graphql-markdown/graphql@npm:^1.1.5, @graphql-markdown/graphql@npm:^1.2.2":
+  version: 1.2.2
+  resolution: "@graphql-markdown/graphql@npm:1.2.2"
+  dependencies:
+    "@graphql-markdown/types": "npm:^1.13.0"
+    "@graphql-markdown/utils": "npm:^1.12.0"
+    "@graphql-tools/load": "npm:8.1.10"
   peerDependencies:
-    graphql: 16.13.2
-  checksum: 10c0/251530664c1c38d232fa980dca30c9e0399e8d7d819dd670b3e2ce70b96ea31bf29ace5759a8b7667e056bbf943eba87cc0493dce48fc6d7598c1285a5965630
+    graphql: 16.14.0
+  checksum: 10c0/28ac502e89939c862d5a69a3dd15832849665913f4b46079dbfb2a03ba8cfadf44f1f7359b37b0c2cb8525a135dd56d92b9e5a98d61bb88a8d96ca1663d0ce90
   languageName: node
   linkType: hard
 
-"@graphql-markdown/logger@npm:^1.0.6":
-  version: 1.0.6
-  resolution: "@graphql-markdown/logger@npm:1.0.6"
+"@graphql-markdown/helpers@npm:^1.1.0":
+  version: 1.1.0
+  resolution: "@graphql-markdown/helpers@npm:1.1.0"
   dependencies:
-    "@graphql-markdown/types": "npm:^1.12.0"
-  checksum: 10c0/120de0029911a574f0b760791cbbb3485727616bc662573566904f5745c2341a3aa69d0e169357f822615086516caa02bb84233e843d5df18261f2cf4213aef3
+    "@graphql-markdown/graphql": "npm:^1.2.2"
+    "@graphql-markdown/types": "npm:^1.13.0"
+    "@graphql-markdown/utils": "npm:^1.12.0"
+  peerDependencies:
+    graphql: 16.14.0
+  checksum: 10c0/d64f26cd7e7de01a15def31928cb881d9761d1e23c9f1416a0a2d933e00b6e468f4881c5ead46172c0a9025798dfcba7d9acdb8f62d699156599740f0474d332
   languageName: node
   linkType: hard
 
-"@graphql-markdown/printer-legacy@npm:^1.15.0":
-  version: 1.15.0
-  resolution: "@graphql-markdown/printer-legacy@npm:1.15.0"
+"@graphql-markdown/logger@npm:^1.0.7":
+  version: 1.0.7
+  resolution: "@graphql-markdown/logger@npm:1.0.7"
   dependencies:
-    "@graphql-markdown/graphql": "npm:^1.2.1"
-    "@graphql-markdown/types": "npm:^1.12.0"
-    "@graphql-markdown/utils": "npm:^1.11.0"
-  checksum: 10c0/2b6b67640cfabcad7a02d131b92adbde37601871bf93ec3c3cf962fa92c62334e2417b7dd0d6bd4c9aba2dea694f1177bd3f0eeff5f6b996aff2787dba256d01
+    "@graphql-markdown/types": "npm:^1.13.0"
+  checksum: 10c0/5d3f7cf104d9447cb11aa11c8f98df5a3ca314a1e1812bbd404a6a3bd4c18666dc6648b9c9d4a16bd1a00aeb67a49fd23e82fbe8da6bc261b9ae3dfeacfbf33f
   languageName: node
   linkType: hard
 
-"@graphql-markdown/types@npm:^1.12.0":
+"@graphql-markdown/printer-legacy@npm:^1.16.0":
+  version: 1.16.0
+  resolution: "@graphql-markdown/printer-legacy@npm:1.16.0"
+  dependencies:
+    "@graphql-markdown/formatters": "npm:^1.0.0"
+    "@graphql-markdown/graphql": "npm:^1.2.2"
+    "@graphql-markdown/types": "npm:^1.13.0"
+    "@graphql-markdown/utils": "npm:^1.12.0"
+  checksum: 10c0/892f0261fc57f7cf7cf64058e4371515a1e30f3a35d24116bc54e57f8bc5a9416965596fa1011d8df6a17e62e2d5954454a6fb472ff9b25922eac9a753ae22dd
+  languageName: node
+  linkType: hard
+
+"@graphql-markdown/types@npm:^1.13.0":
+  version: 1.13.0
+  resolution: "@graphql-markdown/types@npm:1.13.0"
+  checksum: 10c0/236474311dfb6ec3387d9bc34ab86534079a94bec33073d0be9fe5417d0fadd20cb7e345ac18b61b9c557550460e3ec920c0beeaf2b529e942ef0e253609ea02
+  languageName: node
+  linkType: hard
+
+"@graphql-markdown/utils@npm:^1.12.0, @graphql-markdown/utils@npm:^1.7.1":
   version: 1.12.0
-  resolution: "@graphql-markdown/types@npm:1.12.0"
-  checksum: 10c0/30ff51085db6984bb8e6473d74d8461cb5c61827590696ca3352dff015de6a44a98273f8603dbd01868b75a1b4d8034bb81b535773a402d445b3adbc6df0c84d
-  languageName: node
-  linkType: hard
-
-"@graphql-markdown/utils@npm:^1.11.0, @graphql-markdown/utils@npm:^1.7.1":
-  version: 1.11.0
-  resolution: "@graphql-markdown/utils@npm:1.11.0"
+  resolution: "@graphql-markdown/utils@npm:1.12.0"
   dependencies:
-    "@graphql-markdown/types": "npm:^1.12.0"
+    "@graphql-markdown/types": "npm:^1.13.0"
   peerDependencies:
-    prettier: 3.8.1
+    prettier: 3.8.3
   peerDependenciesMeta:
     prettier:
       optional: true
-  checksum: 10c0/07f2eb97d8cff1dd093419e204263cc97fa86eb329aa8ca6f7dcca43b25c029f62e04373746800e6c4ec016304c66f4d00dbfedaeb470f1cf1b0e1cb9b750978
+  checksum: 10c0/982986095b53fedd5d6bc1320af407456d8d7ab1006bed8e64152706fac6fc129bc455b8db7114dd9f487fce1d380910142102eebde1d97e896c10d30da59563
   languageName: node
   linkType: hard
 
@@ -4889,21 +4912,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/load@npm:8.1.8":
-  version: 8.1.8
-  resolution: "@graphql-tools/load@npm:8.1.8"
-  dependencies:
-    "@graphql-tools/schema": "npm:^10.0.31"
-    "@graphql-tools/utils": "npm:^11.0.0"
-    p-limit: "npm:3.1.0"
-    tslib: "npm:^2.4.0"
-  peerDependencies:
-    graphql: ^14.0.0 || ^15.0.0 || ^16.0.0 || ^17.0.0
-  checksum: 10c0/87d26ee4363223e0f187dd6d4fd41c2dee80ec87ce1f01faf7174ac1ca0b85ac537f466a084812024cd2857a0df17c71afae3567998b84cc7a65b65bb84c0663
-  languageName: node
-  linkType: hard
-
-"@graphql-tools/load@npm:^8.0.2, @graphql-tools/load@npm:^8.1.0, @graphql-tools/load@npm:^8.1.8":
+"@graphql-tools/load@npm:8.1.10, @graphql-tools/load@npm:^8.0.2, @graphql-tools/load@npm:^8.1.0, @graphql-tools/load@npm:^8.1.8":
   version: 8.1.10
   resolution: "@graphql-tools/load@npm:8.1.10"
   dependencies:
@@ -4953,7 +4962,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-tools/schema@npm:^10.0.0, @graphql-tools/schema@npm:^10.0.29, @graphql-tools/schema@npm:^10.0.31, @graphql-tools/schema@npm:^10.0.33":
+"@graphql-tools/schema@npm:^10.0.0, @graphql-tools/schema@npm:^10.0.29, @graphql-tools/schema@npm:^10.0.33":
   version: 10.0.33
   resolution: "@graphql-tools/schema@npm:10.0.33"
   dependencies:
