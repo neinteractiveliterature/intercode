@@ -1,6 +1,7 @@
 import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'react';
 import { buildClientSchema, getIntrospectionQuery, GraphQLSchema } from 'graphql';
 import { graphql, updateSchema } from 'cm6-graphql';
+import { json } from '@codemirror/lang-json';
 import { useStandardCodeMirror } from '@neinteractiveliterature/litform';
 import { AuthenticityTokensContext } from '../../AuthenticityTokensContext';
 import { getIntercodeUserTimezoneHeader } from '../../useIntercodeApolloClient';
@@ -39,26 +40,35 @@ export default function GraphQLQueryEditor({ defaultQuery, onEditQuery }: GraphQ
   const csrfToken = manager.tokens?.graphql ?? '';
   const schema = useIntrospectedSchema(csrfToken);
 
-  const [variables, setVariables] = useState('');
   const [response, setResponse] = useState('');
   const [running, setRunning] = useState(false);
-  const queryRef = useRef(defaultQuery ?? '');
+  const queryValueRef = useRef(defaultQuery ?? '');
+  const variablesValueRef = useRef('');
 
-  const extensions = useMemo(() => [graphql()], []);
+  const queryExtensions = useMemo(() => [graphql()], []);
+  const variablesExtensions = useMemo(() => [json()], []);
 
-  const [editorRef, editorView] = useStandardCodeMirror({
-    extensions,
+  const [queryEditorRef, editorView] = useStandardCodeMirror({
+    extensions: queryExtensions,
     value: defaultQuery ?? '',
     onChange: useCallback(
       (value: string) => {
-        queryRef.current = value;
+        queryValueRef.current = value;
         onEditQuery?.(value);
       },
       [onEditQuery],
     ),
   });
 
-  // Push the schema into the editor once it loads
+  const [variablesEditorRef] = useStandardCodeMirror({
+    extensions: variablesExtensions,
+    value: '',
+    onChange: useCallback((value: string) => {
+      variablesValueRef.current = value;
+    }, []),
+    lines: 4,
+  });
+
   useEffect(() => {
     if (schema && editorView) {
       updateSchema(editorView, schema);
@@ -69,8 +79,9 @@ export default function GraphQLQueryEditor({ defaultQuery, onEditQuery }: GraphQ
     setRunning(true);
     try {
       let parsedVariables: Record<string, unknown> | undefined;
-      if (variables.trim()) {
-        parsedVariables = JSON.parse(variables);
+      const variablesText = variablesValueRef.current.trim();
+      if (variablesText) {
+        parsedVariables = JSON.parse(variablesText);
       }
       const res = await fetch('/graphql', {
         method: 'POST',
@@ -80,7 +91,7 @@ export default function GraphQLQueryEditor({ defaultQuery, onEditQuery }: GraphQ
           ...getIntercodeUserTimezoneHeader(),
         },
         credentials: 'same-origin',
-        body: JSON.stringify({ query: queryRef.current, variables: parsedVariables }),
+        body: JSON.stringify({ query: queryValueRef.current, variables: parsedVariables }),
       });
       setResponse(JSON.stringify(await res.json(), null, 2));
     } catch (err) {
@@ -88,31 +99,20 @@ export default function GraphQLQueryEditor({ defaultQuery, onEditQuery }: GraphQ
     } finally {
       setRunning(false);
     }
-  }, [csrfToken, variables]);
+  }, [csrfToken]);
 
   return (
     <div className="d-flex flex-column gap-2 h-100">
       <div className="flex-grow-1 border rounded overflow-hidden" style={{ minHeight: '12rem' }}>
-        <div ref={editorRef} className="h-100" />
+        <div ref={queryEditorRef} className="h-100" />
       </div>
       <div>
         {/* eslint-disable-next-line i18next/no-literal-string */}
-        <label htmlFor="graphql-variables" className="form-label mb-1 fw-semibold small">
-          Variables (JSON)
-        </label>
-        <textarea
-          id="graphql-variables"
-          aria-label="Variables (JSON)"
-          className="form-control form-control-sm font-monospace"
-          rows={3}
-          value={variables}
-          onChange={(e) => setVariables(e.target.value)}
-          placeholder="{}"
-          spellCheck={false}
-        />
+        <div className="form-label mb-1 fw-semibold small">Variables (JSON)</div>
+        <div className="border rounded overflow-hidden" ref={variablesEditorRef} />
       </div>
       <div>
-        { }
+        {}
         <button type="button" className="btn btn-primary btn-sm" onClick={runQuery} disabled={running}>
           {/* eslint-disable-next-line i18next/no-literal-string */}
           {running ? 'Running…' : '▶ Run query'}
