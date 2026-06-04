@@ -3,12 +3,6 @@ import GraphQLQueryEditor from './CmsAdmin/CmsGraphqlQueriesAdmin/GraphQLQueryEd
 import mountReactComponents from './mountReactComponents';
 import { AuthenticityTokensContext } from './AuthenticityTokensContext';
 
- 
-console.log(
-  '[DevModeGraphiql] module loaded, querySelectorAll result:',
-  document.querySelectorAll('[data-react-class]').length,
-);
-
 export type DevModeGraphiqlProps = {
   authenticityTokens: {
     graphql: string;
@@ -49,7 +43,6 @@ function DevModeGraphiql({ authenticityTokens }: DevModeGraphiqlProps): React.JS
 
   return (
     <ErrorBoundary>
-      <p style={{ color: 'red' }}>mounted</p>
       <div style={{ height: '100vh', padding: '1rem', boxSizing: 'border-box' }}>
         <GraphQLQueryEditor />
       </div>
@@ -57,6 +50,4 @@ function DevModeGraphiql({ authenticityTokens }: DevModeGraphiqlProps): React.JS
   );
 }
 
- 
-console.log('[DevModeGraphiql] calling mountReactComponents');
 mountReactComponents({ DevModeGraphiql: DevModeGraphiql as React.FC<unknown> });
