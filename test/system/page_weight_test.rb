@@ -13,9 +13,14 @@ class PageWeightTest < ApplicationSystemTestCase
   INITIAL_ASSET_THRESHOLD_BYTES = 700_000
   ASSET_INITIATOR_TYPES = %w[script link].freeze
 
+  let(:root_site) { create(:root_site) }
   let(:convention) { create(:convention, :with_standard_content) }
 
-  before { Intercode.overridden_virtual_host_domain = convention.domain }
+  before do
+    root_site
+    Intercode.overridden_virtual_host_domain = convention.domain
+  end
+
   after { Intercode.overridden_virtual_host_domain = nil }
 
   it "loads the home page within the initial JS/CSS payload budget" do
