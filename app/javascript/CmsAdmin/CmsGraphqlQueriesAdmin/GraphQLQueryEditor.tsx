@@ -126,7 +126,7 @@ export default function GraphQLQueryEditor({ defaultQuery, onEditQuery }: GraphQ
 
   return (
     <div className="d-flex gap-2 h-100">
-      <div className="d-flex flex-column gap-2 flex-grow-1" style={{ minWidth: 0 }}>
+      <div className="d-flex flex-column gap-2" style={{ flex: '1 1 0', minWidth: 0 }}>
         <div className="d-flex flex-column flex-grow-1" style={{ minHeight: 0 }}>
           {/* eslint-disable-next-line i18next/no-literal-string */}
           <div id="graphql-query-label" className="form-label mb-1 fw-semibold small">
@@ -145,7 +145,7 @@ export default function GraphQLQueryEditor({ defaultQuery, onEditQuery }: GraphQ
         </div>
       </div>
       <div className="d-flex flex-column align-items-center justify-content-center" style={{ flexShrink: 0 }}>
-        { }
+        {}
         <button
           type="button"
           className="btn btn-primary btn-sm"
@@ -157,7 +157,7 @@ export default function GraphQLQueryEditor({ defaultQuery, onEditQuery }: GraphQ
           {running ? '⏳' : '▶'}
         </button>
       </div>
-      <div className="d-flex flex-column flex-grow-1" style={{ minWidth: 0 }}>
+      <div className="d-flex flex-column" style={{ flex: '1 1 0', minWidth: 0 }}>
         {/* eslint-disable-next-line i18next/no-literal-string */}
         <div className="fw-semibold small mb-1">Response</div>
         <div className="border rounded overflow-hidden flex-grow-1" ref={responseEditorRef} />
