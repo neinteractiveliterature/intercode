@@ -1,7 +1,7 @@
 import 'regenerator-runtime/runtime';
 
 import mountReactComponents from '../mountReactComponents';
-import { StrictMode, Suspense, use, useMemo } from 'react';
+import { StrictMode, Suspense, use, useLayoutEffect, useMemo, useState } from 'react';
 import AuthenticityTokensManager, { getAuthenticityTokensURL } from 'AuthenticityTokensContext';
 import { createBrowserRouter, RouterContextProvider, RouterProvider } from 'react-router';
 import { buildBrowserApolloClient, GraphQLNotAuthenticatedErrorEvent } from 'useIntercodeApolloClient';
@@ -70,6 +70,35 @@ const bootstrapPromise: Promise<Bootstrap> = (async () => {
   return { clientConfiguration, authenticityTokensManager, authManager, client };
 })();
 
+type BrowserRouter = ReturnType<typeof createBrowserRouter>;
+
+// createBrowserRouter calls router.initialize() internally, which starts the
+// initial navigation asynchronously. By the time our useEffect subscribes,
+// the navigation may already be done — router.subscribe fires the callback
+// synchronously (via a buffered state update) with the final state. Watching
+// router.state.initialized (set to true once initial data loading completes)
+// handles both "already done" and "still in progress" correctly.
+function RouterLoadingOverlay({ router }: { router: BrowserRouter }) {
+  const [ready, setReady] = useState(() => router.state.initialized);
+
+  useLayoutEffect(() => {
+    return router.subscribe((state) => {
+      if (state.initialized) {
+        setReady(true);
+      }
+    });
+  }, [router]);
+
+  if (ready) return null;
+
+  return (
+    <div className="text-center mt-5 custom-loading-indicator">
+      <div className="spinner-border" role="status" />
+      <span className="visually-hidden">Loading...</span>
+    </div>
+  );
+}
+
 function DataModeApplicationEntry() {
   const bootstrap = use(bootstrapPromise);
 
@@ -101,6 +130,7 @@ function DataModeApplicationEntry() {
   return (
     <StrictMode>
       <AuthenticationManagerContext.Provider value={bootstrap.authManager}>
+        <RouterLoadingOverlay router={router} />
         <RouterProvider router={router} />
       </AuthenticationManagerContext.Provider>
     </StrictMode>
