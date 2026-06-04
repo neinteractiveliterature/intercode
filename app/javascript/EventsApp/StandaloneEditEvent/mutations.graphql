@@ -1,14 +1,5 @@
 #import "./queries.graphql"
 
-mutation StandaloneDropEvent($input: DropEventInput!) {
-  dropEvent(input: $input) {
-    event {
-      id
-      status
-    }
-  }
-}
-
 mutation StandaloneUpdateEvent($input: UpdateEventInput!) {
   updateEvent(input: $input) {
     event {
@@ -18,38 +9,3 @@ mutation StandaloneUpdateEvent($input: UpdateEventInput!) {
   }
 }
 
-mutation StandaloneAttachImageToEvent($id: ID!, $signedBlobId: ID!) {
-  attachImageToEvent(input: { id: $id, signedBlobId: $signedBlobId }) {
-    event {
-      id
-      ...StandaloneEditEvent_EventFields
-    }
-  }
-}
-
-mutation StandaloneCreateMaximumEventProvidedTicketsOverride($input: CreateMaximumEventProvidedTicketsOverrideInput!) {
-  createMaximumEventProvidedTicketsOverride(input: $input) {
-    maximum_event_provided_tickets_override {
-      id
-      ...StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFields
-    }
-  }
-}
-
-mutation StandaloneDeleteMaximumEventProvidedTicketsOverride($input: DeleteMaximumEventProvidedTicketsOverrideInput!) {
-  deleteMaximumEventProvidedTicketsOverride(input: $input) {
-    maximum_event_provided_tickets_override {
-      id
-      ...StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFields
-    }
-  }
-}
-
-mutation StandaloneUpdateMaximumEventProvidedTicketsOverride($input: UpdateMaximumEventProvidedTicketsOverrideInput!) {
-  updateMaximumEventProvidedTicketsOverride(input: $input) {
-    maximum_event_provided_tickets_override {
-      id
-      ...StandaloneEditEvent_MaximumEventProvidedTicketsOverrideFields
-    }
-  }
-}

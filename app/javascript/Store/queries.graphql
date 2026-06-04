@@ -1,18 +1,6 @@
 #import "./orderFields.graphql"
 #import "./pricingStructureFields.graphql"
 
-query AdminStoreAbilityQuery {
-  currentAbility {
-    can_update_products
-    can_update_orders
-  }
-
-  convention: conventionByRequestHost {
-    id
-    timezone_name
-  }
-}
-
 query OrderHistoryQuery {
   convention: conventionByRequestHost {
     id
