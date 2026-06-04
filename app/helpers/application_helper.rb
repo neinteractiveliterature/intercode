@@ -31,6 +31,21 @@ module ApplicationHelper
     "#{request.scheme}://#{host}#{path}"
   end
 
+  def app_root_loading_content
+    visually_hidden_style =
+      "position:absolute;width:1px;height:1px;padding:0;margin:-1px;" \
+        "overflow:hidden;clip:rect(0,0,0,0);white-space:nowrap;border:0"
+    spinner_style =
+      "display:inline-block;width:2rem;height:2rem;border:0.25em solid currentColor;" \
+        "border-right-color:transparent;border-radius:50%;animation:_intercode_spinner 0.75s linear infinite"
+
+    tag.style("@keyframes _intercode_spinner{to{transform:rotate(360deg)}}") +
+      tag.div(
+        tag.div(tag.span("Loading...", style: visually_hidden_style), role: "status", style: spinner_style),
+        style: "text-align:center;margin-top:3rem"
+      )
+  end
+
   def browser_warning
     # CloudFront strips all cookies before forwarding to the origin, so the
     # suppressBrowserWarning cookie is never visible to Rails on proxied requests.
