@@ -81,6 +81,7 @@ export default function GraphQLQueryEditor({ defaultQuery, onEditQuery }: GraphQ
   const [responseEditorRef] = useStandardCodeMirror({
     extensions: responseExtensions,
     value: response,
+    onChange: () => {},
   });
 
   const [variablesEditorRef] = useStandardCodeMirror({
