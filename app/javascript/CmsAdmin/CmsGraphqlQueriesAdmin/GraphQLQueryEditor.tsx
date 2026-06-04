@@ -53,8 +53,14 @@ export default function GraphQLQueryEditor({ defaultQuery, onEditQuery }: GraphQ
     [],
   );
 
-  const queryExtensions = useMemo(() => [graphql(), fillHeight], [fillHeight]);
-  const variablesExtensions = useMemo(() => [json()], []);
+  const queryExtensions = useMemo(
+    () => [graphql(), fillHeight, EditorView.contentAttributes.of({ 'aria-labelledby': 'graphql-query-label' })],
+    [fillHeight],
+  );
+  const variablesExtensions = useMemo(
+    () => [json(), EditorView.contentAttributes.of({ 'aria-labelledby': 'graphql-variables-label' })],
+    [],
+  );
   const responseExtensions = useMemo(
     () => [json(), EditorState.readOnly.of(true), EditorView.editable.of(false), fillHeight],
     [fillHeight],
@@ -120,23 +126,31 @@ export default function GraphQLQueryEditor({ defaultQuery, onEditQuery }: GraphQ
 
   return (
     <div className="d-flex gap-2 h-100">
-      <div className="d-flex flex-column gap-2" style={{ width: '50%', minWidth: 0 }}>
-        <div className="flex-grow-1 border rounded overflow-hidden" style={{ minHeight: '12rem' }}>
-          <div ref={queryEditorRef} className="h-100" />
+      <div className="d-flex flex-column gap-2 flex-grow-1" style={{ minWidth: 0 }}>
+        <div className="d-flex flex-column flex-grow-1" style={{ minHeight: 0 }}>
+          {/* eslint-disable-next-line i18next/no-literal-string */}
+          <div id="graphql-query-label" className="form-label mb-1 fw-semibold small">
+            Query
+          </div>
+          <div className="border rounded overflow-hidden flex-grow-1" style={{ minHeight: '12rem' }}>
+            <div ref={queryEditorRef} className="h-100" />
+          </div>
         </div>
         <div>
           {/* eslint-disable-next-line i18next/no-literal-string */}
-          <div className="form-label mb-1 fw-semibold small">Variables (JSON)</div>
+          <div id="graphql-variables-label" className="form-label mb-1 fw-semibold small">
+            Variables (JSON)
+          </div>
           <div className="border rounded overflow-hidden" ref={variablesEditorRef} />
         </div>
-        <div>
-          <button type="button" className="btn btn-primary btn-sm" onClick={runQuery} disabled={running}>
-            {/* eslint-disable-next-line i18next/no-literal-string */}
-            {running ? 'Running…' : '▶ Run query'}
-          </button>
-        </div>
       </div>
-      <div className="d-flex flex-column" style={{ width: '50%', minWidth: 0 }}>
+      <div className="d-flex flex-column align-items-center justify-content-center" style={{ flexShrink: 0 }}>
+        <button type="button" className="btn btn-primary btn-sm" onClick={runQuery} disabled={running}>
+          {/* eslint-disable-next-line i18next/no-literal-string */}
+          {running ? 'Running…' : '▶ Run query'}
+        </button>
+      </div>
+      <div className="d-flex flex-column flex-grow-1" style={{ minWidth: 0 }}>
         {/* eslint-disable-next-line i18next/no-literal-string */}
         <div className="fw-semibold small mb-1">Response</div>
         <div className="border rounded overflow-hidden flex-grow-1" ref={responseEditorRef} />
