@@ -2,6 +2,8 @@ import { useCallback, useContext, useEffect, useMemo, useRef, useState } from 'r
 import { buildClientSchema, getIntrospectionQuery, GraphQLSchema } from 'graphql';
 import { graphql, updateSchema } from 'cm6-graphql';
 import { json } from '@codemirror/lang-json';
+import { EditorState } from '@codemirror/state';
+import { EditorView } from '@codemirror/view';
 import { useStandardCodeMirror } from '@neinteractiveliterature/litform';
 import { AuthenticityTokensContext } from '../../AuthenticityTokensContext';
 import { getIntercodeUserTimezoneHeader } from '../../useIntercodeApolloClient';
@@ -47,6 +49,7 @@ export default function GraphQLQueryEditor({ defaultQuery, onEditQuery }: GraphQ
 
   const queryExtensions = useMemo(() => [graphql()], []);
   const variablesExtensions = useMemo(() => [json()], []);
+  const responseExtensions = useMemo(() => [json(), EditorState.readOnly.of(true), EditorView.editable.of(false)], []);
 
   const [queryEditorRef, editorView] = useStandardCodeMirror({
     extensions: queryExtensions,
@@ -58,6 +61,11 @@ export default function GraphQLQueryEditor({ defaultQuery, onEditQuery }: GraphQ
       },
       [onEditQuery],
     ),
+  });
+
+  const [responseEditorRef] = useStandardCodeMirror({
+    extensions: responseExtensions,
+    value: response,
   });
 
   const [variablesEditorRef] = useStandardCodeMirror({
@@ -103,7 +111,7 @@ export default function GraphQLQueryEditor({ defaultQuery, onEditQuery }: GraphQ
 
   return (
     <div className="d-flex gap-2 h-100">
-      <div className="d-flex flex-column gap-2 flex-grow-1" style={{ minWidth: 0 }}>
+      <div className="d-flex flex-column gap-2" style={{ width: '50%', minWidth: 0 }}>
         <div className="flex-grow-1 border rounded overflow-hidden" style={{ minHeight: '12rem' }}>
           <div ref={queryEditorRef} className="h-100" />
         </div>
@@ -119,15 +127,10 @@ export default function GraphQLQueryEditor({ defaultQuery, onEditQuery }: GraphQ
           </button>
         </div>
       </div>
-      <div className="d-flex flex-column flex-grow-1" style={{ minWidth: 0 }}>
+      <div className="d-flex flex-column" style={{ width: '50%', minWidth: 0 }}>
         {/* eslint-disable-next-line i18next/no-literal-string */}
         <div className="fw-semibold small mb-1">Response</div>
-        <pre
-          className="border rounded p-2 bg-light overflow-auto flex-grow-1 mb-0"
-          style={{ fontSize: '0.75rem', minHeight: '4rem' }}
-        >
-          {response}
-        </pre>
+        <div className="border rounded overflow-hidden flex-grow-1" ref={responseEditorRef} />
       </div>
     </div>
   );
