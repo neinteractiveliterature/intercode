@@ -1,5 +1,6 @@
 ARG RUBY_VERSION
 ARG NODE_VERSION
+ARG CHAMBER_VERSION=2.13.4
 
 ### dev
 
@@ -56,6 +57,7 @@ FROM ${TARGETARCH}_jemalloc as production
 ARG NODE_VERSION
 ARG TARGETARCH
 ARG REVISION
+ARG CHAMBER_VERSION
 
 ENV RAILS_ENV production
 ENV NODE_ENV production
@@ -82,8 +84,14 @@ RUN curl -L https://fly.io/install.sh | sh
 ENV FLYCTL_INSTALL="/root/.fly"
 ENV PATH="$FLYCTL_INSTALL/bin:$PATH"
 
+# Set up chamber for SSM-based secrets management
+RUN curl -fL "https://github.com/segmentio/chamber/releases/download/v${CHAMBER_VERSION}/chamber-v${CHAMBER_VERSION}-linux-${TARGETARCH}" \
+  -o /usr/local/bin/chamber \
+  && chmod +x /usr/local/bin/chamber
+
 COPY --from=build /usr/local/bundle /usr/local/bundle
 COPY --from=build --chown=www /usr/src/intercode /usr/src/intercode
+RUN chmod +x /usr/src/intercode/bin/entrypoint.sh
 
 # The following two lines are to enable heroku exec support: https://devcenter.heroku.com/articles/exec#using-with-docker
 ADD ./.profile.d /app/.profile.d
@@ -93,4 +101,5 @@ WORKDIR /usr/src/intercode
 
 USER www
 ENV PATH=/opt/node/bin:$PATH
-CMD bundle exec bin/rails server -p $PORT -b 0.0.0.0
+ENTRYPOINT ["/usr/src/intercode/bin/entrypoint.sh"]
+CMD ["bundle", "exec", "bin/rails", "server", "-p", "3000", "-b", "0.0.0.0"]

@@ -15,6 +15,7 @@ release_command = "bundle exec rails release:perform --trace"
 strategy = "bluegreen"
 
 [env]
+CHAMBER_SERVICE = "intercode_production"
 ASSETS_HOST = "assets.neilhosting.net"
 AUTOSCALE_MIN_INSTANCES = "2"
 AUTOSCALE_MAX_INSTANCES = "10"

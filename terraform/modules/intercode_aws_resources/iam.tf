@@ -77,6 +77,16 @@ resource "aws_iam_group_policy" "this" {
         Action   = ["events:PutRule", "events:PutTargets"]
         Resource = "*"
       },
+      {
+        Sid    = "SsmParameterAccess"
+        Effect = "Allow"
+        Action = [
+          "ssm:GetParametersByPath",
+          "ssm:GetParameter",
+          "ssm:GetParameters",
+        ]
+        Resource = "arn:aws:ssm:${local.region}:${local.account_id}:parameter/${var.name}/*"
+      },
     ]
   })
 }
