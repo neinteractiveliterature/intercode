@@ -1,16 +1,8 @@
-import React, { useCallback, useContext, useEffect } from 'react';
-import { GraphiQL } from 'graphiql';
-import { parse } from 'graphql';
-import { Fetcher, FetcherParams } from '@graphiql/toolkit';
-
-import { ApolloLink, execute } from '@apollo/client';
-import { useIntercodeApolloLink } from './useIntercodeApolloClient';
+import React, { Component, useContext, useLayoutEffect } from 'react';
+import GraphQLQueryEditor from './CmsAdmin/CmsGraphqlQueriesAdmin/GraphQLQueryEditor';
 import mountReactComponents from './mountReactComponents';
-
-import 'graphiql/graphiql.css';
-import './styles/dev-mode-graphiql.scss';
 import { AuthenticityTokensContext } from './AuthenticityTokensContext';
-import { useApolloClient } from '@apollo/client/react';
+import './styles/application.scss';
 
 export type DevModeGraphiqlProps = {
   authenticityTokens: {
@@ -18,26 +10,45 @@ export type DevModeGraphiqlProps = {
   };
 };
 
+type ErrorBoundaryState = { error: Error | null };
+
+class ErrorBoundary extends Component<{ children: React.ReactNode }, ErrorBoundaryState> {
+  state: ErrorBoundaryState = { error: null };
+
+  static getDerivedStateFromError(error: Error) {
+    return { error };
+  }
+
+  render() {
+    if (this.state.error) {
+      return (
+        <div style={{ padding: '1rem', fontFamily: 'monospace', whiteSpace: 'pre-wrap', color: 'red' }}>
+          <strong>Error rendering GraphQL editor:</strong>
+          {'\n'}
+          {this.state.error.stack ?? this.state.error.message}
+        </div>
+      );
+    }
+    return this.props.children;
+  }
+}
+
 function DevModeGraphiql({ authenticityTokens }: DevModeGraphiqlProps): React.JSX.Element {
   const manager = useContext(AuthenticityTokensContext);
 
-  useEffect(() => {
+  // useLayoutEffect runs before any useEffect, so tokens are set before
+  // GraphQLQueryEditor's introspection fetch fires.
+  useLayoutEffect(() => {
     manager.setTokens(authenticityTokens);
   }, [authenticityTokens, manager]);
-  const link = useIntercodeApolloLink(new URL('/graphql', window.location.href), manager);
-  const client = useApolloClient();
 
-  const fetcher = useCallback(
-    (operation: FetcherParams) => {
-      const operationAsGraphQLRequest = operation as unknown as ApolloLink.Request;
-
-      operationAsGraphQLRequest.query = parse(operation.query);
-      return execute(link, operationAsGraphQLRequest, { client });
-    },
-    [link, client],
-  ) as unknown as Fetcher;
-
-  return <GraphiQL fetcher={fetcher} />;
+  return (
+    <ErrorBoundary>
+      <div style={{ height: '100vh', padding: '1rem', boxSizing: 'border-box' }}>
+        <GraphQLQueryEditor />
+      </div>
+    </ErrorBoundary>
+  );
 }
 
 mountReactComponents({ DevModeGraphiql: DevModeGraphiql as React.FC<unknown> });

@@ -732,14 +732,23 @@
       "editContent": "Edit content",
       "deleteContent": "Delete content"
     },
-    "files": {
-      "copyEmbedCode": "Copy CMS embed code"
-    },
     "fileUploadForm": {
       "clearFileButton": "Clear",
       "fileInputLabel": "Choose a file...",
       "title": "Upload a file",
       "uploadFileButton": "Upload"
+    },
+    "files": {
+      "copyEmbedCode": "Copy CMS embed code"
+    },
+    "graphqlQueries": {
+      "editor": {
+        "queryLabel": "Query",
+        "variablesLabel": "Variables (JSON)",
+        "responseLabel": "Response",
+        "runQuery": "Run query",
+        "running": "Running…"
+      }
     },
     "layoutForm": {
       "navbarClassesHelpText": "Overrides the default CSS classes for the Bootstrap navigation bar (by default, <2>{{ defaultClasses }}</2>)"

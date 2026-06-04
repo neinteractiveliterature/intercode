@@ -2,8 +2,17 @@
 <html>
   <head>
     <title>GraphiQL</title>
-    <%= stylesheet_link_tag url_with_possible_host('/packs/dev-mode-graphiql.css', ENV['ASSETS_HOST']), media: :all %>
-    <%= javascript_include_tag url_with_possible_host('/packs/dev-mode-graphiql.js', ENV['ASSETS_HOST']), type: 'module', defer: true %>
+    <% if Rails.env.development? %>
+      <script type="module">
+        import RefreshRuntime from <%=raw url_with_possible_host("/@react-refresh", ENV['ASSETS_HOST']).to_json %>
+        RefreshRuntime.injectIntoGlobalHook(window)
+        window.$RefreshReg$ = () => {}
+        window.$RefreshSig$ = () => (type) => type
+        window.__vite_plugin_react_preamble_installed__ = true
+      </script>
+      <%= javascript_include_tag url_with_possible_host("/@vite/client", ENV['ASSETS_HOST']), type: 'module' %>
+    <% end %>
+    <%= javascript_include_tag url_with_possible_host(dev_mode_graphiql_entry_path, ENV['ASSETS_HOST']), type: 'module', defer: true %>
   </head>
   <body>
     <%= yield %>

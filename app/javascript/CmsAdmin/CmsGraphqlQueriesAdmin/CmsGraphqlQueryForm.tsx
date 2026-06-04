@@ -1,6 +1,5 @@
-import { Suspense, useMemo, useContext } from 'react';
+import { Suspense } from 'react';
 import * as React from 'react';
-import { createGraphiQLFetcher } from '@graphiql/toolkit';
 import {
   BootstrapFormInput,
   BootstrapFormTextarea,
@@ -9,15 +8,8 @@ import {
 } from '@neinteractiveliterature/litform';
 
 import { lazyWithAppEntrypointHeadersCheck } from '../../checkAppEntrypointHeadersMatch';
-import { getIntercodeUserTimezoneHeader } from '../../useIntercodeApolloClient';
-import { AuthenticityTokensContext } from '../../AuthenticityTokensContext';
-import type { GraphiQLProps } from 'graphiql';
 
-const GraphiQL = lazyWithAppEntrypointHeadersCheck<GraphiQLProps>(() =>
-  import(/* webpackChunkName: 'graphiql' */ 'graphiql').then((m) => ({
-    default: m.GraphiQL as React.ComponentType<GraphiQLProps>,
-  })),
-);
+const GraphQLQueryEditor = lazyWithAppEntrypointHeadersCheck(() => import('./GraphQLQueryEditor'));
 
 type CmsGraphqlQueryFormFields = {
   identifier: string;
@@ -36,16 +28,7 @@ function CmsGraphqlQueryForm<T extends CmsGraphqlQueryFormFields>({
   onChange,
   readOnly,
 }: CmsGraphqlQueryFormProps<T>): React.JSX.Element {
-  const manager = useContext(AuthenticityTokensContext);
-  const authenticityToken = manager.tokens?.graphql;
   const [setIdentifier, setAdminNotes, setQuery] = usePropertySetters(onChange, 'identifier', 'admin_notes', 'query');
-
-  const fetcher = useMemo(() => {
-    return createGraphiQLFetcher({
-      url: '/graphql',
-      headers: { 'X-CSRF-Token': authenticityToken ?? '', ...getIntercodeUserTimezoneHeader() },
-    });
-  }, [authenticityToken]);
 
   return (
     <>
@@ -66,9 +49,9 @@ function CmsGraphqlQueryForm<T extends CmsGraphqlQueryFormFields>({
         readOnly={readOnly}
       />
 
-      <div className="border" style={{ height: '40em' }}>
+      <div className="border p-2" style={{ height: '40em' }}>
         <Suspense fallback={<LoadingIndicator iconSet="bootstrap-icons" />}>
-          <GraphiQL defaultQuery={value.query} onEditQuery={setQuery} fetcher={fetcher} />
+          <GraphQLQueryEditor defaultQuery={value.query} onEditQuery={readOnly ? undefined : setQuery} />
         </Suspense>
         <input type="hidden" name="query" value={value.query} />
       </div>
