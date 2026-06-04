@@ -145,9 +145,16 @@ export default function GraphQLQueryEditor({ defaultQuery, onEditQuery }: GraphQ
         </div>
       </div>
       <div className="d-flex flex-column align-items-center justify-content-center" style={{ flexShrink: 0 }}>
-        <button type="button" className="btn btn-primary btn-sm" onClick={runQuery} disabled={running}>
-          {/* eslint-disable-next-line i18next/no-literal-string */}
-          {running ? 'Running…' : '▶ Run query'}
+        { }
+        <button
+          type="button"
+          className="btn btn-primary btn-sm"
+          onClick={runQuery}
+          disabled={running}
+          aria-label={running ? 'Running…' : 'Run query'}
+          title={running ? 'Running…' : 'Run query'}
+        >
+          {running ? '⏳' : '▶'}
         </button>
       </div>
       <div className="d-flex flex-column flex-grow-1" style={{ minWidth: 0 }}>
