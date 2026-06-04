@@ -102,34 +102,33 @@ export default function GraphQLQueryEditor({ defaultQuery, onEditQuery }: GraphQ
   }, [csrfToken]);
 
   return (
-    <div className="d-flex flex-column gap-2 h-100">
-      <div className="flex-grow-1 border rounded overflow-hidden" style={{ minHeight: '12rem' }}>
-        <div ref={queryEditorRef} className="h-100" />
+    <div className="d-flex gap-2 h-100">
+      <div className="d-flex flex-column gap-2 flex-grow-1" style={{ minWidth: 0 }}>
+        <div className="flex-grow-1 border rounded overflow-hidden" style={{ minHeight: '12rem' }}>
+          <div ref={queryEditorRef} className="h-100" />
+        </div>
+        <div>
+          {/* eslint-disable-next-line i18next/no-literal-string */}
+          <div className="form-label mb-1 fw-semibold small">Variables (JSON)</div>
+          <div className="border rounded overflow-hidden" ref={variablesEditorRef} />
+        </div>
+        <div>
+          <button type="button" className="btn btn-primary btn-sm" onClick={runQuery} disabled={running}>
+            {/* eslint-disable-next-line i18next/no-literal-string */}
+            {running ? 'Running…' : '▶ Run query'}
+          </button>
+        </div>
       </div>
-      <div>
+      <div className="d-flex flex-column flex-grow-1" style={{ minWidth: 0 }}>
         {/* eslint-disable-next-line i18next/no-literal-string */}
-        <div className="form-label mb-1 fw-semibold small">Variables (JSON)</div>
-        <div className="border rounded overflow-hidden" ref={variablesEditorRef} />
+        <div className="fw-semibold small mb-1">Response</div>
+        <pre
+          className="border rounded p-2 bg-light overflow-auto flex-grow-1 mb-0"
+          style={{ fontSize: '0.75rem', minHeight: '4rem' }}
+        >
+          {response}
+        </pre>
       </div>
-      <div>
-        {}
-        <button type="button" className="btn btn-primary btn-sm" onClick={runQuery} disabled={running}>
-          {/* eslint-disable-next-line i18next/no-literal-string */}
-          {running ? 'Running…' : '▶ Run query'}
-        </button>
-      </div>
-      {response && (
-        <>
-          {/* eslint-disable-next-line i18next/no-literal-string */}
-          <div className="fw-semibold small">Response</div>
-          <pre
-            className="border rounded p-2 bg-light overflow-auto mb-0"
-            style={{ maxHeight: '16rem', fontSize: '0.75rem' }}
-          >
-            {response}
-          </pre>
-        </>
-      )}
     </div>
   );
 }
