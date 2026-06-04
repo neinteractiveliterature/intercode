@@ -1,16 +1,7 @@
-import React, { useCallback, useContext, useEffect } from 'react';
-import { GraphiQL } from 'graphiql';
-import { parse } from 'graphql';
-import { Fetcher, FetcherParams } from '@graphiql/toolkit';
-
-import { ApolloLink, execute } from '@apollo/client';
-import { useIntercodeApolloLink } from './useIntercodeApolloClient';
+import React, { useContext, useLayoutEffect } from 'react';
+import GraphQLQueryEditor from './CmsAdmin/CmsGraphqlQueriesAdmin/GraphQLQueryEditor';
 import mountReactComponents from './mountReactComponents';
-
-import 'graphiql/graphiql.css';
-import './styles/dev-mode-graphiql.scss';
 import { AuthenticityTokensContext } from './AuthenticityTokensContext';
-import { useApolloClient } from '@apollo/client/react';
 
 export type DevModeGraphiqlProps = {
   authenticityTokens: {
@@ -21,23 +12,17 @@ export type DevModeGraphiqlProps = {
 function DevModeGraphiql({ authenticityTokens }: DevModeGraphiqlProps): React.JSX.Element {
   const manager = useContext(AuthenticityTokensContext);
 
-  useEffect(() => {
+  // useLayoutEffect runs before any useEffect, so tokens are set before
+  // GraphQLQueryEditor's introspection fetch fires.
+  useLayoutEffect(() => {
     manager.setTokens(authenticityTokens);
   }, [authenticityTokens, manager]);
-  const link = useIntercodeApolloLink(new URL('/graphql', window.location.href), manager);
-  const client = useApolloClient();
 
-  const fetcher = useCallback(
-    (operation: FetcherParams) => {
-      const operationAsGraphQLRequest = operation as unknown as ApolloLink.Request;
-
-      operationAsGraphQLRequest.query = parse(operation.query);
-      return execute(link, operationAsGraphQLRequest, { client });
-    },
-    [link, client],
-  ) as unknown as Fetcher;
-
-  return <GraphiQL fetcher={fetcher} />;
+  return (
+    <div style={{ height: '100vh', padding: '1rem', boxSizing: 'border-box' }}>
+      <GraphQLQueryEditor />
+    </div>
+  );
 }
 
 mountReactComponents({ DevModeGraphiql: DevModeGraphiql as React.FC<unknown> });

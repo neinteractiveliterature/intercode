@@ -17,6 +17,7 @@ function useIntrospectedSchema(csrfToken: string): GraphQLSchema | undefined {
   const [schema, setSchema] = useState<GraphQLSchema | undefined>(undefined);
 
   useEffect(() => {
+    if (!csrfToken) return;
     fetch('/graphql', {
       method: 'POST',
       headers: {
