@@ -10,7 +10,7 @@ import {
 } from '../../../app/javascript/EventsApp/EventCatalog/EventList/queries.generated';
 import { RateEventDocument, RateEventMutationData } from '../../../app/javascript/EventRatings/mutations.generated';
 import { TimezoneMode } from '../../../app/javascript/graphqlTypes.generated';
-import { MockLink } from '@apollo/client/testing';
+import { MockedResponse } from '@apollo/client/testing';
 import { buildIntercodeApolloCache } from '../../../app/javascript/useIntercodeApolloClient';
 
 type EventEntry = EventListEventsQueryData['convention']['events_paginated']['entries'][number];
@@ -173,7 +173,7 @@ describe('Event catalog rating integration', () => {
   const queryVariables = { page: 1, pageSize: 10 };
 
   test('shows hollow star before favoriting', async () => {
-    const queryMock: MockLink.MockedResponse<EventListEventsQueryData> = {
+    const queryMock: MockedResponse<EventListEventsQueryData> = {
       request: { query: EventListEventsQueryDocument, variables: queryVariables },
       result: { data: makeQueryData(makeEntry('1', null)) },
     };
@@ -192,13 +192,13 @@ describe('Event catalog rating integration', () => {
   // This test will fail if the Apollo cache update from the RateEvent mutation does not
   // propagate back to the useQuery(EventListEventsQueryDocument) that drives the display.
   test('updates to filled star after favoriting', async () => {
-    const queryMock: MockLink.MockedResponse<EventListEventsQueryData> = {
+    const queryMock: MockedResponse<EventListEventsQueryData> = {
       request: { query: EventListEventsQueryDocument, variables: queryVariables },
       result: { data: makeQueryData(makeEntry('1', null)) },
     };
 
     const mutationCalled = vi.fn();
-    const mutationMock: MockLink.MockedResponse<RateEventMutationData> = {
+    const mutationMock: MockedResponse<RateEventMutationData> = {
       request: { query: RateEventDocument, variables: { eventId: '1', rating: 1 } },
       result: () => {
         mutationCalled();
@@ -240,12 +240,12 @@ describe('Event catalog rating integration', () => {
   // Reproduces issue #11614: once favorited, clicking the star should unfavorite (clear the rating).
   // This requires the UI to first show the selected state (filled star), which is a prerequisite.
   test('allows unfavoriting after favoriting', async () => {
-    const queryMock: MockLink.MockedResponse<EventListEventsQueryData> = {
+    const queryMock: MockedResponse<EventListEventsQueryData> = {
       request: { query: EventListEventsQueryDocument, variables: queryVariables },
       result: { data: makeQueryData(makeEntry('1', null)) },
     };
 
-    const favoriteMock: MockLink.MockedResponse<RateEventMutationData> = {
+    const favoriteMock: MockedResponse<RateEventMutationData> = {
       request: { query: RateEventDocument, variables: { eventId: '1', rating: 1 } },
       result: {
         data: {
@@ -259,7 +259,7 @@ describe('Event catalog rating integration', () => {
     };
 
     const unfavoriteCalled = vi.fn();
-    const unfavoriteMock: MockLink.MockedResponse<RateEventMutationData> = {
+    const unfavoriteMock: MockedResponse<RateEventMutationData> = {
       request: { query: RateEventDocument, variables: { eventId: '1', rating: 0 } },
       result: () => {
         unfavoriteCalled();
@@ -311,13 +311,13 @@ describe('Event catalog rating integration (with production Apollo cache)', () =
   const queryVariables = { page: 1, pageSize: 10 };
 
   test('updates to filled star after favoriting', async () => {
-    const queryMock: MockLink.MockedResponse<EventListEventsQueryData> = {
+    const queryMock: MockedResponse<EventListEventsQueryData> = {
       request: { query: EventListEventsQueryDocument, variables: queryVariables },
       result: { data: makeQueryData(makeEntry('1', null)) },
     };
 
     const mutationCalled = vi.fn();
-    const mutationMock: MockLink.MockedResponse<RateEventMutationData> = {
+    const mutationMock: MockedResponse<RateEventMutationData> = {
       request: { query: RateEventDocument, variables: { eventId: '1', rating: 1 } },
       result: () => {
         mutationCalled();
@@ -353,12 +353,12 @@ describe('Event catalog rating integration (with production Apollo cache)', () =
   });
 
   test('allows unfavoriting after favoriting', async () => {
-    const queryMock: MockLink.MockedResponse<EventListEventsQueryData> = {
+    const queryMock: MockedResponse<EventListEventsQueryData> = {
       request: { query: EventListEventsQueryDocument, variables: queryVariables },
       result: { data: makeQueryData(makeEntry('1', null)) },
     };
 
-    const favoriteMock: MockLink.MockedResponse<RateEventMutationData> = {
+    const favoriteMock: MockedResponse<RateEventMutationData> = {
       request: { query: RateEventDocument, variables: { eventId: '1', rating: 1 } },
       result: {
         data: {
@@ -372,7 +372,7 @@ describe('Event catalog rating integration (with production Apollo cache)', () =
     };
 
     const unfavoriteCalled = vi.fn();
-    const unfavoriteMock: MockLink.MockedResponse<RateEventMutationData> = {
+    const unfavoriteMock: MockedResponse<RateEventMutationData> = {
       request: { query: RateEventDocument, variables: { eventId: '1', rating: 0 } },
       result: () => {
         unfavoriteCalled();
@@ -424,7 +424,7 @@ describe('EventList previousData fallback pattern', () => {
   const changedQueryVariables = { page: 1, pageSize: 10, fetchFormItemIdentifiers: ['new-identifier'] };
 
   test('maintains filled star even when useQuery variables change after favoriting', async () => {
-    const queryMock: MockLink.MockedResponse<EventListEventsQueryData> = {
+    const queryMock: MockedResponse<EventListEventsQueryData> = {
       request: { query: EventListEventsQueryDocument, variables: baseQueryVariables },
       result: { data: makeQueryData(makeEntry('1', null)) },
     };
@@ -432,12 +432,12 @@ describe('EventList previousData fallback pattern', () => {
     // When variables change (fetchFormItemIdentifiers added), the mock for the new variables
     // returns the updated data with my_rating: 1 (as would happen with cache-first if the
     // cache was updated by the mutation)
-    const changedVarsQueryMock: MockLink.MockedResponse<EventListEventsQueryData> = {
+    const changedVarsQueryMock: MockedResponse<EventListEventsQueryData> = {
       request: { query: EventListEventsQueryDocument, variables: changedQueryVariables },
       result: { data: makeQueryData(makeEntry('1', 1)) },
     };
 
-    const mutationMock: MockLink.MockedResponse<RateEventMutationData> = {
+    const mutationMock: MockedResponse<RateEventMutationData> = {
       request: { query: RateEventDocument, variables: { eventId: '1', rating: 1 } },
       result: {
         data: {
