@@ -16,5 +16,14 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
 
   self.use_transactional_tests = false
 
-  teardown { DatabaseCleaner.clean }
+  teardown do
+    if failures.any?
+      messages = page.driver.console_messages
+      if messages.any?
+        warn "\nBrowser console output:"
+        messages.each { |m| warn "  [#{m[:type]}] #{m[:text]}" }
+      end
+    end
+    DatabaseCleaner.clean
+  end
 end
