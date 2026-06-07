@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 ENV["RAILS_ENV"] = "test"
 require "simplecov"
 require "simplecov-cobertura"
@@ -13,7 +14,7 @@ end
 
 require "minitest/mock"
 
-require File.expand_path("../../config/environment", __FILE__)
+require File.expand_path("../config/environment", __dir__)
 require "rails/test_help"
 
 require "minitest/reporters"
@@ -111,7 +112,7 @@ class ActiveSupport::TestCase
   def execute_graphql_query(query, user_con_profile: nil, context_attrs: {}, **)
     context = TestGraphqlContext.with_user_con_profile(user_con_profile, **context_attrs)
     result = IntercodeSchema.execute(query, context:, **)
-    raise GraphqlTestExecutionError.new(result) if result["errors"].present?
+    raise GraphqlTestExecutionError, result if result["errors"].present?
     result
   end
 end

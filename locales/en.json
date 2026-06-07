@@ -1214,7 +1214,7 @@
       "manage_organizations": "Update privileged data about organizations on the site",
       "manage_profile": "Update your personal profile data",
       "manage_intercode": "Full site administration access",
-      "manage_signups": "Sign you up and withdraw you from events",
+      "manage_signups": "Sign you up and withdraw you from events, and update your favorites and queues",
       "openid": "Authenticate you using your account",
       "profile": "Access your personal profile data",
       "public": "Access your public data, and public data about conventions you are signed up for",
@@ -1223,7 +1223,7 @@
       "read_events": "Access data about the events and event proposals you manage",
       "read_organizations": "Access privileged data about organizations on the site",
       "read_profile": "Access your personal profile data",
-      "read_signups": "Access data about your signups"
+      "read_signups": "Access data about your signups, favorites, and queues"
     }
   },
   "payWhatYouWant": {

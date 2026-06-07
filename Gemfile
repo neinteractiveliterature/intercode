@@ -7,6 +7,10 @@ gem "rails", "8.1.3"
 # benchmark was removed from Ruby's default gems in Ruby 4.0; required by mini_magick
 gem "benchmark"
 
+# prettyprint 0.2.0 was published to RubyGems without frozen_string_literal: true, but the
+# GitHub tag has it. Using the git source avoids constant warnings on Ruby 4.0.
+gem "prettyprint", github: "ruby/prettyprint", tag: "v0.2.0"
+
 # locking to connection_pool 2.x until ActiveSupport's memcachestore supports the v3 API
 # see https://github.com/mperham/connection_pool/issues/212
 gem "connection_pool", "< 3"

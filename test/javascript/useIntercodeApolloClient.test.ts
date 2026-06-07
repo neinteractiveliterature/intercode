@@ -3,6 +3,7 @@ import {
   EventListEventsQueryDocument,
   EventListEventsQueryVariables,
 } from '../../app/javascript/EventsApp/EventCatalog/EventList/queries.generated';
+import { RateEventDocument } from '../../app/javascript/EventRatings/mutations.generated';
 import { buildIntercodeApolloCache } from '../../app/javascript/useIntercodeApolloClient';
 
 type EventEntry = EventListEventsQueryData['convention']['events_paginated']['entries'][number];
@@ -146,6 +147,88 @@ describe('buildIntercodeApolloCache', () => {
       // Reading with different variables should still return the merged data
       const result = cache.readQuery({ query: EventListEventsQueryDocument, variables: vars(2, 20) });
       expect(result?.convention.events_paginated.entries[0].id).toBe('event-1');
+    });
+  });
+
+  // Reproduces issue #11614: the RateEvent mutation returns event { id, my_rating }.
+  // Apollo normalizes this and updates the Event entity in the cache. The EventListEventsQuery
+  // reads events from convention.events_paginated.entries, which are entity references. So any
+  // query reading those events should reflect the updated my_rating.
+  describe('RateEvent mutation cache propagation', () => {
+    it('updates my_rating in EventListEventsQuery after RateEvent mutation result is written', () => {
+      const cache = buildIntercodeApolloCache();
+
+      // Write initial query data with event having no rating
+      cache.writeQuery({
+        query: EventListEventsQueryDocument,
+        variables: { page: 1, pageSize: 20 },
+        data: makeQueryData(1, 20, ['event-1']),
+      });
+
+      // Verify initial state
+      const initial = cache.readQuery({
+        query: EventListEventsQueryDocument,
+        variables: { page: 1, pageSize: 20 },
+      });
+      expect(initial?.convention.events_paginated.entries[0].my_rating).toBeNull();
+
+      // Simulate Apollo processing the RateEvent mutation response.
+      // Apollo writes normalized entity data from mutation results to the cache,
+      // so this is equivalent to what happens when client.mutate() completes.
+      cache.writeQuery({
+        query: RateEventDocument,
+        variables: { eventId: 'event-1', rating: 1 },
+        data: {
+          __typename: 'Mutation',
+          rateEvent: {
+            __typename: 'RateEventPayload',
+            event: { __typename: 'Event', id: 'event-1', my_rating: 1 },
+          },
+        },
+      });
+
+      // Read the query and verify the updated rating is reflected
+      const updated = cache.readQuery({
+        query: EventListEventsQueryDocument,
+        variables: { page: 1, pageSize: 20 },
+      });
+      expect(updated?.convention.events_paginated.entries[0].my_rating).toBe(1);
+    });
+
+    it('updates my_rating even when keyArgs: false causes all pages to share one cache slot', () => {
+      const cache = buildIntercodeApolloCache();
+
+      // Write two pages of events
+      cache.writeQuery({
+        query: EventListEventsQueryDocument,
+        variables: { page: 1, pageSize: 2 },
+        data: makeQueryData(1, 2, ['event-1', 'event-2'], 4),
+      });
+      cache.writeQuery({
+        query: EventListEventsQueryDocument,
+        variables: { page: 2, pageSize: 2 },
+        data: makeQueryData(2, 2, ['event-3', 'event-4'], 4),
+      });
+
+      // Favorite event-3 (which is on page 2 of the merged results)
+      cache.writeQuery({
+        query: RateEventDocument,
+        variables: { eventId: 'event-3', rating: 1 },
+        data: {
+          __typename: 'Mutation',
+          rateEvent: {
+            __typename: 'RateEventPayload',
+            event: { __typename: 'Event', id: 'event-3', my_rating: 1 },
+          },
+        },
+      });
+
+      // All queries share the same slot, so any variables should show the updated rating
+      const result = cache.readQuery({
+        query: EventListEventsQueryDocument,
+        variables: { page: 1, pageSize: 2 },
+      });
+      expect(result?.convention.events_paginated.entries[2].my_rating).toBe(1);
     });
   });
 });

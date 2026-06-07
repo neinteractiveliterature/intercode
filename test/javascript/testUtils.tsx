@@ -6,6 +6,7 @@ import { i18n } from 'i18next';
 import { I18nextProvider } from 'react-i18next';
 import type { Stripe } from '@stripe/stripe-js';
 import { Confirm } from '@neinteractiveliterature/litform';
+import type { ApolloCache } from '@apollo/client';
 
 import getI18n from '../../app/javascript/setupI18Next';
 import { LazyStripeContext } from '../../app/javascript/LazyStripe';
@@ -13,6 +14,7 @@ import AppRootContext, { appRootContextDefaultValue, AppRootContextValue } from 
 
 export type TestWrapperProps = {
   apolloMocks?: MockedProviderProps['mocks'];
+  apolloCache?: ApolloCache;
   children?: React.ReactNode;
   stripePublishableKey?: string;
   i18nInstance: i18n;
@@ -21,6 +23,7 @@ export type TestWrapperProps = {
 
 function TestWrapper({
   apolloMocks,
+  apolloCache,
   stripePublishableKey,
   i18nInstance,
   appRootContextValue,
@@ -51,7 +54,7 @@ function TestWrapper({
 
   return (
     <AppRootContext.Provider value={effectiveAppRootContextValue}>
-      <MockedProvider mocks={apolloMocks}>
+      <MockedProvider mocks={apolloMocks} cache={apolloCache}>
         <LazyStripeContext.Provider value={lazyStripeProviderValue}>
           <Confirm>
             <I18nextProvider i18n={i18nInstance}>
@@ -91,7 +94,14 @@ async function customRender<Q extends Queries = Queries>(
   ui: React.JSX.Element,
   options: Omit<TestWrapperProps, 'children' | 'i18nInstance'> & RenderOptions<Q> = {},
 ): Promise<RenderResult<typeof queries & Q & CustomQueries>> {
-  const { apolloMocks, stripePublishableKey, queries: providedQueries, appRootContextValue, ...otherOptions } = options;
+  const {
+    apolloMocks,
+    apolloCache,
+    stripePublishableKey,
+    queries: providedQueries,
+    appRootContextValue,
+    ...otherOptions
+  } = options;
   const combinedQueries: typeof queries & Q & CustomQueries = {
     ...queries,
     ...customQueries,
@@ -102,6 +112,7 @@ async function customRender<Q extends Queries = Queries>(
     wrapper: (wrapperProps) => (
       <TestWrapper
         apolloMocks={apolloMocks}
+        apolloCache={apolloCache}
         stripePublishableKey={stripePublishableKey}
         i18nInstance={i18nInstance}
         appRootContextValue={appRootContextValue}
