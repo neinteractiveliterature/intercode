@@ -25,6 +25,13 @@ GIT
       rails (>= 5.2.0)
       shoryuken (>= 2.0)
 
+GIT
+  remote: https://github.com/ruby/prettyprint.git
+  revision: 9248e106c2ea8dbd5f98b18a15876cc96502fe86
+  tag: v0.2.0
+  specs:
+    prettyprint (0.2.0)
+
 GEM
   remote: https://rubygems.org/
   specs:
@@ -452,7 +459,6 @@ GEM
       syntax_tree-haml (>= 2.0.0)
       syntax_tree-rbs (>= 0.2.0)
     prettier_print (1.2.1)
-    prettyprint (0.2.0)
     prism (1.9.0)
     pry (0.14.2)
       coderay (~> 1.1)
@@ -771,6 +777,7 @@ DEPENDENCIES
   positioning
   prettier (= 4.0.4)
   prettier_print
+  prettyprint!
   prism
   pry-rails
   pry-remote
