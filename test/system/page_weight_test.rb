@@ -27,7 +27,7 @@ class PageWeightTest < ApplicationSystemTestCase
     visit "/"
 
     # Wait for the React app to finish bootstrapping before sampling resources.
-    assert page.has_css?("nav.navbar"), wait: 30
+    assert page.has_css?("nav.navbar", wait: 30)
 
     resources = JSON.parse(page.evaluate_script(<<~JS))
         JSON.stringify(
