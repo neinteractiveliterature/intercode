@@ -1,6 +1,10 @@
 # frozen_string_literal: true
 ENV["RAILS_ENV"] = "test"
-Warning[:performance] = false
+module Warning
+  def warn(msg, category: nil, **)
+    super unless msg.include?("literal string will be frozen in the future")
+  end
+end
 require "simplecov"
 require "simplecov-cobertura"
 SimpleCov.start do
