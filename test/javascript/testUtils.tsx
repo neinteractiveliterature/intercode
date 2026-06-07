@@ -14,7 +14,7 @@ import AppRootContext, { appRootContextDefaultValue, AppRootContextValue } from 
 
 export type TestWrapperProps = {
   apolloMocks?: MockedProviderProps['mocks'];
-  apolloCache?: ApolloCache<unknown>;
+  apolloCache?: ApolloCache;
   children?: React.ReactNode;
   stripePublishableKey?: string;
   i18nInstance: i18n;
