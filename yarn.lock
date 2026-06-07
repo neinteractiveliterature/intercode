@@ -242,9 +242,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/client@npm:4.2.0":
-  version: 4.2.0
-  resolution: "@apollo/client@npm:4.2.0"
+"@apollo/client@npm:4.2.2":
+  version: 4.2.2
+  resolution: "@apollo/client@npm:4.2.2"
   dependencies:
     "@graphql-typed-document-node/core": "npm:^3.1.1"
     "@wry/caches": "npm:^1.0.0"
@@ -269,7 +269,7 @@ __metadata:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: 10c0/80c59430efb1bd979206aae1dcc59addd002c774dd004f1901e3266531170c66904916aa31056f216e07d8c279f27605526fe3a819ffaba304151d5d860f5943
+  checksum: 10c0/2b894f83602979649d7fd9cd3ff7bf084d78218cf5c8ab58689f6ee0658d5806cb3b4b79e2f0ae40d6d050e7d469db466619e0ea2b1055468ff9d43fa5358e09
   languageName: node
   linkType: hard
 
@@ -1676,24 +1676,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/autocomplete@npm:^6.0.0, @codemirror/autocomplete@npm:^6.7.1":
-  version: 6.14.0
-  resolution: "@codemirror/autocomplete@npm:6.14.0"
-  dependencies:
-    "@codemirror/language": "npm:^6.0.0"
-    "@codemirror/state": "npm:^6.0.0"
-    "@codemirror/view": "npm:^6.17.0"
-    "@lezer/common": "npm:^1.0.0"
-  peerDependencies:
-    "@codemirror/language": ^6.0.0
-    "@codemirror/state": ^6.0.0
-    "@codemirror/view": ^6.0.0
-    "@lezer/common": ^1.0.0
-  checksum: 10c0/1b385f3b9ce397b349a306f3851ecf4d625fade048e4721a9166a8398a39422663a3a2b62781d01972807bc75b55a0788a74b7d167ee685bc7cb6eb420aecb4d
-  languageName: node
-  linkType: hard
-
-"@codemirror/autocomplete@npm:^6.20.3":
+"@codemirror/autocomplete@npm:^6.0.0, @codemirror/autocomplete@npm:^6.20.3, @codemirror/autocomplete@npm:^6.7.1":
   version: 6.20.3
   resolution: "@codemirror/autocomplete@npm:6.20.3"
   dependencies:
@@ -1801,18 +1784,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/lint@npm:^6.0.0":
-  version: 6.5.0
-  resolution: "@codemirror/lint@npm:6.5.0"
-  dependencies:
-    "@codemirror/state": "npm:^6.0.0"
-    "@codemirror/view": "npm:^6.0.0"
-    crelt: "npm:^1.0.5"
-  checksum: 10c0/5180cc4c56bf8da78d9e506c3f4d281108194103c050a9babd1304bc50a91085d99616cd19cc9fae3c0d55a3288ab5112c1cb4b4b52c4fd032d6396954b0abd8
-  languageName: node
-  linkType: hard
-
-"@codemirror/lint@npm:^6.9.6":
+"@codemirror/lint@npm:^6.0.0, @codemirror/lint@npm:^6.9.6":
   version: 6.9.6
   resolution: "@codemirror/lint@npm:6.9.6"
   dependencies:
@@ -21281,7 +21253,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
-    "@apollo/client": "npm:4.2.0"
+    "@apollo/client": "npm:4.2.2"
     "@breezehr/currency-codes": "npm:^2.2.1"
     "@codemirror/autocomplete": "npm:^6.20.3"
     "@codemirror/commands": "npm:^6.7.1"

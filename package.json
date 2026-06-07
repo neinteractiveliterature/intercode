@@ -30,7 +30,7 @@
     "wrangler:types": "wrangler types --cwd cloudflare"
   },
   "dependencies": {
-    "@apollo/client": "4.2.0",
+    "@apollo/client": "4.2.2",
     "@breezehr/currency-codes": "^2.2.1",
     "@codemirror/autocomplete": "^6.20.3",
     "@codemirror/commands": "^6.7.1",
