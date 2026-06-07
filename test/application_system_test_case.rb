@@ -18,10 +18,16 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
 
   teardown do
     if failures.any?
+      warn "\nURL at failure: #{page.current_url}"
+      warn "Page title: #{page.title}"
+      body_snippet = page.html.to_s.gsub(/\s+/, " ").slice(0, 500)
+      warn "Page body (first 500 chars): #{body_snippet}"
       messages = page.driver.console_messages
       if messages.any?
         warn "\nBrowser console output:"
         messages.each { |m| warn "  [#{m[:type]}] #{m[:text]}" }
+      else
+        warn "No browser console messages captured."
       end
     end
     DatabaseCleaner.clean
