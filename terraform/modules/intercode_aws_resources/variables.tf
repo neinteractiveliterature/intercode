@@ -40,3 +40,10 @@ variable "openid_connect_signing_key" {
   sensitive   = true
   default     = null
 }
+
+variable "fly_api_token" {
+  description = "Fly.io API token for runtime use (e.g. auto-scaling). Optional — not required for all deployments."
+  type        = string
+  sensitive   = true
+  default     = null
+}
