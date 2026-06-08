@@ -26,6 +26,13 @@ resource "aws_ssm_parameter" "aws_region" {
   value = local.region
 }
 
+resource "aws_ssm_parameter" "fly_api_token" {
+  count = var.fly_api_token != null ? 1 : 0
+  name  = "${local.ssm_path_prefix}/FLY_API_TOKEN"
+  type  = "SecureString"
+  value = var.fly_api_token
+}
+
 resource "aws_ssm_parameter" "secrets" {
   for_each = toset(nonsensitive(keys(var.secrets)))
 
