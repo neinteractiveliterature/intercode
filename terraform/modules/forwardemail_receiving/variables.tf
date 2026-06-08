@@ -9,3 +9,9 @@ variable "page_count" {
   type        = number
   default     = 2
 }
+
+variable "ssm_name" {
+  description = "If set, write FORWARDEMAIL_API_KEY to SSM at /{ssm_name}/FORWARDEMAIL_API_KEY."
+  type        = string
+  default     = null
+}
