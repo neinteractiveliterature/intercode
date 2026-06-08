@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useState } from 'react';
 import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { AuthenticityTokensContext } from '../AuthenticityTokensContext';
@@ -10,12 +10,36 @@ function DeviseSignInPage() {
   const manager = useContext(AuthenticityTokensContext);
   const authenticityToken = manager.tokens?.signIn;
   const { conventionName, oauthAppName, siteName } = useSignInContext();
+  const [error, setError] = useState<string | null>(null);
+  const [submitting, setSubmitting] = useState(false);
   const header = conventionName
     ? t('authentication.signInForm.headerWithConvention', { conventionName })
     : oauthAppName
       ? t('authentication.signInForm.headerWithOAuthApp', { appName: oauthAppName })
       : t('authentication.signInForm.header');
   usePageTitle(header);
+
+  async function handleSubmit(event: React.FormEvent<HTMLFormElement>) {
+    event.preventDefault();
+    setError(null);
+    setSubmitting(true);
+    try {
+      const response = await fetch('/users/sign_in', {
+        method: 'POST',
+        body: new FormData(event.currentTarget),
+      });
+      if (response.ok) {
+        window.location.href = response.url || '/';
+      } else {
+        const data = (await response.json()) as { error?: string };
+        setError(data.error ?? t('authentication.signInForm.genericError'));
+      }
+    } catch {
+      setError(t('authentication.signInForm.genericError'));
+    } finally {
+      setSubmitting(false);
+    }
+  }
 
   return (
     <div className="container mt-5">
@@ -39,8 +63,13 @@ function DeviseSignInPage() {
                   })}
                 </p>
               )}
-              <form action="/users/sign_in" method="post">
+              <form onSubmit={handleSubmit}>
                 <input type="hidden" name="authenticity_token" value={authenticityToken ?? ''} />
+                {error && (
+                  <div className="alert alert-danger mb-3" role="alert">
+                    {error}
+                  </div>
+                )}
                 <div className="mb-3">
                   <label htmlFor="user_email" className="form-label">
                     {t('authentication.signInForm.emailLabel')}
@@ -82,7 +111,7 @@ function DeviseSignInPage() {
                   </label>
                 </div>
                 <div className="d-grid">
-                  <button type="submit" className="btn btn-primary" disabled={!authenticityToken}>
+                  <button type="submit" className="btn btn-primary" disabled={!authenticityToken || submitting}>
                     {t('authentication.signInForm.logInButton')}
                   </button>
                 </div>
