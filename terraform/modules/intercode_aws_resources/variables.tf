@@ -85,3 +85,12 @@ variable "twilio" {
   sensitive = true
   default   = null
 }
+
+variable "autoscale" {
+  description = "Fly.io auto-scaling configuration. If null, no autoscale SSM parameters are written."
+  type = object({
+    min_instances = number
+    max_instances = number
+  })
+  default = null
+}

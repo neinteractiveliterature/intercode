@@ -94,6 +94,20 @@ resource "aws_ssm_parameter" "twilio_auth_token" {
   value = var.twilio.auth_token
 }
 
+resource "aws_ssm_parameter" "autoscale_min_instances" {
+  count = var.autoscale != null ? 1 : 0
+  name  = "${local.ssm_path_prefix}/AUTOSCALE_MIN_INSTANCES"
+  type  = "String"
+  value = tostring(var.autoscale.min_instances)
+}
+
+resource "aws_ssm_parameter" "autoscale_max_instances" {
+  count = var.autoscale != null ? 1 : 0
+  name  = "${local.ssm_path_prefix}/AUTOSCALE_MAX_INSTANCES"
+  type  = "String"
+  value = tostring(var.autoscale.max_instances)
+}
+
 resource "aws_ssm_parameter" "secrets" {
   for_each = toset(nonsensitive(keys(var.secrets)))
 
