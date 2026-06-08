@@ -33,6 +33,55 @@ resource "aws_ssm_parameter" "fly_api_token" {
   value = var.fly_api_token
 }
 
+resource "aws_ssm_parameter" "stripe_secret_key" {
+  count = var.stripe != null ? 1 : 0
+  name  = "${local.ssm_path_prefix}/STRIPE_SECRET_KEY"
+  type  = "SecureString"
+  value = var.stripe.secret_key
+}
+
+resource "aws_ssm_parameter" "stripe_publishable_key" {
+  count = var.stripe != null ? 1 : 0
+  name  = "${local.ssm_path_prefix}/STRIPE_PUBLISHABLE_KEY"
+  type  = "SecureString"
+  value = var.stripe.publishable_key
+}
+
+resource "aws_ssm_parameter" "stripe_connect_endpoint_secret" {
+  count = var.stripe != null ? 1 : 0
+  name  = "${local.ssm_path_prefix}/STRIPE_CONNECT_ENDPOINT_SECRET"
+  type  = "SecureString"
+  value = var.stripe.connect_endpoint_secret
+}
+
+resource "aws_ssm_parameter" "recaptcha_secret_key" {
+  count = var.recaptcha != null ? 1 : 0
+  name  = "${local.ssm_path_prefix}/RECAPTCHA_SECRET_KEY"
+  type  = "SecureString"
+  value = var.recaptcha.secret_key
+}
+
+resource "aws_ssm_parameter" "recaptcha_site_key" {
+  count = var.recaptcha != null ? 1 : 0
+  name  = "${local.ssm_path_prefix}/RECAPTCHA_SITE_KEY"
+  type  = "SecureString"
+  value = var.recaptcha.site_key
+}
+
+resource "aws_ssm_parameter" "twilio_account_sid" {
+  count = var.twilio != null ? 1 : 0
+  name  = "${local.ssm_path_prefix}/TWILIO_ACCOUNT_SID"
+  type  = "SecureString"
+  value = var.twilio.account_sid
+}
+
+resource "aws_ssm_parameter" "twilio_auth_token" {
+  count = var.twilio != null ? 1 : 0
+  name  = "${local.ssm_path_prefix}/TWILIO_AUTH_TOKEN"
+  type  = "SecureString"
+  value = var.twilio.auth_token
+}
+
 resource "aws_ssm_parameter" "secrets" {
   for_each = toset(nonsensitive(keys(var.secrets)))
 
