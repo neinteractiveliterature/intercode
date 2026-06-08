@@ -13,3 +13,10 @@ variable "alarm_email_destinations" {
   type        = set(string)
   default     = []
 }
+
+variable "secrets" {
+  description = "Map of secret name to value for manually-managed secrets (e.g. DATABASE_URL, SECRET_KEY_BASE). Written to SSM Parameter Store as SecureString and loaded by chamber at app boot."
+  type        = map(string)
+  sensitive   = true
+  default     = {}
+}

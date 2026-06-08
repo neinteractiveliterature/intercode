@@ -48,3 +48,13 @@ output "iam_access_key_secret" {
   value       = aws_iam_access_key.this.secret
   sensitive   = true
 }
+
+output "chamber_service" {
+  description = "Value to set as CHAMBER_SERVICE in the app's environment. Chamber will load all SSM parameters under this path prefix at boot."
+  value       = var.name
+}
+
+output "ssm_path_prefix" {
+  description = "SSM Parameter Store path prefix where app secrets are stored (e.g. for use with aws ssm put-parameter for manually-managed secrets)."
+  value       = "/${var.name}"
+}
