@@ -26,6 +26,18 @@ resource "aws_ssm_parameter" "aws_region" {
   value = local.region
 }
 
+resource "random_password" "email_forwarders_api_token" {
+  count   = var.email_forwarders_api_token == null ? 1 : 0
+  length  = 128
+  special = false
+}
+
+resource "aws_ssm_parameter" "email_forwarders_api_token" {
+  name  = "${local.ssm_path_prefix}/EMAIL_FORWARDERS_API_TOKEN"
+  type  = "SecureString"
+  value = var.email_forwarders_api_token != null ? var.email_forwarders_api_token : random_password.email_forwarders_api_token[0].result
+}
+
 resource "aws_ssm_parameter" "fly_api_token" {
   count = var.fly_api_token != null ? 1 : 0
   name  = "${local.ssm_path_prefix}/FLY_API_TOKEN"

@@ -41,6 +41,13 @@ variable "openid_connect_signing_key" {
   default     = null
 }
 
+variable "email_forwarders_api_token" {
+  description = "Secret key used to authenticate email forwarding requests. If null, a random value is generated."
+  type        = string
+  sensitive   = true
+  default     = null
+}
+
 variable "fly_api_token" {
   description = "Fly.io API token for runtime use (e.g. auto-scaling). Optional — not required for all deployments."
   type        = string
