@@ -27,7 +27,7 @@ resource "aws_ssm_parameter" "aws_region" {
 }
 
 resource "aws_ssm_parameter" "secrets" {
-  for_each = var.secrets
+  for_each = nonsensitive(var.secrets)
 
   name  = "${local.ssm_path_prefix}/${each.key}"
   type  = "SecureString"
