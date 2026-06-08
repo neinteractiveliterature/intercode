@@ -24,14 +24,15 @@ class PageWeightTest < ApplicationSystemTestCase
   after { Intercode.overridden_virtual_host_domain = nil }
 
   it "loads the home page within the initial JS/CSS payload budget" do
-    visit "/"
-
     # Chrome occasionally gets stuck in a state where navigation silently fails on CI,
     # leaving the page at about:blank. Restarting the browser gives a clean Chrome
-    # process that can actually navigate.
-    if page.current_url.start_with?("about:")
-      page.driver.browser.restart
+    # process that can actually navigate. Retry up to 3 times since even post-restart
+    # visits can silently fail (Ferrum swallows the TimeoutError when pending_connection_errors
+    # is false, so no exception surfaces to signal the failure).
+    3.times do |attempt|
+      page.driver.browser.restart if attempt.positive?
       visit "/"
+      break unless page.current_url.start_with?("about:")
     end
 
     # Wait for the React app to finish bootstrapping before sampling resources.
