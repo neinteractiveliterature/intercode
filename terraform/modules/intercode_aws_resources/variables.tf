@@ -47,3 +47,34 @@ variable "fly_api_token" {
   sensitive   = true
   default     = null
 }
+
+variable "stripe" {
+  description = "Stripe API credentials. If null, no Stripe SSM parameters are written."
+  type = object({
+    secret_key              = string
+    publishable_key         = string
+    connect_endpoint_secret = string
+  })
+  sensitive = true
+  default   = null
+}
+
+variable "recaptcha" {
+  description = "Google reCAPTCHA credentials. If null, no reCAPTCHA SSM parameters are written."
+  type = object({
+    secret_key = string
+    site_key   = string
+  })
+  sensitive = true
+  default   = null
+}
+
+variable "twilio" {
+  description = "Twilio credentials. If null, no Twilio SSM parameters are written."
+  type = object({
+    account_sid = string
+    auth_token  = string
+  })
+  sensitive = true
+  default   = null
+}
