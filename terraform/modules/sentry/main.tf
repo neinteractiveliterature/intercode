@@ -50,3 +50,17 @@ resource "aws_ssm_parameter" "sentry_release_token" {
   type  = "SecureString"
   value = var.release_token
 }
+
+resource "aws_ssm_parameter" "sentry_traces_sample_rate" {
+  count = var.traces_sample_rate != null ? 1 : 0
+  name  = "${local.ssm_path_prefix}/SENTRY_TRACES_SAMPLE_RATE"
+  type  = "String"
+  value = var.traces_sample_rate
+}
+
+resource "aws_ssm_parameter" "sentry_profiles_sample_rate" {
+  count = var.profiles_sample_rate != null ? 1 : 0
+  name  = "${local.ssm_path_prefix}/SENTRY_PROFILES_SAMPLE_RATE"
+  type  = "String"
+  value = var.profiles_sample_rate
+}
