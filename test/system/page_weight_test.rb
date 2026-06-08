@@ -26,9 +26,13 @@ class PageWeightTest < ApplicationSystemTestCase
   it "loads the home page within the initial JS/CSS payload budget" do
     visit "/"
 
-    # On CI the root CMS page lookup occasionally causes "/" to respond slowly enough
-    # that Ferrum's navigation times out, leaving Chrome at about:blank. Retry once.
-    visit "/" if page.current_url.start_with?("about:")
+    # Chrome occasionally gets stuck in a state where navigation silently fails on CI,
+    # leaving the page at about:blank. Restarting the browser gives a clean Chrome
+    # process that can actually navigate.
+    if page.current_url.start_with?("about:")
+      page.driver.browser.restart
+      visit "/"
+    end
 
     # Wait for the React app to finish bootstrapping before sampling resources.
     assert page.has_css?("nav.navbar", wait: 30)
