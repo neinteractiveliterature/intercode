@@ -1,10 +1,21 @@
 terraform {
   required_providers {
+    aws = {
+      source  = "hashicorp/aws"
+      version = ">= 5.0"
+    }
     http = {
       source  = "hashicorp/http"
       version = ">= 3.0"
     }
   }
+}
+
+resource "aws_ssm_parameter" "forwardemail_api_key" {
+  count = var.ssm_name != null ? 1 : 0
+  name  = "/${var.ssm_name}/FORWARDEMAIL_API_KEY"
+  type  = "SecureString"
+  value = var.api_key
 }
 
 data "http" "domains" {
