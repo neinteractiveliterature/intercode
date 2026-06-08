@@ -94,3 +94,21 @@ variable "autoscale" {
   })
   default = null
 }
+
+variable "assets_host" {
+  description = "Hostname for the assets CDN (e.g. 'assets.neilhosting.net'). If null, no SSM parameter is written."
+  type        = string
+  default     = null
+}
+
+variable "uploads_host" {
+  description = "Full URL for the uploads CDN (e.g. 'https://uploads.neilhosting.net'). If null, no SSM parameter is written."
+  type        = string
+  default     = null
+}
+
+variable "cloudwatch_log_group" {
+  description = "Name of the CloudWatch log group for the app. If null, no SSM parameter is written."
+  type        = string
+  default     = null
+}

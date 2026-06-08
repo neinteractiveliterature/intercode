@@ -108,6 +108,27 @@ resource "aws_ssm_parameter" "autoscale_max_instances" {
   value = tostring(var.autoscale.max_instances)
 }
 
+resource "aws_ssm_parameter" "assets_host" {
+  count = var.assets_host != null ? 1 : 0
+  name  = "${local.ssm_path_prefix}/ASSETS_HOST"
+  type  = "String"
+  value = var.assets_host
+}
+
+resource "aws_ssm_parameter" "uploads_host" {
+  count = var.uploads_host != null ? 1 : 0
+  name  = "${local.ssm_path_prefix}/UPLOADS_HOST"
+  type  = "String"
+  value = var.uploads_host
+}
+
+resource "aws_ssm_parameter" "cloudwatch_log_group" {
+  count = var.cloudwatch_log_group != null ? 1 : 0
+  name  = "${local.ssm_path_prefix}/CLOUDWATCH_LOG_GROUP"
+  type  = "String"
+  value = var.cloudwatch_log_group
+}
+
 resource "aws_ssm_parameter" "secrets" {
   for_each = toset(nonsensitive(keys(var.secrets)))
 
