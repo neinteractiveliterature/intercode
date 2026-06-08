@@ -94,6 +94,27 @@ resource "aws_ssm_parameter" "twilio_auth_token" {
   value = var.twilio.auth_token
 }
 
+resource "aws_ssm_parameter" "twilio_sms_number" {
+  count = var.twilio != null && var.twilio.sms_number != null ? 1 : 0
+  name  = "${local.ssm_path_prefix}/TWILIO_SMS_NUMBER"
+  type  = "String"
+  value = var.twilio.sms_number
+}
+
+resource "aws_ssm_parameter" "intercode_host" {
+  count = var.intercode_host != null ? 1 : 0
+  name  = "${local.ssm_path_prefix}/INTERCODE_HOST"
+  type  = "String"
+  value = var.intercode_host
+}
+
+resource "aws_ssm_parameter" "intercode_certs_no_wildcard_domains" {
+  count = var.intercode_certs_no_wildcard_domains != null ? 1 : 0
+  name  = "${local.ssm_path_prefix}/INTERCODE_CERTS_NO_WILDCARD_DOMAINS"
+  type  = "String"
+  value = var.intercode_certs_no_wildcard_domains
+}
+
 resource "aws_ssm_parameter" "autoscale_min_instances" {
   count = var.autoscale != null ? 1 : 0
   name  = "${local.ssm_path_prefix}/AUTOSCALE_MIN_INSTANCES"

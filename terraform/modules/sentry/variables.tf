@@ -18,3 +18,15 @@ variable "release_token" {
   type        = string
   sensitive   = true
 }
+
+variable "traces_sample_rate" {
+  description = "Sentry performance traces sample rate (0.0–1.0). If null, no SSM parameter is written."
+  type        = string
+  default     = null
+}
+
+variable "profiles_sample_rate" {
+  description = "Sentry profiling sample rate (0.0–1.0). If null, no SSM parameter is written."
+  type        = string
+  default     = null
+}

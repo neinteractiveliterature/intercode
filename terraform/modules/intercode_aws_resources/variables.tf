@@ -81,6 +81,7 @@ variable "twilio" {
   type = object({
     account_sid = string
     auth_token  = string
+    sms_number  = optional(string)
   })
   sensitive = true
   default   = null
@@ -109,6 +110,18 @@ variable "uploads_host" {
 
 variable "cloudwatch_log_group" {
   description = "Name of the CloudWatch log group for the app. If null, no SSM parameter is written."
+  type        = string
+  default     = null
+}
+
+variable "intercode_host" {
+  description = "Primary hostname for the Intercode deployment (e.g. 'www.neilhosting.net'). If null, no SSM parameter is written."
+  type        = string
+  default     = null
+}
+
+variable "intercode_certs_no_wildcard_domains" {
+  description = "Space-separated list of domains that need individual TLS certs rather than wildcards. If null, no SSM parameter is written."
   type        = string
   default     = null
 }
