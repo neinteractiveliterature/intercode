@@ -6,6 +6,7 @@
 app = "intercode"
 primary_region = "iad"
 swap_size_mb = 512
+console_command = "/usr/src/intercode/bin/entrypoint.sh /bin/bash"
 
 [build]
 image = "ghcr.io/neinteractiveliterature/intercode:latest"
@@ -15,8 +16,9 @@ release_command = "bundle exec rails release:perform --trace"
 strategy = "bluegreen"
 
 [env]
-# Uncomment this once we're ready to move to Chamber-provided config
-# CHAMBER_SERVICE = "intercode_production"
+CHAMBER_SERVICE = "intercode_production"
+CHAMBER_AWS_ROLE_ARN = "arn:aws:iam::689053117832:role/intercode-chamber"
+AWS_REGION = "us-east-1"
 ASSETS_HOST = "assets.neilhosting.net"
 AUTOSCALE_MIN_INSTANCES = "2"
 AUTOSCALE_MAX_INSTANCES = "10"
