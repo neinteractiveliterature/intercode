@@ -15,8 +15,9 @@ release_command = "bundle exec rails release:perform --trace"
 strategy = "bluegreen"
 
 [env]
-# Uncomment this once we're ready to move to Chamber-provided config
-# CHAMBER_SERVICE = "intercode_production"
+CHAMBER_SERVICE = "intercode_production"
+CHAMBER_AWS_ROLE_ARN = "" # filled in after tofu apply outputs intercode_chamber_role_arn
+AWS_REGION = "us-east-1"
 ASSETS_HOST = "assets.neilhosting.net"
 AUTOSCALE_MIN_INSTANCES = "2"
 AUTOSCALE_MAX_INSTANCES = "10"
