@@ -1,6 +1,17 @@
 #!/bin/bash
 set -e
 
+# Drop to the www user while preserving the current environment (needed so
+# AWS_ROLE_ARN / AWS_WEB_IDENTITY_TOKEN_FILE are visible to the app process).
+# If already running as www (e.g. in tests), just exec directly.
+drop_to_www() {
+  if [ "$(id -u)" -eq 0 ]; then
+    exec su -s /bin/bash --preserve-environment -c 'exec "$0" "$@"' www "$@"
+  else
+    exec "$@"
+  fi
+}
+
 if [ -n "$CHAMBER_SERVICE" ]; then
   if [ -n "$CHAMBER_AWS_ROLE_ARN" ]; then
     TOKEN_FILE=$(mktemp)
@@ -19,12 +30,13 @@ if [ -n "$CHAMBER_SERVICE" ]; then
         echo "ERROR: Failed to parse OIDC token. Response was: $OIDC_RESPONSE" >&2
         exit 1
       }
+    chown www:www "$TOKEN_FILE"
     export AWS_ROLE_ARN="$CHAMBER_AWS_ROLE_ARN"
     export AWS_WEB_IDENTITY_TOKEN_FILE="$TOKEN_FILE"
     export AWS_ROLE_SESSION_NAME="chamber"
     unset CHAMBER_AWS_ROLE_ARN
   fi
-  exec chamber exec "$CHAMBER_SERVICE" -- "$@"
+  drop_to_www chamber exec "$CHAMBER_SERVICE" -- "$@"
 else
-  exec "$@"
+  drop_to_www "$@"
 fi

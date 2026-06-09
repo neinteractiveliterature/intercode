@@ -99,7 +99,8 @@ RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 
 WORKDIR /usr/src/intercode
 
-USER www
+# Entrypoint runs as root so it can access /.fly/api for the OIDC token fetch,
+# then drops to the www user before exec'ing the app process.
 ENV PATH=/opt/node/bin:$PATH
 ENTRYPOINT ["/usr/src/intercode/bin/entrypoint.sh"]
 CMD ["bundle", "exec", "bin/rails", "server", "-p", "3000", "-b", "0.0.0.0"]
