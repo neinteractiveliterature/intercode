@@ -58,3 +58,11 @@ output "ssm_path_prefix" {
   description = "SSM Parameter Store path prefix where app secrets are stored (e.g. for use with aws ssm put-parameter for manually-managed secrets)."
   value       = "/${var.name}"
 }
+
+output "ssm_parameters_version" {
+  description = "Opaque hash that changes whenever any SSM parameter managed by this module changes. Use as a trigger to restart services that load config at startup."
+  value = sha256(jsonencode(merge(
+    { for k, p in aws_ssm_parameter.params : k => p.version },
+    { for k, p in aws_ssm_parameter.secrets : k => p.version },
+  )))
+}
