@@ -16,7 +16,7 @@ strategy = "bluegreen"
 
 [env]
 CHAMBER_SERVICE = "intercode_production"
-CHAMBER_AWS_ROLE_ARN = "" # filled in after tofu apply outputs intercode_chamber_role_arn
+CHAMBER_AWS_ROLE_ARN = "arn:aws:iam::689053117832:role/intercode-chamber"
 AWS_REGION = "us-east-1"
 ASSETS_HOST = "assets.neilhosting.net"
 AUTOSCALE_MIN_INSTANCES = "2"
