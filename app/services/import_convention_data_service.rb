@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require "base64"
+
 # Reads a convention export JSON hash (as produced by intercode-import) and creates all records
 # in the database using ActiveRecord. Intended for one-shot historical data migrations.
 #
@@ -25,6 +27,7 @@ class ImportConventionDataService < CivilService::Service
       convention = build_convention
       load_cms_content_set(convention)
       import_event_categories(convention)
+      import_cms_content(convention)
       import_ticket_types(convention)
       import_rooms(convention)
       staff_position_map = import_staff_positions(convention)
@@ -94,6 +97,61 @@ class ImportConventionDataService < CivilService::Service
     return if content_set_name.blank?
     LoadCmsContentSetService.new(convention: convention, content_set_name: content_set_name).call!
     convention.reload
+  end
+
+  def import_cms_content(convention)
+    import_cms_files(convention)
+    import_cms_pages(convention)
+    import_cms_partials(convention)
+    import_cms_navigation_items(convention)
+  end
+
+  def import_cms_files(convention)
+    existing = Set.new(convention.cms_files.joins(file_attachment: :blob).pluck("lower(active_storage_blobs.filename)"))
+
+    (data[:cms_files] || []).each do |file_data|
+      next if existing.include?(file_data[:filename].downcase)
+
+      cms_file = convention.cms_files.new
+      cms_file.file.attach(
+        io: StringIO.new(Base64.decode64(file_data[:content_base64])),
+        filename: file_data[:filename],
+        content_type: file_data[:content_type]
+      )
+      cms_file.save!
+    end
+  end
+
+  def import_cms_pages(convention)
+    (data[:cms_pages] || []).each do |page_data|
+      page = convention.pages.find_or_initialize_by(slug: page_data[:slug])
+      page.assign_attributes(name: page_data[:name], content: page_data[:content])
+      page.save!
+    end
+  end
+
+  def import_cms_partials(convention)
+    (data[:cms_partials] || []).each do |partial_data|
+      partial = convention.cms_partials.find_or_initialize_by(name: partial_data[:name])
+      partial.content = partial_data[:content]
+      partial.save!
+    end
+  end
+
+  def import_cms_navigation_items(convention)
+    nav_data = data[:cms_navigation_items] || []
+    return if nav_data.empty?
+
+    convention.cms_navigation_items.delete_all
+    nav_data.each do |section_data|
+      section = convention.cms_navigation_items.create!(title: section_data[:title])
+      (section_data[:links] || []).each do |link_data|
+        page = convention.pages.find_by(name: link_data[:page_name])
+        next unless page
+
+        convention.cms_navigation_items.create!(title: link_data[:title], page: page, navigation_section: section)
+      end
+    end
   end
 
   def import_event_categories(convention)

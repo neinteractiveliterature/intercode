@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require "test_helper"
+require "base64"
 
 # rubocop:disable Metrics/ClassLength, Metrics/BlockLength
 class ImportConventionDataServiceTest < ActiveSupport::TestCase
@@ -346,6 +347,84 @@ class ImportConventionDataServiceTest < ActiveSupport::TestCase
       convention = Convention.find_by!(domain: "importtest.example.com")
       filler = convention.event_categories.find_by!(name: "Filler")
       assert_nil filler.event_proposal_form
+    end
+  end
+
+  describe "CMS pages, partials, files, and navigation" do
+    before do
+      data =
+        base_data.merge(
+          cms_content_set: "standard",
+          convention: base_data[:convention].merge(event_categories: standard_event_categories),
+          cms_pages: [
+            { name: "about", slug: "about", content: "<h1>About Us</h1>" },
+            { name: "hotel", slug: "hotel", content: "<p>Stay here.</p>" }
+          ],
+          cms_partials: [{ name: "copyright", content: "&copy; 2024" }],
+          cms_files: [
+            { filename: "logo.png", content_base64: Base64.strict_encode64("fakepngdata"), content_type: "image/png" }
+          ],
+          cms_navigation_items: [
+            {
+              title: "About",
+              links: [{ title: "About Us", page_name: "about" }, { title: "Hotel Info", page_name: "hotel" }]
+            }
+          ]
+        )
+      ImportConventionDataService.new(data: data).call!
+    end
+
+    it "creates pages" do
+      convention = Convention.find_by!(domain: "importtest.example.com")
+      assert convention.pages.find_by(slug: "about")
+      assert convention.pages.find_by(slug: "hotel")
+    end
+
+    it "overwrites a standard content set page when slugs match" do
+      convention = Convention.find_by!(domain: "importtest.example.com")
+      assert_equal "<h1>About Us</h1>", convention.pages.find_by!(slug: "about").content
+    end
+
+    it "creates/overwrites partials by name" do
+      convention = Convention.find_by!(domain: "importtest.example.com")
+      partial = convention.cms_partials.find_by(name: "copyright")
+      assert partial
+      assert_equal "&copy; 2024", partial.content
+    end
+
+    it "uploads CMS files" do
+      convention = Convention.find_by!(domain: "importtest.example.com")
+      files = convention.cms_files.joins(file_attachment: :blob)
+      assert files.exists?(active_storage_blobs: { filename: "logo.png" })
+    end
+
+    it "creates navigation sections with links" do
+      convention = Convention.find_by!(domain: "importtest.example.com")
+      section = convention.cms_navigation_items.find_by(title: "About", page_id: nil)
+      assert section
+      assert_equal 2, CmsNavigationItem.where(navigation_section: section).count
+    end
+
+    it "links navigation items to pages" do
+      convention = Convention.find_by!(domain: "importtest.example.com")
+      about_page = convention.pages.find_by!(slug: "about")
+      assert convention.cms_navigation_items.find_by(title: "About Us", page: about_page)
+    end
+
+    it "skips navigation links for pages that do not exist" do
+      missing_data =
+        base_data.merge(convention: base_data[:convention].merge(domain: "navtest.example.com")).merge(
+          cms_navigation_items: [{ title: "Info", links: [{ title: "Missing Page", page_name: "nonexistent" }] }]
+        )
+      ImportConventionDataService.new(data: missing_data).call!
+      convention = Convention.find_by!(domain: "navtest.example.com")
+      assert_equal 0, convention.cms_navigation_items.where(title: "Missing Page").count
+    end
+
+    it "does not re-upload a file that already exists from the content set" do
+      convention = Convention.find_by!(domain: "importtest.example.com")
+      files = convention.cms_files.joins(file_attachment: :blob)
+      assert_equal 1, files.where(active_storage_blobs: { filename: "logo.png" }).count
     end
   end
 
