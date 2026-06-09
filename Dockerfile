@@ -11,7 +11,7 @@ USER root
 RUN useradd www
 WORKDIR /usr/src/intercode
 
-RUN apt-get update && apt-get install -y libvips42 git build-essential shared-mime-info libpq-dev libmariadb-dev libyaml-dev && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y libvips42 git build-essential shared-mime-info libpq-dev libyaml-dev && rm -rf /var/lib/apt/lists/*
 
 COPY --chown=www:www Gemfile Gemfile.lock .ruby-version /usr/src/intercode/
 RUN bundle config set without 'development test' \
@@ -71,8 +71,7 @@ USER root
 # libjemalloc2: more efficient memory allocation in Ruby and Node
 # shared-mime-info: Rails dependency
 # libpq5: pg gem dependency
-# mariadb-client: dependency for Intercode 1 import
-RUN apt-get update && apt-get install -y --no-install-recommends openssh-server iproute2 curl python3 libvips42 poppler-utils xz-utils libjemalloc2 shared-mime-info libpq5 mariadb-client gosu && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends openssh-server iproute2 curl python3 libvips42 poppler-utils xz-utils libjemalloc2 shared-mime-info libpq5 gosu && rm -rf /var/lib/apt/lists/*
 RUN useradd -ms $(which bash) www
 RUN mkdir /opt/node && \
   cd /opt/node && \
