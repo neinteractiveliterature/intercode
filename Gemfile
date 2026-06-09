@@ -115,8 +115,6 @@ gem "rollbar"
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", ">= 1.1.0", require: false
 
-gem "parallel", groups: %i[development intercode1_import]
-
 # Production profiling
 group :skylight do
   gem "rbtrace"
@@ -159,7 +157,6 @@ group :development do
   gem "rubocop-performance"
   gem "rubocop-rails"
   gem "rubocop-rspec", require: false
-  gem "rubocop-sequel"
   gem "syntax_tree"
   gem "syntax_tree-haml"
   gem "syntax_tree-rbs"
@@ -174,13 +171,6 @@ end
 group :development, :test do
   gem "pry-rails"
   gem "pry-remote"
-end
-
-group :intercode1_import do
-  gem "mysql2", "~> 0.5.3"
-  gem "reverse_markdown"
-  gem "sequel"
-  gem "term-ansicolor"
 end
 
 group :test do

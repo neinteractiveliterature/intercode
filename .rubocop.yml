@@ -3,7 +3,6 @@ inherit_from: .rubocop_todo.yml
 plugins:
   - rubocop-performance
   - rubocop-rails
-  - rubocop-sequel
   - rubocop-factory_bot
   - rubocop-graphql
   - rubocop-capybara
@@ -28,11 +27,6 @@ AllCops:
     - script/rails
     - tmp/**/*
     - vendor/bundle/**/*
-
-Sequel:
-  Enabled: false
-  Include:
-    - lib/intercode/import/**/*.rb
 
 Style/BeginBlock:
   Description: 'Avoid the use of BEGIN blocks.'
