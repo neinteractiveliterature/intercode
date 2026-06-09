@@ -11,11 +11,29 @@ terraform {
   }
 }
 
-resource "aws_ssm_parameter" "forwardemail_api_key" {
-  count = var.ssm_name != null ? 1 : 0
-  name  = "/${var.ssm_name}/FORWARDEMAIL_API_KEY"
-  type  = "SecureString"
-  value = var.api_key
+locals {
+  # Map of SSM parameter name → value. Empty when var.ssm_name is null (no SSM writes).
+  # This map is sensitive (contains api_key); use nonsensitive(keys(...)) for for_each.
+  _ssm_values = var.ssm_name != null ? {
+    FORWARDEMAIL_API_KEY = var.api_key
+  } : {}
+
+  _ssm_types = var.ssm_name != null ? {
+    FORWARDEMAIL_API_KEY = "SecureString"
+  } : {}
+}
+
+resource "aws_ssm_parameter" "params" {
+  for_each = toset(nonsensitive(keys(local._ssm_values)))
+
+  name  = "/${var.ssm_name}/${each.key}"
+  type  = local._ssm_types[each.key]
+  value = local._ssm_values[each.key]
+}
+
+moved {
+  from = aws_ssm_parameter.forwardemail_api_key[0]
+  to   = aws_ssm_parameter.params["FORWARDEMAIL_API_KEY"]
 }
 
 data "http" "domains" {
