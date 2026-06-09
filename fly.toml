@@ -12,7 +12,7 @@ console_command = "/usr/src/intercode/bin/entrypoint.sh /bin/bash"
 image = "ghcr.io/neinteractiveliterature/intercode:latest"
 
 [deploy]
-release_command = "bundle exec rails release:perform --trace"
+release_command = "bundle exec rails release:perform"
 strategy = "bluegreen"
 
 [env]

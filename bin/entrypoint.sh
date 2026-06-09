@@ -1,12 +1,9 @@
 #!/bin/bash
 set -e
 
-# Drop to the www user while preserving the current environment (needed so
-# AWS_ROLE_ARN / AWS_WEB_IDENTITY_TOKEN_FILE are visible to the app process).
-# If already running as www (e.g. in tests), just exec directly.
 drop_to_www() {
   if [ "$(id -u)" -eq 0 ]; then
-    exec su -s /bin/bash --preserve-environment -c 'exec "$0" "$@"' www "$@"
+    exec gosu www "$@"
   else
     exec "$@"
   fi
