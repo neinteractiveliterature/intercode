@@ -24,12 +24,19 @@ if [ -n "$CHAMBER_SERVICE" ]; then
       echo "ERROR: Fly OIDC endpoint returned empty response (connection failure or permission denied on /.fly/api)" >&2
       exit 1
     fi
-    echo "$OIDC_RESPONSE" \
-      | python3 -c "import sys,json; print(json.load(sys.stdin)['token'],end='')" \
-      > "$TOKEN_FILE" || {
-        echo "ERROR: Failed to parse OIDC token. Response was: $OIDC_RESPONSE" >&2
-        exit 1
-      }
+    # The endpoint may return {"token":"..."} JSON or a raw token string.
+    OIDC_TOKEN=$(echo "$OIDC_RESPONSE" | python3 -c "
+import sys, json
+data = sys.stdin.read().strip()
+try:
+    print(json.loads(data)['token'], end='')
+except (json.JSONDecodeError, KeyError):
+    print(data, end='')
+") || {
+      echo "ERROR: Failed to extract OIDC token. Response was: $OIDC_RESPONSE" >&2
+      exit 1
+    }
+    echo -n "$OIDC_TOKEN" > "$TOKEN_FILE"
     chown www:www "$TOKEN_FILE"
     export AWS_ROLE_ARN="$CHAMBER_AWS_ROLE_ARN"
     export AWS_WEB_IDENTITY_TOKEN_FILE="$TOKEN_FILE"
