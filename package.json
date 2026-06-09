@@ -11,6 +11,7 @@
     "build": "yarn run build:web && yarn run build:cli",
     "check-graphql-documents": "tsx scripts/check-graphql-documents.mts",
     "build:web": "vite build",
+    "check:bundle-size": "node scripts/check-bundle-size.mjs",
     "build:cli": "rollup -c rollup.cliUtils.config.ts --configPlugin swc && chmod +x ./bin/*.cjs",
     "build:timezone_data": "node script/buildTimezoneData.js",
     "css:typegen": "yarn run typed-scss-modules 'app/javascript/**/*.module.scss'",
