@@ -609,7 +609,7 @@ GEM
       bigdecimal
       concurrent-ruby (~> 1.0, >= 1.0.2)
       logger
-    sequel (5.104.0)
+    sequel (5.105.0)
       bigdecimal
     shoryuken (6.2.1)
       aws-sdk-core (>= 2)
