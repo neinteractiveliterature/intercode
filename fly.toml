@@ -18,7 +18,6 @@ strategy = "bluegreen"
 [env]
 CHAMBER_SERVICE = "intercode_production"
 CHAMBER_AWS_ROLE_ARN = "arn:aws:iam::689053117832:role/intercode-chamber"
-DEFAULT_CURRENCY = "USD"
 JSON_LOGGING = "1"
 MALLOC_ARENA_MAX = "2"
 RACK_ENV = "production"

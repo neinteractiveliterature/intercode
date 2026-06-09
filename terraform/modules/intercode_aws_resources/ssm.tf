@@ -150,6 +150,12 @@ resource "aws_ssm_parameter" "cloudwatch_log_group" {
   value = var.cloudwatch_log_group
 }
 
+resource "aws_ssm_parameter" "default_currency" {
+  name  = "${local.ssm_path_prefix}/DEFAULT_CURRENCY"
+  type  = "String"
+  value = var.default_currency
+}
+
 resource "aws_ssm_parameter" "secrets" {
   for_each = toset(nonsensitive(keys(var.secrets)))
 
