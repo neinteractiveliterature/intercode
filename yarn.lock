@@ -1785,13 +1785,13 @@ __metadata:
   linkType: hard
 
 "@codemirror/lint@npm:^6.0.0, @codemirror/lint@npm:^6.9.6":
-  version: 6.9.6
-  resolution: "@codemirror/lint@npm:6.9.6"
+  version: 6.9.7
+  resolution: "@codemirror/lint@npm:6.9.7"
   dependencies:
     "@codemirror/state": "npm:^6.0.0"
     "@codemirror/view": "npm:^6.42.0"
     crelt: "npm:^1.0.5"
-  checksum: 10c0/6b79d04e7a05ecda934b4e4fc465688a044661eb5086b60911a40755e5bfd612f843d87f6a45e2a2e294da9aac172e8b603da0e87b0e5ba364a9cce6560113ec
+  checksum: 10c0/5c2985e1118c96d76ccc2295e86476b6a56d4cb764e228b0d42ad08f9e2bb2f4862a2609196099d0242b639e924cd93acc1cca8ae55b4910c4f4e66856981fe0
   languageName: node
   linkType: hard
 
@@ -1815,15 +1815,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/view@npm:6.43.0, @codemirror/view@npm:^6.0.0, @codemirror/view@npm:^6.17.0, @codemirror/view@npm:^6.23.0, @codemirror/view@npm:^6.27.0, @codemirror/view@npm:^6.36.3, @codemirror/view@npm:^6.42.0":
-  version: 6.43.0
-  resolution: "@codemirror/view@npm:6.43.0"
+"@codemirror/view@npm:6.43.1, @codemirror/view@npm:^6.0.0, @codemirror/view@npm:^6.17.0, @codemirror/view@npm:^6.23.0, @codemirror/view@npm:^6.27.0, @codemirror/view@npm:^6.36.3, @codemirror/view@npm:^6.42.0":
+  version: 6.43.1
+  resolution: "@codemirror/view@npm:6.43.1"
   dependencies:
     "@codemirror/state": "npm:^6.6.0"
     crelt: "npm:^1.0.6"
     style-mod: "npm:^4.1.0"
     w3c-keyname: "npm:^2.2.4"
-  checksum: 10c0/87d0db936c1148bd573994062d9109b284e1dc023af1db3490c6f27043cd840f91b63b56adfd6763a71c6ac17b9cd98adda92d41cae6d209efe5bc5133c689a3
+  checksum: 10c0/1ef96bfc756703f6675957793a3ea0f9aef8b2014172c15fc4063b58cefd6974688148eb25c1f2277d6b59d7ca9cb7f66d05e7b6e8c15d68bf050795c902fc18
   languageName: node
   linkType: hard
 
@@ -21003,7 +21003,7 @@ __metadata:
     "@codemirror/language": "npm:6.12.3"
     "@codemirror/lint": "npm:^6.9.6"
     "@codemirror/state": "npm:6.6.0"
-    "@codemirror/view": "npm:6.43.0"
+    "@codemirror/view": "npm:6.43.1"
     "@dnd-kit/core": "npm:6.3.1"
     "@dnd-kit/sortable": "npm:10.0.0"
     "@dnd-kit/utilities": "npm:3.2.2"
