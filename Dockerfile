@@ -64,14 +64,13 @@ ENV NODE_ENV production
 ENV REVISION ${REVISION}
 
 USER root
-# openssh-server: needed for heroku exec
 # iproute2, curl: generally useful network utilities that don't take much space
 # python3, xz-utils: node dependencies
 # libvips43, poppler-utils: activestorage dependencies
 # libjemalloc2: more efficient memory allocation in Ruby and Node
 # shared-mime-info: Rails dependency
 # libpq5: pg gem dependency
-RUN apt-get update && apt-get install -y --no-install-recommends openssh-server iproute2 curl python3 libvips42 poppler-utils xz-utils libjemalloc2 shared-mime-info libpq5 gosu && rm -rf /var/lib/apt/lists/*
+RUN apt-get update && apt-get install -y --no-install-recommends iproute2 curl python3 libvips42 poppler-utils xz-utils libjemalloc2 shared-mime-info libpq5 gosu && rm -rf /var/lib/apt/lists/*
 RUN useradd -ms $(which bash) www
 RUN mkdir /opt/node && \
   cd /opt/node && \
@@ -91,10 +90,6 @@ RUN curl -fL "https://github.com/segmentio/chamber/releases/download/v${CHAMBER_
 COPY --from=build /usr/local/bundle /usr/local/bundle
 COPY --from=build --chown=www /usr/src/intercode /usr/src/intercode
 RUN chmod +x /usr/src/intercode/bin/entrypoint.sh
-
-# The following two lines are to enable heroku exec support: https://devcenter.heroku.com/articles/exec#using-with-docker
-ADD ./.profile.d /app/.profile.d
-RUN rm /bin/sh && ln -s /bin/bash /bin/sh
 
 WORKDIR /usr/src/intercode
 

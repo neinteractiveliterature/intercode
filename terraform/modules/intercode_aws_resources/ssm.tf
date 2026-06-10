@@ -54,9 +54,6 @@ locals {
     var.uploads_host != null ? { UPLOADS_HOST = var.uploads_host } : {},
     var.cloudwatch_log_group != null ? { CLOUDWATCH_LOG_GROUP = var.cloudwatch_log_group } : {},
     var.intercode_host != null ? { INTERCODE_HOST = var.intercode_host } : {},
-    var.intercode_certs_no_wildcard_domains != null ? {
-      INTERCODE_CERTS_NO_WILDCARD_DOMAINS = var.intercode_certs_no_wildcard_domains
-    } : {},
   )
 
   # SSM parameter types by name — "String" or "SecureString".
@@ -96,9 +93,6 @@ locals {
     var.uploads_host != null ? { UPLOADS_HOST = "String" } : {},
     var.cloudwatch_log_group != null ? { CLOUDWATCH_LOG_GROUP = "String" } : {},
     var.intercode_host != null ? { INTERCODE_HOST = "String" } : {},
-    var.intercode_certs_no_wildcard_domains != null ? {
-      INTERCODE_CERTS_NO_WILDCARD_DOMAINS = "String"
-    } : {},
   )
 }
 
@@ -234,7 +228,4 @@ moved {
   from = aws_ssm_parameter.intercode_host[0]
   to   = aws_ssm_parameter.params["INTERCODE_HOST"]
 }
-moved {
-  from = aws_ssm_parameter.intercode_certs_no_wildcard_domains[0]
-  to   = aws_ssm_parameter.params["INTERCODE_CERTS_NO_WILDCARD_DOMAINS"]
-}
+

@@ -272,7 +272,6 @@ GEM
       bigdecimal
       money (~> 7.0)
       nokogiri (~> 1.11)
-    excon (0.112.0)
     factory_bot (6.6.0)
       activesupport (>= 6.1.0)
     factory_bot_rails (6.5.1)
@@ -318,12 +317,6 @@ GEM
       tilt
     heapy (0.2.0)
       thor
-    heroics (0.1.4)
-      base64
-      excon
-      json
-      moneta
-      webrick
     holidays (10.0.0)
     i18n (1.14.8)
       concurrent-ruby (~> 1.0)
@@ -388,7 +381,6 @@ GEM
     minitest-spec-rails (7.4.1)
       minitest (>= 5.0)
       railties (>= 4.1)
-    moneta (1.0.0)
     monetize (2.0.0)
       money (~> 7.0)
     money (7.0.2)
@@ -437,10 +429,6 @@ GEM
       activerecord (>= 6.1)
       activesupport (>= 6.1)
     phonelib (0.10.21)
-    platform-api (3.9.1)
-      heroics (~> 0.1.1)
-      moneta (~> 1.0.0)
-      rate_throttle_client (~> 0.1.0)
     positioning (0.4.8)
       activerecord (>= 6.1)
       activesupport (>= 6.1)
@@ -517,7 +505,6 @@ GEM
       zeitwerk (~> 2.6)
     rainbow (3.1.1)
     rake (13.4.2)
-    rate_throttle_client (0.1.2)
     rb-fsevent (0.11.2)
     rb-inotify (0.11.1)
       ffi (~> 1.0)
@@ -751,7 +738,6 @@ DEPENDENCIES
   pg
   pg_search
   phonelib
-  platform-api
   positioning
   prettier (= 4.0.4)
   prettier_print
@@ -800,7 +786,7 @@ DEPENDENCIES
   yard
 
 RUBY VERSION
-   ruby 4.0.5p0
+  ruby 4.0.5p0
 
 BUNDLED WITH
-   4.0.13
+  4.0.13
