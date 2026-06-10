@@ -120,12 +120,6 @@ variable "intercode_host" {
   default     = null
 }
 
-variable "intercode_certs_no_wildcard_domains" {
-  description = "Space-separated list of domains that need individual TLS certs rather than wildcards. If null, no SSM parameter is written."
-  type        = string
-  default     = null
-}
-
 variable "default_currency" {
   description = "ISO 4217 currency code for the default currency (e.g. 'USD'). Required — Intercode will not function without it."
   type        = string
