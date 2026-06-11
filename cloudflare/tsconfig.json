@@ -1,6 +1,0 @@
-{
-  "compilerOptions": {
-    "lib": ["ES2020"],
-    "types": ["./worker-configuration.d.ts"]
-  }
-}
