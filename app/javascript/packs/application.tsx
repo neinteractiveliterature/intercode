@@ -58,6 +58,10 @@ const bootstrapPromise: Promise<Bootstrap> = (async () => {
   const client = buildBrowserApolloClient(authenticityTokensManager, authManager);
 
   window.addEventListener(GraphQLNotAuthenticatedErrorEvent.type, async () => {
+    // Don't interrupt an in-progress OAuth exchange on the callback page itself
+    if (window.location.pathname === '/oauth/callback') {
+      return;
+    }
     const { redirectUrl } = await authManager.initiateAuthentication(window.location.href);
     window.location.href = redirectUrl.toString();
   });
