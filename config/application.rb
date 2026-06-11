@@ -35,9 +35,7 @@ module Intercode
     config.middleware.insert_after ActionDispatch::Executor, Intercode::FindVirtualHost
     config.middleware.use Rack::Deflater
 
-    config.skylight.probes += %w[active_job graphql] if config.respond_to?(:skylight)
-
-    # To enable tsvectors and triggers; hopefully can get rid of this at some point :(
+# To enable tsvectors and triggers; hopefully can get rid of this at some point :(
     config.active_record.schema_format = :sql
 
     config.generators do |g|

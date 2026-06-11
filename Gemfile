@@ -114,13 +114,6 @@ gem "rollbar"
 # Reduces boot times through caching; required in config/boot.rb
 gem "bootsnap", ">= 1.1.0", require: false
 
-# Production profiling
-group :skylight do
-  gem "rbtrace"
-  gem "skylight"
-  gem "webrick" # we don't actually use it, but Skylight needs it on boot
-end
-
 group :development do
   gem "rack-mini-profiler", require: false
 

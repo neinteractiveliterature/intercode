@@ -22,13 +22,18 @@ if [ -n "$CHAMBER_SERVICE" ]; then
       exit 1
     fi
     # The endpoint may return {"token":"..."} JSON or a raw token string.
-    OIDC_TOKEN=$(echo "$OIDC_RESPONSE" | python3 -c "
-import sys, json
-data = sys.stdin.read().strip()
-try:
-    print(json.loads(data)['token'], end='')
-except (json.JSONDecodeError, KeyError):
-    print(data, end='')
+    OIDC_TOKEN=$(echo "$OIDC_RESPONSE" | node -e "
+let data = '';
+process.stdin.on('data', chunk => data += chunk);
+process.stdin.on('end', () => {
+  data = data.trim();
+  try {
+    const parsed = JSON.parse(data);
+    process.stdout.write(parsed.token !== undefined ? String(parsed.token) : data);
+  } catch (e) {
+    process.stdout.write(data);
+  }
+});
 ") || {
       echo "ERROR: Failed to extract OIDC token. Response was: $OIDC_RESPONSE" >&2
       exit 1
