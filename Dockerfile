@@ -77,11 +77,6 @@ RUN mkdir /opt/node && \
   curl https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-$(echo ${TARGETARCH} | sed 's/amd64/x64/').tar.xz | tar xJ --strip-components=1
 ENV PATH="/opt/node/bin:$PATH"
 
-# Set up flyctl
-RUN curl -L https://fly.io/install.sh | sh
-ENV FLYCTL_INSTALL="/root/.fly"
-ENV PATH="$FLYCTL_INSTALL/bin:$PATH"
-
 # Set up chamber for SSM-based secrets management
 RUN curl -fL "https://github.com/segmentio/chamber/releases/download/v${CHAMBER_VERSION}/chamber-v${CHAMBER_VERSION}-linux-${TARGETARCH}" \
   -o /usr/local/bin/chamber \
