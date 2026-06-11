@@ -65,17 +65,21 @@ ENV REVISION ${REVISION}
 
 USER root
 # iproute2, curl: generally useful network utilities that don't take much space
-# xz-utils: needed to extract node tarball
 # libvips43, poppler-utils: activestorage dependencies
 # libjemalloc2: more efficient memory allocation in Ruby and Node
 # shared-mime-info: Rails dependency
 # libpq5: pg gem dependency
-RUN apt-get update && apt-get install -y --no-install-recommends iproute2 curl libvips42 poppler-utils xz-utils libjemalloc2 shared-mime-info libpq5 gosu && rm -rf /var/lib/apt/lists/*
+# xz-utils: installed temporarily to extract the node tarball, then removed
+RUN apt-get update \
+  && apt-get install -y --no-install-recommends iproute2 curl libvips42 poppler-utils xz-utils libjemalloc2 shared-mime-info libpq5 gosu \
+  && mkdir /opt/node \
+  && cd /opt/node \
+  && curl https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-$(echo ${TARGETARCH} | sed 's/amd64/x64/').tar.xz | tar xJ --strip-components=1 \
+  && rm -rf /opt/node/include /opt/node/lib/node_modules \
+  && apt-get purge -y xz-utils \
+  && apt-get autoremove -y \
+  && rm -rf /var/lib/apt/lists/*
 RUN useradd -ms $(which bash) www
-RUN mkdir /opt/node && \
-  cd /opt/node && \
-  curl https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-$(echo ${TARGETARCH} | sed 's/amd64/x64/').tar.xz | tar xJ --strip-components=1 && \
-  rm -rf /opt/node/include /opt/node/lib/node_modules
 ENV PATH="/opt/node/bin:$PATH"
 
 # Set up chamber for SSM-based secrets management
