@@ -32,6 +32,18 @@ function OAuthCallback() {
     handleCallback();
   }, [authenticationManager]);
 
+  const handleRetry = async () => {
+    setProcessing(true);
+    setError(null);
+    try {
+      const { redirectUrl } = await authenticationManager.initiateAuthentication('/');
+      window.location.href = redirectUrl.toString();
+    } catch (e) {
+      setError(e instanceof Error ? e.message : 'Authentication failed');
+      setProcessing(false);
+    }
+  };
+
   if (processing) {
     return (
       <div className="container mt-4">
@@ -50,9 +62,14 @@ function OAuthCallback() {
       <div className="alert alert-danger">
         <h4>{t('authentication.oauthCallback.authenticationError')}</h4>
         <ErrorDisplay stringError={error} />
-        <Link className="btn btn-primary mt-3" to="/">
-          {t('authentication.oauthCallback.returnToHome')}
-        </Link>
+        <div className="mt-3 d-flex gap-2">
+          <button className="btn btn-primary" onClick={handleRetry}>
+            {t('authentication.oauthCallback.retryLogin')}
+          </button>
+          <Link className="btn btn-outline-secondary" to="/">
+            {t('authentication.oauthCallback.returnToHome')}
+          </Link>
+        </div>
       </div>
     </div>
   );

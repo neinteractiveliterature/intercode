@@ -73,6 +73,7 @@
     "oauthCallback": {
       "authenticationError": "Authentication Error",
       "completingLogin": "Completing login...",
+      "retryLogin": "Try logging in again",
       "returnToHome": "Return to Home"
     },
     "passwordInput": {
