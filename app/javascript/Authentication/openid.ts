@@ -1,5 +1,4 @@
 import {
-  discovery,
   buildAuthorizationUrl,
   Configuration,
   randomPKCECodeVerifier,
@@ -12,13 +11,28 @@ export type PKCEChallengeData = {
   state: string;
 };
 
-export async function discoverOpenidConfig(clientId: string, issuerUrl?: string): Promise<Configuration> {
-  const issuer = new URL(issuerUrl ?? window.location.href);
-  issuer.pathname = '/';
-  issuer.search = '';
-  issuer.hash = '';
-  const config = await discovery(issuer, clientId);
-  return config;
+export type OpenidServerMetadata = {
+  issuer: string;
+  authorizationEndpoint?: string;
+  endSessionEndpoint?: string;
+};
+
+// Build the openid-client Configuration from metadata we already have (delivered
+// same-origin via /client_configuration) rather than fetching the OIDC discovery
+// document. Discovery is a cross-origin request to the issuer host, which gets
+// blocked (Brave shields, untrusted dev certs) and silently wedges login. We only
+// need the authorization endpoint (to build the redirect) and the end-session
+// endpoint (for sign-out); token exchange/refresh go through our own same-origin
+// /oauth_session/* endpoints.
+export function buildOpenidConfig(clientId: string, metadata: OpenidServerMetadata): Configuration {
+  return new Configuration(
+    {
+      issuer: metadata.issuer,
+      authorization_endpoint: metadata.authorizationEndpoint,
+      end_session_endpoint: metadata.endSessionEndpoint,
+    },
+    clientId,
+  );
 }
 
 export async function generatePKCEChallenge(): Promise<PKCEChallengeData> {

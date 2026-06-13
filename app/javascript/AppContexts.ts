@@ -10,6 +10,8 @@ import AuthenticityTokensManager from 'AuthenticityTokensContext';
 export type ClientConfiguration = {
   oauth_frontend_application_uid: string | null;
   oidc_issuer_url: string | null;
+  oidc_authorization_endpoint: string | null;
+  oidc_end_session_endpoint: string | null;
   rails_default_active_storage_service_name: string;
   rails_direct_uploads_url: string;
   recaptcha_site_key: string | null;

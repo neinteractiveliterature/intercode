@@ -1,5 +1,5 @@
 import { Configuration } from 'openid-client';
-import { discoverOpenidConfig, generatePKCEChallenge, getAuthorizationRedirectURL } from './openid';
+import { buildOpenidConfig, generatePKCEChallenge, getAuthorizationRedirectURL } from './openid';
 import { createContext } from 'react';
 import * as z from 'zod/mini';
 
@@ -53,6 +53,8 @@ type TokenResponseBody = {
 export class AuthenticationManager {
   clientId?: string;
   issuerUrl?: string;
+  authorizationEndpoint?: string;
+  endSessionEndpoint?: string;
   openidConfig?: Configuration;
   currentLoginFlowData?: LoginFlowData;
   jwtToken?: string;
@@ -99,7 +101,15 @@ export class AuthenticationManager {
       throw new Error('OAuth client ID not configured');
     }
 
-    this.openidConfig = await discoverOpenidConfig(this.clientId, this.issuerUrl);
+    if (!this.issuerUrl) {
+      throw new Error('OIDC issuer URL not configured');
+    }
+
+    this.openidConfig = buildOpenidConfig(this.clientId, {
+      issuer: this.issuerUrl,
+      authorizationEndpoint: this.authorizationEndpoint,
+      endSessionEndpoint: this.endSessionEndpoint,
+    });
     return this.openidConfig;
   }
 

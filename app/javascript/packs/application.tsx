@@ -62,6 +62,8 @@ const bootstrapPromise: Promise<Bootstrap> = (async () => {
     clientConfiguration.oauth_frontend_application_uid ?? undefined,
   );
   authManager.issuerUrl = clientConfiguration.oidc_issuer_url ?? undefined;
+  authManager.authorizationEndpoint = clientConfiguration.oidc_authorization_endpoint ?? undefined;
+  authManager.endSessionEndpoint = clientConfiguration.oidc_end_session_endpoint ?? undefined;
 
   // Try to redeem the refresh cookie for an access token before we build the
   // Apollo client, so the first GraphQL query goes out authenticated when the
