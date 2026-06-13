@@ -117,7 +117,7 @@ export function AppRootContextRouteGuard({ guard }: AppRootContextRouteGuardProp
 function LoginRequiredRouteGuard() {
   const loginRequired = useLoginRequired();
   if (loginRequired) {
-    return <></>;
+    return loginRequired;
   }
 
   return <Outlet />;

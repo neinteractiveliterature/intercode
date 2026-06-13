@@ -51,7 +51,7 @@ function ClickwrapAgreement() {
   const acceptError = useActionData() as Error | undefined;
 
   if (loginRequired) {
-    return <></>;
+    return loginRequired;
   }
 
   const { convention } = data;
