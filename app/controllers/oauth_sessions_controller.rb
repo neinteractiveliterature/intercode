@@ -46,10 +46,20 @@ class OAuthSessionsController < ApplicationController
 
   def refresh
     refresh_token_value = cookies[COOKIE_NAME]
-    return render_oauth_error(:invalid_grant, status: :unauthorized) if refresh_token_value.blank?
+    if refresh_token_value.blank?
+      report_refresh_failure(:cookie_absent)
+      return render_oauth_error(:invalid_grant, status: :unauthorized)
+    end
 
     access_token = Doorkeeper::AccessToken.by_refresh_token(refresh_token_value)
-    return render_oauth_error(:invalid_grant, status: :unauthorized) if access_token.nil?
+    if access_token.nil?
+      # The cookie carried a refresh token but no access token row matches it.
+      # The most likely cause is that the row was deleted out from under the
+      # cookie (e.g. the nightly CleanupDbService pruning a revoked token) — this
+      # is the case we most want to catch for the "logged out overnight" reports.
+      report_refresh_failure(:token_not_found)
+      return render_oauth_error(:invalid_grant, status: :unauthorized)
+    end
 
     frontend_app = OAuthApplication.find_by(is_intercode_frontend: true)
     return render_oauth_error(:invalid_client, status: :bad_request) unless frontend_app
@@ -59,7 +69,7 @@ class OAuthSessionsController < ApplicationController
     credentials = Doorkeeper::OAuth::Client::Credentials.new(frontend_app.uid, nil)
     request = Doorkeeper::OAuth::RefreshTokenRequest.new(Doorkeeper.config, access_token, credentials)
 
-    respond_with_token_request(request)
+    respond_with_token_request(request, refreshed_token: access_token)
   end
 
   def sign_out
@@ -74,9 +84,39 @@ class OAuthSessionsController < ApplicationController
 
   private
 
-  def respond_with_token_request(request)
+  # Records *why* a cookie-backed refresh failed, so we can diagnose the
+  # convention-site "logged out overnight" reports from real data instead of
+  # guesswork. Deliberately logs no token material — just the failure reason
+  # and (when a row exists) its lifecycle timestamps, which let us distinguish
+  # a deleted row from one that was revoked by rotation. Surfaces to Sentry and
+  # Rollbar with a filterable `oauth_refresh_failure` tag.
+  def report_refresh_failure(reason, access_token: nil, doorkeeper_error: nil)
+    context = { reason: reason, doorkeeper_error: doorkeeper_error }.compact
+
+    if access_token
+      context.merge!(
+        resource_owner_id: access_token.resource_owner_id,
+        application_id: access_token.application_id,
+        token_created_at: access_token.created_at,
+        token_revoked_at: access_token.revoked_at,
+        token_expires_in: access_token.expires_in,
+        has_previous_refresh_token: access_token.previous_refresh_token.present?
+      )
+    end
+
+    ErrorReporting.info("oauth_session refresh failed", tags: { oauth_refresh_failure: reason.to_s }, **context)
+  end
+
+  def respond_with_token_request(request, refreshed_token: nil)
     response = request.authorize
     if response.is_a?(Doorkeeper::OAuth::ErrorResponse)
+      # `refreshed_token` is only passed by the refresh flow: the access token row
+      # exists but Doorkeeper rejected the grant (e.g. it was already revoked, or
+      # this is refresh-token reuse). Capturing the row's state lets us tell a
+      # rotation/race problem apart from the row being deleted entirely.
+      if refreshed_token
+        report_refresh_failure(:grant_rejected, access_token: refreshed_token, doorkeeper_error: response.name)
+      end
       clear_refresh_cookie
       render json: response.body, status: response.status
       return

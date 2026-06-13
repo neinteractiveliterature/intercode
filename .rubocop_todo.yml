@@ -50,11 +50,12 @@ Metrics/BlockLength:
     - 'config/environments/production.rb'
     - 'config/initializers/doorkeeper.rb'
 
-# Offense count: 4
+# Offense count: 5
 # Configuration parameters: CountComments, Max, CountAsOne.
 Metrics/ClassLength:
   Exclude:
     - 'app/controllers/application_controller.rb'
+    - 'app/controllers/oauth_sessions_controller.rb'
     - 'app/graphql/types/ability_type.rb'
     - 'app/graphql/types/mutation_type.rb'
     - 'app/graphql/types/query_type.rb'
