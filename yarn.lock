@@ -13829,11 +13829,11 @@ __metadata:
   linkType: hard
 
 "i18next-chained-backend@npm:^5.0.0":
-  version: 5.0.4
-  resolution: "i18next-chained-backend@npm:5.0.4"
+  version: 5.0.5
+  resolution: "i18next-chained-backend@npm:5.0.5"
   dependencies:
     "@babel/runtime": "npm:^7.28.4"
-  checksum: 10c0/41baee12222c4ca082e2a1c74cfdf9bbf9de1f1787d6dd432abc1ae238a12078a787d4aade308467add22db35b651785c81022367f8a03043e6f368964acddfe
+  checksum: 10c0/14a2b398947cdb3cfa6fcd99c61c931aa82d312e8a8d20f9d229c22dbd17d77ed24150a9e3a9633e995c4a373f189117fdaf29d1d7982a3e0784cf6554c8f05a
   languageName: node
   linkType: hard
 
