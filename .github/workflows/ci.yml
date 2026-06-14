@@ -381,7 +381,7 @@ jobs:
           - sentry
     steps:
       - uses: actions/checkout@v6
-      - uses: opentofu/setup-opentofu@v1
+      - uses: opentofu/setup-opentofu@v2
       - name: tofu init
         run: tofu init -backend=false
         working-directory: terraform/modules/${{ matrix.module }}
