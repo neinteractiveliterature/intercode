@@ -610,7 +610,7 @@ GEM
       sprockets (>= 3.0.0)
     stackprof (0.2.28)
     stringio (3.2.0)
-    stripe (19.2.0)
+    stripe (19.2.1)
       bigdecimal
       logger
     strscan (3.1.8)
