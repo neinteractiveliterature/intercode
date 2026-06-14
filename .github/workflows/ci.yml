@@ -368,6 +368,27 @@ jobs:
         with:
           recreate: true
           path: code-coverage-results.md
+  opentofu-validate:
+    name: OpenTofu validate (${{ matrix.module }})
+    runs-on: ubuntu-latest
+    strategy:
+      matrix:
+        module:
+          - cloudfront_intercode
+          - forwardemail_receiving
+          - ses_email_receiving
+          - intercode_aws_resources
+          - sentry
+    steps:
+      - uses: actions/checkout@v6
+      - uses: opentofu/setup-opentofu@v1
+      - name: tofu init
+        run: tofu init -backend=false
+        working-directory: terraform/modules/${{ matrix.module }}
+      - name: tofu validate
+        run: tofu validate
+        working-directory: terraform/modules/${{ matrix.module }}
+
   update-release-draft:
     runs-on: ubuntu-latest
     name: Update release draft
