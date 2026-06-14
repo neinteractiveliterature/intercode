@@ -17,6 +17,7 @@ import { appRootRoutes } from 'AppRouter';
 import { AuthenticationManager, AuthenticationManagerContext } from '../Authentication/authenticationManager';
 import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
 import { ApolloClient } from '@apollo/client';
+import { initErrorReporting } from 'ErrorReporting';
 
 type Bootstrap = {
   clientConfiguration: ClientConfiguration;
@@ -45,10 +46,24 @@ const bootstrapPromise: Promise<Bootstrap> = (async () => {
   }
   const clientConfiguration = (await configResponse.json()) as ClientConfiguration;
 
+  // Initialize error reporting as early as possible — before we build the
+  // router and render any React. A render-time crash during the initial mount
+  // (e.g. the Brave white-screen-on-login) used to happen before AppRoot's
+  // effect could call this, so the SDKs were never set up and nothing was
+  // reported. The current user id isn't known yet; AppRoot fills it in via
+  // setCurrentUser once the AppRootQuery resolves.
+  initErrorReporting(
+    undefined,
+    clientConfiguration.sentry_frontend_dsn,
+    clientConfiguration.rollbar_client_access_token,
+  );
+
   const authManager = AuthenticationManager.deserializeFromBrowser(
     clientConfiguration.oauth_frontend_application_uid ?? undefined,
   );
   authManager.issuerUrl = clientConfiguration.oidc_issuer_url ?? undefined;
+  authManager.authorizationEndpoint = clientConfiguration.oidc_authorization_endpoint ?? undefined;
+  authManager.endSessionEndpoint = clientConfiguration.oidc_end_session_endpoint ?? undefined;
 
   // Try to redeem the refresh cookie for an access token before we build the
   // Apollo client, so the first GraphQL query goes out authenticated when the

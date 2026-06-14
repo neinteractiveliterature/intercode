@@ -97,7 +97,7 @@ function Cart() {
   const loginRequired = useLoginRequired();
 
   if (loginRequired) {
-    return <></>;
+    return loginRequired;
   }
 
   return (

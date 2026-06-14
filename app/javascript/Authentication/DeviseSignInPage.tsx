@@ -26,10 +26,16 @@ function DeviseSignInPage() {
     try {
       const response = await fetch('/users/sign_in', {
         method: 'POST',
+        headers: { Accept: 'application/json' },
         body: new FormData(event.currentTarget),
       });
       if (response.ok) {
-        window.location.href = response.url || '/';
+        // The server returns the post-sign-in location as JSON rather than
+        // redirecting, so the browser navigates the redirect chain top-level.
+        // If we let fetch() follow it, a cross-origin hop into a relying OAuth
+        // app's callback would be CORS-blocked (and burn the one-time code).
+        const data = (await response.json()) as { location?: string };
+        window.location.href = data.location ?? '/';
       } else {
         const data = (await response.json()) as { error?: string };
         setError(data.error ?? t('authentication.signInForm.genericError'));

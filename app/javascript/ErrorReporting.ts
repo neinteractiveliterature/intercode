@@ -11,6 +11,8 @@ class ErrorReporting {
       }
     | undefined;
 
+  currentUserId: string | undefined;
+
   static instance: ErrorReporting | undefined;
 
   static init(...args: ConstructorParameters<typeof ErrorReporting>) {
@@ -26,6 +28,8 @@ class ErrorReporting {
   }
 
   constructor(currentUserId: string | undefined, sentryDsn?: string | null, rollbarToken?: string | null) {
+    this.currentUserId = currentUserId;
+
     if (sentryDsn) {
       import('@sentry/browser').then((Sentry) => {
         const instance = Sentry.init({ dsn: sentryDsn });
@@ -34,7 +38,7 @@ class ErrorReporting {
             instance,
             newScope: () => {
               const scope = new Sentry.Scope();
-              scope.setUser({ id: currentUserId });
+              scope.setUser({ id: this.currentUserId });
               return scope;
             },
           };
@@ -58,12 +62,21 @@ class ErrorReporting {
               },
             },
             person: {
-              id: currentUserId ?? null,
+              id: this.currentUserId ?? null,
             },
           },
         });
       });
     }
+  }
+
+  // Associate subsequent reports with the signed-in user. The SDKs are
+  // initialized once at boot (before the user id is known), so this updates
+  // the existing instance rather than re-initializing — re-init would install
+  // a second set of global error handlers and double-report.
+  setCurrentUser(currentUserId: string | undefined) {
+    this.currentUserId = currentUserId;
+    this.rollbar?.configure({ payload: { person: { id: currentUserId ?? null } } });
   }
 
   report(level: ErrorReportingLevel, error: Error | string, extra?: Record<string, unknown>) {

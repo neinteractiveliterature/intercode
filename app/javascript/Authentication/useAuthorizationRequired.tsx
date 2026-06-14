@@ -29,9 +29,8 @@ export default function useAuthorizationRequired(...abilities: AbilityName[]): R
   const authorizationRequired = useAuthorizationRequiredWithoutLogin(...abilities);
 
   if (loginRequired) {
-    // useLoginRequired is going to pop the login dialog, we just need to return something truthy
-    // so the caller can halt rendering
-    return <></>;
+    // Not signed in yet — render the login redirect UI (spinner/error) from useLoginRequired
+    return loginRequired;
   }
 
   return authorizationRequired;

@@ -29,7 +29,7 @@ function TicketPurchasePage() {
   const loginRequired = useLoginRequired();
 
   if (loginRequired) {
-    return <></>;
+    return loginRequired;
   }
 
   return (

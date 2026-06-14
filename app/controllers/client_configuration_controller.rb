@@ -14,6 +14,14 @@ class ClientConfigurationController < ApplicationController
     render json: {
              oauth_frontend_application_uid: Doorkeeper::Application.find_by(is_intercode_frontend: true)&.uid,
              oidc_issuer_url: oidc_issuer_url,
+             # The SPA used to fetch these via the OIDC discovery document, but that's a
+             # cross-origin request to the issuer host (a convention page reaching the root
+             # site), which gets blocked (Brave shields, untrusted dev certs, etc.) and
+             # leaves login hanging. Serving them here — same-origin — removes that
+             # dependency. Built from the issuer URL so they point at the issuer host
+             # rather than whatever convention host is making this request.
+             oidc_authorization_endpoint: oidc_authorization_endpoint,
+             oidc_end_session_endpoint: oidc_end_session_endpoint,
              rails_default_active_storage_service_name: Rails.application.config.active_storage.service.to_s,
              rails_direct_uploads_url: rails_direct_uploads_url,
              recaptcha_site_key: Recaptcha.configuration.site_key,
@@ -21,5 +29,15 @@ class ClientConfigurationController < ApplicationController
              sentry_frontend_dsn: ENV["SENTRY_FRONTEND_DSN"].presence,
              rollbar_client_access_token: ENV["ROLLBAR_CLIENT_ACCESS_TOKEN"].presence
            }
+  end
+
+  private
+
+  def oidc_authorization_endpoint
+    URI.join(oidc_issuer_url, oauth_authorization_path).to_s
+  end
+
+  def oidc_end_session_endpoint
+    URI.join(oidc_issuer_url, destroy_user_session_path).to_s
   end
 end
