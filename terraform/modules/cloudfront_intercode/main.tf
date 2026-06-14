@@ -29,8 +29,8 @@ locals {
 resource "aws_cloudfront_origin_request_policy" "forward_all" {
   name = "${var.name}-forward-all"
 
-  cookies_config { cookie_behavior = "allViewer" }
-  query_strings_config { query_string_behavior = "allViewer" }
+  cookies_config { cookie_behavior = "all" }
+  query_strings_config { query_string_behavior = "all" }
   headers_config { header_behavior = "allViewer" }
 }
 
