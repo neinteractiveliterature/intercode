@@ -427,7 +427,7 @@ GEM
     pg_search (2.3.7)
       activerecord (>= 6.1)
       activesupport (>= 6.1)
-    phonelib (0.10.21)
+    phonelib (0.10.22)
     positioning (0.4.8)
       activerecord (>= 6.1)
       activesupport (>= 6.1)
