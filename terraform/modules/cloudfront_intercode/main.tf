@@ -25,41 +25,13 @@ locals {
 # Cache / origin-request policies
 # ---------------------------------------------------------------------------
 
-# Forward the viewer Host header so Intercode can resolve the convention.
-resource "aws_cloudfront_origin_request_policy" "forward_host" {
-  name = "${var.name}-forward-host"
+# Forward all viewer headers, cookies, and query strings to the Rails origin.
+resource "aws_cloudfront_origin_request_policy" "forward_all" {
+  name = "${var.name}-forward-all"
 
-  cookies_config { cookie_behavior = "none" }
-  query_strings_config { query_string_behavior = "none" }
-
-  headers_config {
-    header_behavior = "whitelist"
-    headers {
-      items = ["Host"]
-    }
-  }
-}
-
-# Like forward_host, but also passes the HttpOnly refresh-token cookie so
-# /oauth_session/* endpoints can read it on the Rails side.
-resource "aws_cloudfront_origin_request_policy" "forward_host_with_refresh_cookie" {
-  name = "${var.name}-forward-host-refresh-cookie"
-
-  cookies_config {
-    cookie_behavior = "whitelist"
-    cookies {
-      items = ["__Host-intercode_refresh"]
-    }
-  }
-
-  query_strings_config { query_string_behavior = "none" }
-
-  headers_config {
-    header_behavior = "whitelist"
-    headers {
-      items = ["Host"]
-    }
-  }
+  cookies_config { cookie_behavior = "allViewer" }
+  query_strings_config { query_string_behavior = "allViewer" }
+  headers_config { header_behavior = "allViewer" }
 }
 
 # /og-shell: forward Host + the `path` query param so each path caches
@@ -205,7 +177,7 @@ resource "aws_cloudfront_distribution" "this" {
     cached_methods         = ["GET", "HEAD"]
     compress               = true
     cache_policy_id        = aws_cloudfront_cache_policy.no_cache.id
-    origin_request_policy_id = aws_cloudfront_origin_request_policy.forward_host_with_refresh_cookie.id
+    origin_request_policy_id = aws_cloudfront_origin_request_policy.forward_all.id
     viewer_protocol_policy = "redirect-to-https"
   }
 
@@ -242,7 +214,7 @@ resource "aws_cloudfront_distribution" "this" {
       cached_methods         = ["GET", "HEAD"]
       compress               = true
       cache_policy_id        = aws_cloudfront_cache_policy.no_cache.id
-      origin_request_policy_id = aws_cloudfront_origin_request_policy.forward_host.id
+      origin_request_policy_id = aws_cloudfront_origin_request_policy.forward_all.id
       viewer_protocol_policy = "redirect-to-https"
     }
   }
@@ -255,7 +227,7 @@ resource "aws_cloudfront_distribution" "this" {
     cached_methods           = ["GET", "HEAD"]
     compress                 = true
     cache_policy_id          = aws_cloudfront_cache_policy.cdn_spa_shell.id
-    origin_request_policy_id = aws_cloudfront_origin_request_policy.forward_host.id
+    origin_request_policy_id = aws_cloudfront_origin_request_policy.forward_all.id
     viewer_protocol_policy   = "redirect-to-https"
   }
 
@@ -278,7 +250,7 @@ resource "aws_cloudfront_distribution" "this" {
     cached_methods           = ["GET", "HEAD"]
     compress                 = true
     cache_policy_id          = aws_cloudfront_cache_policy.cdn_spa_shell.id
-    origin_request_policy_id = aws_cloudfront_origin_request_policy.forward_host.id
+    origin_request_policy_id = aws_cloudfront_origin_request_policy.forward_all.id
     viewer_protocol_policy   = "redirect-to-https"
 
     lambda_function_association {
