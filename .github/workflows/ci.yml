@@ -400,6 +400,7 @@ jobs:
       - minitest-system
       - docker-build
       - doc-site
+      - opentofu-validate
     outputs:
       name: ${{ steps.release-drafter.outputs.name }}
       html_url: ${{ steps.release-drafter.outputs.html_url }}
