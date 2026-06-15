@@ -49,8 +49,9 @@ Metrics/BlockLength:
   Exclude:
     - 'config/environments/production.rb'
     - 'config/initializers/doorkeeper.rb'
+    - 'test/presenters/signup_count_presenter_test.rb'
 
-# Offense count: 5
+# Offense count: 7
 # Configuration parameters: CountComments, Max, CountAsOne.
 Metrics/ClassLength:
   Exclude:
@@ -59,6 +60,26 @@ Metrics/ClassLength:
     - 'app/graphql/types/ability_type.rb'
     - 'app/graphql/types/mutation_type.rb'
     - 'app/graphql/types/query_type.rb'
+    - 'app/presenters/signup_count_presenter.rb'
+    - 'test/presenters/signup_count_presenter_test.rb'
+
+# Offense count: 1
+# Configuration parameters: Max.
+Metrics/ParameterLists:
+  Exclude:
+    - 'app/presenters/signup_count_presenter.rb'
+
+# Offense count: 1
+# Configuration parameters: ForbiddenPrefixes, AllowedMethods, MethodDefinitionMacros.
+# ForbiddenPrefixes: is_, has_, have_
+Naming/PredicateMethod:
+  Exclude:
+    - 'app/presenters/signup_count_presenter.rb'
+
+# Offense count: 1
+Naming/PredicatePrefix:
+  Exclude:
+    - 'app/presenters/signup_count_presenter.rb'
 
 # Offense count: 1
 # This cop supports safe autocorrection (--autocorrect).
