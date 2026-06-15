@@ -3,7 +3,7 @@ class SignupCountPresenter
   include SortBuckets
   include ActionView::Helpers::TextHelper
 
-  DIMENSIONS = %i[state bucket_key requested_bucket_key counted team_member]
+  DIMENSIONS = %i[state bucket_key requested_bucket_key counted team_member].freeze
 
   class SignupCountRow
     attr_reader :count, :state, :bucket_key, :requested_bucket_key, :counted, :team_member
@@ -62,7 +62,7 @@ class SignupCountPresenter
 
     def final?
       return @final unless @final.nil?
-      @final = dimension == DIMENSIONS[DIMENSIONS.size - 1]
+      @final = dimension == DIMENSIONS[-1]
     end
 
     def count(**filters)
@@ -112,9 +112,7 @@ AND team_members.user_con_profile_id = signups.user_con_profile_id"
 
   def self.for_runs(runs)
     data_by_run_id = signup_count_data_for_runs(runs)
-    runs.each_with_object({}) do |run, hash|
-      hash[run.id] = new(run, count_data: data_by_run_id[run.id] || SignupCountData.new(DIMENSIONS[0], []))
-    end
+    runs.to_h { |run| [run.id, new(run, count_data: data_by_run_id[run.id] || SignupCountData.new(DIMENSIONS[0], []))] }
   end
 
   def initialize(run, count_data: nil)
@@ -143,22 +141,10 @@ AND team_members.user_con_profile_id = signups.user_con_profile_id"
   end
 
   def bucket_descriptions(state)
-    counted_key = counted_key_for_state(state)
-
     if buckets.size == 1
-      [count_data.count(bucket_key: buckets.first.key, counted: counted_key).to_s]
+      single_bucket_descriptions(state)
     else
-      bucket_texts =
-        buckets.map do |bucket|
-          bucket_counted_key = counted_key
-          bucket_counted_key = :not_counted if bucket.not_counted?
-          "#{bucket.name}: #{count_data.count(bucket_key: bucket.key, counted: bucket_counted_key)}"
-        end
-
-      no_pref_count = count_data.count(requested_bucket_key: nil, counted: false)
-      bucket_texts << "No preference: #{no_pref_count}" if state == "waitlisted" && no_pref_count.positive?
-
-      bucket_texts
+      multi_bucket_descriptions(state)
     end
   end
 
@@ -209,6 +195,31 @@ AND team_members.user_con_profile_id = signups.user_con_profile_id"
   end
 
   private
+
+  def single_bucket_descriptions(state)
+    if state == "waitlisted"
+      [count_data.count(state: state).to_s]
+    else
+      [count_data.count(state: state, bucket_key: buckets.first.key, counted: counted_key_for_state(state)).to_s]
+    end
+  end
+
+  def multi_bucket_descriptions(state)
+    counted_key = counted_key_for_state(state)
+    texts = buckets.map { |bucket| per_bucket_description(bucket, state, counted_key) }
+    no_pref_count = count_data.count(state: state, requested_bucket_key: nil, counted: false)
+    texts << "No preference: #{no_pref_count}" if state == "waitlisted" && no_pref_count.positive?
+    texts
+  end
+
+  def per_bucket_description(bucket, state, counted_key)
+    if state == "waitlisted"
+      "#{bucket.name}: #{count_data.count(state: state, requested_bucket_key: bucket.key, counted: false)}"
+    else
+      bucket_counted_key = bucket.not_counted? ? :not_counted : counted_key
+      "#{bucket.name}: #{count_data.count(state: state, bucket_key: bucket.key, counted: bucket_counted_key)}"
+    end
+  end
 
   def registration_policy
     @registration_policy ||= run.registration_policy
