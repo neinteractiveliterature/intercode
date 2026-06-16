@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 class UserConProfilesController < ApplicationController
   include SendCsv
+  include OAuthSessionManagement
 
   # Normally we'd just use the name of the resource as the instance variable name.  Here that'd be
   # @user_con_profile, which is unsafe for us to use because ApplicationController uses it to mean
@@ -12,7 +13,7 @@ class UserConProfilesController < ApplicationController
 
   def become
     identity_assumer = assumed_identity_from_profile || user_con_profile
-    subject_profile = convention.user_con_profiles.find(params[:id])
+    subject_profile = convention.user_con_profiles.find(params.expect(:id))
     authorize subject_profile, :become?
 
     new_session =
@@ -20,7 +21,7 @@ class UserConProfilesController < ApplicationController
         assumed_profile: subject_profile,
         assumer_profile: identity_assumer,
         justification: params[:justification],
-        started_at: Time.now
+        started_at: Time.current
       )
 
     unless new_session.save
@@ -31,6 +32,7 @@ class UserConProfilesController < ApplicationController
     sign_in subject_profile.user
     session[:assumed_identity_from_profile_id] = identity_assumer.id
     session[:assumed_identity_session_id] = new_session.id
+    issue_oauth_session_for_user(subject_profile.user)
     redirect_to root_url
   end
 
@@ -40,8 +42,10 @@ class UserConProfilesController < ApplicationController
         redirect_to(
           root_url,
           alert:
+            # rubocop:disable Rails/I18nLocaleTexts
             "You haven't assumed an identity, so you can't revert \
 back to your normal identity (since you already are your normal identity)."
+          # rubocop:enable Rails/I18nLocaleTexts
         )
       )
     end
@@ -52,7 +56,8 @@ back to your normal identity (since you already are your normal identity)."
     sign_in regular_user_con_profile.user
     session.delete(:assumed_identity_from_profile_id)
     session.delete(:assumed_identity_session_id)
-    current_session&.update!(finished_at: Time.now) if current_session
+    current_session&.update!(finished_at: Time.current)
+    issue_oauth_session_for_user(regular_user_con_profile.user)
     redirect_to root_url
   end
 

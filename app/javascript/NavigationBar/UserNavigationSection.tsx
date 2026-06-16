@@ -111,10 +111,17 @@ const LoggedInDropdownTarget = forwardRef<HTMLButtonElement, LoggedInDropdownTar
 
 function RevertAssumedIdentityButton() {
   const { assumedIdentityFromProfile } = useContext(AppRootContext);
+  const authenticationManager = useContext(AuthenticationManagerContext);
 
   const revertAssumedIdentity = async () => {
+    const token = await authenticationManager.ensureFreshAccessToken();
+    const headers: Record<string, string> = {};
+    if (token) {
+      headers['Authorization'] = `Bearer ${token}`;
+    }
     const response = await htmlFetch('/user_con_profiles/revert_become', {
       method: 'POST',
+      headers,
     });
 
     window.location.href = response.url;

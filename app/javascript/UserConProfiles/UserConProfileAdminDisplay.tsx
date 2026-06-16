@@ -1,4 +1,4 @@
-import { Suspense, useMemo, useState } from 'react';
+import { Suspense, useContext, useMemo, useState } from 'react';
 import {
   ActionFunction,
   Link,
@@ -34,6 +34,7 @@ import { DeleteUserConProfileDocument } from './mutations.generated';
 import invariant from 'tiny-invariant';
 import { UserConProfile } from 'graphqlTypes.generated';
 import { apolloClientContext } from 'AppContexts';
+import { AuthenticationManagerContext } from '../Authentication/authenticationManager';
 
 export const action: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {
   const client = context.get(apolloClientContext);
@@ -59,16 +60,19 @@ export const action: ActionFunction<RouterContextProvider> = async ({ context, r
   }
 };
 
-async function becomeUser(userConProfileId: string, justification: string) {
+async function becomeUser(userConProfileId: string, justification: string, token?: string) {
   const formData = new FormData();
   formData.append('justification', justification);
+
+  const headers: Record<string, string> = { Accept: 'application/json' };
+  if (token) {
+    headers['Authorization'] = `Bearer ${token}`;
+  }
 
   const response = await fetch(`/user_con_profiles/${userConProfileId}/become`, {
     method: 'POST',
     credentials: 'include',
-    headers: {
-      Accept: 'application/json',
-    },
+    headers,
     body: formData,
   });
 
@@ -98,6 +102,7 @@ function BecomeUserModal({
   close,
 }: BecomeUserModalProps): React.JSX.Element {
   const { t } = useTranslation();
+  const authenticationManager = useContext(AuthenticationManagerContext);
   const [justification, setJustification] = useState('');
   const [becomeAsync, error, inProgress] = useAsyncFunction(becomeUser);
 
@@ -106,7 +111,8 @@ function BecomeUserModal({
       return;
     }
 
-    await becomeAsync(userConProfileId, justification);
+    const token = await authenticationManager.ensureFreshAccessToken();
+    await becomeAsync(userConProfileId, justification, token);
     close();
   };
 
