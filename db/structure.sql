@@ -1544,7 +1544,6 @@ CREATE TABLE public.events (
     convention_id bigint NOT NULL,
     owner_id bigint,
     status character varying DEFAULT 'active'::character varying NOT NULL,
-    registration_policy jsonb,
     participant_communications text,
     age_restrictions_description text,
     content_warnings text,
@@ -1554,7 +1553,8 @@ CREATE TABLE public.events (
     private_signup_list boolean DEFAULT false NOT NULL,
     event_category_id bigint NOT NULL,
     minimum_age integer,
-    title_vector tsvector
+    title_vector tsvector,
+    registration_policy_id bigint NOT NULL
 );
 
 
@@ -2380,6 +2380,80 @@ CREATE SEQUENCE public.ranked_choice_user_constraints_id_seq
 --
 
 ALTER SEQUENCE public.ranked_choice_user_constraints_id_seq OWNED BY public.ranked_choice_user_constraints.id;
+
+
+--
+-- Name: registration_policies; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.registration_policies (
+    id bigint NOT NULL,
+    prevent_no_preference_signups boolean DEFAULT false NOT NULL,
+    freeze_no_preference_buckets boolean DEFAULT false NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: registration_policies_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.registration_policies_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: registration_policies_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.registration_policies_id_seq OWNED BY public.registration_policies.id;
+
+
+--
+-- Name: registration_policy_buckets; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.registration_policy_buckets (
+    id bigint NOT NULL,
+    registration_policy_id bigint NOT NULL,
+    "position" integer NOT NULL,
+    key character varying NOT NULL,
+    name text NOT NULL,
+    description text,
+    minimum_slots integer,
+    preferred_slots integer,
+    total_slots integer,
+    slots_limited boolean DEFAULT false NOT NULL,
+    flex boolean DEFAULT false NOT NULL,
+    counted boolean DEFAULT true NOT NULL,
+    expose_attendees boolean DEFAULT false NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: registration_policy_buckets_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.registration_policy_buckets_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: registration_policy_buckets_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.registration_policy_buckets_id_seq OWNED BY public.registration_policy_buckets.id;
 
 
 --
@@ -3357,6 +3431,20 @@ ALTER TABLE ONLY public.ranked_choice_user_constraints ALTER COLUMN id SET DEFAU
 
 
 --
+-- Name: registration_policies id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.registration_policies ALTER COLUMN id SET DEFAULT nextval('public.registration_policies_id_seq'::regclass);
+
+
+--
+-- Name: registration_policy_buckets id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.registration_policy_buckets ALTER COLUMN id SET DEFAULT nextval('public.registration_policy_buckets_id_seq'::regclass);
+
+
+--
 -- Name: rooms id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -3901,6 +3989,22 @@ ALTER TABLE ONLY public.ranked_choice_user_constraints
 
 
 --
+-- Name: registration_policies registration_policies_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.registration_policies
+    ADD CONSTRAINT registration_policies_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: registration_policy_buckets registration_policy_buckets_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.registration_policy_buckets
+    ADD CONSTRAINT registration_policy_buckets_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: rooms rooms_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -4078,6 +4182,13 @@ CREATE INDEX idx_max_event_provided_tickets_on_event_id ON public.maximum_event_
 --
 
 CREATE INDEX idx_max_event_provided_tickets_on_ticket_type_id ON public.maximum_event_provided_tickets_overrides USING btree (ticket_type_id);
+
+
+--
+-- Name: idx_on_registration_policy_id_key_b71cb40026; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX idx_on_registration_policy_id_key_b71cb40026 ON public.registration_policy_buckets USING btree (registration_policy_id, key);
 
 
 --
@@ -4480,6 +4591,13 @@ CREATE INDEX index_events_on_owner_id ON public.events USING btree (owner_id);
 
 
 --
+-- Name: index_events_on_registration_policy_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_events_on_registration_policy_id ON public.events USING btree (registration_policy_id);
+
+
+--
 -- Name: index_events_on_title_vector; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4820,6 +4938,13 @@ CREATE INDEX index_ranked_choice_decisions_on_user_con_profile_id ON public.rank
 --
 
 CREATE INDEX index_ranked_choice_user_constraints_on_user_con_profile_id ON public.ranked_choice_user_constraints USING btree (user_con_profile_id);
+
+
+--
+-- Name: index_registration_policy_buckets_on_registration_policy_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_registration_policy_buckets_on_registration_policy_id ON public.registration_policy_buckets USING btree (registration_policy_id);
 
 
 --
@@ -5216,6 +5341,14 @@ ALTER TABLE ONLY public.events
 
 ALTER TABLE ONLY public.runs
     ADD CONSTRAINT fk_rails_058061fb50 FOREIGN KEY (updated_by_id) REFERENCES public.users(id);
+
+
+--
+-- Name: events fk_rails_0682145037; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.events
+    ADD CONSTRAINT fk_rails_0682145037 FOREIGN KEY (registration_policy_id) REFERENCES public.registration_policies(id);
 
 
 --
@@ -6161,6 +6294,7 @@ ALTER TABLE ONLY public.cms_files_pages
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260615192952'),
 ('20260601000000'),
 ('20260524175914'),
 ('20260519000000'),
