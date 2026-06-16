@@ -3,7 +3,7 @@ import 'regenerator-runtime/runtime';
 import mountReactComponents from '../mountReactComponents';
 import { StrictMode, Suspense, use, useLayoutEffect, useMemo, useState } from 'react';
 import AuthenticityTokensManager, { getAuthenticityTokensURL } from 'AuthenticityTokensContext';
-import { createBrowserRouter, RouterContextProvider, RouterProvider } from 'react-router';
+import { createBrowserRouter, RouterContextProvider, RouterProvider, RouteObject } from 'react-router';
 import { buildBrowserApolloClient, GraphQLNotAuthenticatedErrorEvent } from 'useIntercodeApolloClient';
 import {
   apolloClientContext,
@@ -18,6 +18,8 @@ import { AuthenticationManager, AuthenticationManagerContext } from '../Authenti
 import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
 import { ApolloClient } from '@apollo/client';
 import { initErrorReporting } from 'ErrorReporting';
+import { checkAppEntrypointHeadersOnError } from '../checkAppEntrypointHeadersMatch';
+import BootErrorBoundary from '../BootErrorBoundary';
 
 type Bootstrap = {
   clientConfiguration: ClientConfiguration;
@@ -118,19 +120,37 @@ function RouterLoadingOverlay({ router }: { router: BrowserRouter }) {
   );
 }
 
+// Wrap every route's lazy import so a failed chunk load — almost always a stale
+// deploy whose hashed chunk no longer exists — reloads onto the fresh bundle
+// instead of surfacing as an unrecoverable blank. Applied once to the whole tree.
+function withEntrypointReloadOnLazy(routes: RouteObject[]): RouteObject[] {
+  return routes.map((route) => {
+    let { lazy } = route;
+    if (typeof lazy === 'function') {
+      const load = lazy;
+      lazy = () => checkAppEntrypointHeadersOnError(load);
+    }
+    return {
+      ...route,
+      lazy,
+      children: route.children ? withEntrypointReloadOnLazy(route.children) : route.children,
+    } as RouteObject;
+  });
+}
+
 function DataModeApplicationEntry() {
   const bootstrap = use(bootstrapPromise);
 
   const router = useMemo(
     () =>
       createBrowserRouter(
-        [
+        withEntrypointReloadOnLazy([
           {
             id: 'root',
             lazy: () => import('root'),
             children: appRootRoutes,
           },
-        ],
+        ]),
         {
           getContext: () => {
             const context = new RouterContextProvider();
@@ -158,9 +178,11 @@ function DataModeApplicationEntry() {
 
 function DataModeApplicationEntrySuspenseWrapper() {
   return (
-    <Suspense fallback={<PageLoadingIndicator visible />}>
-      <DataModeApplicationEntry />
-    </Suspense>
+    <BootErrorBoundary>
+      <Suspense fallback={<PageLoadingIndicator visible />}>
+        <DataModeApplicationEntry />
+      </Suspense>
+    </BootErrorBoundary>
   );
 }
 
