@@ -15,7 +15,7 @@ jobs:
     name: TypeScript check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Read .node-version
         id: node-version
         run: echo "node-version=$(cat .node-version)" >> $GITHUB_OUTPUT
@@ -34,7 +34,7 @@ jobs:
     name: Vitest
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Read .node-version
         id: node-version
         run: echo "node-version=$(cat .node-version)" >> $GITHUB_OUTPUT
@@ -71,7 +71,7 @@ jobs:
     name: Bundle size check
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Read .node-version
         id: node-version
         run: echo "node-version=$(cat .node-version)" >> $GITHUB_OUTPUT
@@ -106,7 +106,7 @@ jobs:
         ports:
           - 5432:5432
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Install libvips42
         run: sudo apt-get update && sudo apt-get install libvips42
       - name: Upgrade postgres client utilities
@@ -163,7 +163,7 @@ jobs:
         ports:
           - 5432:5432
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Install libvips42
         run: sudo apt-get update && sudo apt-get install libvips42
       - name: Upgrade postgres client utilities
@@ -223,7 +223,7 @@ jobs:
     runs-on: ubuntu-latest
     name: Build containers
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Read .node-version
         id: node-version
         run: echo "node-version=$(cat .node-version)" >> $GITHUB_OUTPUT
@@ -280,7 +280,7 @@ jobs:
     name: Build doc site
     runs-on: ubuntu-latest
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - name: Set up docusaurus cache
         uses: actions/cache@v5
         with:
@@ -335,7 +335,7 @@ jobs:
       - minitest-system
     steps:
       - name: Check out repository
-        uses: actions/checkout@v6
+        uses: actions/checkout@v7
       - name: Download Minitest coverage
         uses: actions/download-artifact@v8
         with:
@@ -380,7 +380,7 @@ jobs:
           - intercode_aws_resources
           - sentry
     steps:
-      - uses: actions/checkout@v6
+      - uses: actions/checkout@v7
       - uses: opentofu/setup-opentofu@v2
       - name: tofu init
         run: tofu init -backend=false
