@@ -43,7 +43,7 @@
             },
             {
               "value": "optional",
-              "caption": "Masks are optional, but attendees are still welcome to mask"
+              "caption": "Masks are optional"
             }
           ],
           "required": true
