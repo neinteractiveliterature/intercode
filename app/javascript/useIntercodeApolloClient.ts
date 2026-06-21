@@ -123,14 +123,21 @@ export function buildRefreshOnRejectedBearerLink(authenticationManager?: Authent
       let activeSubscription: { unsubscribe(): void } | undefined;
 
       const runOnce = () => {
-        // Tear down the previous attempt so its `complete`/`error` events
-        // can't race the retry.
+        // Tear down any previous attempt before starting a new one.
         activeSubscription?.unsubscribe();
         activeSubscription = next(operation).subscribe({
           next: (result) => {
             const response = operation.getContext().response as Response | undefined;
             if (!attemptedRefresh && response?.headers?.get(BEARER_REJECTED_HEADER) === 'true') {
               attemptedRefresh = true;
+              // Unsubscribe synchronously so that BatchHttpLink's upcoming
+              // synchronous `complete` call (which immediately follows `next`
+              // in its promise chain) is a no-op on the now-closed subscriber.
+              // Without this, `observer.complete()` would fire before the retry
+              // emits a value, triggering Apollo's "link chain completed without
+              // emitting a value" error.
+              activeSubscription?.unsubscribe();
+              activeSubscription = undefined;
               // Mark the access token as known-bad so the auth-headers link
               // can't reuse it, then refresh and re-run the chain.
               authenticationManager.jwtToken = undefined;
