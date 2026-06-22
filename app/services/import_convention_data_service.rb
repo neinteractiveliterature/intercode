@@ -105,6 +105,12 @@ class ImportConventionDataService < CivilService::Service
     import_cms_pages(convention, layout_map)
     import_cms_partials(convention)
     import_cms_navigation_items(convention)
+
+    con = data[:convention]
+    updates = {}
+    updates[:default_layout] = layout_map[con[:default_layout_name]] if con[:default_layout_name].present?
+    updates[:root_page] = convention.pages.find_by(slug: con[:root_page_slug]) if con[:root_page_slug].present?
+    convention.update!(updates) if updates.any?
   end
 
   def import_cms_layouts(convention)
