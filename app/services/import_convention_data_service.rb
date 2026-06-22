@@ -100,10 +100,20 @@ class ImportConventionDataService < CivilService::Service
   end
 
   def import_cms_content(convention)
+    layout_map = import_cms_layouts(convention)
     import_cms_files(convention)
-    import_cms_pages(convention)
+    import_cms_pages(convention, layout_map)
     import_cms_partials(convention)
     import_cms_navigation_items(convention)
+  end
+
+  def import_cms_layouts(convention)
+    (data[:cms_layouts] || []).each_with_object({}) do |layout_data, map|
+      layout = convention.cms_layouts.find_or_initialize_by(name: layout_data[:name])
+      layout.content = layout_data[:content]
+      layout.save!
+      map[layout_data[:name]] = layout
+    end
   end
 
   def import_cms_files(convention)
@@ -122,10 +132,11 @@ class ImportConventionDataService < CivilService::Service
     end
   end
 
-  def import_cms_pages(convention)
+  def import_cms_pages(convention, layout_map = {})
     (data[:cms_pages] || []).each do |page_data|
       page = convention.pages.find_or_initialize_by(slug: page_data[:slug])
       page.assign_attributes(name: page_data[:name], content: page_data[:content])
+      page.cms_layout = layout_map[page_data[:cms_layout_name]] if page_data[:cms_layout_name].present?
       page.save!
     end
   end
@@ -409,12 +420,22 @@ class ImportConventionDataService < CivilService::Service
   end
 
   def import_store_items(convention)
+    ticket_type_map = convention.ticket_types.index_by(&:name)
+
     (data[:store_items] || []).each_with_object({}) do |item, map|
+      price_money = item[:price] ? money_value(item[:price]) : Money.new(0, Money.default_currency)
+      pricing_structure = PricingStructure.new(pricing_strategy: "fixed", value: price_money)
+      payment_options = price_money.positive? ? ["stripe"] : []
+
       product =
         convention.products.create!(
           name: item[:name],
           description: item[:description],
-          available: item.key?(:available) ? item[:available] : false
+          available: item.key?(:available) ? item[:available] : false,
+          pricing_structure: pricing_structure,
+          payment_options: payment_options,
+          provides_ticket_type:
+            item[:provides_ticket_type_name] ? ticket_type_map[item[:provides_ticket_type_name]] : nil
         )
       map[item[:name]] = product
     end
