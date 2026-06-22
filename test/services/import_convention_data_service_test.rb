@@ -613,5 +613,112 @@ class ImportConventionDataServiceTest < ActiveSupport::TestCase
       assert_equal org, convention.organization
     end
   end
+
+  describe "CMS layouts" do
+    before do
+      data =
+        base_data.merge(
+          cms_layouts: [
+            { name: "Default Layout", content: "<html>{{ content_for_layout }}</html>" },
+            { name: "Minimal Layout", content: "{{ content_for_layout }}" }
+          ],
+          cms_pages: [
+            { name: "Home", slug: "home", content: "Welcome", cms_layout_name: "Default Layout" },
+            { name: "About", slug: "about", content: "About us" }
+          ]
+        )
+      ImportConventionDataService.new(data: data).call!
+    end
+
+    it "creates layouts" do
+      convention = Convention.find_by!(domain: "importtest.example.com")
+      assert convention.cms_layouts.find_by(name: "Default Layout")
+      assert convention.cms_layouts.find_by(name: "Minimal Layout")
+    end
+
+    it "sets layout content" do
+      convention = Convention.find_by!(domain: "importtest.example.com")
+      layout = convention.cms_layouts.find_by!(name: "Default Layout")
+      assert_equal "<html>{{ content_for_layout }}</html>", layout.content
+    end
+
+    it "assigns cms_layout to a page when cms_layout_name is present" do
+      convention = Convention.find_by!(domain: "importtest.example.com")
+      page = convention.pages.find_by!(slug: "home")
+      assert_equal "Default Layout", page.cms_layout.name
+    end
+
+    it "leaves cms_layout nil when cms_layout_name is absent" do
+      convention = Convention.find_by!(domain: "importtest.example.com")
+      page = convention.pages.find_by!(slug: "about")
+      assert_nil page.cms_layout
+    end
+  end
+
+  describe "store items with pricing" do
+    before do
+      data =
+        base_data.merge(
+          convention:
+            base_data[:convention].merge(
+              ticket_mode: "required_for_signup",
+              ticket_types: [
+                { name: "weekend_pass", allows_event_signups: true, counts_towards_convention_maximum: true }
+              ]
+            ),
+          store_items: [
+            {
+              name: "Weekend Pass",
+              available: true,
+              price: {
+                fractional: 5000,
+                currency_code: "USD"
+              },
+              provides_ticket_type_name: "weekend_pass"
+            },
+            { name: "Free Volunteer Pass", available: true, provides_ticket_type_name: "weekend_pass" }
+          ]
+        )
+      ImportConventionDataService.new(data: data).call!
+    end
+
+    it "creates products" do
+      convention = Convention.find_by!(domain: "importtest.example.com")
+      assert convention.products.find_by(name: "Weekend Pass")
+      assert convention.products.find_by(name: "Free Volunteer Pass")
+    end
+
+    it "sets pricing_structure to fixed with the given price" do
+      convention = Convention.find_by!(domain: "importtest.example.com")
+      product = convention.products.find_by!(name: "Weekend Pass")
+      assert_equal "fixed", product.pricing_structure.pricing_strategy
+      assert_equal Money.new(5000, "USD"), product.pricing_structure.value
+    end
+
+    it "sets pricing_structure to a zero fixed price when no price is given" do
+      convention = Convention.find_by!(domain: "importtest.example.com")
+      product = convention.products.find_by!(name: "Free Volunteer Pass")
+      assert_equal "fixed", product.pricing_structure.pricing_strategy
+      assert_equal Money.new(0, Money.default_currency), product.pricing_structure.value
+    end
+
+    it "sets payment_options to stripe when price is positive" do
+      convention = Convention.find_by!(domain: "importtest.example.com")
+      product = convention.products.find_by!(name: "Weekend Pass")
+      assert_equal ["stripe"], product.payment_options
+    end
+
+    it "sets payment_options to empty when price is zero" do
+      convention = Convention.find_by!(domain: "importtest.example.com")
+      product = convention.products.find_by!(name: "Free Volunteer Pass")
+      assert_equal [], product.payment_options
+    end
+
+    it "links provides_ticket_type to the named ticket type" do
+      convention = Convention.find_by!(domain: "importtest.example.com")
+      product = convention.products.find_by!(name: "Weekend Pass")
+      assert_equal "weekend_pass", product.provides_ticket_type.name
+    end
+  end
 end
 # rubocop:enable Metrics/ClassLength, Metrics/BlockLength
