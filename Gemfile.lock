@@ -257,7 +257,7 @@ GEM
       railties (>= 5)
     doorkeeper-jwt (0.4.2)
       jwt (>= 2.1)
-    doorkeeper-openid_connect (1.10.1)
+    doorkeeper-openid_connect (1.10.2)
       doorkeeper (>= 5.5, < 6.0)
       jwt (>= 2.5)
       ostruct (>= 0.5)
@@ -431,7 +431,7 @@ GEM
     positioning (0.4.8)
       activerecord (>= 6.1)
       activesupport (>= 6.1)
-    pp (0.6.3)
+    pp (0.6.4)
       prettyprint
     prettier (4.0.4)
       syntax_tree (>= 4.0.1)
