@@ -48,7 +48,7 @@ data "http" "domains" {
 
 locals {
   pages = [for page in data.http.domains : jsondecode(page.response_body)]
-  domains = toset(concat(local.pages...))
+  domains = flatten(local.pages)
 
   # The API can occasionally return duplicate entries across pages; take the
   # first verification record for each domain.
