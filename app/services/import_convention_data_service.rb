@@ -283,8 +283,8 @@ class ImportConventionDataService < CivilService::Service
 
   def profile_form_response_attrs(prof)
     {
-      first_name: prof[:first_name],
-      last_name: prof[:last_name],
+      first_name: prof[:first_name].to_s,
+      last_name: prof[:last_name].to_s,
       nickname: prof[:nickname],
       bio: prof[:bio],
       show_nickname_in_bio: prof[:show_nickname_in_bio],
