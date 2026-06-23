@@ -117,6 +117,7 @@ class ImportConventionDataService < CivilService::Service
     (data[:cms_layouts] || []).each_with_object({}) do |layout_data, map|
       layout = convention.cms_layouts.find_or_initialize_by(name: layout_data[:name])
       layout.content = layout_data[:content]
+      layout.navbar_classes = layout_data[:navbar_classes]
       layout.save!
       map[layout_data[:name]] = layout
     end
