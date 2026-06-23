@@ -117,6 +117,7 @@ class ImportConventionDataService < CivilService::Service
     (data[:cms_layouts] || []).each_with_object({}) do |layout_data, map|
       layout = convention.cms_layouts.find_or_initialize_by(name: layout_data[:name])
       layout.content = layout_data[:content]
+      layout.navbar_classes = layout_data[:navbar_classes]
       layout.save!
       map[layout_data[:name]] = layout
     end
@@ -283,8 +284,8 @@ class ImportConventionDataService < CivilService::Service
 
   def profile_form_response_attrs(prof)
     {
-      first_name: prof[:first_name],
-      last_name: prof[:last_name],
+      first_name: prof[:first_name].to_s,
+      last_name: prof[:last_name].to_s,
       nickname: prof[:nickname],
       bio: prof[:bio],
       show_nickname_in_bio: prof[:show_nickname_in_bio],
