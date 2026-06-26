@@ -167,7 +167,7 @@
     "@graphql-codegen/near-operation-file-preset": "5.2.1",
     "@graphql-codegen/typed-document-node": "^7.0.0",
     "@graphql-codegen/typescript": "6.0.2",
-    "@graphql-codegen/typescript-operations": "6.0.4",
+    "@graphql-codegen/typescript-operations": "6.0.5",
     "@graphql-codegen/typescript-react-apollo": "4.4.2",
     "@graphql-eslint/eslint-plugin": "4.4.0",
     "@playwright/test": "^1.58.1",
