@@ -124,7 +124,7 @@ GEM
       cgi
       device_detector (>= 1)
       safely_block (>= 0.4)
-    annotaterb (4.22.0)
+    annotaterb (4.23.0)
       activerecord (>= 6.0.0)
       activesupport (>= 6.0.0)
     ansi (1.6.0)
@@ -318,7 +318,7 @@ GEM
     heapy (0.2.0)
       thor
     holidays (11.0.0)
-    i18n (1.14.8)
+    i18n (1.15.2)
       concurrent-ruby (~> 1.0)
     icalendar (2.12.3)
       base64
@@ -334,7 +334,7 @@ GEM
       rdoc (>= 4.0.0)
       reline (>= 0.4.2)
     jmespath (1.6.2)
-    json (2.19.9)
+    json (2.20.0)
     jwt (3.2.0)
       base64
     language_server-protocol (3.17.0.5)
