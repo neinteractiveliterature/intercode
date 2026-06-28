@@ -1,4 +1,4 @@
-import { useContext } from 'react';
+import { useContext, useEffect } from 'react';
 import {
   RouteObject,
   replace,
@@ -6,16 +6,16 @@ import {
   LoaderFunction,
   redirect,
   useNavigate,
-  useRouteError,
   RouterContextProvider,
+  MiddlewareFunction,
 } from 'react-router';
-import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import FourOhFourPage from './FourOhFourPage';
 import { SignupAutomationMode, SignupMode, SiteMode, TicketMode } from './graphqlTypes.generated';
 import AppRootContext, { AppRootContextValue } from './AppRootContext';
 import useAuthorizationRequired, { AbilityName } from './Authentication/useAuthorizationRequired';
 import { EventAdminEventsQueryDocument } from './EventAdmin/queries.generated';
+import { AppRootQueryDocument } from './appRootQueries.generated';
 import buildEventCategoryUrl from './EventAdmin/buildEventCategoryUrl';
 import {
   adminSingleTicketTypeLoader,
@@ -32,9 +32,6 @@ import { teamMembersLoader } from './EventsApp/TeamMemberAdmin/loader';
 import { cmsAdminBaseQueryLoader } from './CmsAdmin/loaders';
 import { cmsPagesAdminLoader } from './CmsAdmin/CmsPagesAdmin/loaders';
 import { cmsPartialsAdminLoader } from './CmsAdmin/CmsPartialsAdmin/loaders';
-import AppRoot from './AppRoot';
-import { AppRootQueryDocument } from './appRootQueries.generated';
-import { SetupMyProfileDocument } from './Authentication/mutations.generated';
 import { liquidDocsLoader } from './LiquidDocs/loader';
 import { cmsLayoutsAdminLoader } from './CmsAdmin/CmsLayoutsAdmin/loaders';
 import { cmsGraphqlQueriesAdminLoader } from './CmsAdmin/CmsGraphqlQueriesAdmin/loaders';
@@ -42,7 +39,8 @@ import { cmsContentGroupsAdminLoader } from './CmsAdmin/CmsContentGroupsAdmin/lo
 import { departmentAdminLoader } from './DepartmentAdmin/loaders';
 import { eventCategoryAdminLoader } from './EventCategoryAdmin/loaders';
 import { eventAdminEventsLoader } from './EventAdmin/loaders';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext, appRootDataContext } from 'AppContexts';
+import RouteErrorBoundary from 'RouteErrorBoundary';
 
 export enum NamedRoute {
   AdminEditEventProposal = 'AdminEditEventProposal',
@@ -163,37 +161,33 @@ function EventPageGuard() {
   const { siteMode } = useContext(AppRootContext);
   const navigate = useNavigate();
 
+  useEffect(() => {
+    if (siteMode === SiteMode.SingleEvent) {
+      navigate('/', { replace: true });
+    }
+  }, []);
+
   if (siteMode === SiteMode.SingleEvent) {
-    navigate('/', { replace: true });
     return <></>;
   } else {
     return <Outlet />;
   }
 }
 
-function EditEventGuard() {
-  const { siteMode } = useContext(AppRootContext);
-  const navigate = useNavigate();
-
-  if (siteMode === SiteMode.SingleEvent) {
-    navigate('/admin_events', { replace: true });
-    return <></>;
-  } else {
-    return <LoginRequiredRouteGuard />;
+const appRootMiddleware: MiddlewareFunction = async ({ context }) => {
+  const client = context.get(apolloClientContext);
+  const { data } = await client.query({ query: AppRootQueryDocument });
+  if (data) {
+    context.set(appRootDataContext, data);
   }
-}
+};
 
-function RouteErrorBoundary() {
-  const error = useRouteError();
-
-  if (error instanceof Error) {
-    return <ErrorDisplay stringError={error.message} />;
-  } else if (typeof error === 'object' && error) {
-    return <ErrorDisplay stringError={error.toString()} />;
-  } else {
-    return <ErrorDisplay stringError={error as string} />;
+const editEventMiddleware: MiddlewareFunction = ({ context }) => {
+  const appRootData = context.get(appRootDataContext);
+  if (appRootData?.convention?.site_mode === SiteMode.SingleEvent) {
+    return redirect('/admin_events');
   }
-}
+};
 
 const eventsRoutes: RouteObject[] = [
   {
@@ -252,7 +246,8 @@ const eventsRoutes: RouteObject[] = [
       },
       {
         path: 'edit',
-        element: <EditEventGuard />,
+        middleware: [editEventMiddleware],
+        element: <LoginRequiredRouteGuard />,
         children: [
           {
             index: true,
@@ -1097,73 +1092,10 @@ export const appLayoutRoutes: RouteObject[] = [
   { path: '*', element: <FourOhFourPage /> },
 ];
 
-const appRootLoader: LoaderFunction<RouterContextProvider> = async ({ context, request }) => {
-  const client = context.get(apolloClientContext);
-  const { data } = await client.query({ query: AppRootQueryDocument });
-
-  if (!data) return data;
-
-  const { pathname } = new URL(request.url);
-
-  if (data.currentUser && data.convention) {
-    const myProfile = data.convention.my_profile;
-    let freshlyCreated = false;
-
-    if (!myProfile) {
-      try {
-        const convention = data.convention;
-        await client.mutate({
-          mutation: SetupMyProfileDocument,
-          update(cache, result) {
-            const newProfile = result.data?.setupMyProfile?.my_profile;
-            if (!newProfile) return;
-            // After creating the profile, wire up the Convention.my_profile reference
-            // in the normalized cache so cache-first queries (e.g. MyProfileForm.loader)
-            // see the new profile instead of the stale null entry. Without this,
-            // MyProfileQuery returns null from cache even though the profile now exists,
-            // causing MyProfileForm.loader to return a 404 and show a broken page.
-            const conventionRef = cache.identify({ __typename: 'Convention', id: convention.id });
-            const profileRef = cache.identify({ __typename: 'UserConProfile', id: newProfile.id });
-            if (conventionRef && profileRef) {
-              cache.modify({
-                id: conventionRef,
-                fields: { my_profile: () => ({ __ref: profileRef }) },
-              });
-            }
-          },
-        });
-        freshlyCreated = true;
-      } catch {
-        return data;
-      }
-    }
-
-    const clickwrapRequired = (data.convention.clickwrap_agreement || '').trim() !== '';
-    const acceptedClickwrap = freshlyCreated ? false : (myProfile?.accepted_clickwrap_agreement ?? false);
-    const needsUpdate = freshlyCreated || (myProfile?.needs_update ?? false);
-
-    const clickwrapNeeded =
-      clickwrapRequired &&
-      !acceptedClickwrap &&
-      pathname !== '/clickwrap_agreement' &&
-      pathname !== '/' &&
-      !pathname.startsWith('/pages');
-
-    if (clickwrapNeeded) return redirect('/clickwrap_agreement');
-
-    if (needsUpdate && pathname !== '/my_profile/setup' && pathname !== '/clickwrap_agreement') {
-      return redirect('/my_profile/setup');
-    }
-  }
-
-  return data;
-};
-
 export const appRootRoutes: RouteObject[] = [
   {
-    element: <AppRoot />,
-    errorElement: <RouteErrorBoundary />,
-    loader: appRootLoader,
+    lazy: () => import('./AppRoot'),
+    middleware: [appRootMiddleware],
     children: [
       {
         path: '/admin_forms/:id/edit',
@@ -1219,7 +1151,7 @@ export const appRootRoutes: RouteObject[] = [
       },
       {
         lazy: () => import('./AppRootLayout'),
-        children: [{ errorElement: <RouteErrorBoundary />, children: appLayoutRoutes }],
+        children: [{ ErrorBoundary: RouteErrorBoundary, children: appLayoutRoutes }],
       },
     ],
   },

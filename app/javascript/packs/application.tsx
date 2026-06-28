@@ -12,6 +12,7 @@ import {
   fetchContext,
   sessionContext,
   ClientConfiguration,
+  appRootDataContext,
 } from 'AppContexts';
 import { appRootRoutes } from 'AppRouter';
 import { AuthenticationManager, AuthenticationManagerContext } from '../Authentication/authenticationManager';
@@ -132,6 +133,9 @@ function DataModeApplicationEntry() {
           },
         ]),
         {
+          future: {
+            v8_middleware: true,
+          },
           getContext: () => {
             const context = new RouterContextProvider();
             context.set(apolloClientContext, bootstrap.client);
@@ -139,6 +143,7 @@ function DataModeApplicationEntry() {
             context.set(authenticityTokensManagerContext, bootstrap.authenticityTokensManager);
             context.set(clientConfigurationContext, bootstrap.clientConfiguration);
             context.set(sessionContext, undefined);
+            context.set(appRootDataContext, undefined);
             return context;
           },
         },
