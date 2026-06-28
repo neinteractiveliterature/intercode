@@ -10,7 +10,7 @@ import {
 
 import FourOhFourPage from './FourOhFourPage';
 import { SignupAutomationMode, SignupMode, SiteMode, TicketMode } from './graphqlTypes.generated';
-import useAuthorizationRequired, { AbilityName } from './Authentication/useAuthorizationRequired';
+import { AbilityName } from './Authentication/useAuthorizationRequired';
 import { EventAdminEventsQueryDocument } from './EventAdmin/queries.generated';
 import { AppRootQueryData, AppRootQueryDocument } from './appRootQueries.generated';
 import buildEventCategoryUrl from './EventAdmin/buildEventCategoryUrl';
@@ -113,16 +113,17 @@ function LoginRequiredRouteGuard() {
   return <Outlet />;
 }
 
-type AuthorizationRequiredRouteGuardProps = {
-  abilities: AbilityName[];
-};
-
-function AuthorizationRequiredRouteGuard({ abilities }: AuthorizationRequiredRouteGuardProps) {
-  const authorizationWarning = useAuthorizationRequired(...abilities);
-
-  if (authorizationWarning) return authorizationWarning;
-
-  return <Outlet />;
+function makeAuthorizationMiddleware(...abilities: AbilityName[]): MiddlewareFunction {
+  return ({ context }) => {
+    const appRootData = context.get(appRootDataContext);
+    if (appRootData == null) return;
+    if (!appRootData.currentUser) {
+      return new Response(null, { status: 401 });
+    }
+    if (!abilities.every((ability) => appRootData.currentAbility[ability])) {
+      return new Response(null, { status: 403 });
+    }
+  };
 }
 
 const eventAdminRootRedirect: LoaderFunction<RouterContextProvider> = async ({ context }) => {
@@ -486,7 +487,7 @@ const commonRoutes: RouteObject[] = [
 const commonInConventionRoutes: RouteObject[] = [
   {
     path: '/admin_departments',
-    element: <AuthorizationRequiredRouteGuard abilities={['can_update_departments']} />,
+    middleware: [makeAuthorizationMiddleware('can_update_departments')],
     id: NamedRoute.DepartmentAdmin,
     loader: departmentAdminLoader,
     children: [
@@ -574,7 +575,7 @@ const commonInConventionRoutes: RouteObject[] = [
   },
   {
     path: '/admin_notifications',
-    element: <AuthorizationRequiredRouteGuard abilities={['can_update_notification_templates']} />,
+    middleware: [makeAuthorizationMiddleware('can_update_notification_templates')],
     children: [
       {
         path: ':eventKey',
@@ -657,7 +658,7 @@ const commonInConventionRoutes: RouteObject[] = [
   { path: '/events', children: eventsRoutes },
   {
     path: '/mailing_lists',
-    element: <AuthorizationRequiredRouteGuard abilities={['can_read_any_mailing_list']} />,
+    middleware: [makeAuthorizationMiddleware('can_read_any_mailing_list')],
     children: [
       { path: 'ticketed_attendees', lazy: () => import('./MailingLists/TicketedAttendees') },
       { path: 'event_proposers', lazy: () => import('./MailingLists/EventProposers') },
@@ -682,7 +683,7 @@ const commonInConventionRoutes: RouteObject[] = [
   { path: '/products/:id', lazy: () => import('./Store/ProductPage') },
   {
     path: '/reports',
-    element: <AuthorizationRequiredRouteGuard abilities={['can_read_reports']} />,
+    middleware: [makeAuthorizationMiddleware('can_read_reports')],
     children: [
       { path: 'new_and_returning_attendees', lazy: () => import('./Reports/NewAndReturningAttendees') },
       { path: 'attendance_by_payment_amount', lazy: () => import('./Reports/AttendanceByPaymentAmount') },
@@ -798,7 +799,7 @@ const commonInConventionRoutes: RouteObject[] = [
     children: [
       {
         path: '/ticket_types',
-        element: <AuthorizationRequiredRouteGuard abilities={['can_manage_ticket_types']} />,
+        middleware: [makeAuthorizationMiddleware('can_manage_ticket_types')],
         children: [
           { path: 'new', loader: adminTicketTypesLoader, lazy: () => import('./TicketTypeAdmin/NewTicketType') },
           {
@@ -833,7 +834,7 @@ const commonInConventionRoutes: RouteObject[] = [
   },
   {
     path: '/user_con_profiles',
-    element: <AuthorizationRequiredRouteGuard abilities={['can_read_user_con_profiles']} />,
+    middleware: [makeAuthorizationMiddleware('can_read_user_con_profiles')],
     children: [
       {
         path: ':id',
@@ -898,7 +899,7 @@ const conventionModeRoutes: RouteObject[] = [
     ],
   },
   {
-    element: <AuthorizationRequiredRouteGuard abilities={['can_update_event_categories']} />,
+    middleware: [makeAuthorizationMiddleware('can_update_event_categories')],
     children: [
       {
         path: '/event_categories',
@@ -1022,7 +1023,7 @@ const rootSiteRoutes: RouteObject[] = [
     ],
   },
   {
-    element: <AuthorizationRequiredRouteGuard abilities={['can_read_users']} />,
+    middleware: [makeAuthorizationMiddleware('can_read_users')],
     children: [
       {
         path: '/users',
