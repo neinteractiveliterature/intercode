@@ -21,7 +21,6 @@ import {
   eventTicketTypesLoader,
 } from './TicketTypeAdmin/loaders';
 import { organizationsLoader, singleOrganizationLoader } from './OrganizationAdmin/loaders';
-import useLoginRequired from './Authentication/useLoginRequired';
 import { eventProposalWithOwnerLoader } from './EventProposals/loaders';
 import { conventionDayLoader } from './EventsApp/conventionDayUrls';
 import { signupAdminEventLoader, singleSignupLoader } from './EventsApp/SignupAdmin/loaders';
@@ -104,14 +103,13 @@ function makeAppRootContextMiddleware(guard: (data: AppRootQueryData) => boolean
   };
 }
 
-function LoginRequiredRouteGuard() {
-  const loginRequired = useLoginRequired();
-  if (loginRequired) {
-    return loginRequired;
+const loginRequiredMiddleware: MiddlewareFunction = ({ context }) => {
+  const appRootData = context.get(appRootDataContext);
+  if (appRootData == null) return;
+  if (!appRootData.currentUser) {
+    return new Response(null, { status: 401 });
   }
-
-  return <Outlet />;
-}
+};
 
 function makeAuthorizationMiddleware(...abilities: AbilityName[]): MiddlewareFunction {
   return ({ context }) => {
@@ -231,8 +229,7 @@ const eventsRoutes: RouteObject[] = [
       },
       {
         path: 'edit',
-        middleware: [editEventMiddleware],
-        element: <LoginRequiredRouteGuard />,
+        middleware: [editEventMiddleware, loginRequiredMiddleware],
         children: [
           {
             index: true,
@@ -671,7 +668,7 @@ const commonInConventionRoutes: RouteObject[] = [
   },
   {
     path: '/my_profile',
-    element: <LoginRequiredRouteGuard />,
+    middleware: [loginRequiredMiddleware],
     children: [
       { path: 'edit_bio', loader: () => replace('./edit') },
       { path: 'edit', lazy: () => import('./MyProfile/MyProfileForm') },
