@@ -1,4 +1,3 @@
-import { useContext } from 'react';
 import {
   RouteObject,
   replace,
@@ -11,10 +10,9 @@ import {
 
 import FourOhFourPage from './FourOhFourPage';
 import { SignupAutomationMode, SignupMode, SiteMode, TicketMode } from './graphqlTypes.generated';
-import AppRootContext, { AppRootContextValue } from './AppRootContext';
 import useAuthorizationRequired, { AbilityName } from './Authentication/useAuthorizationRequired';
 import { EventAdminEventsQueryDocument } from './EventAdmin/queries.generated';
-import { AppRootQueryDocument } from './appRootQueries.generated';
+import { AppRootQueryData, AppRootQueryDocument } from './appRootQueries.generated';
 import buildEventCategoryUrl from './EventAdmin/buildEventCategoryUrl';
 import {
   adminSingleTicketTypeLoader,
@@ -97,18 +95,13 @@ export enum NamedRoute {
 
 export type RouteName = keyof typeof NamedRoute & string;
 
-export type AppRootContextRouteGuardProps = {
-  guard: (context: AppRootContextValue) => boolean;
-};
-
-export function AppRootContextRouteGuard({ guard }: AppRootContextRouteGuardProps) {
-  const context = useContext(AppRootContext);
-
-  if (guard(context)) {
-    return <Outlet />;
-  } else {
-    return <FourOhFourPage />;
-  }
+function makeAppRootContextMiddleware(guard: (data: AppRootQueryData) => boolean): MiddlewareFunction {
+  return ({ context }) => {
+    const appRootData = context.get(appRootDataContext);
+    if (appRootData != null && !guard(appRootData)) {
+      return new Response(null, { status: 404 });
+    }
+  };
 }
 
 function LoginRequiredRouteGuard() {
@@ -180,7 +173,7 @@ const editEventMiddleware: MiddlewareFunction = ({ context }) => {
 
 const eventsRoutes: RouteObject[] = [
   {
-    element: <AppRootContextRouteGuard guard={({ siteMode }) => siteMode !== SiteMode.SingleEvent} />,
+    middleware: [makeAppRootContextMiddleware(({ convention }) => convention?.site_mode !== SiteMode.SingleEvent)],
     children: [
       {
         path: 'schedule',
@@ -202,11 +195,11 @@ const eventsRoutes: RouteObject[] = [
     ],
   },
   {
-    element: (
-      <AppRootContextRouteGuard
-        guard={({ signupAutomationMode }) => signupAutomationMode === SignupAutomationMode.RankedChoice}
-      />
-    ),
+    middleware: [
+      makeAppRootContextMiddleware(
+        ({ convention }) => convention?.signup_automation_mode === SignupAutomationMode.RankedChoice,
+      ),
+    ],
     children: [{ path: 'my-signup-queue', lazy: () => import('./EventsApp/MySignupQueue') }],
   },
   {
@@ -215,7 +208,9 @@ const eventsRoutes: RouteObject[] = [
     children: [
       { path: 'attach_image', lazy: () => import('./EventsApp/attach_image') },
       {
-        element: <AppRootContextRouteGuard guard={({ ticketMode }) => ticketMode === TicketMode.TicketPerEvent} />,
+        middleware: [
+          makeAppRootContextMiddleware(({ convention }) => convention?.ticket_mode === TicketMode.TicketPerEvent),
+        ],
         children: [
           {
             path: 'ticket_types',
@@ -455,7 +450,7 @@ const commonRoutes: RouteObject[] = [
         ],
       },
       {
-        element: <AppRootContextRouteGuard guard={({ conventionName }) => conventionName == null} />,
+        middleware: [makeAppRootContextMiddleware(({ convention }) => convention?.name == null)],
         children: [{ path: '/root_site', lazy: () => import('./RootSiteAdmin/EditRootSite') }],
       },
     ],
@@ -514,11 +509,11 @@ const commonInConventionRoutes: RouteObject[] = [
     id: NamedRoute.EventAdmin,
     children: [
       {
-        element: <AppRootContextRouteGuard guard={({ siteMode }) => siteMode === SiteMode.SingleEvent} />,
+        middleware: [makeAppRootContextMiddleware(({ convention }) => convention?.site_mode === SiteMode.SingleEvent)],
         children: [{ path: ':eventId/edit', lazy: () => import('./EventAdmin/EventAdminEditEvent') }],
       },
       {
-        element: <AppRootContextRouteGuard guard={({ siteMode }) => siteMode !== SiteMode.SingleEvent} />,
+        middleware: [makeAppRootContextMiddleware(({ convention }) => convention?.site_mode !== SiteMode.SingleEvent)],
         children: [
           { path: 'dropped_events', lazy: () => import('./EventAdmin/DroppedEventAdmin') },
           {
@@ -703,18 +698,18 @@ const commonInConventionRoutes: RouteObject[] = [
     children: [{ path: ':id', lazy: () => import('./RoomsAdmin/$id/route') }],
   },
   {
-    element: <AppRootContextRouteGuard guard={({ signupMode }) => signupMode === SignupMode.Moderated} />,
+    middleware: [makeAppRootContextMiddleware(({ convention }) => convention?.signup_mode === SignupMode.Moderated)],
     children: [
       {
         path: '/signup_moderation',
         lazy: () => import('./SignupModeration'),
         children: [
           {
-            element: (
-              <AppRootContextRouteGuard
-                guard={({ signupAutomationMode }) => signupAutomationMode === SignupAutomationMode.RankedChoice}
-              />
-            ),
+            middleware: [
+              makeAppRootContextMiddleware(
+                ({ convention }) => convention?.signup_automation_mode === SignupAutomationMode.RankedChoice,
+              ),
+            ],
             children: [
               {
                 path: 'ranked_choice_queue',
@@ -797,7 +792,9 @@ const commonInConventionRoutes: RouteObject[] = [
     ],
   },
   {
-    element: <AppRootContextRouteGuard guard={({ ticketMode }) => ticketMode === TicketMode.RequiredForSignup} />,
+    middleware: [
+      makeAppRootContextMiddleware(({ convention }) => convention?.ticket_mode === TicketMode.RequiredForSignup),
+    ],
     children: [
       {
         path: '/ticket_types',
@@ -1051,27 +1048,27 @@ export const appLayoutRoutes: RouteObject[] = [
     element: <NonCMSPageWrapper />,
     children: [
       {
-        element: (
-          <AppRootContextRouteGuard
-            guard={({ conventionName, siteMode }) => conventionName != null && siteMode !== SiteMode.SingleEvent}
-          />
-        ),
+        middleware: [
+          makeAppRootContextMiddleware(
+            ({ convention }) => convention?.name != null && convention?.site_mode !== SiteMode.SingleEvent,
+          ),
+        ],
         children: conventionModeRoutes,
       },
       {
-        element: (
-          <AppRootContextRouteGuard
-            guard={({ conventionName, siteMode }) => conventionName != null && siteMode === SiteMode.SingleEvent}
-          />
-        ),
+        middleware: [
+          makeAppRootContextMiddleware(
+            ({ convention }) => convention?.name != null && convention?.site_mode === SiteMode.SingleEvent,
+          ),
+        ],
         children: singleEventModeRoutes,
       },
       {
-        element: <AppRootContextRouteGuard guard={({ conventionName }) => conventionName != null} />,
+        middleware: [makeAppRootContextMiddleware(({ convention }) => convention?.name != null)],
         children: commonInConventionRoutes,
       },
       {
-        element: <AppRootContextRouteGuard guard={({ conventionName }) => conventionName == null} />,
+        middleware: [makeAppRootContextMiddleware(({ convention }) => convention?.name == null)],
         children: rootSiteRoutes,
       },
       ...commonRoutes,

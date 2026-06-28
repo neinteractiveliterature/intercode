@@ -1,8 +1,13 @@
+import { isRouteErrorResponse, useRouteError } from 'react-router';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
-import { useRouteError } from 'react-router';
+import FourOhFourPage from './FourOhFourPage';
 
 export default function RouteErrorBoundary() {
   const error = useRouteError();
+
+  if (isRouteErrorResponse(error) && error.status === 404) {
+    return <FourOhFourPage />;
+  }
 
   if (error instanceof Error) {
     return <ErrorDisplay stringError={error.message} />;
