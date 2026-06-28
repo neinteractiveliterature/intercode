@@ -1,11 +1,10 @@
-import { useContext, useEffect } from 'react';
+import { useContext } from 'react';
 import {
   RouteObject,
   replace,
   Outlet,
   LoaderFunction,
   redirect,
-  useNavigate,
   RouterContextProvider,
   MiddlewareFunction,
 } from 'react-router';
@@ -157,22 +156,12 @@ const eventAdminRootRedirect: LoaderFunction<RouterContextProvider> = async ({ c
   return redirect(buildEventCategoryUrl(firstEventCategory));
 };
 
-function EventPageGuard() {
-  const { siteMode } = useContext(AppRootContext);
-  const navigate = useNavigate();
-
-  useEffect(() => {
-    if (siteMode === SiteMode.SingleEvent) {
-      navigate('/', { replace: true });
-    }
-  }, []);
-
-  if (siteMode === SiteMode.SingleEvent) {
-    return <></>;
-  } else {
-    return <Outlet />;
+const eventPageMiddleware: MiddlewareFunction = ({ context }) => {
+  const appRootData = context.get(appRootDataContext);
+  if (appRootData?.convention?.site_mode === SiteMode.SingleEvent) {
+    return redirect('/');
   }
-}
+};
 
 const appRootMiddleware: MiddlewareFunction = async ({ context }) => {
   const client = context.get(apolloClientContext);
@@ -344,7 +333,7 @@ const eventsRoutes: RouteObject[] = [
       },
       {
         path: '',
-        element: <EventPageGuard />,
+        middleware: [eventPageMiddleware],
         children: [{ index: true, id: NamedRoute.EventPage, lazy: () => import('./EventsApp/EventPage') }],
       },
     ],
