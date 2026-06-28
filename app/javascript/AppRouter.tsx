@@ -530,6 +530,10 @@ const commonInConventionRoutes: RouteObject[] = [
     id: NamedRoute.EventAdmin,
     children: [
       {
+        element: <AppRootContextRouteGuard guard={({ siteMode }) => siteMode === SiteMode.SingleEvent} />,
+        children: [{ path: ':eventId/edit', lazy: () => import('./EventAdmin/EventAdminEditEvent') }],
+      },
+      {
         element: <AppRootContextRouteGuard guard={({ siteMode }) => siteMode !== SiteMode.SingleEvent} />,
         children: [
           { path: 'dropped_events', lazy: () => import('./EventAdmin/DroppedEventAdmin') },
