@@ -11931,12 +11931,11 @@ __metadata:
   linkType: hard
 
 "eslint-plugin-i18next@npm:^6.1.1":
-  version: 6.1.4
-  resolution: "eslint-plugin-i18next@npm:6.1.4"
+  version: 6.1.5
+  resolution: "eslint-plugin-i18next@npm:6.1.5"
   dependencies:
-    lodash: "npm:^4.17.21"
     requireindex: "npm:~1.1.0"
-  checksum: 10c0/789bf5639a608e798b64f60f9ef5937a515c4444bcd1fe5892dd0a1f24dcf088dab86ff1948f54794d114535f9495ad0090c0357565b22017cc593f75921d51a
+  checksum: 10c0/500cb271999e49c630015bcfa7cc635c860a1385b71731f90ca77d37eae4f15c80bd1bb50b6d8b67a468b239fbe6fe73b5346aebdf457100b553b98618a817be
   languageName: node
   linkType: hard
 
