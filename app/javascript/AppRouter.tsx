@@ -1107,7 +1107,27 @@ const appRootLoader: LoaderFunction<RouterContextProvider> = async ({ context, r
 
     if (!myProfile) {
       try {
-        await client.mutate({ mutation: SetupMyProfileDocument });
+        const convention = data.convention;
+        await client.mutate({
+          mutation: SetupMyProfileDocument,
+          update(cache, result) {
+            const newProfile = result.data?.setupMyProfile?.my_profile;
+            if (!newProfile) return;
+            // After creating the profile, wire up the Convention.my_profile reference
+            // in the normalized cache so cache-first queries (e.g. MyProfileForm.loader)
+            // see the new profile instead of the stale null entry. Without this,
+            // MyProfileQuery returns null from cache even though the profile now exists,
+            // causing MyProfileForm.loader to return a 404 and show a broken page.
+            const conventionRef = cache.identify({ __typename: 'Convention', id: convention.id });
+            const profileRef = cache.identify({ __typename: 'UserConProfile', id: newProfile.id });
+            if (conventionRef && profileRef) {
+              cache.modify({
+                id: conventionRef,
+                fields: { my_profile: () => ({ __ref: profileRef }) },
+              });
+            }
+          },
+        });
         freshlyCreated = true;
       } catch {
         return data;
