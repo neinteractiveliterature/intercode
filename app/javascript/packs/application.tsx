@@ -91,35 +91,6 @@ const bootstrapPromise: Promise<Bootstrap> = (async () => {
   return { clientConfiguration, authenticityTokensManager, authManager, client };
 })();
 
-type BrowserRouter = ReturnType<typeof createBrowserRouter>;
-
-// createBrowserRouter calls router.initialize() internally, which starts the
-// initial navigation asynchronously. By the time our useEffect subscribes,
-// the navigation may already be done — router.subscribe fires the callback
-// synchronously (via a buffered state update) with the final state. Watching
-// router.state.initialized (set to true once initial data loading completes)
-// handles both "already done" and "still in progress" correctly.
-function RouterLoadingOverlay({ router }: { router: BrowserRouter }) {
-  const [ready, setReady] = useState(() => router.state.initialized);
-
-  useLayoutEffect(() => {
-    return router.subscribe((state) => {
-      if (state.initialized) {
-        setReady(true);
-      }
-    });
-  }, [router]);
-
-  if (ready) return null;
-
-  return (
-    <div className="text-center mt-5 custom-loading-indicator">
-      <div className="spinner-border" role="status" />
-      <span className="visually-hidden">Loading...</span>
-    </div>
-  );
-}
-
 // Wrap every route's lazy import so a failed chunk load — almost always a stale
 // deploy whose hashed chunk no longer exists — reloads onto the fresh bundle
 // instead of surfacing as an unrecoverable blank. Applied once to the whole tree.
@@ -138,6 +109,15 @@ function withEntrypointReloadOnLazy(routes: RouteObject[]): RouteObject[] {
   });
 }
 
+// DataModeApplicationEntry gates RouterProvider on router.state.initialized.
+//
+// RouterProvider uses useState(router.state) for its initial state. If the
+// router's initial navigation hasn't finished yet (initialized=false,
+// renderFallback=true), RouterProvider renders null and then must use
+// startTransition to escape that null state when the router fires. During
+// that transition the DOM stays empty. Waiting until the router is initialized
+// before mounting RouterProvider ensures useState captures initialized=true
+// from the start, so RouterProvider renders content immediately.
 function DataModeApplicationEntry() {
   const bootstrap = use(bootstrapPromise);
 
@@ -166,10 +146,25 @@ function DataModeApplicationEntry() {
     [bootstrap],
   );
 
+  // Gate on router initialization so RouterProvider always mounts with
+  // initialized=true. router.subscribe replays the buffered initial state
+  // synchronously via the callback if the router finished before our effect
+  // ran (react-router stores the update in bufferedInitialStateUpdate and
+  // replays it to new subscribers immediately on subscribe()).
+  const [routerReady, setRouterReady] = useState(() => router.state.initialized);
+  useLayoutEffect(() => {
+    return router.subscribe((state) => {
+      if (state.initialized) setRouterReady(true);
+    });
+  }, [router]);
+
+  if (!routerReady) {
+    return <PageLoadingIndicator visible />;
+  }
+
   return (
     <StrictMode>
       <AuthenticationManagerContext.Provider value={bootstrap.authManager}>
-        <RouterLoadingOverlay router={router} />
         <RouterProvider router={router} />
       </AuthenticationManagerContext.Provider>
     </StrictMode>
