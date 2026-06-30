@@ -12,6 +12,7 @@ mutation UpdateUserConProfile($input: UpdateUserConProfileInput!) {
   updateUserConProfile(input: $input) {
     user_con_profile {
       id
+      needs_update
       ...UserConProfileFields
     }
   }

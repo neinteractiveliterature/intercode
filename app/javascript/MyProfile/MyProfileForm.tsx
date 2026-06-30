@@ -4,6 +4,7 @@ import {
   Link,
   LoaderFunction,
   SubmitTarget,
+  redirect,
   useFetcher,
   useLoaderData,
   useMatch,
@@ -31,7 +32,9 @@ import { AuthenticityTokensContext } from 'AuthenticityTokensContext';
 
 export const action: ActionFunction<RouterContextProvider> = async ({ request, context }) => {
   const client = context.get(apolloClientContext);
-  const profile = (await request.json()) as LoaderResult['initialUserConProfile'];
+  const { _redirectTo, ...profile } = (await request.json()) as LoaderResult['initialUserConProfile'] & {
+    _redirectTo?: string;
+  };
 
   try {
     await client.mutate({
@@ -50,6 +53,7 @@ export const action: ActionFunction<RouterContextProvider> = async ({ request, c
       refetchQueries: [{ query: MyProfileQueryDocument }],
     });
 
+    if (_redirectTo) return redirect(_redirectTo);
     return null;
   } catch (e) {
     return parseResponseErrors(e, ['updateUserConProfile']);
@@ -225,9 +229,22 @@ function MyProfileForm() {
       </div>
       <div className="my-4 d-flex align-items-center">
         {initialSetup ? (
-          <Link to="/" className="btn btn-primary">
+          <button
+            className="btn btn-primary"
+            disabled={mutationInProgress}
+            onClick={() => {
+              // Explicitly submit the current profile so UpdateUserConProfile sets
+              // needs_update=false in DB and cache, then redirect to /. Without this,
+              // clicking Finish without changing anything would leave needs_update=true
+              // and cause appRootLoader to redirect back to /my_profile/setup.
+              fetcher.submit({ ...userConProfile, _redirectTo: '/' } as SubmitTarget, {
+                method: 'PATCH',
+                encType: 'application/json',
+              });
+            }}
+          >
             {t('myProfile.initialSetupFinishButton')}
-          </Link>
+          </button>
         ) : (
           <Link to="/my_profile" className="btn btn-primary">
             {t('myProfile.profileEditFinishButton')}
