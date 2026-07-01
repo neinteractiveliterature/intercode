@@ -13,7 +13,6 @@
     "lib": ["DOM", "DOM.Iterable", "ES2023"],
     "noImplicitAny": true,
     "skipLibCheck": true,
-    "maxNodeModuleJsDepth": 10,
     "types": ["vitest/globals", "vite/client"],
     "incremental": true,
     "tsBuildInfoFile": ".tsbuildinfo",
