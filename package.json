@@ -23,7 +23,7 @@
     "prepare": "husky install",
     "preview": "vite preview --outDir ./public",
     "start": "vite",
-    "ts:check": "tsc --noEmit --incremental",
+    "ts:check": "NODE_OPTIONS=\"$NODE_OPTIONS --max-old-space-size=8192\" tsc --noEmit --incremental",
     "test": "vitest run",
     "test:ui": "vitest --ui",
     "test:watch": "vitest watch"
