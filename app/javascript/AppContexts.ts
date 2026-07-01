@@ -2,6 +2,7 @@ import { ApolloClient } from '@apollo/client';
 import { Session, createContext } from 'react-router';
 import { SessionData, SessionFlashData } from 'sessions';
 import AuthenticityTokensManager from 'AuthenticityTokensContext';
+import { AppRootQueryData } from 'appRootQueries.generated';
 
 // Bootstrap configuration served from `GET /client_configuration`. Fetched
 // once at module load before any GraphQL traffic, so the SPA has enough to
@@ -25,3 +26,4 @@ export const apolloClientContext = createContext<ApolloClient>();
 export const clientConfigurationContext = createContext<ClientConfiguration>();
 export const fetchContext = createContext<typeof fetch>();
 export const sessionContext = createContext<Session<SessionData, SessionFlashData> | undefined>();
+export const appRootDataContext = createContext<AppRootQueryData | undefined>();

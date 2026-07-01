@@ -1,5 +1,13 @@
 import { Suspense, useMemo, useState, useEffect, useRef } from 'react';
-import { useLocation, useLoaderData, Outlet, useNavigation } from 'react-router';
+import {
+  useLocation,
+  useLoaderData,
+  Outlet,
+  useNavigation,
+  LoaderFunction,
+  redirect,
+  RouterContextProvider,
+} from 'react-router';
 import { Settings } from 'luxon';
 import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
@@ -12,6 +20,72 @@ import { LazyStripeContext } from './LazyStripe';
 import { Stripe } from '@stripe/stripe-js';
 import { reloadOnAppEntrypointHeadersMismatch } from './checkAppEntrypointHeadersMatch';
 import errorReporting from 'ErrorReporting';
+import { apolloClientContext, appRootDataContext } from 'AppContexts';
+import { SetupMyProfileDocument } from 'Authentication/mutations.generated';
+import RouteErrorBoundary from 'RouteErrorBoundary';
+
+export const ErrorBoundary = RouteErrorBoundary;
+
+export const loader: LoaderFunction<RouterContextProvider> = async ({ context, request }) => {
+  const client = context.get(apolloClientContext);
+  const data = context.get(appRootDataContext);
+  if (!data) return data;
+
+  const { pathname } = new URL(request.url);
+
+  if (data.currentUser && data.convention) {
+    const myProfile = data.convention.my_profile;
+    let freshlyCreated = false;
+
+    if (!myProfile) {
+      try {
+        const convention = data.convention;
+        await client.mutate({
+          mutation: SetupMyProfileDocument,
+          update(cache, result) {
+            const newProfile = result.data?.setupMyProfile?.my_profile;
+            if (!newProfile) return;
+            // After creating the profile, wire up the Convention.my_profile reference
+            // in the normalized cache so cache-first queries (e.g. MyProfileForm.loader)
+            // see the new profile instead of the stale null entry. Without this,
+            // MyProfileQuery returns null from cache even though the profile now exists,
+            // causing MyProfileForm.loader to return a 404 and show a broken page.
+            const conventionRef = cache.identify({ __typename: 'Convention', id: convention.id });
+            const profileRef = cache.identify({ __typename: 'UserConProfile', id: newProfile.id });
+            if (conventionRef && profileRef) {
+              cache.modify({
+                id: conventionRef,
+                fields: { my_profile: () => ({ __ref: profileRef }) },
+              });
+            }
+          },
+        });
+        freshlyCreated = true;
+      } catch {
+        return data;
+      }
+    }
+
+    const clickwrapRequired = (data.convention.clickwrap_agreement || '').trim() !== '';
+    const acceptedClickwrap = freshlyCreated ? false : (myProfile?.accepted_clickwrap_agreement ?? false);
+    const needsUpdate = freshlyCreated || (myProfile?.needs_update ?? false);
+
+    const clickwrapNeeded =
+      clickwrapRequired &&
+      !acceptedClickwrap &&
+      pathname !== '/clickwrap_agreement' &&
+      pathname !== '/' &&
+      !pathname.startsWith('/pages');
+
+    if (clickwrapNeeded) return redirect('/clickwrap_agreement');
+
+    if (needsUpdate && pathname !== '/my_profile/setup' && pathname !== '/clickwrap_agreement') {
+      return redirect('/my_profile/setup');
+    }
+  }
+
+  return data;
+};
 
 export function buildAppRootContextValue(
   data: AppRootQueryData | null | undefined,
@@ -125,7 +199,7 @@ function AppRoot(): React.JSX.Element {
           </div>
           {/* Disabling ScrollRestoration for now because it's breaking hash links within the same page (reproducible with Mac Chrome) */}
           {/* <ScrollRestoration /> */}
-          <Suspense fallback={<PageLoadingIndicator visible iconSet="bootstrap-icons" />}>
+          <Suspense fallback={<PageLoadingIndicator visible />}>
             <Outlet />
           </Suspense>
         </div>
@@ -134,4 +208,4 @@ function AppRoot(): React.JSX.Element {
   );
 }
 
-export default AppRoot;
+export const Component = AppRoot;

@@ -1,21 +1,18 @@
-import { useContext } from 'react';
 import {
   RouteObject,
   replace,
   Outlet,
   LoaderFunction,
   redirect,
-  useNavigate,
-  useRouteError,
   RouterContextProvider,
+  MiddlewareFunction,
 } from 'react-router';
-import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import FourOhFourPage from './FourOhFourPage';
 import { SignupAutomationMode, SignupMode, SiteMode, TicketMode } from './graphqlTypes.generated';
-import AppRootContext, { AppRootContextValue } from './AppRootContext';
-import useAuthorizationRequired, { AbilityName } from './Authentication/useAuthorizationRequired';
+import { AbilityName } from './Authentication/useAuthorizationRequired';
 import { EventAdminEventsQueryDocument } from './EventAdmin/queries.generated';
+import { AppRootQueryData, AppRootQueryDocument } from './appRootQueries.generated';
 import buildEventCategoryUrl from './EventAdmin/buildEventCategoryUrl';
 import {
   adminSingleTicketTypeLoader,
@@ -24,7 +21,6 @@ import {
   eventTicketTypesLoader,
 } from './TicketTypeAdmin/loaders';
 import { organizationsLoader, singleOrganizationLoader } from './OrganizationAdmin/loaders';
-import useLoginRequired from './Authentication/useLoginRequired';
 import { eventProposalWithOwnerLoader } from './EventProposals/loaders';
 import { conventionDayLoader } from './EventsApp/conventionDayUrls';
 import { signupAdminEventLoader, singleSignupLoader } from './EventsApp/SignupAdmin/loaders';
@@ -32,9 +28,6 @@ import { teamMembersLoader } from './EventsApp/TeamMemberAdmin/loader';
 import { cmsAdminBaseQueryLoader } from './CmsAdmin/loaders';
 import { cmsPagesAdminLoader } from './CmsAdmin/CmsPagesAdmin/loaders';
 import { cmsPartialsAdminLoader } from './CmsAdmin/CmsPartialsAdmin/loaders';
-import AppRoot from './AppRoot';
-import { AppRootQueryDocument } from './appRootQueries.generated';
-import { SetupMyProfileDocument } from './Authentication/mutations.generated';
 import { liquidDocsLoader } from './LiquidDocs/loader';
 import { cmsLayoutsAdminLoader } from './CmsAdmin/CmsLayoutsAdmin/loaders';
 import { cmsGraphqlQueriesAdminLoader } from './CmsAdmin/CmsGraphqlQueriesAdmin/loaders';
@@ -42,7 +35,8 @@ import { cmsContentGroupsAdminLoader } from './CmsAdmin/CmsContentGroupsAdmin/lo
 import { departmentAdminLoader } from './DepartmentAdmin/loaders';
 import { eventCategoryAdminLoader } from './EventCategoryAdmin/loaders';
 import { eventAdminEventsLoader } from './EventAdmin/loaders';
-import { apolloClientContext } from 'AppContexts';
+import { apolloClientContext, appRootDataContext } from 'AppContexts';
+import RouteErrorBoundary from 'RouteErrorBoundary';
 
 export enum NamedRoute {
   AdminEditEventProposal = 'AdminEditEventProposal',
@@ -100,39 +94,34 @@ export enum NamedRoute {
 
 export type RouteName = keyof typeof NamedRoute & string;
 
-export type AppRootContextRouteGuardProps = {
-  guard: (context: AppRootContextValue) => boolean;
-};
-
-export function AppRootContextRouteGuard({ guard }: AppRootContextRouteGuardProps) {
-  const context = useContext(AppRootContext);
-
-  if (guard(context)) {
-    return <Outlet />;
-  } else {
-    return <FourOhFourPage />;
-  }
+function makeAppRootContextMiddleware(guard: (data: AppRootQueryData) => boolean): MiddlewareFunction {
+  return ({ context }) => {
+    const appRootData = context.get(appRootDataContext);
+    if (appRootData != null && !guard(appRootData)) {
+      return new Response(null, { status: 404 });
+    }
+  };
 }
 
-function LoginRequiredRouteGuard() {
-  const loginRequired = useLoginRequired();
-  if (loginRequired) {
-    return loginRequired;
+const loginRequiredMiddleware: MiddlewareFunction = ({ context }) => {
+  const appRootData = context.get(appRootDataContext);
+  if (appRootData == null) return;
+  if (!appRootData.currentUser) {
+    return new Response(null, { status: 401 });
   }
-
-  return <Outlet />;
-}
-
-type AuthorizationRequiredRouteGuardProps = {
-  abilities: AbilityName[];
 };
 
-function AuthorizationRequiredRouteGuard({ abilities }: AuthorizationRequiredRouteGuardProps) {
-  const authorizationWarning = useAuthorizationRequired(...abilities);
-
-  if (authorizationWarning) return authorizationWarning;
-
-  return <Outlet />;
+function makeAuthorizationMiddleware(...abilities: AbilityName[]): MiddlewareFunction {
+  return ({ context }) => {
+    const appRootData = context.get(appRootDataContext);
+    if (appRootData == null) return;
+    if (!appRootData.currentUser) {
+      return new Response(null, { status: 401 });
+    }
+    if (!abilities.every((ability) => appRootData.currentAbility[ability])) {
+      return new Response(null, { status: 403 });
+    }
+  };
 }
 
 const eventAdminRootRedirect: LoaderFunction<RouterContextProvider> = async ({ context }) => {
@@ -159,45 +148,31 @@ const eventAdminRootRedirect: LoaderFunction<RouterContextProvider> = async ({ c
   return redirect(buildEventCategoryUrl(firstEventCategory));
 };
 
-function EventPageGuard() {
-  const { siteMode } = useContext(AppRootContext);
-  const navigate = useNavigate();
-
-  if (siteMode === SiteMode.SingleEvent) {
-    navigate('/', { replace: true });
-    return <></>;
-  } else {
-    return <Outlet />;
+const eventPageMiddleware: MiddlewareFunction = ({ context }) => {
+  const appRootData = context.get(appRootDataContext);
+  if (appRootData?.convention?.site_mode === SiteMode.SingleEvent) {
+    return redirect('/');
   }
-}
+};
 
-function EditEventGuard() {
-  const { siteMode } = useContext(AppRootContext);
-  const navigate = useNavigate();
-
-  if (siteMode === SiteMode.SingleEvent) {
-    navigate('/admin_events', { replace: true });
-    return <></>;
-  } else {
-    return <LoginRequiredRouteGuard />;
+const appRootMiddleware: MiddlewareFunction = async ({ context }) => {
+  const client = context.get(apolloClientContext);
+  const { data } = await client.query({ query: AppRootQueryDocument });
+  if (data) {
+    context.set(appRootDataContext, data);
   }
-}
+};
 
-function RouteErrorBoundary() {
-  const error = useRouteError();
-
-  if (error instanceof Error) {
-    return <ErrorDisplay stringError={error.message} />;
-  } else if (typeof error === 'object' && error) {
-    return <ErrorDisplay stringError={error.toString()} />;
-  } else {
-    return <ErrorDisplay stringError={error as string} />;
+const editEventMiddleware: MiddlewareFunction = ({ context }) => {
+  const appRootData = context.get(appRootDataContext);
+  if (appRootData?.convention?.site_mode === SiteMode.SingleEvent) {
+    return redirect('/admin_events');
   }
-}
+};
 
 const eventsRoutes: RouteObject[] = [
   {
-    element: <AppRootContextRouteGuard guard={({ siteMode }) => siteMode !== SiteMode.SingleEvent} />,
+    middleware: [makeAppRootContextMiddleware(({ convention }) => convention?.site_mode !== SiteMode.SingleEvent)],
     children: [
       {
         path: 'schedule',
@@ -219,11 +194,11 @@ const eventsRoutes: RouteObject[] = [
     ],
   },
   {
-    element: (
-      <AppRootContextRouteGuard
-        guard={({ signupAutomationMode }) => signupAutomationMode === SignupAutomationMode.RankedChoice}
-      />
-    ),
+    middleware: [
+      makeAppRootContextMiddleware(
+        ({ convention }) => convention?.signup_automation_mode === SignupAutomationMode.RankedChoice,
+      ),
+    ],
     children: [{ path: 'my-signup-queue', lazy: () => import('./EventsApp/MySignupQueue') }],
   },
   {
@@ -232,7 +207,9 @@ const eventsRoutes: RouteObject[] = [
     children: [
       { path: 'attach_image', lazy: () => import('./EventsApp/attach_image') },
       {
-        element: <AppRootContextRouteGuard guard={({ ticketMode }) => ticketMode === TicketMode.TicketPerEvent} />,
+        middleware: [
+          makeAppRootContextMiddleware(({ convention }) => convention?.ticket_mode === TicketMode.TicketPerEvent),
+        ],
         children: [
           {
             path: 'ticket_types',
@@ -252,7 +229,7 @@ const eventsRoutes: RouteObject[] = [
       },
       {
         path: 'edit',
-        element: <EditEventGuard />,
+        middleware: [editEventMiddleware, loginRequiredMiddleware],
         children: [
           {
             index: true,
@@ -349,7 +326,7 @@ const eventsRoutes: RouteObject[] = [
       },
       {
         path: '',
-        element: <EventPageGuard />,
+        middleware: [eventPageMiddleware],
         children: [{ index: true, id: NamedRoute.EventPage, lazy: () => import('./EventsApp/EventPage') }],
       },
     ],
@@ -471,7 +448,7 @@ const commonRoutes: RouteObject[] = [
         ],
       },
       {
-        element: <AppRootContextRouteGuard guard={({ conventionName }) => conventionName == null} />,
+        middleware: [makeAppRootContextMiddleware(({ convention }) => convention?.name == null)],
         children: [{ path: '/root_site', lazy: () => import('./RootSiteAdmin/EditRootSite') }],
       },
     ],
@@ -507,7 +484,7 @@ const commonRoutes: RouteObject[] = [
 const commonInConventionRoutes: RouteObject[] = [
   {
     path: '/admin_departments',
-    element: <AuthorizationRequiredRouteGuard abilities={['can_update_departments']} />,
+    middleware: [makeAuthorizationMiddleware('can_update_departments')],
     id: NamedRoute.DepartmentAdmin,
     loader: departmentAdminLoader,
     children: [
@@ -530,7 +507,11 @@ const commonInConventionRoutes: RouteObject[] = [
     id: NamedRoute.EventAdmin,
     children: [
       {
-        element: <AppRootContextRouteGuard guard={({ siteMode }) => siteMode !== SiteMode.SingleEvent} />,
+        middleware: [makeAppRootContextMiddleware(({ convention }) => convention?.site_mode === SiteMode.SingleEvent)],
+        children: [{ path: ':eventId/edit', lazy: () => import('./EventAdmin/EventAdminEditEvent') }],
+      },
+      {
+        middleware: [makeAppRootContextMiddleware(({ convention }) => convention?.site_mode !== SiteMode.SingleEvent)],
         children: [
           { path: 'dropped_events', lazy: () => import('./EventAdmin/DroppedEventAdmin') },
           {
@@ -591,7 +572,7 @@ const commonInConventionRoutes: RouteObject[] = [
   },
   {
     path: '/admin_notifications',
-    element: <AuthorizationRequiredRouteGuard abilities={['can_update_notification_templates']} />,
+    middleware: [makeAuthorizationMiddleware('can_update_notification_templates')],
     children: [
       {
         path: ':eventKey',
@@ -674,7 +655,7 @@ const commonInConventionRoutes: RouteObject[] = [
   { path: '/events', children: eventsRoutes },
   {
     path: '/mailing_lists',
-    element: <AuthorizationRequiredRouteGuard abilities={['can_read_any_mailing_list']} />,
+    middleware: [makeAuthorizationMiddleware('can_read_any_mailing_list')],
     children: [
       { path: 'ticketed_attendees', lazy: () => import('./MailingLists/TicketedAttendees') },
       { path: 'event_proposers', lazy: () => import('./MailingLists/EventProposers') },
@@ -687,7 +668,7 @@ const commonInConventionRoutes: RouteObject[] = [
   },
   {
     path: '/my_profile',
-    element: <LoginRequiredRouteGuard />,
+    middleware: [loginRequiredMiddleware],
     children: [
       { path: 'edit_bio', loader: () => replace('./edit') },
       { path: 'edit', lazy: () => import('./MyProfile/MyProfileForm') },
@@ -699,7 +680,7 @@ const commonInConventionRoutes: RouteObject[] = [
   { path: '/products/:id', lazy: () => import('./Store/ProductPage') },
   {
     path: '/reports',
-    element: <AuthorizationRequiredRouteGuard abilities={['can_read_reports']} />,
+    middleware: [makeAuthorizationMiddleware('can_read_reports')],
     children: [
       { path: 'new_and_returning_attendees', lazy: () => import('./Reports/NewAndReturningAttendees') },
       { path: 'attendance_by_payment_amount', lazy: () => import('./Reports/AttendanceByPaymentAmount') },
@@ -715,18 +696,18 @@ const commonInConventionRoutes: RouteObject[] = [
     children: [{ path: ':id', lazy: () => import('./RoomsAdmin/$id/route') }],
   },
   {
-    element: <AppRootContextRouteGuard guard={({ signupMode }) => signupMode === SignupMode.Moderated} />,
+    middleware: [makeAppRootContextMiddleware(({ convention }) => convention?.signup_mode === SignupMode.Moderated)],
     children: [
       {
         path: '/signup_moderation',
         lazy: () => import('./SignupModeration'),
         children: [
           {
-            element: (
-              <AppRootContextRouteGuard
-                guard={({ signupAutomationMode }) => signupAutomationMode === SignupAutomationMode.RankedChoice}
-              />
-            ),
+            middleware: [
+              makeAppRootContextMiddleware(
+                ({ convention }) => convention?.signup_automation_mode === SignupAutomationMode.RankedChoice,
+              ),
+            ],
             children: [
               {
                 path: 'ranked_choice_queue',
@@ -809,11 +790,13 @@ const commonInConventionRoutes: RouteObject[] = [
     ],
   },
   {
-    element: <AppRootContextRouteGuard guard={({ ticketMode }) => ticketMode === TicketMode.RequiredForSignup} />,
+    middleware: [
+      makeAppRootContextMiddleware(({ convention }) => convention?.ticket_mode === TicketMode.RequiredForSignup),
+    ],
     children: [
       {
         path: '/ticket_types',
-        element: <AuthorizationRequiredRouteGuard abilities={['can_manage_ticket_types']} />,
+        middleware: [makeAuthorizationMiddleware('can_manage_ticket_types')],
         children: [
           { path: 'new', loader: adminTicketTypesLoader, lazy: () => import('./TicketTypeAdmin/NewTicketType') },
           {
@@ -848,7 +831,7 @@ const commonInConventionRoutes: RouteObject[] = [
   },
   {
     path: '/user_con_profiles',
-    element: <AuthorizationRequiredRouteGuard abilities={['can_read_user_con_profiles']} />,
+    middleware: [makeAuthorizationMiddleware('can_read_user_con_profiles')],
     children: [
       {
         path: ':id',
@@ -913,7 +896,7 @@ const conventionModeRoutes: RouteObject[] = [
     ],
   },
   {
-    element: <AuthorizationRequiredRouteGuard abilities={['can_update_event_categories']} />,
+    middleware: [makeAuthorizationMiddleware('can_update_event_categories')],
     children: [
       {
         path: '/event_categories',
@@ -1037,7 +1020,7 @@ const rootSiteRoutes: RouteObject[] = [
     ],
   },
   {
-    element: <AuthorizationRequiredRouteGuard abilities={['can_read_users']} />,
+    middleware: [makeAuthorizationMiddleware('can_read_users')],
     children: [
       {
         path: '/users',
@@ -1063,27 +1046,27 @@ export const appLayoutRoutes: RouteObject[] = [
     element: <NonCMSPageWrapper />,
     children: [
       {
-        element: (
-          <AppRootContextRouteGuard
-            guard={({ conventionName, siteMode }) => conventionName != null && siteMode !== SiteMode.SingleEvent}
-          />
-        ),
+        middleware: [
+          makeAppRootContextMiddleware(
+            ({ convention }) => convention?.name != null && convention?.site_mode !== SiteMode.SingleEvent,
+          ),
+        ],
         children: conventionModeRoutes,
       },
       {
-        element: (
-          <AppRootContextRouteGuard
-            guard={({ conventionName, siteMode }) => conventionName != null && siteMode === SiteMode.SingleEvent}
-          />
-        ),
+        middleware: [
+          makeAppRootContextMiddleware(
+            ({ convention }) => convention?.name != null && convention?.site_mode === SiteMode.SingleEvent,
+          ),
+        ],
         children: singleEventModeRoutes,
       },
       {
-        element: <AppRootContextRouteGuard guard={({ conventionName }) => conventionName != null} />,
+        middleware: [makeAppRootContextMiddleware(({ convention }) => convention?.name != null)],
         children: commonInConventionRoutes,
       },
       {
-        element: <AppRootContextRouteGuard guard={({ conventionName }) => conventionName == null} />,
+        middleware: [makeAppRootContextMiddleware(({ convention }) => convention?.name == null)],
         children: rootSiteRoutes,
       },
       ...commonRoutes,
@@ -1093,73 +1076,10 @@ export const appLayoutRoutes: RouteObject[] = [
   { path: '*', element: <FourOhFourPage /> },
 ];
 
-const appRootLoader: LoaderFunction<RouterContextProvider> = async ({ context, request }) => {
-  const client = context.get(apolloClientContext);
-  const { data } = await client.query({ query: AppRootQueryDocument });
-
-  if (!data) return data;
-
-  const { pathname } = new URL(request.url);
-
-  if (data.currentUser && data.convention) {
-    const myProfile = data.convention.my_profile;
-    let freshlyCreated = false;
-
-    if (!myProfile) {
-      try {
-        const convention = data.convention;
-        await client.mutate({
-          mutation: SetupMyProfileDocument,
-          update(cache, result) {
-            const newProfile = result.data?.setupMyProfile?.my_profile;
-            if (!newProfile) return;
-            // After creating the profile, wire up the Convention.my_profile reference
-            // in the normalized cache so cache-first queries (e.g. MyProfileForm.loader)
-            // see the new profile instead of the stale null entry. Without this,
-            // MyProfileQuery returns null from cache even though the profile now exists,
-            // causing MyProfileForm.loader to return a 404 and show a broken page.
-            const conventionRef = cache.identify({ __typename: 'Convention', id: convention.id });
-            const profileRef = cache.identify({ __typename: 'UserConProfile', id: newProfile.id });
-            if (conventionRef && profileRef) {
-              cache.modify({
-                id: conventionRef,
-                fields: { my_profile: () => ({ __ref: profileRef }) },
-              });
-            }
-          },
-        });
-        freshlyCreated = true;
-      } catch {
-        return data;
-      }
-    }
-
-    const clickwrapRequired = (data.convention.clickwrap_agreement || '').trim() !== '';
-    const acceptedClickwrap = freshlyCreated ? false : (myProfile?.accepted_clickwrap_agreement ?? false);
-    const needsUpdate = freshlyCreated || (myProfile?.needs_update ?? false);
-
-    const clickwrapNeeded =
-      clickwrapRequired &&
-      !acceptedClickwrap &&
-      pathname !== '/clickwrap_agreement' &&
-      pathname !== '/' &&
-      !pathname.startsWith('/pages');
-
-    if (clickwrapNeeded) return redirect('/clickwrap_agreement');
-
-    if (needsUpdate && pathname !== '/my_profile/setup' && pathname !== '/clickwrap_agreement') {
-      return redirect('/my_profile/setup');
-    }
-  }
-
-  return data;
-};
-
 export const appRootRoutes: RouteObject[] = [
   {
-    element: <AppRoot />,
-    errorElement: <RouteErrorBoundary />,
-    loader: appRootLoader,
+    lazy: () => import('./AppRoot'),
+    middleware: [appRootMiddleware],
     children: [
       {
         path: '/admin_forms/:id/edit',
@@ -1215,7 +1135,7 @@ export const appRootRoutes: RouteObject[] = [
       },
       {
         lazy: () => import('./AppRootLayout'),
-        children: [{ errorElement: <RouteErrorBoundary />, children: appLayoutRoutes }],
+        children: [{ ErrorBoundary: RouteErrorBoundary, children: appLayoutRoutes }],
       },
     ],
   },
