@@ -6365,16 +6365,16 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@stripe/react-stripe-js@npm:6.6.0":
-  version: 6.6.0
-  resolution: "@stripe/react-stripe-js@npm:6.6.0"
+"@stripe/react-stripe-js@npm:6.7.0":
+  version: 6.7.0
+  resolution: "@stripe/react-stripe-js@npm:6.7.0"
   dependencies:
     prop-types: "npm:^15.7.2"
   peerDependencies:
     "@stripe/stripe-js": ">=9.5.0 <10.0.0"
     react: ">=16.8.0 <20.0.0"
     react-dom: ">=16.8.0 <20.0.0"
-  checksum: 10c0/fb093073d19efb15c18cd4b4007b886bfff4bbee17b270fabb86c82e1dad0377ebb15d58bab37c41c3ea01599fc0a5117747611226ac232e1350ebbfeecb17a7
+  checksum: 10c0/4991ab8ce50d5c30371935c3a8e7e653185f66c3a35f0a64ad146e20138ff0f91d7f42bb41c8825104b033287da24e600e6164a8e8874fbb329b736bb5aa8e45
   languageName: node
   linkType: hard
 
@@ -20409,7 +20409,7 @@ __metadata:
     "@rollup/plugin-swc": "npm:^0.4.0"
     "@sentry/browser": "npm:^10.0.0"
     "@sentry/types": "npm:^10.0.0"
-    "@stripe/react-stripe-js": "npm:6.6.0"
+    "@stripe/react-stripe-js": "npm:6.7.0"
     "@stripe/stripe-js": "npm:9.8.0"
     "@swc/core": "npm:^1.14.0"
     "@tanstack/react-table": "npm:^8.20.6"
