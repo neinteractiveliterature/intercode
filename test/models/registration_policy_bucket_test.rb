@@ -64,6 +64,18 @@ class RegistrationPolicyBucketTest < ActiveSupport::TestCase
       assert_not bucket.not_counted?
       assert bucket.counted?
     end
+
+    it "exposes plain (non-predicate) anything/not_counted readers for RegistrationPolicy::BucketDrop's delegate" do
+      bucket.anything = true
+      bucket.not_counted = true
+      assert bucket.anything
+      assert bucket.not_counted
+
+      bucket.anything = false
+      bucket.not_counted = false
+      assert_not bucket.anything
+      assert_not bucket.not_counted
+    end
   end
 
   describe "#slots_unlimited?/#slots_unlimited=" do

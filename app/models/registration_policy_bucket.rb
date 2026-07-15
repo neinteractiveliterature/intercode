@@ -65,9 +65,15 @@ class RegistrationPolicyBucket < ApplicationRecord
     self.slots_limited = !value
   end
 
-  # External API compatibility: GraphQL/Liquid keep calling anything?/not_counted? and
-  # anything=/not_counted=. Plain methods, not `alias`, because flex?/counted? are generated
-  # lazily by AR's attribute-methods module and a class-body `alias` can race that.
+  # External API compatibility: GraphQL calls anything?/not_counted? (it appends the `?` itself),
+  # but RegistrationPolicy::BucketDrop's `delegate :anything, :not_counted, to: :bucket` calls the
+  # plain, non-predicate names -- so both forms need to exist. Plain methods, not `alias`, because
+  # flex?/counted? are generated lazily by AR's attribute-methods module and a class-body `alias`
+  # can race that.
+  def anything
+    flex
+  end
+
   def anything?
     flex?
   end
@@ -76,8 +82,12 @@ class RegistrationPolicyBucket < ApplicationRecord
     self.flex = value
   end
 
+  def not_counted # rubocop:disable Naming/PredicateMethod
+    !counted
+  end
+
   def not_counted?
-    !counted?
+    not_counted
   end
 
   def not_counted=(value)
