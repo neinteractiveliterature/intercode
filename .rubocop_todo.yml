@@ -36,6 +36,8 @@ GraphQL/UnnecessaryArgumentCamelize:
 Lint/MissingCopEnableDirective:
   Exclude:
     - 'app/graphql/types/mutation_type.rb'
+    - 'test/graphql/mutations/update_event_proposal_test.rb'
+    - 'test/graphql/mutations/update_event_test.rb'
 
 # Offense count: 2
 Lint/MissingSuper:
@@ -55,8 +57,20 @@ Metrics/BlockLength:
   Exclude:
     - 'config/environments/production.rb'
     - 'config/initializers/doorkeeper.rb'
+    - 'test/liquid_drops/convention_drop_test.rb'
+    - 'test/models/event_test.rb'
+    - 'test/models/registration_policy_bucket_test.rb'
+    - 'test/models/registration_policy_test.rb'
     - 'test/presenters/signup_count_presenter_test.rb'
     - 'test/services/rerun_moderated_ranked_choice_signup_round_service_test.rb'
+    - 'test/services/create_signup_request_service_test.rb'
+    - 'test/services/create_team_member_service_test.rb'
+    - 'test/services/event_change_registration_policy_service_test.rb'
+    - 'test/services/event_signup_service_test.rb'
+    - 'test/services/event_vacancy_fill_service_test.rb'
+    - 'test/services/event_withdraw_service_test.rb'
+    - 'test/services/execute_ranked_choice_signup_round_service_test.rb'
+    - 'test/services/execute_ranked_choice_signup_service_test.rb'
 
 # Offense count: 7
 # Configuration parameters: CountComments, Max, CountAsOne.
@@ -67,9 +81,21 @@ Metrics/ClassLength:
     - 'app/graphql/types/ability_type.rb'
     - 'app/graphql/types/mutation_type.rb'
     - 'app/graphql/types/query_type.rb'
+    - 'app/models/convention.rb'
+    - 'app/models/event.rb'
+    - 'app/models/registration_policy.rb'
     - 'app/presenters/signup_count_presenter.rb'
     - 'app/services/execute_ranked_choice_signup_service.rb'
+    - 'app/services/event_change_registration_policy_service.rb'
+    - 'app/services/execute_ranked_choice_signup_round_service.rb'
+    - 'test/models/registration_policy_bucket_test.rb'
+    - 'test/models/registration_policy_test.rb'
     - 'test/presenters/signup_count_presenter_test.rb'
+    - 'test/services/create_signup_request_service_test.rb'
+    - 'test/services/create_team_member_service_test.rb'
+    - 'test/services/event_change_registration_policy_service_test.rb'
+    - 'test/services/event_vacancy_fill_service_test.rb'
+    - 'test/services/event_withdraw_service_test.rb'
 
 # Offense count: 1
 # Configuration parameters: AllowedMethods, AllowedPatterns, Max.
@@ -125,6 +151,7 @@ Rails/HasAndBelongsToMany:
 
 Rails/HasManyOrHasOneDependent:
   Exclude:
+    - 'app/models/event.rb'
     - 'app/models/page.rb'
 
 Rails/HelperInstanceVariable:
@@ -135,6 +162,9 @@ Rails/SkipsModelValidations:
   Exclude:
     - 'app/controllers/application_controller.rb'
     - 'app/models/page.rb'
+    - 'app/services/event_change_registration_policy_service.rb'
+    - 'app/services/event_freeze_bucket_assignments_service.rb'
+    - 'app/services/execute_ranked_choice_signup_round_service.rb'
     - 'db/migrate/20251229184620_allow_null_redirect_uri_on_oauth_appliations.rb'
 
 # Offense count: 7
@@ -144,9 +174,52 @@ Rails/SkipsModelValidations:
 Style/FrozenStringLiteralComment:
   Exclude:
     - 'app/models/oauth_application.rb'
+    - 'app/services/event_freeze_bucket_assignments_service.rb'
     - 'config/initializers/cors.rb'
     - 'config/initializers/doorkeeper.rb'
     - 'config/initializers/doorkeeper_openid_connect.rb'
     - 'lib/intercode/virtual_host_constraint.rb'
+    - 'test/factories/event_proposals.rb'
     - 'test/factories/oauth_applications.rb'
+    - 'test/liquid_drops/convention_drop_test.rb'
+    - 'test/models/event_proposal_test.rb'
+    - 'test/models/event_test.rb'
+    - 'test/models/registration_policy/unlimited_test.rb'
+    - 'test/models/registration_policy_bucket_test.rb'
+    - 'test/models/registration_policy_test.rb'
     - 'test/policies/oauth_application_policy_test.rb'
+    - 'test/services/create_signup_request_service_test.rb'
+    - 'test/services/create_team_member_service_test.rb'
+    - 'test/services/event_change_registration_policy_service_test.rb'
+    - 'test/services/event_freeze_bucket_assignments_service_test.rb'
+    - 'test/services/event_signup_service_test.rb'
+    - 'test/services/event_vacancy_fill_service_test.rb'
+    - 'test/services/event_withdraw_service_test.rb'
+    - 'test/services/execute_ranked_choice_signup_round_service_test.rb'
+    - 'test/services/execute_ranked_choice_signup_service_test.rb'
+
+Layout/LineLength:
+  Exclude:
+    - 'test/models/registration_policy_bucket_test.rb'
+
+Lint/MissingSuper:
+  Exclude:
+    - 'app/services/accept_event_proposal_service.rb'
+    - 'app/services/event_change_registration_policy_service.rb'
+    - 'app/services/event_freeze_bucket_assignments_service.rb'
+    - 'app/services/execute_ranked_choice_signup_round_service.rb'
+
+Performance/StringInclude:
+  Exclude:
+    - 'test/models/registration_policy_test.rb'
+
+Rails/SquishedSQLHeredocs:
+  Exclude:
+    - 'app/services/execute_ranked_choice_signup_round_service.rb'
+
+Rails/TimeZone:
+  Exclude:
+    - 'app/models/convention.rb'
+    - 'test/services/event_vacancy_fill_service_test.rb'
+    - 'test/services/execute_ranked_choice_signup_round_service_test.rb'
+

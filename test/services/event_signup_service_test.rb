@@ -101,7 +101,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
         recipients = ActionMailer::Base.deliveries.flat_map(&:to)
         assert_includes recipients, email_team_member.user_con_profile.email
         assert_includes recipients, email_team_member2.user_con_profile.email
-        refute_includes recipients, no_email_team_member.user_con_profile.email
+        assert_not_includes recipients, no_email_team_member.user_con_profile.email
       end
     end
 
@@ -131,7 +131,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
 
         assert result.success?
         assert result.signup.confirmed?
-        refute result.signup.counted?
+        assert_not result.signup.counted?
         assert_nil result.signup.bucket_key
         assert_nil result.signup.requested_bucket_key
       end
@@ -203,7 +203,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
       convention.signup_rounds.update!(maximum_event_signups: "1")
 
       other_event = create(:event, convention:, length_seconds: event.length_seconds)
-      other_run = create(:run, event: other_event, starts_at: the_run.starts_at + event.length_seconds * 2)
+      other_run = create(:run, event: other_event, starts_at: the_run.starts_at + (event.length_seconds * 2))
       other_signup_service = EventSignupService.new(user_con_profile, other_run, requested_bucket_key, user)
       assert other_signup_service.call.success?
 
@@ -305,13 +305,14 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
         create(
           :event,
           convention:,
-          registration_policy: {
-            buckets: [
-              { key: "dogs", name: "dogs", slots_limited: true, total_slots: 3 },
-              { key: "cats", name: "cats", slots_limited: true, total_slots: 2 },
-              { key: "anything", name: "flex", slots_limited: true, total_slots: 4, anything: true }
-            ]
-          }
+          registration_policy:
+            RegistrationPolicy.build_from_hash(
+              buckets: [
+                { key: "dogs", name: "dogs", slots_limited: true, total_slots: 3 },
+                { key: "cats", name: "cats", slots_limited: true, total_slots: 2 },
+                { key: "anything", name: "flex", slots_limited: true, total_slots: 4, anything: true }
+              ]
+            )
         )
       end
 
@@ -380,7 +381,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
           assert_equal 1, ActionMailer::Base.deliveries.size
           recipients = ActionMailer::Base.deliveries.first.to
           assert_includes recipients, email_team_member.user_con_profile.email
-          refute_includes recipients, no_email_team_member.user_con_profile.email
+          assert_not_includes recipients, no_email_team_member.user_con_profile.email
         end
       end
 
@@ -428,7 +429,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
           assert result.success?
           assert result.signup.confirmed?
           assert_nil result.signup.requested_bucket_key
-          refute_equal "anything", result.signup.bucket_key
+          assert_not_equal "anything", result.signup.bucket_key
         end
 
         describe "but the registration policy does not allow it" do
@@ -436,14 +437,15 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
             create(
               :event,
               convention:,
-              registration_policy: {
-                buckets: [
-                  { key: "dogs", name: "dogs", slots_limited: true, total_slots: 3 },
-                  { key: "cats", name: "cats", slots_limited: true, total_slots: 2 },
-                  { key: "anything", name: "flex", slots_limited: true, total_slots: 4, anything: true }
-                ],
-                prevent_no_preference_signups: true
-              }
+              registration_policy:
+                RegistrationPolicy.build_from_hash(
+                  buckets: [
+                    { key: "dogs", name: "dogs", slots_limited: true, total_slots: 3 },
+                    { key: "cats", name: "cats", slots_limited: true, total_slots: 2 },
+                    { key: "anything", name: "flex", slots_limited: true, total_slots: 4, anything: true }
+                  ],
+                  prevent_no_preference_signups: true
+                )
             )
           end
 
@@ -542,13 +544,14 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
         create(
           :event,
           convention:,
-          registration_policy: {
-            buckets: [
-              { key: "pc", name: "PC", slots_limited: true, total_slots: 1 },
-              { key: "npc", name: "NPC", slots_limited: true, total_slots: 1, not_counted: true },
-              { key: "anything", name: "Flex", slots_limited: true, total_slots: 4, anything: true }
-            ]
-          }
+          registration_policy:
+            RegistrationPolicy.build_from_hash(
+              buckets: [
+                { key: "pc", name: "PC", slots_limited: true, total_slots: 1 },
+                { key: "npc", name: "NPC", slots_limited: true, total_slots: 1, not_counted: true },
+                { key: "anything", name: "Flex", slots_limited: true, total_slots: 4, anything: true }
+              ]
+            )
         )
       end
 
@@ -560,7 +563,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
         result = subject.call!
         assert result.success?
         assert result.signup.confirmed?
-        refute result.signup.counted?
+        assert_not result.signup.counted?
         assert_equal "npc", result.signup.bucket_key
         assert_equal "npc", result.signup.requested_bucket_key
       end
@@ -580,7 +583,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
         result = subject.call!
         assert result.success?
         assert result.signup.confirmed?
-        refute result.signup.counted?
+        assert_not result.signup.counted?
         assert_equal "npc", result.signup.bucket_key
         assert_equal "npc", result.signup.requested_bucket_key
       end

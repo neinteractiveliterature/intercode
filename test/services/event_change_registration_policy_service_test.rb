@@ -7,11 +7,11 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
   let(:event) { create(:event, convention: convention) }
   let(:the_run) { create(:run, event: event) }
   let(:new_registration_policy) do
-    RegistrationPolicy.new(
+    RegistrationPolicy.build_from_hash(
       buckets: [
-        { key: "dogs", slots_limited: true, total_slots: 1 },
-        { key: "cats", slots_limited: true, total_slots: 1 },
-        { key: "anything", slots_limited: true, total_slots: 1, anything: true }
+        { key: "dogs", name: "Dogs", slots_limited: true, total_slots: 1 },
+        { key: "cats", name: "Cats", slots_limited: true, total_slots: 1 },
+        { key: "anything", name: "Anything", slots_limited: true, total_slots: 1, anything: true }
       ]
     )
   end
@@ -26,10 +26,39 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
   end
 
   it "changes the registration policy" do
+    original_registration_policy_id = event.registration_policy_id
     result = subject.call
 
     assert result.success?
-    assert_equal new_registration_policy, event.reload.registration_policy
+    event.reload
+    assert event.registration_policy.equivalent_to?(new_registration_policy)
+    assert_equal original_registration_policy_id, event.registration_policy_id
+  end
+
+  describe "when a bucket's key is unchanged" do
+    let(:event) do
+      create(
+        :event,
+        convention: convention,
+        registration_policy:
+          RegistrationPolicy.build_from_hash(
+            buckets: [{ key: "dogs", name: "Dogs (old)", slots_limited: true, total_slots: 3 }]
+          )
+      )
+    end
+
+    it "preserves that bucket's row id while updating its other attributes" do
+      original_bucket_id = event.registration_policy.buckets.find_by!(key: "dogs").id
+
+      result = subject.call
+      assert result.success?
+
+      event.reload
+      dogs_bucket = event.registration_policy.buckets.find_by!(key: "dogs")
+      assert_equal original_bucket_id, dogs_bucket.id
+      assert_equal "Dogs", dogs_bucket.name
+      assert_equal 1, dogs_bucket.total_slots
+    end
   end
 
   it "does not email the team members if nobody moved" do
@@ -92,11 +121,11 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
         :event,
         convention: convention,
         registration_policy:
-          RegistrationPolicy.new(
+          RegistrationPolicy.build_from_hash(
             buckets: [
-              { key: "dogs", slots_limited: true, total_slots: 2 },
-              { key: "cats", slots_limited: true, total_slots: 1 },
-              { key: "anything", slots_limited: true, total_slots: 1, anything: true }
+              { key: "dogs", name: "Dogs", slots_limited: true, total_slots: 2 },
+              { key: "cats", name: "Cats", slots_limited: true, total_slots: 1 },
+              { key: "anything", name: "Anything", slots_limited: true, total_slots: 1, anything: true }
             ]
           )
       )
@@ -238,7 +267,7 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
         assert_equal "dogs", signup1.reload.bucket_key
         assert_equal "dogs", signup2.reload.bucket_key
         assert_equal "anything", signup3.reload.bucket_key
-        refute_equal new_registration_policy, event.reload.registration_policy
+        assert_not event.reload.registration_policy.equivalent_to?(new_registration_policy)
       end
     end
   end
@@ -249,8 +278,11 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
         :event,
         convention: convention,
         registration_policy:
-          RegistrationPolicy.new(
-            buckets: [{ key: "unlimited", slots_limited: false }, { key: "dogs", slots_limited: true, total_slots: 2 }]
+          RegistrationPolicy.build_from_hash(
+            buckets: [
+              { key: "unlimited", name: "Unlimited", slots_limited: false },
+              { key: "dogs", name: "Dogs", slots_limited: true, total_slots: 2 }
+            ]
           )
       )
     end
@@ -352,11 +384,11 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
         :event,
         convention: convention,
         registration_policy:
-          RegistrationPolicy.new(
+          RegistrationPolicy.build_from_hash(
             buckets: [
-              { key: "dogs", slots_limited: true, total_slots: 0 },
-              { key: "cats", slots_limited: true, total_slots: 1 },
-              { key: "anything", slots_limited: true, total_slots: 1, anything: true }
+              { key: "dogs", name: "Dogs", slots_limited: true, total_slots: 0 },
+              { key: "cats", name: "Cats", slots_limited: true, total_slots: 1 },
+              { key: "anything", name: "Anything", slots_limited: true, total_slots: 1, anything: true }
             ]
           )
       )

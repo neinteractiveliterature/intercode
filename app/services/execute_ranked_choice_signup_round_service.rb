@@ -170,13 +170,13 @@ class ExecuteRankedChoiceSignupRoundService < CivilService::Service
   def random_signup_eligible_runs
     @random_signup_eligible_runs ||=
       begin
-        eligible_event_ids = Event.connection.select_values(<<~SQL, "random_signup_eligible_event_ids", [convention.id])
-          SELECT DISTINCT events.id from events
-          INNER JOIN (
-            SELECT id, jsonb_array_elements(registration_policy->'buckets')->'not_counted' bucket_not_counted
-            from events where convention_id = $1
-          ) bucket_not_counted ON (events.id = bucket_not_counted.id AND bucket_not_counted.bucket_not_counted != 'true')
-        SQL
+        counted_registration_policy_ids = RegistrationPolicyBucket.where(counted: true).select(:registration_policy_id)
+        eligible_event_ids =
+          Event
+            .where(convention_id: convention.id)
+            .where(registration_policy_id: counted_registration_policy_ids)
+            .distinct
+            .pluck(:id)
 
         Run.where(event_id: eligible_event_ids)
       end

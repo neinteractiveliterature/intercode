@@ -18,13 +18,21 @@ class AcceptEventProposalService < CivilService::Service
 
   private
 
-  def inner_call
+  def inner_call # rubocop:disable Metrics/AbcSize
     event = convention.events.new(event_category: event_category, status: "active")
     event.assign_default_values_from_form_items(event_form.form_items)
     event.assign_form_response_attributes(event_attributes)
     event.con_mail_destination ||= "gms"
     event.title ||= event_proposal.title # in case the form doesn't include it
     event.length_seconds ||= event_proposal.length_seconds # same deal as title
+    # Unlike title/length_seconds, this isn't just a missing-value fallback: if the target
+    # category's form happens to declare a registration_policy form item, the generic
+    # assign_form_response_attributes call above would have already set event.registration_policy
+    # to the *same row* as event_proposal.registration_policy (association assignment, not a
+    # copy). Events and proposals have independent lifecycles, so always rebuild a fresh,
+    # independent copy here rather than ever sharing a row -- regardless of whether the form
+    # happened to collect it, and regardless of whether the proposal has one at all.
+    event.registration_policy = build_own_registration_policy
     event_proposal.images.blobs.each { |blob| event.images.attach(blob) }
 
     event.save!
@@ -78,5 +86,15 @@ class AcceptEventProposalService < CivilService::Service
 
   def convention
     @convention ||= event_proposal.convention
+  end
+
+  def build_own_registration_policy
+    source_policy = event_proposal.registration_policy
+    # No buckets at all (rather than defaulting to unlimited) -- accepts_signups? is false with
+    # an empty bucket list, so an event accepted without an explicit policy fails closed
+    # (blocks signups until someone configures one) instead of silently accepting unlimited
+    # signups.
+    return RegistrationPolicy.new unless source_policy
+    RegistrationPolicy.build_from_hash(source_policy.as_json)
   end
 end

@@ -20,10 +20,7 @@ class EventFreezeBucketAssignmentsService < CivilService::Service
   def inner_call
     lock_all_runs do
       Event.transaction do
-        new_policy = build_frozen_registration_policy
-
-        event.allow_registration_policy_change = true
-        event.update!(registration_policy: new_policy)
+        apply_frozen_registration_policy
         anything_signups_with_preference.each do |signup|
           signup.update!(bucket_key: signup.requested_bucket_key, updated_by: whodunit)
           signup.log_signup_change!(action: "freeze_bucket_assignments")
@@ -41,21 +38,20 @@ class EventFreezeBucketAssignmentsService < CivilService::Service
       end
   end
 
-  def build_frozen_registration_policy
+  def apply_frozen_registration_policy
     expand_buckets_count =
       anything_signups_with_preference.each_with_object({}) do |signup, hash|
         hash[signup.requested_bucket_key] ||= 0
         hash[signup.requested_bucket_key] += 1
       end
 
-    new_policy = event.registration_policy.dup
-    new_policy.freeze_no_preference_buckets = true
-    expand_buckets_count.each do |bucket_key, amount|
-      new_policy.bucket_with_key(bucket_key).total_slots += amount
-      new_policy.anything_bucket.total_slots -= amount
-    end
+    registration_policy = event.registration_policy
+    registration_policy.update!(freeze_no_preference_buckets: true)
 
-    new_policy
+    expand_buckets_count.each do |bucket_key, amount|
+      registration_policy.bucket_with_key(bucket_key).increment!(:total_slots, amount)
+      registration_policy.anything_bucket.decrement!(:total_slots, amount)
+    end
   end
 
   def lock_all_runs(&block)

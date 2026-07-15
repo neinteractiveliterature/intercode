@@ -8,10 +8,12 @@ class Mutations::UpdateEventTest < ActiveSupport::TestCase
   let(:convention) { create(:convention) }
   let(:admin_profile) { create(:user_con_profile, convention:, user: create(:site_admin)) }
   let(:old_registration_policy) do
-    RegistrationPolicy.new(buckets: [{ key: "unlimited", slots_limited: false, anything: true }])
+    RegistrationPolicy.build_from_hash(
+      buckets: [{ key: "unlimited", name: "Signups", slots_limited: false, anything: true }]
+    )
   end
   let(:new_registration_policy) do
-    RegistrationPolicy.new(
+    RegistrationPolicy.build_from_hash(
       buckets: [
         { key: "players", name: "Players", slots_limited: true, total_slots: 4 },
         { key: "anything", name: "Anything", slots_limited: true, total_slots: 2, anything: true }

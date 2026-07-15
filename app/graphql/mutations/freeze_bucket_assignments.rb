@@ -13,14 +13,14 @@ class Mutations::FreezeBucketAssignments < Mutations::BaseMutation
   load_and_authorize_convention_associated_model :events, :id, :update
 
   def resolve(**)
-    old_registration_policy = event.registration_policy.dup
+    old_registration_policy_json = event.registration_policy.as_json
 
     EventFreezeBucketAssignmentsService.new(event:, whodunit: current_user).call!
     event.reload
 
     log_form_response_changes(
       event,
-      { "registration_policy" => [old_registration_policy.as_json, event.registration_policy.as_json] }
+      { "registration_policy" => [old_registration_policy_json, event.registration_policy.as_json] }
     )
 
     { event: }

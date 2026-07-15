@@ -59,11 +59,11 @@ class EventTest < ActiveSupport::TestCase
       :event,
       convention: convention,
       registration_policy:
-        RegistrationPolicy.new(
+        RegistrationPolicy.build_from_hash(
           buckets: [
-            { key: "dogs", slots_limited: true, total_slots: 2 },
-            { key: "cats", slots_limited: true, total_slots: 2 },
-            { key: "anything", slots_limited: true, total_slots: 2, anything: true }
+            { key: "dogs", name: "Dogs", slots_limited: true, total_slots: 2 },
+            { key: "cats", name: "Cats", slots_limited: true, total_slots: 2 },
+            { key: "anything", name: "Anything", slots_limited: true, total_slots: 2, anything: true }
           ]
         )
     )
@@ -104,6 +104,24 @@ class EventTest < ActiveSupport::TestCase
       create(:signup, run: the_run, requested_bucket_key: "dogs", bucket_key: "dogs")
       create(:signup_request, target_run: the_run, requested_bucket_key: "dogs")
       assert_equal ["dogs"], event.bucket_keys_with_pending_signups_or_requests
+    end
+  end
+
+  describe "#apply_registration_policy_change (from the HasRegistrationPolicy concern)" do
+    it "returns {} and does not yield when given a nil hash" do
+      yielded = false
+      changes = event.apply_registration_policy_change(nil) { yielded = true }
+
+      assert_equal({}, changes)
+      assert_not yielded
+    end
+
+    it "returns {} and does not yield when the hash describes an equivalent policy" do
+      yielded = false
+      changes = event.apply_registration_policy_change(event.registration_policy.as_json) { yielded = true }
+
+      assert_equal({}, changes)
+      assert_not yielded
     end
   end
 end

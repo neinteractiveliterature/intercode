@@ -10,7 +10,6 @@
 #  description            :text
 #  email                  :text
 #  length_seconds         :integer
-#  registration_policy    :jsonb
 #  reminded_at            :datetime
 #  short_blurb            :text
 #  status                 :string
@@ -24,13 +23,15 @@
 #  event_category_id      :bigint           not null
 #  event_id               :bigint
 #  owner_id               :bigint
+#  registration_policy_id :bigint
 #
 # Indexes
 #
-#  index_event_proposals_on_convention_id      (convention_id)
-#  index_event_proposals_on_event_category_id  (event_category_id)
-#  index_event_proposals_on_event_id           (event_id)
-#  index_event_proposals_on_owner_id           (owner_id)
+#  index_event_proposals_on_convention_id           (convention_id)
+#  index_event_proposals_on_event_category_id       (event_category_id)
+#  index_event_proposals_on_event_id                (event_id)
+#  index_event_proposals_on_owner_id                (owner_id)
+#  index_event_proposals_on_registration_policy_id  (registration_policy_id)
 #
 # Foreign Keys
 #
@@ -38,6 +39,7 @@
 #  fk_rails_...  (event_category_id => event_categories.id)
 #  fk_rails_...  (event_id => events.id)
 #  fk_rails_...  (owner_id => user_con_profiles.id)
+#  fk_rails_...  (registration_policy_id => registration_policies.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
 

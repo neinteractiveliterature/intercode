@@ -73,7 +73,14 @@ class CreateSignupRequestServiceTest < ActiveSupport::TestCase
           convention:,
           registration_policy:
             RegistrationPolicy.new(
-              buckets: [RegistrationPolicy::Bucket.new(key: "unlimited", slots_limited: false, not_counted: true)]
+              buckets: [
+                RegistrationPolicyBucket.new(
+                  key: "unlimited",
+                  name: "Unlimited",
+                  slots_limited: false,
+                  not_counted: true
+                )
+              ]
             )
         )
       end
@@ -99,7 +106,14 @@ class CreateSignupRequestServiceTest < ActiveSupport::TestCase
           length_seconds: event.length_seconds,
           registration_policy:
             RegistrationPolicy.new(
-              buckets: [RegistrationPolicy::Bucket.new(key: "unlimited", slots_limited: false, not_counted: true)]
+              buckets: [
+                RegistrationPolicyBucket.new(
+                  key: "unlimited",
+                  name: "Unlimited",
+                  slots_limited: false,
+                  not_counted: true
+                )
+              ]
             )
         )
       end

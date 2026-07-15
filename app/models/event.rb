@@ -56,6 +56,7 @@ class Event < ApplicationRecord
   include AgeRestrictions
   include EventEmail
   include FormResponse
+  include HasRegistrationPolicy
   include MarkdownIndexing
   include OrderByTitle
   include PgSearch::Model
@@ -116,6 +117,7 @@ class Event < ApplicationRecord
 
   belongs_to :convention
   belongs_to :event_category
+  belongs_to :registration_policy, inverse_of: :events, dependent: :destroy
 
   has_many :maximum_event_provided_tickets_overrides, dependent: :destroy
   has_many :provided_tickets, class_name: "Ticket", inverse_of: "provided_by_event", foreign_key: "provided_by_event_id"
@@ -199,8 +201,6 @@ class Event < ApplicationRecord
 
   scope :active, -> { where(status: "active") }
 
-  serialize :registration_policy, coder: ActiveModelCoder.new("RegistrationPolicy")
-
   attr_accessor :bypass_single_event_run_check, :allow_registration_policy_change
 
   def to_param
@@ -266,12 +266,12 @@ class Event < ApplicationRecord
 
   def registration_policy_cannot_change
     return if new_record?
-    return unless registration_policy_changed?
+    return unless registration_policy_id_changed?
 
-    before, after = changes["registration_policy"]
+    before, after = changes["registration_policy_id"]
     return if before == after # ActiveRecord is being overzealous about change detection
 
-    errors.add :registration_policy,
+    errors.add :registration_policy_id,
                "cannot be changed via ActiveRecord on an existing event.  \
 Use EventChangeRegistrationPolicyService instead."
   end

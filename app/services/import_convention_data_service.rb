@@ -475,10 +475,7 @@ class ImportConventionDataService < CivilService::Service
   def build_registration_policy(policy_data)
     return RegistrationPolicy.unlimited unless policy_data
 
-    RegistrationPolicy.new(
-      buckets: (policy_data[:buckets] || []).map { |b| RegistrationPolicy::Bucket.new(**b.transform_keys(&:to_sym)) },
-      prevent_no_preference_signups: policy_data[:prevent_no_preference_signups] || false
-    )
+    RegistrationPolicy.build_from_hash(policy_data)
   end
 
   def money_value(money_data)

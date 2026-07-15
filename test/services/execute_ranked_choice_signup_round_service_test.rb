@@ -5,7 +5,9 @@ describe ExecuteRankedChoiceSignupRoundService do
 
   let(:convention) { create(:convention, :with_notification_templates) }
   let(:one_player_registration_policy) do
-    RegistrationPolicy.new({ buckets: [{ key: "only_one_player", total_slots: 1, slots_limited: true }] })
+    RegistrationPolicy.build_from_hash(
+      buckets: [{ key: "only_one_player", name: "Only one player", total_slots: 1, slots_limited: true }]
+    )
   end
   let(:event) { create(:event, convention:, registration_policy: one_player_registration_policy) }
   let(:the_run) { create(:run, event:) }
@@ -412,7 +414,7 @@ describe ExecuteRankedChoiceSignupRoundService do
         assert_includes all_recipients, email_team_member2.user_con_profile.email
 
         # Team member with no notifications should not receive anything
-        refute_includes all_recipients, no_email_team_member.user_con_profile.email
+        assert_not_includes all_recipients, no_email_team_member.user_con_profile.email
       end
     end
 
@@ -492,6 +494,28 @@ describe ExecuteRankedChoiceSignupRoundService do
       # Lottery numbers should be unchanged
       assert_equal 1, user_a.reload.lottery_number
       assert_equal 2, user_b.reload.lottery_number
+    end
+  end
+
+  describe "#random_signup_eligible_runs" do
+    let(:signup_round) { create(:signup_round, convention:, start: 1.day.ago) }
+    let(:service) { ExecuteRankedChoiceSignupRoundService.new(signup_round:, whodunit: nil) }
+
+    it "excludes events whose only bucket is not_counted" do
+      not_counted_registration_policy =
+        RegistrationPolicy.build_from_hash(
+          buckets: [{ key: "unlimited", name: "Unlimited", slots_limited: false, not_counted: true }]
+        )
+      not_counted_event = create(:event, convention:, registration_policy: not_counted_registration_policy)
+      not_counted_run = create(:run, event: not_counted_event)
+
+      counted_event = create(:event, convention:, registration_policy: one_player_registration_policy)
+      counted_run = create(:run, event: counted_event)
+
+      eligible_runs = service.send(:random_signup_eligible_runs)
+
+      assert_not_includes eligible_runs, not_counted_run
+      assert_includes eligible_runs, counted_run
     end
   end
 end

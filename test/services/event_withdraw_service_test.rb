@@ -42,7 +42,7 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
       recipients = ActionMailer::Base.deliveries.flat_map(&:to)
       assert_includes recipients, email_team_member.user_con_profile.email
       assert_includes recipients, email_team_member2.user_con_profile.email
-      refute_includes recipients, no_email_team_member.user_con_profile.email
+      assert_not_includes recipients, no_email_team_member.user_con_profile.email
     end
   end
 
@@ -71,13 +71,14 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
       create(
         :event,
         convention:,
-        registration_policy: {
-          buckets: [
-            { key: "dogs", name: "dogs", slots_limited: true, total_slots: 1 },
-            { key: "cats", name: "cats", slots_limited: true, total_slots: 1 },
-            { key: "anything", name: "anything", slots_limited: true, total_slots: 1, anything: true }
-          ]
-        }
+        registration_policy:
+          RegistrationPolicy.build_from_hash(
+            buckets: [
+              { key: "dogs", name: "dogs", slots_limited: true, total_slots: 1 },
+              { key: "cats", name: "cats", slots_limited: true, total_slots: 1 },
+              { key: "anything", name: "anything", slots_limited: true, total_slots: 1, anything: true }
+            ]
+          )
       )
     end
 

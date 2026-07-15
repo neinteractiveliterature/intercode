@@ -23,7 +23,11 @@ describe ExecuteRankedChoiceSignupService do
         :event,
         convention:,
         registration_policy:
-          RegistrationPolicy.new(buckets: [RegistrationPolicy::Bucket.new(slots_limited: true, total_slots: 0)])
+          RegistrationPolicy.new(
+            buckets: [
+              RegistrationPolicyBucket.new(key: "unlimited", name: "Unlimited", slots_limited: true, total_slots: 0)
+            ]
+          )
       )
     the_run = create(:run, event:)
     signup_ranked_choice = create(:signup_ranked_choice, target_run: the_run)
@@ -58,7 +62,11 @@ describe ExecuteRankedChoiceSignupService do
         :event,
         convention:,
         registration_policy:
-          RegistrationPolicy.new(buckets: [RegistrationPolicy::Bucket.new(slots_limited: true, total_slots: 0)])
+          RegistrationPolicy.new(
+            buckets: [
+              RegistrationPolicyBucket.new(key: "unlimited", name: "Unlimited", slots_limited: true, total_slots: 0)
+            ]
+          )
       )
     the_run = create(:run, event:)
     signup_ranked_choice = create(:signup_ranked_choice, target_run: the_run, prioritize_waitlist: true)
@@ -77,7 +85,11 @@ describe ExecuteRankedChoiceSignupService do
         :event,
         convention:,
         registration_policy:
-          RegistrationPolicy.new(buckets: [RegistrationPolicy::Bucket.new(slots_limited: true, total_slots: 0)])
+          RegistrationPolicy.new(
+            buckets: [
+              RegistrationPolicyBucket.new(key: "unlimited", name: "Unlimited", slots_limited: true, total_slots: 0)
+            ]
+          )
       )
     end
 
@@ -137,7 +149,11 @@ describe ExecuteRankedChoiceSignupService do
         :event,
         convention:,
         registration_policy:
-          RegistrationPolicy.new(buckets: [RegistrationPolicy::Bucket.new(slots_limited: true, total_slots: 0)])
+          RegistrationPolicy.new(
+            buckets: [
+              RegistrationPolicyBucket.new(key: "unlimited", name: "Unlimited", slots_limited: true, total_slots: 0)
+            ]
+          )
       )
     the_run = create(:run, event:)
     signup_ranked_choice = create(:signup_ranked_choice, target_run: the_run)
@@ -196,7 +212,11 @@ describe ExecuteRankedChoiceSignupService do
           :event,
           convention:,
           registration_policy:
-            RegistrationPolicy.new(buckets: [RegistrationPolicy::Bucket.new(slots_limited: true, total_slots: 0)])
+            RegistrationPolicy.new(
+              buckets: [
+                RegistrationPolicyBucket.new(key: "unlimited", name: "Unlimited", slots_limited: true, total_slots: 0)
+              ]
+            )
         )
       the_run = create(:run, event:)
       signup_ranked_choice = create(:signup_ranked_choice, target_run: the_run)
@@ -222,7 +242,11 @@ describe ExecuteRankedChoiceSignupService do
           :event,
           convention:,
           registration_policy:
-            RegistrationPolicy.new(buckets: [RegistrationPolicy::Bucket.new(slots_limited: true, total_slots: 1)])
+            RegistrationPolicy.new(
+              buckets: [
+                RegistrationPolicyBucket.new(key: "unlimited", name: "Unlimited", slots_limited: true, total_slots: 1)
+              ]
+            )
         )
       the_run = create(:run, event:)
       signup_ranked_choice = create(:signup_ranked_choice, target_run: the_run)
@@ -243,7 +267,11 @@ describe ExecuteRankedChoiceSignupService do
           :event,
           convention:,
           registration_policy:
-            RegistrationPolicy.new(buckets: [RegistrationPolicy::Bucket.new(slots_limited: true, total_slots: 1)])
+            RegistrationPolicy.new(
+              buckets: [
+                RegistrationPolicyBucket.new(key: "unlimited", name: "Unlimited", slots_limited: true, total_slots: 1)
+              ]
+            )
         )
       the_run = create(:run, event:)
       signup_ranked_choice = create(:signup_ranked_choice, target_run: the_run)
