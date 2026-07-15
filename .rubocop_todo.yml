@@ -36,6 +36,7 @@ GraphQL/UnnecessaryArgumentCamelize:
 Lint/MissingCopEnableDirective:
   Exclude:
     - 'app/graphql/types/mutation_type.rb'
+    - 'test/graphql/mutations/create_event_proposal_test.rb'
     - 'test/graphql/mutations/update_event_proposal_test.rb'
     - 'test/graphql/mutations/update_event_test.rb'
 
@@ -57,6 +58,7 @@ Metrics/BlockLength:
   Exclude:
     - 'config/environments/production.rb'
     - 'config/initializers/doorkeeper.rb'
+    - 'test/graphql/mutations/create_event_proposal_test.rb'
     - 'test/liquid_drops/convention_drop_test.rb'
     - 'test/models/event_test.rb'
     - 'test/models/registration_policy_bucket_test.rb'
