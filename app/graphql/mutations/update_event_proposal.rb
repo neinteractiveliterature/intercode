@@ -31,16 +31,19 @@ class Mutations::UpdateEventProposal < Mutations::BaseMutation
   private
 
   def apply_registration_policy(event_proposal, registration_policy_attributes)
-    event_proposal.apply_registration_policy_change(registration_policy_attributes) do |new_registration_policy|
-      ActiveRecord::Base.transaction do
-        if event_proposal.registration_policy
-          event_proposal.registration_policy.update_from!(new_registration_policy)
-        else
-          event_proposal.registration_policy = new_registration_policy
-          event_proposal.save!
-        end
+    change = event_proposal.registration_policy_change_for(registration_policy_attributes)
+    return {} unless change
+
+    ActiveRecord::Base.transaction do
+      if event_proposal.registration_policy
+        event_proposal.registration_policy.update_from!(change.new_policy)
+      else
+        event_proposal.registration_policy = change.new_policy
+        event_proposal.save!
       end
     end
+
+    { "registration_policy" => [change.old_json, event_proposal.registration_policy.as_json] }
   end
 
   def apply_form_response_attrs(event_proposal, form_response_attrs)

@@ -107,21 +107,22 @@ class EventTest < ActiveSupport::TestCase
     end
   end
 
-  describe "#apply_registration_policy_change (from the HasRegistrationPolicy concern)" do
-    it "returns {} and does not yield when given a nil hash" do
-      yielded = false
-      changes = event.apply_registration_policy_change(nil) { yielded = true }
-
-      assert_equal({}, changes)
-      assert_not yielded
+  describe "#registration_policy_change_for (from the HasRegistrationPolicy concern)" do
+    it "returns nil when given a nil hash" do
+      assert_nil event.registration_policy_change_for(nil)
     end
 
-    it "returns {} and does not yield when the hash describes an equivalent policy" do
-      yielded = false
-      changes = event.apply_registration_policy_change(event.registration_policy.as_json) { yielded = true }
+    it "returns nil when the hash describes an equivalent policy" do
+      assert_nil event.registration_policy_change_for(event.registration_policy.as_json)
+    end
 
-      assert_equal({}, changes)
-      assert_not yielded
+    it "returns a Change with the detached new policy and the old policy's JSON when the hash differs" do
+      new_hash = { buckets: [{ key: "unlimited", name: "Signups", slots_limited: false, anything: true }] }
+      change = event.registration_policy_change_for(new_hash)
+
+      assert change.new_policy.equivalent_to?(RegistrationPolicy.build_from_hash(new_hash))
+      assert_not change.new_policy.persisted?
+      assert_equal event.registration_policy.as_json, change.old_json
     end
   end
 
