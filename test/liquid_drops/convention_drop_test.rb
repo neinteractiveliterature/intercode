@@ -9,7 +9,10 @@ describe ConventionDrop do
   end
 
   describe "with runs that have openings" do
-    let(:limited_registration_policy) do
+    # Deliberately not `let` (memoized) -- each event needs its own independent RegistrationPolicy
+    # row, and this file creates multiple events that would otherwise collide on the new unique
+    # index on events.registration_policy_id.
+    def limited_registration_policy
       RegistrationPolicy.build_from_hash(
         buckets: [
           { key: "dogs", name: "dogs", slots_limited: true, total_slots: 3 },

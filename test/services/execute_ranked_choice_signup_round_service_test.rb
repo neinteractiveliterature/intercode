@@ -4,7 +4,10 @@ describe ExecuteRankedChoiceSignupRoundService do
   include ActiveJob::TestHelper
 
   let(:convention) { create(:convention, :with_notification_templates) }
-  let(:one_player_registration_policy) do
+  # Deliberately not `let` (memoized) -- each event needs its own independent RegistrationPolicy
+  # row, and several tests create multiple events that would otherwise collide on the new unique
+  # index on events.registration_policy_id.
+  def one_player_registration_policy
     RegistrationPolicy.build_from_hash(
       buckets: [{ key: "only_one_player", name: "Only one player", total_slots: 1, slots_limited: true }]
     )

@@ -4335,7 +4335,7 @@ CREATE INDEX index_event_proposals_on_owner_id ON public.event_proposals USING b
 -- Name: index_event_proposals_on_registration_policy_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_event_proposals_on_registration_policy_id ON public.event_proposals USING btree (registration_policy_id);
+CREATE UNIQUE INDEX index_event_proposals_on_registration_policy_id ON public.event_proposals USING btree (registration_policy_id);
 
 
 --
@@ -4384,7 +4384,7 @@ CREATE INDEX index_events_on_owner_id ON public.events USING btree (owner_id);
 -- Name: index_events_on_registration_policy_id; Type: INDEX; Schema: public; Owner: -
 --
 
-CREATE INDEX index_events_on_registration_policy_id ON public.events USING btree (registration_policy_id);
+CREATE UNIQUE INDEX index_events_on_registration_policy_id ON public.events USING btree (registration_policy_id);
 
 
 --
@@ -6092,6 +6092,7 @@ ALTER TABLE ONLY public.cms_files_pages
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260716155031'),
 ('20260615192952'),
 ('20260601000000'),
 ('20260524175914'),

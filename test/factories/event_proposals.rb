@@ -31,7 +31,7 @@
 #  index_event_proposals_on_event_category_id       (event_category_id)
 #  index_event_proposals_on_event_id                (event_id)
 #  index_event_proposals_on_owner_id                (owner_id)
-#  index_event_proposals_on_registration_policy_id  (registration_policy_id)
+#  index_event_proposals_on_registration_policy_id  (registration_policy_id) UNIQUE
 #
 # Foreign Keys
 #

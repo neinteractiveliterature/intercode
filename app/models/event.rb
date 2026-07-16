@@ -38,7 +38,7 @@
 #  index_events_on_convention_id           (convention_id)
 #  index_events_on_event_category_id       (event_category_id)
 #  index_events_on_owner_id                (owner_id)
-#  index_events_on_registration_policy_id  (registration_policy_id)
+#  index_events_on_registration_policy_id  (registration_policy_id) UNIQUE
 #  index_events_on_title_vector            (title_vector) USING gin
 #  index_events_on_updated_by_id           (updated_by_id)
 #

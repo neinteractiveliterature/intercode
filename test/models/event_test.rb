@@ -37,7 +37,7 @@
 #  index_events_on_convention_id           (convention_id)
 #  index_events_on_event_category_id       (event_category_id)
 #  index_events_on_owner_id                (owner_id)
-#  index_events_on_registration_policy_id  (registration_policy_id)
+#  index_events_on_registration_policy_id  (registration_policy_id) UNIQUE
 #  index_events_on_title_vector            (title_vector) USING gin
 #  index_events_on_updated_by_id           (updated_by_id)
 #
@@ -122,6 +122,13 @@ class EventTest < ActiveSupport::TestCase
 
       assert_equal({}, changes)
       assert_not yielded
+    end
+  end
+
+  describe "registration_policy_id uniqueness" do
+    it "rejects a second event pointing at the same registration_policy row" do
+      other_event = build(:event, convention:, registration_policy: event.registration_policy)
+      assert_raises(ActiveRecord::RecordNotUnique) { other_event.save!(validate: false) }
     end
   end
 end

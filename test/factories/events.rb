@@ -37,7 +37,7 @@
 #  index_events_on_convention_id           (convention_id)
 #  index_events_on_event_category_id       (event_category_id)
 #  index_events_on_owner_id                (owner_id)
-#  index_events_on_registration_policy_id  (registration_policy_id)
+#  index_events_on_registration_policy_id  (registration_policy_id) UNIQUE
 #  index_events_on_title_vector            (title_vector) USING gin
 #  index_events_on_updated_by_id           (updated_by_id)
 #
@@ -55,10 +55,10 @@ FactoryBot.define do
     convention
 
     sequence(:title) { |n| "Event #{n}" }
-    status { 'active' }
+    status { "active" }
     registration_policy { RegistrationPolicy.unlimited }
     length_seconds { 4.hours }
-    con_mail_destination { 'event_email' }
+    con_mail_destination { "event_email" }
 
     after(:build) { |event| event.event_category ||= build(:event_category, convention: event.convention) }
   end

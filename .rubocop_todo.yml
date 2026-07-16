@@ -182,6 +182,7 @@ Style/FrozenStringLiteralComment:
     - 'config/initializers/doorkeeper_openid_connect.rb'
     - 'lib/intercode/virtual_host_constraint.rb'
     - 'test/factories/event_proposals.rb'
+    - 'test/factories/events.rb'
     - 'test/factories/oauth_applications.rb'
     - 'test/liquid_drops/convention_drop_test.rb'
     - 'test/models/event_proposal_test.rb'
