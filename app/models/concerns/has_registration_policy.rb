@@ -2,13 +2,12 @@
 module HasRegistrationPolicy
   extend ActiveSupport::Concern
 
-  # A proposed registration policy change that differs from the current one, returned by
-  # #registration_policy_change_for. `new_policy` is a detached, unsaved RegistrationPolicy the
-  # caller applies however is appropriate for their model (in-place update, first-time
-  # assignment, running signup simulation, etc.). `old_json` is captured up front, since applying
-  # the change may mutate the owner's registration_policy row in place rather than replacing it --
-  # reading it again afterward would already show the new state.
+  # A proposed registration policy change, returned by #registration_policy_change_for.
   class Change
+    # @!attribute [r] new_policy
+    #   @return [RegistrationPolicy] a detached, unsaved policy for the caller to apply
+    # @!attribute [r] old_json
+    #   @return [Hash, nil] the current policy's JSON, captured before applying the change
     attr_reader :new_policy, :old_json
 
     def initialize(new_policy:, old_json:)
@@ -17,9 +16,8 @@ module HasRegistrationPolicy
     end
   end
 
-  # Builds a detached proposed RegistrationPolicy from `hash` and returns a Change describing it,
-  # or nil if `hash` is blank or describes a policy equivalent to the current one (nothing to
-  # apply).
+  # @param hash [Hash, nil] a raw registration policy hash (e.g. from form response attrs)
+  # @return [Change, nil] nil if hash is blank or describes a policy equivalent to the current one
   def registration_policy_change_for(hash)
     return nil unless hash
 

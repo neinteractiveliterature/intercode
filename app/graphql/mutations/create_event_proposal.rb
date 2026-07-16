@@ -46,12 +46,7 @@ class Mutations::CreateEventProposal < Mutations::BaseMutation
       )
     clone_attributes = template_proposal.read_form_response_attributes_for_form_items(compatible_items)
 
-    # registration_policy is a belongs_to association, not a plain form value --
-    # read_form_response_attribute returns the template's actual persisted row, and assigning it
-    # directly would point the new proposal's FK at the SAME policy/buckets as the template's (and,
-    # since both have dependent: :destroy, risk one proposal's destroy cascading into the other's
-    # policy). Build an independent copy instead, same as
-    # AcceptEventProposalService#build_own_registration_policy.
+    # Build an independent copy -- sharing the template's row risks a dependent: :destroy cascade.
     if clone_attributes["registration_policy"]
       clone_attributes["registration_policy"] = RegistrationPolicy.build_from_hash(
         clone_attributes["registration_policy"].as_json

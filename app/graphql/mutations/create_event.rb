@@ -17,12 +17,7 @@ class Mutations::CreateEvent < Mutations::BaseMutation
     form_response_attrs = JSON.parse(event_attrs.delete("form_response_attrs_json"))
 
     event = convention.events.new(event_attrs)
-    # registration_policy is a belongs_to association, not a plain form value -- assigning a raw
-    # hash through the generic form-response path below would raise
-    # ActiveRecord::AssociationTypeMismatch (there's no accepts_nested_attributes_for). Build a
-    # real RegistrationPolicy explicitly instead; build_from_hash(nil) already returns an empty,
-    # fail-closed policy when the client doesn't submit one, which registration_policy_id being
-    # NOT NULL requires regardless.
+    # Build explicitly -- a raw hash would crash here (no accepts_nested_attributes_for).
     event.registration_policy = RegistrationPolicy.build_from_hash(form_response_attrs.delete("registration_policy"))
     event.assign_form_response_attributes(
       event.filter_form_response_attributes_for_assignment(

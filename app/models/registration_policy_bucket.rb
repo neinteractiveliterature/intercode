@@ -30,10 +30,6 @@
 class RegistrationPolicyBucket < ApplicationRecord
   belongs_to :registration_policy, inverse_of: :buckets
 
-  # Reuses this codebase's existing convention for an ordered-list-within-a-scope column (see
-  # SignupRankedChoice's `positioned on: %i[user_con_profile state], column: :priority`), rather
-  # than hand-rolling position management. Scope is inferred from the belongs_to; column
-  # defaults to `position`, matching our column name.
   positioned on: :registration_policy
 
   COMPARABLE_ATTRIBUTES = %w[
@@ -146,9 +142,7 @@ class RegistrationPolicyBucket < ApplicationRecord
     }
   end
 
-  # Explicit value-equality check, deliberately NOT `==` -- see RegistrationPolicy#equivalent_to?
-  # for the rationale (overriding `==` reaches implicitly into assert_equal, Array#include?,
-  # case/when, uniq, etc).
+  # Deliberately not `==` -- see RegistrationPolicy#equivalent_to? for why.
   def equivalent_to?(other)
     return equivalent_to?(other.bucket) if other.is_a?(RegistrationPolicy::BucketDrop)
     return false unless other.is_a?(RegistrationPolicyBucket)
