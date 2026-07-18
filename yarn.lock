@@ -9458,14 +9458,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"caniuse-lite@npm:1.0.30001800":
-  version: 1.0.30001800
-  resolution: "caniuse-lite@npm:1.0.30001800"
-  checksum: 10c0/107ad692b89ce3b6c060f39159a19577b6b171c678a9174fbe827a6f3b2c3c9cd67f1e46076aa4731cefbd21ba2da754ca2300c6a448c7a05bdda078f73fa3b0
-  languageName: node
-  linkType: hard
-
-"caniuse-lite@npm:^1.0.0, caniuse-lite@npm:^1.0.30001803, caniuse-lite@npm:^1.0.30001806":
+"caniuse-lite@npm:1.0.30001806, caniuse-lite@npm:^1.0.0, caniuse-lite@npm:^1.0.30001803, caniuse-lite@npm:^1.0.30001806":
   version: 1.0.30001806
   resolution: "caniuse-lite@npm:1.0.30001806"
   checksum: 10c0/9442c8afff0968e9b2ce0104a7340c1ce4a5c09f469ccb9eef10d25712ea0afe542486e5318c697c70dd502f988cfc04eaa1c9438c92ac3bcf4d708a2a17bee1
@@ -20467,7 +20460,7 @@ __metadata:
     buffer: "npm:6.0.3"
     bytes: "npm:3.1.2"
     cadmus-navbar-admin: "npm:6.0.0"
-    caniuse-lite: "npm:1.0.30001800"
+    caniuse-lite: "npm:1.0.30001806"
     classnames: "npm:2.5.1"
     cm6-graphql: "npm:^0.2.1"
     codemirror: "npm:^6.0.1"
