@@ -13,7 +13,7 @@ import { apolloClientContext } from 'AppContexts';
 
 export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<SignupRoundsAdminQueryData>({ query: SignupRoundsAdminQueryDocument });
+  const { data } = await client.query({ query: SignupRoundsAdminQueryDocument });
   return data;
 };
 
