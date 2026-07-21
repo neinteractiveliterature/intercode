@@ -37,6 +37,12 @@ Lint/MissingCopEnableDirective:
   Exclude:
     - 'app/graphql/types/mutation_type.rb'
 
+# Offense count: 2
+Lint/MissingSuper:
+  Exclude:
+    - 'app/services/execute_ranked_choice_signup_service.rb'
+    - 'app/services/rerun_moderated_ranked_choice_signup_round_service.rb'
+
 # Offense count: 1
 Lint/NoReturnInBeginEndBlocks:
   Exclude:
@@ -50,6 +56,7 @@ Metrics/BlockLength:
     - 'config/environments/production.rb'
     - 'config/initializers/doorkeeper.rb'
     - 'test/presenters/signup_count_presenter_test.rb'
+    - 'test/services/rerun_moderated_ranked_choice_signup_round_service_test.rb'
 
 # Offense count: 7
 # Configuration parameters: CountComments, Max, CountAsOne.
@@ -61,13 +68,27 @@ Metrics/ClassLength:
     - 'app/graphql/types/mutation_type.rb'
     - 'app/graphql/types/query_type.rb'
     - 'app/presenters/signup_count_presenter.rb'
+    - 'app/services/execute_ranked_choice_signup_service.rb'
     - 'test/presenters/signup_count_presenter_test.rb'
+
+# Offense count: 1
+# Configuration parameters: AllowedMethods, AllowedPatterns, Max.
+Metrics/CyclomaticComplexity:
+  Exclude:
+    - 'app/services/execute_ranked_choice_signup_service.rb'
 
 # Offense count: 1
 # Configuration parameters: Max.
 Metrics/ParameterLists:
   Exclude:
     - 'app/presenters/signup_count_presenter.rb'
+    - 'app/services/execute_ranked_choice_signup_service.rb'
+
+# Offense count: 1
+# Configuration parameters: AllowedMethods, AllowedPatterns, Max.
+Metrics/PerceivedComplexity:
+  Exclude:
+    - 'app/services/execute_ranked_choice_signup_service.rb'
 
 # Offense count: 1
 # Configuration parameters: ForbiddenPrefixes, AllowedMethods, MethodDefinitionMacros.

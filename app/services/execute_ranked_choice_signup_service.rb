@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class ExecuteRankedChoiceSignupService < CivilService::Service
   class Result < CivilService::Result
     attr_accessor :decision
@@ -46,6 +47,11 @@ class ExecuteRankedChoiceSignupService < CivilService::Service
   end
 
   def inner_call
+    # Capture this before doing anything else: accepting the choice changes its state, and
+    # priority is a list position scoped by (user_con_profile, state), so the state change
+    # renumbers the choice itself as well as the remaining pending choices
+    after_signup_ranked_choice
+
     skip = skip_reason
 
     decision =
@@ -176,7 +182,14 @@ class ExecuteRankedChoiceSignupService < CivilService::Service
   end
 
   def after_signup_ranked_choice
-    @after_signup_ranked_choice ||=
-      user_con_profile.signup_ranked_choices.where("priority > ?", signup_ranked_choice.priority).order(:priority).first
+    return @after_signup_ranked_choice if defined?(@after_signup_ranked_choice)
+
+    @after_signup_ranked_choice =
+      user_con_profile
+        .signup_ranked_choices
+        .where(state: "pending")
+        .where("priority > ?", signup_ranked_choice.priority)
+        .order(:priority)
+        .first
   end
 end
