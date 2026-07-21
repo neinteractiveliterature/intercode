@@ -1,5 +1,5 @@
 import { useContext, useState, useMemo } from 'react';
-import { MaximumEventSignupsValue, ParsedSignupRound } from '../SignupRoundUtils';
+import { ParsedSignupRound } from '../SignupRoundUtils';
 import { RankedChoiceOrder, SignupAutomationMode, SignupRoundAutomationAction } from '../graphqlTypes.generated';
 import { useTranslation } from 'react-i18next';
 import MaximumEventSignupsInput from './MaximumEventSignupsInput';
@@ -17,18 +17,6 @@ import { useAppDateTimeFormat } from '../TimeUtils';
 import { DateTime } from 'luxon';
 import { Link, useFetcher } from 'react-router';
 import { describeSignupRound } from './describeSignupRound';
-
-function maximumEventSignupsAsNumber(value: MaximumEventSignupsValue): number {
-  switch (value) {
-    case 'not_now':
-    case 'not_yet':
-      return 0;
-    case 'unlimited':
-      return Infinity;
-    default:
-      return value;
-  }
-}
 
 type SignupRoundCardProps = {
   rounds: ParsedSignupRound<SignupRoundsAdminQueryData['convention']['signup_rounds'][number]>[];
@@ -55,33 +43,7 @@ function SignupRoundCard({ rounds, roundIndex }: SignupRoundCardProps) {
     [editingRound, round],
   );
 
-  const rankedChoiceSignupsAsNumbers = useMemo(() => {
-    return rounds.map((round) => {
-      if (round.automation_action === SignupRoundAutomationAction.ExecuteRankedChoice) {
-        return maximumEventSignupsAsNumber(round.maximum_event_signups ?? 'not_yet');
-      } else {
-        return undefined;
-      }
-    });
-  }, [rounds]);
   const roundDescription = useMemo(() => describeSignupRound(rounds, roundIndex, t), [rounds, roundIndex, t]);
-  const increasedMaximumSignups = useMemo(() => {
-    if (round.maximum_event_signups == null) {
-      return false;
-    }
-
-    for (let i = roundIndex - 1; i > 0; i--) {
-      const roundSignupsAsNumber = rankedChoiceSignupsAsNumbers[i];
-      if (
-        roundSignupsAsNumber != null &&
-        roundSignupsAsNumber >= maximumEventSignupsAsNumber(round.maximum_event_signups)
-      ) {
-        return false;
-      }
-    }
-
-    return true;
-  }, [rankedChoiceSignupsAsNumbers, roundIndex, round.maximum_event_signups]);
 
   return (
     <fetcher.Form action={`./${round.id}`} method="PATCH" preventScrollReset>
@@ -126,31 +88,27 @@ function SignupRoundCard({ rounds, roundIndex }: SignupRoundCardProps) {
                   {t('signups.signupRounds.automationActions.executeRankedChoice')}
                 </option>
               </BootstrapFormSelect>
-              {increasedMaximumSignups && (
-                <BootstrapFormSelect
-                  label={t('signups.rankedChoiceOrderLabel')}
-                  name="ranked_choice_order"
-                  value={editingRound.ranked_choice_order ?? undefined}
-                  onValueChange={(newValue) =>
-                    setEditingRound((prevEditingRound) => {
-                      const newOrder =
-                        newValue === RankedChoiceOrder.Asc || newValue === RankedChoiceOrder.Desc ? newValue : null;
+              <BootstrapFormSelect
+                label={t('signups.rankedChoiceOrderLabel')}
+                name="ranked_choice_order"
+                value={editingRound.ranked_choice_order ?? undefined}
+                onValueChange={(newValue) =>
+                  setEditingRound((prevEditingRound) => {
+                    const newOrder =
+                      newValue === RankedChoiceOrder.Asc || newValue === RankedChoiceOrder.Desc ? newValue : null;
 
-                      return { ...prevEditingRound, ranked_choice_order: newOrder };
-                    })
-                  }
-                >
-                  <option aria-label={t('general.placeholderOptionLabel')} />
-                  <option value={RankedChoiceOrder.Asc}>{t('signups.rankedChoiceOrder.asc')}</option>
-                  <option value={RankedChoiceOrder.Desc}>{t('signups.rankedChoiceOrder.desc')}</option>
-                  <option value={RankedChoiceOrder.AscSerpentine}>
-                    {t('signups.rankedChoiceOrder.ascSerpentine')}
-                  </option>
-                  <option value={RankedChoiceOrder.DescSerpentine}>
-                    {t('signups.rankedChoiceOrder.descSerpentine')}
-                  </option>
-                </BootstrapFormSelect>
-              )}
+                    return { ...prevEditingRound, ranked_choice_order: newOrder };
+                  })
+                }
+              >
+                <option aria-label={t('general.placeholderOptionLabel')} />
+                <option value={RankedChoiceOrder.Asc}>{t('signups.rankedChoiceOrder.asc')}</option>
+                <option value={RankedChoiceOrder.Desc}>{t('signups.rankedChoiceOrder.desc')}</option>
+                <option value={RankedChoiceOrder.AscSerpentine}>{t('signups.rankedChoiceOrder.ascSerpentine')}</option>
+                <option value={RankedChoiceOrder.DescSerpentine}>
+                  {t('signups.rankedChoiceOrder.descSerpentine')}
+                </option>
+              </BootstrapFormSelect>
               <BootstrapFormCheckbox
                 type="checkbox"
                 name="rerandomize_lottery_numbers"
