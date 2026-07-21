@@ -7,6 +7,7 @@ import { useFetcher } from 'react-router';
 import { ErrorDisplay, FormGroupWithLabel } from '@neinteractiveliterature/litform';
 import DateTimeInput from '../BuiltInFormControls/DateTimeInput';
 import MaximumEventSignupsInput from './MaximumEventSignupsInput';
+import { RankedChoiceOrder, SignupAutomationMode, SignupRoundAutomationAction } from 'graphqlTypes.generated';
 
 type CreateNewSignupRoundFormProps = {
   onCancel: () => void;
@@ -39,6 +40,12 @@ export default function CreateNewSignupRoundForm({ onCancel }: CreateNewSignupRo
         )}
       </FormGroupWithLabel>
       <input type="hidden" name="start" value={start?.toISO() ?? ''} />
+      {convention?.signup_automation_mode === SignupAutomationMode.RankedChoice && (
+        <>
+          <input type="hidden" name="automation_action" value={SignupRoundAutomationAction.ExecuteRankedChoice} />
+          <input type="hidden" name="ranked_choice_order" value={RankedChoiceOrder.Asc} />
+        </>
+      )}
 
       <FormGroupWithLabel label={t('signups.signupRounds.maximumEventSignups')}>
         {(id) => (
