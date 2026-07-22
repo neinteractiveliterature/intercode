@@ -11118,7 +11118,7 @@ __metadata:
     graphql-config: "npm:^5.1.3"
     lodash: "npm:4.18.1"
     prism-react-renderer: "npm:2.4.1"
-    react: "npm:19.2.7"
+    react: "npm:19.2.8"
     react-dom: "npm:19.2.7"
     ts-node: "npm:10.9.2"
     url: "npm:0.11.4"
@@ -19599,10 +19599,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:19.2.7":
-  version: 19.2.7
-  resolution: "react@npm:19.2.7"
-  checksum: 10c0/0bd0e2f1bbd4ba97561c6597bf8a5fec05e6476fe61e165c1065598d16668efc6715205599c94d3ddd49d36cb0f21cbf1b9bcc18ee840b805ce222c3e8d558ac
+"react@npm:19.2.8":
+  version: 19.2.8
+  resolution: "react@npm:19.2.8"
+  checksum: 10c0/5f86bdb56426652fd6d989d30a6f2e603c057272c47c9ca3a3fbe190a3a39ee9ccce937d63cfc039717abed1b8891d6a499134bc35311acc07eafdacd86537cd
   languageName: node
   linkType: hard
 
@@ -20534,7 +20534,7 @@ __metadata:
     prop-types: "npm:15.8.1"
     punycode: "npm:2.3.1"
     qs: "npm:^6.15.0"
-    react: "npm:19.2.7"
+    react: "npm:19.2.8"
     react-bootstrap4-modal: "npm:3.0.11"
     react-color: "npm:2.19.3"
     react-cookie-consent: "npm:10.0.1"
