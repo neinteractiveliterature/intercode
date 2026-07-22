@@ -1,16 +1,15 @@
-import { useMemo } from 'react';
+import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
+import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { reactTableFiltersToTableResultsFilters, reactTableSortToTableResultsSort } from './TableUtils';
 import { ColumnFiltersState, SortingState } from '@tanstack/react-table';
+import { AuthenticationManagerContext } from '../Authentication/authenticationManager';
+import useAsyncFunction from '../useAsyncFunction';
 
 export type URLParamSerializableScalar = string | number | boolean;
 export type URLParamSerializable =
-  | null
-  | undefined
-  | URLParamSerializableScalar
-  | URLParamSerializable[]
-  | { [key: string]: URLParamSerializable };
+  null | undefined | URLParamSerializableScalar | URLParamSerializable[] | { [key: string]: URLParamSerializable };
 
 function dataToKeyPathValuePairs(data: URLParamSerializable, prependKeys: string[] = []): [string[], string][] {
   if (data == null) {
@@ -89,6 +88,46 @@ export type ReactTableExportButtonProps = {
   columns?: string[];
 };
 
+function filenameFromContentDisposition(contentDisposition: string | null): string | null {
+  const match = contentDisposition ? /filename="([^"]+)"/.exec(contentDisposition) : null;
+  return match ? match[1] : null;
+}
+
+// The export routes are authenticated the same way GraphQL requests are (a bearer token
+// from AuthenticationManager, since OIDC sign-in never establishes a cookie session Rails
+// can see). A plain <a href> navigation can't attach that header, so we have to fetch the
+// CSV ourselves and hand the browser a blob to download instead.
+async function downloadExport(url: string, token: string | undefined) {
+  const headers: Record<string, string> = {};
+  if (token) {
+    // eslint-disable-next-line i18next/no-literal-string
+    headers.Authorization = `Bearer ${token}`;
+  }
+
+  const response = await fetch(url, { credentials: 'same-origin', headers });
+  if (!response.ok) {
+    throw new Error(`Export failed: HTTP ${response.status}`);
+  }
+
+  const blob = await response.blob();
+  const filename =
+    filenameFromContentDisposition(response.headers.get('Content-Disposition')) ??
+    // eslint-disable-next-line i18next/no-literal-string
+    'export.csv';
+  const objectUrl = URL.createObjectURL(blob);
+
+  try {
+    const link = document.createElement('a');
+    link.href = objectUrl;
+    link.download = filename;
+    document.body.appendChild(link);
+    link.click();
+    link.remove();
+  } finally {
+    URL.revokeObjectURL(objectUrl);
+  }
+}
+
 function ReactTableExportButton({
   exportUrl,
   filters,
@@ -96,17 +135,22 @@ function ReactTableExportButton({
   columns,
 }: ReactTableExportButtonProps): React.JSX.Element {
   const { t } = useTranslation();
-  const href = useMemo(
-    () => getExportUrl(exportUrl, { filters, sortBy, columns }),
-    [columns, exportUrl, filters, sortBy],
-  );
+  const authenticationManager = useContext(AuthenticationManagerContext);
+  const [exportAsync, error, inProgress] = useAsyncFunction(downloadExport, { suppressError: true });
+
+  const onClick = async () => {
+    const url = getExportUrl(exportUrl, { filters, sortBy, columns });
+    const token = await authenticationManager.ensureFreshAccessToken();
+    await exportAsync(url, token);
+  };
 
   return (
-    <a className="btn btn-outline-primary" href={href}>
-      <>
+    <>
+      <button type="button" className="btn btn-outline-primary" onClick={onClick} disabled={inProgress}>
         <i className="bi-file-earmark-spreadsheet" /> {t('tables.exportCSV.buttonText')}
-      </>
-    </a>
+      </button>
+      <ErrorDisplay stringError={error?.message} />
+    </>
   );
 }
 
