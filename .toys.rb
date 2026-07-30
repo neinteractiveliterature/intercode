@@ -1,6 +1,7 @@
+# frozen_string_literal: true
 require "tmpdir"
 
-tool "setup_tls" do
+tool "setup_tls" do # rubocop:disable Metrics/BlockLength
   desc "Generate TLS key and certificate for local dev environment"
 
   include :exec, exit_on_nonzero_status: true
@@ -10,7 +11,6 @@ tool "setup_tls" do
     if File.exist?("dev_ca.crt") && File.exist?("dev_ca.key") && !force_rebuild
       ca_key = OpenSSL::PKey::RSA.new(File.read("dev_ca.key"))
       ca_cert = OpenSSL::X509::Certificate.new(File.read("dev_ca.crt"))
-      [ca_key, ca_cert]
     else
       ca_key = OpenSSL::PKey::RSA.generate(2048)
 
@@ -27,7 +27,7 @@ tool "setup_tls" do
         )
       ca_cert.issuer = ca_cert.subject
       ca_cert.public_key = ca_key.public_key
-      ca_cert.not_before = Time.now
+      ca_cert.not_before = Time.zone.now
       ca_cert.not_after = ca_cert.not_before + (365 * 24 * 60 * 60)
       ef = OpenSSL::X509::ExtensionFactory.new
       ef.subject_certificate = ca_cert
@@ -37,10 +37,10 @@ tool "setup_tls" do
         ef.create_extension("basicConstraints", "CA:true")
       ]
 
-      ca_cert.sign ca_key, OpenSSL::Digest::SHA256.new
+      ca_cert.sign ca_key, OpenSSL::Digest.new("SHA256")
 
       File.binwrite("dev_ca.key", ca_key.to_pem)
-      File.chmod(0600, "dev_ca.key")
+      File.chmod(0o600, "dev_ca.key")
       File.binwrite("dev_ca.crt", ca_cert.to_pem)
 
       puts "Wrote dev_ca.key and dev_ca.crt"
@@ -52,9 +52,8 @@ tool "setup_tls" do
       else
         puts "You will have to add dev_ca.crt to your trusted certificates manually"
       end
-
-      [ca_key, ca_cert]
     end
+    [ca_key, ca_cert]
   end
 
   def run # rubocop:disable Metrics/MethodLength, Metrics/AbcSize
@@ -72,7 +71,7 @@ tool "setup_tls" do
       )
     cert.issuer = ca_cert.subject
     cert.public_key = key.public_key
-    cert.not_before = Time.now
+    cert.not_before = Time.zone.now
     cert.not_after = cert.not_before + (365 * 24 * 60 * 60)
 
     ef = OpenSSL::X509::ExtensionFactory.new
@@ -87,10 +86,10 @@ tool "setup_tls" do
     ]
     cert.add_extension ef.create_extension("authorityKeyIdentifier", "keyid,issuer")
 
-    cert.sign ca_key, OpenSSL::Digest::SHA256.new
+    cert.sign ca_key, OpenSSL::Digest.new("SHA256")
 
     File.binwrite("dev_certificate.key", key.to_pem)
-    File.chmod(0600, "dev_certificate.key")
+    File.chmod(0o600, "dev_certificate.key")
     File.binwrite("dev_certificate.crt", cert.to_pem)
 
     puts "Wrote dev_certificate.key and dev_certificate.crt"
@@ -125,27 +124,57 @@ tool "update_schema" do
   end
 end
 
-tool "pull_production_db" do
+tool "pull_production_db" do # rubocop:disable Metrics/BlockLength
   desc "Pull down the production database into development"
   include :exec, exit_on_nonzero_status: true
+  include :bundler
   required_arg :database_url
   flag :docker_compose
   flag :include_form_response_changes
   flag :include_ahoy_data
+  flag :aws_profile, default: "neil"
+  flag :aws_region, default: "us-east-1"
 
   def run
+    require "aws-sdk-rds"
+    require "cgi"
+    require "uri"
+
     puts "Pulling production data"
     pull_options = ["--exclude-table-data=sessions"]
     pull_options << "--exclude-table-data=form_response_changes" unless include_form_response_changes
     pull_options << "--exclude-table-data=ahoy_events --exclude-table-data=ahoy_visits" unless include_ahoy_data
+
+    authenticated_url = authenticate_database_url(database_url)
+
     cmd =
       "docker run -i -t --mount type=bind,source=\"#{Dir.pwd}\",target=/out postgres:17 \
-pg_dump #{pull_options.join(" ")} -v -x --no-owner -Fp \"#{database_url}\" \
+pg_dump #{pull_options.join(" ")} -v -x --no-owner -Fp \"#{authenticated_url}\" \
 -f /out/intercode_production.sql"
     puts cmd
     sh cmd
 
     exec_tool("load_production_db #{"--docker-compose" if docker_compose}")
+  end
+
+  # RDS IAM auth tokens are just short-lived (15 minute) SigV4-signed passwords, so a
+  # bare `pg_dump` has no way to generate one itself. We mint one here (using the same
+  # aws-sdk-rds gem that pg-aws_rds_iam relies on) and splice it into the connection URL.
+  def authenticate_database_url(url)
+    uri = URI.parse(url)
+    return url unless uri.password.to_s.empty?
+
+    ENV["AWS_PROFILE"] ||= aws_profile
+    ENV["AWS_REGION"] ||= aws_region
+    profile = ENV.fetch("AWS_PROFILE", nil)
+
+    puts "No password in database URL; generating an RDS IAM auth token (AWS_PROFILE=#{profile})"
+    credentials = Aws::CredentialProviderChain.new.resolve
+    generator = Aws::RDS::AuthTokenGenerator.new(credentials:)
+    token = generator.auth_token(region: aws_region, endpoint: "#{uri.host}:#{uri.port || 5432}", user_name: uri.user)
+
+    query = uri.query ? "#{uri.query}&sslmode=require" : "sslmode=require"
+    "#{uri.scheme}://#{uri.user}:#{CGI.escape(token)}@#{uri.host}:#{uri.port || 5432}#{uri.path}?#{query}"
   end
 end
 
@@ -178,7 +207,7 @@ tool "build_sanitized_db" do
     sh "./bin/rails sanitize_db DEVELOPMENT_DATABASE_URL=#{database_url}"
 
     puts "Creating pgdump file"
-    filename = "intercode_sanitized_#{Time.now.strftime("%Y-%m-%d")}.pgdump"
+    filename = "intercode_sanitized_#{Time.zone.now.strftime("%Y-%m-%d")}.pgdump"
     sh "pg_dump -Fc -d intercode_sanitized_tmp -f #{filename}"
 
     puts "Dropping temporary database"
@@ -186,7 +215,7 @@ tool "build_sanitized_db" do
   end
 end
 
-tool "pull_uploads" do
+tool "pull_uploads" do # rubocop:disable Metrics/BlockLength
   desc "Pull uploaded files down from production"
   include :bundler
 
@@ -241,7 +270,7 @@ tool "cleanup_branches" do
   end
 end
 
-tool "update_liquid_doc_json" do
+tool "update_liquid_doc_json" do # rubocop:disable Metrics/BlockLength
   desc "Generate a new liquid_doc.json by introspecting the Liquid code"
 
   def serialize_class(klass)
@@ -263,7 +292,7 @@ tool "update_liquid_doc_json" do
   end
 
   def serialize_registry
-    classes = YARD::Registry.all.select { |obj| obj.is_a?(YARD::CodeObjects::ClassObject) }
+    classes = YARD::Registry.all.grep(YARD::CodeObjects::ClassObject)
     filters_module =
       YARD::Registry.all.find do |obj|
         obj.is_a?(YARD::CodeObjects::ModuleObject) && obj.path == "Intercode::Liquid::Filters"
