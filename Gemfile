@@ -188,3 +188,5 @@ gem "sentry-ruby", "~> 6.0"
 gem "openssl", "~> 4.0"
 
 gem "readline", "~> 0.0.4"
+
+gem "pg-aws_rds_iam", "~> 0.8.0"
