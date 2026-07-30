@@ -1,8 +1,14 @@
 # frozen_string_literal: true
 class Mutations::AddOrderEntryToCurrentPendingOrder < Mutations::BaseMutation
-  field :order_entry, Types::OrderEntryType, null: false
-  argument :order_entry, Types::OrderEntryInputType, required: true, camelize: false
-  argument :pay_what_you_want_amount, Types::MoneyInputType, required: false, camelize: false
+  description "Adds an order entry to the current user's pending order, creating one if necessary."
+
+  field :order_entry, Types::OrderEntryType, null: false, description: "The order entry that was added or updated."
+  argument :order_entry, Types::OrderEntryInputType, required: true, camelize: false do
+    description "The order entry to add."
+  end
+  argument :pay_what_you_want_amount, Types::MoneyInputType, required: false, camelize: false do
+    description "The amount to charge, if this is a pay-what-you-want product."
+  end
 
   require_user_con_profile
 
@@ -10,11 +16,20 @@ class Mutations::AddOrderEntryToCurrentPendingOrder < Mutations::BaseMutation
     product = convention.products.find(order_entry.product_id)
     raise GraphQL::ExecutionError, "#{product.name} is not publicly available" unless product.available?
 
+    check_sold_out(product)
+
     pay_what_you_want_amount = MoneyHelper.coerce_money_input(pay_what_you_want_amount)
     validate_amount(product, pay_what_you_want_amount)
 
-    order = current_pending_order
-    order ||= user_con_profile.orders.create!(status: "pending")
+    new_order_entry = upsert_order_entry(product, order_entry, pay_what_you_want_amount)
+
+    { order_entry: new_order_entry }
+  end
+
+  private
+
+  def upsert_order_entry(product, order_entry, pay_what_you_want_amount)
+    order = current_pending_order || user_con_profile.orders.create!(status: "pending")
 
     new_order_entry =
       order
@@ -30,13 +45,16 @@ class Mutations::AddOrderEntryToCurrentPendingOrder < Mutations::BaseMutation
       new_order_entry.price_per_item = pay_what_you_want_amount
     end
     new_order_entry.save!
-
-    { order_entry: new_order_entry }
+    new_order_entry
   end
 
-  private
+  def check_sold_out(product)
+    return unless product.provides_ticket_type.present? && convention.reached_maximum_tickets?
 
-  def validate_amount(product, pay_what_you_want_amount)
+    raise GraphQL::ExecutionError, "We're sorry, but #{convention.name} is currently sold out."
+  end
+
+  def validate_amount(product, pay_what_you_want_amount) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
     if product.pricing_structure.pricing_strategy == "pay_what_you_want"
       raise GraphQL::ExecutionError, "Amount is required for pay-what-you-want products" unless pay_what_you_want_amount
 

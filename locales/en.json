@@ -1545,6 +1545,7 @@
       "unpaid": "Unpaid"
     },
     "selectProductLabel": "Select",
+    "soldOut": "We're sorry, but {{ conventionName }} is currently sold out of {{ ticketNamePlural }}.",
     "totalPrice": "Total: {{ totalPrice, money }}"
   },
   "tables": {
