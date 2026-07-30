@@ -1,4 +1,5 @@
 import { useContext } from 'react';
+import { useTranslation } from 'react-i18next';
 import { LoaderFunction, RouterContextProvider, replace, useLoaderData, useNavigate } from 'react-router';
 import AppRootContext from '../AppRootContext';
 import useLoginRequired from '../Authentication/useLoginRequired';
@@ -21,8 +22,9 @@ export const loader: LoaderFunction<RouterContextProvider> = async ({ context })
 
 function TicketPurchasePage() {
   const data = useLoaderData() as TicketPurchaseFormQueryData;
-  const { ticketName } = useContext(AppRootContext);
+  const { ticketName, ticketNamePlural } = useContext(AppRootContext);
   const navigate = useNavigate();
+  const { t } = useTranslation();
 
   usePageTitle(`Buy a ${ticketName}`);
 
@@ -39,7 +41,11 @@ function TicketPurchasePage() {
           Buy a {ticketName} for {data.convention.name}
         </h1>
 
-        <TicketPurchaseForm availableProducts={data.convention.products} onAddedToCart={() => navigate('/cart')} />
+        {data.convention.tickets_available_for_purchase ? (
+          <TicketPurchaseForm availableProducts={data.convention.products} onAddedToCart={() => navigate('/cart')} />
+        ) : (
+          <p className="lead">{t('store.soldOut', { conventionName: data.convention.name, ticketNamePlural })}</p>
+        )}
       </div>
     </div>
   );

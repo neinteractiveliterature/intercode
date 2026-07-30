@@ -5,6 +5,7 @@ query TicketPurchaseFormQuery {
     id
     name
     ticket_name
+    tickets_available_for_purchase
 
     products(only_ticket_providing: true, only_available: true) {
       id
