@@ -1,10 +1,10 @@
-ARG RUBY_VERSION
-ARG NODE_VERSION
+ARG RUBY_VERSION=4
+ARG NODE_VERSION=24.11.1
 ARG CHAMBER_VERSION=3.1.5
 
 ### dev
 
-FROM ruby:${RUBY_VERSION}-slim as dev
+FROM ruby:${RUBY_VERSION}-slim AS dev
 ARG NODE_VERSION
 
 USER root
@@ -34,34 +34,32 @@ COPY --chown=www:www . /usr/src/intercode
 
 FROM dev AS build
 
-ENV RAILS_ENV production
-ENV NODE_ENV production
-ENV AWS_ACCESS_KEY_ID dummy
-ENV AWS_SECRET_ACCESS_KEY dummy
+ENV RAILS_ENV=production
+ENV NODE_ENV=production
 
 RUN bundle exec bootsnap precompile --gemfile app/ lib/
-RUN DATABASE_URL=postgresql://fakehost/not_a_real_database AWS_S3_BUCKET=fakebucket bundle exec rails assets:precompile
+RUN DATABASE_URL=postgresql://fakehost/not_a_real_database AWS_S3_BUCKET=fakebucket AWS_ACCESS_KEY_ID=dummy AWS_SECRET_ACCESS_KEY=dummy bundle exec rails assets:precompile
 RUN rm -r doc-site
 
 ### ld_preload trickery
 
-FROM ruby:${RUBY_VERSION}-slim as amd64_jemalloc
+FROM ruby:${RUBY_VERSION}-slim AS amd64_jemalloc
 ENV LD_PRELOAD=/usr/lib/x86_64-linux-gnu/libjemalloc.so.2
 
-FROM ruby:${RUBY_VERSION}-slim as arm64_jemalloc
+FROM ruby:${RUBY_VERSION}-slim AS arm64_jemalloc
 ENV LD_PRELOAD=/usr/lib/aarch64-linux-gnu/libjemalloc.so.2
 
 ### production
 
-FROM ${TARGETARCH}_jemalloc as production
+FROM ${TARGETARCH}_jemalloc AS production
 ARG NODE_VERSION
 ARG TARGETARCH
 ARG REVISION
 ARG CHAMBER_VERSION
 
-ENV RAILS_ENV production
-ENV NODE_ENV production
-ENV REVISION ${REVISION}
+ENV RAILS_ENV=production
+ENV NODE_ENV=production
+ENV REVISION=${REVISION}
 
 USER root
 # iproute2, curl: generally useful network utilities that don't take much space
