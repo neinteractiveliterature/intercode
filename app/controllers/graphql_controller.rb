@@ -74,6 +74,11 @@ class GraphqlController < ApplicationController
   skip_before_action :redirect_if_user_con_profile_needs_update
   skip_before_action :ensure_clickwrap_agreement_accepted
 
+  # The default ParamsWrapper nests a second copy of the request body under a "graphql" key
+  # (named after this controller), since it assumes JSON POST bodies map to a model. We don't
+  # have a model here and never read the wrapped copy, so it's just duplicate data in every log line.
+  wrap_parameters false
+
   def execute
     ActiveRecord::Base.transaction do
       result = clean_backtraces(execute_from_params(params))
@@ -160,6 +165,22 @@ class GraphqlController < ApplicationController
       {}
     else
       raise ArgumentError, "Unexpected parameter: #{ambiguous_param}"
+    end
+  end
+
+  # Surfaces operation name(s)/variables as their own request-log fields (see
+  # config/initializers/json_logging.rb), instead of leaving them buried in the raw params.
+  def append_info_to_payload(payload)
+    super
+
+    batched_queries = params[:_json]
+
+    if batched_queries.is_a?(Array)
+      payload[:graphql_operation_name] = batched_queries.pluck(:operationName)
+      payload[:graphql_variables] = batched_queries.map { |query| ensure_hash(query[:variables]) }
+    else
+      payload[:graphql_operation_name] = params[:operationName]
+      payload[:graphql_variables] = variables
     end
   end
 
