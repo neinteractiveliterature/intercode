@@ -16,6 +16,7 @@ release_command = "bundle exec rails release:perform"
 strategy = "bluegreen"
 
 [env]
+AWS_REGION = "us-east-1"
 CHAMBER_SERVICE = "intercode_production"
 CHAMBER_AWS_ROLE_ARN = "arn:aws:iam::689053117832:role/intercode-chamber"
 JSON_LOGGING = "1"
