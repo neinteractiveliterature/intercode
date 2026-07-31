@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 if ENV["JSON_LOGGING"]
   Rails.application.configure do
     config.lograge.formatter = Lograge::Formatters::Json.new
@@ -7,10 +9,10 @@ if ENV["JSON_LOGGING"]
     config.lograge.custom_options =
       lambda do |event|
         custom_options = {
-          request_time: Time.now,
+          request_time: Time.current,
           application: Rails.application.class.name.delete_suffix("::Application"),
           process_id: Process.pid,
-          host: event.payload[:host],
+          request_host: event.payload[:request_host],
           remote_ip: event.payload[:remote_ip],
           user_agent: event.payload[:user_agent],
           ip: event.payload[:ip],

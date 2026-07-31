@@ -71,6 +71,20 @@ class ApplicationController < ActionController::Base
 
   protected
 
+  # Lograge's custom_options (see config/initializers/json_logging.rb) reads these keys
+  # straight off the process_action.action_controller event payload, so they need to be
+  # added here rather than via config.lograge.custom_payload (which nests them instead).
+  def append_info_to_payload(payload)
+    super
+    payload[:request_host] = request.host
+    payload[:remote_ip] = request.remote_ip
+    payload[:ip] = request.ip
+    payload[:user_agent] = request.headers["User-Agent"]
+    payload[:x_forwarded_for] = request.headers["X-Forwarded-For"]
+    payload[:current_user_id] = current_user&.id
+    payload[:assumed_identity_from_profile_id] = assumed_identity_from_profile&.id
+  end
+
   def pundit_user
     @pundit_user ||=
       AuthorizationInfo.new(
