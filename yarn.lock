@@ -1760,15 +1760,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/view@npm:6.43.6, @codemirror/view@npm:^6.0.0, @codemirror/view@npm:^6.17.0, @codemirror/view@npm:^6.23.0, @codemirror/view@npm:^6.27.0, @codemirror/view@npm:^6.36.3, @codemirror/view@npm:^6.42.0":
-  version: 6.43.6
-  resolution: "@codemirror/view@npm:6.43.6"
+"@codemirror/view@npm:6.43.7, @codemirror/view@npm:^6.0.0, @codemirror/view@npm:^6.17.0, @codemirror/view@npm:^6.23.0, @codemirror/view@npm:^6.27.0, @codemirror/view@npm:^6.36.3, @codemirror/view@npm:^6.42.0":
+  version: 6.43.7
+  resolution: "@codemirror/view@npm:6.43.7"
   dependencies:
     "@codemirror/state": "npm:^6.7.0"
     crelt: "npm:^1.0.6"
     style-mod: "npm:^4.1.0"
     w3c-keyname: "npm:^2.2.4"
-  checksum: 10c0/930b043b8d48e02421a1cb15eb311fb39edbb9709a107eeea8de133aad8ab3fb9bbfae9e829216914cb997026d06d26a71768ff0e2a8d679c9d27d3cb1b940eb
+  checksum: 10c0/f4a667a064ed85bc995f52855180bff01ef0e1c1f89121d7895bd811e9f83677e6471596a2a9a20e3b7f9e69be654383ebff312c177a6d840e8b0b55729e86d2
   languageName: node
   linkType: hard
 
@@ -20375,7 +20375,7 @@ __metadata:
     "@codemirror/language": "npm:6.12.4"
     "@codemirror/lint": "npm:^6.9.6"
     "@codemirror/state": "npm:6.7.1"
-    "@codemirror/view": "npm:6.43.6"
+    "@codemirror/view": "npm:6.43.7"
     "@dnd-kit/core": "npm:6.3.1"
     "@dnd-kit/sortable": "npm:10.0.0"
     "@dnd-kit/utilities": "npm:3.2.2"
