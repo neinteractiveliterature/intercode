@@ -39,13 +39,13 @@ output "alarm_sns_topic_arn" {
 }
 
 output "iam_access_key_id" {
-  description = "AWS access key ID for the app IAM user."
-  value       = aws_iam_access_key.this.id
+  description = "AWS access key ID for the app IAM user. Null if create_static_credentials is false."
+  value       = var.create_static_credentials ? aws_iam_access_key.this[0].id : null
 }
 
 output "iam_access_key_secret" {
-  description = "AWS secret access key for the app IAM user."
-  value       = aws_iam_access_key.this.secret
+  description = "AWS secret access key for the app IAM user. Null if create_static_credentials is false."
+  value       = var.create_static_credentials ? aws_iam_access_key.this[0].secret : null
   sensitive   = true
 }
 

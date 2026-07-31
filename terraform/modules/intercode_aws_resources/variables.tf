@@ -124,3 +124,9 @@ variable "default_currency" {
   description = "ISO 4217 currency code for the default currency (e.g. 'USD'). Required — Intercode will not function without it."
   type        = string
 }
+
+variable "create_static_credentials" {
+  description = "Whether to create a static IAM user/access key and write AWS_ACCESS_KEY_ID/AWS_SECRET_ACCESS_KEY to SSM. Set to false once the app authenticates via Fly's OIDC identity (CHAMBER_AWS_ROLE_ARN) instead of a long-lived key — see intercode#11852."
+  type        = bool
+  default     = true
+}

@@ -44,21 +44,22 @@ module "ses_email" {
 
 ## Inputs
 
-| Name                       | Description                               | Default |
-| -------------------------- | ----------------------------------------- | ------- |
-| `name`                     | Prefix for SQS queues and IAM resources   | —       |
-| `s3_bucket_name`           | Uploads S3 bucket name                    | —       |
-| `alarm_email_destinations` | Emails for CloudWatch alarm notifications | `[]`    |
+| Name                        | Description                                                                                                                                                                  | Default |
+| --------------------------- | ---------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ------- |
+| `name`                      | Prefix for SQS queues and IAM resources                                                                                                                                      | —       |
+| `s3_bucket_name`            | Uploads S3 bucket name                                                                                                                                                       | —       |
+| `alarm_email_destinations`  | Emails for CloudWatch alarm notifications                                                                                                                                    | `[]`    |
+| `create_static_credentials` | Whether to create a static IAM user/access key and write `AWS_ACCESS_KEY_ID`/`AWS_SECRET_ACCESS_KEY` to SSM. Set to `false` once the app authenticates via Fly OIDC instead. | `true`  |
 
 ## Outputs
 
-| Name                    | Description                                                              |
-| ----------------------- | ------------------------------------------------------------------------ |
-| `iam_group_name`        | IAM group name — pass to email modules so they can attach their policies |
-| `s3_bucket_name`        | Uploads bucket name                                                      |
-| `s3_bucket_arn`         | Uploads bucket ARN                                                       |
-| `sqs_queue_urls`        | Map of queue name → URL                                                  |
-| `sqs_queue_arns`        | Map of queue name → ARN                                                  |
-| `alarm_sns_topic_arn`   | CloudWatch alarms SNS topic ARN                                          |
-| `iam_access_key_id`     | App IAM access key ID                                                    |
-| `iam_access_key_secret` | App IAM secret access key (sensitive)                                    |
+| Name                    | Description                                                                             |
+| ----------------------- | --------------------------------------------------------------------------------------- |
+| `iam_group_name`        | IAM group name — pass to email modules so they can attach their policies                |
+| `s3_bucket_name`        | Uploads bucket name                                                                     |
+| `s3_bucket_arn`         | Uploads bucket ARN                                                                      |
+| `sqs_queue_urls`        | Map of queue name → URL                                                                 |
+| `sqs_queue_arns`        | Map of queue name → ARN                                                                 |
+| `alarm_sns_topic_arn`   | CloudWatch alarms SNS topic ARN                                                         |
+| `iam_access_key_id`     | App IAM access key ID (`null` if `create_static_credentials` is `false`)                |
+| `iam_access_key_secret` | App IAM secret access key (sensitive; `null` if `create_static_credentials` is `false`) |

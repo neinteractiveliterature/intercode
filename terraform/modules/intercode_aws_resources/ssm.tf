@@ -21,8 +21,6 @@ locals {
   # This map is sensitive (contains secrets); use nonsensitive(keys(...)) for for_each.
   _ssm_values = merge(
     {
-      AWS_ACCESS_KEY_ID          = aws_iam_access_key.this.id
-      AWS_SECRET_ACCESS_KEY      = aws_iam_access_key.this.secret
       AWS_S3_BUCKET              = aws_s3_bucket.uploads.bucket
       AWS_REGION                 = local.region
       EMAIL_FORWARDERS_API_TOKEN = local._email_forwarders_api_token
@@ -31,6 +29,10 @@ locals {
       OPENID_CONNECT_SIGNING_KEY = local._openid_connect_signing_key
       DEFAULT_CURRENCY           = var.default_currency
     },
+    var.create_static_credentials ? {
+      AWS_ACCESS_KEY_ID     = aws_iam_access_key.this[0].id
+      AWS_SECRET_ACCESS_KEY = aws_iam_access_key.this[0].secret
+    } : {},
     var.fly_api_token != null ? { FLY_API_TOKEN = var.fly_api_token } : {},
     var.stripe != null ? {
       STRIPE_SECRET_KEY              = var.stripe.secret_key
@@ -60,8 +62,6 @@ locals {
   # Maintained in parallel with _ssm_values; never sensitive.
   _ssm_types = merge(
     {
-      AWS_ACCESS_KEY_ID          = "SecureString"
-      AWS_SECRET_ACCESS_KEY      = "SecureString"
       AWS_S3_BUCKET              = "String"
       AWS_REGION                 = "String"
       EMAIL_FORWARDERS_API_TOKEN = "SecureString"
@@ -70,6 +70,10 @@ locals {
       OPENID_CONNECT_SIGNING_KEY = "SecureString"
       DEFAULT_CURRENCY           = "String"
     },
+    var.create_static_credentials ? {
+      AWS_ACCESS_KEY_ID     = "SecureString"
+      AWS_SECRET_ACCESS_KEY = "SecureString"
+    } : {},
     var.fly_api_token != null ? { FLY_API_TOKEN = "SecureString" } : {},
     var.stripe != null ? {
       STRIPE_SECRET_KEY              = "SecureString"

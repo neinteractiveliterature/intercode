@@ -92,14 +92,35 @@ resource "aws_iam_group_policy" "this" {
 }
 
 resource "aws_iam_user" "this" {
-  name = var.name
+  count = var.create_static_credentials ? 1 : 0
+  name  = var.name
 }
 
 resource "aws_iam_user_group_membership" "this" {
-  user   = aws_iam_user.this.name
+  count  = var.create_static_credentials ? 1 : 0
+  user   = aws_iam_user.this[0].name
   groups = [aws_iam_group.this.name]
 }
 
 resource "aws_iam_access_key" "this" {
-  user = aws_iam_user.this.name
+  count = var.create_static_credentials ? 1 : 0
+  user  = aws_iam_user.this[0].name
+}
+
+# create_static_credentials defaults to true, so for existing callers these
+# resources keep their prior addresses (no destroy/recreate of the live
+# access key) despite gaining a count.
+moved {
+  from = aws_iam_user.this
+  to   = aws_iam_user.this[0]
+}
+
+moved {
+  from = aws_iam_user_group_membership.this
+  to   = aws_iam_user_group_membership.this[0]
+}
+
+moved {
+  from = aws_iam_access_key.this
+  to   = aws_iam_access_key.this[0]
 }
