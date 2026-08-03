@@ -111,7 +111,7 @@ class Types::EventType < Types::BaseObject
 
   field :event_category, Types::EventCategoryType, null: false, description: "The category of this event"
 
-  association_loaders Event, :event_category, :team_members, :ticket_types, :convention
+  association_loaders Event, :event_category, :team_members, :ticket_types, :convention, :registration_policy
 
   def form
     event_category = dataloader.with(Sources::ActiveRecordAssociation, Event, :event_category).load(object)
@@ -139,12 +139,16 @@ class Types::EventType < Types::BaseObject
 
   # rubocop:disable Naming/PredicateMethod
   def slots_limited
-    object.registration_policy.slots_limited?
+    policy = registration_policy
+    dataloader.with(Sources::ActiveRecordAssociation, RegistrationPolicy, :buckets).load(policy)
+    policy.slots_limited?
   end
   # rubocop:enable Naming/PredicateMethod
 
   def total_slots
-    object.registration_policy.total_slots
+    policy = registration_policy
+    dataloader.with(Sources::ActiveRecordAssociation, RegistrationPolicy, :buckets).load(policy)
+    policy.total_slots
   end
 
   def short_blurb_html
