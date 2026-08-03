@@ -63,6 +63,23 @@ jobs:
         uses: LoveToKnow/slackify-markdown-action@v1.1.1
         with:
           text: ${{ github.event.release.body }}
+      - name: Truncate release notes for Slack
+        id: truncate-release-notes
+        env:
+          RELEASE_NOTES: ${{ steps.format-release-notes.outputs.text }}
+          RELEASE_URL: ${{ github.event.release.html_url }}
+        run: |
+          # Slack section blocks cap mrkdwn text at 3000 characters.
+          MAX_LENGTH=2800
+          BODY="$RELEASE_NOTES"
+          if [ "${#BODY}" -gt "$MAX_LENGTH" ]; then
+            BODY="${BODY:0:$MAX_LENGTH}"$'\n\n... (truncated; see the full release notes: '"$RELEASE_URL"')'
+          fi
+          {
+            echo "text<<SLACK_MSG_EOF_${{ github.run_id }}_${{ github.run_attempt }}"
+            echo "$BODY"
+            echo "SLACK_MSG_EOF_${{ github.run_id }}_${{ github.run_attempt }}"
+          } >> "$GITHUB_OUTPUT"
       - name: Post about release to Slack
         id: slack
         uses: slackapi/slack-github-action@v3.0.3
@@ -82,7 +99,7 @@ jobs:
               - type: "section"
                 text:
                   type: "mrkdwn"
-                  text: ${{ toJSON(steps.format-release-notes.outputs.text) }}
+                  text: ${{ toJSON(steps.truncate-release-notes.outputs.text) }}
   doc-site-release:
     runs-on: ubuntu-latest
     steps:
