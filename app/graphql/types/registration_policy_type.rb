@@ -58,12 +58,10 @@ class Types::RegistrationPolicyType < Types::BaseObject
     object.minimum_slots_including_not_counted
   end
 
-  # rubocop:disable Naming/PredicateMethod
-  def only_uncounted
+  def only_uncounted # rubocop:disable Naming/PredicateMethod
     buckets
     object.only_uncounted?
   end
-  # rubocop:enable Naming/PredicateMethod
 
   def preferred_slots
     buckets
@@ -75,12 +73,10 @@ class Types::RegistrationPolicyType < Types::BaseObject
     object.preferred_slots_including_not_counted
   end
 
-  # rubocop:disable Naming/PredicateMethod
-  def slots_limited
+  def slots_limited # rubocop:disable Naming/PredicateMethod
     buckets
     object.slots_limited?
   end
-  # rubocop:enable Naming/PredicateMethod
 
   def total_slots
     buckets
