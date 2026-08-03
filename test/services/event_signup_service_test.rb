@@ -608,6 +608,20 @@ class EventSignupServiceTest < ActiveSupport::TestCase
     end
   end
 
+  describe "with a valid ticket and many existing signups on the run" do
+    setup { ticket }
+
+    before do
+      convention.signup_rounds.first.update!(maximum_event_signups: "unlimited")
+      10.times { create_other_signup(:unlimited) }
+    end
+
+    it "does not issue a bucket query per existing signup" do
+      queries = count_queries(/registration_policy_buckets/) { subject.call! }
+      assert_operator queries, :<=, 6, "expected a constant number of bucket queries regardless of signup count"
+    end
+  end
+
   describe "in a moderated-signup convention" do
     let(:convention) { create(:convention, :with_notification_templates, signup_mode: "moderated") }
 
@@ -695,5 +709,17 @@ class EventSignupServiceTest < ActiveSupport::TestCase
         requested_bucket_id: bucket_id_for(the_run, requested_bucket_key)
       }.merge(attributes)
     )
+  end
+
+  def count_queries(pattern)
+    count = 0
+    subscriber =
+      ActiveSupport::Notifications.subscribe("sql.active_record") do |*, payload|
+        count += 1 if pattern.match?(payload[:sql])
+      end
+    yield
+    count
+  ensure
+    ActiveSupport::Notifications.unsubscribe(subscriber) if subscriber
   end
 end

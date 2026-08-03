@@ -18,7 +18,16 @@ class AddBucketIdToSignupsSignupRequestsSignupRankedChoicesAndSignupChanges < Ac
                   }
     add_column :signup_changes, :requested_bucket_name, :string
 
-    reversible { |dir| dir.up { backfill_bucket_ids } }
+    reversible do |dir|
+      dir.up do
+        backfill_bucket_ids
+        add_check_constraint :signups,
+                             "(bucket_id IS NULL) OR ((state)::text = ANY (ARRAY['confirmed'::text, 'ticket_purchase_hold'::text]))", # rubocop:disable Layout/LineLength
+                             name: "bucket_id_null_for_non_slot_occupying_states"
+      end
+
+      dir.down { remove_check_constraint :signups, name: "bucket_id_null_for_non_slot_occupying_states" }
+    end
   end
 
   private

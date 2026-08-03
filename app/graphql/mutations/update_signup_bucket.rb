@@ -29,9 +29,14 @@ class Mutations::UpdateSignupBucket < Mutations::BaseMutation
   private
 
   def requested_bucket_id(args)
-    bucket_id = args[:bucket_id]&.to_i || signup.run.registration_policy.bucket_with_key(args[:bucket_key])&.id
-    raise GraphQL::ExecutionError, "Bad request: bucketId or bucketKey is required" unless bucket_id
-    bucket_id
+    bucket =
+      if args[:bucket_id]
+        signup.run.registration_policy.bucket_with_id(args[:bucket_id].to_i)
+      else
+        signup.run.registration_policy.bucket_with_key(args[:bucket_key])
+      end
+    raise GraphQL::ExecutionError, "Bad request: bucketId or bucketKey is required" unless bucket
+    bucket.id
   end
 
   def fill_vacated_bucket(original_bucket_id)

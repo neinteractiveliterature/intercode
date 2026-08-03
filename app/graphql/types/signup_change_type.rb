@@ -55,7 +55,7 @@ class Types::SignupChangeType < Types::BaseObject
   # you can't actually read it
   def bucket
     return unless exposed_bucket?
-    object.bucket
+    loaded_bucket
   end
 
   def bucket_key
@@ -69,12 +69,17 @@ class Types::SignupChangeType < Types::BaseObject
 
   private
 
+  def loaded_bucket
+    return @loaded_bucket if defined?(@loaded_bucket)
+    @loaded_bucket = dataloader.with(Sources::ActiveRecordAssociation, SignupChange, :bucket).load(object)
+  end
+
   # The bucket referenced here may have been destroyed since this change was recorded (bucket_id
   # nullifies on delete, bucket_name is kept as a permanent snapshot), so this checks the live
   # bucket's expose_attendees when it still exists, falling back to the read_requested_bucket_key
   # policy otherwise -- same as before this was backed by a real association.
   def exposed_bucket?
     return @exposed_bucket if defined?(@exposed_bucket)
-    @exposed_bucket = !!(object.bucket&.expose_attendees? || policy(signup).read_requested_bucket_key?)
+    @exposed_bucket = !!(loaded_bucket&.expose_attendees? || policy(signup).read_requested_bucket_key?)
   end
 end

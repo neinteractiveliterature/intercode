@@ -14,6 +14,12 @@ class EventChangeRegistrationPolicyService < CivilService::Service
     attr_reader :registration_policy, :immovable_signups, :new_signups_by_signup_id
     attr_accessor :logger
 
+    # Sentinel distinguishing "no override was supplied for this signup" from "the override is
+    # explicitly nil" (i.e. clear the requested bucket) -- a bare `nil` default can't tell those
+    # apart, which previously caused a cleared preference to fall back to the removed bucket's key.
+    NO_OVERRIDE = Object.new.freeze
+    private_constant :NO_OVERRIDE
+
     def initialize(registration_policy)
       @registration_policy = registration_policy
       @immovable_signups = []
@@ -27,12 +33,15 @@ class EventChangeRegistrationPolicyService < CivilService::Service
 
       to_keep.each { |signup| new_signups_by_signup_id[signup.id] = signup }
 
-      to_place.each { |signup| simulate_signup(signup, requested_key_overrides[signup.id]) }
+      to_place.each do |signup|
+        override = requested_key_overrides.key?(signup.id) ? requested_key_overrides[signup.id] : NO_OVERRIDE
+        simulate_signup(signup, override)
+      end
     end
 
     # rubocop:disable Metrics/MethodLength, Metrics/PerceivedComplexity
-    def simulate_signup(signup, requested_key_override = nil)
-      requested_key = requested_key_override || signup.requested_bucket_key
+    def simulate_signup(signup, requested_key_override = NO_OVERRIDE)
+      requested_key = requested_key_override == NO_OVERRIDE ? signup.requested_bucket_key : requested_key_override
       bucket_finder =
         SignupBucketFinder.new(
           registration_policy,
@@ -223,8 +232,15 @@ class EventChangeRegistrationPolicyService < CivilService::Service
   def pending_requested_key_overrides
     @pending_requested_key_overrides ||=
       all_signups.each_with_object({}) do |signup, hash|
-        to_key = mapped_key_for_removed_bucket(signup.requested_bucket_id)
-        hash[signup.id] = to_key if to_key
+        next unless removed_bucket_ids.include?(signup.requested_bucket_id)
+
+        old_bucket = removed_buckets_by_id[signup.requested_bucket_id]
+        next unless bucket_key_mappings.key?(old_bucket.key)
+
+        # The mapping may point to a surviving/new bucket (to_key present) or explicitly clear the
+        # preference (to_key nil/absent) -- either way, its mere presence here means "don't fall back
+        # to the signup's own requested_bucket_key", which would otherwise leak the removed bucket.
+        hash[signup.id] = bucket_key_mappings[old_bucket.key][:to_key]
       end
   end
 
@@ -232,6 +248,13 @@ class EventChangeRegistrationPolicyService < CivilService::Service
   # destroyed. relevant_signup_requests/relevant_signup_ranked_choices/all_signups are read here
   # (and memoized) before their rows are touched, so apply_bucket_key_mappings can still see what
   # they used to point at once it runs after update_from! persists the new buckets.
+  #
+  # This clears requested_bucket_id on *every* signup on the event's runs, including withdrawn ones,
+  # but apply_bucket_key_mappings only re-resolves it for all_signups (which excludes withdrawn) --
+  # so a withdrawn signup's requested_bucket_id ends up nil here even if a mapping was supplied for
+  # its old bucket. That's a behavior change from before this bucket was FK-backed (withdrawn signups
+  # used to keep a now-invalid stale key instead), but withdrawn signups don't affect capacity or
+  # placement, so this is presumed harmless.
   def clear_references_to_removed_buckets
     return if removed_bucket_ids.empty?
 
@@ -389,7 +412,7 @@ class EventChangeRegistrationPolicyService < CivilService::Service
       Signup
         .where.not(state: "withdrawn")
         .joins(:run)
-        .includes(:user_con_profile)
+        .includes(:user_con_profile, :bucket, :requested_bucket)
         .where(runs: { event_id: event.id })
         .to_a
   end

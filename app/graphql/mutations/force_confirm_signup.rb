@@ -16,13 +16,21 @@ class Mutations::ForceConfirmSignup < Mutations::BaseMutation
   load_and_authorize_convention_associated_model :signups, :id, :force_confirm
 
   def resolve(**args)
+    bucket = requested_bucket(args)
+    signup.update!(state: "confirmed", bucket_id: bucket.id, counted: bucket.counted?)
+    { signup: }
+  end
+
+  private
+
+  def requested_bucket(args)
     bucket =
       if args[:bucket_id]
         signup.run.registration_policy.bucket_with_id(args[:bucket_id].to_i)
       else
-        signup.run.event.registration_policy.bucket_with_key(args[:bucket_key])
+        signup.run.registration_policy.bucket_with_key(args[:bucket_key])
       end
-    signup.update!(state: "confirmed", bucket_id: bucket.id, counted: bucket.counted?)
-    { signup: }
+    raise GraphQL::ExecutionError, "Bad request: bucketId or bucketKey is required" unless bucket
+    bucket
   end
 end

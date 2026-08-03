@@ -279,6 +279,56 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
     end
   end
 
+  describe "with a removed bucket mapped to no preference, and no flex bucket in the new policy" do
+    let(:new_registration_policy) do
+      RegistrationPolicy.build_from_hash(buckets: [{ key: "dogs", name: "Dogs", slots_limited: true, total_slots: 1 }])
+    end
+
+    let(:event) do
+      create(
+        :event,
+        convention: convention,
+        registration_policy:
+          RegistrationPolicy.build_from_hash(
+            buckets: [
+              { key: "unlimited", name: "Unlimited", slots_limited: false },
+              { key: "dogs", name: "Dogs", slots_limited: true, total_slots: 1 }
+            ]
+          )
+      )
+    end
+
+    subject do
+      EventChangeRegistrationPolicyService.new(
+        event,
+        new_registration_policy,
+        whodunit,
+        [{ from_key: "unlimited", to_key: nil }]
+      )
+    end
+
+    let(:user_con_profile) { create(:user_con_profile, convention: convention) }
+    let(:signup) do
+      create(
+        :signup,
+        user_con_profile: user_con_profile,
+        requested_bucket_id: event.registration_policy.bucket_with_key("unlimited").id,
+        bucket_id: event.registration_policy.bucket_with_key("unlimited").id,
+        run: the_run
+      )
+    end
+
+    before { signup }
+
+    it "moves the signup into a counted bucket instead of reporting it immovable" do
+      result = subject.call
+
+      assert result.success?
+      assert_equal "dogs", signup.reload.bucket_key
+      assert_nil signup.reload.requested_bucket_key
+    end
+  end
+
   describe "when bucket keys are removed and records reference the old keys" do
     let(:event) do
       create(

@@ -76,8 +76,12 @@ OR lower(user_con_profiles.first_name) like :value",
   field :bucket, "Bucket" do
     column_filter :bucket_id
 
+    def expand_scope_for_sort(scope, _direction)
+      scope.left_joins(:bucket)
+    end
+
     def sql_order(direction)
-      "bucket_id #{direction}"
+      "LOWER(registration_policy_buckets.name) #{direction}"
     end
 
     def generate_csv_cell(signup)

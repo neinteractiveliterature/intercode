@@ -47,12 +47,6 @@ Lint/MissingCopEnableDirective:
     - 'test/graphql/mutations/update_event_proposal_test.rb'
     - 'test/graphql/mutations/update_event_test.rb'
 
-# Offense count: 2
-Lint/MissingSuper:
-  Exclude:
-    - 'app/services/execute_ranked_choice_signup_service.rb'
-    - 'app/services/rerun_moderated_ranked_choice_signup_round_service.rb'
-
 # Offense count: 1
 Lint/NoReturnInBeginEndBlocks:
   Exclude:
@@ -215,6 +209,7 @@ Style/FrozenStringLiteralComment:
     - 'test/models/registration_policy/unlimited_test.rb'
     - 'test/models/registration_policy_bucket_test.rb'
     - 'test/models/registration_policy_test.rb'
+    - 'test/models/run_test.rb'
     - 'test/models/signup_change_test.rb'
     - 'test/models/signup_ranked_choice_test.rb'
     - 'test/models/signup_request_test.rb'
@@ -251,6 +246,8 @@ Lint/MissingSuper:
     - 'app/services/event_vacancy_fill_service.rb'
     - 'app/services/event_withdraw_service.rb'
     - 'app/services/execute_ranked_choice_signup_round_service.rb'
+    - 'app/services/execute_ranked_choice_signup_service.rb'
+    - 'app/services/rerun_moderated_ranked_choice_signup_round_service.rb'
 
 Performance/StringInclude:
   Exclude:

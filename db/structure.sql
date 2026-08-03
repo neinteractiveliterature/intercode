@@ -2403,7 +2403,9 @@ CREATE TABLE public.signup_changes (
     bucket_id bigint,
     bucket_name character varying,
     requested_bucket_id bigint,
-    requested_bucket_name character varying
+    requested_bucket_name character varying,
+    requested_bucket_key character varying,
+    bucket_key character varying
 );
 
 
@@ -2443,7 +2445,8 @@ CREATE TABLE public.signup_ranked_choices (
     result_signup_request_id bigint,
     prioritize_waitlist boolean DEFAULT false NOT NULL,
     waitlist_position_cap integer,
-    requested_bucket_id bigint
+    requested_bucket_id bigint,
+    requested_bucket_key character varying
 );
 
 
@@ -2480,7 +2483,8 @@ CREATE TABLE public.signup_requests (
     updated_by_id bigint,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
-    requested_bucket_id bigint
+    requested_bucket_id bigint,
+    requested_bucket_key character varying
 );
 
 
@@ -2558,7 +2562,10 @@ CREATE TABLE public.signups (
     expires_at timestamp without time zone,
     bucket_id bigint,
     requested_bucket_id bigint,
-    CONSTRAINT bucket_id_null_for_non_slot_occupying_states CHECK (((bucket_id IS NULL) OR ((state)::text = ANY (ARRAY['confirmed'::text, 'ticket_purchase_hold'::text]))))
+    requested_bucket_key character varying,
+    bucket_key character varying,
+    CONSTRAINT bucket_id_null_for_non_slot_occupying_states CHECK (((bucket_id IS NULL) OR ((state)::text = ANY (ARRAY['confirmed'::text, 'ticket_purchase_hold'::text])))),
+    CONSTRAINT bucket_key_null_for_non_slot_occupying_states CHECK (((bucket_key IS NULL) OR ((state)::text = ANY (ARRAY['confirmed'::text, 'ticket_purchase_hold'::text]))))
 );
 
 
@@ -6184,7 +6191,6 @@ ALTER TABLE ONLY public.cms_files_pages
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
-('20260803190706'),
 ('20260803190446'),
 ('20260716155031'),
 ('20260615192952'),

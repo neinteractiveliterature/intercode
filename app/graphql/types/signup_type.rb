@@ -63,8 +63,9 @@ class Types::SignupType < Types::BaseObject
   # Why not just do this as an authorized hook?  We need it to be safe to ask for this data even if
   # you can't actually read it
   def bucket
-    return unless object.bucket&.expose_attendees? || policy(object).read_requested_bucket_key?
-    object.bucket
+    loaded_bucket = dataloader.with(Sources::ActiveRecordAssociation, Signup, :bucket).load(object)
+    return unless loaded_bucket&.expose_attendees? || policy(object).read_requested_bucket_key?
+    loaded_bucket
   end
 
   def bucket_key

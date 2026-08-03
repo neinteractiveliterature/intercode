@@ -206,7 +206,12 @@ class EventVacancyFillService < CivilService::Service
     @all_signups ||=
       begin
         run.signups.reload
-        run.signups.where.not(state: "withdrawn").where.not(id: team_member_signups.map(&:id)).to_a
+        run
+          .signups
+          .where.not(state: "withdrawn")
+          .where.not(id: team_member_signups.map(&:id))
+          .includes(:bucket, :requested_bucket)
+          .to_a
       end
   end
 

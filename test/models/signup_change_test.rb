@@ -5,8 +5,10 @@
 #
 #  id                        :bigint           not null, primary key
 #  action                    :string           not null
+#  bucket_key                :string
 #  bucket_name               :string
 #  counted                   :boolean
+#  requested_bucket_key      :string
 #  requested_bucket_name     :string
 #  state                     :string           not null
 #  created_at                :datetime         not null

@@ -55,7 +55,7 @@ class SignupMoveResult
   end
 
   def signup
-    @signup ||= Signup.find(signup_id)
+    @signup ||= Signup.includes(:bucket, :requested_bucket).find(signup_id)
   end
 
   def bucket

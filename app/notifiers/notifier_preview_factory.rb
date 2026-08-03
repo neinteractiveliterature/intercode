@@ -112,6 +112,7 @@ class NotifierPreviewFactory
   end
 
   def find_signup_move_result
-    SignupMoveResult.new(convention.signups.first.id, "confirmed", "flex", "waitlisted", nil)
+    signup = convention.signups.first
+    SignupMoveResult.new(signup.id, "confirmed", signup.bucket_id, "waitlisted", nil)
   end
 end
