@@ -199,7 +199,11 @@ class Convention < ApplicationRecord
   end
 
   def bucket_metadata_from_events
-    events.pluck(:registration_policy).flat_map { |p| p.buckets.flat_map(&:metadata) }.uniq
+    RegistrationPolicyBucket
+      .where(registration_policy_id: events.select(:registration_policy_id))
+      .pluck(:key, :name, :description)
+      .map { |key, name, description| { key:, name:, description: } }
+      .uniq
   end
 
   def to_liquid

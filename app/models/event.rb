@@ -19,7 +19,6 @@
 #  organization                 :string
 #  participant_communications   :text
 #  private_signup_list          :boolean          default(FALSE), not null
-#  registration_policy          :jsonb
 #  short_blurb                  :text
 #  status                       :string           default("active"), not null
 #  team_mailing_list_name       :text
@@ -31,21 +30,24 @@
 #  convention_id                :bigint           not null
 #  event_category_id            :bigint           not null
 #  owner_id                     :bigint
+#  registration_policy_id       :bigint           not null
 #  updated_by_id                :bigint
 #
 # Indexes
 #
-#  index_events_on_convention_id      (convention_id)
-#  index_events_on_event_category_id  (event_category_id)
-#  index_events_on_owner_id           (owner_id)
-#  index_events_on_title_vector       (title_vector) USING gin
-#  index_events_on_updated_by_id      (updated_by_id)
+#  index_events_on_convention_id           (convention_id)
+#  index_events_on_event_category_id       (event_category_id)
+#  index_events_on_owner_id                (owner_id)
+#  index_events_on_registration_policy_id  (registration_policy_id) UNIQUE
+#  index_events_on_title_vector            (title_vector) USING gin
+#  index_events_on_updated_by_id           (updated_by_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (convention_id => conventions.id)
 #  fk_rails_...  (event_category_id => event_categories.id)
 #  fk_rails_...  (owner_id => users.id)
+#  fk_rails_...  (registration_policy_id => registration_policies.id)
 #  fk_rails_...  (updated_by_id => users.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
@@ -54,6 +56,7 @@ class Event < ApplicationRecord
   include AgeRestrictions
   include EventEmail
   include FormResponse
+  include HasRegistrationPolicy
   include MarkdownIndexing
   include OrderByTitle
   include PgSearch::Model
@@ -114,6 +117,7 @@ class Event < ApplicationRecord
 
   belongs_to :convention
   belongs_to :event_category
+  belongs_to :registration_policy, inverse_of: :events, dependent: :destroy
 
   has_many :maximum_event_provided_tickets_overrides, dependent: :destroy
   has_many :provided_tickets, class_name: "Ticket", inverse_of: "provided_by_event", foreign_key: "provided_by_event_id"
@@ -197,8 +201,6 @@ class Event < ApplicationRecord
 
   scope :active, -> { where(status: "active") }
 
-  serialize :registration_policy, coder: ActiveModelCoder.new("RegistrationPolicy")
-
   attr_accessor :bypass_single_event_run_check, :allow_registration_policy_change
 
   def to_param
@@ -264,12 +266,12 @@ class Event < ApplicationRecord
 
   def registration_policy_cannot_change
     return if new_record?
-    return unless registration_policy_changed?
+    return unless registration_policy_id_changed?
 
-    before, after = changes["registration_policy"]
+    before, after = changes["registration_policy_id"]
     return if before == after # ActiveRecord is being overzealous about change detection
 
-    errors.add :registration_policy,
+    errors.add :registration_policy_id,
                "cannot be changed via ActiveRecord on an existing event.  \
 Use EventChangeRegistrationPolicyService instead."
   end

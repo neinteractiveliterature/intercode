@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 describe ConventionDrop do
   let(:convention) { create(:convention) }
@@ -8,15 +8,18 @@ describe ConventionDrop do
     assert_equal convention.name, convention_drop.name
   end
 
-  describe 'with runs that have openings' do
-    let(:limited_registration_policy) do
-      {
+  describe "with runs that have openings" do
+    # Deliberately not `let` (memoized) -- each event needs its own independent RegistrationPolicy
+    # row, and this file creates multiple events that would otherwise collide on the new unique
+    # index on events.registration_policy_id.
+    def limited_registration_policy
+      RegistrationPolicy.build_from_hash(
         buckets: [
-          { key: 'dogs', name: 'dogs', slots_limited: true, total_slots: 3 },
-          { key: 'cats', name: 'cats', slots_limited: true, total_slots: 2 },
-          { key: 'anything', name: 'flex', slots_limited: true, total_slots: 4, anything: true }
+          { key: "dogs", name: "dogs", slots_limited: true, total_slots: 3 },
+          { key: "cats", name: "cats", slots_limited: true, total_slots: 2 },
+          { key: "anything", name: "flex", slots_limited: true, total_slots: 4, anything: true }
         ]
-      }
+      )
     end
     let(:event_with_openings) do
       create(:event, convention: convention, registration_policy: limited_registration_policy)
@@ -24,7 +27,7 @@ describe ConventionDrop do
     let(:run_with_openings) { create(:run, event: event_with_openings) }
     let(:unlimited_event_with_openings) { create(:event, convention: convention) }
     let(:unlimited_run_with_openings) { create(:run, event: unlimited_event_with_openings) }
-    let(:volunteer_event_category) { create(:event_category, convention: convention, name: 'Volunteer event') }
+    let(:volunteer_event_category) { create(:event_category, convention: convention, name: "Volunteer event") }
     let(:volunteer_event_with_openings) do
       create(
         :event,
@@ -44,18 +47,18 @@ describe ConventionDrop do
       run_without_openings
     end
 
-    it 'returns all runs with limited-slot openings' do
+    it "returns all runs with limited-slot openings" do
       assert_includes convention_drop.runs_with_openings, run_with_openings
       assert_includes convention_drop.runs_with_openings, volunteer_run_with_openings
-      refute_includes convention_drop.runs_with_openings, run_without_openings
-      refute_includes convention_drop.runs_with_openings, unlimited_run_with_openings
+      assert_not_includes convention_drop.runs_with_openings, run_without_openings
+      assert_not_includes convention_drop.runs_with_openings, unlimited_run_with_openings
     end
 
-    it 'returns all non-volunteer runs with limited-slot openings' do
+    it "returns all non-volunteer runs with limited-slot openings" do
       assert_includes convention_drop.non_volunteer_runs_with_openings, run_with_openings
-      refute_includes convention_drop.non_volunteer_runs_with_openings, volunteer_run_with_openings
-      refute_includes convention_drop.non_volunteer_runs_with_openings, run_without_openings
-      refute_includes convention_drop.non_volunteer_runs_with_openings, unlimited_run_with_openings
+      assert_not_includes convention_drop.non_volunteer_runs_with_openings, volunteer_run_with_openings
+      assert_not_includes convention_drop.non_volunteer_runs_with_openings, run_without_openings
+      assert_not_includes convention_drop.non_volunteer_runs_with_openings, unlimited_run_with_openings
     end
   end
 end

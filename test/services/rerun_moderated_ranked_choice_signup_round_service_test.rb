@@ -6,8 +6,17 @@ describe RerunModeratedRankedChoiceSignupRoundService do
   let(:signup_round) do
     create(:signup_round, convention:, ranked_choice_order: "asc", maximum_event_signups: "1", start: 1.day.ago)
   end
-  let(:one_player_registration_policy) do
-    RegistrationPolicy.new({ buckets: [{ key: "only_one_player", total_slots: 1, slots_limited: true }] })
+  def one_player_registration_policy
+    RegistrationPolicy.new(
+      buckets: [
+        RegistrationPolicyBucket.new(
+          key: "only_one_player",
+          name: "Only one player",
+          total_slots: 1,
+          slots_limited: true
+        )
+      ]
+    )
   end
 
   def create_ranked_choices(user_con_profile, count)

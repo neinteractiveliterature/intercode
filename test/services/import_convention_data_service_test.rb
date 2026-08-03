@@ -518,6 +518,53 @@ class ImportConventionDataServiceTest < ActiveSupport::TestCase
     end
   end
 
+  describe "event proposals" do
+    let(:data) do
+      base_data.merge(
+        cms_content_set: "standard",
+        convention: base_data[:convention].merge(event_categories: standard_event_categories),
+        users: [{ email: "proposer@example.com", first_name: "Prop", last_name: "Oser" }],
+        user_con_profiles: [{ user_email: "proposer@example.com", first_name: "Prop", last_name: "Oser" }],
+        event_proposals: [
+          {
+            event_category_name: "LARP",
+            status: "proposed",
+            owner_email: "proposer@example.com",
+            form_response_attributes: {
+              title: "A Proposed LARP"
+            },
+            registration_policy: {
+              buckets: [{ key: "unlimited", name: "Signups", slots_limited: false, anything: true }]
+            }
+          },
+          {
+            event_category_name: "LARP",
+            status: "proposed",
+            owner_email: "proposer@example.com",
+            form_response_attributes: {
+              title: "Another Proposed LARP"
+            }
+          }
+        ]
+      )
+    end
+
+    before { ImportConventionDataService.new(data:).call! }
+
+    it "imports the registration policy with buckets when provided" do
+      convention = Convention.find_by!(domain: "importtest.example.com")
+      proposal = convention.event_proposals.find_by!(title: "A Proposed LARP")
+      assert proposal.registration_policy.present?
+      assert_equal ["unlimited"], proposal.registration_policy.buckets.map(&:key)
+    end
+
+    it "leaves registration_policy nil when not provided, rather than fabricating a default" do
+      convention = Convention.find_by!(domain: "importtest.example.com")
+      proposal = convention.event_proposals.find_by!(title: "Another Proposed LARP")
+      assert_nil proposal.registration_policy_id
+    end
+  end
+
   describe "signups" do
     before do
       data =

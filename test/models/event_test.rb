@@ -18,7 +18,6 @@
 #  organization                 :string
 #  participant_communications   :text
 #  private_signup_list          :boolean          default(FALSE), not null
-#  registration_policy          :jsonb
 #  short_blurb                  :text
 #  status                       :string           default("active"), not null
 #  team_mailing_list_name       :text
@@ -30,21 +29,24 @@
 #  convention_id                :bigint           not null
 #  event_category_id            :bigint           not null
 #  owner_id                     :bigint
+#  registration_policy_id       :bigint           not null
 #  updated_by_id                :bigint
 #
 # Indexes
 #
-#  index_events_on_convention_id      (convention_id)
-#  index_events_on_event_category_id  (event_category_id)
-#  index_events_on_owner_id           (owner_id)
-#  index_events_on_title_vector       (title_vector) USING gin
-#  index_events_on_updated_by_id      (updated_by_id)
+#  index_events_on_convention_id           (convention_id)
+#  index_events_on_event_category_id       (event_category_id)
+#  index_events_on_owner_id                (owner_id)
+#  index_events_on_registration_policy_id  (registration_policy_id) UNIQUE
+#  index_events_on_title_vector            (title_vector) USING gin
+#  index_events_on_updated_by_id           (updated_by_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (convention_id => conventions.id)
 #  fk_rails_...  (event_category_id => event_categories.id)
 #  fk_rails_...  (owner_id => users.id)
+#  fk_rails_...  (registration_policy_id => registration_policies.id)
 #  fk_rails_...  (updated_by_id => users.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
@@ -57,11 +59,11 @@ class EventTest < ActiveSupport::TestCase
       :event,
       convention: convention,
       registration_policy:
-        RegistrationPolicy.new(
+        RegistrationPolicy.build_from_hash(
           buckets: [
-            { key: "dogs", slots_limited: true, total_slots: 2 },
-            { key: "cats", slots_limited: true, total_slots: 2 },
-            { key: "anything", slots_limited: true, total_slots: 2, anything: true }
+            { key: "dogs", name: "Dogs", slots_limited: true, total_slots: 2 },
+            { key: "cats", name: "Cats", slots_limited: true, total_slots: 2 },
+            { key: "anything", name: "Anything", slots_limited: true, total_slots: 2, anything: true }
           ]
         )
     )
@@ -102,6 +104,32 @@ class EventTest < ActiveSupport::TestCase
       create(:signup, run: the_run, requested_bucket_key: "dogs", bucket_key: "dogs")
       create(:signup_request, target_run: the_run, requested_bucket_key: "dogs")
       assert_equal ["dogs"], event.bucket_keys_with_pending_signups_or_requests
+    end
+  end
+
+  describe "#registration_policy_change_for (from the HasRegistrationPolicy concern)" do
+    it "returns nil when given a nil hash" do
+      assert_nil event.registration_policy_change_for(nil)
+    end
+
+    it "returns nil when the hash describes an equivalent policy" do
+      assert_nil event.registration_policy_change_for(event.registration_policy.as_json)
+    end
+
+    it "returns a Change with the detached new policy and the old policy's JSON when the hash differs" do
+      new_hash = { buckets: [{ key: "unlimited", name: "Signups", slots_limited: false, anything: true }] }
+      change = event.registration_policy_change_for(new_hash)
+
+      assert change.new_policy.equivalent_to?(RegistrationPolicy.build_from_hash(new_hash))
+      assert_not change.new_policy.persisted?
+      assert_equal event.registration_policy.as_json, change.old_json
+    end
+  end
+
+  describe "registration_policy_id uniqueness" do
+    it "rejects a second event pointing at the same registration_policy row" do
+      other_event = build(:event, convention:, registration_policy: event.registration_policy)
+      assert_raises(ActiveRecord::RecordNotUnique) { other_event.save!(validate: false) }
     end
   end
 end

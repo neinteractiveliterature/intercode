@@ -6,7 +6,9 @@ class SignupCountPresenterTest < ActiveSupport::TestCase
 
   describe "with a single-bucket limited event" do
     let(:registration_policy) do
-      RegistrationPolicy.new(buckets: [{ key: "attendees", name: "Attendees", slots_limited: true, total_slots: 10 }])
+      RegistrationPolicy.build_from_hash(
+        buckets: [{ key: "attendees", name: "Attendees", slots_limited: true, total_slots: 10 }]
+      )
     end
     let(:event) { create(:event, convention:, registration_policy:) }
     let(:the_run) { create(:run, event:) }
@@ -76,7 +78,7 @@ class SignupCountPresenterTest < ActiveSupport::TestCase
 
   describe "with a multi-bucket event" do
     let(:registration_policy) do
-      RegistrationPolicy.new(
+      RegistrationPolicy.build_from_hash(
         buckets: [
           { key: "dogs", name: "Dogs", slots_limited: true, total_slots: 5 },
           { key: "cats", name: "Cats", slots_limited: true, total_slots: 5 },

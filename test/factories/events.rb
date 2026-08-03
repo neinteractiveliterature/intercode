@@ -18,7 +18,6 @@
 #  organization                 :string
 #  participant_communications   :text
 #  private_signup_list          :boolean          default(FALSE), not null
-#  registration_policy          :jsonb
 #  short_blurb                  :text
 #  status                       :string           default("active"), not null
 #  team_mailing_list_name       :text
@@ -30,21 +29,24 @@
 #  convention_id                :bigint           not null
 #  event_category_id            :bigint           not null
 #  owner_id                     :bigint
+#  registration_policy_id       :bigint           not null
 #  updated_by_id                :bigint
 #
 # Indexes
 #
-#  index_events_on_convention_id      (convention_id)
-#  index_events_on_event_category_id  (event_category_id)
-#  index_events_on_owner_id           (owner_id)
-#  index_events_on_title_vector       (title_vector) USING gin
-#  index_events_on_updated_by_id      (updated_by_id)
+#  index_events_on_convention_id           (convention_id)
+#  index_events_on_event_category_id       (event_category_id)
+#  index_events_on_owner_id                (owner_id)
+#  index_events_on_registration_policy_id  (registration_policy_id) UNIQUE
+#  index_events_on_title_vector            (title_vector) USING gin
+#  index_events_on_updated_by_id           (updated_by_id)
 #
 # Foreign Keys
 #
 #  fk_rails_...  (convention_id => conventions.id)
 #  fk_rails_...  (event_category_id => event_categories.id)
 #  fk_rails_...  (owner_id => users.id)
+#  fk_rails_...  (registration_policy_id => registration_policies.id)
 #  fk_rails_...  (updated_by_id => users.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
@@ -53,10 +55,10 @@ FactoryBot.define do
     convention
 
     sequence(:title) { |n| "Event #{n}" }
-    status { 'active' }
+    status { "active" }
     registration_policy { RegistrationPolicy.unlimited }
     length_seconds { 4.hours }
-    con_mail_destination { 'event_email' }
+    con_mail_destination { "event_email" }
 
     after(:build) { |event| event.event_category ||= build(:event_category, convention: event.convention) }
   end

@@ -30,9 +30,9 @@ class RegistrationPolicy::UnlimitedTest < ActiveSupport::TestCase
     end
   end
 
-  it "serializes and deserializes" do
-    json = subject.to_json
-    deserialized = RegistrationPolicy.new.from_json(json)
-    assert_equal subject.buckets, deserialized.buckets
+  it "round-trips through persistence" do
+    subject.save!
+    reloaded = RegistrationPolicy.find(subject.id)
+    assert_equal subject.buckets.map(&:key), reloaded.buckets.map(&:key)
   end
 end

@@ -1,9 +1,19 @@
 # frozen_string_literal: true
 class Mutations::CreateEventProposal < Mutations::BaseMutation
-  field :event_proposal, Types::EventProposalType, null: false
+  description "Create a new event proposal, optionally cloning form values from an existing one"
 
-  argument :clone_event_proposal_id, ID, required: false, camelize: true
-  argument :event_category_id, ID, required: false, camelize: true
+  field :event_proposal, Types::EventProposalType, null: false, description: "The newly-created event proposal"
+
+  argument :clone_event_proposal_id,
+           ID,
+           required: false,
+           camelize: true,
+           description: "The ID of an existing event proposal to copy compatible form values from"
+  argument :event_category_id,
+           ID,
+           required: false,
+           camelize: true,
+           description: "The ID of the event category the new proposal belongs to"
 
   authorize_create_convention_associated_model :event_proposals
 
@@ -35,6 +45,14 @@ class Mutations::CreateEventProposal < Mutations::BaseMutation
         event_proposal.event_category.event_proposal_form
       )
     clone_attributes = template_proposal.read_form_response_attributes_for_form_items(compatible_items)
+
+    # Build an independent copy -- sharing the template's row risks a dependent: :destroy cascade.
+    if clone_attributes["registration_policy"]
+      clone_attributes["registration_policy"] = RegistrationPolicy.build_from_hash(
+        clone_attributes["registration_policy"].as_json
+      )
+    end
+
     event_proposal.assign_form_response_attributes(clone_attributes)
   end
 

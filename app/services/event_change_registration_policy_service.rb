@@ -175,8 +175,7 @@ class EventChangeRegistrationPolicyService < CivilService::Service
         apply_simulation_changes(new_signups_by_signup_id)
       end
 
-      event.allow_registration_policy_change = true
-      event.update!(registration_policy: new_registration_policy)
+      event.registration_policy.update_from!(new_registration_policy)
 
       move_results.each { |move_result| move_result.signup.log_signup_change!(action: "change_registration_policy") }
     end

@@ -28,15 +28,13 @@ class Mutations::UpdateEvent < Mutations::BaseMutation
   private
 
   def apply_registration_policy(event, registration_policy_attributes, bucket_key_mappings)
-    new_registration_policy = RegistrationPolicy.new(registration_policy_attributes)
-    return {} if event.registration_policy == new_registration_policy
+    change = event.registration_policy_change_for(registration_policy_attributes)
+    return {} unless change
 
-    old_registration_policy = event.registration_policy
-    EventChangeRegistrationPolicyService.new(event, new_registration_policy, current_user, bucket_key_mappings).call!
-
+    EventChangeRegistrationPolicyService.new(event, change.new_policy, current_user, bucket_key_mappings).call!
     event.reload
 
-    { "registration_policy" => [old_registration_policy.as_json, new_registration_policy.as_json] }
+    { "registration_policy" => [change.old_json, event.registration_policy.as_json] }
   end
 
   def apply_form_response_attrs(event, form_response_attrs)

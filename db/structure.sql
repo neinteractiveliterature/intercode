@@ -39,74 +39,6 @@ COMMENT ON EXTENSION unaccent IS 'text search dictionary that removes accents';
 
 
 --
--- Name: anything_bucket_keys(jsonb); Type: FUNCTION; Schema: public; Owner: -
---
-
-CREATE FUNCTION public.anything_bucket_keys(registration_policy jsonb) RETURNS text[]
-    LANGUAGE sql
-    AS $$
-    SELECT ARRAY_AGG(key) FROM registration_policy_buckets(registration_policy)
-    WHERE anything = 't'
-  $$;
-
-
---
--- Name: bucket_keys(jsonb); Type: FUNCTION; Schema: public; Owner: -
---
-
-CREATE FUNCTION public.bucket_keys(registration_policy jsonb) RETURNS text[]
-    LANGUAGE sql
-    AS $$
-    SELECT ARRAY_AGG(key) FROM registration_policy_buckets(registration_policy)
-  $$;
-
-
---
--- Name: bucket_minimum_slots(jsonb, text); Type: FUNCTION; Schema: public; Owner: -
---
-
-CREATE FUNCTION public.bucket_minimum_slots(registration_policy jsonb, bucket_key text) RETURNS bigint
-    LANGUAGE sql
-    AS $$
-    SELECT (registration_bucket(registration_policy, bucket_key)->>'minimum_slots')::bigint
-  $$;
-
-
---
--- Name: bucket_preferred_slots(jsonb, text); Type: FUNCTION; Schema: public; Owner: -
---
-
-CREATE FUNCTION public.bucket_preferred_slots(registration_policy jsonb, bucket_key text) RETURNS bigint
-    LANGUAGE sql
-    AS $$
-    SELECT (registration_bucket(registration_policy, bucket_key)->>'preferred_slots')::bigint
-  $$;
-
-
---
--- Name: bucket_total_slots(jsonb, text); Type: FUNCTION; Schema: public; Owner: -
---
-
-CREATE FUNCTION public.bucket_total_slots(registration_policy jsonb, bucket_key text) RETURNS bigint
-    LANGUAGE sql
-    AS $$
-    SELECT (registration_bucket(registration_policy, bucket_key)->>'total_slots')::bigint
-  $$;
-
-
---
--- Name: counted_bucket_keys(jsonb); Type: FUNCTION; Schema: public; Owner: -
---
-
-CREATE FUNCTION public.counted_bucket_keys(registration_policy jsonb) RETURNS text[]
-    LANGUAGE sql
-    AS $$
-    SELECT ARRAY_AGG(key) FROM registration_policy_buckets(registration_policy)
-    WHERE not_counted = 'f'
-  $$;
-
-
---
 -- Name: current_scheduled_value(jsonb); Type: FUNCTION; Schema: public; Owner: -
 --
 
@@ -146,41 +78,6 @@ CREATE FUNCTION public.event_update_all_runs_timespan_tsrange() RETURNS trigger
     RETURN null;
   END
 $$;
-
-
---
--- Name: minimum_all_slots(jsonb); Type: FUNCTION; Schema: public; Owner: -
---
-
-CREATE FUNCTION public.minimum_all_slots(registration_policy jsonb) RETURNS bigint
-    LANGUAGE sql
-    AS $$
-    SELECT COALESCE(SUM(minimum_slots), 0) FROM registration_policy_buckets(registration_policy)
-  $$;
-
-
---
--- Name: minimum_counted_slots(jsonb); Type: FUNCTION; Schema: public; Owner: -
---
-
-CREATE FUNCTION public.minimum_counted_slots(registration_policy jsonb) RETURNS bigint
-    LANGUAGE sql
-    AS $$
-    SELECT COALESCE(SUM(minimum_slots), 0) FROM registration_policy_buckets(registration_policy)
-    WHERE not_counted = 'f'
-  $$;
-
-
---
--- Name: minimum_not_counted_slots(jsonb); Type: FUNCTION; Schema: public; Owner: -
---
-
-CREATE FUNCTION public.minimum_not_counted_slots(registration_policy jsonb) RETURNS bigint
-    LANGUAGE sql
-    AS $$
-    SELECT COALESCE(SUM(minimum_slots), 0) FROM registration_policy_buckets(registration_policy)
-    WHERE not_counted = 't'
-  $$;
 
 
 --
@@ -254,92 +151,6 @@ CREATE FUNCTION public.next_scheduled_value_timespan_at(scheduled_value jsonb, t
 
 
 --
--- Name: not_counted_bucket_keys(jsonb); Type: FUNCTION; Schema: public; Owner: -
---
-
-CREATE FUNCTION public.not_counted_bucket_keys(registration_policy jsonb) RETURNS text[]
-    LANGUAGE sql
-    AS $$
-    SELECT ARRAY_AGG(key) FROM registration_policy_buckets(registration_policy)
-    WHERE not_counted = 't'
-  $$;
-
-
---
--- Name: preferred_all_slots(jsonb); Type: FUNCTION; Schema: public; Owner: -
---
-
-CREATE FUNCTION public.preferred_all_slots(registration_policy jsonb) RETURNS bigint
-    LANGUAGE sql
-    AS $$
-    SELECT COALESCE(SUM(preferred_slots), 0) FROM registration_policy_buckets(registration_policy)
-  $$;
-
-
---
--- Name: preferred_counted_slots(jsonb); Type: FUNCTION; Schema: public; Owner: -
---
-
-CREATE FUNCTION public.preferred_counted_slots(registration_policy jsonb) RETURNS bigint
-    LANGUAGE sql
-    AS $$
-    SELECT COALESCE(SUM(preferred_slots), 0) FROM registration_policy_buckets(registration_policy)
-    WHERE not_counted = 'f'
-  $$;
-
-
---
--- Name: preferred_not_counted_slots(jsonb); Type: FUNCTION; Schema: public; Owner: -
---
-
-CREATE FUNCTION public.preferred_not_counted_slots(registration_policy jsonb) RETURNS bigint
-    LANGUAGE sql
-    AS $$
-    SELECT COALESCE(SUM(preferred_slots), 0) FROM registration_policy_buckets(registration_policy)
-    WHERE not_counted = 't'
-  $$;
-
-
---
--- Name: registration_bucket(jsonb, text); Type: FUNCTION; Schema: public; Owner: -
---
-
-CREATE FUNCTION public.registration_bucket(registration_policy jsonb, bucket_key text) RETURNS jsonb
-    LANGUAGE sql
-    AS $$
-    SELECT to_jsonb(bucket) FROM (
-      SELECT * FROM registration_policy_buckets(registration_policy)
-      WHERE key = bucket_key
-      LIMIT 1
-    ) bucket
-  $$;
-
-
---
--- Name: registration_policy_buckets(jsonb); Type: FUNCTION; Schema: public; Owner: -
---
-
-CREATE FUNCTION public.registration_policy_buckets(registration_policy jsonb) RETURNS TABLE(bucket_index bigint, key text, name text, description text, minimum_slots integer, preferred_slots integer, total_slots integer, anything boolean, not_counted boolean, expose_attendees boolean)
-    LANGUAGE sql
-    AS $$
-    SELECT
-      row_number() over() AS bucket_index,
-      bucket->>'key' AS key,
-      bucket->>'name' AS name,
-      bucket->>'description' AS description,
-      (bucket->>'minimum_slots')::int AS minimum_slots,
-      (bucket->>'preferred_slots')::int AS preferred_slots,
-      (bucket->>'total_slots')::int AS total_slots,
-      (bucket->>'anything' IS NOT NULL AND bucket->>'anything' = 'true') AS anything,
-      (bucket->>'not_counted' IS NOT NULL AND bucket->>'not_counted' = 'true') AS not_counted,
-      (bucket->>'expose_attendees' IS NOT NULL AND bucket->>'expose_attendees' = 'true') AS expose_attendees
-    FROM (
-      SELECT jsonb_array_elements(registration_policy->'buckets') AS bucket
-    ) buckets
-  $$;
-
-
---
 -- Name: run_update_timespan_tsrange(); Type: FUNCTION; Schema: public; Owner: -
 --
 
@@ -401,41 +212,6 @@ CREATE FUNCTION public.scheduled_value_timespans(scheduled_value jsonb) RETURNS 
       SELECT jsonb_array_elements(scheduled_value->'timespans') AS timespan
     ) timespans
     ORDER BY (CASE WHEN timespan->>'start' IS NULL THEN 0 ELSE 1 END), (timespan->>'start')::timestamp
-  $$;
-
-
---
--- Name: total_all_slots(jsonb); Type: FUNCTION; Schema: public; Owner: -
---
-
-CREATE FUNCTION public.total_all_slots(registration_policy jsonb) RETURNS bigint
-    LANGUAGE sql
-    AS $$
-    SELECT COALESCE(SUM(total_slots), 0) FROM registration_policy_buckets(registration_policy)
-  $$;
-
-
---
--- Name: total_counted_slots(jsonb); Type: FUNCTION; Schema: public; Owner: -
---
-
-CREATE FUNCTION public.total_counted_slots(registration_policy jsonb) RETURNS bigint
-    LANGUAGE sql
-    AS $$
-    SELECT COALESCE(SUM(total_slots), 0) FROM registration_policy_buckets(registration_policy)
-    WHERE not_counted = 'f'
-  $$;
-
-
---
--- Name: total_not_counted_slots(jsonb); Type: FUNCTION; Schema: public; Owner: -
---
-
-CREATE FUNCTION public.total_not_counted_slots(registration_policy jsonb) RETURNS bigint
-    LANGUAGE sql
-    AS $$
-    SELECT COALESCE(SUM(total_slots), 0) FROM registration_policy_buckets(registration_policy)
-    WHERE not_counted = 't'
   $$;
 
 
@@ -1456,7 +1232,6 @@ CREATE TABLE public.event_proposals (
     length_seconds integer,
     description text,
     short_blurb text,
-    registration_policy jsonb,
     can_play_concurrently boolean,
     additional_info jsonb,
     created_at timestamp without time zone NOT NULL,
@@ -1466,7 +1241,8 @@ CREATE TABLE public.event_proposals (
     admin_notes text,
     reminded_at timestamp without time zone,
     team_mailing_list_name text,
-    event_category_id bigint NOT NULL
+    event_category_id bigint NOT NULL,
+    registration_policy_id bigint
 );
 
 
@@ -1544,7 +1320,6 @@ CREATE TABLE public.events (
     convention_id bigint NOT NULL,
     owner_id bigint,
     status character varying DEFAULT 'active'::character varying NOT NULL,
-    registration_policy jsonb,
     participant_communications text,
     age_restrictions_description text,
     content_warnings text,
@@ -1554,7 +1329,8 @@ CREATE TABLE public.events (
     private_signup_list boolean DEFAULT false NOT NULL,
     event_category_id bigint NOT NULL,
     minimum_age integer,
-    title_vector tsvector
+    title_vector tsvector,
+    registration_policy_id bigint NOT NULL
 );
 
 
@@ -2380,6 +2156,80 @@ CREATE SEQUENCE public.ranked_choice_user_constraints_id_seq
 --
 
 ALTER SEQUENCE public.ranked_choice_user_constraints_id_seq OWNED BY public.ranked_choice_user_constraints.id;
+
+
+--
+-- Name: registration_policies; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.registration_policies (
+    id bigint NOT NULL,
+    prevent_no_preference_signups boolean DEFAULT false NOT NULL,
+    freeze_no_preference_buckets boolean DEFAULT false NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: registration_policies_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.registration_policies_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: registration_policies_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.registration_policies_id_seq OWNED BY public.registration_policies.id;
+
+
+--
+-- Name: registration_policy_buckets; Type: TABLE; Schema: public; Owner: -
+--
+
+CREATE TABLE public.registration_policy_buckets (
+    id bigint NOT NULL,
+    registration_policy_id bigint NOT NULL,
+    "position" integer NOT NULL,
+    key character varying NOT NULL,
+    name text NOT NULL,
+    description text,
+    minimum_slots integer DEFAULT 0 NOT NULL,
+    preferred_slots integer DEFAULT 0 NOT NULL,
+    total_slots integer DEFAULT 0 NOT NULL,
+    slots_limited boolean DEFAULT false NOT NULL,
+    flex boolean DEFAULT false NOT NULL,
+    counted boolean DEFAULT true NOT NULL,
+    expose_attendees boolean DEFAULT false NOT NULL,
+    created_at timestamp(6) without time zone NOT NULL,
+    updated_at timestamp(6) without time zone NOT NULL
+);
+
+
+--
+-- Name: registration_policy_buckets_id_seq; Type: SEQUENCE; Schema: public; Owner: -
+--
+
+CREATE SEQUENCE public.registration_policy_buckets_id_seq
+    START WITH 1
+    INCREMENT BY 1
+    NO MINVALUE
+    NO MAXVALUE
+    CACHE 1;
+
+
+--
+-- Name: registration_policy_buckets_id_seq; Type: SEQUENCE OWNED BY; Schema: public; Owner: -
+--
+
+ALTER SEQUENCE public.registration_policy_buckets_id_seq OWNED BY public.registration_policy_buckets.id;
 
 
 --
@@ -3357,6 +3207,20 @@ ALTER TABLE ONLY public.ranked_choice_user_constraints ALTER COLUMN id SET DEFAU
 
 
 --
+-- Name: registration_policies id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.registration_policies ALTER COLUMN id SET DEFAULT nextval('public.registration_policies_id_seq'::regclass);
+
+
+--
+-- Name: registration_policy_buckets id; Type: DEFAULT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.registration_policy_buckets ALTER COLUMN id SET DEFAULT nextval('public.registration_policy_buckets_id_seq'::regclass);
+
+
+--
 -- Name: rooms id; Type: DEFAULT; Schema: public; Owner: -
 --
 
@@ -3901,6 +3765,22 @@ ALTER TABLE ONLY public.ranked_choice_user_constraints
 
 
 --
+-- Name: registration_policies registration_policies_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.registration_policies
+    ADD CONSTRAINT registration_policies_pkey PRIMARY KEY (id);
+
+
+--
+-- Name: registration_policy_buckets registration_policy_buckets_pkey; Type: CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.registration_policy_buckets
+    ADD CONSTRAINT registration_policy_buckets_pkey PRIMARY KEY (id);
+
+
+--
 -- Name: rooms rooms_pkey; Type: CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -4078,6 +3958,20 @@ CREATE INDEX idx_max_event_provided_tickets_on_event_id ON public.maximum_event_
 --
 
 CREATE INDEX idx_max_event_provided_tickets_on_ticket_type_id ON public.maximum_event_provided_tickets_overrides USING btree (ticket_type_id);
+
+
+--
+-- Name: idx_on_registration_policy_id_key_b71cb40026; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX idx_on_registration_policy_id_key_b71cb40026 ON public.registration_policy_buckets USING btree (registration_policy_id, key);
+
+
+--
+-- Name: idx_on_registration_policy_id_position_c9150cdc46; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX idx_on_registration_policy_id_position_c9150cdc46 ON public.registration_policy_buckets USING btree (registration_policy_id, "position");
 
 
 --
@@ -4438,6 +4332,13 @@ CREATE INDEX index_event_proposals_on_owner_id ON public.event_proposals USING b
 
 
 --
+-- Name: index_event_proposals_on_registration_policy_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_event_proposals_on_registration_policy_id ON public.event_proposals USING btree (registration_policy_id);
+
+
+--
 -- Name: index_event_ratings_on_event_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4477,6 +4378,13 @@ CREATE INDEX index_events_on_event_category_id ON public.events USING btree (eve
 --
 
 CREATE INDEX index_events_on_owner_id ON public.events USING btree (owner_id);
+
+
+--
+-- Name: index_events_on_registration_policy_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE UNIQUE INDEX index_events_on_registration_policy_id ON public.events USING btree (registration_policy_id);
 
 
 --
@@ -4820,6 +4728,13 @@ CREATE INDEX index_ranked_choice_decisions_on_user_con_profile_id ON public.rank
 --
 
 CREATE INDEX index_ranked_choice_user_constraints_on_user_con_profile_id ON public.ranked_choice_user_constraints USING btree (user_con_profile_id);
+
+
+--
+-- Name: index_registration_policy_buckets_on_registration_policy_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_registration_policy_buckets_on_registration_policy_id ON public.registration_policy_buckets USING btree (registration_policy_id);
 
 
 --
@@ -5219,6 +5134,14 @@ ALTER TABLE ONLY public.runs
 
 
 --
+-- Name: events fk_rails_0682145037; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.events
+    ADD CONSTRAINT fk_rails_0682145037 FOREIGN KEY (registration_policy_id) REFERENCES public.registration_policies(id);
+
+
+--
 -- Name: assumed_identity_request_logs fk_rails_072c03953e; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5408,6 +5331,14 @@ ALTER TABLE ONLY public.event_categories
 
 ALTER TABLE ONLY public.ticket_types
     ADD CONSTRAINT fk_rails_3f5bd3dab9 FOREIGN KEY (event_id) REFERENCES public.events(id);
+
+
+--
+-- Name: event_proposals fk_rails_3fcd06459b; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.event_proposals
+    ADD CONSTRAINT fk_rails_3fcd06459b FOREIGN KEY (registration_policy_id) REFERENCES public.registration_policies(id);
 
 
 --
@@ -6161,6 +6092,8 @@ ALTER TABLE ONLY public.cms_files_pages
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260716155031'),
+('20260615192952'),
 ('20260601000000'),
 ('20260524175914'),
 ('20260519000000'),

@@ -8,13 +8,14 @@ class EventFreezeBucketAssignmentsServiceTest < ActiveSupport::TestCase
     create(
       :event,
       convention:,
-      registration_policy: {
-        buckets: [
-          { key: "dogs", slots_limited: true, total_slots: 1 },
-          { key: "cats", slots_limited: true, total_slots: 1 },
-          { key: "anything", slots_limited: true, total_slots: 1, anything: true }
-        ]
-      }
+      registration_policy:
+        RegistrationPolicy.build_from_hash(
+          buckets: [
+            { key: "dogs", name: "Dogs", slots_limited: true, total_slots: 1 },
+            { key: "cats", name: "Cats", slots_limited: true, total_slots: 1 },
+            { key: "anything", name: "Anything", slots_limited: true, total_slots: 1, anything: true }
+          ]
+        )
     )
   end
 
@@ -36,6 +37,9 @@ class EventFreezeBucketAssignmentsServiceTest < ActiveSupport::TestCase
     travel(-1.second) { anything_signup }
     waitlist_signup
 
+    original_policy_id = event.registration_policy_id
+    original_bucket_ids = event.registration_policy.buckets.index_by(&:key).transform_values(&:id)
+
     result = EventFreezeBucketAssignmentsService.new(event:).call!
 
     event.reload
@@ -47,6 +51,12 @@ class EventFreezeBucketAssignmentsServiceTest < ActiveSupport::TestCase
     assert_equal 1, event.registration_policy.bucket_with_key("cats").total_slots
     assert_equal 0, event.registration_policy.bucket_with_key("anything").total_slots
     assert event.registration_policy.freeze_no_preference_buckets?
+
+    # Regression guard: this used to reconstruct the whole bucket set via `.dup` (which silently
+    # loses AR's association cache), so verify every bucket -- not just the touched ones --
+    # still exists with its original row id.
+    assert_equal original_policy_id, event.registration_policy_id
+    assert_equal(original_bucket_ids, event.registration_policy.buckets.index_by(&:key).transform_values(&:id))
   end
 
   it "does not work on events with multiple runs" do

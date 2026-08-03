@@ -18,13 +18,16 @@ class AcceptEventProposalService < CivilService::Service
 
   private
 
-  def inner_call
+  def inner_call # rubocop:disable Metrics/AbcSize
     event = convention.events.new(event_category: event_category, status: "active")
     event.assign_default_values_from_form_items(event_form.form_items)
     event.assign_form_response_attributes(event_attributes)
     event.con_mail_destination ||= "gms"
     event.title ||= event_proposal.title # in case the form doesn't include it
     event.length_seconds ||= event_proposal.length_seconds # same deal as title
+    # Always rebuild an independent copy -- the generic assignment above may have shared the
+    # proposal's row directly.
+    event.registration_policy = build_own_registration_policy
     event_proposal.images.blobs.each { |blob| event.images.attach(blob) }
 
     event.save!
@@ -78,5 +81,12 @@ class AcceptEventProposalService < CivilService::Service
 
   def convention
     @convention ||= event_proposal.convention
+  end
+
+  def build_own_registration_policy
+    source_policy = event_proposal.registration_policy
+    # Empty (not unlimited) -- fails closed, blocking signups until someone configures a real policy.
+    return RegistrationPolicy.new unless source_policy
+    RegistrationPolicy.build_from_hash(source_policy.as_json)
   end
 end

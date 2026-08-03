@@ -8,13 +8,14 @@ class EventVacancyFillServiceTest < ActiveSupport::TestCase
     create(
       :event,
       convention:,
-      registration_policy: {
-        buckets: [
-          { key: "dogs", slots_limited: true, total_slots: 1 },
-          { key: "cats", slots_limited: true, total_slots: 1 },
-          { key: "anything", slots_limited: true, total_slots: 1, anything: true }
-        ]
-      }
+      registration_policy:
+        RegistrationPolicy.build_from_hash(
+          buckets: [
+            { key: "dogs", name: "Dogs", slots_limited: true, total_slots: 1 },
+            { key: "cats", name: "Cats", slots_limited: true, total_slots: 1 },
+            { key: "anything", name: "Anything", slots_limited: true, total_slots: 1, anything: true }
+          ]
+        )
     )
   end
 
@@ -96,9 +97,7 @@ class EventVacancyFillServiceTest < ActiveSupport::TestCase
     travel(-2.seconds) { no_pref_signup }
     travel(-1.second) { anything_signup }
     waitlist_signup
-    event.allow_registration_policy_change = true
-    frozen_policy = event.registration_policy.dup.tap { |p| p.assign_attributes(freeze_no_preference_buckets: true) }
-    event.update!(registration_policy: frozen_policy)
+    event.registration_policy.update!(freeze_no_preference_buckets: true)
 
     cats_result = EventVacancyFillService.new(the_run, "cats").call
     assert cats_result.success?
@@ -110,9 +109,7 @@ class EventVacancyFillServiceTest < ActiveSupport::TestCase
     travel(-2.seconds) { create_signup(state: "confirmed", bucket_key: "cats", requested_bucket_key: nil) }
     travel(-1.second) { create_signup(state: "confirmed", bucket_key: "anything", requested_bucket_key: nil) }
     waitlist_no_pref_signup
-    event.allow_registration_policy_change = true
-    frozen_policy = event.registration_policy.dup.tap { |p| p.assign_attributes(freeze_no_preference_buckets: true) }
-    event.update!(registration_policy: frozen_policy)
+    event.registration_policy.update!(freeze_no_preference_buckets: true)
 
     dogs_result = EventVacancyFillService.new(the_run, "dogs").call
     assert dogs_result.success?
@@ -242,14 +239,15 @@ class EventVacancyFillServiceTest < ActiveSupport::TestCase
       create(
         :event,
         convention:,
-        registration_policy: {
-          buckets: [
-            { key: "pc", slots_limited: true, total_slots: 1 },
-            { key: "npc", slots_limited: true, total_slots: 1, not_counted: true },
-            { key: "spectator", slots_limited: false },
-            { key: "anything", slots_limited: true, total_slots: 1, anything: true }
-          ]
-        }
+        registration_policy:
+          RegistrationPolicy.build_from_hash(
+            buckets: [
+              { key: "pc", name: "PC", slots_limited: true, total_slots: 1 },
+              { key: "npc", name: "NPC", slots_limited: true, total_slots: 1, not_counted: true },
+              { key: "spectator", name: "Spectator", slots_limited: false },
+              { key: "anything", name: "Anything", slots_limited: true, total_slots: 1, anything: true }
+            ]
+          )
       )
     end
 
@@ -306,12 +304,13 @@ class EventVacancyFillServiceTest < ActiveSupport::TestCase
           create(
             :event,
             convention:,
-            registration_policy: {
-              buckets: [
-                { key: "green", slots_limited: true, total_slots: 1 },
-                { key: "blue", slots_limited: true, total_slots: 1 }
-              ]
-            }
+            registration_policy:
+              RegistrationPolicy.build_from_hash(
+                buckets: [
+                  { key: "green", name: "Green", slots_limited: true, total_slots: 1 },
+                  { key: "blue", name: "Blue", slots_limited: true, total_slots: 1 }
+                ]
+              )
           )
         end
         let(:bucket_key) { "green" }

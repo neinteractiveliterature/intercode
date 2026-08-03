@@ -345,9 +345,18 @@ class ImportConventionDataService < CivilService::Service
 
       proposal = convention.event_proposals.new(event_category: category, owner: profile, status: ep[:status])
       proposal.event = event_map[ep[:event_id]] if ep[:event_id] && event_map[ep[:event_id]]
+      proposal.registration_policy = build_proposal_registration_policy(ep)
       proposal.assign_form_response_attributes(ep[:form_response_attributes] || {})
       proposal.save!
     end
+  end
+
+  # Unlike events, registration_policy_id is nullable on event proposals -- a proposal genuinely
+  # may not have one yet, so only build one if the import data actually provides it, rather than
+  # fabricating an unlimited/empty default that wasn't part of the source data.
+  def build_proposal_registration_policy(proposal_data)
+    return nil unless proposal_data[:registration_policy]
+    RegistrationPolicy.build_from_hash(proposal_data[:registration_policy])
   end
 
   def import_runs(convention, event_map)
@@ -475,10 +484,7 @@ class ImportConventionDataService < CivilService::Service
   def build_registration_policy(policy_data)
     return RegistrationPolicy.unlimited unless policy_data
 
-    RegistrationPolicy.new(
-      buckets: (policy_data[:buckets] || []).map { |b| RegistrationPolicy::Bucket.new(**b.transform_keys(&:to_sym)) },
-      prevent_no_preference_signups: policy_data[:prevent_no_preference_signups] || false
-    )
+    RegistrationPolicy.build_from_hash(policy_data)
   end
 
   def money_value(money_data)

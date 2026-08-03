@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 class CreateTeamMemberServiceTest < ActiveSupport::TestCase
   let(:convention) { create(:convention, :with_notification_templates) }
@@ -19,7 +19,7 @@ class CreateTeamMemberServiceTest < ActiveSupport::TestCase
     )
   end
 
-  it 'creates a team_member record' do
+  it "creates a team_member record" do
     assert_difference(-> { event.team_members.count }, 1) do
       result = subject.call!
       assert_equal user_con_profile, result.team_member.user_con_profile
@@ -27,11 +27,11 @@ class CreateTeamMemberServiceTest < ActiveSupport::TestCase
     end
   end
 
-  describe 'providing tickets' do
+  describe "providing tickets" do
     let(:ticket_type) { create(:event_provided_ticket_type, convention: convention) }
     let(:provide_ticket_type_id) { ticket_type.id }
 
-    it 'provides a ticket if requested' do
+    it "provides a ticket if requested" do
       assert_difference(-> { Ticket.count }, 1) do
         result = subject.call!
         assert_equal user_con_profile, result.ticket.user_con_profile
@@ -41,82 +41,83 @@ class CreateTeamMemberServiceTest < ActiveSupport::TestCase
     end
   end
 
-  describe 'with existing signup' do
+  describe "with existing signup" do
     let(:signup) do
       create(
         :signup,
         run: the_run,
         user_con_profile: user_con_profile,
-        state: 'confirmed',
-        bucket_key: 'unlimited',
+        state: "confirmed",
+        bucket_key: "unlimited",
         counted: true
       )
     end
 
     before { signup }
 
-    it 'converts it to a GM signup' do
+    it "converts it to a GM signup" do
       result = subject.call!
       signup.reload
 
       assert_equal [signup], result.converted_signups
-      refute signup.counted?
+      assert_not signup.counted?
       assert_nil signup.bucket_key
-      assert_equal 'confirmed', signup.state
+      assert_equal "confirmed", signup.state
     end
 
-    describe 'limited buckets' do
+    describe "limited buckets" do
       let(:event) do
         create(
           :event,
           convention: convention,
           event_category: event_category,
-          registration_policy: {
-            buckets: [
-              { key: 'dogs', name: 'dogs', slots_limited: true, total_slots: 3 },
-              { key: 'cats', name: 'cats', slots_limited: true, total_slots: 2 }
-            ]
-          }
+          registration_policy:
+            RegistrationPolicy.build_from_hash(
+              buckets: [
+                { key: "dogs", name: "dogs", slots_limited: true, total_slots: 3 },
+                { key: "cats", name: "cats", slots_limited: true, total_slots: 2 }
+              ]
+            )
         )
       end
 
-      describe 'waitlisted' do
+      describe "waitlisted" do
         let(:signup) do
           create(
             :signup,
             run: the_run,
             user_con_profile: user_con_profile,
-            state: 'waitlisted',
-            requested_bucket_key: 'dogs',
+            state: "waitlisted",
+            requested_bucket_key: "dogs",
             counted: false
           )
         end
 
-        it 'converts it to a confirmed GM signup' do
+        it "converts it to a confirmed GM signup" do
           result = subject.call!
           signup.reload
 
           assert_equal [signup], result.converted_signups
-          refute signup.counted?
+          assert_not signup.counted?
           assert_nil signup.bucket_key
-          assert_equal 'confirmed', signup.state
+          assert_equal "confirmed", signup.state
         end
       end
 
-      describe 'blocking someone in the waitlist' do
+      describe "blocking someone in the waitlist" do
         let(:signup) do
           create(
             :signup,
             run: the_run,
             user_con_profile: user_con_profile,
-            state: 'confirmed',
-            bucket_key: 'dogs',
-            requested_bucket_key: 'dogs',
+            state: "confirmed",
+            bucket_key: "dogs",
+            requested_bucket_key: "dogs",
             counted: true
           )
         end
         let(:waitlist_signup) do
-          create(:signup, run: the_run, state: 'waitlisted', requested_bucket_key: 'dogs', counted: false)
+          create(:signup, run: the_run, state: "waitlisted", requested_bucket_key: "dogs", counted: false)
         end
 
         before do
@@ -125,15 +126,15 @@ class CreateTeamMemberServiceTest < ActiveSupport::TestCase
             :signup,
             2,
             run: the_run,
-            state: 'confirmed',
-            bucket_key: 'dogs',
-            requested_bucket_key: 'dogs',
+            state: "confirmed",
+            bucket_key: "dogs",
+            requested_bucket_key: "dogs",
             counted: true
           )
           waitlist_signup
         end
 
-        it 'pulls in the waitlisted person' do
+        it "pulls in the waitlisted person" do
           result = subject.call!
           signup.reload
           waitlist_signup.reload
@@ -141,8 +142,8 @@ class CreateTeamMemberServiceTest < ActiveSupport::TestCase
           assert_equal [signup], result.converted_signups
           assert_equal [waitlist_signup], result.move_results.map(&:signup)
           assert waitlist_signup.counted?
-          assert_equal 'dogs', waitlist_signup.bucket_key
-          assert_equal 'confirmed', waitlist_signup.state
+          assert_equal "dogs", waitlist_signup.bucket_key
+          assert_equal "confirmed", waitlist_signup.state
         end
       end
     end
