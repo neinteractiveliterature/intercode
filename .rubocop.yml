@@ -56,6 +56,12 @@ Metrics/AbcSize:
   Exclude:
     - db/migrate/**/*.rb
 
+Metrics/ClassLength:
+  Enabled: false
+
+Metrics/BlockLength:
+  Enabled: false
+
 Metrics/MethodLength:
   CountAsOne: ['array', 'heredoc']
   Max: 20 # default is 10

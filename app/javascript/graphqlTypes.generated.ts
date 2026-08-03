@@ -235,7 +235,9 @@ export type ActiveStorageAttachmentResized_UrlArgs = {
 export type AddOrderEntryToCurrentPendingOrderInput = {
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  /** The order entry to add. */
   order_entry: OrderEntryInput;
+  /** The amount to charge, if this is a pay-what-you-want product. */
   pay_what_you_want_amount?: InputMaybe<MoneyInput>;
 };
 
@@ -244,6 +246,7 @@ export type AddOrderEntryToCurrentPendingOrderPayload = {
   __typename: 'AddOrderEntryToCurrentPendingOrderPayload';
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
+  /** The order entry that was added or updated. */
   order_entry: OrderEntry;
 };
 
@@ -1850,7 +1853,9 @@ export type CreateEventCategoryPayload = {
 export type CreateEventInput = {
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  /** The event attributes */
   event: EventInput;
+  /** Signed blob IDs for images to attach to this event */
   signedImageBlobIds?: InputMaybe<Array<Scalars['ID']['input']>>;
 };
 
@@ -1859,6 +1864,7 @@ export type CreateEventPayload = {
   __typename: 'CreateEventPayload';
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
+  /** The newly-created event */
   event: Event;
 };
 
@@ -1866,7 +1872,9 @@ export type CreateEventPayload = {
 export type CreateEventProposalInput = {
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  /** The ID of an existing event proposal to copy compatible form values from */
   cloneEventProposalId?: InputMaybe<Scalars['ID']['input']>;
+  /** The ID of the event category the new proposal belongs to */
   eventCategoryId?: InputMaybe<Scalars['ID']['input']>;
 };
 
@@ -1875,6 +1883,7 @@ export type CreateEventProposalPayload = {
   __typename: 'CreateEventProposalPayload';
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
+  /** The newly-created event proposal */
   event_proposal: EventProposal;
 };
 
@@ -1882,8 +1891,11 @@ export type CreateEventProposalPayload = {
 export type CreateFillerEventInput = {
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  /** The event attributes */
   event: EventInput;
+  /** The initial run to create for this event */
   run?: InputMaybe<RunInput>;
+  /** Signed blob IDs for images to attach to this event */
   signedImageBlobIds?: InputMaybe<Array<Scalars['ID']['input']>>;
 };
 
@@ -1892,6 +1904,7 @@ export type CreateFillerEventPayload = {
   __typename: 'CreateFillerEventPayload';
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
+  /** The newly-created event */
   event: Event;
 };
 
@@ -3102,36 +3115,55 @@ export type EventInput = {
   removeImageBlobIds?: InputMaybe<Array<Scalars['ID']['input']>>;
 };
 
+/** A proposal for a new event, submitted by a convention attendee for review */
 export type EventProposal = {
   __typename: 'EventProposal';
+  /** Admin-only notes about this event proposal */
   admin_notes?: Maybe<Scalars['String']['output']>;
+  /** The convention this event proposal belongs to */
   convention: Convention;
+  /** When this event proposal was created */
   created_at: Scalars['Date']['output'];
   current_user_form_item_viewer_role: FormItemRole;
   current_user_form_item_writer_role: FormItemRole;
+  /** The event created from this proposal, if it was accepted */
   event?: Maybe<Event>;
+  /** The category of this event proposal */
   event_category: EventCategory;
+  /** The form used for this event proposal */
   form?: Maybe<Form>;
   form_response_attrs_json?: Maybe<Scalars['Json']['output']>;
   form_response_attrs_json_with_rendered_markdown?: Maybe<Scalars['Json']['output']>;
+  /** The history of changes to this event proposal's form response */
   form_response_changes: Array<FormResponseChange>;
+  /** The ID of this event proposal */
   id: Scalars['ID']['output'];
+  /** Images attached to this event proposal */
   images: Array<ActiveStorageAttachment>;
+  /** The proposed length of the event in seconds */
   length_seconds?: Maybe<Scalars['Int']['output']>;
+  /** The convention attendee who submitted this proposal */
   owner: UserConProfile;
+  /** The proposed registration policy for this event */
   registration_policy?: Maybe<RegistrationPolicy>;
+  /** The status of this event proposal (draft, submitted, etc.) */
   status: Scalars['String']['output'];
+  /** When this event proposal was submitted for review */
   submitted_at?: Maybe<Scalars['Date']['output']>;
+  /** The proposed title of the event */
   title?: Maybe<Scalars['String']['output']>;
+  /** When this event proposal was last updated */
   updated_at: Scalars['Date']['output'];
 };
 
 
+/** A proposal for a new event, submitted by a convention attendee for review */
 export type EventProposalForm_Response_Attrs_JsonArgs = {
   itemIdentifiers?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
 
+/** A proposal for a new event, submitted by a convention attendee for review */
 export type EventProposalForm_Response_Attrs_Json_With_Rendered_MarkdownArgs = {
   itemIdentifiers?: InputMaybe<Array<Scalars['String']['input']>>;
 };
@@ -3467,6 +3499,7 @@ export type Mutation = {
   __typename: 'Mutation';
   acceptClickwrapAgreement: AcceptClickwrapAgreementPayload;
   acceptSignupRequest: AcceptSignupRequestPayload;
+  /** Adds an order entry to the current user's pending order, creating one if necessary. */
   addOrderEntryToCurrentPendingOrder: AddOrderEntryToCurrentPendingOrderPayload;
   attachImageToEvent: AttachImageToEventPayload;
   attachImageToEventProposal: AttachImageToEventProposalPayload;
@@ -3485,9 +3518,12 @@ export type Mutation = {
   createCouponApplication: CreateCouponApplicationPayload;
   createDepartment: CreateDepartmentPayload;
   createEmailRoute: CreateEmailRoutePayload;
+  /** Create a new event */
   createEvent: CreateEventPayload;
   createEventCategory: CreateEventCategoryPayload;
+  /** Create a new event proposal, optionally cloning form values from an existing one */
   createEventProposal: CreateEventProposalPayload;
+  /** Create a new filler event (a single-run event with no signup process, e.g. an ongoing activity) */
   createFillerEvent: CreateFillerEventPayload;
   /** Create a new form in a convention. */
   createForm: CreateFormPayload;
@@ -3617,6 +3653,7 @@ export type Mutation = {
   updateEvent: UpdateEventPayload;
   updateEventAdminNotes: UpdateEventAdminNotesPayload;
   updateEventCategory: UpdateEventCategoryPayload;
+  /** Update an event proposal */
   updateEventProposal: UpdateEventProposalPayload;
   updateEventProposalAdminNotes: UpdateEventProposalAdminNotesPayload;
   updateForm: UpdateFormPayload;
@@ -6730,7 +6767,9 @@ export type UpdateEventProposalAdminNotesPayload = {
 export type UpdateEventProposalInput = {
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  /** The event proposal attributes to update */
   event_proposal: EventProposalInput;
+  /** The ID of the event proposal to update */
   id?: InputMaybe<Scalars['ID']['input']>;
 };
 
@@ -6739,6 +6778,7 @@ export type UpdateEventProposalPayload = {
   __typename: 'UpdateEventProposalPayload';
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
+  /** The updated event proposal */
   event_proposal: EventProposal;
 };
 

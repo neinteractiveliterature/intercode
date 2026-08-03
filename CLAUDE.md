@@ -25,6 +25,7 @@ Intercode is a convention management system built with:
 
 - **TypeScript**: Run `yarn run tsc --noEmit` after making changes
 - **Ruby**: Run the relevant test suite before committing
+- **GraphQL schema**: Whenever a change touches `app/graphql` (types, mutations, sources, etc.) in a way that changes the schema — new/changed/removed fields, arguments, or descriptions — run `bin/rails graphql:update` and commit the resulting changes to `schema.graphql`, `schema.json`, and the generated frontend files (`app/javascript/graphqlTypes.generated.ts`, `*.generated.ts` files, `app/graphql/graphql_operations_generated.json`, `app/javascript/possibleTypes.json`, `app/javascript/enumTypes.json`). These are checked-in generated files, not build artifacts — a PR that changes the schema without regenerating them leaves them stale for whoever touches the schema next.
 
 ## Deployment Model
 

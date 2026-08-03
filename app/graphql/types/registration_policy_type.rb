@@ -45,4 +45,46 @@ class Types::RegistrationPolicyType < Types::BaseObject
   field :total_slots_including_not_counted, Integer, null: true do # rubocop:disable GraphQL/ExtractType
     description "The sum of total slots across all buckets, including not-counted buckets."
   end
+
+  association_loaders RegistrationPolicy, :buckets
+
+  def minimum_slots
+    buckets
+    object.minimum_slots
+  end
+
+  def minimum_slots_including_not_counted
+    buckets
+    object.minimum_slots_including_not_counted
+  end
+
+  def only_uncounted # rubocop:disable Naming/PredicateMethod
+    buckets
+    object.only_uncounted?
+  end
+
+  def preferred_slots
+    buckets
+    object.preferred_slots
+  end
+
+  def preferred_slots_including_not_counted
+    buckets
+    object.preferred_slots_including_not_counted
+  end
+
+  def slots_limited # rubocop:disable Naming/PredicateMethod
+    buckets
+    object.slots_limited?
+  end
+
+  def total_slots
+    buckets
+    object.total_slots
+  end
+
+  def total_slots_including_not_counted
+    buckets
+    object.total_slots_including_not_counted
+  end
 end

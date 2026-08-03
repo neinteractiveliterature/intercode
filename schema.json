@@ -1495,7 +1495,7 @@
             },
             {
               "name": "order_entry",
-              "description": null,
+              "description": "The order entry to add.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -1511,7 +1511,7 @@
             },
             {
               "name": "pay_what_you_want_amount",
-              "description": null,
+              "description": "The amount to charge, if this is a pay-what-you-want product.",
               "type": {
                 "kind": "INPUT_OBJECT",
                 "name": "MoneyInput",
@@ -1545,7 +1545,7 @@
             },
             {
               "name": "order_entry",
-              "description": null,
+              "description": "The order entry that was added or updated.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -9032,7 +9032,7 @@
             },
             {
               "name": "event",
-              "description": null,
+              "description": "The event attributes",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -9048,7 +9048,7 @@
             },
             {
               "name": "signedImageBlobIds",
-              "description": null,
+              "description": "Signed blob IDs for images to attach to this event",
               "type": {
                 "kind": "LIST",
                 "name": null,
@@ -9090,7 +9090,7 @@
             },
             {
               "name": "event",
-              "description": null,
+              "description": "The newly-created event",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -9130,7 +9130,7 @@
             },
             {
               "name": "cloneEventProposalId",
-              "description": null,
+              "description": "The ID of an existing event proposal to copy compatible form values from",
               "type": {
                 "kind": "SCALAR",
                 "name": "ID",
@@ -9142,7 +9142,7 @@
             },
             {
               "name": "eventCategoryId",
-              "description": null,
+              "description": "The ID of the event category the new proposal belongs to",
               "type": {
                 "kind": "SCALAR",
                 "name": "ID",
@@ -9176,7 +9176,7 @@
             },
             {
               "name": "event_proposal",
-              "description": null,
+              "description": "The newly-created event proposal",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -9216,7 +9216,7 @@
             },
             {
               "name": "event",
-              "description": null,
+              "description": "The event attributes",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -9232,7 +9232,7 @@
             },
             {
               "name": "run",
-              "description": null,
+              "description": "The initial run to create for this event",
               "type": {
                 "kind": "INPUT_OBJECT",
                 "name": "RunInput",
@@ -9244,7 +9244,7 @@
             },
             {
               "name": "signedImageBlobIds",
-              "description": null,
+              "description": "Signed blob IDs for images to attach to this event",
               "type": {
                 "kind": "LIST",
                 "name": null,
@@ -9286,7 +9286,7 @@
             },
             {
               "name": "event",
-              "description": null,
+              "description": "The newly-created event",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -16198,13 +16198,13 @@
         {
           "kind": "OBJECT",
           "name": "EventProposal",
-          "description": null,
+          "description": "A proposal for a new event, submitted by a convention attendee for review",
           "interfaces": [],
           "possibleTypes": null,
           "fields": [
             {
               "name": "admin_notes",
-              "description": null,
+              "description": "Admin-only notes about this event proposal",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -16216,7 +16216,7 @@
             },
             {
               "name": "convention",
-              "description": null,
+              "description": "The convention this event proposal belongs to",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -16232,7 +16232,7 @@
             },
             {
               "name": "created_at",
-              "description": null,
+              "description": "When this event proposal was created",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -16280,7 +16280,7 @@
             },
             {
               "name": "event",
-              "description": null,
+              "description": "The event created from this proposal, if it was accepted",
               "type": {
                 "kind": "OBJECT",
                 "name": "Event",
@@ -16292,7 +16292,7 @@
             },
             {
               "name": "event_category",
-              "description": null,
+              "description": "The category of this event proposal",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -16308,7 +16308,7 @@
             },
             {
               "name": "form",
-              "description": null,
+              "description": "The form used for this event proposal",
               "type": {
                 "kind": "OBJECT",
                 "name": "Form",
@@ -16386,7 +16386,7 @@
             },
             {
               "name": "form_response_changes",
-              "description": null,
+              "description": "The history of changes to this event proposal's form response",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -16410,7 +16410,7 @@
             },
             {
               "name": "id",
-              "description": null,
+              "description": "The ID of this event proposal",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -16426,7 +16426,7 @@
             },
             {
               "name": "images",
-              "description": null,
+              "description": "Images attached to this event proposal",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -16450,7 +16450,7 @@
             },
             {
               "name": "length_seconds",
-              "description": null,
+              "description": "The proposed length of the event in seconds",
               "type": {
                 "kind": "SCALAR",
                 "name": "Int",
@@ -16462,7 +16462,7 @@
             },
             {
               "name": "owner",
-              "description": null,
+              "description": "The convention attendee who submitted this proposal",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -16478,7 +16478,7 @@
             },
             {
               "name": "registration_policy",
-              "description": null,
+              "description": "The proposed registration policy for this event",
               "type": {
                 "kind": "OBJECT",
                 "name": "RegistrationPolicy",
@@ -16490,7 +16490,7 @@
             },
             {
               "name": "status",
-              "description": null,
+              "description": "The status of this event proposal (draft, submitted, etc.)",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -16506,7 +16506,7 @@
             },
             {
               "name": "submitted_at",
-              "description": null,
+              "description": "When this event proposal was submitted for review",
               "type": {
                 "kind": "SCALAR",
                 "name": "Date",
@@ -16518,7 +16518,7 @@
             },
             {
               "name": "title",
-              "description": null,
+              "description": "The proposed title of the event",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -16530,7 +16530,7 @@
             },
             {
               "name": "updated_at",
-              "description": null,
+              "description": "When this event proposal was last updated",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -19220,7 +19220,7 @@
             },
             {
               "name": "addOrderEntryToCurrentPendingOrder",
-              "description": null,
+              "description": "Adds an order entry to the current user's pending order, creating one if necessary.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -19781,7 +19781,7 @@
             },
             {
               "name": "createEvent",
-              "description": null,
+              "description": "Create a new event",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -19847,7 +19847,7 @@
             },
             {
               "name": "createEventProposal",
-              "description": null,
+              "description": "Create a new event proposal, optionally cloning form values from an existing one",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -19880,7 +19880,7 @@
             },
             {
               "name": "createFillerEvent",
-              "description": null,
+              "description": "Create a new filler event (a single-run event with no signup process, e.g. an ongoing activity)",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -23081,7 +23081,7 @@
             },
             {
               "name": "updateEventProposal",
-              "description": null,
+              "description": "Update an event proposal",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -37758,7 +37758,7 @@
             },
             {
               "name": "event_proposal",
-              "description": null,
+              "description": "The event proposal attributes to update",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -37774,7 +37774,7 @@
             },
             {
               "name": "id",
-              "description": null,
+              "description": "The ID of the event proposal to update",
               "type": {
                 "kind": "SCALAR",
                 "name": "ID",
@@ -37808,7 +37808,7 @@
             },
             {
               "name": "event_proposal",
-              "description": null,
+              "description": "The updated event proposal",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
