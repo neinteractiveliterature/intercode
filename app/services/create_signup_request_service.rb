@@ -10,7 +10,7 @@ class CreateSignupRequestService < CivilService::Service
 
   attr_reader :user_con_profile,
               :target_run,
-              :requested_bucket_key,
+              :requested_bucket_id,
               :replace_signup,
               :whodunit,
               :suppress_notifications,
@@ -25,7 +25,7 @@ class CreateSignupRequestService < CivilService::Service
   def initialize(
     user_con_profile:,
     target_run:,
-    requested_bucket_key:,
+    requested_bucket_id:,
     replace_signup: nil,
     whodunit: nil,
     suppress_notifications: false,
@@ -34,7 +34,7 @@ class CreateSignupRequestService < CivilService::Service
   )
     @user_con_profile = user_con_profile
     @target_run = target_run
-    @requested_bucket_key = requested_bucket_key
+    @requested_bucket_id = requested_bucket_id
     @replace_signup = replace_signup
     @whodunit = whodunit
     @suppress_notifications = suppress_notifications
@@ -46,12 +46,7 @@ class CreateSignupRequestService < CivilService::Service
 
   def inner_call
     signup_request =
-      user_con_profile.signup_requests.create!(
-        target_run:,
-        replace_signup:,
-        requested_bucket_key:,
-        updated_by: whodunit
-      )
+      user_con_profile.signup_requests.create!(target_run:, replace_signup:, requested_bucket_id:, updated_by: whodunit)
     destroy_pending_ranked_choices
 
     unless suppress_notifications
@@ -99,7 +94,7 @@ class CreateSignupRequestService < CivilService::Service
 
     user_con_profile
       .signup_ranked_choices
-      .where(state: "pending", target_run_id: target_run.id, requested_bucket_key:)
+      .where(state: "pending", target_run_id: target_run.id, requested_bucket_id:)
       .destroy_all
   end
 
@@ -109,7 +104,7 @@ class CreateSignupRequestService < CivilService::Service
   end
 
   def counts_towards_total?
-    target_bucket = event.registration_policy.bucket_with_key(requested_bucket_key)
+    target_bucket = event.registration_policy.bucket_with_id(requested_bucket_id)
     target_bucket.nil? || target_bucket.counted?
   end
 end

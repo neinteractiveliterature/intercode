@@ -3,29 +3,29 @@ class SignupCountPresenter
   include SortBuckets
   include ActionView::Helpers::TextHelper
 
-  DIMENSIONS = %i[state bucket_key requested_bucket_key counted team_member].freeze
+  DIMENSIONS = %i[state bucket_id requested_bucket_id counted team_member].freeze
 
   class SignupCountRow
-    attr_reader :count, :state, :bucket_key, :requested_bucket_key, :counted, :team_member
+    attr_reader :count, :state, :bucket_id, :requested_bucket_id, :counted, :team_member
 
     def self.from_data(count, data)
-      state, bucket_key, requested_bucket_key, counted, team_member = data
+      state, bucket_id, requested_bucket_id, counted, team_member = data
 
       new(
         count: count,
         state: state,
-        bucket_key: bucket_key,
-        requested_bucket_key: requested_bucket_key,
+        bucket_id: bucket_id,
+        requested_bucket_id: requested_bucket_id,
         counted: counted || false,
         team_member: team_member || false
       )
     end
 
-    def initialize(count:, state:, bucket_key:, requested_bucket_key:, counted:, team_member:)
+    def initialize(count:, state:, bucket_id:, requested_bucket_id:, counted:, team_member:)
       @count = count
       @state = state
-      @bucket_key = bucket_key
-      @requested_bucket_key = requested_bucket_key
+      @bucket_id = bucket_id
+      @requested_bucket_id = requested_bucket_id
       @counted = counted
       @team_member = team_member
     end
@@ -34,8 +34,8 @@ class SignupCountPresenter
       {
         count: count,
         state: state,
-        bucket_key: bucket_key,
-        requested_bucket_key: requested_bucket_key,
+        bucket_id: bucket_id,
+        requested_bucket_id: requested_bucket_id,
         counted: counted,
         team_member: team_member
       }
@@ -82,9 +82,9 @@ class SignupCountPresenter
 
   attr_reader :run
 
-  def self.effective_bucket_key(state, bucket_key, requested_bucket_key)
-    return requested_bucket_key if state == "waitlisted"
-    bucket_key
+  def self.effective_bucket_id(state, bucket_id, requested_bucket_id)
+    return requested_bucket_id if state == "waitlisted"
+    bucket_id
   end
 
   def self.group_count_signups(scope)
@@ -94,7 +94,7 @@ class SignupCountPresenter
         "LEFT JOIN team_members ON team_members.event_id = events.id \
 AND team_members.user_con_profile_id = signups.user_con_profile_id"
       )
-      .group(:run_id, :state, :bucket_key, :requested_bucket_key, :counted, "team_members.id IS NOT NULL")
+      .group(:run_id, :state, :bucket_id, :requested_bucket_id, :counted, "team_members.id IS NOT NULL")
       .count
   end
 
@@ -161,7 +161,7 @@ AND team_members.user_con_profile_id = signups.user_con_profile_id"
     @confirmed_limited_count ||=
       buckets
         .select(&:slots_limited?)
-        .sum { |bucket| count_data.count(state: "confirmed", bucket_key: bucket.key, counted: true) }
+        .sum { |bucket| count_data.count(state: "confirmed", bucket_id: bucket.id, counted: true) }
   end
 
   # Waitlisted signups are never counted, so count them all here
@@ -169,12 +169,12 @@ AND team_members.user_con_profile_id = signups.user_con_profile_id"
     @waitlist_count ||= count_data.count(state: "waitlisted")
   end
 
-  def capacity_fraction_for_bucket(bucket_key)
-    bucket = registration_policy.bucket_with_key(bucket_key)
+  def capacity_fraction_for_bucket(bucket_id)
+    bucket = registration_policy.bucket_with_id(bucket_id)
     return 1.0 if bucket.slots_unlimited?
     return 0.0 if bucket.total_slots.zero?
 
-    remaining_slots = (bucket.total_slots - count_data.count(state: "confirmed", bucket_key: bucket_key))
+    remaining_slots = (bucket.total_slots - count_data.count(state: "confirmed", bucket_id: bucket_id))
     remaining_slots.to_f / bucket.total_slots
   end
 
@@ -200,24 +200,24 @@ AND team_members.user_con_profile_id = signups.user_con_profile_id"
     if state == "waitlisted"
       [count_data.count(state: state).to_s]
     else
-      [count_data.count(state: state, bucket_key: buckets.first.key, counted: counted_key_for_state(state)).to_s]
+      [count_data.count(state: state, bucket_id: buckets.first.id, counted: counted_key_for_state(state)).to_s]
     end
   end
 
   def multi_bucket_descriptions(state)
     counted_key = counted_key_for_state(state)
     texts = buckets.map { |bucket| per_bucket_description(bucket, state, counted_key) }
-    no_pref_count = count_data.count(state: state, requested_bucket_key: nil, counted: false)
+    no_pref_count = count_data.count(state: state, requested_bucket_id: nil, counted: false)
     texts << "No preference: #{no_pref_count}" if state == "waitlisted" && no_pref_count.positive?
     texts
   end
 
   def per_bucket_description(bucket, state, counted_key)
     if state == "waitlisted"
-      "#{bucket.name}: #{count_data.count(state: state, requested_bucket_key: bucket.key, counted: false)}"
+      "#{bucket.name}: #{count_data.count(state: state, requested_bucket_id: bucket.id, counted: false)}"
     else
       bucket_counted_key = bucket.not_counted? ? :not_counted : counted_key
-      "#{bucket.name}: #{count_data.count(state: state, bucket_key: bucket.key, counted: bucket_counted_key)}"
+      "#{bucket.name}: #{count_data.count(state: state, bucket_id: bucket.id, counted: bucket_counted_key)}"
     end
   end
 

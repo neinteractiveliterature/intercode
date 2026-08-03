@@ -1,13 +1,45 @@
 # frozen_string_literal: true
 class Mutations::CreateUserSignup < Mutations::BaseMutation
-  field :signup, Types::SignupType, null: false
+  description "Sign a user up for a run, as an admin action"
 
-  argument :no_requested_bucket, Boolean, required: false, camelize: false
-  argument :requested_bucket_key, String, required: false, camelize: false
-  argument :run_id, ID, required: false, camelize: true
-  argument :suppress_confirmation, Boolean, required: false, camelize: false
-  argument :suppress_notifications, Boolean, required: false, camelize: false
-  argument :user_con_profile_id, ID, required: false, camelize: true
+  field :signup, Types::SignupType, null: false, description: "The signup that was created"
+
+  argument :no_requested_bucket,
+           Boolean,
+           required: false,
+           camelize: false,
+           description: "Set to true to sign up with no bucket preference"
+  argument :requested_bucket_id,
+           ID,
+           required: false,
+           camelize: true,
+           description: "The bucket to request, or null for no preference"
+  argument :requested_bucket_key, # rubocop:disable GraphQL/ExtractInputType
+           String,
+           required: false,
+           camelize: false,
+           deprecation_reason: "Use requestedBucketId instead",
+           description: "The bucket key to request, or null for no preference"
+  argument :run_id, # rubocop:disable GraphQL/ExtractInputType
+           ID,
+           required: false,
+           camelize: true,
+           description: "The ID of the run to sign up for"
+  argument :suppress_confirmation, # rubocop:disable GraphQL/ExtractInputType
+           Boolean,
+           required: false,
+           camelize: false,
+           description: "Set to true to skip sending the signup confirmation notification"
+  argument :suppress_notifications, # rubocop:disable GraphQL/ExtractInputType
+           Boolean,
+           required: false,
+           camelize: false,
+           description: "Set to true to skip sending team member notifications for this signup"
+  argument :user_con_profile_id, # rubocop:disable GraphQL/ExtractInputType
+           ID,
+           required: false,
+           camelize: true,
+           description: "The ID of the user con profile to sign up"
 
   attr_reader :run, :signup_user_con_profile
 
@@ -18,8 +50,9 @@ class Mutations::CreateUserSignup < Mutations::BaseMutation
   end
 
   def resolve(**args)
-    should_have_requested_bucket_key = args[:no_requested_bucket].blank?
-    if should_have_requested_bucket_key && !args[:requested_bucket_key]
+    should_have_requested_bucket = args[:no_requested_bucket].blank?
+    requested_bucket_id = args[:requested_bucket_id]&.to_i || requested_bucket_id_from_key(args)
+    if should_have_requested_bucket && !requested_bucket_id
       raise GraphQL::ExecutionError,
             "Bad request: signups must either request a bucket or specify that no bucket is requested."
     end
@@ -28,7 +61,7 @@ class Mutations::CreateUserSignup < Mutations::BaseMutation
       EventSignupService.new(
         signup_user_con_profile,
         run,
-        should_have_requested_bucket_key ? args[:requested_bucket_key] : nil,
+        should_have_requested_bucket ? requested_bucket_id : nil,
         context[:current_user],
         suppress_notifications: args[:suppress_notifications],
         suppress_confirmation: args[:suppress_confirmation],
@@ -39,5 +72,11 @@ class Mutations::CreateUserSignup < Mutations::BaseMutation
     raise GraphQL::ExecutionError, result.errors.full_messages.join(", ") if result.failure?
 
     { signup: result.signup }
+  end
+
+  private
+
+  def requested_bucket_id_from_key(args)
+    run.registration_policy.bucket_with_key(args[:requested_bucket_key])&.id
   end
 end

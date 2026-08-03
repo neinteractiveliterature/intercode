@@ -4,6 +4,8 @@ class RegistrationPolicy::BucketDrop < Liquid::Drop
   # @api
   attr_reader :bucket
 
+  # @!method id
+  #   @return [Integer] The numeric database id of this bucket
   # @!method key
   #   @return [String] The unique string identifier for this bucket
   # @!method name
@@ -28,7 +30,8 @@ class RegistrationPolicy::BucketDrop < Liquid::Drop
   # @!method expose_attendees
   #   @return [Boolean] Whether or not to allow other attendees to see that a person is in this
   #                     bucket in the signup summary page
-  delegate :key,
+  delegate :id,
+           :key,
            :name,
            :description,
            :minimum_slots,

@@ -4,27 +4,31 @@
 #
 # Table name: signups
 #
-#  id                   :bigint           not null, primary key
-#  bucket_key           :string
-#  counted              :boolean
-#  expires_at           :datetime
-#  requested_bucket_key :string
-#  state                :string           default("confirmed"), not null
-#  created_at           :datetime         not null
-#  updated_at           :datetime         not null
-#  run_id               :bigint           not null
-#  updated_by_id        :bigint
-#  user_con_profile_id  :bigint           not null
+#  id                  :bigint           not null, primary key
+#  counted             :boolean
+#  expires_at          :datetime
+#  state               :string           default("confirmed"), not null
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  bucket_id           :bigint
+#  requested_bucket_id :bigint
+#  run_id              :bigint           not null
+#  updated_by_id       :bigint
+#  user_con_profile_id :bigint           not null
 #
 # Indexes
 #
+#  index_signups_on_bucket_id            (bucket_id)
 #  index_signups_on_expires_at           (expires_at)
+#  index_signups_on_requested_bucket_id  (requested_bucket_id)
 #  index_signups_on_run_id               (run_id)
 #  index_signups_on_updated_by_id        (updated_by_id)
 #  index_signups_on_user_con_profile_id  (user_con_profile_id)
 #
 # Foreign Keys
 #
+#  fk_rails_...  (bucket_id => registration_policy_buckets.id)
+#  fk_rails_...  (requested_bucket_id => registration_policy_buckets.id)
 #  fk_rails_...  (run_id => runs.id)
 #  fk_rails_...  (updated_by_id => users.id)
 #  fk_rails_...  (user_con_profile_id => user_con_profiles.id)
@@ -43,11 +47,13 @@ class Signup < ApplicationRecord
   has_one :signup_request, foreign_key: "result_signup_id", dependent: :destroy
   has_one :signup_ranked_choice, foreign_key: "result_signup_id", dependent: :destroy
   belongs_to :updated_by, class_name: "User", optional: true
+  belongs_to :bucket, class_name: "RegistrationPolicyBucket", optional: true
+  belongs_to :requested_bucket, class_name: "RegistrationPolicyBucket", optional: true
   has_many :signup_changes, dependent: :destroy
 
   validates :state, inclusion: { in: STATES }
-  validates :bucket_key, presence: { if: ->(signup) { signup.counted? && signup.occupying_slot? } }
-  validates :bucket_key, absence: { unless: ->(signup) { signup.occupying_slot? } }
+  validates :bucket_id, presence: { if: ->(signup) { signup.counted? && signup.occupying_slot? } }
+  validates :bucket_id, absence: { unless: ->(signup) { signup.occupying_slot? } }
   validate :must_be_in_existing_bucket
   validate :user_con_profile_and_run_must_be_in_same_convention
 
@@ -69,20 +75,23 @@ class Signup < ApplicationRecord
   scope :expired, -> { where(expires_at: ...Time.now) }
   scope :not_expired, -> { where("expires_at >= ? or expires_at is null", Time.now) }
 
-  def bucket
-    run.registration_policy.bucket_with_key(bucket_key)
-  end
-
-  def requested_bucket
-    run.registration_policy.bucket_with_key(requested_bucket_key)
-  end
-
   def team_member?
     event.team_members.any? { |team_member| team_member.user_con_profile == user_con_profile }
   end
 
   def no_preference?
-    requested_bucket_key.nil?
+    requested_bucket_id.nil?
+  end
+
+  # Used by SignupBucketFinder and EventChangeRegistrationPolicyService's simulation, which have to
+  # compare against candidate buckets from a detached, not-yet-persisted RegistrationPolicy (no id
+  # yet) -- key is the only identity valid in both the persisted and detached cases.
+  def bucket_key
+    bucket&.key
+  end
+
+  def requested_bucket_key
+    requested_bucket&.key
   end
 
   def to_liquid
@@ -110,8 +119,10 @@ class Signup < ApplicationRecord
         user_con_profile_id:,
         previous_signup_change: signup_changes.order(created_at: :desc).first,
         updated_by_id:,
-        bucket_key:,
-        requested_bucket_key:,
+        bucket_id:,
+        bucket_name: bucket&.name,
+        requested_bucket_id:,
+        requested_bucket_name: requested_bucket&.name,
         state:,
         counted:,
         **attrs
@@ -132,8 +143,8 @@ class Signup < ApplicationRecord
   def must_be_in_existing_bucket
     return if can_have_invalid_buckets?
 
-    errors.add(:bucket_key, bucket_validity_error_message) if invalid_bucket?
-    errors.add(:requested_bucket_key, bucket_validity_error_message) if invalid_requested_bucket?
+    errors.add(:bucket_id, bucket_validity_error_message) if invalid_bucket?
+    errors.add(:requested_bucket_id, bucket_validity_error_message) if invalid_requested_bucket?
   end
 
   def user_con_profile_and_run_must_be_in_same_convention
@@ -147,11 +158,11 @@ class Signup < ApplicationRecord
   end
 
   def invalid_bucket?
-    bucket_key && !bucket
+    bucket_id && bucket.registration_policy_id != event.registration_policy_id
   end
 
   def invalid_requested_bucket?
-    requested_bucket_key && !requested_bucket
+    requested_bucket_id && requested_bucket.registration_policy_id != event.registration_policy_id
   end
 
   def bucket_validity_error_message
@@ -161,7 +172,7 @@ class Signup < ApplicationRecord
           run
             .registration_policy
             .buckets
-            .map(&:key)
+            .map(&:name)
             .to_sentence(last_word_connector: ", or ", two_words_connector: " or ")
 
         "must be one of #{bucket_names}"

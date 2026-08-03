@@ -26,11 +26,16 @@ class EventFreezeBucketAssignmentsServiceTest < ActiveSupport::TestCase
     create(:signup, user_con_profile:, run: the_run, **attrs)
   end
 
-  let(:anything_signup) { create_signup(state: "confirmed", bucket_key: "anything", requested_bucket_key: "dogs") }
+  let(:dogs_bucket_id) { event.registration_policy.bucket_with_key("dogs").id }
+  let(:anything_bucket_id) { event.registration_policy.bucket_with_key("anything").id }
 
-  let(:waitlist_signup) { create_signup(state: "waitlisted", requested_bucket_key: "dogs") }
+  let(:anything_signup) do
+    create_signup(state: "confirmed", bucket_id: anything_bucket_id, requested_bucket_id: dogs_bucket_id)
+  end
 
-  let(:no_pref_signup) { create_signup(state: "confirmed", bucket_key: "dogs", requested_bucket_key: nil) }
+  let(:waitlist_signup) { create_signup(state: "waitlisted", requested_bucket_id: dogs_bucket_id) }
+
+  let(:no_pref_signup) { create_signup(state: "confirmed", bucket_id: dogs_bucket_id, requested_bucket_id: nil) }
 
   it "freezes bucket assignments for existing signups" do
     travel(-2.seconds) { no_pref_signup }

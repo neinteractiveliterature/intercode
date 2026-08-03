@@ -6,11 +6,11 @@
 #  id                       :bigint           not null, primary key
 #  prioritize_waitlist      :boolean          default(FALSE), not null
 #  priority                 :integer          not null
-#  requested_bucket_key     :string
 #  state                    :string           not null
 #  waitlist_position_cap    :integer
 #  created_at               :datetime         not null
 #  updated_at               :datetime         not null
+#  requested_bucket_id      :bigint
 #  result_signup_id         :bigint
 #  result_signup_request_id :bigint
 #  target_run_id            :bigint           not null
@@ -20,6 +20,7 @@
 # Indexes
 #
 #  idx_on_user_con_profile_id_state_priority_7c693e2c51     (user_con_profile_id,state,priority) UNIQUE
+#  index_signup_ranked_choices_on_requested_bucket_id       (requested_bucket_id)
 #  index_signup_ranked_choices_on_result_signup_id          (result_signup_id)
 #  index_signup_ranked_choices_on_result_signup_request_id  (result_signup_request_id)
 #  index_signup_ranked_choices_on_target_run_id             (target_run_id)
@@ -28,6 +29,7 @@
 #
 # Foreign Keys
 #
+#  fk_rails_...  (requested_bucket_id => registration_policy_buckets.id)
 #  fk_rails_...  (result_signup_id => signups.id)
 #  fk_rails_...  (result_signup_request_id => signup_requests.id) ON DELETE => nullify
 #  fk_rails_...  (target_run_id => runs.id)

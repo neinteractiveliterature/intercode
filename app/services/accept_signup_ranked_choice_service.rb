@@ -43,7 +43,7 @@ class AcceptSignupRankedChoiceService < CivilService::Service
     EventSignupService.new(
       signup_ranked_choice.user_con_profile,
       signup_ranked_choice.target_run,
-      signup_ranked_choice.requested_bucket_key,
+      signup_ranked_choice.requested_bucket_id,
       whodunit,
       skip_locking: true,
       suppress_notifications:,
@@ -57,7 +57,7 @@ class AcceptSignupRankedChoiceService < CivilService::Service
     CreateSignupRequestService.new(
       user_con_profile: signup_ranked_choice.user_con_profile,
       target_run: signup_ranked_choice.target_run,
-      requested_bucket_key: signup_ranked_choice.requested_bucket_key,
+      requested_bucket_id: signup_ranked_choice.requested_bucket_id,
       whodunit:,
       # Never send notifications when creating SignupRequests from ranked choices
       suppress_notifications: true,

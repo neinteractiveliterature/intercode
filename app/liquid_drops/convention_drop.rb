@@ -84,8 +84,7 @@ class ConventionDrop < Liquid::Drop
     presenters
       .select do |_run_id, presenter|
         buckets = presenter.run.event.registration_policy.buckets.select(&:slots_limited?)
-        limited_signup_count =
-          buckets.sum { |bucket| presenter.signup_count(state: "confirmed", bucket_key: bucket.key) }
+        limited_signup_count = buckets.sum { |bucket| presenter.signup_count(state: "confirmed", bucket_id: bucket.id) }
         limited_signup_count < buckets.sum(&:total_slots)
       end
       .values

@@ -2395,13 +2395,15 @@ CREATE TABLE public.signup_changes (
     user_con_profile_id bigint NOT NULL,
     previous_signup_change_id bigint,
     updated_by_id bigint,
-    bucket_key character varying,
-    requested_bucket_key character varying,
     state character varying NOT NULL,
     counted boolean,
     action character varying NOT NULL,
     created_at timestamp(6) without time zone NOT NULL,
-    updated_at timestamp(6) without time zone NOT NULL
+    updated_at timestamp(6) without time zone NOT NULL,
+    bucket_id bigint,
+    bucket_name character varying,
+    requested_bucket_id bigint,
+    requested_bucket_name character varying
 );
 
 
@@ -2431,7 +2433,6 @@ ALTER SEQUENCE public.signup_changes_id_seq OWNED BY public.signup_changes.id;
 CREATE TABLE public.signup_ranked_choices (
     id bigint NOT NULL,
     priority integer NOT NULL,
-    requested_bucket_key character varying,
     state character varying NOT NULL,
     result_signup_id bigint,
     target_run_id bigint NOT NULL,
@@ -2441,7 +2442,8 @@ CREATE TABLE public.signup_ranked_choices (
     updated_at timestamp(6) without time zone NOT NULL,
     result_signup_request_id bigint,
     prioritize_waitlist boolean DEFAULT false NOT NULL,
-    waitlist_position_cap integer
+    waitlist_position_cap integer,
+    requested_bucket_id bigint
 );
 
 
@@ -2473,12 +2475,12 @@ CREATE TABLE public.signup_requests (
     state character varying DEFAULT 'pending'::character varying NOT NULL,
     user_con_profile_id bigint NOT NULL,
     target_run_id bigint NOT NULL,
-    requested_bucket_key character varying,
     replace_signup_id bigint,
     result_signup_id bigint,
     updated_by_id bigint,
     created_at timestamp without time zone NOT NULL,
-    updated_at timestamp without time zone NOT NULL
+    updated_at timestamp without time zone NOT NULL,
+    requested_bucket_id bigint
 );
 
 
@@ -2547,16 +2549,16 @@ ALTER SEQUENCE public.signup_rounds_id_seq OWNED BY public.signup_rounds.id;
 CREATE TABLE public.signups (
     id bigint NOT NULL,
     run_id bigint NOT NULL,
-    bucket_key character varying,
     updated_by_id bigint,
     created_at timestamp without time zone NOT NULL,
     updated_at timestamp without time zone NOT NULL,
     user_con_profile_id bigint NOT NULL,
     state character varying DEFAULT 'confirmed'::character varying NOT NULL,
     counted boolean,
-    requested_bucket_key character varying,
     expires_at timestamp without time zone,
-    CONSTRAINT bucket_key_null_for_non_slot_occupying_states CHECK (((bucket_key IS NULL) OR ((state)::text = ANY (ARRAY[('confirmed'::character varying)::text, ('ticket_purchase_hold'::character varying)::text]))))
+    bucket_id bigint,
+    requested_bucket_id bigint,
+    CONSTRAINT bucket_id_null_for_non_slot_occupying_states CHECK (((bucket_id IS NULL) OR ((state)::text = ANY (ARRAY['confirmed'::text, 'ticket_purchase_hold'::text]))))
 );
 
 
@@ -4822,10 +4824,24 @@ CREATE INDEX index_sessions_on_updated_at ON public.sessions USING btree (update
 
 
 --
+-- Name: index_signup_changes_on_bucket_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_signup_changes_on_bucket_id ON public.signup_changes USING btree (bucket_id);
+
+
+--
 -- Name: index_signup_changes_on_previous_signup_change_id; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_signup_changes_on_previous_signup_change_id ON public.signup_changes USING btree (previous_signup_change_id);
+
+
+--
+-- Name: index_signup_changes_on_requested_bucket_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_signup_changes_on_requested_bucket_id ON public.signup_changes USING btree (requested_bucket_id);
 
 
 --
@@ -4854,6 +4870,13 @@ CREATE INDEX index_signup_changes_on_updated_by_id ON public.signup_changes USIN
 --
 
 CREATE INDEX index_signup_changes_on_user_con_profile_id ON public.signup_changes USING btree (user_con_profile_id);
+
+
+--
+-- Name: index_signup_ranked_choices_on_requested_bucket_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_signup_ranked_choices_on_requested_bucket_id ON public.signup_ranked_choices USING btree (requested_bucket_id);
 
 
 --
@@ -4899,6 +4922,13 @@ CREATE INDEX index_signup_requests_on_replace_signup_id ON public.signup_request
 
 
 --
+-- Name: index_signup_requests_on_requested_bucket_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_signup_requests_on_requested_bucket_id ON public.signup_requests USING btree (requested_bucket_id);
+
+
+--
 -- Name: index_signup_requests_on_result_signup_id; Type: INDEX; Schema: public; Owner: -
 --
 
@@ -4941,10 +4971,24 @@ CREATE INDEX index_signup_rounds_on_convention_id ON public.signup_rounds USING 
 
 
 --
+-- Name: index_signups_on_bucket_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_signups_on_bucket_id ON public.signups USING btree (bucket_id);
+
+
+--
 -- Name: index_signups_on_expires_at; Type: INDEX; Schema: public; Owner: -
 --
 
 CREATE INDEX index_signups_on_expires_at ON public.signups USING btree (expires_at);
+
+
+--
+-- Name: index_signups_on_requested_bucket_id; Type: INDEX; Schema: public; Owner: -
+--
+
+CREATE INDEX index_signups_on_requested_bucket_id ON public.signups USING btree (requested_bucket_id);
 
 
 --
@@ -5115,6 +5159,14 @@ ALTER TABLE ONLY public.tickets
 
 ALTER TABLE ONLY public.signup_requests
     ADD CONSTRAINT fk_rails_008590ab32 FOREIGN KEY (replace_signup_id) REFERENCES public.signups(id);
+
+
+--
+-- Name: signup_changes fk_rails_01c554e5ff; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.signup_changes
+    ADD CONSTRAINT fk_rails_01c554e5ff FOREIGN KEY (requested_bucket_id) REFERENCES public.registration_policy_buckets(id) ON DELETE SET NULL;
 
 
 --
@@ -5302,6 +5354,14 @@ ALTER TABLE ONLY public.ranked_choice_decisions
 
 
 --
+-- Name: signups fk_rails_3452ca243a; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.signups
+    ADD CONSTRAINT fk_rails_3452ca243a FOREIGN KEY (bucket_id) REFERENCES public.registration_policy_buckets(id);
+
+
+--
 -- Name: form_sections fk_rails_364c041eca; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5411,6 +5471,14 @@ ALTER TABLE ONLY public.signup_requests
 
 ALTER TABLE ONLY public.cms_content_group_associations
     ADD CONSTRAINT fk_rails_4facd81f7c FOREIGN KEY (cms_content_group_id) REFERENCES public.cms_content_groups(id);
+
+
+--
+-- Name: signups fk_rails_51a8b340c0; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.signups
+    ADD CONSTRAINT fk_rails_51a8b340c0 FOREIGN KEY (requested_bucket_id) REFERENCES public.registration_policy_buckets(id);
 
 
 --
@@ -5702,6 +5770,14 @@ ALTER TABLE ONLY public.event_proposals
 
 
 --
+-- Name: signup_ranked_choices fk_rails_955f42b033; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.signup_ranked_choices
+    ADD CONSTRAINT fk_rails_955f42b033 FOREIGN KEY (requested_bucket_id) REFERENCES public.registration_policy_buckets(id);
+
+
+--
 -- Name: forms fk_rails_96a0e4a52f; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -5715,6 +5791,14 @@ ALTER TABLE ONLY public.forms
 
 ALTER TABLE ONLY public.active_storage_variant_records
     ADD CONSTRAINT fk_rails_993965df05 FOREIGN KEY (blob_id) REFERENCES public.active_storage_blobs(id);
+
+
+--
+-- Name: signup_requests fk_rails_99f2235cd8; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.signup_requests
+    ADD CONSTRAINT fk_rails_99f2235cd8 FOREIGN KEY (requested_bucket_id) REFERENCES public.registration_policy_buckets(id);
 
 
 --
@@ -5974,6 +6058,14 @@ ALTER TABLE ONLY public.products
 
 
 --
+-- Name: signup_changes fk_rails_eb9466195d; Type: FK CONSTRAINT; Schema: public; Owner: -
+--
+
+ALTER TABLE ONLY public.signup_changes
+    ADD CONSTRAINT fk_rails_eb9466195d FOREIGN KEY (bucket_id) REFERENCES public.registration_policy_buckets(id) ON DELETE SET NULL;
+
+
+--
 -- Name: assumed_identity_sessions fk_rails_ed60cedab3; Type: FK CONSTRAINT; Schema: public; Owner: -
 --
 
@@ -6092,6 +6184,8 @@ ALTER TABLE ONLY public.cms_files_pages
 SET search_path TO "$user", public;
 
 INSERT INTO "schema_migrations" (version) VALUES
+('20260803190706'),
+('20260803190446'),
 ('20260716155031'),
 ('20260615192952'),
 ('20260601000000'),

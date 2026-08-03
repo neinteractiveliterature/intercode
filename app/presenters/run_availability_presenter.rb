@@ -10,9 +10,9 @@ class RunAvailabilityPresenter
 
     def confirmed_count
       if bucket.counted?
-        signup_count_presenter.signup_count(bucket_key: bucket.key, state: "confirmed", counted: true)
+        signup_count_presenter.signup_count(bucket_id: bucket.id, state: "confirmed", counted: true)
       else
-        signup_count_presenter.signup_count(bucket_key: bucket.key, state: "confirmed")
+        signup_count_presenter.signup_count(bucket_id: bucket.id, state: "confirmed")
       end
     end
 

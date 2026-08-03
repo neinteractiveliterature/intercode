@@ -1,4 +1,8 @@
 # frozen_string_literal: true
+# Deliberately key-based rather than bucket_id-based: registration_policy here may be a detached,
+# not-yet-persisted policy (e.g. while EventChangeRegistrationPolicyService is simulating a
+# registration policy change), whose candidate buckets have no id yet. Key is the only identity
+# that's valid for both persisted and detached buckets.
 class SignupBucketFinder
   class FakeSignup
     include ActiveModel::Model
@@ -88,7 +92,7 @@ class SignupBucketFinder
 
     fake_signups =
       other_signups.select do |signup|
-        (signup.respond_to?(:bucket_key) && signup.bucket_key == bucket.key) &&
+        signup.respond_to?(:bucket_key) && signup.bucket_key == bucket.key &&
           !(signup.respond_to?(:requested_bucket_key) && signup.requested_bucket_key)
       end
     fake_signups.filter_map { |fake_signup| @original_other_signups_by_id[fake_signup.id] }

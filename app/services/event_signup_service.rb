@@ -7,7 +7,7 @@ class EventSignupService < CivilService::Service
 
   attr_reader :user_con_profile,
               :run,
-              :requested_bucket_key,
+              :requested_bucket_id,
               :whodunit,
               :suppress_notifications,
               :suppress_confirmation,
@@ -32,7 +32,7 @@ class EventSignupService < CivilService::Service
   def initialize( # rubocop:disable Metrics/ParameterLists
     user_con_profile,
     run,
-    requested_bucket_key,
+    requested_bucket_id,
     whodunit,
     skip_locking: false,
     suppress_notifications: false,
@@ -43,7 +43,7 @@ class EventSignupService < CivilService::Service
   )
     @user_con_profile = user_con_profile
     @run = run
-    @requested_bucket_key = requested_bucket_key
+    @requested_bucket_id = requested_bucket_id
     @whodunit = whodunit
     @skip_locking = skip_locking
     @suppress_notifications = suppress_notifications
@@ -65,8 +65,8 @@ class EventSignupService < CivilService::Service
       signup =
         run.signups.create!(
           run:,
-          bucket_key: actual_bucket&.key,
-          requested_bucket_key:,
+          bucket_id: actual_bucket&.id,
+          requested_bucket_id:,
           user_con_profile:,
           counted: counts_towards_total?,
           state: signup_state,
@@ -148,10 +148,13 @@ class EventSignupService < CivilService::Service
     errors.add :base, I18n.t("signups.errors.already_signed_up", event_title: event.title)
   end
 
-  def require_valid_bucket
-    return if run.registration_policy.allow_no_preference_signups? && !requested_bucket_key
+  def requested_bucket
+    return unless requested_bucket_id
+    @requested_bucket ||= run.registration_policy.bucket_with_id(requested_bucket_id)
+  end
 
-    requested_bucket = run.registration_policy.bucket_with_key(requested_bucket_key)
+  def require_valid_bucket
+    return if run.registration_policy.allow_no_preference_signups? && !requested_bucket_id
     return if requested_bucket && !requested_bucket.anything?
 
     non_anything_buckets = run.registration_policy.buckets.reject(&:anything?)
@@ -161,7 +164,7 @@ class EventSignupService < CivilService::Service
 
   def require_no_bucket_for_team_member
     return unless team_member?
-    return unless requested_bucket_key
+    return unless requested_bucket_id
 
     errors.add :base, I18n.t("signups.errors.team_members_cannot_be_counted")
   end
@@ -182,7 +185,7 @@ class EventSignupService < CivilService::Service
   end
 
   def bucket_finder
-    @bucket_finder ||= SignupBucketFinder.new(run.registration_policy, requested_bucket_key, run.signups.to_a)
+    @bucket_finder ||= SignupBucketFinder.new(run.registration_policy, requested_bucket&.key, run.signups.to_a)
   end
 
   def actual_bucket
@@ -194,8 +197,8 @@ class EventSignupService < CivilService::Service
     @existing_signups ||= run.signups
   end
 
-  def existing_signups_by_bucket_key
-    @existing_signups_by_bucket_key ||= existing_signups.group_by(&:bucket_key)
+  def existing_signups_by_bucket_id
+    @existing_signups_by_bucket_id ||= existing_signups.group_by(&:bucket_id)
   end
 
   def move_signup
@@ -204,7 +207,7 @@ class EventSignupService < CivilService::Service
     destination_bucket =
       bucket_finder.no_preference_bucket_finder.prioritized_buckets_with_capacity_except(actual_bucket).first
 
-    movable_signup.update!(bucket_key: destination_bucket.key)
+    movable_signup.update!(bucket_id: destination_bucket.id)
     movable_signup
   end
 
@@ -227,7 +230,7 @@ class EventSignupService < CivilService::Service
 
     user_con_profile
       .signup_ranked_choices
-      .where(state: "pending", target_run_id: run.id, requested_bucket_key:)
+      .where(state: "pending", target_run_id: run.id, requested_bucket_id:)
       .destroy_all
   end
 end

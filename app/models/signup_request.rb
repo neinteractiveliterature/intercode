@@ -4,20 +4,21 @@
 #
 # Table name: signup_requests
 #
-#  id                   :bigint           not null, primary key
-#  requested_bucket_key :string
-#  state                :string           default("pending"), not null
-#  created_at           :datetime         not null
-#  updated_at           :datetime         not null
-#  replace_signup_id    :bigint
-#  result_signup_id     :bigint
-#  target_run_id        :bigint           not null
-#  updated_by_id        :bigint
-#  user_con_profile_id  :bigint           not null
+#  id                  :bigint           not null, primary key
+#  state               :string           default("pending"), not null
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  replace_signup_id   :bigint
+#  requested_bucket_id :bigint
+#  result_signup_id    :bigint
+#  target_run_id       :bigint           not null
+#  updated_by_id       :bigint
+#  user_con_profile_id :bigint           not null
 #
 # Indexes
 #
 #  index_signup_requests_on_replace_signup_id    (replace_signup_id)
+#  index_signup_requests_on_requested_bucket_id  (requested_bucket_id)
 #  index_signup_requests_on_result_signup_id     (result_signup_id)
 #  index_signup_requests_on_state                (state)
 #  index_signup_requests_on_target_run_id        (target_run_id)
@@ -27,6 +28,7 @@
 # Foreign Keys
 #
 #  fk_rails_...  (replace_signup_id => signups.id)
+#  fk_rails_...  (requested_bucket_id => registration_policy_buckets.id)
 #  fk_rails_...  (result_signup_id => signups.id)
 #  fk_rails_...  (target_run_id => runs.id)
 #  fk_rails_...  (updated_by_id => users.id)
@@ -40,6 +42,7 @@ class SignupRequest < ApplicationRecord
   belongs_to :replace_signup, class_name: "Signup", optional: true
   belongs_to :result_signup, class_name: "Signup", optional: true
   belongs_to :updated_by, class_name: "User", optional: true
+  belongs_to :requested_bucket, class_name: "RegistrationPolicyBucket", optional: true
   has_one :convention, through: :user_con_profile
   has_one :event, through: :target_run
   has_one :signup_ranked_choice, inverse_of: :result_signup_request, dependent: :nullify
@@ -53,8 +56,11 @@ class SignupRequest < ApplicationRecord
     SignupRequestDrop.new(self)
   end
 
-  def requested_bucket
-    target_run.registration_policy.bucket_with_key(requested_bucket_key)
+  # Used by SignupBucketFinder, which has to compare against candidate buckets from a detached,
+  # not-yet-persisted RegistrationPolicy (no id yet) during registration policy change simulation --
+  # key is the only identity valid in both the persisted and detached cases.
+  def requested_bucket_key
+    requested_bucket&.key
   end
 
   private

@@ -39,7 +39,7 @@ class Run < ApplicationRecord
   has_and_belongs_to_many :rooms
 
   delegate :length_seconds, :registration_policy, :convention, to: :event
-  delegate :bucket_with_key, to: :registration_policy
+  delegate :bucket_with_id, to: :registration_policy
 
   scope :between, ->(start, finish) { where("tsrange(?, ?, '[)') && timespan_tsrange", start, finish) }
 
@@ -47,36 +47,36 @@ class Run < ApplicationRecord
     starts_at + length_seconds.seconds
   end
 
-  def signups_by_bucket_key
+  def signups_by_bucket_id
     signups
-      .group_by(&:bucket_key)
-      .tap { |hash| (registration_policy.buckets.map(&:key) + [nil]).each { |bucket_key| hash[bucket_key] ||= [] } }
+      .group_by(&:bucket_id)
+      .tap { |hash| (registration_policy.buckets.map(&:id) + [nil]).each { |bucket_id| hash[bucket_id] ||= [] } }
   end
 
-  def bucket_full?(bucket_key)
-    bucket_with_key(bucket_key).full?(signups_by_bucket_key[bucket_key])
+  def bucket_full?(bucket_id)
+    bucket_with_id(bucket_id).full?(signups_by_bucket_id[bucket_id])
   end
 
-  def bucket_has_available_slots?(bucket_key)
-    bucket = bucket_with_key(bucket_key)
-    bucket&.has_available_slots?(signups_by_bucket_key[bucket_key])
+  def bucket_has_available_slots?(bucket_id)
+    bucket = bucket_with_id(bucket_id)
+    bucket&.has_available_slots?(signups_by_bucket_id[bucket_id])
   end
 
   def full?
-    registration_policy.buckets.all? { |bucket| bucket_full?(bucket.key) }
+    registration_policy.buckets.all? { |bucket| bucket_full?(bucket.id) }
   end
 
   def has_available_slots?
-    registration_policy.buckets.any? { |bucket| bucket_has_available_slots?(bucket.key) }
+    registration_policy.buckets.any? { |bucket| bucket_has_available_slots?(bucket.id) }
   end
 
-  def available_slots_by_bucket_key
-    signups = signups_by_bucket_key
+  def available_slots_by_bucket_id
+    signups = signups_by_bucket_id
 
     registration_policy
       .buckets
-      .map(&:key)
-      .index_with { |bucket_key| bucket_with_key(bucket_key).available_slots(signups[bucket_key] || []) }
+      .map(&:id)
+      .index_with { |bucket_id| bucket_with_id(bucket_id).available_slots(signups[bucket_id] || []) }
   end
 
   def timespan

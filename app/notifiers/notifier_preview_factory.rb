@@ -88,8 +88,8 @@ class NotifierPreviewFactory
       Order.where(user_con_profile: convention.user_con_profiles.select(:id)).first
     when :prev_state
       "confirmed"
-    when :prev_bucket_key
-      "flex"
+    when :prev_bucket_id
+      1
     when :refund_id
       "refund-abc123"
     when :signup

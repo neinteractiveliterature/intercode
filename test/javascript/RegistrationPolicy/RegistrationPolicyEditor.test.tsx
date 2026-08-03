@@ -14,6 +14,7 @@ describe('RegistrationPolicyEditor', () => {
 
   const defaultRegistrationPolicyBucket: RegistrationPolicyBucket = {
     __typename: 'RegistrationPolicyBucket',
+    id: 'testBucket',
     key: 'testBucket',
     name: 'test',
     description: 'a bucket for testing',

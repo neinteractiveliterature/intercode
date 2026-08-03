@@ -22,7 +22,7 @@ class EventFreezeBucketAssignmentsService < CivilService::Service
       Event.transaction do
         apply_frozen_registration_policy
         anything_signups_with_preference.each do |signup|
-          signup.update!(bucket_key: signup.requested_bucket_key, updated_by: whodunit)
+          signup.update!(bucket_id: signup.requested_bucket_id, updated_by: whodunit)
           signup.log_signup_change!(action: "freeze_bucket_assignments")
         end
       end
@@ -41,15 +41,15 @@ class EventFreezeBucketAssignmentsService < CivilService::Service
   def apply_frozen_registration_policy
     expand_buckets_count =
       anything_signups_with_preference.each_with_object({}) do |signup, hash|
-        hash[signup.requested_bucket_key] ||= 0
-        hash[signup.requested_bucket_key] += 1
+        hash[signup.requested_bucket_id] ||= 0
+        hash[signup.requested_bucket_id] += 1
       end
 
     registration_policy = event.registration_policy
     registration_policy.update!(freeze_no_preference_buckets: true)
 
-    expand_buckets_count.each do |bucket_key, amount|
-      registration_policy.bucket_with_key(bucket_key).increment!(:total_slots, amount)
+    expand_buckets_count.each do |bucket_id, amount|
+      registration_policy.bucket_with_id(bucket_id).increment!(:total_slots, amount)
       registration_policy.anything_bucket.decrement!(:total_slots, amount)
     end
   end

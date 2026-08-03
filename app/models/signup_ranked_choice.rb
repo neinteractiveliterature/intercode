@@ -6,11 +6,11 @@
 #  id                       :bigint           not null, primary key
 #  prioritize_waitlist      :boolean          default(FALSE), not null
 #  priority                 :integer          not null
-#  requested_bucket_key     :string
 #  state                    :string           not null
 #  waitlist_position_cap    :integer
 #  created_at               :datetime         not null
 #  updated_at               :datetime         not null
+#  requested_bucket_id      :bigint
 #  result_signup_id         :bigint
 #  result_signup_request_id :bigint
 #  target_run_id            :bigint           not null
@@ -20,6 +20,7 @@
 # Indexes
 #
 #  idx_on_user_con_profile_id_state_priority_7c693e2c51     (user_con_profile_id,state,priority) UNIQUE
+#  index_signup_ranked_choices_on_requested_bucket_id       (requested_bucket_id)
 #  index_signup_ranked_choices_on_result_signup_id          (result_signup_id)
 #  index_signup_ranked_choices_on_result_signup_request_id  (result_signup_request_id)
 #  index_signup_ranked_choices_on_target_run_id             (target_run_id)
@@ -28,6 +29,7 @@
 #
 # Foreign Keys
 #
+#  fk_rails_...  (requested_bucket_id => registration_policy_buckets.id)
 #  fk_rails_...  (result_signup_id => signups.id)
 #  fk_rails_...  (result_signup_request_id => signup_requests.id) ON DELETE => nullify
 #  fk_rails_...  (target_run_id => runs.id)
@@ -42,6 +44,7 @@ class SignupRankedChoice < ApplicationRecord
   belongs_to :result_signup, class_name: "Signup", optional: true
   belongs_to :result_signup_request, class_name: "SignupRequest", optional: true
   belongs_to :updated_by, class_name: "User"
+  belongs_to :requested_bucket, class_name: "RegistrationPolicyBucket", optional: true
   has_one :convention, through: :user_con_profile
   has_many :ranked_choice_decisions, dependent: :nullify
 
@@ -57,6 +60,13 @@ class SignupRankedChoice < ApplicationRecord
 
   def to_liquid
     SignupRankedChoiceDrop.new(self)
+  end
+
+  # Used by SignupBucketFinder, which has to compare against candidate buckets from a detached,
+  # not-yet-persisted RegistrationPolicy (no id yet) during registration policy change simulation --
+  # key is the only identity valid in both the persisted and detached cases.
+  def requested_bucket_key
+    requested_bucket&.key
   end
 
   private

@@ -20,7 +20,7 @@ class Tables::SignupsTableResultsPresenter < Tables::TableResultsPresenter
       scope.resolve,
       pundit_user,
       {},
-      [{ field: 'created_at', desc: true }],
+      [{ field: "created_at", desc: true }],
       %w[name event_title state created_at choice]
     )
   end
@@ -28,26 +28,24 @@ class Tables::SignupsTableResultsPresenter < Tables::TableResultsPresenter
   def self.format_bucket(bucket, requested_bucket)
     return "#{bucket.name} (no preference)" if bucket && !requested_bucket
     if requested_bucket && bucket != requested_bucket
-      return "#{bucket&.name || 'None'} (requested #{requested_bucket.name})"
+      return "#{bucket&.name || "None"} (requested #{requested_bucket.name})"
     end
     bucket&.name
   end
 
-  field :id, 'Seq'
+  field :id, "Seq"
 
-  field :state, 'State' do
+  field :state, "State" do
     column_filter
   end
 
-  field :name, 'Name' do
+  field :name, "Name" do
     def apply_filter(scope, value)
-      scope
-        .joins(:user_con_profile)
-        .where(
-          "lower(user_con_profiles.last_name) like :value \
+      scope.joins(:user_con_profile).where(
+        "lower(user_con_profiles.last_name) like :value \
 OR lower(user_con_profiles.first_name) like :value",
-          value: "%#{value.downcase}%"
-        )
+        value: "%#{value.downcase}%"
+      )
     end
 
     def expand_scope_for_sort(scope, _direction)
@@ -63,10 +61,10 @@ OR lower(user_con_profiles.first_name) like :value",
     end
   end
 
-  field :event_title, 'Event' do
+  field :event_title, "Event" do
     def apply_filter(scope, value)
       run_scope = Run.where(id: scope.select(:run_id))
-      event_scope = Names.string_search(Event.where(id: run_scope.select(:event_id)), value, ['title'])
+      event_scope = Names.string_search(Event.where(id: run_scope.select(:event_id)), value, ["title"])
       scope.joins(:run).where(runs: { event_id: event_scope.select(:id) })
     end
 
@@ -75,11 +73,11 @@ OR lower(user_con_profiles.first_name) like :value",
     end
   end
 
-  field :bucket, 'Bucket' do
-    column_filter :bucket_key
+  field :bucket, "Bucket" do
+    column_filter :bucket_id
 
     def sql_order(direction)
-      "bucket_key #{direction}"
+      "bucket_id #{direction}"
     end
 
     def generate_csv_cell(signup)
@@ -87,9 +85,9 @@ OR lower(user_con_profiles.first_name) like :value",
     end
   end
 
-  field :age_restrictions_check, 'Age check'
+  field :age_restrictions_check, "Age check"
 
-  field :age, 'Age' do
+  field :age, "Age" do
     delegate :pundit_user, to: :presenter
 
     def expand_scope_for_sort(scope, _direction)
@@ -102,9 +100,9 @@ OR lower(user_con_profiles.first_name) like :value",
     end
   end
 
-  field :email, 'Email' do
+  field :email, "Email" do
     def apply_filter(scope, value)
-      scope.joins(user_con_profile: :user).where('lower(users.email) like :value', value: "%#{value.downcase}%")
+      scope.joins(user_con_profile: :user).where("lower(users.email) like :value", value: "%#{value.downcase}%")
     end
 
     def expand_scope_for_sort(scope, _direction)
@@ -120,19 +118,19 @@ OR lower(user_con_profiles.first_name) like :value",
     end
   end
 
-  field :created_at, 'Timestamp'
+  field :created_at, "Timestamp"
 
-  field :choice, 'Choice' do
+  field :choice, "Choice" do
     def generate_csv_cell(signup)
-      signup.counted? ? signup.choice : 'N/C'
+      signup.counted? ? signup.choice : "N/C"
     end
   end
 
   attr_reader :pundit_user
 
-  def initialize(scope, pundit_user, *args)
+  def initialize(scope, pundit_user, *)
     @pundit_user = pundit_user
-    super(scope, *args)
+    super(scope, *)
   end
 
   private

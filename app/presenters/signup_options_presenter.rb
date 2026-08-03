@@ -15,7 +15,7 @@ class SignupOptionsPresenter
     end
 
     def params
-      { requested_bucket_key: bucket.key }
+      { requested_bucket_id: bucket.id }
     end
 
     def button_class
@@ -39,7 +39,7 @@ class SignupOptionsPresenter
 
   class NoPreferenceSignupOption
     def label
-      'No preference'
+      "No preference"
     end
 
     def params
@@ -47,7 +47,7 @@ class SignupOptionsPresenter
     end
 
     def button_class
-      'btn-outline-dark'
+      "btn-outline-dark"
     end
 
     def bucket
@@ -55,7 +55,7 @@ class SignupOptionsPresenter
     end
 
     def help_text
-      'Sign up for any of the limited-capacity buckets in this event'
+      "Sign up for any of the limited-capacity buckets in this event"
     end
 
     def no_preference?
@@ -87,7 +87,7 @@ class SignupOptionsPresenter
     end
 
     def button_class
-      'btn-outline-primary'
+      "btn-outline-primary"
     end
 
     def bucket

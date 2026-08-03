@@ -1,7 +1,11 @@
-require 'test_helper'
+require "test_helper"
 
 describe SignupDrop do
-  let(:signup) { create(:signup, bucket_key: 'unlimited', requested_bucket_key: 'unlimited') }
+  let(:signup) do
+    created_signup = create(:signup)
+    created_signup.update!(requested_bucket_id: created_signup.bucket_id)
+    created_signup
+  end
   let(:signup_drop) { SignupDrop.new(signup) }
   let(:the_run) { signup.run }
   let(:event) { the_run.event }
@@ -18,7 +22,7 @@ describe SignupDrop do
     end
   end
 
-  it 'returns the event path' do
+  it "returns the event path" do
     assert_match %r{events/#{event.id}}, signup_drop.event_url
   end
 end

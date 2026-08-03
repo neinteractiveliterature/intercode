@@ -105,6 +105,11 @@ class RegistrationPolicyBucket < ApplicationRecord
   end
 
   # Ported verbatim from the old RegistrationPolicy::Bucket (app/models/registration_policy/bucket.rb)
+  #
+  # Deliberately compares by key rather than bucket_id: this can be called with a candidate bucket
+  # from a detached, not-yet-persisted RegistrationPolicy (e.g. while simulating a registration
+  # policy change in EventChangeRegistrationPolicyService), which has no id yet. Key is the only
+  # identity that's valid for both persisted and detached buckets.
   def signup_definitely_occupies_slot_in_bucket?(signup)
     case signup
     when Signup, SignupBucketFinder::FakeSignup

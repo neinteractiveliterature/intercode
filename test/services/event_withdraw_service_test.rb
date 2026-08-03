@@ -10,8 +10,9 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
   let(:user) { user_con_profile.user }
   let(:bucket_key) { "unlimited" }
   let(:signup_state) { "confirmed" }
+  let(:bucket_id) { event.registration_policy.bucket_with_key(bucket_key).id }
   let(:signup) do
-    create(:signup, user_con_profile:, run: the_run, state: signup_state, bucket_key:, requested_bucket_key: bucket_key)
+    create(:signup, user_con_profile:, run: the_run, state: signup_state, bucket_id:, requested_bucket_id: bucket_id)
   end
 
   subject { EventWithdrawService.new(signup, user) }
@@ -91,8 +92,8 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
         user_con_profile: anything_user_con_profile,
         run: the_run,
         state: "confirmed",
-        bucket_key: "anything",
-        requested_bucket_key: bucket_key
+        bucket_id: event.registration_policy.bucket_with_key("anything").id,
+        requested_bucket_id: bucket_id
       )
     end
 
@@ -103,7 +104,7 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
         user_con_profile: anything_user_con_profile,
         run: the_run,
         state: "waitlisted",
-        requested_bucket_key: bucket_key
+        requested_bucket_id: bucket_id
       )
     end
 
@@ -132,7 +133,7 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
     end
 
     it "does not try to fill an overfilled bucket" do
-      extra_signup = create(:signup, run: the_run, state: "confirmed", bucket_key:, requested_bucket_key: bucket_key)
+      extra_signup = create(:signup, run: the_run, state: "confirmed", bucket_id:, requested_bucket_id: bucket_id)
       waitlist_signup
 
       result = subject.call

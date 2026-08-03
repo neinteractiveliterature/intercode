@@ -33,10 +33,10 @@ class AcceptSignupRequestService < CivilService::Service
     success(signup: signup_result.signup, withdraw_result:)
   end
 
-  def with_relevant_locks(&block)
+  def with_relevant_locks(&)
     with_advisory_lock_unless_skip_locking("run_#{signup_request.target_run.id}_signups") do
       if signup_request.replace_signup
-        with_advisory_lock_unless_skip_locking("run_#{signup_request.replace_signup.run.id}_signups", &block)
+        with_advisory_lock_unless_skip_locking("run_#{signup_request.replace_signup.run.id}_signups", &)
       else
         yield
       end
@@ -59,7 +59,7 @@ class AcceptSignupRequestService < CivilService::Service
     EventSignupService.new(
       signup_request.user_con_profile,
       signup_request.target_run,
-      signup_request.requested_bucket_key,
+      signup_request.requested_bucket_id,
       whodunit,
       skip_locking: true,
       allow_non_self_service_signups: true,

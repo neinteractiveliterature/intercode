@@ -64,6 +64,10 @@ class RegistrationPolicy < ApplicationRecord
     buckets.find { |bucket| bucket.key == normalized_key }
   end
 
+  def bucket_with_id(id)
+    buckets.find { |bucket| bucket.id == id }
+  end
+
   # Applies another (typically detached, e.g. built via .build_from_hash) policy's values onto
   # this persisted one in place. Shared by EventChangeRegistrationPolicyService (after signup
   # simulation succeeds) and EventProposal's update path, which otherwise duplicated this exact

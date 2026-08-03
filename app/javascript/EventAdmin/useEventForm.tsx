@@ -21,6 +21,7 @@ function buildSingleBucketRegistrationPolicy(totalSlots?: number | null): Regist
     buckets: [
       {
         __typename: 'RegistrationPolicyBucket',
+        id: 'signups',
         key: 'signups',
         name: 'Signups',
         description: 'Signups for this event',

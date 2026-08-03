@@ -15,7 +15,7 @@ class SignupRequestDrop < Liquid::Drop
   #                    withdrawn)
   # @!method result_signup
   #   @return [SignupDrop] The resulting signup, if the request was accepted
-  delegate :id, :target_run, :user_con_profile, :state, :result_signup, to: :signup_request
+  delegate :id, :target_run, :user_con_profile, :state, :result_signup, :requested_bucket, to: :signup_request
 
   # @!method event
   #   @return [EventDrop] The event the signup is requested for
@@ -33,13 +33,6 @@ class SignupRequestDrop < Liquid::Drop
 
   # @return [String] The URL for admins to go to moderate this signup request
   def signup_moderation_url
-    '/signup_moderation'
-  end
-
-  # @!method requested_bucket
-  #   @return [RegistrationPolicy::BucketDrop] The bucket the user requested to sign up in, if any
-  def requested_bucket
-    return nil unless signup_request.requested_bucket_key
-    event.registration_policy.bucket_with_key(signup_request.requested_bucket_key)
+    "/signup_moderation"
   end
 end

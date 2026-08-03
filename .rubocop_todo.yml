@@ -112,13 +112,18 @@ Metrics/ClassLength:
 # Configuration parameters: AllowedMethods, AllowedPatterns, Max.
 Metrics/CyclomaticComplexity:
   Exclude:
+    - 'app/notifiers/notifier_preview_factory.rb'
     - 'app/services/execute_ranked_choice_signup_service.rb'
+    - 'app/services/signup_bucket_finder.rb'
 
 # Offense count: 1
 # Configuration parameters: Max.
 Metrics/ParameterLists:
   Exclude:
     - 'app/presenters/signup_count_presenter.rb'
+    - 'app/services/create_signup_request_service.rb'
+    - 'app/services/event_vacancy_fill_service.rb'
+    - 'app/services/event_withdraw_service.rb'
     - 'app/services/execute_ranked_choice_signup_service.rb'
 
 # Offense count: 1
@@ -137,6 +142,8 @@ Naming/PredicateMethod:
 # Offense count: 1
 Naming/PredicatePrefix:
   Exclude:
+    - 'app/models/run.rb'
+    - 'app/presenters/run_availability_presenter.rb'
     - 'app/presenters/signup_count_presenter.rb'
 
 # Offense count: 1
@@ -159,6 +166,7 @@ Rails/RefuteMethods:
 Rails/HasAndBelongsToMany:
   Exclude:
     - 'app/models/page.rb'
+    - 'app/models/run.rb'
 
 Rails/HasManyOrHasOneDependent:
   Exclude:
@@ -185,6 +193,9 @@ Rails/SkipsModelValidations:
 Style/FrozenStringLiteralComment:
   Exclude:
     - 'app/models/oauth_application.rb'
+    - 'app/models/signup_ranked_choice.rb'
+    - 'app/serializers/signup_move_result_serializer.rb'
+    - 'app/services/create_signup_request_service.rb'
     - 'app/services/event_freeze_bucket_assignments_service.rb'
     - 'config/initializers/cors.rb'
     - 'config/initializers/doorkeeper.rb'
@@ -193,12 +204,21 @@ Style/FrozenStringLiteralComment:
     - 'test/factories/event_proposals.rb'
     - 'test/factories/events.rb'
     - 'test/factories/oauth_applications.rb'
+    - 'test/factories/signup_ranked_choices.rb'
+    - 'test/factories/signup_requests.rb'
+    - 'test/factories/signups.rb'
     - 'test/liquid_drops/convention_drop_test.rb'
+    - 'test/liquid_drops/signup_drop_test.rb'
+    - 'test/liquid_drops/user_con_profile_drop_test.rb'
     - 'test/models/event_proposal_test.rb'
     - 'test/models/event_test.rb'
     - 'test/models/registration_policy/unlimited_test.rb'
     - 'test/models/registration_policy_bucket_test.rb'
     - 'test/models/registration_policy_test.rb'
+    - 'test/models/signup_change_test.rb'
+    - 'test/models/signup_ranked_choice_test.rb'
+    - 'test/models/signup_request_test.rb'
+    - 'test/models/signup_test.rb'
     - 'test/policies/oauth_application_policy_test.rb'
     - 'test/services/create_signup_request_service_test.rb'
     - 'test/services/create_team_member_service_test.rb'
@@ -216,9 +236,20 @@ Layout/LineLength:
 
 Lint/MissingSuper:
   Exclude:
+    - 'app/liquid_drops/convention_drop.rb'
+    - 'app/liquid_drops/registration_policy/bucket_drop.rb'
+    - 'app/liquid_drops/signup_move_result_drop.rb'
+    - 'app/liquid_drops/signup_request_drop.rb'
     - 'app/services/accept_event_proposal_service.rb'
+    - 'app/services/accept_signup_ranked_choice_service.rb'
+    - 'app/services/accept_signup_request_service.rb'
+    - 'app/services/create_signup_request_service.rb'
+    - 'app/services/create_team_member_service.rb'
     - 'app/services/event_change_registration_policy_service.rb'
     - 'app/services/event_freeze_bucket_assignments_service.rb'
+    - 'app/services/event_signup_service.rb'
+    - 'app/services/event_vacancy_fill_service.rb'
+    - 'app/services/event_withdraw_service.rb'
     - 'app/services/execute_ranked_choice_signup_round_service.rb'
 
 Performance/StringInclude:
@@ -232,6 +263,31 @@ Rails/SquishedSQLHeredocs:
 Rails/TimeZone:
   Exclude:
     - 'app/models/convention.rb'
+    - 'app/models/signup.rb'
+    - 'app/services/event_withdraw_service.rb'
     - 'test/services/event_vacancy_fill_service_test.rb'
     - 'test/services/execute_ranked_choice_signup_round_service_test.rb'
+
+Rails/InverseOf:
+  Exclude:
+    - 'app/models/run.rb'
+    - 'app/models/signup.rb'
+
+Naming/MemoizedInstanceVariableName:
+  Exclude:
+    - 'app/liquid_drops/convention_drop.rb'
+    - 'app/presenters/run_availability_presenter.rb'
+    - 'app/services/signup_bucket_finder.rb'
+
+Lint/DuplicateBranch:
+  Exclude:
+    - 'app/presenters/signup_options_presenter.rb'
+
+Style/MutableConstant:
+  Exclude:
+    - 'app/models/signup.rb'
+
+Style/ReduceToHash:
+  Exclude:
+    - 'app/liquid_drops/convention_drop.rb'
 

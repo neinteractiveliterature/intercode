@@ -297,11 +297,25 @@ export type AuthorizedApplication = {
   uid: Scalars['ID']['output'];
 };
 
-/** A mapping from an old bucket key to a new bucket key when changing a registration policy */
+/** A mapping from an old bucket to a new bucket when changing a registration policy */
 export type BucketKeyMappingInput = {
-  /** The old bucket key being removed or changed */
-  from_key: Scalars['String']['input'];
-  /** The new bucket key to map to (nil means no preference) */
+  /** The id of the old bucket being removed or changed */
+  fromBucketId?: InputMaybe<Scalars['ID']['input']>;
+  /**
+   * The old bucket key being removed or changed
+   * @deprecated Use from_bucket_id instead
+   */
+  from_key?: InputMaybe<Scalars['String']['input']>;
+  /**
+   * The id of the new bucket to map to (nil means no preference). Only usable when mapping
+   * to a bucket that already exists -- mapping to a bucket being newly created in the same
+   * edit still requires to_key, since it has no id yet.
+   */
+  toBucketId?: InputMaybe<Scalars['ID']['input']>;
+  /**
+   * The new bucket key to map to (nil means no preference)
+   * @deprecated Use to_bucket_id instead
+   */
   to_key?: InputMaybe<Scalars['String']['input']>;
 };
 
@@ -2012,8 +2026,16 @@ export type CreateMultipleRunsPayload = {
 export type CreateMySignupInput = {
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  /** Set to true to sign up with no bucket preference */
   no_requested_bucket?: InputMaybe<Scalars['Boolean']['input']>;
+  /** The bucket to request, or null for no preference */
+  requestedBucketId?: InputMaybe<Scalars['ID']['input']>;
+  /**
+   * The bucket key to request, or null for no preference
+   * @deprecated Use requestedBucketId instead
+   */
   requested_bucket_key?: InputMaybe<Scalars['String']['input']>;
+  /** The ID of the run to sign up for */
   runId?: InputMaybe<Scalars['ID']['input']>;
 };
 
@@ -2022,6 +2044,7 @@ export type CreateMySignupPayload = {
   __typename: 'CreateMySignupPayload';
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
+  /** The signup that was created */
   signup: Signup;
 };
 
@@ -2199,7 +2222,12 @@ export type CreateRunPayload = {
 export type CreateSignupRankedChoiceInput = {
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
-  /** The bucket key to queue a signup ranked choice in, or null to queue a no-preference choice */
+  /** The bucket to queue a signup ranked choice in, or null to queue a no-preference choice */
+  requestedBucketId?: InputMaybe<Scalars['ID']['input']>;
+  /**
+   * The bucket key to queue a signup ranked choice in, or null to queue a no-preference choice
+   * @deprecated Use requestedBucketId instead
+   */
   requested_bucket_key?: InputMaybe<Scalars['String']['input']>;
   /** The ID of the run to queue a signup ranked choice for */
   targetRunId?: InputMaybe<Scalars['ID']['input']>;
@@ -2218,8 +2246,16 @@ export type CreateSignupRankedChoicePayload = {
 export type CreateSignupRequestInput = {
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  /** The ID of an existing signup this request should replace if accepted */
   replaceSignupId?: InputMaybe<Scalars['ID']['input']>;
+  /** The bucket to request, or null for no preference */
+  requestedBucketId?: InputMaybe<Scalars['ID']['input']>;
+  /**
+   * The bucket key to request, or null for no preference
+   * @deprecated Use requestedBucketId instead
+   */
   requested_bucket_key?: InputMaybe<Scalars['String']['input']>;
+  /** The ID of the run to request a signup for */
   targetRunId?: InputMaybe<Scalars['ID']['input']>;
 };
 
@@ -2228,6 +2264,7 @@ export type CreateSignupRequestPayload = {
   __typename: 'CreateSignupRequestPayload';
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
+  /** The signup request that was created */
   signup_request: SignupRequest;
 };
 
@@ -2354,11 +2391,22 @@ export type CreateUserConProfilePayload = {
 export type CreateUserSignupInput = {
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  /** Set to true to sign up with no bucket preference */
   no_requested_bucket?: InputMaybe<Scalars['Boolean']['input']>;
+  /** The bucket to request, or null for no preference */
+  requestedBucketId?: InputMaybe<Scalars['ID']['input']>;
+  /**
+   * The bucket key to request, or null for no preference
+   * @deprecated Use requestedBucketId instead
+   */
   requested_bucket_key?: InputMaybe<Scalars['String']['input']>;
+  /** The ID of the run to sign up for */
   runId?: InputMaybe<Scalars['ID']['input']>;
+  /** Set to true to skip sending the signup confirmation notification */
   suppress_confirmation?: InputMaybe<Scalars['Boolean']['input']>;
+  /** Set to true to skip sending team member notifications for this signup */
   suppress_notifications?: InputMaybe<Scalars['Boolean']['input']>;
+  /** The ID of the user con profile to sign up */
   userConProfileId?: InputMaybe<Scalars['ID']['input']>;
 };
 
@@ -2367,6 +2415,7 @@ export type CreateUserSignupPayload = {
   __typename: 'CreateUserSignupPayload';
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
+  /** The signup that was created */
   signup: Signup;
 };
 
@@ -3221,9 +3270,16 @@ export type EventsPagination = PaginationInterface & {
 
 /** Autogenerated input type of ForceConfirmSignup */
 export type ForceConfirmSignupInput = {
-  bucket_key: Scalars['String']['input'];
+  /** The bucket to confirm the signup into */
+  bucketId?: InputMaybe<Scalars['ID']['input']>;
+  /**
+   * The bucket key to confirm the signup into
+   * @deprecated Use bucketId instead
+   */
+  bucket_key?: InputMaybe<Scalars['String']['input']>;
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  /** The ID of the signup to confirm */
   id?: InputMaybe<Scalars['ID']['input']>;
 };
 
@@ -3232,6 +3288,7 @@ export type ForceConfirmSignupPayload = {
   __typename: 'ForceConfirmSignupPayload';
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
+  /** The signup that was confirmed */
   signup: Signup;
 };
 
@@ -3362,13 +3419,30 @@ export type FreezeBucketAssignmentsPayload = {
   event: Event;
 };
 
+/** A count of signups sharing the same state, bucket, counted-ness, and team-member status */
 export type GroupedSignupCount = {
   __typename: 'GroupedSignupCount';
+  /** The bucket these signups are in */
+  bucket?: Maybe<RegistrationPolicyBucket>;
+  /**
+   * The key of the bucket these signups are in
+   * @deprecated Use bucket instead
+   */
   bucket_key?: Maybe<Scalars['String']['output']>;
+  /** The number of signups in this group */
   count: Scalars['Int']['output'];
+  /** Whether these signups count towards totals */
   counted: Scalars['Boolean']['output'];
+  /** The bucket these signups requested */
+  requested_bucket?: Maybe<RegistrationPolicyBucket>;
+  /**
+   * The key of the bucket these signups requested
+   * @deprecated Use requestedBucket instead
+   */
   requested_bucket_key?: Maybe<Scalars['String']['output']>;
+  /** The state these signups are in */
   state: SignupState;
+  /** Whether these signups belong to event team members */
   team_member: Scalars['Boolean']['output'];
 };
 
@@ -3532,6 +3606,7 @@ export type Mutation = {
   createFormWithJSON: CreateFormWithJsonPayload;
   createMaximumEventProvidedTicketsOverride: CreateMaximumEventProvidedTicketsOverridePayload;
   createMultipleRuns: CreateMultipleRunsPayload;
+  /** Sign the current user up for a run, as a self-service signup */
   createMySignup: CreateMySignupPayload;
   /** Creates a new OAuth2 application. Returns the plaintext secret once; it cannot be retrieved again. */
   createOAuthApplication: CreateOAuthApplicationPayload;
@@ -3551,6 +3626,7 @@ export type Mutation = {
   createRun: CreateRunPayload;
   /** Create a new SignupRankedChoice in a user's signup queue */
   createSignupRankedChoice: CreateSignupRankedChoicePayload;
+  /** Create a request to sign up for a run, for the current user, in a moderated-signup convention */
   createSignupRequest: CreateSignupRequestPayload;
   /** Create a new SignupRound in a convention */
   createSignupRound: CreateSignupRoundPayload;
@@ -3560,6 +3636,7 @@ export type Mutation = {
   createTicketType: CreateTicketTypePayload;
   createUserActivityAlert: CreateUserActivityAlertPayload;
   createUserConProfile: CreateUserConProfilePayload;
+  /** Sign a user up for a run, as an admin action */
   createUserSignup: CreateUserSignupPayload;
   deleteCmsContentGroup: DeleteCmsContentGroupPayload;
   deleteCmsFile: DeleteCmsFilePayload;
@@ -3599,6 +3676,7 @@ export type Mutation = {
   deleteUserActivityAlert: DeleteUserActivityAlertPayload;
   deleteUserConProfile: DeleteUserConProfilePayload;
   dropEvent: DropEventPayload;
+  /** Force-confirm a signup into a specific bucket, bypassing capacity limits */
   forceConfirmSignup: ForceConfirmSignupPayload;
   /**
    * Freeze the existing bucket assignments for an event as they currently are.  After doing this, any signups in flex
@@ -3675,7 +3753,9 @@ export type Mutation = {
   updateRoom: UpdateRoomPayload;
   updateRootSite: UpdateRootSitePayload;
   updateRun: UpdateRunPayload;
+  /** Move a signup into a different bucket, backfilling the vacancy it leaves behind */
   updateSignupBucket: UpdateSignupBucketPayload;
+  /** Change whether a signup counts towards the event's total signups and its bucket's slots */
   updateSignupCounted: UpdateSignupCountedPayload;
   /** Change the priority of a SignupRankedChoice in a user's queue */
   updateSignupRankedChoicePriority: UpdateSignupRankedChoicePriorityPayload;
@@ -5472,17 +5552,33 @@ export type RegistrationPolicy = {
   total_slots_including_not_counted?: Maybe<Scalars['Int']['output']>;
 };
 
+/** A bucket that a run's signups can be placed into as part of a registration policy */
 export type RegistrationPolicyBucket = {
   __typename: 'RegistrationPolicyBucket';
+  /** Whether or not this is a "flex" bucket ("anything" is a legacy term for "flex") */
   anything: Scalars['Boolean']['output'];
+  /** A long-form description for the bucket */
   description?: Maybe<Scalars['String']['output']>;
+  /** Whether or not to allow other attendees to see that a person is in this bucket in the signup summary page */
   expose_attendees: Scalars['Boolean']['output'];
+  /** The ID of this bucket */
+  id: Scalars['ID']['output'];
+  /** The unique string identifier for this bucket */
   key: Scalars['String']['output'];
+  /** The minimum number of attendees needed for this bucket */
   minimum_slots?: Maybe<Scalars['Int']['output']>;
+  /** The name of this bucket */
   name?: Maybe<Scalars['String']['output']>;
+  /**
+   * If true, attendees in this bucket are not counted towards total attendees for runs of this event, and this
+   * event will not count towards their maximum event signups allowed
+   */
   not_counted: Scalars['Boolean']['output'];
+  /** The preferred number of attendees for this bucket */
   preferred_slots?: Maybe<Scalars['Int']['output']>;
+  /** Whether or not the number of attendees is limited in this bucket */
   slots_limited: Scalars['Boolean']['output'];
+  /** The maximum number of attendees this bucket can accept */
   total_slots?: Maybe<Scalars['Int']['output']>;
 };
 
@@ -5968,20 +6064,44 @@ export enum ShowSchedule {
   Yes = 'yes'
 }
 
+/** A signup for a run of an event */
 export type Signup = {
   __typename: 'Signup';
+  /** Whether the signed-up attendee meets the event's age restrictions, if any */
   age_restrictions_check: Scalars['String']['output'];
+  /** The bucket assigned to this signup */
+  bucket?: Maybe<RegistrationPolicyBucket>;
+  /**
+   * The key of the bucket assigned to this signup
+   * @deprecated Use bucket instead
+   */
   bucket_key?: Maybe<Scalars['String']['output']>;
+  /** The order in which this signup was made, among the attendee's other counted signups */
   choice?: Maybe<Scalars['Int']['output']>;
+  /** Whether this signup counts towards the event's and attendee's signup totals */
   counted: Scalars['Boolean']['output'];
+  /** When this signup was created */
   created_at: Scalars['Date']['output'];
+  /** When this signup will expire, if it's being held temporarily */
   expires_at?: Maybe<Scalars['Date']['output']>;
+  /** The ID of this signup */
   id: Scalars['ID']['output'];
+  /** The bucket this signup requested, if any */
+  requested_bucket?: Maybe<RegistrationPolicyBucket>;
+  /**
+   * The key of the bucket this signup requested, if any
+   * @deprecated Use requestedBucket instead
+   */
   requested_bucket_key?: Maybe<Scalars['String']['output']>;
+  /** The run this signup is for */
   run: Run;
+  /** The state of this signup */
   state: SignupState;
+  /** When this signup was last updated */
   updated_at: Scalars['Date']['output'];
+  /** The profile of the person who is signed up */
   user_con_profile: UserConProfile;
+  /** This signup's position on the waitlist, if it's waitlisted */
   waitlist_position?: Maybe<Scalars['Int']['output']>;
 };
 
@@ -5997,18 +6117,37 @@ export enum SignupAutomationMode {
   RankedChoice = 'ranked_choice'
 }
 
+/** A record of a single change made to a signup, kept for audit purposes */
 export type SignupChange = {
   __typename: 'SignupChange';
+  /** What triggered this change */
   action: SignupChangeAction;
+  /** The bucket assigned by this change */
+  bucket?: Maybe<RegistrationPolicyBucket>;
+  /**
+   * The key of the bucket assigned by this change
+   * @deprecated Use bucket or bucketName instead
+   */
   bucket_key?: Maybe<Scalars['String']['output']>;
+  /** The name of the bucket assigned by this change, as of when the change happened */
+  bucket_name?: Maybe<Scalars['String']['output']>;
+  /** Whether the signup counted towards totals after this change */
   counted: Scalars['Boolean']['output'];
+  /** When this change happened */
   created_at: Scalars['Date']['output'];
+  /** The ID of this change */
   id: Scalars['ID']['output'];
+  /** The change that happened before this one, if any */
   previous_signup_change?: Maybe<SignupChange>;
+  /** The run this signup change happened on */
   run: Run;
+  /** The signup this change happened to */
   signup: Signup;
+  /** The state of the signup after this change */
   state: SignupState;
+  /** When this change was last updated */
   updated_at: Scalars['Date']['output'];
+  /** The profile of the person whose signup changed */
   user_con_profile: UserConProfile;
 };
 
@@ -6066,13 +6205,30 @@ export enum SignupMode {
   SelfService = 'self_service'
 }
 
+/** The result of a signup being automatically moved from one state or bucket to another */
 export type SignupMoveResult = {
   __typename: 'SignupMoveResult';
+  /** The new bucket assigned to this signup */
+  bucket?: Maybe<RegistrationPolicyBucket>;
+  /**
+   * The key of the new bucket assigned to this signup
+   * @deprecated Use bucket instead
+   */
   bucket_key?: Maybe<Scalars['String']['output']>;
+  /** The previous bucket assigned to this signup */
+  prev_bucket?: Maybe<RegistrationPolicyBucket>;
+  /**
+   * The key of the previous bucket assigned to this signup
+   * @deprecated Use prevBucket instead
+   */
   prev_bucket_key?: Maybe<Scalars['String']['output']>;
+  /** The previous state of this signup */
   prev_state: SignupState;
+  /** The signup that was moved */
   signup: Signup;
+  /** The ID of the signup that was moved */
   signup_id: Scalars['Int']['output'];
+  /** The new state of this signup */
   state: SignupState;
 };
 
@@ -6097,6 +6253,11 @@ export type SignupRankedChoice = {
   /** All the automated decisions that have been made about this choice */
   ranked_choice_decisions: Array<RankedChoiceDecision>;
   /** The bucket that this choice is trying to sign up in (or null, if it's a no-preference signup) */
+  requested_bucket?: Maybe<RegistrationPolicyBucket>;
+  /**
+   * The bucket that this choice is trying to sign up in (or null, if it's a no-preference signup)
+   * @deprecated Use requestedBucket instead
+   */
   requested_bucket_key?: Maybe<Scalars['String']['output']>;
   /** The resulting Signup from processing this choice, if it has been processed */
   result_signup?: Maybe<Signup>;
@@ -6152,6 +6313,11 @@ export type SignupRequest = {
    */
   replace_signup?: Maybe<Signup>;
   /** The bucket that this request is asking to sign up in (or null, if it's a no-preference signup) */
+  requested_bucket?: Maybe<RegistrationPolicyBucket>;
+  /**
+   * The bucket that this request is asking to sign up in (or null, if it's a no-preference signup)
+   * @deprecated Use requestedBucket instead
+   */
   requested_bucket_key?: Maybe<Scalars['String']['output']>;
   /** The resulting Signup from accepting this request, if it has been accepted */
   result_signup?: Maybe<Signup>;
@@ -7056,9 +7222,16 @@ export type UpdateRunPayload = {
 
 /** Autogenerated input type of UpdateSignupBucket */
 export type UpdateSignupBucketInput = {
-  bucket_key: Scalars['String']['input'];
+  /** The bucket to move the signup into */
+  bucketId?: InputMaybe<Scalars['ID']['input']>;
+  /**
+   * The bucket key to move the signup into
+   * @deprecated Use bucketId instead
+   */
+  bucket_key?: InputMaybe<Scalars['String']['input']>;
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  /** The ID of the signup to move */
   id?: InputMaybe<Scalars['ID']['input']>;
 };
 
@@ -7067,6 +7240,7 @@ export type UpdateSignupBucketPayload = {
   __typename: 'UpdateSignupBucketPayload';
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
+  /** The updated signup */
   signup: Signup;
 };
 
@@ -7074,7 +7248,9 @@ export type UpdateSignupBucketPayload = {
 export type UpdateSignupCountedInput = {
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  /** Whether the signup should count towards totals */
   counted: Scalars['Boolean']['input'];
+  /** The ID of the signup to update */
   id?: InputMaybe<Scalars['ID']['input']>;
 };
 
@@ -7083,6 +7259,7 @@ export type UpdateSignupCountedPayload = {
   __typename: 'UpdateSignupCountedPayload';
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
+  /** The updated signup */
   signup: Signup;
 };
 

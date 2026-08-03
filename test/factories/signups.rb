@@ -3,27 +3,31 @@
 #
 # Table name: signups
 #
-#  id                   :bigint           not null, primary key
-#  bucket_key           :string
-#  counted              :boolean
-#  expires_at           :datetime
-#  requested_bucket_key :string
-#  state                :string           default("confirmed"), not null
-#  created_at           :datetime         not null
-#  updated_at           :datetime         not null
-#  run_id               :bigint           not null
-#  updated_by_id        :bigint
-#  user_con_profile_id  :bigint           not null
+#  id                  :bigint           not null, primary key
+#  counted             :boolean
+#  expires_at          :datetime
+#  state               :string           default("confirmed"), not null
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  bucket_id           :bigint
+#  requested_bucket_id :bigint
+#  run_id              :bigint           not null
+#  updated_by_id       :bigint
+#  user_con_profile_id :bigint           not null
 #
 # Indexes
 #
+#  index_signups_on_bucket_id            (bucket_id)
 #  index_signups_on_expires_at           (expires_at)
+#  index_signups_on_requested_bucket_id  (requested_bucket_id)
 #  index_signups_on_run_id               (run_id)
 #  index_signups_on_updated_by_id        (updated_by_id)
 #  index_signups_on_user_con_profile_id  (user_con_profile_id)
 #
 # Foreign Keys
 #
+#  fk_rails_...  (bucket_id => registration_policy_buckets.id)
+#  fk_rails_...  (requested_bucket_id => registration_policy_buckets.id)
 #  fk_rails_...  (run_id => runs.id)
 #  fk_rails_...  (updated_by_id => users.id)
 #  fk_rails_...  (user_con_profile_id => user_con_profiles.id)
@@ -31,7 +35,7 @@
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
 FactoryBot.define do
   factory :signup do
-    state { 'confirmed' }
+    state { "confirmed" }
     counted { true }
     updated_by { nil }
 
@@ -40,7 +44,7 @@ FactoryBot.define do
       event = signup.run&.event || create(:event, convention: convention)
       signup.user_con_profile ||= create(:user_con_profile, convention: convention)
       signup.run ||= create(:run, event: event)
-      signup.bucket_key ||= signup.run.event.registration_policy.buckets.first.key if signup.occupying_slot?
+      signup.bucket_id ||= signup.run.event.registration_policy.buckets.first.id if signup.occupying_slot?
     end
   end
 end
