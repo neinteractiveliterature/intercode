@@ -413,12 +413,23 @@ jobs:
           GITHUB_TOKEN: ${{ secrets.GITHUB_TOKEN }}
       - name: Format Slack post
         id: slack-post
+        env:
+          RELEASE_NAME: ${{ steps.release-drafter.outputs.name }}
+          RELEASE_URL: ${{ steps.release-drafter.outputs.html_url }}
+          COMMIT_MESSAGES: ${{ join(github.event.commits.*.message, '\n- ') }}
+          RUN_URL: ${{ github.server_url }}/${{ github.repository }}/actions/runs/${{ github.run_id }}
         run: |
-          echo "text<<END_OF_SLACK_MESSAGE" >> "$GITHUB_OUTPUT"
-          echo -e "Draft release ${{ steps.release-drafter.outputs.name }} updated:\n" >> "$GITHUB_OUTPUT"
-          echo -e "- ${{ join(github.event.commits.*.message, '\n- ') }}\n" >> "$GITHUB_OUTPUT"
-          echo "To release Intercode to production, visit: ${{ steps.release-drafter.outputs.html_url }}" >> "$GITHUB_OUTPUT"
-          echo END_OF_SLACK_MESSAGE >> "$GITHUB_OUTPUT"
+          MAX_LENGTH=2800
+          BODY=$(printf 'Draft release %s updated:\n\n- %s\n\nTo release Intercode to production, visit: %s' \
+            "$RELEASE_NAME" "$COMMIT_MESSAGES" "$RELEASE_URL")
+          if [ "${#BODY}" -gt "$MAX_LENGTH" ]; then
+            BODY="${BODY:0:$MAX_LENGTH}"$'\n\n... (truncated; see the full run: '"$RUN_URL"')'
+          fi
+          {
+            echo "text<<SLACK_MSG_EOF_${{ github.run_id }}_${{ github.run_attempt }}"
+            echo "$BODY"
+            echo "SLACK_MSG_EOF_${{ github.run_id }}_${{ github.run_attempt }}"
+          } >> "$GITHUB_OUTPUT"
       - name: Post about drafted release to Slack
         id: slack
         uses: slackapi/slack-github-action@v3.0.3
