@@ -18,7 +18,9 @@ export type BucketKeyMappingInput = {
 export type CreateEventInput = {
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: string | null | undefined;
+  /** The event attributes */
   event: EventInput;
+  /** Signed blob IDs for images to attach to this event */
   signedImageBlobIds?: Array<string | number> | null | undefined;
 };
 
@@ -26,8 +28,11 @@ export type CreateEventInput = {
 export type CreateFillerEventInput = {
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: string | null | undefined;
+  /** The event attributes */
   event: EventInput;
+  /** The initial run to create for this event */
   run?: RunInput | null | undefined;
+  /** Signed blob IDs for images to attach to this event */
   signedImageBlobIds?: Array<string | number> | null | undefined;
 };
 

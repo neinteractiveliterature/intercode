@@ -42,7 +42,9 @@ export type SubmitEventProposalInput = {
 export type UpdateEventProposalInput = {
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: string | null | undefined;
+  /** The event proposal attributes to update */
   event_proposal: EventProposalInput;
+  /** The ID of the event proposal to update */
   id?: string | number | null | undefined;
 };
 

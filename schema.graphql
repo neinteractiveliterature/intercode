@@ -124,7 +124,15 @@ input AddOrderEntryToCurrentPendingOrderInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
+
+  """
+  The order entry to add.
+  """
   order_entry: OrderEntryInput!
+
+  """
+  The amount to charge, if this is a pay-what-you-want product.
+  """
   pay_what_you_want_amount: MoneyInput
 }
 
@@ -136,6 +144,10 @@ type AddOrderEntryToCurrentPendingOrderPayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
+
+  """
+  The order entry that was added or updated.
+  """
   order_entry: OrderEntry!
 }
 
@@ -2117,7 +2129,15 @@ input CreateEventInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
+
+  """
+  The event attributes
+  """
   event: EventInput!
+
+  """
+  Signed blob IDs for images to attach to this event
+  """
   signedImageBlobIds: [ID!]
 }
 
@@ -2129,6 +2149,10 @@ type CreateEventPayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
+
+  """
+  The newly-created event
+  """
   event: Event!
 }
 
@@ -2140,7 +2164,15 @@ input CreateEventProposalInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
+
+  """
+  The ID of an existing event proposal to copy compatible form values from
+  """
   cloneEventProposalId: ID
+
+  """
+  The ID of the event category the new proposal belongs to
+  """
   eventCategoryId: ID
 }
 
@@ -2152,6 +2184,10 @@ type CreateEventProposalPayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
+
+  """
+  The newly-created event proposal
+  """
   event_proposal: EventProposal!
 }
 
@@ -2163,8 +2199,20 @@ input CreateFillerEventInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
+
+  """
+  The event attributes
+  """
   event: EventInput!
+
+  """
+  The initial run to create for this event
+  """
   run: RunInput
+
+  """
+  Signed blob IDs for images to attach to this event
+  """
   signedImageBlobIds: [ID!]
 }
 
@@ -2176,6 +2224,10 @@ type CreateFillerEventPayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
+
+  """
+  The newly-created event
+  """
   event: Event!
 }
 
@@ -4036,26 +4088,92 @@ input EventInput {
   removeImageBlobIds: [ID!]
 }
 
+"""
+A proposal for a new event, submitted by a convention attendee for review
+"""
 type EventProposal {
+  """
+  Admin-only notes about this event proposal
+  """
   admin_notes: String
+
+  """
+  The convention this event proposal belongs to
+  """
   convention: Convention!
+
+  """
+  When this event proposal was created
+  """
   created_at: Date!
   current_user_form_item_viewer_role: FormItemRole!
   current_user_form_item_writer_role: FormItemRole!
+
+  """
+  The event created from this proposal, if it was accepted
+  """
   event: Event
+
+  """
+  The category of this event proposal
+  """
   event_category: EventCategory!
+
+  """
+  The form used for this event proposal
+  """
   form: Form
   form_response_attrs_json(itemIdentifiers: [String!]): Json
   form_response_attrs_json_with_rendered_markdown(itemIdentifiers: [String!]): Json
+
+  """
+  The history of changes to this event proposal's form response
+  """
   form_response_changes: [FormResponseChange!]!
+
+  """
+  The ID of this event proposal
+  """
   id: ID!
+
+  """
+  Images attached to this event proposal
+  """
   images: [ActiveStorageAttachment!]!
+
+  """
+  The proposed length of the event in seconds
+  """
   length_seconds: Int
+
+  """
+  The convention attendee who submitted this proposal
+  """
   owner: UserConProfile!
+
+  """
+  The proposed registration policy for this event
+  """
   registration_policy: RegistrationPolicy
+
+  """
+  The status of this event proposal (draft, submitted, etc.)
+  """
   status: String!
+
+  """
+  When this event proposal was submitted for review
+  """
   submitted_at: Date
+
+  """
+  The proposed title of the event
+  """
   title: String
+
+  """
+  When this event proposal was last updated
+  """
   updated_at: Date!
 }
 
@@ -4471,6 +4589,10 @@ type Mutation {
     """
     input: AcceptSignupRequestInput!
   ): AcceptSignupRequestPayload!
+
+  """
+  Adds an order entry to the current user's pending order, creating one if necessary.
+  """
   addOrderEntryToCurrentPendingOrder(
     """
     Parameters for AddOrderEntryToCurrentPendingOrder
@@ -4577,6 +4699,10 @@ type Mutation {
     """
     input: CreateEmailRouteInput!
   ): CreateEmailRoutePayload!
+
+  """
+  Create a new event
+  """
   createEvent(
     """
     Parameters for CreateEvent
@@ -4589,12 +4715,20 @@ type Mutation {
     """
     input: CreateEventCategoryInput!
   ): CreateEventCategoryPayload!
+
+  """
+  Create a new event proposal, optionally cloning form values from an existing one
+  """
   createEventProposal(
     """
     Parameters for CreateEventProposal
     """
     input: CreateEventProposalInput!
   ): CreateEventProposalPayload!
+
+  """
+  Create a new filler event (a single-run event with no signup process, e.g. an ongoing activity)
+  """
   createFillerEvent(
     """
     Parameters for CreateFillerEvent
@@ -5260,6 +5394,10 @@ type Mutation {
     """
     input: UpdateEventCategoryInput!
   ): UpdateEventCategoryPayload!
+
+  """
+  Update an event proposal
+  """
   updateEventProposal(
     """
     Parameters for UpdateEventProposal
@@ -8936,7 +9074,15 @@ input UpdateEventProposalInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
+
+  """
+  The event proposal attributes to update
+  """
   event_proposal: EventProposalInput!
+
+  """
+  The ID of the event proposal to update
+  """
   id: ID
 }
 
@@ -8948,6 +9094,10 @@ type UpdateEventProposalPayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
+
+  """
+  The updated event proposal
+  """
   event_proposal: EventProposal!
 }
 
