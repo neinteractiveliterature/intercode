@@ -102,7 +102,7 @@ class RegistrationPolicyBucketTest < ActiveSupport::TestCase
         create(
           :signup,
           run: create(:run, event: create(:event, registration_policy: bucket.registration_policy)),
-          bucket_key: bucket.key,
+          bucket_id: bucket.id,
           counted: true
         )
 
@@ -116,20 +116,22 @@ class RegistrationPolicyBucketTest < ActiveSupport::TestCase
     let(:bucket) { build(:registration_policy_bucket, key: "pcs") }
 
     it "returns true for a confirmed Signup with a matching bucket_key" do
-      signup = build(:signup, state: "confirmed", bucket_key: "pcs", counted: true)
+      signup = build(:signup, state: "confirmed", bucket: build(:registration_policy_bucket, key: "pcs"), counted: true)
       assert bucket.signup_definitely_occupies_slot_in_bucket?(signup)
     end
 
     it "returns false for a Signup that isn't occupying a slot" do
-      signup = build(:signup, state: "withdrawn", bucket_key: "pcs", counted: true)
+      signup = build(:signup, state: "withdrawn", bucket: build(:registration_policy_bucket, key: "pcs"), counted: true)
       assert_not bucket.signup_definitely_occupies_slot_in_bucket?(signup)
     end
 
     it "excludes an uncounted signup from a counted bucket, but not_counted buckets count everyone" do
       counted_bucket = build(:registration_policy_bucket, key: "pcs", not_counted: false)
       not_counted_bucket = build(:registration_policy_bucket, key: "pcs", not_counted: true)
-      counted_signup = build(:signup, state: "confirmed", bucket_key: "pcs", counted: true)
-      uncounted_signup = build(:signup, state: "confirmed", bucket_key: "pcs", counted: false)
+      counted_signup =
+        build(:signup, state: "confirmed", bucket: build(:registration_policy_bucket, key: "pcs"), counted: true)
+      uncounted_signup =
+        build(:signup, state: "confirmed", bucket: build(:registration_policy_bucket, key: "pcs"), counted: false)
 
       assert counted_bucket.signup_definitely_occupies_slot_in_bucket?(counted_signup)
       assert_not counted_bucket.signup_definitely_occupies_slot_in_bucket?(uncounted_signup)
@@ -143,8 +145,9 @@ class RegistrationPolicyBucketTest < ActiveSupport::TestCase
     end
 
     it "checks state and requested_bucket_key for a SignupRequest" do
-      pending_request = build(:signup_request, state: "pending", requested_bucket_key: "pcs")
-      other_state_request = build(:signup_request, state: "withdrawn", requested_bucket_key: "pcs")
+      pcs_bucket = create(:registration_policy_bucket, key: "pcs")
+      pending_request = build(:signup_request, state: "pending", requested_bucket: pcs_bucket)
+      other_state_request = build(:signup_request, state: "withdrawn", requested_bucket: pcs_bucket)
 
       assert bucket.signup_definitely_occupies_slot_in_bucket?(pending_request)
       assert_not bucket.signup_definitely_occupies_slot_in_bucket?(other_state_request)

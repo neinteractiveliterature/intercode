@@ -8,7 +8,6 @@ require "base64"
 # Usage:
 #   data = JSON.parse(File.read('convention-export.json'), symbolize_names: true)
 #   ImportConventionDataService.new(data: data, organization: org).call!
-# rubocop:disable Metrics/ClassLength
 class ImportConventionDataService < CivilService::Service
   attr_reader :data, :organization
 
@@ -407,11 +406,15 @@ class ImportConventionDataService < CivilService::Service
       run.signups.create!(
         user_con_profile: profile,
         state: s[:state],
-        bucket_key: s[:bucket_key],
-        requested_bucket_key: s[:requested_bucket_key],
+        bucket_id: bucket_id_for(run, s[:bucket_key]),
+        requested_bucket_id: bucket_id_for(run, s[:requested_bucket_key]),
         counted: s.key?(:counted) ? s[:counted] : true
       )
     end
+  end
+
+  def bucket_id_for(run, bucket_key)
+    run.registration_policy.bucket_with_key(bucket_key)&.id
   end
 
   def import_tickets(convention, event_map, user_con_profile_map)

@@ -48,7 +48,7 @@ class CreateTeamMemberServiceTest < ActiveSupport::TestCase
         run: the_run,
         user_con_profile: user_con_profile,
         state: "confirmed",
-        bucket_key: "unlimited",
+        bucket_id: event.registration_policy.bucket_with_key("unlimited").id,
         counted: true
       )
     end
@@ -88,7 +88,7 @@ class CreateTeamMemberServiceTest < ActiveSupport::TestCase
             run: the_run,
             user_con_profile: user_con_profile,
             state: "waitlisted",
-            requested_bucket_key: "dogs",
+            requested_bucket_id: event.registration_policy.bucket_with_key("dogs").id,
             counted: false
           )
         end
@@ -105,19 +105,20 @@ class CreateTeamMemberServiceTest < ActiveSupport::TestCase
       end
 
       describe "blocking someone in the waitlist" do
+        let(:dogs_bucket_id) { event.registration_policy.bucket_with_key("dogs").id }
         let(:signup) do
           create(
             :signup,
             run: the_run,
             user_con_profile: user_con_profile,
             state: "confirmed",
-            bucket_key: "dogs",
-            requested_bucket_key: "dogs",
+            bucket_id: dogs_bucket_id,
+            requested_bucket_id: dogs_bucket_id,
             counted: true
           )
         end
         let(:waitlist_signup) do
-          create(:signup, run: the_run, state: "waitlisted", requested_bucket_key: "dogs", counted: false)
+          create(:signup, run: the_run, state: "waitlisted", requested_bucket_id: dogs_bucket_id, counted: false)
         end
 
         before do
@@ -127,8 +128,8 @@ class CreateTeamMemberServiceTest < ActiveSupport::TestCase
             2,
             run: the_run,
             state: "confirmed",
-            bucket_key: "dogs",
-            requested_bucket_key: "dogs",
+            bucket_id: dogs_bucket_id,
+            requested_bucket_id: dogs_bucket_id,
             counted: true
           )
           waitlist_signup

@@ -11,18 +11,18 @@ class Signups::WithdrawalNotifier < Notifier
     { event_category: signup.run.event.event_category }
   end
 
-  attr_reader :signup, :prev_state, :prev_bucket_key, :move_results
+  attr_reader :signup, :prev_state, :prev_bucket_id, :move_results
 
-  def initialize(signup:, prev_state:, prev_bucket_key:, move_results:, triggering_user: nil)
+  def initialize(signup:, prev_state:, prev_bucket_id:, move_results:, triggering_user: nil)
     @signup = signup
     @prev_state = prev_state
-    @prev_bucket_key = prev_bucket_key
+    @prev_bucket_id = prev_bucket_id
     @move_results = move_results
     super(convention: signup.run.event.convention, event_key: "signups/withdrawal", triggering_user:)
   end
 
   def initializer_options
-    { signup:, prev_state:, prev_bucket_key:, move_results:, triggering_user: }
+    { signup:, prev_state:, prev_bucket_id:, move_results:, triggering_user: }
   end
 
   def liquid_assigns
@@ -71,8 +71,8 @@ class Signups::WithdrawalNotifier < Notifier
   end
 
   def prev_bucket
-    return unless prev_bucket_key
-    signup.run.event.registration_policy.bucket_with_key(prev_bucket_key)
+    return unless prev_bucket_id
+    signup.run.event.registration_policy.bucket_with_id(prev_bucket_id)
   end
 
   def sends_sms?

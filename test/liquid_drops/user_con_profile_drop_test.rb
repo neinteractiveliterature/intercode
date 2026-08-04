@@ -1,4 +1,4 @@
-require 'test_helper'
+require "test_helper"
 
 describe UserConProfileDrop do
   let(:ticket) { create(:ticket) }
@@ -13,37 +13,39 @@ describe UserConProfileDrop do
     end
   end
 
-  describe 'with team member events' do
+  describe "with team member events" do
     let(:team_members) { events.map { |event| create(:team_member, user_con_profile: user_con_profile, event: event) } }
 
     before { team_members }
 
-    it 'returns the events for which the user con profile is a team member' do
+    it "returns the events for which the user con profile is a team member" do
       assert_equal events.map(&:id).sort, user_con_profile_drop.team_member_events.map(&:id).sort
     end
   end
 
-  describe 'with signups' do
+  describe "with signups" do
     let(:runs) { events.map { |event| create(:run, event: event) } }
     let(:confirmed_signups) do
       runs.map do |run|
+        unlimited_bucket_id = run.event.registration_policy.bucket_with_key("unlimited").id
         create(
           :signup,
           user_con_profile: user_con_profile,
           run: run,
-          bucket_key: 'unlimited',
-          requested_bucket_key: 'unlimited'
+          bucket_id: unlimited_bucket_id,
+          requested_bucket_id: unlimited_bucket_id
         )
       end
     end
     let(:withdrawn_signups) do
       runs.map do |run|
+        unlimited_bucket_id = run.event.registration_policy.bucket_with_key("unlimited").id
         create(
           :signup,
           user_con_profile: user_con_profile,
           run: run,
-          state: 'withdrawn',
-          requested_bucket_key: 'unlimited'
+          state: "withdrawn",
+          requested_bucket_id: unlimited_bucket_id
         )
       end
     end
@@ -53,13 +55,13 @@ describe UserConProfileDrop do
       withdrawn_signups
     end
 
-    it 'returns all the confirmed signups' do
+    it "returns all the confirmed signups" do
       assert_equal confirmed_signups.map(&:id).sort, user_con_profile_drop.signups.map(&:id).sort
     end
 
-    it 'returns none of the withdrawn signups' do
+    it "returns none of the withdrawn signups" do
       signups = user_con_profile_drop.signups
-      withdrawn_signups.each { |signup| refute_includes signups, signup }
+      withdrawn_signups.each { |signup| assert_not_includes signups, signup }
     end
   end
 end

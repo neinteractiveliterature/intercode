@@ -15,7 +15,13 @@ class Types::SignupRequestType < Types::BaseObject
       this request is accepted, the replace_signup will be withdrawn.
     MARKDOWN
   end
-  field :requested_bucket_key, String, null: true do
+  field :requested_bucket, Types::RegistrationPolicyBucketType, null: true do
+    description "The bucket that this request is asking to sign up in (or null, if it's a no-preference signup)"
+  end
+  field :requested_bucket_key, # rubocop:disable GraphQL/ExtractType
+        String,
+        null: true,
+        deprecation_reason: "Use requestedBucket instead" do
     description "The bucket that this request is asking to sign up in (or null, if it's a no-preference signup)"
   end
   field :result_signup, Types::SignupType, null: true do
@@ -37,5 +43,10 @@ class Types::SignupRequestType < Types::BaseObject
                       :target_run,
                       :replace_signup,
                       :result_signup,
-                      :signup_ranked_choice
+                      :signup_ranked_choice,
+                      :requested_bucket
+
+  def requested_bucket_key
+    requested_bucket&.key
+  end
 end

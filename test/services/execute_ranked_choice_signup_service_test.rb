@@ -276,7 +276,7 @@ describe ExecuteRankedChoiceSignupService do
       the_run = create(:run, event:)
       signup_ranked_choice = create(:signup_ranked_choice, target_run: the_run)
       signup_request = create(:signup_request, target_run: the_run)
-      signup_request.update!(requested_bucket_key: nil)
+      signup_request.update!(requested_bucket_id: nil)
 
       result = ExecuteRankedChoiceSignupService.new(signup_round:, signup_ranked_choice:, whodunit: nil).call!
 

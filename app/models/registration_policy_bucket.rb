@@ -105,13 +105,16 @@ class RegistrationPolicyBucket < ApplicationRecord
   end
 
   # Ported verbatim from the old RegistrationPolicy::Bucket (app/models/registration_policy/bucket.rb)
+  #
+  # FakeSignup always compares by key rather than bucket_id: this can be called with a candidate
+  # bucket from a detached, not-yet-persisted RegistrationPolicy (e.g. while simulating a
+  # registration policy change in EventChangeRegistrationPolicyService), which has no id yet, and
+  # FakeSignup has no persisted row of its own to key a preload off of anyway. A real Signup against
+  # a persisted bucket uses bucket_id instead -- see occupies_bucket_as_signup? below.
   def signup_definitely_occupies_slot_in_bucket?(signup)
     case signup
     when Signup, SignupBucketFinder::FakeSignup
-      signup.occupying_slot? && signup.bucket_key == key &&
-        (
-          not_counted? || signup.counted # don't count non-counted signups in a counted bucket
-        )
+      occupies_bucket_as_signup?(signup)
     when SignupRequest
       signup.state == "pending" && signup.requested_bucket_key == key
     else
@@ -151,5 +154,18 @@ class RegistrationPolicyBucket < ApplicationRecord
 
   def to_liquid
     RegistrationPolicy::BucketDrop.new(self)
+  end
+
+  private
+
+  # Fast path when signup is a persisted Signup and this bucket is persisted too: bucket_id (a
+  # plain column) can stand in for key without touching the bucket association -- this runs once
+  # per signup on every capacity check (Run#full?, the schedule grid, etc.), so an association read
+  # per call is a real N+1. Falls back to the key comparison for FakeSignup, or for a detached,
+  # not-yet-persisted candidate bucket (id is nil).
+  def occupies_bucket_as_signup?(signup)
+    return false unless signup.occupying_slot? && (not_counted? || signup.counted)
+    return signup.bucket_id == id if signup.is_a?(Signup) && id
+    signup.bucket_key == key
   end
 end

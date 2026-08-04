@@ -14,6 +14,7 @@ export type BucketKeyRemappingModalProps = {
   visible: boolean;
   removedBuckets: BucketOption[];
   newPolicyBuckets: BucketOption[];
+  preventNoPreferenceSignups: boolean;
   onConfirm: (mappings: BucketKeyMappingInput[]) => Promise<void>;
   onCancel: () => void;
 };
@@ -22,18 +23,37 @@ function BucketKeyRemappingModal({
   visible,
   removedBuckets,
   newPolicyBuckets,
+  preventNoPreferenceSignups,
   onConfirm,
   onCancel,
 }: BucketKeyRemappingModalProps): React.JSX.Element {
   const { t } = useTranslation();
-  const [mappings, setMappings] = useState<Record<string, string | null>>(() =>
-    Object.fromEntries(removedBuckets.map((bucket) => [bucket.key, null])),
-  );
+  const [mappings, setMappings] = useState<Record<string, string | null>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // This modal is mounted once, up front, with removedBuckets: [] -- a plain useState initializer
+  // would only ever see that empty array, leaving every removed bucket's default "No preference"
+  // selection un-seeded in state. Since handleConfirm below builds bucketKeyMappings from
+  // Object.entries(mappings) rather than from removedBuckets, any bucket the admin never touches a
+  // dropdown for (i.e. left at the already-selected default) would be silently missing from the
+  // submitted mappings. Re-seed whenever the set of removed buckets changes, following React's
+  // "adjusting state when a prop changes" pattern (setting state during render, rather than in an
+  // effect, avoids an extra commit/re-render cycle).
+  const [prevRemovedBuckets, setPrevRemovedBuckets] = useState(removedBuckets);
+  if (prevRemovedBuckets !== removedBuckets) {
+    setPrevRemovedBuckets(removedBuckets);
+    setMappings(Object.fromEntries(removedBuckets.map((bucket) => [bucket.key, null])));
+  }
 
   const setMapping = (fromKey: string, toKey: string | null) => {
     setMappings((prev) => ({ ...prev, [fromKey]: toKey }));
   };
+
+  // When the new policy disallows no-preference signups, mapping a removed bucket to "no
+  // preference" would leave affected signups/requests with a null requested_bucket_id that the
+  // policy no longer permits new signups to have -- so every row needs an explicit bucket chosen
+  // before this can be confirmed.
+  const canConfirm = !preventNoPreferenceSignups || removedBuckets.every((bucket) => mappings[bucket.key]);
 
   const handleConfirm = async () => {
     const bucketKeyMappings: BucketKeyMappingInput[] = Object.entries(mappings).map(([fromKey, toKey]) => ({
@@ -54,7 +74,13 @@ function BucketKeyRemappingModal({
         <h5 className="modal-title">{t('admin.events.bucketKeyRemapping.title')}</h5>
       </div>
       <div className="modal-body">
-        <p>{t('admin.events.bucketKeyRemapping.description')}</p>
+        <p>
+          {t(
+            preventNoPreferenceSignups
+              ? 'admin.events.bucketKeyRemapping.descriptionNoPreferenceDisallowed'
+              : 'admin.events.bucketKeyRemapping.description',
+          )}
+        </p>
         <table className="table">
           <thead>
             <tr>
@@ -73,7 +99,13 @@ function BucketKeyRemappingModal({
                     onChange={(e) => setMapping(bucket.key, e.target.value || null)}
                     disabled={isSubmitting}
                   >
-                    <option value="">{t('admin.events.bucketKeyRemapping.noPreferenceOption')}</option>
+                    {preventNoPreferenceSignups ? (
+                      <option value="" disabled>
+                        {t('admin.events.bucketKeyRemapping.selectBucketPlaceholder')}
+                      </option>
+                    ) : (
+                      <option value="">{t('admin.events.bucketKeyRemapping.noPreferenceOption')}</option>
+                    )}
                     {newPolicyBuckets.map((newBucket) => (
                       <option key={newBucket.key} value={newBucket.key}>
                         {newBucket.name ?? newBucket.key}
@@ -90,7 +122,12 @@ function BucketKeyRemappingModal({
         <button type="button" className="btn btn-secondary" onClick={onCancel} disabled={isSubmitting}>
           {t('buttons.cancel')}
         </button>
-        <button type="button" className="btn btn-primary" onClick={handleConfirm} disabled={isSubmitting}>
+        <button
+          type="button"
+          className="btn btn-primary"
+          onClick={handleConfirm}
+          disabled={isSubmitting || !canConfirm}
+        >
           {isSubmitting ? (
             <LoadingIndicator iconSet="bootstrap-icons" />
           ) : (

@@ -26,10 +26,42 @@
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
 
-require 'test_helper'
+require "test_helper"
 
 class RunTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  let(:convention) { create(:convention) }
+  let(:registration_policy) do
+    RegistrationPolicy.build_from_hash(buckets: [{ key: "dogs", name: "Dogs", slots_limited: true, total_slots: 20 }])
+  end
+  let(:event) { create(:event, convention:, registration_policy:) }
+  let(:the_run) { create(:run, event:) }
+  let(:dogs_bucket_id) { registration_policy.bucket_with_key("dogs").id }
+
+  describe "capacity checks over many signups" do
+    before { 10.times { create(:signup, run: the_run, bucket_id: dogs_bucket_id) } }
+
+    it "does not issue a bucket query per signup when checking #full?" do
+      queries = count_queries(/registration_policy_buckets/) { the_run.reload.full? }
+      assert_operator queries, :<=, 2, "expected a constant number of bucket queries regardless of signup count"
+    end
+
+    it "does not issue a bucket query per signup when computing #available_slots_by_bucket_id" do
+      queries = count_queries(/registration_policy_buckets/) { the_run.reload.available_slots_by_bucket_id }
+      assert_operator queries, :<=, 2, "expected a constant number of bucket queries regardless of signup count"
+    end
+  end
+
+  private
+
+  def count_queries(pattern)
+    count = 0
+    subscriber =
+      ActiveSupport::Notifications.subscribe("sql.active_record") do |*, payload|
+        count += 1 if pattern.match?(payload[:sql])
+      end
+    yield
+    count
+  ensure
+    ActiveSupport::Notifications.unsubscribe(subscriber) if subscriber
+  end
 end

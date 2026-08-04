@@ -30,6 +30,7 @@ fragment SignupFields on Signup {
 
       registration_policy {
         buckets {
+          id
           key
           name
           anything
@@ -91,6 +92,7 @@ fragment UserConProfileSignupsFragment on UserConProfile {
 
         registration_policy {
           buckets {
+            id
             key
             name
           }
@@ -175,6 +177,7 @@ query RunSignupsTableSignupsQuery(
 
       registration_policy {
         buckets {
+          id
           key
           name
         }
@@ -233,6 +236,7 @@ query RunHeaderRunInfoQuery($eventId: ID!, $runId: ID!) {
         slots_limited
 
         buckets {
+          id
           name
           total_slots
         }
@@ -263,6 +267,7 @@ query RunSignupSummaryQuery($eventId: ID!, $runId: ID!) {
 
       registration_policy {
         buckets {
+          id
           key
           name
           expose_attendees
@@ -358,6 +363,7 @@ query RunSignupChangesPageQuery($runId: ID!) {
 
         registration_policy {
           buckets {
+            id
             key
             name
             anything

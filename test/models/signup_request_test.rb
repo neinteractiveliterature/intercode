@@ -9,6 +9,7 @@
 #  created_at           :datetime         not null
 #  updated_at           :datetime         not null
 #  replace_signup_id    :bigint
+#  requested_bucket_id  :bigint
 #  result_signup_id     :bigint
 #  target_run_id        :bigint           not null
 #  updated_by_id        :bigint
@@ -17,6 +18,7 @@
 # Indexes
 #
 #  index_signup_requests_on_replace_signup_id    (replace_signup_id)
+#  index_signup_requests_on_requested_bucket_id  (requested_bucket_id)
 #  index_signup_requests_on_result_signup_id     (result_signup_id)
 #  index_signup_requests_on_state                (state)
 #  index_signup_requests_on_target_run_id        (target_run_id)
@@ -26,13 +28,14 @@
 # Foreign Keys
 #
 #  fk_rails_...  (replace_signup_id => signups.id)
+#  fk_rails_...  (requested_bucket_id => registration_policy_buckets.id)
 #  fk_rails_...  (result_signup_id => signups.id)
 #  fk_rails_...  (target_run_id => runs.id)
 #  fk_rails_...  (updated_by_id => users.id)
 #  fk_rails_...  (user_con_profile_id => user_con_profiles.id)
 #
 # rubocop:enable Layout/LineLength, Lint/RedundantCopDisableDirective
-require 'test_helper'
+require "test_helper"
 
 class SignupRequestTest < ActiveSupport::TestCase
   # test "the truth" do

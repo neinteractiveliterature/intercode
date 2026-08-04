@@ -89,7 +89,7 @@ function BucketFilter<TData extends SignupType, TValue>({ column }: { column: Co
     () =>
       (data.convention?.event.registration_policy?.buckets ?? []).map((bucket) => ({
         label: bucket.name ?? bucket.key,
-        value: bucket.key,
+        value: bucket.id,
       })) ?? [],
     [data],
   );

@@ -6,13 +6,13 @@ admin_notes: Formats a list of automatic changes to event signups for team membe
     <li>
       <a href="mailto:{{ move_result.signup.user_con_profile.email }}">{{ move_result.signup.user_con_profile.name }}</a>:
       {{ move_result.prev_state }}
-      {% if move_result.prev_bucket -%}
-        ({{ move_result.prev_bucket.name }})
+      {% if move_result.prev_bucket_name -%}
+        ({{ move_result.prev_bucket_name }})
       {%- endif %}
       →
       {{ move_result.state }}
-      {% if move_result.bucket -%}
-        ({{ move_result.bucket.name }})
+      {% if move_result.bucket_name -%}
+        ({{ move_result.bucket_name }})
       {%- endif %}
     </li>
   {%- endfor -%}

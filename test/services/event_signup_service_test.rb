@@ -1,6 +1,6 @@
 require "test_helper"
 
-class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics/ClassLength
+class EventSignupServiceTest < ActiveSupport::TestCase
   include ActiveJob::TestHelper
 
   let(:convention) { create(:convention, :with_notification_templates, ticket_mode: "required_for_signup") }
@@ -12,7 +12,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
   let(:ticket) { create(:ticket, ticket_type:, user_con_profile:) }
   let(:requested_bucket_key) { :unlimited }
 
-  subject { EventSignupService.new(user_con_profile, the_run, requested_bucket_key, user) }
+  subject { EventSignupService.new(user_con_profile, the_run, bucket_id_for(the_run, requested_bucket_key), user) }
 
   describe "without a valid ticket" do
     it "disallows signups" do
@@ -91,7 +91,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
           EventSignupService.new(
             user_con_profile,
             the_run,
-            requested_bucket_key,
+            bucket_id_for(the_run, requested_bucket_key),
             user,
             suppress_confirmation: true
           ).call!
@@ -106,12 +106,13 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
     end
 
     it "disallows signups when the user is already signed up" do
+      existing_bucket_id = bucket_id_for(the_run, requested_bucket_key)
       create(
         :signup,
         run: the_run,
         user_con_profile:,
-        requested_bucket_key:,
-        bucket_key: requested_bucket_key,
+        requested_bucket_id: existing_bucket_id,
+        bucket_id: existing_bucket_id,
         state: "confirmed",
         counted: true
       )
@@ -204,7 +205,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
 
       other_event = create(:event, convention:, length_seconds: event.length_seconds)
       other_run = create(:run, event: other_event, starts_at: the_run.starts_at + (event.length_seconds * 2))
-      other_signup_service = EventSignupService.new(user_con_profile, other_run, requested_bucket_key, user)
+      other_signup_service =
+        EventSignupService.new(user_con_profile, other_run, bucket_id_for(other_run, requested_bucket_key), user)
       assert other_signup_service.call.success?
 
       result = subject.call
@@ -242,8 +244,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
             user_con_profile:,
             run: other_run,
             state: "waitlisted",
-            bucket_key: nil,
-            requested_bucket_key: "unlimited"
+            bucket_id: nil,
+            requested_bucket_id: bucket_id_for(other_run, "unlimited")
           )
 
         assert waitlist_signup1.waitlisted?
@@ -258,7 +260,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
       end
 
       it "disallows signups to conflicting events" do
-        other_signup_service = EventSignupService.new(user_con_profile, other_run, requested_bucket_key, user)
+        other_signup_service =
+          EventSignupService.new(user_con_profile, other_run, bucket_id_for(other_run, requested_bucket_key), user)
         assert other_signup_service.call.success?
 
         result = subject.call
@@ -271,7 +274,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
 
       it "allows signups to conflicting events that allow concurrent signups" do
         other_event.update!(can_play_concurrently: true)
-        other_signup_service = EventSignupService.new(user_con_profile, other_run, requested_bucket_key, user)
+        other_signup_service =
+          EventSignupService.new(user_con_profile, other_run, bucket_id_for(other_run, requested_bucket_key), user)
         assert other_signup_service.call.success?
 
         result = subject.call!
@@ -279,7 +283,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
       end
 
       it "allows signups to conflicting events if this one allows concurrent signups" do
-        other_signup_service = EventSignupService.new(user_con_profile, other_run, requested_bucket_key, user)
+        other_signup_service =
+          EventSignupService.new(user_con_profile, other_run, bucket_id_for(other_run, requested_bucket_key), user)
         assert other_signup_service.call.success?
 
         event.update!(can_play_concurrently: true)
@@ -372,7 +377,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
             EventSignupService.new(
               user_con_profile,
               the_run,
-              requested_bucket_key,
+              bucket_id_for(the_run, requested_bucket_key),
               user,
               suppress_confirmation: true
             ).call!
@@ -603,6 +608,20 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
     end
   end
 
+  describe "with a valid ticket and many existing signups on the run" do
+    setup { ticket }
+
+    before do
+      convention.signup_rounds.first.update!(maximum_event_signups: "unlimited")
+      10.times { create_other_signup(:unlimited) }
+    end
+
+    it "does not issue a bucket query per existing signup" do
+      queries = count_queries(/registration_policy_buckets/) { subject.call! }
+      assert_operator queries, :<=, 6, "expected a constant number of bucket queries regardless of signup count"
+    end
+  end
+
   describe "in a moderated-signup convention" do
     let(:convention) { create(:convention, :with_notification_templates, signup_mode: "moderated") }
 
@@ -669,13 +688,38 @@ class EventSignupServiceTest < ActiveSupport::TestCase # rubocop:disable Metrics
 
   private
 
+  # Resolves a bucket key (symbol/string) to the real bucket_id on the given run's registration
+  # policy. Returns nil for a nil key (no-preference), and a nonexistent id (-1) for a key that
+  # doesn't match any bucket, so callers can still exercise "invalid bucket requested" behavior.
+  def bucket_id_for(run, key)
+    return nil if key.nil?
+    run.registration_policy.bucket_with_key(key)&.id || -1
+  end
+
   def create_other_signup(bucket_key, **attributes)
     signup_user_con_profile = create(:user_con_profile, convention:)
+    requested_bucket_key =
+      attributes.key?(:requested_bucket_key) ? attributes.delete(:requested_bucket_key) : bucket_key
     create(
       :signup,
-      { user_con_profile: signup_user_con_profile, run: the_run, bucket_key:, requested_bucket_key: bucket_key }.merge(
-        attributes
-      )
+      {
+        user_con_profile: signup_user_con_profile,
+        run: the_run,
+        bucket_id: bucket_id_for(the_run, bucket_key),
+        requested_bucket_id: bucket_id_for(the_run, requested_bucket_key)
+      }.merge(attributes)
     )
+  end
+
+  def count_queries(pattern)
+    count = 0
+    subscriber =
+      ActiveSupport::Notifications.subscribe("sql.active_record") do |*, payload|
+        count += 1 if pattern.match?(payload[:sql])
+      end
+    yield
+    count
+  ensure
+    ActiveSupport::Notifications.unsubscribe(subscriber) if subscriber
   end
 end

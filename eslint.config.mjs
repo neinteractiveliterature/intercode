@@ -221,6 +221,12 @@ export default typescriptEslint.config(
       '@graphql-eslint/naming-convention': 'off',
       '@graphql-eslint/known-fragment-names': 'off',
 
+      // Several deprecated fields (bucket_key/requested_bucket_key) are deliberately still queried
+      // during the FK migration in #11868/#11871 for frontend backward compatibility -- downgraded
+      // to a warning so that's visible without blocking commits until those call sites migrate off
+      // them.
+      '@graphql-eslint/no-deprecated': 'warn',
+
       '@graphql-eslint/selection-set-depth': [
         'error',
         {

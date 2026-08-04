@@ -88,8 +88,8 @@ class NotifierPreviewFactory
       Order.where(user_con_profile: convention.user_con_profiles.select(:id)).first
     when :prev_state
       "confirmed"
-    when :prev_bucket_key
-      "flex"
+    when :prev_bucket_id
+      1
     when :refund_id
       "refund-abc123"
     when :signup
@@ -112,6 +112,7 @@ class NotifierPreviewFactory
   end
 
   def find_signup_move_result
-    SignupMoveResult.new(convention.signups.first.id, "confirmed", "flex", "waitlisted", nil)
+    signup = convention.signups.first
+    SignupMoveResult.new(signup.id, "confirmed", signup.bucket_id, "waitlisted", nil)
   end
 end

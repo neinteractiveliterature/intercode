@@ -228,27 +228,31 @@ class Event < ApplicationRecord
     run_ids = runs.pluck(:id)
     return [] if run_ids.empty?
 
+    RegistrationPolicyBucket.where(id: requested_bucket_ids_for(run_ids)).pluck(:key)
+  end
+
+  private
+
+  def requested_bucket_ids_for(run_ids)
     (
       Signup
         .where.not(state: "withdrawn")
         .where(run_id: run_ids)
-        .where.not(requested_bucket_key: nil)
+        .where.not(requested_bucket_id: nil)
         .distinct
-        .pluck(:requested_bucket_key) +
+        .pluck(:requested_bucket_id) +
         SignupRequest
           .where(target_run_id: run_ids, state: "pending")
-          .where.not(requested_bucket_key: nil)
+          .where.not(requested_bucket_id: nil)
           .distinct
-          .pluck(:requested_bucket_key) +
+          .pluck(:requested_bucket_id) +
         SignupRankedChoice
           .where(target_run_id: run_ids)
-          .where.not(requested_bucket_key: nil)
+          .where.not(requested_bucket_id: nil)
           .distinct
-          .pluck(:requested_bucket_key)
+          .pluck(:requested_bucket_id)
     ).uniq
   end
-
-  private
 
   def validate_registration_policy
     return unless registration_policy

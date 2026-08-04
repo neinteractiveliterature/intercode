@@ -21,6 +21,9 @@ function buildSingleBucketRegistrationPolicy(totalSlots?: number | null): Regist
     buckets: [
       {
         __typename: 'RegistrationPolicyBucket',
+        // Not a real bucket id (this bucket doesn't exist yet) -- placeholder is fine because
+        // RegistrationPolicy.build_from_hash on the server ignores id and assigns a real one.
+        id: 'signups',
         key: 'signups',
         name: 'Signups',
         description: 'Signups for this event',

@@ -31,10 +31,31 @@ class Mutations::UpdateEvent < Mutations::BaseMutation
     change = event.registration_policy_change_for(registration_policy_attributes)
     return {} unless change
 
-    EventChangeRegistrationPolicyService.new(event, change.new_policy, current_user, bucket_key_mappings).call!
+    resolved_mappings = resolve_bucket_key_mappings(event, bucket_key_mappings)
+    EventChangeRegistrationPolicyService.new(event, change.new_policy, current_user, resolved_mappings).call!
     event.reload
 
     { "registration_policy" => [change.old_json, event.registration_policy.as_json] }
+  end
+
+  # EventChangeRegistrationPolicyService still works entirely in terms of from_key/to_key (see the
+  # comment on that service). This resolves incoming from_bucket_id/to_bucket_id args (only usable
+  # when the destination bucket already exists, since a bucket being newly created in this same
+  # edit has no id yet) down to that shape.
+  def resolve_bucket_key_mappings(event, bucket_key_mappings)
+    (bucket_key_mappings || []).map { |mapping| resolve_bucket_key_mapping(event, mapping.to_h) }
+  end
+
+  def resolve_bucket_key_mapping(event, mapping)
+    {
+      from_key: mapping[:from_key] || bucket_key_for_id(event, mapping[:from_bucket_id]),
+      to_key: mapping[:to_key] || bucket_key_for_id(event, mapping[:to_bucket_id])
+    }
+  end
+
+  def bucket_key_for_id(event, bucket_id)
+    return nil unless bucket_id
+    event.registration_policy.bucket_with_id(bucket_id.to_i)&.key
   end
 
   def apply_form_response_attrs(event, form_response_attrs)

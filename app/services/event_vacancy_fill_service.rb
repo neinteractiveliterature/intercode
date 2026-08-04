@@ -5,7 +5,7 @@ class EventVacancyFillService < CivilService::Service
   end
   self.result_class = Result
 
-  attr_reader :run, :bucket_key, :move_results, :suppress_notifications, :immovable_signups, :action
+  attr_reader :run, :bucket_id, :move_results, :suppress_notifications, :immovable_signups, :action
   delegate :event, to: :run
   delegate :convention, to: :event
 
@@ -14,14 +14,14 @@ class EventVacancyFillService < CivilService::Service
 
   def initialize(
     run,
-    bucket_key,
+    bucket_id,
     immovable_signups: [],
     skip_locking: false,
     suppress_notifications: false,
     action: "vacancy_fill"
   )
     @run = run
-    @bucket_key = bucket_key
+    @bucket_id = bucket_id
     @skip_locking = skip_locking
     @immovable_signups = immovable_signups
     @move_results = []
@@ -32,38 +32,38 @@ class EventVacancyFillService < CivilService::Service
   private
 
   def inner_call
-    bucket = event.registration_policy.bucket_with_key(bucket_key)
+    bucket = event.registration_policy.bucket_with_id(bucket_id)
     return success(move_results: []) if bucket.slots_unlimited?
 
-    with_advisory_lock_unless_skip_locking("run_#{run.id}_signups") { fill_bucket_vacancy(bucket_key) }
+    with_advisory_lock_unless_skip_locking("run_#{run.id}_signups") { fill_bucket_vacancy(bucket_id) }
 
     move_results.each { |result| notify_moved_signup(result) if result.should_notify? }
 
     success(move_results: move_results)
   end
 
-  def fill_bucket_vacancy(bucket_key)
-    signup_to_move = best_signup_to_fill_bucket_vacancy(bucket_key)
+  def fill_bucket_vacancy(bucket_id)
+    signup_to_move = best_signup_to_fill_bucket_vacancy(bucket_id)
     return unless signup_to_move
 
-    bucket = event.registration_policy.bucket_with_key(bucket_key)
+    bucket = event.registration_policy.bucket_with_id(bucket_id)
     creating_vacancy = signup_to_move.occupying_slot?
-    prev_bucket_key = signup_to_move.bucket_key
+    prev_bucket_id = signup_to_move.bucket_id
     prev_state = signup_to_move.state
     signup_to_move.update!(
-      bucket_key: bucket_key,
+      bucket_id: bucket_id,
       counted: bucket.counted?,
       **status_attributes_for_newly_moved_signup(signup_to_move)
     )
     signup_to_move.log_signup_change!(action: "vacancy_fill")
-    move_results << SignupMoveResult.from_signup(signup_to_move, prev_state, prev_bucket_key)
+    move_results << SignupMoveResult.from_signup(signup_to_move, prev_state, prev_bucket_id)
 
     # Clear cached signup data since we just modified it
     clear_signup_cache!
 
     # We left a vacancy by moving a confirmed signup out of its bucket, so recursively try to fill
     # that vacancy
-    fill_bucket_vacancy(prev_bucket_key) if creating_vacancy
+    fill_bucket_vacancy(prev_bucket_id) if creating_vacancy
   end
 
   def status_attributes_for_newly_moved_signup(signup_to_move)
@@ -79,63 +79,63 @@ class EventVacancyFillService < CivilService::Service
     { state: new_state, expires_at: new_expires_at }
   end
 
-  def best_signup_to_fill_bucket_vacancy(bucket_key)
-    bucket = event.registration_policy.bucket_with_key(bucket_key)
+  def best_signup_to_fill_bucket_vacancy(bucket_id)
+    bucket = event.registration_policy.bucket_with_id(bucket_id)
     return unless bucket
 
-    bucket_has_vacancy = run.bucket_has_available_slots?(bucket_key)
+    bucket_has_vacancy = run.bucket_has_available_slots?(bucket_id)
     waitlisted_signups = signups_ordered.select(&:waitlisted?)
 
     # Try to accommodate each waitlisted signup in order
     waitlisted_signups.each do |waitlisted_signup|
-      result = try_accommodate_waitlisted_signup(waitlisted_signup, bucket, bucket_key, bucket_has_vacancy)
+      result = try_accommodate_waitlisted_signup(waitlisted_signup, bucket, bucket_id, bucket_has_vacancy)
       return result if result
     end
 
     # Fallback: if no waitlisted signup can be accommodated, look at confirmed signups
-    find_confirmed_signup_to_move(bucket, bucket_key, bucket_has_vacancy)
+    find_confirmed_signup_to_move(bucket, bucket_id, bucket_has_vacancy)
   end
 
-  def try_accommodate_waitlisted_signup(waitlisted_signup, bucket, bucket_key, bucket_has_vacancy)
+  def try_accommodate_waitlisted_signup(waitlisted_signup, bucket, bucket_id, bucket_has_vacancy)
     # Can they fill this bucket directly?
-    return waitlisted_signup if can_fill_bucket_directly?(waitlisted_signup, bucket, bucket_key, bucket_has_vacancy)
+    return waitlisted_signup if can_fill_bucket_directly?(waitlisted_signup, bucket, bucket_id, bucket_has_vacancy)
 
     # Do they want a different specific bucket? Try to make room for them there.
-    result = try_make_room_in_requested_bucket(waitlisted_signup, bucket, bucket_key, bucket_has_vacancy)
+    result = try_make_room_in_requested_bucket(waitlisted_signup, bucket, bucket_id, bucket_has_vacancy)
     return result if result
 
     # If this bucket is full but the waitlisted signup wants THIS bucket, make room
-    try_make_room_for_waitlisted_signup(waitlisted_signup, bucket, bucket_key, bucket_has_vacancy)
+    try_make_room_for_waitlisted_signup(waitlisted_signup, bucket, bucket_id, bucket_has_vacancy)
   end
 
-  def can_fill_bucket_directly?(waitlisted_signup, bucket, bucket_key, bucket_has_vacancy)
-    waitlisted_signup.bucket_key != bucket_key && signup_can_fill_bucket_vacancy?(waitlisted_signup, bucket) &&
+  def can_fill_bucket_directly?(waitlisted_signup, bucket, bucket_id, bucket_has_vacancy)
+    waitlisted_signup.bucket_id != bucket_id && signup_can_fill_bucket_vacancy?(waitlisted_signup, bucket) &&
       !signup_already_in_best_slot?(waitlisted_signup) && (bucket_has_vacancy || bucket.anything?)
   end
 
-  # Scenario: We have a vacancy in bucket_key, but the waitlisted signup wants a different bucket
-  # (their requested_bucket_key). Use the vacancy we have to make room in the bucket they actually want.
+  # Scenario: We have a vacancy in bucket_id, but the waitlisted signup wants a different bucket
+  # (their requested_bucket_id). Use the vacancy we have to make room in the bucket they actually want.
   # This allows us to help waitlisted signups who want specific buckets, rather than just filling
   # our vacancy with whoever fits.
-  def try_make_room_in_requested_bucket(waitlisted_signup, bucket, bucket_key, bucket_has_vacancy)
-    unless waitlisted_signup.requested_bucket_key && waitlisted_signup.requested_bucket_key != bucket_key &&
+  def try_make_room_in_requested_bucket(waitlisted_signup, bucket, bucket_id, bucket_has_vacancy)
+    unless waitlisted_signup.requested_bucket_id && waitlisted_signup.requested_bucket_id != bucket_id &&
              bucket_has_vacancy
       return
     end
 
-    requested_bucket = event.registration_policy.bucket_with_key(waitlisted_signup.requested_bucket_key)
+    requested_bucket = event.registration_policy.bucket_with_id(waitlisted_signup.requested_bucket_id)
     return unless requested_bucket && counted_limited_bucket?(requested_bucket)
 
-    find_movable_no_pref_signup(requested_bucket.key, bucket)
+    find_movable_no_pref_signup(requested_bucket.id, bucket)
   end
 
-  # Scenario: We're trying to fill bucket_key (which is currently FULL), and the waitlisted signup
+  # Scenario: We're trying to fill bucket_id (which is currently FULL), and the waitlisted signup
   # wants that specific bucket. Find a third bucket with space, move a no-preference signup there,
-  # creating a vacancy in bucket_key that the waitlisted signup can then fill.
+  # creating a vacancy in bucket_id that the waitlisted signup can then fill.
   # This differs from try_make_room_in_requested_bucket because we DON'T already have a vacancy -
   # we need to create one.
-  def try_make_room_for_waitlisted_signup(waitlisted_signup, bucket, bucket_key, bucket_has_vacancy)
-    if bucket_has_vacancy || waitlisted_signup.requested_bucket_key != bucket_key || !counted_limited_bucket?(bucket) ||
+  def try_make_room_for_waitlisted_signup(waitlisted_signup, bucket, bucket_id, bucket_has_vacancy)
+    if bucket_has_vacancy || waitlisted_signup.requested_bucket_id != bucket_id || !counted_limited_bucket?(bucket) ||
          bucket.anything?
       return
     end
@@ -143,18 +143,18 @@ class EventVacancyFillService < CivilService::Service
     alternate_bucket = find_alternate_bucket_with_vacancy
     return unless alternate_bucket
 
-    no_pref_to_move = find_movable_no_pref_signup(bucket_key, alternate_bucket)
+    no_pref_to_move = find_movable_no_pref_signup(bucket_id, alternate_bucket)
     return unless no_pref_to_move
 
     # Fill the alternate bucket with the no-pref signup, which will create a vacancy here
-    fill_bucket_vacancy(alternate_bucket.key)
+    fill_bucket_vacancy(alternate_bucket.id)
     # After filling the alternate bucket, try again to fill this bucket
-    best_signup_to_fill_bucket_vacancy(bucket_key)
+    best_signup_to_fill_bucket_vacancy(bucket_id)
   end
 
-  def find_confirmed_signup_to_move(bucket, _bucket_key, bucket_has_vacancy)
+  def find_confirmed_signup_to_move(bucket, _bucket_id, bucket_has_vacancy)
     signups_ordered.find do |signup|
-      next if signup.bucket_key == bucket.key
+      next if signup.bucket_id == bucket.id
       next unless signup_can_fill_bucket_vacancy?(signup, bucket)
       next if signup_already_in_best_slot?(signup)
       next unless bucket_has_vacancy || bucket.anything?
@@ -166,7 +166,7 @@ class EventVacancyFillService < CivilService::Service
   def signup_already_in_best_slot?(signup)
     return false unless signup.occupying_slot?
 
-    (signup.requested_bucket_key == signup.bucket_key)
+    (signup.requested_bucket_id == signup.bucket_id)
     # TODO: figure out how to do something like the next line.  We'd rather not move a no-pref
     # signup out of flex but at this point I am not sure how to do that while allowing it to be
     # moved at all.
@@ -177,16 +177,16 @@ class EventVacancyFillService < CivilService::Service
     return false unless signup.bucket.nil? || counted_limited_bucket?(signup.bucket)
 
     (signup.no_preference? && counted_limited_bucket?(bucket_with_vacancy)) ||
-      signup.requested_bucket_key == bucket_with_vacancy.key || bucket_with_vacancy.anything?
+      signup.requested_bucket_id == bucket_with_vacancy.id || bucket_with_vacancy.anything?
   end
 
   def counted_limited_bucket?(bucket)
     bucket&.slots_limited? && bucket.counted?
   end
 
-  def find_movable_no_pref_signup(from_bucket_key, to_bucket)
+  def find_movable_no_pref_signup(from_bucket_id, to_bucket)
     signups_ordered.find do |signup|
-      signup.bucket_key == from_bucket_key && signup.no_preference? && signup.occupying_slot? &&
+      signup.bucket_id == from_bucket_id && signup.no_preference? && signup.occupying_slot? &&
         signup_movable?(signup) && signup_can_fill_bucket_vacancy?(signup, to_bucket) &&
         !signup_already_in_best_slot?(signup)
     end
@@ -194,7 +194,7 @@ class EventVacancyFillService < CivilService::Service
 
   def find_alternate_bucket_with_vacancy
     event.registration_policy.buckets.find do |bucket|
-      counted_limited_bucket?(bucket) && run.bucket_has_available_slots?(bucket.key)
+      counted_limited_bucket?(bucket) && run.bucket_has_available_slots?(bucket.id)
     end
   end
 
@@ -206,7 +206,12 @@ class EventVacancyFillService < CivilService::Service
     @all_signups ||=
       begin
         run.signups.reload
-        run.signups.where.not(state: "withdrawn").where.not(id: team_member_signups.map(&:id)).to_a
+        run
+          .signups
+          .where.not(state: "withdrawn")
+          .where.not(id: team_member_signups.map(&:id))
+          .includes(:bucket, :requested_bucket)
+          .to_a
       end
   end
 

@@ -1,10 +1,30 @@
 # frozen_string_literal: true
 class Mutations::CreateSignupRequest < Mutations::BaseMutation
-  field :signup_request, Types::SignupRequestType, null: false
+  description "Create a request to sign up for a run, for the current user, in a moderated-signup convention"
 
-  argument :replace_signup_id, ID, required: false, camelize: true
-  argument :requested_bucket_key, String, required: false, camelize: false
-  argument :target_run_id, ID, required: false, camelize: true
+  field :signup_request, Types::SignupRequestType, null: false, description: "The signup request that was created"
+
+  argument :replace_signup_id,
+           ID,
+           required: false,
+           camelize: true,
+           description: "The ID of an existing signup this request should replace if accepted"
+  argument :requested_bucket_id,
+           ID,
+           required: false,
+           camelize: true,
+           description: "The bucket to request, or null for no preference"
+  argument :requested_bucket_key, # rubocop:disable GraphQL/ExtractInputType
+           String,
+           required: false,
+           camelize: false,
+           deprecation_reason: "Use requestedBucketId instead",
+           description: "The bucket key to request, or null for no preference"
+  argument :target_run_id, # rubocop:disable GraphQL/ExtractInputType
+           ID,
+           required: false,
+           camelize: true,
+           description: "The ID of the run to request a signup for"
 
   attr_reader :target_run
 
@@ -15,13 +35,16 @@ class Mutations::CreateSignupRequest < Mutations::BaseMutation
 
   def resolve(**args)
     replace_signup = (user_con_profile.signups.find(args[:replace_signup_id]) if args[:replace_signup_id])
+    requested_bucket_id =
+      args[:requested_bucket_id]&.to_i ||
+        target_run.registration_policy.bucket_with_key(args[:requested_bucket_key])&.id
 
     result =
       CreateSignupRequestService.new(
         user_con_profile:,
         target_run:,
         replace_signup:,
-        requested_bucket_key: args[:requested_bucket_key],
+        requested_bucket_id:,
         whodunit: current_user
       ).call!
 

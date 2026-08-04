@@ -18,14 +18,14 @@ class RegistrationPolicy::UnlimitedTest < ActiveSupport::TestCase
   end
 
   it "allows all signups" do
-    bucket_key = subject.buckets.first.key
+    bucket_id = event.registration_policy.buckets.first.id
 
     3.times do |_i|
       event_run.signups.reload
 
       signup_user_con_profile = create(:user_con_profile, convention: convention)
       create(:ticket, user_con_profile: signup_user_con_profile, ticket_type: free_ticket_type)
-      result = EventSignupService.new(signup_user_con_profile, event_run, bucket_key, signup_user_con_profile.user).call
+      result = EventSignupService.new(signup_user_con_profile, event_run, bucket_id, signup_user_con_profile.user).call
       assert result.success?
     end
   end

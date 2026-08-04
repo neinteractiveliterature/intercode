@@ -59,10 +59,10 @@ class CreateTeamMemberService < CivilService::Service
     creates_vacancy = signup.counted? && signup.occupying_slot?
 
     with_advisory_lock_unless_skip_locking("run_#{signup.run.id}_signups") do
-      prior_bucket_key = signup.bucket_key
-      signup.update!(state: 'confirmed', bucket_key: nil, counted: false)
+      prior_bucket_id = signup.bucket_id
+      signup.update!(state: "confirmed", bucket_id: nil, counted: false)
       if creates_vacancy
-        result = EventVacancyFillService.new(signup.run, prior_bucket_key, skip_locking: true).call!
+        result = EventVacancyFillService.new(signup.run, prior_bucket_id, skip_locking: true).call!
         result.move_results
       end
     end

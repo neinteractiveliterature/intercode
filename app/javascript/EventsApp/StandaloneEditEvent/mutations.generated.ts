@@ -6,11 +6,25 @@ export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' |
 import * as Types from '../../graphqlTypes.generated';
 
 import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
-/** A mapping from an old bucket key to a new bucket key when changing a registration policy */
+/** A mapping from an old bucket to a new bucket when changing a registration policy */
 export type BucketKeyMappingInput = {
-  /** The old bucket key being removed or changed */
-  from_key: string;
-  /** The new bucket key to map to (nil means no preference) */
+  /** The id of the old bucket being removed or changed */
+  fromBucketId?: string | number | null | undefined;
+  /**
+   * The old bucket key being removed or changed
+   * @deprecated Use from_bucket_id instead
+   */
+  from_key?: string | null | undefined;
+  /**
+   * The id of the new bucket to map to (nil means no preference). Only usable when mapping
+   * to a bucket that already exists -- mapping to a bucket being newly created in the same
+   * edit still requires to_key, since it has no id yet.
+   */
+  toBucketId?: string | number | null | undefined;
+  /**
+   * The new bucket key to map to (nil means no preference)
+   * @deprecated Use to_bucket_id instead
+   */
   to_key?: string | null | undefined;
 };
 

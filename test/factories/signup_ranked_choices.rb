@@ -11,6 +11,7 @@
 #  waitlist_position_cap    :integer
 #  created_at               :datetime         not null
 #  updated_at               :datetime         not null
+#  requested_bucket_id      :bigint
 #  result_signup_id         :bigint
 #  result_signup_request_id :bigint
 #  target_run_id            :bigint           not null
@@ -20,6 +21,7 @@
 # Indexes
 #
 #  idx_on_user_con_profile_id_state_priority_7c693e2c51     (user_con_profile_id,state,priority) UNIQUE
+#  index_signup_ranked_choices_on_requested_bucket_id       (requested_bucket_id)
 #  index_signup_ranked_choices_on_result_signup_id          (result_signup_id)
 #  index_signup_ranked_choices_on_result_signup_request_id  (result_signup_request_id)
 #  index_signup_ranked_choices_on_target_run_id             (target_run_id)
@@ -28,6 +30,7 @@
 #
 # Foreign Keys
 #
+#  fk_rails_...  (requested_bucket_id => registration_policy_buckets.id)
 #  fk_rails_...  (result_signup_id => signups.id)
 #  fk_rails_...  (result_signup_request_id => signup_requests.id) ON DELETE => nullify
 #  fk_rails_...  (target_run_id => runs.id)
@@ -44,7 +47,7 @@ FactoryBot.define do
     after(:build) do |choice|
       choice.user_con_profile ||= FactoryBot.create(:user_con_profile, convention: choice.target_run.event.convention)
       choice.updated_by ||= choice.user_con_profile.user
-      choice.requested_bucket_key ||= choice.target_run.event.registration_policy.buckets.first.key
+      choice.requested_bucket_id ||= choice.target_run.event.registration_policy.buckets.first.id
     end
   end
 end

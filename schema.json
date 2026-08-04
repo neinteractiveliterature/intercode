@@ -1881,22 +1881,42 @@
         {
           "kind": "INPUT_OBJECT",
           "name": "BucketKeyMappingInput",
-          "description": "A mapping from an old bucket key to a new bucket key when changing a registration policy",
+          "description": "A mapping from an old bucket to a new bucket when changing a registration policy",
           "interfaces": null,
           "possibleTypes": null,
           "fields": null,
           "inputFields": [
             {
+              "name": "fromBucketId",
+              "description": "The id of the old bucket being removed or changed",
+              "type": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "from_key",
               "description": "The old bucket key being removed or changed",
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": true,
+              "deprecationReason": "Use from_bucket_id instead"
+            },
+            {
+              "name": "toBucketId",
+              "description": "The id of the new bucket to map to (nil means no preference). Only usable when mapping\nto a bucket that already exists -- mapping to a bucket being newly created in the same\nedit still requires to_key, since it has no id yet.\n",
+              "type": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
               },
               "defaultValue": null,
               "isDeprecated": false,
@@ -1911,8 +1931,8 @@
                 "ofType": null
               },
               "defaultValue": null,
-              "isDeprecated": false,
-              "deprecationReason": null
+              "isDeprecated": true,
+              "deprecationReason": "Use to_bucket_id instead"
             }
           ],
           "enumValues": null
@@ -9902,7 +9922,7 @@
             },
             {
               "name": "no_requested_bucket",
-              "description": null,
+              "description": "Set to true to sign up with no bucket preference",
               "type": {
                 "kind": "SCALAR",
                 "name": "Boolean",
@@ -9913,11 +9933,11 @@
               "deprecationReason": null
             },
             {
-              "name": "requested_bucket_key",
-              "description": null,
+              "name": "requestedBucketId",
+              "description": "The bucket to request, or null for no preference",
               "type": {
                 "kind": "SCALAR",
-                "name": "String",
+                "name": "ID",
                 "ofType": null
               },
               "defaultValue": null,
@@ -9925,8 +9945,20 @@
               "deprecationReason": null
             },
             {
+              "name": "requested_bucket_key",
+              "description": "The bucket key to request, or null for no preference",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": true,
+              "deprecationReason": "Use requestedBucketId instead"
+            },
+            {
               "name": "runId",
-              "description": null,
+              "description": "The ID of the run to sign up for",
               "type": {
                 "kind": "SCALAR",
                 "name": "ID",
@@ -9960,7 +9992,7 @@
             },
             {
               "name": "signup",
-              "description": null,
+              "description": "The signup that was created",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -10947,6 +10979,18 @@
               "deprecationReason": null
             },
             {
+              "name": "requestedBucketId",
+              "description": "The bucket to queue a signup ranked choice in, or null to queue a no-preference choice",
+              "type": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
               "name": "requested_bucket_key",
               "description": "The bucket key to queue a signup ranked choice in, or null to queue a no-preference choice",
               "type": {
@@ -10955,8 +10999,8 @@
                 "ofType": null
               },
               "defaultValue": null,
-              "isDeprecated": false,
-              "deprecationReason": null
+              "isDeprecated": true,
+              "deprecationReason": "Use requestedBucketId instead"
             },
             {
               "name": "targetRunId",
@@ -11034,7 +11078,19 @@
             },
             {
               "name": "replaceSignupId",
-              "description": null,
+              "description": "The ID of an existing signup this request should replace if accepted",
+              "type": {
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": false,
+              "deprecationReason": null
+            },
+            {
+              "name": "requestedBucketId",
+              "description": "The bucket to request, or null for no preference",
               "type": {
                 "kind": "SCALAR",
                 "name": "ID",
@@ -11046,19 +11102,19 @@
             },
             {
               "name": "requested_bucket_key",
-              "description": null,
+              "description": "The bucket key to request, or null for no preference",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
                 "ofType": null
               },
               "defaultValue": null,
-              "isDeprecated": false,
-              "deprecationReason": null
+              "isDeprecated": true,
+              "deprecationReason": "Use requestedBucketId instead"
             },
             {
               "name": "targetRunId",
-              "description": null,
+              "description": "The ID of the run to request a signup for",
               "type": {
                 "kind": "SCALAR",
                 "name": "ID",
@@ -11092,7 +11148,7 @@
             },
             {
               "name": "signup_request",
-              "description": null,
+              "description": "The signup request that was created",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -11846,7 +11902,7 @@
             },
             {
               "name": "no_requested_bucket",
-              "description": null,
+              "description": "Set to true to sign up with no bucket preference",
               "type": {
                 "kind": "SCALAR",
                 "name": "Boolean",
@@ -11857,11 +11913,11 @@
               "deprecationReason": null
             },
             {
-              "name": "requested_bucket_key",
-              "description": null,
+              "name": "requestedBucketId",
+              "description": "The bucket to request, or null for no preference",
               "type": {
                 "kind": "SCALAR",
-                "name": "String",
+                "name": "ID",
                 "ofType": null
               },
               "defaultValue": null,
@@ -11869,8 +11925,20 @@
               "deprecationReason": null
             },
             {
+              "name": "requested_bucket_key",
+              "description": "The bucket key to request, or null for no preference",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": true,
+              "deprecationReason": "Use requestedBucketId instead"
+            },
+            {
               "name": "runId",
-              "description": null,
+              "description": "The ID of the run to sign up for",
               "type": {
                 "kind": "SCALAR",
                 "name": "ID",
@@ -11882,7 +11950,7 @@
             },
             {
               "name": "suppress_confirmation",
-              "description": null,
+              "description": "Set to true to skip sending the signup confirmation notification",
               "type": {
                 "kind": "SCALAR",
                 "name": "Boolean",
@@ -11894,7 +11962,7 @@
             },
             {
               "name": "suppress_notifications",
-              "description": null,
+              "description": "Set to true to skip sending team member notifications for this signup",
               "type": {
                 "kind": "SCALAR",
                 "name": "Boolean",
@@ -11906,7 +11974,7 @@
             },
             {
               "name": "userConProfileId",
-              "description": null,
+              "description": "The ID of the user con profile to sign up",
               "type": {
                 "kind": "SCALAR",
                 "name": "ID",
@@ -11940,7 +12008,7 @@
             },
             {
               "name": "signup",
-              "description": null,
+              "description": "The signup that was created",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -17021,24 +17089,32 @@
               "deprecationReason": null
             },
             {
-              "name": "bucket_key",
-              "description": null,
+              "name": "bucketId",
+              "description": "The bucket to confirm the signup into",
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
               },
               "defaultValue": null,
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
+              "name": "bucket_key",
+              "description": "The bucket key to confirm the signup into",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": true,
+              "deprecationReason": "Use bucketId instead"
+            },
+            {
               "name": "id",
-              "description": null,
+              "description": "The ID of the signup to confirm",
               "type": {
                 "kind": "SCALAR",
                 "name": "ID",
@@ -17072,7 +17148,7 @@
             },
             {
               "name": "signup",
-              "description": null,
+              "description": "The signup that was confirmed",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -18099,16 +18175,16 @@
         {
           "kind": "OBJECT",
           "name": "GroupedSignupCount",
-          "description": null,
+          "description": "A count of signups sharing the same state, bucket, counted-ness, and team-member status",
           "interfaces": [],
           "possibleTypes": null,
           "fields": [
             {
-              "name": "bucket_key",
-              "description": null,
+              "name": "bucket",
+              "description": "The bucket these signups are in",
               "type": {
-                "kind": "SCALAR",
-                "name": "String",
+                "kind": "OBJECT",
+                "name": "RegistrationPolicyBucket",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -18116,8 +18192,20 @@
               "args": []
             },
             {
+              "name": "bucket_key",
+              "description": "The key of the bucket these signups are in",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": true,
+              "deprecationReason": "Use bucket instead",
+              "args": []
+            },
+            {
               "name": "count",
-              "description": null,
+              "description": "The number of signups in this group",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -18133,7 +18221,7 @@
             },
             {
               "name": "counted",
-              "description": null,
+              "description": "Whether these signups count towards totals",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -18148,11 +18236,11 @@
               "args": []
             },
             {
-              "name": "requested_bucket_key",
-              "description": null,
+              "name": "requested_bucket",
+              "description": "The bucket these signups requested",
               "type": {
-                "kind": "SCALAR",
-                "name": "String",
+                "kind": "OBJECT",
+                "name": "RegistrationPolicyBucket",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -18160,8 +18248,20 @@
               "args": []
             },
             {
+              "name": "requested_bucket_key",
+              "description": "The key of the bucket these signups requested",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": true,
+              "deprecationReason": "Use requestedBucket instead",
+              "args": []
+            },
+            {
               "name": "state",
-              "description": null,
+              "description": "The state these signups are in",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -18177,7 +18277,7 @@
             },
             {
               "name": "team_member",
-              "description": null,
+              "description": "Whether these signups belong to event team members",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -20111,7 +20211,7 @@
             },
             {
               "name": "createMySignup",
-              "description": null,
+              "description": "Sign the current user up for a run, as a self-service signup",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -20507,7 +20607,7 @@
             },
             {
               "name": "createSignupRequest",
-              "description": null,
+              "description": "Create a request to sign up for a run, for the current user, in a moderated-signup convention",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -20771,7 +20871,7 @@
             },
             {
               "name": "createUserSignup",
-              "description": null,
+              "description": "Sign a user up for a run, as an admin action",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -21926,7 +22026,7 @@
             },
             {
               "name": "forceConfirmSignup",
-              "description": null,
+              "description": "Force-confirm a signup into a specific bucket, bypassing capacity limits",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -23675,7 +23775,7 @@
             },
             {
               "name": "updateSignupBucket",
-              "description": null,
+              "description": "Move a signup into a different bucket, backfilling the vacancy it leaves behind",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -23708,7 +23808,7 @@
             },
             {
               "name": "updateSignupCounted",
-              "description": null,
+              "description": "Change whether a signup counts towards the event's total signups and its bucket's slots",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -29808,13 +29908,13 @@
         {
           "kind": "OBJECT",
           "name": "RegistrationPolicyBucket",
-          "description": null,
+          "description": "A bucket that a run's signups can be placed into as part of a registration policy",
           "interfaces": [],
           "possibleTypes": null,
           "fields": [
             {
               "name": "anything",
-              "description": null,
+              "description": "Whether or not this is a \"flex\" bucket (\"anything\" is a legacy term for \"flex\")",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -29830,7 +29930,7 @@
             },
             {
               "name": "description",
-              "description": null,
+              "description": "A long-form description for the bucket",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -29842,7 +29942,7 @@
             },
             {
               "name": "expose_attendees",
-              "description": null,
+              "description": "Whether or not to allow other attendees to see that a person is in this bucket in the signup summary page\n",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -29857,8 +29957,24 @@
               "args": []
             },
             {
+              "name": "id",
+              "description": "The ID of this bucket",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "SCALAR",
+                  "name": "ID",
+                  "ofType": null
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
               "name": "key",
-              "description": null,
+              "description": "The unique string identifier for this bucket",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -29874,7 +29990,7 @@
             },
             {
               "name": "minimum_slots",
-              "description": null,
+              "description": "The minimum number of attendees needed for this bucket",
               "type": {
                 "kind": "SCALAR",
                 "name": "Int",
@@ -29886,7 +30002,7 @@
             },
             {
               "name": "name",
-              "description": null,
+              "description": "The name of this bucket",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -29898,7 +30014,7 @@
             },
             {
               "name": "not_counted",
-              "description": null,
+              "description": "If true, attendees in this bucket are not counted towards total attendees for runs of this event, and this\nevent will not count towards their maximum event signups allowed\n",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -29914,7 +30030,7 @@
             },
             {
               "name": "preferred_slots",
-              "description": null,
+              "description": "The preferred number of attendees for this bucket",
               "type": {
                 "kind": "SCALAR",
                 "name": "Int",
@@ -29926,7 +30042,7 @@
             },
             {
               "name": "slots_limited",
-              "description": null,
+              "description": "Whether or not the number of attendees is limited in this bucket",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -29942,7 +30058,7 @@
             },
             {
               "name": "total_slots",
-              "description": null,
+              "description": "The maximum number of attendees this bucket can accept",
               "type": {
                 "kind": "SCALAR",
                 "name": "Int",
@@ -32741,13 +32857,13 @@
         {
           "kind": "OBJECT",
           "name": "Signup",
-          "description": null,
+          "description": "A signup for a run of an event",
           "interfaces": [],
           "possibleTypes": null,
           "fields": [
             {
               "name": "age_restrictions_check",
-              "description": null,
+              "description": "Whether the signed-up attendee meets the event's age restrictions, if any",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -32762,11 +32878,11 @@
               "args": []
             },
             {
-              "name": "bucket_key",
-              "description": null,
+              "name": "bucket",
+              "description": "The bucket assigned to this signup",
               "type": {
-                "kind": "SCALAR",
-                "name": "String",
+                "kind": "OBJECT",
+                "name": "RegistrationPolicyBucket",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -32774,8 +32890,20 @@
               "args": []
             },
             {
+              "name": "bucket_key",
+              "description": "The key of the bucket assigned to this signup",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": true,
+              "deprecationReason": "Use bucket instead",
+              "args": []
+            },
+            {
               "name": "choice",
-              "description": null,
+              "description": "The order in which this signup was made, among the attendee's other counted signups",
               "type": {
                 "kind": "SCALAR",
                 "name": "Int",
@@ -32787,7 +32915,7 @@
             },
             {
               "name": "counted",
-              "description": null,
+              "description": "Whether this signup counts towards the event's and attendee's signup totals",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -32803,7 +32931,7 @@
             },
             {
               "name": "created_at",
-              "description": null,
+              "description": "When this signup was created",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -32819,7 +32947,7 @@
             },
             {
               "name": "expires_at",
-              "description": null,
+              "description": "When this signup will expire, if it's being held temporarily",
               "type": {
                 "kind": "SCALAR",
                 "name": "Date",
@@ -32831,7 +32959,7 @@
             },
             {
               "name": "id",
-              "description": null,
+              "description": "The ID of this signup",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -32846,11 +32974,11 @@
               "args": []
             },
             {
-              "name": "requested_bucket_key",
-              "description": null,
+              "name": "requested_bucket",
+              "description": "The bucket this signup requested, if any",
               "type": {
-                "kind": "SCALAR",
-                "name": "String",
+                "kind": "OBJECT",
+                "name": "RegistrationPolicyBucket",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -32858,8 +32986,20 @@
               "args": []
             },
             {
+              "name": "requested_bucket_key",
+              "description": "The key of the bucket this signup requested, if any",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": true,
+              "deprecationReason": "Use requestedBucket instead",
+              "args": []
+            },
+            {
               "name": "run",
-              "description": null,
+              "description": "The run this signup is for",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -32875,7 +33015,7 @@
             },
             {
               "name": "state",
-              "description": null,
+              "description": "The state of this signup",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -32891,7 +33031,7 @@
             },
             {
               "name": "updated_at",
-              "description": null,
+              "description": "When this signup was last updated",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -32907,7 +33047,7 @@
             },
             {
               "name": "user_con_profile",
-              "description": null,
+              "description": "The profile of the person who is signed up",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -32923,7 +33063,7 @@
             },
             {
               "name": "waitlist_position",
-              "description": null,
+              "description": "This signup's position on the waitlist, if it's waitlisted",
               "type": {
                 "kind": "SCALAR",
                 "name": "Int",
@@ -32963,13 +33103,13 @@
         {
           "kind": "OBJECT",
           "name": "SignupChange",
-          "description": null,
+          "description": "A record of a single change made to a signup, kept for audit purposes",
           "interfaces": [],
           "possibleTypes": null,
           "fields": [
             {
               "name": "action",
-              "description": null,
+              "description": "What triggered this change",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -32984,8 +33124,32 @@
               "args": []
             },
             {
+              "name": "bucket",
+              "description": "The bucket assigned by this change",
+              "type": {
+                "kind": "OBJECT",
+                "name": "RegistrationPolicyBucket",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
               "name": "bucket_key",
-              "description": null,
+              "description": "The key of the bucket assigned by this change",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": true,
+              "deprecationReason": "Use bucket or bucketName instead",
+              "args": []
+            },
+            {
+              "name": "bucket_name",
+              "description": "The name of the bucket assigned by this change, as of when the change happened",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
@@ -32997,7 +33161,7 @@
             },
             {
               "name": "counted",
-              "description": null,
+              "description": "Whether the signup counted towards totals after this change",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -33013,7 +33177,7 @@
             },
             {
               "name": "created_at",
-              "description": null,
+              "description": "When this change happened",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -33029,7 +33193,7 @@
             },
             {
               "name": "id",
-              "description": null,
+              "description": "The ID of this change",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -33045,7 +33209,7 @@
             },
             {
               "name": "previous_signup_change",
-              "description": null,
+              "description": "The change that happened before this one, if any",
               "type": {
                 "kind": "OBJECT",
                 "name": "SignupChange",
@@ -33057,7 +33221,7 @@
             },
             {
               "name": "run",
-              "description": null,
+              "description": "The run this signup change happened on",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -33073,7 +33237,7 @@
             },
             {
               "name": "signup",
-              "description": null,
+              "description": "The signup this change happened to",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -33089,7 +33253,7 @@
             },
             {
               "name": "state",
-              "description": null,
+              "description": "The state of the signup after this change",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -33105,7 +33269,7 @@
             },
             {
               "name": "updated_at",
-              "description": null,
+              "description": "When this change was last updated",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -33121,7 +33285,7 @@
             },
             {
               "name": "user_con_profile",
-              "description": null,
+              "description": "The profile of the person whose signup changed",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -33520,16 +33684,40 @@
         {
           "kind": "OBJECT",
           "name": "SignupMoveResult",
-          "description": null,
+          "description": "The result of a signup being automatically moved from one state or bucket to another",
           "interfaces": [],
           "possibleTypes": null,
           "fields": [
             {
+              "name": "bucket",
+              "description": "The new bucket assigned to this signup",
+              "type": {
+                "kind": "OBJECT",
+                "name": "RegistrationPolicyBucket",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
               "name": "bucket_key",
-              "description": null,
+              "description": "The key of the new bucket assigned to this signup",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
+                "ofType": null
+              },
+              "isDeprecated": true,
+              "deprecationReason": "Use bucket instead",
+              "args": []
+            },
+            {
+              "name": "prev_bucket",
+              "description": "The previous bucket assigned to this signup",
+              "type": {
+                "kind": "OBJECT",
+                "name": "RegistrationPolicyBucket",
                 "ofType": null
               },
               "isDeprecated": false,
@@ -33538,19 +33726,19 @@
             },
             {
               "name": "prev_bucket_key",
-              "description": null,
+              "description": "The key of the previous bucket assigned to this signup",
               "type": {
                 "kind": "SCALAR",
                 "name": "String",
                 "ofType": null
               },
-              "isDeprecated": false,
-              "deprecationReason": null,
+              "isDeprecated": true,
+              "deprecationReason": "Use prevBucket instead",
               "args": []
             },
             {
               "name": "prev_state",
-              "description": null,
+              "description": "The previous state of this signup",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -33566,7 +33754,7 @@
             },
             {
               "name": "signup",
-              "description": null,
+              "description": "The signup that was moved",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -33582,7 +33770,7 @@
             },
             {
               "name": "signup_id",
-              "description": null,
+              "description": "The ID of the signup that was moved",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -33598,7 +33786,7 @@
             },
             {
               "name": "state",
-              "description": null,
+              "description": "The new state of this signup",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -33712,6 +33900,18 @@
               "args": []
             },
             {
+              "name": "requested_bucket",
+              "description": "The bucket that this choice is trying to sign up in (or null, if it's a no-preference signup)",
+              "type": {
+                "kind": "OBJECT",
+                "name": "RegistrationPolicyBucket",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
               "name": "requested_bucket_key",
               "description": "The bucket that this choice is trying to sign up in (or null, if it's a no-preference signup)",
               "type": {
@@ -33719,8 +33919,8 @@
                 "name": "String",
                 "ofType": null
               },
-              "isDeprecated": false,
-              "deprecationReason": null,
+              "isDeprecated": true,
+              "deprecationReason": "Use requestedBucket instead",
               "args": []
             },
             {
@@ -33942,6 +34142,18 @@
               "args": []
             },
             {
+              "name": "requested_bucket",
+              "description": "The bucket that this request is asking to sign up in (or null, if it's a no-preference signup)",
+              "type": {
+                "kind": "OBJECT",
+                "name": "RegistrationPolicyBucket",
+                "ofType": null
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
               "name": "requested_bucket_key",
               "description": "The bucket that this request is asking to sign up in (or null, if it's a no-preference signup)",
               "type": {
@@ -33949,8 +34161,8 @@
                 "name": "String",
                 "ofType": null
               },
-              "isDeprecated": false,
-              "deprecationReason": null,
+              "isDeprecated": true,
+              "deprecationReason": "Use requestedBucket instead",
               "args": []
             },
             {
@@ -39407,24 +39619,32 @@
               "deprecationReason": null
             },
             {
-              "name": "bucket_key",
-              "description": null,
+              "name": "bucketId",
+              "description": "The bucket to move the signup into",
               "type": {
-                "kind": "NON_NULL",
-                "name": null,
-                "ofType": {
-                  "kind": "SCALAR",
-                  "name": "String",
-                  "ofType": null
-                }
+                "kind": "SCALAR",
+                "name": "ID",
+                "ofType": null
               },
               "defaultValue": null,
               "isDeprecated": false,
               "deprecationReason": null
             },
             {
+              "name": "bucket_key",
+              "description": "The bucket key to move the signup into",
+              "type": {
+                "kind": "SCALAR",
+                "name": "String",
+                "ofType": null
+              },
+              "defaultValue": null,
+              "isDeprecated": true,
+              "deprecationReason": "Use bucketId instead"
+            },
+            {
               "name": "id",
-              "description": null,
+              "description": "The ID of the signup to move",
               "type": {
                 "kind": "SCALAR",
                 "name": "ID",
@@ -39458,7 +39678,7 @@
             },
             {
               "name": "signup",
-              "description": null,
+              "description": "The updated signup",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -39498,7 +39718,7 @@
             },
             {
               "name": "counted",
-              "description": null,
+              "description": "Whether the signup should count towards totals",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -39514,7 +39734,7 @@
             },
             {
               "name": "id",
-              "description": null,
+              "description": "The ID of the signup to update",
               "type": {
                 "kind": "SCALAR",
                 "name": "ID",
@@ -39548,7 +39768,7 @@
             },
             {
               "name": "signup",
-              "description": null,
+              "description": "The updated signup",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,

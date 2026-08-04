@@ -3,10 +3,16 @@ import { BucketKeyMappingInput } from '../graphqlTypes.generated';
 import { BucketKeyRemappingModalProps } from './BucketKeyRemappingModal';
 
 type Bucket = { key: string; name?: string | null };
-type RegistrationPolicyLike = { buckets?: Bucket[] } | null;
+type RegistrationPolicyLike = { buckets?: Bucket[]; prevent_no_preference_signups?: boolean } | null;
 
 function bucketsFromFormResponseAttrs(formResponseAttrs: { registration_policy?: unknown }): Bucket[] {
   return (formResponseAttrs.registration_policy as RegistrationPolicyLike)?.buckets ?? [];
+}
+
+function preventNoPreferenceSignupsFromFormResponseAttrs(formResponseAttrs: {
+  registration_policy?: unknown;
+}): boolean {
+  return (formResponseAttrs.registration_policy as RegistrationPolicyLike)?.prevent_no_preference_signups ?? false;
 }
 
 type UseBucketKeyRemappingOptions = {
@@ -25,6 +31,10 @@ export default function useBucketKeyRemapping({ event, initialEvent, onSubmit }:
   const pendingRejectRef = useRef<((reason?: unknown) => void) | null>(null);
 
   const newPolicyBuckets = useMemo(() => bucketsFromFormResponseAttrs(event.form_response_attrs), [event]);
+  const preventNoPreferenceSignups = useMemo(
+    () => preventNoPreferenceSignupsFromFormResponseAttrs(event.form_response_attrs),
+    [event],
+  );
 
   const updateEvent = useCallback(async () => {
     const currentBucketKeys = new Set(newPolicyBuckets.map((b) => b.key));
@@ -49,6 +59,7 @@ export default function useBucketKeyRemapping({ event, initialEvent, onSubmit }:
     visible: remappingModalVisible,
     removedBuckets: removedBucketsNeedingRemapping,
     newPolicyBuckets,
+    preventNoPreferenceSignups,
     onConfirm: async (mappings) => {
       try {
         await onSubmit(mappings);

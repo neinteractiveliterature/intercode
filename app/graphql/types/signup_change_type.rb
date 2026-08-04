@@ -1,18 +1,38 @@
 # frozen_string_literal: true
 class Types::SignupChangeType < Types::BaseObject
+  description "A record of a single change made to a signup, kept for audit purposes"
+
   authorize_record
 
-  field :action, Types::SignupChangeActionType, null: false
-  field :bucket_key, String, null: true, camelize: false
-  field :counted, Boolean, null: false
-  field :created_at, Types::DateType, null: false, camelize: false
-  field :id, ID, null: false
-  field :previous_signup_change, Types::SignupChangeType, null: true
-  field :run, Types::RunType, null: false
-  field :signup, Types::SignupType, null: false
-  field :state, Types::SignupStateType, null: false
-  field :updated_at, Types::DateType, null: false, camelize: false
-  field :user_con_profile, Types::UserConProfileType, null: false, camelize: false
+  field :action, Types::SignupChangeActionType, null: false, description: "What triggered this change"
+  field :bucket, Types::RegistrationPolicyBucketType, null: true, description: "The bucket assigned by this change"
+  field :bucket_key,
+        String,
+        null: true,
+        camelize: false,
+        deprecation_reason: "Use bucket or bucketName instead",
+        description: "The key of the bucket assigned by this change"
+  field :bucket_name, # rubocop:disable GraphQL/ExtractType
+        String,
+        null: true,
+        camelize: false,
+        description: "The name of the bucket assigned by this change, as of when the change happened"
+  field :counted, Boolean, null: false, description: "Whether the signup counted towards totals after this change"
+  field :created_at, Types::DateType, null: false, camelize: false, description: "When this change happened"
+  field :id, ID, null: false, description: "The ID of this change"
+  field :previous_signup_change,
+        Types::SignupChangeType,
+        null: true,
+        description: "The change that happened before this one, if any"
+  field :run, Types::RunType, null: false, description: "The run this signup change happened on"
+  field :signup, Types::SignupType, null: false, description: "The signup this change happened to"
+  field :state, Types::SignupStateType, null: false, description: "The state of the signup after this change"
+  field :updated_at, Types::DateType, null: false, camelize: false, description: "When this change was last updated"
+  field :user_con_profile,
+        Types::UserConProfileType,
+        null: false,
+        camelize: false,
+        description: "The profile of the person whose signup changed"
 
   association_loaders SignupChange, :previous_signup_change, :run, :user_con_profile
 
@@ -27,25 +47,39 @@ class Types::SignupChangeType < Types::BaseObject
     signup
   end
 
-  def counted
+  def counted # rubocop:disable Naming/PredicateMethod
     !!object.counted
   end
 
   # Why not just do this as an authorized hook?  We need it to be safe to ask for this data even if
   # you can't actually read it
-  def bucket_key
-    return nil unless object.bucket_key
+  def bucket
+    return unless exposed_bucket?
+    loaded_bucket
+  end
 
-    bucket_key_for_signup(signup)
+  def bucket_key
+    bucket&.key
+  end
+
+  def bucket_name
+    return unless exposed_bucket?
+    object.bucket_name
   end
 
   private
 
-  def bucket_key_for_signup(signup)
-    registration_policy = object.run.event.registration_policy
-    expose_attendees = registration_policy.bucket_with_key(object.bucket_key)&.expose_attendees?
-    return unless expose_attendees || policy(signup).read_requested_bucket_key?
+  def loaded_bucket
+    return @loaded_bucket if defined?(@loaded_bucket)
+    @loaded_bucket = dataloader.with(Sources::ActiveRecordAssociation, SignupChange, :bucket).load(object)
+  end
 
-    object.bucket_key
+  # The bucket referenced here may have been destroyed since this change was recorded (bucket_id
+  # nullifies on delete, bucket_name is kept as a permanent snapshot), so this checks the live
+  # bucket's expose_attendees when it still exists, falling back to the read_requested_bucket_key
+  # policy otherwise -- same as before this was backed by a real association.
+  def exposed_bucket?
+    return @exposed_bucket if defined?(@exposed_bucket)
+    @exposed_bucket = !!(loaded_bucket&.expose_attendees? || policy(signup).read_requested_bucket_key?)
   end
 end
