@@ -153,7 +153,7 @@ class EventChangeRegistrationPolicyService < CivilService::Service
 
   def inner_call
     lock_all_runs do
-      return failure(errors) if unmapped_bucket_key_errors.any?
+      return failure(errors) if bucket_key_mapping_errors.any?
 
       immovable_signups, new_signups_by_signup_id = simulate_signups
 
@@ -334,10 +334,36 @@ class EventChangeRegistrationPolicyService < CivilService::Service
     bucket_key_mappings[old_bucket.key]&.fetch(:to_key, nil)
   end
 
+  def bucket_key_mapping_errors
+    unmapped_bucket_key_errors
+    invalid_no_preference_mapping_errors
+  end
+
   def unmapped_bucket_key_errors
     unmapped_removed_buckets.each_with_object(errors) do |bucket, errs|
       errs.add(:base, "Bucket key #{bucket.key.inspect} was removed but no mapping was provided")
     end
+  end
+
+  # Mapping a removed bucket to "no preference" (to_key: nil) would leave affected
+  # signups/requests/ranked choices with a null requested_bucket_id -- fine normally, but the new
+  # policy may have prevent_no_preference_signups set, in which case that's not a state new signups
+  # are allowed to be created in (see EventSignupService#require_valid_bucket). Reject any such
+  # mapping outright rather than silently letting existing records drift into that disallowed state.
+  def invalid_no_preference_mapping_errors
+    return errors unless new_registration_policy.prevent_no_preference_signups?
+
+    bucket_key_mappings.each_value do |mapping|
+      next if mapping[:to_key]
+
+      errors.add(
+        :base,
+        "Bucket key #{mapping[:from_key].inspect} cannot be mapped to \"no preference\" because the new " \
+          "registration policy does not allow no-preference signups"
+      )
+    end
+
+    errors
   end
 
   def unmapped_removed_buckets

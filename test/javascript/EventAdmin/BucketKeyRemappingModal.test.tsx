@@ -21,26 +21,33 @@ describe('BucketKeyRemappingModal', () => {
     onCancel.mockClear();
   });
 
+  async function renderModal() {
+    const i18nInstance = await getI18n();
+    const wrap = (ui: React.JSX.Element) => <I18nextProvider i18n={i18nInstance}>{ui}</I18nextProvider>;
+
+    const result = rtlRender(
+      wrap(
+        <BucketKeyRemappingModal
+          visible={false}
+          removedBuckets={[]}
+          newPolicyBuckets={[{ key: 'dogs', name: 'Dogs' }]}
+          preventNoPreferenceSignups={false}
+          onConfirm={onConfirm}
+          onCancel={onCancel}
+        />,
+      ),
+    );
+
+    return { ...result, wrap };
+  }
+
   // Regression test: this modal is mounted once, up front, with removedBuckets: [] before the
   // admin ever clicks Save -- removedBuckets only becomes non-empty later, as a prop update on the
   // already-mounted component (see useBucketKeyRemapping). Confirming without ever touching a
   // bucket's dropdown (i.e. accepting the default "No preference", which is already selected)
   // previously submitted an empty mapping list instead of one entry per removed bucket.
   test('submits a mapping for a removed bucket even if its dropdown is left at the default', async () => {
-    const i18nInstance = await getI18n();
-    const wrap = (ui: React.JSX.Element) => <I18nextProvider i18n={i18nInstance}>{ui}</I18nextProvider>;
-
-    const { rerender, getByText } = rtlRender(
-      wrap(
-        <BucketKeyRemappingModal
-          visible={false}
-          removedBuckets={[]}
-          newPolicyBuckets={[{ key: 'dogs', name: 'Dogs' }]}
-          onConfirm={onConfirm}
-          onCancel={onCancel}
-        />,
-      ),
-    );
+    const { rerender, wrap, getByText } = await renderModal();
 
     rerender(
       wrap(
@@ -48,6 +55,7 @@ describe('BucketKeyRemappingModal', () => {
           visible
           removedBuckets={[{ key: 'signups', name: 'Cats' }]}
           newPolicyBuckets={[{ key: 'dogs', name: 'Dogs' }]}
+          preventNoPreferenceSignups={false}
           onConfirm={onConfirm}
           onCancel={onCancel}
         />,
@@ -61,20 +69,7 @@ describe('BucketKeyRemappingModal', () => {
   });
 
   test('submits the selected destination bucket when one is chosen', async () => {
-    const i18nInstance = await getI18n();
-    const wrap = (ui: React.JSX.Element) => <I18nextProvider i18n={i18nInstance}>{ui}</I18nextProvider>;
-
-    const { rerender, getByRole, getByText } = rtlRender(
-      wrap(
-        <BucketKeyRemappingModal
-          visible={false}
-          removedBuckets={[]}
-          newPolicyBuckets={[{ key: 'dogs', name: 'Dogs' }]}
-          onConfirm={onConfirm}
-          onCancel={onCancel}
-        />,
-      ),
-    );
+    const { rerender, wrap, getByRole, getByText } = await renderModal();
 
     rerender(
       wrap(
@@ -82,6 +77,7 @@ describe('BucketKeyRemappingModal', () => {
           visible
           removedBuckets={[{ key: 'signups', name: 'Cats' }]}
           newPolicyBuckets={[{ key: 'dogs', name: 'Dogs' }]}
+          preventNoPreferenceSignups={false}
           onConfirm={onConfirm}
           onCancel={onCancel}
         />,
@@ -93,5 +89,57 @@ describe('BucketKeyRemappingModal', () => {
     fireEvent.click(getByText('Apply and save event'));
 
     await waitFor(() => expect(onConfirm).toHaveBeenCalledWith([{ from_key: 'signups', to_key: 'dogs' }]));
+  });
+
+  describe('when the new policy disallows no-preference signups', () => {
+    test('does not offer "No preference" as an option', async () => {
+      const { rerender, wrap, getByRole } = await renderModal();
+
+      rerender(
+        wrap(
+          <BucketKeyRemappingModal
+            visible
+            removedBuckets={[{ key: 'signups', name: 'Cats' }]}
+            newPolicyBuckets={[{ key: 'dogs', name: 'Dogs' }]}
+            preventNoPreferenceSignups
+            onConfirm={onConfirm}
+            onCancel={onCancel}
+          />,
+        ),
+      );
+      await waitFor(() => {});
+
+      const select = getByRole('combobox', { hidden: true }) as HTMLSelectElement;
+      const optionLabels = Array.from(select.options).map((option) => option.label);
+      expect(optionLabels).not.toContain('No preference');
+    });
+
+    test('disables Apply until every removed bucket has a real bucket selected', async () => {
+      const { rerender, wrap, getByRole, getByText } = await renderModal();
+
+      rerender(
+        wrap(
+          <BucketKeyRemappingModal
+            visible
+            removedBuckets={[{ key: 'signups', name: 'Cats' }]}
+            newPolicyBuckets={[{ key: 'dogs', name: 'Dogs' }]}
+            preventNoPreferenceSignups
+            onConfirm={onConfirm}
+            onCancel={onCancel}
+          />,
+        ),
+      );
+      await waitFor(() => {});
+
+      const confirmButton = getByText('Apply and save event').closest('button');
+      expect(confirmButton).toBeDisabled();
+
+      fireEvent.change(getByRole('combobox', { hidden: true }), { target: { value: 'dogs' } });
+      expect(confirmButton).not.toBeDisabled();
+
+      fireEvent.click(getByText('Apply and save event'));
+
+      await waitFor(() => expect(onConfirm).toHaveBeenCalledWith([{ from_key: 'signups', to_key: 'dogs' }]));
+    });
   });
 });

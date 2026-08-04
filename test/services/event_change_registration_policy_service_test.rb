@@ -433,6 +433,41 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
         assert_nil signup_ranked_choice.reload.requested_bucket_key
       end
     end
+
+    describe "with bucket_key_mappings mapping to nil, when the new policy disallows no-preference signups" do
+      let(:new_registration_policy) do
+        RegistrationPolicy.build_from_hash(
+          prevent_no_preference_signups: true,
+          buckets: [
+            { key: "dogs", name: "Dogs", slots_limited: true, total_slots: 1 },
+            { key: "cats", name: "Cats", slots_limited: true, total_slots: 1 },
+            { key: "anything", name: "Anything", slots_limited: true, total_slots: 1, anything: true }
+          ]
+        )
+      end
+
+      subject do
+        EventChangeRegistrationPolicyService.new(
+          event,
+          new_registration_policy,
+          whodunit,
+          [{ from_key: "unlimited", to_key: nil }]
+        )
+      end
+
+      it "fails instead of leaving affected records with a disallowed no-preference state" do
+        result = subject.call
+
+        assert result.failure?
+        assert_match(
+          /\ABucket key "unlimited" cannot be mapped to "no preference"/,
+          result.errors.full_messages.join("\n")
+        )
+        assert_equal "unlimited", signup.reload.requested_bucket_key
+        assert_equal "unlimited", signup_request.reload.requested_bucket_key
+        assert_equal "unlimited", signup_ranked_choice.reload.requested_bucket_key
+      end
+    end
   end
 
   describe "with existing signups in buckets that will grow" do

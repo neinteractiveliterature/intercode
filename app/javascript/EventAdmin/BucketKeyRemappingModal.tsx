@@ -14,6 +14,7 @@ export type BucketKeyRemappingModalProps = {
   visible: boolean;
   removedBuckets: BucketOption[];
   newPolicyBuckets: BucketOption[];
+  preventNoPreferenceSignups: boolean;
   onConfirm: (mappings: BucketKeyMappingInput[]) => Promise<void>;
   onCancel: () => void;
 };
@@ -22,6 +23,7 @@ function BucketKeyRemappingModal({
   visible,
   removedBuckets,
   newPolicyBuckets,
+  preventNoPreferenceSignups,
   onConfirm,
   onCancel,
 }: BucketKeyRemappingModalProps): React.JSX.Element {
@@ -47,6 +49,12 @@ function BucketKeyRemappingModal({
     setMappings((prev) => ({ ...prev, [fromKey]: toKey }));
   };
 
+  // When the new policy disallows no-preference signups, mapping a removed bucket to "no
+  // preference" would leave affected signups/requests with a null requested_bucket_id that the
+  // policy no longer permits new signups to have -- so every row needs an explicit bucket chosen
+  // before this can be confirmed.
+  const canConfirm = !preventNoPreferenceSignups || removedBuckets.every((bucket) => mappings[bucket.key]);
+
   const handleConfirm = async () => {
     const bucketKeyMappings: BucketKeyMappingInput[] = Object.entries(mappings).map(([fromKey, toKey]) => ({
       from_key: fromKey,
@@ -66,7 +74,13 @@ function BucketKeyRemappingModal({
         <h5 className="modal-title">{t('admin.events.bucketKeyRemapping.title')}</h5>
       </div>
       <div className="modal-body">
-        <p>{t('admin.events.bucketKeyRemapping.description')}</p>
+        <p>
+          {t(
+            preventNoPreferenceSignups
+              ? 'admin.events.bucketKeyRemapping.descriptionNoPreferenceDisallowed'
+              : 'admin.events.bucketKeyRemapping.description',
+          )}
+        </p>
         <table className="table">
           <thead>
             <tr>
@@ -85,7 +99,13 @@ function BucketKeyRemappingModal({
                     onChange={(e) => setMapping(bucket.key, e.target.value || null)}
                     disabled={isSubmitting}
                   >
-                    <option value="">{t('admin.events.bucketKeyRemapping.noPreferenceOption')}</option>
+                    {preventNoPreferenceSignups ? (
+                      <option value="" disabled>
+                        {t('admin.events.bucketKeyRemapping.selectBucketPlaceholder')}
+                      </option>
+                    ) : (
+                      <option value="">{t('admin.events.bucketKeyRemapping.noPreferenceOption')}</option>
+                    )}
                     {newPolicyBuckets.map((newBucket) => (
                       <option key={newBucket.key} value={newBucket.key}>
                         {newBucket.name ?? newBucket.key}
@@ -102,7 +122,12 @@ function BucketKeyRemappingModal({
         <button type="button" className="btn btn-secondary" onClick={onCancel} disabled={isSubmitting}>
           {t('buttons.cancel')}
         </button>
-        <button type="button" className="btn btn-primary" onClick={handleConfirm} disabled={isSubmitting}>
+        <button
+          type="button"
+          className="btn btn-primary"
+          onClick={handleConfirm}
+          disabled={isSubmitting || !canConfirm}
+        >
           {isSubmitting ? (
             <LoadingIndicator iconSet="bootstrap-icons" />
           ) : (

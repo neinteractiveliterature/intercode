@@ -117,9 +117,11 @@
       "bucketKeyRemapping": {
         "title": "Remap bucket assignments",
         "description": "Some attendees have signed up for, requested, or queued for specific buckets that are being removed. Please indicate where to move them, or choose \"No preference\" to allow them to go to any bucket.",
+        "descriptionNoPreferenceDisallowed": "Some attendees have signed up for, requested, or queued for specific buckets that are being removed. The new registration policy does not allow no-preference signups, so please choose a specific bucket for each one to move to.",
         "removedBucketColumn": "Removed bucket",
         "newBucketColumn": "Move attendees to",
         "noPreferenceOption": "No preference",
+        "selectBucketPlaceholder": "Select a bucket…",
         "confirmButton": "Apply and save event"
       }
     },
