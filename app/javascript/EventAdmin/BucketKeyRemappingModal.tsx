@@ -26,10 +26,22 @@ function BucketKeyRemappingModal({
   onCancel,
 }: BucketKeyRemappingModalProps): React.JSX.Element {
   const { t } = useTranslation();
-  const [mappings, setMappings] = useState<Record<string, string | null>>(() =>
-    Object.fromEntries(removedBuckets.map((bucket) => [bucket.key, null])),
-  );
+  const [mappings, setMappings] = useState<Record<string, string | null>>({});
   const [isSubmitting, setIsSubmitting] = useState(false);
+
+  // This modal is mounted once, up front, with removedBuckets: [] -- a plain useState initializer
+  // would only ever see that empty array, leaving every removed bucket's default "No preference"
+  // selection un-seeded in state. Since handleConfirm below builds bucketKeyMappings from
+  // Object.entries(mappings) rather than from removedBuckets, any bucket the admin never touches a
+  // dropdown for (i.e. left at the already-selected default) would be silently missing from the
+  // submitted mappings. Re-seed whenever the set of removed buckets changes, following React's
+  // "adjusting state when a prop changes" pattern (setting state during render, rather than in an
+  // effect, avoids an extra commit/re-render cycle).
+  const [prevRemovedBuckets, setPrevRemovedBuckets] = useState(removedBuckets);
+  if (prevRemovedBuckets !== removedBuckets) {
+    setPrevRemovedBuckets(removedBuckets);
+    setMappings(Object.fromEntries(removedBuckets.map((bucket) => [bucket.key, null])));
+  }
 
   const setMapping = (fromKey: string, toKey: string | null) => {
     setMappings((prev) => ({ ...prev, [fromKey]: toKey }));
