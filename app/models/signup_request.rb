@@ -4,17 +4,16 @@
 #
 # Table name: signup_requests
 #
-#  id                   :bigint           not null, primary key
-#  requested_bucket_key :string
-#  state                :string           default("pending"), not null
-#  created_at           :datetime         not null
-#  updated_at           :datetime         not null
-#  replace_signup_id    :bigint
-#  requested_bucket_id  :bigint
-#  result_signup_id     :bigint
-#  target_run_id        :bigint           not null
-#  updated_by_id        :bigint
-#  user_con_profile_id  :bigint           not null
+#  id                  :bigint           not null, primary key
+#  state               :string           default("pending"), not null
+#  created_at          :datetime         not null
+#  updated_at          :datetime         not null
+#  replace_signup_id   :bigint
+#  requested_bucket_id :bigint
+#  result_signup_id    :bigint
+#  target_run_id       :bigint           not null
+#  updated_by_id       :bigint
+#  user_con_profile_id :bigint           not null
 #
 # Indexes
 #
