@@ -111,6 +111,18 @@ AND team_members.user_con_profile_id = signups.user_con_profile_id"
   end
 
   def self.for_runs(runs)
+    runs = runs.to_a
+    # Every presenter built below reads run.registration_policy.buckets (directly, or via
+    # RunAvailabilityPresenter which wraps this). Preload it here, once per batch, so that doesn't
+    # turn into a registration_policy + buckets query pair per run.
+    ActiveRecord::Associations::Preloader.new(
+      records: runs,
+      associations: {
+        event: {
+          registration_policy: :buckets
+        }
+      }
+    ).call
     data_by_run_id = signup_count_data_for_runs(runs)
     runs.to_h { |run| [run.id, new(run, count_data: data_by_run_id[run.id] || SignupCountData.new(DIMENSIONS[0], []))] }
   end
