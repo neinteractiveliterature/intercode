@@ -132,4 +132,39 @@ class SignupCountPresenterTest < ActiveSupport::TestCase
       end
     end
   end
+
+  describe ".for_runs over many runs" do
+    let(:registration_policy) do
+      RegistrationPolicy.build_from_hash(
+        buckets: [{ key: "attendees", name: "Attendees", slots_limited: true, total_slots: 10 }]
+      )
+    end
+    let(:event) { create(:event, convention:, registration_policy:) }
+    let(:runs) { create_list(:run, 10, event:) }
+
+    before { runs.each { |run| create(:signup, run:) } }
+
+    it "does not issue a registration_policy/buckets query pair per run" do
+      # Load fresh Run records so each has its own unloaded `event` association, rather than all
+      # 10 sharing the single memoized `event` (and thus already-cached registration_policy) from
+      # the `let` above -- that would mask the N+1 this test exists to catch.
+      fresh_runs = Run.where(id: runs.map(&:id)).to_a
+      queries = count_queries(/registration_polic/) { SignupCountPresenter.for_runs(fresh_runs).each_value(&:buckets) }
+      assert_operator queries, :<=, 2, "expected a constant number of registration_policy/bucket queries"
+    end
+  end
+
+  private
+
+  def count_queries(pattern)
+    count = 0
+    subscriber =
+      ActiveSupport::Notifications.subscribe("sql.active_record") do |*, payload|
+        count += 1 if pattern.match?(payload[:sql])
+      end
+    yield
+    count
+  ensure
+    ActiveSupport::Notifications.unsubscribe(subscriber) if subscriber
+  end
 end
