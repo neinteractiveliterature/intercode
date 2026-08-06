@@ -63,5 +63,30 @@ describe UserConProfileDrop do
       signups = user_con_profile_drop.signups
       withdrawn_signups.each { |signup| assert_not_includes signups, signup }
     end
+
+    it "does not issue a bucket query per signup" do
+      queries =
+        count_queries(/registration_policy_buckets/) do
+          user_con_profile_drop.signups.each do |signup|
+            signup.bucket
+            signup.requested_bucket
+          end
+        end
+      assert_operator queries, :<=, 2, "expected a constant number of bucket queries regardless of signup count"
+    end
+  end
+
+  private
+
+  def count_queries(pattern)
+    count = 0
+    subscriber =
+      ActiveSupport::Notifications.subscribe("sql.active_record") do |*, payload|
+        count += 1 if pattern.match?(payload[:sql])
+      end
+    yield
+    count
+  ensure
+    ActiveSupport::Notifications.unsubscribe(subscriber) if subscriber
   end
 end
