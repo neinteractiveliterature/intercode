@@ -115,6 +115,20 @@ class ActiveSupport::TestCase
     raise GraphqlTestExecutionError, result if result["errors"].present?
     result
   end
+
+  # Counts SQL queries matching pattern issued while running the block, for asserting on N+1s
+  # (e.g. assert_operator count_queries(/registration_policy_buckets/) { subject.call! }, :<=, 1).
+  def count_queries(pattern)
+    count = 0
+    subscriber =
+      ActiveSupport::Notifications.subscribe("sql.active_record") do |*, payload|
+        count += 1 if pattern.match?(payload[:sql])
+      end
+    yield
+    count
+  ensure
+    ActiveSupport::Notifications.unsubscribe(subscriber) if subscriber
+  end
 end
 
 class ActionController::TestCase

@@ -403,18 +403,4 @@ describe ExecuteRankedChoiceSignupService do
       assert_equal "signed_up", signup_ranked_choice.state
     end
   end
-
-  private
-
-  def count_queries(pattern)
-    count = 0
-    subscriber =
-      ActiveSupport::Notifications.subscribe("sql.active_record") do |*, payload|
-        count += 1 if pattern.match?(payload[:sql])
-      end
-    yield
-    count
-  ensure
-    ActiveSupport::Notifications.unsubscribe(subscriber) if subscriber
-  end
 end

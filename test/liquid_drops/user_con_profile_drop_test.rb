@@ -75,18 +75,4 @@ describe UserConProfileDrop do
       assert_operator queries, :<=, 2, "expected a constant number of bucket queries regardless of signup count"
     end
   end
-
-  private
-
-  def count_queries(pattern)
-    count = 0
-    subscriber =
-      ActiveSupport::Notifications.subscribe("sql.active_record") do |*, payload|
-        count += 1 if pattern.match?(payload[:sql])
-      end
-    yield
-    count
-  ensure
-    ActiveSupport::Notifications.unsubscribe(subscriber) if subscriber
-  end
 end
