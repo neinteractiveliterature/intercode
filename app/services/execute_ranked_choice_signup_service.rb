@@ -117,7 +117,8 @@ class ExecuteRankedChoiceSignupService < CivilService::Service
     @actual_bucket ||=
       begin
         run = signup_ranked_choice.target_run
-        existing_signups = run.signups.counted.occupying_slot.includes(:bucket, :requested_bucket).to_a
+        existing_signups =
+          run.signups.counted.occupying_slot.includes(:user_con_profile, :bucket, :requested_bucket).to_a
         bucket_finder =
           SignupBucketFinder.new(run.registration_policy, signup_ranked_choice.requested_bucket_key, existing_signups)
         if convention.signup_mode == "moderated"

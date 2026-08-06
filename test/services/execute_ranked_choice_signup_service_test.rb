@@ -79,6 +79,33 @@ describe ExecuteRankedChoiceSignupService do
     assert_equal "waitlisted", signup_ranked_choice.state
   end
 
+  describe "with many existing signups on the run" do
+    let(:event) { create(:event, convention:) }
+    let(:the_run) { create(:run, event:) }
+
+    # Signing up itself (RankedChoiceDecision/log_signup_change!/positioned repositioning, etc.)
+    # issues a small, fixed number of user_con_profile queries regardless of how many other
+    # signups exist on the run -- what this test guards against is that count scaling up with the
+    # number of *other* signups on the run, which is what SignupBucketFinder's FakeSignup building
+    # does if the run's existing signups aren't preloaded with :user_con_profile.
+    def user_con_profile_queries_for(existing_signup_count)
+      the_run.signups.destroy_all
+      existing_signup_count.times do
+        create(:signup, user_con_profile: create(:user_con_profile, convention:), run: the_run)
+      end
+      signup_ranked_choice = create(:signup_ranked_choice, target_run: the_run)
+      count_queries(/SELECT "user_con_profiles"/) do
+        ExecuteRankedChoiceSignupService.new(signup_round:, signup_ranked_choice:, whodunit: nil).call!
+      end
+    end
+
+    it "does not scale the user_con_profile query count with the number of existing signups" do
+      baseline = user_con_profile_queries_for(1)
+      with_many_signups = user_con_profile_queries_for(20)
+      assert_equal baseline, with_many_signups, "expected the same query count regardless of existing signup count"
+    end
+  end
+
   describe "with a waitlist_position_cap" do
     let(:full_event) do
       create(
@@ -375,5 +402,19 @@ describe ExecuteRankedChoiceSignupService do
       assert_equal "confirmed", result.decision.signup.state
       assert_equal "signed_up", signup_ranked_choice.state
     end
+  end
+
+  private
+
+  def count_queries(pattern)
+    count = 0
+    subscriber =
+      ActiveSupport::Notifications.subscribe("sql.active_record") do |*, payload|
+        count += 1 if pattern.match?(payload[:sql])
+      end
+    yield
+    count
+  ensure
+    ActiveSupport::Notifications.unsubscribe(subscriber) if subscriber
   end
 end
