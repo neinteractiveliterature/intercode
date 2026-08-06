@@ -620,6 +620,14 @@ class EventSignupServiceTest < ActiveSupport::TestCase
       queries = count_queries(/registration_policy_buckets/) { subject.call! }
       assert_operator queries, :<=, 6, "expected a constant number of bucket queries regardless of signup count"
     end
+
+    it "does not issue a user_con_profile query per existing signup" do
+      queries = count_queries(/SELECT "user_con_profiles"/) { subject.call! }
+      assert_operator queries,
+                      :<=,
+                      2,
+                      "expected a constant number of user_con_profile queries regardless of signup count"
+    end
   end
 
   describe "in a moderated-signup convention" do
@@ -709,17 +717,5 @@ class EventSignupServiceTest < ActiveSupport::TestCase
         requested_bucket_id: bucket_id_for(the_run, requested_bucket_key)
       }.merge(attributes)
     )
-  end
-
-  def count_queries(pattern)
-    count = 0
-    subscriber =
-      ActiveSupport::Notifications.subscribe("sql.active_record") do |*, payload|
-        count += 1 if pattern.match?(payload[:sql])
-      end
-    yield
-    count
-  ensure
-    ActiveSupport::Notifications.unsubscribe(subscriber) if subscriber
   end
 end

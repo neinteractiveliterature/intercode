@@ -51,6 +51,7 @@ class UserConProfileDrop < Liquid::Drop
 
   # @api
   def initialize(user_con_profile)
+    super()
     @user_con_profile = user_con_profile
   end
 
@@ -65,7 +66,17 @@ class UserConProfileDrop < Liquid::Drop
     user_con_profile
       .signups
       .where.not(state: "withdrawn")
-      .includes(event: :event_category, run: { rooms: nil, event: { team_members: :user_con_profile } })
+      .includes(
+        :bucket,
+        :requested_bucket,
+        event: :event_category,
+        run: {
+          rooms: nil,
+          event: {
+            team_members: :user_con_profile
+          }
+        }
+      )
       .to_a
   end
 

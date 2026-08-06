@@ -27,6 +27,7 @@ class EventDrop < Liquid::Drop
 
   # @api
   def initialize(event)
+    super()
     @event = event
   end
 
@@ -86,10 +87,7 @@ class EventDrop < Liquid::Drop
     define_method field do
       markdown = event.public_send(field)
       return nil unless markdown
-      MarkdownPresenter.new("").render(
-        markdown,
-        local_images: event.images.includes(:blob).index_by { |image| image.filename.to_s }
-      )
+      MarkdownPresenter.new("").render(markdown, local_images: local_images)
     end
   end
 
@@ -103,5 +101,13 @@ class EventDrop < Liquid::Drop
       team_member_name: event.event_category.team_member_name,
       controller: @context.registers["controller"]
     ).as_json_with_rendered_markdown("event", event, "")
+  end
+
+  private
+
+  # Memoized so that rendering multiple markdown fields (description, short_blurb, etc.) on the
+  # same EventDrop only queries this event's image attachments once, rather than once per field.
+  def local_images
+    @local_images ||= event.images.includes(:blob).index_by { |image| image.filename.to_s }
   end
 end
