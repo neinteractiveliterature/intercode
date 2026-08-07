@@ -1,25 +1,28 @@
 # frozen_string_literal: true
-# Deliberately key-based rather than bucket_id-based: registration_policy here may be a detached,
-# not-yet-persisted policy (e.g. while EventChangeRegistrationPolicyService is simulating a
-# registration policy change), whose candidate buckets have no id yet. Key is the only identity
-# that's valid for both persisted and detached buckets.
+# registration_policy here may be a detached, not-yet-persisted policy (e.g. while
+# EventChangeRegistrationPolicyService is simulating a registration policy change), whose candidate
+# buckets have no id yet. Bucket comparisons throughout this class go through id when both sides are
+# persisted, and object identity otherwise -- see RegistrationPolicyBucket#occupies_bucket_as_signup?
+# and #same_bucket? below.
 class SignupBucketFinder
   class FakeSignup
     include ActiveModel::Model
 
-    attr_accessor :id, :state, :run, :bucket_key, :requested_bucket_key, :user_con_profile, :counted
+    attr_accessor :id, :state, :run, :bucket, :requested_bucket, :user_con_profile, :counted
 
     def self.from_signup(signup)
       attrs =
-        %i[id state run bucket_key requested_bucket_key user_con_profile counted].index_with do |attr|
-          signup.public_send(attr)
-        end
+        %i[id state run bucket requested_bucket user_con_profile counted].index_with { |attr| signup.public_send(attr) }
 
       new(attrs)
     end
 
     def attributes
-      { id:, state:, run:, bucket_key:, requested_bucket_key:, user_con_profile:, counted: }
+      { id:, state:, run:, bucket:, requested_bucket:, user_con_profile:, counted: }
+    end
+
+    def bucket_id
+      bucket&.id
     end
 
     def occupying_slot?
@@ -27,11 +30,11 @@ class SignupBucketFinder
     end
   end
 
-  attr_reader :registration_policy, :other_signups, :requested_bucket_key, :allow_movement
+  attr_reader :registration_policy, :other_signups, :requested_bucket, :allow_movement
 
-  def initialize(registration_policy, requested_bucket_key, other_signups, allow_movement: true)
+  def initialize(registration_policy, requested_bucket, other_signups, allow_movement: true)
     @registration_policy = registration_policy
-    @requested_bucket_key = requested_bucket_key
+    @requested_bucket = requested_bucket
     @allow_movement = allow_movement
     @original_other_signups_by_id = other_signups.index_by(&:id)
     @other_signups = other_signups.map { |signup| FakeSignup.from_signup(signup) }
@@ -39,7 +42,7 @@ class SignupBucketFinder
 
   def simulate_accepting_signup_request(signup_request)
     accept_finder =
-      SignupBucketFinder.new(registration_policy, signup_request.requested_bucket_key, @other_signups, allow_movement:)
+      SignupBucketFinder.new(registration_policy, signup_request.requested_bucket, @other_signups, allow_movement:)
     actual_bucket = accept_finder.find_bucket
 
     if actual_bucket
@@ -47,7 +50,7 @@ class SignupBucketFinder
         movable_signup = accept_finder.movable_signups_for_bucket(actual_bucket).first
         destination_bucket =
           accept_finder.no_preference_bucket_finder.prioritized_buckets_with_capacity_except(actual_bucket).first
-        movable_signup.bucket_key = destination_bucket.key
+        movable_signup.bucket = destination_bucket
       end
 
       simulate_confirmed_signup(signup_request, actual_bucket)
@@ -60,9 +63,9 @@ class SignupBucketFinder
     @other_signups << FakeSignup.new(
       run: signup_request.target_run,
       state: "confirmed",
-      bucket_key: actual_bucket.key,
+      bucket: actual_bucket,
       user_con_profile: signup_request.user_con_profile,
-      requested_bucket_key: signup_request.requested_bucket_key,
+      requested_bucket: signup_request.requested_bucket,
       counted: actual_bucket.counted?
     )
   end
@@ -71,9 +74,9 @@ class SignupBucketFinder
     @other_signups << FakeSignup.new(
       run: signup_request.target_run,
       state: "waitlisted",
-      bucket_key: nil,
+      bucket: nil,
       user_con_profile: signup_request.user_con_profile,
-      requested_bucket_key: signup_request.requested_bucket_key,
+      requested_bucket: signup_request.requested_bucket,
       counted: false
     )
   end
@@ -90,17 +93,13 @@ class SignupBucketFinder
     return [] unless allow_movement
     return [] unless no_preference_bucket_finder.prioritized_buckets_with_capacity.any?
 
-    fake_signups =
-      other_signups.select do |signup|
-        signup.respond_to?(:bucket_key) && signup.bucket_key == bucket.key &&
-          !(signup.respond_to?(:requested_bucket_key) && signup.requested_bucket_key)
-      end
+    fake_signups = other_signups.select { |signup| same_bucket?(signup.bucket, bucket) && !signup.requested_bucket }
     fake_signups.filter_map { |fake_signup| @original_other_signups_by_id[fake_signup.id] }
   end
 
   def prioritized_buckets
     @prioritized_buckets ||=
-      requested_bucket_key ? prioritized_buckets_with_requested_bucket : prioritized_buckets_without_requested_bucket
+      requested_bucket ? prioritized_buckets_with_requested_bucket : prioritized_buckets_without_requested_bucket
   end
 
   def prioritized_buckets_with_capacity
@@ -108,8 +107,7 @@ class SignupBucketFinder
   end
 
   def prioritized_buckets_with_capacity_except(*buckets)
-    bucket_keys = buckets.map(&:key)
-    prioritized_buckets_with_capacity.reject { |bucket| bucket_keys.include?(bucket.key) }
+    prioritized_buckets_with_capacity.reject { |candidate| buckets.any? { |bucket| same_bucket?(candidate, bucket) } }
   end
 
   def no_preference_bucket_finder
@@ -118,8 +116,12 @@ class SignupBucketFinder
 
   private
 
-  def requested_bucket
-    @requested_bucket ||= registration_policy.bucket_with_key(requested_bucket_key)
+  # Compares by id when both buckets are persisted, object identity otherwise -- mirrors
+  # RegistrationPolicyBucket#occupies_bucket_as_signup?, since a detached candidate bucket has no id
+  # to compare and only object identity can tell it apart from another detached candidate.
+  def same_bucket?(bucket_a, bucket_b)
+    return false if bucket_a.nil? || bucket_b.nil?
+    bucket_a.id && bucket_b.id ? bucket_a.id == bucket_b.id : bucket_a.equal?(bucket_b)
   end
 
   def prioritized_buckets_with_requested_bucket

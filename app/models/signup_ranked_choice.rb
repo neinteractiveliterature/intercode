@@ -62,13 +62,6 @@ class SignupRankedChoice < ApplicationRecord
     SignupRankedChoiceDrop.new(self)
   end
 
-  # Used by SignupBucketFinder, which has to compare against candidate buckets from a detached,
-  # not-yet-persisted RegistrationPolicy (no id yet) during registration policy change simulation --
-  # key is the only identity valid in both the persisted and detached cases.
-  def requested_bucket_key
-    requested_bucket&.key
-  end
-
   private
 
   def ensure_all_fields_point_at_the_same_convention

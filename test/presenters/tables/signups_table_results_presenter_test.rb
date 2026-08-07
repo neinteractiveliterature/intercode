@@ -14,8 +14,8 @@ class Tables::SignupsTableResultsPresenterTest < ActiveSupport::TestCase
   end
   let(:event) { create(:event, convention:, registration_policy:) }
   let(:the_run) { create(:run, event:) }
-  let(:zebras_bucket) { registration_policy.bucket_with_key("zebras") }
-  let(:aardvarks_bucket) { registration_policy.bucket_with_key("aardvarks") }
+  let(:zebras_bucket) { bucket_with_key(registration_policy, "zebras") }
+  let(:aardvarks_bucket) { bucket_with_key(registration_policy, "aardvarks") }
 
   def presenter_for(filters: {}, sort: [])
     Tables::SignupsTableResultsPresenter.for_run(the_run, site_admin, filters, sort)

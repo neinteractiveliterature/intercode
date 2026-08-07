@@ -3,7 +3,6 @@
 require "test_helper"
 require "base64"
 
-# rubocop:disable Metrics/ClassLength, Metrics/BlockLength
 class ImportConventionDataServiceTest < ActiveSupport::TestCase
   # Minimal valid export with no external dependencies (no CMS content set, no event categories)
   let(:base_data) do
@@ -495,7 +494,7 @@ class ImportConventionDataServiceTest < ActiveSupport::TestCase
     it "creates the registration policy with buckets" do
       convention = Convention.find_by!(domain: "importtest.example.com")
       event = convention.events.find_by!(title: "A Great LARP")
-      bucket = event.registration_policy.bucket_with_key("players")
+      bucket = bucket_with_key(event.registration_policy, "players")
       assert bucket
       assert_equal 10, bucket.total_slots
       assert bucket.slots_limited?
@@ -621,7 +620,7 @@ class ImportConventionDataServiceTest < ActiveSupport::TestCase
       convention = Convention.find_by!(domain: "importtest.example.com")
       event = convention.events.find_by!(title: "Signup Test LARP")
       signup = event.runs.first.signups.first
-      assert_equal "players", signup.bucket_key
+      assert_equal "players", signup.bucket&.key
       assert signup.counted
     end
   end

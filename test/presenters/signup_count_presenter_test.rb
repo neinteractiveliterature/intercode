@@ -29,7 +29,7 @@ class SignupCountPresenterTest < ActiveSupport::TestCase
     end
 
     describe "#waitlist_count" do
-      let(:attendees_bucket_id) { registration_policy.bucket_with_key("attendees").id }
+      let(:attendees_bucket_id) { bucket_with_key(registration_policy, "attendees").id }
 
       it "counts waitlisted signups" do
         create(:signup, run: the_run, state: "waitlisted", counted: false, requested_bucket_id: attendees_bucket_id)
@@ -45,7 +45,7 @@ class SignupCountPresenterTest < ActiveSupport::TestCase
     end
 
     describe "#has_waitlist?" do
-      let(:attendees_bucket_id) { registration_policy.bucket_with_key("attendees").id }
+      let(:attendees_bucket_id) { bucket_with_key(registration_policy, "attendees").id }
 
       it "returns true when there are waitlisted signups" do
         create(:signup, run: the_run, state: "waitlisted", counted: false, requested_bucket_id: attendees_bucket_id)
@@ -59,7 +59,7 @@ class SignupCountPresenterTest < ActiveSupport::TestCase
     end
 
     describe "#signups_description" do
-      let(:attendees_bucket_id) { registration_policy.bucket_with_key("attendees").id }
+      let(:attendees_bucket_id) { bucket_with_key(registration_policy, "attendees").id }
 
       it "reports confirmed count" do
         create(:signup, run: the_run)
@@ -95,8 +95,8 @@ class SignupCountPresenterTest < ActiveSupport::TestCase
     let(:event) { create(:event, convention:, registration_policy:) }
     let(:the_run) { create(:run, event:) }
     let(:presenter) { SignupCountPresenter.new(the_run) }
-    let(:dogs_bucket_id) { registration_policy.bucket_with_key("dogs").id }
-    let(:cats_bucket_id) { registration_policy.bucket_with_key("cats").id }
+    let(:dogs_bucket_id) { bucket_with_key(registration_policy, "dogs").id }
+    let(:cats_bucket_id) { bucket_with_key(registration_policy, "cats").id }
 
     describe "#signups_description" do
       it "shows per-bucket confirmed counts" do

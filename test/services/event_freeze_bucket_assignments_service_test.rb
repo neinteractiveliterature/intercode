@@ -26,8 +26,8 @@ class EventFreezeBucketAssignmentsServiceTest < ActiveSupport::TestCase
     create(:signup, user_con_profile:, run: the_run, **attrs)
   end
 
-  let(:dogs_bucket_id) { event.registration_policy.bucket_with_key("dogs").id }
-  let(:anything_bucket_id) { event.registration_policy.bucket_with_key("anything").id }
+  let(:dogs_bucket_id) { bucket_with_key(event.registration_policy, "dogs").id }
+  let(:anything_bucket_id) { bucket_with_key(event.registration_policy, "anything").id }
 
   let(:anything_signup) do
     create_signup(state: "confirmed", bucket_id: anything_bucket_id, requested_bucket_id: dogs_bucket_id)
@@ -51,10 +51,10 @@ class EventFreezeBucketAssignmentsServiceTest < ActiveSupport::TestCase
     anything_signup.reload
 
     assert_equal [anything_signup], result.anything_signups_with_preference
-    assert_equal "dogs", anything_signup.bucket_key
-    assert_equal 2, event.registration_policy.bucket_with_key("dogs").total_slots
-    assert_equal 1, event.registration_policy.bucket_with_key("cats").total_slots
-    assert_equal 0, event.registration_policy.bucket_with_key("anything").total_slots
+    assert_equal "dogs", anything_signup.bucket&.key
+    assert_equal 2, bucket_with_key(event.registration_policy, "dogs").total_slots
+    assert_equal 1, bucket_with_key(event.registration_policy, "cats").total_slots
+    assert_equal 0, bucket_with_key(event.registration_policy, "anything").total_slots
     assert event.registration_policy.freeze_no_preference_buckets?
 
     # Regression guard: this used to reconstruct the whole bucket set via `.dup` (which silently

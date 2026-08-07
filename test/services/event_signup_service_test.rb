@@ -133,8 +133,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase
         assert result.success?
         assert result.signup.confirmed?
         assert_not result.signup.counted?
-        assert_nil result.signup.bucket_key
-        assert_nil result.signup.requested_bucket_key
+        assert_nil result.signup.bucket&.key
+        assert_nil result.signup.requested_bucket&.key
       end
 
       it "does not care whether signups are open yet" do
@@ -329,8 +329,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase
         result = subject.call!
         assert result.success?
         assert result.signup.confirmed?
-        assert_equal "cats", result.signup.bucket_key
-        assert_equal "cats", result.signup.requested_bucket_key
+        assert_equal "cats", result.signup.bucket&.key
+        assert_equal "cats", result.signup.requested_bucket&.key
       end
 
       it "will fall back to the anything bucket if necessary" do
@@ -339,8 +339,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase
         result = subject.call!
         assert result.success?
         assert result.signup.confirmed?
-        assert_equal "anything", result.signup.bucket_key
-        assert_equal "cats", result.signup.requested_bucket_key
+        assert_equal "anything", result.signup.bucket&.key
+        assert_equal "cats", result.signup.requested_bucket&.key
       end
 
       it "will go to the waitlist if necessary" do
@@ -350,8 +350,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase
         result = subject.call
         assert result.success?
         assert result.signup.waitlisted?
-        assert result.signup.bucket_key.nil?
-        assert_equal "cats", result.signup.requested_bucket_key
+        assert result.signup.bucket&.key.nil?
+        assert_equal "cats", result.signup.requested_bucket&.key
       end
 
       it "will go to the waitlist even if the other signups are ticket_purchase_hold" do
@@ -361,8 +361,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase
         result = subject.call
         assert result.success?
         assert result.signup.waitlisted?
-        assert result.signup.bucket_key.nil?
-        assert_equal "cats", result.signup.requested_bucket_key
+        assert result.signup.bucket&.key.nil?
+        assert_equal "cats", result.signup.requested_bucket&.key
       end
 
       it "emails only the team members who have requested waitlist emails" do
@@ -423,8 +423,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase
           result = subject.call
           assert result.success?
           assert result.signup.confirmed?
-          assert_nil result.signup.requested_bucket_key
-          assert_equal "anything", result.signup.bucket_key
+          assert_nil result.signup.requested_bucket&.key
+          assert_equal "anything", result.signup.bucket&.key
         end
 
         it "puts you into some other bucket if anything is full" do
@@ -433,8 +433,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase
           result = subject.call
           assert result.success?
           assert result.signup.confirmed?
-          assert_nil result.signup.requested_bucket_key
-          assert_not_equal "anything", result.signup.bucket_key
+          assert_nil result.signup.requested_bucket&.key
+          assert_not_equal "anything", result.signup.bucket&.key
         end
 
         describe "but the registration policy does not allow it" do
@@ -475,12 +475,12 @@ class EventSignupServiceTest < ActiveSupport::TestCase
           result = subject.call!
           assert result.success?
           assert result.signup.confirmed?
-          assert_equal "cats", result.signup.requested_bucket_key
-          assert_equal "anything", result.signup.bucket_key
+          assert_equal "cats", result.signup.requested_bucket&.key
+          assert_equal "anything", result.signup.bucket&.key
 
           movable_signup.reload
-          assert_equal "cats", movable_signup.bucket_key
-          assert_nil movable_signup.requested_bucket_key
+          assert_equal "cats", movable_signup.bucket&.key
+          assert_nil movable_signup.requested_bucket&.key
         end
 
         it "moves them into a different bucket if the flex bucket is not possible" do
@@ -491,12 +491,12 @@ class EventSignupServiceTest < ActiveSupport::TestCase
           result = subject.call!
           assert result.success?
           assert result.signup.confirmed?
-          assert_equal "cats", result.signup.requested_bucket_key
-          assert_equal "cats", result.signup.bucket_key
+          assert_equal "cats", result.signup.requested_bucket&.key
+          assert_equal "cats", result.signup.bucket&.key
 
           movable_signup.reload
-          assert_equal "dogs", movable_signup.bucket_key
-          assert_nil movable_signup.requested_bucket_key
+          assert_equal "dogs", movable_signup.bucket&.key
+          assert_nil movable_signup.requested_bucket&.key
         end
 
         it "waitlists you if not possible" do
@@ -508,12 +508,12 @@ class EventSignupServiceTest < ActiveSupport::TestCase
           result = subject.call!
           assert result.success?
           assert result.signup.waitlisted?
-          assert_equal "cats", result.signup.requested_bucket_key
-          assert_nil result.signup.bucket_key
+          assert_equal "cats", result.signup.requested_bucket&.key
+          assert_nil result.signup.bucket&.key
 
           movable_signup.reload
-          assert_equal "cats", movable_signup.bucket_key
-          assert_nil movable_signup.requested_bucket_key
+          assert_equal "cats", movable_signup.bucket&.key
+          assert_nil movable_signup.requested_bucket&.key
         end
       end
 
@@ -526,7 +526,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
 
           assert result.success?
           assert result.signup.confirmed?
-          assert_equal "cats", result.signup.bucket_key
+          assert_equal "cats", result.signup.bucket&.key
         end
 
         it "lets people waitlist" do
@@ -538,8 +538,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase
 
           assert result.success?
           assert result.signup.waitlisted?
-          assert_equal "cats", result.signup.requested_bucket_key
-          assert_nil result.signup.bucket_key
+          assert_equal "cats", result.signup.requested_bucket&.key
+          assert_nil result.signup.bucket&.key
         end
       end
     end
@@ -569,8 +569,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase
         assert result.success?
         assert result.signup.confirmed?
         assert_not result.signup.counted?
-        assert_equal "npc", result.signup.bucket_key
-        assert_equal "npc", result.signup.requested_bucket_key
+        assert_equal "npc", result.signup.bucket&.key
+        assert_equal "npc", result.signup.requested_bucket&.key
       end
 
       it "will not use anything buckets" do
@@ -578,8 +578,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase
         result = subject.call!
         assert result.success?
         assert result.signup.waitlisted?
-        assert_nil result.signup.bucket_key
-        assert_equal "npc", result.signup.requested_bucket_key
+        assert_nil result.signup.bucket&.key
+        assert_equal "npc", result.signup.requested_bucket&.key
       end
 
       it "will still sign the user up if the run is otherwise full" do
@@ -589,8 +589,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase
         assert result.success?
         assert result.signup.confirmed?
         assert_not result.signup.counted?
-        assert_equal "npc", result.signup.bucket_key
-        assert_equal "npc", result.signup.requested_bucket_key
+        assert_equal "npc", result.signup.bucket&.key
+        assert_equal "npc", result.signup.requested_bucket&.key
       end
 
       describe "no-preference signups" do
@@ -601,8 +601,8 @@ class EventSignupServiceTest < ActiveSupport::TestCase
           result = subject.call!
           assert result.success?
           assert result.signup.waitlisted?
-          assert_nil result.signup.bucket_key
-          assert_nil result.signup.requested_bucket_key
+          assert_nil result.signup.bucket&.key
+          assert_nil result.signup.requested_bucket&.key
         end
       end
     end
@@ -701,7 +701,7 @@ class EventSignupServiceTest < ActiveSupport::TestCase
   # doesn't match any bucket, so callers can still exercise "invalid bucket requested" behavior.
   def bucket_id_for(run, key)
     return nil if key.nil?
-    run.registration_policy.bucket_with_key(key)&.id || -1
+    bucket_with_key(run.registration_policy, key)&.id || -1
   end
 
   def create_other_signup(bucket_key, **attributes)

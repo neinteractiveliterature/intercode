@@ -58,6 +58,8 @@ class Mutations::CreateMySignup < Mutations::BaseMutation
   private
 
   def requested_bucket_id_from_key(args)
-    run.registration_policy.bucket_with_key(args[:requested_bucket_key])&.id
+    return nil unless args[:requested_bucket_key]
+    normalized_key = RegistrationPolicyBucket.normalize_key(args[:requested_bucket_key])
+    run.registration_policy.buckets.find { |bucket| bucket.key == normalized_key }&.id
   end
 end

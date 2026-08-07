@@ -106,17 +106,15 @@ class RegistrationPolicyBucket < ApplicationRecord
 
   # Ported verbatim from the old RegistrationPolicy::Bucket (app/models/registration_policy/bucket.rb)
   #
-  # FakeSignup always compares by key rather than bucket_id: this can be called with a candidate
-  # bucket from a detached, not-yet-persisted RegistrationPolicy (e.g. while simulating a
-  # registration policy change in EventChangeRegistrationPolicyService), which has no id yet, and
-  # FakeSignup has no persisted row of its own to key a preload off of anyway. A real Signup against
-  # a persisted bucket uses bucket_id instead -- see occupies_bucket_as_signup? below.
+  # This can be called with a candidate bucket from a detached, not-yet-persisted RegistrationPolicy
+  # (e.g. while simulating a registration policy change in EventChangeRegistrationPolicyService),
+  # which has no id yet -- see occupies_bucket_as_signup? below for how both cases are handled.
   def signup_definitely_occupies_slot_in_bucket?(signup)
     case signup
     when Signup, SignupBucketFinder::FakeSignup
       occupies_bucket_as_signup?(signup)
     when SignupRequest
-      signup.state == "pending" && signup.requested_bucket_key == key
+      signup.state == "pending" && (id ? signup.requested_bucket_id == id : signup.requested_bucket.equal?(self))
     else
       raise ArgumentError, "RegistrationPolicyBucket doesn't know how to count #{signup.class.name} objects as signups"
     end
@@ -158,14 +156,15 @@ class RegistrationPolicyBucket < ApplicationRecord
 
   private
 
-  # Fast path when signup is a persisted Signup and this bucket is persisted too: bucket_id (a
-  # plain column) can stand in for key without touching the bucket association -- this runs once
-  # per signup on every capacity check (Run#full?, the schedule grid, etc.), so an association read
-  # per call is a real N+1. Falls back to the key comparison for FakeSignup, or for a detached,
-  # not-yet-persisted candidate bucket (id is nil).
+  # Fast path when this bucket is persisted: bucket_id (a plain column, real for a Signup and an
+  # in-memory delegate to the candidate bucket's id for a FakeSignup) avoids touching the bucket
+  # association -- this runs once per signup on every capacity check (Run#full?, the schedule grid,
+  # etc.), so an association read per call on a real Signup is a real N+1. Falls back to object
+  # identity when this bucket is a detached, not-yet-persisted candidate (id is nil): only a
+  # FakeSignup can be "in" such a bucket, by holding a reference to this exact instance.
   def occupies_bucket_as_signup?(signup)
     return false unless signup.occupying_slot? && (not_counted? || signup.counted)
-    return signup.bucket_id == id if signup.is_a?(Signup) && id
-    signup.bucket_key == key
+    return signup.bucket_id == id if id
+    signup.bucket.equal?(self)
   end
 end

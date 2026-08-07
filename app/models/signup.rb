@@ -83,17 +83,6 @@ class Signup < ApplicationRecord
     requested_bucket_id.nil?
   end
 
-  # Used by SignupBucketFinder and EventChangeRegistrationPolicyService's simulation, which have to
-  # compare against candidate buckets from a detached, not-yet-persisted RegistrationPolicy (no id
-  # yet) -- key is the only identity valid in both the persisted and detached cases.
-  def bucket_key
-    bucket&.key
-  end
-
-  def requested_bucket_key
-    requested_bucket&.key
-  end
-
   def to_liquid
     SignupDrop.new(self)
   end

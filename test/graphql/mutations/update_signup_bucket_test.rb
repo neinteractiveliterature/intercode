@@ -15,7 +15,7 @@ class Mutations::UpdateSignupBucketTest < ActiveSupport::TestCase
   let(:event) { create(:event, convention:, registration_policy:) }
   let(:the_run) { create(:run, event:) }
   let(:admin_user_con_profile) { create(:user_con_profile, convention:, user: create(:site_admin)) }
-  let(:signup) { create(:signup, run: the_run, bucket_id: registration_policy.bucket_with_key("dogs").id) }
+  let(:signup) { create(:signup, run: the_run, bucket_id: bucket_with_key(registration_policy, "dogs").id) }
 
   MUTATION = <<~GRAPHQL
     mutation TestUpdateSignupBucket($id: ID!, $bucketId: ID, $bucketKey: String) {
@@ -26,7 +26,7 @@ class Mutations::UpdateSignupBucketTest < ActiveSupport::TestCase
   GRAPHQL
 
   it "moves the signup into the given bucket" do
-    cats_bucket = registration_policy.bucket_with_key("cats")
+    cats_bucket = bucket_with_key(registration_policy, "cats")
 
     execute_graphql_query(
       MUTATION,
@@ -47,7 +47,7 @@ class Mutations::UpdateSignupBucketTest < ActiveSupport::TestCase
         buckets: [{ key: "foxes", name: "Foxes", slots_limited: true, total_slots: 10 }]
       )
     other_event = create(:event, convention:, registration_policy: other_registration_policy)
-    foreign_bucket_id = other_registration_policy.bucket_with_key("foxes").id
+    foreign_bucket_id = bucket_with_key(other_registration_policy, "foxes").id
     original_bucket_id = signup.bucket_id
 
     error =

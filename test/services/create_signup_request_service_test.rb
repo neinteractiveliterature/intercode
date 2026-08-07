@@ -10,7 +10,7 @@ class CreateSignupRequestServiceTest < ActiveSupport::TestCase
   let(:user) { user_con_profile.user }
   let(:ticket_type) { create(:free_ticket_type, convention:) }
   let(:ticket) { create(:ticket, ticket_type:, user_con_profile:) }
-  let(:requested_bucket_id) { event.registration_policy.bucket_with_key("unlimited").id }
+  let(:requested_bucket_id) { bucket_with_key(event.registration_policy, "unlimited").id }
 
   subject do
     CreateSignupRequestService.new(user_con_profile:, target_run: the_run, requested_bucket_id:, whodunit: user)

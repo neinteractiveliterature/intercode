@@ -25,7 +25,7 @@ class EventVacancyFillServiceTest < ActiveSupport::TestCase
 
   def bucket_id_for(key)
     return nil if key.nil?
-    event.registration_policy.bucket_with_key(key).id
+    bucket_with_key(event.registration_policy, key).id
   end
 
   def create_signup(bucket_key: nil, requested_bucket_key: nil, **attrs)
@@ -62,7 +62,7 @@ class EventVacancyFillServiceTest < ActiveSupport::TestCase
     assert_equal "confirmed", move_result.prev_state
     assert_equal "anything", move_result.prev_bucket.key
 
-    assert_equal bucket_key, anything_signup.reload.bucket_key
+    assert_equal bucket_key, anything_signup.reload.bucket&.key
   end
 
   it "moves a waitlist signup into the vacancy" do
@@ -77,7 +77,7 @@ class EventVacancyFillServiceTest < ActiveSupport::TestCase
     assert_equal "waitlisted", move_result.prev_state
     assert_nil move_result.prev_bucket
 
-    assert_equal bucket_key, waitlist_signup.reload.bucket_key
+    assert_equal bucket_key, waitlist_signup.reload.bucket&.key
   end
 
   it "moves a no-preference signup out of the way in order to fill a vacancy" do
@@ -99,11 +99,11 @@ class EventVacancyFillServiceTest < ActiveSupport::TestCase
     assert_equal "waitlisted", waitlist_move_result.prev_state
     assert_nil waitlist_move_result.prev_bucket
 
-    assert_equal "dogs", waitlist_signup.reload.bucket_key
-    assert_equal "cats", no_pref_signup.reload.bucket_key
+    assert_equal "dogs", waitlist_signup.reload.bucket&.key
+    assert_equal "cats", no_pref_signup.reload.bucket&.key
 
     # shouldn't have moved the signup that's already in flex
-    assert_equal "anything", anything_signup.reload.bucket_key
+    assert_equal "anything", anything_signup.reload.bucket&.key
   end
 
   it "does not move no-preference signups if the registration policy does not allow it" do
@@ -133,7 +133,7 @@ class EventVacancyFillServiceTest < ActiveSupport::TestCase
     assert_equal "waitlisted", waitlist_move_result.prev_state
     assert_nil waitlist_move_result.prev_bucket
 
-    assert_equal "dogs", waitlist_no_pref_signup.reload.bucket_key
+    assert_equal "dogs", waitlist_no_pref_signup.reload.bucket&.key
   end
 
   it "handles waitlisted signups in strictly chronological order, regardless of no-pref status" do
@@ -152,7 +152,7 @@ class EventVacancyFillServiceTest < ActiveSupport::TestCase
     assert_equal "confirmed", waitlist_no_pref_move_result.state
     assert_equal "anything", waitlist_no_pref_move_result.bucket.key
 
-    assert_equal "anything", waitlist_no_pref_signup.reload.bucket_key
+    assert_equal "anything", waitlist_no_pref_signup.reload.bucket&.key
   end
 
   it "breaks ties correctly in sub-second differences" do
@@ -191,7 +191,7 @@ class EventVacancyFillServiceTest < ActiveSupport::TestCase
     assert_equal "confirmed", move_result.state
     assert_equal "anything", move_result.bucket.key
 
-    assert_equal "anything", waitlist_signup.reload.bucket_key
+    assert_equal "anything", waitlist_signup.reload.bucket&.key
   end
 
   it "does not move confirmed signups if not necessary" do
@@ -208,8 +208,8 @@ class EventVacancyFillServiceTest < ActiveSupport::TestCase
     assert_equal "waitlisted", waitlist_move_result.prev_state
     assert waitlist_move_result.prev_bucket.nil?
 
-    assert_equal "anything", anything_signup.reload.bucket_key
-    assert_equal bucket_key, waitlist_signup.reload.bucket_key
+    assert_equal "anything", anything_signup.reload.bucket&.key
+    assert_equal bucket_key, waitlist_signup.reload.bucket&.key
   end
 
   it "notifies moved users who were waitlisted" do
@@ -278,7 +278,7 @@ class EventVacancyFillServiceTest < ActiveSupport::TestCase
         assert_equal "waitlisted", move_result.prev_state
         assert_nil move_result.prev_bucket
 
-        assert_equal bucket_key, waitlist_signup.reload.bucket_key
+        assert_equal bucket_key, waitlist_signup.reload.bucket&.key
       end
 
       it "will not fill in drops with no-preference signups" do
@@ -338,9 +338,9 @@ class EventVacancyFillServiceTest < ActiveSupport::TestCase
           assert_equal 2, result.move_results.size
           assert_equal green_confirmed.reload, result.move_results[0].signup
           assert_equal green_waitlist.reload, result.move_results[1].signup
-          assert_equal "blue", green_confirmed.bucket_key
+          assert_equal "blue", green_confirmed.bucket&.key
           assert_equal "confirmed", green_waitlist.state
-          assert_equal "green", green_waitlist.bucket_key
+          assert_equal "green", green_waitlist.bucket&.key
           assert_equal "waitlisted", no_pref_waitlist.state
         end
       end

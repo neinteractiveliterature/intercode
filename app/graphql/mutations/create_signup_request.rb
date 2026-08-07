@@ -35,9 +35,7 @@ class Mutations::CreateSignupRequest < Mutations::BaseMutation
 
   def resolve(**args)
     replace_signup = (user_con_profile.signups.find(args[:replace_signup_id]) if args[:replace_signup_id])
-    requested_bucket_id =
-      args[:requested_bucket_id]&.to_i ||
-        target_run.registration_policy.bucket_with_key(args[:requested_bucket_key])&.id
+    requested_bucket_id = args[:requested_bucket_id]&.to_i || requested_bucket_id_from_key(args)
 
     result =
       CreateSignupRequestService.new(
@@ -49,5 +47,13 @@ class Mutations::CreateSignupRequest < Mutations::BaseMutation
       ).call!
 
     { signup_request: result.signup_request }
+  end
+
+  private
+
+  def requested_bucket_id_from_key(args)
+    return nil unless args[:requested_bucket_key]
+    normalized_key = RegistrationPolicyBucket.normalize_key(args[:requested_bucket_key])
+    target_run.registration_policy.buckets.find { |bucket| bucket.key == normalized_key }&.id
   end
 end
