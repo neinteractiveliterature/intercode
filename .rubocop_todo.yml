@@ -114,6 +114,7 @@ Metrics/CyclomaticComplexity:
 # Configuration parameters: Max.
 Metrics/ParameterLists:
   Exclude:
+    - 'app/presenters/form_response_presenter.rb'
     - 'app/presenters/signup_count_presenter.rb'
     - 'app/services/create_signup_request_service.rb'
     - 'app/services/event_vacancy_fill_service.rb'

@@ -92,7 +92,13 @@ class FormResponsePresenter
     @local_images ||=
       case response
       when Event, EventProposal
-        response.images.includes(:blob).index_by { |image| image.filename.to_s }
+        attachments =
+          if dataloader
+            dataloader.with(Sources::ActiveStorageAttachment, response.class, :images).load(response)
+          else
+            response.images.includes(:blob)
+          end
+        attachments.index_by { |image| image.filename.to_s }
       else
         {}
       end
