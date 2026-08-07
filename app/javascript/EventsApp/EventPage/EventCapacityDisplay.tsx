@@ -25,7 +25,7 @@ function EventCapacityDisplay({ event }: EventCapacityDisplayProps): React.JSX.E
   return (
     <ul className="list-inline mb-0">
       {sortBuckets(event.registration_policy?.buckets ?? []).map((bucket) => (
-        <li className="list-inline-item me-4" key={bucket.key}>
+        <li className="list-inline-item me-4" key={bucket.id}>
           <strong>{bucket.name}:</strong> {describeBucketCapacity(bucket, t)}
         </li>
       ))}

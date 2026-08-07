@@ -1,4 +1,5 @@
 export type RunCapacityBucket = {
+  id: string;
   key: string;
   name?: string | null;
   slots_limited: boolean;

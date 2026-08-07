@@ -71,14 +71,14 @@ export default function CreateModeratedSignupModal({
       await createSignupRankedChoiceMutate({
         variables: {
           targetRunId: run.id,
-          requestedBucketKey: signupOption.bucket?.key,
+          requestedBucketId: signupOption.bucket?.id,
         },
       });
     } else {
       await createSignupRequest({
         variables: {
           targetRunId: run.id,
-          requestedBucketKey: signupOption.bucket?.key,
+          requestedBucketId: signupOption.bucket?.id,
           replaceSignupId: conflictingSignup?.id,
         },
       });

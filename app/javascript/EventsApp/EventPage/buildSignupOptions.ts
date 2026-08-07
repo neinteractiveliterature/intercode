@@ -53,7 +53,7 @@ function buildBucketSignupOption(
   pendingRankedChoices: SignupOption['pendingRankedChoices'],
 ): SignupOption {
   return {
-    key: bucket.key,
+    key: bucket.id,
     label: hideLabel ? undefined : (bucket.name ?? undefined),
     buttonClass: `btn-outline-bucket-color-${(index % 9) + 1}`,
     bucket,

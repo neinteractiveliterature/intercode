@@ -108,7 +108,7 @@ function EventPageRunCard({
           mutation: CreateSignupRankedChoiceDocument,
           variables: {
             targetRunId: run.id,
-            requestedBucketKey: signupOption.bucket?.key,
+            requestedBucketId: signupOption.bucket?.id,
           },
         });
 
@@ -119,7 +119,7 @@ function EventPageRunCard({
           mutation: CreateMySignupDocument,
           variables: {
             runId: run.id,
-            requestedBucketKey: (signupOption.bucket || {}).key,
+            requestedBucketId: (signupOption.bucket || {}).id,
             noRequestedBucket: signupOption.bucket == null,
           },
           update: (cache, { data }) => {

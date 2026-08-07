@@ -52,6 +52,7 @@ describe('EventPageRunCard', () => {
       buckets: [
         {
           __typename: 'RegistrationPolicyBucket',
+          id: '1',
           key: 'player',
           name: 'Player',
           description: 'Regular player',
@@ -227,7 +228,7 @@ describe('EventPageRunCard', () => {
           query: CreateMySignupDocument,
           variables: {
             runId: '1',
-            requestedBucketKey: 'player',
+            requestedBucketId: '1',
             noRequestedBucket: false,
           },
         },
@@ -278,7 +279,7 @@ describe('EventPageRunCard', () => {
           query: CreateSignupRankedChoiceDocument,
           variables: {
             targetRunId: '1',
-            requestedBucketKey: 'player',
+            requestedBucketId: '1',
           },
         },
         result: () => {
@@ -458,6 +459,7 @@ describe('EventPageRunCard', () => {
           buckets: [
             {
               __typename: 'RegistrationPolicyBucket' as const,
+              id: '1',
               key: 'player',
               name: 'Player',
               description: 'Regular player',
@@ -469,6 +471,7 @@ describe('EventPageRunCard', () => {
             },
             {
               __typename: 'RegistrationPolicyBucket' as const,
+              id: '2',
               key: 'premium',
               name: 'Premium',
               description: 'Premium player',
@@ -497,6 +500,7 @@ describe('EventPageRunCard', () => {
           buckets: [
             {
               __typename: 'RegistrationPolicyBucket' as const,
+              id: '1',
               key: 'player',
               name: 'Player',
               description: 'Regular player',
@@ -508,6 +512,7 @@ describe('EventPageRunCard', () => {
             },
             {
               __typename: 'RegistrationPolicyBucket' as const,
+              id: '2',
               key: 'premium',
               name: 'Premium',
               description: 'Premium player',

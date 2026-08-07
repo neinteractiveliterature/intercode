@@ -54,6 +54,7 @@ fragment SignupModerationSignupRequestFields on SignupRequest {
       id
       registration_policy {
         buckets {
+          id
           key
           name
           total_slots

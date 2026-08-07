@@ -23,7 +23,7 @@ function RunCapacityGraph({ run, event, signupsAvailable }: RunCapacityGraphProp
         <RunCapacityGraphBucket
           bucket={bucket}
           signupCountData={signupCountData}
-          key={bucket.key}
+          key={bucket.id}
           signupsAvailable={signupsAvailable}
           bucketIndex={bucketIndex}
         />

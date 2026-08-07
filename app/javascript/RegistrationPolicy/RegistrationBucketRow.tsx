@@ -25,7 +25,12 @@ export type EditingRegistrationBucket = Pick<
   | 'preferred_slots'
   | 'total_slots'
   | 'anything'
->;
+> & {
+  // Absent for a bucket added in the current edit session; the real database id for anything
+  // loaded from the server. Threaded through so RegistrationPolicy#sync_buckets_from_hash! can
+  // correlate edited buckets by id instead of falling back to key.
+  id?: RegistrationPolicyBucket['id'];
+};
 
 export type RegistrationBucketRowProps<T extends EditingRegistrationBucket> = {
   registrationBucket: T;

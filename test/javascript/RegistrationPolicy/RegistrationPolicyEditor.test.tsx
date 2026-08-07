@@ -125,6 +125,7 @@ describe('RegistrationPolicyEditor', () => {
     const presetBuckets = preset.policy.buckets.map((presetBucket) => ({
       ...defaultRegistrationPolicyBucket,
       ...presetBucket,
+      id: presetBucket.key,
     }));
 
     test('renders the selector by default', async () => {

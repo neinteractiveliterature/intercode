@@ -1,9 +1,9 @@
 #import "./queries.graphql"
 #import "../queries.graphql"
 
-mutation CreateMySignup($runId: ID!, $requestedBucketKey: String, $noRequestedBucket: Boolean) {
+mutation CreateMySignup($runId: ID!, $requestedBucketId: ID, $noRequestedBucket: Boolean) {
   createMySignup(
-    input: { runId: $runId, requested_bucket_key: $requestedBucketKey, no_requested_bucket: $noRequestedBucket }
+    input: { runId: $runId, requestedBucketId: $requestedBucketId, no_requested_bucket: $noRequestedBucket }
   ) {
     signup {
       id
@@ -33,9 +33,9 @@ mutation WithdrawMySignup($runId: ID!) {
   }
 }
 
-mutation CreateSignupRequest($targetRunId: ID!, $requestedBucketKey: String, $replaceSignupId: ID) {
+mutation CreateSignupRequest($targetRunId: ID!, $requestedBucketId: ID, $replaceSignupId: ID) {
   createSignupRequest(
-    input: { targetRunId: $targetRunId, requested_bucket_key: $requestedBucketKey, replaceSignupId: $replaceSignupId }
+    input: { targetRunId: $targetRunId, requestedBucketId: $requestedBucketId, replaceSignupId: $replaceSignupId }
   ) {
     signup_request {
       id
@@ -53,8 +53,8 @@ mutation WithdrawSignupRequest($id: ID!) {
   }
 }
 
-mutation CreateSignupRankedChoice($targetRunId: ID!, $requestedBucketKey: String) {
-  createSignupRankedChoice(input: { targetRunId: $targetRunId, requested_bucket_key: $requestedBucketKey }) {
+mutation CreateSignupRankedChoice($targetRunId: ID!, $requestedBucketId: ID) {
+  createSignupRankedChoice(input: { targetRunId: $targetRunId, requestedBucketId: $requestedBucketId }) {
     signup_ranked_choice {
       id
       ...MySignupRankedChoiceFields

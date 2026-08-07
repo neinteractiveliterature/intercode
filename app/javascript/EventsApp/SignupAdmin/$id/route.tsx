@@ -275,7 +275,7 @@ function EditSignup(): React.JSX.Element {
               Signup bucket:{' '}
               <strong>
                 {(bucket || { name: 'none' }).name}
-                {requestedBucket && (!bucket || bucket.key !== requestedBucket.key)
+                {requestedBucket && (!bucket || bucket.id !== requestedBucket.id)
                   ? ` (requested ${requestedBucket.name})`
                   : ''}
                 {!teamMember && !requestedBucket ? ' (no preference)' : ''}

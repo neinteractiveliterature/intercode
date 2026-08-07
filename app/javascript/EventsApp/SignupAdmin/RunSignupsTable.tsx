@@ -88,7 +88,7 @@ function BucketFilter<TData extends SignupType, TValue>({ column }: { column: Co
   const choices = useMemo(
     () =>
       (data.convention?.event.registration_policy?.buckets ?? []).map((bucket) => ({
-        label: bucket.name ?? bucket.key,
+        label: bucket.name ?? '',
         value: bucket.id,
       })) ?? [],
     [data],
