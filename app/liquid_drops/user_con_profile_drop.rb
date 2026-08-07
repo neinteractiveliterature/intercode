@@ -69,7 +69,10 @@ class UserConProfileDrop < Liquid::Drop
       .includes(
         :bucket,
         :requested_bucket,
-        event: :event_category,
+        event: {
+          event_category: nil,
+          convention: :signup_rounds
+        },
         run: {
           rooms: nil,
           event: {
