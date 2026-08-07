@@ -74,5 +74,18 @@ describe UserConProfileDrop do
         end
       assert_operator queries, :<=, 2, "expected a constant number of bucket queries regardless of signup count"
     end
+
+    it "does not issue a convention/signup_rounds query per signup" do
+      # Mirrors what {% withdraw_user_signup_button %} does for every signup in the "My Schedule"
+      # widget: signup.event.convention.signup_rounds
+      queries =
+        count_queries(/SELECT "conventions"|SELECT "signup_rounds"/) do
+          user_con_profile_drop.signups.each { |signup| signup.event.convention.signup_rounds.to_a }
+        end
+      assert_operator queries,
+                      :<=,
+                      2,
+                      "expected a constant number of convention/signup_round queries regardless of signup count"
+    end
   end
 end
