@@ -54,7 +54,7 @@ function buildBucketSignupOption(
 ): SignupOption {
   return {
     key: bucket.id,
-    label: hideLabel ? undefined : (bucket.name ?? undefined),
+    label: hideLabel ? undefined : bucket.name,
     buttonClass: `btn-outline-bucket-color-${(index % 9) + 1}`,
     bucket,
     helpText: bucket.description ?? undefined,

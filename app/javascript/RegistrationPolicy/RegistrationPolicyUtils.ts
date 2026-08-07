@@ -62,7 +62,7 @@ export function bucketSortCompare(a: BucketForRegistrationPolicyUtils, b: Bucket
     return -1;
   }
 
-  return (a.name ?? '').localeCompare(b.name ?? '', undefined, { sensitivity: 'base' });
+  return a.name.localeCompare(b.name, undefined, { sensitivity: 'base' });
 }
 
 export function isPreventNoPreferenceSignupsApplicable(

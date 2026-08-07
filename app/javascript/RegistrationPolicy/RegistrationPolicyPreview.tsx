@@ -24,7 +24,6 @@ function RegistrationPolicyPreview({ registrationPolicy }: RegistrationPolicyPre
         // present, locally-unique) key as a placeholder so this preview-only object still has
         // some stable identity to key React lists off of.
         id: bucket.id ?? bucket.key,
-        name: bucket.name ?? null,
         description: bucket.description ?? null,
         minimum_slots: bucket.minimum_slots ?? null,
         preferred_slots: bucket.preferred_slots ?? null,
