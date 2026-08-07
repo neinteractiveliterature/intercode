@@ -28,7 +28,8 @@ class Mutations::ForceConfirmSignup < Mutations::BaseMutation
       if args[:bucket_id]
         signup.run.registration_policy.bucket_with_id(args[:bucket_id].to_i)
       else
-        signup.run.registration_policy.bucket_with_key(args[:bucket_key])
+        normalized_key = RegistrationPolicyBucket.normalize_key(args[:bucket_key])
+        signup.run.registration_policy.buckets.find { |b| b.key == normalized_key }
       end
     raise GraphQL::ExecutionError, "Bad request: bucketId or bucketKey is required" unless bucket
     bucket

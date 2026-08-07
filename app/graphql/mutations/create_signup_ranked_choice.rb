@@ -28,9 +28,7 @@ class Mutations::CreateSignupRankedChoice < Mutations::BaseMutation
   end
 
   def resolve(**args)
-    requested_bucket_id =
-      args[:requested_bucket_id]&.to_i ||
-        target_run.registration_policy.bucket_with_key(args[:requested_bucket_key])&.id
+    requested_bucket_id = args[:requested_bucket_id]&.to_i || requested_bucket_id_from_key(args)
 
     signup_ranked_choice =
       user_con_profile.signup_ranked_choices.create!(
@@ -42,5 +40,13 @@ class Mutations::CreateSignupRankedChoice < Mutations::BaseMutation
       )
 
     { signup_ranked_choice: }
+  end
+
+  private
+
+  def requested_bucket_id_from_key(args)
+    return nil unless args[:requested_bucket_key]
+    normalized_key = RegistrationPolicyBucket.normalize_key(args[:requested_bucket_key])
+    target_run.registration_policy.buckets.find { |bucket| bucket.key == normalized_key }&.id
   end
 end

@@ -64,11 +64,6 @@ class RegistrationPolicy < ApplicationRecord
     end
   end
 
-  def bucket_with_key(key)
-    normalized_key = RegistrationPolicyBucket.normalize_key(key)
-    buckets.find { |bucket| bucket.key == normalized_key }
-  end
-
   def bucket_with_id(id)
     buckets.find { |bucket| bucket.id == id }
   end
@@ -176,7 +171,11 @@ class RegistrationPolicy < ApplicationRecord
     return false unless freeze_no_preference_buckets? == other.freeze_no_preference_buckets?
     return false unless buckets.size == other.buckets.size
 
-    buckets.all? { |bucket| bucket.equivalent_to?(other.bucket_with_key(bucket.key)) }
+    # other is typically a detached policy (e.g. from build_from_hash) with no bucket ids yet, so
+    # key is the only identity valid on both sides here -- same structural reason sync_buckets_from_hash!
+    # falls back to key.
+    other_buckets_by_key = other.buckets.index_by(&:key)
+    buckets.all? { |bucket| bucket.equivalent_to?(other_buckets_by_key[bucket.key]) }
   end
 
   private

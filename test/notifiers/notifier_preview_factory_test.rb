@@ -8,7 +8,7 @@ class NotifierPreviewFactoryTest < ActiveSupport::TestCase
   end
   let(:event) { create(:event, convention:, registration_policy:) }
   let(:the_run) { create(:run, event:) }
-  let(:signup) { create(:signup, run: the_run, bucket_id: registration_policy.bucket_with_key("dogs").id) }
+  let(:signup) { create(:signup, run: the_run, bucket_id: bucket_with_key(registration_policy, "dogs").id) }
 
   before { signup }
 

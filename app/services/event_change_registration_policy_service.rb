@@ -5,11 +5,13 @@ class EventChangeRegistrationPolicyService < CivilService::Service
   end
   self.result_class = Result
 
-  # Deliberately key-based throughout: registration_policy here is new_registration_policy, a
-  # detached policy built via RegistrationPolicy.build_from_hash that hasn't been persisted yet, so
-  # its candidate buckets have no id (existing keys will get their old, stable id back once
-  # update_from! persists them in place; genuinely new keys get an id for the first time). Key is
-  # the only identity valid on both real signups and these not-yet-persisted candidate buckets.
+  # registration_policy here is new_registration_policy, a detached policy built via
+  # RegistrationPolicy.build_from_hash that hasn't been persisted yet, so its candidate buckets have
+  # no id (existing keys will get their old, stable id back once update_from! persists them in
+  # place; genuinely new keys get an id for the first time). candidate_bucket_for bridges a real
+  # signup's persisted bucket to its candidate counterpart by key, since key is the only identity
+  # valid on both sides pre-persist -- everywhere else in this class works with the resolved bucket
+  # objects (id or object identity, per SignupBucketFinder).
   class SignupSimulator
     attr_reader :registration_policy, :immovable_signups, :new_signups_by_signup_id
     attr_accessor :logger
@@ -26,32 +28,32 @@ class EventChangeRegistrationPolicyService < CivilService::Service
       @new_signups_by_signup_id = {}
     end
 
-    def simulate_signups(signups, requested_key_overrides: {})
+    def simulate_signups(signups, requested_bucket_overrides: {})
       # Signups that are occupying a slot with no bucket can't possibly be affected by a registration
       # policy change; just put them right into the signup list without simulating anything
-      to_keep, to_place = signups.partition { |signup| signup.occupying_slot? && !signup.bucket_key }
+      to_keep, to_place = signups.partition { |signup| signup.occupying_slot? && !signup.bucket }
 
       to_keep.each { |signup| new_signups_by_signup_id[signup.id] = signup }
 
       to_place.each do |signup|
-        override = requested_key_overrides.key?(signup.id) ? requested_key_overrides[signup.id] : NO_OVERRIDE
+        override = requested_bucket_overrides.key?(signup.id) ? requested_bucket_overrides[signup.id] : NO_OVERRIDE
         simulate_signup(signup, override)
       end
     end
 
-    # rubocop:disable Metrics/MethodLength, Metrics/PerceivedComplexity
-    def simulate_signup(signup, requested_key_override = NO_OVERRIDE)
-      requested_key = requested_key_override == NO_OVERRIDE ? signup.requested_bucket_key : requested_key_override
+    # rubocop:disable Metrics/MethodLength
+    def simulate_signup(signup, requested_bucket_override = NO_OVERRIDE)
+      requested_bucket = resolve_requested_bucket(signup, requested_bucket_override)
       bucket_finder =
         SignupBucketFinder.new(
           registration_policy,
-          requested_key,
+          requested_bucket,
           new_signups_by_signup_id.values,
           allow_movement: true
         )
 
       # Try to put them in the bucket they're already in if possible
-      current_bucket = (signup.bucket_key ? registration_policy.bucket_with_key(signup.bucket_key) : nil)
+      current_bucket = candidate_bucket_for(signup.bucket)
       destination_bucket =
         (
           if current_bucket && !current_bucket.full?(new_signups_by_signup_id.values)
@@ -71,9 +73,23 @@ class EventChangeRegistrationPolicyService < CivilService::Service
       log_bucket_counts
     end
 
-    # rubocop:enable Metrics/MethodLength, Metrics/PerceivedComplexity
+    # rubocop:enable Metrics/MethodLength
 
     private
+
+    def resolve_requested_bucket(signup, requested_bucket_override)
+      return requested_bucket_override unless requested_bucket_override == NO_OVERRIDE
+      candidate_bucket_for(signup.requested_bucket)
+    end
+
+    def candidate_bucket_for(bucket)
+      return nil unless bucket
+      candidate_buckets_by_key[bucket.key]
+    end
+
+    def candidate_buckets_by_key
+      @candidate_buckets_by_key ||= registration_policy.buckets.index_by(&:key)
+    end
 
     def place_signup(signup, bucket_finder, destination_bucket)
       if destination_bucket&.full?(new_signups_by_signup_id.values)
@@ -81,11 +97,7 @@ class EventChangeRegistrationPolicyService < CivilService::Service
       end
 
       new_signup = SignupBucketFinder::FakeSignup.from_signup(signup)
-      new_signup.assign_attributes(
-        bucket_key: destination_bucket.key,
-        state: "confirmed",
-        counted: destination_bucket.counted?
-      )
+      new_signup.assign_attributes(bucket: destination_bucket, state: "confirmed", counted: destination_bucket.counted?)
       new_signups_by_signup_id[signup.id] = new_signup
       log_signup_placement(signup, destination_bucket)
     end
@@ -97,7 +109,7 @@ class EventChangeRegistrationPolicyService < CivilService::Service
       log "Moving signup for #{movable_signup.user_con_profile.name_without_nickname} to
 #{destination_bucket.key}"
 
-      movable_signup.bucket_key = destination_bucket.key
+      movable_signup.bucket = destination_bucket
       movable_signup
     end
 
@@ -108,18 +120,18 @@ class EventChangeRegistrationPolicyService < CivilService::Service
     def log_immovable_signup(signup)
       return unless logger
       log "Signup for #{signup.user_con_profile.name_without_nickname} \
-(#{signup.requested_bucket_key}) is immovable"
+(#{signup.requested_bucket&.key}) is immovable"
     end
 
     def log_signup_placement(signup, destination_bucket)
       return unless logger
 
-      if destination_bucket.key == signup.bucket_key
+      if destination_bucket.equal?(candidate_bucket_for(signup.bucket))
         log "Signup for #{signup.user_con_profile.name_without_nickname} remains in
 #{destination_bucket.key}"
       else
         log "Signup for #{signup.user_con_profile.name_without_nickname} placed in
-#{destination_bucket.key} (was #{signup.bucket_key})"
+#{destination_bucket.key} (was #{signup.bucket&.key})"
       end
     end
 
@@ -129,7 +141,7 @@ class EventChangeRegistrationPolicyService < CivilService::Service
       bucket_counts =
         registration_policy.buckets.map do |bucket|
           signup_count =
-            new_signups_by_signup_id.values.count { |signup| signup.bucket_key == bucket.key && signup.counted? }
+            new_signups_by_signup_id.values.count { |signup| signup.bucket.equal?(bucket) && signup.counted? }
           "#{bucket.key}: #{signup_count}/#{bucket.total_slots}"
         end
       log "Counts: [#{bucket_counts.join(" | ")}]"
@@ -139,17 +151,37 @@ class EventChangeRegistrationPolicyService < CivilService::Service
 
   include SkippableAdvisoryLock
 
-  attr_reader :event, :new_registration_policy, :whodunit, :bucket_key_mappings, :move_results
+  attr_reader :event, :new_registration_policy, :whodunit, :bucket_id_mappings, :move_results
 
   def initialize(event, new_registration_policy, whodunit, bucket_key_mappings = nil)
     @event = event
     @new_registration_policy = new_registration_policy
     @whodunit = whodunit
-    @bucket_key_mappings = (bucket_key_mappings || []).index_by { |mapping| mapping[:from_key] }
+
+    # Resolved once, up front, while event.registration_policy.buckets still reflects the pre-edit
+    # state -- from_key always names a currently-persisted (about-to-be-removed-or-not) bucket, so it
+    # has a real id already. to_key is kept as a string: it may name a bucket that's brand new in
+    # this same edit, which has no id until update_from! persists it further down the line.
+    @bucket_mappings =
+      (bucket_key_mappings || []).filter_map do |mapping|
+        from_bucket = current_buckets_by_key[normalize_key(mapping[:from_key])]
+        next unless from_bucket
+
+        { from_bucket_id: from_bucket.id, from_key: from_bucket.key, to_key: mapping[:to_key] }
+      end
+    @bucket_id_mappings = @bucket_mappings.to_h { |mapping| [mapping[:from_bucket_id], mapping[:to_key]] }
     @move_results = []
   end
 
   private
+
+  def normalize_key(key)
+    RegistrationPolicyBucket.normalize_key(key)
+  end
+
+  def current_buckets_by_key
+    @current_buckets_by_key ||= event.registration_policy.buckets.index_by(&:key)
+  end
 
   def inner_call
     lock_all_runs do
@@ -195,7 +227,7 @@ class EventChangeRegistrationPolicyService < CivilService::Service
       simulator = SignupSimulator.new(new_registration_policy)
       simulator.simulate_signups(
         signups_by_run_id[run.id] || [],
-        requested_key_overrides: pending_requested_key_overrides
+        requested_bucket_overrides: pending_requested_bucket_overrides
       )
 
       new_signups_by_signup_id.update(simulator.new_signups_by_signup_id)
@@ -209,7 +241,7 @@ class EventChangeRegistrationPolicyService < CivilService::Service
     signups_by_id = all_signups.index_by(&:id)
     new_signups_by_signup_id.each do |signup_id, new_signup|
       signup = signups_by_id[signup_id]
-      new_bucket_id = new_signup.bucket_key ? event.registration_policy.bucket_with_key(new_signup.bucket_key)&.id : nil
+      new_bucket_id = new_signup.bucket ? real_buckets_by_key[new_signup.bucket.key]&.id : nil
       check_for_move signup, new_signup, new_bucket_id
       apply_changes_for_signup signup, new_signup, new_bucket_id
     end
@@ -225,22 +257,33 @@ class EventChangeRegistrationPolicyService < CivilService::Service
     signup.update_columns(state: new_signup.state, bucket_id: new_bucket_id, counted: new_signup.counted)
   end
 
+  # The still-persisted buckets, freshly resolved after update_from! has created/updated them -- the
+  # only point at which a bucket that was brand new in this edit finally has a real id. Bridges the
+  # candidate buckets used throughout simulation (see SignupSimulator#candidate_bucket_for) and the
+  # admin-supplied to_key mappings (see apply_bucket_key_mappings) back to real, persisted rows.
+  def real_buckets_by_key
+    @real_buckets_by_key ||= event.registration_policy.buckets.index_by(&:key)
+  end
+
+  def new_registration_policy_buckets_by_key
+    @new_registration_policy_buckets_by_key ||= new_registration_policy.buckets.index_by(&:key)
+  end
+
   # Signups whose *requested* (not current) bucket is being removed, with an admin-supplied mapping
   # to a surviving or new bucket, need that preference fed into the simulation as an override --
   # their real requested_bucket_id can't be updated yet if the mapping targets a brand new bucket,
   # since that bucket has no id until update_from! persists it below.
-  def pending_requested_key_overrides
-    @pending_requested_key_overrides ||=
+  def pending_requested_bucket_overrides
+    @pending_requested_bucket_overrides ||=
       all_signups.each_with_object({}) do |signup, hash|
         next unless removed_bucket_ids.include?(signup.requested_bucket_id)
+        next unless bucket_id_mappings.key?(signup.requested_bucket_id)
 
-        old_bucket = removed_buckets_by_id[signup.requested_bucket_id]
-        next unless bucket_key_mappings.key?(old_bucket.key)
-
-        # The mapping may point to a surviving/new bucket (to_key present) or explicitly clear the
-        # preference (to_key nil/absent) -- either way, its mere presence here means "don't fall back
-        # to the signup's own requested_bucket_key", which would otherwise leak the removed bucket.
-        hash[signup.id] = bucket_key_mappings[old_bucket.key][:to_key]
+        # The mapping may point to a surviving/new candidate bucket (to_key present) or explicitly
+        # clear the preference (to_key nil/absent) -- either way, its mere presence here means "don't
+        # fall back to the signup's own requested bucket", which would otherwise leak the removed one.
+        to_key = bucket_id_mappings[signup.requested_bucket_id]
+        hash[signup.id] = to_key ? new_registration_policy_buckets_by_key[normalize_key(to_key)] : nil
       end
   end
 
@@ -291,7 +334,7 @@ class EventChangeRegistrationPolicyService < CivilService::Service
       to_key = mapped_key_for_removed_bucket(signup.requested_bucket_id)
       next unless to_key
 
-      signup.update_columns(requested_bucket_id: event.registration_policy.bucket_with_key(to_key)&.id)
+      signup.update_columns(requested_bucket_id: real_buckets_by_key[normalize_key(to_key)]&.id)
     end
   end
 
@@ -300,7 +343,7 @@ class EventChangeRegistrationPolicyService < CivilService::Service
       to_key = mapped_key_for_removed_bucket(request.requested_bucket_id)
       next unless to_key
 
-      request.update_columns(requested_bucket_id: event.registration_policy.bucket_with_key(to_key)&.id)
+      request.update_columns(requested_bucket_id: real_buckets_by_key[normalize_key(to_key)]&.id)
     end
   end
 
@@ -309,7 +352,7 @@ class EventChangeRegistrationPolicyService < CivilService::Service
       to_key = mapped_key_for_removed_bucket(choice.requested_bucket_id)
       next unless to_key
 
-      choice.update_columns(requested_bucket_id: event.registration_policy.bucket_with_key(to_key)&.id)
+      choice.update_columns(requested_bucket_id: real_buckets_by_key[normalize_key(to_key)]&.id)
     end
   end
 
@@ -329,9 +372,7 @@ class EventChangeRegistrationPolicyService < CivilService::Service
 
   def mapped_key_for_removed_bucket(bucket_id)
     return nil unless bucket_id && removed_bucket_ids.include?(bucket_id)
-
-    old_bucket = removed_buckets.find { |bucket| bucket.id == bucket_id }
-    bucket_key_mappings[old_bucket.key]&.fetch(:to_key, nil)
+    bucket_id_mappings[bucket_id]
   end
 
   def bucket_key_mapping_errors
@@ -353,7 +394,7 @@ class EventChangeRegistrationPolicyService < CivilService::Service
   def invalid_no_preference_mapping_errors
     return errors unless new_registration_policy.prevent_no_preference_signups?
 
-    bucket_key_mappings.each_value do |mapping|
+    @bucket_mappings.each do |mapping|
       next if mapping[:to_key]
 
       errors.add(
@@ -378,7 +419,7 @@ class EventChangeRegistrationPolicyService < CivilService::Service
       ).map(&:requested_bucket_id).uniq
 
     removed_buckets.select do |bucket|
-      referenced_removed_bucket_ids.include?(bucket.id) && !bucket_key_mappings.key?(bucket.key)
+      referenced_removed_bucket_ids.include?(bucket.id) && !bucket_id_mappings.key?(bucket.id)
     end
   end
 

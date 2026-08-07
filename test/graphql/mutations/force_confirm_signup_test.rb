@@ -21,7 +21,7 @@ class Mutations::ForceConfirmSignupTest < ActiveSupport::TestCase
   GRAPHQL
 
   it "confirms the signup into the given bucket" do
-    dogs_bucket = registration_policy.bucket_with_key("dogs")
+    dogs_bucket = bucket_with_key(registration_policy, "dogs")
 
     execute_graphql_query(
       MUTATION,

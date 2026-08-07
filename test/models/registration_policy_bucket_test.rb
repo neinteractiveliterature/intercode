@@ -113,41 +113,40 @@ class RegistrationPolicyBucketTest < ActiveSupport::TestCase
   end
 
   describe "#signup_definitely_occupies_slot_in_bucket?" do
-    let(:bucket) { build(:registration_policy_bucket, key: "pcs") }
+    # Persisted (not built) so comparisons below exercise the real, id-based fast path -- see
+    # RegistrationPolicyBucket#occupies_bucket_as_signup?.
+    let(:bucket) { create(:registration_policy_bucket, key: "pcs") }
 
-    it "returns true for a confirmed Signup with a matching bucket_key" do
-      signup = build(:signup, state: "confirmed", bucket: build(:registration_policy_bucket, key: "pcs"), counted: true)
+    it "returns true for a confirmed Signup in this bucket" do
+      signup = build(:signup, state: "confirmed", bucket:, counted: true)
       assert bucket.signup_definitely_occupies_slot_in_bucket?(signup)
     end
 
     it "returns false for a Signup that isn't occupying a slot" do
-      signup = build(:signup, state: "withdrawn", bucket: build(:registration_policy_bucket, key: "pcs"), counted: true)
+      signup = build(:signup, state: "withdrawn", bucket:, counted: true)
       assert_not bucket.signup_definitely_occupies_slot_in_bucket?(signup)
     end
 
     it "excludes an uncounted signup from a counted bucket, but not_counted buckets count everyone" do
-      counted_bucket = build(:registration_policy_bucket, key: "pcs", not_counted: false)
-      not_counted_bucket = build(:registration_policy_bucket, key: "pcs", not_counted: true)
-      counted_signup =
-        build(:signup, state: "confirmed", bucket: build(:registration_policy_bucket, key: "pcs"), counted: true)
-      uncounted_signup =
-        build(:signup, state: "confirmed", bucket: build(:registration_policy_bucket, key: "pcs"), counted: false)
+      counted_signup = build(:signup, state: "confirmed", bucket:, counted: true)
+      uncounted_signup = build(:signup, state: "confirmed", bucket:, counted: false)
 
-      assert counted_bucket.signup_definitely_occupies_slot_in_bucket?(counted_signup)
-      assert_not counted_bucket.signup_definitely_occupies_slot_in_bucket?(uncounted_signup)
-      assert not_counted_bucket.signup_definitely_occupies_slot_in_bucket?(counted_signup)
-      assert not_counted_bucket.signup_definitely_occupies_slot_in_bucket?(uncounted_signup)
+      assert bucket.signup_definitely_occupies_slot_in_bucket?(counted_signup)
+      assert_not bucket.signup_definitely_occupies_slot_in_bucket?(uncounted_signup)
+
+      bucket.not_counted = true
+      assert bucket.signup_definitely_occupies_slot_in_bucket?(counted_signup)
+      assert bucket.signup_definitely_occupies_slot_in_bucket?(uncounted_signup)
     end
 
-    it "returns true for a FakeSignup that occupies a slot with a matching bucket_key" do
-      fake_signup = SignupBucketFinder::FakeSignup.new(state: "confirmed", bucket_key: "pcs", counted: true)
+    it "returns true for a FakeSignup that occupies a slot in this bucket" do
+      fake_signup = SignupBucketFinder::FakeSignup.new(state: "confirmed", bucket:, counted: true)
       assert bucket.signup_definitely_occupies_slot_in_bucket?(fake_signup)
     end
 
-    it "checks state and requested_bucket_key for a SignupRequest" do
-      pcs_bucket = create(:registration_policy_bucket, key: "pcs")
-      pending_request = build(:signup_request, state: "pending", requested_bucket: pcs_bucket)
-      other_state_request = build(:signup_request, state: "withdrawn", requested_bucket: pcs_bucket)
+    it "checks state and requested_bucket for a SignupRequest" do
+      pending_request = build(:signup_request, state: "pending", requested_bucket: bucket)
+      other_state_request = build(:signup_request, state: "withdrawn", requested_bucket: bucket)
 
       assert bucket.signup_definitely_occupies_slot_in_bucket?(pending_request)
       assert_not bucket.signup_definitely_occupies_slot_in_bucket?(other_state_request)

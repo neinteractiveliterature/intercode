@@ -27,7 +27,7 @@ describe UserConProfileDrop do
     let(:runs) { events.map { |event| create(:run, event: event) } }
     let(:confirmed_signups) do
       runs.map do |run|
-        unlimited_bucket_id = run.event.registration_policy.bucket_with_key("unlimited").id
+        unlimited_bucket_id = bucket_with_key(run.event.registration_policy, "unlimited").id
         create(
           :signup,
           user_con_profile: user_con_profile,
@@ -39,7 +39,7 @@ describe UserConProfileDrop do
     end
     let(:withdrawn_signups) do
       runs.map do |run|
-        unlimited_bucket_id = run.event.registration_policy.bucket_with_key("unlimited").id
+        unlimited_bucket_id = bucket_with_key(run.event.registration_policy, "unlimited").id
         create(
           :signup,
           user_con_profile: user_con_profile,

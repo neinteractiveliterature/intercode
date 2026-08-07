@@ -116,6 +116,14 @@ class ActiveSupport::TestCase
     result
   end
 
+  # Test-only convenience: production code identifies buckets by id (or, during registration policy
+  # simulation, object identity), not key -- see #11892. Tests still often only know a bucket by the
+  # key its factory/fixture was created with.
+  def bucket_with_key(registration_policy, key)
+    normalized_key = RegistrationPolicyBucket.normalize_key(key)
+    registration_policy.buckets.find { |bucket| bucket.key == normalized_key }
+  end
+
   # Counts SQL queries matching pattern issued while running the block, for asserting on N+1s
   # (e.g. assert_operator count_queries(/registration_policy_buckets/) { subject.call! }, :<=, 1).
   def count_queries(pattern)

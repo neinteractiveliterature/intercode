@@ -188,7 +188,7 @@ class EventSignupService < CivilService::Service
     @bucket_finder ||=
       SignupBucketFinder.new(
         run.registration_policy,
-        requested_bucket&.key,
+        requested_bucket,
         run.signups.includes(:user_con_profile, :bucket, :requested_bucket).to_a
       )
   end

@@ -81,31 +81,31 @@ class EventTest < ActiveSupport::TestCase
     end
 
     it "includes requested_bucket_key from active signups" do
-      dogs_id = event.registration_policy.bucket_with_key("dogs").id
+      dogs_id = bucket_with_key(event.registration_policy, "dogs").id
       create(:signup, run: the_run, requested_bucket_id: dogs_id, bucket_id: dogs_id)
       assert_includes event.bucket_keys_with_pending_signups_or_requests, "dogs"
     end
 
     it "excludes withdrawn signups" do
-      dogs_id = event.registration_policy.bucket_with_key("dogs").id
+      dogs_id = bucket_with_key(event.registration_policy, "dogs").id
       create(:signup, run: the_run, requested_bucket_id: dogs_id, state: "withdrawn")
       assert_equal [], event.bucket_keys_with_pending_signups_or_requests
     end
 
     it "includes requested_bucket_key from pending signup requests" do
-      cats_id = event.registration_policy.bucket_with_key("cats").id
+      cats_id = bucket_with_key(event.registration_policy, "cats").id
       create(:signup_request, target_run: the_run, requested_bucket_id: cats_id)
       assert_includes event.bucket_keys_with_pending_signups_or_requests, "cats"
     end
 
     it "includes requested_bucket_key from signup ranked choices" do
-      anything_id = event.registration_policy.bucket_with_key("anything").id
+      anything_id = bucket_with_key(event.registration_policy, "anything").id
       create(:signup_ranked_choice, target_run: the_run, requested_bucket_id: anything_id)
       assert_includes event.bucket_keys_with_pending_signups_or_requests, "anything"
     end
 
     it "deduplicates keys across all three sources" do
-      dogs_id = event.registration_policy.bucket_with_key("dogs").id
+      dogs_id = bucket_with_key(event.registration_policy, "dogs").id
       create(:signup, run: the_run, requested_bucket_id: dogs_id, bucket_id: dogs_id)
       create(:signup_request, target_run: the_run, requested_bucket_id: dogs_id)
       assert_equal ["dogs"], event.bucket_keys_with_pending_signups_or_requests

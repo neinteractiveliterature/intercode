@@ -83,8 +83,8 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
       create(
         :signup,
         user_con_profile: user_con_profile,
-        requested_bucket_id: event.registration_policy.bucket_with_key("unlimited").id,
-        bucket_id: event.registration_policy.bucket_with_key("unlimited").id,
+        requested_bucket_id: bucket_with_key(event.registration_policy, "unlimited").id,
+        bucket_id: bucket_with_key(event.registration_policy, "unlimited").id,
         run: the_run
       )
     end
@@ -95,7 +95,7 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
       # The "unlimited" bucket is being removed by this policy change, so it will be destroyed by
       # the time the service returns; capture its id up front since SignupMoveResult#prev_bucket
       # can no longer resolve a full bucket object for a bucket that no longer exists.
-      unlimited_bucket_id = event.registration_policy.bucket_with_key("unlimited").id
+      unlimited_bucket_id = bucket_with_key(event.registration_policy, "unlimited").id
 
       result = subject.call
 
@@ -108,7 +108,7 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
       assert_equal "Signups", result.move_results.first.prev_bucket_name
       assert_equal "confirmed", result.move_results.first.state
       assert_equal "confirmed", result.move_results.first.prev_state
-      assert_equal "anything", signup.reload.bucket_key
+      assert_equal "anything", signup.reload.bucket&.key
     end
 
     it "emails the team members" do
@@ -145,8 +145,8 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
       create(
         :signup,
         user_con_profile: user_con_profile1,
-        requested_bucket_id: event.registration_policy.bucket_with_key("dogs").id,
-        bucket_id: event.registration_policy.bucket_with_key("dogs").id,
+        requested_bucket_id: bucket_with_key(event.registration_policy, "dogs").id,
+        bucket_id: bucket_with_key(event.registration_policy, "dogs").id,
         run: the_run
       )
     end
@@ -154,8 +154,8 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
       create(
         :signup,
         user_con_profile: user_con_profile2,
-        requested_bucket_id: event.registration_policy.bucket_with_key("dogs").id,
-        bucket_id: event.registration_policy.bucket_with_key("dogs").id,
+        requested_bucket_id: bucket_with_key(event.registration_policy, "dogs").id,
+        bucket_id: bucket_with_key(event.registration_policy, "dogs").id,
         run: the_run
       )
     end
@@ -176,8 +176,8 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
       assert_equal "confirmed", result.move_results.first.state
       assert_equal "confirmed", result.move_results.first.prev_state
 
-      assert_equal "dogs", signup1.reload.bucket_key
-      assert_equal "anything", signup2.reload.bucket_key
+      assert_equal "dogs", signup1.reload.bucket&.key
+      assert_equal "anything", signup2.reload.bucket&.key
     end
 
     it "emails the team members" do
@@ -196,7 +196,7 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
           :signup,
           user_con_profile: user_con_profile2,
           requested_bucket_id: nil,
-          bucket_id: event.registration_policy.bucket_with_key("anything").id,
+          bucket_id: bucket_with_key(event.registration_policy, "anything").id,
           run: the_run
         )
       end
@@ -207,7 +207,7 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
           :signup,
           user_con_profile: user_con_profile3,
           requested_bucket_id: nil,
-          bucket_id: event.registration_policy.bucket_with_key("dogs").id,
+          bucket_id: bucket_with_key(event.registration_policy, "dogs").id,
           run: the_run
         )
       end
@@ -229,9 +229,9 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
         assert_equal "confirmed", result.move_results.first.state
         assert_equal "confirmed", result.move_results.first.prev_state
 
-        assert_equal "dogs", signup1.reload.bucket_key
-        assert_equal "anything", signup2.reload.bucket_key
-        assert_equal "cats", signup3.reload.bucket_key
+        assert_equal "dogs", signup1.reload.bucket&.key
+        assert_equal "anything", signup2.reload.bucket&.key
+        assert_equal "cats", signup3.reload.bucket&.key
       end
 
       it "emails the team members" do
@@ -251,8 +251,8 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
         create(
           :signup,
           user_con_profile: user_con_profile3,
-          requested_bucket_id: event.registration_policy.bucket_with_key("dogs").id,
-          bucket_id: event.registration_policy.bucket_with_key("anything").id,
+          requested_bucket_id: bucket_with_key(event.registration_policy, "dogs").id,
+          bucket_id: bucket_with_key(event.registration_policy, "anything").id,
           run: the_run
         )
       end
@@ -271,9 +271,9 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
           /\ASignup for #{user_con_profile3.name_without_nickname} would no longer fit/,
           result.errors.full_messages.join("\n")
         )
-        assert_equal "dogs", signup1.reload.bucket_key
-        assert_equal "dogs", signup2.reload.bucket_key
-        assert_equal "anything", signup3.reload.bucket_key
+        assert_equal "dogs", signup1.reload.bucket&.key
+        assert_equal "dogs", signup2.reload.bucket&.key
+        assert_equal "anything", signup3.reload.bucket&.key
         assert_not event.reload.registration_policy.equivalent_to?(new_registration_policy)
       end
     end
@@ -312,8 +312,8 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
       create(
         :signup,
         user_con_profile: user_con_profile,
-        requested_bucket_id: event.registration_policy.bucket_with_key("unlimited").id,
-        bucket_id: event.registration_policy.bucket_with_key("unlimited").id,
+        requested_bucket_id: bucket_with_key(event.registration_policy, "unlimited").id,
+        bucket_id: bucket_with_key(event.registration_policy, "unlimited").id,
         run: the_run
       )
     end
@@ -324,8 +324,8 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
       result = subject.call
 
       assert result.success?
-      assert_equal "dogs", signup.reload.bucket_key
-      assert_nil signup.reload.requested_bucket_key
+      assert_equal "dogs", signup.reload.bucket&.key
+      assert_nil signup.reload.requested_bucket&.key
     end
   end
 
@@ -349,8 +349,8 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
       create(
         :signup,
         user_con_profile: user_con_profile,
-        requested_bucket_id: event.registration_policy.bucket_with_key("unlimited").id,
-        bucket_id: event.registration_policy.bucket_with_key("unlimited").id,
+        requested_bucket_id: bucket_with_key(event.registration_policy, "unlimited").id,
+        bucket_id: bucket_with_key(event.registration_policy, "unlimited").id,
         run: the_run
       )
     end
@@ -360,7 +360,7 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
       create(
         :signup_request,
         user_con_profile: signup_request_user_con_profile,
-        requested_bucket_id: event.registration_policy.bucket_with_key("unlimited").id,
+        requested_bucket_id: bucket_with_key(event.registration_policy, "unlimited").id,
         target_run: the_run
       )
     end
@@ -370,7 +370,7 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
       create(
         :signup_ranked_choice,
         user_con_profile: ranked_choice_user_con_profile,
-        requested_bucket_id: event.registration_policy.bucket_with_key("unlimited").id,
+        requested_bucket_id: bucket_with_key(event.registration_policy, "unlimited").id,
         target_run: the_run
       )
     end
@@ -390,9 +390,9 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
           /\ABucket key "unlimited" was removed but no mapping was provided/,
           result.errors.full_messages.join("\n")
         )
-        assert_equal "unlimited", signup.reload.requested_bucket_key
-        assert_equal "unlimited", signup_request.reload.requested_bucket_key
-        assert_equal "unlimited", signup_ranked_choice.reload.requested_bucket_key
+        assert_equal "unlimited", signup.reload.requested_bucket&.key
+        assert_equal "unlimited", signup_request.reload.requested_bucket&.key
+        assert_equal "unlimited", signup_ranked_choice.reload.requested_bucket&.key
       end
     end
 
@@ -409,9 +409,9 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
       it "updates requested_bucket_key on affected records to the mapped bucket" do
         subject.call!
 
-        assert_equal "dogs", signup.reload.requested_bucket_key
-        assert_equal "dogs", signup_request.reload.requested_bucket_key
-        assert_equal "dogs", signup_ranked_choice.reload.requested_bucket_key
+        assert_equal "dogs", signup.reload.requested_bucket&.key
+        assert_equal "dogs", signup_request.reload.requested_bucket&.key
+        assert_equal "dogs", signup_ranked_choice.reload.requested_bucket&.key
       end
     end
 
@@ -428,9 +428,9 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
       it "sets requested_bucket_key to nil on affected records" do
         subject.call!
 
-        assert_nil signup.reload.requested_bucket_key
-        assert_nil signup_request.reload.requested_bucket_key
-        assert_nil signup_ranked_choice.reload.requested_bucket_key
+        assert_nil signup.reload.requested_bucket&.key
+        assert_nil signup_request.reload.requested_bucket&.key
+        assert_nil signup_ranked_choice.reload.requested_bucket&.key
       end
     end
 
@@ -463,9 +463,9 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
           /\ABucket key "unlimited" cannot be mapped to "no preference"/,
           result.errors.full_messages.join("\n")
         )
-        assert_equal "unlimited", signup.reload.requested_bucket_key
-        assert_equal "unlimited", signup_request.reload.requested_bucket_key
-        assert_equal "unlimited", signup_ranked_choice.reload.requested_bucket_key
+        assert_equal "unlimited", signup.reload.requested_bucket&.key
+        assert_equal "unlimited", signup_request.reload.requested_bucket&.key
+        assert_equal "unlimited", signup_ranked_choice.reload.requested_bucket&.key
       end
     end
   end
@@ -493,8 +493,8 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
       create(
         :signup,
         user_con_profile: user_con_profile1,
-        requested_bucket_id: event.registration_policy.bucket_with_key("dogs").id,
-        bucket_id: event.registration_policy.bucket_with_key("anything").id,
+        requested_bucket_id: bucket_with_key(event.registration_policy, "dogs").id,
+        bucket_id: bucket_with_key(event.registration_policy, "anything").id,
         run: the_run
       )
     end
@@ -503,7 +503,7 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
         :signup,
         user_con_profile: user_con_profile2,
         state: "waitlisted",
-        requested_bucket_id: event.registration_policy.bucket_with_key("dogs").id,
+        requested_bucket_id: bucket_with_key(event.registration_policy, "dogs").id,
         bucket_id: nil,
         run: the_run
       )
@@ -518,14 +518,14 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
       result = subject.call
 
       assert result.success?
-      assert_equal "anything", signup1.reload.bucket_key
+      assert_equal "anything", signup1.reload.bucket&.key
     end
 
     it "pulls in waitlisted signups" do
       result = subject.call
 
       assert result.success?
-      assert_equal "dogs", signup2.reload.bucket_key
+      assert_equal "dogs", signup2.reload.bucket&.key
       assert_equal "confirmed", signup2.reload.state
     end
 

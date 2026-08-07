@@ -10,7 +10,7 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
   let(:user) { user_con_profile.user }
   let(:bucket_key) { "unlimited" }
   let(:signup_state) { "confirmed" }
-  let(:bucket_id) { event.registration_policy.bucket_with_key(bucket_key).id }
+  let(:bucket_id) { bucket_with_key(event.registration_policy, bucket_key).id }
   let(:signup) do
     create(:signup, user_con_profile:, run: the_run, state: signup_state, bucket_id:, requested_bucket_id: bucket_id)
   end
@@ -92,7 +92,7 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
         user_con_profile: anything_user_con_profile,
         run: the_run,
         state: "confirmed",
-        bucket_id: event.registration_policy.bucket_with_key("anything").id,
+        bucket_id: bucket_with_key(event.registration_policy, "anything").id,
         requested_bucket_id: bucket_id
       )
     end
@@ -117,7 +117,7 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
 
       assert_equal 1, result.move_results.size
 
-      assert_equal bucket_key, anything_signup.reload.bucket_key
+      assert_equal bucket_key, anything_signup.reload.bucket&.key
     end
 
     it "moves a waitlist signup into the vacancy" do
@@ -129,7 +129,7 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
 
       assert_equal 1, result.move_results.size
 
-      assert_equal bucket_key, waitlist_signup.reload.bucket_key
+      assert_equal bucket_key, waitlist_signup.reload.bucket&.key
     end
 
     it "does not try to fill an overfilled bucket" do
@@ -142,8 +142,8 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
 
       assert_equal 0, result.move_results.size
 
-      assert_nil waitlist_signup.reload.bucket_key
-      assert_equal bucket_key, extra_signup.reload.bucket_key
+      assert_nil waitlist_signup.reload.bucket&.key
+      assert_equal bucket_key, extra_signup.reload.bucket&.key
     end
 
     it "does not move confirmed signups unless necessary" do
@@ -156,8 +156,8 @@ class EventWithdrawServiceTest < ActiveSupport::TestCase
 
       assert_equal 1, result.move_results.size
 
-      assert_equal "anything", anything_signup.reload.bucket_key
-      assert_equal bucket_key, waitlist_signup.reload.bucket_key
+      assert_equal "anything", anything_signup.reload.bucket&.key
+      assert_equal bucket_key, waitlist_signup.reload.bucket&.key
     end
 
     it "notifies team members who have requested it" do

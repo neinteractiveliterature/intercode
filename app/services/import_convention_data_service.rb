@@ -414,7 +414,9 @@ class ImportConventionDataService < CivilService::Service
   end
 
   def bucket_id_for(run, bucket_key)
-    run.registration_policy.bucket_with_key(bucket_key)&.id
+    return nil unless bucket_key
+    normalized_key = RegistrationPolicyBucket.normalize_key(bucket_key)
+    run.registration_policy.buckets.find { |bucket| bucket.key == normalized_key }&.id
   end
 
   def import_tickets(convention, event_map, user_con_profile_map)

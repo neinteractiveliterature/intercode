@@ -48,7 +48,7 @@ class CreateTeamMemberServiceTest < ActiveSupport::TestCase
         run: the_run,
         user_con_profile: user_con_profile,
         state: "confirmed",
-        bucket_id: event.registration_policy.bucket_with_key("unlimited").id,
+        bucket_id: bucket_with_key(event.registration_policy, "unlimited").id,
         counted: true
       )
     end
@@ -61,7 +61,7 @@ class CreateTeamMemberServiceTest < ActiveSupport::TestCase
 
       assert_equal [signup], result.converted_signups
       assert_not signup.counted?
-      assert_nil signup.bucket_key
+      assert_nil signup.bucket&.key
       assert_equal "confirmed", signup.state
     end
 
@@ -88,7 +88,7 @@ class CreateTeamMemberServiceTest < ActiveSupport::TestCase
             run: the_run,
             user_con_profile: user_con_profile,
             state: "waitlisted",
-            requested_bucket_id: event.registration_policy.bucket_with_key("dogs").id,
+            requested_bucket_id: bucket_with_key(event.registration_policy, "dogs").id,
             counted: false
           )
         end
@@ -99,13 +99,13 @@ class CreateTeamMemberServiceTest < ActiveSupport::TestCase
 
           assert_equal [signup], result.converted_signups
           assert_not signup.counted?
-          assert_nil signup.bucket_key
+          assert_nil signup.bucket&.key
           assert_equal "confirmed", signup.state
         end
       end
 
       describe "blocking someone in the waitlist" do
-        let(:dogs_bucket_id) { event.registration_policy.bucket_with_key("dogs").id }
+        let(:dogs_bucket_id) { bucket_with_key(event.registration_policy, "dogs").id }
         let(:signup) do
           create(
             :signup,
@@ -143,7 +143,7 @@ class CreateTeamMemberServiceTest < ActiveSupport::TestCase
           assert_equal [signup], result.converted_signups
           assert_equal [waitlist_signup], result.move_results.map(&:signup)
           assert waitlist_signup.counted?
-          assert_equal "dogs", waitlist_signup.bucket_key
+          assert_equal "dogs", waitlist_signup.bucket&.key
           assert_equal "confirmed", waitlist_signup.state
         end
       end
