@@ -44,6 +44,11 @@ class RegistrationPolicy < ApplicationRecord
   # hooked into `new`/`assign_attributes`.
   IGNORED_HASH_KEYS = %w[__typename id created_at updated_at].freeze
 
+  # Unlike the policy-level hash, a bucket's id is kept: it's how sync_buckets_from_hash! recognizes
+  # "this is the same bucket, just edited" instead of "this bucket was removed and a new one added"
+  # once this detached policy is applied onto a persisted one via update_from!.
+  IGNORED_BUCKET_HASH_KEYS = %w[__typename created_at updated_at].freeze
+
   def self.build_from_hash(hash)
     # Strip __typename (an Apollo Client cache-normalization artifact) and id/created_at/updated_at
     # (would let this detached policy alias a real persisted row).
@@ -53,7 +58,7 @@ class RegistrationPolicy < ApplicationRecord
       policy.buckets =
         bucket_hashes.each_with_index.map do |bucket_hash, index|
           RegistrationPolicyBucket.new(
-            bucket_hash.to_h.stringify_keys.except(*IGNORED_HASH_KEYS).merge("position" => index + 1)
+            bucket_hash.to_h.stringify_keys.except(*IGNORED_BUCKET_HASH_KEYS).merge("position" => index + 1)
           )
         end
     end
@@ -80,25 +85,29 @@ class RegistrationPolicy < ApplicationRecord
     sync_buckets_from_hash!(other.buckets.map(&:attributes))
   end
 
-  # Matches buckets by key (never rewritten in place); destroys removed keys before
-  # creating/updating the rest to avoid a transient key collision (positions are reassigned safely
-  # by the `positioned` gem, so no equivalent care is needed there). Caller wraps this in a
-  # transaction. This key-based matching is about this API's own write-identity model, not
-  # signups' bucket_key -- it isn't resolved by the deferred bucket_key->FK conversion on signups
-  # unless that work also redesigns this API around ids.
+  # Matches buckets primarily by id, so a bucket can have its key (or any other attribute) edited
+  # without losing its row/identity -- id is stable across an edit in a way key no longer needs to
+  # be. Falls back to key-matching for any incoming hash that doesn't carry an id (e.g. a policy
+  # built without ever round-tripping through a persisted one); this keeps callers that don't
+  # supply bucket ids working the same way they always have, rather than treating every one of
+  # their buckets as brand new. Destroys unmatched buckets before creating/updating the rest to
+  # avoid a transient key collision (positions are reassigned safely by the `positioned` gem, so no
+  # equivalent care is needed there). Caller wraps this in a transaction.
   def sync_buckets_from_hash!(bucket_hashes)
     bucket_hashes = bucket_hashes.map { |hash| hash.to_h.stringify_keys }
-    desired_keys = bucket_hashes.map { |hash| RegistrationPolicyBucket.normalize_key(hash["key"]) }
+    existing_by_id = buckets.index_by(&:id)
     existing_by_key = buckets.index_by(&:key)
 
-    existing_by_key.except(*desired_keys).each_value(&:destroy!)
+    matches = bucket_hashes.map { |hash| match_existing_bucket(hash, existing_by_id, existing_by_key) }
+    matched_ids = matches.compact.to_set(&:id)
+
+    buckets.reject { |bucket| matched_ids.include?(bucket.id) }.each(&:destroy!)
 
     bucket_hashes.each_with_index do |hash, index|
-      normalized_key = RegistrationPolicyBucket.normalize_key(hash["key"])
       attrs = hash.except("id", "registration_policy_id", "created_at", "updated_at").merge("position" => index + 1)
-      existing = existing_by_key[normalized_key]
+      existing = matches[index]
 
-      existing ? existing.update!(attrs.except("key")) : buckets.create!(attrs)
+      existing ? existing.update!(attrs) : buckets.create!(attrs)
     end
 
     # The destroys above happened directly on the fetched records, not through the association
@@ -171,6 +180,11 @@ class RegistrationPolicy < ApplicationRecord
   end
 
   private
+
+  def match_existing_bucket(hash, existing_by_id, existing_by_key)
+    return existing_by_id[hash["id"].to_i] if hash["id"].presence
+    existing_by_key[RegistrationPolicyBucket.normalize_key(hash["key"])]
+  end
 
   def validate_flex_bucket_uniqueness
     flex_buckets = buckets.reject(&:marked_for_destruction?).select(&:anything?)

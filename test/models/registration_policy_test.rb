@@ -75,7 +75,7 @@ class RegistrationPolicyTest < ActiveSupport::TestCase
       assert policy.buckets.none?(&:persisted?)
     end
 
-    it "strips __typename, id, created_at, and updated_at from both the policy and its buckets" do
+    it "strips __typename, id, created_at, and updated_at from the policy itself" do
       policy =
         RegistrationPolicy.build_from_hash(
           "__typename" => "RegistrationPolicyType",
@@ -86,7 +86,16 @@ class RegistrationPolicyTest < ActiveSupport::TestCase
         )
 
       assert_nil policy.id
-      assert_nil policy.buckets.first.id
+    end
+
+    it "strips __typename, created_at, and updated_at from buckets but keeps their id" do
+      policy =
+        RegistrationPolicy.build_from_hash(
+          "buckets" => [{ "__typename" => "RegistrationPolicyBucketType", "id" => 999_999, "key" => "pcs" }]
+        )
+
+      assert_equal 999_999, policy.buckets.first.id
+      assert_not policy.buckets.first.persisted?
     end
   end
 
@@ -114,7 +123,7 @@ class RegistrationPolicyTest < ActiveSupport::TestCase
   end
 
   describe "#sync_buckets_from_hash!" do
-    it "updates matched buckets in place, preserving their row id" do
+    it "updates matched buckets in place, preserving their row id (falls back to key-matching without an id)" do
       policy = create(:registration_policy, buckets: [build(:registration_policy_bucket, key: "pcs", total_slots: 2)])
       original_id = policy.buckets.first.id
 
@@ -163,6 +172,18 @@ class RegistrationPolicyTest < ActiveSupport::TestCase
 
       assert_equal ["pcs"], policy.buckets.map(&:key)
     end
+
+    it "matches a bucket by id, allowing its key to be renamed without losing the row" do
+      policy = create(:registration_policy, buckets: [build(:registration_policy_bucket, key: "pcs", total_slots: 2)])
+      original_id = policy.buckets.first.id
+
+      policy.sync_buckets_from_hash!([{ id: original_id, key: "player_characters", name: "PCs", total_slots: 5 }])
+      policy.reload
+
+      assert_equal [original_id], policy.buckets.map(&:id)
+      assert_equal "player_characters", policy.buckets.first.key
+      assert_equal 5, policy.buckets.first.total_slots
+    end
   end
 
   describe "#update_from!" do
@@ -180,6 +201,22 @@ class RegistrationPolicyTest < ActiveSupport::TestCase
 
       assert_equal true, policy.prevent_no_preference_signups
       assert_equal true, policy.freeze_no_preference_buckets
+      assert_equal 9, policy.buckets.first.total_slots
+    end
+
+    it "preserves a bucket's row across a key rename, since build_from_hash keeps the bucket's id" do
+      policy = create(:registration_policy, buckets: [build(:registration_policy_bucket, key: "pcs", total_slots: 2)])
+      original_id = policy.buckets.first.id
+      other =
+        RegistrationPolicy.build_from_hash(
+          buckets: [{ id: original_id, key: "player_characters", name: "Player characters", total_slots: 9 }]
+        )
+
+      policy.update_from!(other)
+      policy.reload
+
+      assert_equal [original_id], policy.buckets.map(&:id)
+      assert_equal "player_characters", policy.buckets.first.key
       assert_equal 9, policy.buckets.first.total_slots
     end
   end
