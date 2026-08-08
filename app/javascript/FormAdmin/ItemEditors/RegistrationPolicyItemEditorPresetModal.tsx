@@ -3,6 +3,7 @@ import * as React from 'react';
 import { Modal } from 'react-bootstrap4-modal';
 
 import RegistrationPolicyEditor from '../../RegistrationPolicy/RegistrationPolicyEditor';
+import { withGeneratedBucketIds, withoutGeneratedBucketIds } from '../../RegistrationPolicy/RegistrationPolicy';
 import { RegistrationPolicyPreset } from '../FormItemUtils';
 
 export type RegistrationPolicyItemEditorPresetModalProps = {
@@ -18,19 +19,25 @@ function RegistrationPolicyItemEditorPresetModal({
   visible,
   close,
 }: RegistrationPolicyItemEditorPresetModalProps): React.JSX.Element {
-  const [preset, setPreset] = useState(initialPreset);
+  // generatedId is the editor's own client-only bookkeeping mechanism and must never be
+  // persisted as part of the preset, so it's assigned here (once, on open) and stripped again
+  // in saveClicked.
+  const [preset, setPreset] = useState(() => ({
+    ...initialPreset,
+    policy: withGeneratedBucketIds(initialPreset.policy),
+  }));
 
-  const policyChanged = (policy: RegistrationPolicyPreset['policy']) => {
+  const policyChanged = (policy: typeof preset.policy) => {
     setPreset((prevPreset) => ({ ...prevPreset, policy }));
   };
 
   const cancelClicked = () => {
-    setPreset(initialPreset);
+    setPreset({ ...initialPreset, policy: withGeneratedBucketIds(initialPreset.policy) });
     close();
   };
 
   const saveClicked = () => {
-    onChange(preset);
+    onChange({ ...preset, policy: withoutGeneratedBucketIds(preset.policy) });
     close();
   };
 

@@ -30,17 +30,21 @@ export type EditingRegistrationBucket = Pick<
   // loaded from the server. Threaded through so RegistrationPolicy#sync_buckets_from_hash! can
   // correlate edited buckets by id instead of falling back to key.
   id?: RegistrationPolicyBucket['id'];
+  // Client-only identity for the editor's own bookkeeping (React keys, change/delete handlers).
+  // Assigned to every bucket the moment it enters the editor's state, regardless of whether it
+  // has a real id yet; never sent to the server.
+  generatedId: string;
 };
 
 export type RegistrationBucketRowProps<T extends EditingRegistrationBucket> = {
   registrationBucket: T;
-  onChange: (key: string, bucket: T) => void;
+  onChange: (generatedId: string, bucket: T) => void;
   lockLimited?: boolean;
   lockCounts?: boolean;
   lockNameAndDescription?: boolean;
   lockDelete?: boolean;
   validateComplete?: boolean;
-  onDelete: (key: string) => void;
+  onDelete: (generatedId: string) => void;
 };
 
 function RegistrationBucketRow<T extends EditingRegistrationBucket>({
@@ -54,8 +58,8 @@ function RegistrationBucketRow<T extends EditingRegistrationBucket>({
   onDelete,
 }: RegistrationBucketRowProps<T>): React.JSX.Element {
   const updateBucket = useCallback(
-    (newValue: T) => onChange(registrationBucket.key, newValue),
-    [registrationBucket.key, onChange],
+    (newValue: T) => onChange(registrationBucket.generatedId, newValue),
+    [registrationBucket.generatedId, onChange],
   );
   const setBucket = useFunctionalStateUpdater(registrationBucket, updateBucket);
   const [
@@ -268,7 +272,7 @@ function RegistrationBucketRow<T extends EditingRegistrationBucket>({
           onClick={() =>
             confirm({
               prompt: 'Are you sure you wish to delete this registration bucket?',
-              action: () => onDelete(registrationBucket.key),
+              action: () => onDelete(registrationBucket.generatedId),
             })
           }
         >
