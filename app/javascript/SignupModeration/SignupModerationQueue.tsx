@@ -64,13 +64,16 @@ function signupRequestStateBadgeClass(state: SignupRequestState) {
 }
 
 function describeRequestedBucket(signupRequest: SignupModerationSignupRequestFieldsFragment, t: TFunction) {
-  return signupRequest.requested_bucket
-    ? (
-        signupRequest.target_run.event.registration_policy?.buckets.find(
-          (bucket) => bucket.id === signupRequest.requested_bucket?.id,
-        ) || {}
-      ).name
-    : t('signups.noPreference');
+  const bucket = signupRequest.requested_bucket
+    ? signupRequest.target_run.event.registration_policy?.buckets.find(
+        (b) => b.id === signupRequest.requested_bucket?.id,
+      )
+    : undefined;
+
+  // A requested_bucket that no longer resolves to any of the run's current buckets (e.g. removed
+  // or renamed since this request was made) used to fall through to `undefined`, rendering blank
+  // instead of falling back to "no preference" the way every other bucket display in this app does.
+  return bucket ? bucket.name : t('signups.noPreference');
 }
 
 type SignupModerationRunDetailsRun = NonNullable<

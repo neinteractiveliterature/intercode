@@ -65,6 +65,41 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
     end
   end
 
+  describe "when a bucket's key changes while it has an existing signup" do
+    let(:event) do
+      create(
+        :event,
+        convention: convention,
+        registration_policy:
+          RegistrationPolicy.build_from_hash(
+            buckets: [{ key: "dogs", name: "Dogs", slots_limited: true, total_slots: 1 }]
+          )
+      )
+    end
+    let(:dogs_bucket_id) { event.registration_policy.buckets.find_by!(key: "dogs").id }
+    let(:new_registration_policy) do
+      RegistrationPolicy.build_from_hash(
+        buckets: [{ id: dogs_bucket_id, key: "hounds", name: "Hounds", slots_limited: true, total_slots: 1 }]
+      )
+    end
+
+    before { create(:signup, run: the_run, bucket_id: dogs_bucket_id, state: "confirmed") }
+
+    it "keeps the existing signup in the renamed bucket, rather than treating it as removed" do
+      signup = the_run.signups.sole
+      result = subject.call
+      assert result.success?
+
+      event.reload
+      renamed_bucket = event.registration_policy.buckets.find_by!(key: "hounds")
+      assert_equal dogs_bucket_id, renamed_bucket.id
+
+      signup.reload
+      assert_equal renamed_bucket.id, signup.bucket_id
+      assert_equal "confirmed", signup.state
+    end
+  end
+
   it "does not email the team members if nobody moved" do
     perform_enqueued_jobs do
       subject.call!
