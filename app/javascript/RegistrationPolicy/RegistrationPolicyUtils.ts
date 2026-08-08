@@ -1,9 +1,5 @@
 import { RegistrationPolicyPreset } from '../FormAdmin/FormItemUtils';
-import {
-  BucketForRegistrationPolicyUtils,
-  getRegistrationPolicyBucket,
-  RegistrationPolicyForRegistrationPolicyUtils,
-} from './RegistrationPolicy';
+import { BucketForRegistrationPolicyUtils, RegistrationPolicyForRegistrationPolicyUtils } from './RegistrationPolicy';
 
 export function presetMatchesPolicy(
   registrationPolicy: RegistrationPolicyForRegistrationPolicyUtils,
@@ -15,8 +11,12 @@ export function presetMatchesPolicy(
     return false;
   }
 
+  // Presets are admin-authored fixture data with no id/generatedId concept, so this match (and
+  // bucketInPreset in RegistrationPolicyEditor) stays key-based permanently.
   const allKeysMatch = preset.policy.buckets.every(
-    (bucket) => typeof bucket.key === 'string' && getRegistrationPolicyBucket(registrationPolicy, bucket.key),
+    (bucket) =>
+      typeof bucket.key === 'string' &&
+      (registrationPolicy.buckets ?? []).some((policyBucket) => policyBucket.key === bucket.key),
   );
   if (!allKeysMatch) {
     return false;

@@ -12,10 +12,11 @@ describe('RegistrationPolicyEditor', () => {
   const onChange = vi.fn<(rp: EditingRegistrationPolicy<EditingRegistrationBucket>) => void>();
   beforeEach(onChange.mockReset);
 
-  const defaultRegistrationPolicyBucket: RegistrationPolicyBucket = {
+  const defaultRegistrationPolicyBucket: RegistrationPolicyBucket & Pick<EditingRegistrationBucket, 'generatedId'> = {
     __typename: 'RegistrationPolicyBucket',
     id: 'testBucket',
     key: 'testBucket',
+    generatedId: 'testBucket',
     name: 'test',
     description: 'a bucket for testing',
     total_slots: 10,
@@ -31,7 +32,7 @@ describe('RegistrationPolicyEditor', () => {
     props?: Partial<
       RegistrationPolicyEditorProps<EditingRegistrationBucket, EditingRegistrationPolicy<EditingRegistrationBucket>>
     >,
-    buckets: RegistrationPolicyBucket[] = [defaultRegistrationPolicyBucket],
+    buckets: EditingRegistrationBucket[] = [defaultRegistrationPolicyBucket],
     preventNoPreferenceSignups = false,
   ) => {
     return await render(
@@ -126,6 +127,7 @@ describe('RegistrationPolicyEditor', () => {
       ...defaultRegistrationPolicyBucket,
       ...presetBucket,
       id: presetBucket.key,
+      generatedId: presetBucket.key,
     }));
 
     test('renders the selector by default', async () => {

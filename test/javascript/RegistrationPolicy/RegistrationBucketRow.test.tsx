@@ -8,6 +8,7 @@ describe('RegistrationBucketRow', () => {
 
   const defaultRegistrationBucketProps = {
     key: 'testBucket',
+    generatedId: 'testGeneratedId',
     name: 'test',
     description: 'a bucket for testing',
     total_slots: 10,
@@ -80,7 +81,7 @@ describe('RegistrationBucketRow', () => {
     const { getByLabelText } = await renderRegistrationBucketRow();
     fireEvent.focus(getByLabelText('Bucket name'));
     fireEvent.change(getByLabelText('Bucket name'), { target: { value: 'new name' } });
-    expect(onChange.mock.calls[0][0]).toEqual('testBucket');
+    expect(onChange.mock.calls[0][0]).toEqual('testGeneratedId');
     expect(onChange.mock.calls[0][1].name).toEqual('new name');
     expect(onChange.mock.calls[0][1].key).toEqual('testBucket');
   });
@@ -91,42 +92,42 @@ describe('RegistrationBucketRow', () => {
     fireEvent.change(getByLabelText('Bucket description'), {
       target: { value: 'a new description' },
     });
-    expect(onChange.mock.calls[0][0]).toEqual('testBucket');
+    expect(onChange.mock.calls[0][0]).toEqual('testGeneratedId');
     expect(onChange.mock.calls[0][1].description).toEqual('a new description');
   });
 
   test('changing unlimited checkbox', async () => {
     const { getByLabelText } = await renderRegistrationBucketRow();
     fireEvent.click(getByLabelText('Unlimited?'));
-    expect(onChange.mock.calls[0][0]).toEqual('testBucket');
+    expect(onChange.mock.calls[0][0]).toEqual('testGeneratedId');
     expect(onChange.mock.calls[0][1].slots_limited).toEqual(false);
   });
 
   test('changing counted checkbox', async () => {
     const { getByLabelText } = await renderRegistrationBucketRow();
     fireEvent.click(getByLabelText('Counted for signups?'));
-    expect(onChange.mock.calls[0][0]).toEqual('testBucket');
+    expect(onChange.mock.calls[0][0]).toEqual('testGeneratedId');
     expect(onChange.mock.calls[0][1].not_counted).toEqual(true);
   });
 
   test('changing minimumSlots', async () => {
     const { getByLabelText } = await renderRegistrationBucketRow();
     fireEvent.change(getByLabelText('Min'), { target: { value: '4' } });
-    expect(onChange.mock.calls[0][0]).toEqual('testBucket');
+    expect(onChange.mock.calls[0][0]).toEqual('testGeneratedId');
     expect(onChange.mock.calls[0][1].minimum_slots).toEqual(4);
   });
 
   test('changing preferredSlots', async () => {
     const { getByLabelText } = await renderRegistrationBucketRow();
     fireEvent.change(getByLabelText('Pref'), { target: { value: '6' } });
-    expect(onChange.mock.calls[0][0]).toEqual('testBucket');
+    expect(onChange.mock.calls[0][0]).toEqual('testGeneratedId');
     expect(onChange.mock.calls[0][1].preferred_slots).toEqual(6);
   });
 
   test('changing totalSlots', async () => {
     const { getByLabelText } = await renderRegistrationBucketRow();
     fireEvent.change(getByLabelText('Max'), { target: { value: '55' } });
-    expect(onChange.mock.calls[0][0]).toEqual('testBucket');
+    expect(onChange.mock.calls[0][0]).toEqual('testGeneratedId');
     expect(onChange.mock.calls[0][1].total_slots).toEqual(55);
   });
 
@@ -136,7 +137,7 @@ describe('RegistrationBucketRow', () => {
     await waitFor(() => expect(getByText('OK')).toBeVisible());
     fireEvent.click(getByText('OK'));
     await waitFor(() => expect(getByText('OK')).not.toBeVisible());
-    expect(onDelete.mock.calls[0][0]).toEqual('testBucket');
+    expect(onDelete.mock.calls[0][0]).toEqual('testGeneratedId');
   });
 
   test('canceling delete', async () => {

@@ -1,5 +1,6 @@
 import { useState, useMemo } from 'react';
 import * as React from 'react';
+import { v4 as uuidv4 } from 'uuid';
 
 import { bucketSortCompare, findPreset } from './RegistrationPolicyUtils';
 import RegistrationBucketRow, { EditingRegistrationBucket } from './RegistrationBucketRow';
@@ -70,40 +71,35 @@ function RegistrationPolicyEditor<
   const addBucketClicked = (event: React.MouseEvent) => {
     event.preventDefault();
 
-    const customBucketKeyNumbers = (registrationPolicy.buckets || [])
-      .map((bucket) => bucket.key)
-      .filter((key) => key.match(/^custom_\d+$/))
-      .map((key) => Number.parseInt(key.replace('custom_', ''), 10));
-
-    const maxBucketKeyNumber = customBucketKeyNumbers.length > 0 ? Math.max(...customBucketKeyNumbers) : 0;
-
-    const customBucketNumber = maxBucketKeyNumber + 1;
+    const customBucketNumber = (registrationPolicy.buckets || []).length + 1;
 
     onChange(
-      addRegistrationPolicyBucket(registrationPolicy, `custom_${customBucketNumber}`, {
+      addRegistrationPolicyBucket(registrationPolicy, uuidv4(), {
+        key: `custom_${customBucketNumber}`,
         name: `Custom ${customBucketNumber}`,
         anything: false,
         slots_limited: true,
         not_counted: false,
         expose_attendees: false,
-      } as Omit<BucketType, 'key'>),
+      } as Omit<BucketType, 'generatedId'>),
     );
   };
 
   const addFlexBucketClicked = (event: React.MouseEvent) => {
     event.preventDefault();
     onChange(
-      addRegistrationPolicyBucket(registrationPolicy, 'flex', {
+      addRegistrationPolicyBucket(registrationPolicy, uuidv4(), {
+        key: 'flex',
         name: 'Flex',
         description: 'Characters that can be in any other limited bucket',
         slots_limited: true,
         anything: true,
-      } as Omit<BucketType, 'key'>),
+      } as Omit<BucketType, 'generatedId'>),
     );
   };
 
-  const bucketChanged = (key: string, newBucket: BucketType) => {
-    onChange(updateRegistrationPolicyBucket(registrationPolicy, key, newBucket));
+  const bucketChanged = (generatedId: string, newBucket: BucketType) => {
+    onChange(updateRegistrationPolicyBucket(registrationPolicy, generatedId, newBucket));
   };
 
   const preventNoPreferenceSignupsChanged = (newValue: string) => {
@@ -113,8 +109,8 @@ function RegistrationPolicyEditor<
     });
   };
 
-  const deleteBucket = (key: string) => {
-    onChange(removeRegistrationPolicyBucket(registrationPolicy, key));
+  const deleteBucket = (generatedId: string) => {
+    onChange(removeRegistrationPolicyBucket(registrationPolicy, generatedId));
   };
 
   const presetSelected = (event: React.ChangeEvent<HTMLSelectElement>) => {
@@ -173,7 +169,7 @@ function RegistrationPolicyEditor<
 
     return (
       <RegistrationBucketRow
-        key={bucket.key}
+        key={bucket.generatedId}
         registrationBucket={bucket}
         onChange={bucketChanged}
         onDelete={deleteBucket}

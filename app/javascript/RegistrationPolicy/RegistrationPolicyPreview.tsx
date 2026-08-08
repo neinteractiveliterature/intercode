@@ -20,10 +20,12 @@ function RegistrationPolicyPreview({ registrationPolicy }: RegistrationPolicyPre
       buckets: buckets.map((bucket) => ({
         __typename: 'RegistrationPolicyBucket' as const,
         ...bucket,
-        // A bucket added in the current edit session has no id yet; fall back to its (always
-        // present, locally-unique) key as a placeholder so this preview-only object still has
-        // some stable identity to key React lists off of.
-        id: bucket.id ?? bucket.key,
+        // A bucket added in the current edit session has no id yet; fall back to its
+        // generatedId (present for any bucket coming from the editor) or, failing that, its key
+        // (present for a real, already-persisted bucket rendered outside the editor, e.g. in
+        // RegistrationPolicyDisplay), so this preview-only object always has some stable
+        // identity to key React lists off of.
+        id: bucket.id ?? bucket.generatedId ?? bucket.key,
         description: bucket.description ?? null,
         minimum_slots: bucket.minimum_slots ?? null,
         preferred_slots: bucket.preferred_slots ?? null,

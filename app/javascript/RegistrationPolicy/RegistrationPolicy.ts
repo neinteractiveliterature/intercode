@@ -1,3 +1,4 @@
+import { v4 as uuidv4 } from 'uuid';
 import { RegistrationPolicy, RegistrationPolicyBucket } from '../graphqlTypes.generated';
 
 export type BucketForRegistrationPolicyUtils = Pick<
@@ -15,6 +16,8 @@ export type BucketForRegistrationPolicyUtils = Pick<
 > & {
   // Absent for a bucket added in the current edit session; see EditingRegistrationBucket.
   id?: RegistrationPolicyBucket['id'];
+  // Only present for buckets belonging to an in-progress edit session; see EditingRegistrationBucket.
+  generatedId?: string;
 };
 
 export type RegistrationPolicyForRegistrationPolicyUtils = Pick<RegistrationPolicy, 'prevent_no_preference_signups'> & {
@@ -48,49 +51,49 @@ export function getRegistrationPolicySlotsLimited(
 
 export function getRegistrationPolicyBucket(
   registrationPolicy: RegistrationPolicyForRegistrationPolicyUtils,
-  key: string,
+  generatedId: string,
 ): BucketForRegistrationPolicyUtils | undefined {
-  return (registrationPolicy.buckets ?? []).find((bucket) => bucket.key === key);
+  return (registrationPolicy.buckets ?? []).find((bucket) => bucket.generatedId === generatedId);
 }
 
 export function addRegistrationPolicyBucket<T extends RegistrationPolicyForRegistrationPolicyUtils>(
   registrationPolicy: T,
-  key: string,
-  bucket: Omit<T['buckets'][0], 'key'>,
+  generatedId: string,
+  bucket: Omit<T['buckets'][0], 'generatedId'>,
 ): T {
-  if (getRegistrationPolicyBucket(registrationPolicy, key)) {
-    throw new Error(`Bucket with key ${key} already exists in registration policy`);
+  if (getRegistrationPolicyBucket(registrationPolicy, generatedId)) {
+    throw new Error(`Bucket with generatedId ${generatedId} already exists in registration policy`);
   }
 
   return {
     ...registrationPolicy,
-    buckets: [...(registrationPolicy.buckets ?? []), { key, ...bucket }],
+    buckets: [...(registrationPolicy.buckets ?? []), { generatedId, ...bucket }],
   };
 }
 
 export function removeRegistrationPolicyBucket<T extends RegistrationPolicyForRegistrationPolicyUtils>(
   registrationPolicy: T,
-  key: string,
+  generatedId: string,
 ): T {
   return {
     ...registrationPolicy,
-    buckets: (registrationPolicy.buckets ?? []).filter((bucket) => bucket.key !== key),
+    buckets: (registrationPolicy.buckets ?? []).filter((bucket) => bucket.generatedId !== generatedId),
   };
 }
 
 export function updateRegistrationPolicyBucket<T extends RegistrationPolicyForRegistrationPolicyUtils>(
   registrationPolicy: T,
-  key: string,
-  newBucket: Omit<T['buckets'][0], 'key'>,
+  generatedId: string,
+  newBucket: Omit<T['buckets'][0], 'generatedId'>,
 ): T {
-  const index = (registrationPolicy.buckets ?? []).findIndex((bucket) => bucket.key === key);
+  const index = (registrationPolicy.buckets ?? []).findIndex((bucket) => bucket.generatedId === generatedId);
 
   if (index === -1) {
-    return addRegistrationPolicyBucket(registrationPolicy, key, newBucket);
+    return addRegistrationPolicyBucket(registrationPolicy, generatedId, newBucket);
   }
 
   const newBuckets = [...(registrationPolicy.buckets ?? [])];
-  newBuckets.splice(index, 1, { key, ...newBucket });
+  newBuckets.splice(index, 1, { generatedId, ...newBucket });
 
   return {
     ...registrationPolicy,
@@ -102,4 +105,35 @@ export function getRegistrationPolicyAnythingBucket<T extends RegistrationPolicy
   registrationPolicy: T,
 ): BucketForRegistrationPolicyUtils | undefined {
   return (registrationPolicy.buckets ?? []).find((bucket) => bucket.anything);
+}
+
+export type RegistrationPolicyBucketWithGeneratedId = RegistrationPolicyBucket & { generatedId: string };
+export type RegistrationPolicyWithGeneratedBucketIds = Omit<RegistrationPolicy, 'buckets'> & {
+  buckets: RegistrationPolicyBucketWithGeneratedId[];
+};
+
+// Tags every bucket entering an editing session with a stable, client-only generatedId, so the
+// editor never has to rely on key (which won't always be present) or id (which new buckets don't
+// have yet) for its own bookkeeping.
+export function withGeneratedBucketIds(
+  registrationPolicy: RegistrationPolicy,
+): RegistrationPolicyWithGeneratedBucketIds {
+  return {
+    ...registrationPolicy,
+    buckets: registrationPolicy.buckets.map((bucket) => ({
+      ...bucket,
+      generatedId: (bucket as RegistrationPolicyBucketWithGeneratedId).generatedId ?? uuidv4(),
+    })),
+  };
+}
+
+// The inverse of withGeneratedBucketIds -- generatedId must never be sent to the server, so this
+// is applied before a registration policy leaves the editor for good.
+export function withoutGeneratedBucketIds(
+  registrationPolicy: RegistrationPolicyWithGeneratedBucketIds,
+): RegistrationPolicy {
+  return {
+    ...registrationPolicy,
+    buckets: registrationPolicy.buckets.map(({ generatedId, ...bucket }) => bucket),
+  };
 }
