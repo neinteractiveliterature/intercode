@@ -2993,9 +2993,16 @@ export type Event = {
   /** The author(s) of this event */
   author?: Maybe<Scalars['String']['output']>;
   /**
+   * The distinct requested_bucket_id values from active signups, pending signup requests, and active signup ranked
+   * choices for this event. Used to determine which buckets require a remapping UI when editing the registration
+   * policy and a bucket they're already used in is removed.
+   */
+  bucket_ids_with_pending_signups_or_requests: Array<Scalars['ID']['output']>;
+  /**
    * The distinct requested_bucket_key values from active signups, pending signup requests, and active signup ranked
    * choices for this event. Used to determine which bucket key changes require a remapping UI when editing the
    * registration policy.
+   * @deprecated Use bucket_ids_with_pending_signups_or_requests instead
    */
   bucket_keys_with_pending_signups_or_requests: Array<Scalars['String']['output']>;
   /** Whether attendees can sign up for this event at the same time as other events */

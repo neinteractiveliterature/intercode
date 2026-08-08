@@ -3889,11 +3889,18 @@ type Event {
   author: String
 
   """
+  The distinct requested_bucket_id values from active signups, pending signup requests, and active signup ranked
+  choices for this event. Used to determine which buckets require a remapping UI when editing the registration
+  policy and a bucket they're already used in is removed.
+  """
+  bucket_ids_with_pending_signups_or_requests: [ID!]!
+
+  """
   The distinct requested_bucket_key values from active signups, pending signup requests, and active signup ranked
   choices for this event. Used to determine which bucket key changes require a remapping UI when editing the
   registration policy.
   """
-  bucket_keys_with_pending_signups_or_requests: [String!]!
+  bucket_keys_with_pending_signups_or_requests: [String!]! @deprecated(reason: "Use bucket_ids_with_pending_signups_or_requests instead")
 
   """
   Whether attendees can sign up for this event at the same time as other events

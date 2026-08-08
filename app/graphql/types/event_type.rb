@@ -38,12 +38,24 @@ class Types::EventType < Types::BaseObject
         null: false,
         description: "Overrides for the maximum number of tickets this event can provide"
 
-  field :bucket_keys_with_pending_signups_or_requests, [String], null: false do
+  field :bucket_keys_with_pending_signups_or_requests,
+        [String],
+        null: false,
+        deprecation_reason: "Use bucket_ids_with_pending_signups_or_requests instead" do
     authorize_action :update
     description <<~MARKDOWN
       The distinct requested_bucket_key values from active signups, pending signup requests, and active signup ranked
       choices for this event. Used to determine which bucket key changes require a remapping UI when editing the
       registration policy.
+    MARKDOWN
+  end
+
+  field :bucket_ids_with_pending_signups_or_requests, [ID], null: false do # rubocop:disable GraphQL/ExtractType
+    authorize_action :update
+    description <<~MARKDOWN
+      The distinct requested_bucket_id values from active signups, pending signup requests, and active signup ranked
+      choices for this event. Used to determine which buckets require a remapping UI when editing the registration
+      policy and a bucket they're already used in is removed.
     MARKDOWN
   end
 

@@ -2,7 +2,7 @@ import { useState, useCallback, useMemo, useRef } from 'react';
 import { BucketKeyMappingInput } from '../graphqlTypes.generated';
 import { BucketKeyRemappingModalProps } from './BucketKeyRemappingModal';
 
-type DraftBucket = { key: string; name?: string | null };
+type DraftBucket = { key: string; id?: string; name?: string | null };
 // A bucket read from the event's already-persisted form response (as opposed to the current,
 // possibly-unsaved draft) always has a real id, since RegistrationPolicyBucket#as_json includes
 // it -- unlike a brand-new bucket in the draft, which has no id until the edit is saved.
@@ -26,7 +26,7 @@ type UseBucketKeyRemappingOptions = {
   event: { form_response_attrs: { registration_policy?: unknown } };
   initialEvent: {
     form_response_attrs: { registration_policy?: unknown };
-    bucket_keys_with_pending_signups_or_requests: string[];
+    bucket_ids_with_pending_signups_or_requests: string[];
   };
   onSubmit: (mappings?: BucketKeyMappingInput[]) => void | Promise<void>;
 };
@@ -44,11 +44,11 @@ export default function useBucketKeyRemapping({ event, initialEvent, onSubmit }:
   );
 
   const updateEvent = useCallback(async () => {
-    const currentBucketKeys = new Set(newPolicyBuckets.map((b) => b.key));
+    const currentBucketIds = new Set(newPolicyBuckets.map((b) => b.id).filter((id): id is string => Boolean(id)));
     const originalBuckets = bucketsFromFormResponseAttrs<PersistedBucket>(initialEvent.form_response_attrs);
-    const keysWithRecords = new Set(initialEvent.bucket_keys_with_pending_signups_or_requests);
+    const idsWithRecords = new Set(initialEvent.bucket_ids_with_pending_signups_or_requests);
 
-    const removedBuckets = originalBuckets.filter((b) => !currentBucketKeys.has(b.key) && keysWithRecords.has(b.key));
+    const removedBuckets = originalBuckets.filter((b) => !currentBucketIds.has(b.id) && idsWithRecords.has(b.id));
 
     if (removedBuckets.length > 0) {
       setRemovedBucketsNeedingRemapping(removedBuckets);

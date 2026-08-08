@@ -13,9 +13,9 @@ describe('useBucketKeyRemapping', () => {
     },
   });
 
-  const buildInitialEvent = (buckets: Bucket[], bucketKeysWithPendingSignupsOrRequests: string[]) => ({
+  const buildInitialEvent = (buckets: Bucket[], bucketIdsWithPendingSignupsOrRequests: string[]) => ({
     ...buildEvent(buckets),
-    bucket_keys_with_pending_signups_or_requests: bucketKeysWithPendingSignupsOrRequests,
+    bucket_ids_with_pending_signups_or_requests: bucketIdsWithPendingSignupsOrRequests,
   });
 
   const renderUseBucketKeyRemapping = (
@@ -52,9 +52,26 @@ describe('useBucketKeyRemapping', () => {
     expect(result.current.remappingModalProps.visible).toBe(false);
   });
 
+  it('submits immediately when a bucket with pending records is only renamed, keeping its id', async () => {
+    const onSubmit = vi.fn().mockResolvedValue(undefined);
+    const initialEvent = buildInitialEvent([{ key: 'dogs', id: '1', name: 'Dogs' }], ['1']);
+    // Same id as the original bucket, but a different key/name -- a same-id rename must not be
+    // mistaken for a removal, even though the key that pending records were originally keyed off of
+    // no longer matches any current bucket.
+    const event = buildEvent([{ key: 'good_dogs', id: '1', name: 'Good Dogs' }]);
+    const { result } = renderUseBucketKeyRemapping(event, initialEvent, onSubmit);
+
+    await act(async () => {
+      await result.current.updateEvent();
+    });
+
+    expect(onSubmit).toHaveBeenCalledWith();
+    expect(result.current.remappingModalProps.visible).toBe(false);
+  });
+
   it('shows the remapping modal, carrying the removed bucket’s real id, when it has pending records', async () => {
     const onSubmit = vi.fn().mockResolvedValue(undefined);
-    const initialEvent = buildInitialEvent([{ key: 'dogs', id: '1', name: 'Dogs' }], ['dogs']);
+    const initialEvent = buildInitialEvent([{ key: 'dogs', id: '1', name: 'Dogs' }], ['1']);
     const event = buildEvent([{ key: 'cats' }]);
     const { result } = renderUseBucketKeyRemapping(event, initialEvent, onSubmit);
 
@@ -69,7 +86,7 @@ describe('useBucketKeyRemapping', () => {
 
   it('submits with the confirmed mappings and hides the modal on confirm', async () => {
     const onSubmit = vi.fn().mockResolvedValue(undefined);
-    const initialEvent = buildInitialEvent([{ key: 'dogs', id: '1', name: 'Dogs' }], ['dogs']);
+    const initialEvent = buildInitialEvent([{ key: 'dogs', id: '1', name: 'Dogs' }], ['1']);
     const event = buildEvent([{ key: 'cats' }]);
     const { result } = renderUseBucketKeyRemapping(event, initialEvent, onSubmit);
 
@@ -92,7 +109,7 @@ describe('useBucketKeyRemapping', () => {
 
   it('does not submit, but still resolves the pending update, on cancel', async () => {
     const onSubmit = vi.fn().mockResolvedValue(undefined);
-    const initialEvent = buildInitialEvent([{ key: 'dogs', id: '1', name: 'Dogs' }], ['dogs']);
+    const initialEvent = buildInitialEvent([{ key: 'dogs', id: '1', name: 'Dogs' }], ['1']);
     const event = buildEvent([{ key: 'cats' }]);
     const { result } = renderUseBucketKeyRemapping(event, initialEvent, onSubmit);
 
