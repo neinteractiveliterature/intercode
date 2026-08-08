@@ -14951,6 +14951,30 @@
               "args": []
             },
             {
+              "name": "bucket_ids_with_pending_signups_or_requests",
+              "description": "The distinct requested_bucket_id values from active signups, pending signup requests, and active signup ranked\nchoices for this event. Used to determine which buckets require a remapping UI when editing the registration\npolicy and a bucket they're already used in is removed.\n",
+              "type": {
+                "kind": "NON_NULL",
+                "name": null,
+                "ofType": {
+                  "kind": "LIST",
+                  "name": null,
+                  "ofType": {
+                    "kind": "NON_NULL",
+                    "name": null,
+                    "ofType": {
+                      "kind": "SCALAR",
+                      "name": "ID",
+                      "ofType": null
+                    }
+                  }
+                }
+              },
+              "isDeprecated": false,
+              "deprecationReason": null,
+              "args": []
+            },
+            {
               "name": "bucket_keys_with_pending_signups_or_requests",
               "description": "The distinct requested_bucket_key values from active signups, pending signup requests, and active signup ranked\nchoices for this event. Used to determine which bucket key changes require a remapping UI when editing the\nregistration policy.\n",
               "type": {
@@ -14970,8 +14994,8 @@
                   }
                 }
               },
-              "isDeprecated": false,
-              "deprecationReason": null,
+              "isDeprecated": true,
+              "deprecationReason": "Use bucket_ids_with_pending_signups_or_requests instead",
               "args": []
             },
             {

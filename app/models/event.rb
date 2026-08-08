@@ -231,6 +231,13 @@ class Event < ApplicationRecord
     RegistrationPolicyBucket.where(id: requested_bucket_ids_for(run_ids)).pluck(:key)
   end
 
+  def bucket_ids_with_pending_signups_or_requests
+    run_ids = runs.pluck(:id)
+    return [] if run_ids.empty?
+
+    requested_bucket_ids_for(run_ids)
+  end
+
   private
 
   def requested_bucket_ids_for(run_ids)

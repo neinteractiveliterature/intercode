@@ -112,6 +112,55 @@ class EventTest < ActiveSupport::TestCase
     end
   end
 
+  describe "#bucket_ids_with_pending_signups_or_requests" do
+    it "returns an empty array for an event with no runs" do
+      assert_equal [], event.bucket_ids_with_pending_signups_or_requests
+    end
+
+    it "returns an empty array for an event with runs but no signups" do
+      the_run
+      assert_equal [], event.bucket_ids_with_pending_signups_or_requests
+    end
+
+    it "includes requested_bucket_id from active signups" do
+      dogs_id = bucket_with_key(event.registration_policy, "dogs").id
+      create(:signup, run: the_run, requested_bucket_id: dogs_id, bucket_id: dogs_id)
+      assert_includes event.bucket_ids_with_pending_signups_or_requests, dogs_id
+    end
+
+    it "excludes withdrawn signups" do
+      dogs_id = bucket_with_key(event.registration_policy, "dogs").id
+      create(:signup, run: the_run, requested_bucket_id: dogs_id, state: "withdrawn")
+      assert_equal [], event.bucket_ids_with_pending_signups_or_requests
+    end
+
+    it "includes requested_bucket_id from pending signup requests" do
+      cats_id = bucket_with_key(event.registration_policy, "cats").id
+      create(:signup_request, target_run: the_run, requested_bucket_id: cats_id)
+      assert_includes event.bucket_ids_with_pending_signups_or_requests, cats_id
+    end
+
+    it "includes requested_bucket_id from signup ranked choices" do
+      anything_id = bucket_with_key(event.registration_policy, "anything").id
+      create(:signup_ranked_choice, target_run: the_run, requested_bucket_id: anything_id)
+      assert_includes event.bucket_ids_with_pending_signups_or_requests, anything_id
+    end
+
+    it "deduplicates ids across all three sources" do
+      dogs_id = bucket_with_key(event.registration_policy, "dogs").id
+      create(:signup, run: the_run, requested_bucket_id: dogs_id, bucket_id: dogs_id)
+      create(:signup_request, target_run: the_run, requested_bucket_id: dogs_id)
+      assert_equal [dogs_id], event.bucket_ids_with_pending_signups_or_requests
+    end
+
+    it "still returns bucket keys from the deprecated method with the same underlying data" do
+      dogs_id = bucket_with_key(event.registration_policy, "dogs").id
+      create(:signup, run: the_run, requested_bucket_id: dogs_id, bucket_id: dogs_id)
+      assert_equal ["dogs"], event.bucket_keys_with_pending_signups_or_requests
+      assert_equal [dogs_id], event.bucket_ids_with_pending_signups_or_requests
+    end
+  end
+
   describe "#registration_policy_change_for (from the HasRegistrationPolicy concern)" do
     it "returns nil when given a nil hash" do
       assert_nil event.registration_policy_change_for(nil)
