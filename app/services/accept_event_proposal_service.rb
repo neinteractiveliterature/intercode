@@ -87,6 +87,6 @@ class AcceptEventProposalService < CivilService::Service
     source_policy = event_proposal.registration_policy
     # Empty (not unlimited) -- fails closed, blocking signups until someone configures a real policy.
     return RegistrationPolicy.new unless source_policy
-    RegistrationPolicy.build_from_hash(source_policy.as_json)
+    RegistrationPolicy.build_from_hash_as_clone(source_policy.as_json)
   end
 end

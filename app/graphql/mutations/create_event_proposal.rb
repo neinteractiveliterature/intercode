@@ -48,7 +48,7 @@ class Mutations::CreateEventProposal < Mutations::BaseMutation
 
     # Build an independent copy -- sharing the template's row risks a dependent: :destroy cascade.
     if clone_attributes["registration_policy"]
-      clone_attributes["registration_policy"] = RegistrationPolicy.build_from_hash(
+      clone_attributes["registration_policy"] = RegistrationPolicy.build_from_hash_as_clone(
         clone_attributes["registration_policy"].as_json
       )
     end
