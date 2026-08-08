@@ -163,6 +163,11 @@ function withDefaultHydrateFallback(routes: RouteStubArray): RouteStubArray {
 // own real ApolloClient wired to a MockLink instead. Mirrors how the real app wires up its router
 // context (see packs/application.tsx's getContext), and matches its v8_middleware future flag so
 // context.get/set behaves the same way in tests as it does in production.
+//
+// Some routed components ALSO call Apollo hooks directly (e.g. a table driven by useQuery, on top
+// of a parent route's loader) -- those go through React's ApolloProvider context instead, so this
+// also wraps the tree in MockedProvider using the same apolloMocks. A query reachable only via a
+// loader is never touched by MockedProvider's link, and vice versa, so one list safely covers both.
 export async function renderRoute(
   routes: RouteStubArray,
   options: RenderRouteOptions = {},
@@ -177,15 +182,23 @@ export async function renderRoute(
   const i18nInstance = await getI18n();
   const effectiveAppRootContextValue = { ...appRootContextDefaultValue, ...appRootContextValue };
 
-  const result = render(
-    <AppRootContext.Provider value={effectiveAppRootContextValue}>
-      <Confirm>
-        <I18nextProvider i18n={i18nInstance}>
-          <RoutesStub initialEntries={initialEntries} initialIndex={initialIndex} future={{ v8_middleware: true }} />
-        </I18nextProvider>
-      </Confirm>
-    </AppRootContext.Provider>,
-    { queries: { ...queries, ...customQueries } },
+  const result = await act(() =>
+    render(
+      <AppRootContext.Provider value={effectiveAppRootContextValue}>
+        <MockedProvider mocks={apolloMocks}>
+          <Confirm>
+            <I18nextProvider i18n={i18nInstance}>
+              <RoutesStub
+                initialEntries={initialEntries}
+                initialIndex={initialIndex}
+                future={{ v8_middleware: true }}
+              />
+            </I18nextProvider>
+          </Confirm>
+        </MockedProvider>
+      </AppRootContext.Provider>,
+      { queries: { ...queries, ...customQueries } },
+    ),
   );
 
   return result as RenderResult<typeof queries & CustomQueries>;
