@@ -6,12 +6,14 @@ class EventChangeRegistrationPolicyService < CivilService::Service
   self.result_class = Result
 
   # registration_policy here is new_registration_policy, a detached policy built via
-  # RegistrationPolicy.build_from_hash that hasn't been persisted yet, so its candidate buckets have
-  # no id (existing keys will get their old, stable id back once update_from! persists them in
-  # place; genuinely new keys get an id for the first time). candidate_bucket_for bridges a real
-  # signup's persisted bucket to its candidate counterpart by key, since key is the only identity
-  # valid on both sides pre-persist -- everywhere else in this class works with the resolved bucket
-  # objects (id or object identity, per SignupBucketFinder).
+  # RegistrationPolicy.build_from_hash that hasn't been persisted yet. A candidate bucket that
+  # already existed pre-edit carries its real, stable id (build_from_hash keeps it); a genuinely
+  # new candidate has no id until update_from! persists it further down the line.
+  # candidate_bucket_for bridges a real signup's persisted bucket (always a real id) to its
+  # candidate counterpart by id -- a signup can't already be in, or have already requested, a
+  # bucket that's brand new in this edit, so a candidate with no id correctly never matches.
+  # Everywhere else in this class works with the resolved bucket objects (id or object identity,
+  # per SignupBucketFinder).
   class SignupSimulator
     attr_reader :registration_policy, :immovable_signups, :new_signups_by_signup_id
     attr_accessor :logger
@@ -84,11 +86,11 @@ class EventChangeRegistrationPolicyService < CivilService::Service
 
     def candidate_bucket_for(bucket)
       return nil unless bucket
-      candidate_buckets_by_key[bucket.key]
+      candidate_buckets_by_id[bucket.id]
     end
 
-    def candidate_buckets_by_key
-      @candidate_buckets_by_key ||= registration_policy.buckets.index_by(&:key)
+    def candidate_buckets_by_id
+      @candidate_buckets_by_id ||= registration_policy.buckets.index_by(&:id)
     end
 
     def place_signup(signup, bucket_finder, destination_bucket)

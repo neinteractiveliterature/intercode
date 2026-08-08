@@ -124,6 +124,35 @@ class ActiveSupport::TestCase
     registration_policy.buckets.find { |bucket| bucket.key == normalized_key }
   end
 
+  # Test-only convenience: mimics what the registration policy editor now sends for an edit to an
+  # existing policy (see #11895/#11897) -- each bucket spec carries the real id of whichever
+  # existing bucket has the same key, so RegistrationPolicy#sync_buckets_from_hash! matches it by
+  # id rather than creating (and destroying the old) row. A spec whose key has no existing match
+  # gets no id, correctly describing a brand-new bucket.
+  def build_edited_registration_policy(event, bucket_specs, **policy_attrs)
+    existing_by_key = event.registration_policy.buckets.index_by(&:key)
+    buckets =
+      bucket_specs.map do |spec|
+        existing = existing_by_key[RegistrationPolicyBucket.normalize_key(spec[:key])]
+        existing ? spec.merge(id: existing.id) : spec
+      end
+    RegistrationPolicy.build_from_hash(policy_attrs.merge(buckets: buckets))
+  end
+
+  # Test-only convenience: RegistrationPolicy#equivalent_to? matches by id (see #11897), so it
+  # can't verify "these two independently-persisted/detached policies describe the same buckets"
+  # -- e.g. a clone against its source, or a freshly-persisted policy against the detached hash
+  # that requested it (both real scenarios with no id overlap by design). Matches buckets by key
+  # instead, which is what actually varies in those cases, and compares content the same way
+  # RegistrationPolicyBucket#equivalent_to? always has.
+  def assert_registration_policies_have_equivalent_buckets(expected, actual)
+    actual_buckets_by_key = actual.buckets.index_by(&:key)
+    assert_equal expected.buckets.map(&:key).sort, actual_buckets_by_key.keys.sort
+    expected.buckets.each do |bucket|
+      assert bucket.equivalent_to?(actual_buckets_by_key[bucket.key]), "bucket #{bucket.key.inspect} not equivalent"
+    end
+  end
+
   # Counts SQL queries matching pattern issued while running the block, for asserting on N+1s
   # (e.g. assert_operator count_queries(/registration_policy_buckets/) { subject.call! }, :<=, 1).
   def count_queries(pattern)
