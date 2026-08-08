@@ -1,7 +1,9 @@
 import { Suspense, useMemo, useState } from 'react';
+import { ApolloClient, InMemoryCache } from '@apollo/client';
 import { MockedProvider, MockedProviderProps } from '@apollo/client/testing/react';
+import { MockLink } from '@apollo/client/testing';
 import { render, queries, Queries, RenderOptions, RenderResult, waitFor } from '@testing-library/react';
-import { createMemoryRouter, RouterProvider } from 'react-router';
+import { createMemoryRouter, createRoutesStub, RouterContextProvider, RouterProvider } from 'react-router';
 import { i18n } from 'i18next';
 import { I18nextProvider } from 'react-i18next';
 import type { Stripe } from '@stripe/stripe-js';
@@ -11,6 +13,7 @@ import type { ApolloCache } from '@apollo/client';
 import getI18n from '../../app/javascript/setupI18Next';
 import { LazyStripeContext } from '../../app/javascript/LazyStripe';
 import AppRootContext, { appRootContextDefaultValue, AppRootContextValue } from '../../app/javascript/AppRootContext';
+import { apolloClientContext } from '../../app/javascript/AppContexts';
 
 export type TestWrapperProps = {
   apolloMocks?: MockedProviderProps['mocks'];
@@ -125,6 +128,61 @@ async function customRender<Q extends Queries = Queries>(
   await waitFor(() => expect(result.queryAllByTestId('test-wrapper-suspense-fallback')).toHaveLength(0));
 
   return result;
+}
+
+export type RenderRouteOptions = {
+  apolloMocks?: MockLink.MockedResponse[];
+  initialEntries?: string[];
+  initialIndex?: number;
+  appRootContextValue?: Partial<AppRootContextValue>;
+};
+
+type RouteStubArray = Parameters<typeof createRoutesStub>[0];
+
+// Fills in a no-op HydrateFallback on every route that doesn't already have one, recursively --
+// otherwise react-router logs a "No HydrateFallback element provided" warning while a route's
+// loader is still resolving, which is expected and harmless in every one of these tests (they all
+// await the real content afterward).
+function withDefaultHydrateFallback(routes: RouteStubArray): RouteStubArray {
+  return routes.map((route) => ({
+    HydrateFallback: () => null,
+    ...route,
+    children: route.children ? withDefaultHydrateFallback(route.children) : route.children,
+  })) as RouteStubArray;
+}
+
+// For components that get their data via a React Router loader/action (context.get(apolloClientContext)
+// inside a LoaderFunction/ActionFunction) rather than an Apollo hook -- MockedProvider only intercepts
+// hooks that go through React's ApolloProvider context, so a loader-side client.query() call needs its
+// own real ApolloClient wired to a MockLink instead. Mirrors how the real app wires up its router
+// context (see packs/application.tsx's getContext), and matches its v8_middleware future flag so
+// context.get/set behaves the same way in tests as it does in production.
+export async function renderRoute(
+  routes: RouteStubArray,
+  options: RenderRouteOptions = {},
+): Promise<RenderResult<typeof queries & CustomQueries>> {
+  const { apolloMocks = [], initialEntries, initialIndex, appRootContextValue } = options;
+
+  const client = new ApolloClient({ link: new MockLink(apolloMocks), cache: new InMemoryCache() });
+  const context = new RouterContextProvider();
+  context.set(apolloClientContext, client);
+
+  const RoutesStub = createRoutesStub(withDefaultHydrateFallback(routes), context);
+  const i18nInstance = await getI18n();
+  const effectiveAppRootContextValue = { ...appRootContextDefaultValue, ...appRootContextValue };
+
+  const result = render(
+    <AppRootContext.Provider value={effectiveAppRootContextValue}>
+      <Confirm>
+        <I18nextProvider i18n={i18nInstance}>
+          <RoutesStub initialEntries={initialEntries} initialIndex={initialIndex} future={{ v8_middleware: true }} />
+        </I18nextProvider>
+      </Confirm>
+    </AppRootContext.Provider>,
+    { queries: { ...queries, ...customQueries } },
+  );
+
+  return result as RenderResult<typeof queries & CustomQueries>;
 }
 
 // re-export everything
