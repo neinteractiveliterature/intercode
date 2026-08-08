@@ -359,12 +359,16 @@ class EventChangeRegistrationPolicyService < CivilService::Service
   end
 
   # The still-persisted buckets (with their real, stable ids) that the incoming new_registration_policy
-  # doesn't have a matching key for. Computed once, before update_from! destroys them.
+  # doesn't have a matching candidate for. Computed once, before update_from! destroys them. Matched
+  # by id, not key: a bucket whose key changes mid-edit is still the same bucket (sync_buckets_from_hash!
+  # matches it by id too, see #11892), so key-based matching here would wrongly treat every rename as
+  # a remove-and-recreate, silently orphaning that bucket's signups when clear_references_to_removed_buckets
+  # nulls their bucket_id/requested_bucket_id out from under them.
   def removed_buckets
     @removed_buckets ||=
       begin
-        new_keys = new_registration_policy.buckets.to_set(&:key)
-        event.registration_policy.buckets.reject { |bucket| new_keys.include?(bucket.key) }
+        new_bucket_ids = new_registration_policy.buckets.filter_map(&:id).to_set
+        event.registration_policy.buckets.reject { |bucket| new_bucket_ids.include?(bucket.id) }
       end
   end
 
