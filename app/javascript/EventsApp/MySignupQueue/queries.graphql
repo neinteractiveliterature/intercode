@@ -45,7 +45,9 @@ fragment UserConProfileRankedChoiceQueueFields on UserConProfile {
     prioritize_waitlist
     waitlist_position_cap
     priority
-    requested_bucket_key
+    requested_bucket {
+      id
+    }
 
     simulated_skip_reason {
       reason

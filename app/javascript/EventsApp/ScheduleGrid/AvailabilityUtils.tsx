@@ -34,7 +34,7 @@ export function calculateAvailability(
       signupCount = signupCountData.getNotCountedConfirmedSignupCount();
     } else {
       signupCount = signupCountData.sumSignupCounts({
-        bucket_key: limitedBuckets.map((bucket) => bucket.key),
+        bucket_id: limitedBuckets.map((bucket) => bucket.id),
       });
     }
   }

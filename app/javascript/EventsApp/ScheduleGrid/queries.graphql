@@ -24,6 +24,7 @@ fragment ScheduleGridEventFragment on Event {
     minimum_slots_including_not_counted
 
     buckets {
+      id
       key
       not_counted
       total_slots

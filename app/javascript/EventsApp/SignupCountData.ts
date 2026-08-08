@@ -1,9 +1,27 @@
-import { GroupedSignupCount, SignupState } from '../graphqlTypes.generated';
+import { RegistrationPolicyBucket, SignupState } from '../graphqlTypes.generated';
+
+export type GroupedSignupCountForSignupCountData = {
+  bucket?: Pick<RegistrationPolicyBucket, 'id'> | null;
+  count: number;
+  counted: boolean;
+  state: SignupState;
+  team_member: boolean;
+};
+
+// The generic filter mechanism below compares plain field values, so a nested bucket relation is
+// flattened into a synthetic bucket_id at construction time rather than filtered directly.
+type NormalizedGroupedSignupCount = {
+  bucket_id: string | null;
+  count: number;
+  counted: boolean;
+  state: SignupState;
+  team_member: boolean;
+};
 
 export type SignupCountFieldFilter<T> = T | T[] | undefined;
 
 export type SignupCountDataFilter = {
-  [Field in keyof GroupedSignupCount]?: SignupCountFieldFilter<GroupedSignupCount[Field]>;
+  [Field in keyof NormalizedGroupedSignupCount]?: SignupCountFieldFilter<NormalizedGroupedSignupCount[Field]>;
 };
 
 export type SignupCountsByBucketKeyAndCounted = {
@@ -15,28 +33,36 @@ export type SignupCountsByBucketKeyAndCounted = {
 
 export type EventForSignupCountData = {
   registration_policy?: null | {
-    buckets: { key: string; slots_limited: boolean }[];
+    buckets: { id: string; slots_limited: boolean }[];
     total_slots?: number | null;
     slots_limited?: boolean | null;
   };
 };
 
 export default class SignupCountData {
-  data: GroupedSignupCount[];
+  data: NormalizedGroupedSignupCount[];
 
-  static fromRun(run: { grouped_signup_counts: GroupedSignupCount[] }): SignupCountData {
+  static fromRun(run: { grouped_signup_counts: GroupedSignupCountForSignupCountData[] }): SignupCountData {
     return SignupCountData.fromGroupedCounts(run.grouped_signup_counts);
   }
 
-  static fromGroupedCounts(groupedCounts: GroupedSignupCount[]): SignupCountData {
-    return new SignupCountData(groupedCounts);
+  static fromGroupedCounts(groupedCounts: GroupedSignupCountForSignupCountData[]): SignupCountData {
+    return new SignupCountData(
+      groupedCounts.map((row) => ({
+        bucket_id: row.bucket?.id ?? null,
+        count: row.count,
+        counted: row.counted,
+        state: row.state,
+        team_member: row.team_member,
+      })),
+    );
   }
 
-  constructor(data: GroupedSignupCount[]) {
+  constructor(data: NormalizedGroupedSignupCount[]) {
     this.data = data;
   }
 
-  filterRows(filters: SignupCountDataFilter): GroupedSignupCount[] {
+  filterRows(filters: SignupCountDataFilter): NormalizedGroupedSignupCount[] {
     return Object.entries(filters).reduce((filteredData, [field, value]) => {
       if (Array.isArray(value)) {
         return filteredData.filter((row) => (value as unknown[]).includes(row[field as keyof SignupCountDataFilter]));
@@ -60,7 +86,7 @@ export default class SignupCountData {
     const limitedBuckets = event.registration_policy.buckets.filter((bucket) => bucket.slots_limited);
     return this.sumSignupCounts({
       state: SignupState.Confirmed,
-      bucket_key: limitedBuckets.map((bucket) => bucket.key),
+      bucket_id: limitedBuckets.map((bucket) => bucket.id),
       counted: true,
     });
   }

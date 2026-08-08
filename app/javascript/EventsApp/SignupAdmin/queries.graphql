@@ -4,8 +4,13 @@ fragment SignupFields on Signup {
   id
   state
   counted
-  bucket_key
-  requested_bucket_key
+  bucket {
+    id
+    key
+  }
+  requested_bucket {
+    id
+  }
 
   run {
     id
@@ -69,8 +74,12 @@ fragment UserConProfileSignupsFragment on UserConProfile {
     id
     state
     counted
-    bucket_key
-    requested_bucket_key
+    bucket {
+      id
+    }
+    requested_bucket {
+      id
+    }
 
     user_con_profile {
       id
@@ -196,8 +205,12 @@ query RunSignupsTableSignupsQuery(
             id
             state
             counted
-            bucket_key
-            requested_bucket_key
+            bucket {
+              id
+            }
+            requested_bucket {
+              id
+            }
             age_restrictions_check
 
             run {
@@ -293,7 +306,9 @@ query RunSignupSummaryQuery($eventId: ID!, $runId: ID!) {
           entries {
             id
             state
-            bucket_key
+            bucket {
+              id
+            }
             waitlist_position
 
             user_con_profile {
@@ -404,7 +419,9 @@ query RunSignupChangesQuery(
           id
           state
           counted
-          bucket_key
+          bucket {
+            id
+          }
           action
           created_at
 
@@ -412,12 +429,16 @@ query RunSignupChangesQuery(
             id
             state
             counted
-            bucket_key
+            bucket {
+              id
+            }
           }
 
           signup {
             id
-            requested_bucket_key
+            requested_bucket {
+              id
+            }
           }
 
           user_con_profile {

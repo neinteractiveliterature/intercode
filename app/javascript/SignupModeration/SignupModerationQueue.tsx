@@ -64,10 +64,10 @@ function signupRequestStateBadgeClass(state: SignupRequestState) {
 }
 
 function describeRequestedBucket(signupRequest: SignupModerationSignupRequestFieldsFragment, t: TFunction) {
-  return signupRequest.requested_bucket_key
+  return signupRequest.requested_bucket
     ? (
         signupRequest.target_run.event.registration_policy?.buckets.find(
-          (bucket) => bucket.key === signupRequest.requested_bucket_key,
+          (bucket) => bucket.id === signupRequest.requested_bucket?.id,
         ) || {}
       ).name
     : t('signups.noPreference');

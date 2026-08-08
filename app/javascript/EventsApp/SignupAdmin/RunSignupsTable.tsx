@@ -134,7 +134,7 @@ function RunSignupsTable(): React.JSX.Element {
         enableSorting: true,
         cell: UserConProfileWithGravatarCell,
       }),
-      columnHelper.accessor('bucket_key', {
+      columnHelper.accessor((row) => row.bucket?.id, {
         header: t('events.signupAdmin.bucketHeader'),
         id: 'bucket',
         cell: BucketCell,

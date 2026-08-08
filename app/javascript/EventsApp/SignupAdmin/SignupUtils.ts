@@ -5,14 +5,16 @@ import snakeCase from 'lodash/snakeCase';
 import { RegistrationPolicyBucket, Signup, SignupState } from '../../graphqlTypes.generated';
 import humanize from '../../humanize';
 
-export function findBucket<BucketType extends Pick<RegistrationPolicyBucket, 'key'>>(
-  bucketKey: string | null | undefined,
+export function findBucket<BucketType extends Pick<RegistrationPolicyBucket, 'id'>>(
+  bucketId: string | null | undefined,
   registrationPolicy: { buckets: BucketType[] },
 ): BucketType | undefined {
-  return registrationPolicy.buckets.find((bucket) => bucket.key === bucketKey);
+  return registrationPolicy.buckets.find((bucket) => bucket.id === bucketId);
 }
 
-export type SignupForFormatBucket = Pick<Signup, 'bucket_key' | 'counted' | 'state' | 'requested_bucket_key'> & {
+export type SignupForFormatBucket = Pick<Signup, 'counted' | 'state'> & {
+  bucket?: Pick<RegistrationPolicyBucket, 'id'> | null;
+  requested_bucket?: Pick<RegistrationPolicyBucket, 'id'> | null;
   user_con_profile?: { id: string };
 };
 
@@ -22,7 +24,7 @@ export type EventForFormatBucket = {
   };
   registration_policy?: null | {
     buckets: {
-      key: string;
+      id: string;
       name?: string | null;
     }[];
   };
@@ -30,7 +32,6 @@ export type EventForFormatBucket = {
 };
 
 export function formatBucket(signup: SignupForFormatBucket, event: EventForFormatBucket, t: TFunction): string {
-  const { bucket_key: bucketKey } = signup;
   const registrationPolicy = event.registration_policy ?? { buckets: [] };
 
   if (signup.state === SignupState.Withdrawn) {
@@ -38,9 +39,9 @@ export function formatBucket(signup: SignupForFormatBucket, event: EventForForma
   }
 
   if (!signup.counted) {
-    if (bucketKey) {
+    if (signup.bucket) {
       return t('signups.states.notCountedWithBucket', {
-        bucketName: findBucket(bucketKey, registrationPolicy)?.name,
+        bucketName: findBucket(signup.bucket.id, registrationPolicy)?.name,
       });
     }
 
@@ -51,7 +52,7 @@ export function formatBucket(signup: SignupForFormatBucket, event: EventForForma
     }
 
     if (signup.state === 'waitlisted') {
-      const requestedBucket = findBucket(signup.requested_bucket_key, registrationPolicy);
+      const requestedBucket = findBucket(signup.requested_bucket?.id, registrationPolicy);
       if (requestedBucket) {
         return t('signups.states.waitlistedWithRequestedBucket', {
           requestedBucketName: requestedBucket.name,
@@ -64,8 +65,8 @@ export function formatBucket(signup: SignupForFormatBucket, event: EventForForma
     return t('signups.states.notCounted');
   }
 
-  const bucket = findBucket(bucketKey, registrationPolicy);
-  const requestedBucket = findBucket(signup.requested_bucket_key, registrationPolicy);
+  const bucket = findBucket(signup.bucket?.id, registrationPolicy);
+  const requestedBucket = findBucket(signup.requested_bucket?.id, registrationPolicy);
 
   if (bucket && requestedBucket && bucket.name != null && bucket.name === requestedBucket.name) {
     return bucket.name;
@@ -113,7 +114,7 @@ export function formatSignupStatus(signup: SignupForFormatBucket, event: EventFo
     return formatBucket(signup, event, t);
   }
 
-  const requestedBucket = findBucket(signup.requested_bucket_key, event.registration_policy ?? { buckets: [] });
+  const requestedBucket = findBucket(signup.requested_bucket?.id, event.registration_policy ?? { buckets: [] });
   const stateText = formatSignupState(signup.state, t);
 
   if (requestedBucket) {

@@ -9,10 +9,10 @@ type BucketType = NonNullable<SignupFieldsFragment['run']['event']['registration
 
 function getLabelForBucketChoice(signup: SignupFieldsFragment, bucket: BucketType, t: TFunction) {
   const addenda = [];
-  if (bucket.key === signup.bucket_key) {
+  if (bucket.id === signup.bucket?.id) {
     addenda.push(t('events.signupAdmin.bucketInput.currentBucketLabel'));
   }
-  if (bucket.key === signup.requested_bucket_key) {
+  if (bucket.id === signup.requested_bucket?.id) {
     addenda.push(t('events.signupAdmin.bucketInput.userRequestedBucketLabel'));
   }
   const addendaString = addenda.length > 0 ? ` (${addenda.join(', ')})` : '';
@@ -21,7 +21,7 @@ function getLabelForBucketChoice(signup: SignupFieldsFragment, bucket: BucketTyp
 }
 
 function shouldBucketChoiceBeDisabled(signup: SignupFieldsFragment, bucket: BucketType) {
-  return bucket.key === signup.bucket_key || (bucket.anything && signup.bucket_key != null);
+  return bucket.id === signup.bucket?.id || (bucket.anything && signup.bucket != null);
 }
 
 export type BucketInputProps = Omit<

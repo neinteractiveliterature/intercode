@@ -63,7 +63,7 @@ function RunCapacityGraphBucket({
 
   const signupCount = signupCountData.sumSignupCounts({
     state: [SignupState.Confirmed, SignupState.TicketPurchaseHold],
-    bucket_key: bucket.key,
+    bucket_id: bucket.id,
   });
   const remainingCapacity = (bucket.total_slots ?? 0) - signupCount;
 

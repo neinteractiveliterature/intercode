@@ -23,16 +23,12 @@ function BucketChangeCell<TData, TValue extends BucketChangeType>({
 
   const oldBucket = signupChange.previous_signup_change
     ? formatBucket(
-        { ...signupChange.previous_signup_change, requested_bucket_key: signupChange.signup.requested_bucket_key },
+        { ...signupChange.previous_signup_change, requested_bucket: signupChange.signup.requested_bucket },
         event,
         t,
       )
     : null;
-  const newBucket = formatBucket(
-    { ...signupChange, requested_bucket_key: signupChange.signup.requested_bucket_key },
-    event,
-    t,
-  );
+  const newBucket = formatBucket({ ...signupChange, requested_bucket: signupChange.signup.requested_bucket }, event, t);
 
   return (
     <>

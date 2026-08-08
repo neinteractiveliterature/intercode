@@ -8,7 +8,9 @@ fragment SignupModerationRunFields on Run {
   starts_at
 
   grouped_signup_counts {
-    bucket_key
+    bucket {
+      id
+    }
     count
     counted
     state
@@ -25,7 +27,9 @@ fragment SignupModerationRunFields on Run {
 fragment SignupModerationSignupRequestFields on SignupRequest {
   id
   state
-  requested_bucket_key
+  requested_bucket {
+    id
+  }
   created_at
 
   user_con_profile {
