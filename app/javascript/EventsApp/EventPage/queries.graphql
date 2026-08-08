@@ -15,7 +15,9 @@ fragment MySignupRequestFields on SignupRequest {
   target_run {
     id
   }
-  requested_bucket_key
+  requested_bucket {
+    id
+  }
   replace_signup {
     id
   }
@@ -27,7 +29,9 @@ fragment MySignupRankedChoiceFields on SignupRankedChoice {
   target_run {
     id
   }
-  requested_bucket_key
+  requested_bucket {
+    id
+  }
   priority
 }
 
@@ -38,7 +42,9 @@ fragment EventPageRunFields on Run {
   current_ability_can_signup_summary_run
 
   grouped_signup_counts {
-    bucket_key
+    bucket {
+      id
+    }
     count
     counted
     state

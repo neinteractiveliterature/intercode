@@ -3,7 +3,12 @@ import { notEmpty } from '@neinteractiveliterature/litform';
 import { EventPageQueryData, RunCardRegistrationPolicyFieldsFragment } from './queries.generated';
 import sortBuckets from './sortBuckets';
 import SignupCountData from '../SignupCountData';
-import { SignupState, SignupRankedChoice, UserSignupConstraints } from '../../graphqlTypes.generated';
+import {
+  RegistrationPolicyBucket,
+  SignupState,
+  SignupRankedChoice,
+  UserSignupConstraints,
+} from '../../graphqlTypes.generated';
 
 type SignupOptionBucket = RunCardRegistrationPolicyFieldsFragment['buckets'][0];
 
@@ -19,7 +24,9 @@ export type SignupOption = {
   counted: boolean;
   teamMember: boolean;
   action: SignupOptionAction;
-  pendingRankedChoices: Pick<SignupRankedChoice, 'priority' | 'requested_bucket_key'>[];
+  pendingRankedChoices: (Pick<SignupRankedChoice, 'priority'> & {
+    requested_bucket?: Pick<RegistrationPolicyBucket, 'id'> | null;
+  })[];
 };
 
 function isMainOption(option: SignupOption, noPreferenceOptions: SignupOption[], notCountedOptions: SignupOption[]) {
@@ -127,7 +134,7 @@ function allSignupOptions(
     },
   signupCounts: SignupCountData,
   addToQueue: boolean,
-  myPendingRankedChoices: Pick<SignupRankedChoice, 'requested_bucket_key' | 'priority'>[],
+  myPendingRankedChoices: SignupOption['pendingRankedChoices'],
   userSignupConstraints: Pick<UserSignupConstraints, 'at_maximum_signups'>,
   userConProfile?: { id: string },
 ): SignupOption[] {
@@ -151,16 +158,14 @@ function allSignupOptions(
   const buckets = sortBuckets((event.registration_policy || {}).buckets || []);
   const nonAnythingBuckets = buckets.filter((bucket) => !bucket.anything);
   const hasAvailableSignups = !userSignupConstraints.at_maximum_signups;
-  const noPreferencePendingRankedChoices = myPendingRankedChoices.filter(
-    (request) => request.requested_bucket_key == null,
-  );
+  const noPreferencePendingRankedChoices = myPendingRankedChoices.filter((request) => request.requested_bucket == null);
   const limitedAnythingBuckets = buckets.filter((bucket) => bucket.anything && bucket.slots_limited);
   const limitedAnythingBucketsCapacity = limitedAnythingBuckets.reduce(
     (total, bucket) => total + (bucket.total_slots ?? 0),
     0,
   );
   const limitedAnythingBucketsSignupCount = signupCounts.sumSignupCounts({
-    bucket_key: limitedAnythingBuckets.map((bucket) => bucket.key),
+    bucket_id: limitedAnythingBuckets.map((bucket) => bucket.id),
     state: SignupState.Confirmed,
   });
 
@@ -175,7 +180,7 @@ function allSignupOptions(
 
         let action: SignupOptionAction = 'SIGN_UP_NOW';
         const pendingRankedChoices = myPendingRankedChoices.filter(
-          (request) => request.requested_bucket_key === bucket.key,
+          (request) => request.requested_bucket?.id === bucket.id,
         );
         if (!hasAvailableSignups && pendingRankedChoices.length > 0) {
           action = 'IN_QUEUE';
@@ -183,7 +188,7 @@ function allSignupOptions(
           action = 'ADD_TO_QUEUE';
         } else if (
           bucket.slots_limited &&
-          signupCounts.sumSignupCounts({ bucket_key: bucket.key, state: SignupState.Confirmed }) +
+          signupCounts.sumSignupCounts({ bucket_id: bucket.id, state: SignupState.Confirmed }) +
             limitedAnythingBucketsSignupCount >=
             (bucket.total_slots ?? 0) + limitedAnythingBucketsCapacity
         ) {
@@ -219,7 +224,7 @@ export default function buildSignupOptions(
   event: Parameters<typeof allSignupOptions>[0],
   signupCounts: SignupCountData,
   addToQueue: boolean,
-  myPendingRankedChoices: Pick<SignupRankedChoice, 'requested_bucket_key' | 'priority'>[],
+  myPendingRankedChoices: SignupOption['pendingRankedChoices'],
   userSignupConstraints: Pick<UserSignupConstraints, 'at_maximum_signups'>,
   userConProfile?: { id: string },
 ): PartitionedSignupOptions {

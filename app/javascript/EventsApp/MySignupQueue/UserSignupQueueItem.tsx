@@ -184,7 +184,7 @@ export default function UserSignupQueueItem({
               )}{' '}
               |{' '}
               {pendingChoice.target_run.event.registration_policy?.buckets.find(
-                (bucket) => bucket.key === pendingChoice.requested_bucket_key,
+                (bucket) => bucket.id === pendingChoice.requested_bucket?.id,
               )?.name ?? t('signups.noPreference')}
             </div>
 

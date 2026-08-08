@@ -85,8 +85,8 @@ function RunSignupSummary(): React.JSX.Element {
     teamMembers: EventType['team_members'],
     teamMemberName: string,
   ) => {
-    const bucket = findBucket(signup.bucket_key, registrationPolicy ?? { buckets: [] });
-    const suffix = signup.bucket_key && bucket && bucket.expose_attendees ? ` (${bucket.name})` : null;
+    const bucket = findBucket(signup.bucket?.id, registrationPolicy ?? { buckets: [] });
+    const suffix = signup.bucket && bucket && bucket.expose_attendees ? ` (${bucket.name})` : null;
     const waitlistPosition = signup.state === 'waitlisted' ? ` #${signup.waitlist_position}` : null;
 
     return (

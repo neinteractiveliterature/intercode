@@ -244,9 +244,9 @@ function EditSignup(): React.JSX.Element {
     const { registration_policy: registrationPolicy } = event;
     const timespan = Timespan.finiteFromStrings(run.starts_at, run.ends_at);
     const teamMember = run.event.team_members.find((tm) => tm.user_con_profile.id === signup.user_con_profile.id);
-    const bucket = signup.bucket_key ? registrationPolicy?.buckets.find((b) => b.key === signup.bucket_key) : null;
-    const requestedBucket = signup.requested_bucket_key
-      ? registrationPolicy?.buckets.find((b) => b.key === signup.requested_bucket_key)
+    const bucket = signup.bucket ? registrationPolicy?.buckets.find((b) => b.id === signup.bucket?.id) : null;
+    const requestedBucket = signup.requested_bucket
+      ? registrationPolicy?.buckets.find((b) => b.id === signup.requested_bucket?.id)
       : null;
 
     return (

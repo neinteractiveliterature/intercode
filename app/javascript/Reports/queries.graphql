@@ -152,7 +152,9 @@ query SignupSpySignupChangesQuery($filters: SignupChangeFiltersInput, $page: Int
         id
         state
         counted
-        bucket_key
+        bucket {
+          id
+        }
         action
         created_at
 
@@ -160,12 +162,17 @@ query SignupSpySignupChangesQuery($filters: SignupChangeFiltersInput, $page: Int
           id
           state
           counted
-          bucket_key
+          bucket {
+            id
+          }
         }
 
         signup {
           id
           choice
+          requested_bucket {
+            id
+          }
         }
 
         run {
@@ -182,6 +189,7 @@ query SignupSpySignupChangesQuery($filters: SignupChangeFiltersInput, $page: Int
 
             registration_policy {
               buckets {
+                id
                 key
                 name
                 anything

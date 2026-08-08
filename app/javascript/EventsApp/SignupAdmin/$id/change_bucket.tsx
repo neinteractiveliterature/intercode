@@ -53,7 +53,7 @@ function ChangeBucketModal(): React.JSX.Element {
   }, [fetcher, signup, bucketKey]);
 
   if (prevSignupId !== signup?.id) {
-    setBucketKey(signup?.bucket_key);
+    setBucketKey(signup?.bucket?.key);
     setPrevSignupId(signup?.id);
   }
 

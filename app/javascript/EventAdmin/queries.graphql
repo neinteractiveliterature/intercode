@@ -86,7 +86,9 @@ fragment RunFields on Run {
   not_counted_signup_count
 
   grouped_signup_counts {
-    bucket_key
+    bucket {
+      id
+    }
     count
     counted
     state
@@ -142,6 +144,7 @@ fragment EventFields on Event {
 
   registration_policy {
     buckets {
+      id
       key
       name
       description

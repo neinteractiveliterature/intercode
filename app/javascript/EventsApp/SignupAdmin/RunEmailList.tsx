@@ -27,7 +27,7 @@ function getEmails({ data, includes }: { data: RunSignupsTableSignupsQueryData; 
   const signups = data.convention.event.run.signups_paginated.entries.filter((signup) => {
     const isTeamMember = teamMemberUserConProfileIds.includes(signup.user_con_profile.id);
 
-    if (!isTeamMember && signup.state === 'confirmed' && !includesObject[signup.bucket_key ?? '']) {
+    if (!isTeamMember && signup.state === 'confirmed' && !includesObject[signup.bucket?.id ?? '']) {
       return false;
     }
 
@@ -71,7 +71,7 @@ function RunEmailList() {
   const { t } = useTranslation();
   const [includes, setIncludes] = useState(() => [
     'teamMembers',
-    ...(data.convention.event.registration_policy?.buckets ?? []).map((bucket) => bucket.key),
+    ...(data.convention.event.registration_policy?.buckets ?? []).map((bucket) => bucket.id),
   ]);
 
   const mainTitle = useMemo(
@@ -112,7 +112,7 @@ function RunEmailList() {
                 label: t('events.signupAdmin.emailFilters.confirmedBucket', {
                   bucketName: bucket.name,
                 }) as string,
-                value: bucket.key,
+                value: bucket.id,
               })),
               {
                 label: t('events.signupAdmin.emailFilters.waitlisted'),

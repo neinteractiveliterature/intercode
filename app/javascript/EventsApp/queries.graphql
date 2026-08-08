@@ -44,7 +44,9 @@ fragment RunBasicSignupData on Run {
   id
 
   grouped_signup_counts {
-    bucket_key
+    bucket {
+      id
+    }
     count
     counted
     state
