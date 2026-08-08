@@ -64,6 +64,20 @@ class RegistrationPolicy < ApplicationRecord
     end
   end
 
+  # For callers that want to build_from_hash a *clone* of another policy's as_json into an
+  # unrelated policy (e.g. cloning an event proposal, or accepting one into a new event's
+  # registration policy) rather than describing an edit to the same policy the hash came from.
+  # build_from_hash keeps a bucket's id so sync_buckets_from_hash! can recognize an edited bucket
+  # -- but for a clone, keeping the source's ids would make the copy's buckets collide with the
+  # still-existing source rows on the registration_policy_buckets primary key once saved.
+  def self.build_from_hash_as_clone(hash)
+    hash = hash.to_h.stringify_keys
+    return build_from_hash(hash) unless hash["buckets"]
+
+    bucket_hashes_without_ids = hash["buckets"].map { |bucket_hash| bucket_hash.to_h.stringify_keys.except("id") }
+    build_from_hash(hash.merge("buckets" => bucket_hashes_without_ids))
+  end
+
   def bucket_with_id(id)
     buckets.find { |bucket| bucket.id == id }
   end

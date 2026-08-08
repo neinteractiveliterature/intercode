@@ -126,10 +126,13 @@ class RegistrationPolicyBucket < ApplicationRecord
 
   # Hand-curated (not AR's default as_json) to preserve the old external shape -- this JSON is
   # persisted verbatim into FormResponseChange audit records, so keeping anything/not_counted
-  # names and omitting id/registration_policy_id/timestamps avoids a shape discontinuity
-  # between historical and newly-created audit rows.
+  # names and omitting registration_policy_id/timestamps avoids a shape discontinuity between
+  # historical and newly-created audit rows. id is included (unlike the omitted fields above) so
+  # the registration policy editor can round-trip a bucket's id through form_response_attrs_json;
+  # see RegistrationPolicy#sync_buckets_from_hash! for why that matters.
   def as_json(_options = {})
     {
+      "id" => id,
       "key" => key,
       "name" => name,
       "description" => description,

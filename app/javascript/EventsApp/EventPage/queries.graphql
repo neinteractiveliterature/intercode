@@ -72,6 +72,7 @@ fragment RunCardRegistrationPolicyFields on RegistrationPolicy {
   total_slots_including_not_counted
 
   buckets {
+    id
     key
     name
     description

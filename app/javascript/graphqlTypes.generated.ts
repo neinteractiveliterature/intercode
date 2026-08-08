@@ -5568,7 +5568,7 @@ export type RegistrationPolicyBucket = {
   /** The minimum number of attendees needed for this bucket */
   minimum_slots?: Maybe<Scalars['Int']['output']>;
   /** The name of this bucket */
-  name?: Maybe<Scalars['String']['output']>;
+  name: Scalars['String']['output'];
   /**
    * If true, attendees in this bucket are not counted towards total attendees for runs of this event, and this
    * event will not count towards their maximum event signups allowed

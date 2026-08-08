@@ -91,7 +91,7 @@ function BucketKeyRemappingModal({
           <tbody>
             {removedBuckets.map((bucket) => (
               <tr key={bucket.key}>
-                <td>{bucket.name ?? bucket.key}</td>
+                <td>{bucket.name}</td>
                 <td>
                   <select
                     className="form-select"
@@ -108,7 +108,7 @@ function BucketKeyRemappingModal({
                     )}
                     {newPolicyBuckets.map((newBucket) => (
                       <option key={newBucket.key} value={newBucket.key}>
-                        {newBucket.name ?? newBucket.key}
+                        {newBucket.name}
                       </option>
                     ))}
                   </select>

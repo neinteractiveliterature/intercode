@@ -25,7 +25,12 @@ export type EditingRegistrationBucket = Pick<
   | 'preferred_slots'
   | 'total_slots'
   | 'anything'
->;
+> & {
+  // Absent for a bucket added in the current edit session; the real database id for anything
+  // loaded from the server. Threaded through so RegistrationPolicy#sync_buckets_from_hash! can
+  // correlate edited buckets by id instead of falling back to key.
+  id?: RegistrationPolicyBucket['id'];
+};
 
 export type RegistrationBucketRowProps<T extends EditingRegistrationBucket> = {
   registrationBucket: T;
@@ -222,7 +227,7 @@ function RegistrationBucketRow<T extends EditingRegistrationBucket>({
       <td key="nameAndDescription" style={{ width: '19rem' }}>
         <div className="mb-1">
           <BootstrapFormInput
-            value={registrationBucket.name ?? ''}
+            value={registrationBucket.name}
             onTextChange={setName}
             placeholder="Bucket name"
             label="Bucket name"

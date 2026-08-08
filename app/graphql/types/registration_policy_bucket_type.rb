@@ -6,7 +6,7 @@ class Types::RegistrationPolicyBucketType < Types::BaseObject
   field :id, ID, null: false, description: "The ID of this bucket"
   field :key, String, null: false, description: "The unique string identifier for this bucket"
   field :minimum_slots, Integer, null: true, description: "The minimum number of attendees needed for this bucket"
-  field :name, String, null: true, description: "The name of this bucket"
+  field :name, String, null: false, description: "The name of this bucket"
   field :preferred_slots, Integer, null: true, description: "The preferred number of attendees for this bucket"
   field :total_slots, Integer, null: true, description: "The maximum number of attendees this bucket can accept"
 

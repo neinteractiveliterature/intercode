@@ -110,7 +110,7 @@ function RunEmailList() {
               },
               ...(data.convention.event.registration_policy?.buckets ?? []).map((bucket) => ({
                 label: t('events.signupAdmin.emailFilters.confirmedBucket', {
-                  bucketName: bucket.name ?? bucket.key,
+                  bucketName: bucket.name,
                 }) as string,
                 value: bucket.key,
               })),

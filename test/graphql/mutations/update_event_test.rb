@@ -53,7 +53,10 @@ class Mutations::UpdateEventTest < ActiveSupport::TestCase
 
     it "records the new policy as new_value" do
       change = FormResponseChange.find_by!(response: event, field_identifier: "registration_policy")
-      assert_equal new_registration_policy.as_json, change.new_value
+      # Not assert_equal against new_registration_policy.as_json directly -- new_registration_policy
+      # is never persisted, so its buckets have no id, while change.new_value reflects the buckets
+      # actually created by the mutation (real ids). equivalent_to? compares content, not identity.
+      assert RegistrationPolicy.build_from_hash(change.new_value).equivalent_to?(new_registration_policy)
     end
 
     it "stores different previous_value and new_value" do

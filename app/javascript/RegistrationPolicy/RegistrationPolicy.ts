@@ -12,7 +12,10 @@ export type BucketForRegistrationPolicyUtils = Pick<
   | 'expose_attendees'
   | 'name'
   | 'description'
->;
+> & {
+  // Absent for a bucket added in the current edit session; see EditingRegistrationBucket.
+  id?: RegistrationPolicyBucket['id'];
+};
 
 export type RegistrationPolicyForRegistrationPolicyUtils = Pick<RegistrationPolicy, 'prevent_no_preference_signups'> & {
   buckets: BucketForRegistrationPolicyUtils[];

@@ -7373,7 +7373,7 @@ type RegistrationPolicyBucket {
   """
   The name of this bucket
   """
-  name: String
+  name: String!
 
   """
   If true, attendees in this bucket are not counted towards total attendees for runs of this event, and this

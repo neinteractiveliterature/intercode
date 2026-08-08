@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { useApolloClient, useSuspenseQuery } from "@apollo/client/react";
+import { useApolloClient, useSuspenseQuery } from '@apollo/client/react';
 import { ErrorDisplay, useConfirm, useAlert } from '@neinteractiveliterature/litform';
 
 import buildSignupOptions, { SignupOption } from '../EventsApp/EventPage/buildSignupOptions';
@@ -31,7 +31,7 @@ export default function CreateSignupRunCard({
       variables: {
         runId,
         userConProfileId,
-        requestedBucketKey: signupOption.bucket?.key,
+        requestedBucketId: signupOption.bucket?.id,
         noRequestedBucket: signupOption.bucket == null,
       },
     });

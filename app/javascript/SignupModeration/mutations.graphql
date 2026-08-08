@@ -3,14 +3,14 @@
 mutation CreateUserSignup(
   $runId: ID!
   $userConProfileId: ID!
-  $requestedBucketKey: String
+  $requestedBucketId: ID
   $noRequestedBucket: Boolean
 ) {
   createUserSignup(
     input: {
       runId: $runId
       userConProfileId: $userConProfileId
-      requested_bucket_key: $requestedBucketKey
+      requestedBucketId: $requestedBucketId
       no_requested_bucket: $noRequestedBucket
       suppress_notifications: true
       suppress_confirmation: true
