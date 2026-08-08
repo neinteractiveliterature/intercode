@@ -11,11 +11,6 @@ export type BucketKeyMappingInput = {
   /** The id of the old bucket being removed or changed */
   fromBucketId?: string | number | null | undefined;
   /**
-   * The old bucket key being removed or changed
-   * @deprecated Use from_bucket_id instead
-   */
-  from_key?: string | null | undefined;
-  /**
    * The id of the new bucket to map to (nil means no preference). Only usable when mapping
    * to a bucket that already exists -- mapping to a bucket being newly created in the same
    * edit still requires to_key, since it has no id yet.

@@ -6,8 +6,6 @@ class RegistrationPolicy::BucketDrop < Liquid::Drop
 
   # @!method id
   #   @return [Integer] The numeric database id of this bucket
-  # @!method key
-  #   @return [String] The unique string identifier for this bucket
   # @!method name
   #   @return [String] The name of this bucket
   # @!method description
@@ -31,7 +29,6 @@ class RegistrationPolicy::BucketDrop < Liquid::Drop
   #   @return [Boolean] Whether or not to allow other attendees to see that a person is in this
   #                     bucket in the signup summary page
   delegate :id,
-           :key,
            :name,
            :description,
            :minimum_slots,

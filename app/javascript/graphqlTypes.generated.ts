@@ -302,11 +302,6 @@ export type BucketKeyMappingInput = {
   /** The id of the old bucket being removed or changed */
   fromBucketId?: InputMaybe<Scalars['ID']['input']>;
   /**
-   * The old bucket key being removed or changed
-   * @deprecated Use from_bucket_id instead
-   */
-  from_key?: InputMaybe<Scalars['String']['input']>;
-  /**
    * The id of the new bucket to map to (nil means no preference). Only usable when mapping
    * to a bucket that already exists -- mapping to a bucket being newly created in the same
    * edit still requires to_key, since it has no id yet.
@@ -5563,7 +5558,10 @@ export type RegistrationPolicyBucket = {
   expose_attendees: Scalars['Boolean']['output'];
   /** The ID of this bucket */
   id: Scalars['ID']['output'];
-  /** The unique string identifier for this bucket */
+  /**
+   * The unique string identifier for this bucket
+   * @deprecated Use id instead
+   */
   key: Scalars['String']['output'];
   /** The minimum number of attendees needed for this bucket */
   minimum_slots?: Maybe<Scalars['Int']['output']>;

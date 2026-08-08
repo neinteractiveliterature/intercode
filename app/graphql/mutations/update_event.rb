@@ -39,16 +39,16 @@ class Mutations::UpdateEvent < Mutations::BaseMutation
   end
 
   # EventChangeRegistrationPolicyService still works entirely in terms of from_key/to_key (see the
-  # comment on that service). This resolves incoming from_bucket_id/to_bucket_id args (only usable
-  # when the destination bucket already exists, since a bucket being newly created in this same
-  # edit has no id yet) down to that shape.
+  # comment on that service). This resolves incoming from_bucket_id/to_bucket_id args down to that
+  # shape -- to_bucket_id is only usable when the destination bucket already exists, since a
+  # bucket being newly created in this same edit has no id yet, so to_key is still accepted too.
   def resolve_bucket_key_mappings(event, bucket_key_mappings)
     (bucket_key_mappings || []).map { |mapping| resolve_bucket_key_mapping(event, mapping.to_h) }
   end
 
   def resolve_bucket_key_mapping(event, mapping)
     {
-      from_key: mapping[:from_key] || bucket_key_for_id(event, mapping[:from_bucket_id]),
+      from_key: bucket_key_for_id(event, mapping[:from_bucket_id]),
       to_key: mapping[:to_key] || bucket_key_for_id(event, mapping[:to_bucket_id])
     }
   end

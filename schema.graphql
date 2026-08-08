@@ -238,11 +238,6 @@ input BucketKeyMappingInput {
   fromBucketId: ID
 
   """
-  The old bucket key being removed or changed
-  """
-  from_key: String @deprecated(reason: "Use from_bucket_id instead")
-
-  """
   The id of the new bucket to map to (nil means no preference). Only usable when mapping
   to a bucket that already exists -- mapping to a bucket being newly created in the same
   edit still requires to_key, since it has no id yet.
@@ -7363,7 +7358,7 @@ type RegistrationPolicyBucket {
   """
   The unique string identifier for this bucket
   """
-  key: String!
+  key: String! @deprecated(reason: "Use id instead")
 
   """
   The minimum number of attendees needed for this bucket

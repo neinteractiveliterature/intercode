@@ -53,7 +53,7 @@ describe('BucketKeyRemappingModal', () => {
       wrap(
         <BucketKeyRemappingModal
           visible
-          removedBuckets={[{ key: 'signups', name: 'Cats' }]}
+          removedBuckets={[{ id: '1', key: 'signups', name: 'Cats' }]}
           newPolicyBuckets={[{ key: 'dogs', name: 'Dogs' }]}
           preventNoPreferenceSignups={false}
           onConfirm={onConfirm}
@@ -65,7 +65,7 @@ describe('BucketKeyRemappingModal', () => {
 
     fireEvent.click(getByText('Apply and save event'));
 
-    await waitFor(() => expect(onConfirm).toHaveBeenCalledWith([{ from_key: 'signups', to_key: undefined }]));
+    await waitFor(() => expect(onConfirm).toHaveBeenCalledWith([{ from_bucket_id: '1', to_key: undefined }]));
   });
 
   test('submits the selected destination bucket when one is chosen', async () => {
@@ -75,7 +75,7 @@ describe('BucketKeyRemappingModal', () => {
       wrap(
         <BucketKeyRemappingModal
           visible
-          removedBuckets={[{ key: 'signups', name: 'Cats' }]}
+          removedBuckets={[{ id: '1', key: 'signups', name: 'Cats' }]}
           newPolicyBuckets={[{ key: 'dogs', name: 'Dogs' }]}
           preventNoPreferenceSignups={false}
           onConfirm={onConfirm}
@@ -88,7 +88,7 @@ describe('BucketKeyRemappingModal', () => {
     fireEvent.change(getByRole('combobox', { hidden: true }), { target: { value: 'dogs' } });
     fireEvent.click(getByText('Apply and save event'));
 
-    await waitFor(() => expect(onConfirm).toHaveBeenCalledWith([{ from_key: 'signups', to_key: 'dogs' }]));
+    await waitFor(() => expect(onConfirm).toHaveBeenCalledWith([{ from_bucket_id: '1', to_key: 'dogs' }]));
   });
 
   describe('when the new policy disallows no-preference signups', () => {
@@ -99,7 +99,7 @@ describe('BucketKeyRemappingModal', () => {
         wrap(
           <BucketKeyRemappingModal
             visible
-            removedBuckets={[{ key: 'signups', name: 'Cats' }]}
+            removedBuckets={[{ id: '1', key: 'signups', name: 'Cats' }]}
             newPolicyBuckets={[{ key: 'dogs', name: 'Dogs' }]}
             preventNoPreferenceSignups
             onConfirm={onConfirm}
@@ -121,7 +121,7 @@ describe('BucketKeyRemappingModal', () => {
         wrap(
           <BucketKeyRemappingModal
             visible
-            removedBuckets={[{ key: 'signups', name: 'Cats' }]}
+            removedBuckets={[{ id: '1', key: 'signups', name: 'Cats' }]}
             newPolicyBuckets={[{ key: 'dogs', name: 'Dogs' }]}
             preventNoPreferenceSignups
             onConfirm={onConfirm}
@@ -139,7 +139,7 @@ describe('BucketKeyRemappingModal', () => {
 
       fireEvent.click(getByText('Apply and save event'));
 
-      await waitFor(() => expect(onConfirm).toHaveBeenCalledWith([{ from_key: 'signups', to_key: 'dogs' }]));
+      await waitFor(() => expect(onConfirm).toHaveBeenCalledWith([{ from_bucket_id: '1', to_key: 'dogs' }]));
     });
   });
 });

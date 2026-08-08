@@ -10,9 +10,13 @@ type BucketOption = {
   name?: string | null;
 };
 
+// A removed bucket is always a persisted row, so it always has a real id -- unlike a bucket in
+// newPolicyBuckets, which might have been added in the current, not-yet-saved edit.
+type RemovedBucketOption = BucketOption & { id: string };
+
 export type BucketKeyRemappingModalProps = {
   visible: boolean;
-  removedBuckets: BucketOption[];
+  removedBuckets: RemovedBucketOption[];
   newPolicyBuckets: BucketOption[];
   preventNoPreferenceSignups: boolean;
   onConfirm: (mappings: BucketKeyMappingInput[]) => Promise<void>;
@@ -42,22 +46,22 @@ function BucketKeyRemappingModal({
   const [prevRemovedBuckets, setPrevRemovedBuckets] = useState(removedBuckets);
   if (prevRemovedBuckets !== removedBuckets) {
     setPrevRemovedBuckets(removedBuckets);
-    setMappings(Object.fromEntries(removedBuckets.map((bucket) => [bucket.key, null])));
+    setMappings(Object.fromEntries(removedBuckets.map((bucket) => [bucket.id, null])));
   }
 
-  const setMapping = (fromKey: string, toKey: string | null) => {
-    setMappings((prev) => ({ ...prev, [fromKey]: toKey }));
+  const setMapping = (fromBucketId: string, toKey: string | null) => {
+    setMappings((prev) => ({ ...prev, [fromBucketId]: toKey }));
   };
 
   // When the new policy disallows no-preference signups, mapping a removed bucket to "no
   // preference" would leave affected signups/requests with a null requested_bucket_id that the
   // policy no longer permits new signups to have -- so every row needs an explicit bucket chosen
   // before this can be confirmed.
-  const canConfirm = !preventNoPreferenceSignups || removedBuckets.every((bucket) => mappings[bucket.key]);
+  const canConfirm = !preventNoPreferenceSignups || removedBuckets.every((bucket) => mappings[bucket.id]);
 
   const handleConfirm = async () => {
-    const bucketKeyMappings: BucketKeyMappingInput[] = Object.entries(mappings).map(([fromKey, toKey]) => ({
-      from_key: fromKey,
+    const bucketKeyMappings: BucketKeyMappingInput[] = Object.entries(mappings).map(([fromBucketId, toKey]) => ({
+      from_bucket_id: fromBucketId,
       to_key: toKey ?? undefined,
     }));
     setIsSubmitting(true);
@@ -90,13 +94,13 @@ function BucketKeyRemappingModal({
           </thead>
           <tbody>
             {removedBuckets.map((bucket) => (
-              <tr key={bucket.key}>
+              <tr key={bucket.id}>
                 <td>{bucket.name}</td>
                 <td>
                   <select
                     className="form-select"
-                    value={mappings[bucket.key] ?? ''}
-                    onChange={(e) => setMapping(bucket.key, e.target.value || null)}
+                    value={mappings[bucket.id] ?? ''}
+                    onChange={(e) => setMapping(bucket.id, e.target.value || null)}
                     disabled={isSubmitting}
                   >
                     {preventNoPreferenceSignups ? (
