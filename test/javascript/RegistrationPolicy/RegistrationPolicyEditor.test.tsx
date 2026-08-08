@@ -90,6 +90,10 @@ describe('RegistrationPolicyEditor', () => {
     const newPolicy = onChange.mock.calls[0][0];
     expect(newPolicy.buckets.length).toEqual(2);
     expect(newPolicy.buckets.map((bucket) => bucket.anything)).toEqual([false, false]);
+    // A freshly-added bucket has no real id yet -- a fabricated one here would corrupt
+    // RegistrationPolicy#sync_buckets_from_hash!'s id-based correlation on save (see #11895/#11897).
+    expect(newPolicy.buckets[1].id).toBeUndefined();
+    expect(newPolicy.buckets[1].generatedId).toBeTruthy();
   });
 
   test('add flex bucket', async () => {
@@ -98,6 +102,8 @@ describe('RegistrationPolicyEditor', () => {
     const newPolicy = onChange.mock.calls[0][0];
     expect(newPolicy.buckets.length).toEqual(2);
     expect(newPolicy.buckets.map((bucket) => bucket.anything)).toEqual([false, true]);
+    expect(newPolicy.buckets[1].id).toBeUndefined();
+    expect(newPolicy.buckets[1].generatedId).toBeTruthy();
   });
 
   test('delete bucket', async () => {
@@ -114,6 +120,10 @@ describe('RegistrationPolicyEditor', () => {
     fireEvent.change(getByLabelText('Min'), { target: { value: '1' } });
     const newPolicy = onChange.mock.calls[0][0];
     expect(newPolicy.buckets[0].minimum_slots).toEqual(1);
+    // Editing a bucket must not lose the real id it entered the editor with -- that id is how the
+    // backend correlates this bucket back to its existing row (see #11895/#11897).
+    expect(newPolicy.buckets[0].id).toEqual('testBucket');
+    expect(newPolicy.buckets[0].generatedId).toEqual('testBucket');
   });
 
   describe('with presets', () => {
