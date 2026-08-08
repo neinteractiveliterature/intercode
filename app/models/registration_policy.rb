@@ -94,20 +94,19 @@ class RegistrationPolicy < ApplicationRecord
     sync_buckets_from_hash!(other.buckets.map(&:attributes))
   end
 
-  # Matches buckets primarily by id, so a bucket can have its key (or any other attribute) edited
-  # without losing its row/identity -- id is stable across an edit in a way key no longer needs to
-  # be. Falls back to key-matching for any incoming hash that doesn't carry an id (e.g. a policy
-  # built without ever round-tripping through a persisted one); this keeps callers that don't
-  # supply bucket ids working the same way they always have, rather than treating every one of
-  # their buckets as brand new. Destroys unmatched buckets before creating/updating the rest to
-  # avoid a transient key collision (positions are reassigned safely by the `positioned` gem, so no
+  # Matches buckets by id, so a bucket can have its key (or any other attribute) edited without
+  # losing its row/identity. A hash with no id is unambiguously a brand-new bucket -- every caller
+  # that edits an existing registration policy (the registration policy editor, via #11895's
+  # id-threading) reliably supplies id for anything that already exists, so there's no fallback to
+  # key here: a missing id always means "create a new row," never "maybe this secretly matches
+  # something by key." Destroys unmatched buckets before creating/updating the rest to avoid a
+  # transient key collision (positions are reassigned safely by the `positioned` gem, so no
   # equivalent care is needed there). Caller wraps this in a transaction.
   def sync_buckets_from_hash!(bucket_hashes)
     bucket_hashes = bucket_hashes.map { |hash| hash.to_h.stringify_keys }
     existing_by_id = buckets.index_by(&:id)
-    existing_by_key = buckets.index_by(&:key)
 
-    matches = bucket_hashes.map { |hash| match_existing_bucket(hash, existing_by_id, existing_by_key) }
+    matches = bucket_hashes.map { |hash| match_existing_bucket(hash, existing_by_id) }
     matched_ids = matches.compact.to_set(&:id)
 
     buckets.reject { |bucket| matched_ids.include?(bucket.id) }.each(&:destroy!)
@@ -185,18 +184,17 @@ class RegistrationPolicy < ApplicationRecord
     return false unless freeze_no_preference_buckets? == other.freeze_no_preference_buckets?
     return false unless buckets.size == other.buckets.size
 
-    # other is typically a detached policy (e.g. from build_from_hash) with no bucket ids yet, so
-    # key is the only identity valid on both sides here -- same structural reason sync_buckets_from_hash!
-    # falls back to key.
-    other_buckets_by_key = other.buckets.index_by(&:key)
-    buckets.all? { |bucket| bucket.equivalent_to?(other_buckets_by_key[bucket.key]) }
+    # other is typically a detached policy (e.g. from build_from_hash) -- matches by id, so a
+    # bucket that's genuinely new in other (no id yet) never finds a match here and correctly
+    # counts as "different" (a brand-new bucket, by definition, changes the policy).
+    other_buckets_by_id = other.buckets.index_by(&:id)
+    buckets.all? { |bucket| bucket.equivalent_to?(other_buckets_by_id[bucket.id]) }
   end
 
   private
 
-  def match_existing_bucket(hash, existing_by_id, existing_by_key)
-    return existing_by_id[hash["id"].to_i] if hash["id"].presence
-    existing_by_key[RegistrationPolicyBucket.normalize_key(hash["key"])]
+  def match_existing_bucket(hash, existing_by_id)
+    existing_by_id[hash["id"].to_i] if hash["id"].presence
   end
 
   def validate_flex_bucket_uniqueness

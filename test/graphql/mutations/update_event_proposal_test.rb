@@ -70,8 +70,11 @@ class Mutations::UpdateEventProposalTest < ActiveSupport::TestCase
       change = FormResponseChange.find_by!(response: event_proposal, field_identifier: "registration_policy")
       # Not assert_equal against new_registration_policy.as_json directly -- new_registration_policy
       # is never persisted, so its buckets have no id, while change.new_value reflects the buckets
-      # actually created by the mutation (real ids). equivalent_to? compares content, not identity.
-      assert RegistrationPolicy.build_from_hash(change.new_value).equivalent_to?(new_registration_policy)
+      # actually created by the mutation (real ids). Matches by key instead (see #11897).
+      assert_registration_policies_have_equivalent_buckets(
+        new_registration_policy,
+        RegistrationPolicy.build_from_hash(change.new_value)
+      )
     end
 
     it "stores different previous_value and new_value" do

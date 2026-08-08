@@ -67,7 +67,12 @@ class Mutations::CreateEventProposalTest < ActiveSupport::TestCase
     end
 
     it "copies bucket content equivalently, not by reference" do
-      assert new_proposal.registration_policy.equivalent_to?(template_proposal.registration_policy)
+      # Not equivalent_to? -- it matches by id (see #11897), and this clone deliberately has
+      # different ids from its source (see build_from_hash_as_clone). Matches by key instead.
+      assert_registration_policies_have_equivalent_buckets(
+        template_proposal.registration_policy,
+        new_proposal.registration_policy
+      )
       assert_not_equal(
         template_proposal.registration_policy.buckets.map(&:id),
         new_proposal.registration_policy.buckets.map(&:id)

@@ -123,14 +123,15 @@ class RegistrationPolicyTest < ActiveSupport::TestCase
   end
 
   describe "#sync_buckets_from_hash!" do
-    it "updates matched buckets in place, preserving their row id (falls back to key-matching without an id)" do
+    it "creates a new row (and destroys the old one) for a hash with no id, even with a matching key" do
       policy = create(:registration_policy, buckets: [build(:registration_policy_bucket, key: "pcs", total_slots: 2)])
       original_id = policy.buckets.first.id
 
       policy.sync_buckets_from_hash!([{ key: "pcs", name: "Player characters", total_slots: 5 }])
       policy.reload
 
-      assert_equal [original_id], policy.buckets.map(&:id)
+      assert_equal 1, policy.buckets.size
+      assert_not_equal original_id, policy.buckets.first.id
       assert_equal 5, policy.buckets.first.total_slots
       assert_equal "Player characters", policy.buckets.first.name
     end
@@ -141,8 +142,9 @@ class RegistrationPolicyTest < ActiveSupport::TestCase
           :registration_policy,
           buckets: [build(:registration_policy_bucket, key: "pcs"), build(:registration_policy_bucket, key: "npcs")]
         )
+      pcs_id = policy.buckets.find { |bucket| bucket.key == "pcs" }.id
 
-      policy.sync_buckets_from_hash!([{ key: "pcs" }])
+      policy.sync_buckets_from_hash!([{ id: pcs_id, key: "pcs" }])
       policy.reload
 
       assert_equal ["pcs"], policy.buckets.map(&:key)
@@ -150,8 +152,9 @@ class RegistrationPolicyTest < ActiveSupport::TestCase
 
     it "creates buckets for new keys" do
       policy = create(:registration_policy, buckets: [build(:registration_policy_bucket, key: "pcs")])
+      pcs_id = policy.buckets.first.id
 
-      policy.sync_buckets_from_hash!([{ key: "pcs" }, { key: "npcs", name: "NPCs" }])
+      policy.sync_buckets_from_hash!([{ id: pcs_id, key: "pcs" }, { key: "npcs", name: "NPCs" }])
       policy.reload
 
       assert_equal %w[pcs npcs], policy.buckets.map(&:key)

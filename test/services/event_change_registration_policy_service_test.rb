@@ -7,8 +7,9 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
   let(:event) { create(:event, convention: convention) }
   let(:the_run) { create(:run, event: event) }
   let(:new_registration_policy) do
-    RegistrationPolicy.build_from_hash(
-      buckets: [
+    build_edited_registration_policy(
+      event,
+      [
         { key: "dogs", name: "Dogs", slots_limited: true, total_slots: 1 },
         { key: "cats", name: "Cats", slots_limited: true, total_slots: 1 },
         { key: "anything", name: "Anything", slots_limited: true, total_slots: 1, anything: true }
@@ -31,7 +32,10 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
 
     assert result.success?
     event.reload
-    assert event.registration_policy.equivalent_to?(new_registration_policy)
+    # Not equivalent_to? -- new_registration_policy here describes an entirely new set of bucket
+    # keys with no ids at all, so it can never be "equivalent" (by id) to anything, including the
+    # very policy it was used to build. Check that the requested keys actually took effect instead.
+    assert_equal new_registration_policy.buckets.map(&:key).sort, event.registration_policy.buckets.map(&:key).sort
     assert_equal original_registration_policy_id, event.registration_policy_id
   end
 
@@ -281,7 +285,7 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
 
   describe "with a removed bucket mapped to no preference, and no flex bucket in the new policy" do
     let(:new_registration_policy) do
-      RegistrationPolicy.build_from_hash(buckets: [{ key: "dogs", name: "Dogs", slots_limited: true, total_slots: 1 }])
+      build_edited_registration_policy(event, [{ key: "dogs", name: "Dogs", slots_limited: true, total_slots: 1 }])
     end
 
     let(:event) do
@@ -436,13 +440,14 @@ class EventChangeRegistrationPolicyServiceTest < ActiveSupport::TestCase
 
     describe "with bucket_key_mappings mapping to nil, when the new policy disallows no-preference signups" do
       let(:new_registration_policy) do
-        RegistrationPolicy.build_from_hash(
-          prevent_no_preference_signups: true,
-          buckets: [
+        build_edited_registration_policy(
+          event,
+          [
             { key: "dogs", name: "Dogs", slots_limited: true, total_slots: 1 },
             { key: "cats", name: "Cats", slots_limited: true, total_slots: 1 },
             { key: "anything", name: "Anything", slots_limited: true, total_slots: 1, anything: true }
-          ]
+          ],
+          prevent_no_preference_signups: true
         )
       end
 

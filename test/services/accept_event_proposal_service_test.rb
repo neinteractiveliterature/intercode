@@ -86,7 +86,9 @@ class AcceptEventProposalServiceTest < ActiveSupport::TestCase
     assert event.registration_policy.present?
     assert_not_equal event_proposal.registration_policy_id, event.registration_policy_id
     assert_not_equal(event_proposal.registration_policy.buckets.map(&:id), event.registration_policy.buckets.map(&:id))
-    assert event.registration_policy.equivalent_to?(event_proposal.registration_policy)
+    # Not equivalent_to? -- it matches by id (see #11897), and this clone deliberately has
+    # different ids from its source (see build_from_hash_as_clone). Matches by key instead.
+    assert_registration_policies_have_equivalent_buckets(event_proposal.registration_policy, event.registration_policy)
   end
 
   it "copies attached images" do
