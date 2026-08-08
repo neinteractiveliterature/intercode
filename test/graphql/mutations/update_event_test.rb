@@ -30,6 +30,23 @@ class Mutations::UpdateEventTest < ActiveSupport::TestCase
     }
   GRAPHQL
 
+  UPDATE_EVENT_WITH_BUCKET_KEY_MAPPINGS_MUTATION = <<~GRAPHQL
+    mutation TestUpdateEventWithBucketKeyMappings(
+      $id: ID!
+      $formResponseAttrsJson: String!
+      $bucketKeyMappings: [BucketKeyMappingInput!]
+    ) {
+      updateEvent(
+        input: {
+          id: $id
+          event: { form_response_attrs_json: $formResponseAttrsJson, bucket_key_mappings: $bucketKeyMappings }
+        }
+      ) {
+        event { id }
+      }
+    }
+  GRAPHQL
+
   describe "updating registration_policy" do
     before do
       execute_graphql_query(
@@ -65,6 +82,35 @@ class Mutations::UpdateEventTest < ActiveSupport::TestCase
     it "stores different previous_value and new_value" do
       change = FormResponseChange.find_by!(response: event, field_identifier: "registration_policy")
       assert_not_equal change.previous_value, change.new_value
+    end
+  end
+
+  describe "with bucket_key_mappings remapping a removed bucket's signups" do
+    let(:the_run) { create(:run, event:) }
+    let(:unlimited_bucket_id) { bucket_with_key(event.registration_policy, "unlimited").id }
+    let(:signup) do
+      create(:signup, run: the_run, bucket_id: unlimited_bucket_id, requested_bucket_id: unlimited_bucket_id)
+    end
+
+    before { signup }
+
+    # Exercises both sides of resolve_bucket_key_mapping: from_bucket_id (the "unlimited" bucket
+    # being removed, which already has a real id) and to_key (the "anything" bucket, which is being
+    # newly created in this same edit and so has no id yet for to_bucket_id to reference).
+    it "moves the signup into the bucket named by to_key, resolving from_bucket_id to the removed bucket" do
+      execute_graphql_query(
+        UPDATE_EVENT_WITH_BUCKET_KEY_MAPPINGS_MUTATION,
+        user_con_profile: admin_profile,
+        variables: {
+          "id" => event.id.to_s,
+          "formResponseAttrsJson" => { "registration_policy" => new_registration_policy.as_json }.to_json,
+          "bucketKeyMappings" => [{ "fromBucketId" => unlimited_bucket_id.to_s, "to_key" => "anything" }]
+        }
+      )
+
+      signup.reload
+      assert_equal "anything", signup.bucket&.key
+      assert_equal "anything", signup.requested_bucket&.key
     end
   end
 
