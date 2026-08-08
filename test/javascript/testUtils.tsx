@@ -2,7 +2,7 @@ import { Suspense, useMemo, useState } from 'react';
 import { ApolloClient, InMemoryCache } from '@apollo/client';
 import { MockedProvider, MockedProviderProps } from '@apollo/client/testing/react';
 import { MockLink } from '@apollo/client/testing';
-import { render, queries, Queries, RenderOptions, RenderResult, waitFor } from '@testing-library/react';
+import { act, render, queries, Queries, RenderOptions, RenderResult, waitFor } from '@testing-library/react';
 import { createMemoryRouter, createRoutesStub, RouterContextProvider, RouterProvider } from 'react-router';
 import { i18n } from 'i18next';
 import { I18nextProvider } from 'react-i18next';
@@ -111,20 +111,26 @@ async function customRender<Q extends Queries = Queries>(
     ...providedQueries,
   } as typeof queries & Q & CustomQueries;
   const i18nInstance = await getI18n();
-  const result = render(ui, {
-    wrapper: (wrapperProps) => (
-      <TestWrapper
-        apolloMocks={apolloMocks}
-        apolloCache={apolloCache}
-        stripePublishableKey={stripePublishableKey}
-        i18nInstance={i18nInstance}
-        appRootContextValue={appRootContextValue}
-        {...wrapperProps}
-      />
-    ),
-    queries: combinedQueries,
-    ...otherOptions,
-  });
+  // useSuspenseQuery suspends immediately (unlike useQuery, which stays mounted in a loading
+  // state), so React needs the initial render wrapped in its own act() to actually process and
+  // resolve the suspended promise -- without this, a component using it never progresses past the
+  // Suspense fallback in tests, per Apollo's own testing docs.
+  const result = await act(() =>
+    render(ui, {
+      wrapper: (wrapperProps) => (
+        <TestWrapper
+          apolloMocks={apolloMocks}
+          apolloCache={apolloCache}
+          stripePublishableKey={stripePublishableKey}
+          i18nInstance={i18nInstance}
+          appRootContextValue={appRootContextValue}
+          {...wrapperProps}
+        />
+      ),
+      queries: combinedQueries,
+      ...otherOptions,
+    }),
+  );
   await waitFor(() => expect(result.queryAllByTestId('test-wrapper-suspense-fallback')).toHaveLength(0));
 
   return result;
