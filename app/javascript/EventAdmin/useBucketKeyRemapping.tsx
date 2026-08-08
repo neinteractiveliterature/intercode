@@ -2,17 +2,24 @@ import { useState, useCallback, useMemo, useRef } from 'react';
 import { BucketKeyMappingInput } from '../graphqlTypes.generated';
 import { BucketKeyRemappingModalProps } from './BucketKeyRemappingModal';
 
-type Bucket = { key: string; name?: string | null };
-type RegistrationPolicyLike = { buckets?: Bucket[]; prevent_no_preference_signups?: boolean } | null;
+type DraftBucket = { key: string; name?: string | null };
+// A bucket read from the event's already-persisted form response (as opposed to the current,
+// possibly-unsaved draft) always has a real id, since RegistrationPolicyBucket#as_json includes
+// it -- unlike a brand-new bucket in the draft, which has no id until the edit is saved.
+type PersistedBucket = DraftBucket & { id: string };
+type RegistrationPolicyLike<BucketType> = { buckets?: BucketType[]; prevent_no_preference_signups?: boolean } | null;
 
-function bucketsFromFormResponseAttrs(formResponseAttrs: { registration_policy?: unknown }): Bucket[] {
-  return (formResponseAttrs.registration_policy as RegistrationPolicyLike)?.buckets ?? [];
+function bucketsFromFormResponseAttrs<BucketType>(formResponseAttrs: { registration_policy?: unknown }): BucketType[] {
+  return (formResponseAttrs.registration_policy as RegistrationPolicyLike<BucketType>)?.buckets ?? [];
 }
 
 function preventNoPreferenceSignupsFromFormResponseAttrs(formResponseAttrs: {
   registration_policy?: unknown;
 }): boolean {
-  return (formResponseAttrs.registration_policy as RegistrationPolicyLike)?.prevent_no_preference_signups ?? false;
+  return (
+    (formResponseAttrs.registration_policy as RegistrationPolicyLike<DraftBucket>)?.prevent_no_preference_signups ??
+    false
+  );
 }
 
 type UseBucketKeyRemappingOptions = {
@@ -26,11 +33,11 @@ type UseBucketKeyRemappingOptions = {
 
 export default function useBucketKeyRemapping({ event, initialEvent, onSubmit }: UseBucketKeyRemappingOptions) {
   const [remappingModalVisible, setRemappingModalVisible] = useState(false);
-  const [removedBucketsNeedingRemapping, setRemovedBucketsNeedingRemapping] = useState<Bucket[]>([]);
+  const [removedBucketsNeedingRemapping, setRemovedBucketsNeedingRemapping] = useState<PersistedBucket[]>([]);
   const pendingResolveRef = useRef<(() => void) | null>(null);
   const pendingRejectRef = useRef<((reason?: unknown) => void) | null>(null);
 
-  const newPolicyBuckets = useMemo(() => bucketsFromFormResponseAttrs(event.form_response_attrs), [event]);
+  const newPolicyBuckets = useMemo(() => bucketsFromFormResponseAttrs<DraftBucket>(event.form_response_attrs), [event]);
   const preventNoPreferenceSignups = useMemo(
     () => preventNoPreferenceSignupsFromFormResponseAttrs(event.form_response_attrs),
     [event],
@@ -38,7 +45,7 @@ export default function useBucketKeyRemapping({ event, initialEvent, onSubmit }:
 
   const updateEvent = useCallback(async () => {
     const currentBucketKeys = new Set(newPolicyBuckets.map((b) => b.key));
-    const originalBuckets = bucketsFromFormResponseAttrs(initialEvent.form_response_attrs);
+    const originalBuckets = bucketsFromFormResponseAttrs<PersistedBucket>(initialEvent.form_response_attrs);
     const keysWithRecords = new Set(initialEvent.bucket_keys_with_pending_signups_or_requests);
 
     const removedBuckets = originalBuckets.filter((b) => !currentBucketKeys.has(b.key) && keysWithRecords.has(b.key));

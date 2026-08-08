@@ -4,7 +4,11 @@ class Types::RegistrationPolicyBucketType < Types::BaseObject
 
   field :description, String, null: true, description: "A long-form description for the bucket"
   field :id, ID, null: false, description: "The ID of this bucket"
-  field :key, String, null: false, description: "The unique string identifier for this bucket"
+  field :key,
+        String,
+        null: false,
+        deprecation_reason: "Use id instead",
+        description: "The unique string identifier for this bucket"
   field :minimum_slots, Integer, null: true, description: "The minimum number of attendees needed for this bucket"
   field :name, String, null: false, description: "The name of this bucket"
   field :preferred_slots, Integer, null: true, description: "The preferred number of attendees for this bucket"

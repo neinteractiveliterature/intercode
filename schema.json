@@ -1899,18 +1899,6 @@
               "deprecationReason": null
             },
             {
-              "name": "from_key",
-              "description": "The old bucket key being removed or changed",
-              "type": {
-                "kind": "SCALAR",
-                "name": "String",
-                "ofType": null
-              },
-              "defaultValue": null,
-              "isDeprecated": true,
-              "deprecationReason": "Use from_bucket_id instead"
-            },
-            {
               "name": "toBucketId",
               "description": "The id of the new bucket to map to (nil means no preference). Only usable when mapping\nto a bucket that already exists -- mapping to a bucket being newly created in the same\nedit still requires to_key, since it has no id yet.\n",
               "type": {
@@ -29984,8 +29972,8 @@
                   "ofType": null
                 }
               },
-              "isDeprecated": false,
-              "deprecationReason": null,
+              "isDeprecated": true,
+              "deprecationReason": "Use id instead",
               "args": []
             },
             {
