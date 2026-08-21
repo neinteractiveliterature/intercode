@@ -14868,7 +14868,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"js-cookie@npm:^3.0.5":
+"js-cookie@npm:^3.0.8":
   version: 3.0.8
   resolution: "js-cookie@npm:3.0.8"
   checksum: 10c0/421912a4a55535bda32b3059835864e1182c3af5b4516df00a060edc1fa5a53d38bb8d5a91d5d305e396206f4fd11e829f17850aa5aa8164118c04d8ebf1ff5d
@@ -19287,15 +19287,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-cookie-consent@npm:10.0.1":
-  version: 10.0.1
-  resolution: "react-cookie-consent@npm:10.0.1"
+"react-cookie-consent@npm:10.0.2":
+  version: 10.0.2
+  resolution: "react-cookie-consent@npm:10.0.2"
   dependencies:
-    js-cookie: "npm:^3.0.5"
+    js-cookie: "npm:^3.0.8"
   peerDependencies:
     react: ">=18"
     react-dom: ">=18"
-  checksum: 10c0/76977fea75885a815d002a279845e892dc42c3b9c0482859f0ab2077ac1ada68a07192557731b2b4393796f753770a30319905d184896fcc623d5fa69d2a0f8c
+  checksum: 10c0/d941ae3b4116eb693214d9b265fdaf7456df68669e4fa9128d9b675515a295f13f786a2525542d7adf5f52ef281007dab52d2022e7d5575fb31abc0d8d9e99e0
   languageName: node
   linkType: hard
 
@@ -20540,7 +20540,7 @@ __metadata:
     react: "npm:19.2.7"
     react-bootstrap4-modal: "npm:3.0.11"
     react-color: "npm:2.19.3"
-    react-cookie-consent: "npm:10.0.1"
+    react-cookie-consent: "npm:10.0.2"
     react-dom: "npm:19.2.7"
     react-google-recaptcha: "npm:3.1.0"
     react-html-id: "npm:0.1.5"
