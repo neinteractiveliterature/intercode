@@ -6894,10 +6894,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/bytes@npm:3.1.5":
-  version: 3.1.5
-  resolution: "@types/bytes@npm:3.1.5"
-  checksum: 10c0/5bed1b55a27d0c9c5160567d6df8f73830a95ffabbba735791c8888f83c5dcc9fc901f0b441ca50b07579c9c9ee4ef2b27a2259597182cee831b99b198846cc4
+"@types/bytes@npm:3.1.6":
+  version: 3.1.6
+  resolution: "@types/bytes@npm:3.1.6"
+  checksum: 10c0/2d9fff3d0aa5487f71a94a719b04336f03832211353927b9e1b3dc02a566f38c96b7a5ccb260af3893b4900f5bc5ee1b5adc3074a061b7a0522787ed57a8a5be
   languageName: node
   linkType: hard
 
@@ -20458,7 +20458,7 @@ __metadata:
     "@testing-library/react": "npm:16.3.2"
     "@testing-library/user-event": "npm:^14.6.1"
     "@types/bootstrap": "npm:5.2.11"
-    "@types/bytes": "npm:3.1.5"
+    "@types/bytes": "npm:3.1.6"
     "@types/debounce-promise": "npm:3.1.9"
     "@types/diff": "npm:8.0.0"
     "@types/events": "npm:3.0.3"
