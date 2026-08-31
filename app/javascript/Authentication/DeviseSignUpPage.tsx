@@ -1,7 +1,7 @@
 import { useState, useContext, Suspense, useId } from 'react';
 import * as React from 'react';
 import { Link, LoaderFunction, useLoaderData } from 'react-router';
-import ReCAPTCHA from 'react-google-recaptcha';
+import { Turnstile } from '@marsidev/react-turnstile';
 import arrayToSentence from 'array-to-sentence';
 import { useTranslation } from 'react-i18next';
 import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
@@ -19,13 +19,13 @@ import usePageTitle from '../usePageTitle';
 import { clientConfigurationContext } from '../AppContexts';
 
 type DeviseSignUpPageLoaderData = {
-  recaptchaSiteKey: string | null;
+  turnstileSiteKey: string | null;
 };
 
 export const loader: LoaderFunction = ({ context }) => {
   const clientConfiguration = context.get(clientConfigurationContext);
   return {
-    recaptchaSiteKey: clientConfiguration.recaptcha_site_key,
+    turnstileSiteKey: clientConfiguration.turnstile_site_key,
   } satisfies DeviseSignUpPageLoaderData;
 };
 
@@ -42,7 +42,7 @@ async function signUp(
   formData.append('user[email]', formState.email ?? '');
   formData.append('user[password]', password);
   formData.append('user[password_confirmation]', passwordConfirmation);
-  formData.append('g-recaptcha-response', captchaValue);
+  formData.append('cf-turnstile-response', captchaValue);
 
   const response = await fetch('/users', {
     method: 'POST',
@@ -72,7 +72,7 @@ async function signUp(
 
 function DeviseSignUpPage(): React.JSX.Element {
   const { t } = useTranslation();
-  const { recaptchaSiteKey } = useLoaderData() as DeviseSignUpPageLoaderData;
+  const { turnstileSiteKey } = useLoaderData() as DeviseSignUpPageLoaderData;
   const manager = useContext(AuthenticityTokensContext);
   const { conventionName, oauthAppName } = useSignInContext();
   const [formState, setFormState] = useState<UserFormState>({});
@@ -146,7 +146,13 @@ function DeviseSignUpPage(): React.JSX.Element {
                   value={passwordConfirmation}
                   onChange={setPasswordConfirmation}
                 />
-                {recaptchaSiteKey && <ReCAPTCHA sitekey={recaptchaSiteKey} onChange={setCaptchaValue} />}
+                {turnstileSiteKey && (
+                  <Turnstile
+                    siteKey={turnstileSiteKey}
+                    onSuccess={setCaptchaValue}
+                    onExpire={() => setCaptchaValue(null)}
+                  />
+                )}
                 <ErrorDisplay stringError={(submitError || {}).message} />
               </div>
               <div className="card-footer bg-light d-flex justify-content-between align-items-center">

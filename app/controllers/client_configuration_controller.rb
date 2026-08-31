@@ -24,7 +24,7 @@ class ClientConfigurationController < ApplicationController
              oidc_end_session_endpoint: oidc_end_session_endpoint,
              rails_default_active_storage_service_name: Rails.application.config.active_storage.service.to_s,
              rails_direct_uploads_url: rails_direct_uploads_url,
-             recaptcha_site_key: Recaptcha.configuration.site_key,
+             turnstile_site_key: ENV.fetch("TURNSTILE_SITE_KEY", nil),
              assets_host: ENV["ASSETS_HOST"].presence,
              sentry_frontend_dsn: ENV["SENTRY_FRONTEND_DSN"].presence,
              rollbar_client_access_token: ENV["ROLLBAR_CLIENT_ACCESS_TOKEN"].presence

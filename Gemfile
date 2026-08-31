@@ -32,7 +32,6 @@ gem "doorkeeper", "5.9.6"
 gem "doorkeeper-jwt"
 gem "doorkeeper-openid_connect"
 gem "pundit"
-gem "recaptcha", require: "recaptcha/rails"
 
 # Let's store sessions in the database, shall we?
 gem "activerecord-session_store"

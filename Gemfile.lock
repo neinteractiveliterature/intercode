@@ -524,7 +524,6 @@ GEM
       tsort
     readline (0.0.4)
       reline
-    recaptcha (5.21.2)
     redcarpet (3.6.1)
     regexp_parser (2.12.0)
     reline (0.6.3)
@@ -753,7 +752,6 @@ DEPENDENCIES
   rails (= 8.1.3.1)
   rails-controller-testing
   readline (~> 0.0.4)
-  recaptcha
   redcarpet
   rollbar
   rubocop (>= 1.82)
