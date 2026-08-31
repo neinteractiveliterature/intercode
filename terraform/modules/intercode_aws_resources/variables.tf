@@ -66,8 +66,8 @@ variable "stripe" {
   default   = null
 }
 
-variable "recaptcha" {
-  description = "Google reCAPTCHA credentials. If null, no reCAPTCHA SSM parameters are written."
+variable "turnstile" {
+  description = "Cloudflare Turnstile credentials. If null, no Turnstile SSM parameters are written."
   type = object({
     secret_key = string
     site_key   = string

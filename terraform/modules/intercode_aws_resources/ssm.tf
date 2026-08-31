@@ -37,9 +37,9 @@ locals {
       STRIPE_PUBLISHABLE_KEY         = var.stripe.publishable_key
       STRIPE_CONNECT_ENDPOINT_SECRET = var.stripe.connect_endpoint_secret
     } : {},
-    var.recaptcha != null ? {
-      RECAPTCHA_SECRET_KEY = var.recaptcha.secret_key
-      RECAPTCHA_SITE_KEY   = var.recaptcha.site_key
+    var.turnstile != null ? {
+      TURNSTILE_SECRET_KEY = var.turnstile.secret_key
+      TURNSTILE_SITE_KEY   = var.turnstile.site_key
     } : {},
     var.twilio != null ? {
       TWILIO_ACCOUNT_SID = var.twilio.account_sid
@@ -76,9 +76,9 @@ locals {
       STRIPE_PUBLISHABLE_KEY         = "SecureString"
       STRIPE_CONNECT_ENDPOINT_SECRET = "SecureString"
     } : {},
-    var.recaptcha != null ? {
-      RECAPTCHA_SECRET_KEY = "SecureString"
-      RECAPTCHA_SITE_KEY   = "SecureString"
+    var.turnstile != null ? {
+      TURNSTILE_SECRET_KEY = "SecureString"
+      TURNSTILE_SITE_KEY   = "SecureString"
     } : {},
     var.twilio != null ? {
       TWILIO_ACCOUNT_SID = "SecureString"
@@ -183,14 +183,6 @@ moved {
 moved {
   from = aws_ssm_parameter.stripe_connect_endpoint_secret[0]
   to   = aws_ssm_parameter.params["STRIPE_CONNECT_ENDPOINT_SECRET"]
-}
-moved {
-  from = aws_ssm_parameter.recaptcha_secret_key[0]
-  to   = aws_ssm_parameter.params["RECAPTCHA_SECRET_KEY"]
-}
-moved {
-  from = aws_ssm_parameter.recaptcha_site_key[0]
-  to   = aws_ssm_parameter.params["RECAPTCHA_SITE_KEY"]
 }
 moved {
   from = aws_ssm_parameter.twilio_account_sid[0]
