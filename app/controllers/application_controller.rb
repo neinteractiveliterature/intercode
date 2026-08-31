@@ -60,7 +60,7 @@ class ApplicationController < ActionController::Base
 
   def app_component_props
     {
-      recaptchaSiteKey: Recaptcha.configuration.site_key,
+      turnstileSiteKey: ENV.fetch("TURNSTILE_SITE_KEY", nil),
       railsDirectUploadsUrl: rails_direct_uploads_url,
       railsDefaultActiveStorageServiceName: Rails.application.config.active_storage.service.to_s,
       oauthFrontendApplicationUid: Doorkeeper::Application.find_by(is_intercode_frontend: true)&.uid,

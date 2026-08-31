@@ -17,12 +17,14 @@ class RegistrationsController < Devise::RegistrationsController
 
   def check_captcha
     return if RootSite.instance.disable_captcha?
-    return if verify_recaptcha
+
+    result = TurnstileVerificationService.new(token: params["cf-turnstile-response"], remote_ip: request.remote_ip).call
+    return if result.success?
 
     configure_permitted_parameters # we prepended, so this won't have run
     self.resource = resource_class.new sign_up_params
-    resource.validate # Look for any other validation errors besides Recaptcha
-    resource.errors.add :recaptcha, "failed verification"
+    resource.validate # Look for any other validation errors besides the captcha
+    resource.errors.add :captcha, "failed verification"
     respond_with resource
   end
 
