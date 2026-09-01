@@ -9854,19 +9854,19 @@ __metadata:
   linkType: hard
 
 "cm6-graphql@npm:^0.2.1":
-  version: 0.2.1
-  resolution: "cm6-graphql@npm:0.2.1"
+  version: 0.2.2
+  resolution: "cm6-graphql@npm:0.2.2"
   dependencies:
-    graphql-language-service: "npm:^5.3.0"
+    graphql-language-service: "npm:^5.7.0"
   peerDependencies:
     "@codemirror/autocomplete": ^6.0.0
     "@codemirror/language": ^6.0.0
-    "@codemirror/lint": ^6.0.0
+    "@codemirror/lint": ^6.9.7
     "@codemirror/state": ^6.0.0
     "@codemirror/view": ^6.0.0
     "@lezer/highlight": ^1.0.0
     graphql: ^15.5.0 || ^16.0.0 || ^17.0.0
-  checksum: 10c0/33b4d4634e25f67a126a8e0a9d4f4c927b4554f0fe7e0b512f494703ee0c600a332c7ad673c1968174e08f305c767c6d6cd6f59d88bceee10c7f16507504fca7
+  checksum: 10c0/687efdc11e50d1d361ea0ea38b0d1244e6d991fbbf017cd485821bebfaafce014706b2a6919012dcf414a6021ecff0a7dd09d64978747c36478a6cc42f6767e7
   languageName: node
   linkType: hard
 
@@ -13235,9 +13235,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-language-service@npm:^5.3.0":
-  version: 5.5.1
-  resolution: "graphql-language-service@npm:5.5.1"
+"graphql-language-service@npm:^5.7.0":
+  version: 5.7.0
+  resolution: "graphql-language-service@npm:5.7.0"
   dependencies:
     debounce-promise: "npm:^3.1.2"
     nullthrows: "npm:^1.0.0"
@@ -13246,7 +13246,7 @@ __metadata:
     graphql: ^15.5.0 || ^16.0.0 || ^17.0.0
   bin:
     graphql: dist/temp-bin.js
-  checksum: 10c0/75f9a32d452780abdb37bf9fe643fda323d4bc9c4635391a596ce1fc8bc03e0321f453e7e0ce549356c5cc4f52fc0efbb67c879db4ad1edbb453c59ba077fc65
+  checksum: 10c0/0a6d22be6ac75a028cc8455df29aeda2b41dbfc0500ef2f891258886d856433433bd6e5d87689e7d4d65a111c19b302b1af35ac5eb3b12efbb2c3ba0f858d547
   languageName: node
   linkType: hard
 
