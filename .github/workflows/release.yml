@@ -82,7 +82,7 @@ jobs:
           } >> "$GITHUB_OUTPUT"
       - name: Post about release to Slack
         id: slack
-        uses: slackapi/slack-github-action@v3.0.3
+        uses: slackapi/slack-github-action@v3.0.5
         with:
           method: chat.postMessage
           token: ${{ secrets.SLACKTOKEN }}
