@@ -50,4 +50,18 @@ class RunTest < ActiveSupport::TestCase
       assert_operator queries, :<=, 2, "expected a constant number of bucket queries regardless of signup count"
     end
   end
+
+  describe "#destroy" do
+    let(:other_run) { create(:run, event:) }
+    let(:user_con_profile) { create(:user_con_profile, convention:) }
+    let(:signup) { create(:signup, run: the_run, user_con_profile:, bucket_id: dogs_bucket_id) }
+
+    it "nullifies replace_signup_id on pending signup requests targeting other runs, instead of failing" do
+      signup_request = create(:signup_request, target_run: other_run, user_con_profile:, replace_signup: signup)
+
+      the_run.destroy!
+
+      assert_nil signup_request.reload.replace_signup_id
+    end
+  end
 end
