@@ -39,7 +39,7 @@
 class SignupRequest < ApplicationRecord
   belongs_to :user_con_profile
   belongs_to :target_run, class_name: "Run"
-  belongs_to :replace_signup, class_name: "Signup", optional: true
+  belongs_to :replace_signup, class_name: "Signup", optional: true, inverse_of: :signup_requests_replacing_this_signup
   belongs_to :result_signup, class_name: "Signup", optional: true
   belongs_to :updated_by, class_name: "User", optional: true
   belongs_to :requested_bucket, class_name: "RegistrationPolicyBucket", optional: true

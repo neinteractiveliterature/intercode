@@ -45,6 +45,11 @@ class Signup < ApplicationRecord
   has_one :event, through: :run
   has_one :convention, through: :event
   has_one :signup_request, foreign_key: "result_signup_id", dependent: :destroy
+  has_many :signup_requests_replacing_this_signup,
+           class_name: "SignupRequest",
+           foreign_key: "replace_signup_id",
+           dependent: :nullify,
+           inverse_of: :replace_signup
   has_one :signup_ranked_choice, foreign_key: "result_signup_id", dependent: :destroy
   belongs_to :updated_by, class_name: "User", optional: true
   belongs_to :bucket, class_name: "RegistrationPolicyBucket", optional: true
