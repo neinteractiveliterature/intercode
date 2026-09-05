@@ -1763,24 +1763,24 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@codemirror/state@npm:6.7.2, @codemirror/state@npm:^6.0.0, @codemirror/state@npm:^6.5.2, @codemirror/state@npm:^6.7.0":
-  version: 6.7.2
-  resolution: "@codemirror/state@npm:6.7.2"
+"@codemirror/state@npm:6.7.4, @codemirror/state@npm:^6.0.0, @codemirror/state@npm:^6.5.2, @codemirror/state@npm:^6.7.0":
+  version: 6.7.4
+  resolution: "@codemirror/state@npm:6.7.4"
   dependencies:
     "@marijn/find-cluster-break": "npm:^1.0.0"
-  checksum: 10c0/2033933f175c04fdea14c5daa0293c01f42ba05c16029b11f5926dc7e1d0a331639151b369f3dd768eba751b45c70b9a9a48cd10921de0ee96bd4121edf66713
+  checksum: 10c0/eccc99ebffe4d469d38abbd0cef5a9eaa245ee8b0b3bb51fc24ffcb330666d736968b3fa0b34d2bbbd6b58586d29c6132bc6090274749f48f92cb9bd2458d6ed
   languageName: node
   linkType: hard
 
-"@codemirror/view@npm:6.43.10, @codemirror/view@npm:^6.0.0, @codemirror/view@npm:^6.17.0, @codemirror/view@npm:^6.23.0, @codemirror/view@npm:^6.27.0, @codemirror/view@npm:^6.36.3, @codemirror/view@npm:^6.42.0":
-  version: 6.43.10
-  resolution: "@codemirror/view@npm:6.43.10"
+"@codemirror/view@npm:6.43.11, @codemirror/view@npm:^6.0.0, @codemirror/view@npm:^6.17.0, @codemirror/view@npm:^6.23.0, @codemirror/view@npm:^6.27.0, @codemirror/view@npm:^6.36.3, @codemirror/view@npm:^6.42.0":
+  version: 6.43.11
+  resolution: "@codemirror/view@npm:6.43.11"
   dependencies:
     "@codemirror/state": "npm:^6.7.0"
     crelt: "npm:^1.0.6"
     style-mod: "npm:^4.1.0"
     w3c-keyname: "npm:^2.2.4"
-  checksum: 10c0/03a53c16a1fe6c8cefcc4ae3e5a0ccc1f8533273df857ca67cd49b70dfc7c01f11b3db20edf7743fce7b264ff493a7da14c3ab46eb0edc89969eced14d046f93
+  checksum: 10c0/7e681944e4548b8d51dc868587135f39ceb0cf538c16f9d9c034af2ad3767bdd50656a6fdbc61cbaf8650c0439f3a162cf5e3c4adc9a7c64ff7718a420bafaa6
   languageName: node
   linkType: hard
 
@@ -20497,8 +20497,8 @@ __metadata:
     "@codemirror/lang-markdown": "npm:6.5.2"
     "@codemirror/language": "npm:6.12.4"
     "@codemirror/lint": "npm:^6.9.6"
-    "@codemirror/state": "npm:6.7.2"
-    "@codemirror/view": "npm:6.43.10"
+    "@codemirror/state": "npm:6.7.4"
+    "@codemirror/view": "npm:6.43.11"
     "@dnd-kit/core": "npm:6.3.1"
     "@dnd-kit/sortable": "npm:10.0.0"
     "@dnd-kit/utilities": "npm:3.2.2"
