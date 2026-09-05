@@ -1,5 +1,5 @@
 import { useState, useCallback, useContext, useMemo } from 'react';
-import { useQuery } from '@apollo/client/react';
+import { useApolloClient, useQuery } from '@apollo/client/react';
 import { ColumnFiltersState } from '@tanstack/react-table';
 import { useTranslation } from 'react-i18next';
 import {
@@ -45,7 +45,7 @@ type LoaderResult = {
 
 export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<CommonConventionDataQueryData>({ query: CommonConventionDataQueryDocument });
+  const { data } = await client.query({ query: CommonConventionDataQueryDocument });
   if (!data) {
     return new Response(null, { status: 404 });
   }
@@ -79,6 +79,7 @@ function EventList(): React.JSX.Element {
     () => filterableFormItems.map((item) => item.identifier).filter(notEmpty),
     [filterableFormItems],
   );
+  const client = useApolloClient();
 
   const {
     data: currentData,
@@ -94,6 +95,7 @@ function EventList(): React.JSX.Element {
       filters: reactTableFiltersToTableResultsFilters(effectiveFilters),
       fetchFormItemIdentifiers: filterableFormItemIdentifiers,
     },
+    fetchPolicy: 'cache-and-network',
   });
   const [fetchMoreEventsAsync, fetchMoreError, fetchMoreInProgress] = useAsyncFunction(() =>
     fetchMore({
@@ -118,6 +120,7 @@ function EventList(): React.JSX.Element {
       updateSearch({
         filters: [...filters.filter(({ id }) => id !== fieldId), { id: fieldId, value }],
       });
+      client.refetchQueries({ include: [EventListEventsQueryDocument] });
     },
     [updateSearch, filters],
   );
@@ -194,8 +197,7 @@ function EventList(): React.JSX.Element {
                   formItem={item}
                   value={
                     ((effectiveFilters.find(({ id }) => id === 'form_items')?.value as
-                      | Record<string, string[]>
-                      | undefined) ?? {})[item.identifier ?? '']
+                      Record<string, string[]> | undefined) ?? {})[item.identifier ?? '']
                   }
                   onChange={(newValue) => {
                     const prevValue = effectiveFilters.find(({ id }) => id === 'form_items');
