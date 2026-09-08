@@ -89,7 +89,7 @@
     "classnames": "2.5.1",
     "cm6-graphql": "^0.2.1",
     "codemirror": "^6.0.1",
-    "core-js": "3.49.0",
+    "core-js": "3.50.0",
     "crypto-browserify": "3.12.1",
     "cssnano": "8.0.10",
     "csv-stringify": "^6.5.1",
