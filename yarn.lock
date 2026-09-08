@@ -9342,7 +9342,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"browserslist@npm:^4.0.0, browserslist@npm:^4.23.0, browserslist@npm:^4.24.0, browserslist@npm:^4.25.0, browserslist@npm:^4.28.1, browserslist@npm:^4.28.8, browserslist@npm:^4.28.9":
+"browserslist@npm:^4.0.0, browserslist@npm:^4.23.0, browserslist@npm:^4.24.0, browserslist@npm:^4.25.0, browserslist@npm:^4.28.1, browserslist@npm:^4.28.7, browserslist@npm:^4.28.8, browserslist@npm:^4.28.9":
   version: 4.28.9
   resolution: "browserslist@npm:4.28.9"
   dependencies:
@@ -10309,12 +10309,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"core-js-compat@npm:3.49.0, core-js-compat@npm:^3.38.0, core-js-compat@npm:^3.38.1":
-  version: 3.49.0
-  resolution: "core-js-compat@npm:3.49.0"
+"core-js-compat@npm:3.50.0, core-js-compat@npm:^3.38.0, core-js-compat@npm:^3.38.1":
+  version: 3.50.0
+  resolution: "core-js-compat@npm:3.50.0"
   dependencies:
-    browserslist: "npm:^4.28.1"
-  checksum: 10c0/546e64b7ce45f724825bc13c1347f35c0459a6e71c0dcccff3ec21fbff463f5b0b97fc1220e6d90302153863489301793276fe2bf96f46001ff555ead4140308
+    browserslist: "npm:^4.28.7"
+  checksum: 10c0/1ccfe07f47f7d8a14e615c5e7adb3b9d8b3dcb2f228fd0d00a59723dbf9b944a4a3f4ceb96c1861cb9fb9838d486163ceebaec3323d15c6d456b45d2a2a03583
   languageName: node
   linkType: hard
 
@@ -20565,7 +20565,7 @@ __metadata:
     cm6-graphql: "npm:^0.2.1"
     codemirror: "npm:^6.0.1"
     core-js: "npm:3.50.0"
-    core-js-compat: "npm:3.49.0"
+    core-js-compat: "npm:3.50.0"
     crypto-browserify: "npm:3.12.1"
     cssnano: "npm:8.0.10"
     csv-stringify: "npm:^6.5.1"
