@@ -11249,7 +11249,7 @@ __metadata:
     "@svgr/webpack": "npm:8.1.0"
     "@types/lodash": "npm:4.17.25"
     clsx: "npm:2.1.1"
-    entities: "npm:8.0.0"
+    entities: "npm:8.1.0"
     file-loader: "npm:6.2.0"
     graphql: "npm:^16.9.0"
     graphql-config: "npm:^5.1.3"
@@ -11529,10 +11529,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"entities@npm:8.0.0, entities@npm:^8.0.0":
-  version: 8.0.0
-  resolution: "entities@npm:8.0.0"
-  checksum: 10c0/938e631664c19451823344a351aeeafd74fae2d5fa51e4d5b6ff635afaefd4bacf0f609989888c04c42733f46ffdac15211608267ebb02488005891a4793e94d
+"entities@npm:8.1.0, entities@npm:^8.0.0":
+  version: 8.1.0
+  resolution: "entities@npm:8.1.0"
+  checksum: 10c0/da0bf22912c19d2a4707783e1b905d3f6a977e93e0655a8d2c526455eb3996f668f9f2e4c2a07af8d6927d232c41b6e929a7044df0236c7bf6e9c38e070e3719
   languageName: node
   linkType: hard
 
