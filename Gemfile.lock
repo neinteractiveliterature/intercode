@@ -320,7 +320,7 @@ GEM
       tilt
     heapy (0.2.0)
       thor
-    holidays (11.0.0)
+    holidays (11.5.0)
     i18n (1.15.2)
       concurrent-ruby (~> 1.0)
     icalendar (2.12.4)
