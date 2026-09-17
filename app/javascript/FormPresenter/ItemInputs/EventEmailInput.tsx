@@ -52,7 +52,9 @@ function EventEmailInput({
       } else {
         onChange({
           ...newValue,
-          team_mailing_list_name: undefined,
+          // explicit null (not undefined) so this actually reaches the server and clears
+          // any previously-saved team mailing list name; JSON.stringify drops undefined keys
+          team_mailing_list_name: null,
         });
       }
     },
@@ -73,7 +75,9 @@ function EventEmailInput({
       onChange({
         ...(value || {}),
         con_mail_destination: newBehavior,
-        team_mailing_list_name: undefined,
+        // explicit null (not undefined) so this actually reaches the server and clears
+        // any previously-saved team mailing list name; JSON.stringify drops undefined keys
+        team_mailing_list_name: null,
       });
     }
     userDidInteract();
@@ -92,7 +96,7 @@ function EventEmailInput({
         >
           {(id) => (
             <EmailAliasInput
-              value={(value || {}).team_mailing_list_name}
+              value={(value || {}).team_mailing_list_name ?? ''}
               onTextChange={(newName) => updateValue({ ...value, team_mailing_list_name: newName })}
               id={id}
               aria-label={t('forms.eventEmail.mailingListAliasLabel')}

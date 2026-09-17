@@ -119,7 +119,7 @@ export type EventEmailProperties = CommonQuestionProperties;
 export type EventEmailValue = {
   con_mail_destination?: 'event_email' | 'gms';
   email?: string;
-  team_mailing_list_name?: string;
+  team_mailing_list_name?: string | null;
 };
 
 export function valueIsEventEmailValue(value: unknown): value is EventEmailValue {
@@ -476,9 +476,7 @@ export function mutationUpdaterForFormSection<ResultDataType>(
 }
 
 export type FormTypeDefinition =
-  | (typeof FormTypes)['event']
-  | (typeof FormTypes)['event_proposal']
-  | (typeof FormTypes)['user_con_profile'];
+  (typeof FormTypes)['event'] | (typeof FormTypes)['event_proposal'] | (typeof FormTypes)['user_con_profile'];
 
 export type StandardItemIdentifier<FormType extends FormTypeDefinition> = keyof FormType['standard_items'];
 
