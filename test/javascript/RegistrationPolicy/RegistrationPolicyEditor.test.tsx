@@ -126,6 +126,61 @@ describe('RegistrationPolicyEditor', () => {
     expect(newPolicy.buckets[0].generatedId).toEqual('testBucket');
   });
 
+  test('renaming a bucket does not reorder or corrupt sibling buckets', async () => {
+    // Regression test for a bug where the bucket list re-sorted by name on every render, so
+    // renaming a bucket to alphabetically cross a sibling's name flipped their row order live,
+    // mid-edit -- which read as "typing in one bucket's field changes another bucket's field."
+    const bucketA = {
+      ...defaultRegistrationPolicyBucket,
+      id: 'a',
+      generatedId: 'a',
+      key: 'a',
+      name: 'Alpha',
+      minimum_slots: 1,
+    };
+    const bucketB = {
+      ...defaultRegistrationPolicyBucket,
+      id: 'b',
+      generatedId: 'b',
+      key: 'b',
+      name: 'Beta',
+      minimum_slots: 2,
+    };
+
+    const { getAllByPlaceholderText, getAllByLabelText, rerender } = await renderRegistrationPolicyEditor({}, [
+      bucketA,
+      bucketB,
+    ]);
+
+    expect(getAllByPlaceholderText('Bucket name').map((input) => (input as HTMLInputElement).value)).toEqual([
+      'Alpha',
+      'Beta',
+    ]);
+    expect(getAllByLabelText('Min').map((input) => (input as HTMLInputElement).value)).toEqual(['1', '2']);
+
+    // Rename Alpha to Zeta, which alphabetically sorts after Beta. The row order (and each row's
+    // own values) must stay put -- only the name field's own value should change.
+    await rerender(
+      <RegistrationPolicyEditor
+        registrationPolicy={{
+          buckets: [{ ...bucketA, name: 'Zeta' }, bucketB],
+          prevent_no_preference_signups: false,
+        }}
+        onChange={onChange}
+        lockNameAndDescription={false}
+        lockLimitedBuckets={[]}
+        lockDeleteBuckets={[]}
+        allowCustom
+      />,
+    );
+
+    expect(getAllByPlaceholderText('Bucket name').map((input) => (input as HTMLInputElement).value)).toEqual([
+      'Zeta',
+      'Beta',
+    ]);
+    expect(getAllByLabelText('Min').map((input) => (input as HTMLInputElement).value)).toEqual(['1', '2']);
+  });
+
   describe('with presets', () => {
     const preset = defaultPresets.find(
       (aPreset) => aPreset.name === 'Limited slots by gender (classic Intercon-style)',
