@@ -64,7 +64,14 @@ jobs:
       - run: cat /home/runner/.local/bin/eslint
       - run: chmod +x /home/runner/.local/bin/eslint
       - run: eslint --version
-      - uses: reviewdog/action-eslint@v1
+      # Pinned below v1.35.0: that release switched the action's internal eslint
+      # invocation from `npx --no-install -c "eslint ..."` (a shell string, which
+      # respects $PATH and finds the shim above) to `npx --no-install eslint ...`
+      # (bare argv form, which does not). Since this repo uses Yarn PnP (no
+      # node_modules/.bin), the bare form can't resolve eslint locally and npx
+      # falls back to fetching eslint's latest release from the registry, which
+      # --no-install then refuses to do. See reviewdog/action-eslint#258.
+      - uses: reviewdog/action-eslint@v1.34.0
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           eslint_flags: 'app/javascript test/javascript schema.graphql'
