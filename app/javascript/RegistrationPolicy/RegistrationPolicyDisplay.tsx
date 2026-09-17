@@ -133,7 +133,7 @@ function RegistrationPolicyDisplay({ presets, registrationPolicy }: Registration
         </tr>
       </thead>
       <tbody>
-        {registrationPolicy.buckets.sort(bucketSortCompare).map((bucket) => (
+        {[...registrationPolicy.buckets].sort(bucketSortCompare).map((bucket) => (
           <RegistrationPolicyDisplayBucketRow bucket={bucket} preset={preset} key={bucket.key} />
         ))}
       </tbody>

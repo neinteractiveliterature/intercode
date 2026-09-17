@@ -53,6 +53,12 @@ export function findPreset(
   return presets.find((preset) => presetMatchesPolicy(registrationPolicy, preset));
 }
 
+// Only breaks ties on "anything" (flex buckets sort last); buckets are otherwise left in their
+// existing (persisted position/insertion) order via Array.prototype.sort's stability guarantee.
+// Sorting by name here previously caused a bucket's row to jump position on every keystroke
+// while an admin was typing its name -- since callers pass a live, in-progress bucket list,
+// that made data entry look like it was leaking between buckets (it wasn't; only the display
+// order was reshuffling out from under the user).
 export function bucketSortCompare(a: BucketForRegistrationPolicyUtils, b: BucketForRegistrationPolicyUtils): number {
   if (a.anything && !b.anything) {
     return 1;
@@ -62,7 +68,7 @@ export function bucketSortCompare(a: BucketForRegistrationPolicyUtils, b: Bucket
     return -1;
   }
 
-  return a.name.localeCompare(b.name, undefined, { sensitivity: 'base' });
+  return 0;
 }
 
 export function isPreventNoPreferenceSignupsApplicable(

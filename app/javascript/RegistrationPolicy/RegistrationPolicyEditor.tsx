@@ -206,7 +206,7 @@ function RegistrationPolicyEditor<
   };
 
   const renderTable = () => {
-    const bucketRows = (registrationPolicy.buckets || [])
+    const bucketRows = [...(registrationPolicy.buckets || [])]
       .sort(bucketSortCompare)
       .map((bucket) => renderBucketRow(bucket));
 
