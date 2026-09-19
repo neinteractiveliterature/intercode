@@ -19066,12 +19066,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prettier@npm:3.9.6":
-  version: 3.9.6
-  resolution: "prettier@npm:3.9.6"
+"prettier@npm:3.9.8":
+  version: 3.9.8
+  resolution: "prettier@npm:3.9.8"
   bin:
     prettier: bin/prettier.cjs
-  checksum: 10c0/9f7ddae234035868f3daab3dc34e6de7e54622185afb017378029f0c09a9c023248ccf6f34def0b17a0538e18c47aa1b3188bab72965d1bf735919baa0747e99
+  checksum: 10c0/257e5ef11ba5006d0b0712271705701c065c8003e07763f996ce185d39633902f3fe1f814839eed76f75c97b6d5376d6157bd9f44db18cacb1dbdcb263cc66ae
   languageName: node
   linkType: hard
 
@@ -20644,7 +20644,7 @@ __metadata:
     porter-stemmer: "npm:0.9.1"
     postcss: "npm:8.5.28"
     postcss-import: "npm:16.1.1"
-    prettier: "npm:3.9.6"
+    prettier: "npm:3.9.8"
     prop-types: "npm:15.8.1"
     punycode: "npm:2.3.1"
     qs: "npm:^6.16.0"
