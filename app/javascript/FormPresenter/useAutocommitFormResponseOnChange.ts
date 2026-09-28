@@ -17,8 +17,22 @@ export default function useAutocommitFormResponseOnChange<
   useEffect(() => {
     commitRef.current = commit;
   }, [commit]);
+
+  // Chains each commit onto the previous one so a new commit never starts until the last settled.
+  const inFlightRef = useRef<Promise<unknown>>(Promise.resolve());
   const debouncedCommit = useMemo(
-    () => debounce((response) => commitRef.current(response), 300, { leading: true }),
+    () =>
+      debounce(
+        // refs are only read once debounce-promise invokes this callback, never during render
+        // eslint-disable-next-line react-hooks/refs
+        (response: FormResponseType) => {
+          const result = inFlightRef.current.catch(() => undefined).then(() => commitRef.current(response));
+          inFlightRef.current = result;
+          return result;
+        },
+        300,
+        { leading: true },
+      ),
     [],
   );
 

@@ -87,6 +87,8 @@ class RegistrationPolicy < ApplicationRecord
   # simulation succeeds) and EventProposal's update path, which otherwise duplicated this exact
   # pair of calls.
   def update_from!(other)
+    # Callers run this inside a transaction; see PR description for why this lock is needed.
+    lock!
     update!(
       prevent_no_preference_signups: other.prevent_no_preference_signups,
       freeze_no_preference_buckets: other.freeze_no_preference_buckets
