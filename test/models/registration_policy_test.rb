@@ -222,6 +222,28 @@ class RegistrationPolicyTest < ActiveSupport::TestCase
       assert_equal "player_characters", policy.buckets.first.key
       assert_equal 9, policy.buckets.first.total_slots
     end
+
+    it "doesn't crash when a second, stale in-memory copy re-applies an edit after a bucket it " \
+         "still references has already been destroyed" do
+      policy =
+        create(
+          :registration_policy,
+          buckets: [build(:registration_policy_bucket, key: "pcs"), build(:registration_policy_bucket, key: "npcs")]
+        )
+      pcs_id = policy.buckets.find { |bucket| bucket.key == "pcs" }.id
+
+      stale_policy = RegistrationPolicy.find(policy.id)
+      stale_policy.buckets.load
+
+      policy.update_from!(RegistrationPolicy.build_from_hash(buckets: [{ id: pcs_id, key: "pcs", name: "PCs" }]))
+      policy.reload
+      assert_equal ["pcs"], policy.buckets.map(&:key)
+
+      stale_policy.update_from!(RegistrationPolicy.build_from_hash(buckets: [{ id: pcs_id, key: "pcs", name: "PCs" }]))
+
+      policy.reload
+      assert_equal ["pcs"], policy.buckets.map(&:key)
+    end
   end
 
   describe "persistence" do
