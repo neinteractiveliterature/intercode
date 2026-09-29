@@ -1,5 +1,6 @@
 import { Link, LoaderFunction, useLoaderData, RouterContextProvider } from 'react-router';
 
+import PrintableReportLink from './PrintableReportLink';
 import usePageTitle from '../usePageTitle';
 import { ReportsMenuQueryData, ReportsMenuQueryDocument } from './queries.generated';
 import { apolloClientContext } from 'AppContexts';
@@ -60,29 +61,29 @@ function ReportsMenu() {
         <div className="card-body">
           <ul className="mb-0">
             <li>
-              <a href="/reports/events_by_time" target="_blank" rel="noopener noreferrer">
+              <PrintableReportLink path="/reports/events_by_time">
                 {t('admin.reports.menu.eventsByTime')}
-              </a>
+              </PrintableReportLink>
             </li>
             <li>
-              <a href="/reports/per_event" target="_blank" rel="noopener noreferrer">
+              <PrintableReportLink path="/reports/per_event">
                 {t('admin.reports.menu.perEventReport')}
-              </a>
+              </PrintableReportLink>
             </li>
             <li>
-              <a href="/reports/per_room" target="_blank" rel="noopener noreferrer">
+              <PrintableReportLink path="/reports/per_room">
                 {t('admin.reports.menu.perRoomReport')}
-              </a>
+              </PrintableReportLink>
             </li>
             <li>
-              <a href="/reports/per_user" target="_blank" rel="noopener noreferrer">
+              <PrintableReportLink path="/reports/per_user">
                 {t('admin.reports.menu.perUserReport')}
-              </a>
+              </PrintableReportLink>
             </li>
             <li>
-              <a href="/reports/volunteer_events" target="_blank" rel="noopener noreferrer">
+              <PrintableReportLink path="/reports/volunteer_events">
                 {t('admin.reports.menu.volunteerEventSignups')}
-              </a>
+              </PrintableReportLink>
             </li>
           </ul>
         </div>
