@@ -248,6 +248,9 @@
       }
     },
     "reports": {
+      "printable": {
+        "loading": "Loading report…"
+      },
       "menu": {
         "regularReportsHeader": "Regular reports",
         "printableReportsHeader": "Printable reports",

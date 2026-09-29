@@ -1,5 +1,6 @@
 import { ReactNode, useContext } from 'react';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
+import { useTranslation } from 'react-i18next';
 
 import { AuthenticationManagerContext } from '../Authentication/authenticationManager';
 import useAsyncFunction from '../useAsyncFunction';
@@ -7,7 +8,6 @@ import useAsyncFunction from '../useAsyncFunction';
 // The blob: page we open has no useful base URL, so relative asset URLs in the report
 // (stylesheets, etc.) would break. Point them back at our own origin.
 function addBaseHref(html: string): string {
-   
   return html.replace(/<head>/i, `<head><base href="${window.location.origin}/">`);
 }
 
@@ -43,12 +43,25 @@ async function openReport(url: string, token: string | undefined, reportWindow: 
   }
 }
 
+function showLoadingMessage(reportWindow: Window | null, message: string) {
+  if (!reportWindow) {
+    return;
+  }
+
+  reportWindow.document.title = message;
+  const paragraph = reportWindow.document.createElement('p');
+  paragraph.textContent = message;
+  paragraph.style.cssText = 'font-family: sans-serif; padding: 1em;';
+  reportWindow.document.body.replaceChildren(paragraph);
+}
+
 export type PrintableReportLinkProps = {
   path: string;
   children: ReactNode;
 };
 
 function PrintableReportLink({ path, children }: PrintableReportLinkProps): React.JSX.Element {
+  const { t } = useTranslation();
   const authenticationManager = useContext(AuthenticationManagerContext);
   const [openReportAsync, error, inProgress] = useAsyncFunction(openReport, { suppressError: true });
 
@@ -56,6 +69,7 @@ function PrintableReportLink({ path, children }: PrintableReportLinkProps): Reac
     // Open the tab synchronously, inside the click handler, so popup blockers allow it;
     // we point it at the report once the fetch finishes.
     const reportWindow = window.open('', '_blank');
+    showLoadingMessage(reportWindow, t('admin.reports.printable.loading'));
     const token = await authenticationManager.ensureFreshAccessToken();
     await openReportAsync(path, token, reportWindow);
   };
