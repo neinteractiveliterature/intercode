@@ -17,6 +17,7 @@ import {
 } from '@neinteractiveliterature/litform';
 import upperFirst from 'lodash/upperFirst';
 
+import PrintableReportLink from '../Reports/PrintableReportLink';
 import FormItemDisplay from '../FormPresenter/ItemDisplays/FormItemDisplay';
 import TicketAdminSection from './TicketAdminSection';
 import UserConProfileSignupsCard from '../EventsApp/SignupAdmin/UserConProfileSignupsCard';
@@ -204,9 +205,9 @@ function UserConProfileAdminDisplay(): React.JSX.Element {
             </li>
           ) : null}
           <li className="list-group-item">
-            <a href={`/reports/user_con_profiles/${userConProfileId}`} target="_blank" rel="noopener noreferrer">
+            <PrintableReportLink path={`/reports/user_con_profiles/${userConProfileId}`}>
               {t('admin.userConProfiles.adminSection.printableReport')}
-            </a>
+            </PrintableReportLink>
           </li>
           {ability?.can_become_user_con_profile ? (
             <li className="list-group-item">
