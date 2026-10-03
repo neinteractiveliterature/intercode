@@ -56,6 +56,11 @@ class Tables::TableResultsPresenter
       false
     end
 
+    # Fields that only exist to support filtering (e.g. title_prefix) and have no value to export
+    def filter_only?
+      false
+    end
+
     def csv_header_for_path(path)
       path.last
     end
@@ -118,7 +123,8 @@ class Tables::TableResultsPresenter
     @base_scope = base_scope
     @filters = filters || {}
     @sort = sort || []
-    @visible_field_ids = (visible_field_ids || fields.reject { |_id, field| field.path_based? }.keys).map(&:to_sym)
+    @visible_field_ids =
+      (visible_field_ids || fields.reject { |_id, field| field.path_based? || field.filter_only? }.keys).map(&:to_sym)
   end
 
   def scoped
@@ -141,18 +147,7 @@ class Tables::TableResultsPresenter
   end
 
   def visible_field_accessors
-    visible_field_ids.filter_map do |visible_field_id|
-      direct_field = fields[visible_field_id.to_sym]
-      next direct_field.csv_header, ->(model) { direct_field.generate_csv_cell(model) } if direct_field
-
-      # Path-based fields expand to multiple columns, e.g. "form_items.some_identifier".  Only the first segment is
-      # a field ID, so that the rest of the path is free to contain dots.
-      field_id, *path = visible_field_id.to_s.split(".", 2)
-      path_field = fields[field_id.to_sym]
-      next unless path_field&.path_based? && path.present?
-
-      next path_field.csv_header_for_path(path), ->(model) { path_field.generate_csv_cell(model, path) }
-    end
+    visible_field_ids.filter_map { |visible_field_id| csv_accessor_for(visible_field_id) }
   end
 
   def csv_enumerator(zone: nil)
@@ -179,6 +174,23 @@ class Tables::TableResultsPresenter
   end
 
   private
+
+  # Returns a [header, getter] pair for a visible field ID, or nil if the ID doesn't correspond to an exportable column
+  def csv_accessor_for(visible_field_id)
+    direct_field = fields[visible_field_id.to_sym]
+    if direct_field
+      return nil if direct_field.filter_only?
+      return direct_field.csv_header, ->(model) { direct_field.generate_csv_cell(model) }
+    end
+
+    # Path-based fields expand to multiple columns, e.g. "form_items.some_identifier".  Only the first segment is a
+    # field ID, so that the rest of the path is free to contain dots.
+    field_id, *path = visible_field_id.to_s.split(".", 2)
+    path_field = fields[field_id.to_sym]
+    return nil unless path_field&.path_based? && path.present?
+
+    [path_field.csv_header_for_path(path), ->(model) { path_field.generate_csv_cell(model, path) }]
+  end
 
   def apply_filters(scope)
     return scope if filters.blank?

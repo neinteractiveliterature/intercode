@@ -50,6 +50,10 @@ class Tables::RunsTableResultsPresenter < Tables::TableResultsPresenter
   end
 
   field :title_prefix, "Title prefix" do
+    def filter_only?
+      true
+    end
+
     def apply_filter(scope, value)
       value.present? ? scope.where(event_id: Event.title_prefix(value).select(:id)) : scope
     end
