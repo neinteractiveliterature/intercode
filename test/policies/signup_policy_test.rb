@@ -123,6 +123,45 @@ class SignupPolicyTest < ActiveSupport::TestCase
     end
   end
 
+  describe "#admin_create?" do
+    let(:user_con_profile) { create(:user_con_profile, convention: convention) }
+    let(:new_signup) { Signup.new(run: signup.run, user_con_profile: user_con_profile) }
+
+    %w[self_service moderated].each do |signup_mode|
+      it "lets users with update_signups create admin signups in #{signup_mode} conventions" do
+        convention.update!(signup_mode: signup_mode)
+        user = create_user_with_update_signups_in_convention(convention)
+        assert_policy_allows SignupPolicy, user, new_signup, :admin_create?, convention
+      end
+    end
+
+    it "does not let users create admin signups for themselves, since those skip the self-service checks" do
+      assert_not SignupPolicy.new(user_con_profile.user, new_signup).admin_create?
+    end
+
+    it "does not let users create admin signups for other people" do
+      assert_not SignupPolicy.new(create(:user_con_profile, convention: convention).user, new_signup).admin_create?
+    end
+
+    it "does not let users with update_signups in another convention create admin signups" do
+      user = create_user_with_update_signups_in_convention(create(:convention))
+      assert_not SignupPolicy.new(user, new_signup).admin_create?
+    end
+
+    it "does not let users with other convention permissions create admin signups" do
+      user = create_user_with_update_convention_in_convention(convention)
+      assert_not SignupPolicy.new(user, new_signup).admin_create?
+    end
+
+    it "lets site admins create admin signups" do
+      assert SignupPolicy.new(create(:user, site_admin: true), new_signup).admin_create?
+    end
+
+    it "does not let anonymous users create admin signups" do
+      assert_not SignupPolicy.new(nil, new_signup).admin_create?
+    end
+  end
+
   describe "#withdraw?" do
     it "lets a user withdraw their own signups" do
       assert_policy_allows SignupPolicy, signup.user_con_profile.user, signup, :withdraw?, convention

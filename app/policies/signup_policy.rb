@@ -44,11 +44,19 @@ class SignupPolicy < ApplicationPolicy
     super
   end
 
-  # Users can sign themselves up (the signup mode check is done in EventSignupService, for better UX).  Signing
-  # up somebody else is an admin action, which requires update_signups (in any signup mode) or site admin.
+  # Users can sign themselves up (the signup mode check is done in EventSignupService, for better UX), and
+  # people who can create admin signups can sign anyone up.
   def create?
     return false if assumed_identity_from_profile && assumed_identity_from_profile.convention != convention
     return true if oauth_scope?(:manage_signups) && owned_by_user?(record.user_con_profile)
+
+    admin_create?
+  end
+
+  # Admin signups skip the self-service checks in EventSignupService (e.g. they work in moderated conventions),
+  # so they need update_signups (in any signup mode) or site admin, no matter whose signup it is.
+  def admin_create?
+    return false if assumed_identity_from_profile && assumed_identity_from_profile.convention != convention
 
     if oauth_scoped_disjunction { |d|
          d.add(:manage_conventions) { has_convention_permission?(convention, "update_signups") }

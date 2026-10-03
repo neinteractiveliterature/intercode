@@ -69,6 +69,20 @@ class Mutations::CreateUserSignupTest < ActiveSupport::TestCase
         assert_equal "admin_create_signup", signup.signup_changes.order(:id).last.action
       end
 
+      it "doesn't let regular attendees sign themselves up through the admin mutation" do
+        # Admin signups skip the self-service checks, so e.g. a moderated convention's signup requests could be bypassed
+        error = assert_raises(GraphqlTestExecutionError) { sign_up(as: attendee) }
+
+        assert_match(/Unauthorized mutation/, error.message)
+        assert_equal 0, Signup.where(run: the_run).count
+      end
+
+      it "lets users with update_signups sign themselves up through the admin mutation" do
+        result = sign_up(:as => signup_admin, "userConProfileId" => signup_admin.id.to_s)
+
+        assert_equal "confirmed", result["data"]["createUserSignup"]["signup"]["state"]
+      end
+
       it "doesn't let regular attendees sign other people up" do
         stranger = create(:user_con_profile, convention:)
 
