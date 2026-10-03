@@ -19,7 +19,7 @@ import HtmlCell from '../../../Tables/HtmlCell';
 import { DateTime } from 'luxon';
 import EventCatalogNavTabs from '../EventCatalogNavTabs';
 import { apolloClientContext } from '../../../AppContexts';
-import { formItemColumns } from 'Tables/formItemColumns';
+import { formItemColumns, jsonFormDataGetter } from 'Tables/formItemColumns';
 
 const FILTER_CODECS = buildFieldFilterCodecs({
   status: FilterCodecs.stringArray,
@@ -160,9 +160,9 @@ function EventTable() {
         id: 'event_created_at',
         cell: SingleLineTimestampCell,
       }),
-      ...formItemColumns(filterableFormItems, columnHelper, (run: RunType) =>
-        JSON.parse(run.event.form_response_attrs_json_with_rendered_markdown ?? '{}'),
-      ),
+      ...formItemColumns(filterableFormItems, columnHelper, {
+        getFormData: jsonFormDataGetter((run: RunType) => run.event.form_response_attrs_json_with_rendered_markdown),
+      }),
     ];
   }, [filterableFormItems]);
 

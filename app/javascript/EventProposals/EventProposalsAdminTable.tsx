@@ -20,7 +20,7 @@ import EventCategoryFilter from '../Tables/EventCategoryFilter';
 import DurationCell from '../Tables/DurationCell';
 import CapacityCell from '../Tables/CapacityCell';
 import { useMemo } from 'react';
-import { formItemColumns } from 'Tables/formItemColumns';
+import { formItemColumns, jsonFormDataGetter } from 'Tables/formItemColumns';
 import { useSuspenseQuery } from '@apollo/client/react';
 import { notEmpty } from '@neinteractiveliterature/litform';
 import { getFilterableFormItems } from 'EventsApp/useFilterableFormItems';
@@ -150,7 +150,7 @@ function EventProposalsAdminTable(): React.JSX.Element {
           formsQueryData.convention.event_categories.map((category) => category.event_proposal_form).filter(notEmpty),
         ),
         columnHelper,
-        (row) => JSON.parse(row.form_response_attrs_json ?? '{}'),
+        { getFormData: jsonFormDataGetter((row: EventProposalType) => row.form_response_attrs_json) },
       ),
       columnHelper.display({
         header: '',
@@ -159,7 +159,7 @@ function EventProposalsAdminTable(): React.JSX.Element {
         cell: ExtraCell,
       }),
     ];
-  }, []);
+  }, [formsQueryData]);
 
   const {
     tableHeaderProps,

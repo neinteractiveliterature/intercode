@@ -211,6 +211,32 @@ lower(user_con_profiles.first_name) #{direction}"
 
   field :order_summary, "Order summary"
 
+  field :form_items, "Convention-specific form items", Tables::FormItems::FormItemsField do
+    def form_items_for(_user_con_profile)
+      user_con_profile_form_items
+    end
+
+    def candidate_form_items
+      user_con_profile_form_items
+    end
+
+    # Form items that correspond to built-in columns (e.g. first_name, email) are exported through those columns, which
+    # have their own access checks
+    def exposed_form_item?(form_item)
+      form_item.identifier.present? && !presenter.fields.key?(form_item.identifier.to_sym)
+    end
+
+    def header_description_for(form_item)
+      form_item.admin_description.presence || form_item.public_description
+    end
+
+    private
+
+    def user_con_profile_form_items
+      @user_con_profile_form_items ||= (presenter.convention.user_con_profile_form&.form_items || []).to_a
+    end
+  end
+
   def initialize(convention, pundit_user, *)
     @convention = convention
     @pundit_user = pundit_user
@@ -222,19 +248,6 @@ lower(user_con_profiles.first_name) #{direction}"
     @can_read_tickets = Pundit.policy(pundit_user, Ticket.new(user_con_profile: UserConProfile.new(convention:))).read?
   end
 
-  def fields
-    super.merge(form_fields)
-  end
-
-  def form_fields
-    @form_fields ||=
-      begin
-        usable_form_items = convention.user_con_profile_form.form_items.select(&:identifier)
-        usable_form_items.to_h { |form_item| [form_item.identifier.to_sym, FormField.new(self, form_item)] }
-      end
-  end
-
-  private
 
   def apply_privileges_filter(scope, value)
     value.include?("site_admin") ? scope.joins(:user).where(users: { site_admin: true }) : scope

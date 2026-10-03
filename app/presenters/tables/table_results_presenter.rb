@@ -76,29 +76,6 @@ class Tables::TableResultsPresenter
     end
   end
 
-  class FormField < Field
-    attr_reader :form_item, :get_form_response_from_row
-
-    def initialize(presenter, form_item, get_form_response_from_row: nil)
-      super(presenter)
-      @form_item = form_item
-      @get_form_response_from_row = get_form_response_from_row
-    end
-
-    def id
-      :"form_fields[#{form_item.identifier}]"
-    end
-
-    def csv_header
-      form_item.properties["public_description"] || form_item.identifier.humanize
-    end
-
-    def generate_csv_cell(row, _path = nil)
-      form_response = (get_form_response_from_row ? get_form_response_from_row.call(row) : row)
-      form_response.read_form_response_attribute(form_item.identifier)
-    end
-  end
-
   def self.build_field_class(id, csv_header, base = Tables::TableResultsPresenter::Field, &block)
     field_class =
       Class.new(base) do
