@@ -1,5 +1,6 @@
-require 'test_helper'
-require_relative 'convention_permissions_test_helper'
+# frozen_string_literal: true
+require "test_helper"
+require_relative "convention_permissions_test_helper"
 
 class SignupPolicyTest < ActiveSupport::TestCase
   include ConventionPermissionsTestHelper
@@ -7,44 +8,44 @@ class SignupPolicyTest < ActiveSupport::TestCase
   let(:signup) { create(:signup) }
   let(:convention) { signup.run.event.convention }
 
-  describe '#read?' do
-    it 'lets users with read_signup_details read signups' do
+  describe "#read?" do
+    it "lets users with read_signup_details read signups" do
       user = create_user_with_read_signup_details_in_convention(convention)
       assert_policy_allows SignupPolicy, user, signup, :read?, convention
     end
 
-    it 'lets team members read signups in their events' do
+    it "lets team members read signups in their events" do
       team_member = create(:team_member, event: signup.run.event)
       assert_policy_allows SignupPolicy, team_member.user_con_profile.user, signup, :read?, convention
     end
 
-    it 'lets users read their own signups' do
+    it "lets users read their own signups" do
       assert_policy_allows SignupPolicy, signup.user_con_profile.user, signup, :read?, convention
     end
 
-    it 'lets users read signups of other attendees of the same run' do
+    it "lets users read signups of other attendees of the same run" do
       my_signup = create(:signup, run: signup.run)
       assert_policy_allows SignupPolicy, my_signup.user_con_profile.user, signup, :read?, convention
     end
 
-    it 'does not let users read signups of other attendees of the same run if private_signup_list is set' do
+    it "does not let users read signups of other attendees of the same run if private_signup_list is set" do
       signup.run.event.update!(private_signup_list: true)
       my_signup = create(:signup, run: signup.run)
-      refute SignupPolicy.new(my_signup.user_con_profile.user, signup).read?
+      assert_not SignupPolicy.new(my_signup.user_con_profile.user, signup).read?
     end
 
     it "does not let users read other users' signups" do
-      refute SignupPolicy.new(create(:user), signup).read?
+      assert_not SignupPolicy.new(create(:user), signup).read?
     end
   end
 
-  describe '#read_requested_bucket_key?' do
-    it 'lets users with read_signup_details read requested bucket key for signups in the con' do
+  describe "#read_requested_bucket_key?" do
+    it "lets users with read_signup_details read requested bucket key for signups in the con" do
       user = create_user_with_read_signup_details_in_convention(convention)
       assert_policy_allows SignupPolicy, user, signup, :read_requested_bucket_key?, convention
     end
 
-    it 'lets team members read requested bucket key for signups in their events' do
+    it "lets team members read requested bucket key for signups in their events" do
       team_member = create(:team_member, event: signup.run.event)
       assert_policy_allows SignupPolicy,
                            team_member.user_con_profile.user,
@@ -53,74 +54,122 @@ class SignupPolicyTest < ActiveSupport::TestCase
                            convention
     end
 
-    it 'lets users read requested bucket key for their own signups' do
+    it "lets users read requested bucket key for their own signups" do
       assert_policy_allows SignupPolicy, signup.user_con_profile.user, signup, :read_requested_bucket_key?, convention
     end
 
-    it 'does not let users read requested bucket key of other attendes of the same run' do
+    it "does not let users read requested bucket key of other attendes of the same run" do
       my_signup = create(:signup, run: signup.run)
-      refute SignupPolicy.new(my_signup.user_con_profile.user, signup).read_requested_bucket_key?
+      assert_not SignupPolicy.new(my_signup.user_con_profile.user, signup).read_requested_bucket_key?
     end
 
     it "does not let users read requested bucket key for other users' signups" do
-      refute SignupPolicy.new(create(:user), signup).read_requested_bucket_key?
+      assert_not SignupPolicy.new(create(:user), signup).read_requested_bucket_key?
     end
   end
 
-  describe '#create?' do
-    it 'lets any user create signups' do
+  describe "#create?" do
+    let(:user_con_profile) { create(:user_con_profile, convention: convention) }
+    let(:new_signup) { Signup.new(run: signup.run, user_con_profile: user_con_profile) }
+
+    it "lets users sign themselves up" do
       # For better UX, the signup mode check is done in EventSignupService
-      assert_policy_allows SignupPolicy, signup.user_con_profile.user, Signup.new(run: signup.run), :create?, convention
+      assert_policy_allows SignupPolicy, user_con_profile.user, new_signup, :create?, convention
+    end
+
+    it "lets users sign themselves up in both self-service and moderated conventions" do
+      %w[self_service moderated].each do |signup_mode|
+        convention.update!(signup_mode: signup_mode)
+        assert SignupPolicy.new(user_con_profile.user, new_signup).create?
+      end
+    end
+
+    it "does not let users sign other people up" do
+      assert_not SignupPolicy.new(create(:user_con_profile, convention: convention).user, new_signup).create?
+      assert_not SignupPolicy.new(create(:user), new_signup).create?
+    end
+
+    it "does not let anonymous users sign anyone up" do
+      assert_not SignupPolicy.new(nil, new_signup).create?
+    end
+
+    %w[self_service moderated].each do |signup_mode|
+      it "lets users with update_signups sign other people up in #{signup_mode} conventions" do
+        convention.update!(signup_mode: signup_mode)
+        user = create_user_with_update_signups_in_convention(convention)
+        assert_policy_allows SignupPolicy, user, new_signup, :create?, convention
+      end
+    end
+
+    it "does not let users with update_signups in another convention sign other people up" do
+      user = create_user_with_update_signups_in_convention(create(:convention))
+      assert_not SignupPolicy.new(user, new_signup).create?
+    end
+
+    it "does not let users with other convention permissions sign other people up" do
+      user = create_user_with_update_convention_in_convention(convention)
+      assert_not SignupPolicy.new(user, new_signup).create?
+    end
+
+    it "lets site admins sign other people up" do
+      assert SignupPolicy.new(create(:user, site_admin: true), new_signup).create?
+    end
+
+    it "does not let someone assuming a user identity from another convention sign that user up" do
+      assert_not SignupPolicy.new(
+                   create_identity_assumer_from_other_convention(user_con_profile.user),
+                   new_signup
+                 ).create?
     end
   end
 
-  describe '#withdraw?' do
-    it 'lets a user withdraw their own signups' do
+  describe "#withdraw?" do
+    it "lets a user withdraw their own signups" do
       assert_policy_allows SignupPolicy, signup.user_con_profile.user, signup, :withdraw?, convention
     end
 
     it "does not let a user withdraw other users' signups" do
-      refute SignupPolicy.new(create(:user), signup).withdraw?
+      assert_not SignupPolicy.new(create(:user), signup).withdraw?
     end
 
-    it 'lets users with update_signups withdraw signups in moderated signup conventions' do
-      convention.update!(signup_mode: 'moderated')
+    it "lets users with update_signups withdraw signups in moderated signup conventions" do
+      convention.update!(signup_mode: "moderated")
       user = create_user_with_update_signups_in_convention(convention)
       assert_policy_allows SignupPolicy, user, signup, :withdraw?, convention
     end
 
-    it 'does not let users with update_signups withdraw signups in self-service signup conventions' do
-      convention.update!(signup_mode: 'self_service')
+    it "does not let users with update_signups withdraw signups in self-service signup conventions" do
+      convention.update!(signup_mode: "self_service")
       user = create_user_with_update_signups_in_convention(convention)
-      refute SignupPolicy.new(user, signup).withdraw?
+      assert_not SignupPolicy.new(user, signup).withdraw?
     end
   end
 
-  describe '#manage?' do
-    it 'lets users with update_signups manage signups in moderated conventions' do
-      convention.update!(signup_mode: 'moderated')
+  describe "#manage?" do
+    it "lets users with update_signups manage signups in moderated conventions" do
+      convention.update!(signup_mode: "moderated")
       user = create_user_with_update_signups_in_convention(convention)
       assert SignupPolicy.new(user, signup).manage?
     end
 
-    it 'does not let users with update_signups manage signups in self-service conventions' do
-      convention.update!(signup_mode: 'self_service')
+    it "does not let users with update_signups manage signups in self-service conventions" do
+      convention.update!(signup_mode: "self_service")
       user = create_user_with_update_signups_in_convention(convention)
-      refute SignupPolicy.new(user, signup).manage?
+      assert_not SignupPolicy.new(user, signup).manage?
     end
 
-    it 'does not let users with only read_signup_details manage signups' do
+    it "does not let users with only read_signup_details manage signups" do
       user = create_user_with_read_signup_details_in_convention(convention)
-      refute SignupPolicy.new(user, signup).manage?
+      assert_not SignupPolicy.new(user, signup).manage?
     end
 
-    it 'does not let team members manage signups in their events' do
+    it "does not let team members manage signups in their events" do
       team_member = create(:team_member, event: signup.run.event)
-      refute SignupPolicy.new(team_member.user_con_profile.user, signup).manage?
+      assert_not SignupPolicy.new(team_member.user_con_profile.user, signup).manage?
     end
 
-    it 'does not let users manage their own signups' do
-      refute SignupPolicy.new(signup.user_con_profile.user, signup).manage?
+    it "does not let users manage their own signups" do
+      assert_not SignupPolicy.new(signup.user_con_profile.user, signup).manage?
     end
   end
 
@@ -131,12 +180,12 @@ class SignupPolicyTest < ActiveSupport::TestCase
     end
 
     it "does not let users #{action} their own signups" do
-      refute SignupPolicy.new(signup.user_con_profile.user, signup).public_send("#{action}?")
+      assert_not SignupPolicy.new(signup.user_con_profile.user, signup).public_send("#{action}?")
     end
   end
 
-  describe 'Scope' do
-    it 'return signups in cons where the user has read_signup_details' do
+  describe "Scope" do
+    it "return signups in cons where the user has read_signup_details" do
       user = create_user_with_read_signup_details_in_convention(convention)
       resolved_signups = SignupPolicy::Scope.new(user, Signup.all).resolve
       identity_assumer_resolved_signups =
@@ -146,7 +195,7 @@ class SignupPolicyTest < ActiveSupport::TestCase
       assert_equal [], identity_assumer_resolved_signups.sort
     end
 
-    it 'returns signups for events where you are a team member' do
+    it "returns signups for events where you are a team member" do
       team_member = create(:team_member, event: signup.run.event)
       resolved_signups = SignupPolicy::Scope.new(team_member.user_con_profile.user, Signup.all).resolve
       identity_assumer_resolved_signups =
@@ -159,17 +208,19 @@ class SignupPolicyTest < ActiveSupport::TestCase
       assert_equal [], identity_assumer_resolved_signups.sort
     end
 
-    it 'returns your own signups' do
+    it "returns your own signups" do
       resolved_signups = SignupPolicy::Scope.new(signup.user_con_profile.user, Signup.all).resolve
       identity_assumer_resolved_signups =
-        SignupPolicy::Scope.new(create_identity_assumer_from_other_convention(signup.user_con_profile.user), Signup.all)
-          .resolve
+        SignupPolicy::Scope.new(
+          create_identity_assumer_from_other_convention(signup.user_con_profile.user),
+          Signup.all
+        ).resolve
 
       assert_equal [signup], resolved_signups.sort
       assert_equal [], identity_assumer_resolved_signups.sort
     end
 
-    it 'returns signups of other attendees of the same run' do
+    it "returns signups of other attendees of the same run" do
       my_signup = create(:signup, run: signup.run)
       resolved_signups = SignupPolicy::Scope.new(my_signup.user_con_profile.user, Signup.all).resolve
       identity_assumer_resolved_signups =
@@ -182,7 +233,7 @@ class SignupPolicyTest < ActiveSupport::TestCase
       assert_equal [], identity_assumer_resolved_signups.sort
     end
 
-    it 'does not return signups of other attendees of the same run if private_signup_list is set' do
+    it "does not return signups of other attendees of the same run if private_signup_list is set" do
       signup.run.event.update!(private_signup_list: true)
       my_signup = create(:signup, run: signup.run)
       resolved_signups = SignupPolicy::Scope.new(my_signup.user_con_profile.user, Signup.all).resolve
@@ -196,7 +247,7 @@ class SignupPolicyTest < ActiveSupport::TestCase
       assert_equal [], identity_assumer_resolved_signups.sort
     end
 
-    it 'returns no signups by default' do
+    it "returns no signups by default" do
       resolved_signups = SignupPolicy::Scope.new(create(:user), Signup.all).resolve
       assert_equal [], resolved_signups.sort
     end
