@@ -25,6 +25,14 @@ class Tables::RunsTableResultsPresenter < Tables::TableResultsPresenter
       scope.where(events: { event_category_id: value })
     end
 
+    def expand_scope_for_sort(scope, _direction)
+      scope.joins(event: :event_category)
+    end
+
+    def sql_order(direction)
+      Arel.sql("lower(event_categories.name) #{direction}")
+    end
+
     def generate_csv_cell(run)
       run.event.event_category.name
     end
@@ -37,7 +45,7 @@ class Tables::RunsTableResultsPresenter < Tables::TableResultsPresenter
 
     # Weird hax: we're handling the actual sorting in expand_scope_for_sort
     def expand_scope_for_sort(scope, direction)
-      scope.order(Arel.sql(Event.order_by_title(direction).arel.ast.orders))
+      scope.order(*Event.order_by_title(direction).arel.ast.orders)
     end
 
     def sql_order(_direction)
@@ -60,6 +68,10 @@ class Tables::RunsTableResultsPresenter < Tables::TableResultsPresenter
   end
 
   field :my_rating, "My rating" do
+    def filter_only?
+      true
+    end
+
     delegate :user_con_profile, :pundit_user, to: :presenter
 
     def apply_filter(scope, value)
@@ -70,7 +82,7 @@ class Tables::RunsTableResultsPresenter < Tables::TableResultsPresenter
     # Weird hax: we're handling the actual sorting in expand_scope_for_sort
     def expand_scope_for_sort(scope, direction)
       if user_con_profile && !pundit_user.assumed_identity_from_profile
-        scope.order(Arel.sql(Event.order_by_rating_for_user_con_profile(user_con_profile, direction).arel.ast.orders))
+        scope.joins(:event).merge(Event.order_by_rating_for_user_con_profile(user_con_profile, direction))
       else
         scope
       end
@@ -82,9 +94,17 @@ class Tables::RunsTableResultsPresenter < Tables::TableResultsPresenter
   end
 
   field :starts_at, "Starts at"
-  field :ends_at, "Ends at"
+  field :ends_at, "Ends at" do
+    def sql_order(direction)
+      Arel.sql("runs.starts_at + (events.length_seconds * interval '1 second') #{direction}")
+    end
+  end
 
   field :length_seconds, "Duration" do
+    def sql_order(direction)
+      Arel.sql("events.length_seconds #{direction}")
+    end
+
     def generate_csv_cell(run)
       duration_parts = ActiveSupport::Duration.build(run.event.length_seconds).parts
       format("%d:%02d", duration_parts[:hours] || 0, duration_parts[:minutes] || 0) # rubocop:disable Style/FormatStringToken

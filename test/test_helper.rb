@@ -19,6 +19,8 @@ require "minitest/mock"
 require File.expand_path("../config/environment", __dir__)
 require "rails/test_help"
 
+Dir[File.expand_path("support/**/*.rb", __dir__)].each { |file| require file }
+
 require "minitest/reporters"
 if ENV["CI"].present?
   Minitest::Reporters.use!(

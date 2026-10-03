@@ -48,6 +48,10 @@ class Tables::EventsTableResultsPresenter < Tables::TableResultsPresenter
   end
 
   field :my_rating, "My rating" do
+    def filter_only?
+      true
+    end
+
     delegate :user_con_profile, :pundit_user, to: :presenter
 
     def apply_filter(scope, value)
@@ -95,7 +99,7 @@ class Tables::EventsTableResultsPresenter < Tables::TableResultsPresenter
     end
 
     def sql_order(direction)
-      "user_con_profiles.last_name #{direction}, user_con_profiles.first_name #{direction}"
+      "users.last_name #{direction}, users.first_name #{direction}"
     end
   end
 
