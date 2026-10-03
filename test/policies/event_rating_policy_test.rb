@@ -14,7 +14,6 @@ class EventRatingPolicyTest < ActiveSupport::TestCase
 
   let(:event_rating) { create(:event_rating) }
 
-  # rubocop:disable Metrics/BlockLength
   %w[read manage].each do |action|
     it "does not allow logged out users to #{action} event ratings" do
       assert_not EventRatingPolicy.new(nil, event_rating).send("#{action}?")
@@ -74,5 +73,36 @@ class EventRatingPolicyTest < ActiveSupport::TestCase
   it "does not allow users to manage their own event ratings over OAuth without manage_signups scope" do
     authorization_info = AuthorizationInfo.new(event_rating.user_con_profile.user, FakeToken.with_scopes(:public))
     assert_not EventRatingPolicy.new(authorization_info, event_rating).manage?
+  end
+
+  describe "Scope" do
+    it "returns only the user's own event ratings" do
+      other_rating = create(:event_rating)
+      resolved = EventRatingPolicy::Scope.new(event_rating.user_con_profile.user, EventRating.all).resolve
+
+      assert_equal [event_rating], resolved.to_a
+      assert_not_includes resolved, other_rating
+    end
+
+    it "returns nothing to logged out users" do
+      event_rating
+      assert_empty EventRatingPolicy::Scope.new(nil, EventRating.all).resolve
+    end
+
+    it "returns nothing to site admins who don't own any ratings" do
+      event_rating
+      assert_empty EventRatingPolicy::Scope.new(create(:site_admin), EventRating.all).resolve
+    end
+
+    it "returns the user's ratings over OAuth with the read_signups scope" do
+      authorization_info =
+        AuthorizationInfo.new(event_rating.user_con_profile.user, FakeToken.with_scopes(:read_signups))
+      assert_equal [event_rating], EventRatingPolicy::Scope.new(authorization_info, EventRating.all).resolve.to_a
+    end
+
+    it "returns nothing over OAuth without the read_signups scope" do
+      authorization_info = AuthorizationInfo.new(event_rating.user_con_profile.user, FakeToken.with_scopes(:public))
+      assert_empty EventRatingPolicy::Scope.new(authorization_info, EventRating.all).resolve
+    end
   end
 end
