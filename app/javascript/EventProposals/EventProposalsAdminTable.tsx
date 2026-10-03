@@ -23,7 +23,7 @@ import { useMemo } from 'react';
 import { formItemColumns, jsonFormDataGetter } from 'Tables/formItemColumns';
 import { useSuspenseQuery } from '@apollo/client/react';
 import { notEmpty } from '@neinteractiveliterature/litform';
-import { getFilterableFormItems } from 'EventsApp/useFilterableFormItems';
+import { mergeFormItemsAcrossForms } from 'EventsApp/useFilterableFormItems';
 
 type EventProposalType = EventProposalsAdminQueryData['convention']['event_proposals_paginated']['entries'][0];
 
@@ -146,7 +146,7 @@ function EventProposalsAdminTable(): React.JSX.Element {
         cell: SingleLineTimestampCell,
       }),
       ...formItemColumns(
-        getFilterableFormItems(
+        mergeFormItemsAcrossForms(
           formsQueryData.convention.event_categories.map((category) => category.event_proposal_form).filter(notEmpty),
         ),
         columnHelper,

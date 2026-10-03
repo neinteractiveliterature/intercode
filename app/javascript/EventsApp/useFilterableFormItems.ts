@@ -77,7 +77,9 @@ function mergeFormItemsForFilter(items: TypedFormItem[]): TypedFormItem | undefi
   return items[0];
 }
 
-export function getFilterableFormItems(forms: { form_sections: { form_items: CommonFormItemFieldsFragment[] }[] }[]) {
+export function mergeFormItemsAcrossForms(
+  forms: { form_sections: { form_items: CommonFormItemFieldsFragment[] }[] }[],
+) {
   return Object.values(
     groupBy(
       forms.flatMap((form) =>
@@ -91,7 +93,7 @@ export function getFilterableFormItems(forms: { form_sections: { form_items: Com
 }
 
 export function getFilterableEventFormItems(convention: CommonConventionDataQueryData['convention']) {
-  return getFilterableFormItems(
+  return mergeFormItemsAcrossForms(
     convention.event_categories.map((category) => ({
       form_sections: category.event_form.form_sections.map((formSection) => ({
         form_items: formSection.form_items.filter((item) => item.expose_in?.includes(FormItemExposeIn.EventCatalog)),
