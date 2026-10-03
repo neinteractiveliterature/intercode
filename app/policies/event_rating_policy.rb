@@ -16,7 +16,7 @@ class EventRatingPolicy < ApplicationPolicy
     def resolve
       return scope.none unless user
       return scope.none unless oauth_scope?(:read_signups)
-      scope.joins(:user_con_profile).where(user_con_profiles: { user_id: actual_user.id })
+      scope.joins(:user_con_profile).where(user_con_profiles: { user_id: authorization_info.actual_user.id })
     end
   end
 end

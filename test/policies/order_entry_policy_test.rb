@@ -1,5 +1,6 @@
-require 'test_helper'
-require_relative 'convention_permissions_test_helper'
+# frozen_string_literal: true
+require "test_helper"
+require_relative "convention_permissions_test_helper"
 
 class OrderEntryPolicyTest < ActiveSupport::TestCase
   include ConventionPermissionsTestHelper
@@ -9,22 +10,22 @@ class OrderEntryPolicyTest < ActiveSupport::TestCase
   let(:order_user) { order.user_con_profile.user }
   let(:convention) { order.user_con_profile.convention }
 
-  describe '#read?' do
-    it 'lets me read order entries I made' do
+  describe "#read?" do
+    it "lets me read order entries I made" do
       assert_policy_allows OrderEntryPolicy, order_user, order_entry, :read?, convention
     end
 
-    it 'lets users with read_orders permission read order entries I made' do
+    it "lets users with read_orders permission read order entries I made" do
       user = create_user_with_read_orders_in_convention(convention)
       assert_policy_allows OrderEntryPolicy, user, order_entry, :read?, convention
     end
 
-    it 'does not let me read order entries other people made' do
-      refute OrderEntryPolicy.new(create(:user), order_entry).read?
+    it "does not let me read order entries other people made" do
+      assert_not OrderEntryPolicy.new(create(:user), order_entry).read?
     end
   end
 
-  describe '#manage?' do
+  describe "#manage?" do
     %w[pending].each do |status|
       it "lets me manage entries in my own #{status} orders" do
         order.update!(status: status)
@@ -33,24 +34,24 @@ class OrderEntryPolicyTest < ActiveSupport::TestCase
 
       it "does not let me manage entries in other people's #{status} orders" do
         order.update!(status: status)
-        refute OrderEntryPolicy.new(create(:user), order_entry).manage?
+        assert_not OrderEntryPolicy.new(create(:user), order_entry).manage?
       end
     end
 
     (Types::OrderStatusType.values.keys - %w[pending]).each do |status|
       it "does not let me manage entries in my own #{status} orders" do
         order.update!(status: status)
-        refute OrderEntryPolicy.new(order_user, order_entry).manage?
+        assert_not OrderEntryPolicy.new(order_user, order_entry).manage?
       end
 
       it "does not let me manage entries in other people's #{status} orders" do
         order.update!(status: status)
-        refute OrderEntryPolicy.new(create(:user), order_entry).manage?
+        assert_not OrderEntryPolicy.new(create(:user), order_entry).manage?
       end
     end
   end
 
-  describe 'Scope' do
+  describe "Scope" do
     it "lets me see my own order entries but not other people's" do
       me = create(:user_con_profile)
       my_orders = create_list(:order, 3, user_con_profile: me)
@@ -83,6 +84,26 @@ class OrderEntryPolicyTest < ActiveSupport::TestCase
         assert_equal (my_order_entries + someones_order_entries).sort, resolved_order_entries.sort
         assert_equal [], identity_assumer_resolved_order_entries.sort
       end
+    end
+  end
+
+  describe "#change_price?" do
+    it "lets users with update_orders change the price of order entries" do
+      user = create_user_with_update_orders_in_convention(convention)
+      assert_policy_allows OrderEntryPolicy, user, order_entry, :change_price?, convention
+    end
+
+    it "does not let me change the price of entries in my own orders" do
+      assert_not OrderEntryPolicy.new(order_user, order_entry).change_price?
+    end
+
+    it "does not let users with only read_orders change prices" do
+      user = create_user_with_read_orders_in_convention(convention)
+      assert_not OrderEntryPolicy.new(user, order_entry).change_price?
+    end
+
+    it "lets site admins change prices" do
+      assert OrderEntryPolicy.new(create(:user, site_admin: true), order_entry).change_price?
     end
   end
 end
