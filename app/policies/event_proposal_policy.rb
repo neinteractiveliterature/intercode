@@ -1,12 +1,12 @@
 # frozen_string_literal: true
 class EventProposalPolicy < ApplicationPolicy
-  EVENT_PROPOSAL_NON_DRAFT_STATUSES = EventProposal::STATUSES.to_a - ['draft']
-  EVENT_PROPOSAL_NON_PENDING_STATUSES = EVENT_PROPOSAL_NON_DRAFT_STATUSES - ['proposed']
+  EVENT_PROPOSAL_NON_DRAFT_STATUSES = EventProposal::STATUSES.to_a - ["draft"]
+  EVENT_PROPOSAL_NON_PENDING_STATUSES = EVENT_PROPOSAL_NON_DRAFT_STATUSES - ["proposed"]
 
   delegate :convention, to: :record
 
   def read?
-    if oauth_scoped_disjunction do |d|
+    if oauth_scoped_disjunction { |d|
          d.add(:read_events) do
            user_is_owner? ||
              (
@@ -18,7 +18,7 @@ class EventProposalPolicy < ApplicationPolicy
                  has_applicable_permission?(:read_event_proposals)
              )
          end
-       end
+       }
       return true
     end
 
@@ -38,7 +38,7 @@ class EventProposalPolicy < ApplicationPolicy
   end
 
   def update?
-    if oauth_scoped_disjunction do |d|
+    if oauth_scoped_disjunction { |d|
          d.add(:manage_events) do
            (%w[draft proposed reviewing tentative_accept].include?(record.status) && user_is_owner?) ||
              (
@@ -46,7 +46,7 @@ class EventProposalPolicy < ApplicationPolicy
                  has_applicable_permission?(:update_event_proposals)
              ) || team_member_for_accepted_proposal?
          end
-       end
+       }
       return true
     end
 
@@ -55,12 +55,12 @@ class EventProposalPolicy < ApplicationPolicy
 
   def destroy?
     return false if assumed_identity_from_profile && assumed_identity_from_profile.convention != record.convention
-    oauth_scope?(:manage_events) && record.status == 'draft' && user && record.owner.user_id == user.id
+    oauth_scope?(:manage_events) && record.status == "draft" && owned_by_user?(record.owner)
   end
 
   def submit?
     return false if assumed_identity_from_profile && assumed_identity_from_profile.convention != record.convention
-    oauth_scope?(:manage_events) && user && record.owner.user_id == user.id
+    oauth_scope?(:manage_events) && owned_by_user?(record.owner)
   end
 
   def update_admin_notes?
@@ -76,10 +76,8 @@ class EventProposalPolicy < ApplicationPolicy
     FormItem.highest_level_role(
       team_member: user_is_owner?,
       admin:
-        (
-          EVENT_PROPOSAL_NON_DRAFT_STATUSES.include?(record.status) &&
+        EVENT_PROPOSAL_NON_DRAFT_STATUSES.include?(record.status) &&
             has_applicable_permission?(:update_event_proposals)
-        )
     )
   end
 
@@ -96,7 +94,7 @@ class EventProposalPolicy < ApplicationPolicy
 
   def user_is_owner?
     return false if assumed_identity_from_profile && assumed_identity_from_profile.convention != record.convention
-    user && record.owner && record.owner.user_id == user.id
+    owned_by_user?(record.owner)
   end
 
   def team_member_for_accepted_proposal?

@@ -7,10 +7,10 @@ class SignupPolicy < ApplicationPolicy
   def read?
     return false if assumed_identity_from_profile && assumed_identity_from_profile.convention != convention
 
-    if oauth_scoped_disjunction do |d|
-         d.add(:read_signups) { user && record.user_con_profile&.user_id == user.id }
+    if oauth_scoped_disjunction { |d|
+         d.add(:read_signups) { owned_by_user?(record.user_con_profile) }
          d.add(:read_events) { signed_up_for_run?(run) && !event.private_signup_list? }
-       end
+       }
       return true
     end
     return true if read_requested_bucket_key?
@@ -21,11 +21,11 @@ class SignupPolicy < ApplicationPolicy
   def read_requested_bucket_key?
     return false if assumed_identity_from_profile && assumed_identity_from_profile.convention != convention
 
-    if oauth_scoped_disjunction do |d|
-         d.add(:read_signups) { user && record.user_con_profile&.user_id == user.id }
-         d.add(:read_conventions) { has_convention_permission?(convention, 'read_signup_details') }
+    if oauth_scoped_disjunction { |d|
+         d.add(:read_signups) { owned_by_user?(record.user_con_profile) }
+         d.add(:read_conventions) { has_convention_permission?(convention, "read_signup_details") }
          d.add(:read_events) { team_member_for_event?(event) }
-       end
+       }
       return true
     end
 
@@ -33,11 +33,11 @@ class SignupPolicy < ApplicationPolicy
   end
 
   def manage?
-    if oauth_scoped_disjunction do |d|
+    if oauth_scoped_disjunction { |d|
          d.add(:manage_conventions) do
-           convention.signup_mode == 'moderated' && has_convention_permission?(convention, 'update_signups')
+           convention.signup_mode == "moderated" && has_convention_permission?(convention, "update_signups")
          end
-       end
+       }
       return true
     end
 
@@ -51,15 +51,15 @@ class SignupPolicy < ApplicationPolicy
 
   def withdraw?
     return false if assumed_identity_from_profile && assumed_identity_from_profile.convention != convention
-    oauth_scope?(:manage_signups) && user && record.user_con_profile.user_id == user.id ? true : manage?
+    oauth_scope?(:manage_signups) && owned_by_user?(record.user_con_profile) ? true : manage?
   end
 
   %i[force_confirm? update_counted? update_bucket?].each do |team_member_action|
     define_method team_member_action do
-      if oauth_scoped_disjunction do |d|
+      if oauth_scoped_disjunction { |d|
            d.add(:manage_events) { team_member_for_event?(event) }
-           d.add(:manage_conventions) { has_convention_permission?(convention, 'update_signups') }
-         end
+           d.add(:manage_conventions) { has_convention_permission?(convention, "update_signups") }
+         }
         return true
       end
 
@@ -81,7 +81,7 @@ class SignupPolicy < ApplicationPolicy
           end
 
           if oauth_scope?(:read_conventions)
-            dw.add(run: Run.where(event: Event.where(convention: conventions_with_permission('read_signup_details'))))
+            dw.add(run: Run.where(event: Event.where(convention: conventions_with_permission("read_signup_details"))))
           end
         end
 

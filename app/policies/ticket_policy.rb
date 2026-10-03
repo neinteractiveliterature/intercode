@@ -6,11 +6,11 @@ class TicketPolicy < ApplicationPolicy
   def read?
     return false if assumed_identity_from_profile && assumed_identity_from_profile.convention != convention
 
-    if oauth_scoped_disjunction do |d|
-         d.add(:read_conventions) { has_convention_permission?(convention, 'read_tickets') }
+    if oauth_scoped_disjunction { |d|
+         d.add(:read_conventions) { has_convention_permission?(convention, "read_tickets") }
          d.add(:read_events) { team_member_in_convention?(convention) }
-         d.add(:read_profile) { user && user.id == user_con_profile.user_id }
-       end
+         d.add(:read_profile) { owned_by_user?(user_con_profile) }
+       }
       return true
     end
 
@@ -18,9 +18,9 @@ class TicketPolicy < ApplicationPolicy
   end
 
   def provide?
-    if oauth_scoped_disjunction do |d|
+    if oauth_scoped_disjunction { |d|
          d.add(:manage_events) { record.provided_by_event && team_member_for_event?(record.provided_by_event) }
-       end
+       }
       return true
     end
 
@@ -28,7 +28,7 @@ class TicketPolicy < ApplicationPolicy
   end
 
   def manage?
-    return true if oauth_scope?(:manage_conventions) && has_convention_permission?(convention, 'update_tickets')
+    return true if oauth_scope?(:manage_conventions) && has_convention_permission?(convention, "update_tickets")
 
     super
   end
@@ -40,7 +40,7 @@ class TicketPolicy < ApplicationPolicy
       ticket_scope =
         disjunctive_where do |dw|
           if oauth_scope?(:read_conventions)
-            dw.add(user_con_profile_id: UserConProfile.where(convention: conventions_with_permission('read_tickets')))
+            dw.add(user_con_profile_id: UserConProfile.where(convention: conventions_with_permission("read_tickets")))
           end
 
           if oauth_scope?(:read_events)
