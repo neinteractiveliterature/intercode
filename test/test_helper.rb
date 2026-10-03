@@ -4,6 +4,8 @@ require "simplecov"
 require "simplecov-cobertura"
 SimpleCov.start do
   add_filter "/test/"
+  # Report on files that no test loads, too, rather than silently leaving them out of the totals
+  track_files "{app,lib}/**/*.rb"
 
   if ENV["CI"]
     formatter SimpleCov::Formatter::CoberturaFormatter
