@@ -11,15 +11,15 @@ class UserConProfilePolicy < ApplicationPolicy
     # you can always read bio-eligible profiles
     return true if record.can_have_bio?
 
-    if oauth_scoped_disjunction do |d|
+    if oauth_scoped_disjunction { |d|
          d.add(:read_events) { user_con_profile_ids_in_signed_up_runs.include?(record.id) }
-       end
+       }
       return true
     end
 
-    if oauth_scoped_disjunction do |d|
-         d.add(:read_conventions) { has_convention_permission?(convention, 'read_user_con_profiles') }
-       end
+    if oauth_scoped_disjunction { |d|
+         d.add(:read_conventions) { has_convention_permission?(convention, "read_user_con_profiles") }
+       }
       return true
     end
 
@@ -31,16 +31,16 @@ class UserConProfilePolicy < ApplicationPolicy
 
     oauth_scoped_disjunction do |d|
       d.add(:read_conventions) do
-        team_member_in_convention?(convention) || has_convention_permission?(convention, 'read_user_con_profile_email')
+        team_member_in_convention?(convention) || has_convention_permission?(convention, "read_user_con_profile_email")
       end
     end
   end
 
   def read_birth_date?
-    if oauth_scoped_disjunction do |d|
+    if oauth_scoped_disjunction { |d|
          d.add(:read_profile) { profile_is_user_or_identity_assumer? }
-         d.add(:read_conventions) { has_convention_permission?(convention, 'read_user_con_profile_birth_date') }
-       end
+         d.add(:read_conventions) { has_convention_permission?(convention, "read_user_con_profile_birth_date") }
+       }
       return true
     end
 
@@ -48,14 +48,14 @@ class UserConProfilePolicy < ApplicationPolicy
   end
 
   def read_personal_info?
-    if oauth_scoped_disjunction do |d|
+    if oauth_scoped_disjunction { |d|
          d.add(:read_profile) { profile_is_user_or_identity_assumer? }
          d.add(:read_conventions) do
-           has_convention_permission?(convention, 'read_user_con_profile_personal_info') ||
-             has_event_category_permission_in_convention?(convention, 'read_event_proposals') ||
+           has_convention_permission?(convention, "read_user_con_profile_personal_info") ||
+             has_event_category_permission_in_convention?(convention, "read_event_proposals") ||
              team_member_for_user_con_profile?(record)
          end
-       end
+       }
       return true
     end
 
@@ -64,7 +64,7 @@ class UserConProfilePolicy < ApplicationPolicy
 
   def create?
     return false if assumed_identity_from_profile && assumed_identity_from_profile.convention != convention
-    return true if oauth_scoped_disjunction { |d| d.add(:manage_profile) { user && user.id == record.user_id } }
+    return true if oauth_scoped_disjunction { |d| d.add(:manage_profile) { owned_by_user?(record) } }
 
     manage?
   end
@@ -76,9 +76,9 @@ class UserConProfilePolicy < ApplicationPolicy
   def manage?
     return false if assumed_identity_from_profile && assumed_identity_from_profile.convention != convention
 
-    if oauth_scoped_disjunction do |d|
-         d.add(:manage_conventions) { has_convention_permission?(convention, 'update_user_con_profiles') }
-       end
+    if oauth_scoped_disjunction { |d|
+         d.add(:manage_conventions) { has_convention_permission?(convention, "update_user_con_profiles") }
+       }
       return true
     end
 
@@ -97,15 +97,13 @@ class UserConProfilePolicy < ApplicationPolicy
     return :normal if assumed_identity_from_profile && assumed_identity_from_profile.convention != convention
 
     FormItem.highest_level_role(
-      all_profiles_basic_access: has_convention_permission?(convention, 'read_user_con_profiles'),
+      all_profiles_basic_access: has_convention_permission?(convention, "read_user_con_profiles"),
       # admin for user con profiles acts like "has the highest level permissions on this profile"
       admin:
-        (
-          has_convention_permission?(convention, 'read_user_con_profiles') &&
-            has_convention_permission?(convention, 'read_user_con_profile_birth_date') &&
-            has_convention_permission?(convention, 'read_user_con_profile_personal_info') &&
-            has_convention_permission?(convention, 'read_user_con_profile_email')
-        )
+        has_convention_permission?(convention, "read_user_con_profiles") &&
+            has_convention_permission?(convention, "read_user_con_profile_birth_date") &&
+            has_convention_permission?(convention, "read_user_con_profile_personal_info") &&
+            has_convention_permission?(convention, "read_user_con_profile_email")
     )
   end
 
@@ -113,15 +111,13 @@ class UserConProfilePolicy < ApplicationPolicy
     return :normal if assumed_identity_from_profile && assumed_identity_from_profile.convention != convention
 
     FormItem.highest_level_role(
-      all_profiles_basic_access: has_convention_permission?(convention, 'update_user_con_profiles'),
+      all_profiles_basic_access: has_convention_permission?(convention, "update_user_con_profiles"),
       # admin for user con profiles acts like "has the highest level permissions on this profile"
       admin:
-        (
-          has_convention_permission?(convention, 'update_user_con_profiles') &&
-            has_convention_permission?(convention, 'read_user_con_profile_birth_date') &&
-            has_convention_permission?(convention, 'read_user_con_profile_personal_info') &&
-            has_convention_permission?(convention, 'read_user_con_profile_email')
-        )
+        has_convention_permission?(convention, "update_user_con_profiles") &&
+            has_convention_permission?(convention, "read_user_con_profile_birth_date") &&
+            has_convention_permission?(convention, "read_user_con_profile_personal_info") &&
+            has_convention_permission?(convention, "read_user_con_profile_email")
     )
   end
 
@@ -146,12 +142,12 @@ class UserConProfilePolicy < ApplicationPolicy
           dw.add(
             convention:
               conventions_with_permission(
-                'read_user_con_profiles',
-                'read_user_con_profile_email',
-                'read_user_con_profile_personal_info'
+                "read_user_con_profiles",
+                "read_user_con_profile_email",
+                "read_user_con_profile_personal_info"
               )
           )
-          dw.add(convention: event_categories_with_permission('read_event_proposals').select(:convention_id))
+          dw.add(convention: event_categories_with_permission("read_event_proposals").select(:convention_id))
         end
 
       if assumed_identity_from_profile

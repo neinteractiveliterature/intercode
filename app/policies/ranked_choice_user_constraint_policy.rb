@@ -7,7 +7,7 @@ class RankedChoiceUserConstraintPolicy < ApplicationPolicy
     return false if assumed_identity_from_profile && assumed_identity_from_profile.convention != convention
 
     if oauth_scoped_disjunction { |d|
-         d.add(:read_signups) { record.user_con_profile.user_id == user&.id }
+         d.add(:read_signups) { owned_by_user?(record.user_con_profile) }
 
          d.add(:read_conventions) do
            convention.signup_automation_mode == "ranked_choice" &&
@@ -25,7 +25,7 @@ class RankedChoiceUserConstraintPolicy < ApplicationPolicy
 
     if oauth_scoped_disjunction { |d|
          d.add(:manage_signups) do
-           user && user.id == record.user_con_profile.user_id && (convention.signup_automation_mode == "ranked_choice")
+           owned_by_user?(record.user_con_profile) && (convention.signup_automation_mode == "ranked_choice")
          end
          d.add(:manage_conventions) do
            convention.signup_automation_mode == "ranked_choice" &&

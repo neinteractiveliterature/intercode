@@ -8,7 +8,7 @@ class SignupChangePolicy < ApplicationPolicy
     return false if assumed_identity_from_profile && assumed_identity_from_profile.convention != convention
 
     if oauth_scoped_disjunction { |d|
-         d.add(:read_signups) { user && record.user_con_profile&.user_id == user.id }
+         d.add(:read_signups) { owned_by_user?(record.user_con_profile) }
          d.add(:read_conventions) { has_convention_permission?(convention, "read_signup_details") }
          d.add(:read_events) { team_member_for_event?(event) }
        }

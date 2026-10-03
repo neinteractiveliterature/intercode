@@ -138,6 +138,7 @@ Naming/PredicateMethod:
 Naming/PredicatePrefix:
   Exclude:
     - 'app/models/run.rb'
+    - 'app/policies/event_proposal_policy.rb'
     - 'app/presenters/run_availability_presenter.rb'
     - 'app/presenters/signup_count_presenter.rb'
 

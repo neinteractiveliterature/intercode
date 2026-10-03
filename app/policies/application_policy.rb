@@ -16,6 +16,21 @@ class ApplicationPolicy
     @record = record
   end
 
+  # Is the given user_con_profile (typically the owner of the record being authorized) the current user?
+  #
+  # Always use this instead of comparing user IDs by hand.  An identity assumer acts as another user in only
+  # one convention, so they must not be treated as the owner of anything in a different convention.  Checks
+  # that go through has_convention_permission? get that behavior from the query managers, but raw comparisons
+  # of user IDs don't.
+  def owned_by_user?(user_con_profile)
+    return false unless user && user_con_profile
+    if assumed_identity_from_profile && assumed_identity_from_profile.convention_id != user_con_profile.convention_id
+      return false
+    end
+
+    user_con_profile.user_id == user.id
+  end
+
   def site_admin_read?
     oauth_scope?(:read_conventions) && site_admin?
   end
@@ -61,8 +76,8 @@ class ApplicationPolicy
 
     private
 
-    def disjunctive_where(&block)
-      Queries::DisjunctiveWhere.build(scope, &block)
+    def disjunctive_where(&)
+      Queries::DisjunctiveWhere.build(scope, &)
     end
   end
 end

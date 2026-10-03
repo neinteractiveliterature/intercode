@@ -8,7 +8,7 @@ class SignupRankedChoicePolicy < ApplicationPolicy
     return false if assumed_identity_from_profile && assumed_identity_from_profile.convention != convention
 
     if oauth_scoped_disjunction { |d|
-         d.add(:read_signups) { record.user_con_profile.user_id == user&.id }
+         d.add(:read_signups) { owned_by_user?(record.user_con_profile) }
 
          d.add(:read_conventions) do
            convention.signup_mode == "moderated" && convention.signup_automation_mode == "ranked_choice" &&
@@ -45,19 +45,19 @@ class SignupRankedChoicePolicy < ApplicationPolicy
   def create?
     return false unless oauth_scope?(:manage_signups)
     return false if assumed_identity_from_profile && assumed_identity_from_profile.convention != convention
-    user && user.id == record.user_con_profile.user_id && (convention.signup_automation_mode == "ranked_choice")
+    owned_by_user?(record.user_con_profile) && (convention.signup_automation_mode == "ranked_choice")
   end
 
   def destroy?
     return false unless oauth_scope?(:manage_signups)
     return false if assumed_identity_from_profile && assumed_identity_from_profile.convention != convention
-    user && record.state == "pending" && user.id == record.user_con_profile.user_id
+    record.state == "pending" && owned_by_user?(record.user_con_profile)
   end
 
   def update?
     return false unless oauth_scope?(:manage_signups)
     return false if assumed_identity_from_profile && assumed_identity_from_profile.convention != convention
-    user && record.state == "pending" && user.id == record.user_con_profile.user_id
+    record.state == "pending" && owned_by_user?(record.user_con_profile)
   end
 
   class Scope < Scope

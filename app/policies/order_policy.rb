@@ -6,16 +6,16 @@ class OrderPolicy < ApplicationPolicy
   def read?
     return false if assumed_identity_from_profile && assumed_identity_from_profile.convention != convention
 
-    if oauth_scoped_disjunction do |d|
+    if oauth_scoped_disjunction { |d|
          d.add(:read_conventions) do
-           has_convention_permission?(convention, 'read_orders') ||
+           has_convention_permission?(convention, "read_orders") ||
              (
                record.tickets.any? &&
                  record.tickets.any? { |ticket| TicketPolicy.new(authorization_info, ticket).read? }
              )
          end
-         d.add(:read_profile) { user && user.id == user_con_profile.user_id }
-       end
+         d.add(:read_profile) { owned_by_user?(user_con_profile) }
+       }
       return true
     end
 
@@ -23,9 +23,9 @@ class OrderPolicy < ApplicationPolicy
   end
 
   def manage?
-    if oauth_scoped_disjunction do |d|
-         d.add(:manage_conventions) { has_convention_permission?(convention, 'update_orders') }
-       end
+    if oauth_scoped_disjunction { |d|
+         d.add(:manage_conventions) { has_convention_permission?(convention, "update_orders") }
+       }
       return true
     end
 
@@ -39,11 +39,9 @@ class OrderPolicy < ApplicationPolicy
   def submit?
     return false if assumed_identity_from_profile && assumed_identity_from_profile.convention != convention
 
-    if oauth_scoped_disjunction do |d|
-         d.add(:manage_profile) do
-           %w[pending unpaid].include?(record.status) && user && user.id == user_con_profile.user_id
-         end
-       end
+    if oauth_scoped_disjunction { |d|
+         d.add(:manage_profile) { %w[pending unpaid].include?(record.status) && owned_by_user?(user_con_profile) }
+       }
       return true
     end
 
@@ -63,7 +61,7 @@ class OrderPolicy < ApplicationPolicy
           if oauth_scope?(:read_conventions)
             dw.add(
               user_con_profile_id:
-                UserConProfile.where(convention: conventions_with_permission('read_orders', 'update_orders'))
+                UserConProfile.where(convention: conventions_with_permission("read_orders", "update_orders"))
             )
           end
 
