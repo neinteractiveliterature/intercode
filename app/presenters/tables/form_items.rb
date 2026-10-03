@@ -155,4 +155,38 @@ module Tables::FormItems
         .join("\n")
     end
   end
+
+  # For tables whose rows are (or belong to) Events, using the event forms and the event catalog exposure setting
+  class EventFormItemsField < FormItemsField
+    EXPOSED_IN = "event_catalog"
+
+    # The Event for a given table row
+    def event_for(row)
+      row
+    end
+
+    def form_response_for(row)
+      event_for(row)
+    end
+
+    def form_items_for(row)
+      event_for(row).event_category.event_form&.form_items
+    end
+
+    def candidate_form_items
+      @candidate_form_items ||=
+        FormItem
+          .joins(form_section: :form)
+          .where(forms: { convention_id: presenter.convention.id, form_type: "event" })
+          .select { |form_item| exposed_form_item?(form_item) }
+    end
+
+    def exposed_form_item?(form_item)
+      form_item.expose_in&.include?(EXPOSED_IN)
+    end
+
+    def additional_info_table_name
+      Event.table_name
+    end
+  end
 end

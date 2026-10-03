@@ -101,27 +101,11 @@ class Tables::EventsTableResultsPresenter < Tables::TableResultsPresenter
 
   field :created_at, "Created at"
 
-  field :form_items, "Convention-specific form items" do
-    def apply_filter(scope, value)
-      value
-        .each
-        .inject(scope) do |acc_scope, (identifier, values)|
-          if values.present?
-            acc_scope.where(
-              %("events"."additional_info"->:field ?| array[:values]),
-              field: identifier,
-              values: Array(values)
-            )
-          else
-            acc_scope
-          end
-        end
-    end
-  end
+  field :form_items, "Convention-specific form items", Tables::FormItems::EventFormItemsField
 
   attr_reader :pundit_user, :convention
 
-  def initialize(base_scope:, convention:, pundit_user:, filters: {}, sort: nil, visible_field_ids: nil)
+  def initialize(base_scope:, convention:, pundit_user:, filters: {}, sort: nil, visible_field_ids: nil) # rubocop:disable Metrics/ParameterLists
     super(base_scope, filters, sort, visible_field_ids)
     @convention = convention
     @pundit_user = pundit_user
@@ -130,6 +114,14 @@ class Tables::EventsTableResultsPresenter < Tables::TableResultsPresenter
   def user_con_profile
     return nil unless pundit_user&.user
 
-    @user_con_profile ||= convention.user_con_profiles.find_by(user_id: pundit_user.user.id)
+    return @user_con_profile if defined?(@user_con_profile)
+
+    @user_con_profile = convention.user_con_profiles.find_by(user_id: pundit_user.user.id)
+  end
+
+  private
+
+  def csv_scope
+    scoped.includes(event_category: { event_form: :form_items })
   end
 end

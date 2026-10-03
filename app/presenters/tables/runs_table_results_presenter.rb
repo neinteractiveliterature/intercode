@@ -83,7 +83,7 @@ class Tables::RunsTableResultsPresenter < Tables::TableResultsPresenter
   field :length_seconds, "Duration" do
     def generate_csv_cell(run)
       duration_parts = ActiveSupport::Duration.build(run.event.length_seconds).parts
-      format("%d:%02d", duration_parts[:hours] || 0, duration_parts[:minutes] || 0)
+      format("%d:%02d", duration_parts[:hours] || 0, duration_parts[:minutes] || 0) # rubocop:disable Style/FormatStringToken
     end
   end
 
@@ -120,21 +120,9 @@ class Tables::RunsTableResultsPresenter < Tables::TableResultsPresenter
     end
   end
 
-  field :form_items, "Convention-specific form items" do
-    def apply_filter(scope, value)
-      value
-        .each
-        .inject(scope) do |acc_scope, (identifier, values)|
-          if values.present?
-            acc_scope.where(
-              %("events"."additional_info"->:field ?| array[:values]),
-              field: identifier,
-              values: Array(values)
-            )
-          else
-            acc_scope
-          end
-        end
+  field :form_items, "Convention-specific form items", Tables::FormItems::EventFormItemsField do
+    def event_for(run)
+      run.event
     end
   end
 
@@ -170,43 +158,23 @@ class Tables::RunsTableResultsPresenter < Tables::TableResultsPresenter
 
   attr_reader :pundit_user, :convention
 
-  def initialize(base_scope:, convention:, pundit_user:, filters: {}, sort: nil, visible_field_ids: nil)
+  def initialize(base_scope:, convention:, pundit_user:, filters: {}, sort: nil, visible_field_ids: nil) # rubocop:disable Metrics/ParameterLists
     @convention = convention
     @pundit_user = pundit_user
     super(base_scope, filters, sort, visible_field_ids)
   end
 
-  def form_fields
-    @form_fields ||=
-      begin
-        filterable_items_by_identifier =
-          FormItem
-            .joins(form_section: :form)
-            .where(forms: { convention_id: convention.id, form_type: "event" })
-            .where(Arel.sql("expose_in @> ARRAY['event_catalog']"))
-            .group_by(&:identifier)
-
-        filterable_items_by_identifier
-          .values
-          .map do |form_items|
-            # TODO merge form items
-            Tables::TableResultsPresenter::FormField.new(
-              self,
-              form_items.first,
-              get_form_response_from_row: ->(run) { run.event }
-            )
-          end
-          .index_by(&:id)
-      end
-  end
-
-  def fields
-    @fields ||= super.merge(form_fields)
-  end
-
   def user_con_profile
     return nil unless pundit_user&.user
 
-    @user_con_profile ||= convention.user_con_profiles.find_by(user_id: pundit_user.user.id)
+    return @user_con_profile if defined?(@user_con_profile)
+
+    @user_con_profile = convention.user_con_profiles.find_by(user_id: pundit_user.user.id)
+  end
+
+  private
+
+  def csv_scope
+    scoped.includes(event: { event_category: { event_form: :form_items } })
   end
 end
