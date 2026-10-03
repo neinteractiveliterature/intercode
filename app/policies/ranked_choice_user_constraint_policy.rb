@@ -21,6 +21,8 @@ class RankedChoiceUserConstraintPolicy < ApplicationPolicy
   end
 
   def manage?
+    return false if assumed_identity_from_profile && assumed_identity_from_profile.convention != convention
+
     if oauth_scoped_disjunction { |d|
          d.add(:manage_signups) do
            user && user.id == record.user_con_profile.user_id && (convention.signup_automation_mode == "ranked_choice")
@@ -58,7 +60,7 @@ class RankedChoiceUserConstraintPolicy < ApplicationPolicy
 
       if assumed_identity_from_profile
         signup_request_scope.where(
-          target_run: Run.where(event: Event.where(convention_id: assumed_identity_from_profile.convention_id))
+          user_con_profile: UserConProfile.where(convention_id: assumed_identity_from_profile.convention_id)
         )
       else
         signup_request_scope
