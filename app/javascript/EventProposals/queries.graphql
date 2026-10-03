@@ -48,6 +48,25 @@ fragment EventProposalFormData on Convention {
   event_mailing_list_domain
 }
 
+query EventProposalFormsQuery {
+  convention: conventionByRequestHost {
+    id
+    event_categories(current_ability_can_read_event_proposals: true) {
+      id
+      event_proposal_form {
+        id
+        form_sections {
+          id
+          form_items {
+            id
+            ...CommonFormItemFields
+          }
+        }
+      }
+    }
+  }
+}
+
 query EventProposalQuery($eventProposalId: ID!) {
   currentAbility {
     can_delete_event_proposal(eventProposalId: $eventProposalId)
@@ -156,6 +175,8 @@ query EventProposalsAdminQuery($page: Int, $perPage: Int, $filters: EventProposa
   convention: conventionByRequestHost {
     id
     timezone_name
+    starts_at
+    ends_at
 
     event_categories(current_ability_can_read_event_proposals: true) {
       id
@@ -176,6 +197,7 @@ query EventProposalsAdminQuery($page: Int, $perPage: Int, $filters: EventProposa
         status
         submitted_at
         updated_at
+        form_response_attrs_json
 
         event_category {
           id

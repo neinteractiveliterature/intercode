@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router';
+import { Link, LoaderFunction, RouterContextProvider, useLoaderData, useNavigate } from 'react-router';
 import { CellContext, Column, ColumnDef, createColumnHelper } from '@tanstack/react-table';
 
 import ChoiceSetFilter from '../Tables/ChoiceSetFilter';
@@ -10,12 +10,20 @@ import TableHeader from '../Tables/TableHeader';
 import usePageTitle from '../usePageTitle';
 import UserConProfileWithGravatarCell from '../Tables/UserConProfileWithGravatarCell';
 import { SingleLineTimestampCell } from '../Tables/TimestampCell';
-import { EventProposalsAdminQueryData, EventProposalsAdminQueryDocument } from './queries.generated';
+import {
+  EventProposalFormsQueryDocument,
+  EventProposalsAdminQueryData,
+  EventProposalsAdminQueryDocument,
+} from './queries.generated';
 import EventCategoryCell from '../Tables/EventCategoryCell';
 import EventCategoryFilter from '../Tables/EventCategoryFilter';
 import DurationCell from '../Tables/DurationCell';
 import CapacityCell from '../Tables/CapacityCell';
 import { useMemo } from 'react';
+import { formItemColumns, jsonFormDataGetter } from 'Tables/formItemColumns';
+import { apolloClientContext } from 'AppContexts';
+import { notEmpty } from '@neinteractiveliterature/litform';
+import { mergeFormItemsAcrossForms } from 'EventsApp/useFilterableFormItems';
 
 type EventProposalType = EventProposalsAdminQueryData['convention']['event_proposals_paginated']['entries'][0];
 
@@ -72,7 +80,26 @@ const defaultVisibleColumns = [
 ];
 const alwaysVisibleColumns = ['_extra'];
 
+type LoaderResult = {
+  formItems: ReturnType<typeof mergeFormItemsAcrossForms>;
+};
+
+export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+  const client = context.get(apolloClientContext);
+  const { data } = await client.query({ query: EventProposalFormsQueryDocument });
+  if (!data) {
+    return new Response(null, { status: 404 });
+  }
+
+  const formItems = mergeFormItemsAcrossForms(
+    data.convention.event_categories.map((category) => category.event_proposal_form).filter(notEmpty),
+  );
+  return { formItems } satisfies LoaderResult;
+};
+
 function EventProposalsAdminTable(): React.JSX.Element {
+  const { formItems } = useLoaderData() as LoaderResult;
+
   const navigate = useNavigate();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const columns = useMemo((): ColumnDef<EventProposalType, any>[] => {
@@ -135,6 +162,9 @@ function EventProposalsAdminTable(): React.JSX.Element {
         enableSorting: true,
         cell: SingleLineTimestampCell,
       }),
+      ...formItemColumns(formItems, columnHelper, {
+        getFormData: jsonFormDataGetter((row: EventProposalType) => row.form_response_attrs_json),
+      }),
       columnHelper.display({
         header: '',
         id: '_extra',
@@ -142,7 +172,7 @@ function EventProposalsAdminTable(): React.JSX.Element {
         cell: ExtraCell,
       }),
     ];
-  }, []);
+  }, [formItems]);
 
   const {
     tableHeaderProps,

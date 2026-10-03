@@ -17,7 +17,7 @@ import {
   ScheduleGridConventionDataQueryData,
   ScheduleGridConventionDataQueryDocument,
 } from './ScheduleGrid/queries.generated';
-import useFilterableFormItems from './useFilterableFormItems';
+import useFilterableEventFormItems from './useFilterableFormItems';
 import EventListFilterableFormItemDropdown from './EventCatalog/EventList/EventListFilterableFormItemDropdown';
 import useReactRouterReactTable from '../Tables/useReactRouterReactTable';
 import { buildFieldFilterCodecs, FilterCodecs } from '../Tables/FilterUtils';
@@ -169,7 +169,7 @@ function ScheduleApp(): React.JSX.Element {
     [filters],
   );
 
-  const filterableFormItems = useFilterableFormItems(data.convention);
+  const filterableFormItems = useFilterableEventFormItems(data.convention);
   const fetchFormItemIdentifiers = useMemo(
     () => filterableFormItems.map((item) => item.identifier).filter(notEmpty),
     [filterableFormItems],
@@ -266,8 +266,7 @@ function ScheduleApp(): React.JSX.Element {
                   }
                   onChange={(newValue) => {
                     const prevValue = filters.find(({ id }) => id === 'form_items') as
-                      | Record<string, string[]>
-                      | undefined;
+                      Record<string, string[]> | undefined;
                     updateSearch({
                       filters: [
                         ...filters.filter(({ id }) => id !== 'form_items'),

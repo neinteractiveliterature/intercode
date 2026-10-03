@@ -50,6 +50,21 @@ class Tables::TableResultsPresenter
       { id => direction }
     end
 
+    # Fields that are expanded into sub-columns via a dotted path (e.g. "form_items.some_identifier")
+    # rather than being exported as a single column
+    def path_based?
+      false
+    end
+
+    # Fields that only exist to support filtering (e.g. title_prefix) and have no value to export
+    def filter_only?
+      false
+    end
+
+    def csv_header_for_path(path)
+      path.last
+    end
+
     def generate_csv_cell(object)
       object.public_send(id)
     end
@@ -66,30 +81,6 @@ class Tables::TableResultsPresenter
     end
   end
 
-  class FormField < Field
-    attr_reader :form_item, :get_form_response_from_row
-
-    def initialize(presenter, form_item, get_form_response_from_row: nil)
-      super(presenter)
-      @form_item = form_item
-      @get_form_response_from_row = get_form_response_from_row
-    end
-
-    def id
-      :"form_fields[#{form_item.identifier}]"
-    end
-
-    def csv_header
-      form_item.properties["public_description"] || form_item.identifier.humanize
-    end
-
-    def generate_csv_cell(row)
-      form_response = (get_form_response_from_row ? get_form_response_from_row.call(row) : row)
-      form_response.read_form_response_attribute(form_item.identifier)
-    end
-  end
-
-  # rubocop:disable Metrics/MethodLength
   def self.build_field_class(id, csv_header, base = Tables::TableResultsPresenter::Field, &block)
     field_class =
       Class.new(base) do
@@ -97,13 +88,8 @@ class Tables::TableResultsPresenter
           attr_reader :id, :csv_header
         end
 
-        def id
-          self.class.id
-        end
-
-        def csv_header
-          self.class.csv_header
-        end
+        delegate :id, to: :class
+        delegate :csv_header, to: :class
       end
 
     field_class.instance_variable_set(:@id, id.to_sym)
@@ -120,16 +106,14 @@ class Tables::TableResultsPresenter
     const_set(constant_name, field_class)
   end
 
-  # rubocop:enable Metrics/MethodLength
-
   def self.field_classes
     @field_classes ||= {}
   end
 
-  def self.field(id, csv_header, base = Tables::TableResultsPresenter::Field, &block)
+  def self.field(id, csv_header, base = Tables::TableResultsPresenter::Field, &)
     id_sym = id.to_sym
     raise "Field #{id_sym} already defined for #{self.class.name}" if field_classes[id_sym]
-    field_class = build_field_class(id_sym, csv_header, base, &block)
+    field_class = build_field_class(id_sym, csv_header, base, &)
     field_classes[id_sym] = field_class
   end
 
@@ -139,7 +123,8 @@ class Tables::TableResultsPresenter
     @base_scope = base_scope
     @filters = filters || {}
     @sort = sort || []
-    @visible_field_ids = (visible_field_ids || fields.keys).map(&:to_sym)
+    @visible_field_ids =
+      (visible_field_ids || fields.reject { |_id, field| field.path_based? || field.filter_only? }.keys).map(&:to_sym)
   end
 
   def scoped
@@ -151,7 +136,7 @@ class Tables::TableResultsPresenter
   end
 
   def fields
-    self.class.field_classes.transform_values { |field_class| field_class.new(self) }
+    @fields ||= self.class.field_classes.transform_values { |field_class| field_class.new(self) }
   end
 
   def filter_descriptions
@@ -161,8 +146,8 @@ class Tables::TableResultsPresenter
     end
   end
 
-  def visible_fields
-    fields.slice(*visible_field_ids.map(&:to_sym)).values
+  def visible_field_accessors
+    visible_field_ids.filter_map { |visible_field_id| csv_accessor_for(visible_field_id) }
   end
 
   def csv_enumerator(zone: nil)
@@ -170,8 +155,8 @@ class Tables::TableResultsPresenter
 
     current_zone = Time.zone
     Time.use_zone(zone || current_zone) do
-      the_fields = visible_fields
-      yield CSV.generate_line(the_fields.map(&:csv_header))
+      the_fields = visible_field_accessors
+      yield CSV.generate_line(the_fields.map(&:first))
 
       # I'm gonna make my own find_each, with limits and offsets!
       total_records = csv_scope.count
@@ -181,7 +166,7 @@ class Tables::TableResultsPresenter
           .limit(batch_size)
           .offset(offset)
           .each do |model|
-            csv_data = the_fields.map { |field| field.generate_csv_cell(model) }
+            csv_data = the_fields.map { |(_header, getter)| getter.call(model) }
             yield CSV.generate_line(csv_data)
           end
       end
@@ -189,6 +174,23 @@ class Tables::TableResultsPresenter
   end
 
   private
+
+  # Returns a [header, getter] pair for a visible field ID, or nil if the ID doesn't correspond to an exportable column
+  def csv_accessor_for(visible_field_id)
+    direct_field = fields[visible_field_id.to_sym]
+    if direct_field
+      return nil if direct_field.filter_only? || direct_field.path_based?
+      return direct_field.csv_header, ->(model) { direct_field.generate_csv_cell(model) }
+    end
+
+    # Path-based fields expand to multiple columns, e.g. "form_items.some_identifier".  Only the first segment is a
+    # field ID, so that the rest of the path is free to contain dots.
+    field_id, *path = visible_field_id.to_s.split(".", 2)
+    path_field = fields[field_id.to_sym]
+    return nil unless path_field&.path_based? && path.present?
+
+    [path_field.csv_header_for_path(path), ->(model) { path_field.generate_csv_cell(model, path) }]
+  end
 
   def apply_filters(scope)
     return scope if filters.blank?

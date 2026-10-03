@@ -10,7 +10,7 @@ import { buildFieldFilterCodecs, FilterCodecs } from '../Tables/FilterUtils';
 import ChoiceSetFilter from '../Tables/ChoiceSetFilter';
 import EmailCell from '../Tables/EmailCell';
 import formatMoney from '../formatMoney';
-import FormItemDisplay from '../FormPresenter/ItemDisplays/FormItemDisplay';
+import { adminFormItemHeader, formItemColumns, jsonFormDataGetter } from '../Tables/formItemColumns';
 import FreeTextFilter from '../Tables/FreeTextFilter';
 import useReactTableWithTheWorks, { createQueryDataContext } from '../Tables/useReactTableWithTheWorks';
 import TableHeader from '../Tables/TableHeader';
@@ -21,7 +21,6 @@ import {
   UserConProfilesTableUserConProfilesQueryDocument,
   UserConProfilesTableUserConProfilesQueryVariables,
 } from './queries.generated';
-import { FormItemValueType, TypedFormItem } from '../FormAdmin/FormItemUtils';
 import { getSortedParsedFormItems } from '../Models/Form';
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
 import { formatLCM, getDateTimeFormat } from '../TimeUtils';
@@ -272,35 +271,17 @@ function UserConProfilesTable({
       }) as ColumnDef<UserConProfilesTableRow>,
     );
 
-    const existingColumnIds = new Set(columns.map((column) => column.id));
-    formItems.forEach((formItem) => {
-      const { identifier } = formItem;
-      if (!identifier || existingColumnIds.has(identifier)) {
-        return;
-      }
-
-      const FormItemCell = <TData, TValue extends FormItemValueType<TypedFormItem>>({
-        getValue,
-      }: CellContext<TData, TValue>) => (
-        <FormItemDisplay
-          formItem={formItem}
-          value={getValue()}
-          convention={attendeesPageQueryData.convention}
-          displayMode="admin"
-        />
-      );
-
-      columns.push(
-        columnHelper.accessor(
-          (userConProfile) => JSON.parse(userConProfile.form_response_attrs_json ?? '{}')[identifier],
-          {
-            header: formItem.admin_description || humanize(identifier),
-            id: identifier,
-            cell: FormItemCell,
-          },
-        ) as ColumnDef<UserConProfilesTableRow>,
-      );
-    });
+    columns.push(
+      ...(formItemColumns(formItems, columnHelper, {
+        getFormData: jsonFormDataGetter(
+          (userConProfile: UserConProfilesTableRow) => userConProfile.form_response_attrs_json,
+        ),
+        convention: attendeesPageQueryData.convention,
+        displayMode: 'admin',
+        getHeader: adminFormItemHeader,
+        excludeIdentifiers: new Set(columns.map((column) => column.id)),
+      }) as ColumnDef<UserConProfilesTableRow>[]),
+    );
 
     return columns;
   }, [t, timezoneName, attendeesPageQueryData, canReadTickets]);

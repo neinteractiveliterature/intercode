@@ -23,7 +23,7 @@ import useAsyncFunction from '../../../useAsyncFunction';
 import { EventListEventsQueryDocument } from './queries.generated';
 import EventListFilterableFormItemDropdown from './EventListFilterableFormItemDropdown';
 import { CommonConventionDataQueryData, CommonConventionDataQueryDocument } from '../../queries.generated';
-import { getFilterableFormItems } from '../../useFilterableFormItems';
+import { getFilterableEventFormItems } from '../../useFilterableFormItems';
 import useMergeCategoriesIntoEvents from '../../useMergeCategoriesIntoEvents';
 import EventCatalogNavTabs from '../EventCatalogNavTabs';
 import { LoaderFunction, useLoaderData, RouterContextProvider } from 'react-router';
@@ -40,7 +40,7 @@ const filterCodecs = buildFieldFilterCodecs({
 
 type LoaderResult = {
   convention: CommonConventionDataQueryData['convention'];
-  filterableFormItems: ReturnType<typeof getFilterableFormItems>;
+  filterableFormItems: ReturnType<typeof getFilterableEventFormItems>;
 };
 
 export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
@@ -49,7 +49,7 @@ export const loader: LoaderFunction<RouterContextProvider> = async ({ context })
   if (!data) {
     return new Response(null, { status: 404 });
   }
-  const filterableFormItems = getFilterableFormItems(data.convention);
+  const filterableFormItems = getFilterableEventFormItems(data.convention);
   return { convention: data.convention, filterableFormItems } satisfies LoaderResult;
 };
 

@@ -3,6 +3,10 @@ ENV["RAILS_ENV"] = "test"
 require "simplecov"
 require "simplecov-cobertura"
 SimpleCov.start do
+  add_filter "/test/"
+  # Report on files that no test loads, too, rather than silently leaving them out of the totals
+  track_files "{app,lib}/**/*.rb"
+
   if ENV["CI"]
     formatter SimpleCov::Formatter::CoberturaFormatter
   else
@@ -16,6 +20,8 @@ require "minitest/mock"
 
 require File.expand_path("../config/environment", __dir__)
 require "rails/test_help"
+
+Dir[File.expand_path("support/**/*.rb", __dir__)].each { |file| require file }
 
 require "minitest/reporters"
 if ENV["CI"].present?

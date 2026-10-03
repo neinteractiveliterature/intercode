@@ -1,6 +1,5 @@
-import { notEmpty } from '@neinteractiveliterature/litform';
 import { CommonConventionDataQueryData, CommonConventionDataQueryDocument } from '../../queries.generated';
-import { getFilterableFormItems } from '../../useFilterableFormItems';
+import { getFilterableEventFormItems } from '../../useFilterableFormItems';
 import useReactTableWithTheWorks, { QueryDataContext } from '../../../Tables/useReactTableWithTheWorks';
 import usePageTitle from '../../../usePageTitle';
 import { FilterCodecs, buildFieldFilterCodecs } from '../../../Tables/FilterUtils';
@@ -10,17 +9,17 @@ import { LoaderFunction, useLoaderData, useNavigate, RouterContextProvider } fro
 import { CellContext, ColumnDef, createColumnHelper } from '@tanstack/react-table';
 import EventCategoryCell from '../../../Tables/EventCategoryCell';
 import EventCategoryFilter from '../../../Tables/EventCategoryFilter';
-import { useContext, useMemo } from 'react';
+import { useMemo } from 'react';
 import { SingleLineTimestampCell } from '../../../Tables/TimestampCell';
 import CapacityCell from '../../../Tables/CapacityCell';
 import { EventCatalogRunsQueryData, EventCatalogRunsQueryDocument } from './queries.generated';
-import FormItemDisplay from '../../../FormPresenter/ItemDisplays/FormItemDisplay';
 import DurationCell from '../../../Tables/DurationCell';
 import FreeTextFilter from '../../../Tables/FreeTextFilter';
 import HtmlCell from '../../../Tables/HtmlCell';
 import { DateTime } from 'luxon';
 import EventCatalogNavTabs from '../EventCatalogNavTabs';
 import { apolloClientContext } from '../../../AppContexts';
+import { formItemColumns, jsonFormDataGetter } from 'Tables/formItemColumns';
 
 const FILTER_CODECS = buildFieldFilterCodecs({
   status: FilterCodecs.stringArray,
@@ -56,7 +55,7 @@ const defaultVisibleColumns = ['category', 'title', 'starts_at', 'length_seconds
 
 type LoaderResult = {
   convention: CommonConventionDataQueryData['convention'];
-  filterableFormItems: ReturnType<typeof getFilterableFormItems>;
+  filterableFormItems: ReturnType<typeof getFilterableEventFormItems>;
 };
 
 export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
@@ -65,7 +64,7 @@ export const loader: LoaderFunction<RouterContextProvider> = async ({ context })
   if (!data) {
     return new Response(null, { status: 404 });
   }
-  const filterableFormItems = getFilterableFormItems(data.convention);
+  const filterableFormItems = getFilterableEventFormItems(data.convention);
   return { convention: data.convention, filterableFormItems } satisfies LoaderResult;
 };
 
@@ -161,35 +160,9 @@ function EventTable() {
         id: 'event_created_at',
         cell: SingleLineTimestampCell,
       }),
-      ...filterableFormItems
-        .map((formItem) => {
-          if (formItem.item_type === 'static_text') {
-            return undefined;
-          }
-
-          function FormItemCell<TData, TValue>({ getValue }: CellContext<TData, TValue>) {
-            const data = useContext(QueryDataContext) as EventCatalogRunsQueryData;
-            return (
-              <FormItemDisplay
-                convention={data.convention}
-                formItem={formItem}
-                displayMode="public"
-                value={getValue()}
-              />
-            );
-          }
-
-          return columnHelper.accessor(
-            (run: RunType) =>
-              JSON.parse(run.event.form_response_attrs_json_with_rendered_markdown ?? '{}')[formItem.identifier],
-            {
-              header: formItem.public_description ?? formItem.identifier,
-              id: `form_fields[${formItem.identifier}]`,
-              cell: FormItemCell,
-            },
-          );
-        })
-        .filter(notEmpty),
+      ...formItemColumns(filterableFormItems, columnHelper, {
+        getFormData: jsonFormDataGetter((run: RunType) => run.event.form_response_attrs_json_with_rendered_markdown),
+      }),
     ];
   }, [filterableFormItems]);
 

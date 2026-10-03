@@ -98,6 +98,11 @@ OR lower(user_con_profiles.first_name) like :value",
       scope.joins(:user_con_profile)
     end
 
+    # Younger attendees have later birth dates, so the sort direction is inverted
+    def sql_order(direction)
+      Arel.sql("user_con_profiles.birth_date #{invert_sort_direction(direction)} NULLS LAST")
+    end
+
     def generate_csv_cell(signup)
       return unless UserConProfilePolicy.new(pundit_user, signup.user_con_profile).read_birth_date?
       signup.user_con_profile.age_as_of(signup.run.starts_at)
