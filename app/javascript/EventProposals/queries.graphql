@@ -51,7 +51,7 @@ fragment EventProposalFormData on Convention {
 query EventProposalFormsQuery {
   convention: conventionByRequestHost {
     id
-    event_categories {
+    event_categories(current_ability_can_read_event_proposals: true) {
       id
       event_proposal_form {
         id

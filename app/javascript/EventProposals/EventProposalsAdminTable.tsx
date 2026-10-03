@@ -1,4 +1,4 @@
-import { Link, useNavigate } from 'react-router';
+import { Link, LoaderFunction, RouterContextProvider, useLoaderData, useNavigate } from 'react-router';
 import { CellContext, Column, ColumnDef, createColumnHelper } from '@tanstack/react-table';
 
 import ChoiceSetFilter from '../Tables/ChoiceSetFilter';
@@ -21,7 +21,7 @@ import DurationCell from '../Tables/DurationCell';
 import CapacityCell from '../Tables/CapacityCell';
 import { useMemo } from 'react';
 import { formItemColumns, jsonFormDataGetter } from 'Tables/formItemColumns';
-import { useSuspenseQuery } from '@apollo/client/react';
+import { apolloClientContext } from 'AppContexts';
 import { notEmpty } from '@neinteractiveliterature/litform';
 import { mergeFormItemsAcrossForms } from 'EventsApp/useFilterableFormItems';
 
@@ -80,8 +80,25 @@ const defaultVisibleColumns = [
 ];
 const alwaysVisibleColumns = ['_extra'];
 
+type LoaderResult = {
+  formItems: ReturnType<typeof mergeFormItemsAcrossForms>;
+};
+
+export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+  const client = context.get(apolloClientContext);
+  const { data } = await client.query({ query: EventProposalFormsQueryDocument });
+  if (!data) {
+    return new Response(null, { status: 404 });
+  }
+
+  const formItems = mergeFormItemsAcrossForms(
+    data.convention.event_categories.map((category) => category.event_proposal_form).filter(notEmpty),
+  );
+  return { formItems } satisfies LoaderResult;
+};
+
 function EventProposalsAdminTable(): React.JSX.Element {
-  const { data: formsQueryData } = useSuspenseQuery(EventProposalFormsQueryDocument);
+  const { formItems } = useLoaderData() as LoaderResult;
 
   const navigate = useNavigate();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
@@ -145,13 +162,9 @@ function EventProposalsAdminTable(): React.JSX.Element {
         enableSorting: true,
         cell: SingleLineTimestampCell,
       }),
-      ...formItemColumns(
-        mergeFormItemsAcrossForms(
-          formsQueryData.convention.event_categories.map((category) => category.event_proposal_form).filter(notEmpty),
-        ),
-        columnHelper,
-        { getFormData: jsonFormDataGetter((row: EventProposalType) => row.form_response_attrs_json) },
-      ),
+      ...formItemColumns(formItems, columnHelper, {
+        getFormData: jsonFormDataGetter((row: EventProposalType) => row.form_response_attrs_json),
+      }),
       columnHelper.display({
         header: '',
         id: '_extra',
@@ -159,7 +172,7 @@ function EventProposalsAdminTable(): React.JSX.Element {
         cell: ExtraCell,
       }),
     ];
-  }, [formsQueryData]);
+  }, [formItems]);
 
   const {
     tableHeaderProps,
