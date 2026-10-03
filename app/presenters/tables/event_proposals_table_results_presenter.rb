@@ -2,7 +2,7 @@
 class Tables::EventProposalsTableResultsPresenter < Tables::TableResultsPresenter
   def self.for_convention(convention, pundit_user, filters, sort, visible_field_ids = nil)
     scope = Pundit.policy_scope(pundit_user, convention.event_proposals.where.not(status: "draft"))
-    new(scope, filters, sort, visible_field_ids)
+    new(base_scope: scope, convention:, pundit_user:, filters:, sort:, visible_field_ids:)
   end
 
   def self.describe_duration(length_seconds)
@@ -96,7 +96,29 @@ status #{direction}"
   field :submitted_at, "Submitted"
   field :updated_at, "Updated"
 
-  field :form_items, "Convention-specific form items", Tables::FormItems::FormItemsField
+  field :form_items, "Convention-specific form items", Tables::FormItems::FormItemsField do
+    def form_items_for(event_proposal)
+      event_proposal.event_category.event_proposal_form&.form_items
+    end
+
+    def candidate_form_items
+      @candidate_form_items ||=
+        FormItem.joins(form_section: :form).where(
+          forms: {
+            convention_id: presenter.convention.id,
+            form_type: "event_proposal"
+          }
+        )
+    end
+  end
+
+  attr_reader :convention, :pundit_user
+
+  def initialize(base_scope:, convention:, pundit_user:, filters: {}, sort: nil, visible_field_ids: nil) # rubocop:disable Metrics/ParameterLists
+    super(base_scope, filters, sort, visible_field_ids)
+    @convention = convention
+    @pundit_user = pundit_user
+  end
 
   private
 

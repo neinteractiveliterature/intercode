@@ -13,6 +13,16 @@ class Tables::EventProposalsTableResultsPresenterTest < ActiveSupport::TestCase
       properties: {
         "lines" => 1,
         "caption" => "Pitch"
+      },
+      public_description: "Elevator pitch"
+    )
+    section.form_items.create!(
+      item_type: "free_text",
+      identifier: "secret",
+      visibility: "admin",
+      properties: {
+        "lines" => 1,
+        "caption" => "Secret"
       }
     )
     section.form_items.create!(
@@ -30,6 +40,7 @@ class Tables::EventProposalsTableResultsPresenterTest < ActiveSupport::TestCase
       event_category:,
       additional_info: {
         "pitch" => "A thrilling tale",
+        "secret" => "Hidden info",
         "genre" => ["scifi"]
       }
     )
@@ -37,8 +48,8 @@ class Tables::EventProposalsTableResultsPresenterTest < ActiveSupport::TestCase
 
   before { event_proposal }
 
-  def presenter_for(visible_field_ids = nil)
-    Tables::EventProposalsTableResultsPresenter.for_convention(convention, site_admin, {}, [], visible_field_ids)
+  def presenter_for(visible_field_ids = nil, pundit_user: site_admin)
+    Tables::EventProposalsTableResultsPresenter.for_convention(convention, pundit_user, {}, [], visible_field_ids)
   end
 
   def csv_rows(presenter)
@@ -55,7 +66,24 @@ class Tables::EventProposalsTableResultsPresenterTest < ActiveSupport::TestCase
   it "exports form items addressed by path" do
     rows = csv_rows(presenter_for(%w[title form_items.pitch form_items.genre]))
 
-    assert_equal %w[Title pitch genre], rows.first
+    assert_equal ["Title", "Elevator pitch", "Genre"], rows.first
     assert_equal [event_proposal.title, "A thrilling tale", "Science Fiction"], rows.second
+  end
+
+  it "shows hidden form items to users with a high enough role" do
+    admin_profile = create(:user_con_profile, convention:)
+    staff_position = create(:staff_position, convention:, user_con_profiles: [admin_profile])
+    %w[read_pending_event_proposals update_event_proposals].each do |permission|
+      staff_position.permissions.create!(event_category:, permission:)
+    end
+    rows = csv_rows(presenter_for(%w[form_items.secret], pundit_user: admin_profile.user))
+
+    assert_equal "Hidden info", rows.second.first
+  end
+
+  it "replaces hidden form item values with placeholder text for users without a high enough role" do
+    rows = csv_rows(presenter_for(%w[form_items.secret], pundit_user: event_proposal.owner.user))
+
+    assert_equal I18n.t("forms.hidden_text.admin"), rows.second.first
   end
 end

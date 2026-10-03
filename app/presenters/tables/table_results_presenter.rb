@@ -56,6 +56,10 @@ class Tables::TableResultsPresenter
       false
     end
 
+    def csv_header_for_path(path)
+      path.last
+    end
+
     def generate_csv_cell(object)
       object.public_send(id)
     end
@@ -149,7 +153,7 @@ class Tables::TableResultsPresenter
   end
 
   def fields
-    self.class.field_classes.transform_values { |field_class| field_class.new(self) }
+    @fields ||= self.class.field_classes.transform_values { |field_class| field_class.new(self) }
   end
 
   def filter_descriptions
@@ -164,9 +168,13 @@ class Tables::TableResultsPresenter
       direct_field = fields[visible_field_id.to_sym]
       next direct_field.csv_header, ->(model) { direct_field.generate_csv_cell(model) } if direct_field
 
-      path = visible_field_id.to_s.split(".")
-      starting_field = fields[path.first.to_sym] if path.present?
-      next path.last, ->(model) { starting_field.generate_csv_cell(model, path[1..]) } if starting_field
+      # Path-based fields expand to multiple columns, e.g. "form_items.some_identifier".  Only the first segment is
+      # a field ID, so that the rest of the path is free to contain dots.
+      field_id, *path = visible_field_id.to_s.split(".", 2)
+      path_field = fields[field_id.to_sym]
+      next unless path_field&.path_based? && path.present?
+
+      next path_field.csv_header_for_path(path), ->(model) { path_field.generate_csv_cell(model, path) }
     end
   end
 
