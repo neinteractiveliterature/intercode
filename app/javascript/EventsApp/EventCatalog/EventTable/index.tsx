@@ -1,5 +1,5 @@
 import { CommonConventionDataQueryData, CommonConventionDataQueryDocument } from '../../queries.generated';
-import { getFilterableFormItems } from '../../useFilterableFormItems';
+import { getFilterableEventFormItems } from '../../useFilterableFormItems';
 import useReactTableWithTheWorks, { QueryDataContext } from '../../../Tables/useReactTableWithTheWorks';
 import usePageTitle from '../../../usePageTitle';
 import { FilterCodecs, buildFieldFilterCodecs } from '../../../Tables/FilterUtils';
@@ -55,7 +55,7 @@ const defaultVisibleColumns = ['category', 'title', 'starts_at', 'length_seconds
 
 type LoaderResult = {
   convention: CommonConventionDataQueryData['convention'];
-  filterableFormItems: ReturnType<typeof getFilterableFormItems>;
+  filterableFormItems: ReturnType<typeof getFilterableEventFormItems>;
 };
 
 export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
@@ -64,9 +64,7 @@ export const loader: LoaderFunction<RouterContextProvider> = async ({ context })
   if (!data) {
     return new Response(null, { status: 404 });
   }
-  const filterableFormItems = getFilterableFormItems(
-    data.convention.event_categories.map((category) => category.event_form),
-  );
+  const filterableFormItems = getFilterableEventFormItems(data.convention);
   return { convention: data.convention, filterableFormItems } satisfies LoaderResult;
 };
 

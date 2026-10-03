@@ -101,6 +101,6 @@ status #{direction}"
   private
 
   def csv_scope
-    scoped.includes(:owner, :event_category)
+    scoped.includes(:owner, event_category: { event_proposal_form: :form_items })
   end
 end

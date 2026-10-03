@@ -2,6 +2,10 @@
 #
 module Tables::FormItems
   class FormItemsField < Tables::TableResultsPresenter::Field
+    def path_based?
+      true
+    end
+
     def apply_filter(scope, value)
       value
         .each
@@ -33,8 +37,7 @@ module Tables::FormItems
 
     def generate_csv_cell(object, path)
       identifier = path.first
-      form_item =
-        object.event_category.event_proposal_form.form_items.to_a.find { |item| item.identifier == identifier }
+      form_item = object.event_category.event_proposal_form&.form_items&.find { |item| item.identifier == identifier }
       value = object.read_form_response_attribute(identifier)
       form_item_value_to_csv(form_item, value)
     end

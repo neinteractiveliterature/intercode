@@ -50,6 +50,12 @@ class Tables::TableResultsPresenter
       { id => direction }
     end
 
+    # Fields that are expanded into sub-columns via a dotted path (e.g. "form_items.some_identifier")
+    # rather than being exported as a single column
+    def path_based?
+      false
+    end
+
     def generate_csv_cell(object)
       object.public_send(id)
     end
@@ -131,7 +137,7 @@ class Tables::TableResultsPresenter
     @base_scope = base_scope
     @filters = filters || {}
     @sort = sort || []
-    @visible_field_ids = (visible_field_ids || fields.keys).map(&:to_sym)
+    @visible_field_ids = (visible_field_ids || fields.reject { |_id, field| field.path_based? }.keys).map(&:to_sym)
   end
 
   def scoped

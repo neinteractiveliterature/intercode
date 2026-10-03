@@ -9,6 +9,7 @@ import {
   parseTypedFormItemArray,
   TypedFormItem,
 } from '../FormAdmin/FormItemUtils';
+import { FormItemExposeIn } from '../graphqlTypes.generated';
 import { CommonConventionDataQueryData } from './queries.generated';
 import { CommonFormItemFieldsFragment } from 'Models/commonFormFragments.generated';
 
@@ -89,9 +90,16 @@ export function getFilterableFormItems(forms: { form_sections: { form_items: Com
     .filter(notEmpty);
 }
 
-export default function useFilterableEventFormItems(convention: CommonConventionDataQueryData['convention']) {
-  return useMemo(
-    () => getFilterableFormItems(convention.event_categories.map((category) => category.event_form)),
-    [convention],
+export function getFilterableEventFormItems(convention: CommonConventionDataQueryData['convention']) {
+  return getFilterableFormItems(
+    convention.event_categories.map((category) => ({
+      form_sections: category.event_form.form_sections.map((formSection) => ({
+        form_items: formSection.form_items.filter((item) => item.expose_in?.includes(FormItemExposeIn.EventCatalog)),
+      })),
+    })),
   );
+}
+
+export default function useFilterableEventFormItems(convention: CommonConventionDataQueryData['convention']) {
+  return useMemo(() => getFilterableEventFormItems(convention), [convention]);
 }
