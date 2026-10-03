@@ -3,6 +3,8 @@ ENV["RAILS_ENV"] = "test"
 require "simplecov"
 require "simplecov-cobertura"
 SimpleCov.start do
+  add_filter "/test/"
+
   if ENV["CI"]
     formatter SimpleCov::Formatter::CoberturaFormatter
   else
