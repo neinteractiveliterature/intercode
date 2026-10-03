@@ -277,10 +277,6 @@ Naming/MemoizedInstanceVariableName:
     - 'app/presenters/run_availability_presenter.rb'
     - 'app/services/signup_bucket_finder.rb'
 
-Lint/DuplicateBranch:
-  Exclude:
-    - 'app/presenters/signup_options_presenter.rb'
-
 Style/MutableConstant:
   Exclude:
     - 'app/models/signup.rb'
