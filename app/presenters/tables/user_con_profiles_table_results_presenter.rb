@@ -248,11 +248,6 @@ lower(user_con_profiles.first_name) #{direction}"
     @can_read_tickets = Pundit.policy(pundit_user, Ticket.new(user_con_profile: UserConProfile.new(convention:))).read?
   end
 
-
-  def apply_privileges_filter(scope, value)
-    value.include?("site_admin") ? scope.joins(:user).where(users: { site_admin: true }) : scope
-  end
-
   def csv_scope
     scoped.includes(:user, :team_members, ticket: :ticket_type, orders: { order_entries: %i[product product_variant] })
   end

@@ -105,7 +105,7 @@ class Tables::EventsTableResultsPresenterTest < ActiveSupport::TestCase
     assert_equal [event.id], sorted_ids(:owner)
     assert_equal [other_event.id, event.id], sorted_ids(:first_scheduled_run_start)
     assert_equal [event.id, other_event.id], sorted_ids(:first_scheduled_run_start, desc: true)
-    assert_sortable(:created_at)
+    assert_sortable(:created_at, :text_search)
   end
 
   it "does not sort by first scheduled run without permission to see the schedule" do

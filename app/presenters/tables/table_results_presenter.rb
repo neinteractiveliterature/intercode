@@ -179,7 +179,7 @@ class Tables::TableResultsPresenter
   def csv_accessor_for(visible_field_id)
     direct_field = fields[visible_field_id.to_sym]
     if direct_field
-      return nil if direct_field.filter_only?
+      return nil if direct_field.filter_only? || direct_field.path_based?
       return direct_field.csv_header, ->(model) { direct_field.generate_csv_cell(model) }
     end
 

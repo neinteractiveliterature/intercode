@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-# rubocop:disable Metrics/BlockLength
 require "test_helper"
 require "csv"
 
@@ -90,6 +89,180 @@ class CsvExportsControllerTest < ActionDispatch::IntegrationTest
       assert_equal 1, csv.size, "the same user's data is visible once the bearer token is actually sent"
     end
   end
+
+  describe "GET coupons" do
+    it "exports the convention's coupons" do
+      create(:coupon, convention:, code: "SAVE10")
+
+      get csv_exports_coupons_path, params: { columns: %w[code] }
+
+      assert_response :ok
+      assert_equal [["Code"], ["SAVE10"]], CSV.parse(response.body)
+    end
+  end
+
+  describe "GET event_proposals" do
+    let(:event_category) { create(:event_category, convention:) }
+    let(:event_proposal) do
+      section = event_category.event_proposal_form.form_sections.create!(title: "Section")
+      section.form_items.create!(
+        item_type: "free_text",
+        identifier: "pitch",
+        public_description: "Elevator pitch",
+        properties: {
+          "lines" => 1,
+          "caption" => "Pitch"
+        }
+      )
+      create(:event_proposal, convention:, event_category:, additional_info: { "pitch" => "A thrilling tale" })
+    end
+
+    before do
+      %w[read_pending_event_proposals update_event_proposals].each do |permission|
+        con_admin_staff_position.permissions.create!(model: convention, permission:)
+      end
+    end
+
+    it "exports event proposals, including custom form items" do
+      event_proposal
+
+      get csv_exports_event_proposals_path, params: { columns: %w[title form_items.pitch] }
+
+      assert_response :ok
+      assert_equal [["Title", "Elevator pitch"], [event_proposal.title, "A thrilling tale"]], CSV.parse(response.body)
+    end
+
+    it "includes active filters in the filename" do
+      event_proposal
+
+      get csv_exports_event_proposals_path, params: { columns: %w[title], filters: { title: "thrill" } }
+
+      assert_response :ok
+      assert_match(/Title - thrill/, response.headers["Content-Disposition"])
+    end
+  end
+
+  describe "GET orders" do
+    it "exports non-pending orders" do
+      user_con_profile = create(:user_con_profile, convention:, first_name: "Ann", last_name: "Aardvark")
+      create(:order, user_con_profile:, status: "paid")
+      create(:order, user_con_profile:, status: "pending")
+
+      get csv_exports_orders_path, params: { columns: %w[user_name status] }
+
+      assert_response :ok
+      rows = CSV.parse(response.body)
+      assert_equal 2, rows.size
+      assert_equal %w[User Status], rows.first.values_at(1, 2)
+      assert_equal ["Ann Aardvark", "paid"], rows.second.values_at(1, 2)
+    end
+  end
+
+  describe "GET ranked_choice_decisions" do
+    it "exports the decisions made in a signup round" do
+      convention.update!(signup_automation_mode: "ranked_choice")
+      signup_round = create(:signup_round, convention:)
+      user_con_profile = create(:user_con_profile, convention:, first_name: "Zed", last_name: "Zebra")
+      RankedChoiceDecision.create!(
+        signup_round:,
+        user_con_profile:,
+        decision: "skip_user",
+        reason: "no_pending_choices"
+      )
+
+      get csv_exports_ranked_choice_decisions_path,
+          params: {
+            signup_round_id: signup_round.id,
+            columns: %w[user_con_profile_name decision],
+            filters: {
+              decision: ["SKIP_USER"],
+              user_con_profile_name: "zebra"
+            }
+          }
+
+      assert_response :ok
+      assert_equal [%w[Attendee Decision], ["Zebra, Zed", "skip_user"]], CSV.parse(response.body)
+    end
+  end
+
+  describe "GET run_signups" do
+    it "exports a run's signups" do
+      signup = create(:signup, run: signup_run)
+
+      get csv_exports_run_signups_path, params: { run_id: signup_run.id, columns: %w[name state] }
+
+      assert_response :ok
+      assert_equal [%w[Name State], [signup.user_con_profile.name_inverted, "confirmed"]], CSV.parse(response.body)
+      assert_match(/#{Regexp.escape(event.title)} Signups/, response.headers["Content-Disposition"])
+    end
+  end
+
+  describe "GET run_signup_changes" do
+    it "exports a run's signup change log" do
+      signup = create(:signup, run: signup_run)
+      signup.log_signup_change!(action: "self_service_signup")
+
+      get csv_exports_run_signup_changes_path, params: { run_id: signup_run.id, columns: %w[action] }
+
+      assert_response :ok
+      assert_equal [%w[Action], %w[self_service_signup]], CSV.parse(response.body)
+    end
+  end
+
+  describe "GET runs" do
+    it "exports runs, including custom event form items exposed in the event catalog" do
+      event_category = create(:event_category, convention:)
+      section = event_category.event_form.form_sections.create!(title: "Section")
+      section.form_items.create!(
+        item_type: "free_text",
+        identifier: "pitch",
+        expose_in: ["event_catalog"],
+        public_description: "Elevator pitch",
+        properties: {
+          "lines" => 1,
+          "caption" => "Pitch"
+        }
+      )
+      run_event = create(:event, convention:, event_category:, additional_info: { "pitch" => "A thrilling tale" })
+      create(:run, event: run_event)
+
+      get csv_exports_runs_path, params: { columns: %w[title form_items.pitch] }
+
+      assert_response :ok
+      assert_equal [["Title", "Elevator pitch"], [run_event.title, "A thrilling tale"]], CSV.parse(response.body)
+    end
+
+    it "exports without an explicit column list" do
+      create(:run, event:)
+
+      get csv_exports_runs_path
+
+      assert_response :ok
+      assert_equal 2, CSV.parse(response.body).size
+    end
+  end
+
+  describe "GET user_con_profiles" do
+    it "exports attendees" do
+      create(:user_con_profile, convention:, first_name: "Ann", last_name: "Aardvark")
+
+      get csv_exports_user_con_profiles_path, params: { columns: %w[name], filters: { name: "aardvark" } }
+
+      assert_response :ok
+      assert_equal [%w[Name], ["Aardvark, Ann"]], CSV.parse(response.body)
+    end
+  end
+
+  describe "GET users" do
+    it "exports users for site admins" do
+      con_admin.update!(site_admin: true, first_name: "Sia", last_name: "Siteadmin")
+
+      get "/csv_exports/users", params: { columns: %w[first_name], filters: { first_name: "sia" } }
+
+      assert_response :ok
+      assert_equal [["First name"], ["Sia"]], CSV.parse(response.body)
+    end
+  end
 end
 
 describe CsvExportsController::RunSignupsFilenameFinder do
@@ -106,6 +279,13 @@ describe CsvExportsController::RunSignupsFilenameFinder do
         "#{event.title} (#{run1.starts_at.strftime("%a")}) Signups",
         finder.unique_filename(event, run1, "Signups")
       )
+    end
+
+    it "falls back to run IDs when nothing else distinguishes runs" do
+      run1 = create(:run, event: event, starts_at: convention.starts_at)
+      create(:run, event: event, starts_at: convention.starts_at)
+
+      assert_equal "#{event.title} (run #{run1.id}) Signups", finder.unique_filename(event, run1, "Signups")
     end
 
     it "uses just the event title when the event has only one run" do
