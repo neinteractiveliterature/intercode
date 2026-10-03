@@ -9,8 +9,8 @@ import {
   parseTypedFormItemArray,
   TypedFormItem,
 } from '../FormAdmin/FormItemUtils';
-import { FormItemExposeIn } from '../graphqlTypes.generated';
 import { CommonConventionDataQueryData } from './queries.generated';
+import { CommonFormItemFieldsFragment } from 'Models/commonFormFragments.generated';
 
 function isAllFreeTextItems(items: TypedFormItem[]): items is FreeTextFormItem[] {
   return items.length > 0 && items.every((item) => item.item_type === 'free_text');
@@ -76,16 +76,12 @@ function mergeFormItemsForFilter(items: TypedFormItem[]): TypedFormItem | undefi
   return items[0];
 }
 
-export function getFilterableFormItems(convention: CommonConventionDataQueryData['convention']) {
+export function getFilterableFormItems(forms: { form_sections: { form_items: CommonFormItemFieldsFragment[] }[] }[]) {
   return Object.values(
     groupBy(
-      convention.event_categories.flatMap((eventCategory) =>
-        eventCategory.event_form.form_sections.flatMap((formSection) =>
-          parseTypedFormItemArray(
-            formSection.form_items.filter((item) => item.expose_in?.includes(FormItemExposeIn.EventCatalog)),
-          ),
-        ),
-      ) ?? [],
+      forms.flatMap((form) =>
+        form.form_sections.flatMap((formSection) => parseTypedFormItemArray(formSection.form_items)),
+      ),
       (formItem) => formItem.identifier,
     ),
   )
@@ -93,6 +89,9 @@ export function getFilterableFormItems(convention: CommonConventionDataQueryData
     .filter(notEmpty);
 }
 
-export default function useFilterableFormItems(convention: CommonConventionDataQueryData['convention']) {
-  return useMemo(() => getFilterableFormItems(convention), [convention]);
+export default function useFilterableEventFormItems(convention: CommonConventionDataQueryData['convention']) {
+  return useMemo(
+    () => getFilterableFormItems(convention.event_categories.map((category) => category.event_form)),
+    [convention],
+  );
 }

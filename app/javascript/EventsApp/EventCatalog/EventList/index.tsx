@@ -28,6 +28,7 @@ import useMergeCategoriesIntoEvents from '../../useMergeCategoriesIntoEvents';
 import EventCatalogNavTabs from '../EventCatalogNavTabs';
 import { LoaderFunction, useLoaderData, RouterContextProvider } from 'react-router';
 import { apolloClientContext } from '../../../AppContexts';
+import { FormItemExposeIn } from 'graphqlTypes.generated';
 
 const PAGE_SIZE = 20;
 
@@ -49,7 +50,9 @@ export const loader: LoaderFunction<RouterContextProvider> = async ({ context })
   if (!data) {
     return new Response(null, { status: 404 });
   }
-  const filterableFormItems = getFilterableFormItems(data.convention);
+  const filterableFormItems = getFilterableFormItems(
+    data.convention.event_categories.map((category) => category.event_form),
+  ).filter((formItem) => formItem.expose_in?.includes(FormItemExposeIn.EventCatalog));
   return { convention: data.convention, filterableFormItems } satisfies LoaderResult;
 };
 

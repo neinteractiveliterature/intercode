@@ -85,7 +85,7 @@ class CsvExportsController < ApplicationController
   end
 
   def ranked_choice_decisions # rubocop:disable Metrics/MethodLength
-    signup_round = SignupRound.find(params[:signup_round_id])
+    signup_round = SignupRound.find(params.expect(:signup_round_id))
     authorize signup_round, :update?
 
     transformed_filters =
@@ -111,7 +111,7 @@ class CsvExportsController < ApplicationController
   end
 
   def run_signup_changes
-    run = convention.runs.includes(:event).find(params[:run_id])
+    run = convention.runs.includes(:event).find(params.expect(:run_id))
     authorize SignupChange.new(run: run), :read?
 
     send_table_presenter_csv(
@@ -126,7 +126,7 @@ class CsvExportsController < ApplicationController
   end
 
   def run_signups
-    run = convention.runs.includes(:event).find(params[:run_id])
+    run = convention.runs.includes(:event).find(params.expect(:run_id))
     authorize Signup.new(run: run), :read?
 
     send_table_presenter_csv(

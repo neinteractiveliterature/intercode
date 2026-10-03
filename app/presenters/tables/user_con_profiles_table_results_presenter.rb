@@ -230,9 +230,7 @@ lower(user_con_profiles.first_name) #{direction}"
     @form_fields ||=
       begin
         usable_form_items = convention.user_con_profile_form.form_items.select(&:identifier)
-        usable_form_items.each_with_object({}) do |form_item, form_fields|
-          form_fields[form_item.identifier.to_sym] = FormField.new(self, form_item)
-        end
+        usable_form_items.to_h { |form_item| [form_item.identifier.to_sym, FormField.new(self, form_item)] }
       end
   end
 

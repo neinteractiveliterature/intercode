@@ -10,12 +10,20 @@ import TableHeader from '../Tables/TableHeader';
 import usePageTitle from '../usePageTitle';
 import UserConProfileWithGravatarCell from '../Tables/UserConProfileWithGravatarCell';
 import { SingleLineTimestampCell } from '../Tables/TimestampCell';
-import { EventProposalsAdminQueryData, EventProposalsAdminQueryDocument } from './queries.generated';
+import {
+  EventProposalFormsQueryDocument,
+  EventProposalsAdminQueryData,
+  EventProposalsAdminQueryDocument,
+} from './queries.generated';
 import EventCategoryCell from '../Tables/EventCategoryCell';
 import EventCategoryFilter from '../Tables/EventCategoryFilter';
 import DurationCell from '../Tables/DurationCell';
 import CapacityCell from '../Tables/CapacityCell';
 import { useMemo } from 'react';
+import { formItemColumns } from 'Tables/formItemColumns';
+import { useSuspenseQuery } from '@apollo/client/react';
+import { notEmpty } from '@neinteractiveliterature/litform';
+import { getFilterableFormItems } from 'EventsApp/useFilterableFormItems';
 
 type EventProposalType = EventProposalsAdminQueryData['convention']['event_proposals_paginated']['entries'][0];
 
@@ -73,6 +81,8 @@ const defaultVisibleColumns = [
 const alwaysVisibleColumns = ['_extra'];
 
 function EventProposalsAdminTable(): React.JSX.Element {
+  const { data: formsQueryData } = useSuspenseQuery(EventProposalFormsQueryDocument);
+
   const navigate = useNavigate();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const columns = useMemo((): ColumnDef<EventProposalType, any>[] => {
@@ -135,6 +145,13 @@ function EventProposalsAdminTable(): React.JSX.Element {
         enableSorting: true,
         cell: SingleLineTimestampCell,
       }),
+      ...formItemColumns(
+        getFilterableFormItems(
+          formsQueryData.convention.event_categories.map((category) => category.event_proposal_form).filter(notEmpty),
+        ),
+        columnHelper,
+        (row) => JSON.parse(row.form_response_attrs_json ?? '{}'),
+      ),
       columnHelper.display({
         header: '',
         id: '_extra',

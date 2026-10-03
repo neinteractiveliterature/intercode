@@ -83,13 +83,12 @@ class Tables::TableResultsPresenter
       form_item.properties["public_description"] || form_item.identifier.humanize
     end
 
-    def generate_csv_cell(row)
+    def generate_csv_cell(row, _path = nil)
       form_response = (get_form_response_from_row ? get_form_response_from_row.call(row) : row)
       form_response.read_form_response_attribute(form_item.identifier)
     end
   end
 
-  # rubocop:disable Metrics/MethodLength
   def self.build_field_class(id, csv_header, base = Tables::TableResultsPresenter::Field, &block)
     field_class =
       Class.new(base) do
@@ -97,13 +96,8 @@ class Tables::TableResultsPresenter
           attr_reader :id, :csv_header
         end
 
-        def id
-          self.class.id
-        end
-
-        def csv_header
-          self.class.csv_header
-        end
+        delegate :id, to: :class
+        delegate :csv_header, to: :class
       end
 
     field_class.instance_variable_set(:@id, id.to_sym)
@@ -120,16 +114,14 @@ class Tables::TableResultsPresenter
     const_set(constant_name, field_class)
   end
 
-  # rubocop:enable Metrics/MethodLength
-
   def self.field_classes
     @field_classes ||= {}
   end
 
-  def self.field(id, csv_header, base = Tables::TableResultsPresenter::Field, &block)
+  def self.field(id, csv_header, base = Tables::TableResultsPresenter::Field, &)
     id_sym = id.to_sym
     raise "Field #{id_sym} already defined for #{self.class.name}" if field_classes[id_sym]
-    field_class = build_field_class(id_sym, csv_header, base, &block)
+    field_class = build_field_class(id_sym, csv_header, base, &)
     field_classes[id_sym] = field_class
   end
 
@@ -161,8 +153,15 @@ class Tables::TableResultsPresenter
     end
   end
 
-  def visible_fields
-    fields.slice(*visible_field_ids.map(&:to_sym)).values
+  def visible_field_accessors
+    visible_field_ids.filter_map do |visible_field_id|
+      direct_field = fields[visible_field_id.to_sym]
+      next direct_field.csv_header, ->(model) { direct_field.generate_csv_cell(model) } if direct_field
+
+      path = visible_field_id.to_s.split(".")
+      starting_field = fields[path.first.to_sym] if path.present?
+      next path.last, ->(model) { starting_field.generate_csv_cell(model, path[1..]) } if starting_field
+    end
   end
 
   def csv_enumerator(zone: nil)
@@ -170,8 +169,8 @@ class Tables::TableResultsPresenter
 
     current_zone = Time.zone
     Time.use_zone(zone || current_zone) do
-      the_fields = visible_fields
-      yield CSV.generate_line(the_fields.map(&:csv_header))
+      the_fields = visible_field_accessors
+      yield CSV.generate_line(the_fields.map(&:first))
 
       # I'm gonna make my own find_each, with limits and offsets!
       total_records = csv_scope.count
@@ -181,7 +180,7 @@ class Tables::TableResultsPresenter
           .limit(batch_size)
           .offset(offset)
           .each do |model|
-            csv_data = the_fields.map { |field| field.generate_csv_cell(model) }
+            csv_data = the_fields.map { |(_header, getter)| getter.call(model) }
             yield CSV.generate_line(csv_data)
           end
       end
