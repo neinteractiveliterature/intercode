@@ -1,3 +1,4 @@
+import { useState } from 'react';
 import { render, fireEvent, waitFor } from '../testUtils';
 import defaultPresets from './defaultPresets';
 import RegistrationPolicyEditor, {
@@ -235,6 +236,44 @@ describe('RegistrationPolicyEditor', () => {
       const { queryAllByText } = await renderRegistrationPolicyEditor({ presets: defaultPresets }, presetBuckets);
       expect(queryAllByText('Add regular bucket')).toHaveLength(0);
       expect(queryAllByText('Add flex bucket')).toHaveLength(0);
+    });
+
+    test('editing one bucket after switching to a preset only changes that bucket', async () => {
+      // Regression test: preset buckets used to come through without a generatedId, so editing any bucket after the
+      // first one replaced the first bucket with it.  This needs a parent that holds the policy state, like the real
+      // forms do, so that the editor re-renders with what it just emitted.
+      const StatefulEditor = () => {
+        const [registrationPolicy, setRegistrationPolicy] = useState<
+          EditingRegistrationPolicy<EditingRegistrationBucket>
+        >({ buckets: [], prevent_no_preference_signups: false });
+
+        return (
+          <RegistrationPolicyEditor
+            registrationPolicy={registrationPolicy}
+            onChange={(newPolicy) => {
+              setRegistrationPolicy(newPolicy);
+              onChange(newPolicy);
+            }}
+            presets={defaultPresets}
+            allowCustom
+            lockNameAndDescription={false}
+            lockLimitedBuckets={[]}
+            lockDeleteBuckets={[]}
+          />
+        );
+      };
+      const { getByRole, getAllByLabelText } = await render(<StatefulEditor />);
+
+      fireEvent.change(getByRole('combobox'), { target: { value: preset.name } });
+      const namesBefore = onChange.mock.lastCall?.[0].buckets.map((bucket) => bucket.name);
+      expect(namesBefore).toEqual(presetBuckets.map((bucket) => bucket.name));
+
+      fireEvent.change(getAllByLabelText('Min')[1], { target: { value: '7' } });
+
+      const buckets = onChange.mock.lastCall?.[0].buckets ?? [];
+      expect(buckets.map((bucket) => bucket.name)).toEqual(namesBefore);
+      expect(buckets.map((bucket) => bucket.minimum_slots)).toEqual([undefined, 7, undefined]);
+      expect(new Set(buckets.map((bucket) => bucket.generatedId)).size).toBe(buckets.length);
     });
 
     test('switching to a preset', async () => {

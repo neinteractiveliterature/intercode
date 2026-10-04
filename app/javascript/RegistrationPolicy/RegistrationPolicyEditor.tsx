@@ -13,6 +13,7 @@ import {
   updateRegistrationPolicyBucket,
   getRegistrationPolicyAnythingBucket,
   removeRegistrationPolicyBucket,
+  withGeneratedBucketIds,
 } from './RegistrationPolicy';
 import RegistrationPolicyPreview from './RegistrationPolicyPreview';
 import RegistrationPolicyPresetSelector from './RegistrationPolicyPresetSelector';
@@ -132,7 +133,8 @@ function RegistrationPolicyEditor<
       setPreset(newPreset);
       setCustom(false);
       if (newPreset) {
-        onChange(newPreset.policy as unknown as T);
+        // presets are plain policies, so give their buckets the generatedIds the rest of the editor keys everything on
+        onChange(withGeneratedBucketIds(newPreset.policy) as unknown as T);
       } else {
         onChange({ buckets: [], prevent_no_preference_signups: false } as unknown as T);
       }
