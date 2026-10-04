@@ -11800,7 +11800,7 @@
             },
             {
               "name": "user_con_profile",
-              "description": null,
+              "description": "The details for the new profile",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -11816,7 +11816,7 @@
             },
             {
               "name": "userId",
-              "description": null,
+              "description": "The ID of the user to add as an attendee",
               "type": {
                 "kind": "SCALAR",
                 "name": "ID",
@@ -11850,7 +11850,7 @@
             },
             {
               "name": "user_con_profile",
-              "description": null,
+              "description": "The user profile that was created",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -20850,7 +20850,7 @@
             },
             {
               "name": "createUserConProfile",
-              "description": null,
+              "description": "Adds an existing user to the current convention as an attendee.  The new profile is pre-filled from the user's\nmost recent profile at another convention, and any details given here take precedence.  Only users the caller can\nsee (the same ones the Add Attendee modal lists) can be added.\n",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,

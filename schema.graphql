@@ -2948,7 +2948,15 @@ input CreateUserConProfileInput {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
+
+  """
+  The ID of the user to add as an attendee
+  """
   userId: ID
+
+  """
+  The details for the new profile
+  """
   user_con_profile: UserConProfileInput!
 }
 
@@ -2960,6 +2968,10 @@ type CreateUserConProfilePayload {
   A unique identifier for the client performing the mutation.
   """
   clientMutationId: String
+
+  """
+  The user profile that was created
+  """
   user_con_profile: UserConProfile!
 }
 
@@ -5064,6 +5076,12 @@ type Mutation {
     """
     input: CreateUserActivityAlertInput!
   ): CreateUserActivityAlertPayload!
+
+  """
+  Adds an existing user to the current convention as an attendee.  The new profile is pre-filled from the user's
+  most recent profile at another convention, and any details given here take precedence.  Only users the caller can
+  see (the same ones the Add Attendee modal lists) can be added.
+  """
   createUserConProfile(
     """
     Parameters for CreateUserConProfile
