@@ -50,6 +50,7 @@ class SignupRankedChoice < ApplicationRecord
 
   validates :state, presence: true, inclusion: { in: Types::SignupRankedChoiceStateType.values.keys }
   validate :ensure_all_fields_point_at_the_same_convention
+  validate :requested_bucket_must_be_in_target_run_registration_policy, if: :requested_bucket_id_changed?
   validates :result_signup, presence: { if: ->(signup_ranked_choice) { signup_ranked_choice.state == "signed_up" } }
   validates :result_signup_request,
             presence: {
@@ -71,5 +72,12 @@ class SignupRankedChoice < ApplicationRecord
 
       errors.add field, "is in #{value.convention.name} but the attendee profile is in #{convention.name}"
     end
+  end
+
+  def requested_bucket_must_be_in_target_run_registration_policy
+    return unless requested_bucket && target_run
+    return if requested_bucket.registration_policy_id == target_run.event.registration_policy_id
+
+    errors.add :requested_bucket, "is not a bucket in the registration policy for #{target_run.event.title}"
   end
 end
