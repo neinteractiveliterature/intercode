@@ -1,5 +1,5 @@
 import { DateTime } from 'luxon';
-import { waitFor, render, fireEvent } from '../testUtils';
+import { waitFor, render, userEvent } from '../testUtils';
 import ConventionForm, {
   ConventionFormConvention,
   ConventionFormProps,
@@ -41,6 +41,12 @@ const mockCmsFilesAdminQuery: MockLink.MockedResponse<CmsFilesAdminQueryData, Cm
 };
 
 describe('ConventionForm', () => {
+  let user: ReturnType<typeof userEvent.setup>;
+
+  beforeEach(() => {
+    user = userEvent.setup();
+  });
+
   const defaultInitialConvention: ConventionFormConvention = {
     __typename: 'Convention',
     canceled: false,
@@ -159,7 +165,7 @@ describe('ConventionForm', () => {
       'Time zoneUTC+00:00 Etc/UTC (Coordinated Universal Time)',
     );
 
-    fireEvent.click(getByText('Events'));
+    await user.click(getByText('Events'));
 
     expect(getMultipleChoiceInput('Accepting event proposals', 'Yes')?.checked).toBe(true);
     expect(
@@ -169,18 +175,16 @@ describe('ConventionForm', () => {
       )?.checked,
     ).toBe(true);
 
-    fireEvent.click(getByText('Payments'));
+    await user.click(getByText('Payments'));
     expect((getByLabelText('Maximum tickets') as HTMLInputElement).value).toEqual('100');
   });
 
   test('mutating form fields', async () => {
     const { getByText, getMultipleChoiceInput } = await renderConventionForm();
 
-    fireEvent.click(getByText('Events'));
+    await user.click(getByText('Events'));
     expect(getMultipleChoiceInput('Accepting event proposals', 'Yes')?.checked).toBe(false);
-    fireEvent.change(getMultipleChoiceInput('Accepting event proposals', 'Yes'), {
-      target: { checked: true },
-    });
+    await user.click(getMultipleChoiceInput('Accepting event proposals', 'Yes'));
     expect(getMultipleChoiceInput('Accepting event proposals', 'Yes')?.checked).toBe(true);
   });
 
@@ -188,7 +192,7 @@ describe('ConventionForm', () => {
     const saveConvention = vi.fn();
     const { getByText } = await renderConventionForm({ saveConvention });
 
-    fireEvent.click(getByText('Save settings'), { selector: 'button' });
+    await user.click(getByText('Save settings', { selector: 'button' }));
     await waitFor(() => expect(saveConvention).toHaveBeenCalledTimes(1));
     expect(saveConvention).toHaveBeenCalledWith(defaultInitialConvention, undefined, undefined);
   });

@@ -28,7 +28,15 @@ const viteConfigWithoutHttps = defineConfig({
     ],
     server: {
       deps: {
-        inline: ['@neinteractiveliterature/litform'],
+        // The Testing Library packages have to be processed together so that they all share one copy of
+        // @testing-library/dom.  Otherwise user-event ends up with its own copy, which React Testing Library hasn't
+        // configured to wrap events in act(), and every user interaction logs "not wrapped in act(...)" warnings.
+        inline: [
+          '@neinteractiveliterature/litform',
+          '@testing-library/dom',
+          '@testing-library/react',
+          '@testing-library/user-event',
+        ],
       },
     },
   },
