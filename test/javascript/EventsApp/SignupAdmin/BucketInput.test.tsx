@@ -4,6 +4,7 @@ import { render } from '../../testUtils';
 import BucketInput from '../../../../app/javascript/EventsApp/SignupAdmin/BucketInput';
 import { SignupFieldsFragment } from '../../../../app/javascript/EventsApp/SignupAdmin/queries.generated';
 import { SignupState } from '../../../../app/javascript/graphqlTypes.generated';
+import { buildStandardBuckets } from '../../fixtures/registrationPolicy';
 
 describe('BucketInput', () => {
   const buildSignup = (overrides: Partial<SignupFieldsFragment> = {}): SignupFieldsFragment => ({
@@ -27,11 +28,7 @@ describe('BucketInput', () => {
         event_category: { __typename: 'EventCategory', id: '1', team_member_name: 'GM', teamMemberNamePlural: 'GMs' },
         registration_policy: {
           __typename: 'RegistrationPolicy',
-          buckets: [
-            { __typename: 'RegistrationPolicyBucket', id: '1', key: 'player', name: 'Player', anything: false },
-            { __typename: 'RegistrationPolicyBucket', id: '2', key: 'gm', name: 'GM', anything: false },
-            { __typename: 'RegistrationPolicyBucket', id: '3', key: 'flex', name: 'Flex', anything: true },
-          ],
+          buckets: buildStandardBuckets(),
         },
         team_members: [],
       },

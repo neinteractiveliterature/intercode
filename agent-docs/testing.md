@@ -12,6 +12,8 @@ When modifying loader/action patterns:
 
 ## End-to-End Testing with Playwright
 
+Use Playwright (and Rails system tests) sparingly: browser-driven tests have been flaky in this project, so prefer a component test (see [Frontend Testing](frontend-testing.md)) wherever it gets close enough. Reserve end-to-end tests for the few flows that really need a real browser.
+
 The project includes Playwright test infrastructure for browser-based end-to-end tests. The helpers are located in `playwright-tests/` and handle authentication, user creation, and permissions.
 
 ### Quick Start

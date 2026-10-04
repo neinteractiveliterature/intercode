@@ -19,6 +19,7 @@ Intercode is a convention management system built with:
 - [Frontend Patterns](agent-docs/frontend-patterns.md) — File organization, React Router, GraphQL, forms, modals, i18n, auth, utilities
 - [Litform Component Library](agent-docs/litform.md) — Available UI components, form inputs, modal hooks, and usage examples; points to full reference on GitHub
 - [Testing](agent-docs/testing.md) — Minitest considerations, Playwright end-to-end tests
+- [Frontend Testing](agent-docs/frontend-testing.md) — Vitest + Testing Library conventions: the `render`/`renderRoute` harness, `userEvent`, mocking Apollo, test data, and the `act()` guard
 - [Development](agent-docs/development.md) — Build commands, PR labels, tips
 
 ## Pre-Commit Checks
