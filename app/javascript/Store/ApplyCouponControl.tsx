@@ -17,8 +17,13 @@ function ApplyCouponControl({ createCouponApplication }: ApplyCouponControlProps
   const [applyCoupon, applyError, applyInProgress] = useAsyncFunction(createCouponApplication);
 
   const applyClicked = async () => {
-    await applyCoupon(couponCode);
-    setCouponCode('');
+    try {
+      await applyCoupon(couponCode);
+      setCouponCode('');
+    } catch {
+      // The error is shown below, and the code stays in the box so it can be corrected.  (Not catching it here would
+      // leave an unhandled rejection, since nothing awaits the click and Enter handlers.)
+    }
   };
 
   const keyDownInCodeInput = (event: React.KeyboardEvent) => {

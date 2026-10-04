@@ -82,7 +82,66 @@ export function buildProductQueryData(
   };
 }
 
-export function buildEmptyCartQueryData(): CartQueryData {
+type CartOrder = NonNullable<NonNullable<CartQueryData['convention']['my_profile']>['current_pending_order']>;
+export type CartOrderEntry = CartOrder['order_entries'][number];
+export type CartCouponApplication = CartOrder['coupon_applications'][number];
+
+export function buildCartOrderEntry(overrides: Partial<CartOrderEntry> = {}): CartOrderEntry {
+  const pricePerItem = overrides.price_per_item ?? buildMoney(2000);
+  const quantity = overrides.quantity ?? 1;
+
+  return {
+    __typename: 'OrderEntry',
+    id: '1',
+    quantity,
+    product: {
+      __typename: 'Product',
+      id: '1',
+      name: 'Test Product',
+      payment_options: ['stripe'],
+      provides_ticket_type: null,
+    },
+    product_variant: null,
+    price_per_item: pricePerItem,
+    price: buildMoney(pricePerItem.fractional * quantity, pricePerItem.currency_code),
+    ...overrides,
+  };
+}
+
+export function buildCartCouponApplication(overrides: Partial<CartCouponApplication> = {}): CartCouponApplication {
+  return {
+    __typename: 'CouponApplication',
+    id: '1',
+    discount: buildMoney(500),
+    coupon: {
+      __typename: 'Coupon',
+      id: '1',
+      code: 'SAVE5',
+      percent_discount: null,
+      fixed_amount: buildMoney(500),
+      provides_product: null,
+    },
+    ...overrides,
+  };
+}
+
+export function buildCartOrder(overrides: Partial<CartOrder> = {}): CartOrder {
+  const orderEntries = overrides.order_entries ?? [buildCartOrderEntry()];
+  const totalBeforeDiscounts = orderEntries.reduce((sum, entry) => sum + entry.price.fractional, 0);
+  const discounts = (overrides.coupon_applications ?? []).reduce((sum, app) => sum + app.discount.fractional, 0);
+
+  return {
+    __typename: 'Order',
+    id: '5',
+    coupon_applications: [],
+    order_entries: orderEntries,
+    total_price_before_discounts: buildMoney(totalBeforeDiscounts),
+    total_price: buildMoney(totalBeforeDiscounts - discounts),
+    ...overrides,
+  };
+}
+
+export function buildCartQueryData(order: CartOrder | null = null): CartQueryData {
   return {
     __typename: 'Query',
     convention: {
@@ -93,8 +152,12 @@ export function buildEmptyCartQueryData(): CartQueryData {
         __typename: 'UserConProfile',
         id: '1',
         name_without_nickname: 'Test User',
-        current_pending_order: null,
+        current_pending_order: order,
       },
     },
   };
+}
+
+export function buildEmptyCartQueryData(): CartQueryData {
+  return buildCartQueryData(null);
 }
