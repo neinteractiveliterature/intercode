@@ -2370,7 +2370,9 @@ export type CreateUserActivityAlertPayload = {
 export type CreateUserConProfileInput = {
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: InputMaybe<Scalars['String']['input']>;
+  /** The ID of the user to add as an attendee */
   userId?: InputMaybe<Scalars['ID']['input']>;
+  /** The details for the new profile */
   user_con_profile: UserConProfileInput;
 };
 
@@ -2379,6 +2381,7 @@ export type CreateUserConProfilePayload = {
   __typename: 'CreateUserConProfilePayload';
   /** A unique identifier for the client performing the mutation. */
   clientMutationId?: Maybe<Scalars['String']['output']>;
+  /** The user profile that was created */
   user_con_profile: UserConProfile;
 };
 
@@ -3637,6 +3640,11 @@ export type Mutation = {
   createTicket: CreateTicketPayload;
   createTicketType: CreateTicketTypePayload;
   createUserActivityAlert: CreateUserActivityAlertPayload;
+  /**
+   * Adds an existing user to the current convention as an attendee.  The new profile is pre-filled from the user's
+   * most recent profile at another convention, and any details given here take precedence.  Only users the caller can
+   * see (the same ones the Add Attendee modal lists) can be added.
+   */
   createUserConProfile: CreateUserConProfilePayload;
   /** Sign a user up for a run, as an admin action */
   createUserSignup: CreateUserSignupPayload;
