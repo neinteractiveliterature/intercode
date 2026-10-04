@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { render, fireEvent, waitFor } from '../testUtils';
+import { render, userEvent, waitFor } from '../testUtils';
 import defaultPresets from './defaultPresets';
 import RegistrationPolicyEditor, {
   EditingRegistrationPolicy,
@@ -11,7 +11,11 @@ import { vi } from 'vitest';
 
 describe('RegistrationPolicyEditor', () => {
   const onChange = vi.fn<(rp: EditingRegistrationPolicy<EditingRegistrationBucket>) => void>();
-  beforeEach(onChange.mockReset);
+  let user: ReturnType<typeof userEvent.setup>;
+  beforeEach(() => {
+    onChange.mockReset();
+    user = userEvent.setup();
+  });
 
   const defaultRegistrationPolicyBucket: RegistrationPolicyBucket & Pick<EditingRegistrationBucket, 'generatedId'> = {
     __typename: 'RegistrationPolicyBucket',
@@ -29,20 +33,40 @@ describe('RegistrationPolicyEditor', () => {
     not_counted: false,
   };
 
+  type EditorProps = RegistrationPolicyEditorProps<
+    EditingRegistrationBucket,
+    EditingRegistrationPolicy<EditingRegistrationBucket>
+  >;
+
+  // The editor is a controlled component, so to type into it for real (a keystroke at a time) it needs a parent
+  // that holds the policy state, the way the real forms do.  onChange still sees every change the editor makes.
+  function StatefulEditor({
+    initialPolicy,
+    ...props
+  }: Omit<EditorProps, 'registrationPolicy' | 'onChange'> & {
+    initialPolicy: EditingRegistrationPolicy<EditingRegistrationBucket>;
+  }) {
+    const [registrationPolicy, setRegistrationPolicy] = useState(initialPolicy);
+    return (
+      <RegistrationPolicyEditor
+        {...props}
+        registrationPolicy={registrationPolicy}
+        onChange={(newPolicy) => {
+          setRegistrationPolicy(newPolicy);
+          onChange(newPolicy);
+        }}
+      />
+    );
+  }
+
   const renderRegistrationPolicyEditor = async (
-    props?: Partial<
-      RegistrationPolicyEditorProps<EditingRegistrationBucket, EditingRegistrationPolicy<EditingRegistrationBucket>>
-    >,
+    props?: Partial<Omit<EditorProps, 'registrationPolicy' | 'onChange'>>,
     buckets: EditingRegistrationBucket[] = [defaultRegistrationPolicyBucket],
     preventNoPreferenceSignups = false,
   ) => {
     return await render(
-      <RegistrationPolicyEditor
-        registrationPolicy={{
-          buckets,
-          prevent_no_preference_signups: preventNoPreferenceSignups,
-        }}
-        onChange={onChange}
+      <StatefulEditor
+        initialPolicy={{ buckets, prevent_no_preference_signups: preventNoPreferenceSignups }}
         lockNameAndDescription={false}
         lockLimitedBuckets={[]}
         lockDeleteBuckets={[]}
@@ -50,6 +74,14 @@ describe('RegistrationPolicyEditor', () => {
         {...props}
       />,
     );
+  };
+
+  const lastPolicyChange = () => {
+    const lastCall = onChange.mock.lastCall;
+    if (!lastCall) {
+      throw new Error('onChange was never called');
+    }
+    return lastCall[0];
   };
 
   test('basic layout', async () => {
@@ -87,8 +119,8 @@ describe('RegistrationPolicyEditor', () => {
 
   test('add regular bucket', async () => {
     const { getByText } = await renderRegistrationPolicyEditor();
-    fireEvent.click(getByText('Add regular bucket'));
-    const newPolicy = onChange.mock.calls[0][0];
+    await user.click(getByText('Add regular bucket'));
+    const newPolicy = lastPolicyChange();
     expect(newPolicy.buckets.length).toEqual(2);
     expect(newPolicy.buckets.map((bucket) => bucket.anything)).toEqual([false, false]);
     // A freshly-added bucket has no real id yet -- a fabricated one here would corrupt
@@ -99,8 +131,8 @@ describe('RegistrationPolicyEditor', () => {
 
   test('add flex bucket', async () => {
     const { getByText } = await renderRegistrationPolicyEditor();
-    fireEvent.click(getByText('Add flex bucket'));
-    const newPolicy = onChange.mock.calls[0][0];
+    await user.click(getByText('Add flex bucket'));
+    const newPolicy = lastPolicyChange();
     expect(newPolicy.buckets.length).toEqual(2);
     expect(newPolicy.buckets.map((bucket) => bucket.anything)).toEqual([false, true]);
     expect(newPolicy.buckets[1].id).toBeUndefined();
@@ -109,17 +141,17 @@ describe('RegistrationPolicyEditor', () => {
 
   test('delete bucket', async () => {
     const { getByText } = await renderRegistrationPolicyEditor();
-    fireEvent.click(getByText('Delete bucket'));
-    fireEvent.click(getByText('OK'));
-    await waitFor(() => {}); // TODO figure out a way to use waitForElementToBeRemoved here
-    const newPolicy = onChange.mock.calls[0][0];
-    expect(newPolicy.buckets.length).toEqual(0);
+    await user.click(getByText('Delete bucket'));
+    await user.click(getByText('OK'));
+    await waitFor(() => expect(onChange).toHaveBeenCalled());
+    expect(lastPolicyChange().buckets.length).toEqual(0);
   });
 
   test('change bucket', async () => {
     const { getByLabelText } = await renderRegistrationPolicyEditor();
-    fireEvent.change(getByLabelText('Min'), { target: { value: '1' } });
-    const newPolicy = onChange.mock.calls[0][0];
+    await user.clear(getByLabelText('Min'));
+    await user.type(getByLabelText('Min'), '1');
+    const newPolicy = lastPolicyChange();
     expect(newPolicy.buckets[0].minimum_slots).toEqual(1);
     // Editing a bucket must not lose the real id it entered the editor with -- that id is how the
     // backend correlates this bucket back to its existing row (see #11895/#11897).
@@ -148,38 +180,21 @@ describe('RegistrationPolicyEditor', () => {
       minimum_slots: 2,
     };
 
-    const { getAllByPlaceholderText, getAllByLabelText, rerender } = await renderRegistrationPolicyEditor({}, [
-      bucketA,
-      bucketB,
-    ]);
+    const { getAllByPlaceholderText, getAllByLabelText } = await renderRegistrationPolicyEditor({}, [bucketA, bucketB]);
+    const nameValues = () => getAllByPlaceholderText('Bucket name').map((input) => (input as HTMLInputElement).value);
+    const minValues = () => getAllByLabelText('Min').map((input) => (input as HTMLInputElement).value);
 
-    expect(getAllByPlaceholderText('Bucket name').map((input) => (input as HTMLInputElement).value)).toEqual([
-      'Alpha',
-      'Beta',
-    ]);
-    expect(getAllByLabelText('Min').map((input) => (input as HTMLInputElement).value)).toEqual(['1', '2']);
+    expect(nameValues()).toEqual(['Alpha', 'Beta']);
+    expect(minValues()).toEqual(['1', '2']);
 
-    // Rename Alpha to Zeta, which alphabetically sorts after Beta. The row order (and each row's
-    // own values) must stay put -- only the name field's own value should change.
-    await rerender(
-      <RegistrationPolicyEditor
-        registrationPolicy={{
-          buckets: [{ ...bucketA, name: 'Zeta' }, bucketB],
-          prevent_no_preference_signups: false,
-        }}
-        onChange={onChange}
-        lockNameAndDescription={false}
-        lockLimitedBuckets={[]}
-        lockDeleteBuckets={[]}
-        allowCustom
-      />,
-    );
+    // Rename Alpha to Zeta, a keystroke at a time.  Partway through it passes Beta alphabetically ("Z" > "B"), and
+    // the row order (and each row's own values) must stay put -- only the name field's own value should change.
+    await user.clear(getAllByPlaceholderText('Bucket name')[0]);
+    await user.type(getAllByPlaceholderText('Bucket name')[0], 'Zeta');
 
-    expect(getAllByPlaceholderText('Bucket name').map((input) => (input as HTMLInputElement).value)).toEqual([
-      'Zeta',
-      'Beta',
-    ]);
-    expect(getAllByLabelText('Min').map((input) => (input as HTMLInputElement).value)).toEqual(['1', '2']);
+    expect(nameValues()).toEqual(['Zeta', 'Beta']);
+    expect(minValues()).toEqual(['1', '2']);
+    expect(lastPolicyChange().buckets.map((bucket) => bucket.id)).toEqual(['a', 'b']);
   });
 
   describe('with presets', () => {
@@ -240,37 +255,16 @@ describe('RegistrationPolicyEditor', () => {
 
     test('editing one bucket after switching to a preset only changes that bucket', async () => {
       // Regression test: preset buckets used to come through without a generatedId, so editing any bucket after the
-      // first one replaced the first bucket with it.  This needs a parent that holds the policy state, like the real
-      // forms do, so that the editor re-renders with what it just emitted.
-      const StatefulEditor = () => {
-        const [registrationPolicy, setRegistrationPolicy] = useState<
-          EditingRegistrationPolicy<EditingRegistrationBucket>
-        >({ buckets: [], prevent_no_preference_signups: false });
-
-        return (
-          <RegistrationPolicyEditor
-            registrationPolicy={registrationPolicy}
-            onChange={(newPolicy) => {
-              setRegistrationPolicy(newPolicy);
-              onChange(newPolicy);
-            }}
-            presets={defaultPresets}
-            allowCustom
-            lockNameAndDescription={false}
-            lockLimitedBuckets={[]}
-            lockDeleteBuckets={[]}
-          />
-        );
-      };
-      const { getByRole, getAllByLabelText } = await render(<StatefulEditor />);
-
-      fireEvent.change(getByRole('combobox'), { target: { value: preset.name } });
-      const namesBefore = onChange.mock.lastCall?.[0].buckets.map((bucket) => bucket.name);
+      // first one replaced the first bucket with it.
+      const { getByRole, getAllByLabelText } = await renderRegistrationPolicyEditor({ presets: defaultPresets });
+      await user.selectOptions(getByRole('combobox'), preset.name);
+      const namesBefore = lastPolicyChange().buckets.map((bucket) => bucket.name);
       expect(namesBefore).toEqual(presetBuckets.map((bucket) => bucket.name));
 
-      fireEvent.change(getAllByLabelText('Min')[1], { target: { value: '7' } });
+      await user.clear(getAllByLabelText('Min')[1]);
+      await user.type(getAllByLabelText('Min')[1], '7');
 
-      const buckets = onChange.mock.lastCall?.[0].buckets ?? [];
+      const buckets = lastPolicyChange().buckets;
       expect(buckets.map((bucket) => bucket.name)).toEqual(namesBefore);
       expect(buckets.map((bucket) => bucket.minimum_slots)).toEqual([undefined, 7, undefined]);
       expect(new Set(buckets.map((bucket) => bucket.generatedId)).size).toBe(buckets.length);
@@ -278,8 +272,8 @@ describe('RegistrationPolicyEditor', () => {
 
     test('switching to a preset', async () => {
       const { getByRole } = await renderRegistrationPolicyEditor({ presets: defaultPresets });
-      fireEvent.change(getByRole('combobox'), { target: { value: preset.name } });
-      const newPolicy = onChange.mock.calls[0][0];
+      await user.selectOptions(getByRole('combobox'), preset.name);
+      const newPolicy = lastPolicyChange();
       expect(newPolicy.buckets.map((bucket) => bucket.name)).toEqual(presetBuckets.map((bucket) => bucket.name));
     });
   });
