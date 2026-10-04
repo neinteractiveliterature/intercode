@@ -1,6 +1,7 @@
 import { Suspense, useMemo, useState } from 'react';
 import { ApolloClient, InMemoryCache } from '@apollo/client';
 import { MockedProvider, MockedProviderProps } from '@apollo/client/testing/react';
+import { ApolloProvider } from '@apollo/client/react';
 import { MockLink } from '@apollo/client/testing';
 import userEvent from '@testing-library/user-event';
 import { act, render, queries, Queries, RenderOptions, RenderResult, waitFor } from '@testing-library/react';
@@ -170,10 +171,9 @@ function withDefaultHydrateFallback(routes: RouteStubArray): RouteStubArray {
 // context (see packs/application.tsx's getContext), and matches its v8_middleware future flag so
 // context.get/set behaves the same way in tests as it does in production.
 //
-// Some routed components ALSO call Apollo hooks directly (e.g. a table driven by useQuery, on top
-// of a parent route's loader) -- those go through React's ApolloProvider context instead, so this
-// also wraps the tree in MockedProvider using the same apolloMocks. A query reachable only via a
-// loader is never touched by MockedProvider's link, and vice versa, so one list safely covers both.
+// Components rendered by the route use that same client through ApolloProvider, so a hook and a loader
+// share one cache (and one MockLink: each mock is used once, so list a query twice if it will be made twice),
+// like in production. That lets a test see a component update after an action changes the cache.
 export async function renderRoute(
   routes: RouteStubArray,
   options: RenderRouteOptions = {},
@@ -193,7 +193,7 @@ export async function renderRoute(
   await act(async () => {
     result = render(
       <AppRootContext.Provider value={effectiveAppRootContextValue}>
-        <MockedProvider mocks={apolloMocks}>
+        <ApolloProvider client={client}>
           <Confirm>
             <I18nextProvider i18n={i18nInstance}>
               <RoutesStub
@@ -203,7 +203,7 @@ export async function renderRoute(
               />
             </I18nextProvider>
           </Confirm>
-        </MockedProvider>
+        </ApolloProvider>
       </AppRootContext.Provider>,
       { queries: { ...queries, ...customQueries } },
     ) as RenderResult<typeof queries & CustomQueries>;
