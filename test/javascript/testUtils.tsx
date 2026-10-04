@@ -2,6 +2,7 @@ import { Suspense, useMemo, useState } from 'react';
 import { ApolloClient, InMemoryCache } from '@apollo/client';
 import { MockedProvider, MockedProviderProps } from '@apollo/client/testing/react';
 import { MockLink } from '@apollo/client/testing';
+import userEvent from '@testing-library/user-event';
 import { act, render, queries, Queries, RenderOptions, RenderResult, waitFor } from '@testing-library/react';
 import { createMemoryRouter, createRoutesStub, RouterContextProvider, RouterProvider } from 'react-router';
 import { i18n } from 'i18next';
@@ -115,8 +116,13 @@ async function customRender<Q extends Queries = Queries>(
   // state), so React needs the initial render wrapped in its own act() to actually process and
   // resolve the suspended promise -- without this, a component using it never progresses past the
   // Suspense fallback in tests, per Apollo's own testing docs.
-  const result = await act(() =>
-    render(ui, {
+  //
+  // The callback must be async: with a synchronous callback React closes the act scope as soon as it returns, so
+  // anything a component schedules in a microtask while mounting (react-popper's position updates, for one) lands
+  // after the scope and logs "not wrapped in act(...)".  An async callback keeps the scope open until those drain.
+  let result!: RenderResult<typeof queries & Q & CustomQueries>;
+  await act(async () => {
+    result = render(ui, {
       wrapper: (wrapperProps) => (
         <TestWrapper
           apolloMocks={apolloMocks}
@@ -129,8 +135,8 @@ async function customRender<Q extends Queries = Queries>(
       ),
       queries: combinedQueries,
       ...otherOptions,
-    }),
-  );
+    });
+  });
   await waitFor(() => expect(result.queryAllByTestId('test-wrapper-suspense-fallback')).toHaveLength(0));
 
   return result;
@@ -182,8 +188,10 @@ export async function renderRoute(
   const i18nInstance = await getI18n();
   const effectiveAppRootContextValue = { ...appRootContextDefaultValue, ...appRootContextValue };
 
-  const result = await act(() =>
-    render(
+  // (async callback, for the same reason as in customRender above)
+  let result!: RenderResult<typeof queries & CustomQueries>;
+  await act(async () => {
+    result = render(
       <AppRootContext.Provider value={effectiveAppRootContextValue}>
         <MockedProvider mocks={apolloMocks}>
           <Confirm>
@@ -198,14 +206,18 @@ export async function renderRoute(
         </MockedProvider>
       </AppRootContext.Provider>,
       { queries: { ...queries, ...customQueries } },
-    ),
-  );
+    ) as RenderResult<typeof queries & CustomQueries>;
+  });
 
-  return result as RenderResult<typeof queries & CustomQueries>;
+  return result;
 }
 
 // re-export everything
 export * from '@testing-library/react';
+
+// Prefer userEvent over fireEvent for interactions: `const user = userEvent.setup()` before rendering, then
+// `await user.click(...)`, `await user.type(...)`, etc.  See agent-docs/frontend-testing.md.
+export { userEvent };
 
 // override render method
 export { customRender as render };
