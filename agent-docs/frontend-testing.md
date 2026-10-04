@@ -49,6 +49,25 @@ describe('MyComponent', () => {
 - Use `fireEvent` only for events a user can't produce directly (like an image `load` event).
 - **Controlled components with a mocked `onChange` don't work with real typing**, because the parent never updates the value between keystrokes. Render the component inside a small stateful wrapper that holds the value (like the real form does), pass it a `vi.fn()` to spy on, and assert on `mock.lastCall`. See `RegistrationPolicyEditor.test.tsx`. This also catches bugs that only appear once the component re-renders with what it just emitted: that's how the preset bucket bug (#12081) was found.
 
+## Testing a route with a loader and an action
+
+`test/javascript/UserConProfiles/EditUserConProfile.test.tsx` is the worked example: a route whose loader fetches data, whose form submits to an action, which calls a mutation and redirects. Use `renderRoute` with the real `loader` and `action`, plus a stand-in route for wherever the action redirects to:
+
+```tsx
+renderRoute(
+  [
+    { path: '/user_con_profiles/:id/edit', loader, action, Component: EditUserConProfile },
+    { path: '/user_con_profiles/:id', Component: () => <h1>Viewing a profile</h1> },
+  ],
+  { apolloMocks, initialEntries: ['/user_con_profiles/7/edit'] },
+);
+```
+
+- Cover the whole cycle: loader renders the data, the user edits and submits, the mutation gets the right payload, and the redirect lands. Also cover the failure path (the error is shown and the user can retry) and the in-progress state (`delay` on the mock).
+- To check what the mutation was sent, give the mock `request.variables` as a function: it receives the variables, so it can record them and return whether they match (`variables: (variables) => { saved(variables.input); return true; }`).
+- Make fixtures carry `__typename` all the way down. Data from a loader goes through Apollo's cache, which can't read back objects that lack one.
+- Check the tests can fail: break the redirect, the payload and the error display in turn and make sure a test goes red each time.
+
 ## Finding elements
 
 In order of preference: `ByRole` (with `name`), `ByLabelText`, `ByText`, `ByPlaceholderText` / `ByDisplayValue`, and only then `ByTestId`. Avoid `querySelector`. For things that appear later, `await findBy...` or `await waitFor(() => expect(...))` rather than asserting immediately. `jest-dom` matchers (`toHaveValue`, `toBeDisabled`, `toHaveAttribute`, ...) are available.
