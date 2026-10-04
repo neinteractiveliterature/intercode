@@ -43,6 +43,8 @@ export default function formFromExportJSON(exportJSON: any): CommonFormFieldsFra
     });
 
     formSections.push({
+      // (the typename matters once the data goes through Apollo's cache, which can't read back objects without one)
+      __typename: 'FormSection',
       ...sectionProps,
       id: formSectionId.toString(),
       position: formSectionId,
