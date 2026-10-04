@@ -518,7 +518,7 @@ export function findStandardItem(formType?: FormTypeDefinition, identifier?: str
 }
 
 export function highestLevelRole(roles: FormItemRole[]): FormItemRole {
-  return [...FORM_ITEM_ROLES.reverse()].find((role) => roles.includes(role)) ?? FormItemRole.Normal;
+  return [...FORM_ITEM_ROLES].reverse().find((role) => roles.includes(role)) ?? FormItemRole.Normal;
 }
 
 export function roleIsAtLeast(a: FormItemRole, b: FormItemRole): boolean {
