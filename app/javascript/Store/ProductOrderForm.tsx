@@ -77,16 +77,20 @@ export default function ProductOrderForm({ productId, onAddedToCart, runId }: Pr
     }
   };
 
-  const [addToCartClicked, addToCartError, addToCartInProgress] = useAsyncFunction(async () => {
-    if (product.clickwrap_agreement_html != null) {
-      confirm({
-        action: addToCart,
-        prompt: <div dangerouslySetInnerHTML={{ __html: product.clickwrap_agreement_html }} />,
-      });
-    } else {
-      await addToCart();
-    }
-  });
+  const [addToCartClicked, addToCartError, addToCartInProgress] = useAsyncFunction(
+    async () => {
+      if (product.clickwrap_agreement_html != null) {
+        confirm({
+          action: addToCart,
+          prompt: <div dangerouslySetInnerHTML={{ __html: product.clickwrap_agreement_html }} />,
+        });
+      } else {
+        await addToCart();
+      }
+      // the error is shown by the ErrorDisplay below, so it shouldn't also be thrown out of the click handler
+    },
+    { suppressError: true },
+  );
 
   const renderVariantSelect = () => {
     if (product.product_variants.length < 1) {
@@ -101,12 +105,10 @@ export default function ProductOrderForm({ productId, onAddedToCart, runId }: Pr
 
       let overridePriceDescription = '';
       if (overridePrice && price && overridePrice.fractional !== price.fractional) {
-        const diff = {
-          ...price,
-          fractional: overridePrice.fractional - price.fractional,
-        };
-        const sign = Math.sign(diff.fractional) < 0 ? '-' : '+';
-        overridePriceDescription = ` (${sign}${formatMoney(diff)})`;
+        const difference = overridePrice.fractional - price.fractional;
+        const sign = Math.sign(difference) < 0 ? '-' : '+';
+        // (format the size of the difference, since the sign is added separately)
+        overridePriceDescription = ` (${sign}${formatMoney({ ...price, fractional: Math.abs(difference) })})`;
       }
 
       return (
