@@ -185,7 +185,7 @@ export function UserPricingStructureDescription({
       <Trans
         i18nKey="pricingStructure.price"
         defaults="<bold>{{ price, money }}</bold>"
-        values={{ price: pricingStructure.value }}
+        values={{ price: currentValue }}
         components={{ bold: <strong /> }}
       />
     );

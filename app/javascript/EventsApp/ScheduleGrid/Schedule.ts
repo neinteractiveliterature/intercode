@@ -19,8 +19,8 @@ import errorReporting from 'ErrorReporting';
 function expandTimespanToNearestHour(timespan: FiniteTimespan) {
   const start = timespan.start.set({ minute: 0, second: 0, millisecond: 0 });
   const finish = timeIsOnTheHour(timespan.finish)
-    ? timespan.finish.plus({ hours: 1 }).set({ minute: 0, second: 0, millisecond: 0 })
-    : timespan.finish;
+    ? timespan.finish
+    : timespan.finish.plus({ hours: 1 }).set({ minute: 0, second: 0, millisecond: 0 });
 
   return Timespan.fromDateTimes(start, finish) as FiniteTimespan;
 }
