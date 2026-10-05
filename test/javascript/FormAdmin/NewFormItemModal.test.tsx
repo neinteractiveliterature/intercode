@@ -22,11 +22,10 @@ const buildFormItem = (identifier: string): TypedFormItem => ({
   admin_description: null,
   public_description: null,
   expose_in: null,
-  properties: { caption: identifier, lines: 1, free_text_type: 'text', format: 'text' },
-  rendered_properties: { caption: identifier, lines: 1, free_text_type: 'text', format: 'text' },
+  properties: { identifier, caption: identifier, lines: 1, free_text_type: 'text', format: 'text' },
+  rendered_properties: { identifier, caption: identifier, lines: 1, free_text_type: 'text', format: 'text' },
   visibility: FormItemRole.Normal,
   writeability: FormItemRole.Normal,
-  default_value: null,
 });
 
 const buildForm = (existingIdentifiers: string[]): FormEditorForm => ({
@@ -55,7 +54,8 @@ const buildContext = (form: FormEditorForm): FormEditorContextValue => ({
     timezone_name: null,
     timezone_mode: TimezoneMode.UserLocal,
     event_mailing_list_domain: null,
-    form,
+    // (the editor reads the form's items from the context's own `form`, not from here)
+    form: { ...form, form_sections: [] },
   },
   form,
   formTypeIdentifier: FormType.Event,
