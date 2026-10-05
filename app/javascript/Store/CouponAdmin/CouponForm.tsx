@@ -107,12 +107,12 @@ function CouponForm<T extends Omit<AdminCouponFieldsFragment, 'id'>>({
               id={id}
               value={value.fixed_amount}
               onChange={(newFixedAmount) => {
-                const amount = typeof newFixedAmount === 'function' ? undefined : newFixedAmount;
-                setFixedAmount(
-                  (amount ?? buildBlankFixedAmount(defaultCurrencyCode)) as unknown as Parameters<
-                    typeof setFixedAmount
-                  >[0],
-                );
+                // (a function is how MoneyInput changes just the currency, so it needs the amount that's there now)
+                const amount =
+                  typeof newFixedAmount === 'function'
+                    ? newFixedAmount(value.fixed_amount ?? undefined)
+                    : newFixedAmount;
+                setFixedAmount(amount ?? buildBlankFixedAmount(defaultCurrencyCode));
               }}
             />
           )}

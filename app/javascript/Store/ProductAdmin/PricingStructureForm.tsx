@@ -107,7 +107,7 @@ export default function PricingStructureForm({ pricingStructure, setPricingStruc
               value={pricingStructure.value as Money | undefined}
               onChange={(price) => {
                 if (typeof price === 'function') {
-                  setPricingStructure((prev) => ({ ...prev, value: price(prev?.price ?? undefined) }));
+                  setPricingStructure((prev) => ({ ...prev, value: price(prev?.value as Money | undefined) }));
                 } else {
                   setPricingStructure((prev) => ({ ...prev, value: price }));
                 }

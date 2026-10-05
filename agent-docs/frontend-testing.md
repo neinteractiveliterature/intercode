@@ -69,6 +69,12 @@ renderRoute(
 - Make fixtures carry `__typename` all the way down. Data from a loader goes through Apollo's cache, which can't read back objects that lack one.
 - Check the tests can fail: break the redirect, the payload and the error display in turn and make sure a test goes red each time.
 
+## Testing a route action on its own
+
+When the interesting part of a route is its action (which mutation it sends, what it does with the result), call it directly with `runAction` (`test/javascript/runAction.ts`) instead of rendering a page that submits to it. It builds a real Apollo client on a `MockLink`, runs the action with a request you describe (`method`, `params`, `json` or `form`), and returns `{ result, client, cache, resetStore }`. See `test/javascript/Store/OrderAdmin.actions.test.ts`. A mutation's result doesn't carry the root `__typename`, and Apollo only returns the fields the mutation selects, so build mock data to match the selection.
+
+To test a component that submits to other routes, render it with `renderRoute` and stand in for those routes with ones that record the request (`test/javascript/Store/OrderModals.test.tsx`).
+
 ## Finding elements
 
 In order of preference: `ByRole` (with `name`), `ByLabelText`, `ByText`, `ByPlaceholderText` / `ByDisplayValue`, and only then `ByTestId`. Avoid `querySelector`. For things that appear later, `await findBy...` or `await waitFor(() => expect(...))` rather than asserting immediately. `jest-dom` matchers (`toHaveValue`, `toBeDisabled`, `toHaveAttribute`, ...) are available.
