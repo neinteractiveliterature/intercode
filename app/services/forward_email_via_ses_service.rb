@@ -26,7 +26,7 @@ class ForwardEmailViaSesService < CivilService::Service
     recipients.each do |recipient|
       forward_addresses = forward_addresses_for_recipient(recipient)
 
-      if forward_addresses
+      if forward_addresses.present?
         Rails.logger.debug { "Forwarding mail for #{recipient} -> #{forward_addresses.join(", ")}" }
         forward_email(recipient, forward_addresses)
       elsif intercode_address?(recipient)
