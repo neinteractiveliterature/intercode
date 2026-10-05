@@ -101,7 +101,7 @@ export function OrderPaymentModalContents({ onCancel, onComplete, onError, order
     return (
       <div className="modal-body">
         {paymentModeSelect}
-        {paymentMode === PaymentMode.Now || PaymentMode.PaymentIntent ? (
+        {paymentMode === PaymentMode.Now || paymentMode === PaymentMode.PaymentIntent ? (
           <>
             <LinkAuthenticationElement
               options={myProfile?.email ? { defaultValues: { email: myProfile.email } } : {}}
