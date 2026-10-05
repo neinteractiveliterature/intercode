@@ -22,8 +22,6 @@ export default function useAfterSessionChange(): (
 
       if (destUrl.toString() === window.location.href) {
         window.location.reload();
-      } else if (destUrl.host === window.location.host) {
-        window.location.href = destUrl.toString();
       } else {
         window.location.href = destUrl.toString();
       }

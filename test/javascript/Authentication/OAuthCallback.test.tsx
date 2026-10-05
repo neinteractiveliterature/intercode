@@ -7,6 +7,10 @@ import {
 } from '../../../app/javascript/Authentication/authenticationManager';
 import { Component as OAuthCallback } from '../../../app/javascript/Authentication/OAuthCallback';
 
+const reportError = vi.fn();
+
+vi.mock('../../../app/javascript/ErrorReporting', () => ({ default: () => ({ error: reportError }) }));
+
 describe('OAuthCallback', () => {
   let user: ReturnType<typeof userEvent.setup>;
   let manager: AuthenticationManager;
@@ -14,6 +18,7 @@ describe('OAuthCallback', () => {
 
   beforeEach(() => {
     user = userEvent.setup();
+    reportError.mockReset();
     manager = new AuthenticationManager('test-client');
     location = { href: 'https://example.com/oauth/callback?code=abc&state=xyz' };
     vi.stubGlobal('location', location);
@@ -64,6 +69,15 @@ describe('OAuthCallback', () => {
       expect(location.href).toBe('https://example.com/oauth/callback?code=abc&state=xyz');
     });
 
+    it('reports the error', async () => {
+      const { findByText } = await renderPage();
+
+      await findByText('Authentication Error');
+      expect(reportError).toHaveBeenCalledWith(expect.objectContaining({ message: 'No current login flow found' }), {
+        tags: { context: 'oauth-callback' },
+      });
+    });
+
     it('offers a way home', async () => {
       const { findByRole } = await renderPage();
 
@@ -91,6 +105,9 @@ describe('OAuthCallback', () => {
       await user.click(await findByRole('button', { name: 'Try logging in again' }));
 
       expect(await findByText(/OIDC issuer URL not configured/)).toBeTruthy();
+      expect(reportError).toHaveBeenCalledWith(expect.objectContaining({ message: 'OIDC issuer URL not configured' }), {
+        tags: { context: 'oauth-callback-retry' },
+      });
     });
   });
 
