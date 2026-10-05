@@ -1,4 +1,4 @@
-import { useCallback, useState, useMemo, ReactNode } from 'react';
+import { useCallback, useRef, useState, useMemo, ReactNode } from 'react';
 
 import { useApolloClient, useSuspenseQuery } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
@@ -36,6 +36,8 @@ function EventProposalFormInner({
 }: EventProposalFormInnerProps) {
   const { t } = useTranslation();
   const [updatePromise, setUpdatePromise] = useState<Promise<unknown>>();
+  // (the same promise, for submitForm to wait on without capturing a stale copy of it)
+  const updatePromiseRef = useRef<Promise<unknown>>(undefined);
   const [submitPromise, setSubmitPromise] = useState<Promise<unknown>>();
   const [eventProposal, setEventProposal] = useState(initialEventProposal);
   const [responseErrors, setResponseErrors] = useState({});
@@ -79,16 +81,19 @@ function EventProposalFormInner({
         },
       });
       setUpdatePromise(promise);
+      updatePromiseRef.current = promise;
       await promise;
     } catch (e) {
       setUpdateError(e instanceof Error ? e : undefined);
       setResponseErrors(parseResponseErrors(e, ['updateEventProposal']));
     } finally {
       setUpdatePromise(undefined);
+      updatePromiseRef.current = undefined;
     }
   }, []);
   useAutocommitFormResponseOnChange(commitResponse, eventProposal);
 
+  // resolves to whether the submission went through
   const submitResponse = useCallback(async (proposal: typeof eventProposal) => {
     try {
       const promise = client.mutate({
@@ -101,8 +106,11 @@ function EventProposalFormInner({
       });
       setSubmitPromise(promise);
       await promise;
+      return true;
     } catch (e) {
       setSubmitError(e instanceof Error ? e : undefined);
+      setResponseErrors(parseResponseErrors(e, ['submitEventProposal']));
+      return false;
     } finally {
       setSubmitPromise(undefined);
     }
@@ -115,20 +123,20 @@ function EventProposalFormInner({
   }, [afterSubmit]);
 
   const submitForm = useCallback(async () => {
-    if (updatePromise) {
-      updatePromise.then(() => {
-        submitForm();
-      });
-      return;
+    // let any save that's in flight finish first, but don't submit on top of one that failed
+    if (updatePromiseRef.current) {
+      try {
+        await updatePromiseRef.current;
+      } catch {
+        return;
+      }
     }
 
-    try {
-      await submitResponse(eventProposal);
+    setSubmitError(undefined);
+    if (await submitResponse(eventProposal)) {
       formSubmitted();
-    } catch (e) {
-      setResponseErrors(parseResponseErrors(e, ['updateEventProposal']));
     }
-  }, [eventProposal, formSubmitted, submitResponse, updatePromise]);
+  }, [eventProposal, formSubmitted, submitResponse]);
 
   return (
     <FormPresenterApp form={form}>

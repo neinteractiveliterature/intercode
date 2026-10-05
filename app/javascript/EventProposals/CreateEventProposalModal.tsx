@@ -5,7 +5,7 @@ import { ErrorDisplay, sortByLocaleString } from '@neinteractiveliterature/litfo
 
 import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
 import { ProposeEventButtonQueryData } from './queries.generated';
-import { useActionData, useNavigation, useSubmit } from 'react-router';
+import { useFetcher } from 'react-router';
 
 export type CreateEventProposalModalProps = {
   cancel: () => void;
@@ -40,10 +40,11 @@ function CreateEventProposalModal({
       ? proposableEventCategories.find((category) => category.id === department.event_categories[0].id)
       : undefined,
   );
-  const submit = useSubmit();
-  const navigation = useNavigation();
-  const createInProgress = navigation.state !== 'idle';
-  const createError = useActionData();
+  // a fetcher, because the action this submits to belongs to a different route than the one this is rendered in, so
+  // that route's useActionData would never see its errors
+  const fetcher = useFetcher();
+  const createInProgress = fetcher.state !== 'idle';
+  const createError = fetcher.data instanceof Error ? fetcher.data : undefined;
 
   const departmentEventCategories = useMemo(
     () =>
@@ -62,7 +63,7 @@ function CreateEventProposalModal({
     if (!eventCategory) {
       return;
     }
-    submit(
+    fetcher.submit(
       {
         ...(cloneEventProposal ? { clone_event_proposal_id: cloneEventProposal.id } : {}),
         event_category_id: eventCategory.id,
