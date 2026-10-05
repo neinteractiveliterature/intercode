@@ -24,7 +24,7 @@ function WithdrawMySignupButton({
         {...otherProps}
       />
 
-      <withdrawMySignupModal.Component />
+      {withdrawMySignupModal.modal}
     </>
   );
 }

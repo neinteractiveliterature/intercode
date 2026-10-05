@@ -198,7 +198,7 @@ function EventPageRunCard({
         />
       )}
 
-      <withdrawMySignupModal.Component />
+      {withdrawMySignupModal.modal}
     </div>
   );
 }

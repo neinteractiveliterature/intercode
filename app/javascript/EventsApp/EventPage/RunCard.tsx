@@ -32,8 +32,7 @@ type RunCardEvent = {
   length_seconds: number;
   private_signup_list?: boolean | null;
   registration_policy?:
-    | (Omit<RunCardRegistrationPolicyFieldsFragment, 'buckets'> & { buckets: RunCapacityBucket[] })
-    | null;
+    (Omit<RunCardRegistrationPolicyFieldsFragment, 'buckets'> & { buckets: RunCapacityBucket[] }) | null;
   runs: Array<unknown>;
   ticket_types: Array<{ providing_products: TicketPurchaseFormProps['availableProducts'] }>;
 };
