@@ -43,7 +43,9 @@ function getSectionizedFormItems(formData: EventPageForm, formResponse: Record<s
   return { shortFormItems, secretFormItems, longFormItems };
 }
 
-export default function useSectionizedFormItems(event?: EventPageQueryData['convention']['event']): {
+export default function useSectionizedFormItems(
+  event?: Pick<EventPageQueryData['convention']['event'], 'form' | 'form_response_attrs_json_with_rendered_markdown'>,
+): {
   shortFormItems: TypedFormItem[];
   longFormItems: FreeTextFormItem[];
   secretFormItems: TypedFormItem[];

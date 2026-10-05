@@ -119,13 +119,9 @@ export function useWithdrawMySignupModal() {
     });
   }, []);
 
-  const Component = () => {
-    if (props == null) {
-      return <></>;
-    } else {
-      return <WithdrawMySignupModal {...props} />;
-    }
-  };
+  // An element rather than a component made here: a component created on every render would be a different component
+  // each time, so any re-render of the page around it would remount the modal and lose what the person had entered
+  const modal = props == null ? null : <WithdrawMySignupModal {...props} />;
 
-  return { openModal, Component };
+  return { openModal, modal };
 }
