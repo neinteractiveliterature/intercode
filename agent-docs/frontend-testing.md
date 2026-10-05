@@ -24,7 +24,7 @@ Test behavior a user (or another part of the app) would notice, not implementati
 Import `render`, `renderRoute`, `userEvent`, `waitFor` and the rest of Testing Library from `../testUtils`, not from `@testing-library/react` directly.
 
 - **`render(ui, options)`** is async (`await` it). It wraps the component in i18n, an Apollo `MockedProvider`, a router, `AppRootContext`, Stripe and a Suspense boundary. Options: `apolloMocks`, `apolloCache`, `appRootContextValue`, `stripePublishableKey`.
-- **`renderRoute(routes, options)`** is for components that get their data from a React Router loader (`context.get(apolloClientContext)` in a `loader`/`action`). A loader-side `client.query()` bypasses `MockedProvider`, so this builds a real `ApolloClient` on a `MockLink` for loaders, and wraps `MockedProvider` too for components that also use hooks. The same `apolloMocks` list covers both.
+- **`renderRoute(routes, options)`** is for components that get their data from a React Router loader (`context.get(apolloClientContext)` in a `loader`/`action`). It builds one real `ApolloClient` on a `MockLink`, used by loaders, actions and (through `ApolloProvider`) hooks, so they share a cache like in production: a component updates after an action changes the cache. Each mock is used once, so list a query twice if the page will make it twice (e.g. a refetch after a mutation).
 - **Apollo mocks** are `MockLink.MockedResponse` objects built from the generated documents and data types (`FooQueryDocument`, `FooQueryData`), so a query change breaks the type check instead of silently drifting.
 - **Time**: use `vi.useFakeTimers({ toFake: ['Date'] })` with `vi.setSystemTime(...)`. Faking only `Date` leaves the timers Testing Library relies on alone.
 
@@ -65,6 +65,7 @@ renderRoute(
 
 - Cover the whole cycle: loader renders the data, the user edits and submits, the mutation gets the right payload, and the redirect lands. Also cover the failure path (the error is shown and the user can retry) and the in-progress state (`delay` on the mock).
 - To check what the mutation was sent, give the mock `request.variables` as a function: it receives the variables, so it can record them and return whether they match (`variables: (variables) => { saved(variables.input); return true; }`).
+- A component that needs Stripe (like `OrderPaymentModal`) can be stubbed with `vi.mock` when a test is about the page driving it (see `Store/Cart.test.tsx`); give the stub buttons for the callbacks you want to trigger.
 - Make fixtures carry `__typename` all the way down. Data from a loader goes through Apollo's cache, which can't read back objects that lack one.
 - Check the tests can fail: break the redirect, the payload and the error display in turn and make sure a test goes red each time.
 
@@ -90,6 +91,7 @@ One category is not guarded: "a component suspended inside an `act` scope, but t
 
 ## Things to know about the environment
 
+- **Modals stay `aria-hidden` in jsdom**, so role queries inside one need `{ hidden: true }` (e.g. `getByRole('button', { name: 'OK', hidden: true })`). A closed modal's element also lingers because jsdom never finishes the fade transition; assert on its contents instead of the element.
 - **jsdom has no layout.** Anything that depends on measurement (scroll positions, popper placement, element sizes) can't be asserted on.
 - **jsdom's `crypto.subtle` can't hash its own byte arrays**, so real PKCE challenge generation fails there. Mock `generatePKCEChallenge` (see `authenticationManager.test.ts`).
 - **The Testing Library packages are inlined in `vitest.config.mts`** so that React Testing Library and `user-event` share one copy of `@testing-library/dom`. Without that, `userEvent` interactions aren't wrapped in `act` and every one logs a warning. If you add another package that wraps Testing Library, inline it too.
