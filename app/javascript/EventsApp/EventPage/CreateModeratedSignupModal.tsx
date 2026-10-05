@@ -23,8 +23,8 @@ import { useApolloClient } from '@apollo/client/react';
 export type CreateModeratedSignupModalProps = {
   visible: boolean;
   close: () => void;
-  run: EventPageQueryData['convention']['event']['runs'][0];
-  event: EventPageQueryData['convention']['event'];
+  run: Pick<EventPageQueryData['convention']['event']['runs'][0], 'id' | 'starts_at'>;
+  event: Pick<EventPageQueryData['convention']['event'], 'id' | 'length_seconds' | 'can_play_concurrently'>;
   signupOption?: SignupOption;
 };
 

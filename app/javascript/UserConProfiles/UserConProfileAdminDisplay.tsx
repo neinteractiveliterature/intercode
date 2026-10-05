@@ -96,7 +96,7 @@ type BecomeUserModalProps = {
   userConProfileName?: string;
 };
 
-function BecomeUserModal({
+export function BecomeUserModal({
   userConProfileId,
   userConProfileName,
   visible,
