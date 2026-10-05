@@ -91,3 +91,9 @@ Style/BlockDelimiters:
 # Not sure why Prettier isn't disabling this but apparently we have to
 Style/StringLiterals:
   Enabled: false
+
+# CivilService::Service doesn't define an initialize of its own (the next one up the chain is BasicObject's, which does
+# nothing), so there's nothing for a service's initialize to pass along to super
+Lint/MissingSuper:
+  AllowedParentClasses:
+    - CivilService::Service

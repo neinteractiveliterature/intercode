@@ -237,20 +237,6 @@ Lint/MissingSuper:
     - 'app/liquid_drops/registration_policy/bucket_drop.rb'
     - 'app/liquid_drops/signup_move_result_drop.rb'
     - 'app/liquid_drops/signup_request_drop.rb'
-    - 'app/services/accept_event_proposal_service.rb'
-    - 'app/services/accept_signup_ranked_choice_service.rb'
-    - 'app/services/accept_signup_request_service.rb'
-    - 'app/services/create_signup_request_service.rb'
-    - 'app/services/create_team_member_service.rb'
-    - 'app/services/event_change_registration_policy_service.rb'
-    - 'app/services/event_freeze_bucket_assignments_service.rb'
-    - 'app/services/event_signup_service.rb'
-    - 'app/services/event_vacancy_fill_service.rb'
-    - 'app/services/event_withdraw_service.rb'
-    - 'app/services/execute_ranked_choice_signup_round_service.rb'
-    - 'app/services/execute_ranked_choice_signup_service.rb'
-    - 'app/services/rerun_moderated_ranked_choice_signup_round_service.rb'
-    - 'app/services/sync_forward_email_service.rb'
 
 Performance/StringInclude:
   Exclude:
