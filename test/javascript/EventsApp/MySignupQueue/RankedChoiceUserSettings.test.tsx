@@ -37,6 +37,10 @@ vi.mock('../../../../app/javascript/EventsApp/EventPage/BucketAvailabilityDispla
   ),
 }));
 
+// Reports of unexpected errors, so tests can check what's reported
+const reportError = vi.hoisted(() => vi.fn());
+vi.mock('../../../../app/javascript/ErrorReporting', () => ({ default: () => ({ error: reportError }) }));
+
 describe('RankedChoiceUserSettings', () => {
   let user: ReturnType<typeof userEvent.setup>;
   const sent = vi.fn();
@@ -44,6 +48,7 @@ describe('RankedChoiceUserSettings', () => {
   beforeEach(() => {
     user = userEvent.setup();
     sent.mockReset();
+    reportError.mockReset();
   });
 
   const recordingMock = (
@@ -318,6 +323,20 @@ describe('RankedChoiceUserSettings', () => {
       await user.selectOptions(selectIn(rowFor(result, /Total event signups/)), '4');
 
       expect(await result.findByText(/Maximum signups is too high/)).toBeTruthy();
+      // (the server has already dealt with a GraphQL error, and it's shown on the page, so it isn't also reported)
+      expect(reportError).not.toHaveBeenCalled();
+    });
+
+    it('reports a failure that isn’t a GraphQL error, like the network being down', async () => {
+      const failure = new Error('Failed to fetch');
+      const result = await renderSettings({}, [
+        { request: { query: CreateMyRankedChoiceUserConstraintDocument, variables: () => true }, error: failure },
+      ]);
+
+      await user.selectOptions(selectIn(rowFor(result, /Total event signups/)), '4');
+
+      await waitFor(() => expect(reportError).toHaveBeenCalledTimes(1));
+      expect(reportError.mock.calls[0][0]).toBe(failure);
     });
   });
 

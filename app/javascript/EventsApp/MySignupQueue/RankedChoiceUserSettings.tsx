@@ -9,7 +9,8 @@ import { DateTime } from 'luxon';
 import Timespan from '../../Timespan';
 import { RankedChoiceFallbackAction, RankedChoiceUserConstraint, SignupState } from '../../graphqlTypes.generated';
 import BucketAvailabilityDisplay from '../EventPage/BucketAvailabilityDisplay';
-import { useMutation } from "@apollo/client/react";
+import { CombinedGraphQLErrors } from '@apollo/client';
+import { useMutation } from '@apollo/client/react';
 import { UpdateUserConProfileDocument } from '../../UserConProfiles/mutations.generated';
 import {
   CreateMyRankedChoiceUserConstraintDocument,
@@ -17,6 +18,7 @@ import {
   UpdateRankedChoiceUserConstraintDocument,
 } from './mutations.generated';
 import { useRevalidator } from 'react-router';
+import errorReporting from '../../ErrorReporting';
 
 type ConstraintAvailabilityDisplayProps = {
   constraint: Pick<RankedChoiceUserConstraint, 'start' | 'finish' | 'maximum_signups'>;
@@ -133,6 +135,22 @@ function RankedChoiceUserSettings({ data }: { data: MySignupQueueQueryData }) {
     [conventionTimespan, timezoneName],
   );
   const revalidator = useRevalidator();
+
+  // useMutation's functions reject when the mutation fails, but these are called from event handlers that nothing
+  // awaits, and the failure is already shown below (from the mutation's error state), so don't leave it unhandled.
+  // GraphQL errors have been dealt with by the server; anything else (like a network failure) is still reported.
+  const showErrorInPlace = async (action: () => Promise<unknown>) => {
+    try {
+      await action();
+    } catch (error) {
+      if (!CombinedGraphQLErrors.is(error)) {
+        errorReporting().error(error instanceof Error ? error : String(error), {
+          tags: { context: 'ranked-choice-settings' },
+        });
+      }
+    }
+  };
+
   const [createMyRankedChoiceUserConstraint, { error: createError, loading: createLoading }] = useMutation(
     CreateMyRankedChoiceUserConstraintDocument,
     { onCompleted: revalidator.revalidate },
@@ -181,42 +199,44 @@ function RankedChoiceUserSettings({ data }: { data: MySignupQueueQueryData }) {
     return { totalSignupsConstraint, conventionDaySignupConstraints, miscConstraints };
   }, [conventionDays, data.convention.my_profile?.ranked_choice_user_constraints]);
 
-  const constraintChanged = async (
+  const constraintChanged = (
     constraint: Pick<RankedChoiceUserConstraint, 'id'> | undefined,
     start: DateTime | undefined,
     finish: DateTime | undefined,
     maximumSignups: number | null | undefined,
   ) => {
-    if (constraint == null) {
-      await createMyRankedChoiceUserConstraint({
-        variables: {
-          rankedChoiceUserConstraint: {
-            start: start?.toISO(),
-            finish: finish?.toISO(),
-            maximumSignups,
+    showErrorInPlace(async () => {
+      if (constraint == null) {
+        await createMyRankedChoiceUserConstraint({
+          variables: {
+            rankedChoiceUserConstraint: {
+              start: start?.toISO(),
+              finish: finish?.toISO(),
+              maximumSignups,
+            },
           },
-        },
-        refetchQueries: [{ query: MySignupQueueQueryDocument }],
-        awaitRefetchQueries: true,
-      });
-    } else if (maximumSignups == null) {
-      await deleteRankedChoiceUserConstraint({
-        variables: { id: constraint.id },
-        refetchQueries: [{ query: MySignupQueueQueryDocument }],
-        awaitRefetchQueries: true,
-      });
-    } else {
-      await updateRankedChoiceUserConstraint({
-        variables: {
-          id: constraint.id,
-          rankedChoiceUserConstraint: { maximumSignups },
-        },
-        refetchQueries: [{ query: MySignupQueueQueryDocument }],
-        awaitRefetchQueries: true,
-      });
-    }
+          refetchQueries: [{ query: MySignupQueueQueryDocument }],
+          awaitRefetchQueries: true,
+        });
+      } else if (maximumSignups == null) {
+        await deleteRankedChoiceUserConstraint({
+          variables: { id: constraint.id },
+          refetchQueries: [{ query: MySignupQueueQueryDocument }],
+          awaitRefetchQueries: true,
+        });
+      } else {
+        await updateRankedChoiceUserConstraint({
+          variables: {
+            id: constraint.id,
+            rankedChoiceUserConstraint: { maximumSignups },
+          },
+          refetchQueries: [{ query: MySignupQueueQueryDocument }],
+          awaitRefetchQueries: true,
+        });
+      }
 
-    revalidator.revalidate();
+      revalidator.revalidate();
+    });
   };
 
   return (
@@ -234,21 +254,23 @@ function RankedChoiceUserSettings({ data }: { data: MySignupQueueQueryData }) {
             value,
           }))}
           value={data.convention.my_profile?.ranked_choice_fallback_action}
-          onChange={async (newValue) => {
-            await updateUserConProfile({
-              variables: {
-                input: {
-                  user_con_profile: {
-                    ranked_choice_fallback_action: newValue as RankedChoiceFallbackAction,
+          onChange={(newValue) =>
+            showErrorInPlace(async () => {
+              await updateUserConProfile({
+                variables: {
+                  input: {
+                    user_con_profile: {
+                      ranked_choice_fallback_action: newValue as RankedChoiceFallbackAction,
+                    },
+                    id: myProfile?.id,
                   },
-                  id: myProfile?.id,
                 },
-              },
-              refetchQueries: [{ query: MySignupQueueQueryDocument }],
-              awaitRefetchQueries: true,
-            });
-            revalidator.revalidate();
-          }}
+                refetchQueries: [{ query: MySignupQueueQueryDocument }],
+                awaitRefetchQueries: true,
+              });
+              revalidator.revalidate();
+            })
+          }
           disabled={profileUpdateLoading}
         />
 
