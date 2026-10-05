@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class SyncForwardEmailService < CivilService::Service
   attr_reader :mappings_by_domain
 
@@ -14,7 +15,7 @@ class SyncForwardEmailService < CivilService::Service
 
   def inner_call
     existing_domains = fetch_domains
-    return if existing_domains.empty?
+    return success if existing_domains.empty?
 
     mappings_by_domain.each_key do |domain|
       if existing_domains[domain].nil?
@@ -32,7 +33,8 @@ class SyncForwardEmailService < CivilService::Service
     success
   end
 
-  def sync_mappings_for_domain(domain:) # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
+  # rubocop:disable Metrics/AbcSize,Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
+  def sync_mappings_for_domain(domain:)
     mappings = @mappings_by_domain[domain].index_by { |m| m.catch_all? ? "*" : m.inbound_local }
     return if mappings.nil?
 
@@ -87,6 +89,7 @@ class SyncForwardEmailService < CivilService::Service
 
     { errors: }
   end
+  # rubocop:enable Metrics/AbcSize,Metrics/MethodLength,Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
 
   def fetch_domains
     paginate_request("/v1/domains?pagination=true").index_by { |d| d["name"] }

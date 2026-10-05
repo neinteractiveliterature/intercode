@@ -250,6 +250,7 @@ Lint/MissingSuper:
     - 'app/services/execute_ranked_choice_signup_round_service.rb'
     - 'app/services/execute_ranked_choice_signup_service.rb'
     - 'app/services/rerun_moderated_ranked_choice_signup_round_service.rb'
+    - 'app/services/sync_forward_email_service.rb'
 
 Performance/StringInclude:
   Exclude:
