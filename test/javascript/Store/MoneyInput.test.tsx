@@ -116,6 +116,29 @@ describe('MoneyInput', () => {
       expect(changed).toHaveBeenLastCalledWith({ __typename: 'Money', fractional: 2500, currency_code: 'EUR' });
     });
 
+    it('keeps the chosen currency when the amount is cleared and typed again', async () => {
+      const { getByRole } = await renderInput({ initialValue: buildMoney(2500) }, ['USD', 'EUR']);
+
+      await user.selectOptions(getByRole('combobox', { name: 'Currency' }), 'EUR');
+      await user.clear(getByRole('textbox'));
+      expect(changed).toHaveBeenLastCalledWith(undefined);
+      // the choice of currency stays on show while there is no amount
+      expect(getByRole('combobox', { name: 'Currency' })).toHaveValue('EUR');
+
+      await user.type(getByRole('textbox'), '7');
+
+      expect(changed).toHaveBeenLastCalledWith({ __typename: 'Money', fractional: 700, currency_code: 'EUR' });
+    });
+
+    it('keeps the starting currency when the amount is cleared and typed again', async () => {
+      const { getByRole } = await renderInput({ initialValue: buildMoney(100, 'JPY') }, ['JPY']);
+
+      await user.clear(getByRole('textbox'));
+      await user.type(getByRole('textbox'), '500');
+
+      expect(changed).toHaveBeenLastCalledWith({ __typename: 'Money', fractional: 500, currency_code: 'JPY' });
+    });
+
     it('starts a new amount in the first allowed currency if the default one isn’t allowed', async () => {
       const { getByRole } = await renderInput({ allowedCurrencyCodes: ['EUR', 'GBP'] }, ['USD', 'EUR', 'GBP']);
 

@@ -38,13 +38,22 @@ export default React.forwardRef<HTMLInputElement, MoneyInputProps>(function Mone
     }
   }, [allowedCurrencyCodes, defaultCurrencyCode]);
 
-  const currency = useMemo(() => {
-    if (value?.currency_code) {
-      return currencyCodes.code(value.currency_code)!;
-    } else {
-      return currencyCodes.code(defaultCurrencyCodeForThisInput)!;
-    }
-  }, [value?.currency_code, defaultCurrencyCodeForThisInput]);
+  // Emptying the box makes the value undefined, which would drop the chosen currency, so remember the last one we saw
+  // (state, set while rendering, rather than a ref, so it's safe to read during render)
+  const [rememberedCurrencyCode, setRememberedCurrencyCode] = useState(value?.currency_code);
+  if (value?.currency_code && value.currency_code !== rememberedCurrencyCode) {
+    setRememberedCurrencyCode(value.currency_code);
+  }
+  const rememberedCurrencyStillAllowed =
+    rememberedCurrencyCode != null &&
+    (allowedCurrencyCodes == null || allowedCurrencyCodes.includes(rememberedCurrencyCode));
+  const currentCurrencyCode =
+    value?.currency_code ?? (rememberedCurrencyStillAllowed ? rememberedCurrencyCode : undefined);
+
+  const currency = useMemo(
+    () => currencyCodes.code(currentCurrencyCode ?? defaultCurrencyCodeForThisInput)!,
+    [currentCurrencyCode, defaultCurrencyCodeForThisInput],
+  );
 
   const showCurrencySelect = useMemo(() => {
     if (allowedCurrencyCodes && allowedCurrencyCodes.length > 1) {
@@ -92,7 +101,7 @@ export default React.forwardRef<HTMLInputElement, MoneyInputProps>(function Mone
         <CurrencySelect
           aria-label="Currency"
           className="form-select flex-shrink-1"
-          value={value?.currency_code ?? null}
+          value={currentCurrencyCode ?? null}
           allowedCurrencyCodes={allowedCurrencyCodes}
           onChange={(newCurrencyCode) =>
             onChange((prevValue) => ({
@@ -100,7 +109,7 @@ export default React.forwardRef<HTMLInputElement, MoneyInputProps>(function Mone
               fractional:
                 (prevValue?.fractional ?? 0) /
                 10 **
-                  (currencyCodes.code(prevValue?.currency_code ?? defaultCurrencyCodeForThisInput)!.digits -
+                  (currencyCodes.code(prevValue?.currency_code ?? currency.code)!.digits -
                     currencyCodes.code(newCurrencyCode ?? defaultCurrencyCodeForThisInput)!.digits),
               currency_code: newCurrencyCode ?? defaultCurrencyCodeForThisInput,
             }))
