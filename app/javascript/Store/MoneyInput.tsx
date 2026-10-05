@@ -67,7 +67,8 @@ export default React.forwardRef<HTMLInputElement, MoneyInputProps>(function Mone
     if (floatValue != null) {
       onChange({
         __typename: 'Money',
-        fractional: Math.floor(floatValue * 10 ** currency.digits),
+        // (rounded, not truncated: 19.99 * 100 is 1998.9999999999998 in floating point)
+        fractional: Math.round(floatValue * 10 ** currency.digits),
         currency_code: currency.code,
       });
     } else {
