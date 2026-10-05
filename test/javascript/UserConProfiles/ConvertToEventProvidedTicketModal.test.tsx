@@ -68,6 +68,10 @@ const queryData: ConvertToEventProvidedTicketQueryData = {
   },
 };
 
+// The event's ticket types load through a suspense query once an event is chosen, which can take longer than the
+// default one second on a busy CI runner
+const SLOW = { timeout: 5000 };
+
 describe('ConvertToEventProvidedTicketModal', () => {
   let user: ReturnType<typeof userEvent.setup>;
   const onClose = vi.fn();
@@ -138,7 +142,7 @@ describe('ConvertToEventProvidedTicketModal', () => {
 
   const chooseEventAndTicketType = async (result: Awaited<ReturnType<typeof renderModal>>) => {
     await user.click(result.getByRole('button', { name: 'Choose Big Game', hidden: true }));
-    await user.click(await result.findByRole('radio', { name: /Provide gm comp badge/, hidden: true }));
+    await user.click(await result.findByRole('radio', { name: /Provide gm comp badge/, hidden: true }, SLOW));
   };
 
   it('says whose badge is being converted, and what will happen to it', async () => {
@@ -153,7 +157,7 @@ describe('ConvertToEventProvidedTicketModal', () => {
     expect(footerButton(result, 'Convert badge')).toBeDisabled();
 
     await user.click(result.getByRole('button', { name: 'Choose Big Game', hidden: true }));
-    await result.findByText(/Big Game has 2 badges remaining to provide/);
+    await result.findByText(/Big Game has 2 badges remaining to provide/, {}, SLOW);
     expect(footerButton(result, 'Convert badge')).toBeDisabled();
   });
 
@@ -163,7 +167,7 @@ describe('ConvertToEventProvidedTicketModal', () => {
     await user.click(result.getByRole('button', { name: 'Choose Big Game', hidden: true }));
 
     expect(
-      await result.findByRole('radio', { name: 'Provide gm comp badge (2 remaining)', hidden: true }),
+      await result.findByRole('radio', { name: 'Provide gm comp badge (2 remaining)', hidden: true }, SLOW),
     ).toBeEnabled();
     // the ticket type that events can't provide isn't offered
     expect(result.queryByRole('radio', { name: /weekend pass/, hidden: true })).toBeNull();
