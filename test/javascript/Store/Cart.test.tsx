@@ -102,7 +102,7 @@ describe('Cart', () => {
     expect(getByText('Test Product')).toBeTruthy();
     expect(getByText('Mug')).toBeTruthy();
     expect(getByText('Total').closest('tr')).toHaveTextContent('$40.00');
-    expect(document.title).toContain('Cart');
+    await waitFor(() => expect(document.title).toContain('Cart'));
   });
 
   it('says the cart is empty when there is no pending order', async () => {

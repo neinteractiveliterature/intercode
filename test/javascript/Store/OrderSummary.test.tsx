@@ -1,6 +1,6 @@
 import { MockLink } from '@apollo/client/testing';
 
-import { renderRoute } from '../testUtils';
+import { renderRoute, waitFor } from '../testUtils';
 import { Component as OrderSummary, loader } from '../../../app/javascript/Store/OrderSummary';
 import { OrderSummaryQueryData, OrderSummaryQueryDocument } from '../../../app/javascript/Store/queries.generated';
 
@@ -111,6 +111,6 @@ describe('OrderSummary', () => {
   it('sets the page title', async () => {
     await renderSummary([]);
 
-    expect(document.title).toContain('Order summary');
+    await waitFor(() => expect(document.title).toContain('Order summary'));
   });
 });

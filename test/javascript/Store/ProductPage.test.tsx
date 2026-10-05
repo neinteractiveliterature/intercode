@@ -70,7 +70,7 @@ describe('ProductPage', () => {
     expect(await findByRole('heading', { name: 'Convention T-shirt' })).toBeTruthy();
     expect(getByText('$25.00')).toBeTruthy();
     expect(getByText('soft')).toBeTruthy();
-    expect(document.title).toContain('Convention T-shirt');
+    await waitFor(() => expect(document.title).toContain('Convention T-shirt'));
   });
 
   it('shows the product image, in both the large and small layouts', async () => {
