@@ -194,13 +194,14 @@ function AdminOrderForm<T extends AdminOrderType>({ order, updateOrder }: AdminO
         <dd className="col-md-9">
           <InPlaceEditor
             value={order.payment_note || ''}
-            renderInput={({ buttons, inputProps: { onChange, ...inputProps } }) => (
+            renderInput={({ buttons, inputProps: { onChange, committing, ...inputProps } }) => (
               <>
                 <textarea
                   className="form-control col me-1"
                   onChange={(event) => {
                     onChange(event.target.value);
                   }}
+                  disabled={committing}
                   {...inputProps}
                 />
                 {buttons}

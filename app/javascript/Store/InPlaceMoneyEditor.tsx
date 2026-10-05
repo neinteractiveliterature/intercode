@@ -13,7 +13,7 @@ function InPlaceMoneyEditor({ value, children, ...props }: InPlaceMoneyEditorPro
   return (
     <InPlaceEditor<Money | undefined>
       value={value ?? undefined}
-      renderInput={({ commitEditing, cancelEditing, inputProps }) => (
+      renderInput={({ commitEditing, cancelEditing, inputProps: { committing, ...inputProps } }) => (
         <MoneyInput
           {...inputProps}
           inputGroupClassName="input-group input-group-sm"
@@ -25,7 +25,7 @@ function InPlaceMoneyEditor({ value, children, ...props }: InPlaceMoneyEditorPro
                 className="btn btn-sm btn-outline-secondary"
                 onClick={cancelEditing}
                 aria-label="Cancel editing"
-                disabled={inputProps.committing}
+                disabled={committing}
               >
                 <i className="bi-x" />
               </button>
@@ -34,7 +34,7 @@ function InPlaceMoneyEditor({ value, children, ...props }: InPlaceMoneyEditorPro
                 className="btn btn-sm btn-primary"
                 onClick={commitEditing}
                 aria-label="Commit changes"
-                disabled={inputProps.committing}
+                disabled={committing}
               >
                 <i className="bi-check" />
               </button>
