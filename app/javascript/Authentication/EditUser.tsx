@@ -5,7 +5,7 @@ import { BootstrapFormInput, LoadingIndicator, ErrorDisplay } from '@neinteracti
 
 import { LoaderFunction, RouterContextProvider, Navigate, useLoaderData } from 'react-router';
 import PasswordConfirmationInput from './PasswordConfirmationInput';
-import useAsyncFunction from '../useAsyncFunction';
+import useAsyncFunction, { UserFacingError } from '../useAsyncFunction';
 import AccountFormContent from './AccountFormContent';
 import UserFormFields, { UserFormState } from './UserFormFields';
 import usePageTitle from '../usePageTitle';
@@ -47,14 +47,14 @@ async function updateUser(
   if (!response.ok) {
     const responseJson = await response.json();
     if (responseJson.errors) {
-      throw new Error(
+      throw new UserFacingError(
         Object.entries(responseJson.errors)
           .map(([key, error]) => `${humanize(key)} ${error}`)
           .join(', '),
       );
     }
 
-    throw new Error(responseJson.error);
+    throw new UserFacingError(responseJson.error);
   }
 }
 
@@ -73,28 +73,30 @@ function EditUserForm() {
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const [currentPassword, setCurrentPassword] = useState('');
-  const [updateUserAsync, updateUserError, updateUserInProgress] = useAsyncFunction(updateUser);
   const [saved, setSaved] = useState(false);
+  // (the success step is inside the wrapped function so it doesn't run after a failure; the error is shown below)
+  const [onSubmit, updateUserError, updateUserInProgress] = useAsyncFunction(
+    async (event: React.SyntheticEvent) => {
+      event.preventDefault();
+
+      if (!formState) {
+        return;
+      }
+      if (!authenticityToken) {
+        throw new Error('No authenticity token received from server');
+      }
+
+      await updateUser(authenticityToken, formState, password, passwordConfirmation, currentPassword);
+      setSaved(true);
+    },
+    { suppressError: true },
+  );
   const passwordFieldId = useId();
   usePageTitle('Update Your Account');
 
   if (!formState) {
     return <Navigate to="/" replace />;
   }
-
-  const onSubmit = async (event: React.SyntheticEvent) => {
-    event.preventDefault();
-
-    if (!formState) {
-      return;
-    }
-    if (!authenticityToken) {
-      throw new Error('No authenticity token received from server');
-    }
-
-    await updateUserAsync(authenticityToken, formState, password, passwordConfirmation, currentPassword);
-    setSaved(true);
-  };
 
   return (
     <div className="container mt-5">

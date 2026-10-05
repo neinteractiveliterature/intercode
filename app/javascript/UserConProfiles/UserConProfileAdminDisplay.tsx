@@ -105,17 +105,19 @@ function BecomeUserModal({
   const { t } = useTranslation();
   const authenticationManager = useContext(AuthenticationManagerContext);
   const [justification, setJustification] = useState('');
-  const [becomeAsync, error, inProgress] = useAsyncFunction(becomeUser);
+  // (closing is inside the wrapped function so the modal stays open after a failure; the error is shown below)
+  const [becomeClicked, error, inProgress] = useAsyncFunction(
+    async () => {
+      if (userConProfileId == null) {
+        return;
+      }
 
-  const becomeClicked = async () => {
-    if (userConProfileId == null) {
-      return;
-    }
-
-    const token = await authenticationManager.ensureFreshAccessToken();
-    await becomeAsync(userConProfileId, justification, token);
-    close();
-  };
+      const token = await authenticationManager.ensureFreshAccessToken();
+      await becomeUser(userConProfileId, justification, token);
+      close();
+    },
+    { suppressError: true },
+  );
 
   return (
     <Modal visible={visible}>

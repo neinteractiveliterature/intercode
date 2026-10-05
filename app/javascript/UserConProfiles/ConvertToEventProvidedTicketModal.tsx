@@ -78,46 +78,48 @@ function ConvertToEventProvidedTicketModal({
   const [event, setEvent] = useState<EventType>();
   const [ticketTypeId, setTicketTypeId] = useState<string>();
   const [convertMutate] = useMutation(ConvertTicketToEventProvidedDocument);
-  const [convertTicketToEventProvided, error, inProgress] = useAsyncFunction(convertMutate);
+  // (closing is inside the wrapped function so the modal stays open after a failure; the error is shown below)
+  const [convertClicked, error, inProgress] = useAsyncFunction(
+    async () => {
+      if (event == null || ticketTypeId == null) {
+        return;
+      }
 
-  const convertClicked = async () => {
-    if (event == null || ticketTypeId == null) {
-      return;
-    }
+      await convertMutate({
+        variables: {
+          eventId: event.id,
+          ticketTypeId,
+          userConProfileId: userConProfile.id,
+        },
+        update: (cache, result) => {
+          const cachedData = cache.readQuery<UserConProfileAdminQueryData>({
+            query: UserConProfileAdminQueryDocument,
+            variables: { id: userConProfile.id },
+          });
+          if (!cachedData) {
+            return;
+          }
 
-    await convertTicketToEventProvided({
-      variables: {
-        eventId: event.id,
-        ticketTypeId,
-        userConProfileId: userConProfile.id,
-      },
-      update: (cache, result) => {
-        const cachedData = cache.readQuery<UserConProfileAdminQueryData>({
-          query: UserConProfileAdminQueryDocument,
-          variables: { id: userConProfile.id },
-        });
-        if (!cachedData) {
-          return;
-        }
-
-        cache.writeQuery<UserConProfileAdminQueryData>({
-          query: UserConProfileAdminQueryDocument,
-          variables: { id: userConProfile.id },
-          data: {
-            ...cachedData,
-            convention: {
-              ...cachedData.convention,
-              user_con_profile: {
-                ...cachedData.convention.user_con_profile,
-                ticket: result.data?.convertTicketToEventProvided?.ticket ?? null,
+          cache.writeQuery<UserConProfileAdminQueryData>({
+            query: UserConProfileAdminQueryDocument,
+            variables: { id: userConProfile.id },
+            data: {
+              ...cachedData,
+              convention: {
+                ...cachedData.convention,
+                user_con_profile: {
+                  ...cachedData.convention.user_con_profile,
+                  ticket: result.data?.convertTicketToEventProvided?.ticket ?? null,
+                },
               },
             },
-          },
-        });
-      },
-    });
-    onClose();
-  };
+          });
+        },
+      });
+      onClose();
+    },
+    { suppressError: true },
+  );
 
   return (
     <Modal visible={visible}>
