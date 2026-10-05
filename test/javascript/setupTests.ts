@@ -30,3 +30,10 @@ afterEach(() => {
     );
   }
 });
+
+// jsdom does no layout, and CodeMirror (used by MarkdownInput) measures text ranges
+if (typeof Range !== 'undefined') {
+  Range.prototype.getClientRects ??= () =>
+    Object.assign<DOMRect[], { item: () => DOMRect | null }>([], { item: () => null });
+  Range.prototype.getBoundingClientRect ??= () => new DOMRect();
+}
