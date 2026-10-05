@@ -132,8 +132,9 @@ function MultipleChoiceItemInput({
     const providedValues = (newValue ?? []).filter((choiceValue) =>
       choiceValues.some((providedValue) => providedValue === choiceValue),
     );
-    if (otherValue && newValue?.includes(OTHER_VALUE)) {
-      onChange([...providedValues, otherValue]);
+    if (newValue?.includes(OTHER_VALUE)) {
+      // an empty string stands for "Other, with nothing typed yet", the same as in the single-choice case
+      onChange([...providedValues, otherValue ?? '']);
     } else {
       onChange(providedValues);
     }
@@ -154,15 +155,10 @@ function MultipleChoiceItemInput({
     if (typeof valueForChoiceSet === 'string') {
       onChange(event.target.value);
     } else {
-      onChange(
-        (valueForChoiceSet ?? []).map((singleValue) => {
-          if (singleValue === OTHER_VALUE) {
-            return event.target.value;
-          }
-
-          return singleValue;
-        }),
-      );
+      // keep the provided choices that are selected, and replace whatever was typed in Other
+      const choiceValues = formItem.rendered_properties.choices.map((choice) => choice.value);
+      const providedValues = castMultipleValue(value).filter((selectedValue) => choiceValues.includes(selectedValue));
+      onChange([...providedValues, event.target.value]);
     }
   };
 
