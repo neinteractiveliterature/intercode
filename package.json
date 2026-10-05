@@ -50,7 +50,7 @@
     "@lezer/highlight": "^1.2.1",
     "@lezer/lr": "^1.4.2",
     "@marsidev/react-turnstile": "^1.6.1",
-    "@neinteractiveliterature/litform": "0.35.0",
+    "@neinteractiveliterature/litform": "0.35.2",
     "@popperjs/core": "^2.11.8",
     "@rails/activestorage": "8.1.400",
     "@sentry/browser": "^10.0.0",
