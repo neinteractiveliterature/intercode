@@ -103,3 +103,15 @@ export function buildMySignupQueueData(
     },
   };
 }
+
+// Just the signed-in person's part of the page's data (what the queue components take as `userConProfile`)
+export type QueueProfile = MyProfile;
+
+export function buildQueueProfile(overrides: Partial<MyProfile> = {}): QueueProfile {
+  const profile = buildMySignupQueueData(overrides).convention.my_profile;
+  if (!profile) {
+    throw new Error('buildQueueProfile unexpectedly had no profile');
+  }
+
+  return profile;
+}
