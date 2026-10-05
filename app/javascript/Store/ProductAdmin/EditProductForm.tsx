@@ -6,14 +6,14 @@ import {
   BootstrapFormSelect,
   BootstrapFormInput,
 } from '@neinteractiveliterature/litform';
-import { useContext } from 'react';
+import { useCallback, useContext, useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
 import AppRootContext from '../../AppRootContext';
 import LiquidInput from '../../BuiltInFormControls/LiquidInput';
 import { WithRealOrGeneratedId } from '../../GeneratedIdUtils';
 import { PricingStrategy } from '../../graphqlTypes.generated';
 import AdminProductVariantsTable from './AdminProductVariantsTable';
-import { EditingProductBase } from './EditingProductTypes';
+import { EditingPricingStructure, EditingProductBase } from './EditingProductTypes';
 import PricingStructureForm from './PricingStructureForm';
 import { AdminProductsQueryData } from './queries.generated';
 
@@ -34,23 +34,35 @@ export default function EditProductForm<ProductType extends WithRealOrGeneratedI
 }: EditProductFormProps<ProductType>) {
   const { t } = useTranslation();
   const { ticketName, defaultCurrencyCode } = useContext(AppRootContext);
-  const [
-    setAvailable,
-    setName,
-    setPaymentOptions,
-    setPricingStructure,
-    setDescription,
-    setProductVariants,
-    setClickwrapAgreement,
-  ] = usePropertySetters(
-    setProduct,
-    'available',
-    'name',
-    'payment_options',
-    'pricing_structure',
-    'description',
-    'product_variants',
-    'clickwrap_agreement',
+  const [setAvailable, setName, setPaymentOptions, setDescription, setProductVariants, setClickwrapAgreement] =
+    usePropertySetters(
+      setProduct,
+      'available',
+      'name',
+      'payment_options',
+      'description',
+      'product_variants',
+      'clickwrap_agreement',
+    );
+
+  // A product with no pricing structure yet is shown as a fixed price of zero.  Edits have to start from that too,
+  // or the first one would build a structure with no pricing strategy, which the form then shows as blank.
+  const defaultPricingStructure = useMemo(
+    (): EditingPricingStructure => ({
+      __typename: 'PricingStructure',
+      pricing_strategy: PricingStrategy.Fixed,
+      value: { __typename: 'Money', currency_code: defaultCurrencyCode, fractional: 0 },
+    }),
+    [defaultCurrencyCode],
+  );
+  const setPricingStructure = useCallback(
+    (update: React.SetStateAction<EditingPricingStructure | undefined>) =>
+      setProduct((prev) => ({
+        ...prev,
+        pricing_structure:
+          typeof update === 'function' ? update(prev.pricing_structure ?? defaultPricingStructure) : update,
+      })),
+    [setProduct, defaultPricingStructure],
   );
   const imageChanged = (event: React.ChangeEvent<HTMLInputElement>) => {
     const file = (event.target.files ?? [])[0];
@@ -187,17 +199,7 @@ export default function EditProductForm<ProductType extends WithRealOrGeneratedI
 
           <div>
             <PricingStructureForm
-              pricingStructure={
-                product.pricing_structure ?? {
-                  __typename: 'PricingStructure',
-                  pricing_strategy: PricingStrategy.Fixed,
-                  value: {
-                    __typename: 'Money',
-                    currency_code: defaultCurrencyCode,
-                    fractional: 0,
-                  },
-                }
-              }
+              pricingStructure={product.pricing_structure ?? defaultPricingStructure}
               setPricingStructure={setPricingStructure}
             />
           </div>

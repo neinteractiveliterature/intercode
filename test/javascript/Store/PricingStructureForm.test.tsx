@@ -1,8 +1,9 @@
 import { useState } from 'react';
 import { vi } from 'vitest';
 
-import { render, userEvent } from '../testUtils';
+import { render, userEvent, within } from '../testUtils';
 import PricingStructureForm from '../../../app/javascript/Store/ProductAdmin/PricingStructureForm';
+import EditPricingStructureModal from '../../../app/javascript/Store/ProductAdmin/EditPricingStructureModal';
 import { EditingPricingStructure } from '../../../app/javascript/Store/ProductAdmin/EditingProductTypes';
 import {
   Money,
@@ -196,5 +197,72 @@ describe('PricingStructureForm', () => {
       expect((lastValue()?.value as Money).fractional).toBe(2500);
       expect(getByLabelText('Price')).toHaveValue('25');
     });
+  });
+});
+
+describe('EditPricingStructureModal', () => {
+  let user: ReturnType<typeof userEvent.setup>;
+  const close = vi.fn();
+  const onChange = vi.fn<(pricingStructure: EditingPricingStructure | undefined) => void>();
+
+  beforeEach(() => {
+    user = userEvent.setup();
+    close.mockReset();
+    onChange.mockReset();
+  });
+
+  const renderModal = (value?: EditingPricingStructure | null) =>
+    render(<EditPricingStructureModal visible close={close} state={{ value, onChange, opened: new Date() }} />, {
+      appRootContextValue: { defaultCurrencyCode: 'USD', supportedCurrencyCodes: ['USD'] },
+    });
+
+  // (the test wrapper's confirm dialog has OK and Cancel buttons of its own, so look within this modal)
+  const footerButton = (result: Awaited<ReturnType<typeof renderModal>>, name: string) =>
+    within(result.getByText('Pricing structure').closest('.modal-content') as HTMLElement).getByRole('button', {
+      name,
+      hidden: true,
+    });
+
+  it('starts from the pricing structure it was opened with', async () => {
+    const result = await renderModal({ pricing_strategy: PricingStrategy.Fixed, value: buildMoney(2500) });
+
+    expect(result.getByRole('radio', { name: 'Fixed price', hidden: true })).toBeChecked();
+    expect(result.getByRole('textbox', { name: 'Price', hidden: true })).toHaveValue('25');
+  });
+
+  it('gives back the edited pricing structure when OK is clicked, and closes', async () => {
+    const result = await renderModal({ pricing_strategy: PricingStrategy.Fixed, value: buildMoney(2500) });
+
+    await user.clear(result.getByRole('textbox', { name: 'Price', hidden: true }));
+    await user.type(result.getByRole('textbox', { name: 'Price', hidden: true }), '30');
+    await user.click(footerButton(result, 'OK'));
+
+    expect(onChange).toHaveBeenCalledWith(
+      expect.objectContaining({
+        pricing_strategy: PricingStrategy.Fixed,
+        value: expect.objectContaining({ fractional: 3000 }),
+      }),
+    );
+    expect(close).toHaveBeenCalledTimes(1);
+  });
+
+  it('gives back nothing, but still closes, if no pricing structure was ever set', async () => {
+    const result = await renderModal();
+
+    await user.click(footerButton(result, 'OK'));
+
+    expect(onChange).not.toHaveBeenCalled();
+    expect(close).toHaveBeenCalledTimes(1);
+  });
+
+  it('discards the changes when cancelled', async () => {
+    const result = await renderModal({ pricing_strategy: PricingStrategy.Fixed, value: buildMoney(2500) });
+
+    await user.clear(result.getByRole('textbox', { name: 'Price', hidden: true }));
+    await user.type(result.getByRole('textbox', { name: 'Price', hidden: true }), '30');
+    await user.click(footerButton(result, 'Cancel'));
+
+    expect(onChange).not.toHaveBeenCalled();
+    expect(close).toHaveBeenCalledTimes(1);
   });
 });
