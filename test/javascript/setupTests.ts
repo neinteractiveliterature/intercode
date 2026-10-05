@@ -37,3 +37,8 @@ if (typeof Range !== 'undefined') {
     Object.assign<DOMRect[], { item: () => DOMRect | null }>([], { item: () => null });
   Range.prototype.getBoundingClientRect ??= () => new DOMRect();
 }
+
+// ...and doesn't scroll either
+if (typeof Element !== 'undefined') {
+  Element.prototype.scrollIntoView ??= () => {};
+}
