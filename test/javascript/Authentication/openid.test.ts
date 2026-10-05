@@ -30,3 +30,18 @@ describe('buildOpenidConfig', () => {
     expect(config.serverMetadata().end_session_endpoint).toBe('https://issuer.example.com/users/sign_out');
   });
 });
+
+describe('getAuthorizationRedirectURL', () => {
+  it('redirects back to this site’s OAuth callback and asks for the scopes the frontend needs', () => {
+    const config = buildOpenidConfig('test-client-id', {
+      issuer: 'https://issuer.example.com/',
+      authorizationEndpoint: 'https://issuer.example.com/oauth/authorize',
+    });
+
+    const url = getAuthorizationRedirectURL(config, { verifier: 'v', challenge: 'c', state: 's' }, 'test-client-id');
+
+    expect(url.searchParams.get('redirect_uri')).toBe(`${window.location.origin}/oauth/callback`);
+    const scopes = url.searchParams.get('scope')?.split(' ');
+    expect(scopes).toEqual(expect.arrayContaining(['public', 'openid', 'email', 'profile', 'manage_intercode']));
+  });
+});

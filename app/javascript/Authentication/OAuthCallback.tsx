@@ -3,6 +3,7 @@ import { Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 import { AuthenticationManagerContext } from './authenticationManager';
+import errorReporting from '../ErrorReporting';
 
 function OAuthCallback() {
   const { t } = useTranslation();
@@ -24,6 +25,9 @@ function OAuthCallback() {
         window.location.href = returnPath;
       } catch (e) {
         console.error('OAuth callback error:', e);
+        errorReporting().error(e instanceof Error ? e : new Error(String(e)), {
+          tags: { context: 'oauth-callback' },
+        });
         setError(e instanceof Error ? e.message : 'Authentication failed');
         setProcessing(false);
       }
@@ -39,6 +43,9 @@ function OAuthCallback() {
       const { redirectUrl } = await authenticationManager.initiateAuthentication('/');
       window.location.href = redirectUrl.toString();
     } catch (e) {
+      errorReporting().error(e instanceof Error ? e : new Error(String(e)), {
+        tags: { context: 'oauth-callback-retry' },
+      });
       setError(e instanceof Error ? e.message : 'Authentication failed');
       setProcessing(false);
     }
