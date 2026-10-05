@@ -19,6 +19,8 @@ export type EditRunModalProps = {
   event: EventFieldsFragment;
   editingRunChanged: React.Dispatch<RunFieldsFragment>;
   onCancel: () => void;
+  // what went wrong the last time this was saved, if anything
+  error?: Error;
 };
 
 function EditRunModal({
@@ -28,6 +30,7 @@ function EditRunModal({
   editingRunChanged,
   onCancel,
   formProps,
+  error,
 }: EditRunModalProps): React.JSX.Element {
   const { t } = useTranslation();
   const confirm = useConfirm();
@@ -64,6 +67,7 @@ function EditRunModal({
               event={event}
               onChange={editingRunChanged as React.Dispatch<React.SetStateAction<RunFieldsFragment>>}
             />
+            <ErrorDisplay graphQLError={error} />
           </div>
         )}
         <div className="modal-footer">

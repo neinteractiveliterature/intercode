@@ -1,5 +1,6 @@
 import { useState } from 'react';
 import {
+  useActionData,
   useNavigate,
   LoaderFunction,
   useLoaderData,
@@ -97,6 +98,7 @@ function NewRun(): React.JSX.Element {
   };
 
   const [run, setRun] = useState(initialRun);
+  const actionData = useActionData();
 
   return (
     <EditRunModal
@@ -105,6 +107,7 @@ function NewRun(): React.JSX.Element {
       editingRunChanged={setRun}
       event={event}
       onCancel={cancelEditing}
+      error={actionData instanceof Error ? actionData : undefined}
       run={run}
     />
   );

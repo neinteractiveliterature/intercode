@@ -1,5 +1,13 @@
 import { useState } from 'react';
-import { useNavigate, LoaderFunction, useLoaderData, ActionFunction, redirect, RouterContextProvider } from 'react-router';
+import {
+  useActionData,
+  useNavigate,
+  LoaderFunction,
+  useLoaderData,
+  ActionFunction,
+  redirect,
+  RouterContextProvider,
+} from 'react-router';
 
 import EditRunModal, { EditingRun } from './EditRunModal';
 import { EventAdminEventsQueryData, EventAdminEventsQueryDocument } from './queries.generated';
@@ -7,7 +15,11 @@ import { apolloClientContext } from 'AppContexts';
 import { UpdateRunDocument } from './mutations.generated';
 import { buildRunInputFromFormData } from './buildRunInputFromFormData';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ params: { eventCategoryId, runId }, request, context }) => {
+export const action: ActionFunction<RouterContextProvider> = async ({
+  params: { eventCategoryId, runId },
+  request,
+  context,
+}) => {
   const client = context.get(apolloClientContext);
   try {
     const formData = await request.formData();
@@ -56,6 +68,7 @@ function EditRun(): React.JSX.Element {
   };
 
   const [run, setRun] = useState(initialRun);
+  const actionData = useActionData();
 
   return (
     <EditRunModal
@@ -64,6 +77,7 @@ function EditRun(): React.JSX.Element {
       editingRunChanged={setRun}
       event={event}
       onCancel={cancelEditing}
+      error={actionData instanceof Error ? actionData : undefined}
       run={run}
     />
   );

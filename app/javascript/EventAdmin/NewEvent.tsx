@@ -1,5 +1,5 @@
 import { useState, useMemo } from 'react';
-import { Link, useParams, useSubmit } from 'react-router';
+import { Link, useFetcher, useParams } from 'react-router';
 
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -37,13 +37,14 @@ function runIsCreatable(run: RunForRunFormFields): run is Omit<RunForRunFormFiel
 function NewEvent() {
   const data = useEventAdminEventsLoader();
   const convention = data.convention;
-  const submit = useSubmit();
+  // a fetcher, because the create action is a different route's, so useActionData here would never see its errors
+  const fetcher = useFetcher();
+  const createError = fetcher.data instanceof Error ? fetcher.data : undefined;
   const { eventCategoryId: eventCategoryIdParam } = useParams<{ eventCategoryId: string }>();
   const initialEventCategory = useMemo(
     () => convention.event_categories.find((c) => c.id === eventCategoryIdParam?.replace(/-.*$/, '')),
     [convention, eventCategoryIdParam],
   );
-  const [createError, setCreateError] = useState<Error>();
   const initialEvent = useMemo<NewEventFormEvent>(
     () => ({
       __typename: 'Event',
@@ -109,16 +110,11 @@ function NewEvent() {
       };
     }
 
-    try {
-      submit(payload, {
-        method: 'POST',
-        action: `/admin_events/${eventCategory.id}/events`,
-        encType: 'application/json',
-      });
-    } catch (error) {
-      setCreateError(error instanceof Error ? error : undefined);
-      throw error;
-    }
+    fetcher.submit(payload, {
+      method: 'POST',
+      action: `/admin_events/${eventCategory.id}/events`,
+      encType: 'application/json',
+    });
   };
 
   const warningMessage =
@@ -158,7 +154,7 @@ function NewEvent() {
           type="button"
           className="btn btn-primary"
           onClick={createEventClicked}
-          disabled={!eventCategoryId || !!warningMessage}
+          disabled={!eventCategoryId || !!warningMessage || fetcher.state !== 'idle'}
         >
           Create event
         </button>
