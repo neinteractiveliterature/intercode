@@ -41,7 +41,6 @@ export type FileUploadFormProps = {
 function FileUploadForm({ onUpload }: FileUploadFormProps): React.JSX.Element {
   const { t } = useTranslation();
   const [file, setFile] = useState<File | null | undefined>();
-  const [uploadAsync, error, uploading] = useAsyncFunction(uploadFile);
   const [progressPercent, setProgressPercent] = useState<number>(0);
   const [progressIndeterminate, setProgressIndeterminate] = useState(false);
   const { railsDirectUploadsUrl } = useContext(RailsDirectUploadsContext);
@@ -55,21 +54,25 @@ function FileUploadForm({ onUpload }: FileUploadFormProps): React.JSX.Element {
     }
   }, []);
 
-  const uploadFormSubmitted = async (event: React.FormEvent) => {
-    event.preventDefault();
-    event.stopPropagation();
-    if (!file) {
-      return;
-    }
+  // (clearing the file is inside the wrapped function so it stays selected after a failure; the error is shown below)
+  const [uploadFormSubmitted, error, uploading] = useAsyncFunction(
+    async (event: React.FormEvent) => {
+      event.preventDefault();
+      event.stopPropagation();
+      if (!file) {
+        return;
+      }
 
-    const blob = await uploadAsync(file, railsDirectUploadsUrl, onProgress);
+      const blob = await uploadFile(file, railsDirectUploadsUrl, onProgress);
 
-    if (blob && onUpload) {
-      await onUpload(blob, file);
-    }
+      if (blob && onUpload) {
+        await onUpload(blob, file);
+      }
 
-    setFile(null);
-  };
+      setFile(null);
+    },
+    { suppressError: true },
+  );
 
   return (
     <div className="card">

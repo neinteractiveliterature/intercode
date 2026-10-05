@@ -40,7 +40,6 @@ export default function CreateModeratedSignupModal({
   const [createMutate] = useMutation(CreateSignupRequestDocument, {
     refetchQueries: () => [{ query: EventPageQueryDocument, variables: { eventId: event.id } }],
   });
-  const [createSignupRequest, createError, createInProgress] = useAsyncFunction(createMutate);
   const runTimespan = useMemo(() => timespanFromRun(timezoneName, event, run), [timezoneName, event, run]);
   const [createSignupRankedChoiceMutate] = useMutation(CreateSignupRankedChoiceDocument);
   const revalidator = useRevalidator();
@@ -59,35 +58,39 @@ export default function CreateModeratedSignupModal({
     });
   }, [data.convention.my_profile?.signups, event.can_play_concurrently, runTimespan, timezoneName]);
 
-  const confirmClicked = async () => {
-    if (!signupOption) {
-      errorReporting().error('CreateModeratedSignupModal: signupOption is null!');
-      throw new Error(
-        `Signup option not found in CreateModeratedSignupModal. This is probably a bug; we've been notified automatically and will look at it as soon as possible.`,
-      );
-    }
+  // (everything is inside the wrapped function so the modal doesn't close after a failure; the error is shown below)
+  const [confirmClicked, createError, createInProgress] = useAsyncFunction(
+    async () => {
+      if (!signupOption) {
+        errorReporting().error('CreateModeratedSignupModal: signupOption is null!');
+        throw new Error(
+          `Signup option not found in CreateModeratedSignupModal. This is probably a bug; we've been notified automatically and will look at it as soon as possible.`,
+        );
+      }
 
-    if (signupOption.action === 'ADD_TO_QUEUE') {
-      await createSignupRankedChoiceMutate({
-        variables: {
-          targetRunId: run.id,
-          requestedBucketId: signupOption.bucket?.id,
-        },
-      });
-    } else {
-      await createSignupRequest({
-        variables: {
-          targetRunId: run.id,
-          requestedBucketId: signupOption.bucket?.id,
-          replaceSignupId: conflictingSignup?.id,
-        },
-      });
-    }
+      if (signupOption.action === 'ADD_TO_QUEUE') {
+        await createSignupRankedChoiceMutate({
+          variables: {
+            targetRunId: run.id,
+            requestedBucketId: signupOption.bucket?.id,
+          },
+        });
+      } else {
+        await createMutate({
+          variables: {
+            targetRunId: run.id,
+            requestedBucketId: signupOption.bucket?.id,
+            replaceSignupId: conflictingSignup?.id,
+          },
+        });
+      }
 
-    await client.resetStore();
-    revalidator.revalidate();
-    close();
-  };
+      await client.resetStore();
+      revalidator.revalidate();
+      close();
+    },
+    { suppressError: true },
+  );
 
   return (
     <Modal visible={visible}>

@@ -49,7 +49,7 @@ export default function EventTicketPurchaseModal({
 
     close();
   };
-  const [cancelAsync, cancelError, cancelInProgress] = useAsyncFunction(cancel);
+  const [cancelAsync, cancelError, cancelInProgress] = useAsyncFunction(cancel, { suppressError: true });
 
   const complete = async () => {
     await client.resetStore();

@@ -97,11 +97,13 @@ function EventList(): React.JSX.Element {
     },
     fetchPolicy: 'cache-and-network',
   });
-  const [fetchMoreEventsAsync, fetchMoreError, fetchMoreInProgress] = useAsyncFunction(() =>
-    fetchMore({
-      variables: { page: (data?.convention.events_paginated.current_page ?? 0) + 1, pageSize: PAGE_SIZE },
-      // the cache policy in useIntercodeApolloClient takes care of merging
-    }),
+  const [fetchMoreEventsAsync, fetchMoreError, fetchMoreInProgress] = useAsyncFunction(
+    () =>
+      fetchMore({
+        variables: { page: (data?.convention.events_paginated.current_page ?? 0) + 1, pageSize: PAGE_SIZE },
+        // the cache policy in useIntercodeApolloClient takes care of merging
+      }),
+    { suppressError: true },
   );
   const data = loading && previousData ? previousData : currentData;
 

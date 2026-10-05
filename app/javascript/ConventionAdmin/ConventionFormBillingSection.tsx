@@ -56,8 +56,10 @@ function ConventionFormBillingSection({
       window.location.href = onboardingLink;
     }
   }, [createConventionStripeAccount]);
-  const [startCreateStripeAccount, createStripeAccountError, createStripeAccountInProgress] =
-    useAsyncFunction(createStripeAccountAndRedirect);
+  const [startCreateStripeAccount, createStripeAccountError, createStripeAccountInProgress] = useAsyncFunction(
+    createStripeAccountAndRedirect,
+    { suppressError: true },
+  );
 
   const obtainOnboardingLinkAndRedirect = useCallback(async () => {
     const result = await apolloClient.query<
@@ -75,6 +77,7 @@ function ConventionFormBillingSection({
   }, [apolloClient]);
   const [startObtainOnboardingLink, obtainOnboardingLinkError, obtainOnboardinLinkInProgress] = useAsyncFunction(
     obtainOnboardingLinkAndRedirect,
+    { suppressError: true },
   );
 
   return (

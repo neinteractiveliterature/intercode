@@ -73,28 +73,30 @@ function EditUserForm() {
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const [currentPassword, setCurrentPassword] = useState('');
-  const [updateUserAsync, updateUserError, updateUserInProgress] = useAsyncFunction(updateUser);
   const [saved, setSaved] = useState(false);
+  // (the success step is inside the wrapped function so it doesn't run after a failure; the error is shown below)
+  const [onSubmit, updateUserError, updateUserInProgress] = useAsyncFunction(
+    async (event: React.SyntheticEvent) => {
+      event.preventDefault();
+
+      if (!formState) {
+        return;
+      }
+      if (!authenticityToken) {
+        throw new Error('No authenticity token received from server');
+      }
+
+      await updateUser(authenticityToken, formState, password, passwordConfirmation, currentPassword);
+      setSaved(true);
+    },
+    { suppressError: true },
+  );
   const passwordFieldId = useId();
   usePageTitle('Update Your Account');
 
   if (!formState) {
     return <Navigate to="/" replace />;
   }
-
-  const onSubmit = async (event: React.SyntheticEvent) => {
-    event.preventDefault();
-
-    if (!formState) {
-      return;
-    }
-    if (!authenticityToken) {
-      throw new Error('No authenticity token received from server');
-    }
-
-    await updateUserAsync(authenticityToken, formState, password, passwordConfirmation, currentPassword);
-    setSaved(true);
-  };
 
   return (
     <div className="container mt-5">

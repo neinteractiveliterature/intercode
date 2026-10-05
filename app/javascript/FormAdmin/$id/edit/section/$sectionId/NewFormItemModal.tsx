@@ -60,7 +60,6 @@ function NewFormItemModal<FormType extends FormTypeDefinition>({
   const [itemType, setItemType] = useState<TypedFormItem['item_type']>();
   const [standardItem, setStandardItem] = useState<StandardItem>();
   const [identifier, setIdentifier] = useState<string>();
-  const [createAsync, createError, createInProgress] = useAsyncFunction(createFormItem);
 
   const standardItems = formType.standard_items as Record<string, Omit<StandardItem, 'identifier'>>;
 
@@ -124,25 +123,29 @@ function NewFormItemModal<FormType extends FormTypeDefinition>({
     }
   };
 
-  const addClicked = async () => {
-    if (!itemType || !identifier) {
-      return;
-    }
-    const newFormItem = buildNewFormItem(itemType);
-    await createAsync({
-      ...newFormItem,
-      __typename: 'FormItem',
-      identifier,
-      default_value: (standardItem || {}).default_value,
-      admin_description: (standardItem || {}).admin_description ?? null,
-      public_description: (standardItem || {}).public_description ?? null,
-      properties: {
-        ...newFormItem.properties,
-        ...standardItemProperties(standardItem, itemType),
-      },
-    });
-    close();
-  };
+  // (closing is inside the wrapped function so the modal stays open after a failure; the error is shown below)
+  const [addClicked, createError, createInProgress] = useAsyncFunction(
+    async () => {
+      if (!itemType || !identifier) {
+        return;
+      }
+      const newFormItem = buildNewFormItem(itemType);
+      await createFormItem({
+        ...newFormItem,
+        __typename: 'FormItem',
+        identifier,
+        default_value: (standardItem || {}).default_value,
+        admin_description: (standardItem || {}).admin_description ?? null,
+        public_description: (standardItem || {}).public_description ?? null,
+        properties: {
+          ...newFormItem.properties,
+          ...standardItemProperties(standardItem, itemType),
+        },
+      });
+      close();
+    },
+    { suppressError: true },
+  );
 
   const dataComplete = identifier && identifier.trim() !== '' && itemType && itemType.trim() !== '';
 

@@ -49,17 +49,19 @@ function ResetPassword(): React.JSX.Element {
   const [password, setPassword] = useState('');
   const [passwordConfirmation, setPasswordConfirmation] = useState('');
   const passwordId = useId();
-  const [changePasswordAsync, changePasswordError] = useAsyncFunction(changePassword);
+  // (the redirect is inside the wrapped function so it doesn't happen after a failure; the error is shown below)
+  const [onSubmit, changePasswordError] = useAsyncFunction(
+    async (event: React.SyntheticEvent) => {
+      event.preventDefault();
+      if (!authenticityToken) {
+        throw new Error('No authenticity token received from server');
+      }
 
-  const onSubmit = async (event: React.SyntheticEvent) => {
-    event.preventDefault();
-    if (!authenticityToken) {
-      throw new Error('No authenticity token received from server');
-    }
-
-    await changePasswordAsync(authenticityToken, resetPasswordToken, password, passwordConfirmation);
-    window.location.href = '/';
-  };
+      await changePassword(authenticityToken, resetPasswordToken, password, passwordConfirmation);
+      window.location.href = '/';
+    },
+    { suppressError: true },
+  );
 
   return (
     <>

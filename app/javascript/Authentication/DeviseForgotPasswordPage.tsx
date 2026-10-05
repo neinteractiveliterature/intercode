@@ -50,23 +50,25 @@ function DeviseForgotPasswordPage(): React.JSX.Element {
   const authenticityToken = manager.tokens?.resetPassword;
   const [email, setEmail] = useState('');
   const [success, setSuccess] = useState(false);
-  const [resetPasswordAsync, resetPasswordError, resetPasswordInProgress] = useAsyncFunction(resetPassword);
+  // (the success step is inside the wrapped function so it doesn't run after a failure; the error is shown below)
+  const [onSubmit, resetPasswordError, resetPasswordInProgress] = useAsyncFunction(
+    async (event: React.SyntheticEvent) => {
+      event.preventDefault();
+      if (!authenticityToken) {
+        throw new Error('No authenticity token received from server');
+      }
+
+      await resetPassword(authenticityToken, email);
+      setSuccess(true);
+    },
+    { suppressError: true },
+  );
   const header = conventionName
     ? t('authentication.forgotPasswordForm.headerWithConvention', { conventionName })
     : oauthAppName
       ? t('authentication.forgotPasswordForm.headerWithOAuthApp', { appName: oauthAppName })
       : t('authentication.forgotPasswordForm.header');
   usePageTitle(header);
-
-  const onSubmit = async (event: React.SyntheticEvent) => {
-    event.preventDefault();
-    if (!authenticityToken) {
-      throw new Error('No authenticity token received from server');
-    }
-
-    await resetPasswordAsync(authenticityToken, email);
-    setSuccess(true);
-  };
 
   return (
     <div className="container mt-5">

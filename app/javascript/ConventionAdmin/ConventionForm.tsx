@@ -32,7 +32,9 @@ function ConventionForm({
   rootSite,
 }: ConventionFormProps): React.JSX.Element {
   const [convention, setConvention] = useState(initialConvention);
-  const [save, saveError, saveInProgress] = useAsyncFunction(saveConvention);
+  const [save, saveError, saveInProgress] = useAsyncFunction(saveConvention, {
+    suppressError: true,
+  });
   const [openGraphImage, setOpenGraphImage] = useState<File | null | undefined>();
   const [favicon, setFavicon] = useState<File | null | undefined>();
 

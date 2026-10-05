@@ -38,7 +38,7 @@ function TicketForm({
 
   const sortedTicketTypes = useMemo(() => sortTicketTypes(convention.ticket_types), [convention.ticket_types]);
 
-  const [submit, submitError, submitInProgress] = useAsyncFunction(onSubmit);
+  const [submit, submitError, submitInProgress] = useAsyncFunction(onSubmit, { suppressError: true });
 
   const submitForm = useCallback(
     async (event: SyntheticEvent) => {
