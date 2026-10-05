@@ -237,7 +237,8 @@ function EventList(): React.JSX.Element {
       {data && (
         <>
           <EventListEvents
-            convention={data.convention}
+            // (the events query doesn't fetch the convention's dates, which the day headings need)
+            convention={{ ...convention, ...data.convention }}
             eventsPaginated={eventsPaginated}
             sortBy={sortBy}
             canReadSchedule={data.currentAbility.can_read_schedule}

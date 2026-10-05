@@ -53,11 +53,10 @@ function EventListEvents({
           const conventionDay = conventionDayTimespans.find((timespan) =>
             timespan.includesTime(DateTime.fromISO(runs[0].starts_at, { zone: timezoneName })),
           );
-          if (conventionDay && (previousConventionDay == null || !previousConventionDay.isSame(conventionDay))) {
-            previousConventionDay = conventionDay;
-          }
+          // a heading goes above the first event that starts on each convention day
           if (conventionDay && (previousConventionDay == null || !previousConventionDay.isSame(conventionDay))) {
             eventIds.set(event.id, conventionDay.start);
+            previousConventionDay = conventionDay;
           }
         }
       }
