@@ -1,4 +1,4 @@
-import { useState, useMemo, useContext, ReactNode, useEffect } from 'react';
+import { useState, useMemo, useContext, useRef, ReactNode, useEffect } from 'react';
 import { Modal } from 'react-bootstrap4-modal';
 
 import { DateTime } from 'luxon';
@@ -59,21 +59,21 @@ function ScheduleMultipleRunsModal({
   );
   const { t } = useTranslation();
   const fetcher = useFetcher();
-  const [lastFetcherData, setLastFetcherData] = useState();
   const error = fetcher.data instanceof Error ? fetcher.data : undefined;
 
+  // finish once, when the action's result arrives and it isn't an error
+  const finishedDataRef = useRef<unknown>(undefined);
   useEffect(() => {
-    if (fetcher.state === 'idle' && fetcher.data && !(fetcher.data instanceof Error)) {
-      setLastFetcherData(fetcher.data);
-    }
-  }, [fetcher.data, fetcher.state]);
-
-  useEffect(() => {
-    if (lastFetcherData) {
-      setLastFetcherData(undefined);
+    if (
+      fetcher.state === 'idle' &&
+      fetcher.data &&
+      !(fetcher.data instanceof Error) &&
+      finishedDataRef.current !== fetcher.data
+    ) {
+      finishedDataRef.current = fetcher.data;
       onFinish();
     }
-  }, [lastFetcherData, onFinish]);
+  }, [fetcher.data, fetcher.state, onFinish]);
 
   const timespan = useMemo(() => {
     if (!day || !start || !finish || !timeIsComplete(start) || !timeIsComplete(finish)) {
@@ -128,7 +128,8 @@ function ScheduleMultipleRunsModal({
     [event],
   );
 
-  const scheduleRuns = async () => {
+  // (onFinish is called by the effect above once the runs have actually been created, so that a failure can be seen)
+  const scheduleRuns = () => {
     fetcher.submit(
       {
         starts_at: nonConflictingTimespansWithinRange.map((timespan) => timespan.start.toISO()),
@@ -140,7 +141,6 @@ function ScheduleMultipleRunsModal({
         encType: 'application/json',
       },
     );
-    onFinish();
   };
 
   const renderTimeSelects = () => {
