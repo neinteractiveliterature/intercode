@@ -4,7 +4,7 @@ import { Link } from 'react-router';
 import { useTranslation, Trans } from 'react-i18next';
 import { BootstrapFormInput, ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import useAsyncFunction from '../useAsyncFunction';
+import useAsyncFunction, { UserFacingError } from '../useAsyncFunction';
 import humanize from '../humanize';
 import { AuthenticityTokensContext } from '../AuthenticityTokensContext';
 import { useSignInContext } from './useSignInContext';
@@ -37,7 +37,7 @@ async function resetPassword(authenticityToken: string, email: string) {
   const responseJson = await response.json();
 
   if (!response.ok) {
-    throw new Error(responseJson.error ?? parseRailsErrorHash(responseJson.errors) ?? response.statusText);
+    throw new UserFacingError(responseJson.error ?? parseRailsErrorHash(responseJson.errors) ?? response.statusText);
   }
 
   return responseJson;

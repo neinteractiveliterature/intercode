@@ -5,7 +5,7 @@ import { BootstrapFormInput, LoadingIndicator, ErrorDisplay } from '@neinteracti
 
 import { LoaderFunction, RouterContextProvider, Navigate, useLoaderData } from 'react-router';
 import PasswordConfirmationInput from './PasswordConfirmationInput';
-import useAsyncFunction from '../useAsyncFunction';
+import useAsyncFunction, { UserFacingError } from '../useAsyncFunction';
 import AccountFormContent from './AccountFormContent';
 import UserFormFields, { UserFormState } from './UserFormFields';
 import usePageTitle from '../usePageTitle';
@@ -47,14 +47,14 @@ async function updateUser(
   if (!response.ok) {
     const responseJson = await response.json();
     if (responseJson.errors) {
-      throw new Error(
+      throw new UserFacingError(
         Object.entries(responseJson.errors)
           .map(([key, error]) => `${humanize(key)} ${error}`)
           .join(', '),
       );
     }
 
-    throw new Error(responseJson.error);
+    throw new UserFacingError(responseJson.error);
   }
 }
 

@@ -6,7 +6,7 @@ import arrayToSentence from 'array-to-sentence';
 import { useTranslation } from 'react-i18next';
 import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import useAsyncFunction from '../useAsyncFunction';
+import useAsyncFunction, { UserFacingError } from '../useAsyncFunction';
 import AccountFormContent from './AccountFormContent';
 import UserFormFields, { UserFormState } from './UserFormFields';
 import PasswordConfirmationInput from './PasswordConfirmationInput';
@@ -57,13 +57,13 @@ async function signUp(
   if (!response.ok) {
     const responseJson = await response.json();
     if (responseJson.errors) {
-      throw new Error(
+      throw new UserFacingError(
         Object.entries(responseJson.errors)
           .map(([key, errors]) => `${humanize(key)} ${arrayToSentence(errors as string[])}`)
           .join(', '),
       );
     } else if (responseJson.error) {
-      throw new Error(responseJson.error);
+      throw new UserFacingError(responseJson.error);
     }
 
     throw new Error(response.statusText);

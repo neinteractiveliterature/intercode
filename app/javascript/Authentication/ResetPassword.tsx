@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import PasswordConfirmationInput from './PasswordConfirmationInput';
-import useAsyncFunction from '../useAsyncFunction';
+import useAsyncFunction, { UserFacingError } from '../useAsyncFunction';
 import { AuthenticityTokensContext } from '../AuthenticityTokensContext';
 import { useSignInContext } from './useSignInContext';
 import PasswordInputWithStrengthCheck from './PasswordInputWithStrengthCheck';
@@ -32,7 +32,7 @@ async function changePassword(
   });
 
   if (!response.ok) {
-    throw new Error((await response.json()).error);
+    throw new UserFacingError((await response.json()).error);
   }
 }
 
