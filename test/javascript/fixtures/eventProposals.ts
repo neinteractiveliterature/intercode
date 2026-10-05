@@ -11,12 +11,13 @@ type FormFromFragment = NonNullable<EventProposalFieldsFragment['event_category'
 // Form item fixtures carry parsed properties; the API sends them as JSON strings
 export function buildProposalForm(
   items: TypedFormItem[] = [buildFreeTextItem({ identifier: 'title', caption: 'Title' })],
+  formType: FormType = FormType.EventProposal,
 ) {
   const form: FormFromFragment = {
     __typename: 'Form',
     id: '30',
     title: 'Proposal form',
-    form_type: FormType.EventProposal,
+    form_type: formType,
     form_sections: [
       {
         __typename: 'FormSection',
