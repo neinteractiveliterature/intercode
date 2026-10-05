@@ -1,3 +1,4 @@
+import { InMemoryCache } from '@apollo/client';
 import { MockLink } from '@apollo/client/testing';
 import { vi } from 'vitest';
 
@@ -68,10 +69,6 @@ const queryData: ConvertToEventProvidedTicketQueryData = {
   },
 };
 
-// The event's ticket types load through a suspense query once an event is chosen, which can take longer than the
-// default one second on a busy CI runner
-const SLOW = { timeout: 5000 };
-
 describe('ConvertToEventProvidedTicketModal', () => {
   let user: ReturnType<typeof userEvent.setup>;
   const onClose = vi.fn();
@@ -83,9 +80,16 @@ describe('ConvertToEventProvidedTicketModal', () => {
     converted.mockReset();
   });
 
-  const queryMock: MockLink.MockedResponse<ConvertToEventProvidedTicketQueryData> = {
-    request: { query: ConvertToEventProvidedTicketQueryDocument, variables: { eventId: '10' } },
-    result: { data: queryData },
+  // The event's ticket types load through a suspense query once an event is chosen.  A component suspending inside
+  // an act scope (which a user event is) can lose its update, so the data is already in the cache instead.
+  const seededCache = () => {
+    const cache = new InMemoryCache();
+    cache.writeQuery({
+      query: ConvertToEventProvidedTicketQueryDocument,
+      variables: { eventId: '10' },
+      data: queryData,
+    });
+    return cache;
   };
 
   const convertMock = (
@@ -123,7 +127,7 @@ describe('ConvertToEventProvidedTicketModal', () => {
     ...options,
   });
 
-  const renderModal = (apolloMocks: MockLink.MockedResponse[]) =>
+  const renderModal = (apolloMocks: MockLink.MockedResponse[] = []) =>
     render(
       <ConvertToEventProvidedTicketModal
         convention={convention}
@@ -131,7 +135,7 @@ describe('ConvertToEventProvidedTicketModal', () => {
         visible
         onClose={onClose}
       />,
-      { apolloMocks },
+      { apolloMocks, apolloCache: seededCache() },
     );
 
   // (the test wrapper's confirm dialog has buttons of its own, so look within this modal's footer)
@@ -142,7 +146,7 @@ describe('ConvertToEventProvidedTicketModal', () => {
 
   const chooseEventAndTicketType = async (result: Awaited<ReturnType<typeof renderModal>>) => {
     await user.click(result.getByRole('button', { name: 'Choose Big Game', hidden: true }));
-    await user.click(await result.findByRole('radio', { name: /Provide gm comp badge/, hidden: true }, SLOW));
+    await user.click(await result.findByRole('radio', { name: /Provide gm comp badge/, hidden: true }));
   };
 
   it('says whose badge is being converted, and what will happen to it', async () => {
@@ -153,28 +157,28 @@ describe('ConvertToEventProvidedTicketModal', () => {
   });
 
   it('needs both an event and a ticket type before it can convert', async () => {
-    const result = await renderModal([queryMock]);
+    const result = await renderModal();
     expect(footerButton(result, 'Convert badge')).toBeDisabled();
 
     await user.click(result.getByRole('button', { name: 'Choose Big Game', hidden: true }));
-    await result.findByText(/Big Game has 2 badges remaining to provide/, {}, SLOW);
+    await result.findByText(/Big Game has 2 badges remaining to provide/, {});
     expect(footerButton(result, 'Convert badge')).toBeDisabled();
   });
 
   it('offers the ticket types the event can still provide, with how many remain', async () => {
-    const result = await renderModal([queryMock]);
+    const result = await renderModal();
 
     await user.click(result.getByRole('button', { name: 'Choose Big Game', hidden: true }));
 
     expect(
-      await result.findByRole('radio', { name: 'Provide gm comp badge (2 remaining)', hidden: true }, SLOW),
+      await result.findByRole('radio', { name: 'Provide gm comp badge (2 remaining)', hidden: true }),
     ).toBeEnabled();
     // the ticket type that events can't provide isn't offered
     expect(result.queryByRole('radio', { name: /weekend pass/, hidden: true })).toBeNull();
   });
 
   it('converts the ticket for the chosen event and ticket type, then closes', async () => {
-    const result = await renderModal([queryMock, convertMock()]);
+    const result = await renderModal([convertMock()]);
 
     await chooseEventAndTicketType(result);
     await user.click(footerButton(result, 'Convert badge'));
@@ -185,7 +189,6 @@ describe('ConvertToEventProvidedTicketModal', () => {
 
   it('shows the error and stays open if the conversion fails', async () => {
     const result = await renderModal([
-      queryMock,
       convertMock({ result: { errors: [{ message: 'No more tickets available from this event' }] } }),
     ]);
 
@@ -198,7 +201,7 @@ describe('ConvertToEventProvidedTicketModal', () => {
   });
 
   it('disables everything while the conversion is in progress', async () => {
-    const result = await renderModal([queryMock, convertMock({ delay: 100 })]);
+    const result = await renderModal([convertMock({ delay: 100 })]);
 
     await chooseEventAndTicketType(result);
     await user.click(footerButton(result, 'Convert badge'));
