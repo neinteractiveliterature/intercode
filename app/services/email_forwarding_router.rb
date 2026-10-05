@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class EmailForwardingRouter
   class Mapping
     attr_reader :inbound_domain, :inbound_local, :destination_addresses
@@ -150,22 +151,6 @@ class EmailForwardingRouter
       )
   end
 
-  def self.all_mappings_for_inbound_address(address)
-    all_mappings[EmailRoute.normalize_address(address)]
-  end
-
-  def self.all_mappings_for_destination_address(address)
-    all_mappings.values.flatten.select { |mapping| mapping.destination_addresses.include?(address) }
-  end
-
-  def self.all_inbound_addresses
-    all_mappings.keys
-  end
-
-  def self.all_destination_addresses
-    all_mappings.values.flatten.uniq
-  end
-
   def self.deduplicate_destinations(destinations)
     destinations_by_normalized_address = destinations.index_by { |dest| EmailRoute.normalize_address(dest) }
     destinations_by_normalized_address.values
@@ -195,6 +180,7 @@ class EmailForwardingRouter
     ].compact.uniq
   end
 
+  # rubocop:disable Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
   def staff_positions_for_recipient
     @staff_positions_for_recipient ||=
       if convention_by_domain
@@ -217,6 +203,7 @@ class EmailForwardingRouter
         []
       end
   end
+  # rubocop:enable Metrics/CyclomaticComplexity,Metrics/PerceivedComplexity
 
   def team_members_for_recipient
     @team_members_for_recipient ||=
