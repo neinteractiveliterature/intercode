@@ -29,7 +29,9 @@ function EventListCategoryDropdown({
   onChange: onChangeProp,
 }: EventListCategoryDropdownProps): React.JSX.Element {
   const [interacted, setInteracted] = useState(false);
-  const currentCategories = eventCategories.filter((category) => (value || []).includes(category.id));
+  // (values decoded from the URL are numbers, so compare them as strings)
+  const selectedCategoryIds = (value || []).map((id) => id.toString());
+  const currentCategories = eventCategories.filter((category) => selectedCategoryIds.includes(category.id));
   const { t } = useTranslation();
 
   let categoryDescription = t('events.categoryDropdown.allCategoriesLabel');
