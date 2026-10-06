@@ -120,7 +120,7 @@ const RunDisplay = forwardRef<HTMLDivElement, RunDisplayProps>(function RunDispl
         run.disableDetailsPopup
           ? undefined
           : (keyEvent) => {
-              if (keyEvent.keyCode === 13 || keyEvent.keyCode === 32) {
+              if (keyEvent.key === 'Enter' || keyEvent.key === ' ') {
                 keyEvent.preventDefault();
                 toggle();
               }
