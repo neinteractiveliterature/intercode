@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # To simulate the effect of autoscaling as a CSV file:
 # bin/rails runner script/generate_simulated_autoscaling_graph.rb
 
@@ -21,12 +22,15 @@ class AutoscaleServersService < CivilService::Service
         convention.user_con_profiles.count
       end
 
+    # (log2(0) is -Infinity, which would turn into NaN in the throttling and blow up the clamp, so a convention with
+    # nobody in it yet just doesn't get the log term)
+    log_term = user_count.positive? ? Math.log2(user_count) : 0
+
     (
       # log2 term: bias the low end of the formula to use more servers, because redundancy = good
       # linear term: the log2 term accounts for ~half of the needed servers
       # constant term: never go below a certain minimum for a signup opening
-      (0.5 * Math.log2(user_count)) + (0.5 * (1 / USERS_PER_INSTANCE.to_f) * user_count) +
-        MIN_INSTANCES_FOR_SIGNUP_OPENING
+      (0.5 * log_term) + (0.5 * (1 / USERS_PER_INSTANCE.to_f) * user_count) + MIN_INSTANCES_FOR_SIGNUP_OPENING
     )
   end
 
@@ -59,7 +63,7 @@ class AutoscaleServersService < CivilService::Service
   end
 
   def self.scaling_target_for(time)
-    nearby_increases = Convention.connection.select_rows <<~SQL
+    nearby_increases = Convention.connection.select_rows <<~SQL.squish
       select conventions.id, signup_rounds.start, signup_rounds.maximum_event_signups
       from conventions
       join signup_rounds on signup_rounds.convention_id = conventions.id
@@ -104,7 +108,7 @@ class AutoscaleServersService < CivilService::Service
   private
 
   def inner_call
-    now = Time.now
+    now = Time.current
     web_scaling_target = self.class.scaling_target_for(now)
     worker_scaling_target = self.class.worker_scaling_target_for(now)
     worker_instance_type = self.class.worker_instance_type_for(now)
