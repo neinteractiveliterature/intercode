@@ -1588,7 +1588,8 @@
         "full": "event full",
         "missingTicket": "{{ ticketName }} required",
         "noMoreSignupsAllowed": "no more signups allowed",
-        "noPendingChoices": "user constraints",
+        "noPendingChoices": "no pending choices",
+        "rankedChoiceUserConstraints": "user constraints",
         "teamMember": "team member",
         "waitlistPositionCapExceeded": "waitlist position cap exceeded"
       }

@@ -95,7 +95,7 @@ export function describeReason(reason: RankedChoiceDecisionReason, ticketName: s
   }
 
   if (reason === RankedChoiceDecisionReason.RankedChoiceUserConstraints) {
-    return t('tables.rankedChoiceDecision.reasons.noPendingChoices');
+    return t('tables.rankedChoiceDecision.reasons.rankedChoiceUserConstraints');
   }
 
   if (reason === RankedChoiceDecisionReason.TeamMember) {
@@ -148,7 +148,8 @@ export function RankedChoiceReasonCell<TData, TValue extends RankedChoiceDecisio
 
 const FILTER_CODECS = buildFieldFilterCodecs({
   decision: FilterCodecs.stringArray,
-  reason: FilterCodecs.integerArray,
+  // (reasons are enum names like CONFLICT, not numbers)
+  reason: FilterCodecs.stringArray,
 });
 
 // eslint-disable-next-line i18next/no-literal-string
@@ -254,9 +255,12 @@ function RankedChoiceSignupDecisionsTable({ signupRoundId }: RankedChoiceSignupD
   );
 }
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const loader: LoaderFunction<RouterContextProvider> = async ({ context, params: { id } }) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query<SignupRoundsAdminQueryData>({ query: SignupRoundsAdminQueryDocument });
+  if (!data?.convention.signup_rounds.some((round) => round.id === id)) {
+    throw new Response('Not Found', { status: 404 });
+  }
   return data;
 };
 
