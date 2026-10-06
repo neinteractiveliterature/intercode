@@ -58,9 +58,21 @@ class ActiveSupport::TestCase
   include FactoryBot::Syntax::Methods
   include ActionMailer::TestCase::ClearTestDeliveries
 
-  # Minitest is broken with parallelization on Ruby 3.1 - it's expecting methods to be methods but Rails is
-  # deserializing them as strings, so you can't actually see the unexpected error output
-  # parallelize(workers: :number_of_processors)
+  # Set PARALLEL_WORKERS to run tests in that many processes (each with its own copy of the test database).  CI does,
+  # to use all of the cores on its runners; it's left off by default so that a plain `rails test` stays simple.
+  if ENV["PARALLEL_WORKERS"].to_i > 1
+    parallelize(workers: ENV["PARALLEL_WORKERS"].to_i)
+
+    # Each worker writes its own coverage report (coverage/worker-N/coverage.xml) instead of merging with the others as
+    # the run exits, which races the workers finishing.  The main process's coverage.xml has what loading the app
+    # covered (class bodies and so on), so CI merges all of them with scripts/merge_coverage.rb.
+    parallelize_setup do |worker|
+      SimpleCov.command_name "#{SimpleCov.command_name}-#{worker}"
+      SimpleCov.use_merging false
+      SimpleCov.coverage_dir "coverage/worker-#{worker}"
+    end
+    parallelize_teardown { |_worker| SimpleCov.result.format! }
+  end
 
   class TestGraphqlContext
     def self.with_user_con_profile(user_con_profile, **attrs)

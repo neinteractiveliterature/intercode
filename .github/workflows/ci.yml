@@ -93,6 +93,8 @@ jobs:
     env:
       TEST_DATABASE_URL: postgres://postgres:postgres@localhost/intercode_test
       RAILS_ENV: test
+      # the runner has 4 cores; each worker gets its own copy of the test database
+      PARALLEL_WORKERS: 4
     services:
       postgres:
         image: postgres:18
@@ -352,7 +354,7 @@ jobs:
           name: vitest-coverage
           path: vitest-coverage
       - name: Merge coverage reports
-        run: ruby scripts/merge_coverage.rb merged-coverage.xml minitest-coverage/coverage.xml vitest-coverage/cobertura-coverage.xml minitest-system-coverage/coverage.xml
+        run: ruby scripts/merge_coverage.rb merged-coverage.xml minitest-coverage/coverage.xml minitest-coverage/worker-*/coverage.xml vitest-coverage/cobertura-coverage.xml minitest-system-coverage/coverage.xml
       - name: Generate Coverage Report
         uses: clearlyip/code-coverage-report-action@v7
         id: code_coverage_report_action
