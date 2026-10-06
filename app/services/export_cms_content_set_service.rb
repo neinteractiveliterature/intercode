@@ -45,8 +45,8 @@ class ExportCmsContentSetService < CivilService::Service
       inherited_item = inherited_items[item.identifier]
 
       if inherited_item
-        inherited_attrs = storage_adapter.read_item_attrs(inherited_item).stringify_keys.transform_values(&:strip)
-        own_attrs = item.model.attributes.slice(*inherited_attrs.keys).stringify_keys.transform_values(&:strip)
+        inherited_attrs = strip_string_values(storage_adapter.read_item_attrs(inherited_item).stringify_keys)
+        own_attrs = strip_string_values(item.model.attributes.slice(*inherited_attrs.keys).stringify_keys)
 
         if own_attrs == inherited_attrs
           Rails.logger.info(
@@ -58,6 +58,11 @@ class ExportCmsContentSetService < CivilService::Service
 
       export_item(item) { |io| storage_adapter.serialize_item(item, io) }
     end
+  end
+
+  # (attributes include booleans and so on as well as text, and only the text has whitespace to ignore)
+  def strip_string_values(attrs)
+    attrs.transform_values { |value| value.is_a?(String) ? value.strip : value }
   end
 
   def export_metadata
@@ -95,11 +100,11 @@ class ExportCmsContentSetService < CivilService::Service
   end
 
   def serialize_variables
-    cms_parent.cms_variables.order(:key).each_with_object({}) { |variable, hash| hash[variable.key] = variable.value }
+    cms_parent.cms_variables.order(:key).to_h { |variable| [variable.key, variable.value] }
   end
 
   def inherited_content_sets
-    @inherit_content_sets ||= inherit.map { |content_set_name| CmsContentSet.new(name: content_set_name) }
+    @inherited_content_sets ||= inherit.map { |content_set_name| CmsContentSet.new(name: content_set_name) }
   end
 
   def ensure_no_conflicting_folder
