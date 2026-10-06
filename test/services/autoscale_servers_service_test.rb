@@ -10,6 +10,7 @@ class AutoscaleServersServiceTest < ActiveSupport::TestCase
   let(:signup_minimum) { Service::MIN_INSTANCES_FOR_SIGNUP_OPENING }
   let(:now) { Time.zone.local(2026, 6, 1, 12, 0, 0) }
 
+  # (a few dozen attendees is plenty to push the target above the minimum, and each one is a database row)
   def convention_with_attendees(count, **attributes)
     convention = create(:convention, **attributes)
     create_list(:user_con_profile, count, convention:)
@@ -27,7 +28,7 @@ class AutoscaleServersServiceTest < ActiveSupport::TestCase
 
     it "grows with the number of attendees, never less than the minimum for a signup opening" do
       small = Service.scaling_target_for_signup_opening(convention_with_attendees(4))
-      large = Service.scaling_target_for_signup_opening(convention_with_attendees(200))
+      large = Service.scaling_target_for_signup_opening(convention_with_attendees(40))
 
       assert_operator small, :>=, signup_minimum
       assert_operator large, :>, small
@@ -112,7 +113,7 @@ class AutoscaleServersServiceTest < ActiveSupport::TestCase
     end
 
     it "scales up for a convention with a signup round about to open" do
-      convention = convention_with_attendees(300)
+      convention = convention_with_attendees(40)
       open_signups(convention, at: now + 30.minutes)
 
       target = Service.scaling_target_for(now)
@@ -123,7 +124,7 @@ class AutoscaleServersServiceTest < ActiveSupport::TestCase
     end
 
     it "rounds up to a whole number of instances" do
-      convention = convention_with_attendees(300)
+      convention = convention_with_attendees(40)
       open_signups(convention, at: now + 30.minutes)
       exact = Service.scaling_target_for_signup_opening(convention)
 
@@ -131,15 +132,18 @@ class AutoscaleServersServiceTest < ActiveSupport::TestCase
     end
 
     it "never goes above the maximum" do
-      convention = convention_with_attendees(5000)
+      convention = create(:convention)
       open_signups(convention, at: now + 30.minutes)
 
-      assert_equal max_instances, Service.scaling_target_for(now)
+      # (as if there were thousands of attendees, without creating them)
+      Service.stub(:scaling_target_for_signup_opening, 500.0) do
+        assert_equal max_instances, Service.scaling_target_for(now)
+      end
     end
 
     it "uses the busiest of several conventions" do
       small = convention_with_attendees(5)
-      large = convention_with_attendees(300)
+      large = convention_with_attendees(40)
       open_signups(small, at: now + 30.minutes)
       open_signups(large, at: now + 30.minutes)
 
@@ -149,30 +153,30 @@ class AutoscaleServersServiceTest < ActiveSupport::TestCase
     end
 
     it "ignores signup rounds that open further ahead than the lookahead" do
-      convention = convention_with_attendees(300)
+      convention = convention_with_attendees(40)
       open_signups(convention, at: now + Service::SIGNUP_OPENING_LOOKAHEAD_TIME + 1.hour)
 
       assert_equal min_instances, Service.scaling_target_for(now)
     end
 
     it "ignores signup rounds that opened further back than the lookback" do
-      convention = convention_with_attendees(300)
+      convention = convention_with_attendees(40)
       open_signups(convention, at: now - Service::SIGNUP_OPENING_LOOKBACK_TIME - 1.hour)
 
       assert_equal min_instances, Service.scaling_target_for(now)
     end
 
     it "ignores rounds that do not let anyone sign up" do
-      convention = convention_with_attendees(300)
+      convention = convention_with_attendees(40)
       open_signups(convention, at: now + 30.minutes, maximum_event_signups: "not_now")
-      other = convention_with_attendees(300)
+      other = convention_with_attendees(40)
       open_signups(other, at: now + 30.minutes, maximum_event_signups: "not_yet")
 
       assert_equal min_instances, Service.scaling_target_for(now)
     end
 
     it "ignores conventions where signups need to be moderated" do
-      convention = convention_with_attendees(300, signup_mode: "moderated")
+      convention = convention_with_attendees(40, signup_mode: "moderated")
       open_signups(convention, at: now + 30.minutes)
 
       assert_equal min_instances, Service.scaling_target_for(now)
