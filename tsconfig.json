@@ -2,6 +2,7 @@
   "compilerOptions": {
     "outDir": "./dist/", // path to output directory
     "sourceMap": true, // allow sourcemap support
+    "strict": false, // TypeScript 7 defaults this to true; keep the existing behavior
     "strictNullChecks": true, // enable strict null checks as a best practice
     "module": "es2020", // specify module code generation
     "moduleResolution": "Bundler",
@@ -14,8 +15,6 @@
     "noImplicitAny": true,
     "skipLibCheck": true,
     "types": ["vitest/globals", "vite/client"],
-    "incremental": true,
-    "tsBuildInfoFile": ".tsbuildinfo",
     "paths": {
       "*": ["./app/javascript/*"]
     }

@@ -29,7 +29,7 @@ jobs:
       - name: graphql-codegen
         run: yarn run graphql:codegen
       - name: tsc on resulting generated files
-        run: yarn run tsc --noEmit
+        run: yarn run ts:check
   vitest:
     name: Vitest
     runs-on: ubuntu-latest

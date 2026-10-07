@@ -10,7 +10,7 @@ yarn install
 yarn dev
 
 # Type check
-yarn run tsc --noEmit
+yarn run ts:check
 
 # Generate GraphQL types
 yarn graphql:codegen
@@ -43,4 +43,4 @@ Every PR should have one category label and one version bump label. If no versio
 - Check existing patterns in similar files
 - Look for `*.generated.ts` files for type definitions
 - Use TypeScript's "Go to Definition" to understand type structures
-- Run `yarn run tsc --noEmit` to catch type errors early
+- Run `yarn run ts:check` to catch type errors early
