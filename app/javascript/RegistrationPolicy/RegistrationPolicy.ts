@@ -137,3 +137,20 @@ export function withoutGeneratedBucketIds(
     buckets: registrationPolicy.buckets.map(({ generatedId, ...bucket }) => bucket),
   };
 }
+
+// Turns null slot counts (from presets, or from a cleared number input) into 0: the server's slot
+// columns are NOT NULL, and an unlimited bucket doesn't use them anyway. Apply this where a policy
+// is about to be sent to the server.
+export function withDefaultedSlotCounts<PolicyType extends RegistrationPolicy>(
+  registrationPolicy: PolicyType,
+): PolicyType {
+  return {
+    ...registrationPolicy,
+    buckets: registrationPolicy.buckets.map((bucket) => ({
+      ...bucket,
+      minimum_slots: bucket.minimum_slots ?? 0,
+      preferred_slots: bucket.preferred_slots ?? 0,
+      total_slots: bucket.total_slots ?? 0,
+    })),
+  };
+}
