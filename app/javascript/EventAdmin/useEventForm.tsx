@@ -16,6 +16,16 @@ import { getSortedParsedFormItems } from '../Models/Form';
 import { ImageAttachmentConfig } from '../BuiltInFormControls/MarkdownInput';
 
 function buildSingleBucketRegistrationPolicy(totalSlots?: number | null): RegistrationPolicy {
+  // No (valid) total_slots means this event doesn't take signups: an empty policy, no buckets.
+  if (totalSlots == null || !Number.isFinite(totalSlots)) {
+    return {
+      __typename: 'RegistrationPolicy',
+      buckets: [],
+      freeze_no_preference_buckets: false,
+      prevent_no_preference_signups: false,
+    };
+  }
+
   return {
     __typename: 'RegistrationPolicy',
     buckets: [
