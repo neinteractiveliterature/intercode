@@ -1,7 +1,11 @@
 import { useMemo, useState } from 'react';
 import classNames from 'classnames';
 import RegistrationPolicyEditor from '../../RegistrationPolicy/RegistrationPolicyEditor';
-import { withGeneratedBucketIds, withoutGeneratedBucketIds } from '../../RegistrationPolicy/RegistrationPolicy';
+import {
+  withDefaultedSlotCounts,
+  withGeneratedBucketIds,
+  withoutGeneratedBucketIds,
+} from '../../RegistrationPolicy/RegistrationPolicy';
 import { CommonFormItemInputProps } from './CommonFormItemInputProps';
 import { RegistrationPolicyFormItem } from '../../FormAdmin/FormItemUtils';
 import { RegistrationPolicy } from '../../graphqlTypes.generated';
@@ -44,7 +48,7 @@ function RegistrationPolicyItemInput({
   const valueChanged = (newValue: typeof editingPolicy) => {
     onInteract(formItem.identifier);
     setEditingPolicy(newValue);
-    onChange(withoutGeneratedBucketIds(newValue));
+    onChange(withDefaultedSlotCounts(withoutGeneratedBucketIds(newValue)));
   };
 
   return (

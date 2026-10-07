@@ -128,15 +128,25 @@ export function withGeneratedBucketIds(
 }
 
 // The inverse of withGeneratedBucketIds -- generatedId must never be sent to the server, so this
-// is applied before a registration policy leaves the editor for good. It also turns null slot
-// counts (from presets, or from a cleared number input) into 0: the server's slot columns are
-// NOT NULL, and an unlimited bucket doesn't use them anyway.
+// is applied before a registration policy leaves the editor for good.
 export function withoutGeneratedBucketIds(
   registrationPolicy: RegistrationPolicyWithGeneratedBucketIds,
 ): RegistrationPolicy {
   return {
     ...registrationPolicy,
-    buckets: registrationPolicy.buckets.map(({ generatedId, ...bucket }) => ({
+    buckets: registrationPolicy.buckets.map(({ generatedId, ...bucket }) => bucket),
+  };
+}
+
+// Turns null slot counts (from presets, or from a cleared number input) into 0: the server's slot
+// columns are NOT NULL, and an unlimited bucket doesn't use them anyway. Apply this where a policy
+// is about to be sent to the server.
+export function withDefaultedSlotCounts<PolicyType extends RegistrationPolicy>(
+  registrationPolicy: PolicyType,
+): PolicyType {
+  return {
+    ...registrationPolicy,
+    buckets: registrationPolicy.buckets.map((bucket) => ({
       ...bucket,
       minimum_slots: bucket.minimum_slots ?? 0,
       preferred_slots: bucket.preferred_slots ?? 0,
