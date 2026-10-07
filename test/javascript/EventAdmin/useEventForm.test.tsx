@@ -2,7 +2,11 @@ import { renderHook, act } from '@testing-library/react';
 
 import { render } from '../testUtils';
 import { convention, initialEvent, minimalForm } from './formMockData';
-import useEventForm, { EventForm, UseEventFormOptions } from '../../../app/javascript/EventAdmin/useEventForm';
+import useEventForm, {
+  DEFAULT_EVENT_FORM_RESPONSE_ATTRS,
+  EventForm,
+  UseEventFormOptions,
+} from '../../../app/javascript/EventAdmin/useEventForm';
 
 describe('useEventForm', () => {
   const renderEventFormHook = (overrides: Partial<UseEventFormOptions<typeof initialEvent>> = {}) =>
@@ -53,6 +57,35 @@ describe('useEventForm', () => {
       const { result } = renderEventFormHook();
       const [, { event }] = result.current;
       expect(event).toEqual(initialEvent);
+    });
+  });
+
+  describe('registration policy', () => {
+    it('defaults to a policy with no buckets', () => {
+      expect(DEFAULT_EVENT_FORM_RESPONSE_ATTRS.registration_policy.buckets).toEqual([]);
+    });
+
+    it('builds a single limited bucket when total_slots is set', () => {
+      const { result } = renderEventFormHook();
+      act(() => {
+        result.current[0].formResponseValuesChanged({ total_slots: '12' });
+      });
+      const [, { event }] = result.current;
+      const { buckets } = event.form_response_attrs
+        .registration_policy as typeof DEFAULT_EVENT_FORM_RESPONSE_ATTRS.registration_policy;
+      expect(buckets).toHaveLength(1);
+      expect(buckets[0]).toMatchObject({ key: 'signups', slots_limited: true, total_slots: 12 });
+    });
+
+    it('goes back to no buckets when total_slots is not a number', () => {
+      const { result } = renderEventFormHook();
+      act(() => {
+        result.current[0].formResponseValuesChanged({ total_slots: '' });
+      });
+      const [, { event }] = result.current;
+      const { buckets } = event.form_response_attrs
+        .registration_policy as typeof DEFAULT_EVENT_FORM_RESPONSE_ATTRS.registration_policy;
+      expect(buckets).toEqual([]);
     });
   });
 
