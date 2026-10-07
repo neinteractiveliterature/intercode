@@ -21,6 +21,7 @@ describe('EditEventProposal', () => {
   let deletes: { method: string; path: string }[];
   let submitError: Error | undefined;
   let updateError: Error | undefined;
+  let updateDelay: number | undefined;
 
   beforeEach(() => {
     user = userEvent.setup();
@@ -29,6 +30,7 @@ describe('EditEventProposal', () => {
     deletes = [];
     submitError = undefined;
     updateError = undefined;
+    updateDelay = undefined;
   });
 
   const proposalResult = () => buildEventProposalFields();
@@ -55,6 +57,7 @@ describe('EditEventProposal', () => {
                 updateEventProposal: { __typename: 'UpdateEventProposalPayload', event_proposal: proposalResult() },
               },
             },
+      delay: updateDelay,
       maxUsageCount: 50,
     },
     {
@@ -145,9 +148,13 @@ describe('EditEventProposal', () => {
 
   it('does not submit, and shows the error, if the save before it failed', async () => {
     updateError = new Error('Title is too long');
+    // (slow enough that the save is certainly still in flight when Submit is clicked, rather than racing it)
+    updateDelay = 300;
     const { findByRole, findByText, queryByText } = await renderPage();
+    const submitButton = await findByRole('button', { name: 'Submit proposal' });
+    await waitFor(() => expect(updates).toHaveBeenCalled());
 
-    await user.click(await findByRole('button', { name: 'Submit proposal' }));
+    await user.click(submitButton);
 
     expect(await findByText(/Title is too long/)).toBeTruthy();
     expect(submits).not.toHaveBeenCalled();
