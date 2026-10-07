@@ -6,7 +6,7 @@ Frontend tests use Vitest (jsdom) and React Testing Library. They live in `test/
 yarn run vitest run                                   # everything
 yarn run vitest run test/javascript/Store             # one directory or file
 COVERAGE=1 yarn run vitest run                        # with coverage (writes coverage/)
-yarn run tsc --noEmit                                 # tests are type checked too
+yarn run ts:check                                 # tests are type checked too
 ```
 
 ## What kind of test to write

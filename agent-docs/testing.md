@@ -7,7 +7,7 @@ When modifying loader/action patterns:
 1. Ensure loaders use `LoaderFunction<RouterContextProvider>`
 2. Ensure actions use `ActionFunction<RouterContextProvider>`
 3. Always get the client from context in loaders/actions
-4. Run `yarn run tsc --noEmit` to check for TypeScript errors
+4. Run `yarn run ts:check` to check for TypeScript errors
 5. Test actual navigation flows to ensure data loading works
 
 ### Running Minitest in parallel
