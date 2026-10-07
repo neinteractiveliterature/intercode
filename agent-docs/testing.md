@@ -10,6 +10,22 @@ When modifying loader/action patterns:
 4. Run `yarn run tsc --noEmit` to check for TypeScript errors
 5. Test actual navigation flows to ensure data loading works
 
+### Running Minitest in parallel
+
+Set `PARALLEL_WORKERS` to run the suite in that many processes, each with its own copy of the test database
+(`intercode_test-0`, `-1`, ...). CI uses 4, which cuts the Minitest run from about 4½ minutes to about 1½.
+
+```sh
+PARALLEL_WORKERS=4 bin/rails test
+```
+
+- On macOS the `pg` gem can crash (a segfault in `connect_start`) when the workers fork. Set
+  `PGGSSENCMODE=disable OBJC_DISABLE_INITIALIZE_FORK_SAFETY=YES` as well.
+- Each worker writes its own coverage report to `coverage/worker-N/coverage.xml`, and the main process's
+  `coverage/coverage.xml` has what loading the app covered. Merge them with
+  `ruby scripts/merge_coverage.rb merged.xml coverage/coverage.xml coverage/worker-*/coverage.xml` (CI's coverage report
+  job does). The merged result is line-for-line identical to a single-process run's.
+
 ## End-to-End Testing with Playwright
 
 Use Playwright (and Rails system tests) sparingly: browser-driven tests have been flaky in this project, so prefer a component test (see [Frontend Testing](frontend-testing.md)) wherever it gets close enough. Reserve end-to-end tests for the few flows that really need a real browser.
