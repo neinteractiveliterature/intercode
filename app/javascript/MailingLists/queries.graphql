@@ -39,13 +39,18 @@ query EventProposersQuery {
   }
 }
 
-query TeamMembersMailingListQuery {
+query TeamMembersMailingListQuery($eventCategoryIds: [ID!]) {
   convention: conventionByRequestHost {
     id
     name
 
+    event_categories {
+      id
+      name
+    }
+
     mailing_lists {
-      team_members {
+      team_members(eventCategoryIds: $eventCategoryIds) {
         ...MailingListsResultFields
       }
     }

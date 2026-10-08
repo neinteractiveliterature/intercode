@@ -4598,13 +4598,56 @@ type LiquidAssign {
   name: String!
 }
 
+"""
+Mailing lists that convention staff can use to contact groups of people at this convention.
+"""
 type MailingLists {
+  """
+  The owners of event proposals that have been submitted and not rejected or withdrawn.
+  """
   event_proposers: MailingListsResult!
-  team_members: MailingListsResult!
+
+  """
+  The team members of active events, or the event's own email address for events that have one set as their
+  convention mail destination.
+  """
+  team_members(
+    """
+    If specified, only includes team members of events in these event categories
+    """
+    eventCategoryIds: [ID!]
+  ): MailingListsResult!
+
+  """
+  Everyone in this convention who has a ticket.
+  """
   ticketed_attendees: MailingListsResult!
+
+  """
+  People who are eligible to have a bio but haven't written one yet.
+  """
   users_with_pending_bio: MailingListsResult!
+
+  """
+  For each run that has waitlisted signups, the people who are on its waitlist.
+  """
   waitlists: [MailingListsWaitlistsResult!]!
-  whos_free(finish: Date!, start: Date!): MailingListsResult!
+
+  """
+  Ticketed attendees who have opted in to "who's free" emails and aren't signed up for anything during the given
+  time span.
+  """
+  whos_free(
+    """
+    The end of the time span to check
+    """
+    finish: Date!
+
+    """
+    The start of the time span to check
+    """
+    start: Date!
+  ): MailingListsResult!
 }
 
 type MailingListsResult {

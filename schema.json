@@ -18405,13 +18405,13 @@
         {
           "kind": "OBJECT",
           "name": "MailingLists",
-          "description": null,
+          "description": "Mailing lists that convention staff can use to contact groups of people at this convention.",
           "interfaces": [],
           "possibleTypes": null,
           "fields": [
             {
               "name": "event_proposers",
-              "description": null,
+              "description": "The owners of event proposals that have been submitted and not rejected or withdrawn.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -18427,7 +18427,7 @@
             },
             {
               "name": "team_members",
-              "description": null,
+              "description": "The team members of active events, or the event's own email address for events that have one set as their\nconvention mail destination.\n",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -18439,11 +18439,32 @@
               },
               "isDeprecated": false,
               "deprecationReason": null,
-              "args": []
+              "args": [
+                {
+                  "name": "eventCategoryIds",
+                  "description": "If specified, only includes team members of events in these event categories",
+                  "type": {
+                    "kind": "LIST",
+                    "name": null,
+                    "ofType": {
+                      "kind": "NON_NULL",
+                      "name": null,
+                      "ofType": {
+                        "kind": "SCALAR",
+                        "name": "ID",
+                        "ofType": null
+                      }
+                    }
+                  },
+                  "defaultValue": null,
+                  "isDeprecated": false,
+                  "deprecationReason": null
+                }
+              ]
             },
             {
               "name": "ticketed_attendees",
-              "description": null,
+              "description": "Everyone in this convention who has a ticket.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -18459,7 +18480,7 @@
             },
             {
               "name": "users_with_pending_bio",
-              "description": null,
+              "description": "People who are eligible to have a bio but haven't written one yet.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -18475,7 +18496,7 @@
             },
             {
               "name": "waitlists",
-              "description": null,
+              "description": "For each run that has waitlisted signups, the people who are on its waitlist.",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -18499,7 +18520,7 @@
             },
             {
               "name": "whos_free",
-              "description": null,
+              "description": "Ticketed attendees who have opted in to \"who's free\" emails and aren't signed up for anything during the given\ntime span.\n",
               "type": {
                 "kind": "NON_NULL",
                 "name": null,
@@ -18514,7 +18535,7 @@
               "args": [
                 {
                   "name": "finish",
-                  "description": null,
+                  "description": "The end of the time span to check",
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
@@ -18530,7 +18551,7 @@
                 },
                 {
                   "name": "start",
-                  "description": null,
+                  "description": "The start of the time span to check",
                   "type": {
                     "kind": "NON_NULL",
                     "name": null,
