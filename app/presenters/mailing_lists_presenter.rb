@@ -12,8 +12,8 @@ class MailingListsPresenter
   class WaitlistsResult < Result
     attr_reader :run
 
-    def initialize(run, *args)
-      super(*args)
+    def initialize(run, *)
+      super(*)
       @run = run
     end
   end
@@ -50,8 +50,9 @@ class MailingListsPresenter
     )
   end
 
-  def team_members
+  def team_members(event_category_ids: nil)
     events = convention.events.active.includes(team_members: { user_con_profile: :user }).order_by_title
+    events = events.where(event_category_id: event_category_ids) if event_category_ids.present?
 
     emails_by_event = events.index_with { |event| team_member_emails_for_event(event) }.to_h
 

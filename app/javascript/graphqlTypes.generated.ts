@@ -3458,17 +3458,37 @@ export type LiquidAssign = {
   name: Scalars['String']['output'];
 };
 
+/** Mailing lists that convention staff can use to contact groups of people at this convention. */
 export type MailingLists = {
   __typename: 'MailingLists';
+  /** The owners of event proposals that have been submitted and not rejected or withdrawn. */
   event_proposers: MailingListsResult;
+  /**
+   * The team members of active events, or the event's own email address for events that have one set as their
+   * convention mail destination.
+   */
   team_members: MailingListsResult;
+  /** Everyone in this convention who has a ticket. */
   ticketed_attendees: MailingListsResult;
+  /** People who are eligible to have a bio but haven't written one yet. */
   users_with_pending_bio: MailingListsResult;
+  /** For each run that has waitlisted signups, the people who are on its waitlist. */
   waitlists: Array<MailingListsWaitlistsResult>;
+  /**
+   * Ticketed attendees who have opted in to "who's free" emails and aren't signed up for anything during the given
+   * time span.
+   */
   whos_free: MailingListsResult;
 };
 
 
+/** Mailing lists that convention staff can use to contact groups of people at this convention. */
+export type MailingListsTeam_MembersArgs = {
+  eventCategoryIds?: InputMaybe<Array<Scalars['ID']['input']>>;
+};
+
+
+/** Mailing lists that convention staff can use to contact groups of people at this convention. */
 export type MailingListsWhos_FreeArgs = {
   finish: Scalars['Date']['input'];
   start: Scalars['Date']['input'];
