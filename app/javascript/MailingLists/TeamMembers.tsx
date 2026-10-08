@@ -1,12 +1,12 @@
 import { useMemo } from 'react';
-import { ChoiceSet } from '@neinteractiveliterature/litform';
+import { FormGroupWithLabel } from '@neinteractiveliterature/litform';
+import Select from 'react-select';
 import { LoaderFunction, RouterContextProvider, useLoaderData, useSearchParams } from 'react-router';
 
 import TabbedMailingList from './TabbedMailingList';
 import usePageTitle from '../usePageTitle';
 import { TeamMembersMailingListQueryData, TeamMembersMailingListQueryDocument } from './queries.generated';
 import { apolloClientContext } from '../AppContexts';
-import humanize from '../humanize';
 
 const EVENT_CATEGORY_PARAM = 'event_category';
 
@@ -26,25 +26,34 @@ function TeamMembers() {
   usePageTitle('Event team members');
 
   const selectedCategoryIds = searchParams.getAll(EVENT_CATEGORY_PARAM);
-  const categoryChoices = useMemo(
-    () => data.convention.event_categories.map((category) => ({ label: humanize(category.name), value: category.id })),
-    [data.convention.event_categories],
+  const selectedCategories = useMemo(
+    () => data.convention.event_categories.filter((category) => selectedCategoryIds.includes(category.id)),
+    [data.convention.event_categories, selectedCategoryIds],
   );
 
   return (
     <>
       <h1 className="mb-4">Mail to all event team members</h1>
 
-      <fieldset className="mb-4">
-        <legend className="col-form-label p-0">Limit to events in these categories</legend>
-        <small className="text-muted">Leave all unchecked to include every category.</small>
-        <ChoiceSet
-          choices={categoryChoices}
-          value={selectedCategoryIds}
-          onChange={(categoryIds: string[]) => setSearchParams({ [EVENT_CATEGORY_PARAM]: categoryIds })}
-          multiple
-        />
-      </fieldset>
+      <div className="mb-4">
+        <FormGroupWithLabel label="Limit to events in these categories">
+          {(id) => (
+            <Select
+              inputId={id}
+              isMulti
+              options={data.convention.event_categories}
+              value={selectedCategories}
+              getOptionValue={(category) => category.id}
+              getOptionLabel={(category) => category.name}
+              placeholder="All event categories"
+              onChange={(categories) =>
+                setSearchParams({ [EVENT_CATEGORY_PARAM]: categories.map((category) => category.id) })
+              }
+              styles={{ menu: (provided) => ({ ...provided, zIndex: 25 }) }}
+            />
+          )}
+        </FormGroupWithLabel>
+      </div>
 
       <TabbedMailingList
         emails={data.convention.mailing_lists.team_members.emails}
