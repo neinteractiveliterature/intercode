@@ -53,7 +53,9 @@ function TeamMemberForm({ event, disabled, value, onChange }: TeamMemberFormProp
       label: (
         <>
           {t('events.teamMemberAdmin.showEmail.label')}{' '}
-          <HelpPopover iconSet="bootstrap-icons">{t('events.teamMemberAdmin.showEmail.helpPopover')}</HelpPopover>
+          <HelpPopover iconSet="bootstrap-icons">
+            {t('events.teamMemberAdmin.showEmail.helpPopover', { teamMemberName })}
+          </HelpPopover>
         </>
       ),
       value: value.show_email,
