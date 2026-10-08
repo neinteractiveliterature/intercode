@@ -995,6 +995,7 @@
       "nameHeader": "Name",
       "newHeader": "Add {{ teamMemberName }}",
       "newPageTitle": "Add {{ teamMemberName }} - {{ eventTitle }}",
+      "noProvidableTickets": "{{ eventTitle }} is not able to provide any {{ ticketNamePlural }}.",
       "nonEventProvidedTicketDescription": "{{ name }} has a {{ ticketType }} {{ ticketName }}.",
       "provideTicketButton": "Provide {{ ticketName }}",
       "provideTicketChoice_one": "Provide {{ ticketType }} {{ ticketName }} ({{ count }} remaining)",

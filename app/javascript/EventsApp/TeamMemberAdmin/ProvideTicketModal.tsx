@@ -56,14 +56,14 @@ function ProvideTicketModal(): React.JSX.Element {
 
   const { convention } = data;
 
-  if (getProvidableTicketTypes(data.convention).length < 1) {
-    return <></>;
-  }
-
   const mutationInProgress = navigation.state === 'submitting';
   const onClose = () => {
     navigate(`/events/${eventId}/team_members`);
   };
+
+  const hasTicket = teamMember?.user_con_profile.ticket != null;
+  const canProvideTickets = getProvidableTicketTypes(convention).length > 0;
+  const showCloseOnly = hasTicket || !canProvideTickets;
 
   return (
     <Modal visible>
@@ -78,7 +78,7 @@ function ProvideTicketModal(): React.JSX.Element {
                 <TicketingStatusDescription userConProfile={teamMember.user_con_profile} convention={convention} />
               </p>
 
-              {teamMember && !teamMember.user_con_profile.ticket ? (
+              {!hasTicket && canProvideTickets ? (
                 <ProvidableTicketTypeSelection
                   convention={convention}
                   value={ticketTypeId}
@@ -86,13 +86,22 @@ function ProvideTicketModal(): React.JSX.Element {
                   disabled={mutationInProgress}
                 />
               ) : null}
+
+              {!hasTicket && !canProvideTickets ? (
+                <p>
+                  {t('events.teamMemberAdmin.noProvidableTickets', {
+                    eventTitle: convention.event.title,
+                    ticketNamePlural: convention.ticketNamePlural,
+                  })}
+                </p>
+              ) : null}
             </>
           ) : null}
 
           <ErrorDisplay graphQLError={error} />
         </div>
         <div className="modal-footer">
-          {teamMember && teamMember.user_con_profile.ticket ? (
+          {showCloseOnly ? (
             <button type="button" className="btn btn-primary" onClick={onClose}>
               {t('buttons.ok')}
             </button>
