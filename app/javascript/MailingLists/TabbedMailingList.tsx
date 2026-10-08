@@ -52,10 +52,13 @@ function TabbedMailingList({ emails, id, metadataFields, csvFilename }: TabbedMa
                 </tr>
               </thead>
               <tbody>
-                {emails.map((email) => {
+                {emails.map((email, index) => {
                   const metadata = JSON.parse(email.metadata_json);
                   return (
-                    <tr key={email.email}>
+                    // the same person can be listed more than once (e.g. a team member on several events),
+                    // so the address alone isn't a unique key
+                     
+                    <tr key={`${index}-${email.email}`}>
                       <td>
                         <a href={`mailto:${email.formatted_address}`}>{email.email}</a>
                       </td>
