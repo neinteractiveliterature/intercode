@@ -27,10 +27,10 @@ GIT
 
 GIT
   remote: https://github.com/ruby/prettyprint.git
-  revision: 9248e106c2ea8dbd5f98b18a15876cc96502fe86
-  tag: v0.2.0
+  revision: d9a7ffec2dc009e5518dbcf7841bd792ea94bd96
+  tag: v0.2.1
   specs:
-    prettyprint (0.2.0)
+    prettyprint (0.2.1)
 
 GEM
   remote: https://rubygems.org/
