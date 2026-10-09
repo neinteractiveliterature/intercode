@@ -427,8 +427,8 @@ GEM
       ast (~> 2.4.1)
       racc
     parslet (2.0.0)
-    pg (1.6.3-arm64-darwin)
-    pg (1.6.3-x86_64-linux)
+    pg (1.7.0-arm64-darwin)
+    pg (1.7.0-x86_64-linux)
     pg-aws_rds_iam (0.8.0)
       aws-sdk-rds (~> 1.0)
       pg (~> 1.3)
