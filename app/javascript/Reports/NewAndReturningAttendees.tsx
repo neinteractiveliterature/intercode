@@ -11,12 +11,12 @@ import sortBy from 'lodash/sortBy';
 import { joinReact } from 'RenderingUtils';
 import { Convention } from 'graphqlTypes.generated';
 import classNames from 'classnames';
+import { DateTime } from 'luxon';
+import { useAppDateTimeFormat } from 'TimeUtils';
 
 export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<NewAndReturningAttendeesQueryData>({
-    query: NewAndReturningAttendeesQueryDocument,
-  });
+  const { data } = await client.query({ query: NewAndReturningAttendeesQueryDocument });
   return data;
 };
 
@@ -41,6 +41,10 @@ function AttendeeRow({ attendee }: { attendee: AttendeeProfile }) {
       ),
     [attendee.attended_conventions],
   );
+  const ticketCreatedAt = attendee.current_convention_user_con_profile.ticket
+    ? DateTime.fromISO(attendee.current_convention_user_con_profile.ticket.created_at)
+    : undefined;
+  const fmt = useAppDateTimeFormat();
 
   return (
     <tr>
@@ -54,6 +58,8 @@ function AttendeeRow({ attendee }: { attendee: AttendeeProfile }) {
           {attendee.current_convention_user_con_profile.email}
         </a>
       </td>
+      <td>{ticketCreatedAt && fmt(ticketCreatedAt, 'compactDateTime')}</td>
+      <td>{attendedConventions.length}</td>
       <td>
         {attendedConventions.length <= 3 || showAll ? (
           joinReact(
@@ -122,9 +128,20 @@ function SortableHeader<ColumnName extends string>({
   );
 }
 
-function AttendeeTable({ attendees }: { attendees: AttendeeProfile[] }) {
+function AttendeeTable({
+  attendees,
+  conventionName,
+  ticketName,
+}: {
+  attendees: AttendeeProfile[];
+  conventionName: string;
+  ticketName: string;
+}) {
   const { t } = useTranslation();
-  const [sortColumn, setSortColumn] = useState<'name' | 'email' | 'conventions'>('name');
+  const fmt = useAppDateTimeFormat();
+  const [sortColumn, setSortColumn] = useState<
+    'name' | 'email' | 'conventions' | 'conventionsCount' | 'currentConTicketCreatedAt'
+  >('name');
   const [reverse, setReverse] = useState(false);
 
   const attendeesSorted = useMemo(() => {
@@ -141,6 +158,16 @@ function AttendeeTable({ attendees }: { attendees: AttendeeProfile[] }) {
           undefined,
           { sensitivity: 'base' },
         );
+      } else if (sortColumn === 'currentConTicketCreatedAt') {
+        const ticketCreatedAtMillis = (attendee: AttendeeProfile) => {
+          const createdAt = attendee.current_convention_user_con_profile.ticket?.created_at;
+          return createdAt ? DateTime.fromISO(createdAt).toMillis() : 0;
+        };
+        return ticketCreatedAtMillis(a) - ticketCreatedAtMillis(b);
+      } else if (sortColumn === 'conventions') {
+        const conventionNames = (attendee: AttendeeProfile) =>
+          attendee.attended_conventions.map((c) => c.name).join(', ');
+        return conventionNames(a).localeCompare(conventionNames(b), undefined, { sensitivity: 'base' });
       } else {
         return a.attended_conventions.length - b.attended_conventions.length;
       }
@@ -158,17 +185,23 @@ function AttendeeTable({ attendees }: { attendees: AttendeeProfile[] }) {
       [
         t('admin.reports.newAndReturningAttendees.nameHeader'),
         t('admin.reports.newAndReturningAttendees.emailHeader'),
+        t('admin.reports.newAndReturningAttendees.currentConTicketCreatedHeader', { conventionName, ticketName }),
+        t('admin.reports.newAndReturningAttendees.conventionsCountHeader'),
         t('admin.reports.newAndReturningAttendees.conventionsHeader'),
       ],
       ...attendeesSorted.map((attendee) => [
         attendee.current_convention_user_con_profile.name_inverted,
         attendee.current_convention_user_con_profile.email,
+        attendee.current_convention_user_con_profile.ticket
+          ? fmt(DateTime.fromISO(attendee.current_convention_user_con_profile.ticket.created_at), 'compactDateTime')
+          : '',
         attendee.attended_conventions.length,
+        attendee.attended_conventions.map((c) => c.name).join(', '),
       ]),
     ];
     const blob = new Blob([csvStringify(rows)], { type: 'text/csv; charset=utf-8' });
     saveAs(blob, 'attendance_history.csv');
-  }, [attendeesSorted, t]);
+  }, [attendeesSorted, t, fmt, conventionName, ticketName]);
 
   return (
     <>
@@ -197,6 +230,27 @@ function AttendeeTable({ attendees }: { attendees: AttendeeProfile[] }) {
               setReverse={setReverse}
             >
               {t('admin.reports.newAndReturningAttendees.emailHeader')}
+            </SortableHeader>
+            <SortableHeader
+              columnName="currentConTicketCreatedAt"
+              sortColumn={sortColumn}
+              reverse={reverse}
+              setSortColumn={setSortColumn}
+              setReverse={setReverse}
+            >
+              {t('admin.reports.newAndReturningAttendees.currentConTicketCreatedHeader', {
+                conventionName,
+                ticketName,
+              })}
+            </SortableHeader>
+            <SortableHeader
+              columnName="conventionsCount"
+              sortColumn={sortColumn}
+              reverse={reverse}
+              setSortColumn={setSortColumn}
+              setReverse={setReverse}
+            >
+              {t('admin.reports.newAndReturningAttendees.conventionsCountHeader')}
             </SortableHeader>
             <SortableHeader
               columnName="conventions"
@@ -251,7 +305,11 @@ function NewAndReturningAttendees() {
         </div>
       </div>
 
-      <AttendeeTable attendees={organization_attendance_counts} />
+      <AttendeeTable
+        attendees={organization_attendance_counts}
+        conventionName={data.convention.name}
+        ticketName={data.convention.ticket_name}
+      />
     </>
   );
 }
