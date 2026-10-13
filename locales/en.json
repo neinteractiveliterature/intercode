@@ -266,7 +266,9 @@
         "volunteerEventSignups": "Volunteer event signups"
       },
       "newAndReturningAttendees": {
+        "conventionsCountHeader": "Number of conventions",
         "conventionsHeader": "Conventions",
+        "currentConTicketCreatedHeader": "{{ conventionName }} {{ ticketName }} creation date",
         "emailHeader": "Email",
         "exportCsvButton": "Export CSV",
         "moreConventions_one": "and {{ count }} more",

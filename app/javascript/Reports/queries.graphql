@@ -12,6 +12,8 @@ query ReportsMenuQuery {
 query NewAndReturningAttendeesQuery {
   convention: conventionByRequestHost {
     id
+    name
+    ticket_name
 
     reports {
       new_and_returning_attendees {
@@ -21,6 +23,10 @@ query NewAndReturningAttendeesQuery {
             id
             name_inverted
             email
+            ticket {
+              id
+              created_at
+            }
           }
           attended_conventions {
             id
