@@ -4210,9 +4210,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-eslint/eslint-plugin@npm:4.4.1":
-  version: 4.4.1
-  resolution: "@graphql-eslint/eslint-plugin@npm:4.4.1"
+"@graphql-eslint/eslint-plugin@npm:4.4.2":
+  version: 4.4.2
+  resolution: "@graphql-eslint/eslint-plugin@npm:4.4.2"
   dependencies:
     "@graphql-tools/code-file-loader": "npm:^8.0.0"
     "@graphql-tools/graphql-tag-pluck": "npm:^8.3.4"
@@ -4232,7 +4232,7 @@ __metadata:
       optional: true
     json-schema-to-ts:
       optional: true
-  checksum: 10c0/a9ee947037b66651be1b9a4470928846ff8f621c86587546c48aeecbeb970815c83006cd75ada6f370624a0a23a75e95886dded2fbbda486b176942cbd1b110f
+  checksum: 10c0/cd6429096d32424b3ad7cc1179acf60f0b2908cabf2d55f57e60019148097aa7f5ea078be922d326a89757f73e25ca26cec482ffb86c32118a4c16cdc154fa68
   languageName: node
   linkType: hard
 
@@ -20790,7 +20790,7 @@ __metadata:
     "@graphql-codegen/typescript": "npm:6.0.2"
     "@graphql-codegen/typescript-operations": "npm:6.0.5"
     "@graphql-codegen/typescript-react-apollo": "npm:4.4.2"
-    "@graphql-eslint/eslint-plugin": "npm:4.4.1"
+    "@graphql-eslint/eslint-plugin": "npm:4.4.2"
     "@graphql-typed-document-node/core": "npm:^3.2.0"
     "@juggle/resize-observer": "npm:3.4.0"
     "@lezer/common": "npm:1.5.3"
