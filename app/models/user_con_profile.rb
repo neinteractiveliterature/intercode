@@ -40,8 +40,7 @@
 #
 # Indexes
 #
-#  index_user_con_profiles_on_convention_id_and_lottery_number  (convention_id,lottery_number) UNIQUE
-#  index_user_con_profiles_on_convention_id_and_user_id         (convention_id,user_id) UNIQUE
+#  index_user_con_profiles_on_convention_id_and_user_id  (convention_id,user_id) UNIQUE
 #
 # Foreign Keys
 #

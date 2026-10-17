@@ -72,7 +72,7 @@ class ContentCloners::ContentClonerBase
         notification_destination.conditions.to_h do |condition_key, condition_value|
           case condition_key.to_sym
           when :event_category
-            [:event_category, @id_maps.fetch(:event_categories)[condition_value]]
+            [:event_category, @id_maps.fetch(:event_categories)[condition_value]&.id]
           else
             [condition_key, condition_value]
           end
