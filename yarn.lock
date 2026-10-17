@@ -7366,10 +7366,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/rails__activestorage@npm:8.0.1":
-  version: 8.0.1
-  resolution: "@types/rails__activestorage@npm:8.0.1"
-  checksum: 10c0/7ebcb2bd7b448164ecb2b1fc70b47a1d09e8199a3ee7b16fa6eefdb37e0f344d457446fc3cf556a71b544ce42564d013ef496b469d4bf7cbd8c12b2e0b89ba92
+"@types/rails__activestorage@npm:8.0.2":
+  version: 8.0.2
+  resolution: "@types/rails__activestorage@npm:8.0.2"
+  checksum: 10c0/c7552199d681d6f29cbc7676f1bd605299c49305a965eb0c9ef8b39e4ba864bbff142256a94676468a1e81a1f9fb99c89c098b6e612d6e43e3d364853a19b243
   languageName: node
   linkType: hard
 
@@ -20832,7 +20832,7 @@ __metadata:
     "@types/pnpapi": "npm:^0.0.5"
     "@types/punycode": "npm:2.1.4"
     "@types/qs": "npm:^6"
-    "@types/rails__activestorage": "npm:8.0.1"
+    "@types/rails__activestorage": "npm:8.0.2"
     "@types/react": "npm:19.2.17"
     "@types/react-click-outside-hook": "npm:1.0.3"
     "@types/react-color": "npm:3.0.13"
