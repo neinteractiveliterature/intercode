@@ -34,6 +34,7 @@ class NotificationDestination < ApplicationRecord
 
   validate :ensure_dynamic_destination_allowed_for_source
   validate :ensure_all_conditions_allowed_for_source
+  validate :ensure_event_category_condition_is_ids
 
   def user_con_profiles(notifier)
     return [] unless all_conditions_match?(notifier)
@@ -89,6 +90,15 @@ class NotificationDestination < ApplicationRecord
     errors.add :conditions,
                "#{invalid_conditions.to_sentence} not allowed for this source. \
 Valid options: #{source.allowed_conditions.to_sentence}"
+  end
+
+  def ensure_event_category_condition_is_ids
+    return unless conditions&.key?("event_category")
+
+    ids = Array.wrap(conditions["event_category"])
+    return if ids.present? && ids.all?(Integer)
+
+    errors.add :conditions, "event_category must be an event category ID or an array of event category IDs"
   end
 
   def email_for_user_con_profile(user_con_profile)

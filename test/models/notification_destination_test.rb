@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
@@ -29,7 +30,23 @@
 require "test_helper"
 
 class NotificationDestinationTest < ActiveSupport::TestCase
-  # test "the truth" do
-  #   assert true
-  # end
+  let(:convention) { create(:convention, :with_notification_templates) }
+  let(:event_category) { create(:event_category, convention:) }
+  let(:staff_position) { create(:staff_position, convention:) }
+  let(:notification_template) { convention.notification_templates.find_by!(event_key: "event_proposals/new_proposal") }
+
+  def build_destination(value)
+    notification_template.notification_destinations.new(staff_position:, conditions: { event_category: value })
+  end
+
+  it "accepts an event category ID or array of IDs as an event_category condition" do
+    assert build_destination(event_category.id).valid?
+    assert build_destination([event_category.id]).valid?
+  end
+
+  it "rejects non-ID values for the event_category condition" do
+    [nil, [], event_category.attributes, event_category.id.to_s].each do |value|
+      assert_not build_destination(value).valid?, "expected #{value.inspect} to be invalid"
+    end
+  end
 end

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 require "test_helper"
 
 class CloneConventionServiceTest < ActiveSupport::TestCase
@@ -31,7 +32,7 @@ class CloneConventionServiceTest < ActiveSupport::TestCase
     assert_equal Time.utc(2018, 10, 28, 18, 0, 0), result.convention.starts_at
     assert_equal Time.utc(2018, 10, 30, 18, 0, 0), result.convention.ends_at
     assert_equal "no", result.convention.show_schedule
-    refute result.convention.accepting_proposals
+    assert_not result.convention.accepting_proposals
     assert_equal 500, result.convention.maximum_tickets
     assert_equal "penguin", result.convention.ticket_name
     assert_equal "America/Chicago", result.convention.timezone_name
@@ -43,7 +44,7 @@ class CloneConventionServiceTest < ActiveSupport::TestCase
   end
 
   it "clones signup rounds" do
-    convention.signup_rounds.first.update!(executed_at: Time.now)
+    convention.signup_rounds.first.update!(executed_at: Time.zone.now)
     create(:signup_round, convention:, start: convention.starts_at - 30.days, maximum_event_signups: "unlimited")
 
     result = service.call!
@@ -133,7 +134,7 @@ class CloneConventionServiceTest < ActiveSupport::TestCase
     assert_equal 1, result.convention.staff_positions.count
     assert_equal staff_position.name, result.convention.staff_positions.first.name
     assert result.convention.staff_positions.first.permissions.first.model
-    refute_equal(
+    assert_not_equal(
       staff_position.permissions.first.model,
       result.convention.staff_positions.first.permissions.first.model
     )
@@ -161,6 +162,23 @@ class CloneConventionServiceTest < ActiveSupport::TestCase
     assert result.success?
     assert_equal 1, result.convention.user_activity_alerts.count
     assert_equal 1, result.convention.user_activity_alerts.first.notification_destinations.count
+  end
+
+  it "maps event category conditions on notification destinations to the cloned category IDs" do
+    convention = create(:convention, :with_notification_templates)
+    event_category = create(:event_category, convention:)
+    staff_position = create(:staff_position, convention:)
+    template = convention.notification_templates.find_by!(event_key: "event_proposals/new_proposal")
+    template.notification_destinations.create!(staff_position:, conditions: { event_category: event_category.id })
+
+    result = CloneConventionService.new(source_convention: convention, new_convention_attributes:).call!
+    result.convention.reload
+    assert result.success?
+
+    cloned_category = result.convention.event_categories.first
+    cloned_template = result.convention.notification_templates.find_by!(event_key: "event_proposals/new_proposal")
+    conditions = cloned_template.notification_destinations.filter_map(&:conditions)
+    assert_equal [{ "event_category" => cloned_category.id }], conditions
   end
 
   it "does not clone coupons" do
