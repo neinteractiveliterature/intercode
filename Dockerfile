@@ -68,8 +68,10 @@ USER root
 # shared-mime-info: Rails dependency
 # libpq5: pg gem dependency
 # xz-utils: installed temporarily to extract the node tarball, then removed
+# ca-certificates: listed explicitly so an exact-tag base image (e.g. ruby:4.0.6-slim) that stopped receiving
+#   rebuilds still gets the current CA bundle from Debian security updates
 RUN apt-get update \
-  && apt-get install -y --no-install-recommends iproute2 curl libvips42 poppler-utils xz-utils libjemalloc2 shared-mime-info libpq5 gosu \
+  && apt-get install -y --no-install-recommends iproute2 curl libvips42 poppler-utils xz-utils libjemalloc2 shared-mime-info libpq5 gosu ca-certificates \
   && mkdir /opt/node \
   && cd /opt/node \
   && curl https://nodejs.org/dist/v${NODE_VERSION}/node-v${NODE_VERSION}-linux-$(echo ${TARGETARCH} | sed 's/amd64/x64/').tar.xz | tar xJ --strip-components=1 \
