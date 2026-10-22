@@ -32,6 +32,10 @@
         "match": [{ "categoryName": "Con services" }, { "categoryName": "Hotel services" }]
       },
       {
+        "id": "ongoing",
+        "match": [{ "categoryName": "Ongoing event" }]
+      },
+      {
         "id": "volunteerEvents",
         "match": [{ "categoryName": "Volunteer event" }]
       }
@@ -83,6 +87,10 @@
       {
         "id": "conServices",
         "match": [{ "categoryName": "Con services" }, { "categoryName": "Hotel services" }]
+      },
+      {
+        "id": "ongoing",
+        "match": [{ "categoryName": "Ongoing event" }]
       },
       {
         "id": "volunteerEvents",
