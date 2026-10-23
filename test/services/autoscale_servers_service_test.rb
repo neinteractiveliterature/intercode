@@ -259,7 +259,10 @@ class AutoscaleServersServiceTest < ActiveSupport::TestCase
     it "skips the run without calling the adapter when another run holds the lock" do
       # (advisory locks are re-entrant within one connection, so simulate another session holding it)
       result =
-        ActiveRecord::Base.stub(:with_advisory_lock, ->(*, **) { false }) { run_service_with(min_instances, 1, :small) }
+        ActiveRecord::Base.stub(
+          :with_advisory_lock_result,
+          ->(*, **) { WithAdvisoryLock::Result.new(lock_was_acquired: false) }
+        ) { run_service_with(min_instances, 1, :small) }
 
       assert result.success?
       adapter.verify
@@ -271,14 +274,26 @@ class AutoscaleServersServiceTest < ActiveSupport::TestCase
       lock_options = nil
 
       ActiveRecord::Base.stub(
-        :with_advisory_lock,
+        :with_advisory_lock_result,
         ->(name, **options, &block) do
           lock_options = options.merge(name:)
-          block.call
+          WithAdvisoryLock::Result.new(lock_was_acquired: true, result: block.call)
         end
       ) { run_service_with(min_instances, 1, :small) }
 
       assert_equal({ name: Service::ADVISORY_LOCK_NAME, timeout_seconds: 0 }, lock_options)
+    end
+
+    it "does not report a skipped run when the run itself returns nothing" do
+      expect_balance_check
+      adapter.expect(:apply_instance_counts, nil, [Array])
+      messages = []
+
+      Rails
+        .logger
+        .stub(:info, ->(message = nil, *) { messages << message }) { run_service_with(min_instances, 1, :small) }
+
+      assert_not(messages.any? { |message| message.to_s.include?("skipping") })
     end
 
     it "adds a performance web server alongside the regular ones when a CPU balance is about to run out" do

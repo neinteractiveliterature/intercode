@@ -134,9 +134,10 @@ class AutoscaleServersService < CivilService::Service
   # Skip rather than wait if another run is in progress: this task can be delivered to more than one worker (and SQS
   # delivers at least once), and the next scheduled run re-evaluates from scratch anyway
   def inner_call
-    acquired = ActiveRecord::Base.with_advisory_lock(ADVISORY_LOCK_NAME, timeout_seconds: 0) { apply_scaling_targets }
+    lock_result =
+      ActiveRecord::Base.with_advisory_lock_result(ADVISORY_LOCK_NAME, timeout_seconds: 0) { apply_scaling_targets }
 
-    Rails.logger.info "Another autoscale run is in progress, skipping this one" unless acquired
+    Rails.logger.info "Another autoscale run is in progress, skipping this one" unless lock_result.lock_was_acquired?
     success
   end
 
