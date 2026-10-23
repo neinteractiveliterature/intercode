@@ -209,18 +209,29 @@ class HostingServiceAdapters::Fly < HostingServiceAdapters::Base
   def destroy_machines(instances)
     instances.each do |instance|
       Rails.logger.info "Stopping Fly machine #{instance.name}"
-      machines_api.post("/v1/apps/#{ENV.fetch("FLY_APP_NAME")}/machines/#{instance.id}/stop")
+      ignoring_missing_machine(instance) do
+        machines_api.post("/v1/apps/#{ENV.fetch("FLY_APP_NAME")}/machines/#{instance.id}/stop")
+      end
     end
 
     Rails.logger.info "Waiting for all machines to stop"
     instances.each do |instance|
-      machines_api.get(
-        "/v1/apps/#{ENV.fetch("FLY_APP_NAME")}/machines/#{instance.id}/wait?\
+      ignoring_missing_machine(instance) do
+        machines_api.get(
+          "/v1/apps/#{ENV.fetch("FLY_APP_NAME")}/machines/#{instance.id}/wait?\
 state=stopped&instance_id=#{instance.instance_id}"
-      )
+        )
 
-      Rails.logger.info "Destroying Fly machine #{instance.name}"
-      machines_api.delete("/v1/apps/#{ENV.fetch("FLY_APP_NAME")}/machines/#{instance.id}")
+        Rails.logger.info "Destroying Fly machine #{instance.name}"
+        machines_api.delete("/v1/apps/#{ENV.fetch("FLY_APP_NAME")}/machines/#{instance.id}")
+      end
     end
+  end
+
+  # A machine we're removing can disappear on its own before we get to it, which is the outcome we wanted anyway
+  def ignoring_missing_machine(instance)
+    yield
+  rescue Faraday::ResourceNotFound
+    Rails.logger.info "Fly machine #{instance.name} is already gone"
   end
 end

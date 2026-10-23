@@ -282,6 +282,56 @@ class HostingServiceAdapters::FlyTest < ActiveSupport::TestCase
     end
   end
 
+  describe "#apply_instance_counts with machines it doesn't manage" do
+    it "leaves machines outside the web and worker groups alone" do
+      stub_api(
+        :get,
+        "/v1/apps/test-app/machines",
+        [
+          machine("w1", group: "web", guest: Fly::SMALL_GUEST),
+          machine("s1", group: "shoryuken", guest: Fly::SMALL_GUEST),
+          machine("c1", group: "fly_app_console", guest: Fly::SMALL_GUEST)
+        ]
+      )
+
+      with_stubbed_api do
+        adapter.apply_instance_counts(
+          [{ group: :web, type: :small, count: 1 }, { group: :worker, type: :small, count: 1 }]
+        )
+      end
+
+      assert_empty requests_matching(:post)
+      assert_empty requests_matching(:delete)
+    end
+
+    it "carries on when a machine it is removing is already gone" do
+      stub_api(
+        :get,
+        "/v1/apps/test-app/machines",
+        [
+          machine("w1", group: "web", guest: Fly::SMALL_GUEST),
+          machine("s1", group: "shoryuken", guest: Fly::LARGE_GUEST),
+          machine("s2", group: "shoryuken", guest: Fly::LARGE_GUEST)
+        ]
+      )
+      stub_api(:post, "/v1/apps/test-app/machines", { "id" => "new", "name" => "new-machine" })
+      stub_api(:get, "/v1/apps/test-app/machines/new/wait?state=started")
+      stub_api(:post, "/v1/apps/test-app/machines/s1/stop")
+      stub_api(:get, "/v1/apps/test-app/machines/s1/wait?state=stopped&instance_id=instance-s1", {}, status: 404)
+      stub_api(:post, "/v1/apps/test-app/machines/s2/stop")
+      stub_api(:get, "/v1/apps/test-app/machines/s2/wait?state=stopped&instance_id=instance-s2")
+      stub_api(:delete, "/v1/apps/test-app/machines/s2")
+
+      with_stubbed_api do
+        adapter.apply_instance_counts(
+          [{ group: :web, type: :small, count: 1 }, { group: :worker, type: :small, count: 1 }]
+        )
+      end
+
+      assert_equal ["/v1/apps/test-app/machines/s2"], requests_matching(:delete).pluck(:path)
+    end
+  end
+
   describe "#seconds_until_cpu_exhaustion" do
     before do
       ENV["FLY_METRICS_TOKEN"] = "metrics-token"
