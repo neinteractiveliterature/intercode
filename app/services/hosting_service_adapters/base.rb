@@ -16,12 +16,15 @@ class HostingServiceAdapters::Base
 
   def apply_instance_counts(target_counts)
     target_groups = Set.new(target_counts.map { |target| { group: target[:group], type: target[:type] } })
+    managed_groups = Set.new(target_counts.pluck(:group))
 
     target_counts.each do |target|
       update_instance_group(group: target[:group], type: target[:type], count: target[:count])
     end
 
     instances_state.counts.each do |row|
+      # Only reconcile groups we manage; anything else (e.g. a console session someone has open) isn't ours to remove
+      next unless managed_groups.include?(row[:group])
       next if target_groups.include?(row.slice(:group, :type))
       update_instance_group(group: row[:group], type: row[:type], count: 0)
     end
