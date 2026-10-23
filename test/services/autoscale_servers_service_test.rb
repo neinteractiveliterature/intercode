@@ -211,6 +211,13 @@ class AutoscaleServersServiceTest < ActiveSupport::TestCase
   describe "#call" do
     let(:adapter) { Minitest::Mock.new }
 
+    def expect_balance_check(runway: nil, large_instances: [])
+      adapter.expect(:seconds_until_cpu_exhaustion, runway, [], group: :web)
+      instances_state = Minitest::Mock.new
+      instances_state.expect(:find_instances, large_instances, [], group: :web, type: :large)
+      adapter.expect(:instances_state, instances_state)
+    end
+
     def run_service_with(web_target, worker_target, worker_type)
       Service.stub(:scaling_target_for, web_target) do
         Service.stub(:worker_scaling_target_for, worker_target) do
@@ -222,6 +229,7 @@ class AutoscaleServersServiceTest < ActiveSupport::TestCase
     end
 
     it "asks the hosting adapter for small web servers and one small worker at the minimum" do
+      expect_balance_check
       adapter.expect(
         :apply_instance_counts,
         nil,
@@ -235,6 +243,7 @@ class AutoscaleServersServiceTest < ActiveSupport::TestCase
     end
 
     it "asks for medium web servers and two large workers when scaled up" do
+      expect_balance_check
       adapter.expect(
         :apply_instance_counts,
         nil,
@@ -257,6 +266,7 @@ class AutoscaleServersServiceTest < ActiveSupport::TestCase
     end
 
     it "takes a non-blocking lock so a second run skips instead of waiting" do
+      expect_balance_check
       adapter.expect(:apply_instance_counts, nil, [Array])
       lock_options = nil
 
@@ -269,6 +279,62 @@ class AutoscaleServersServiceTest < ActiveSupport::TestCase
       ) { run_service_with(min_instances, 1, :small) }
 
       assert_equal({ name: Service::ADVISORY_LOCK_NAME, timeout_seconds: 0 }, lock_options)
+    end
+
+    it "adds a performance web server alongside the regular ones when a CPU balance is about to run out" do
+      expect_balance_check(runway: 10.minutes.to_i)
+      adapter.expect(
+        :apply_instance_counts,
+        nil,
+        [
+          [
+            { group: :web, type: :small, count: min_instances },
+            { group: :worker, type: :small, count: 1 },
+            { group: :web, type: :large, count: 1 }
+          ]
+        ]
+      )
+
+      result = run_service_with(min_instances, 1, :small)
+
+      assert result.success?
+      adapter.verify
+    end
+  end
+
+  describe ".large_web_target_for" do
+    let(:horizon) { Service::CPU_BALANCE_HORIZON }
+    let(:min_lifetime) { Service::CPU_BALANCE_MIN_LARGE_LIFETIME }
+
+    def large_instance(age)
+      HostingServiceAdapters::Instance.new(type: :large, group: :web, created_at: age && (now - age))
+    end
+
+    def target(runway:, large_instances: [])
+      Service.large_web_target_for(runway:, large_instances:, now:)
+    end
+
+    it "adds one when the soonest balance runs out within the horizon" do
+      assert_equal 1, target(runway: 0)
+      assert_equal 1, target(runway: horizon - 1.second)
+    end
+
+    it "adds none when balances are healthy, unknown or not draining" do
+      assert_equal 0, target(runway: horizon + 1.second)
+      assert_equal 0, target(runway: nil)
+    end
+
+    it "keeps an existing one until it is old enough" do
+      assert_equal 1, target(runway: nil, large_instances: [large_instance(min_lifetime - 1.minute)])
+      assert_equal 1, target(runway: nil, large_instances: [large_instance(nil)])
+      assert_equal 0, target(runway: nil, large_instances: [large_instance(min_lifetime + 1.minute)])
+    end
+
+    it "keeps an existing one while the regular machines are still only marginally healthy" do
+      old = [large_instance(min_lifetime + 1.hour)]
+
+      assert_equal 1, target(runway: horizon + 1.minute, large_instances: old)
+      assert_equal 0, target(runway: (horizon * 2) + 1.minute, large_instances: old)
     end
   end
 end

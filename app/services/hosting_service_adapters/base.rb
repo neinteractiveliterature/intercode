@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class HostingServiceAdapters::Base
   def applicable?
     raise NotImplementedError, "HostingServiceAdapters::Base subclasses must implement #applicable?"
@@ -5,6 +6,12 @@ class HostingServiceAdapters::Base
 
   def instances_state
     raise NotImplementedError, "HostingServiceAdapters::Base subclasses must implement #instances_state"
+  end
+
+  # The soonest any instance in the group is expected to run out of CPU burst capacity (0 if one already has), or nil if
+  # that's unknown, not applicable, or nothing is draining
+  def seconds_until_cpu_exhaustion(**)
+    nil
   end
 
   def apply_instance_counts(target_counts)
