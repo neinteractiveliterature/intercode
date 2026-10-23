@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
@@ -51,7 +52,11 @@ class SignupRound < ApplicationRecord
   end
 
   def execute!
-    transaction do
+    # Lock the row and re-check executed_at, so that overlapping runs (e.g. a duplicate scheduler message) can't execute
+    # the same round twice
+    with_lock do
+      next if executed_at.present?
+
       if convention.signup_automation_mode == "ranked_choice" && automation_action == "execute_ranked_choice"
         ExecuteRankedChoiceSignupRoundService.new(signup_round: self, whodunit: nil).call!
       end
