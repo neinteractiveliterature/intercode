@@ -311,7 +311,7 @@ class HostingServiceAdapters::FlyTest < ActiveSupport::TestCase
     def with_stubbed_metrics(balances:, trends:, &)
       queries = []
       metrics_stubs = Faraday::Adapter::Test::Stubs.new
-      metrics_stubs.get("/api/v1/query") do |env|
+      metrics_stubs.get("/prometheus/test-org/api/v1/query") do |env|
         query = env.params["query"]
         queries << query
         [
@@ -321,7 +321,7 @@ class HostingServiceAdapters::FlyTest < ActiveSupport::TestCase
         ]
       end
       connection =
-        Faraday.new(url: "https://api.fly.io/prometheus/test-org") do |builder|
+        Faraday.new(url: "https://api.fly.io") do |builder|
           builder.response :json
           builder.response :raise_error
           builder.adapter :test, metrics_stubs
@@ -384,9 +384,9 @@ class HostingServiceAdapters::FlyTest < ActiveSupport::TestCase
 
     it "is nil, rather than raising, when the metrics API fails" do
       failing = Faraday::Adapter::Test::Stubs.new
-      failing.get("/api/v1/query") { [500, {}, "boom"] }
+      failing.get("/prometheus/test-org/api/v1/query") { [500, {}, "boom"] }
       connection =
-        Faraday.new(url: "https://api.fly.io/prometheus/test-org") do |builder|
+        Faraday.new(url: "https://api.fly.io") do |builder|
           builder.response :raise_error
           builder.adapter :test, failing
         end
