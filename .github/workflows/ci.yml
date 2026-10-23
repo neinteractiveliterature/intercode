@@ -109,8 +109,7 @@ jobs:
           - 5432:5432
     steps:
       - uses: actions/checkout@v7
-      - name: Install libvips42
-        run: sudo apt-get update && sudo apt-get install libvips42
+      - uses: ./.github/actions/install-libvips
       - name: Upgrade postgres client utilities
         run: |
           sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
@@ -166,8 +165,7 @@ jobs:
           - 5432:5432
     steps:
       - uses: actions/checkout@v7
-      - name: Install libvips42
-        run: sudo apt-get update && sudo apt-get install libvips42
+      - uses: ./.github/actions/install-libvips
       - name: Upgrade postgres client utilities
         run: |
           sudo sh -c 'echo "deb http://apt.postgresql.org/pub/repos/apt $(lsb_release -cs)-pgdg main" > /etc/apt/sources.list.d/pgdg.list'
@@ -292,8 +290,7 @@ jobs:
           restore-keys: |
             ${{ runner.os }}-doc-site-docusaurus-${{ github.ref }}
             ${{ runner.os }}-doc-site-docusaurus-
-      - name: Install libvips42
-        run: sudo apt-get update && sudo apt-get install libvips42
+      - uses: ./.github/actions/install-libvips
       - name: Read .node-version
         id: node-version
         run: echo "node-version=$(cat .node-version)" >> $GITHUB_OUTPUT

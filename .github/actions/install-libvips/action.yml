@@ -1,0 +1,46 @@
+name: Install libvips
+description: >-
+  Installs libvips42 (needed by ruby-vips). The runners' Ubuntu mirror intermittently drops to a few kB/s, which
+  turned this step from ~10 seconds into 5+ minutes, so the downloaded packages are cached and the download is
+  retried with a time limit.
+runs:
+  using: composite
+  steps:
+    - name: Get runner image version
+      id: image
+      shell: bash
+      run: echo "version=${ImageVersion:-unknown}" >> "$GITHUB_OUTPUT"
+    - name: Restore apt package cache
+      uses: actions/cache@v6
+      with:
+        path: ~/apt-archives
+        key: apt-libvips-${{ runner.os }}-${{ steps.image.outputs.version }}
+        restore-keys: |
+          apt-libvips-${{ runner.os }}-
+    - name: Install libvips42
+      shell: bash
+      run: |
+        export archives="$HOME/apt-archives"
+        mkdir -p "$archives/partial"
+        apt_get() { sudo apt-get -o Dir::Cache::archives="$archives" "$@"; }
+        export -f apt_get
+
+        # Download first, under a time limit, so a slow mirror can be abandoned and retried safely (killing apt
+        # mid-install could leave dpkg half-configured; killing a download can't)
+        downloaded=false
+        for attempt in 1 2 3; do
+          if timeout 90 bash -c 'apt_get update && apt_get install --download-only -y libvips42'; then
+            downloaded=true
+            break
+          fi
+          echo "Download attempt $attempt didn't finish in time"
+        done
+        if [ "$downloaded" = false ]; then
+          echo "Falling back to a download with no time limit"
+          apt_get update && apt_get install --download-only -y libvips42
+        fi
+
+        apt_get install -y libvips42
+
+        # apt runs as root, but the cache step needs to read the archives (and the lock file) as the runner user
+        sudo chown -R "$USER" "$archives"
