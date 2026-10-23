@@ -55,6 +55,16 @@ variable "fly_api_token" {
   default     = null
 }
 
+variable "fly_metrics" {
+  description = "Fly.io metrics access, used by the autoscaler to watch web machines' CPU burst balance and add capacity before they are throttled. token is a read-only org token; org_slug is the Fly organization's slug. If null, no metrics SSM parameters are written and the autoscaler skips that check."
+  type = object({
+    token    = string
+    org_slug = string
+  })
+  sensitive = true
+  default   = null
+}
+
 variable "stripe" {
   description = "Stripe API credentials. If null, no Stripe SSM parameters are written."
   type = object({
@@ -88,10 +98,12 @@ variable "twilio" {
 }
 
 variable "autoscale" {
-  description = "Fly.io auto-scaling configuration. If null, no autoscale SSM parameters are written."
+  description = "Fly.io auto-scaling configuration. If null, no autoscale SSM parameters are written. The optional cpu_balance_* settings tune the CPU burst balance check (it needs fly_metrics); when unset, the app's defaults apply."
   type = object({
-    min_instances = number
-    max_instances = number
+    min_instances                        = number
+    max_instances                        = number
+    cpu_balance_horizon_minutes          = optional(number)
+    cpu_balance_min_large_lifetime_hours = optional(number)
   })
   default = null
 }

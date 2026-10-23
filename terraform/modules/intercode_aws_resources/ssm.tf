@@ -32,6 +32,10 @@ locals {
       DEFAULT_CURRENCY           = var.default_currency
     },
     var.fly_api_token != null ? { FLY_API_TOKEN = var.fly_api_token } : {},
+    var.fly_metrics != null ? {
+      FLY_METRICS_TOKEN = var.fly_metrics.token
+      FLY_ORG_SLUG      = var.fly_metrics.org_slug
+    } : {},
     var.stripe != null ? {
       STRIPE_SECRET_KEY              = var.stripe.secret_key
       STRIPE_PUBLISHABLE_KEY         = var.stripe.publishable_key
@@ -49,6 +53,12 @@ locals {
     var.autoscale != null ? {
       AUTOSCALE_MIN_INSTANCES = tostring(var.autoscale.min_instances)
       AUTOSCALE_MAX_INSTANCES = tostring(var.autoscale.max_instances)
+    } : {},
+    var.autoscale != null && var.autoscale.cpu_balance_horizon_minutes != null ? {
+      AUTOSCALE_CPU_BALANCE_HORIZON_MINUTES = tostring(var.autoscale.cpu_balance_horizon_minutes)
+    } : {},
+    var.autoscale != null && var.autoscale.cpu_balance_min_large_lifetime_hours != null ? {
+      AUTOSCALE_CPU_BALANCE_MIN_LARGE_LIFETIME_HOURS = tostring(var.autoscale.cpu_balance_min_large_lifetime_hours)
     } : {},
     var.assets_host != null ? { ASSETS_HOST = var.assets_host } : {},
     var.uploads_host != null ? { UPLOADS_HOST = var.uploads_host } : {},
@@ -71,6 +81,10 @@ locals {
       DEFAULT_CURRENCY           = "String"
     },
     var.fly_api_token != null ? { FLY_API_TOKEN = "SecureString" } : {},
+    var.fly_metrics != null ? {
+      FLY_METRICS_TOKEN = "SecureString"
+      FLY_ORG_SLUG      = "String"
+    } : {},
     var.stripe != null ? {
       STRIPE_SECRET_KEY              = "SecureString"
       STRIPE_PUBLISHABLE_KEY         = "SecureString"
@@ -88,6 +102,12 @@ locals {
     var.autoscale != null ? {
       AUTOSCALE_MIN_INSTANCES = "String"
       AUTOSCALE_MAX_INSTANCES = "String"
+    } : {},
+    var.autoscale != null && var.autoscale.cpu_balance_horizon_minutes != null ? {
+      AUTOSCALE_CPU_BALANCE_HORIZON_MINUTES = "String"
+    } : {},
+    var.autoscale != null && var.autoscale.cpu_balance_min_large_lifetime_hours != null ? {
+      AUTOSCALE_CPU_BALANCE_MIN_LARGE_LIFETIME_HOURS = "String"
     } : {},
     var.assets_host != null ? { ASSETS_HOST = "String" } : {},
     var.uploads_host != null ? { UPLOADS_HOST = "String" } : {},
