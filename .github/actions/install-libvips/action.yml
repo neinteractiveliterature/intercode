@@ -26,10 +26,11 @@ runs:
         export -f apt_get
 
         # Download first, under a time limit, so a slow mirror can be abandoned and retried safely (killing apt
-        # mid-install could leave dpkg half-configured; killing a download can't)
+        # mid-install could leave dpkg half-configured; killing a download can't). Packages that finished downloading
+        # are kept, so short attempts lose little.
         downloaded=false
-        for attempt in 1 2 3; do
-          if timeout 90 bash -c 'apt_get update && apt_get install --download-only -y libvips42'; then
+        for attempt in 1 2 3 4; do
+          if timeout 45 bash -c 'apt_get update && apt_get install --download-only -y libvips42'; then
             downloaded=true
             break
           fi
