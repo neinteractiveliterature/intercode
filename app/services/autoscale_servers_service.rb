@@ -8,6 +8,11 @@ class AutoscaleServersService < CivilService::Service
   MIN_INSTANCES = ENV.fetch("AUTOSCALE_MIN_INSTANCES", "2").to_i
   MIN_INSTANCES_FOR_SIGNUP_OPENING = ENV.fetch("AUTOSCALE_MIN_INSTANCES_FOR_SIGNUP_OPENING", "2").to_i
   MAX_INSTANCES = ENV.fetch("AUTOSCALE_MAX_INSTANCES", "10").to_i
+  # If a web machine is projected to run out of CPU burst balance within this long, add a performance machine
+  CPU_BALANCE_HORIZON = ENV.fetch("AUTOSCALE_CPU_BALANCE_HORIZON_MINUTES", "45").to_i.minutes
+  # Once added, keep the performance machine at least this long, so that the relief it gives the others doesn't make it
+  # flap on and off
+  CPU_BALANCE_MIN_LARGE_LIFETIME = ENV.fetch("AUTOSCALE_CPU_BALANCE_MIN_LARGE_LIFETIME_HOURS", "2").to_i.hours
   SIGNUP_OPENING_LOOKAHEAD_TIME = ENV.fetch("AUTOSCALE_SIGNUP_OPENING_LOOKAHEAD_HOURS", "48").to_i.hours
   SIGNUP_OPENING_RAMP_UP_LOOKAHEAD_TIME = ENV.fetch("AUTOSCALE_SIGNUP_OPENING_RAMP_UP_LOOKAHEAD_HOURS", "2").to_i.hours
   SIGNUP_OPENING_FULL_THROTTLE_LOOKAHEAD_TIME =
@@ -106,6 +111,24 @@ class AutoscaleServersService < CivilService::Service
     end
   end
 
+  # Returns how many performance-1x web machines (which have no burst balance to run out of) should run alongside the
+  # regular ones. runway is the time until the soonest regular web machine runs out of CPU burst balance, or nil if none
+  # is draining or it's unknown. It has to get comfortably past the horizon before an existing machine is released.
+  def self.large_web_target_for(runway:, large_instances:, now:)
+    return 1 if runway && runway < CPU_BALANCE_HORIZON
+    return 0 if large_instances.empty?
+
+    keep_large_web?(runway:, large_instances:, now:) ? 1 : 0
+  end
+
+  def self.keep_large_web?(runway:, large_instances:, now:)
+    return true if runway && runway < CPU_BALANCE_HORIZON * 2
+
+    large_instances.any? do |instance|
+      instance.created_at.nil? || now - instance.created_at < CPU_BALANCE_MIN_LARGE_LIFETIME
+    end
+  end
+
   private
 
   # Skip rather than wait if another run is in progress: this task can be delivered to more than one worker (and SQS
@@ -123,12 +146,20 @@ class AutoscaleServersService < CivilService::Service
     worker_scaling_target = self.class.worker_scaling_target_for(now)
     worker_instance_type = self.class.worker_instance_type_for(now)
 
-    adapter.apply_instance_counts(
-      [
-        { group: :web, type: web_scaling_target == MIN_INSTANCES ? :small : :medium, count: web_scaling_target },
-        { group: :worker, type: worker_instance_type, count: worker_scaling_target }
-      ]
-    )
+    targets = [
+      { group: :web, type: web_scaling_target == MIN_INSTANCES ? :small : :medium, count: web_scaling_target },
+      { group: :worker, type: worker_instance_type, count: worker_scaling_target }
+    ]
+
+    large_web_target =
+      self.class.large_web_target_for(
+        runway: adapter.seconds_until_cpu_exhaustion(group: :web),
+        large_instances: adapter.instances_state.find_instances(group: :web, type: :large),
+        now:
+      )
+    targets << { group: :web, type: :large, count: large_web_target } if large_web_target.positive?
+
+    adapter.apply_instance_counts(targets)
   end
 
   def adapter

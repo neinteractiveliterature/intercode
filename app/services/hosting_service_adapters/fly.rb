@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class HostingServiceAdapters::Fly < HostingServiceAdapters::Base # rubocop:disable Metrics/ClassLength
+class HostingServiceAdapters::Fly < HostingServiceAdapters::Base
   SMALL_GUEST = { "cpu_kind" => "shared", "cpus" => 1, "memory_mb" => 1024 }.freeze
   # SMALL_GUEST = { "cpu_kind" => "shared", "cpus" => 1, "memory_mb" => 512 }
   MEDIUM_GUEST = { "cpu_kind" => "shared", "cpus" => 4, "memory_mb" => 1024 }.freeze
@@ -19,6 +19,8 @@ class HostingServiceAdapters::Fly < HostingServiceAdapters::Base # rubocop:disab
     end
   end
 
+  CPU_BALANCE_TREND_WINDOW = "10m"
+
   def applicable?
     ENV["FLY_APP_NAME"].present? && ENV["FLY_API_TOKEN"].present?
   end
@@ -28,6 +30,24 @@ class HostingServiceAdapters::Fly < HostingServiceAdapters::Base # rubocop:disab
       HostingServiceAdapters::InstancesState.new(
         instances: current_machines.map { |machine| instance_for_machine(machine) }
       )
+  end
+
+  # Fly's shared CPUs run on a burst balance that drains whenever usage is above the baseline and throttles the machine
+  # to the baseline (6% for shared-cpu-1x) once it's empty. This estimates the time left from each machine's balance and
+  # its recent trend. Needs FLY_METRICS_TOKEN (a read-only org token) and FLY_ORG_SLUG; without them, returns nil.
+  def seconds_until_cpu_exhaustion(group:)
+    return nil unless metrics_configured?
+
+    machine_ids = instances_state.find_instances(group:).reject { |instance| instance.type == :large }.map(&:id)
+    return nil if machine_ids.empty?
+
+    balances = query_metric_by_instance("fly_instance_cpu_balance{#{app_selector}}")
+    trends = query_metric_by_instance("deriv(fly_instance_cpu_balance{#{app_selector}}[#{CPU_BALANCE_TREND_WINDOW}])")
+
+    machine_ids.filter_map { |id| runway_seconds(balances[id], trends[id]) }.min
+  rescue Faraday::Error => e
+    Rails.logger.warn "Couldn't read Fly CPU balance metrics: #{e.message}"
+    nil
   end
 
   def invalidate_state
@@ -53,6 +73,38 @@ class HostingServiceAdapters::Fly < HostingServiceAdapters::Base # rubocop:disab
   end
 
   private
+
+  def metrics_configured?
+    ENV["FLY_METRICS_TOKEN"].present? && ENV["FLY_ORG_SLUG"].present?
+  end
+
+  def app_selector
+    %(app="#{ENV.fetch("FLY_APP_NAME")}")
+  end
+
+  def metrics_api
+    @metrics_api ||=
+      Faraday.new(url: "https://api.fly.io/prometheus/#{ENV.fetch("FLY_ORG_SLUG")}") do |builder|
+        builder.request :authorization, "FlyV1", -> { ENV.fetch("FLY_METRICS_TOKEN") }
+        builder.response :json
+        builder.response :raise_error
+        builder.options.timeout = 10
+      end
+  end
+
+  # Runs an instant query and returns the value of each series, keyed by the machine ID in its "instance" label
+  def query_metric_by_instance(query)
+    results = metrics_api.get("/api/v1/query", query:).body.dig("data", "result") || []
+    results.to_h { |series| [series.dig("metric", "instance"), series.dig("value", 1).to_f] }
+  end
+
+  def runway_seconds(balance, trend)
+    return nil if balance.nil?
+    # A throttled machine's balance is flat at zero, so its trend says nothing
+    return 0 if balance <= 0
+
+    trend.present? && trend.negative? ? balance / -trend : nil
+  end
 
   def machines_api_base
     @machines_api_base ||= ENV["FLY_PRIVATE_IP"].present? ? "http://_api.internal:4280" : "https://api.machines.dev"
@@ -82,6 +134,7 @@ class HostingServiceAdapters::Fly < HostingServiceAdapters::Base # rubocop:disab
       instance_id: machine["instance_id"],
       name: machine["name"],
       state: machine["state"],
+      created_at: machine["created_at"].presence&.then { |timestamp| Time.zone.parse(timestamp) },
       config: machine["config"],
       region: machine["region"],
       group:

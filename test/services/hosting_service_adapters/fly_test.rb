@@ -5,7 +5,8 @@ class HostingServiceAdapters::FlyTest < ActiveSupport::TestCase
   Fly = HostingServiceAdapters::Fly
 
   setup do
-    @original_env = ENV.to_h.slice("FLY_APP_NAME", "FLY_API_TOKEN", "FLY_PRIVATE_IP")
+    @original_env =
+      ENV.to_h.slice("FLY_APP_NAME", "FLY_API_TOKEN", "FLY_PRIVATE_IP", "FLY_METRICS_TOKEN", "FLY_ORG_SLUG")
     ENV["FLY_APP_NAME"] = "test-app"
     ENV["FLY_API_TOKEN"] = "test-token"
     ENV.delete("FLY_PRIVATE_IP")
@@ -14,7 +15,7 @@ class HostingServiceAdapters::FlyTest < ActiveSupport::TestCase
   end
 
   teardown do
-    %w[FLY_APP_NAME FLY_API_TOKEN FLY_PRIVATE_IP].each { |name| ENV.delete(name) }
+    %w[FLY_APP_NAME FLY_API_TOKEN FLY_PRIVATE_IP FLY_METRICS_TOKEN FLY_ORG_SLUG].each { |name| ENV.delete(name) }
     @original_env.each { |name, value| ENV[name] = value }
   end
 
@@ -277,6 +278,121 @@ class HostingServiceAdapters::FlyTest < ActiveSupport::TestCase
         # one new small worker (cloned from the existing worker), and the old large worker is gone
         assert_equal(1, requests_matching(:post).count { |request| request[:body] })
         assert_includes requests_matching(:delete).pluck(:path), "/v1/apps/test-app/machines/s1"
+      end
+    end
+  end
+
+  describe "#seconds_until_cpu_exhaustion" do
+    before do
+      ENV["FLY_METRICS_TOKEN"] = "metrics-token"
+      ENV["FLY_ORG_SLUG"] = "test-org"
+      stub_api(
+        :get,
+        "/v1/apps/test-app/machines",
+        [
+          machine("w1", group: "web"),
+          machine("w2", group: "web"),
+          machine("w3", group: "web", guest: Fly::LARGE_GUEST),
+          machine("s1", group: "shoryuken")
+        ]
+      )
+    end
+
+    def metric_response(values)
+      {
+        "status" => "success",
+        "data" => {
+          "result" =>
+            values.map { |instance, value| { "metric" => { "instance" => instance }, "value" => [1, value.to_s] } }
+        }
+      }
+    end
+
+    def with_stubbed_metrics(balances:, trends:, &)
+      queries = []
+      metrics_stubs = Faraday::Adapter::Test::Stubs.new
+      metrics_stubs.get("/api/v1/query") do |env|
+        query = env.params["query"]
+        queries << query
+        [
+          200,
+          { "Content-Type" => "application/json" },
+          metric_response(query.start_with?("deriv") ? trends : balances).to_json
+        ]
+      end
+      connection =
+        Faraday.new(url: "https://api.fly.io/prometheus/test-org") do |builder|
+          builder.response :json
+          builder.response :raise_error
+          builder.adapter :test, metrics_stubs
+        end
+
+      with_stubbed_api { adapter.stub(:metrics_api, connection, &) }
+      queries
+    end
+
+    it "is the balance divided by the rate it is draining, for the machine with the least time left" do
+      result = nil
+      with_stubbed_metrics(balances: { "w1" => 6000, "w2" => 3000 }, trends: { "w1" => -2, "w2" => -5 }) do
+        result = adapter.seconds_until_cpu_exhaustion(group: :web)
+      end
+
+      assert_in_delta 600, result, 0.001
+    end
+
+    it "ignores machines that are not draining and machines in other groups" do
+      result = nil
+      with_stubbed_metrics(
+        balances: {
+          "w1" => 6000,
+          "w2" => 50_000,
+          "s1" => 10
+        },
+        trends: {
+          "w1" => 0.5,
+          "w2" => 0,
+          "s1" => -5
+        }
+      ) { result = adapter.seconds_until_cpu_exhaustion(group: :web) }
+
+      assert_nil result
+    end
+
+    it "treats a machine with an empty balance as already out, whatever its trend" do
+      result = nil
+      with_stubbed_metrics(balances: { "w1" => 0, "w2" => 50_000 }, trends: { "w1" => 0, "w2" => -1 }) do
+        result = adapter.seconds_until_cpu_exhaustion(group: :web)
+      end
+
+      assert_equal 0, result
+    end
+
+    it "does not count performance machines, which have no burst balance" do
+      result = nil
+      with_stubbed_metrics(balances: { "w3" => 0 }, trends: { "w3" => -1 }) do
+        result = adapter.seconds_until_cpu_exhaustion(group: :web)
+      end
+
+      assert_nil result
+    end
+
+    it "is nil without a metrics token or org" do
+      ENV.delete("FLY_METRICS_TOKEN")
+
+      assert_nil adapter.seconds_until_cpu_exhaustion(group: :web)
+    end
+
+    it "is nil, rather than raising, when the metrics API fails" do
+      failing = Faraday::Adapter::Test::Stubs.new
+      failing.get("/api/v1/query") { [500, {}, "boom"] }
+      connection =
+        Faraday.new(url: "https://api.fly.io/prometheus/test-org") do |builder|
+          builder.response :raise_error
+          builder.adapter :test, failing
+        end
+
+      with_stubbed_api do
+        adapter.stub(:metrics_api, connection) { assert_nil adapter.seconds_until_cpu_exhaustion(group: :web) }
       end
     end
   end
