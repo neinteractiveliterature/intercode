@@ -4,6 +4,7 @@
 
 class AutoscaleServersService < CivilService::Service
   USERS_PER_INSTANCE = ENV.fetch("AUTOSCALE_USERS_PER_INSTANCE", "40").to_i
+  ADVISORY_LOCK_NAME = "autoscale_servers"
   MIN_INSTANCES = ENV.fetch("AUTOSCALE_MIN_INSTANCES", "2").to_i
   MIN_INSTANCES_FOR_SIGNUP_OPENING = ENV.fetch("AUTOSCALE_MIN_INSTANCES_FOR_SIGNUP_OPENING", "2").to_i
   MAX_INSTANCES = ENV.fetch("AUTOSCALE_MAX_INSTANCES", "10").to_i
@@ -107,7 +108,16 @@ class AutoscaleServersService < CivilService::Service
 
   private
 
+  # Skip rather than wait if another run is in progress: this task can be delivered to more than one worker (and SQS
+  # delivers at least once), and the next scheduled run re-evaluates from scratch anyway
   def inner_call
+    acquired = ActiveRecord::Base.with_advisory_lock(ADVISORY_LOCK_NAME, timeout_seconds: 0) { apply_scaling_targets }
+
+    Rails.logger.info "Another autoscale run is in progress, skipping this one" unless acquired
+    success
+  end
+
+  def apply_scaling_targets
     now = Time.current
     web_scaling_target = self.class.scaling_target_for(now)
     worker_scaling_target = self.class.worker_scaling_target_for(now)
@@ -119,8 +129,6 @@ class AutoscaleServersService < CivilService::Service
         { group: :worker, type: worker_instance_type, count: worker_scaling_target }
       ]
     )
-
-    success
   end
 
   def adapter

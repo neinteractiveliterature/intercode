@@ -246,5 +246,29 @@ class AutoscaleServersServiceTest < ActiveSupport::TestCase
       assert result.success?
       adapter.verify
     end
+
+    it "skips the run without calling the adapter when another run holds the lock" do
+      # (advisory locks are re-entrant within one connection, so simulate another session holding it)
+      result =
+        ActiveRecord::Base.stub(:with_advisory_lock, ->(*, **) { false }) { run_service_with(min_instances, 1, :small) }
+
+      assert result.success?
+      adapter.verify
+    end
+
+    it "takes a non-blocking lock so a second run skips instead of waiting" do
+      adapter.expect(:apply_instance_counts, nil, [Array])
+      lock_options = nil
+
+      ActiveRecord::Base.stub(
+        :with_advisory_lock,
+        ->(name, **options, &block) do
+          lock_options = options.merge(name:)
+          block.call
+        end
+      ) { run_service_with(min_instances, 1, :small) }
+
+      assert_equal({ name: Service::ADVISORY_LOCK_NAME, timeout_seconds: 0 }, lock_options)
+    end
   end
 end

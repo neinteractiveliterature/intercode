@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # rubocop:disable Layout/LineLength, Lint/RedundantCopDisableDirective
 # == Schema Information
 #
@@ -63,6 +64,23 @@ class SignupRoundTest < ActiveSupport::TestCase
       end
 
       mock_service.verify
+    end
+
+    it "does not execute a round that has already been executed, even from a stale copy" do
+      mock_service = Minitest::Mock.new
+      mock_service.expect :call!, nil
+      convention = create(:convention, signup_automation_mode: "ranked_choice")
+      signup_round =
+        create(:signup_round, convention:, automation_action: "execute_ranked_choice", ranked_choice_order: "asc")
+      stale_copy = SignupRound.find(signup_round.id)
+
+      ExecuteRankedChoiceSignupRoundService.stub :new, mock_service do
+        signup_round.execute!
+        stale_copy.execute!
+      end
+
+      mock_service.verify
+      assert_equal signup_round.reload.executed_at, stale_copy.executed_at
     end
   end
 end
