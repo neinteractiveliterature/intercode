@@ -19966,12 +19966,12 @@ __metadata:
   linkType: hard
 
 "react-transition-state@npm:^2.3.1":
-  version: 2.4.0
-  resolution: "react-transition-state@npm:2.4.0"
+  version: 2.4.1
+  resolution: "react-transition-state@npm:2.4.1"
   peerDependencies:
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
-  checksum: 10c0/f0858a6d572d0dd20cbf02de9bd7983fc09d826ec01ea4295ea49e0910e1045763da3caa28cbe29fe88118b712900b964b618f06ac22377c5bd99d7ede074050
+  checksum: 10c0/39ff11ba8ec859db7a91487f30325eca9b9919cb057afdf19843de402bf5201f256019319a14097fa8f7081f14290782551af5eddb7370b5503e99347c120bca
   languageName: node
   linkType: hard
 
