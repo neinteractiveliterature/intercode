@@ -12,8 +12,8 @@ CloudwatchScheduler() do |_config|
     CleanupDbService.new.call!
   end
 
-  task "autoscale", cron: "0/15 * * * ? *" do
-    AutoscaleServersService.new.call!
+  task "autoscale", cron: "0/5 * * * ? *" do
+    AutoscaleServersJob.perform_later
   end
 
   task "drop_expired_signups", cron: "0/10 * * * ? *" do
