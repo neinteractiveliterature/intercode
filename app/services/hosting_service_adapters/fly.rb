@@ -118,6 +118,9 @@ class HostingServiceAdapters::Fly < HostingServiceAdapters::Base
         builder.response :json
         builder.response :raise_error
         builder.response :logger, nil, { headers: true, bodies: true, errors: true }
+        # (the wait endpoints hold the connection open for up to a minute)
+        builder.options.open_timeout = 10
+        builder.options.timeout = 90
       end
   end
 
