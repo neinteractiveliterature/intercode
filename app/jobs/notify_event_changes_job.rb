@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 class NotifyEventChangesJob < ApplicationJob
+  include SkipIfAlreadyRunning
+
   def perform
     NotifyFormResponseChangesService.new(
       scope: FormResponseChange.where(response_type: "Event"),
