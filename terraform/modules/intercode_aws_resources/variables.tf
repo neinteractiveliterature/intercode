@@ -98,12 +98,32 @@ variable "twilio" {
 }
 
 variable "autoscale" {
-  description = "Fly.io auto-scaling configuration. If null, no autoscale SSM parameters are written. The optional cpu_balance_* settings tune the CPU burst balance check (it needs fly_metrics); when unset, the app's defaults apply."
+  description = <<-EOT
+    Fly.io auto-scaling configuration. If null, no autoscale SSM parameters are written. The optional settings are only
+    written when set; otherwise the app's own defaults apply.
+
+    - users_per_instance: attendees one web machine is expected to handle during a signup opening
+    - min_instances_for_signup_opening: web machine floor around a signup opening
+    - signup_opening_lookahead_hours: how far ahead of a signup round to start considering it
+    - signup_opening_ramp_up_lookahead_hours: how long before a round to ramp up gradually
+    - signup_opening_full_throttle_lookahead_hours: how long before a round to be fully scaled up
+    - signup_opening_decay_hours: how long after a round to scale back down
+    - signup_opening_lookback_hours: how far back to look for rounds that still affect scaling
+    - cpu_balance_horizon_minutes / cpu_balance_min_large_lifetime_hours: tune the CPU burst balance check (needs
+      fly_metrics)
+  EOT
   type = object({
-    min_instances                        = number
-    max_instances                        = number
-    cpu_balance_horizon_minutes          = optional(number)
-    cpu_balance_min_large_lifetime_hours = optional(number)
+    min_instances                                = number
+    max_instances                                = number
+    users_per_instance                           = optional(number)
+    min_instances_for_signup_opening             = optional(number)
+    signup_opening_lookahead_hours               = optional(number)
+    signup_opening_ramp_up_lookahead_hours       = optional(number)
+    signup_opening_full_throttle_lookahead_hours = optional(number)
+    signup_opening_decay_hours                   = optional(number)
+    signup_opening_lookback_hours                = optional(number)
+    cpu_balance_horizon_minutes                  = optional(number)
+    cpu_balance_min_large_lifetime_hours         = optional(number)
   })
   default = null
 }

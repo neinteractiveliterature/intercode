@@ -17,6 +17,21 @@ locals {
     : tls_private_key.openid_connect_signing_key[0].private_key_pem
   )
 
+  # The autoscale settings that are only written when set; the app has its own defaults for the rest
+  _autoscale_optional_values = {
+    for name, value in(var.autoscale == null ? {} : {
+      AUTOSCALE_USERS_PER_INSTANCE                           = var.autoscale.users_per_instance
+      AUTOSCALE_MIN_INSTANCES_FOR_SIGNUP_OPENING             = var.autoscale.min_instances_for_signup_opening
+      AUTOSCALE_SIGNUP_OPENING_LOOKAHEAD_HOURS               = var.autoscale.signup_opening_lookahead_hours
+      AUTOSCALE_SIGNUP_OPENING_RAMP_UP_LOOKAHEAD_HOURS       = var.autoscale.signup_opening_ramp_up_lookahead_hours
+      AUTOSCALE_SIGNUP_OPENING_FULL_THROTTLE_LOOKAHEAD_HOURS = var.autoscale.signup_opening_full_throttle_lookahead_hours
+      AUTOSCALE_SIGNUP_OPENING_DECAY_TIME                    = var.autoscale.signup_opening_decay_hours
+      AUTOSCALE_SIGNUP_OPENING_LOOKBACK_TIME                 = var.autoscale.signup_opening_lookback_hours
+      AUTOSCALE_CPU_BALANCE_HORIZON_MINUTES                  = var.autoscale.cpu_balance_horizon_minutes
+      AUTOSCALE_CPU_BALANCE_MIN_LARGE_LIFETIME_HOURS         = var.autoscale.cpu_balance_min_large_lifetime_hours
+    }) : name => tostring(value) if value != null
+  }
+
   # Map of SSM parameter name → value for all module-managed parameters.
   # This map is sensitive (contains secrets); use nonsensitive(keys(...)) for for_each.
   _ssm_values = merge(
@@ -54,12 +69,7 @@ locals {
       AUTOSCALE_MIN_INSTANCES = tostring(var.autoscale.min_instances)
       AUTOSCALE_MAX_INSTANCES = tostring(var.autoscale.max_instances)
     } : {},
-    var.autoscale != null && var.autoscale.cpu_balance_horizon_minutes != null ? {
-      AUTOSCALE_CPU_BALANCE_HORIZON_MINUTES = tostring(var.autoscale.cpu_balance_horizon_minutes)
-    } : {},
-    var.autoscale != null && var.autoscale.cpu_balance_min_large_lifetime_hours != null ? {
-      AUTOSCALE_CPU_BALANCE_MIN_LARGE_LIFETIME_HOURS = tostring(var.autoscale.cpu_balance_min_large_lifetime_hours)
-    } : {},
+    local._autoscale_optional_values,
     var.assets_host != null ? { ASSETS_HOST = var.assets_host } : {},
     var.uploads_host != null ? { UPLOADS_HOST = var.uploads_host } : {},
     var.cloudwatch_log_group != null ? { CLOUDWATCH_LOG_GROUP = var.cloudwatch_log_group } : {},
@@ -103,12 +113,7 @@ locals {
       AUTOSCALE_MIN_INSTANCES = "String"
       AUTOSCALE_MAX_INSTANCES = "String"
     } : {},
-    var.autoscale != null && var.autoscale.cpu_balance_horizon_minutes != null ? {
-      AUTOSCALE_CPU_BALANCE_HORIZON_MINUTES = "String"
-    } : {},
-    var.autoscale != null && var.autoscale.cpu_balance_min_large_lifetime_hours != null ? {
-      AUTOSCALE_CPU_BALANCE_MIN_LARGE_LIFETIME_HOURS = "String"
-    } : {},
+    { for name in keys(local._autoscale_optional_values) : name => "String" },
     var.assets_host != null ? { ASSETS_HOST = "String" } : {},
     var.uploads_host != null ? { UPLOADS_HOST = "String" } : {},
     var.cloudwatch_log_group != null ? { CLOUDWATCH_LOG_GROUP = "String" } : {},
