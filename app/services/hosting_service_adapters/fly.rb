@@ -84,7 +84,7 @@ class HostingServiceAdapters::Fly < HostingServiceAdapters::Base
 
   def metrics_api
     @metrics_api ||=
-      Faraday.new(url: "https://api.fly.io/prometheus/#{ENV.fetch("FLY_ORG_SLUG")}") do |builder|
+      Faraday.new(url: "https://api.fly.io") do |builder|
         builder.request :authorization, "FlyV1", -> { ENV.fetch("FLY_METRICS_TOKEN") }
         builder.response :json
         builder.response :raise_error
@@ -94,7 +94,8 @@ class HostingServiceAdapters::Fly < HostingServiceAdapters::Base
 
   # Runs an instant query and returns the value of each series, keyed by the machine ID in its "instance" label
   def query_metric_by_instance(query)
-    results = metrics_api.get("/api/v1/query", query:).body.dig("data", "result") || []
+    results =
+      metrics_api.get("/prometheus/#{ENV.fetch("FLY_ORG_SLUG")}/api/v1/query", query:).body.dig("data", "result") || []
     results.to_h { |series| [series.dig("metric", "instance"), series.dig("value", 1).to_f] }
   end
 
