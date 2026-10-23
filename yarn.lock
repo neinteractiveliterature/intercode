@@ -5417,12 +5417,12 @@ __metadata:
   linkType: hard
 
 "@marsidev/react-turnstile@npm:^1.6.1":
-  version: 1.6.2
-  resolution: "@marsidev/react-turnstile@npm:1.6.2"
+  version: 1.6.3
+  resolution: "@marsidev/react-turnstile@npm:1.6.3"
   peerDependencies:
     react: ^17.0.2 || ^18.0.0 || ^19.0
     react-dom: ^17.0.2 || ^18.0.0 || ^19.0
-  checksum: 10c0/60a69db55b984d28d7ed9438810de066243c6547858e8c5163be4a9f6014cdfd57224671dd1418b9815ac5e37bf4eb002019bcbc80dda9510ff21e75be9efe54
+  checksum: 10c0/814ed76639207b0841849d7e387730b93a606b88ec23046d6b94848627f5b28b360be3ebcb3b7ce60c722072fc0418dff2f7286dedde65b448ed4ac56b8d66e4
   languageName: node
   linkType: hard
 
