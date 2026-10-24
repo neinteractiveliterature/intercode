@@ -159,9 +159,9 @@ variable "intercode_host" {
 
 variable "devise_secret_key" {
   description = <<-EOT
-    Secret key Devise uses to digest its tokens (password resets, confirmations). If null, nothing is written and the
-    app falls back to a key that is checked in to its repository, so set this for any real deployment. Changing it
-    invalidates outstanding reset and confirmation links.
+    Secret key Devise uses to digest its tokens (password resets, confirmations). If null, a random one is generated and
+    kept in the Terraform state. Without a DEVISE_SECRET_KEY, the app falls back to a key that is checked in to its
+    repository. Changing it invalidates outstanding reset and confirmation links.
   EOT
   type        = string
   sensitive   = true

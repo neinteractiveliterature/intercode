@@ -11,6 +11,11 @@ locals {
     ? var.secret_key_base
     : random_password.secret_key_base[0].result
   )
+  _devise_secret_key = (
+    var.devise_secret_key != null
+    ? var.devise_secret_key
+    : random_password.devise_secret_key[0].result
+  )
   _openid_connect_signing_key = (
     var.openid_connect_signing_key != null
     ? var.openid_connect_signing_key
@@ -45,6 +50,7 @@ locals {
       SECRET_KEY_BASE            = local._secret_key_base
       OPENID_CONNECT_SIGNING_KEY = local._openid_connect_signing_key
       DEFAULT_CURRENCY           = var.default_currency
+      DEVISE_SECRET_KEY          = local._devise_secret_key
     },
     var.fly_api_token != null ? { FLY_API_TOKEN = var.fly_api_token } : {},
     var.fly_metrics != null ? {
@@ -71,7 +77,6 @@ locals {
     var.twilio != null && var.twilio.sms_debug_destination != null ? {
       TWILIO_SMS_DEBUG_DESTINATION = var.twilio.sms_debug_destination
     } : {},
-    var.devise_secret_key != null ? { DEVISE_SECRET_KEY = var.devise_secret_key } : {},
     var.ses_configuration_set != null ? { SES_CONFIGURATION_SET = var.ses_configuration_set } : {},
     var.session_days_trim_threshold != null ? { SESSION_DAYS_TRIM_THRESHOLD = tostring(var.session_days_trim_threshold) } : {},
     var.autoscale != null ? {
@@ -98,6 +103,7 @@ locals {
       SECRET_KEY_BASE            = "SecureString"
       OPENID_CONNECT_SIGNING_KEY = "SecureString"
       DEFAULT_CURRENCY           = "String"
+      DEVISE_SECRET_KEY          = "SecureString"
     },
     var.fly_api_token != null ? { FLY_API_TOKEN = "SecureString" } : {},
     var.fly_metrics != null ? {
@@ -122,7 +128,6 @@ locals {
     } : {},
     var.twilio != null && var.twilio.sms_number != null ? { TWILIO_SMS_NUMBER = "String" } : {},
     var.twilio != null && var.twilio.sms_debug_destination != null ? { TWILIO_SMS_DEBUG_DESTINATION = "String" } : {},
-    var.devise_secret_key != null ? { DEVISE_SECRET_KEY = "SecureString" } : {},
     var.ses_configuration_set != null ? { SES_CONFIGURATION_SET = "String" } : {},
     var.session_days_trim_threshold != null ? { SESSION_DAYS_TRIM_THRESHOLD = "String" } : {},
     var.autoscale != null ? {
@@ -145,6 +150,12 @@ resource "random_password" "email_forwarders_api_token" {
 
 resource "random_password" "secret_key_base" {
   count   = var.secret_key_base == null ? 1 : 0
+  length  = 128
+  special = false
+}
+
+resource "random_password" "devise_secret_key" {
+  count   = var.devise_secret_key == null ? 1 : 0
   length  = 128
   special = false
 }
