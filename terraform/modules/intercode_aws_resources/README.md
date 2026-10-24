@@ -63,19 +63,19 @@ deployments don't change.
 
 ### Variables
 
-| Variable(s)                                                                                   | What it sets                                                              |
-| --------------------------------------------------------------------------------------------- | ------------------------------------------------------------------------- |
-| `database_url`, `secret_key_base`, `openid_connect_signing_key`, `email_forwarders_api_token` | Core secrets (the last three are generated if not given)                  |
-| `devise_secret_key`                                                                           | `DEVISE_SECRET_KEY`: without it the app uses a key checked in to its repo |
-| `default_currency`, `intercode_host`, `assets_host`, `uploads_host`                           | Currency and hostnames                                                    |
-| `stripe`, `turnstile`, `twilio`                                                               | Payment, bot protection and SMS credentials                               |
-| `ses_configuration_set`                                                                       | `SES_CONFIGURATION_SET` for outgoing email                                |
-| `session_days_trim_threshold`                                                                 | `SESSION_DAYS_TRIM_THRESHOLD`: days the nightly cleanup keeps sessions    |
-| `autoscale`, `fly_api_token`, `fly_metrics`                                                   | Autoscaling settings and the Fly tokens it uses                           |
-| `cloudwatch_log_group`                                                                        | `CLOUDWATCH_LOG_GROUP`                                                    |
-| `secrets`                                                                                     | Any other secret, as `{ ENV_VAR_NAME = value }`                           |
-| `sentry` module                                                                               | `SENTRY_*`                                                                |
-| `forwardemail_receiving` module                                                               | `FORWARDEMAIL_API_KEY`                                                    |
+| Variable(s)                                                                                   | What it sets                                                           |
+| --------------------------------------------------------------------------------------------- | ---------------------------------------------------------------------- |
+| `database_url`, `secret_key_base`, `openid_connect_signing_key`, `email_forwarders_api_token` | Core secrets (the last three are generated if not given)               |
+| `devise_secret_key`                                                                           | `DEVISE_SECRET_KEY` (generated if not given)                           |
+| `default_currency`, `intercode_host`, `assets_host`, `uploads_host`                           | Currency and hostnames                                                 |
+| `stripe`, `turnstile`, `twilio`                                                               | Payment, bot protection and SMS credentials                            |
+| `ses_configuration_set`                                                                       | `SES_CONFIGURATION_SET` for outgoing email                             |
+| `session_days_trim_threshold`                                                                 | `SESSION_DAYS_TRIM_THRESHOLD`: days the nightly cleanup keeps sessions |
+| `autoscale`, `fly_api_token`, `fly_metrics`                                                   | Autoscaling settings and the Fly tokens it uses                        |
+| `cloudwatch_log_group`                                                                        | `CLOUDWATCH_LOG_GROUP`                                                 |
+| `secrets`                                                                                     | Any other secret, as `{ ENV_VAR_NAME = value }`                        |
+| `sentry` module                                                                               | `SENTRY_*`                                                             |
+| `forwardemail_receiving` module                                                               | `FORWARDEMAIL_API_KEY`                                                 |
 
 ### Left out on purpose
 
