@@ -358,6 +358,89 @@ describe('AuthenticationManager', () => {
     });
   });
 
+  describe('when the visitor is known to be anonymous', () => {
+    async function anonymousManager() {
+      fetchMock.mockResolvedValueOnce(new Response('', { status: 401 }));
+      const manager = configuredManager();
+      await manager.ensureFreshAccessToken();
+      fetchMock.mockClear();
+      return manager;
+    }
+
+    it('does not try to refresh again after the server says there is no session', async () => {
+      const manager = await anonymousManager();
+
+      expect(await manager.ensureFreshAccessToken()).toBeUndefined();
+      expect(await manager.ensureFreshAccessToken()).toBeUndefined();
+
+      expect(fetchMock).not.toHaveBeenCalled();
+    });
+
+    it('also learns it from the boot-time refresh', async () => {
+      fetchMock.mockResolvedValueOnce(new Response('', { status: 401 }));
+      const manager = configuredManager();
+      await manager.bootstrapFromCookie();
+      fetchMock.mockClear();
+
+      expect(await manager.ensureFreshAccessToken()).toBeUndefined();
+
+      expect(fetchMock).not.toHaveBeenCalled();
+    });
+
+    it('still refreshes after a network error, which says nothing about the session', async () => {
+      fetchMock.mockRejectedValueOnce(new TypeError('network down'));
+      const manager = configuredManager();
+      await manager.ensureFreshAccessToken();
+      fetchMock.mockResolvedValueOnce(tokenResponse('second try'));
+
+      expect(await manager.ensureFreshAccessToken()).toBe('second try');
+    });
+
+    it('still refreshes after a server error', async () => {
+      fetchMock.mockResolvedValueOnce(new Response('', { status: 503 }));
+      const manager = configuredManager();
+      await manager.ensureFreshAccessToken();
+      fetchMock.mockResolvedValueOnce(tokenResponse('second try'));
+
+      expect(await manager.ensureFreshAccessToken()).toBe('second try');
+    });
+
+    it('still refreshes a token that has expired, since the visitor was logged in', async () => {
+      fetchMock.mockResolvedValue(tokenResponse('refreshed'));
+      const manager = configuredManager();
+      manager.jwtToken = jwtExpiringAt(nowSeconds() - 10);
+
+      expect(await manager.ensureFreshAccessToken()).toBe('refreshed');
+    });
+
+    it('goes back to refreshing once the visitor logs in', async () => {
+      const manager = await anonymousManager();
+      manager.currentLoginFlowData = { pkceChallenge };
+      fetchMock.mockResolvedValueOnce(tokenResponse(jwtExpiringAt(nowSeconds() - 10)));
+      await manager.handleOauthCallback(new URL('https://example.com/cb?code=abc'));
+      fetchMock.mockResolvedValueOnce(tokenResponse('refreshed'));
+
+      expect(await manager.ensureFreshAccessToken()).toBe('refreshed');
+    });
+
+    it('goes back to refreshing after a reset', async () => {
+      const manager = await anonymousManager();
+      await manager.reset();
+      fetchMock.mockResolvedValueOnce(tokenResponse('refreshed'));
+
+      expect(await manager.ensureFreshAccessToken()).toBe('refreshed');
+    });
+
+    it('goes back to refreshing after signing out', async () => {
+      const manager = await anonymousManager();
+      fetchMock.mockResolvedValueOnce(new Response(null, { status: 204 }));
+      await manager.signOut();
+      fetchMock.mockResolvedValueOnce(tokenResponse('refreshed'));
+
+      expect(await manager.ensureFreshAccessToken()).toBe('refreshed');
+    });
+  });
+
   describe('signOut', () => {
     it('revokes the session on the server, forgets the token, and returns the issuer’s end session endpoint', async () => {
       fetchMock.mockResolvedValue(new Response(null, { status: 204 }));

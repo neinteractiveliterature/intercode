@@ -47,7 +47,7 @@ class OAuthSessionsController < ApplicationController
   def refresh
     refresh_token_value = cookies[COOKIE_NAME]
     if refresh_token_value.blank?
-      report_refresh_failure(:cookie_absent)
+      # Every logged-out visitor sends this, so it's not worth reporting
       return render_oauth_error(:invalid_grant, status: :unauthorized)
     end
 
