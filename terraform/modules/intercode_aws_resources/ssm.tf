@@ -56,6 +56,9 @@ locals {
       STRIPE_PUBLISHABLE_KEY         = var.stripe.publishable_key
       STRIPE_CONNECT_ENDPOINT_SECRET = var.stripe.connect_endpoint_secret
     } : {},
+    var.stripe != null && var.stripe.account_endpoint_secret != null ? {
+      STRIPE_ACCOUNT_ENDPOINT_SECRET = var.stripe.account_endpoint_secret
+    } : {},
     var.turnstile != null ? {
       TURNSTILE_SECRET_KEY = var.turnstile.secret_key
       TURNSTILE_SITE_KEY   = var.turnstile.site_key
@@ -65,6 +68,12 @@ locals {
       TWILIO_AUTH_TOKEN  = var.twilio.auth_token
     } : {},
     var.twilio != null && var.twilio.sms_number != null ? { TWILIO_SMS_NUMBER = var.twilio.sms_number } : {},
+    var.twilio != null && var.twilio.sms_debug_destination != null ? {
+      TWILIO_SMS_DEBUG_DESTINATION = var.twilio.sms_debug_destination
+    } : {},
+    var.devise_secret_key != null ? { DEVISE_SECRET_KEY = var.devise_secret_key } : {},
+    var.ses_configuration_set != null ? { SES_CONFIGURATION_SET = var.ses_configuration_set } : {},
+    var.session_days_trim_threshold != null ? { SESSION_DAYS_TRIM_THRESHOLD = tostring(var.session_days_trim_threshold) } : {},
     var.autoscale != null ? {
       AUTOSCALE_MIN_INSTANCES = tostring(var.autoscale.min_instances)
       AUTOSCALE_MAX_INSTANCES = tostring(var.autoscale.max_instances)
@@ -100,6 +109,9 @@ locals {
       STRIPE_PUBLISHABLE_KEY         = "SecureString"
       STRIPE_CONNECT_ENDPOINT_SECRET = "SecureString"
     } : {},
+    var.stripe != null && var.stripe.account_endpoint_secret != null ? {
+      STRIPE_ACCOUNT_ENDPOINT_SECRET = "SecureString"
+    } : {},
     var.turnstile != null ? {
       TURNSTILE_SECRET_KEY = "SecureString"
       TURNSTILE_SITE_KEY   = "SecureString"
@@ -109,6 +121,10 @@ locals {
       TWILIO_AUTH_TOKEN  = "SecureString"
     } : {},
     var.twilio != null && var.twilio.sms_number != null ? { TWILIO_SMS_NUMBER = "String" } : {},
+    var.twilio != null && var.twilio.sms_debug_destination != null ? { TWILIO_SMS_DEBUG_DESTINATION = "String" } : {},
+    var.devise_secret_key != null ? { DEVISE_SECRET_KEY = "SecureString" } : {},
+    var.ses_configuration_set != null ? { SES_CONFIGURATION_SET = "String" } : {},
+    var.session_days_trim_threshold != null ? { SESSION_DAYS_TRIM_THRESHOLD = "String" } : {},
     var.autoscale != null ? {
       AUTOSCALE_MIN_INSTANCES = "String"
       AUTOSCALE_MAX_INSTANCES = "String"
