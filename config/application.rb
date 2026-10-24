@@ -2,7 +2,21 @@
 
 require_relative "boot"
 
-require "rails/all"
+require "rails"
+
+# Everything in rails/all except Action Cable, which this app doesn't use
+%w[
+  active_record/railtie
+  active_storage/engine
+  action_controller/railtie
+  action_view/railtie
+  action_mailer/railtie
+  active_job/railtie
+  action_mailbox/engine
+  action_text/engine
+  rails/test_unit/railtie
+].each { |railtie| require railtie }
+
 require File.expand_path("lib/intercode/virtual_host_constraint", Rails.root)
 
 # Require the gems listed in Gemfile, including any gems
@@ -35,7 +49,7 @@ module Intercode
     config.middleware.insert_after ActionDispatch::Executor, Intercode::FindVirtualHost
     config.middleware.use Rack::Deflater
 
-# To enable tsvectors and triggers; hopefully can get rid of this at some point :(
+    # To enable tsvectors and triggers; hopefully can get rid of this at some point :(
     config.active_record.schema_format = :sql
 
     config.generators do |g|
