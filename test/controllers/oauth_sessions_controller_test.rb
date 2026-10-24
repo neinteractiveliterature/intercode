@@ -11,13 +11,12 @@ class OAuthSessionsControllerTest < ActionDispatch::IntegrationTest
   end
 
   describe "POST /oauth_session/refresh instrumentation" do
-    it "reports cookie_absent when there's no refresh cookie" do
+    it "rejects a request with no refresh cookie without reporting it, since that's every logged-out visitor" do
       reports = capture_error_reports { post "/oauth_session/refresh" }
 
       assert_response :unauthorized
-      assert_equal 1, reports.length
-      assert_equal :cookie_absent, reports.first[:reason]
-      assert_equal({ oauth_refresh_failure: "cookie_absent" }, reports.first[:tags])
+      assert_equal "invalid_grant", response.parsed_body["error"]
+      assert_empty reports
     end
 
     it "reports token_not_found when the cookie references no access token row" do

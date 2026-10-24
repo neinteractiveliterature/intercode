@@ -47,6 +47,15 @@ type TokenResponseBody = {
   scope: string;
 };
 
+class TokenEndpointError extends Error {
+  status: number;
+
+  constructor(path: string, status: number) {
+    super(`${path} failed: HTTP ${status}`);
+    this.status = status;
+  }
+}
+
 // The refresh token lives in an HttpOnly `__Host-` cookie set by the
 // `/oauth_session/*` endpoints. The SPA only handles the access token
 // (in memory, not persisted) and the PKCE challenge during sign-in.
@@ -59,6 +68,10 @@ export class AuthenticationManager {
   currentLoginFlowData?: LoginFlowData;
   jwtToken?: string;
   private refreshPromise?: Promise<void>;
+  // Set once the server has said there's no session behind our cookie (or no cookie at all), so that logged-out
+  // visitors don't repeat a refresh that can't succeed before every query. Only a 401 sets it: a network error or a
+  // 5xx says nothing about whether the visitor is logged in.
+  private knownAnonymous = false;
 
   constructor(clientId?: string) {
     this.clientId = clientId;
@@ -148,6 +161,7 @@ export class AuthenticationManager {
       });
 
       this.jwtToken = tokenResponse.access_token;
+      this.knownAnonymous = false;
 
       const returnPath = loginFlowData.returnPath || '/';
       return { returnPath };
@@ -164,9 +178,11 @@ export class AuthenticationManager {
     try {
       const tokenResponse = await this.postToTokenEndpoint('/oauth_session/refresh', {});
       this.jwtToken = tokenResponse.access_token;
+      this.knownAnonymous = false;
       return true;
-    } catch {
+    } catch (e) {
       this.jwtToken = undefined;
+      this.noteRefreshFailure(e);
       return false;
     }
   }
@@ -178,6 +194,9 @@ export class AuthenticationManager {
   async ensureFreshAccessToken(): Promise<string | undefined> {
     if (this.jwtToken && !this.isAccessTokenExpired()) {
       return this.jwtToken;
+    }
+    if (!this.jwtToken && this.knownAnonymous) {
+      return undefined;
     }
     if (!this.refreshPromise) {
       this.refreshPromise = this.performRefresh().finally(() => {
@@ -200,11 +219,19 @@ export class AuthenticationManager {
     try {
       const tokenResponse = await this.postToTokenEndpoint('/oauth_session/refresh', {});
       this.jwtToken = tokenResponse.access_token;
+      this.knownAnonymous = false;
     } catch (e) {
       // Cookie missing, revoked, or server unreachable. Either way the user
       // is no longer authenticated locally; let the caller fall through.
       console.warn('Cookie-backed refresh failed; clearing in-memory access token', e);
       this.jwtToken = undefined;
+      this.noteRefreshFailure(e);
+    }
+  }
+
+  private noteRefreshFailure(error: unknown) {
+    if (error instanceof TokenEndpointError && error.status === 401) {
+      this.knownAnonymous = true;
     }
   }
 
@@ -219,6 +246,7 @@ export class AuthenticationManager {
     }
 
     this.jwtToken = undefined;
+    this.knownAnonymous = false;
 
     const config = await this.getOpenidConfig();
     const endSessionEndpoint = config.serverMetadata().end_session_endpoint;
@@ -227,6 +255,7 @@ export class AuthenticationManager {
 
   async reset(): Promise<void> {
     this.jwtToken = undefined;
+    this.knownAnonymous = false;
   }
 
   private async postToTokenEndpoint(path: string, body: Record<string, string>): Promise<TokenResponseBody> {
@@ -237,7 +266,7 @@ export class AuthenticationManager {
       body: JSON.stringify(body),
     });
     if (!response.ok) {
-      throw new Error(`${path} failed: HTTP ${response.status}`);
+      throw new TokenEndpointError(path, response.status);
     }
     return (await response.json()) as TokenResponseBody;
   }
