@@ -695,7 +695,6 @@ DEPENDENCIES
   capybara
   civil_service!
   cloudwatch_scheduler!
-  connection_pool (< 4)
   csv
   cuprite
   database_cleaner-active_record
