@@ -71,6 +71,9 @@ variable "stripe" {
     secret_key              = string
     publishable_key         = string
     connect_endpoint_secret = string
+    # Signing secret for the account webhook endpoint (/stripe_webhook/account). Only needed if that endpoint is
+    # registered with Stripe.
+    account_endpoint_secret = optional(string)
   })
   sensitive = true
   default   = null
@@ -92,6 +95,8 @@ variable "twilio" {
     account_sid = string
     auth_token  = string
     sms_number  = optional(string)
+    # If set, every SMS is sent to this number instead of its real recipient. For testing only.
+    sms_debug_destination = optional(string)
   })
   sensitive = true
   default   = null
@@ -149,6 +154,29 @@ variable "cloudwatch_log_group" {
 variable "intercode_host" {
   description = "Primary hostname for the Intercode deployment (e.g. 'www.neilhosting.net'). If null, no SSM parameter is written."
   type        = string
+  default     = null
+}
+
+variable "devise_secret_key" {
+  description = <<-EOT
+    Secret key Devise uses to digest its tokens (password resets, confirmations). If null, nothing is written and the
+    app falls back to a key that is checked in to its repository, so set this for any real deployment. Changing it
+    invalidates outstanding reset and confirmation links.
+  EOT
+  type        = string
+  sensitive   = true
+  default     = null
+}
+
+variable "ses_configuration_set" {
+  description = "Name of the SES configuration set to send outgoing email with (e.g. the ses_email_receiving module's configuration_set_name). If null, no SSM parameter is written and email is sent without one."
+  type        = string
+  default     = null
+}
+
+variable "session_days_trim_threshold" {
+  description = "How many days the nightly cleanup keeps old sessions for. If null, no SSM parameter is written and the app's default (30) applies."
+  type        = number
   default     = null
 }
 
