@@ -20,6 +20,7 @@ class HostingServiceAdapters::Fly < HostingServiceAdapters::Base
   end
 
   CPU_BALANCE_TREND_WINDOW = "10m"
+  CPU_BALANCE_TREND_WINDOW_SECONDS = 10.minutes
 
   def applicable?
     ENV["FLY_APP_NAME"].present? && ENV["FLY_API_TOKEN"].present?
@@ -34,11 +35,13 @@ class HostingServiceAdapters::Fly < HostingServiceAdapters::Base
 
   # Fly's shared CPUs run on a burst balance that drains whenever usage is above the baseline and throttles the machine
   # to the baseline (6% for shared-cpu-1x) once it's empty. This estimates the time left from each machine's balance and
-  # its recent trend. Needs FLY_METRICS_TOKEN (a read-only org token) and FLY_ORG_SLUG; without them, returns nil.
+  # its recent trend. Machines younger than the trend window are skipped, since the window would span their boot, when
+  # the balance briefly falls. Needs FLY_METRICS_TOKEN (a read-only org token) and FLY_ORG_SLUG; without them, returns
+  # nil.
   def seconds_until_cpu_exhaustion(group:)
     return nil unless metrics_configured?
 
-    machine_ids = instances_state.find_instances(group:).reject { |instance| instance.type == :large }.map(&:id)
+    machine_ids = settled_burstable_instances(group).map(&:id)
     return nil if machine_ids.empty?
 
     balances = query_metric_by_instance("fly_instance_cpu_balance{#{app_selector}}")
@@ -73,6 +76,13 @@ class HostingServiceAdapters::Fly < HostingServiceAdapters::Base
   end
 
   private
+
+  def settled_burstable_instances(group)
+    cutoff = CPU_BALANCE_TREND_WINDOW_SECONDS.ago
+    instances_state
+      .find_instances(group:)
+      .reject { |instance| instance.type == :large || (instance.created_at && instance.created_at > cutoff) }
+  end
 
   def metrics_configured?
     ENV["FLY_METRICS_TOKEN"].present? && ENV["FLY_ORG_SLUG"].present?
