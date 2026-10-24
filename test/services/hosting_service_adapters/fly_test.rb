@@ -21,8 +21,9 @@ class HostingServiceAdapters::FlyTest < ActiveSupport::TestCase
 
   let(:adapter) { Fly.new }
 
-  def machine(id, group:, guest: Fly::SMALL_GUEST, state: "started")
+  def machine(id, group:, guest: Fly::SMALL_GUEST, state: "started", created_at: nil)
     {
+      "created_at" => created_at&.iso8601,
       "id" => id,
       "instance_id" => "instance-#{id}",
       "name" => "machine-#{id}",
@@ -336,16 +337,16 @@ class HostingServiceAdapters::FlyTest < ActiveSupport::TestCase
     before do
       ENV["FLY_METRICS_TOKEN"] = "metrics-token"
       ENV["FLY_ORG_SLUG"] = "test-org"
-      stub_api(
-        :get,
-        "/v1/apps/test-app/machines",
-        [
-          machine("w1", group: "web"),
-          machine("w2", group: "web"),
-          machine("w3", group: "web", guest: Fly::LARGE_GUEST),
-          machine("s1", group: "shoryuken")
-        ]
-      )
+      stub_api(:get, "/v1/apps/test-app/machines", machines)
+    end
+
+    let(:machines) do
+      [
+        machine("w1", group: "web"),
+        machine("w2", group: "web"),
+        machine("w3", group: "web", guest: Fly::LARGE_GUEST),
+        machine("s1", group: "shoryuken")
+      ]
     end
 
     def metric_response(values)
@@ -424,6 +425,21 @@ class HostingServiceAdapters::FlyTest < ActiveSupport::TestCase
       end
 
       assert_nil result
+    end
+
+    describe "with a machine too new for the trend window to be meaningful" do
+      let(:machines) do
+        [machine("w1", group: "web", created_at: 5.minutes.ago), machine("w2", group: "web", created_at: 2.hours.ago)]
+      end
+
+      it "ignores that machine" do
+        result = nil
+        with_stubbed_metrics(balances: { "w1" => 100, "w2" => 6000 }, trends: { "w1" => -50, "w2" => -2 }) do
+          result = adapter.seconds_until_cpu_exhaustion(group: :web)
+        end
+
+        assert_in_delta 3000, result, 0.001
+      end
     end
 
     it "is nil without a metrics token or org" do
