@@ -91,8 +91,7 @@ deployments don't change.
   `LOG_QUERY_SOURCE`, `RACK_MINI_PROFILER`.
 - **Development and one-off tasks:** `DEVELOPMENT_DATABASE_URL`, `TEST_DATABASE_URL`, `ANNOTATERB_SKIP_ON_DB_TASKS`,
   `INPUT_FILE`, `ORGANIZATION_NAME`.
-- **Unused:** `REDIS_URL` configures Action Cable in production, which the app doesn't use yet, and `RAILS_MASTER_KEY`
-  is Rails' own variable (the app has no credentials files).
+- **Not read by the app:** `RAILS_MASTER_KEY` is Rails' own variable, and the app has no credentials files.
 
 ## Outputs
 
