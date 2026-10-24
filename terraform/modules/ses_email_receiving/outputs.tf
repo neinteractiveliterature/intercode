@@ -13,3 +13,8 @@ output "inbox_deliveries_sns_topic_arn" {
   value       = aws_sns_topic.inbox_deliveries.arn
 }
 
+
+output "configuration_set_name" {
+  description = "Name of the SES configuration set. Pass to intercode_aws_resources as ses_configuration_set so the app sends its email with it."
+  value       = aws_ses_configuration_set.default.name
+}
