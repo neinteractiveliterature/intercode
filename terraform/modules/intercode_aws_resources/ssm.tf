@@ -65,6 +65,11 @@ locals {
     var.stripe != null && var.stripe.account_endpoint_secret != null ? {
       STRIPE_ACCOUNT_ENDPOINT_SECRET = var.stripe.account_endpoint_secret
     } : {},
+    var.rollbar != null ? { ROLLBAR_ACCESS_TOKEN = var.rollbar.access_token } : {},
+    var.rollbar != null && var.rollbar.client_access_token != null ? {
+      ROLLBAR_CLIENT_ACCESS_TOKEN = var.rollbar.client_access_token
+    } : {},
+    var.rollbar != null && var.rollbar.environment != null ? { ROLLBAR_ENV = var.rollbar.environment } : {},
     var.turnstile != null ? {
       TURNSTILE_SECRET_KEY = var.turnstile.secret_key
       TURNSTILE_SITE_KEY   = var.turnstile.site_key
@@ -118,6 +123,11 @@ locals {
     var.stripe != null && var.stripe.account_endpoint_secret != null ? {
       STRIPE_ACCOUNT_ENDPOINT_SECRET = "SecureString"
     } : {},
+    var.rollbar != null ? { ROLLBAR_ACCESS_TOKEN = "SecureString" } : {},
+    var.rollbar != null && var.rollbar.client_access_token != null ? {
+      ROLLBAR_CLIENT_ACCESS_TOKEN = "SecureString"
+    } : {},
+    var.rollbar != null && var.rollbar.environment != null ? { ROLLBAR_ENV = "String" } : {},
     var.turnstile != null ? {
       TURNSTILE_SECRET_KEY = "SecureString"
       TURNSTILE_SITE_KEY   = "SecureString"
