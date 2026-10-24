@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 # Adapted from https://github.com/liefery-it-legacy/loggery-gem
 class ShoryukenJSONLogging
   class << self
@@ -23,18 +24,13 @@ class ShoryukenJSONLogging
   private
 
   def build_metadata(queue, body)
-    dyno_id = ENV.fetch("DYNO", nil)
-    dyno_type = dyno_id&.split(".")&.first
-
     {
       jid: body["job_id"],
       thread_id: Thread.current.object_id.to_s(36),
       job_class: body["job_class"],
       arguments: body["arguments"].inspect,
       queue: queue,
-      executions: body["executions"],
-      dyno_type: dyno_type,
-      dyno_id: dyno_id
+      executions: body["executions"]
     }
   end
 

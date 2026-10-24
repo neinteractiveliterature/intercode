@@ -95,7 +95,6 @@ gem "lograge"
 # Miscellany
 gem "browser"
 gem "csv"
-gem "dalli"
 gem "domain_prefix"
 gem "faraday"
 gem "fly.io-rails"

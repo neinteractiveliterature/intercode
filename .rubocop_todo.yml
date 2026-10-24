@@ -269,6 +269,10 @@ Style/MutableConstant:
   Exclude:
     - 'app/models/signup.rb'
 
+Style/OneClassPerFile:
+  Exclude:
+    - 'config/initializers/shoryuken.rb'
+
 Style/ReduceToHash:
   Exclude:
     - 'app/liquid_drops/convention_drop.rb'

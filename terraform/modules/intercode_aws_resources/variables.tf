@@ -157,6 +157,18 @@ variable "intercode_host" {
   default     = null
 }
 
+variable "rollbar" {
+  description = "Rollbar error reporting, as an alternative or addition to Sentry. If null, no Rollbar SSM parameters are written and Rollbar is inactive."
+  type = object({
+    access_token        = string
+    client_access_token = optional(string)
+    # The environment name reported to Rollbar. Defaults to the Rails environment.
+    environment = optional(string)
+  })
+  sensitive = true
+  default   = null
+}
+
 variable "devise_secret_key" {
   description = <<-EOT
     Secret key Devise uses to digest its tokens (password resets, confirmations). If null, a random one is generated and
