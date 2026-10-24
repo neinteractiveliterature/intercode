@@ -11,10 +11,6 @@ gem "benchmark"
 # GitHub tag has it. Using the git source avoids constant warnings on Ruby 4.0.
 gem "prettyprint", github: "ruby/prettyprint", tag: "v0.2.1"
 
-# locking to connection_pool 2.x until ActiveSupport's memcachestore supports the v3 API
-# see https://github.com/mperham/connection_pool/issues/212
-gem "connection_pool", "< 4"
-
 gem "pg"
 gem "puma"
 
