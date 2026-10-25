@@ -29,10 +29,15 @@ type Bootstrap = {
   client: ApolloClient;
 };
 
-// Fetch /client_configuration *first*, then stand up the auth manager and
-// Apollo client using its values. This lets the AuthenticationManager refresh
-// expired access tokens on cold boot (which requires the OAuth clientId and
-// OIDC issuer URL) without depending on server-rendered HTML.
+// The cookie refresh only needs the HttpOnly session cookie, not anything from /client_configuration, so start it
+// right away rather than after the configuration has loaded. The OAuth settings get filled in on the same manager
+// once they arrive.
+const authManager = AuthenticationManager.deserializeFromBrowser();
+const cookieBootstrapPromise = authManager.bootstrapFromCookie();
+
+// Fetch /client_configuration *first*, then stand up the Apollo client using its values. This lets the
+// AuthenticationManager refresh expired access tokens (which requires the OAuth clientId and OIDC issuer URL)
+// without depending on server-rendered HTML.
 const bootstrapPromise: Promise<Bootstrap> = (async () => {
   // /client_configuration is needed to construct the auth manager; the
   // authenticity-tokens refresh is independent and can run in parallel.
@@ -61,17 +66,14 @@ const bootstrapPromise: Promise<Bootstrap> = (async () => {
     clientConfiguration.rollbar_client_access_token,
   );
 
-  const authManager = AuthenticationManager.deserializeFromBrowser(
-    clientConfiguration.oauth_frontend_application_uid ?? undefined,
-  );
+  authManager.clientId = clientConfiguration.oauth_frontend_application_uid ?? undefined;
   authManager.issuerUrl = clientConfiguration.oidc_issuer_url ?? undefined;
   authManager.authorizationEndpoint = clientConfiguration.oidc_authorization_endpoint ?? undefined;
   authManager.endSessionEndpoint = clientConfiguration.oidc_end_session_endpoint ?? undefined;
 
-  // Try to redeem the refresh cookie for an access token before we build the
-  // Apollo client, so the first GraphQL query goes out authenticated when the
-  // user already has a session. 401 means "no session yet" — keep going.
-  await authManager.bootstrapFromCookie();
+  // Wait for the refresh cookie to be redeemed for an access token before we build the Apollo client, so the first
+  // GraphQL query goes out authenticated when the user already has a session. 401 means "no session yet" — keep going.
+  await cookieBootstrapPromise;
 
   const client = buildBrowserApolloClient(authenticityTokensManager, authManager);
 
