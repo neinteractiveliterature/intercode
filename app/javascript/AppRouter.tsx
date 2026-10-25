@@ -23,7 +23,7 @@ import {
 } from './TicketTypeAdmin/loaders';
 import { organizationsLoader, singleOrganizationLoader } from './OrganizationAdmin/loaders';
 import { eventProposalWithOwnerLoader } from './EventProposals/loaders';
-import { conventionDayLoader } from './EventsApp/conventionDayUrls';
+import { redirectToFirstDayMiddleware } from './EventsApp/conventionDayUrls';
 import { signupAdminEventLoader, singleSignupLoader } from './EventsApp/SignupAdmin/loaders';
 import { teamMembersLoader } from './EventsApp/TeamMemberAdmin/loader';
 import { cmsAdminBaseQueryLoader } from './CmsAdmin/loaders';
@@ -171,13 +171,7 @@ const eventsRoutes: RouteObject[] = [
         path: 'schedule',
         children: [
           { path: ':day', lazy: () => import('./EventsApp/ScheduleApp') },
-          {
-            index: true,
-            loader: (async ({ params, request, context }) => {
-              const client = context.get(apolloClientContext);
-              return conventionDayLoader(client, { params, request });
-            }) satisfies LoaderFunction<RouterContextProvider>,
-          },
+          { index: true, middleware: [redirectToFirstDayMiddleware] },
         ],
       },
       { path: 'schedule_by_room/*', loader: () => replace('../schedule') },
