@@ -12,6 +12,10 @@ It creates:
 - An alarm that fires when the count reaches `five_xx_threshold` within
   `five_xx_period` seconds, across all distributions logging to the group
 
+Requests addressed to a distribution's raw `*.cloudfront.net` domain are not
+counted. Scanners find those domains and the Rails origin can't serve them, so
+they always return 502 without any visitor being affected.
+
 4xx responses are deliberately not alarmed on: anonymous visitors' expected
 `401`s from `/oauth_session/refresh` would swamp it. The alarm counts responses
 rather than computing a rate because these sites see only tens to hundreds of

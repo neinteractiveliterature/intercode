@@ -31,13 +31,15 @@ resource "aws_cloudwatch_log_delivery_destination" "access_logs" {
 
 # Count 5xx responses from any distribution delivering to the log group. 4xx is
 # deliberately left out: anonymous visitors' /oauth_session/refresh 401s are
-# expected and would swamp it.
+# expected and would swamp it. Requests addressed to a distribution's raw
+# *.cloudfront.net domain are left out too: scanners find those, and the Rails
+# origin can't serve them, so they always 502 without any visitor being affected.
 resource "aws_cloudwatch_log_metric_filter" "five_xx" {
   provider = aws.us_east_1
 
   name           = "${var.name}-5xx"
   log_group_name = aws_cloudwatch_log_group.access_logs.name
-  pattern        = "{ $.sc-status = \"5*\" }"
+  pattern        = "{ $.sc-status = \"5*\" && $.x-host-header != \"*.cloudfront.net\" }"
 
   metric_transformation {
     name          = "CloudFront5xxResponses"
