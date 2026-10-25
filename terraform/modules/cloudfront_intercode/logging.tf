@@ -7,7 +7,7 @@
 # ---------------------------------------------------------------------------
 
 resource "aws_cloudwatch_log_delivery_source" "access_logs" {
-  count    = var.access_log_delivery_destination_arn == null ? 0 : 1
+  count    = var.access_logs_enabled ? 1 : 0
   provider = aws.us_east_1
 
   name         = "${var.name}-access-logs"
@@ -16,7 +16,7 @@ resource "aws_cloudwatch_log_delivery_source" "access_logs" {
 }
 
 resource "aws_cloudwatch_log_delivery" "access_logs" {
-  count    = var.access_log_delivery_destination_arn == null ? 0 : 1
+  count    = var.access_logs_enabled ? 1 : 0
   provider = aws.us_east_1
 
   delivery_source_name     = aws_cloudwatch_log_delivery_source.access_logs[0].name
