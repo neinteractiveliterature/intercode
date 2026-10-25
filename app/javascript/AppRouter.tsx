@@ -12,7 +12,8 @@ import FourOhFourPage from './FourOhFourPage';
 import { SignupAutomationMode, SignupMode, SiteMode, TicketMode } from './graphqlTypes.generated';
 import { AbilityName } from './Authentication/useAuthorizationRequired';
 import { EventAdminEventsQueryDocument } from './EventAdmin/queries.generated';
-import { AppRootQueryData, AppRootQueryDocument } from './appRootQueries.generated';
+import { AppRootQueryData } from './appRootQueries.generated';
+import { appRootMiddleware } from './appRootMiddleware';
 import buildEventCategoryUrl from './EventAdmin/buildEventCategoryUrl';
 import {
   adminSingleTicketTypeLoader,
@@ -152,14 +153,6 @@ const eventPageMiddleware: MiddlewareFunction = ({ context }) => {
   const appRootData = context.get(appRootDataContext);
   if (appRootData?.convention?.site_mode === SiteMode.SingleEvent) {
     return redirect('/');
-  }
-};
-
-const appRootMiddleware: MiddlewareFunction = async ({ context }) => {
-  const client = context.get(apolloClientContext);
-  const { data } = await client.query({ query: AppRootQueryDocument });
-  if (data) {
-    context.set(appRootDataContext, data);
   }
 };
 
