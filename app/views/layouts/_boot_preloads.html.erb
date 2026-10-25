@@ -1,0 +1,3 @@
+<%# The SPA fetches both of these as soon as its entry script has loaded. Preloading them starts the requests while the entry script is still downloading; the later fetch() calls reuse the responses. %>
+<link rel="preload" href="/client_configuration" as="fetch" crossorigin="anonymous"/>
+<link rel="preload" href="/authenticity_tokens" as="fetch" crossorigin="anonymous"/>
