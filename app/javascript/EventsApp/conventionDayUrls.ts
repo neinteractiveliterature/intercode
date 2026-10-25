@@ -11,8 +11,9 @@ import { AppRootQueryData, AppRootQueryDocument } from '../appRootQueries.genera
 import { buildAppRootContextValue } from '../AppRoot';
 import getI18n from '../setupI18Next';
 import { getConventionDayTimespans } from '../TimespanUtils';
-import { replace } from 'react-router';
+import { MiddlewareFunction, replace } from 'react-router';
 import type { ApolloClient } from '@apollo/client';
+import { apolloClientContext } from '../AppContexts';
 
 function conventionDayUrlPortionFormat(
   siteMode: SiteMode | undefined,
@@ -121,3 +122,13 @@ export async function conventionDayLoader(
     conventionDayTimespansByUrlPortion,
   } satisfies ConventionDayLoaderResult;
 }
+
+// Sends /events/schedule to its first day before any loader runs. A redirect returned from a loader has to wait for the
+// page's other loaders (the layout's, for example) to finish first, and only then does the next navigation start.
+export const redirectToFirstDayMiddleware: MiddlewareFunction = async ({ context, params, request }) => {
+  const client = context.get(apolloClientContext);
+  const result = await conventionDayLoader(client, { params, request });
+  if (result instanceof Response) {
+    return result;
+  }
+};
