@@ -48,7 +48,7 @@ for example:
 
 ```
 filter `sc-status` like /^5/
-| stats count(*) by `cs(Host)`, `cs-uri-stem`
+| stats count(*) by `x-host-header`, `cs-uri-stem`
 ```
 
 ## Inputs
