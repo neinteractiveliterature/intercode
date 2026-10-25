@@ -59,16 +59,17 @@ to the Rails origin, so multi-tenant routing works correctly behind CloudFront.
 
 ## Inputs
 
-| Name                   | Description                                  | Default          |
-| ---------------------- | -------------------------------------------- | ---------------- |
-| `name`                 | Resource name prefix                         | —                |
-| `rails_origin_domain`  | Rails app domain                             | —                |
-| `assets_origin_domain` | Assets server domain                         | —                |
-| `aliases`              | CloudFront CNAMEs                            | `[]`             |
-| `acm_certificate_arn`  | ACM certificate ARN (us-east-1)              | `null`           |
-| `price_class`          | CloudFront price class                       | `PriceClass_100` |
-| `og_shell_ttl`         | TTL for `/og-shell` responses (seconds)      | `3600`           |
-| `cdn_spa_shell_ttl`    | TTL for `/cdn-spa-shell` responses (seconds) | `86400`          |
+| Name                                  | Description                                                                                                                                               | Default          |
+| ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| `name`                                | Resource name prefix                                                                                                                                      | —                |
+| `rails_origin_domain`                 | Rails app domain                                                                                                                                          | —                |
+| `assets_origin_domain`                | Assets server domain                                                                                                                                      | —                |
+| `aliases`                             | CloudFront CNAMEs                                                                                                                                         | `[]`             |
+| `acm_certificate_arn`                 | ACM certificate ARN (us-east-1)                                                                                                                           | `null`           |
+| `price_class`                         | CloudFront price class                                                                                                                                    | `PriceClass_100` |
+| `og_shell_ttl`                        | TTL for `/og-shell` responses (seconds)                                                                                                                   | `3600`           |
+| `cdn_spa_shell_ttl`                   | TTL for `/cdn-spa-shell` responses (seconds)                                                                                                              | `86400`          |
+| `access_log_delivery_destination_arn` | CloudWatch Logs delivery destination for access logs (from [`cloudfront_intercode_logging`](../cloudfront_intercode_logging)); no access logs when `null` | `null`           |
 
 ## Outputs
 

@@ -42,3 +42,9 @@ variable "cdn_spa_shell_ttl" {
   type        = number
   default     = 86400
 }
+
+variable "access_log_delivery_destination_arn" {
+  description = "ARN of the CloudWatch Logs delivery destination to send access logs to (the delivery_destination_arn output of the cloudfront_intercode_logging module). No access logs are delivered when null."
+  type        = string
+  default     = null
+}
