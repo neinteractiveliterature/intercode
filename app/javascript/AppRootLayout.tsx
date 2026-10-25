@@ -6,23 +6,7 @@ import NavigationBar from './NavigationBar';
 import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
 import { AppRootLayoutQueryData, AppRootLayoutQueryDocument } from './appRootQueries.generated';
 import { apolloClientContext } from 'AppContexts';
-
-// Avoid unnecessary layout checks when moving between pages that can't change layout
-function normalizePathForLayout(path: string) {
-  if (path.startsWith('/pages/') || path.startsWith('/users/') || path.startsWith('/oauth/authorize') || path === '/') {
-    return path;
-  }
-
-  // only event ID is relevant for layout rendering
-  const eventsMatch = path.match(/^\/events\/(\d+)/);
-  if (eventsMatch) {
-    // eslint-disable-next-line i18next/no-literal-string
-    return `/events/${eventsMatch[1]}`;
-  }
-
-  // eslint-disable-next-line i18next/no-literal-string
-  return '/non_cms_path'; // arbitrary path that's not a CMS page
-}
+import { normalizePathForLayout } from './normalizePathForLayout';
 
 export const loader: LoaderFunction<RouterContextProvider> = async ({ context, request }) => {
   const client = context.get(apolloClientContext);
