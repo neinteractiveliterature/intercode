@@ -69,6 +69,7 @@ to the Rails origin, so multi-tenant routing works correctly behind CloudFront.
 | `price_class`                         | CloudFront price class                                                                                                                                    | `PriceClass_100` |
 | `og_shell_ttl`                        | TTL for `/og-shell` responses (seconds)                                                                                                                   | `3600`           |
 | `cdn_spa_shell_ttl`                   | TTL for `/cdn-spa-shell` responses (seconds)                                                                                                              | `86400`          |
+| `access_logs_enabled`                 | Deliver access logs to the destination below                                                                                                              | `false`          |
 | `access_log_delivery_destination_arn` | CloudWatch Logs delivery destination for access logs (from [`cloudfront_intercode_logging`](../cloudfront_intercode_logging)); no access logs when `null` | `null`           |
 
 ## Outputs

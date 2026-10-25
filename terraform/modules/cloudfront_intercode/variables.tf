@@ -43,8 +43,14 @@ variable "cdn_spa_shell_ttl" {
   default     = 86400
 }
 
+variable "access_logs_enabled" {
+  description = "Whether to deliver access logs to access_log_delivery_destination_arn. This is a separate flag, rather than checking the ARN for null, because the ARN is unknown at plan time when the logging module is created in the same apply."
+  type        = bool
+  default     = false
+}
+
 variable "access_log_delivery_destination_arn" {
-  description = "ARN of the CloudWatch Logs delivery destination to send access logs to (the delivery_destination_arn output of the cloudfront_intercode_logging module). No access logs are delivered when null."
+  description = "ARN of the CloudWatch Logs delivery destination to send access logs to (the delivery_destination_arn output of the cloudfront_intercode_logging module). Required when access_logs_enabled is true."
   type        = string
   default     = null
 }

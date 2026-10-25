@@ -38,6 +38,7 @@ module "cloudfront" {
   source = "path/to/modules/cloudfront_intercode"
   # ...
 
+  access_logs_enabled                 = true
   access_log_delivery_destination_arn = module.cloudfront_logging.delivery_destination_arn
 }
 ```
