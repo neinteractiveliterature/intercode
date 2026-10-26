@@ -379,6 +379,7 @@ jobs:
           - ses_email_receiving
           - intercode_aws_resources
           - sentry
+          - assets_bucket_intercode
     steps:
       - uses: actions/checkout@v7
       - uses: opentofu/setup-opentofu@v2

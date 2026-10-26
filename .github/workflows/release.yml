@@ -28,6 +28,43 @@ jobs:
         run: docker tag ghcr.io/neinteractiveliterature/intercode-assets:${{ github.sha }} ghcr.io/neinteractiveliterature/intercode-assets:latest
       - name: Push to registry
         run: docker push ghcr.io/neinteractiveliterature/intercode-assets:latest && docker push ghcr.io/neinteractiveliterature/intercode-assets:${{ github.event.release.name }}
+  # Keeps each release's built assets in an S3 bucket, without deleting earlier releases' files, so that stale
+  # tabs and cached pages can still load their chunks. Skipped unless ASSETS_BUCKET is set; see
+  # terraform/modules/assets_bucket_intercode.
+  assets-bucket-release:
+    runs-on: ubuntu-latest
+    if: vars.ASSETS_BUCKET != ''
+    needs:
+      - docker-release
+    permissions:
+      id-token: write
+      contents: read
+    steps:
+      - uses: actions/checkout@v7
+      - name: Log in to registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+      - name: Extract assets from image
+        run: |
+          docker pull ghcr.io/neinteractiveliterature/intercode-assets:${{ github.sha }}
+          container=$(docker create ghcr.io/neinteractiveliterature/intercode-assets:${{ github.sha }})
+          docker cp "$container:/usr/share/nginx/html/packs" packs
+          docker rm "$container"
+      - uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: ${{ vars.ASSETS_UPLOAD_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION || 'us-east-1' }}
+      # Upload every file, not only new ones: the upload resets the age that the bucket's lifecycle rule expires on.
+      - name: Upload hashed assets
+        run: |
+          aws s3 cp packs "s3://${{ vars.ASSETS_BUCKET }}/packs" --recursive \
+            --exclude "application.js" --exclude "application-styles.js" \
+            --cache-control "public, max-age=15552000"
+      # The unhashed entry files are replaced each release, so they must always be revalidated.
+      - name: Upload entry files
+        run: |
+          for file in $(jq -r '.[]' config/nocache-files.json); do
+            aws s3 cp "packs/$(basename "$file")" "s3://${{ vars.ASSETS_BUCKET }}$file" --cache-control "no-cache"
+          done
   fly-release:
     runs-on: ubuntu-latest
     needs:
