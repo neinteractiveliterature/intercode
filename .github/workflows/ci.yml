@@ -275,8 +275,12 @@ jobs:
           platforms: linux/amd64
           tags: |
             ghcr.io/neinteractiveliterature/intercode-assets:${{ github.sha }}
+          # Layer on the last released assets image, so the previous release's files stay available (see
+          # Dockerfile.assets). latest is only retagged when a release is published.
           build-args: |
             BASEIMAGE=ghcr.io/neinteractiveliterature/intercode:${{ github.sha }}
+            PREVIOUS_ASSETS_IMAGE=ghcr.io/neinteractiveliterature/intercode-assets:latest
+            PREVIOUS_ASSETS_RETENTION_DAYS=30
   doc-site:
     name: Build doc site
     runs-on: ubuntu-latest
