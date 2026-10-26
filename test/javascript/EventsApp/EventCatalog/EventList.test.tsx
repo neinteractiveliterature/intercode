@@ -79,6 +79,12 @@ describe('EventList (the event catalog)', () => {
 
   const lastVariables = () => queried.mock.calls[queried.mock.calls.length - 1][0];
 
+  // waitFor's default 1000 ms is too tight for the re-query after an interaction when the machine is busy (parallel
+  // test files, shared CI runners), and there's no visible change to wait on instead: the labels are derived from the
+  // same URL state that triggers the query.
+  const REQUERY_TIMEOUT = 5000;
+  const waitForVariables = (assertion: () => void) => waitFor(assertion, { timeout: REQUERY_TIMEOUT });
+
   it('lists the events with a heading and tabs for the list and table views', async () => {
     const r = await renderPage({
       entries: [buildCatalogEvent({ id: '1', title: 'Alpha' }), buildCatalogEvent({ id: '2', title: 'Beta' })],
@@ -150,7 +156,7 @@ describe('EventList (the event catalog)', () => {
 
       await user.type(r.getByLabelText('Search'), 'dragon');
 
-      await waitFor(() => expect(lastVariables().filters).toMatchObject({ text_search: 'dragon' }));
+      await waitForVariables(() => expect(lastVariables().filters).toMatchObject({ text_search: 'dragon' }));
     });
   });
 
@@ -176,7 +182,7 @@ describe('EventList (the event catalog)', () => {
       await user.click(r.getByRole('button', { name: /Sort by/ }));
       await user.click(await r.findByRole('button', { name: 'Order added (newest first)' }));
 
-      await waitFor(() => expect(lastVariables().sort).toEqual([{ field: 'created_at', desc: true }]));
+      await waitForVariables(() => expect(lastVariables().sort).toEqual([{ field: 'created_at', desc: true }]));
     });
   });
 
@@ -217,7 +223,7 @@ describe('EventList (the event catalog)', () => {
 
       await user.click(await r.findByRole('checkbox', { name: 'Larp' }));
 
-      await waitFor(() => expect(lastVariables().filters.category).toEqual([4]));
+      await waitForVariables(() => expect(lastVariables().filters.category).toEqual([4]));
     });
   });
 
