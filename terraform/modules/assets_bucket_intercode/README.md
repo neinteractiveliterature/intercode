@@ -31,6 +31,7 @@ module "assets_bucket" {
 
 resource "aws_cloudfront_distribution" "assets" {
   # ...
+  default_root_object = "index.html"
 
   origin {
     origin_id                = "assets-bucket"
@@ -42,6 +43,10 @@ resource "aws_cloudfront_distribution" "assets" {
 
 The distribution doesn't need a custom origin config for S3; keep whatever viewer response headers (such as a
 security-headers Lambda@Edge) you already have on its behavior.
+
+Set a `default_root_object` on the distribution (any key that doesn't exist, such as `index.html`). The bucket policy
+lets CloudFront list the bucket, so that a missing file is a 404 rather than a 403, and without a root object a request
+for `/` returns a listing of every key.
 
 ## How releases upload
 
