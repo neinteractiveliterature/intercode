@@ -29,7 +29,15 @@ class HostingServiceAdapters::Base
       update_instance_group(group: row[:group], type: row[:type], count: 0)
     end
 
+    remove_stopped_instances(groups: managed_groups)
+
     instances_state
+  end
+
+  # Gets rid of instances in these groups that have stopped and aren't coming back. They don't count toward the
+  # targets, and bringing one back could mean running an older release of the app, so the targets are met with new
+  # instances instead.
+  def remove_stopped_instances(groups:)
   end
 
   def update_instance_group(group:, type:, count:)
