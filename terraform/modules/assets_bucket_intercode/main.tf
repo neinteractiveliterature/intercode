@@ -33,20 +33,34 @@ resource "aws_s3_bucket_public_access_block" "assets" {
   restrict_public_buckets = true
 }
 
-# Release assets are uploaded again by every release (see the README), so an
-# object's age is the time since the last release that contained it.
+# A file's retention starts when a release stops containing it, not when it was uploaded. S3 can only count from an
+# object's last modification, so the release upload marks the files the new release dropped by copying each one onto
+# itself with the `obsolete` tag (which resets its age), and this rule expires only tagged objects. Files the current
+# release contains are uploaded without the tag, so they never expire, however long it is between releases.
 resource "aws_s3_bucket_lifecycle_configuration" "assets" {
   bucket = aws_s3_bucket.assets.id
 
   rule {
-    id     = "expire-old-release-assets"
+    id     = "expire-obsolete-release-assets"
     status = "Enabled"
 
-    filter {}
+    filter {
+      tag {
+        key   = "obsolete"
+        value = "true"
+      }
+    }
 
     expiration {
       days = var.retention_days
     }
+  }
+
+  rule {
+    id     = "abort-incomplete-multipart-uploads"
+    status = "Enabled"
+
+    filter {}
 
     abort_incomplete_multipart_upload {
       days_after_initiation = 1
@@ -173,8 +187,9 @@ resource "aws_iam_role" "release_upload" {
 data "aws_iam_policy_document" "release_upload" {
   count = local.github_role_enabled ? 1 : 0
 
+  # Marking a file obsolete is a copy onto itself with a new tag, which needs to read it and read and write its tags.
   statement {
-    actions   = ["s3:PutObject"]
+    actions   = ["s3:PutObject", "s3:GetObject", "s3:GetObjectTagging", "s3:PutObjectTagging"]
     resources = ["${aws_s3_bucket.assets.arn}/*"]
   }
 
