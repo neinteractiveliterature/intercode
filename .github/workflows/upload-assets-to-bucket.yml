@@ -1,0 +1,64 @@
+name: Upload assets to bucket
+
+# Uploads a commit's built assets (from its intercode-assets image) to the assets bucket, and marks the files that
+# commit's release dropped as obsolete. See terraform/modules/assets_bucket_intercode. Called by the release workflow,
+# and can be run by hand to upload an already-built commit.
+#
+# The role it assumes only trusts the refs listed in the module's github_oidc_subjects (release tags by default), so a
+# manual run has to be started from a ref that role trusts.
+
+on:
+  workflow_call:
+    inputs:
+      sha:
+        description: Commit whose intercode-assets image to upload
+        required: true
+        type: string
+  workflow_dispatch:
+    inputs:
+      sha:
+        description: Commit whose intercode-assets image to upload (full SHA; defaults to the commit this runs from)
+        required: false
+        type: string
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+      packages: read
+    env:
+      ASSETS_SHA: ${{ inputs.sha || github.sha }}
+    steps:
+      - name: Check that the bucket is configured
+        run: |
+          if [ -z "${{ vars.ASSETS_BUCKET }}" ] || [ -z "${{ vars.ASSETS_UPLOAD_ROLE_ARN }}" ]; then
+            echo "ASSETS_BUCKET and ASSETS_UPLOAD_ROLE_ARN must be set as repository variables" >&2
+            exit 1
+          fi
+      - name: Check the commit
+        run: |
+          if ! echo "$ASSETS_SHA" | grep -qE '^[0-9a-f]{40}$'; then
+            echo "sha must be a full 40-character commit SHA, got: $ASSETS_SHA" >&2
+            exit 1
+          fi
+      - uses: actions/checkout@v7
+      - name: Log in to registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+      - name: Extract assets from image
+        run: |
+          docker pull ghcr.io/neinteractiveliterature/intercode-assets:$ASSETS_SHA
+          container=$(docker create ghcr.io/neinteractiveliterature/intercode-assets:$ASSETS_SHA)
+          docker cp "$container:/usr/share/nginx/html/packs" packs
+          docker cp "$container:/etc/intercode-assets/current-files.txt" current-files.txt
+          docker rm "$container"
+          # The image also carries over earlier releases' files (see Dockerfile.assets). Only this release's own
+          # files count as current, so the rest can be marked obsolete in the bucket.
+          (cd packs && find . -type f | sort) | comm -23 - current-files.txt | (cd packs && xargs -r rm)
+      - uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: ${{ vars.ASSETS_UPLOAD_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION || 'us-east-1' }}
+      - name: Upload assets and mark the ones this release dropped as obsolete
+        run: script/uploadReleaseAssets.sh "${{ vars.ASSETS_BUCKET }}" packs

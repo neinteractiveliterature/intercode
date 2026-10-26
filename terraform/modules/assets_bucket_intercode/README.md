@@ -45,9 +45,10 @@ security-headers Lambda@Edge) you already have on its behavior.
 
 ## How releases upload
 
-The release workflow (`.github/workflows/release.yml`) has an `assets-bucket-release` job that copies the release's
-`public/packs` out of the `intercode-assets` image and uploads it, but only when the repository variable
-`ASSETS_BUCKET` is set. Set these repository variables from the module's outputs:
+The release workflow (`.github/workflows/release.yml`) has an `assets-bucket-release` job that runs
+`.github/workflows/upload-assets-to-bucket.yml`. That workflow copies the release's `public/packs` out of the
+`intercode-assets` image and uploads it, but the release job only runs when the repository variable `ASSETS_BUCKET` is
+set. Set these repository variables from the module's outputs:
 
 | Variable                 | Value                          |
 | ------------------------ | ------------------------------ |
@@ -70,6 +71,11 @@ modification, so `script/uploadReleaseAssets.sh` does it in three steps:
 
 The upload role can only upload, read and tag objects in this bucket; it can't delete anything, which is left to the
 lifecycle rule.
+
+To upload an already-built commit without a release, run the "Upload assets to bucket" workflow by hand and give it
+the commit's full SHA. The upload role only trusts the refs in `github_oidc_subjects` (any release tag by default), so
+a manual run has to start from a ref the role trusts; add `repo:<owner>/<repo>:ref:refs/heads/main` to
+`github_oidc_subjects` if you want to run it from `main`.
 
 ## Cutting over
 

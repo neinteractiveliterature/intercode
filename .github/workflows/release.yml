@@ -30,35 +30,18 @@ jobs:
         run: docker push ghcr.io/neinteractiveliterature/intercode-assets:latest && docker push ghcr.io/neinteractiveliterature/intercode-assets:${{ github.event.release.name }}
   # Keeps each release's built assets in an S3 bucket, without deleting earlier releases' files, so that stale
   # tabs and cached pages can still load their chunks. Skipped unless ASSETS_BUCKET is set; see
-  # terraform/modules/assets_bucket_intercode.
+  # terraform/modules/assets_bucket_intercode and upload-assets-to-bucket.yml.
   assets-bucket-release:
-    runs-on: ubuntu-latest
     if: vars.ASSETS_BUCKET != ''
     needs:
       - docker-release
     permissions:
       id-token: write
       contents: read
-    steps:
-      - uses: actions/checkout@v7
-      - name: Log in to registry
-        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-      - name: Extract assets from image
-        run: |
-          docker pull ghcr.io/neinteractiveliterature/intercode-assets:${{ github.sha }}
-          container=$(docker create ghcr.io/neinteractiveliterature/intercode-assets:${{ github.sha }})
-          docker cp "$container:/usr/share/nginx/html/packs" packs
-          docker cp "$container:/etc/intercode-assets/current-files.txt" current-files.txt
-          docker rm "$container"
-          # The image also carries over earlier releases' files (see Dockerfile.assets). Only this release's own
-          # files count as current, so the rest can be marked obsolete in the bucket.
-          (cd packs && find . -type f | sort) | comm -23 - current-files.txt | (cd packs && xargs -r rm)
-      - uses: aws-actions/configure-aws-credentials@v6
-        with:
-          role-to-assume: ${{ vars.ASSETS_UPLOAD_ROLE_ARN }}
-          aws-region: ${{ vars.AWS_REGION || 'us-east-1' }}
-      - name: Upload assets and mark the ones this release dropped as obsolete
-        run: script/uploadReleaseAssets.sh "${{ vars.ASSETS_BUCKET }}" packs
+      packages: read
+    uses: ./.github/workflows/upload-assets-to-bucket.yml
+    with:
+      sha: ${{ github.sha }}
   fly-release:
     runs-on: ubuntu-latest
     needs:
