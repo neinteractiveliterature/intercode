@@ -25,6 +25,22 @@ module ApplicationHelper
     Rails.env.development? ? "/app/javascript/packs/applicationEntry.ts" : "/packs/application.js"
   end
 
+  # If the entry script fails to load (a page naming a build whose files are gone, or a flaky network), the app never
+  # boots and its own recovery code never runs. Reload, unless we already did within the last 15 seconds, so it can't
+  # loop (the same guard window BootErrorBoundary uses).
+  ENTRY_SCRIPT_ONERROR =
+    "try{var k='intercode.entryScriptReloadAt',l=Number(sessionStorage.getItem(k));" \
+      "if(!(l>0&&Date.now()-l<15000)){sessionStorage.setItem(k,Date.now());location.reload()}}catch(e){}"
+
+  def application_entry_script_tag
+    javascript_include_tag(
+      url_with_possible_host(application_entry_path, ENV.fetch("ASSETS_HOST", nil)),
+      defer: true,
+      type: "module",
+      onerror: ENTRY_SCRIPT_ONERROR
+    )
+  end
+
   def dev_mode_graphiql_entry_path
     Rails.env.development? ? "/app/javascript/DevModeGraphiql.tsx" : "/packs/dev-mode-graphiql.js"
   end

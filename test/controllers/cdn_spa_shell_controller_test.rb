@@ -27,4 +27,15 @@ class CdnSpaShellControllerTest < ActionDispatch::IntegrationTest
     assert early_refresh, "expected the shell to start the refresh request"
     assert_operator early_refresh, :<, html.index('type="module"')
   end
+
+  it "reloads once if the entry script fails to load" do
+    get "/cdn-spa-shell"
+
+    assert_response :ok
+    script_tag = response.body.scan(/<script[^>]*>/).find { |tag| tag.include?("packs/application.js") }
+
+    assert script_tag, "expected the shell to include the entry script"
+    assert_includes script_tag, "onerror="
+    assert_includes script_tag, "location.reload()"
+  end
 end

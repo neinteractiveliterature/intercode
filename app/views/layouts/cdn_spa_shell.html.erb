@@ -14,7 +14,7 @@
     <%= javascript_include_tag url_with_possible_host("/@vite/client", ENV['ASSETS_HOST']), type: 'module' %>
   <% end %>
   <%= render 'layouts/boot_preloads' %>
-  <%= javascript_include_tag url_with_possible_host(application_entry_path, ENV['ASSETS_HOST']), defer: true, type: 'module' %>
+  <%= application_entry_script_tag %>
   <meta content="width=device-width, initial-scale=1" name="viewport"/>
   <meta property="og:url" content="<%= request.url %>">
   <meta property="og:title" content="<%= convention ? convention.name : "Intercode" %>">
