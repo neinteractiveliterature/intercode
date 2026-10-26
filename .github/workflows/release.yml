@@ -53,18 +53,8 @@ jobs:
         with:
           role-to-assume: ${{ vars.ASSETS_UPLOAD_ROLE_ARN }}
           aws-region: ${{ vars.AWS_REGION || 'us-east-1' }}
-      # Upload every file, not only new ones: the upload resets the age that the bucket's lifecycle rule expires on.
-      - name: Upload hashed assets
-        run: |
-          aws s3 cp packs "s3://${{ vars.ASSETS_BUCKET }}/packs" --recursive \
-            --exclude "application.js" --exclude "application-styles.js" \
-            --cache-control "public, max-age=15552000"
-      # The unhashed entry files are replaced each release, so they must always be revalidated.
-      - name: Upload entry files
-        run: |
-          for file in $(jq -r '.[]' config/nocache-files.json); do
-            aws s3 cp "packs/$(basename "$file")" "s3://${{ vars.ASSETS_BUCKET }}$file" --cache-control "no-cache"
-          done
+      - name: Upload assets and mark the ones this release dropped as obsolete
+        run: script/uploadReleaseAssets.sh "${{ vars.ASSETS_BUCKET }}" packs
   fly-release:
     runs-on: ubuntu-latest
     needs:

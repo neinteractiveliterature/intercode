@@ -5,7 +5,7 @@ opened before a deploy (or a cached page that names last release's files) can st
 meant to be the origin of the assets CloudFront distribution, in place of the Rails app or the `intercode-assets`
 container.
 
-- **Private S3 bucket** with a lifecycle rule that expires objects `retention_days` after they were last uploaded
+- **Private S3 bucket** with a lifecycle rule that expires files `retention_days` after the release that dropped them
 - **CORS configuration** allowing `GET`/`HEAD` from any origin, matching the headers Rails and the assets nginx send
   today (convention domains load module scripts cross-origin from the assets host)
 - **CloudFront origin access control**, and a bucket policy that lets the distributions you list read the bucket
@@ -22,7 +22,7 @@ module "assets_bucket" {
   source = "path/to/modules/assets_bucket_intercode"
 
   bucket_name                  = "intercode-assets-production"
-  retention_days               = 90
+  retention_days               = 30
   cloudfront_distribution_arns = [aws_cloudfront_distribution.assets.arn]
 
   github_repository        = "neinteractiveliterature/intercode"
@@ -55,14 +55,21 @@ The release workflow (`.github/workflows/release.yml`) has an `assets-bucket-rel
 | `ASSETS_UPLOAD_ROLE_ARN` | `release_upload_role_arn`      |
 | `AWS_REGION`             | The bucket's region (optional) |
 
-Every release uploads **all** of its files, not just the new ones. The file names are content hashes, so a file that
-didn't change is uploaded to the same key with the same content, and the upload resets its age. That is what keeps
-files the current release still uses from expiring. The unhashed entry files listed in `config/nocache-files.json`
-(`application.js`, `application-styles.js`) are uploaded with `Cache-Control: no-cache` and replaced each release;
-everything else gets a long `Cache-Control` matching what the assets nginx sends.
+Retention counts from the release that **dropped** a file, not from when it was uploaded, so files the current
+release uses never expire, however long it is between releases. S3 lifecycle rules can only count from an object's last
+modification, so `script/uploadReleaseAssets.sh` does it in three steps:
 
-Because ages only reset on release, `retention_days` has to be longer than the longest gap you expect between
-releases. If it isn't, the live site's assets expire.
+1. It uploads **all** of the release's files, not just new ones. Uploading replaces the object, which clears the
+   `obsolete` tag from a file that has come back into a release.
+2. The unhashed entry files listed in `config/nocache-files.json` (`application.js`, `application-styles.js`) are
+   uploaded with `Cache-Control: no-cache`; everything else gets a long `Cache-Control` matching what the assets nginx
+   sends.
+3. Any file in the bucket that this release doesn't contain, and that isn't already tagged, is copied onto itself with
+   the tag `obsolete=true`. The copy resets its age, and the bucket's lifecycle rule expires objects with that tag
+   `retention_days` later. A file that is already tagged isn't copied again, so its countdown isn't restarted.
+
+The upload role can only upload, read and tag objects in this bucket; it can't delete anything, which is left to the
+lifecycle rule.
 
 ## Cutting over
 
@@ -77,7 +84,7 @@ Uploading before switching means there is no window where assets are missing.
 | Name                           | Description                                                                          | Default |
 | ------------------------------ | ------------------------------------------------------------------------------------ | ------- |
 | `bucket_name`                  | Name of the S3 bucket                                                                | —       |
-| `retention_days`               | Days to keep an object after it was last uploaded                                    | `90`    |
+| `retention_days`               | Days to keep a file after the release that dropped it                                | `30`    |
 | `cloudfront_distribution_arns` | CloudFront distributions allowed to read the bucket; no bucket policy while empty    | `[]`    |
 | `github_repository`            | `owner/name` of the repository that uploads; no upload role when `null`              | `null`  |
 | `github_oidc_subjects`         | Allowed OIDC `sub` claims; defaults to any tag in `github_repository`                | `null`  |

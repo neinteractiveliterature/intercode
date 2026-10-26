@@ -3,8 +3,13 @@ ARG BASEIMAGE
 # hashed files are carried over into this image, so that tabs and cached pages from the previous release can still
 # load their chunks. The default, an empty image, carries nothing over and leaves this build unchanged.
 ARG PREVIOUS_ASSETS_IMAGE=scratch
-# Carried-over files are pruned once they are this many days old. Files that are part of this release are never pruned.
+# Carried-over files are pruned this many days after the release that dropped them. Files that are part of this
+# release are never pruned, however old.
 ARG PREVIOUS_ASSETS_RETENTION_DAYS=30
+#
+# Whoever builds this image passes these (for example --build-arg PREVIOUS_ASSETS_IMAGE=<the last release's assets
+# image>); nothing in this repository's workflows does. The merge step goes by file ages, which BuildKit's cache
+# doesn't see, so don't expect --cache-from to be safe for rebuilding the same inputs at a later date.
 
 FROM ${PREVIOUS_ASSETS_IMAGE} as previous
 
@@ -22,16 +27,10 @@ FROM nginx
 RUN  rm /usr/share/nginx/html/index.*
 COPY --from=code /usr/src/intercode/public /usr/share/nginx/html
 ARG PREVIOUS_ASSETS_RETENTION_DAYS
-# Add the previous image's files that this release doesn't have, after pruning the ones that have aged out (-p keeps
-# their age, so a file's age is the time since the release that last built it). cp -n never overwrites, so this
-# release's own files are never pruned or replaced.
+# Carry over the previous image's files, and prune the ones that have been obsolete for too long.
 RUN --mount=type=bind,from=previous,target=/previous \
-    if [ -d /previous/usr/share/nginx/html/packs ]; then \
-      cp -rp /previous/usr/share/nginx/html/packs /tmp/previous-packs && \
-      find /tmp/previous-packs -type f -mtime +${PREVIOUS_ASSETS_RETENTION_DAYS} -delete && \
-      cp -rnp /tmp/previous-packs/. /usr/share/nginx/html/packs/ && \
-      rm -rf /tmp/previous-packs; \
-    fi
+    --mount=type=bind,source=script/mergePreviousAssets.sh,target=/mergePreviousAssets.sh \
+    /mergePreviousAssets.sh /previous ${PREVIOUS_ASSETS_RETENTION_DAYS}
 RUN  touch /usr/share/nginx/html/index.html && \
      chmod 644 /usr/share/nginx/html/index.html && \
      chown www-data.root -R /usr/share/nginx/html && \

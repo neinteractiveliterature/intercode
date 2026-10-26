@@ -4,9 +4,9 @@ variable "bucket_name" {
 }
 
 variable "retention_days" {
-  description = "How long to keep an object after it was last uploaded. Every release uploads all of its assets again, so this must be longer than the longest gap you expect between releases, or the current release's assets expire."
+  description = "How long to keep a file after the release that dropped it. Files in the current release never expire."
   type        = number
-  default     = 90
+  default     = 30
 }
 
 variable "cloudfront_distribution_arns" {
