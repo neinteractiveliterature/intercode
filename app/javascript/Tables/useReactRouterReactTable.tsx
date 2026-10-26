@@ -18,6 +18,48 @@ function identityCodec(field: string, value: string): string {
   return value;
 }
 
+// Reads the table state (page, filters and sorting) out of a URL's search params. This is the pure part of
+// useReactRouterReactTable, so that route loaders can read the same state the table shows.
+export function decodeReactRouterReactTableSearchParams(
+  params: URLSearchParams,
+  { decodeFilterValue, defaultState }: Pick<UseReactRouterReactTableOptions, 'decodeFilterValue' | 'defaultState'> = {},
+): ReactRouterReactTableState {
+  const decode = decodeFilterValue ?? identityCodec;
+  let page: number | undefined;
+  const filters: ColumnFiltersState = [];
+  const sortBy: SortingState = [];
+
+  Array.from(params.entries()).forEach(([key, value]) => {
+    if (key === 'page') {
+      page = Number.parseInt(value, 10) - 1;
+      return;
+    }
+
+    const filterMatch = key.match(/^filters\.(.*)$/);
+    if (filterMatch) {
+      const filterValue = decode(filterMatch[1], value);
+      if (filterValue != null) {
+        filters.push({
+          id: filterMatch[1],
+          value: filterValue,
+        });
+      }
+      return;
+    }
+
+    const sortMatch = key.match(/^sort\.(.*)$/);
+    if (sortMatch) {
+      sortBy.push({ id: sortMatch[1], desc: value === 'desc' });
+    }
+  });
+
+  return {
+    page: page ?? defaultState?.page ?? 0,
+    filters: filters.length > 0 ? filters : (defaultState?.filters ?? []),
+    sortBy: sortBy.length > 0 ? sortBy : (defaultState?.sortBy ?? []),
+  };
+}
+
 export default function useReactRouterReactTable({
   defaultState,
   encodeFilterValue,
@@ -33,41 +75,8 @@ export default function useReactRouterReactTable({
   const decode = useMemo(() => decodeFilterValue ?? identityCodec, [decodeFilterValue]);
 
   const decodeSearchParams = useCallback(
-    (params: URLSearchParams) => {
-      let page: number | undefined;
-      const filters: ColumnFiltersState = [];
-      const sortBy: SortingState = [];
-
-      Array.from(params.entries()).forEach(([key, value]) => {
-        if (key === 'page') {
-          page = Number.parseInt(value, 10) - 1;
-          return;
-        }
-
-        const filterMatch = key.match(/^filters\.(.*)$/);
-        if (filterMatch) {
-          const filterValue = decode(filterMatch[1], value);
-          if (filterValue != null) {
-            filters.push({
-              id: filterMatch[1],
-              value: filterValue,
-            });
-          }
-          return;
-        }
-
-        const sortMatch = key.match(/^sort\.(.*)$/);
-        if (sortMatch) {
-          sortBy.push({ id: sortMatch[1], desc: value === 'desc' });
-        }
-      });
-
-      return {
-        page: page ?? defaultState?.page ?? 0,
-        filters: filters.length > 0 ? filters : (defaultState?.filters ?? []),
-        sortBy: sortBy.length > 0 ? sortBy : (defaultState?.sortBy ?? []),
-      };
-    },
+    (params: URLSearchParams) =>
+      decodeReactRouterReactTableSearchParams(params, { decodeFilterValue: decode, defaultState }),
     [decode, defaultState],
   );
 

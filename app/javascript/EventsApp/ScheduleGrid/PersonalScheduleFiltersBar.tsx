@@ -1,4 +1,5 @@
 import React, { useEffect, useMemo } from 'react';
+import { SCHEDULE_VIEW_PARAM } from '../scheduleQueryInputs';
 import { useLocation } from 'react-router';
 import { ColumnFiltersState } from '@tanstack/react-table';
 import { parseIntOrNull } from '@neinteractiveliterature/litform';
@@ -68,7 +69,11 @@ export function usePersonalScheduleFilters({
   const location = useLocation();
 
   useEffect(() => {
-    if (showPersonalFilters && signedIn && !location.search) {
+    // The view in the URL doesn't count: it's not a filter, and it shouldn't stop the saved filters being loaded
+    const hasFilterParams = Array.from(new URLSearchParams(location.search).keys()).some(
+      (key) => key !== SCHEDULE_VIEW_PARAM,
+    );
+    if (showPersonalFilters && signedIn && !hasFilterParams) {
       updateSearch({ filters: loadPersonalFilters() });
     }
   }, [showPersonalFilters, location, signedIn, updateSearch]);

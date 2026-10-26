@@ -1,17 +1,24 @@
 import { vi } from 'vitest';
 import { Suspense } from 'react';
+import { useLocation } from 'react-router';
 import { MockLink } from '@apollo/client/testing';
 import { DateTime } from 'luxon';
 
 import { renderRoute, userEvent, waitFor } from '../testUtils';
-import { Component as ScheduleApp } from '../../../app/javascript/EventsApp/ScheduleApp';
-import { ScheduleGridConventionDataQueryData } from '../../../app/javascript/EventsApp/ScheduleGrid/queries.generated';
-import { ScheduleGridEventsQueryDocument } from '../../../app/javascript/EventsApp/ScheduleGrid/queries.generated';
+import { Component as ScheduleApp, loader } from '../../../app/javascript/EventsApp/ScheduleApp';
+import { redirectToFirstDayMiddleware } from '../../../app/javascript/EventsApp/conventionDayUrls';
+import { AppRootQueryDocument } from '../../../app/javascript/appRootQueries.generated';
+import {
+  ScheduleGridConventionDataQueryData,
+  ScheduleGridConventionDataQueryDocument,
+  ScheduleGridEventsQueryDocument,
+} from '../../../app/javascript/EventsApp/ScheduleGrid/queries.generated';
 import { appRootContextDefaultValue, AppRootContextValue } from '../../../app/javascript/AppRootContext';
 import { SiteMode } from '../../../app/javascript/graphqlTypes.generated';
 import Timespan from '../../../app/javascript/Timespan';
 import { buildMultipleChoiceItem } from '../fixtures/formItems';
 import { buildCatalogCategory, buildCatalogConvention, buildCatalogFormItem } from '../fixtures/eventCatalog';
+import { buildAppRootConvention, buildAppRootData } from '../fixtures/appRoot';
 
 // The grids are big and have their own tests; here they're a marker saying which one was asked for
 vi.mock('../../../app/javascript/EventsApp/ScheduleGrid', () => ({
@@ -57,6 +64,9 @@ describe('ScheduleApp', () => {
     },
   });
 
+  const SearchDisplay = () => <div data-testid="search">{useLocation().search}</div>;
+
+  // Runs the route's real loader (and the redirect from the bare /events/schedule), with the queries it makes mocked
   const renderPage = ({
     ability = {},
     conventionTimespan = SHORT_CON,
@@ -64,6 +74,8 @@ describe('ScheduleApp', () => {
     categories,
     search = '',
     myProfile = false,
+    eventsLog,
+    eventsDelay,
   }: {
     ability?: Partial<AppRootContextValue['currentAbility']>;
     conventionTimespan?: Timespan;
@@ -71,22 +83,63 @@ describe('ScheduleApp', () => {
     categories?: ReturnType<typeof buildCatalogCategory>[];
     search?: string;
     myProfile?: boolean;
+    // records what the events query is asked for (the variables of each request) and how many times it was served
+    eventsLog?: { variables: string[]; served: number };
+    eventsDelay?: number;
   } = {}) => {
+    const currentAbility = {
+      ...appRootContextDefaultValue.currentAbility,
+      can_read_schedule: true,
+      can_read_schedule_with_counts: false,
+      ...ability,
+    };
+    const appRootData = buildAppRootData(
+      buildAppRootConvention({
+        site_mode: siteMode,
+        starts_at: conventionTimespan.start?.toISO() ?? null,
+        ends_at: conventionTimespan.finish?.toISO() ?? null,
+        timezone_name: 'UTC',
+      }),
+    );
     const apolloMocks: MockLink.MockedResponse[] = [
       {
-        request: { query: ScheduleGridEventsQueryDocument, variables: () => true },
-        result: { data: { __typename: 'Query', convention: { __typename: 'Convention', id: '1', events: [] } } },
+        request: { query: AppRootQueryDocument },
+        result: { data: { ...appRootData, currentAbility } },
+        maxUsageCount: 10,
+      },
+      {
+        request: { query: ScheduleGridConventionDataQueryDocument },
+        result: loaderData(categories),
+        maxUsageCount: 10,
+      },
+      {
+        request: {
+          query: ScheduleGridEventsQueryDocument,
+          variables: (variables: Record<string, unknown>) => {
+            eventsLog?.variables.push(JSON.stringify(variables));
+            return true;
+          },
+        },
+        delay: eventsDelay,
+        result: () => {
+          if (eventsLog) {
+            eventsLog.served += 1;
+          }
+          return { data: { __typename: 'Query', convention: { __typename: 'Convention', id: '1', events: [] } } };
+        },
         maxUsageCount: 10,
       },
     ];
     return renderRoute(
       [
+        { path: '/events/schedule', middleware: [redirectToFirstDayMiddleware] },
         {
-          path: '/events/schedule',
-          loader: () => loaderData(categories),
+          path: '/events/schedule/:day',
+          loader,
           Component: () => (
             <Suspense fallback={<div>Loading</div>}>
               <ScheduleApp />
+              <SearchDisplay />
             </Suspense>
           ),
         },
@@ -98,12 +151,7 @@ describe('ScheduleApp', () => {
           timezoneName: 'UTC',
           conventionTimespan,
           siteMode,
-          currentAbility: {
-            ...appRootContextDefaultValue.currentAbility,
-            can_read_schedule: true,
-            can_read_schedule_with_counts: false,
-            ...ability,
-          },
+          currentAbility,
           ...(myProfile ? { myProfile: { __typename: 'UserConProfile', id: '2', name: 'Me' } as never } : {}),
         },
       },
@@ -194,6 +242,119 @@ describe('ScheduleApp', () => {
 
       await waitFor(() => expect(r.queryByText(/grid: schedule_with_counts/)).toBeNull());
       expect(await r.findByText(/grid: con_schedule \(/)).toBeTruthy();
+    });
+  });
+
+  describe('the view in the URL', () => {
+    it('shows the view named in the URL, even if another was chosen last time', async () => {
+      window.localStorage.setItem('schedule:view', 'list');
+      const r = await renderPage({ search: '?view=con_schedule_by_room' });
+
+      expect(await r.findByText(/grid: con_schedule_by_room/)).toBeTruthy();
+    });
+
+    it('ignores a view in the URL that does not exist or is not available', async () => {
+      const nonsense = await renderPage({ search: '?view=nonsense' });
+      expect(await nonsense.findByText(/grid: con_schedule \(/)).toBeTruthy();
+      nonsense.unmount();
+
+      const unavailable = await renderPage({ search: '?view=schedule_with_counts' });
+      expect(await unavailable.findByText(/grid: con_schedule \(/)).toBeTruthy();
+    });
+
+    it('puts the chosen view in the URL, keeping the rest of it, as well as remembering it', async () => {
+      const r = await renderPage({ search: '?foo=bar' });
+      await r.findByText(/grid: con_schedule \(/);
+
+      await user.click(await r.findByRole('button', { name: /View type/ }));
+      await user.click(await r.findByRole('button', { name: 'List view' }));
+
+      await waitFor(() => expect(r.getByTestId('search')).toHaveTextContent('view=list'));
+      expect(r.getByTestId('search')).toHaveTextContent('foo=bar');
+      expect(window.localStorage.getItem('schedule:view')).toBe('list');
+    });
+
+    it('still loads the saved personal filters when the only thing in the URL is the view', async () => {
+      window.localStorage.setItem(
+        'schedule:personalFilters',
+        JSON.stringify([
+          { id: 'my_rating', value: [2] },
+          { id: 'hide_conflicts', value: true },
+        ]),
+      );
+      const r = await renderPage({ search: '?view=con_schedule', myProfile: true });
+
+      await waitFor(() => expect(r.getByTestId('search')).toHaveTextContent('filters.my_rating'));
+      expect(r.getByTestId('search')).toHaveTextContent('view=con_schedule');
+    });
+  });
+
+  describe('asking for the events', () => {
+    it('is done by the loader, for the list, in the way the list asks for them', async () => {
+      const eventsLog = { variables: [] as string[], served: 0 };
+      const r = await renderPage({ search: '?view=list', eventsLog });
+      await r.findByText('Event Schedule');
+
+      await waitFor(() => expect(eventsLog.served).toBeGreaterThan(0));
+      // the list asks for these same events again once it renders: it joins the loader's request instead of making one
+      expect(eventsLog.served).toBe(1);
+      expect(new Set(eventsLog.variables)).toEqual(
+        new Set([JSON.stringify({ filters: {}, fetchFormItemIdentifiers: [] })]),
+      );
+    });
+
+    it('is done by the loader, for the day, for a grid', async () => {
+      const eventsLog = { variables: [] as string[], served: 0 };
+      const r = await renderPage({ eventsLog });
+      await r.findByText(/grid: con_schedule \(/);
+
+      await waitFor(() => expect(eventsLog.served).toBe(1));
+      const [variables] = Array.from(new Set(eventsLog.variables)).map((v) => JSON.parse(v));
+      expect(variables).toMatchObject({ fetchFormItemIdentifiers: [], extendedCounts: false, filters: {} });
+      expect(new Date(variables.finish).getTime()).toBeGreaterThan(new Date(variables.start).getTime());
+    });
+
+    it('includes the filters in the URL', async () => {
+      const eventsLog = { variables: [] as string[], served: 0 };
+      const r = await renderPage({ search: '?view=list&filters.title=chess', eventsLog });
+      await r.findByText('Event Schedule');
+
+      await waitFor(() => expect(eventsLog.served).toBeGreaterThan(0));
+      expect(JSON.parse(eventsLog.variables[0]).filters).toEqual({ title: 'chess' });
+    });
+
+    it('includes the form items that can be filtered on', async () => {
+      const system = buildMultipleChoiceItem({
+        identifier: 'system',
+        caption: 'System',
+        choices: [{ caption: 'D&D', value: 'dnd' }],
+      });
+      const eventsLog = { variables: [] as string[], served: 0 };
+      const r = await renderPage({
+        search: '?view=list',
+        categories: [buildCatalogCategory({ id: '4' }, [buildCatalogFormItem(system, 'Game system')])],
+        eventsLog,
+      });
+      await r.findByText('Event Schedule');
+
+      await waitFor(() => expect(eventsLog.served).toBeGreaterThan(0));
+      expect(JSON.parse(eventsLog.variables[0]).fetchFormItemIdentifiers).toEqual(['system']);
+    });
+
+    it('does not make the schedule wait for them', async () => {
+      const eventsLog = { variables: [] as string[], served: 0 };
+      const r = await renderPage({ eventsLog, eventsDelay: 1000 });
+
+      expect(await r.findByText('Event Schedule')).toBeTruthy();
+      expect(eventsLog.served).toBe(0);
+    });
+
+    it('is not done for someone who cannot read the schedule', async () => {
+      const eventsLog = { variables: [] as string[], served: 0 };
+      const r = await renderPage({ ability: { can_read_schedule: false }, eventsLog });
+      await r.findByText(/not authorized/);
+
+      expect(eventsLog.variables).toEqual([]);
     });
   });
 

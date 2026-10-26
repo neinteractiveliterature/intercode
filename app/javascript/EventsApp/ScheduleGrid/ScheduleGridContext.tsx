@@ -13,6 +13,7 @@ import { ScheduleGridConfig } from './ScheduleGridConfig';
 import { ScheduleEventInput } from './Schedule';
 import { CmsPartialBlockName, EventFiltersInput, TimezoneMode } from '../../graphqlTypes.generated';
 import { ScheduleGridConventionDataQueryData, ScheduleGridEventsQueryDocument } from './queries.generated';
+import { gridEventsQueryVariables } from '../scheduleQueryInputs';
 import { ScheduleGridConventionInput } from './ScheduleGridTypes';
 import { FiniteTimespan } from '../../Timespan';
 import useMergeCategoriesIntoEvents from '../useMergeCategoriesIntoEvents';
@@ -202,21 +203,6 @@ function LoadingOverlay({ loading }: LoadingOverlayProps) {
   );
 }
 
-function getEventsQueryVariables(
-  timespan: FiniteTimespan,
-  fetchFormItemIdentifiers: string[],
-  showExtendedCounts?: boolean,
-  filters?: EventFiltersInput,
-) {
-  return {
-    start: timespan.start.toISO(),
-    finish: timespan.finish.toISO(),
-    fetchFormItemIdentifiers,
-    extendedCounts: showExtendedCounts || false,
-    filters,
-  };
-}
-
 type ScheduleGridProviderTabContentProps = {
   config: ScheduleGridConfig;
   convention: ScheduleGridConventionDataQueryData['convention'];
@@ -239,7 +225,7 @@ function ScheduleGridProviderTabContent({
   const { myRatingFilter, hideConflicts } = useContext(ScheduleGridFiltersContext);
   const { data, loading, error } = useQuery(ScheduleGridEventsQueryDocument, {
     variables: {
-      ...getEventsQueryVariables(timespan, fetchFormItemIdentifiers, config.showExtendedCounts, filters),
+      ...gridEventsQueryVariables(timespan, fetchFormItemIdentifiers, config.showExtendedCounts, filters),
     },
   });
   const cachedData = useCachedLoadableValue(loading, error, () => data, [data]);
@@ -303,7 +289,7 @@ export function ScheduleGridProvider({
       client.query({
         query: ScheduleGridEventsQueryDocument,
         variables: {
-          ...getEventsQueryVariables(timespan, fetchFormItemIdentifiers, config.showExtendedCounts, filters),
+          ...gridEventsQueryVariables(timespan, fetchFormItemIdentifiers, config.showExtendedCounts, filters),
         },
       }),
     [client, fetchFormItemIdentifiers, config.showExtendedCounts, filters],
