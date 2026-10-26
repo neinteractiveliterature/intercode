@@ -48,7 +48,11 @@ jobs:
           docker pull ghcr.io/neinteractiveliterature/intercode-assets:${{ github.sha }}
           container=$(docker create ghcr.io/neinteractiveliterature/intercode-assets:${{ github.sha }})
           docker cp "$container:/usr/share/nginx/html/packs" packs
+          docker cp "$container:/etc/intercode-assets/current-files.txt" current-files.txt
           docker rm "$container"
+          # The image also carries over earlier releases' files (see Dockerfile.assets). Only this release's own
+          # files count as current, so the rest can be marked obsolete in the bucket.
+          (cd packs && find . -type f | sort) | comm -23 - current-files.txt | (cd packs && xargs -r rm)
       - uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: ${{ vars.ASSETS_UPLOAD_ROLE_ARN }}
