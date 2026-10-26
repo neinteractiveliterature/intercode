@@ -6,6 +6,9 @@ class HostingServiceAdapters::Fly < HostingServiceAdapters::Base
   LARGE_GUEST = { "cpu_kind" => "performance", "cpus" => 1, "memory_mb" => 2048 }.freeze
 
   class Machine < HostingServiceAdapters::Instance
+    # A machine in any other state (stopped, stopping, suspended, being destroyed) isn't serving traffic
+    LIVE_STATES = %w[created starting started replacing].freeze
+
     attr_reader :id, :state, :config, :region, :instance_id, :name
 
     def initialize(id:, instance_id:, state:, config:, region:, name:, **args) # rubocop:disable Metrics/ParameterLists
@@ -17,7 +20,20 @@ class HostingServiceAdapters::Fly < HostingServiceAdapters::Base
       @region = region
       @name = name
     end
+
+    def live?
+      LIVE_STATES.include?(state)
+    end
+
+    # Fly records the release a machine was created or updated by in its metadata
+    def release_version
+      config.dig("metadata", "fly_release_version").to_i
+    end
   end
+
+  # How long a machine has to have been stopped before it's removed. A deploy stops and replaces machines itself, and
+  # shouldn't have them taken away from under it.
+  STOPPED_MACHINE_GRACE_PERIOD = 10.minutes
 
   CPU_BALANCE_TREND_WINDOW = "10m"
   CPU_BALANCE_TREND_WINDOW_SECONDS = 10.minutes
@@ -35,9 +51,9 @@ class HostingServiceAdapters::Fly < HostingServiceAdapters::Base
 
   # Fly's shared CPUs run on a burst balance that drains whenever usage is above the baseline and throttles the machine
   # to the baseline (6% for shared-cpu-1x) once it's empty. This estimates the time left from each machine's balance and
-  # its recent trend. Machines younger than the trend window are skipped, since the window would span their boot, when
-  # the balance briefly falls. Needs FLY_METRICS_TOKEN (a read-only org token) and FLY_ORG_SLUG; without them, returns
-  # nil.
+  # its recent trend. Machines that started or changed within the trend window are skipped, since the window would span
+  # their boot, when the balance briefly falls. Needs FLY_METRICS_TOKEN (a read-only org token) and FLY_ORG_SLUG;
+  # without them, returns nil.
   def seconds_until_cpu_exhaustion(group:)
     return nil unless metrics_configured?
 
@@ -63,25 +79,63 @@ class HostingServiceAdapters::Fly < HostingServiceAdapters::Base
     instances_state
   end
 
+  # Machines that aren't live don't count: they can't serve traffic, so the group needs replacements for them
   def update_instance_group(group:, type:, count:)
-    current_instances = instances_state.find_instances(group:, type:)
+    current_instances = instances_state.find_instances(group:, type:, live: true)
 
     if current_instances.size < count
       create_machines(group:, type:, count: count - current_instances.size)
       invalidate_state
     elsif current_instances.size > count
-      destroy_machines(current_instances.first(current_instances.size - count))
+      destroy_machines(oldest_first(current_instances).first(current_instances.size - count))
       invalidate_state
     end
   end
 
+  def remove_stopped_instances(groups:)
+    stopped = stopped_machines_past_grace_period(groups)
+    return if stopped.empty?
+
+    Rails.logger.info "Deleting stopped Fly machine(s): #{stopped.map(&:name).join(", ")}"
+    stopped.each do |instance|
+      ignoring_missing_machine(instance) do
+        machines_api.delete("/v1/apps/#{ENV.fetch("FLY_APP_NAME")}/machines/#{instance.id}")
+      end
+    end
+    invalidate_state
+  end
+
   private
+
+  def stopped_machines_past_grace_period(groups)
+    cutoff = STOPPED_MACHINE_GRACE_PERIOD.ago
+    instances_state.instances.select do |instance|
+      next false unless groups.include?(instance.group) && instance.state == "stopped"
+
+      instance.last_changed_at.present? && instance.last_changed_at < cutoff
+    end
+  end
+
+  # Which machines to remove first: the ones from the oldest releases, so that during a blue-green deploy (when there
+  # are briefly too many) it's the old machines that go, and then the longest-running
+  def oldest_first(instances)
+    instances.sort_by.with_index do |instance, index|
+      [instance.release_version, instance.created_at || Time.zone.at(0), index]
+    end
+  end
+
+  # New machines are copied from a running machine on the newest release, not from whichever one happens to be first
+  def template_machine_for(group)
+    candidates = instances_state.find_instances(group:, live: true).presence || instances_state.find_instances(group:)
+    candidates.max_by.with_index { |instance, index| [instance.release_version, -index] } ||
+      raise("No #{group} machine to copy for a new one")
+  end
 
   def settled_burstable_instances(group)
     cutoff = CPU_BALANCE_TREND_WINDOW_SECONDS.ago
     instances_state
-      .find_instances(group:)
-      .reject { |instance| instance.type == :large || (instance.created_at && instance.created_at > cutoff) }
+      .find_instances(group:, live: true)
+      .reject { |instance| instance.type == :large || (instance.last_changed_at && instance.last_changed_at > cutoff) }
   end
 
   def metrics_configured?
@@ -139,6 +193,10 @@ class HostingServiceAdapters::Fly < HostingServiceAdapters::Base
     @current_machines ||= machines_api.get("/v1/apps/#{ENV.fetch("FLY_APP_NAME")}/machines").body
   end
 
+  def parse_timestamp(timestamp)
+    timestamp.presence&.then { |value| Time.zone.parse(value) }
+  end
+
   def instance_for_machine(machine) # rubocop:disable Metrics/MethodLength
     guest = machine.dig("config", "guest")
     process_group = machine.dig("config", "metadata", "fly_process_group")
@@ -148,7 +206,8 @@ class HostingServiceAdapters::Fly < HostingServiceAdapters::Base
       instance_id: machine["instance_id"],
       name: machine["name"],
       state: machine["state"],
-      created_at: machine["created_at"].presence&.then { |timestamp| Time.zone.parse(timestamp) },
+      created_at: parse_timestamp(machine["created_at"]),
+      updated_at: parse_timestamp(machine["updated_at"]),
       config: machine["config"],
       region: machine["region"],
       group:
@@ -195,7 +254,7 @@ class HostingServiceAdapters::Fly < HostingServiceAdapters::Base
   end
 
   def machine_create_body(group:, type:)
-    template_machine = instances_state.find_instances(group:).first
+    template_machine = template_machine_for(group)
     config_template = template_machine.config.merge("guest" => guest_config_for_type(type))
     { config: config_template, region: template_machine.region }
   end

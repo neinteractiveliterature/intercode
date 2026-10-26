@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class HostingServiceAdapters::InstancesState
   attr_reader :instances
 
@@ -5,9 +6,10 @@ class HostingServiceAdapters::InstancesState
     @instances = instances
   end
 
-  def find_instances(group: nil, type: nil)
+  def find_instances(group: nil, type: nil, live: nil)
     instances.filter do |instance|
-      (type.nil? || instance.type == type.to_sym) && (group.nil? || instance.group == group.to_sym)
+      (type.nil? || instance.type == type.to_sym) && (group.nil? || instance.group == group.to_sym) &&
+        (live.nil? || instance.live? == live)
     end
   end
 

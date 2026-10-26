@@ -21,9 +21,19 @@ class HostingServiceAdapters::FlyTest < ActiveSupport::TestCase
 
   let(:adapter) { Fly.new }
 
-  def machine(id, group:, guest: Fly::SMALL_GUEST, state: "started", created_at: nil)
+  def machine( # rubocop:disable Metrics/ParameterLists
+    id,
+    group:,
+    guest: Fly::SMALL_GUEST,
+    state: "started",
+    created_at: nil,
+    updated_at: nil,
+    release_version: nil,
+    image: "registry.fly.io/test-app:latest"
+  )
     {
       "created_at" => created_at&.iso8601,
+      "updated_at" => updated_at&.iso8601,
       "id" => id,
       "instance_id" => "instance-#{id}",
       "name" => "machine-#{id}",
@@ -31,10 +41,8 @@ class HostingServiceAdapters::FlyTest < ActiveSupport::TestCase
       "region" => "iad",
       "config" => {
         "guest" => guest,
-        "image" => "registry.fly.io/test-app:latest",
-        "metadata" => {
-          "fly_process_group" => group
-        }
+        "image" => image,
+        "metadata" => { "fly_process_group" => group, "fly_release_version" => release_version&.to_s }.compact
       }
     }
   end
@@ -221,6 +229,76 @@ class HostingServiceAdapters::FlyTest < ActiveSupport::TestCase
       end
     end
 
+    describe "when some machines have stopped" do
+      it "doesn't count them, and makes up the difference with new machines" do
+        stub_api(
+          :get,
+          "/v1/apps/test-app/machines",
+          [machine("w1", group: "web"), machine("w2", group: "web", state: "stopped")]
+        )
+        stub_api(:post, "/v1/apps/test-app/machines", { "id" => "new", "name" => "new-machine" })
+        stub_api(:get, "/v1/apps/test-app/machines/new/wait?state=started")
+
+        with_stubbed_api { adapter.update_instance_group(group: :web, type: :small, count: 2) }
+
+        assert_equal 1, requests_matching(:post).size
+        assert_empty(@requests.select { |request| request[:path].end_with?("/start") })
+      end
+
+      it "doesn't start them, since they might be on an older release" do
+        stub_api(:get, "/v1/apps/test-app/machines", [machine("w1", group: "web", state: "stopped")])
+        stub_api(:post, "/v1/apps/test-app/machines", { "id" => "new", "name" => "new-machine" })
+        stub_api(:get, "/v1/apps/test-app/machines/new/wait?state=started")
+
+        with_stubbed_api { adapter.update_instance_group(group: :web, type: :small, count: 1) }
+
+        assert_equal ["/v1/apps/test-app/machines"], requests_matching(:post).pluck(:path)
+      end
+
+      it "counts machines that are on their way up" do
+        stub_api(
+          :get,
+          "/v1/apps/test-app/machines",
+          [
+            machine("w1", group: "web"),
+            machine("w2", group: "web", state: "starting"),
+            machine("w3", group: "web", state: "created")
+          ]
+        )
+
+        with_stubbed_api { adapter.update_instance_group(group: :web, type: :small, count: 3) }
+
+        assert_empty requests_matching(:post)
+        assert_empty requests_matching(:delete)
+      end
+    end
+
+    describe "when choosing a machine to copy" do
+      it "copies a running machine on the newest release, not the first one in the list" do
+        stub_api(
+          :get,
+          "/v1/apps/test-app/machines",
+          [
+            machine("old", group: "web", release_version: 478, image: "registry.fly.io/test-app:old"),
+            machine(
+              "stopped",
+              group: "web",
+              state: "stopped",
+              release_version: 480,
+              image: "registry.fly.io/test-app:stopped"
+            ),
+            machine("new", group: "web", release_version: 479, image: "registry.fly.io/test-app:new")
+          ]
+        )
+        stub_api(:post, "/v1/apps/test-app/machines", { "id" => "made", "name" => "made-machine" })
+        stub_api(:get, "/v1/apps/test-app/machines/made/wait?state=started")
+
+        with_stubbed_api { adapter.update_instance_group(group: :web, type: :small, count: 4) }
+
+        assert_equal "registry.fly.io/test-app:new", requests_matching(:post).first[:body]["config"]["image"]
+      end
+    end
+
     describe "when there are too many machines" do
       it "stops, waits for and destroys the surplus" do
         stub_api(
@@ -240,6 +318,33 @@ class HostingServiceAdapters::FlyTest < ActiveSupport::TestCase
         assert_equal(%w[w1 w2], requests_matching(:post).pluck(:path).map { |path| path[%r{machines/(\w+)/stop}, 1] })
         assert_equal(
           %w[/v1/apps/test-app/machines/w1 /v1/apps/test-app/machines/w2],
+          requests_matching(:delete).pluck(:path)
+        )
+      end
+    end
+
+    describe "when there are too many machines during a blue-green deploy" do
+      it "removes the machines from the oldest release first, then the longest running" do
+        stub_api(
+          :get,
+          "/v1/apps/test-app/machines",
+          [
+            machine("new1", group: "web", release_version: 479, created_at: 5.minutes.ago),
+            machine("old-newer", group: "web", release_version: 478, created_at: 1.day.ago),
+            machine("new2", group: "web", release_version: 479, created_at: 4.minutes.ago),
+            machine("old-oldest", group: "web", release_version: 478, created_at: 3.days.ago)
+          ]
+        )
+        %w[old-oldest old-newer].each do |id|
+          stub_api(:post, "/v1/apps/test-app/machines/#{id}/stop")
+          stub_api(:get, "/v1/apps/test-app/machines/#{id}/wait?state=stopped&instance_id=instance-#{id}")
+          stub_api(:delete, "/v1/apps/test-app/machines/#{id}")
+        end
+
+        with_stubbed_api { adapter.update_instance_group(group: :web, type: :small, count: 2) }
+
+        assert_equal(
+          %w[/v1/apps/test-app/machines/old-oldest /v1/apps/test-app/machines/old-newer],
           requests_matching(:delete).pluck(:path)
         )
       end
@@ -280,6 +385,79 @@ class HostingServiceAdapters::FlyTest < ActiveSupport::TestCase
         assert_equal(1, requests_matching(:post).count { |request| request[:body] })
         assert_includes requests_matching(:delete).pluck(:path), "/v1/apps/test-app/machines/s1"
       end
+    end
+  end
+
+  describe "#apply_instance_counts with stopped machines" do
+    let(:targets) { [{ group: :web, type: :small, count: 1 }, { group: :worker, type: :small, count: 1 }] }
+
+    def stub_replacements
+      stub_api(:post, "/v1/apps/test-app/machines", { "id" => "new", "name" => "new-machine" })
+      stub_api(:get, "/v1/apps/test-app/machines/new/wait?state=started")
+    end
+
+    it "deletes a machine that has been stopped for a while, and replaces it" do
+      stub_api(
+        :get,
+        "/v1/apps/test-app/machines",
+        [machine("w1", group: "web", state: "stopped", updated_at: 20.minutes.ago), machine("s1", group: "shoryuken")]
+      )
+      stub_replacements
+      stub_api(:delete, "/v1/apps/test-app/machines/w1")
+
+      with_stubbed_api { adapter.apply_instance_counts(targets) }
+
+      assert_equal 1, requests_matching(:post).size
+      assert_equal ["/v1/apps/test-app/machines/w1"], requests_matching(:delete).pluck(:path)
+    end
+
+    it "leaves a machine alone that only just stopped, which a deploy may still be dealing with" do
+      stub_api(
+        :get,
+        "/v1/apps/test-app/machines",
+        [
+          machine("w1", group: "web"),
+          machine("w2", group: "web", state: "stopped", updated_at: 2.minutes.ago),
+          machine("s1", group: "shoryuken")
+        ]
+      )
+
+      with_stubbed_api { adapter.apply_instance_counts(targets) }
+
+      assert_empty requests_matching(:delete)
+    end
+
+    it "leaves stopped machines outside the groups it manages alone" do
+      stub_api(
+        :get,
+        "/v1/apps/test-app/machines",
+        [
+          machine("w1", group: "web"),
+          machine("s1", group: "shoryuken"),
+          machine("c1", group: "fly_app_console", state: "stopped", updated_at: 2.days.ago)
+        ]
+      )
+
+      with_stubbed_api { adapter.apply_instance_counts(targets) }
+
+      assert_empty requests_matching(:delete)
+    end
+
+    it "carries on when a stopped machine is already gone" do
+      stub_api(
+        :get,
+        "/v1/apps/test-app/machines",
+        [
+          machine("w1", group: "web"),
+          machine("w2", group: "web", state: "stopped", updated_at: 1.hour.ago),
+          machine("s1", group: "shoryuken")
+        ]
+      )
+      stub_api(:delete, "/v1/apps/test-app/machines/w2", {}, status: 404)
+
+      with_stubbed_api { adapter.apply_instance_counts(targets) }
+
+      assert_equal ["/v1/apps/test-app/machines/w2"], requests_matching(:delete).pluck(:path)
     end
   end
 
@@ -430,6 +608,42 @@ class HostingServiceAdapters::FlyTest < ActiveSupport::TestCase
     describe "with a machine too new for the trend window to be meaningful" do
       let(:machines) do
         [machine("w1", group: "web", created_at: 5.minutes.ago), machine("w2", group: "web", created_at: 2.hours.ago)]
+      end
+
+      it "ignores that machine" do
+        result = nil
+        with_stubbed_metrics(balances: { "w1" => 100, "w2" => 6000 }, trends: { "w1" => -50, "w2" => -2 }) do
+          result = adapter.seconds_until_cpu_exhaustion(group: :web)
+        end
+
+        assert_in_delta 3000, result, 0.001
+      end
+    end
+
+    describe "with a machine that was restarted recently" do
+      let(:machines) do
+        [
+          machine("w1", group: "web", created_at: 2.hours.ago, updated_at: 3.minutes.ago),
+          machine("w2", group: "web", created_at: 2.hours.ago, updated_at: 1.hour.ago)
+        ]
+      end
+
+      it "ignores that machine too, since its balance dips while it boots" do
+        result = nil
+        with_stubbed_metrics(balances: { "w1" => 100, "w2" => 6000 }, trends: { "w1" => -50, "w2" => -2 }) do
+          result = adapter.seconds_until_cpu_exhaustion(group: :web)
+        end
+
+        assert_in_delta 3000, result, 0.001
+      end
+    end
+
+    describe "with a machine that has stopped" do
+      let(:machines) do
+        [
+          machine("w1", group: "web", state: "stopped", created_at: 2.hours.ago, updated_at: 1.hour.ago),
+          machine("w2", group: "web", created_at: 2.hours.ago, updated_at: 1.hour.ago)
+        ]
       end
 
       it "ignores that machine" do
