@@ -263,6 +263,57 @@ describe('AuthenticationManager', () => {
 
       expect(await configuredManager().bootstrapFromCookie()).toBe(false);
     });
+
+    describe('when the page has already started the refresh', () => {
+      afterEach(() => {
+        window.intercodeEarlyRefresh = undefined;
+      });
+
+      it('uses that request instead of making its own', async () => {
+        window.intercodeEarlyRefresh = Promise.resolve(tokenResponse('early-token'));
+        const manager = configuredManager();
+
+        expect(await manager.bootstrapFromCookie()).toBe(true);
+
+        expect(manager.jwtToken).toBe('early-token');
+        expect(fetchMock).not.toHaveBeenCalled();
+      });
+
+      it('uses that request only once', async () => {
+        window.intercodeEarlyRefresh = Promise.resolve(tokenResponse('early-token'));
+        fetchMock.mockResolvedValue(tokenResponse('second-token'));
+        const manager = configuredManager();
+
+        await manager.bootstrapFromCookie();
+        expect(window.intercodeEarlyRefresh).toBeUndefined();
+
+        await manager.bootstrapFromCookie();
+        expect(manager.jwtToken).toBe('second-token');
+        expect(fetchMock).toHaveBeenCalledTimes(1);
+      });
+
+      it('treats a 401 on that request as no session, so later requests do not try again', async () => {
+        window.intercodeEarlyRefresh = Promise.resolve(new Response('', { status: 401 }));
+        const manager = configuredManager();
+
+        expect(await manager.bootstrapFromCookie()).toBe(false);
+
+        expect(await manager.ensureFreshAccessToken()).toBeUndefined();
+        expect(fetchMock).not.toHaveBeenCalled();
+      });
+
+      it('carries on unauthenticated, but tries again later, if that request could not reach the server', async () => {
+        const failed = Promise.reject(new TypeError('network down'));
+        failed.catch(() => {});
+        window.intercodeEarlyRefresh = failed;
+        fetchMock.mockResolvedValue(tokenResponse('retry-token'));
+        const manager = configuredManager();
+
+        expect(await manager.bootstrapFromCookie()).toBe(false);
+
+        expect(await manager.ensureFreshAccessToken()).toBe('retry-token');
+      });
+    });
   });
 
   describe('ensureFreshAccessToken', () => {

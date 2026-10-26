@@ -1,3 +1,13 @@
 <%# The SPA fetches both of these as soon as its entry script has loaded. Preloading them starts the requests while the entry script is still downloading; the later fetch() calls reuse the responses. %>
 <link rel="preload" href="/client_configuration" as="fetch" crossorigin="anonymous"/>
 <link rel="preload" href="/authenticity_tokens" as="fetch" crossorigin="anonymous"/>
+<%# Starts redeeming the refresh cookie now, while the entry script is still downloading. AuthenticationManager's bootstrapFromCookie takes this request over, once, instead of making its own, so this must stay the same request it would make. %>
+<%= javascript_tag do %>
+  window.intercodeEarlyRefresh = fetch('/oauth_session/refresh', {
+    method: 'POST',
+    credentials: 'same-origin',
+    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+    body: '{}'
+  });
+  window.intercodeEarlyRefresh.catch(function () {});
+<% end %>

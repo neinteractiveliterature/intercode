@@ -16,4 +16,15 @@ class CdnSpaShellControllerTest < ActionDispatch::IntegrationTest
       assert_operator preload, :<, entry_index, "expected the #{path} preload to come before the entry script"
     end
   end
+
+  it "starts redeeming the refresh cookie before the entry script loads" do
+    get "/cdn-spa-shell"
+
+    assert_response :ok
+    html = response.body
+    early_refresh = html.index("window.intercodeEarlyRefresh = fetch('/oauth_session/refresh'")
+
+    assert early_refresh, "expected the shell to start the refresh request"
+    assert_operator early_refresh, :<, html.index('type="module"')
+  end
 end

@@ -56,6 +56,15 @@ class TokenEndpointError extends Error {
   }
 }
 
+// The server-rendered shell starts the refresh request itself (see layouts/_boot_preloads.html.erb), so that it is
+// already in flight while this script is still downloading. It can be used once: a second refresh would race the
+// first over the rotating refresh token.
+function takeEarlyRefreshResponse(): Promise<Response> | undefined {
+  const early = window.intercodeEarlyRefresh;
+  window.intercodeEarlyRefresh = undefined;
+  return early;
+}
+
 // The refresh token lives in an HttpOnly `__Host-` cookie set by the
 // `/oauth_session/*` endpoints. The SPA only handles the access token
 // (in memory, not persisted) and the PKCE challenge during sign-in.
@@ -176,7 +185,7 @@ export class AuthenticationManager {
   // caller continues unauthenticated.
   async bootstrapFromCookie(): Promise<boolean> {
     try {
-      const tokenResponse = await this.postToTokenEndpoint('/oauth_session/refresh', {});
+      const tokenResponse = await this.postToTokenEndpoint('/oauth_session/refresh', {}, takeEarlyRefreshResponse());
       this.jwtToken = tokenResponse.access_token;
       this.knownAnonymous = false;
       return true;
@@ -258,13 +267,18 @@ export class AuthenticationManager {
     this.knownAnonymous = false;
   }
 
-  private async postToTokenEndpoint(path: string, body: Record<string, string>): Promise<TokenResponseBody> {
-    const response = await fetch(path, {
-      method: 'POST',
-      credentials: 'same-origin',
-      headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-      body: JSON.stringify(body),
-    });
+  private async postToTokenEndpoint(
+    path: string,
+    body: Record<string, string>,
+    inFlightResponse?: Promise<Response>,
+  ): Promise<TokenResponseBody> {
+    const response = await (inFlightResponse ??
+      fetch(path, {
+        method: 'POST',
+        credentials: 'same-origin',
+        headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
+        body: JSON.stringify(body),
+      }));
     if (!response.ok) {
       throw new TokenEndpointError(path, response.status);
     }
