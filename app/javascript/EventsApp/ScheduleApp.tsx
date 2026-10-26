@@ -11,37 +11,31 @@ import ScheduleGridApp from './ScheduleGrid';
 import PersonalScheduleFiltersBar, { usePersonalScheduleFilters } from './ScheduleGrid/PersonalScheduleFiltersBar';
 import { useAuthorizationRequiredWithoutLogin } from '../Authentication/useAuthorizationRequired';
 import { ScheduleGridConfig, allConfigs } from './ScheduleGrid/ScheduleGridConfig';
-import { conventionRequiresDates } from './runTimeFormatting';
-import { notEmpty } from '@neinteractiveliterature/litform';
 import {
   ScheduleGridConventionDataQueryData,
   ScheduleGridConventionDataQueryDocument,
+  ScheduleGridEventsQueryDocument,
 } from './ScheduleGrid/queries.generated';
 import useFilterableEventFormItems from './useFilterableFormItems';
 import EventListFilterableFormItemDropdown from './EventCatalog/EventList/EventListFilterableFormItemDropdown';
 import useReactRouterReactTable from '../Tables/useReactRouterReactTable';
-import { buildFieldFilterCodecs, FilterCodecs } from '../Tables/FilterUtils';
-import { reactTableFiltersToTableResultsFilters } from '../Tables/TableUtils';
-import { LoaderFunction, useLoaderData, RouterContextProvider } from 'react-router';
+import { LoaderFunction, useLoaderData, useSearchParams, RouterContextProvider } from 'react-router';
 import { apolloClientContext } from '../AppContexts';
+import { AppRootQueryData, AppRootQueryDocument } from '../appRootQueries.generated';
+import { buildAppRootContextValue } from '../AppRoot';
+import {
+  getAvailableScheduleConfigs,
+  getFetchFormItemIdentifiers,
+  getScheduleEventFilters,
+  gridEventsQueryVariables,
+  listEventsQueryVariables,
+  resolveScheduleView,
+  SCHEDULE_VIEW_PARAM,
+  SCHEDULE_VIEW_STORAGE_KEY,
+  scheduleFilterCodecs,
+} from './scheduleQueryInputs';
 import { conventionDayLoader, ConventionDayLoaderResult } from './conventionDayUrls';
 import styles from 'styles/schedule_grid.module.scss';
-
-const filterCodecs = buildFieldFilterCodecs({
-  form_items: FilterCodecs.json,
-});
-
-const SCHEDULE_VIEWS = ['list', ...allConfigs.map((config) => config.key)];
-
-function getDefaultScheduleView(scheduleGridConfigs: ScheduleGridConfig[]) {
-  // Bootstrap's "medium" breakpoint
-  if (window.innerWidth < 768 || scheduleGridConfigs.length === 0) {
-    // eslint-disable-next-line i18next/no-literal-string
-    return 'list';
-  }
-
-  return scheduleGridConfigs[0].key;
-}
 
 function getScheduleViewLabel(view: string, t: TFunction) {
   if (view === 'list') {
@@ -95,15 +89,19 @@ function ScheduleViewDropdown({ viewSelected, scheduleView, configs }: ScheduleV
   );
 }
 
-type LoaderResult = ConventionDayLoaderResult & { data: ScheduleGridConventionDataQueryData };
+export type ScheduleLoaderResult = ConventionDayLoaderResult & {
+  data: ScheduleGridConventionDataQueryData;
+  scheduleView: string;
+  eventFilters: ReturnType<typeof getScheduleEventFilters>;
+  fetchFormItemIdentifiers: string[];
+};
 
 export const loader: LoaderFunction<RouterContextProvider> = async ({ params, request, context }) => {
   const client = context.get(apolloClientContext);
-  const [conventionDayLoaderResult, { data }] = await Promise.all([
+  const [conventionDayLoaderResult, { data }, { data: appRootData }] = await Promise.all([
     conventionDayLoader(client, { params, request }),
-    await client.query<ScheduleGridConventionDataQueryData>({
-      query: ScheduleGridConventionDataQueryDocument,
-    }),
+    client.query<ScheduleGridConventionDataQueryData>({ query: ScheduleGridConventionDataQueryDocument }),
+    client.query<AppRootQueryData>({ query: AppRootQueryDocument }),
   ]);
   if (conventionDayLoaderResult instanceof Response) {
     return conventionDayLoaderResult;
@@ -112,13 +110,61 @@ export const loader: LoaderFunction<RouterContextProvider> = async ({ params, re
     return new Response(null, { status: 404 });
   }
 
-  return { ...conventionDayLoaderResult, data } satisfies LoaderResult;
+  const { conventionTimespan, siteMode, currentAbility } = buildAppRootContextValue(appRootData);
+  const { searchParams } = new URL(request.url);
+  const configs = getAvailableScheduleConfigs({ conventionTimespan, siteMode, currentAbility });
+  const scheduleView = resolveScheduleView({
+    requestedView: searchParams.get(SCHEDULE_VIEW_PARAM),
+    storedView: window.localStorage.getItem(SCHEDULE_VIEW_STORAGE_KEY),
+    configs,
+    viewportWidth: window.innerWidth,
+  });
+  const eventFilters = getScheduleEventFilters(searchParams);
+  const fetchFormItemIdentifiers = getFetchFormItemIdentifiers(data.convention);
+
+  // Start asking for the events now instead of when the page renders. The page's own request for them joins this one,
+  // so this isn't waited for here: the schedule's frame can appear while the events are still on their way.
+  const scheduleGridConfig = configs.find((config) => config.key === scheduleView);
+  if (scheduleView === 'list' && currentAbility.can_read_schedule) {
+    client
+      .query({
+        query: ScheduleGridEventsQueryDocument,
+        variables: listEventsQueryVariables(eventFilters, fetchFormItemIdentifiers),
+      })
+      .catch(() => {});
+  } else if (
+    scheduleGridConfig &&
+    (scheduleGridConfig.showExtendedCounts
+      ? currentAbility.can_read_schedule_with_counts
+      : currentAbility.can_read_schedule)
+  ) {
+    client
+      .query({
+        query: ScheduleGridEventsQueryDocument,
+        variables: gridEventsQueryVariables(
+          conventionDayLoaderResult.matchingTimespan,
+          fetchFormItemIdentifiers,
+          scheduleGridConfig.showExtendedCounts,
+          eventFilters,
+        ),
+      })
+      .catch(() => {});
+  }
+
+  return {
+    ...conventionDayLoaderResult,
+    data,
+    scheduleView,
+    eventFilters,
+    fetchFormItemIdentifiers,
+  } satisfies ScheduleLoaderResult;
 };
 
 function ScheduleApp(): React.JSX.Element {
-  const { data } = useLoaderData() as LoaderResult;
+  const { data, scheduleView, eventFilters, fetchFormItemIdentifiers } = useLoaderData() as ScheduleLoaderResult;
   const { myProfile, currentAbility, conventionTimespan, siteMode, navigationBarRef } = useContext(AppRootContext);
   const { t } = useTranslation();
+  const [, setSearchParams] = useSearchParams();
   const { choiceSetValue, choiceSetChanged } = usePersonalScheduleFilters({
     showPersonalFilters: true,
     signedIn: myProfile != null,
@@ -126,30 +172,9 @@ function ScheduleApp(): React.JSX.Element {
   const scheduleGridNavigationBarRef = useRef<HTMLDivElement>(null);
 
   const configs = useMemo(
-    () =>
-      allConfigs.filter((config) => {
-        // Only show grids for conventions less than a week long
-        if (conventionRequiresDates(conventionTimespan, siteMode)) {
-          return false;
-        }
-
-        if (config.showExtendedCounts && !currentAbility.can_read_schedule_with_counts) {
-          return false;
-        }
-
-        return true;
-      }),
-    [currentAbility.can_read_schedule_with_counts, conventionTimespan, siteMode],
+    () => getAvailableScheduleConfigs({ conventionTimespan, siteMode, currentAbility }),
+    [conventionTimespan, siteMode, currentAbility],
   );
-
-  const [scheduleView, setScheduleView] = useState<string>(() => {
-    const storedView = window.localStorage.getItem('schedule:view');
-    if (storedView && (SCHEDULE_VIEWS as readonly string[]).includes(storedView)) {
-      return storedView as string;
-    }
-
-    return getDefaultScheduleView(configs);
-  });
 
   const scheduleGridConfig = useMemo(() => configs.find((c) => c.key === scheduleView), [scheduleView, configs]);
 
@@ -157,23 +182,22 @@ function ScheduleApp(): React.JSX.Element {
     scheduleGridConfig?.showExtendedCounts ? 'can_read_schedule_with_counts' : 'can_read_schedule',
   );
 
-  const viewSelected = useCallback((view: string) => {
-    window.localStorage.setItem('schedule:view', view);
-    setScheduleView(view);
-  }, []);
-
-  const { filters, updateSearch } = useReactRouterReactTable({ ...filterCodecs });
-  const effectiveFilters = useMemo(
-    () =>
-      reactTableFiltersToTableResultsFilters(filters.filter(({ id }) => id !== 'my_rating' && id !== 'hide_conflicts')),
-    [filters],
+  // The view is in the URL so that a link shows the same view; it's also remembered for next time
+  const viewSelected = useCallback(
+    (view: string) => {
+      window.localStorage.setItem(SCHEDULE_VIEW_STORAGE_KEY, view);
+      setSearchParams((previous) => {
+        const next = new URLSearchParams(previous);
+        next.set(SCHEDULE_VIEW_PARAM, view);
+        return next;
+      });
+    },
+    [setSearchParams],
   );
+
+  const { filters, updateSearch } = useReactRouterReactTable({ ...scheduleFilterCodecs });
 
   const filterableFormItems = useFilterableEventFormItems(data.convention);
-  const fetchFormItemIdentifiers = useMemo(
-    () => filterableFormItems.map((item) => item.identifier).filter(notEmpty),
-    [filterableFormItems],
-  );
 
   const [navigationBarTop, setNavigationBarTop] = useState(0);
 
@@ -198,7 +222,7 @@ function ScheduleApp(): React.JSX.Element {
         <RunList
           fetchFormItemIdentifiers={fetchFormItemIdentifiers}
           convention={data.convention}
-          filters={effectiveFilters}
+          filters={eventFilters}
           scheduleGridNavigationBarRef={scheduleGridNavigationBarRef}
         />
       );
@@ -210,7 +234,7 @@ function ScheduleApp(): React.JSX.Element {
           fetchFormItemIdentifiers={fetchFormItemIdentifiers}
           configKey={scheduleGridConfig.key}
           convention={data.convention}
-          filters={effectiveFilters}
+          filters={eventFilters}
           currentAbilityCanCreateCmsPartials={data.currentAbility.can_create_cms_partials}
         />
       );
@@ -220,19 +244,7 @@ function ScheduleApp(): React.JSX.Element {
   };
 
   if (authorizationRequired) {
-    if (scheduleGridConfig?.showExtendedCounts && currentAbility.can_read_schedule) {
-      // eslint-disable-next-line i18next/no-literal-string
-      const authorizedView = configs.find((config) => !config.showExtendedCounts)?.key ?? 'list';
-      setScheduleView(authorizedView);
-      return <></>;
-    }
-
     return authorizationRequired;
-  }
-
-  if (scheduleView && scheduleView !== 'list' && !scheduleGridConfig) {
-    setScheduleView(getDefaultScheduleView(configs));
-    return <></>;
   }
 
   return (

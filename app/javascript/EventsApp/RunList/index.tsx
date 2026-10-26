@@ -17,6 +17,7 @@ import {
   ScheduleGridConventionDataQueryData,
   ScheduleGridEventsQueryDocument,
 } from '../ScheduleGrid/queries.generated';
+import { listEventsQueryVariables } from '../scheduleQueryInputs';
 import { findConflictingRuns } from '../ScheduleGrid/Schedule';
 import { ScheduleGridEventCategory } from '../ScheduleGrid/ScheduleGridTypes';
 import SignupCountData from '../SignupCountData';
@@ -51,7 +52,7 @@ export default function RunList({
   scheduleGridNavigationBarRef,
 }: RunListProps) {
   const { data } = useSuspenseQuery(ScheduleGridEventsQueryDocument, {
-    variables: { filters, fetchFormItemIdentifiers },
+    variables: listEventsQueryVariables(filters, fetchFormItemIdentifiers),
   });
   const { timezoneName, myProfile, navigationBarRef } = useContext(AppRootContext);
   const format = useAppDateTimeFormat();
