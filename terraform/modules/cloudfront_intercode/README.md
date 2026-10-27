@@ -98,9 +98,29 @@ block) and `nginx/rails-locations.conf` (include in the `server` block) are gene
 second expects an upstream named `rails` and `/etc/nginx/proxy_params.conf`. Send crawlers to
 `/og-shell?path=<original path>` from `location /` when `$is_crawler` is set.
 
-Because the old Lambda@Edge function is replaced, applying this change on an existing deployment destroys it, and
-AWS will not delete a Lambda@Edge function until its edge replicas are gone, which can take a few hours after the
-distribution stops using it. If the first apply fails on that step, apply again later.
+## Upgrading from the Lambda@Edge router
+
+Earlier versions of this module routed crawlers with a Lambda@Edge origin-request function. Upgrading removes it, and
+a plain `tofu apply` on an existing deployment **cannot succeed**:
+
+- The distribution update (which drops the Lambda association) is ordered _after_ the Lambda's destruction.
+- AWS will not delete a Lambda@Edge function while a distribution still uses it, or until its edge replicas are gone,
+  which can take a few hours after the distribution stops using it.
+
+So the Lambda delete fails, and the distribution never gets updated. Do it in two steps:
+
+1. Update the distributions on their own. Targeting them leaves the Lambda destroys out of the plan:
+
+   ```
+   tofu apply \
+     -target='module.<your module>.aws_cloudfront_distribution.this'
+   ```
+
+   (add a `-target` for each distribution, such as one per `for_each` key). Check the plan first: it should show only
+   the distributions changing, with 0 to destroy.
+
+2. Wait a few hours, then run a plain `tofu apply` to delete the old Lambda functions and their IAM roles. Until the
+   edge replicas are gone this step errors, which is harmless because nothing uses the functions any more.
 
 ## Host header forwarding
 
