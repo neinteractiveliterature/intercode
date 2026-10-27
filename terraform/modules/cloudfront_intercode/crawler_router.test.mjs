@@ -1,10 +1,7 @@
-// Run with: node --test terraform/modules/cloudfront_intercode/
-import assert from 'node:assert/strict';
-import { readFileSync } from 'node:fs';
-import { test } from 'node:test';
+import { expect, test } from 'vitest';
+// The source is a CloudFront Function, which is a script rather than a module, so import its text and evaluate it
+import source from './crawler_router.js?raw';
 
-// The source is a CloudFront Function, which is a script rather than a module, so evaluate it for its handler
-const source = readFileSync(new URL('./crawler_router.js', import.meta.url), 'utf8');
 const handler = new Function(`${source}; return handler;`)();
 
 const BROWSER = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/120.0 Safari/537.36';
@@ -16,12 +13,12 @@ function route(uri, userAgent, querystring = {}) {
 
 test('sends browsers to the SPA shell and drops the query string', () => {
   const request = route('/events/4130', BROWSER, { utm_source: { value: 'newsletter' } });
-  assert.equal(request.uri, '/cdn-spa-shell');
-  assert.deepEqual(request.querystring, {});
+  expect(request.uri).toBe('/cdn-spa-shell');
+  expect(request.querystring).toEqual({});
 });
 
 test('sends requests with no user agent to the SPA shell', () => {
-  assert.equal(route('/events/4130', undefined).uri, '/cdn-spa-shell');
+  expect(route('/events/4130', undefined).uri).toBe('/cdn-spa-shell');
 });
 
 for (const userAgent of [
@@ -35,18 +32,18 @@ for (const userAgent of [
 ]) {
   test(`sends ${userAgent.slice(0, 40)} to the OG shell with the original path`, () => {
     const request = route('/events/4130', userAgent);
-    assert.equal(request.uri, '/og-shell');
-    assert.deepEqual(request.querystring, { path: { value: '%2Fevents%2F4130' } });
+    expect(request.uri).toBe('/og-shell');
+    expect(request.querystring).toEqual({ path: { value: '%2Fevents%2F4130' } });
   });
 }
 
 test('encodes the original path, including percent-encoded characters', () => {
   const request = route('/events/a%20b/c', 'facebookexternalhit/1.1');
-  assert.equal(request.querystring.path.value, '%2Fevents%2Fa%2520b%2Fc');
+  expect(request.querystring.path.value).toBe('%2Fevents%2Fa%2520b%2Fc');
 });
 
 test('sends the root path to the OG shell for crawlers', () => {
-  assert.equal(route('/', 'Twitterbot/1.0').querystring.path.value, '%2F');
+  expect(route('/', 'Twitterbot/1.0').querystring.path.value).toBe('%2F');
 });
 
 for (const uri of [
@@ -58,11 +55,11 @@ for (const uri of [
 ]) {
   test(`leaves ${uri} alone, even for crawlers`, () => {
     const request = route(uri, 'facebookexternalhit/1.1', { a: { value: '1' } });
-    assert.equal(request.uri, uri);
-    assert.deepEqual(request.querystring, { a: { value: '1' } });
+    expect(request.uri).toBe(uri);
+    expect(request.querystring).toEqual({ a: { value: '1' } });
   });
 }
 
 test('does not treat a path that merely starts with a Rails prefix as a Rails path', () => {
-  assert.equal(route('/users-guide', BROWSER).uri, '/cdn-spa-shell');
+  expect(route('/users-guide', BROWSER).uri).toBe('/cdn-spa-shell');
 });

@@ -393,9 +393,6 @@ jobs:
       - name: tofu validate
         run: tofu validate
         working-directory: terraform/modules/${{ matrix.module }}
-      - name: Test the CloudFront Function
-        if: matrix.module == 'cloudfront_intercode'
-        run: node --test terraform/modules/cloudfront_intercode/crawler_router.test.mjs
 
   update-release-draft:
     runs-on: ubuntu-latest
