@@ -4,7 +4,7 @@ Creates a CloudFront distribution in front of an Intercode Rails origin with:
 
 - Long-TTL caching of `/packs/*` from the assets server
 - No-cache pass-through for API/auth endpoints
-- Crawler detection via a Lambda@Edge origin-request function:
+- Crawler detection via a viewer-request CloudFront Function (`crawler_router.js`):
   - Crawlers → `/og-shell?path=<original-path>` (per-resource OG metadata)
   - Regular users → `/cdn-spa-shell` (lightweight shell, convention-level OG only)
 
@@ -47,9 +47,40 @@ resource "aws_route53_record" "interconx" {
 
 ## Provider aliases
 
-Lambda@Edge functions must be deployed in `us-east-1`. This module requires a
-provider alias named `aws.us_east_1` configured for that region. Pass it via
-the `providers` map as shown above.
+Standard logging v2 resources must live in `us-east-1`, so this module requires a provider alias named
+`aws.us_east_1` configured for that region. Pass it via the `providers` map as shown above.
+
+## How requests are routed
+
+The function attaches to the **viewer request** event of the **default cache behavior**, the catch-all for SPA
+routes. More specific behaviors take precedence:
+
+| Path pattern            | Origin        | Function | Cache TTL                          |
+| ----------------------- | ------------- | -------- | ---------------------------------- |
+| `/packs/*`              | Assets server | None     | Long (immutable)                   |
+| `/client_configuration` | Rails         | None     | No cache                           |
+| `/authenticity_tokens`  | Rails         | None     | No cache                           |
+| `/oauth_session/*`      | Rails         | None     | No cache                           |
+| `/og-shell`             | Rails         | None     | Keyed on `path` query param + Host |
+| `/cdn-spa-shell`        | Rails         | None     | Keyed on Host; long                |
+| `*` (default)           | Rails         | Router   | Keyed on Host + `path` query param |
+
+The function runs before the cache lookup on every request, so the rewritten URI and query string are what key the
+cache. A crawler's response can therefore never be served to a browser, or the reverse. (The router used to be a
+Lambda@Edge origin-request function, which only ran on a cache miss, so a crawler could be served a browser's cached
+generic shell.) The default behavior's cache policy includes `path` in the key; without it every crawled page would
+share one `/og-shell` entry.
+
+- `/cdn-spa-shell`: the content varies per convention domain, hence `Host` in the key. Rails sends a one-day TTL.
+- `/og-shell`: keyed on `Host` and `path`. Rails marks these responses `max-age=0, private`, so they aren't cached.
+- Browsers' query strings are dropped, so tracking parameters can't fragment the cache.
+
+The crawler list and the Rails path list in `crawler_router.js` need to stay in step with the behaviors above and
+with Rails' routes. Tests for the function run with `node --test terraform/modules/cloudfront_intercode/crawler_router.test.mjs`.
+
+Because the old Lambda@Edge function is replaced, applying this change on an existing deployment destroys it, and
+AWS will not delete a Lambda@Edge function until its edge replicas are gone, which can take a few hours after the
+distribution stops using it. If the first apply fails on that step, apply again later.
 
 ## Host header forwarding
 

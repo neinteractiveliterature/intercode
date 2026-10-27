@@ -1,7 +1,0 @@
-{
-  "name": "cloudfront-og-router",
-  "version": "1.0.0",
-  "description": "Lambda@Edge origin-request handler for Intercode CloudFront distribution",
-  "type": "module",
-  "main": "index.mjs"
-}

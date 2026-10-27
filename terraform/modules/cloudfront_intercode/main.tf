@@ -5,10 +5,6 @@ terraform {
       version               = ">= 5.0"
       configuration_aliases = [aws.us_east_1]
     }
-    archive = {
-      source  = "hashicorp/archive"
-      version = ">= 2.0"
-    }
   }
 }
 
@@ -116,6 +112,46 @@ resource "aws_cloudfront_cache_policy" "og_shell" {
     enable_accept_encoding_gzip   = true
     enable_accept_encoding_brotli = true
   }
+}
+
+# Default behavior: the router function rewrites SPA routes to /cdn-spa-shell (browsers) or /og-shell?path=...
+# (crawlers) before the cache lookup, so the cache is keyed on Host plus the `path` query parameter. Without `path`
+# in the key every crawled page would share one /og-shell entry. TTLs follow what Rails sends, which is a day for
+# /cdn-spa-shell and nothing for /og-shell.
+resource "aws_cloudfront_cache_policy" "default_router" {
+  name        = "${var.name}-default-router"
+  default_ttl = var.cdn_spa_shell_ttl
+  max_ttl     = var.cdn_spa_shell_ttl
+  min_ttl     = 0
+
+  parameters_in_cache_key_and_forwarded_to_origin {
+    cookies_config { cookie_behavior = "none" }
+    headers_config {
+      header_behavior = "whitelist"
+      headers {
+        items = ["Host"]
+      }
+    }
+    query_strings_config {
+      query_string_behavior = "whitelist"
+      query_strings {
+        items = ["path"]
+      }
+    }
+    enable_accept_encoding_gzip   = true
+    enable_accept_encoding_brotli = true
+  }
+}
+
+# Sends crawlers to /og-shell and everyone else to /cdn-spa-shell. This is a viewer-request function, which runs
+# before the cache lookup on every request; the previous Lambda@Edge origin-request router only ran on a cache miss,
+# so a crawler could be served a browser's cached generic shell.
+resource "aws_cloudfront_function" "crawler_router" {
+  name    = "${var.name}-og-router"
+  comment = "Routes crawlers to /og-shell and everyone else to /cdn-spa-shell"
+  runtime = "cloudfront-js-2.0"
+  publish = true
+  code    = file("${path.module}/crawler_router.js")
 }
 
 # ---------------------------------------------------------------------------
@@ -243,20 +279,19 @@ resource "aws_cloudfront_distribution" "this" {
     viewer_protocol_policy   = "redirect-to-https"
   }
 
-  # Default — all SPA routes. Lambda@Edge rewrites to /cdn-spa-shell or /og-shell.
+  # Default — all SPA routes. The router function rewrites to /cdn-spa-shell or /og-shell.
   default_cache_behavior {
     target_origin_id         = local.rails_origin_id
     allowed_methods          = ["GET", "HEAD"]
     cached_methods           = ["GET", "HEAD"]
     compress                 = true
-    cache_policy_id          = aws_cloudfront_cache_policy.cdn_spa_shell.id
+    cache_policy_id          = aws_cloudfront_cache_policy.default_router.id
     origin_request_policy_id = aws_cloudfront_origin_request_policy.forward_all.id
     viewer_protocol_policy   = "redirect-to-https"
 
-    lambda_function_association {
-      event_type   = "origin-request"
-      lambda_arn   = aws_lambda_function.og_router.qualified_arn
-      include_body = false
+    function_association {
+      event_type   = "viewer-request"
+      function_arn = aws_cloudfront_function.crawler_router.arn
     }
   }
 
