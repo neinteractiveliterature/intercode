@@ -76,7 +76,7 @@ share one `/og-shell` entry.
 - Browsers' query strings are dropped, so tracking parameters can't fragment the cache.
 
 The crawler list and the Rails path list in `crawler_router.js` need to stay in step with the behaviors above and
-with Rails' routes. Tests for the function run with `node --test terraform/modules/cloudfront_intercode/crawler_router.test.mjs`.
+with Rails' routes. Tests for the function run with Vitest (`yarn vitest run terraform/modules/cloudfront_intercode`).
 
 Because the old Lambda@Edge function is replaced, applying this change on an existing deployment destroys it, and
 AWS will not delete a Lambda@Edge function until its edge replicas are gone, which can take a few hours after the
