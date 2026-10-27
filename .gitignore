@@ -113,4 +113,3 @@ cookbooks
 # Terraform
 **/.terraform/
 **/.terraform.lock.hcl
-**/og_router.zip
