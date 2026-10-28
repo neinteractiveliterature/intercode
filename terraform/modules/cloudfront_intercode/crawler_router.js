@@ -14,7 +14,7 @@ var CRAWLER_UA_RE =
 
 // Paths that belong to Rails, the assets origin or the shells, and must never be rewritten
 var BYPASS_PATH_RE =
-  /^(?:\/authenticity_tokens|\/client_configuration|\/graphql|\/graphiql|\/sns_notifications|\/healthz|\/sitemap\.xml|\/cdn-spa-shell|\/og-shell)$|^(?:\/users\/|\/oauth\/|\/oauth_session\/|\/email_forwarders\/|\/stripe_webhook\/|\/stripe_account\/|\/reports\/|\/calendars\/|\/csv_exports\/|\/user_con_profiles\/|\/rails\/active_storage\/|\/uploads\/|\/packs\/)/;
+  /^(?:\/authenticity_tokens|\/client_configuration|\/graphql|\/graphiql|\/sns_notifications|\/healthz|\/sitemap\.xml|\/cdn-spa-shell|\/og-shell)$|^(?:\/users\/|\/oauth\/|\/oauth_session\/|\/email_forwarders\/|\/stripe_webhook\/|\/stripe_account\/|\/reports\/|\/calendars\/|\/csv_exports\/|\/user_con_profiles\/|\/rails\/active_storage\/|\/uploads\/|\/packs\/|\/assets\/)/;
 // END GENERATED
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars -- CloudFront calls this entry point

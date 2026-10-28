@@ -91,6 +91,44 @@ After editing it, run `yarn routing:codegen` and commit the result. That rewrite
 `yarn routing:check` and fails if they are stale. Tests for the function run with Vitest
 (`yarn vitest run terraform/modules/cloudfront_intercode`).
 
+## Serving the shell from S3 (framework-mode build)
+
+By default the default behavior is a Rails origin, and Rails renders the shell. The framework-mode build is a static
+`index.html` plus hashed files in `assets/`, which can be served from an S3 bucket instead. Set both of:
+
+- `static_shell_bucket_domain_name`: the bucket's `bucket_regional_domain_name`
+- `static_shell_origin_access_control_id`: the bucket's `origin_access_control_id`
+
+Both come from an `assets_bucket_intercode` instance. Use **a separate bucket** for this, not the one that serves
+`/packs/*`: the release upload marks every file under its prefix that the new release lacks as obsolete, and the two
+builds would otherwise mark each other's files. The bucket's `cloudfront_distribution_arns` must include this
+distribution's ARN. Then:
+
+| Path pattern  | Origin              | Function            | Cache TTL                                                      |
+| ------------- | ------------------- | ------------------- | -------------------------------------------------------------- |
+| `/assets/*`   | Static shell bucket | None                | Long (immutable)                                               |
+| Rails paths   | Rails               | None                | As above                                                       |
+| `*` (default) | Static shell bucket | Static shell router | `static_shell_ttl` (60 s), keyed on the `path` query parameter |
+
+The default behavior's function is `static_shell_router.js` instead of `crawler_router.js`. Browsers get
+`/index.html` from the bucket. Crawlers, and any Rails path that reaches it, get the Rails origin with the viewer's
+`Host` header (an S3 origin can't take one, so the default behavior has no origin request policy), and crawlers get
+`/og-shell?path=...`. It is generated from `routing.json` like the other one, and `/assets/*` is in `asset_paths`.
+
+Releases upload the build with the `framework-shell-release` job in `.github/workflows/release.yml`, which runs
+`script/uploadFrameworkAssets.sh`: the hashed files with a long `Cache-Control`, then `index.html` with
+`max-age=60` (keep that in step with `static_shell_ttl`), then it marks the files that release dropped as obsolete.
+Set the repository variables `FRAMEWORK_SHELL_BUCKET` and `FRAMEWORK_SHELL_UPLOAD_ROLE_ARN` (from the bucket module's
+`bucket_name` and `release_upload_role_arn`) to turn it on. The image it uploads from is only built when the repository
+variable `BUILD_FRAMEWORK` is set.
+
+**Trying it out:** create the bucket and a distribution with the two variables set and no aliases, run the "Upload
+framework-mode build to bucket" workflow for a commit, and fetch the distribution's `cloudfront.net` domain with a
+`Host` header for a convention, once as a browser and once as a crawler. The shell should come from the bucket, the
+crawler's response from Rails, and a missing `/assets/...` file should be a 404.
+
+**Rolling back** is removing the two variables. The next apply puts the Rails origin and the Rails-rendered shell back.
+
 ## Other web servers
 
 Deployments without CloudFront can do the same routing in nginx. `nginx/crawler-map.conf` (include in the `http`

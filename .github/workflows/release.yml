@@ -42,6 +42,19 @@ jobs:
     uses: ./.github/workflows/upload-assets-to-bucket.yml
     with:
       sha: ${{ github.sha }}
+  # The same for the framework-mode build and its static shell bucket (terraform/modules/cloudfront_intercode, static
+  # shell mode). Skipped unless FRAMEWORK_SHELL_BUCKET is set; see upload-framework-assets-to-bucket.yml.
+  framework-shell-release:
+    if: vars.FRAMEWORK_SHELL_BUCKET != ''
+    needs:
+      - docker-release
+    permissions:
+      id-token: write
+      contents: read
+      packages: read
+    uses: ./.github/workflows/upload-framework-assets-to-bucket.yml
+    with:
+      sha: ${{ github.sha }}
   fly-release:
     runs-on: ubuntu-latest
     needs:

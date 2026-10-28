@@ -13,8 +13,14 @@ terraform {
 # ---------------------------------------------------------------------------
 
 locals {
-  rails_origin_id  = "rails"
-  assets_origin_id = "assets"
+  rails_origin_id        = "rails"
+  assets_origin_id       = "assets"
+  static_shell_origin_id = "static-shell"
+
+  # With a static shell bucket, the default behavior's origin is the bucket and the router function switches to Rails
+  # where needed. Without one, everything below the specific behaviors is Rails, as it always was.
+  static_shell_enabled = var.static_shell_bucket_domain_name != null
+  default_origin_id    = local.static_shell_enabled ? local.static_shell_origin_id : local.rails_origin_id
 
   # Every path that is routed by something other than the SPA fallback. See the README for what to edit.
   routing = jsondecode(file("${path.module}/routing.json"))
@@ -146,15 +152,41 @@ resource "aws_cloudfront_cache_policy" "default_router" {
   }
 }
 
+# Default behavior when the shell comes from the bucket. The key is the rewritten URI plus the `path` query parameter
+# (set for crawlers only), and nothing else: S3 can't be sent the viewer's Host header, and the shell is identical for
+# every domain. A short TTL keeps a new release's index.html from lingering; the hashed files it names stay in the
+# bucket for much longer (see assets_bucket_intercode).
+resource "aws_cloudfront_cache_policy" "static_shell" {
+  count = local.static_shell_enabled ? 1 : 0
+
+  name        = "${var.name}-static-shell"
+  default_ttl = var.static_shell_ttl
+  max_ttl     = var.static_shell_ttl
+  min_ttl     = 0
+
+  parameters_in_cache_key_and_forwarded_to_origin {
+    cookies_config { cookie_behavior = "none" }
+    headers_config { header_behavior = "none" }
+    query_strings_config {
+      query_string_behavior = "whitelist"
+      query_strings {
+        items = ["path"]
+      }
+    }
+    enable_accept_encoding_gzip   = true
+    enable_accept_encoding_brotli = true
+  }
+}
+
 # Sends crawlers to /og-shell and everyone else to /cdn-spa-shell. This is a viewer-request function, which runs
 # before the cache lookup on every request; the previous Lambda@Edge origin-request router only ran on a cache miss,
 # so a crawler could be served a browser's cached generic shell.
 resource "aws_cloudfront_function" "crawler_router" {
   name    = "${var.name}-og-router"
-  comment = "Routes crawlers to /og-shell and everyone else to /cdn-spa-shell"
+  comment = local.static_shell_enabled ? "Routes crawlers and Rails paths to Rails and everyone else to the static shell" : "Routes crawlers to /og-shell and everyone else to /cdn-spa-shell"
   runtime = "cloudfront-js-2.0"
   publish = true
-  code    = file("${path.module}/crawler_router.js")
+  code    = file("${path.module}/${local.static_shell_enabled ? "static_shell_router.js" : "crawler_router.js"}")
 }
 
 # ---------------------------------------------------------------------------
@@ -167,6 +199,13 @@ resource "aws_cloudfront_distribution" "this" {
   price_class     = var.price_class
   aliases         = var.aliases
   comment         = var.name
+
+  lifecycle {
+    precondition {
+      condition     = (var.static_shell_bucket_domain_name == null) == (var.static_shell_origin_access_control_id == null)
+      error_message = "static_shell_bucket_domain_name and static_shell_origin_access_control_id must be set together."
+    }
+  }
 
   # Rails origin
   origin {
@@ -191,6 +230,31 @@ resource "aws_cloudfront_distribution" "this" {
       https_port             = 443
       origin_protocol_policy = "https-only"
       origin_ssl_protocols   = ["TLSv1.2"]
+    }
+  }
+
+  # Static shell bucket (framework-mode build), when there is one. Access is by origin access control, so no custom
+  # origin config and no Host header.
+  dynamic "origin" {
+    for_each = local.static_shell_enabled ? [1] : []
+    content {
+      origin_id                = local.static_shell_origin_id
+      domain_name              = var.static_shell_bucket_domain_name
+      origin_access_control_id = var.static_shell_origin_access_control_id
+    }
+  }
+
+  # /assets/* — the framework-mode build's hashed files, from the bucket. Same domain as the app, so no CORS needed.
+  dynamic "ordered_cache_behavior" {
+    for_each = local.static_shell_enabled ? [1] : []
+    content {
+      path_pattern           = "/assets/*"
+      target_origin_id       = local.static_shell_origin_id
+      allowed_methods        = ["GET", "HEAD"]
+      cached_methods         = ["GET", "HEAD"]
+      compress               = true
+      cache_policy_id        = "658327ea-f89d-4fab-a63d-7e88639e58f6" # CachingOptimized managed policy
+      viewer_protocol_policy = "redirect-to-https"
     }
   }
 
@@ -248,14 +312,16 @@ resource "aws_cloudfront_distribution" "this" {
     viewer_protocol_policy   = "redirect-to-https"
   }
 
-  # Default — all SPA routes. The router function rewrites to /cdn-spa-shell or /og-shell.
+  # Default — all SPA routes. The router function rewrites to /cdn-spa-shell or /og-shell, or, with a static shell
+  # bucket, to /index.html in the bucket or /og-shell on Rails.
   default_cache_behavior {
-    target_origin_id         = local.rails_origin_id
-    allowed_methods          = ["GET", "HEAD"]
-    cached_methods           = ["GET", "HEAD"]
-    compress                 = true
-    cache_policy_id          = aws_cloudfront_cache_policy.default_router.id
-    origin_request_policy_id = aws_cloudfront_origin_request_policy.forward_all.id
+    target_origin_id = local.default_origin_id
+    allowed_methods  = ["GET", "HEAD"]
+    cached_methods   = ["GET", "HEAD"]
+    compress         = true
+    cache_policy_id  = local.static_shell_enabled ? aws_cloudfront_cache_policy.static_shell[0].id : aws_cloudfront_cache_policy.default_router.id
+    # The bucket can't be sent the viewer's headers; the router passes Host to Rails itself
+    origin_request_policy_id = local.static_shell_enabled ? null : aws_cloudfront_origin_request_policy.forward_all.id
     viewer_protocol_policy   = "redirect-to-https"
 
     function_association {

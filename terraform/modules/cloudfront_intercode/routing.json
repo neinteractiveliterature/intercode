@@ -21,7 +21,7 @@
     "/uploads/*"
   ],
   "shell_paths": ["/cdn-spa-shell", "/og-shell"],
-  "asset_paths": ["/packs/*"],
+  "asset_paths": ["/packs/*", "/assets/*"],
   "crawler_user_agents": [
     "Googlebot",
     "bingbot",
