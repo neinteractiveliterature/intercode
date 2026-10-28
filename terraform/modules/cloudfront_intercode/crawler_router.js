@@ -8,20 +8,21 @@
 // This runs before the cache lookup, so the rewritten URI and query string are what key the cache (see the
 // default_router cache policy). A crawler's response can therefore never be served to a browser, or the reverse.
 
+// BEGIN GENERATED from routing.json by script/genRouting.mjs (yarn routing:codegen). Do not edit.
 var CRAWLER_UA_RE =
   /Googlebot|bingbot|DuckDuckBot|YandexBot|Baiduspider|facebookexternalhit|Twitterbot|LinkedInBot|WhatsApp|Discordbot|Slackbot|Applebot|Embedly|Pinterest/i;
 
-// Paths that belong to the underlying Rails app and must never be rewritten. This mirrors the specific CloudFront
-// behaviors defined in main.tf and acts as a safety net if a new route is added without a corresponding behavior.
-var RAILS_PATH_RE =
-  /^\/(users|oauth|oauth_session|authenticity_tokens|client_configuration|graphql|graphiql|email_forwarders|sns_notifications|stripe_webhook|stripe_account|healthz|sitemap\.xml|reports|calendars|csv_exports|user_con_profiles|rails|uploads|packs|cdn-spa-shell|og-shell)(\/|$)/;
+// Paths that belong to Rails, the assets origin or the shells, and must never be rewritten
+var BYPASS_PATH_RE =
+  /^(?:\/authenticity_tokens|\/client_configuration|\/graphql|\/graphiql|\/sns_notifications|\/healthz|\/sitemap\.xml|\/cdn-spa-shell|\/og-shell)$|^(?:\/users\/|\/oauth\/|\/oauth_session\/|\/email_forwarders\/|\/stripe_webhook\/|\/stripe_account\/|\/reports\/|\/calendars\/|\/csv_exports\/|\/user_con_profiles\/|\/rails\/active_storage\/|\/uploads\/|\/packs\/)/;
+// END GENERATED
 
 // eslint-disable-next-line @typescript-eslint/no-unused-vars -- CloudFront calls this entry point
 function handler(event) {
   var request = event.request;
   var uri = request.uri;
 
-  if (RAILS_PATH_RE.test(uri)) {
+  if (BYPASS_PATH_RE.test(uri)) {
     return request;
   }
 

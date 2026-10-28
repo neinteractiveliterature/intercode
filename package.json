@@ -21,6 +21,8 @@
     "i18next:dedupe": "yarn run tsx ./script/deduplicateTranslations.ts",
     "lint": "eslint app/javascript test/javascript schema.graphql --cache",
     "prepare": "husky install",
+    "routing:codegen": "node script/genRouting.mjs",
+    "routing:check": "node script/genRouting.mjs --check",
     "preview": "vite preview --outDir ./public",
     "start": "vite",
     "ts:check": "node node_modules/@typescript/native/bin/tsc --noEmit",

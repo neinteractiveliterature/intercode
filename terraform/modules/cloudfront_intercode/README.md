@@ -75,8 +75,28 @@ share one `/og-shell` entry.
 - `/og-shell`: keyed on `Host` and `path`. Rails marks these responses `max-age=0, private`, so they aren't cached.
 - Browsers' query strings are dropped, so tracking parameters can't fragment the cache.
 
-The crawler list and the Rails path list in `crawler_router.js` need to stay in step with the behaviors above and
-with Rails' routes. Tests for the function run with Vitest (`yarn vitest run terraform/modules/cloudfront_intercode`).
+### Adding a route or crawler
+
+`routing.json` is the one place to edit:
+
+- `rails_paths`: routes that Rails owns. Each becomes a no-cache pass-through behavior (Terraform reads the file
+  directly), is exempt from the router function, and is proxied by the reference nginx config. `/foo/*` is a prefix
+  (it doesn't match `/foo` itself); anything else is an exact path.
+- `shell_paths` and `asset_paths`: the shell and `/packs/*` behaviors, which `main.tf` still spells out. A test
+  fails if `main.tf` and `routing.json` disagree.
+- `crawler_user_agents`: the user agents that get `/og-shell`.
+
+After editing it, run `yarn routing:codegen` and commit the result. That rewrites the generated section of
+`crawler_router.js` (a CloudFront Function can't read files) and the two files in `nginx/`; CI runs
+`yarn routing:check` and fails if they are stale. Tests for the function run with Vitest
+(`yarn vitest run terraform/modules/cloudfront_intercode`).
+
+## Other web servers
+
+Deployments without CloudFront can do the same routing in nginx. `nginx/crawler-map.conf` (include in the `http`
+block) and `nginx/rails-locations.conf` (include in the `server` block) are generated from the same file. The
+second expects an upstream named `rails` and `/etc/nginx/proxy_params.conf`. Send crawlers to
+`/og-shell?path=<original path>` from `location /` when `$is_crawler` is set.
 
 Because the old Lambda@Edge function is replaced, applying this change on an existing deployment destroys it, and
 AWS will not delete a Lambda@Edge function until its edge replicas are gone, which can take a few hours after the

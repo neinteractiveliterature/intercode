@@ -1,6 +1,8 @@
 import { expect, test } from 'vitest';
 // The source is a CloudFront Function, which is a script rather than a module, so import its text and evaluate it
 import source from './crawler_router.js?raw';
+import routing from './routing.json';
+import mainTf from './main.tf?raw';
 
 const handler = new Function(`${source}; return handler;`)();
 
@@ -62,4 +64,22 @@ for (const uri of [
 
 test('does not treat a path that merely starts with a Rails prefix as a Rails path', () => {
   expect(route('/users-guide', BROWSER).uri).toBe('/cdn-spa-shell');
+});
+
+// The Rails paths come from routing.json, so check them all rather than a sample
+for (const pattern of routing.rails_paths) {
+  const uri = pattern.endsWith('/*') ? `${pattern.slice(0, -1)}example` : pattern;
+  test(`leaves the routing.json path ${uri} alone`, () => {
+    expect(route(uri, 'facebookexternalhit/1.1').uri).toBe(uri);
+  });
+}
+
+test('does not treat a prefix path as matching its bare name', () => {
+  expect(route('/users', 'facebookexternalhit/1.1').uri).toBe('/og-shell');
+});
+
+// The shell and asset behaviors are written out in main.tf, so make sure they stay in step with routing.json
+test('main.tf has a behavior for each shell and asset path', () => {
+  const patterns = [...mainTf.matchAll(/path_pattern\s*=\s*"([^"]+)"/g)].map((m) => m[1]);
+  expect(patterns.sort()).toEqual([...routing.shell_paths, ...routing.asset_paths].sort());
 });

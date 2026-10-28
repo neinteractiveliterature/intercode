@@ -45,6 +45,8 @@ jobs:
           node-version: ${{ steps.node-version.outputs.node-version }}
       - name: yarn install
         run: yarn install
+      - name: Check generated CloudFront and nginx routing files are up to date
+        run: yarn run routing:check
       - name: build
         run: COVERAGE=true yarn run test
       - name: Publish Test Report
