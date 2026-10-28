@@ -77,4 +77,5 @@ cookbooks
 .pnp.*
 
 /doc-site/.yarn
+/doc-site/node_modules
 /doc-site/build
