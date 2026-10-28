@@ -3,12 +3,16 @@
 # been obsolete for longer than the retention period. A file becomes obsolete when a release stops containing it, so
 # its age is counted from the build that dropped it, not from when it was first built.
 #
-# Usage: mergePreviousAssets.sh <previous-image-root> <retention-days>
+# Usage: mergePreviousAssets.sh <previous-image-root> <retention-days> [web-root] [subdirectory]
+#
+# The web root and subdirectory default to the ones Dockerfile.assets uses (/usr/share/nginx/html and packs).
+# Dockerfile.assets-framework passes its own, since its hashed files live in assets/ in a different directory.
 set -eu
 
 previous_root="$1"
 retention_days="$2"
-html=/usr/share/nginx/html
+html="${3:-/usr/share/nginx/html}"
+subdir="${4:-packs}"
 manifest_dir=/etc/intercode-assets
 previous_manifest="$previous_root$manifest_dir/current-files.txt"
 work=/tmp/previous-packs
@@ -16,11 +20,11 @@ work=/tmp/previous-packs
 # Record which files this release contains, for the next build to compare against. It lives outside the web root so
 # that it isn't served.
 mkdir -p "$manifest_dir"
-(cd "$html/packs" && find . -type f | sort) > "$manifest_dir/current-files.txt"
+(cd "$html/$subdir" && find . -type f | sort) > "$manifest_dir/current-files.txt"
 
-[ -d "$previous_root$html/packs" ] || exit 0
+[ -d "$previous_root$html/$subdir" ] || exit 0
 
-cp -rp "$previous_root$html/packs" "$work"
+cp -rp "$previous_root$html/$subdir" "$work"
 
 # The files the previous release contained. An image from before this was recorded has no manifest, so assume it was
 # all current.
@@ -40,5 +44,5 @@ done
 find "$work" -type f -mtime +"$retention_days" -delete
 
 # cp -n never overwrites, so this release's own files win.
-cp -rnp "$work/." "$html/packs/"
+cp -rnp "$work/." "$html/$subdir/"
 rm -rf "$work"

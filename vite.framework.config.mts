@@ -5,6 +5,11 @@ import { globalDefines } from './globalDefines.mts';
 import { css, manualChunks } from './vite.config.mts';
 import routing from './terraform/modules/cloudfront_intercode/routing.json' with { type: 'json' };
 
+// The framework build can't know the assets host: ASSETS_HOST is only set when the container starts. Every asset URL
+// is built against this placeholder, and script/substituteAssetsHost.sh swaps in the real host (or nothing, for
+// same-origin assets) when the assets image starts. Keep it in step with that script.
+export const ASSETS_HOST_PLACEHOLDER = 'https://ASSETHOSTPLACEHOLDER.invalid/';
+
 // In development the Vite server stands in for CloudFront: SPA routes are served here and the paths Rails owns are
 // proxied to it (the same list the CloudFront behaviors and nginx config come from).
 const railsUrl = process.env.RAILS_URL ?? 'https://localhost:5050';
@@ -16,7 +21,8 @@ const railsPathPatterns = [...routing.rails_paths, ...routing.shell_paths].map((
 // Framework-mode (react-router.config.ts) build, run with `yarn build:framework` (or `yarn start:framework` for a
 // development server that proxies Rails' paths to RAILS_URL, https://localhost:5050 by default). Kept apart from vite.config.mts so
 // the production build is unaffected until the migration is ready to cut over.
-export default defineConfig({
+export default defineConfig(({ command }) => ({
+  base: command === 'build' ? ASSETS_HOST_PLACEHOLDER : '/',
   plugins: [
     reactRouter(),
     // The polyfills are for the browser bundle; applied to the prerender (Node) build they replace node: modules
@@ -49,4 +55,4 @@ export default defineConfig({
       ]),
     ),
   },
-});
+}));
