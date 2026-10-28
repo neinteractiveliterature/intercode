@@ -19,6 +19,13 @@ export type ClientConfiguration = {
   assets_host: string | null;
   sentry_frontend_dsn: string | null;
   rollbar_client_access_token: string | null;
+  // Null on the root site
+  convention: {
+    name: string;
+    favicon_url: string | null;
+    favicon_content_type: string | null;
+    open_graph_image_url: string | null;
+  } | null;
 };
 
 export const authenticityTokensManagerContext = createContext<AuthenticityTokensManager>();

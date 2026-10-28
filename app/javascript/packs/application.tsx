@@ -35,24 +35,39 @@ type Bootstrap = {
 const authManager = AuthenticationManager.deserializeFromBrowser();
 const cookieBootstrapPromise = authManager.bootstrapFromCookie();
 
+// The shell fetches /client_configuration itself to set the title and favicon (see layouts/_boot_preloads.html.erb).
+// Use that if it worked, and otherwise make the request here so a failure is reported through the boot error path.
+async function loadClientConfiguration(): Promise<ClientConfiguration> {
+  const early = window.intercodeEarlyClientConfiguration;
+  window.intercodeEarlyClientConfiguration = undefined;
+  if (early) {
+    try {
+      return (await early) as ClientConfiguration;
+    } catch {
+      // fall through to our own request
+    }
+  }
+  const configResponse = await fetch('/client_configuration', { credentials: 'same-origin' });
+  if (!configResponse.ok) {
+    throw new Error(`Failed to load /client_configuration (HTTP ${configResponse.status})`);
+  }
+  return (await configResponse.json()) as ClientConfiguration;
+}
+
 // Fetch /client_configuration *first*, then stand up the Apollo client using its values. This lets the
 // AuthenticationManager refresh expired access tokens (which requires the OAuth clientId and OIDC issuer URL)
 // without depending on server-rendered HTML.
 const bootstrapPromise: Promise<Bootstrap> = (async () => {
   // /client_configuration is needed to construct the auth manager; the
   // authenticity-tokens refresh is independent and can run in parallel.
-  const [configResponse, authenticityTokensManager] = await Promise.all([
-    fetch('/client_configuration', { credentials: 'same-origin' }),
+  const [clientConfiguration, authenticityTokensManager] = await Promise.all([
+    loadClientConfiguration(),
     (async () => {
       const mgr = new AuthenticityTokensManager(fetch, undefined, getAuthenticityTokensURL());
       await mgr.refresh();
       return mgr;
     })(),
   ]);
-  if (!configResponse.ok) {
-    throw new Error(`Failed to load /client_configuration (HTTP ${configResponse.status})`);
-  }
-  const clientConfiguration = (await configResponse.json()) as ClientConfiguration;
 
   // Initialize error reporting as early as possible — before we build the
   // router and render any React. A render-time crash during the initial mount

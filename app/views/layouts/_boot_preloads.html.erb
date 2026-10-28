@@ -11,3 +11,25 @@
   });
   window.intercodeEarlyRefresh.catch(function () {});
 <% end %>
+<%# Fetches /client_configuration now and uses it to set the title and favicon, which a shell without server-rendered tags (the framework-mode shell) lacks. The app takes the same promise over instead of fetching again. A failed fetch is left for the app to retry and report. %>
+<%= javascript_tag do %>
+  window.intercodeEarlyClientConfiguration = fetch('/client_configuration', { credentials: 'same-origin' }).then(function (response) {
+    if (!response.ok) { throw new Error('HTTP ' + response.status); }
+    return response.json();
+  });
+  window.intercodeEarlyClientConfiguration.then(function (config) {
+    var convention = config.convention;
+    if (!convention) { return; }
+    document.title = convention.name;
+    if (convention.favicon_url) {
+      var icon = document.querySelector('link[rel="icon"]');
+      if (!icon) {
+        icon = document.createElement('link');
+        icon.rel = 'icon';
+        document.head.appendChild(icon);
+      }
+      if (convention.favicon_content_type) { icon.type = convention.favicon_content_type; }
+      icon.href = convention.favicon_url;
+    }
+  }).catch(function () {});
+<% end %>

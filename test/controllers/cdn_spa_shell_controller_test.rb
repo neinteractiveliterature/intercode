@@ -28,6 +28,18 @@ class CdnSpaShellControllerTest < ActionDispatch::IntegrationTest
     assert_operator early_refresh, :<, html.index('type="module"')
   end
 
+  it "fetches the client configuration for the app to reuse, and sets the title and favicon from it" do
+    get "/cdn-spa-shell"
+
+    assert_response :ok
+    html = response.body
+    early_fetch = html.index("window.intercodeEarlyClientConfiguration = fetch('/client_configuration'")
+
+    assert early_fetch, "expected the shell to start the client configuration request"
+    assert_operator early_fetch, :<, html.index('type="module"')
+    assert_includes html, "document.title = convention.name"
+  end
+
   it "reloads once if the entry script fails to load" do
     get "/cdn-spa-shell"
 
