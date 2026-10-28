@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 require "intercode/virtual_host_constraint"
 
-# rubocop:disable Metrics/BlockLength
 Intercode::Application.routes.draw do
   use_doorkeeper_openid_connect
   use_doorkeeper
@@ -85,10 +84,14 @@ Intercode::Application.routes.draw do
   get "csv_exports/users" => "csv_exports#users"
   get "/sitemap.xml" => "sitemaps#show"
 
-  get "/(*extra)" => "single_page_app#root",
-      :as => :root,
-      :constraints => {
-        extra: %r{(?!(rails/active_storage|uploads|packs|assets)/).*}
-      }
+  spa_path_constraint = { extra: %r{(?!(rails/active_storage|uploads|packs|assets)/).*} }
+
+  # With STATIC_SHELL_DIR set (see StaticSpaShell), the prebuilt framework-mode shell answers instead of the
+  # Rails-rendered one below. It's checked per request so the route doesn't depend on the environment at boot.
+  constraints(->(_request) { StaticSpaShell.enabled? }) do
+    get "/(*extra)" => "static_spa_shell#show", :constraints => spa_path_constraint
+  end
+
+  get "/(*extra)" => "single_page_app#root", :as => :root, :constraints => spa_path_constraint
 end
 # rubocop:enable Metrics/BlockLength
