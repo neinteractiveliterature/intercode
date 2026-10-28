@@ -12,6 +12,7 @@
     "check-graphql-documents": "tsx scripts/check-graphql-documents.mts",
     "build:web": "vite build",
     "check:bundle-size": "node scripts/check-bundle-size.mjs",
+    "start:framework": "INTERCODE_BACKEND=http://localhost react-router dev --config vite.framework.config.mts",
     "build:framework": "INTERCODE_BACKEND=http://localhost react-router build --config vite.framework.config.mts",
     "build:cli": "rollup -c rollup.cliUtils.config.ts --configPlugin swc && chmod +x ./bin/*.cjs",
     "build:timezone_data": "node script/buildTimezoneData.js",
