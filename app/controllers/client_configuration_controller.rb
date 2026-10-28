@@ -27,11 +27,25 @@ class ClientConfigurationController < ApplicationController
              turnstile_site_key: ENV.fetch("TURNSTILE_SITE_KEY", nil),
              assets_host: ENV["ASSETS_HOST"].presence,
              sentry_frontend_dsn: ENV["SENTRY_FRONTEND_DSN"].presence,
-             rollbar_client_access_token: ENV["ROLLBAR_CLIENT_ACCESS_TOKEN"].presence
+             rollbar_client_access_token: ENV["ROLLBAR_CLIENT_ACCESS_TOKEN"].presence,
+             convention: convention_configuration
            }
   end
 
   private
+
+  # What a static shell can't carry for itself: the convention's name, favicon and Open Graph image, which the
+  # server-rendered shells put in the page head. Null on the root site.
+  def convention_configuration
+    return unless convention
+
+    {
+      name: convention.name,
+      favicon_url: convention.favicon.attachment ? cdn_upload_url(convention.favicon) : nil,
+      favicon_content_type: convention.favicon.attachment ? convention.favicon.content_type : nil,
+      open_graph_image_url: convention.open_graph_image.attachment ? cdn_upload_url(convention.open_graph_image) : nil
+    }
+  end
 
   def oidc_authorization_endpoint
     URI.join(oidc_issuer_url, oauth_authorization_path).to_s
