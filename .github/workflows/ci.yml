@@ -93,6 +93,25 @@ jobs:
         run: |
           test -f build/framework/client/index.html
           ls build/framework/client/assets/*.js > /dev/null
+      - name: Build the assets image
+        run: >
+          docker build -f Dockerfile.assets-framework -t intercode-assets-framework:ci
+          --build-arg REVISION=${{ github.sha }} .
+      - name: Check the assets image with and without ASSETS_HOST
+        run: |
+          docker run -d --name with-host -e ASSETS_HOST=assets.example.com:3135 -p 8081:80 intercode-assets-framework:ci
+          docker run -d --name without-host -p 8082:80 intercode-assets-framework:ci
+          sleep 5
+          curl -sf http://localhost:8081/index.html | grep -q 'href="https://assets.example.com:3135/assets/'
+          curl -sf http://localhost:8082/index.html | grep -q 'href="/assets/'
+          for port in 8081 8082; do
+            if curl -sf http://localhost:$port/index.html | grep -q ASSETHOSTPLACEHOLDER; then
+              echo "placeholder left in index.html on port $port"
+              exit 1
+            fi
+            manifest=$(curl -sf http://localhost:$port/index.html | grep -o '/assets/manifest-[a-z0-9]*\.js' | head -1)
+            curl -sf http://localhost:$port$manifest | grep -q __reactRouterManifest
+          done
   bundle-size:
     name: Bundle size check
     runs-on: ubuntu-latest

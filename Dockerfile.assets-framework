@@ -1,0 +1,39 @@
+# The framework-mode (react-router.config.ts) assets image, built only when BUILD_FRAMEWORK is set in CI while the
+# migration is in progress. It is a standalone build: it compiles the framework build itself instead of starting from
+# the app image, because the app image doesn't contain it.
+#
+# The build is made against a placeholder asset host. When the container starts it takes a fresh copy of the build and
+# swaps in $ASSETS_HOST (or nothing, for same-origin assets), so one image serves any deployment. The app container
+# needs the same ASSETS_HOST.
+ARG NODE_VERSION=24.11.1
+# Optional: an earlier intercode-assets-framework image whose hashed files are carried over, as in Dockerfile.assets.
+ARG PREVIOUS_ASSETS_IMAGE=scratch
+ARG PREVIOUS_ASSETS_RETENTION_DAYS=30
+
+FROM ${PREVIOUS_ASSETS_IMAGE} AS previous
+
+FROM node:${NODE_VERSION}-slim AS build
+ARG REVISION
+ENV REVISION=${REVISION}
+# husky, which wants a git repository
+ENV HUSKY=0
+WORKDIR /usr/src/intercode
+RUN apt-get update && apt-get install -y --no-install-recommends python3 build-essential && rm -rf /var/lib/apt/lists/*
+COPY package.json yarn.lock .yarnrc.yml ./
+COPY .yarn .yarn
+COPY doc-site/package.json doc-site/package.json
+RUN yarn install --immutable
+COPY . .
+RUN yarn run build:framework
+
+FROM nginx
+ARG PREVIOUS_ASSETS_RETENTION_DAYS
+# The pristine build. The entrypoint copies it into the web root on every start, before substituting ASSETS_HOST.
+COPY --from=build /usr/src/intercode/build/framework/client /usr/share/intercode-assets
+RUN rm /usr/share/nginx/html/index.*
+RUN --mount=type=bind,from=previous,target=/previous \
+    --mount=type=bind,source=script/mergePreviousAssets.sh,target=/mergePreviousAssets.sh \
+    /mergePreviousAssets.sh /previous ${PREVIOUS_ASSETS_RETENTION_DAYS} /usr/share/intercode-assets assets
+COPY script/substituteAssetsHost.sh /usr/local/bin/substituteAssetsHost.sh
+COPY docker-assets-framework/40-substitute-assets-host.sh /docker-entrypoint.d/40-substitute-assets-host.sh
+COPY docker-assets-framework/nginx.conf /etc/nginx/conf.d/default.conf
