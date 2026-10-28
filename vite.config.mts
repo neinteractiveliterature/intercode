@@ -8,6 +8,49 @@ export function absolutePath(relativePath: string) {
   return fileURLToPath(new URL(relativePath, import.meta.url));
 }
 
+// Shared with vite.framework.config.mts
+export function manualChunks(id: string) {
+  const chunks: Array<[string, string[]]> = [
+    ['apollo', ['@apollo/client', 'apollo-upload-client']],
+    [
+      'codemirror',
+      [
+        '@codemirror/state',
+        '@codemirror/view',
+        '@codemirror/language',
+        '@codemirror/lang-html',
+        '@codemirror/lang-json',
+        '@codemirror/lang-markdown',
+        '@lezer/common',
+      ],
+    ],
+    ['currencyCodes', ['@breezehr/currency-codes']],
+    ['graphql', ['graphql']],
+    ['i18next', ['i18next', 'react-i18next']],
+    ['lodash', ['lodash']],
+    ['luxon', ['luxon']],
+    ['reactRouter', ['react-router']],
+  ];
+  for (const [chunk, pkgs] of chunks) {
+    if (pkgs.some((pkg) => id.includes(`/${pkg}/`) || id.includes(`/${pkg}@`))) {
+      return chunk;
+    }
+  }
+}
+
+export const css = {
+  modules: {
+    localsConvention: 'camelCaseOnly',
+  },
+  preprocessorOptions: {
+    scss: {
+      // can't get import to work until Bootstrap supports it
+      silenceDeprecations: ['import', 'legacy-js-api'],
+      quietDeps: true,
+    },
+  },
+};
+
 export default defineConfig({
   plugins: [
     react({
@@ -50,49 +93,11 @@ export default defineConfig({
       output: {
         dir: absolutePath('./public/packs'),
         entryFileNames: '[name].js',
-        manualChunks: (id) => {
-          const chunks: Array<[string, string[]]> = [
-            ['apollo', ['@apollo/client', 'apollo-upload-client']],
-            [
-              'codemirror',
-              [
-                '@codemirror/state',
-                '@codemirror/view',
-                '@codemirror/language',
-                '@codemirror/lang-html',
-                '@codemirror/lang-json',
-                '@codemirror/lang-markdown',
-                '@lezer/common',
-              ],
-            ],
-            ['currencyCodes', ['@breezehr/currency-codes']],
-            ['graphql', ['graphql']],
-            ['i18next', ['i18next', 'react-i18next']],
-            ['lodash', ['lodash']],
-            ['luxon', ['luxon']],
-            ['reactRouter', ['react-router']],
-          ];
-          for (const [chunk, pkgs] of chunks) {
-            if (pkgs.some((pkg) => id.includes(`/${pkg}/`) || id.includes(`/${pkg}@`))) {
-              return chunk;
-            }
-          }
-        },
+        manualChunks,
       },
     },
   },
-  css: {
-    modules: {
-      localsConvention: 'camelCaseOnly',
-    },
-    preprocessorOptions: {
-      scss: {
-        // can't get import to work until Bootstrap supports it
-        silenceDeprecations: ['import', 'legacy-js-api'],
-        quietDeps: true,
-      },
-    },
-  },
+  css,
   server: {
     port: 3135,
     host: '0.0.0.0',

@@ -69,6 +69,30 @@ jobs:
         with:
           name: vitest-coverage
           path: coverage/*
+  # The framework-mode build (react-router.config.ts) while the migration is in progress. Off unless the repository
+  # variable BUILD_FRAMEWORK is set, and not required by anything else.
+  build-framework:
+    name: Framework mode build
+    if: vars.BUILD_FRAMEWORK != ''
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v7
+      - name: Read .node-version
+        id: node-version
+        run: echo "node-version=$(cat .node-version)" >> $GITHUB_OUTPUT
+      - name: install node
+        uses: actions/setup-node@v6
+        with:
+          cache: yarn
+          node-version: ${{ steps.node-version.outputs.node-version }}
+      - name: yarn install
+        run: yarn install
+      - name: Build
+        run: yarn run build:framework
+      - name: Check the output
+        run: |
+          test -f build/framework/client/index.html
+          ls build/framework/client/assets/*.js > /dev/null
   bundle-size:
     name: Bundle size check
     runs-on: ubuntu-latest
