@@ -21,18 +21,6 @@ export default defineConfig({
     reactRouter(),
     // The polyfills are for the browser bundle; applied to the prerender (Node) build they replace node: modules
     { ...nodePolyfills(), applyToEnvironment: (environment) => environment.name === 'client' },
-    {
-      // The react-router plugin pre-bundles react-router-dom whenever it resolves from the project root. Here it
-      // resolves to the copy of version 5 that Docusaurus (the doc-site workspace) hoists into node_modules, and
-      // bundling that against react-router 7 fails. Nothing in the app imports it.
-      name: 'drop-react-router-dom-from-optimize-deps',
-      enforce: 'post',
-      config(config) {
-        if (config.optimizeDeps?.include) {
-          config.optimizeDeps.include = config.optimizeDeps.include.filter((name) => name !== 'react-router-dom');
-        }
-      },
-    },
   ],
   resolve: {
     mainFields: ['module'],
