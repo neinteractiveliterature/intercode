@@ -1,0 +1,41 @@
+{
+  "rails_paths": [
+    "/users/*",
+    "/oauth/*",
+    "/oauth_session/*",
+    "/authenticity_tokens",
+    "/client_configuration",
+    "/graphql",
+    "/graphiql",
+    "/email_forwarders/*",
+    "/sns_notifications",
+    "/stripe_webhook/*",
+    "/stripe_account/*",
+    "/healthz",
+    "/sitemap.xml",
+    "/reports/*",
+    "/calendars/*",
+    "/csv_exports/*",
+    "/user_con_profiles/*",
+    "/rails/active_storage/*",
+    "/uploads/*"
+  ],
+  "shell_paths": ["/cdn-spa-shell", "/og-shell"],
+  "asset_paths": ["/packs/*"],
+  "crawler_user_agents": [
+    "Googlebot",
+    "bingbot",
+    "DuckDuckBot",
+    "YandexBot",
+    "Baiduspider",
+    "facebookexternalhit",
+    "Twitterbot",
+    "LinkedInBot",
+    "WhatsApp",
+    "Discordbot",
+    "Slackbot",
+    "Applebot",
+    "Embedly",
+    "Pinterest"
+  ]
+}

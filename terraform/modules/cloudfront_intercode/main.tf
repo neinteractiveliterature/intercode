@@ -15,6 +15,9 @@ terraform {
 locals {
   rails_origin_id  = "rails"
   assets_origin_id = "assets"
+
+  # Every path that is routed by something other than the SPA fallback. See the README for what to edit.
+  routing = jsondecode(file("${path.module}/routing.json"))
 }
 
 # ---------------------------------------------------------------------------
@@ -205,44 +208,10 @@ resource "aws_cloudfront_distribution" "this" {
     viewer_protocol_policy = "redirect-to-https"
   }
 
-  # /oauth_session/* — cookie-exchange endpoints that need the refresh token cookie forwarded.
-  ordered_cache_behavior {
-    path_pattern           = "/oauth_session/*"
-    target_origin_id       = local.rails_origin_id
-    allowed_methods        = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
-    cached_methods         = ["GET", "HEAD"]
-    compress               = true
-    cache_policy_id        = aws_cloudfront_cache_policy.no_cache.id
-    origin_request_policy_id = aws_cloudfront_origin_request_policy.forward_all.id
-    viewer_protocol_policy = "redirect-to-https"
-  }
-
-  # No-cache pass-through behaviours for all non-shell Rails routes.
+  # No-cache pass-through behaviours for all non-shell Rails routes, from routing.json (the one place to add a route).
+  # /oauth_session/* needs the refresh token cookie forwarded, which forward_all does.
   dynamic "ordered_cache_behavior" {
-    for_each = [
-      # Auth / session
-      "/users/*",
-      "/oauth/*",
-      "/authenticity_tokens",
-      "/client_configuration",
-      # App-server APIs
-      "/graphql",
-      "/graphiql",
-      "/email_forwarders/*",
-      "/sns_notifications",
-      "/stripe_webhook/*",
-      "/stripe_account/*",
-      "/healthz",
-      "/sitemap.xml",
-      # Convention-scoped HTML routes
-      "/reports/*",
-      "/calendars/*",
-      "/csv_exports/*",
-      "/user_con_profiles/*",
-      # Active Storage / uploads
-      "/rails/active_storage/*",
-      "/uploads/*",
-    ]
+    for_each = local.routing.rails_paths
     content {
       path_pattern           = ordered_cache_behavior.value
       target_origin_id       = local.rails_origin_id
