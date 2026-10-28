@@ -75,6 +75,9 @@ jobs:
     name: Framework mode build
     if: vars.BUILD_FRAMEWORK != ''
     runs-on: ubuntu-latest
+    permissions:
+      contents: read
+      packages: write
     steps:
       - uses: actions/checkout@v7
       - name: Read .node-version
@@ -97,6 +100,12 @@ jobs:
         run: >
           docker build -f Dockerfile.assets-framework -t intercode-assets-framework:ci
           --build-arg REVISION=${{ github.sha }} .
+      - name: Push the assets image (on main), for the release upload to the static shell bucket
+        if: github.event_name == 'push' && github.event.ref == 'refs/heads/main'
+        run: |
+          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+          docker tag intercode-assets-framework:ci ghcr.io/neinteractiveliterature/intercode-assets-framework:${{ github.sha }}
+          docker push ghcr.io/neinteractiveliterature/intercode-assets-framework:${{ github.sha }}
       - name: Check the assets image with and without ASSETS_HOST
         run: |
           docker run -d --name with-host -e ASSETS_HOST=assets.example.com:3135 -p 8081:80 intercode-assets-framework:ci

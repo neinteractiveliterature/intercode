@@ -1,0 +1,73 @@
+name: Upload framework-mode build to bucket
+
+# Uploads a commit's framework-mode build (from its intercode-assets-framework image) to the static shell bucket, and
+# marks the files that commit's release dropped as obsolete. See terraform/modules/assets_bucket_intercode and the static
+# shell mode of terraform/modules/cloudfront_intercode. Called by the release workflow, and can be run by hand to upload
+# an already-built commit. The image is only built (and pushed, on main) when the repository variable BUILD_FRAMEWORK
+# is set; see the build-framework job in ci.yml.
+#
+# The role it assumes only trusts the refs listed in the module's github_oidc_subjects (release tags by default), so a
+# manual run has to be started from a ref that role trusts.
+
+on:
+  workflow_call:
+    inputs:
+      sha:
+        description: Commit whose intercode-assets-framework image to upload
+        required: true
+        type: string
+  workflow_dispatch:
+    inputs:
+      sha:
+        description: Commit whose intercode-assets-framework image to upload (full SHA; defaults to the commit this runs from)
+        required: false
+        type: string
+
+jobs:
+  upload:
+    runs-on: ubuntu-latest
+    permissions:
+      id-token: write
+      contents: read
+      packages: read
+    env:
+      ASSETS_SHA: ${{ inputs.sha || github.sha }}
+    steps:
+      - name: Check that the bucket is configured
+        run: |
+          if [ -z "${{ vars.FRAMEWORK_SHELL_BUCKET }}" ] || [ -z "${{ vars.FRAMEWORK_SHELL_UPLOAD_ROLE_ARN }}" ]; then
+            echo "FRAMEWORK_SHELL_BUCKET and FRAMEWORK_SHELL_UPLOAD_ROLE_ARN must be set as repository variables" >&2
+            exit 1
+          fi
+      - name: Check the commit
+        run: |
+          if ! echo "$ASSETS_SHA" | grep -qE '^[0-9a-f]{40}$'; then
+            echo "sha must be a full 40-character commit SHA, got: $ASSETS_SHA" >&2
+            exit 1
+          fi
+      - uses: actions/checkout@v7
+      - name: Log in to registry
+        run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
+      - name: Extract the build from the image
+        run: |
+          if ! docker pull ghcr.io/neinteractiveliterature/intercode-assets-framework:$ASSETS_SHA; then
+            echo "No intercode-assets-framework image for $ASSETS_SHA. It is only built when BUILD_FRAMEWORK is set." >&2
+            exit 1
+          fi
+          container=$(docker create ghcr.io/neinteractiveliterature/intercode-assets-framework:$ASSETS_SHA)
+          docker cp "$container:/usr/share/intercode-assets" build
+          docker cp "$container:/etc/intercode-assets/current-files.txt" current-files.txt
+          docker rm "$container"
+          # The image also carries over earlier releases' files (see Dockerfile.assets-framework). Only this release's
+          # own files count as current, so the rest can be marked obsolete in the bucket.
+          (cd build/assets && find . -type f | sort) | comm -23 - current-files.txt | (cd build/assets && xargs -r rm)
+      - name: Point the build at the same origin
+        # The build is made against a placeholder asset host. The bucket is served from the app's own domain, so the
+        # URLs become plain /assets/... paths.
+        run: script/substituteAssetsHost.sh build ""
+      - uses: aws-actions/configure-aws-credentials@v6
+        with:
+          role-to-assume: ${{ vars.FRAMEWORK_SHELL_UPLOAD_ROLE_ARN }}
+          aws-region: ${{ vars.AWS_REGION || 'us-east-1' }}
+      - name: Upload the build and mark the files this release dropped as obsolete
+        run: script/uploadFrameworkAssets.sh "${{ vars.FRAMEWORK_SHELL_BUCKET }}" build
