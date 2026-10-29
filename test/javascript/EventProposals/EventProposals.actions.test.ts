@@ -1,10 +1,10 @@
 import { MockLink } from '@apollo/client/testing';
 
 import runAction from '../runAction';
-import { action as createAction } from '../../../app/javascript/EventProposals/route';
-import { action as transitionAction } from '../../../app/javascript/EventProposals/$id/transition';
-import { action as deleteAction } from '../../../app/javascript/EventProposals/$id/route';
-import { action as adminNotesAction } from '../../../app/javascript/EventProposals/$id/admin_notes';
+import { clientAction as createAction } from '../../../app/javascript/EventProposals/route';
+import { clientAction as transitionAction } from '../../../app/javascript/EventProposals/$id/transition';
+import { clientAction as deleteAction } from '../../../app/javascript/EventProposals/$id/route';
+import { clientAction as adminNotesAction } from '../../../app/javascript/EventProposals/$id/admin_notes';
 import {
   CreateEventProposalDocument,
   DeleteEventProposalDocument,

@@ -37,7 +37,7 @@ import { UserConProfile } from 'graphqlTypes.generated';
 import { apolloClientContext } from 'AppContexts';
 import { AuthenticationManagerContext } from '../Authentication/authenticationManager';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {
   const client = context.get(apolloClientContext);
   invariant(id != null);
   try {

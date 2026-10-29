@@ -5,8 +5,8 @@ import { renderRoute, userEvent, waitFor } from '../testUtils';
 import formFromExportJSON from '../formFromExportJSON';
 import {
   Component as EditUserConProfile,
-  action,
-  loader,
+  clientAction as action,
+  clientLoader as loader,
 } from '../../../app/javascript/UserConProfiles/EditUserConProfile';
 import {
   UserConProfileQueryData,

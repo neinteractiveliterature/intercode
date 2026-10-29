@@ -3,7 +3,7 @@ import invariant from 'tiny-invariant';
 import { apolloClientContext } from '../../AppContexts';
 import { TransitionEventProposalDocument } from '../mutations.generated';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ context, params: { id }, request }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, params: { id }, request }) => {
   const client = context.get(apolloClientContext);
   try {
     invariant(id);
