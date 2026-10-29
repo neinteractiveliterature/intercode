@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import useStateResetOnChange from '../useStateResetOnChange';
 import {
   ActionFunction,
   Form,
@@ -101,7 +101,8 @@ function NotificationConfigurationForm() {
   const updateError = data instanceof Error ? data : undefined;
   const updateInProgress = navigation.state !== 'idle';
 
-  const [notificationTemplate, setNotificationTemplate] = useState(initialNotificationTemplate);
+  // if the page changes and we're still mounted, start over from the new template
+  const [notificationTemplate, setNotificationTemplate] = useStateResetOnChange(initialNotificationTemplate);
   const [destinationsChangeSet, addDestination, removeDestination] =
     useChangeSet<(typeof notificationTemplate.notification_destinations)[number]>();
 
@@ -112,9 +113,6 @@ function NotificationConfigurationForm() {
     'body_text',
     'body_sms',
   );
-
-  // if the page changes and we're still mounted
-  useEffect(() => setNotificationTemplate(initialNotificationTemplate), [initialNotificationTemplate]);
 
   return (
     <Form method="PATCH">

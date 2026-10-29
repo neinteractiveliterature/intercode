@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import useStateResetOnChange from '../useStateResetOnChange';
 import { Modal } from 'react-bootstrap4-modal';
 
 import { useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
@@ -47,7 +47,7 @@ function EditEmailRouteModal(): React.JSX.Element {
   const data = useLoaderData() as RootSiteSingleEmailRouteQueryData;
   const initialEmailRoute = data.email_route;
   const confirm = useConfirm();
-  const [emailRoute, setEmailRoute] = useState(initialEmailRoute);
+  const [emailRoute, setEmailRoute] = useStateResetOnChange(initialEmailRoute);
   const fetcher = useFetcher();
   const error = fetcher.data instanceof Error ? fetcher.data : undefined;
   const inProgress = fetcher.state !== 'idle';
@@ -59,10 +59,6 @@ function EditEmailRouteModal(): React.JSX.Element {
   const deleteConfirmed = () => {
     fetcher.submit({}, { method: 'DELETE' });
   };
-
-  useEffect(() => {
-    setEmailRoute(initialEmailRoute);
-  }, [initialEmailRoute]);
 
   return (
     <Modal visible={!confirm.visible} dialogClassName="modal-lg">

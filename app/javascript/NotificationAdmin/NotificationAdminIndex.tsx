@@ -10,6 +10,7 @@ import { useTranslation } from 'react-i18next';
 import { apolloClientContext } from 'AppContexts';
 import { NotificationsConfigQueryData, NotificationsConfigQueryDocument } from './queries.generated';
 import sortBy from 'lodash/sortBy';
+import useStateResetOnChange from '../useStateResetOnChange';
 
 type NotificationPreviewModalProps = {
   visible: boolean;
@@ -21,15 +22,10 @@ function NotificationPreviewModal({ visible, close, eventConfig }: NotificationP
   const { t } = useTranslation();
   const { myProfile } = useContext(AppRootContext);
   const [sendEmail, setSendEmail] = useState(true);
-  const [sendSms, setSendSms] = useState(true);
-
-  useEffect(() => {
-    if (eventConfig?.sends_sms) {
-      setSendSms(myProfile?.mobile_phone != null);
-    } else {
-      setSendSms(false);
-    }
-  }, [eventConfig, myProfile?.mobile_phone]);
+  // whether to send an SMS starts out as whether this event sends them and we have a number to send it to, and goes back
+  // to that if either changes
+  const defaultSendSms = eventConfig?.sends_sms ? myProfile?.mobile_phone != null : false;
+  const [sendSms, setSendSms] = useStateResetOnChange(defaultSendSms);
 
   const fetcher = useFetcher();
   const error = fetcher.data instanceof Error ? fetcher.data : undefined;
