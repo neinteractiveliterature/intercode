@@ -30,7 +30,7 @@ import humanize from '../humanize';
 import Modal from 'react-bootstrap4-modal';
 import useAsyncFunction from '../useAsyncFunction';
 import { Trans, useTranslation } from 'react-i18next';
-import { NamedRoute } from '../AppRouter';
+import { NamedRoute } from '../NamedRoute';
 import { DeleteUserConProfileDocument } from './mutations.generated';
 import invariant from 'tiny-invariant';
 import { UserConProfile } from 'graphqlTypes.generated';

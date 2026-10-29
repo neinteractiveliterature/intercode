@@ -2,13 +2,12 @@ import { Outlet, useRouteLoaderData } from 'react-router';
 
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 import NamedRouteBreadcrumbItem from '../Breadcrumbs/NamedRouteBreadcrumbItem';
-import { NamedRoute } from '../AppRouter';
+import { NamedRoute } from '../NamedRoute';
 import { ConventionDisplayQueryData } from './queries.generated';
 
 function RootSiteConventionsAdmin(): React.JSX.Element {
   const conventionData = useRouteLoaderData(NamedRoute.RootSiteConventionDisplay) as
-    | ConventionDisplayQueryData
-    | undefined;
+    ConventionDisplayQueryData | undefined;
   const authorizationWarning = useAuthorizationRequired('can_manage_conventions');
   if (authorizationWarning) return authorizationWarning;
 
