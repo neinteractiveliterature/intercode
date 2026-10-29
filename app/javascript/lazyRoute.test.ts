@@ -21,4 +21,10 @@ describe('lazyRoute', () => {
     const route = await lazyRoute(async () => ({ ErrorBoundary }))();
     expect(route).toEqual({ ErrorBoundary });
   });
+
+  test('maps a default export to Component', async () => {
+    const Page = () => null;
+    const route = await lazyRoute(async () => ({ default: Page }))();
+    expect(route).toEqual({ Component: Page });
+  });
 });
