@@ -123,10 +123,19 @@ Set the repository variables `FRAMEWORK_SHELL_BUCKET` and `FRAMEWORK_SHELL_UPLOA
 `bucket_name` and `release_upload_role_arn`) to turn it on. The image it uploads from is only built when the repository
 variable `BUILD_FRAMEWORK` is set.
 
-**Trying it out:** create the bucket and a distribution with the static shell variables set and no aliases, run the "Upload
-framework-mode build to bucket" workflow for a commit, and fetch the distribution's `cloudfront.net` domain with a
-`Host` header for a convention, once as a browser and once as a crawler. The shell should come from the bucket, the
-crawler's response from Rails, and a missing `/assets/...` file should be a 404.
+**Trying it out:** create the bucket and a distribution with the static shell variables set, and give it an alias (and
+certificate) for a hostname that Rails serves, such as a past convention's, without changing that hostname's DNS. Run
+the "Upload framework-mode build to bucket" workflow for a commit, then send the real hostname to the distribution's
+address:
+
+```sh
+curl --resolve h.example.org:443:$(dig +short <id>.cloudfront.net | head -1) https://h.example.org/
+```
+
+Add `-A 'Slackbot-LinkExpanding 1.0'` for a crawler. The shell should come from the bucket, the crawler's response from
+Rails, and a missing `/assets/...` file should be a 404. Don't send a `Host` header to the bare `cloudfront.net` name
+instead: CloudFront answers 403 for a host that isn't one of the distribution's aliases, and without an alias Rails is
+asked for a host it doesn't serve.
 
 **Rolling back** is removing `static_shell_enabled` (and the two variables). The next apply puts the Rails origin and the Rails-rendered shell back.
 
