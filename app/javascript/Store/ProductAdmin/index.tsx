@@ -10,17 +10,18 @@ import EditPricingStructureModal, {
 } from './EditPricingStructureModal';
 import EditAdminProductCard from './EditAdminProductCard';
 import scrollToLocationHash from '../../scrollToLocationHash';
-import { AdminProductsQueryData, AdminProductsQueryDocument } from './queries.generated';
+import { AdminProductsQueryDocument } from './queries.generated';
 import { duplicateProductForEditing, EditingProduct } from './EditingProductTypes';
 import { getRealOrGeneratedId, realOrGeneratedIdsMatch } from '../../GeneratedIdUtils';
-import { ActionFunction, data, LoaderFunction, useLoaderData, RouterContextProvider } from 'react-router';
+import { data, useLoaderData } from 'react-router';
 import { apolloClientContext } from 'AppContexts';
 import { Convention, TicketType } from 'graphqlTypes.generated';
 import { AdminProductFieldsFragmentDoc } from 'Store/adminProductFields.generated';
 import { parseProductFormData } from 'Store/buildProductInput';
 import { CreateProductDocument } from './mutations.generated';
+import type { Route } from './+types/index';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ request, context }) => {
+export const clientAction = async ({ request, context }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     if (request.method === 'POST') {
@@ -84,14 +85,14 @@ function generateBlankProduct(): EditingProduct {
   };
 }
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<AdminProductsQueryData>({ query: AdminProductsQueryDocument });
+  const { data } = await client.query({ query: AdminProductsQueryDocument, errorPolicy: 'none' });
   return data;
 };
 
 function ProductAdmin() {
-  const data = useLoaderData() as AdminProductsQueryData;
+  const data = useLoaderData<typeof clientLoader>();
   const [newProducts, setNewProducts] = useState<EditingProduct[]>([]);
   const [editingProductIds, setEditingProductIds] = useState<string[]>([]);
   const pricingStructureModal = useModal<PricingStructureModalState>();

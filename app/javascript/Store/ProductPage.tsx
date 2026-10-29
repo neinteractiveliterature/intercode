@@ -1,22 +1,20 @@
-import { LoaderFunction, RouterContextProvider, useLoaderData, useNavigate } from 'react-router';
+import { useLoaderData, useNavigate } from 'react-router';
 
 import ProductOrderForm from './ProductOrderForm';
 import SignInButton from '../Authentication/SignInButton';
 import usePageTitle from '../usePageTitle';
 import parseCmsContent from '../parseCmsContent';
-import {
-  OrderFormProductQueryData,
-  OrderFormProductQueryDocument,
-  OrderFormProductQueryVariables,
-} from './queries.generated';
+import { OrderFormProductQueryDocument } from './queries.generated';
 import { apolloClientContext } from 'AppContexts';
 import { UserPricingStructureDescription } from './describePricingStructure';
+import type { Route } from './+types/ProductPage';
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context, params: { id } }) => {
+export const clientLoader = async ({ context, params: { id } }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<OrderFormProductQueryData, OrderFormProductQueryVariables>({
+  const { data } = await client.query({
     query: OrderFormProductQueryDocument,
     variables: { productId: id ?? '' },
+    errorPolicy: 'none',
   });
   return data;
 };
@@ -25,7 +23,7 @@ function ProductPage() {
   const {
     convention: { product },
     currentUser,
-  } = useLoaderData() as OrderFormProductQueryData;
+  } = useLoaderData<typeof clientLoader>();
   const navigate = useNavigate();
 
   usePageTitle(product.name);
