@@ -5,7 +5,7 @@ import { ApolloProvider } from '@apollo/client/react';
 import { MockLink } from '@apollo/client/testing';
 import userEvent from '@testing-library/user-event';
 import { act, render, queries, Queries, RenderOptions, RenderResult, waitFor } from '@testing-library/react';
-import { createMemoryRouter, createRoutesStub, RouterContextProvider, RouterProvider } from 'react-router';
+import { createMemoryRouter, createRoutesStub, RouteObject, RouterContextProvider, RouterProvider } from 'react-router';
 import { i18n } from 'i18next';
 import { I18nextProvider } from 'react-i18next';
 import type { Stripe } from '@stripe/stripe-js';
@@ -210,6 +210,36 @@ export async function renderRoute(
   });
 
   return result;
+}
+
+export type RouteModule = Pick<
+  RouteObject,
+  'Component' | 'ErrorBoundary' | 'HydrateFallback' | 'handle' | 'shouldRevalidate'
+> & {
+  default?: RouteObject['Component'];
+  clientLoader?: RouteObject['loader'];
+  clientAction?: RouteObject['action'];
+};
+
+// Builds a route for renderRoute from a route module (`import * as thePage from '.../ThePage'`), the way the app does:
+// the module's clientLoader and clientAction become the route's loader and action, and its Component (or default
+// export) is what renders. Other exports of the module are ignored.
+export function routeFromModule(
+  path: string,
+  routeModule: RouteModule,
+  children?: RouteStubArray,
+): RouteStubArray[number] {
+  return {
+    path,
+    Component: routeModule.Component ?? routeModule.default,
+    ErrorBoundary: routeModule.ErrorBoundary,
+    HydrateFallback: routeModule.HydrateFallback,
+    handle: routeModule.handle,
+    shouldRevalidate: routeModule.shouldRevalidate,
+    loader: routeModule.clientLoader,
+    action: routeModule.clientAction,
+    children,
+  } as RouteStubArray[number];
 }
 
 // re-export everything

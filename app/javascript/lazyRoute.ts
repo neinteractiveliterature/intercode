@@ -8,13 +8,15 @@ type ClientRouteExports = {
   clientAction?: RouteObject['action'];
 };
 
-export function lazyRoute<M extends object>(load: () => Promise<M>) {
-  return async () => {
-    const { clientLoader, clientAction, ...rest } = (await load()) as M & ClientRouteExports;
-    return {
-      ...rest,
-      ...(clientLoader ? { loader: clientLoader } : {}),
-      ...(clientAction ? { action: clientAction } : {}),
-    };
+export function renameClientExports<M extends object>(routeModule: M) {
+  const { clientLoader, clientAction, ...rest } = routeModule as M & ClientRouteExports;
+  return {
+    ...rest,
+    ...(clientLoader ? { loader: clientLoader } : {}),
+    ...(clientAction ? { action: clientAction } : {}),
   };
+}
+
+export function lazyRoute<M extends object>(load: () => Promise<M>) {
+  return async () => renameClientExports(await load());
 }
