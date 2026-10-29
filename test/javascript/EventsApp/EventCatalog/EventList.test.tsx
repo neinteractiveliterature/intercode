@@ -1,7 +1,7 @@
 import { MockLink } from '@apollo/client/testing';
 import { vi } from 'vitest';
 
-import { renderRoute, userEvent, waitFor } from '../../testUtils';
+import { act, renderRoute, userEvent, waitFor } from '../../testUtils';
 import {
   default as EventList,
   clientLoader as loader,
@@ -82,9 +82,10 @@ describe('EventList (the event catalog)', () => {
 
   const lastVariables = () => queried.mock.calls[queried.mock.calls.length - 1][0];
 
-  // waitFor's default 1000 ms is too tight for the re-query after an interaction when the machine is busy (parallel
-  // test files, shared CI runners), and there's no visible change to wait on instead: the labels are derived from the
-  // same URL state that triggers the query.
+  // The re-query after an interaction can take longer than waitFor's default 1000 ms when the machine is busy, and
+  // there's no visible change to wait on instead: the labels are derived from the same URL state that triggers the
+  // query. (A longer timeout did not make these tests reliable: what did was the guard in changeFilterValue, see the
+  // test below that the search box doesn't change anything.)
   const REQUERY_TIMEOUT = 5000;
   const waitForVariables = (assertion: () => void) => waitFor(assertion, { timeout: REQUERY_TIMEOUT });
 
@@ -237,6 +238,27 @@ describe('EventList (the event catalog)', () => {
       await user.click(await r.findByRole('button', { name: 'Order added (newest first)' }));
 
       await waitForVariables(() => expect(lastVariables().sort).toEqual([{ field: 'created_at', desc: true }]));
+    });
+
+    // The search box reports its value when it mounts, and again 100 ms after its callback changes (which it does
+    // whenever the URL does). That used to rewrite the URL from stale search params, putting back the old order, and
+    // to refetch for nothing: the "asks again in the chosen order" test failed whenever the click landed in that window.
+    it('does not ask again, or change the order, when the search box reports that nothing changed', async () => {
+      const r = await renderPage();
+      await r.findByRole('link', { name: 'Alpha' });
+
+      await user.click(r.getByRole('button', { name: /Sort by/ }));
+      await user.click(await r.findByRole('button', { name: 'Order added (newest first)' }));
+      await waitForVariables(() => expect(lastVariables().sort).toEqual([{ field: 'created_at', desc: true }]));
+
+      await act(async () => {
+        await new Promise((resolve) => setTimeout(resolve, 400));
+      });
+
+      expect(queried.mock.calls.map(([variables]) => variables.sort)).toEqual([
+        [{ field: 'title', desc: false }],
+        [{ field: 'created_at', desc: true }],
+      ]);
     });
   });
 
