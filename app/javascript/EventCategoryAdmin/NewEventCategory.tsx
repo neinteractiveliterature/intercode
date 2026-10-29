@@ -1,6 +1,6 @@
 import { useState } from 'react';
 
-import { ActionFunction, Form, redirect, useActionData, useNavigation, RouterContextProvider } from 'react-router';
+import { Form, redirect, useActionData, useNavigation } from 'react-router';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import EventCategoryForm, { EventCategoryForForm } from './EventCategoryForm';
@@ -11,8 +11,9 @@ import { apolloClientContext } from 'AppContexts';
 import { CreateEventCategoryDocument } from './mutations.generated';
 import { buildEventCategoryFromFormData } from './buildEventCategoryInput';
 import { Convention } from '../graphqlTypes.generated';
+import type { Route } from './+types/NewEventCategory';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
+export const clientAction = async ({ context, request }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     const formData = await request.formData();
@@ -45,7 +46,7 @@ export const clientAction: ActionFunction<RouterContextProvider> = async ({ cont
 function NewEventCategory(): React.JSX.Element {
   const data = useEventCategoryAdminLoader();
   const navigation = useNavigation();
-  const createError = useActionData();
+  const createError = useActionData<typeof clientAction>();
 
   const [eventCategory, setEventCategory] = useState<EventCategoryForForm>({
     name: '',

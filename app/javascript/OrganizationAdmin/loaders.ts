@@ -1,26 +1,19 @@
-import { LoaderFunction } from 'react-router';
+import { LoaderFunctionArgs } from 'react-router';
 import { apolloClientContext } from 'AppContexts';
-import {
-  OrganizationAdminOrganizationsQueryData,
-  OrganizationAdminOrganizationsQueryDocument,
-} from './queries.generated';
+import { OrganizationAdminOrganizationsQueryDocument } from './queries.generated';
 
-export const organizationsLoader: LoaderFunction = async ({ context }) => {
+export const organizationsLoader = async ({ context }: LoaderFunctionArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<OrganizationAdminOrganizationsQueryData>({
-    query: OrganizationAdminOrganizationsQueryDocument,
-  });
+  const { data } = await client.query({ query: OrganizationAdminOrganizationsQueryDocument, errorPolicy: 'none' });
   return data;
 };
 
-export type SingleOrganizationLoaderResult = OrganizationAdminOrganizationsQueryData['organizations'][number];
-
-export const singleOrganizationLoader: LoaderFunction = async ({ params: { id }, ...args }) => {
-  const data = (await organizationsLoader({ params: {}, ...args })) as OrganizationAdminOrganizationsQueryData;
+export const singleOrganizationLoader = async ({ params: { id }, ...args }: LoaderFunctionArgs) => {
+  const data = await organizationsLoader({ params: {}, ...args });
   const organization = data.organizations.find((org) => org.id === id);
 
   if (!organization) {
-    return new Response(null, { status: 404 });
+    throw new Response(null, { status: 404 });
   }
 
   return organization;

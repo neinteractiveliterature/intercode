@@ -1,10 +1,11 @@
-import { ActionFunction, RouterContextProvider, data } from 'react-router';
+import { data } from 'react-router';
 
 import { DeleteOAuthApplicationDocument } from '../mutations.generated';
 import { apolloClientContext } from '../../AppContexts';
 import { OAuthApplication } from '../../graphqlTypes.generated';
+import type { Route } from './+types/route';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request, params }) => {
+export const clientAction = async ({ context, request, params }: Route.ClientActionArgs) => {
   const id = params.id!;
   const client = context.get(apolloClientContext);
   try {

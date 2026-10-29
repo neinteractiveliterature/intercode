@@ -1,11 +1,12 @@
 import { useState } from 'react';
-import { Link, LoaderFunction, RouterContextProvider, useFetcher, useLoaderData } from 'react-router';
+import { Link, useFetcher, useLoaderData } from 'react-router';
 import { useConfirm, ErrorDisplay, DisclosureTriangle } from '@neinteractiveliterature/litform';
 import { useTranslation } from 'react-i18next';
 
 import usePageTitle from '../usePageTitle';
 import { apolloClientContext } from '../AppContexts';
 import { OAuthApplicationsQueryData, OAuthApplicationsQueryDocument } from './queries.generated';
+import type { Route } from './+types/OAuthApplicationsTable';
 
 const COLLAPSED_URI_COUNT = 1;
 
@@ -46,19 +47,15 @@ function RedirectUriList({ redirectUri }: RedirectUriListProps) {
   );
 }
 
-type LoaderResult = {
-  applications: OAuthApplicationsQueryData['oauth_applications'];
-};
-
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query<OAuthApplicationsQueryData>({ query: OAuthApplicationsQueryDocument });
-  return { applications: data?.oauth_applications ?? [] } satisfies LoaderResult;
+  return { applications: data?.oauth_applications ?? [] };
 };
 
 function OAuthApplicationsTable() {
   const { t } = useTranslation();
-  const { applications } = useLoaderData() as LoaderResult;
+  const { applications } = useLoaderData<typeof clientLoader>();
   const fetcher = useFetcher();
   const confirm = useConfirm();
   const deleteError = fetcher.data instanceof Error ? fetcher.data : undefined;

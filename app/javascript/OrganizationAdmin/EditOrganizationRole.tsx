@@ -1,30 +1,25 @@
-import { LoaderFunction, Navigate, useActionData, useLoaderData, useNavigation, useSubmit } from 'react-router';
+import { Navigate, useActionData, useLoaderData, useNavigation, useSubmit } from 'react-router';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import useOrganizationRoleForm from './useOrganizationRoleForm';
 import usePageTitle from '../usePageTitle';
-import { OrganizationAdminOrganizationsQueryData } from './queries.generated';
 import { organizationsLoader } from './loaders';
+import type { Route } from './+types/EditOrganizationRole';
 
-type LoaderResult = {
-  organization: OrganizationAdminOrganizationsQueryData['organizations'][number];
-  initialOrganizationRole: OrganizationAdminOrganizationsQueryData['organizations'][number]['organization_roles'][number];
-};
-
-export const clientLoader: LoaderFunction = async ({ params: { id, organizationRoleId }, ...args }) => {
-  const data = (await organizationsLoader({ params: {}, ...args })) as OrganizationAdminOrganizationsQueryData;
+export const clientLoader = async ({ params: { id, organizationRoleId }, ...args }: Route.ClientLoaderArgs) => {
+  const data = await organizationsLoader({ params: {}, ...args });
   const organization = data.organizations.find((org) => org.id === id);
   const initialOrganizationRole = organization?.organization_roles.find((role) => role.id === organizationRoleId);
 
   if (!organization || !initialOrganizationRole) {
-    return new Response(null, { status: 404 });
+    throw new Response(null, { status: 404 });
   }
 
-  return { initialOrganizationRole, organization } satisfies LoaderResult;
+  return { initialOrganizationRole, organization };
 };
 
 function EditOrganizationRoleForm() {
-  const { organization, initialOrganizationRole } = useLoaderData() as LoaderResult;
+  const { organization, initialOrganizationRole } = useLoaderData<typeof clientLoader>();
   const { renderForm, formState } = useOrganizationRoleForm(initialOrganizationRole);
   const submit = useSubmit();
   const actionData = useActionData();

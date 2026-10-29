@@ -1,12 +1,5 @@
 import { useState } from 'react';
-import {
-  ActionFunction,
-  LoaderFunction,
-  RouterContextProvider,
-  redirect,
-  useLoaderData,
-  useFetcher,
-} from 'react-router';
+import { redirect, useLoaderData, useFetcher } from 'react-router';
 import { CopyToClipboardButton, ErrorDisplay, useConfirm } from '@neinteractiveliterature/litform';
 import { useTranslation } from 'react-i18next';
 
@@ -19,14 +12,11 @@ import {
   RegenerateOAuthApplicationSecretMutationData,
 } from './mutations.generated';
 import OAuthApplicationForm, { EditingOAuthApplication } from './OAuthApplicationForm';
+import type { Route } from './+types/EditOAuthApplication';
 
 const FRONTEND_APP_READONLY_FIELDS = ['redirect_uri', 'scopes'];
 
-type LoaderResult = {
-  initialApplication: OAuthApplicationsQueryData['oauth_applications'][number];
-};
-
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context, params }) => {
+export const clientLoader = async ({ context, params }: Route.ClientLoaderArgs) => {
   const id = params.id!;
   const client = context.get(apolloClientContext);
   const { data } = await client.query<OAuthApplicationsQueryData>({ query: OAuthApplicationsQueryDocument });
@@ -35,10 +25,10 @@ export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ cont
   const initialApplication = data.oauth_applications.find((app) => app.id === id);
   if (!initialApplication) return new Response(null, { status: 404 });
 
-  return { initialApplication } satisfies LoaderResult;
+  return { initialApplication };
 };
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, params, request }) => {
+export const clientAction = async ({ context, params, request }: Route.ClientActionArgs) => {
   const id = params.id!;
   const client = context.get(apolloClientContext);
   try {
@@ -67,7 +57,7 @@ export const clientAction: ActionFunction<RouterContextProvider> = async ({ cont
 
 function EditOAuthApplication() {
   const { t } = useTranslation();
-  const { initialApplication } = useLoaderData() as LoaderResult;
+  const { initialApplication } = useLoaderData<typeof clientLoader>();
   const [application, setApplication] = useState<EditingOAuthApplication>({
     name: initialApplication.name,
     redirect_uri: initialApplication.redirect_uri,

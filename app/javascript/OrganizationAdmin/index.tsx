@@ -3,11 +3,11 @@ import { Outlet, useRouteLoaderData } from 'react-router';
 import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 import { NamedRoute } from '../NamedRoute';
-import { SingleOrganizationLoaderResult } from './loaders';
+import { singleOrganizationLoader } from './loaders';
 import NamedRouteBreadcrumbItem from '../Breadcrumbs/NamedRouteBreadcrumbItem';
 
 function OrganizationAdmin(): React.JSX.Element {
-  const organization = useRouteLoaderData(NamedRoute.Organization) as SingleOrganizationLoaderResult | undefined;
+  const organization = useRouteLoaderData<typeof singleOrganizationLoader>(NamedRoute.Organization);
   const authorizationWarning = useAuthorizationRequired('can_read_organizations');
   if (authorizationWarning) return authorizationWarning;
 

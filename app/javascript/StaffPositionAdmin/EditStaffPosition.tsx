@@ -1,12 +1,5 @@
 import { useState } from 'react';
-import {
-  ActionFunction,
-  LoaderFunction,
-  redirect,
-  useFetcher,
-  useLoaderData,
-  RouterContextProvider,
-} from 'react-router';
+import { redirect, useFetcher, useLoaderData } from 'react-router';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import StaffPositionForm, { EditingStaffPosition } from './StaffPositionForm';
@@ -16,8 +9,9 @@ import { StaffPositionsQueryData, StaffPositionsQueryDocument } from './queries.
 import { UpdateStaffPositionDocument } from './mutations.generated';
 import { apolloClientContext } from 'AppContexts';
 import { StaffPositionInput } from 'graphqlTypes.generated';
+import type { Route } from './+types/EditStaffPosition';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, params: { id }, request }) => {
+export const clientAction = async ({ context, params: { id }, request }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     const staffPosition = (await request.json()) as StaffPositionInput;
@@ -31,11 +25,7 @@ export const clientAction: ActionFunction<RouterContextProvider> = async ({ cont
   }
 };
 
-type LoaderResult = {
-  initialStaffPosition: StaffPositionsQueryData['convention']['staff_positions'][number];
-};
-
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context, params: { id } }) => {
+export const clientLoader = async ({ context, params: { id } }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query<StaffPositionsQueryData>({ query: StaffPositionsQueryDocument });
   if (!data) {
@@ -46,11 +36,11 @@ export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ cont
     return new Response(null, { status: 404 });
   }
 
-  return { initialStaffPosition } satisfies LoaderResult;
+  return { initialStaffPosition };
 };
 
 function EditStaffPosition() {
-  const { initialStaffPosition } = useLoaderData() as LoaderResult;
+  const { initialStaffPosition } = useLoaderData<typeof clientLoader>();
   const [staffPosition, setStaffPosition] = useState<EditingStaffPosition>(initialStaffPosition);
   const fetcher = useFetcher();
   const updateError = fetcher.data instanceof Error ? fetcher.data : undefined;
