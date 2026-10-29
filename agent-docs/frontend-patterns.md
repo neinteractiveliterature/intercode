@@ -179,6 +179,10 @@ function MyComponent() {
 **Common error**: "Property 'instance' does not exist on type 'typeof AuthenticityTokensManager'"
 Solution: Use `AuthenticityTokensContext` with `useContext` hook instead.
 
+### When the framework-mode shell can't load its files
+
+The generated `index.html` names hashed files (manifest, root module, entry), and a copy cached from before a release can name files that are gone. The app never boots then, so `BootErrorBoundary` can't help. `shellRecovery.ts` holds a small inline script that `root.tsx`'s `Layout` puts in the shell's `<head>`: when a script or module-preload link fails, or the entry's dynamic import is rejected, it reloads once (at most once per 15 seconds, using the same `sessionStorage` key as the Rails-rendered shell's `ENTRY_SCRIPT_ONERROR`), and if that doesn't help it shows a plain message with a reload button. `entry.client.tsx` sets `window.intercodeShellBooted` so that the script stops watching once the app has started. The script is a string, so it can't import anything; `test/javascript/shellRecovery.test.ts` runs it against a stand-in window, and `test/system/framework_shell_recovery_test.rb` breaks the shell in a real browser.
+
 ### How the browser gets a session
 
 Both entries (the data-mode `packs/application.tsx` and the framework-mode `entry.client.tsx`) call `startAppBootstrap()` in `appBootstrap.ts` and hand the result to the router through `buildRouterContext`, so authentication works the same way in both:

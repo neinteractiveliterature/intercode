@@ -7,6 +7,10 @@ import { startAppBootstrap, buildRouterContext } from 'appBootstrap';
 import { AuthenticationManagerContext } from './Authentication/authenticationManager';
 import BootErrorBoundary from './BootErrorBoundary';
 
+// Tells the recovery script in the shell (see shellRecovery.ts) that the entry loaded; from here on BootErrorBoundary
+// handles failures
+window.intercodeShellBooted = true;
+
 function ThrowBootError({ error }: { error: unknown }): never {
   throw error;
 }
