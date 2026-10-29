@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ActionFunction, Form, redirect, useActionData, useNavigation, RouterContextProvider } from 'react-router';
+import { Form, redirect, useActionData, useNavigation } from 'react-router';
 
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -8,8 +8,9 @@ import CmsPartialForm, { CmsPartialFormFields } from './CmsPartialForm';
 import usePageTitle from '../../usePageTitle';
 import { apolloClientContext } from '../../AppContexts';
 import { CreatePartialDocument } from './mutations.generated';
+import type { Route } from './+types/NewCmsPartial';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ request, context }) => {
+export const clientAction = async ({ request, context }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   const formData = await request.formData();
 
@@ -32,7 +33,7 @@ function NewCmsPartial(): React.JSX.Element {
   const [partial, setPartial] = useState<CmsPartialFormFields>({});
   const navigation = useNavigation();
   const createInProgress = navigation.state !== 'idle';
-  const createError = useActionData();
+  const createError = useActionData<typeof clientAction>();
 
   usePageTitle('New Partial');
 

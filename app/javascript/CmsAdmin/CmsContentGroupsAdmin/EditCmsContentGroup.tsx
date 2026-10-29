@@ -1,14 +1,6 @@
 import { useState } from 'react';
 import * as React from 'react';
-import {
-  ActionFunction,
-  redirect,
-  useActionData,
-  useLoaderData,
-  useNavigation,
-  useSubmit,
-  RouterContextProvider,
-} from 'react-router';
+import { redirect, useActionData, useLoaderData, useNavigation, useSubmit } from 'react-router';
 import { ErrorDisplay, notEmpty } from '@neinteractiveliterature/litform';
 
 import { buildPermissionInput } from '../../Permissions/PermissionUtils';
@@ -16,11 +8,12 @@ import { useChangeSet } from '../../ChangeSet';
 import CmsContentGroupFormFields, { CmsContentGroupFormFieldsProps } from './CmsContentGroupFormFields';
 import { CmsContentGroupsAdminQueryData } from './queries.generated';
 import { CmsContentTypeIndicator } from '../../graphqlTypes.generated';
-import { singleCmsContentGroupAdminLoader, SingleCmsContentGroupAdminLoaderResult } from './loaders';
+import { singleCmsContentGroupAdminLoader } from './loaders';
 import { apolloClientContext } from '../../AppContexts';
 import { UpdateContentGroupDocument, UpdateContentGroupMutationVariables } from './mutations.generated';
+import type { Route } from './+types/EditCmsContentGroup';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ params: { id }, request, context }) => {
+export const clientAction = async ({ params: { id }, request, context }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   const variables = (await request.json()) as Omit<UpdateContentGroupMutationVariables, 'id'>;
 
@@ -46,13 +39,13 @@ function EditCmsContentGroupForm() {
   const {
     data: { convention },
     contentGroup: initialContentGroup,
-  } = useLoaderData() as SingleCmsContentGroupAdminLoaderResult;
+  } = useLoaderData<typeof clientLoader>();
   const [contentGroup, setContentGroup] = useState(initialContentGroup);
   const [permissionsChangeSet, addPermission, removePermission] =
     useChangeSet<CmsContentGroupsAdminQueryData['cmsParent']['cmsContentGroups'][0]['permissions'][0]>();
   const submit = useSubmit();
   const navigation = useNavigation();
-  const submitError = useActionData();
+  const submitError = useActionData<typeof clientAction>();
   const submitInProgress = navigation.state !== 'idle';
 
   const formSubmitted = async (event: React.FormEvent) => {

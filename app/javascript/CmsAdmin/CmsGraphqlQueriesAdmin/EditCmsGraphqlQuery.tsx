@@ -1,25 +1,18 @@
 import { useState } from 'react';
 
-import {
-  ActionFunction,
-  Form,
-  redirect,
-  useActionData,
-  useLoaderData,
-  useNavigation,
-  RouterContextProvider,
-} from 'react-router';
+import { Form, redirect, useActionData, useLoaderData, useNavigation } from 'react-router';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import CmsGraphqlQueryForm from './CmsGraphqlQueryForm';
 import usePageTitle from '../../usePageTitle';
 
-import { singleCmsGraphqlQueryAdminLoader, SingleCmsGraphqlQueryAdminLoaderResult } from './loaders';
+import { singleCmsGraphqlQueryAdminLoader } from './loaders';
 import { apolloClientContext } from '../../AppContexts';
 import { UpdateCmsGraphqlQueryDocument } from './mutations.generated';
 import { buildCmsGraphqlQueryInputFromFormData } from './buildCmsGraphqlQueryInput';
+import type { Route } from './+types/EditCmsGraphqlQuery';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ params: { id }, request, context }) => {
+export const clientAction = async ({ params: { id }, request, context }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   const formData = await request.formData();
 
@@ -42,10 +35,10 @@ export const clientAction: ActionFunction<RouterContextProvider> = async ({ para
 export const clientLoader = singleCmsGraphqlQueryAdminLoader;
 
 function EditCmsGraphqlQuery() {
-  const { graphqlQuery: initialQuery } = useLoaderData() as SingleCmsGraphqlQueryAdminLoaderResult;
+  const { graphqlQuery: initialQuery } = useLoaderData<typeof clientLoader>();
   const [query, setQuery] = useState(initialQuery);
   const navigation = useNavigation();
-  const saveError = useActionData();
+  const saveError = useActionData<typeof clientAction>();
 
   const saveInProgress = navigation.state !== 'idle';
 

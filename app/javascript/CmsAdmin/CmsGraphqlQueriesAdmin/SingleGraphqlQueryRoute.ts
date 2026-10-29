@@ -1,8 +1,9 @@
-import { ActionFunction, redirect, RouterContextProvider } from 'react-router';
+import { redirect } from 'react-router';
 import { apolloClientContext } from '../../AppContexts';
 import { DeleteCmsGraphqlQueryDocument } from './mutations.generated';
+import type { Route } from './+types/SingleGraphqlQueryRoute';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ request, params: { id }, context }) => {
+export const clientAction = async ({ request, params: { id }, context }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   if (request.method === 'DELETE') {
     await client.mutate({

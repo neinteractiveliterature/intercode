@@ -1,25 +1,21 @@
-import { LoaderFunction, useRouteLoaderData } from 'react-router';
+import { LoaderFunctionArgs } from 'react-router';
 import { apolloClientContext } from 'AppContexts';
-import { CmsGraphqlQueriesQueryData, CmsGraphqlQueriesQueryDocument } from './queries.generated';
+import { CmsGraphqlQueriesQueryDocument } from './queries.generated';
 import { NamedRoute } from '../../NamedRoute';
+import useRequiredRouteLoaderData from '../../useRequiredRouteLoaderData';
 
-export const cmsGraphqlQueriesAdminLoader: LoaderFunction = async ({ context }) => {
+export const cmsGraphqlQueriesAdminLoader = async ({ context }: LoaderFunctionArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<CmsGraphqlQueriesQueryData>({ query: CmsGraphqlQueriesQueryDocument });
+  const { data } = await client.query({ query: CmsGraphqlQueriesQueryDocument, errorPolicy: 'none' });
   return data;
 };
 
 export function useCmsGraphqlQueriesAdminLoader() {
-  return useRouteLoaderData(NamedRoute.CmsGraphqlQueriesAdmin) as CmsGraphqlQueriesQueryData;
+  return useRequiredRouteLoaderData<typeof cmsGraphqlQueriesAdminLoader>(NamedRoute.CmsGraphqlQueriesAdmin);
 }
 
-export type SingleCmsGraphqlQueryAdminLoaderResult = {
-  data: CmsGraphqlQueriesQueryData;
-  graphqlQuery: CmsGraphqlQueriesQueryData['cmsParent']['cmsGraphqlQueries'][number];
-};
-
-export const singleCmsGraphqlQueryAdminLoader: LoaderFunction = async ({ params: { id }, ...args }) => {
-  const data = (await cmsGraphqlQueriesAdminLoader({ params: {}, ...args })) as CmsGraphqlQueriesQueryData;
+export const singleCmsGraphqlQueryAdminLoader = async ({ params: { id }, ...args }: LoaderFunctionArgs) => {
+  const data = await cmsGraphqlQueriesAdminLoader({ params: {}, ...args });
   const graphqlQuery = data.cmsParent.cmsGraphqlQueries.find((graphqlQuery) => graphqlQuery.id === id);
 
   if (!graphqlQuery) {

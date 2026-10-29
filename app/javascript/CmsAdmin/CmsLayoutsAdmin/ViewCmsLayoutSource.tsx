@@ -1,12 +1,12 @@
 import CmsLayoutForm from './CmsLayoutForm';
 import usePageTitle from '../../usePageTitle';
-import { singleCmsLayoutAdminLoader, SingleCmsLayoutAdminLoaderResult } from './loaders';
+import { singleCmsLayoutAdminLoader } from './loaders';
 import { useLoaderData } from 'react-router';
 
 export const clientLoader = singleCmsLayoutAdminLoader;
 
 function ViewCmsLayoutSource() {
-  const { layout: value } = useLoaderData() as SingleCmsLayoutAdminLoaderResult;
+  const { layout: value } = useLoaderData<typeof clientLoader>();
   usePageTitle(`View “${value.name}” Source`);
   return <CmsLayoutForm layout={value} readOnly />;
 }

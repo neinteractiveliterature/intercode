@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ActionFunction, Form, redirect, useActionData, useNavigation, RouterContextProvider } from 'react-router';
+import { Form, redirect, useActionData, useNavigation } from 'react-router';
 
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -9,8 +9,9 @@ import usePageTitle from '../../usePageTitle';
 import { CreateCmsGraphqlQueryDocument } from './mutations.generated';
 import { apolloClientContext } from '../../AppContexts';
 import { buildCmsGraphqlQueryInputFromFormData } from './buildCmsGraphqlQueryInput';
+import type { Route } from './+types/NewCmsGraphqlQuery';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ request, context }) => {
+export const clientAction = async ({ request, context }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   const formData = await request.formData();
 
@@ -31,7 +32,7 @@ export const clientAction: ActionFunction<RouterContextProvider> = async ({ requ
 
 function NewCmsGraphqlQuery(): React.JSX.Element {
   const [query, setQuery] = useState({ identifier: '', admin_notes: '', query: '' });
-  const createError = useActionData();
+  const createError = useActionData<typeof clientAction>();
   const navigation = useNavigation();
 
   usePageTitle('CMS GraphQL Queries');

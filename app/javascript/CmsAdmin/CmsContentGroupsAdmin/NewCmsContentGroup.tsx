@@ -1,6 +1,6 @@
 import { useState } from 'react';
 import * as React from 'react';
-import { ActionFunction, redirect, useActionData, useNavigation, useSubmit, RouterContextProvider } from 'react-router';
+import { redirect, useActionData, useNavigation, useSubmit } from 'react-router';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { buildPermissionInput } from '../../Permissions/PermissionUtils';
@@ -12,8 +12,9 @@ import { CmsContentTypeIndicator, CreateCmsContentGroupInput } from '../../graph
 import { useCmsContentGroupsAdminLoader } from './loaders';
 import { CreateContentGroupDocument } from './mutations.generated';
 import { apolloClientContext } from '../../AppContexts';
+import type { Route } from './+types/NewCmsContentGroup';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ request, context }) => {
+export const clientAction = async ({ request, context }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   const variables = (await request.json()) as CreateCmsContentGroupInput;
   try {
@@ -48,7 +49,7 @@ function NewCmsContentGroup(): React.JSX.Element {
     useChangeSet<CmsContentGroupsAdminQueryData['cmsParent']['cmsContentGroups'][0]['permissions'][0]>();
   const navigation = useNavigation();
   const createInProgress = navigation.state !== 'idle';
-  const createError = useActionData();
+  const createError = useActionData<typeof clientAction>();
   const submit = useSubmit();
 
   usePageTitle('New Content Group');
