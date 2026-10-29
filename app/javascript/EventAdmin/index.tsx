@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from 'react';
+import { useMemo, useState } from 'react';
 import { NavLink, useLocation, Outlet } from 'react-router';
 import classNames from 'classnames';
 import { useLitformPopperWithAutoClosing } from '@neinteractiveliterature/litform';
@@ -8,6 +8,7 @@ import buildEventCategoryUrl from './buildEventCategoryUrl';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 import humanize from '../humanize';
 import { useEventAdminEventsLoader } from './loaders';
+import useStateResetOnChange from '../useStateResetOnChange';
 
 function EventAdmin() {
   const data = useEventAdminEventsLoader();
@@ -16,7 +17,8 @@ function EventAdmin() {
 
   const eventCategories = useMemo(() => sortEventCategories(data.convention.event_categories), [data]);
 
-  const [menuOpen, setMenuOpen] = useState(false);
+  // closes whenever the page changes
+  const [menuOpen, setMenuOpen] = useStateResetOnChange(false, location.pathname);
   const [menu, setMenu] = useState<HTMLDivElement | null>(null);
   const [menuDropdown, setMenuDropdown] = useState<HTMLLIElement | null>(null);
 
@@ -24,10 +26,6 @@ function EventAdmin() {
     placement: 'bottom-start',
     modifiers: [{ name: 'offset', options: { offset: [0, 2] } }],
   });
-
-  useEffect(() => {
-    setMenuOpen(false);
-  }, [location.pathname]);
 
   if (authorizationWarning) return authorizationWarning;
 
@@ -74,4 +72,4 @@ function EventAdmin() {
   );
 }
 
-export const Component = EventAdmin;
+export default EventAdmin;
