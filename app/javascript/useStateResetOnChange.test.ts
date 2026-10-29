@@ -31,4 +31,15 @@ describe('useStateResetOnChange', () => {
     rerender({ value: 'a' });
     expect(result.current[0]).toEqual('edited');
   });
+
+  test('goes back to the value when the reset key changes, and not before', () => {
+    const { result, rerender } = renderHook(({ resetKey }) => useStateResetOnChange(false, resetKey), {
+      initialProps: { resetKey: '/a' },
+    });
+    act(() => result.current[1](true));
+    rerender({ resetKey: '/a' });
+    expect(result.current[0]).toBe(true);
+    rerender({ resetKey: '/b' });
+    expect(result.current[0]).toBe(false);
+  });
 });
