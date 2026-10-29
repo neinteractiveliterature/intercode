@@ -31,14 +31,20 @@ variable "price_class" {
   default     = "PriceClass_100"
 }
 
+variable "static_shell_enabled" {
+  description = "Serve the framework-mode shell from an S3 bucket instead of Rails. Needs static_shell_bucket_domain_name and static_shell_origin_access_control_id. A separate variable because those usually come from a bucket created in the same apply, and are then unknown at plan time."
+  type        = bool
+  default     = false
+}
+
 variable "static_shell_bucket_domain_name" {
-  description = "Regional domain name of the S3 bucket holding the framework-mode build (index.html and assets/), from the assets_bucket_intercode module's bucket_regional_domain_name output. When set, the default behavior serves index.html from the bucket, /assets/* comes from the bucket, and the router sends crawlers and Rails paths to the Rails origin. Leave null to keep serving the shell from Rails. Needs static_shell_origin_access_control_id, and the distribution's ARN in the bucket's cloudfront_distribution_arns."
+  description = "Regional domain name of the S3 bucket holding the framework-mode build (index.html and assets/), from the assets_bucket_intercode module's bucket_regional_domain_name output. With static_shell_enabled, the default behavior serves index.html from the bucket, /assets/* comes from the bucket, and the router sends crawlers and Rails paths to the Rails origin. Needs static_shell_origin_access_control_id, and the distribution's ARN in the bucket's cloudfront_distribution_arns."
   type        = string
   default     = null
 }
 
 variable "static_shell_origin_access_control_id" {
-  description = "ID of the origin access control for the static shell bucket (the assets_bucket_intercode module's origin_access_control_id output). Required with static_shell_bucket_domain_name."
+  description = "ID of the origin access control for the static shell bucket (the assets_bucket_intercode module's origin_access_control_id output). Required with static_shell_enabled."
   type        = string
   default     = null
 }
