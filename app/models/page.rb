@@ -49,6 +49,9 @@ class Page < ApplicationRecord
   after_commit :touch_parent
   after_commit :enqueue_cache_og_description_job, on: %i[create update]
 
+  # Matches pages with a word in their name starting with the query
+  pg_search_scope(:name_prefix, against: :name, using: { tsearch: { dictionary: "simple_unaccent", prefix: true } })
+
   multisearchable(
     against: %i[name content_for_search],
     additional_attributes: ->(page) do

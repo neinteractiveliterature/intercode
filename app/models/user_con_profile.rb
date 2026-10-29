@@ -95,6 +95,18 @@ class UserConProfile < ApplicationRecord
 
   scope :can_have_bio, -> { where(id: has_staff_position.select(:id)).or(where(id: is_team_member.select(:id))) }
 
+  # Matches attendees with a first or last name starting with the query
+  pg_search_scope(
+    :name_prefix,
+    against: %i[first_name last_name],
+    using: {
+      tsearch: {
+        dictionary: "simple_unaccent",
+        prefix: true
+      }
+    }
+  )
+
   multisearchable(
     against: %i[name_without_nickname nickname email],
     additional_attributes: ->(user_con_profile) { { convention_id: user_con_profile.convention_id } }
