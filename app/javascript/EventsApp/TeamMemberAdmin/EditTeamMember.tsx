@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ActionFunction, Form, redirect, useLoaderData, useNavigation, RouterContextProvider } from 'react-router';
+import { Form, redirect, useLoaderData, useNavigation } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import capitalize from 'lodash/capitalize';
 
@@ -7,17 +7,14 @@ import TeamMemberForm, { buildTeamMemberInputFromFormData } from './TeamMemberFo
 import usePageTitle from '../../usePageTitle';
 import { TeamMembersQueryData, TeamMembersQueryDocument } from './queries.generated';
 import FourOhFourPage from '../../FourOhFourPage';
-import { singleTeamMemberLoader, SingleTeamMemberLoaderResult } from './loader';
+import { singleTeamMemberLoader } from './loader';
 import { apolloClientContext } from '../../AppContexts';
 import { DeleteTeamMemberDocument, UpdateTeamMemberDocument } from './mutations.generated';
+import type { Route } from './+types/EditTeamMember';
 
 export const clientLoader = singleTeamMemberLoader;
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({
-  params: { eventId, teamMemberId },
-  request,
-  context,
-}) => {
+export const clientAction = async ({ params: { eventId, teamMemberId }, request, context }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   if (request.method === 'DELETE') {
     await client.mutate({
@@ -49,7 +46,7 @@ export const clientAction: ActionFunction<RouterContextProvider> = async ({
 
 function EditTeamMember(): React.JSX.Element {
   const navigation = useNavigation();
-  const { data, teamMember: initialTeamMember } = useLoaderData() as SingleTeamMemberLoaderResult;
+  const { data, teamMember: initialTeamMember } = useLoaderData<typeof clientLoader>();
   const event = data.convention.event;
   const { t } = useTranslation();
   const [teamMember, setTeamMember] = useState(initialTeamMember);

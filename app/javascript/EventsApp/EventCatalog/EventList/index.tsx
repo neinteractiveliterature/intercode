@@ -23,12 +23,13 @@ import EventListMyRatingSelector from './EventListMyRatingSelector';
 import useAsyncFunction from '../../../useAsyncFunction';
 import { EventListEventsQueryDocument } from './queries.generated';
 import EventListFilterableFormItemDropdown from './EventListFilterableFormItemDropdown';
-import { CommonConventionDataQueryData, CommonConventionDataQueryDocument } from '../../queries.generated';
+import { CommonConventionDataQueryDocument } from '../../queries.generated';
 import { getFilterableEventFormItems } from '../../useFilterableFormItems';
 import useMergeCategoriesIntoEvents from '../../useMergeCategoriesIntoEvents';
 import EventCatalogNavTabs from '../EventCatalogNavTabs';
-import { LoaderFunction, useLoaderData, RouterContextProvider } from 'react-router';
+import { useLoaderData } from 'react-router';
 import { apolloClientContext } from '../../../AppContexts';
+import type { Route } from './+types/index';
 
 const PAGE_SIZE = 20;
 
@@ -39,23 +40,18 @@ const filterCodecs = buildFieldFilterCodecs({
   form_items: FilterCodecs.json,
 });
 
-type LoaderResult = {
-  convention: CommonConventionDataQueryData['convention'];
-  filterableFormItems: ReturnType<typeof getFilterableEventFormItems>;
-};
-
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query({ query: CommonConventionDataQueryDocument });
+  const { data } = await client.query({ query: CommonConventionDataQueryDocument, errorPolicy: 'none' });
   if (!data) {
     return new Response(null, { status: 404 });
   }
   const filterableFormItems = getFilterableEventFormItems(data.convention);
-  return { convention: data.convention, filterableFormItems } satisfies LoaderResult;
+  return { convention: data.convention, filterableFormItems };
 };
 
 function EventList(): React.JSX.Element {
-  const { filterableFormItems, convention } = useLoaderData() as LoaderResult;
+  const { filterableFormItems, convention } = useLoaderData<typeof clientLoader>();
   const { sortBy, filters, updateSearch } = useReactRouterReactTable({
     ...filterCodecs,
   });

@@ -19,9 +19,9 @@ import {
 import useFilterableEventFormItems from './useFilterableFormItems';
 import EventListFilterableFormItemDropdown from './EventCatalog/EventList/EventListFilterableFormItemDropdown';
 import useReactRouterReactTable from '../Tables/useReactRouterReactTable';
-import { LoaderFunction, useLoaderData, useSearchParams, RouterContextProvider } from 'react-router';
+import { useLoaderData, useSearchParams } from 'react-router';
 import { apolloClientContext } from '../AppContexts';
-import { AppRootQueryData, AppRootQueryDocument } from '../appRootQueries.generated';
+import { AppRootQueryDocument } from '../appRootQueries.generated';
 import { buildAppRootContextValue } from '../AppRoot';
 import {
   getAvailableScheduleConfigs,
@@ -36,6 +36,7 @@ import {
 } from './scheduleQueryInputs';
 import { conventionDayLoader, ConventionDayLoaderResult } from './conventionDayUrls';
 import styles from 'styles/schedule_grid.module.scss';
+import type { Route } from './+types/ScheduleApp';
 
 function getScheduleViewLabel(view: string, t: TFunction) {
   if (view === 'list') {
@@ -96,12 +97,12 @@ export type ScheduleLoaderResult = ConventionDayLoaderResult & {
   fetchFormItemIdentifiers: string[];
 };
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ params, request, context }) => {
+export const clientLoader = async ({ params, request, context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
   const [conventionDayLoaderResult, { data }, { data: appRootData }] = await Promise.all([
     conventionDayLoader(client, { params, request }),
-    client.query<ScheduleGridConventionDataQueryData>({ query: ScheduleGridConventionDataQueryDocument }),
-    client.query<AppRootQueryData>({ query: AppRootQueryDocument }),
+    client.query({ query: ScheduleGridConventionDataQueryDocument, errorPolicy: 'none' }),
+    client.query({ query: AppRootQueryDocument, errorPolicy: 'none' }),
   ]);
   if (conventionDayLoaderResult instanceof Response) {
     return conventionDayLoaderResult;
@@ -161,7 +162,7 @@ export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ para
 };
 
 function ScheduleApp(): React.JSX.Element {
-  const { data, scheduleView, eventFilters, fetchFormItemIdentifiers } = useLoaderData() as ScheduleLoaderResult;
+  const { data, scheduleView, eventFilters, fetchFormItemIdentifiers } = useLoaderData<typeof clientLoader>();
   const { myProfile, currentAbility, conventionTimespan, siteMode, navigationBarRef } = useContext(AppRootContext);
   const { t } = useTranslation();
   const [, setSearchParams] = useSearchParams();

@@ -1,4 +1,4 @@
-import { ActionFunction, data, useNavigate, RouterContextProvider } from 'react-router';
+import { data, useNavigate } from 'react-router';
 import { apolloClientContext } from 'AppContexts';
 import { ForceConfirmSignupDocument } from '../mutations.generated';
 import { useEffect, useState } from 'react';
@@ -9,8 +9,9 @@ import BucketInput from '../BucketInput';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import Modal from 'react-bootstrap4-modal';
+import type { Route } from './+types/force_confirm';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {
+export const clientAction = async ({ context, request, params: { id } }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     const formData = await request.formData();

@@ -1,11 +1,11 @@
-import { CommonConventionDataQueryData, CommonConventionDataQueryDocument } from '../../queries.generated';
+import { CommonConventionDataQueryDocument } from '../../queries.generated';
 import { getFilterableEventFormItems } from '../../useFilterableFormItems';
 import useReactTableWithTheWorks, { QueryDataContext } from '../../../Tables/useReactTableWithTheWorks';
 import usePageTitle from '../../../usePageTitle';
 import { FilterCodecs, buildFieldFilterCodecs } from '../../../Tables/FilterUtils';
 import TableHeader from '../../../Tables/TableHeader';
 import ReactTableWithTheWorks from '../../../Tables/ReactTableWithTheWorks';
-import { LoaderFunction, useLoaderData, useNavigate, RouterContextProvider } from 'react-router';
+import { useLoaderData, useNavigate } from 'react-router';
 import { CellContext, ColumnDef, createColumnHelper } from '@tanstack/react-table';
 import EventCategoryCell from '../../../Tables/EventCategoryCell';
 import EventCategoryFilter from '../../../Tables/EventCategoryFilter';
@@ -20,6 +20,7 @@ import { DateTime } from 'luxon';
 import EventCatalogNavTabs from '../EventCatalogNavTabs';
 import { apolloClientContext } from '../../../AppContexts';
 import { formItemColumns, jsonFormDataGetter } from 'Tables/formItemColumns';
+import type { Route } from './+types/index';
 
 const FILTER_CODECS = buildFieldFilterCodecs({
   status: FilterCodecs.stringArray,
@@ -53,23 +54,18 @@ function RoomNamesCell<TData, TValue extends RunType['rooms']>({ getValue }: Cel
 
 const defaultVisibleColumns = ['category', 'title', 'starts_at', 'length_seconds', 'total_slots'];
 
-type LoaderResult = {
-  convention: CommonConventionDataQueryData['convention'];
-  filterableFormItems: ReturnType<typeof getFilterableEventFormItems>;
-};
-
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query({ query: CommonConventionDataQueryDocument });
+  const { data } = await client.query({ query: CommonConventionDataQueryDocument, errorPolicy: 'none' });
   if (!data) {
     return new Response(null, { status: 404 });
   }
   const filterableFormItems = getFilterableEventFormItems(data.convention);
-  return { convention: data.convention, filterableFormItems } satisfies LoaderResult;
+  return { convention: data.convention, filterableFormItems };
 };
 
 function EventTable() {
-  const { convention, filterableFormItems } = useLoaderData() as LoaderResult;
+  const { convention, filterableFormItems } = useLoaderData<typeof clientLoader>();
   const navigate = useNavigate();
   usePageTitle('Table View - Event Catalog');
 

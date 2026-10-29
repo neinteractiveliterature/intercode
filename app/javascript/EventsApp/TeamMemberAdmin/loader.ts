@@ -1,29 +1,29 @@
-import { LoaderFunction, useRouteLoaderData } from 'react-router';
+import { LoaderFunctionArgs } from 'react-router';
 import { TeamMembersQueryData, TeamMembersQueryDocument } from './queries.generated';
 import { apolloClientContext } from 'AppContexts';
 import { NamedRoute } from '../../NamedRoute';
+import useRequiredRouteLoaderData from '../../useRequiredRouteLoaderData';
 
-export const teamMembersLoader: LoaderFunction = async ({ context, params: { eventId } }) => {
+export const teamMembersLoader = async ({ context, params: { eventId } }: LoaderFunctionArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query({ query: TeamMembersQueryDocument, variables: { eventId: eventId ?? '' } });
+  const { data } = await client.query({
+    query: TeamMembersQueryDocument,
+    variables: { eventId: eventId ?? '' },
+    errorPolicy: 'none',
+  });
   return data;
 };
 
 export function useTeamMembersLoader() {
-  return useRouteLoaderData(NamedRoute.TeamMembers) as TeamMembersQueryData;
+  return useRequiredRouteLoaderData<typeof teamMembersLoader>(NamedRoute.TeamMembers);
 }
 
-export type SingleTeamMemberLoaderResult = {
-  data: TeamMembersQueryData;
-  teamMember: TeamMembersQueryData['convention']['event']['team_members'][number];
-};
-
-export const singleTeamMemberLoader: LoaderFunction = async ({ params: { eventId, teamMemberId }, ...args }) => {
+export const singleTeamMemberLoader = async ({ params: { eventId, teamMemberId }, ...args }: LoaderFunctionArgs) => {
   const data = (await teamMembersLoader({ params: { eventId }, ...args })) as TeamMembersQueryData;
   const teamMember = data.convention.event.team_members.find((teamMember) => teamMember.id === teamMemberId);
   if (!teamMember) {
     throw new Response(null, { status: 404 });
   }
 
-  return { data, teamMember } satisfies SingleTeamMemberLoaderResult;
+  return { data, teamMember };
 };

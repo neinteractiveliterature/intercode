@@ -1,15 +1,11 @@
 import { useCallback, useMemo } from 'react';
-import { LoaderFunction, useLoaderData, useNavigate, RouterContextProvider } from 'react-router';
+import { useLoaderData, useNavigate } from 'react-router';
 
 import useEventForm, { EventForm } from '../../EventAdmin/useEventForm';
 import EditEvent from '../../BuiltInForms/EditEvent';
 import MaximumEventProvidedTicketsOverrideEditor from '../../BuiltInFormControls/MaximumEventProvidedTicketsOverrideEditor';
 import usePageTitle from '../../usePageTitle';
-import {
-  StandaloneEditEventQueryData,
-  StandaloneEditEventQueryVariables,
-  StandaloneEditEventQueryDocument,
-} from './queries.generated';
+import { StandaloneEditEventQueryData, StandaloneEditEventQueryDocument } from './queries.generated';
 import deserializeFormResponse, { WithFormResponse } from '../../Models/deserializeFormResponse';
 import { CommonFormFieldsFragment } from '../../Models/commonFormFragments.generated';
 import FourOhFourPage from '../../FourOhFourPage';
@@ -23,6 +19,7 @@ import { useApolloClient } from '@apollo/client/react';
 import useBucketKeyRemapping from '../../EventAdmin/useBucketKeyRemapping';
 import BucketKeyRemappingModal from '../../EventAdmin/BucketKeyRemappingModal';
 import { BucketKeyMappingInput } from '../../graphqlTypes.generated';
+import type { Route } from './+types/index';
 
 export type StandaloneEditEventFormProps = {
   initialEvent: WithFormResponse<StandaloneEditEventQueryData['convention']['event']>;
@@ -101,17 +98,18 @@ function StandaloneEditEventForm({
   );
 }
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ params: { eventId }, context }) => {
+export const clientLoader = async ({ params: { eventId }, context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<StandaloneEditEventQueryData, StandaloneEditEventQueryVariables>({
+  const { data } = await client.query({
     query: StandaloneEditEventQueryDocument,
     variables: { eventId: eventId ?? '' },
+    errorPolicy: 'none',
   });
   return data;
 };
 
 function StandaloneEditEvent(): React.JSX.Element {
-  const data = useLoaderData() as StandaloneEditEventQueryData;
+  const data = useLoaderData<typeof clientLoader>();
 
   const initialEvent = useMemo(() => deserializeFormResponse(data.convention.event), [data]);
 
