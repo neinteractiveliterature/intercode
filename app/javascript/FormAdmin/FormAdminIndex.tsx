@@ -1,13 +1,5 @@
 import { useMemo } from 'react';
-import {
-  ActionFunction,
-  Link,
-  LoaderFunction,
-  redirect,
-  useLoaderData,
-  useSubmit,
-  RouterContextProvider,
-} from 'react-router';
+import { Link, redirect, useLoaderData, useSubmit } from 'react-router';
 import { useModal, useConfirm, ErrorDisplay, sortByLocaleString } from '@neinteractiveliterature/litform';
 
 import usePageTitle from '../usePageTitle';
@@ -17,6 +9,7 @@ import humanize from '../humanize';
 import { apolloClientContext } from 'AppContexts';
 import { CreateFormDocument } from './mutations.generated';
 import { FormType } from '../graphqlTypes.generated';
+import type { Route } from './+types/FormAdminIndex';
 
 function describeFormUsers(form: FormAdminQueryData['convention']['forms'][0]) {
   return [
@@ -26,13 +19,13 @@ function describeFormUsers(form: FormAdminQueryData['convention']['forms'][0]) {
   ];
 }
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<FormAdminQueryData>({ query: FormAdminQueryDocument });
+  const { data } = await client.query({ query: FormAdminQueryDocument, errorPolicy: 'none' });
   return data;
 };
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ request, context }) => {
+export const clientAction = async ({ request, context }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     const formData = await request.formData();
@@ -52,7 +45,7 @@ export const clientAction: ActionFunction<RouterContextProvider> = async ({ requ
 };
 
 function FormAdminIndex() {
-  const data = useLoaderData() as FormAdminQueryData;
+  const data = useLoaderData<typeof clientLoader>();
   const confirm = useConfirm();
   const newFormModal = useModal();
   const sortedForms = useMemo(() => sortByLocaleString(data.convention.forms, (form) => form.title), [data]);

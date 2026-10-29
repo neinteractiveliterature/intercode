@@ -1,14 +1,5 @@
 import { useCallback, useMemo, useState } from 'react';
-import {
-  ActionFunction,
-  Form,
-  LoaderFunction,
-  redirect,
-  useActionData,
-  useLoaderData,
-  useNavigation,
-  RouterContextProvider,
-} from 'react-router';
+import { Form, redirect, useActionData, useLoaderData, useNavigation } from 'react-router';
 
 import {
   BootstrapFormInput,
@@ -21,11 +12,12 @@ import { useTranslation } from 'react-i18next';
 import { json as jsonExtension } from '@codemirror/lang-json';
 
 import usePageTitle from '../usePageTitle';
-import { FormAdminQueryData, FormAdminQueryDocument } from './queries.generated';
+import { FormAdminQueryDocument } from './queries.generated';
 import { FormType } from '../graphqlTypes.generated';
 import { apolloClientContext } from '../AppContexts';
 import { CreateFormWithJsonDocument, UpdateFormWithJsonDocument } from './mutations.generated';
 import invariant from 'tiny-invariant';
+import type { Route } from './+types/FormJSONEditor';
 
 function parseFormData(formData: FormData) {
   const formJSON = JSON.stringify({
@@ -36,7 +28,7 @@ function parseFormData(formData: FormData) {
   return formJSON;
 }
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ request, params, context }) => {
+export const clientAction = async ({ request, params, context }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     if (request.method === 'POST') {
@@ -93,14 +85,9 @@ function formDataFromJSON(json: string): EditingFormJSONData {
   };
 }
 
-type LoaderResult = {
-  initialForm: FormAdminQueryData['convention']['forms'][number];
-  data: FormAdminQueryData;
-};
-
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ params: { id }, context }) => {
+export const clientLoader = async ({ params: { id }, context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<FormAdminQueryData>({ query: FormAdminQueryDocument });
+  const { data } = await client.query({ query: FormAdminQueryDocument, errorPolicy: 'none' });
   if (!data) {
     return new Response(null, { status: 404 });
   }
@@ -108,16 +95,16 @@ export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ para
   if (!initialForm) {
     throw new Response(null, { status: 404 });
   }
-  return { data, initialForm } satisfies LoaderResult;
+  return { data, initialForm };
 };
 
 function FormJSONEditor() {
-  const { initialForm } = useLoaderData() as LoaderResult;
+  const { initialForm } = useLoaderData<typeof clientLoader>();
   const initialFormData = useMemo(() => formDataFromJSON(initialForm.export_json), [initialForm.export_json]);
   const [form, setForm] = useState(initialFormData);
   const { t } = useTranslation();
   const navigation = useNavigation();
-  const error = useActionData();
+  const error = useActionData<typeof clientAction>();
 
   const extensions = useMemo(() => [jsonExtension()], []);
   const onChange = useCallback((sectionsJSON: string) => setForm((prevForm) => ({ ...prevForm, sectionsJSON })), []);
