@@ -29,6 +29,28 @@ describe('buildOpenidConfig', () => {
 
     expect(config.serverMetadata().end_session_endpoint).toBe('https://issuer.example.com/users/sign_out');
   });
+
+  it('accepts an http issuer on localhost, for the system tests', () => {
+    const config = buildOpenidConfig('test-client-id', {
+      issuer: 'http://localhost:3000/',
+      authorizationEndpoint: 'http://localhost:3000/oauth/authorize',
+    });
+
+    const url = getAuthorizationRedirectURL(config, { verifier: 'v', challenge: 'c', state: 's' }, 'test-client-id');
+
+    expect(`${url.origin}${url.pathname}`).toBe('http://localhost:3000/oauth/authorize');
+  });
+
+  it('still refuses an http issuer anywhere else', () => {
+    const config = buildOpenidConfig('test-client-id', {
+      issuer: 'http://issuer.example.com/',
+      authorizationEndpoint: 'http://issuer.example.com/oauth/authorize',
+    });
+
+    expect(() =>
+      getAuthorizationRedirectURL(config, { verifier: 'v', challenge: 'c', state: 's' }, 'test-client-id'),
+    ).toThrow(/HTTPS/);
+  });
 });
 
 describe('getAuthorizationRedirectURL', () => {

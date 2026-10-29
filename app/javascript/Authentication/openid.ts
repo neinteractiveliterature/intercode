@@ -1,4 +1,5 @@
 import {
+  allowInsecureRequests,
   buildAuthorizationUrl,
   Configuration,
   randomPKCECodeVerifier,
@@ -25,7 +26,7 @@ export type OpenidServerMetadata = {
 // endpoint (for sign-out); token exchange/refresh go through our own same-origin
 // /oauth_session/* endpoints.
 export function buildOpenidConfig(clientId: string, metadata: OpenidServerMetadata): Configuration {
-  return new Configuration(
+  const config = new Configuration(
     {
       issuer: metadata.issuer,
       authorization_endpoint: metadata.authorizationEndpoint,
@@ -33,6 +34,19 @@ export function buildOpenidConfig(clientId: string, metadata: OpenidServerMetada
     },
     clientId,
   );
+
+  // openid-client refuses plain-http endpoints. Real issuers are always https; the exception is the system tests,
+  // which run the whole sign-in flow against a Rails server on http://localhost.
+  if (isLocalhostHttp(metadata.issuer)) {
+    allowInsecureRequests(config);
+  }
+
+  return config;
+}
+
+function isLocalhostHttp(url: string): boolean {
+  const { protocol, hostname } = new URL(url);
+  return protocol === 'http:' && hostname === 'localhost';
 }
 
 export async function generatePKCEChallenge(): Promise<PKCEChallengeData> {
