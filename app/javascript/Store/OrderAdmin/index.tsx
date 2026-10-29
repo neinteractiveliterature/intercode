@@ -26,7 +26,7 @@ export type CreateOrderActionInput = {
   couponCodes: string[];
 };
 
-export const action: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
   const client = context.get(apolloClientContext);
   try {
     const { createOrderVariables, couponCodes } = (await request.json()) as CreateOrderActionInput;

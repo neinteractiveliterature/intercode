@@ -178,7 +178,7 @@ function OrderHistoryOrder({ order, convention, paymentModal }: OrderHistoryOrde
   );
 }
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query<OrderHistoryQueryData>({ query: OrderHistoryQueryDocument });
   return data;

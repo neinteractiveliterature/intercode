@@ -8,7 +8,7 @@ import EditProductForm from '../../../app/javascript/Store/ProductAdmin/EditProd
 import EditAdminProductCard from '../../../app/javascript/Store/ProductAdmin/EditAdminProductCard';
 import {
   Component as ProductAdmin,
-  loader as productAdminLoader,
+  clientLoader as productAdminLoader,
 } from '../../../app/javascript/Store/ProductAdmin/index';
 import {
   duplicateProductForEditing,
@@ -83,7 +83,6 @@ describe('the product admin screens', () => {
 
   // A product that hasn't been saved has a generated id instead of a real one
   const newEditingProduct = (overrides: Partial<Omit<EditingProductWithRealId, 'id'>> = {}): EditingProduct => {
-     
     const { id, ...rest } = editingProduct();
     return { ...rest, generatedId: 'new-1', ...overrides };
   };
