@@ -1,13 +1,9 @@
 import { MockLink } from '@apollo/client/testing';
 import { vi } from 'vitest';
 
-import { renderRoute, userEvent, waitFor } from '../testUtils';
+import { renderRoute, routeFromModule, userEvent, waitFor } from '../testUtils';
 import formFromExportJSON from '../formFromExportJSON';
-import {
-  Component as EditUserConProfile,
-  clientAction as action,
-  clientLoader as loader,
-} from '../../../app/javascript/UserConProfiles/EditUserConProfile';
+import * as editUserConProfile from '../../../app/javascript/UserConProfiles/EditUserConProfile';
 import {
   UserConProfileQueryData,
   UserConProfileQueryDocument,
@@ -125,7 +121,7 @@ describe('EditUserConProfile', () => {
   const renderEditPage = (apolloMocks: MockLink.MockedResponse[]) =>
     renderRoute(
       [
-        { path: '/user_con_profiles/:id/edit', loader, action, Component: EditUserConProfile },
+        routeFromModule('/user_con_profiles/:id/edit', editUserConProfile),
         { path: '/user_con_profiles/:id', Component: () => <h1>Viewing a profile</h1> },
       ],
       { apolloMocks, initialEntries: ['/user_con_profiles/7/edit'] },
