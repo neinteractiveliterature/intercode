@@ -229,7 +229,8 @@ export function buildIntercodeApolloCache(): InMemoryCache {
       Convention: {
         fields: {
           events_paginated: {
-            keyArgs: false,
+            // page and per_page are deliberately not key args so that fetchMore pages merge into one list
+            keyArgs: ['filters', 'sort'],
             merge(existing: EventsPagination | null | undefined, incoming: EventsPagination, { args }) {
               const merged = existing ? existing.entries.slice(0) : [];
               const offset = ((args?.page ?? 1) - 1) * (args?.per_page ?? 20);
