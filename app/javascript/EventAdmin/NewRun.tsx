@@ -1,13 +1,5 @@
 import { useState } from 'react';
-import {
-  useActionData,
-  useNavigate,
-  LoaderFunction,
-  useLoaderData,
-  ActionFunction,
-  redirect,
-  RouterContextProvider,
-} from 'react-router';
+import { useActionData, useNavigate, useLoaderData, redirect } from 'react-router';
 
 import EditRunModal, { EditingRun } from './EditRunModal';
 import { EventAdminEventsQueryData, EventAdminEventsQueryDocument, RunFieldsFragmentDoc } from './queries.generated';
@@ -15,12 +7,13 @@ import { apolloClientContext } from 'AppContexts';
 import { CreateRunDocument } from './mutations.generated';
 import { buildRunInputFromFormData } from './buildRunInputFromFormData';
 import { Event } from '../graphqlTypes.generated';
+import type { Route } from './+types/NewRun';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({
+export const clientAction = async ({
   params: { eventCategoryId, eventId },
   request,
   context,
-}) => {
+}: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     const formData = await request.formData();
@@ -59,9 +52,9 @@ type LoaderResult = {
   convention: EventAdminEventsQueryData['convention'];
 };
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ params: { eventId }, context }) => {
+export const clientLoader = async ({ params: { eventId }, context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<EventAdminEventsQueryData>({ query: EventAdminEventsQueryDocument });
+  const { data } = await client.query({ query: EventAdminEventsQueryDocument, errorPolicy: 'none' });
   const convention = data?.convention;
   const events = convention?.events;
   const event = events?.find((e) => e.id.toString() === eventId);
@@ -91,14 +84,14 @@ export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ para
 
 function NewRun(): React.JSX.Element {
   const navigate = useNavigate();
-  const { event, initialRun, convention } = useLoaderData() as LoaderResult;
+  const { event, initialRun, convention } = useLoaderData<typeof clientLoader>();
 
   const cancelEditing = () => {
     navigate('../../../..', { replace: true });
   };
 
   const [run, setRun] = useState(initialRun);
-  const actionData = useActionData();
+  const actionData = useActionData<typeof clientAction>();
 
   return (
     <EditRunModal

@@ -1,5 +1,5 @@
 import { useState, useMemo, useCallback } from 'react';
-import { LoaderFunction, RouterContextProvider, useLoaderData, useNavigate, useRouteLoaderData } from 'react-router';
+import { useLoaderData, useNavigate } from 'react-router';
 import { useTranslation } from 'react-i18next';
 
 import useEventFormWithCategorySelection, { EventFormWithCategorySelection } from './useEventFormWithCategorySelection';
@@ -7,14 +7,10 @@ import EditEvent from '../BuiltInForms/EditEvent';
 import MaximumEventProvidedTicketsOverrideEditor from '../BuiltInFormControls/MaximumEventProvidedTicketsOverrideEditor';
 import usePageTitle from '../usePageTitle';
 import RunFormFields, { RunFormFieldsProps } from '../BuiltInForms/RunFormFields';
-import deserializeFormResponse, { WithFormResponse } from '../Models/deserializeFormResponse';
-import {
-  EventAdminEventsQueryData,
-  EventAdminSingleEventQueryData,
-  EventAdminSingleEventQueryDocument,
-} from './queries.generated';
+import deserializeFormResponse from '../Models/deserializeFormResponse';
+import { EventAdminSingleEventQueryDocument } from './queries.generated';
 import { useImageAttachmentConfig } from '../BuiltInFormControls/MarkdownInput';
-import { NamedRoute } from '../NamedRoute';
+import { useEventAdminEventsLoader } from './loaders';
 import { apolloClientContext } from 'AppContexts';
 import { updateEvent as updateEventMutation, UpdateEventOptions } from './$id';
 import { ActiveStorageAttachment, BucketKeyMappingInput } from 'graphqlTypes.generated';
@@ -22,27 +18,27 @@ import { useApolloClient } from '@apollo/client/react';
 import { useAsyncFetcher } from 'useAsyncFetcher';
 import useBucketKeyRemapping from './useBucketKeyRemapping';
 import BucketKeyRemappingModal from './BucketKeyRemappingModal';
+import type { Route } from './+types/EventAdminEditEvent';
 
-type LoaderResult = WithFormResponse<EventAdminSingleEventQueryData['conventionByRequestHost']['event']>;
-
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context, params: { eventId } }) => {
+export const clientLoader = async ({ context, params: { eventId } }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query({
     query: EventAdminSingleEventQueryDocument,
     variables: { eventId: eventId ?? '' },
+    errorPolicy: 'none',
   });
   if (!data) {
     return new Response(null, { status: 404 });
   }
   const serializedEvent = data.conventionByRequestHost.event;
   const initialEvent = deserializeFormResponse(serializedEvent);
-  return initialEvent satisfies LoaderResult;
+  return initialEvent;
 };
 
 function EventAdminEditEvent() {
   const { t } = useTranslation();
-  const { convention, currentAbility } = useRouteLoaderData(NamedRoute.EventAdmin) as EventAdminEventsQueryData;
-  const initialEvent = useLoaderData() as LoaderResult;
+  const { convention, currentAbility } = useEventAdminEventsLoader();
+  const initialEvent = useLoaderData<typeof clientLoader>();
   const navigate = useNavigate();
   const client = useApolloClient();
   const fetcher = useAsyncFetcher();
