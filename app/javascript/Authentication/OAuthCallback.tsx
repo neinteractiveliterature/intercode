@@ -83,4 +83,3 @@ function OAuthCallback() {
 }
 
 export default OAuthCallback;
-export const Component = OAuthCallback;

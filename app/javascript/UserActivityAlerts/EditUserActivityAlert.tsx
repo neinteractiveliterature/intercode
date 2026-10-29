@@ -159,4 +159,4 @@ function EditUserActivityAlertForm() {
   );
 }
 
-export const Component = EditUserActivityAlertForm;
+export default EditUserActivityAlertForm;

@@ -109,4 +109,4 @@ function EditTeamMember(): React.JSX.Element {
   );
 }
 
-export const Component = EditTeamMember;
+export default EditTeamMember;

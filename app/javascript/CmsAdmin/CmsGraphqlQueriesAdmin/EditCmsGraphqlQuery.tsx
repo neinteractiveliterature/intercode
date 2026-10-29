@@ -68,4 +68,4 @@ function EditCmsGraphqlQuery() {
   );
 }
 
-export const Component = EditCmsGraphqlQuery;
+export default EditCmsGraphqlQuery;

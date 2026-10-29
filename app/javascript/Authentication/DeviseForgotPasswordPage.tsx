@@ -131,4 +131,4 @@ function DeviseForgotPasswordPage(): React.JSX.Element {
   );
 }
 
-export const Component = DeviseForgotPasswordPage;
+export default DeviseForgotPasswordPage;

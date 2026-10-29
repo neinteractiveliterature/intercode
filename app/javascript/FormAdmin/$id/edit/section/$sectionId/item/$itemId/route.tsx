@@ -183,4 +183,4 @@ function FormItemEditorLayout(): React.JSX.Element {
   );
 }
 
-export const Component = FormItemEditorLayout;
+export default FormItemEditorLayout;

@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import CadmusNavbarAdminApp from 'cadmus-navbar-admin';
-import { useApolloClient } from "@apollo/client/react";
+import { useApolloClient } from '@apollo/client/react';
 import 'cadmus-navbar-admin/styles/cadmus-navbar-admin.css';
 
 import Client from './Client';
@@ -15,4 +15,4 @@ function NavigationItemsAdmin(): React.JSX.Element {
   return <CadmusNavbarAdminApp client={navbarAdminClient} />;
 }
 
-export const Component = NavigationItemsAdmin;
+export default NavigationItemsAdmin;

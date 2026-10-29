@@ -7,7 +7,7 @@ import AdminProductCard from '../../../app/javascript/Store/ProductAdmin/AdminPr
 import EditProductForm from '../../../app/javascript/Store/ProductAdmin/EditProductForm';
 import EditAdminProductCard from '../../../app/javascript/Store/ProductAdmin/EditAdminProductCard';
 import {
-  Component as ProductAdmin,
+  default as ProductAdmin,
   clientLoader as productAdminLoader,
 } from '../../../app/javascript/Store/ProductAdmin/index';
 import {

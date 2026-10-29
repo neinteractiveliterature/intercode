@@ -128,4 +128,4 @@ function EventsByChoice() {
   );
 }
 
-export const Component = EventsByChoice;
+export default EventsByChoice;

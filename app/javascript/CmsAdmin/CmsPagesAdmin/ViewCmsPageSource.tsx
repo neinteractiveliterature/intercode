@@ -12,4 +12,4 @@ function ViewCmsPageSource() {
   return <CmsPageForm page={page} cmsLayouts={data.cmsParent.cmsLayouts} cmsParent={data.cmsParent} readOnly />;
 }
 
-export const Component = ViewCmsPageSource;
+export default ViewCmsPageSource;

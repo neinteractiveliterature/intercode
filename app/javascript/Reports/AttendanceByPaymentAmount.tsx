@@ -146,4 +146,4 @@ function AttendanceByPaymentAmount() {
   );
 }
 
-export const Component = AttendanceByPaymentAmount;
+export default AttendanceByPaymentAmount;

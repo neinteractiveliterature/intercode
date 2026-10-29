@@ -66,4 +66,4 @@ function CreateSignup(): React.JSX.Element {
   );
 }
 
-export const Component = CreateSignup;
+export default CreateSignup;

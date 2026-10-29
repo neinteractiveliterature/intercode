@@ -176,4 +176,4 @@ function DeviseSignUpPage(): React.JSX.Element {
   );
 }
 
-export const Component = DeviseSignUpPage;
+export default DeviseSignUpPage;

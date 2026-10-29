@@ -131,4 +131,4 @@ function FormEditor(): React.JSX.Element {
   );
 }
 
-export const Component = FormEditor;
+export default FormEditor;

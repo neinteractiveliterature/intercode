@@ -110,4 +110,4 @@ function AddAttendeeModal(): React.JSX.Element {
   );
 }
 
-export const Component = AddAttendeeModal;
+export default AddAttendeeModal;

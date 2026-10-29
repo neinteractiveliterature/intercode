@@ -208,4 +208,4 @@ function AppRoot(): React.JSX.Element {
   );
 }
 
-export const Component = AppRoot;
+export default AppRoot;

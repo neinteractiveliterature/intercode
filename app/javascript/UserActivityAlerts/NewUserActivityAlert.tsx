@@ -152,4 +152,4 @@ function NewUserActivityAlert() {
   );
 }
 
-export const Component = NewUserActivityAlert;
+export default NewUserActivityAlert;

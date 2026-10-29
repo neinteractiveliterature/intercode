@@ -139,4 +139,4 @@ function ConventionAdmin() {
   );
 }
 
-export const Component = ConventionAdmin;
+export default ConventionAdmin;

@@ -145,4 +145,4 @@ function OAuthApplicationsTable() {
   );
 }
 
-export const Component = OAuthApplicationsTable;
+export default OAuthApplicationsTable;

@@ -33,4 +33,4 @@ function OAuthApplicationAdmin(): React.JSX.Element {
   );
 }
 
-export const Component = OAuthApplicationAdmin;
+export default OAuthApplicationAdmin;

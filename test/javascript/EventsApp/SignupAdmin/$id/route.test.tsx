@@ -1,7 +1,7 @@
 import { MockLink } from '@apollo/client/testing';
 
 import { renderRoute, waitFor } from '../../../testUtils';
-import { Component as EditSignup } from '../../../../../app/javascript/EventsApp/SignupAdmin/$id/route';
+import { default as EditSignup } from '../../../../../app/javascript/EventsApp/SignupAdmin/$id/route';
 import { singleSignupLoader } from '../../../../../app/javascript/EventsApp/SignupAdmin/loaders';
 import {
   AdminSignupQueryData,

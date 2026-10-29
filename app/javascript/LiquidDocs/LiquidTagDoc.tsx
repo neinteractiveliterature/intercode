@@ -47,4 +47,4 @@ function LiquidTagDoc(): React.JSX.Element {
   );
 }
 
-export const Component = LiquidTagDoc;
+export default LiquidTagDoc;

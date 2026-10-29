@@ -35,7 +35,7 @@ function renderProfileConventionYear(
   return start ? format(start, 'year') : null;
 }
 
-export const Component = function UserAdminDisplay() {
+export default function UserAdminDisplay() {
   const data = useLoaderData() as UserAdminQueryData;
   const { t } = useTranslation();
   usePageTitle(data.user.name);
@@ -108,4 +108,4 @@ export const Component = function UserAdminDisplay() {
       <div className="col-lg-3">{/* this.renderUserAdminSection(data) */}</div>
     </div>
   );
-};
+}

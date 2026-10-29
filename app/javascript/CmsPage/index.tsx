@@ -86,4 +86,4 @@ function CmsPage(): React.JSX.Element {
   );
 }
 
-export const Component = CmsPage;
+export default CmsPage;

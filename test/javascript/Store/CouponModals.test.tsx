@@ -6,12 +6,12 @@ import { renderRoute, userEvent, waitFor } from '../testUtils';
 import runAction from '../runAction';
 import {
   clientAction as editAction,
-  Component as EditCouponModal,
+  default as EditCouponModal,
   clientLoader as editLoader,
 } from '../../../app/javascript/Store/CouponAdmin/EditCouponModal';
 import {
   clientAction as newAction,
-  Component as NewCouponModal,
+  default as NewCouponModal,
 } from '../../../app/javascript/Store/CouponAdmin/NewCouponModal';
 import {
   CreateCouponDocument,

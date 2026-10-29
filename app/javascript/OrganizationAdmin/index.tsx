@@ -35,4 +35,4 @@ function OrganizationAdmin(): React.JSX.Element {
   );
 }
 
-export const Component = OrganizationAdmin;
+export default OrganizationAdmin;

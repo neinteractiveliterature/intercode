@@ -267,4 +267,4 @@ function TicketTypesList() {
   );
 }
 
-export const Component = TicketTypesList;
+export default TicketTypesList;

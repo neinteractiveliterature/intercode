@@ -52,4 +52,4 @@ function AppRootLayout() {
   );
 }
 
-export const Component = AppRootLayout;
+export default AppRootLayout;

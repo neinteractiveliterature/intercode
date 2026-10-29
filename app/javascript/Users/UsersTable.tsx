@@ -115,4 +115,4 @@ function UsersTable(): React.JSX.Element {
   );
 }
 
-export const Component = UsersTable;
+export default UsersTable;

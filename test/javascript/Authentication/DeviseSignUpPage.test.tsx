@@ -5,7 +5,7 @@ import { renderRoute, userEvent, waitFor } from '../testUtils';
 import AuthenticityTokensManager, {
   AuthenticityTokensContext,
 } from '../../../app/javascript/AuthenticityTokensContext';
-import { Component as DeviseSignUpPage } from '../../../app/javascript/Authentication/DeviseSignUpPage';
+import { default as DeviseSignUpPage } from '../../../app/javascript/Authentication/DeviseSignUpPage';
 import {
   AccountFormContentQueryDocument,
   SignInContextQueryDocument,

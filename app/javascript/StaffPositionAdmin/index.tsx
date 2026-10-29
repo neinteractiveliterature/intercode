@@ -32,4 +32,4 @@ function StaffPositionAdmin(): React.JSX.Element {
   );
 }
 
-export const Component = StaffPositionAdmin;
+export default StaffPositionAdmin;

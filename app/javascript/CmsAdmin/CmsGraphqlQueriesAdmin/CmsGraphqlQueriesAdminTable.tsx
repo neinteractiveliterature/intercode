@@ -68,4 +68,4 @@ function CmsGraphqlQueriesAdminTable(): React.JSX.Element {
   );
 }
 
-export const Component = CmsGraphqlQueriesAdminTable;
+export default CmsGraphqlQueriesAdminTable;

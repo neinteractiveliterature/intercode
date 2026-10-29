@@ -104,4 +104,4 @@ function CmsVariablesAdmin(): React.JSX.Element {
   );
 }
 
-export const Component = CmsVariablesAdmin;
+export default CmsVariablesAdmin;

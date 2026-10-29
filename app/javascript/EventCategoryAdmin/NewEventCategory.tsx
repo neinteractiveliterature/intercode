@@ -86,4 +86,4 @@ function NewEventCategory(): React.JSX.Element {
   );
 }
 
-export const Component = NewEventCategory;
+export default NewEventCategory;

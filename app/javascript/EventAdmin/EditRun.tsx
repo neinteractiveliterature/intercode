@@ -83,4 +83,4 @@ function EditRun(): React.JSX.Element {
   );
 }
 
-export const Component = EditRun;
+export default EditRun;

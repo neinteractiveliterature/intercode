@@ -98,4 +98,4 @@ function EditEmailRouteModal(): React.JSX.Element {
   );
 }
 
-export const Component = EditEmailRouteModal;
+export default EditEmailRouteModal;

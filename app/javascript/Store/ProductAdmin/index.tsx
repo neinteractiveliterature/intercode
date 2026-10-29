@@ -162,4 +162,4 @@ function ProductAdmin() {
   );
 }
 
-export const Component = ProductAdmin;
+export default ProductAdmin;

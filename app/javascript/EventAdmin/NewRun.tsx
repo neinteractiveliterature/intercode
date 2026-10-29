@@ -113,4 +113,4 @@ function NewRun(): React.JSX.Element {
   );
 }
 
-export const Component = NewRun;
+export default NewRun;

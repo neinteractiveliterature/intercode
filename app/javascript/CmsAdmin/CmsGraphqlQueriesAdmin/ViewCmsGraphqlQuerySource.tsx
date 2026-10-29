@@ -21,4 +21,4 @@ function ViewCmsGraphqlQuerySource() {
   );
 }
 
-export const Component = ViewCmsGraphqlQuerySource;
+export default ViewCmsGraphqlQuerySource;

@@ -4,8 +4,8 @@ import { render, userEvent, waitFor } from '../testUtils';
 import AuthenticityTokensManager, {
   AuthenticityTokensContext,
 } from '../../../app/javascript/AuthenticityTokensContext';
-import { Component as DeviseForgotPasswordPage } from '../../../app/javascript/Authentication/DeviseForgotPasswordPage';
-import { Component as ResetPassword } from '../../../app/javascript/Authentication/ResetPassword';
+import { default as DeviseForgotPasswordPage } from '../../../app/javascript/Authentication/DeviseForgotPasswordPage';
+import { default as ResetPassword } from '../../../app/javascript/Authentication/ResetPassword';
 
 const jsonResponse = (body: unknown, init: ResponseInit = {}) =>
   new Response(JSON.stringify(body), { status: 200, headers: { 'Content-Type': 'application/json' }, ...init });

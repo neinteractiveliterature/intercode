@@ -29,4 +29,4 @@ function CloneConventionRoute() {
   return <NewConventionModal data={data} cloneConvention={cloneConvention} />;
 }
 
-export const Component = CloneConventionRoute;
+export default CloneConventionRoute;

@@ -72,4 +72,4 @@ function EditCmsPageForm() {
   );
 }
 
-export const Component = EditCmsPageForm;
+export default EditCmsPageForm;

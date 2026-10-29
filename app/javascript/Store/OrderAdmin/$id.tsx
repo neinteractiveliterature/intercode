@@ -39,4 +39,4 @@ function EditOrderRoute() {
   return <EditOrderModal order={data.convention.order} closeModal={() => navigate('..')} />;
 }
 
-export const Component = EditOrderRoute;
+export default EditOrderRoute;

@@ -146,4 +146,4 @@ function RunEmailList() {
   );
 }
 
-export const Component = RunEmailList;
+export default RunEmailList;

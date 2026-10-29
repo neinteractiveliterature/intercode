@@ -58,4 +58,4 @@ function EditTicketTypeForm() {
   );
 }
 
-export const Component = EditTicketTypeForm;
+export default EditTicketTypeForm;

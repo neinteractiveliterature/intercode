@@ -1,7 +1,7 @@
 import { MockLink } from '@apollo/client/testing';
 
 import { renderRoute, waitFor } from '../testUtils';
-import { Component as OrderSummary, clientLoader as loader } from '../../../app/javascript/Store/OrderSummary';
+import { default as OrderSummary, clientLoader as loader } from '../../../app/javascript/Store/OrderSummary';
 import { OrderSummaryQueryData, OrderSummaryQueryDocument } from '../../../app/javascript/Store/queries.generated';
 
 type SummaryProduct = OrderSummaryQueryData['convention']['products'][number];

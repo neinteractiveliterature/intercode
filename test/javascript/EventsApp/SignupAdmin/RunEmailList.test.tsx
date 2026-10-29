@@ -2,7 +2,7 @@ import { MockLink } from '@apollo/client/testing';
 
 import { renderRoute, waitFor } from '../../testUtils';
 import {
-  Component as RunEmailList,
+  default as RunEmailList,
   clientLoader as loader,
 } from '../../../../app/javascript/EventsApp/SignupAdmin/RunEmailList';
 import {
