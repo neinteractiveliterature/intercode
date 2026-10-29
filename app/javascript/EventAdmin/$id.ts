@@ -75,7 +75,7 @@ export async function updateEvent({ event, eventCategory, run, client }: UpdateE
   return await updateRegularEvent({ event, client });
 }
 
-export const action: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
   const client = context.get(apolloClientContext);
   try {
     const options = (await request.json()) as UpdateEventOptions;

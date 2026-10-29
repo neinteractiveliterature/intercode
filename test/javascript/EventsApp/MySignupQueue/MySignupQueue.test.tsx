@@ -2,7 +2,7 @@ import { MockLink } from '@apollo/client/testing';
 import { vi } from 'vitest';
 
 import { renderRoute } from '../../testUtils';
-import { Component as MySignupQueue, loader } from '../../../../app/javascript/EventsApp/MySignupQueue';
+import { Component as MySignupQueue, clientLoader as loader } from '../../../../app/javascript/EventsApp/MySignupQueue';
 import {
   MySignupQueueQueryData,
   MySignupQueueQueryDocument,

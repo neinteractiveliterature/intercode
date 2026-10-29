@@ -2,7 +2,10 @@ import { MockLink } from '@apollo/client/testing';
 import { vi } from 'vitest';
 
 import { renderRoute, userEvent, waitFor } from '../../testUtils';
-import { Component as EventList, loader } from '../../../../app/javascript/EventsApp/EventCatalog/EventList';
+import {
+  Component as EventList,
+  clientLoader as loader,
+} from '../../../../app/javascript/EventsApp/EventCatalog/EventList';
 import { EventListEventsQueryDocument } from '../../../../app/javascript/EventsApp/EventCatalog/EventList/queries.generated';
 import { CommonConventionDataQueryDocument } from '../../../../app/javascript/EventsApp/queries.generated';
 import { buildMultipleChoiceItem } from '../../fixtures/formItems';

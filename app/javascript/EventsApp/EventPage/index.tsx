@@ -17,7 +17,7 @@ import { LoaderFunction, useLoaderData, RouterContextProvider } from 'react-rout
 import buildEventUrl from '../buildEventUrl';
 import { apolloClientContext } from '../../AppContexts';
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ params: { eventId }, context }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ params: { eventId }, context }) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query<EventPageQueryData, EventPageQueryVariables>({
     query: EventPageQueryDocument,

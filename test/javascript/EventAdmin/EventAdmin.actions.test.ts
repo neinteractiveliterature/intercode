@@ -2,13 +2,13 @@ import { MockLink } from '@apollo/client/testing';
 import { vi } from 'vitest';
 
 import runAction from '../runAction';
-import { action as createAction } from '../../../app/javascript/EventAdmin/create';
-import { action as updateAction } from '../../../app/javascript/EventAdmin/$id';
-import { action as dropAction } from '../../../app/javascript/EventAdmin/drop';
-import { action as restoreAction } from '../../../app/javascript/EventAdmin/RestoreEventRoute';
-import { action as deleteRunAction } from '../../../app/javascript/EventAdmin/SingleRunRoute';
-import { action as createMultipleRunsAction } from '../../../app/javascript/EventAdmin/CreateMultipleRunsRoute';
-import { action as adminNotesAction } from '../../../app/javascript/EventAdmin/AdminNotesRoute';
+import { clientAction as createAction } from '../../../app/javascript/EventAdmin/create';
+import { clientAction as updateAction } from '../../../app/javascript/EventAdmin/$id';
+import { clientAction as dropAction } from '../../../app/javascript/EventAdmin/drop';
+import { clientAction as restoreAction } from '../../../app/javascript/EventAdmin/RestoreEventRoute';
+import { clientAction as deleteRunAction } from '../../../app/javascript/EventAdmin/SingleRunRoute';
+import { clientAction as createMultipleRunsAction } from '../../../app/javascript/EventAdmin/CreateMultipleRunsRoute';
+import { clientAction as adminNotesAction } from '../../../app/javascript/EventAdmin/AdminNotesRoute';
 import {
   CreateEventDocument,
   CreateFillerEventDocument,

@@ -1,7 +1,7 @@
 import { renderRoute, userEvent, waitFor, within } from '../testUtils';
 import {
   Component as CategorySpecificEventAdmin,
-  loader as categoryLoader,
+  clientLoader as categoryLoader,
 } from '../../../app/javascript/EventAdmin/CategorySpecificEventAdmin';
 import { EventAdminEventsQueryDocument } from '../../../app/javascript/EventAdmin/queries.generated';
 import { SchedulingUi } from '../../../app/javascript/graphqlTypes.generated';

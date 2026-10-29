@@ -5,15 +5,15 @@ import { vi } from 'vitest';
 import { renderRoute, userEvent, waitFor, within } from '../testUtils';
 import {
   Component as EditRun,
-  action as editRunAction,
-  loader as editRunLoader,
+  clientAction as editRunAction,
+  clientLoader as editRunLoader,
 } from '../../../app/javascript/EventAdmin/EditRun';
 import {
   Component as NewRun,
-  action as newRunAction,
-  loader as newRunLoader,
+  clientAction as newRunAction,
+  clientLoader as newRunLoader,
 } from '../../../app/javascript/EventAdmin/NewRun';
-import { action as deleteRunAction } from '../../../app/javascript/EventAdmin/SingleRunRoute';
+import { clientAction as deleteRunAction } from '../../../app/javascript/EventAdmin/SingleRunRoute';
 import { buildRunInputFromFormData } from '../../../app/javascript/EventAdmin/buildRunInputFromFormData';
 import {
   CreateRunDocument,

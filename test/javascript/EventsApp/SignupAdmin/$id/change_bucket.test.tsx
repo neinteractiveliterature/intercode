@@ -5,7 +5,7 @@ import { fireEvent } from '@testing-library/react';
 import { renderRoute, waitFor } from '../../../testUtils';
 import {
   Component as ChangeBucketModal,
-  action as changeBucketAction,
+  clientAction as changeBucketAction,
 } from '../../../../../app/javascript/EventsApp/SignupAdmin/$id/change_bucket';
 import { singleSignupLoader } from '../../../../../app/javascript/EventsApp/SignupAdmin/loaders';
 import {

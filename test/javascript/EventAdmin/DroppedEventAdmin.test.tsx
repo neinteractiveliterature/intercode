@@ -1,5 +1,8 @@
 import { renderRoute, userEvent, waitFor } from '../testUtils';
-import { Component as DroppedEventAdmin, loader } from '../../../app/javascript/EventAdmin/DroppedEventAdmin';
+import {
+  Component as DroppedEventAdmin,
+  clientLoader as loader,
+} from '../../../app/javascript/EventAdmin/DroppedEventAdmin';
 import { EventAdminEventsQueryDocument } from '../../../app/javascript/EventAdmin/queries.generated';
 import { SchedulingUi } from '../../../app/javascript/graphqlTypes.generated';
 import { buildAdminEvent, buildAdminEventCategory, buildEventAdminEventsData } from '../fixtures/eventAdmin';
