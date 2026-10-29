@@ -3,47 +3,85 @@ require "test_helper"
 require "open3"
 require "tmpdir"
 
-# Runs the upload scripts against a stand-in for the AWS CLI that answers from files and logs what it was asked to do
+# Runs the upload scripts against stand-ins for the AWS CLI and boto3 that answer from files and log what they were
+# asked to do
 describe "the assets bucket upload scripts" do
-  let(:stub_aws) { <<~'BASH' }
+  let(:stub_aws) { <<~BASH }
       #!/usr/bin/env bash
       echo "$*" >> "$AWS_STUB_LOG"
-      case "$1 $2" in
-        "s3 cp") ;;
-        "s3api list-objects-v2")
-          prefix=""
-          while [ $# -gt 0 ]; do [ "$1" = "--prefix" ] && prefix="$2"; shift; done
-          grep "^$prefix" "$AWS_STUB_BUCKET_KEYS" | tr '\n' '\t' ;;
-        "s3api get-object-tagging")
-          while [ $# -gt 0 ]; do [ "$1" = "--key" ] && key="$2"; shift; done
-          if grep -qxF "$key" "$AWS_STUB_TAGGED"; then echo 1; else echo 0; fi ;;
-        "s3api head-object") echo '{"CacheControl":"public, max-age=1","ContentType":"text/javascript"}' ;;
-        "s3api copy-object") ;;
-      esac
     BASH
+
+  let(:stub_boto3) { <<~'PYTHON' }
+      import os
+
+      def _log(line):
+          with open(os.environ["AWS_STUB_LOG"], "a") as f:
+              f.write(line + "\n")
+
+      def _lines(path):
+          with open(path) as f:
+              return [line for line in f.read().split("\n") if line]
+
+      class _Paginator:
+          def paginate(self, Bucket, Prefix):
+              _log(f"s3api list-objects-v2 --prefix {Prefix}")
+              keys = [k for k in _lines(os.environ["AWS_STUB_BUCKET_KEYS"]) if k.startswith(Prefix)]
+              return [{"Contents": [{"Key": k} for k in keys]}] if keys else [{}]
+
+      class _Client:
+          def get_paginator(self, name):
+              return _Paginator()
+
+          def get_object_tagging(self, Bucket, Key):
+              _log(f"s3api get-object-tagging --key {Key}")
+              tagged = Key in _lines(os.environ["AWS_STUB_TAGGED"])
+              return {"TagSet": [{"Key": "obsolete", "Value": "true"}] if tagged else []}
+
+          def head_object(self, Bucket, Key):
+              _log(f"s3api head-object --key {Key}")
+              return {"CacheControl": "public, max-age=1", "ContentType": "text/javascript"}
+
+          def copy_object(self, Bucket, Key, CopySource, MetadataDirective, TaggingDirective, Tagging, **metadata):
+              if Key == os.environ.get("AWS_STUB_FAIL_KEY"):
+                  raise RuntimeError(f"copy of {Key} failed")
+              assert CopySource == {"Bucket": Bucket, "Key": Key}
+              assert MetadataDirective == "REPLACE" and TaggingDirective == "REPLACE"
+              _log(
+                  f"s3api copy-object --key {Key} --cache-control {metadata.get('CacheControl')} "
+                  f"--content-type {metadata.get('ContentType')} --tagging {Tagging}"
+              )
+
+      def client(service):
+          assert service == "s3"
+          return _Client()
+    PYTHON
 
   def stub_env(dir, bucket_keys, tagged)
     FileUtils.mkdir_p(File.join(dir, "bin"))
+    FileUtils.mkdir_p(File.join(dir, "pylib"))
     aws = File.join(dir, "bin/aws")
     File.write(aws, stub_aws)
     FileUtils.chmod(0o755, aws)
+    File.write(File.join(dir, "pylib/boto3.py"), stub_boto3)
     File.write(File.join(dir, "bucket_keys"), bucket_keys.join("\n"))
     File.write(File.join(dir, "tagged"), tagged.join("\n"))
     {
       "PATH" => "#{File.join(dir, "bin")}:#{ENV.fetch("PATH")}",
+      "PYTHONPATH" => File.join(dir, "pylib"),
       "AWS_STUB_LOG" => File.join(dir, "log"),
       "AWS_STUB_BUCKET_KEYS" => File.join(dir, "bucket_keys"),
       "AWS_STUB_TAGGED" => File.join(dir, "tagged")
     }
   end
 
-  def run_script(script, *args, bucket_keys:, tagged: [])
+  def run_script(script, *args, bucket_keys:, tagged: [], fail_key: nil)
     Dir.mktmpdir do |dir|
-      env = stub_env(dir, bucket_keys, tagged)
+      full_env = stub_env(dir, bucket_keys, tagged)
+      full_env["AWS_STUB_FAIL_KEY"] = fail_key if fail_key
       resolved_args = args.map { |arg| arg.respond_to?(:call) ? arg.call(dir) : arg }
-      _out, err, status = Open3.capture3(env, Rails.root.join(script).to_s, *resolved_args)
-      assert status.success?, err
-      File.exist?(env["AWS_STUB_LOG"]) ? File.readlines(env["AWS_STUB_LOG"], chomp: true) : []
+      _out, err, status = Open3.capture3(full_env, Rails.root.join(script).to_s, *resolved_args)
+      assert_equal fail_key.nil?, status.success?, err
+      File.exist?(full_env["AWS_STUB_LOG"]) ? File.readlines(full_env["AWS_STUB_LOG"], chomp: true) : []
     end
   end
 
@@ -81,7 +119,9 @@ describe "the assets bucket upload scripts" do
 
       assert_equal 1, copies.size
       assert_includes copies.first, "--key assets/old-OLD.js"
+      assert_includes copies.first, "--cache-control public, max-age=1 --content-type text/javascript"
       assert_includes copies.first, "--tagging obsolete=true"
+      assert(calls.none? { |call| call.include?("--key assets/older-TAGGED.js") && call.start_with?("s3api copy") })
       assert(calls.none? { |call| call.include?("packs/untouched.js") || call.include?("--key index.html") })
     end
 
@@ -139,6 +179,21 @@ describe "the assets bucket upload scripts" do
 
       assert_equal 1, copies.size
       assert_includes copies.first, "--key packs/gone-BBB.js"
+    end
+
+    it "fails when marking a file fails" do
+      run_script(
+        "script/uploadReleaseAssets.sh",
+        "the-bucket",
+        lambda do |dir|
+          packs = File.join(dir, "packs")
+          FileUtils.mkdir_p(packs)
+          File.write(File.join(packs, "current-AAA.js"), "x")
+          packs
+        end,
+        bucket_keys: %w[packs/current-AAA.js packs/gone-BBB.js],
+        fail_key: "packs/gone-BBB.js"
+      )
     end
 
     describe "in phases" do

@@ -40,5 +40,5 @@ if [ "$phase" != hashed ]; then
   aws s3 cp "$build_dir/index.html" "s3://$bucket/index.html" \
     --cache-control "public, max-age=$index_max_age" --content-type "text/html"
 
-  (cd "$build_dir" && find assets -type f) | "$(dirname "$0")/markObsoleteAssets.sh" "$bucket" assets/
+  (cd "$build_dir" && find assets -type f) | "$(dirname "$0")/mark_obsolete_assets.py" "$bucket" assets/
 fi

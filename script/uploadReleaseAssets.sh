@@ -39,5 +39,5 @@ if [ "$phase" != hashed ]; then
     aws s3 cp "$packs_dir/$(basename "$file")" "s3://$bucket$file" --cache-control "no-cache"
   done
 
-  (cd "$packs_dir" && find . -type f | sed 's#^\./#packs/#') | "$(dirname "$0")/markObsoleteAssets.sh" "$bucket" packs/
+  (cd "$packs_dir" && find . -type f | sed 's#^\./#packs/#') | "$(dirname "$0")/mark_obsolete_assets.py" "$bucket" packs/
 fi

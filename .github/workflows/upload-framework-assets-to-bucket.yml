@@ -77,6 +77,8 @@ jobs:
         # The build is made against a placeholder asset host. The bucket is served from the app's own domain, so the
         # URLs become plain /assets/... paths.
         run: script/substituteAssetsHost.sh build ""
+      - name: Install boto3 (used to mark obsolete files)
+        run: python3 -m pip install --user 'boto3>=1.35,<2'
       - uses: aws-actions/configure-aws-credentials@v6
         with:
           role-to-assume: ${{ vars.FRAMEWORK_SHELL_UPLOAD_ROLE_ARN }}
