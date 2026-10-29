@@ -23,12 +23,16 @@ class ApplicationSystemTestCase < ActionDispatch::SystemTestCase
       warn "Page title: #{page.title}"
       body_snippet = page.html.to_s.gsub(/\s+/, " ").slice(0, 500)
       warn "Page body (first 500 chars): #{body_snippet}"
-      messages = page.driver.console_messages
-      if messages.any?
-        warn "\nBrowser console output:"
-        messages.each { |m| warn "  [#{m[:type]}] #{m[:text]}" }
-      else
-        warn "No browser console messages captured."
+      # Only some drivers can report the console (Cuprite can't), and this must not raise: it runs before
+      # DatabaseCleaner, so an error here leaves the failed test's records behind to break the tests after it
+      if page.driver.respond_to?(:console_messages)
+        messages = page.driver.console_messages
+        if messages.any?
+          warn "\nBrowser console output:"
+          messages.each { |m| warn "  [#{m[:type]}] #{m[:text]}" }
+        else
+          warn "No browser console messages captured."
+        end
       end
     end
     DatabaseCleaner.clean
