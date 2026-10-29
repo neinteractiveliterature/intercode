@@ -1,4 +1,4 @@
-import { LoaderFunction, LoaderFunctionArgs, RouterContextProvider } from 'react-router';
+import { LoaderFunctionArgs, RouterContextProvider } from 'react-router';
 import { appRootDataContext } from 'AppContexts';
 import { AbilityName } from './Authentication/useAuthorizationRequired';
 import { AppRootQueryData } from './appRootQueries.generated';
@@ -12,6 +12,8 @@ import { AppRootQueryData } from './appRootQueries.generated';
 // prompt or the not-authorized page. An error from a loader goes to the nearest ErrorBoundary above the route.
 
 export type RouteGuard = (args: LoaderFunctionArgs<RouterContextProvider>) => void;
+
+type LoaderWithGuardArgs<Result> = (args: LoaderFunctionArgs<RouterContextProvider>) => Result | Promise<Result>;
 
 export function makeAppRootContextGuard(guard: (data: AppRootQueryData) => boolean): RouteGuard {
   return ({ context }) => {
@@ -45,12 +47,12 @@ export function makeAuthorizationGuard(...abilities: AbilityName[]): RouteGuard 
 
 // A loader that runs the guards, then the route's own loader if it has one, so that loader doesn't start when a guard
 // fails. A route's children's loaders are not held back (React Router runs them alongside this one).
-export function guarded(
+export function guarded<Result = null>(
   guards: RouteGuard[],
-  loader?: LoaderFunction<RouterContextProvider>,
-): LoaderFunction<RouterContextProvider> {
-  return (args, handlerCtx) => {
+  loader?: LoaderWithGuardArgs<Result>,
+): LoaderWithGuardArgs<Result | null> {
+  return (args) => {
     guards.forEach((guard) => guard(args));
-    return loader ? loader(args, handlerCtx) : null;
+    return loader ? loader(args) : null;
   };
 }
