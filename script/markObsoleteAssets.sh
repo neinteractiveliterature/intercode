@@ -18,8 +18,8 @@ bucket_keys="$(aws s3api list-objects-v2 --bucket "$bucket" --prefix "$prefix" -
 # Copying an object onto itself with a new tag resets its age, so the lifecycle rule's days count from now. S3 only
 # allows a copy onto itself if it changes the metadata, so replace the metadata with the same Cache-Control and
 # Content-Type. Skip files that are already tagged, or their countdown would restart on every release.
-comm -13 <(echo "$current_keys") <(echo "$bucket_keys") | while read -r key; do
-  [ -n "$key" ] || continue
+mark_obsolete() {
+  key="$1"
   tagged="$(aws s3api get-object-tagging --bucket "$bucket" --key "$key" \
     --query "TagSet[?Key=='obsolete'] | length(@)" --output text)"
   if [ "$tagged" = "0" ]; then
@@ -31,4 +31,11 @@ comm -13 <(echo "$current_keys") <(echo "$bucket_keys") | while read -r key; do
       --metadata-directive REPLACE --cache-control "$cache_control" --content-type "$content_type" \
       --tagging-directive REPLACE --tagging "obsolete=true" > /dev/null
   fi
-done
+}
+export -f mark_obsolete
+export bucket
+
+# Each file takes three aws CLI calls, and a release that renames most of its chunks leaves hundreds of files to mark,
+# so run several at once. xargs exits non-zero if any of them failed.
+comm -13 <(echo "$current_keys") <(echo "$bucket_keys") | { grep -v '^$' || true; } |
+  xargs -P "${MARK_OBSOLETE_PARALLELISM:-8}" -I{} bash -c 'set -euo pipefail; mark_obsolete "$1"' _ {}
