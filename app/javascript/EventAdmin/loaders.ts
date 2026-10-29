@@ -1,23 +1,24 @@
-import { LoaderFunction, redirect, RouterContextProvider, useRouteLoaderData } from 'react-router';
+import { LoaderFunctionArgs, redirect } from 'react-router';
 import { apolloClientContext } from 'AppContexts';
-import { EventAdminEventsQueryData, EventAdminEventsQueryDocument } from './queries.generated';
+import { EventAdminEventsQueryDocument } from './queries.generated';
 import { NamedRoute } from '../NamedRoute';
+import useRequiredRouteLoaderData from '../useRequiredRouteLoaderData';
 import { SiteMode } from '../graphqlTypes.generated';
 import buildEventCategoryUrl from './buildEventCategoryUrl';
 
-export const eventAdminEventsLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const eventAdminEventsLoader = async ({ context }: LoaderFunctionArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<EventAdminEventsQueryData>({ query: EventAdminEventsQueryDocument });
+  const { data } = await client.query({ query: EventAdminEventsQueryDocument, errorPolicy: 'none' });
   return data;
 };
 
 export function useEventAdminEventsLoader() {
-  return useRouteLoaderData(NamedRoute.EventAdmin) as EventAdminEventsQueryData;
+  return useRequiredRouteLoaderData<typeof eventAdminEventsLoader>(NamedRoute.EventAdmin);
 }
 
-export const eventAdminRootRedirect: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const eventAdminRootRedirect = async ({ context }: LoaderFunctionArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query({ query: EventAdminEventsQueryDocument });
+  const { data } = await client.query({ query: EventAdminEventsQueryDocument, errorPolicy: 'none' });
   const convention = data?.convention;
   if (!convention) {
     return new Response(null, { status: 404 });

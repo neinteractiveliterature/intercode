@@ -1,19 +1,20 @@
 import { useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import usePageTitle from '../usePageTitle';
-import { EventAdminEventsQueryData, EventAdminEventsQueryDocument } from './queries.generated';
-import { LoaderFunction, RouterContextProvider, useLoaderData } from 'react-router';
+import { EventAdminEventsQueryDocument } from './queries.generated';
+import { useLoaderData } from 'react-router';
 import { apolloClientContext } from 'AppContexts';
 import { useSubmit } from 'react-router';
+import type { Route } from './+types/DroppedEventAdmin';
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query({ query: EventAdminEventsQueryDocument });
+  const { data } = await client.query({ query: EventAdminEventsQueryDocument, errorPolicy: 'none' });
   return data;
 };
 
 function DroppedEventAdmin(): React.JSX.Element {
-  const data = useLoaderData() as EventAdminEventsQueryData;
+  const data = useLoaderData<typeof clientLoader>();
   const confirm = useConfirm();
   const submit = useSubmit();
 

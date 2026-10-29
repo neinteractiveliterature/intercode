@@ -1,25 +1,18 @@
 import { useState } from 'react';
-import {
-  useActionData,
-  useNavigate,
-  LoaderFunction,
-  useLoaderData,
-  ActionFunction,
-  redirect,
-  RouterContextProvider,
-} from 'react-router';
+import { useActionData, useNavigate, useLoaderData, redirect } from 'react-router';
 
 import EditRunModal, { EditingRun } from './EditRunModal';
-import { EventAdminEventsQueryData, EventAdminEventsQueryDocument } from './queries.generated';
+import { EventAdminEventsQueryDocument } from './queries.generated';
 import { apolloClientContext } from 'AppContexts';
 import { UpdateRunDocument } from './mutations.generated';
 import { buildRunInputFromFormData } from './buildRunInputFromFormData';
+import type { Route } from './+types/EditRun';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({
+export const clientAction = async ({
   params: { eventCategoryId, runId },
   request,
   context,
-}) => {
+}: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     const formData = await request.formData();
@@ -38,22 +31,16 @@ export const clientAction: ActionFunction<RouterContextProvider> = async ({
   }
 };
 
-type LoaderResult = {
-  initialRun: EditingRun;
-  event: EventAdminEventsQueryData['convention']['events'][number];
-  convention: EventAdminEventsQueryData['convention'];
-};
-
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ params: { eventId, runId }, context }) => {
+export const clientLoader = async ({ params: { eventId, runId }, context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<EventAdminEventsQueryData>({ query: EventAdminEventsQueryDocument });
+  const { data } = await client.query({ query: EventAdminEventsQueryDocument, errorPolicy: 'none' });
   const convention = data?.convention;
   const events = convention?.events;
   const event = events?.find((e) => e.id.toString() === eventId);
   const initialRun = event?.runs.find((r) => r.id === runId) as EditingRun;
 
   if (convention && event && initialRun) {
-    return { event, initialRun, convention } satisfies LoaderResult;
+    return { event, initialRun, convention };
   } else {
     return new Response(null, { status: 404 });
   }
@@ -61,14 +48,14 @@ export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ para
 
 function EditRun(): React.JSX.Element {
   const navigate = useNavigate();
-  const { event, initialRun, convention } = useLoaderData() as LoaderResult;
+  const { event, initialRun, convention } = useLoaderData<typeof clientLoader>();
 
   const cancelEditing = () => {
     navigate('../../../..', { replace: true });
   };
 
   const [run, setRun] = useState(initialRun);
-  const actionData = useActionData();
+  const actionData = useActionData<typeof clientAction>();
 
   return (
     <EditRunModal

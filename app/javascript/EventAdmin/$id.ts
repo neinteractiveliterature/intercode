@@ -2,8 +2,9 @@ import { buildEventInput, buildRunInput } from './InputBuilders';
 import { EventCategory, SchedulingUi } from '../graphqlTypes.generated';
 import { apolloClientContext } from 'AppContexts';
 import { CreateOrUpdateRunForEventDocument, UpdateEventDocument } from './mutations.generated';
-import { ActionFunction, redirect, RouterContextProvider } from 'react-router';
+import { redirect } from 'react-router';
 import { ApolloClient } from '@apollo/client';
+import type { Route } from './+types/$id';
 
 export type UpdateRegularEventOptions = {
   event: Parameters<typeof buildEventInput>[0] & { id: string };
@@ -75,7 +76,7 @@ export async function updateEvent({ event, eventCategory, run, client }: UpdateE
   return await updateRegularEvent({ event, client });
 }
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
+export const clientAction = async ({ context, request }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     const options = (await request.json()) as UpdateEventOptions;
