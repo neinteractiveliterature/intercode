@@ -2,7 +2,7 @@ import { ActionFunction, redirect, RouterContextProvider } from 'react-router';
 import { apolloClientContext } from '../../AppContexts';
 import { DeleteContentGroupDocument } from './mutations.generated';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ request, params: { id }, context }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ request, params: { id }, context }) => {
   const client = context.get(apolloClientContext);
   if (request.method === 'DELETE') {
     await client.mutate({
