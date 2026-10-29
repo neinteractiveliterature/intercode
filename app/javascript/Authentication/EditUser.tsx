@@ -3,17 +3,18 @@ import * as React from 'react';
 import { useTranslation } from 'react-i18next';
 import { BootstrapFormInput, LoadingIndicator, ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import { LoaderFunction, RouterContextProvider, Navigate, useLoaderData } from 'react-router';
+import { Navigate, useLoaderData } from 'react-router';
 import PasswordConfirmationInput from './PasswordConfirmationInput';
 import useAsyncFunction, { UserFacingError } from '../useAsyncFunction';
 import AccountFormContent from './AccountFormContent';
 import UserFormFields, { UserFormState } from './UserFormFields';
 import usePageTitle from '../usePageTitle';
-import { EditUserQueryData, EditUserQueryDocument } from './queries.generated';
+import { EditUserQueryDocument } from './queries.generated';
 import humanize from '../humanize';
 import { AuthenticityTokensContext } from '../AuthenticityTokensContext';
 import { apolloClientContext } from 'AppContexts';
 import PasswordInputWithStrengthCheck from './PasswordInputWithStrengthCheck';
+import type { Route } from './+types/EditUser';
 
 async function updateUser(
   authenticityToken: string,
@@ -58,14 +59,14 @@ async function updateUser(
   }
 }
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<EditUserQueryData>({ query: EditUserQueryDocument });
+  const { data } = await client.query({ query: EditUserQueryDocument, errorPolicy: 'none' });
   return data;
 };
 
 function EditUserForm() {
-  const { currentUser: initialFormState } = useLoaderData() as EditUserQueryData;
+  const { currentUser: initialFormState } = useLoaderData<typeof clientLoader>();
   const { t } = useTranslation();
   const manager = useContext(AuthenticityTokensContext);
   const authenticityToken = manager.tokens?.updateUser;

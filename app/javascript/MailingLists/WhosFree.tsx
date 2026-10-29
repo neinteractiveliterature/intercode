@@ -3,16 +3,12 @@ import Timespan, { FiniteTimespan } from '../Timespan';
 import WhosFreeForm from './WhosFreeForm';
 import usePageTitle from '../usePageTitle';
 import { WhosFreeQueryData, WhosFreeQueryDocument } from './queries.generated';
-import { LoaderFunction, RouterContextProvider, useLoaderData } from 'react-router';
+import { useLoaderData } from 'react-router';
 import { apolloClientContext } from 'AppContexts';
 import { useSearchParams } from 'react-router';
+import type { Route } from './+types/WhosFree';
 
-type LoaderResult = {
-  timespan?: FiniteTimespan;
-  data?: WhosFreeQueryData;
-};
-
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context, request }) => {
+export const clientLoader = async ({ context, request }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
   const url = new URL(request.url);
   const start = url.searchParams.get('start');
@@ -23,17 +19,18 @@ export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ cont
     try {
       timespan = Timespan.finiteFromStrings(start, finish);
     } catch {
-      return {} satisfies LoaderResult;
+      return {};
     }
 
     const { data } = await client.query({
       query: WhosFreeQueryDocument,
       variables: { start: timespan.start.toISO() ?? '', finish: timespan.finish.toISO() ?? '' },
+      errorPolicy: 'none',
     });
-    return { timespan, data } satisfies LoaderResult;
+    return { timespan, data };
   }
 
-  return {} satisfies LoaderResult;
+  return {};
 };
 
 function WhosFreeResults({ data }: { data: WhosFreeQueryData }) {
@@ -47,7 +44,7 @@ function WhosFreeResults({ data }: { data: WhosFreeQueryData }) {
 }
 
 function WhosFree(): React.JSX.Element {
-  const { data } = useLoaderData() as LoaderResult;
+  const { data } = useLoaderData<typeof clientLoader>();
   const [, setSearchParams] = useSearchParams();
 
   usePageTitle('Who’s free');

@@ -1,39 +1,21 @@
-import { LoaderFunction, RouterContextProvider, useRouteLoaderData } from 'react-router';
+import { LoaderFunctionArgs } from 'react-router';
 import keyBy from 'lodash/keyBy';
 
 import {
   LiquidAssignsQueryData,
   LiquidAssignsQueryDocument,
-  LiquidAssignsQueryVariables,
   NotifierLiquidAssignsQueryData,
   NotifierLiquidAssignsQueryDocument,
-  NotifierLiquidAssignsQueryVariables,
 } from './queries.generated';
 import { apolloClientContext } from 'AppContexts';
-import { loadDocData, YardClass, YardDocs, YardMethod } from './DocData';
+import { loadDocData, YardDocs } from './DocData';
 import { NamedRoute } from '../NamedRoute';
+import useRequiredRouteLoaderData from '../useRequiredRouteLoaderData';
 import findLiquidTagName from './findLiquidTagName';
 import { NotificationEventKey } from 'graphqlTypes.generated';
 
-export type LiquidDocsLoaderResultCommonFields = {
-  assigns: Record<string, LiquidAssignsQueryData['cmsParent']['liquidAssigns'][number]>;
-  docData: YardDocs;
-  filters: Record<string, YardMethod>;
-  sortedAssigns: LiquidAssignsQueryData['cmsParent']['liquidAssigns'];
-  sortedFilters: YardMethod[];
-  sortedTags: YardClass[];
-  tags: Record<string, YardClass>;
-};
-
-export type NotifierLiquidDocsLoaderResult = LiquidDocsLoaderResultCommonFields & {
-  notifierEventKey: string;
-};
-
-export type GlobalLiquidDocsLoaderResult = LiquidDocsLoaderResultCommonFields & {
-  notifierEventKey: null;
-};
-
-export type LiquidDocsLoaderResult = GlobalLiquidDocsLoaderResult | NotifierLiquidDocsLoaderResult;
+// What the loader returns, for the components that take a piece of it as a prop
+export type LiquidDocsLoaderResult = Awaited<ReturnType<typeof liquidDocsLoader>>;
 
 function sortByName<T extends { name: string }>(items: T[]) {
   return [...items].sort((a, b) => a.name.localeCompare(b.name, undefined, { sensitivity: 'base' }));
@@ -42,7 +24,7 @@ function sortByName<T extends { name: string }>(items: T[]) {
 function extractCommonFields(
   data: LiquidAssignsQueryData | NotifierLiquidAssignsQueryData | null | undefined,
   docData: YardDocs,
-): LiquidDocsLoaderResultCommonFields {
+) {
   const sortedAssigns = sortByName(data?.cmsParent.liquidAssigns ?? []);
   const sortedFilters = sortByName(docData.filter_methods);
   const sortedTags = sortByName(docData.classes.filter((klass) => findLiquidTagName(klass) != null));
@@ -53,30 +35,32 @@ function extractCommonFields(
   return { assigns, filters, tags, sortedAssigns, sortedFilters, sortedTags, docData };
 }
 
-export const liquidDocsLoader: LoaderFunction<RouterContextProvider> = async ({ context, request }) => {
+export const liquidDocsLoader = async ({ context, request }: LoaderFunctionArgs) => {
   const client = context.get(apolloClientContext);
   const notifierEventKey = new URL(request.url).searchParams.get('notifier_event_key');
 
   if (notifierEventKey == null) {
     const [{ data }, docData] = await Promise.all([
-      client.query<LiquidAssignsQueryData, LiquidAssignsQueryVariables>({
+      client.query({
         query: LiquidAssignsQueryDocument,
+        errorPolicy: 'none',
       }),
       loadDocData(),
     ]);
-    return { notifierEventKey, ...extractCommonFields(data, docData) } satisfies LiquidDocsLoaderResult;
+    return { notifierEventKey, ...extractCommonFields(data, docData) };
   } else {
     const [{ data }, docData] = await Promise.all([
-      client.query<NotifierLiquidAssignsQueryData, NotifierLiquidAssignsQueryVariables>({
+      client.query({
         query: NotifierLiquidAssignsQueryDocument,
         variables: { eventKey: notifierEventKey as NotificationEventKey },
+        errorPolicy: 'none',
       }),
       loadDocData(),
     ]);
-    return { notifierEventKey, ...extractCommonFields(data, docData) } satisfies LiquidDocsLoaderResult;
+    return { notifierEventKey, ...extractCommonFields(data, docData) };
   }
 };
 
 export function useLiquidDocs() {
-  return useRouteLoaderData(NamedRoute.LiquidDocs) as LiquidDocsLoaderResult;
+  return useRequiredRouteLoaderData<typeof liquidDocsLoader>(NamedRoute.LiquidDocs);
 }

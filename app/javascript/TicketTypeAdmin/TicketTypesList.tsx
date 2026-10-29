@@ -15,7 +15,7 @@ import NewTicketProvidingProductModal from './NewTicketProvidingProductModal';
 import EditTicketProvidingProductModal, {
   EditTicketProvidingProductModalProps,
 } from './EditTicketProvidingProductModal';
-import { TicketTypeLoaderResult } from './loaders';
+import type { TicketTypesLoader } from './loaders';
 import { AdminPricingStructureDescription } from 'Store/describePricingStructure';
 
 type TicketTypeType = AdminTicketTypesQueryData['convention']['ticket_types'][0];
@@ -220,7 +220,7 @@ function TicketTypeDisplay({
 }
 
 function TicketTypesList() {
-  const { parent, ticketTypes } = useLoaderData() as TicketTypeLoaderResult;
+  const { parent, ticketTypes } = useLoaderData<TicketTypesLoader>();
   const { t } = useTranslation();
   const { ticketName } = useContext(AppRootContext);
   const event = parent.__typename === 'Event' ? parent : undefined;

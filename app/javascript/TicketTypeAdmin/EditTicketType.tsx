@@ -1,5 +1,5 @@
 import { useState, useContext } from 'react';
-import { ActionFunction, redirect, useFetcher, useLoaderData, RouterContextProvider } from 'react-router';
+import { ActionFunctionArgs, redirect, useFetcher, useLoaderData } from 'react-router';
 
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -7,13 +7,15 @@ import buildTicketTypeInput from './buildTicketTypeInput';
 import TicketTypeForm, { EditingTicketType } from './TicketTypeForm';
 import usePageTitle from '../usePageTitle';
 import AppRootContext from '../AppRootContext';
-import { SingleTicketTypeLoaderResult } from './loaders';
+import type { SingleTicketTypeLoader } from './loaders';
 import { TicketTypeInput } from 'graphqlTypes.generated';
 import { apolloClientContext } from 'AppContexts';
 import { UpdateTicketTypeDocument } from './mutations.generated';
 import invariant from 'tiny-invariant';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {
+// This module is mounted by wrapper routes (see script/genRoutes.mts), and typegen makes types for those, not for the
+// module, so it takes the plain args until the cutover removes the wrappers
+export const clientAction = async ({ context, request, params: { id } }: ActionFunctionArgs) => {
   const client = context.get(apolloClientContext);
   invariant(id != null);
   try {
@@ -32,7 +34,7 @@ export const clientAction: ActionFunction<RouterContextProvider> = async ({ cont
 };
 
 function EditTicketTypeForm() {
-  const initialTicketType = useLoaderData() as SingleTicketTypeLoaderResult;
+  const initialTicketType = useLoaderData<SingleTicketTypeLoader>();
   const { ticketName } = useContext(AppRootContext);
   usePageTitle(`Editing “${initialTicketType.name}”`);
   const [ticketType, setTicketType] = useState<EditingTicketType>(initialTicketType);

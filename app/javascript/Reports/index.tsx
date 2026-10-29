@@ -1,20 +1,21 @@
-import { Link, LoaderFunction, useLoaderData, RouterContextProvider } from 'react-router';
+import { Link, useLoaderData } from 'react-router';
 
 import PrintableReportLink from './PrintableReportLink';
 import usePageTitle from '../usePageTitle';
-import { ReportsMenuQueryData, ReportsMenuQueryDocument } from './queries.generated';
+import { ReportsMenuQueryDocument } from './queries.generated';
 import { apolloClientContext } from 'AppContexts';
 import { useTranslation } from 'react-i18next';
+import type { Route } from './+types/index';
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<ReportsMenuQueryData>({ query: ReportsMenuQueryDocument });
+  const { data } = await client.query({ query: ReportsMenuQueryDocument, errorPolicy: 'none' });
   return data;
 };
 
 function ReportsMenu() {
   const { t } = useTranslation();
-  const data = useLoaderData() as ReportsMenuQueryData;
+  const data = useLoaderData<typeof clientLoader>();
   usePageTitle(t('navigation.admin.reports'));
 
   return (

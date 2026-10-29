@@ -1,6 +1,6 @@
 import { useState, useContext, Suspense, useId } from 'react';
 import * as React from 'react';
-import { Link, LoaderFunction, useLoaderData } from 'react-router';
+import { Link, useLoaderData } from 'react-router';
 import { Turnstile } from '@marsidev/react-turnstile';
 import arrayToSentence from 'array-to-sentence';
 import { useTranslation } from 'react-i18next';
@@ -17,12 +17,13 @@ import PasswordInputWithStrengthCheck from './PasswordInputWithStrengthCheck';
 import { useSignInContext } from './useSignInContext';
 import usePageTitle from '../usePageTitle';
 import { clientConfigurationContext } from '../AppContexts';
+import type { Route } from './+types/DeviseSignUpPage';
 
 type DeviseSignUpPageLoaderData = {
   turnstileSiteKey: string | null;
 };
 
-export const clientLoader: LoaderFunction = ({ context }) => {
+export const clientLoader = ({ context }: Route.ClientLoaderArgs) => {
   const clientConfiguration = context.get(clientConfigurationContext);
   return {
     turnstileSiteKey: clientConfiguration.turnstile_site_key,
@@ -72,7 +73,7 @@ async function signUp(
 
 function DeviseSignUpPage(): React.JSX.Element {
   const { t } = useTranslation();
-  const { turnstileSiteKey } = useLoaderData() as DeviseSignUpPageLoaderData;
+  const { turnstileSiteKey } = useLoaderData<typeof clientLoader>();
   const manager = useContext(AuthenticityTokensContext);
   const { conventionName, oauthAppName } = useSignInContext();
   const [formState, setFormState] = useState<UserFormState>({});

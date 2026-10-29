@@ -1,4 +1,4 @@
-import { Links, Meta, Scripts, ScrollRestoration } from 'react-router';
+import { LoaderFunctionArgs, Links, Meta, Scripts, ScrollRestoration } from 'react-router';
 import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
 import { ReactNode } from 'react';
 import Root, { loader } from './AppRootProviders';
@@ -25,7 +25,7 @@ export function Layout({ children }: { children: ReactNode }) {
 }
 
 // The same bootstrap data the data-mode root route uses; entry.client.tsx puts it in the router context
-export const clientLoader = loader;
+export const clientLoader = (args: LoaderFunctionArgs) => loader(args);
 clientLoader.hydrate = true as const;
 
 export function HydrateFallback() {

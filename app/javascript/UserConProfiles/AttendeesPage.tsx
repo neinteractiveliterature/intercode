@@ -1,19 +1,20 @@
 import { useTranslation } from 'react-i18next';
 import usePageTitle from '../usePageTitle';
 import UserConProfilesTable from './UserConProfilesTable';
-import { LoaderFunction, Outlet, useLoaderData, RouterContextProvider } from 'react-router';
-import { AttendeesPageQueryData, AttendeesPageQueryDocument } from './queries.generated';
+import { Outlet, useLoaderData } from 'react-router';
+import { AttendeesPageQueryDocument } from './queries.generated';
 import { apolloClientContext } from 'AppContexts';
+import type { Route } from './+types/AttendeesPage';
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query({ query: AttendeesPageQueryDocument });
+  const { data } = await client.query({ query: AttendeesPageQueryDocument, errorPolicy: 'none' });
   return data;
 };
 
 function AttendeesPage() {
   const { t } = useTranslation();
-  const data = useLoaderData() as AttendeesPageQueryData;
+  const data = useLoaderData<typeof clientLoader>();
   usePageTitle(t('navigation.admin.attendees'));
 
   return (

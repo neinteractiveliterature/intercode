@@ -1,16 +1,13 @@
 import { useMemo, useContext, useEffect } from 'react';
-import { LoaderFunction, useLoaderData, RouterContextProvider } from 'react-router';
+import { useLoaderData } from 'react-router';
 
 import { AuthenticityTokensContext } from '../AuthenticityTokensContext';
 import PermissionsPrompt from './PermissionsPrompt';
 import { AuthenticationManagerContext } from '../Authentication/authenticationManager';
 import usePageTitle from '../usePageTitle';
-import {
-  OAuthAuthorizationPromptQueryData,
-  OAuthAuthorizationPromptQueryDocument,
-  OAuthAuthorizationPromptQueryVariables,
-} from './queries.generated';
+import { OAuthAuthorizationPromptQueryDocument } from './queries.generated';
 import { apolloClientContext } from 'AppContexts';
+import type { Route } from './+types/AuthorizationPrompt';
 
 type AuthorizationParams = {
   client_id?: string;
@@ -28,23 +25,24 @@ type PreAuth = AuthorizationParams & {
   scope: string;
 };
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ request, context }) => {
+export const clientLoader = async ({ request, context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
   const url = new URL(request.url);
   const preAuthParamsJSON = JSON.stringify(
     [...url.searchParams].reduce((object, [field, value]) => ({ ...object, [field]: value }), {}),
   );
 
-  const { data } = await client.query<OAuthAuthorizationPromptQueryData, OAuthAuthorizationPromptQueryVariables>({
+  const { data } = await client.query({
     query: OAuthAuthorizationPromptQueryDocument,
     variables: { queryParams: preAuthParamsJSON },
+    errorPolicy: 'none',
   });
 
   return data;
 };
 
 function AuthorizationPrompt() {
-  const data = useLoaderData() as OAuthAuthorizationPromptQueryData;
+  const data = useLoaderData<typeof clientLoader>();
   const preAuth = useMemo(() => JSON.parse(data.oauthPreAuth) as PreAuth, [data]);
   const scopes = useMemo(() => preAuth.scope.split(' '), [preAuth]);
 

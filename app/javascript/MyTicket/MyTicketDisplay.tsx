@@ -1,22 +1,18 @@
 import { useContext } from 'react';
-import { LoaderFunction, RouterContextProvider, replace, useLoaderData } from 'react-router';
+import { replace, useLoaderData } from 'react-router';
 import { DateTime } from 'luxon';
 
 import formatMoney from '../formatMoney';
 import usePageTitle from '../usePageTitle';
 import AppRootContext from '../AppRootContext';
-import { MyTicketDisplayQueryData, MyTicketDisplayQueryDocument } from './queries.generated';
+import { MyTicketDisplayQueryDocument } from './queries.generated';
 import { useAppDateTimeFormat } from '../TimeUtils';
 import { apolloClientContext } from 'AppContexts';
+import type { Route } from './+types/MyTicketDisplay';
 
-type LoaderResult = {
-  convention: MyTicketDisplayQueryData['convention'];
-  ticket: NonNullable<NonNullable<MyTicketDisplayQueryData['convention']['my_profile']>['ticket']>;
-};
-
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<MyTicketDisplayQueryData>({ query: MyTicketDisplayQueryDocument });
+  const { data } = await client.query({ query: MyTicketDisplayQueryDocument, errorPolicy: 'none' });
   if (!data) {
     return new Response(null, { status: 404 });
   }
@@ -24,11 +20,11 @@ export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ cont
     return replace('new');
   }
 
-  return { convention: data.convention, ticket: data.convention.my_profile.ticket } satisfies LoaderResult;
+  return { convention: data.convention, ticket: data.convention.my_profile.ticket };
 };
 
 function MyTicketDisplay() {
-  const { convention, ticket } = useLoaderData() as LoaderResult;
+  const { convention, ticket } = useLoaderData<typeof clientLoader>();
   const format = useAppDateTimeFormat();
   const { timezoneName } = useContext(AppRootContext);
 

@@ -2,20 +2,22 @@ import { useGraphQLConfirm } from '@neinteractiveliterature/litform';
 
 import PermissionsPrompt from './PermissionsPrompt';
 import { OAuthAuthorizedApplicationsQueryData, OAuthAuthorizedApplicationsQueryDocument } from './queries.generated';
-import { LoaderFunction, RouterContextProvider, useLoaderData } from 'react-router';
+import { useLoaderData } from 'react-router';
 import { useFetcher } from 'react-router';
 import { apolloClientContext } from 'AppContexts';
+import type { Route } from './+types/AuthorizedApplications';
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<OAuthAuthorizedApplicationsQueryData>({
+  const { data } = await client.query({
     query: OAuthAuthorizedApplicationsQueryDocument,
+    errorPolicy: 'none',
   });
   return data;
 };
 
 function AuthorizedApplications() {
-  const data = useLoaderData() as OAuthAuthorizedApplicationsQueryData;
+  const data = useLoaderData<typeof clientLoader>();
   const confirm = useGraphQLConfirm();
   const fetcher = useFetcher();
 

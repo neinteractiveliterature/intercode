@@ -1,17 +1,18 @@
 import TabbedMailingList from './TabbedMailingList';
 import usePageTitle from '../usePageTitle';
-import { TicketedAttendeesQueryData, TicketedAttendeesQueryDocument } from './queries.generated';
-import { LoaderFunction, RouterContextProvider, useLoaderData } from 'react-router';
+import { TicketedAttendeesQueryDocument } from './queries.generated';
+import { useLoaderData } from 'react-router';
 import { apolloClientContext } from '../AppContexts';
+import type { Route } from './+types/TicketedAttendees';
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<TicketedAttendeesQueryData>({ query: TicketedAttendeesQueryDocument });
+  const { data } = await client.query({ query: TicketedAttendeesQueryDocument, errorPolicy: 'none' });
   return data;
 };
 
 function TicketedAttendees() {
-  const data = useLoaderData() as TicketedAttendeesQueryData;
+  const data = useLoaderData<typeof clientLoader>();
   usePageTitle(`All attendees with ${data.convention.ticket_name}`);
 
   return (

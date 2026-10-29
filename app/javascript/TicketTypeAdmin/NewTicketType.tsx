@@ -1,5 +1,5 @@
 import { useContext, useState } from 'react';
-import { ActionFunction, replace, useFetcher, useLoaderData, RouterContextProvider } from 'react-router';
+import { ActionFunctionArgs, replace, useFetcher, useLoaderData } from 'react-router';
 
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -8,7 +8,7 @@ import TicketTypeForm, { EditingTicketType } from './TicketTypeForm';
 import usePageTitle from '../usePageTitle';
 import { TicketTypeAdmin_TicketTypeFieldsFragmentDoc } from './queries.generated';
 import AppRootContext from '../AppRootContext';
-import { TicketTypeLoaderResult } from './loaders';
+import type { TicketTypesLoader } from './loaders';
 import { useTranslation } from 'react-i18next';
 import { Convention, TicketTypeInput } from 'graphqlTypes.generated';
 import { apolloClientContext } from 'AppContexts';
@@ -20,7 +20,9 @@ type ActionInput = {
   eventId: string | null;
 };
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
+// This module is mounted by wrapper routes (see script/genRoutes.mts), and typegen makes types for those, not for the
+// module, so it takes the plain args until the cutover removes the wrappers
+export const clientAction = async ({ context, request }: ActionFunctionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     const { ticketType, eventId, conventionId } = (await request.json()) as ActionInput;
@@ -59,7 +61,7 @@ export const clientAction: ActionFunction<RouterContextProvider> = async ({ cont
 
 function NewTicketType() {
   const { t } = useTranslation();
-  const { parent } = useLoaderData() as TicketTypeLoaderResult;
+  const { parent } = useLoaderData<TicketTypesLoader>();
   const { convention, ticketName } = useContext(AppRootContext);
   const fetcher = useFetcher();
   const error = fetcher.data instanceof Error ? fetcher.data : undefined;

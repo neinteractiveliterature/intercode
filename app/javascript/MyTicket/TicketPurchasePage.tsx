@@ -1,16 +1,17 @@
 import { useContext } from 'react';
 import { useTranslation } from 'react-i18next';
-import { LoaderFunction, RouterContextProvider, replace, useLoaderData, useNavigate } from 'react-router';
+import { replace, useLoaderData, useNavigate } from 'react-router';
 import AppRootContext from '../AppRootContext';
 import useLoginRequired from '../Authentication/useLoginRequired';
 import usePageTitle from '../usePageTitle';
-import { TicketPurchaseFormQueryData, TicketPurchaseFormQueryDocument } from './queries.generated';
+import { TicketPurchaseFormQueryDocument } from './queries.generated';
 import TicketPurchaseForm from './TicketPurchaseForm';
 import { apolloClientContext } from 'AppContexts';
+import type { Route } from './+types/TicketPurchasePage';
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<TicketPurchaseFormQueryData>({ query: TicketPurchaseFormQueryDocument });
+  const { data } = await client.query({ query: TicketPurchaseFormQueryDocument, errorPolicy: 'none' });
   if (!data) {
     return new Response(null, { status: 404 });
   }
@@ -21,7 +22,7 @@ export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ cont
 };
 
 function TicketPurchasePage() {
-  const data = useLoaderData() as TicketPurchaseFormQueryData;
+  const data = useLoaderData<typeof clientLoader>();
   const { ticketName, ticketNamePlural } = useContext(AppRootContext);
   const navigate = useNavigate();
   const { t } = useTranslation();

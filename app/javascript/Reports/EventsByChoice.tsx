@@ -9,9 +9,10 @@ import capitalize from 'lodash/capitalize';
 import { titleSort } from '@neinteractiveliterature/litform';
 
 import usePageTitle from '../usePageTitle';
-import { EventsByChoiceQueryData, EventsByChoiceQueryDocument } from './queries.generated';
-import { LoaderFunction, useLoaderData, RouterContextProvider } from 'react-router';
+import { EventsByChoiceQueryDocument } from './queries.generated';
+import { useLoaderData } from 'react-router';
 import { apolloClientContext } from 'AppContexts';
+import type { Route } from './+types/EventsByChoice';
 
 type ProcessedChoiceCount = {
   confirmed?: number;
@@ -36,14 +37,14 @@ function renderChoiceCounts(choiceData: ProcessedChoiceCount) {
   );
 }
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<EventsByChoiceQueryData>({ query: EventsByChoiceQueryDocument });
+  const { data } = await client.query({ query: EventsByChoiceQueryDocument, errorPolicy: 'none' });
   return data;
 };
 
 function EventsByChoice() {
-  const data = useLoaderData() as EventsByChoiceQueryData;
+  const data = useLoaderData<typeof clientLoader>();
   const choiceColumns = useMemo(() => {
     const choices = flatMap(data.convention.reports.events_by_choice, (eventByChoice) =>
       eventByChoice.choice_counts.map((choiceCount) => choiceCount.choice),

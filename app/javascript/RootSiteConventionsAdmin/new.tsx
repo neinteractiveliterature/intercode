@@ -1,10 +1,11 @@
-import { ActionFunction, LoaderFunction, redirect, useLoaderData, RouterContextProvider } from 'react-router';
+import { redirect, useLoaderData } from 'react-router';
 import NewConventionModal from './NewConventionModal';
 import { apolloClientContext } from 'AppContexts';
-import { NewConventionModalQueryData, NewConventionModalQueryDocument } from './queries.generated';
+import { NewConventionModalQueryDocument } from './queries.generated';
 import { CreateConventionDocument } from './mutations.generated';
+import type { Route } from './+types/new';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ request, context }) => {
+export const clientAction = async ({ request, context }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     const variables = await request.json();
@@ -19,14 +20,14 @@ export const clientAction: ActionFunction<RouterContextProvider> = async ({ requ
   }
 };
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query({ query: NewConventionModalQueryDocument });
+  const { data } = await client.query({ query: NewConventionModalQueryDocument, errorPolicy: 'none' });
   return data;
 };
 
 function NewConventionRoute() {
-  const data = useLoaderData() as NewConventionModalQueryData;
+  const data = useLoaderData<typeof clientLoader>();
   return <NewConventionModal data={data} />;
 }
 

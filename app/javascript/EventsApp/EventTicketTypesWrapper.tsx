@@ -7,7 +7,7 @@ import LeafBreadcrumbItem from '../Breadcrumbs/LeafBreadcrumbItem';
 import AppRootContext from '../AppRootContext';
 import capitalize from 'lodash/capitalize';
 import { EventTicketTypesQueryData } from '../TicketTypeAdmin/queries.generated';
-import { TicketTypeLoaderResult } from '../TicketTypeAdmin/loaders';
+import type { TicketTypesLoader } from '../TicketTypeAdmin/loaders';
 
 function SpecificTicketTypeBreadcrumbItem({ event }: { event: EventTicketTypesQueryData['convention']['event'] }) {
   const params = useParams<'id'>();
@@ -21,7 +21,7 @@ function SpecificTicketTypeBreadcrumbItem({ event }: { event: EventTicketTypesQu
 
 function EventTicketTypesWrapper(): React.JSX.Element {
   const { ticketName } = useContext(AppRootContext);
-  const { parent } = useLoaderData() as TicketTypeLoaderResult;
+  const { parent } = useLoaderData<TicketTypesLoader>();
   const { id } = useParams();
 
   const event = parent.__typename === 'Event' ? parent : undefined;

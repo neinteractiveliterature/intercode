@@ -1,13 +1,12 @@
-import { Link, useLocation, useParams, useRouteLoaderData } from 'react-router';
+import { Link, useLocation, useParams } from 'react-router';
 
 import MethodDoc from './MethodDoc';
-import { NamedRoute } from '../NamedRoute';
-import { LiquidDocsLoaderResult } from './loader';
+import { useLiquidDocs } from './loader';
 import FourOhFourPage from '../FourOhFourPage';
 
 function FilterDoc(): React.JSX.Element {
   const { name } = useParams();
-  const { filters } = useRouteLoaderData(NamedRoute.LiquidDocs) as LiquidDocsLoaderResult;
+  const { filters } = useLiquidDocs();
   const location = useLocation();
   const filter = name ? filters[name] : undefined;
 

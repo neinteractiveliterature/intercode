@@ -1,13 +1,5 @@
 import { Suspense, useMemo, useState, useEffect, useRef } from 'react';
-import {
-  useLocation,
-  useLoaderData,
-  Outlet,
-  useNavigation,
-  LoaderFunction,
-  redirect,
-  RouterContextProvider,
-} from 'react-router';
+import { LoaderFunctionArgs, useLocation, useLoaderData, Outlet, useNavigation, redirect } from 'react-router';
 import { Settings } from 'luxon';
 import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
@@ -26,7 +18,9 @@ import RouteErrorBoundary from 'RouteErrorBoundary';
 
 export const ErrorBoundary = RouteErrorBoundary;
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context, request }) => {
+// This module is mounted by a wrapper route (see script/genRoutes.mts), and typegen makes types for that, not for the
+// module, so it takes the plain args until the cutover removes the wrappers
+export const clientLoader = async ({ context, request }: LoaderFunctionArgs) => {
   const client = context.get(apolloClientContext);
   const data = context.get(appRootDataContext);
   if (!data) return data;
@@ -150,7 +144,7 @@ export function buildAppRootContextValue(
 
 function AppRoot(): React.JSX.Element {
   const location = useLocation();
-  const data = useLoaderData() as AppRootQueryData;
+  const data = useLoaderData<typeof clientLoader>();
   const navigation = useNavigation();
   const navigationBarRef = useRef<HTMLElement>(null);
 
@@ -159,7 +153,7 @@ function AppRoot(): React.JSX.Element {
   useEffect(() => {
     // Error reporting is initialized in the boot sequence (see packs/application.tsx);
     // here we just associate subsequent reports with the signed-in user.
-    errorReporting().setCurrentUser(data.currentUser?.id);
+    errorReporting().setCurrentUser(data?.currentUser?.id);
   }, [data?.currentUser?.id]);
 
   useEffect(() => {

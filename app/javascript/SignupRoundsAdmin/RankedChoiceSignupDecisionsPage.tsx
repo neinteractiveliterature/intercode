@@ -1,11 +1,10 @@
 import {
   SignupRoundRankedChoiceDecisionsTableQueryData,
   SignupRoundRankedChoiceDecisionsTableQueryDocument,
-  SignupRoundsAdminQueryData,
   SignupRoundsAdminQueryDocument,
 } from './queries.generated';
 import { useContext, useMemo } from 'react';
-import { LoaderFunction, useLoaderData, useParams, RouterContextProvider } from 'react-router';
+import { useLoaderData, useParams } from 'react-router';
 import { describeSignupRound } from './describeSignupRound';
 import { parseSignupRounds } from '../SignupRoundUtils';
 import { useTranslation } from 'react-i18next';
@@ -27,6 +26,7 @@ import { TFunction } from 'i18next';
 import assertNever from 'assert-never';
 import { FilterCodecs, buildFieldFilterCodecs } from '../Tables/FilterUtils';
 import { apolloClientContext } from 'AppContexts';
+import type { Route } from './+types/RankedChoiceSignupDecisionsPage';
 
 export function describeDecision(decision: RankedChoiceDecisionValue, t: TFunction): string {
   if (decision === RankedChoiceDecisionValue.Signup) {
@@ -255,9 +255,9 @@ function RankedChoiceSignupDecisionsTable({ signupRoundId }: RankedChoiceSignupD
   );
 }
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context, params: { id } }) => {
+export const clientLoader = async ({ context, params: { id } }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<SignupRoundsAdminQueryData>({ query: SignupRoundsAdminQueryDocument });
+  const { data } = await client.query({ query: SignupRoundsAdminQueryDocument, errorPolicy: 'none' });
   if (!data?.convention.signup_rounds.some((round) => round.id === id)) {
     throw new Response('Not Found', { status: 404 });
   }
@@ -265,7 +265,7 @@ export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ cont
 };
 
 function RankedChoiceSignupDecisionsPage() {
-  const data = useLoaderData() as SignupRoundsAdminQueryData;
+  const data = useLoaderData<typeof clientLoader>();
   const { id } = useParams();
   const { timezoneName } = useContext(AppRootContext);
   const { t } = useTranslation();
