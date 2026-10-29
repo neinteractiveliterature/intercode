@@ -26,7 +26,7 @@ type LoaderResult = {
   initialApplication: OAuthApplicationsQueryData['oauth_applications'][number];
 };
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ context, params }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context, params }) => {
   const id = params.id!;
   const client = context.get(apolloClientContext);
   const { data } = await client.query<OAuthApplicationsQueryData>({ query: OAuthApplicationsQueryDocument });
@@ -38,7 +38,7 @@ export const loader: LoaderFunction<RouterContextProvider> = async ({ context, p
   return { initialApplication } satisfies LoaderResult;
 };
 
-export const action: ActionFunction<RouterContextProvider> = async ({ context, params, request }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, params, request }) => {
   const id = params.id!;
   const client = context.get(apolloClientContext);
   try {

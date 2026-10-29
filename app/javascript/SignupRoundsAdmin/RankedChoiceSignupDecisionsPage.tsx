@@ -255,7 +255,7 @@ function RankedChoiceSignupDecisionsTable({ signupRoundId }: RankedChoiceSignupD
   );
 }
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ context, params: { id } }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context, params: { id } }) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query<SignupRoundsAdminQueryData>({ query: SignupRoundsAdminQueryDocument });
   if (!data?.convention.signup_rounds.some((round) => round.id === id)) {

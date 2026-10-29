@@ -26,7 +26,7 @@ function renderOrganizationConventions(
   return conventionNames.join(', ');
 }
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query<OrganizationAdminOrganizationsQueryData>({
     query: OrganizationAdminOrganizationsQueryDocument,

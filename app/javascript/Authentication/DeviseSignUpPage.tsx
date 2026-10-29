@@ -22,7 +22,7 @@ type DeviseSignUpPageLoaderData = {
   turnstileSiteKey: string | null;
 };
 
-export const loader: LoaderFunction = ({ context }) => {
+export const clientLoader: LoaderFunction = ({ context }) => {
   const clientConfiguration = context.get(clientConfigurationContext);
   return {
     turnstileSiteKey: clientConfiguration.turnstile_site_key,

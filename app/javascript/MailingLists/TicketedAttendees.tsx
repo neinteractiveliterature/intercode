@@ -4,7 +4,7 @@ import { TicketedAttendeesQueryData, TicketedAttendeesQueryDocument } from './qu
 import { LoaderFunction, RouterContextProvider, useLoaderData } from 'react-router';
 import { apolloClientContext } from '../AppContexts';
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query<TicketedAttendeesQueryData>({ query: TicketedAttendeesQueryDocument });
   return data;

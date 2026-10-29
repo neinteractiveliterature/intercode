@@ -8,7 +8,7 @@ import { AppRootLayoutQueryData, AppRootLayoutQueryDocument } from './appRootQue
 import { apolloClientContext } from 'AppContexts';
 import { normalizePathForLayout } from './normalizePathForLayout';
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ context, request }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context, request }) => {
   const client = context.get(apolloClientContext);
   const url = new URL(request.url);
   const { data } = await client.query({

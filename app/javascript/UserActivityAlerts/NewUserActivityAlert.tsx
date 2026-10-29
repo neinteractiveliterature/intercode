@@ -28,7 +28,7 @@ type LoaderResult = {
   userActivityAlertEvent: UserActivityAlertsAdminQueryData['notificationEvents'][number];
 };
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query({ query: UserActivityAlertsAdminQueryDocument });
 
@@ -46,7 +46,7 @@ export const loader: LoaderFunction<RouterContextProvider> = async ({ context })
   return { userActivityAlertEvent, convention: data.convention } satisfies LoaderResult;
 };
 
-export const action: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
   const client = context.get(apolloClientContext);
   try {
     if (request.method === 'POST') {

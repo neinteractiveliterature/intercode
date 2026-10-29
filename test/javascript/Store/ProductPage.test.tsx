@@ -2,7 +2,7 @@ import { MockLink } from '@apollo/client/testing';
 import { vi } from 'vitest';
 
 import { renderRoute, userEvent, waitFor } from '../testUtils';
-import { Component as ProductPage, loader } from '../../../app/javascript/Store/ProductPage';
+import { Component as ProductPage, clientLoader as loader } from '../../../app/javascript/Store/ProductPage';
 import {
   OrderFormProductQueryData,
   OrderFormProductQueryDocument,

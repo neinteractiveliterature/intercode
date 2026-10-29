@@ -5,7 +5,7 @@ import { renderRoute, userEvent, waitFor } from '../testUtils';
 import AuthenticityTokensManager, {
   AuthenticityTokensContext,
 } from '../../../app/javascript/AuthenticityTokensContext';
-import { Component as EditUser, loader } from '../../../app/javascript/Authentication/EditUser';
+import { Component as EditUser, clientLoader as loader } from '../../../app/javascript/Authentication/EditUser';
 import {
   AccountFormContentQueryData,
   AccountFormContentQueryDocument,

@@ -12,7 +12,7 @@ type LoaderResult = {
   cloneConvention: NonNullable<NewConventionModalProps['cloneConvention']>;
 };
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ context, params: { id } }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context, params: { id } }) => {
   const client = context.get(apolloClientContext);
   const [{ data: conventionData }, { data }] = await Promise.all([
     client.query({ query: ConventionDisplayQueryDocument, variables: { id: id ?? '' } }),
