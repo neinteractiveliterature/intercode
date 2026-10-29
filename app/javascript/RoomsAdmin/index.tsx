@@ -6,14 +6,15 @@ import { ErrorDisplay, useGraphQLConfirm, sortByLocaleString } from '@neinteract
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
 import usePageTitle from '../usePageTitle';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
-import { RoomsAdminQueryData, RoomsAdminQueryDocument } from './queries.generated';
+import { RoomsAdminQueryDocument } from './queries.generated';
 import { useTranslation } from 'react-i18next';
-import { ActionFunction, LoaderFunction, RouterContextProvider, useActionData, useLoaderData } from 'react-router';
+import { useActionData, useLoaderData } from 'react-router';
 import { apolloClientContext } from 'AppContexts';
 import { useSubmit } from 'react-router';
 import { CreateRoomDocument } from './mutations.generated';
+import type { Route } from './+types/index';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
+export const clientAction = async ({ context, request }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     if (request.method === 'POST') {
@@ -35,19 +36,19 @@ export const clientAction: ActionFunction<RouterContextProvider> = async ({ cont
   }
 };
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<RoomsAdminQueryData>({ query: RoomsAdminQueryDocument });
+  const { data } = await client.query({ query: RoomsAdminQueryDocument, errorPolicy: 'none' });
   return data;
 };
 
 function RoomsAdmin() {
-  const data = useLoaderData() as RoomsAdminQueryData;
+  const data = useLoaderData<typeof clientLoader>();
   const authorizationWarning = useAuthorizationRequired('can_manage_rooms');
   const confirm = useGraphQLConfirm();
   const { t } = useTranslation();
   const submit = useSubmit();
-  const actionData = useActionData();
+  const actionData = useActionData<typeof clientAction>();
   const error = actionData instanceof Error ? actionData : undefined;
 
   const [creatingRoomName, setCreatingRoomName] = useState('');

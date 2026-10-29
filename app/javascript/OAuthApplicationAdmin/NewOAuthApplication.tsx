@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ActionFunction, RouterContextProvider, useFetcher } from 'react-router';
+import { useFetcher } from 'react-router';
 import { CopyToClipboardButton, ErrorDisplay } from '@neinteractiveliterature/litform';
 import { useTranslation } from 'react-i18next';
 
@@ -8,6 +8,7 @@ import { apolloClientContext } from '../AppContexts';
 import { OAuthApplicationsQueryDocument } from './queries.generated';
 import { CreateOAuthApplicationDocument, CreateOAuthApplicationMutationData } from './mutations.generated';
 import OAuthApplicationForm, { EditingOAuthApplication } from './OAuthApplicationForm';
+import type { Route } from './+types/NewOAuthApplication';
 
 type CreatedApplication = {
   id: string;
@@ -16,7 +17,7 @@ type CreatedApplication = {
   secret: string;
 };
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
+export const clientAction = async ({ context, request }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   if (request.method !== 'POST') return new Response(null, { status: 404 });
 

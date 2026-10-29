@@ -1,5 +1,7 @@
 import * as React from 'react';
-import { Link, useRouteLoaderData } from 'react-router';
+import { Link } from 'react-router';
+import useRequiredRouteLoaderData from '../useRequiredRouteLoaderData';
+import type { clientLoader } from './UserActivityAlertsAdmin';
 
 import usePageTitle from '../usePageTitle';
 import { UserActivityAlertsAdminQueryData } from './queries.generated';
@@ -84,7 +86,7 @@ function renderAlertNotificationDestinations(
 }
 
 function UserActivityAlertsList() {
-  const data = useRouteLoaderData(NamedRoute.UserActivityAlerts) as UserActivityAlertsAdminQueryData;
+  const data = useRequiredRouteLoaderData<typeof clientLoader>(NamedRoute.UserActivityAlerts);
   usePageTitle('User activity alerts');
 
   return (

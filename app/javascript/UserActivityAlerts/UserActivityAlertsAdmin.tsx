@@ -1,4 +1,4 @@
-import { useMatches, Outlet, LoaderFunction, RouterContextProvider } from 'react-router';
+import { useMatches, Outlet } from 'react-router';
 
 import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
@@ -7,13 +7,12 @@ import { useTranslation } from 'react-i18next';
 import BreadcrumbItem from '../Breadcrumbs/BreadcrumbItem';
 import { NamedRoute } from '../NamedRoute';
 import { apolloClientContext } from 'AppContexts';
-import { UserActivityAlertsAdminQueryData, UserActivityAlertsAdminQueryDocument } from './queries.generated';
+import { UserActivityAlertsAdminQueryDocument } from './queries.generated';
+import type { Route } from './+types/UserActivityAlertsAdmin';
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<UserActivityAlertsAdminQueryData>({
-    query: UserActivityAlertsAdminQueryDocument,
-  });
+  const { data } = await client.query({ query: UserActivityAlertsAdminQueryDocument, errorPolicy: 'none' });
   return data;
 };
 

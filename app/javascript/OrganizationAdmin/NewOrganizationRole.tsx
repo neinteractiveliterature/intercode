@@ -1,28 +1,21 @@
-import {
-  ActionFunction,
-  Navigate,
-  redirect,
-  useActionData,
-  useNavigation,
-  useRouteLoaderData,
-  useSubmit,
-  RouterContextProvider,
-} from 'react-router';
+import { Navigate, redirect, useActionData, useNavigation, useSubmit } from 'react-router';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import useOrganizationRoleForm from './useOrganizationRoleForm';
 import usePageTitle from '../usePageTitle';
 import { OrganizationRoleFieldsFragmentDoc } from './queries.generated';
+import useRequiredRouteLoaderData from '../useRequiredRouteLoaderData';
 import { NamedRoute } from '../NamedRoute';
-import { SingleOrganizationLoaderResult } from './loaders';
+import { singleOrganizationLoader } from './loaders';
 import invariant from 'tiny-invariant';
 import { CreateOrganizationRoleDocument, CreateOrganizationRoleMutationVariables } from './mutations.generated';
 import { apolloClientContext } from 'AppContexts';
 import { Organization } from 'graphqlTypes.generated';
+import type { Route } from './+types/NewOrganizationRole';
 
 type ActionRequest = Omit<CreateOrganizationRoleMutationVariables, 'organizationId'>;
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ request, params: { id }, context }) => {
+export const clientAction = async ({ request, params: { id }, context }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     if (request.method === 'POST') {
@@ -61,7 +54,7 @@ export const clientAction: ActionFunction<RouterContextProvider> = async ({ requ
 };
 
 function NewOrganizationRole() {
-  const organization = useRouteLoaderData(NamedRoute.Organization) as SingleOrganizationLoaderResult;
+  const organization = useRequiredRouteLoaderData<typeof singleOrganizationLoader>(NamedRoute.Organization);
   const { renderForm, formState } = useOrganizationRoleForm({
     __typename: 'OrganizationRole',
     id: '',
@@ -70,7 +63,7 @@ function NewOrganizationRole() {
     permissions: [],
   });
   const submit = useSubmit();
-  const actionData = useActionData();
+  const actionData = useActionData<typeof clientAction>();
   const mutationError = actionData instanceof Error ? actionData : undefined;
   const mutationInProgress = useNavigation().state !== 'idle';
 

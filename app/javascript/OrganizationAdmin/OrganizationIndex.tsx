@@ -1,5 +1,5 @@
 import sortBy from 'lodash/sortBy';
-import { Link, LoaderFunction, RouterContextProvider, useLoaderData } from 'react-router';
+import { Link, useLoaderData } from 'react-router';
 import { sortByLocaleString } from '@neinteractiveliterature/litform';
 import { useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
@@ -10,6 +10,7 @@ import {
   OrganizationAdminOrganizationsQueryDocument,
 } from './queries.generated';
 import { apolloClientContext } from 'AppContexts';
+import type { Route } from './+types/OrganizationIndex';
 
 function renderOrganizationConventions(
   organization: OrganizationAdminOrganizationsQueryData['organizations'][0],
@@ -26,17 +27,15 @@ function renderOrganizationConventions(
   return conventionNames.join(', ');
 }
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<OrganizationAdminOrganizationsQueryData>({
-    query: OrganizationAdminOrganizationsQueryDocument,
-  });
+  const { data } = await client.query({ query: OrganizationAdminOrganizationsQueryDocument, errorPolicy: 'none' });
   return data;
 };
 
 function OrganizationIndex() {
   const { t } = useTranslation();
-  const data = useLoaderData() as OrganizationAdminOrganizationsQueryData;
+  const data = useLoaderData<typeof clientLoader>();
   usePageTitle('Organizations');
 
   const sortedOrganizations = sortByLocaleString(data.organizations, (organization) => organization.name);

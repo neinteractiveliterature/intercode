@@ -1,11 +1,4 @@
-import {
-  ActionFunction,
-  LoaderFunction,
-  redirect,
-  useFetcher,
-  useLoaderData,
-  RouterContextProvider,
-} from 'react-router';
+import { redirect, useFetcher, useLoaderData } from 'react-router';
 import { useTabs, TabList, TabBody, notEmpty, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
@@ -22,10 +15,11 @@ import {
   UpdateStaffPositionPermissionsDocument,
   UpdateStaffPositionPermissionsMutationVariables,
 } from './mutations.generated';
+import type { Route } from './+types/EditStaffPositionPermissions';
 
 type ActionInput = Omit<UpdateStaffPositionPermissionsMutationVariables, 'staffPositionId'>;
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, params: { id }, request }) => {
+export const clientAction = async ({ context, params: { id }, request }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     const { grantPermissions, revokePermissions } = (await request.json()) as ActionInput;
@@ -43,12 +37,7 @@ const CmsContentGroupPermissionNames = getPermissionNamesForModelType(Permission
 const EventCategoryPermissionNames = getPermissionNamesForModelType(PermissionedModelTypeIndicator.EventCategory);
 const ConventionPermissionNames = getPermissionNamesForModelType(PermissionedModelTypeIndicator.Convention);
 
-type LoaderResult = {
-  convention: StaffPositionsQueryData['convention'];
-  staffPosition: StaffPositionsQueryData['convention']['staff_positions'][number];
-};
-
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context, params: { id } }) => {
+export const clientLoader = async ({ context, params: { id } }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query<StaffPositionsQueryData>({ query: StaffPositionsQueryDocument });
   if (!data) {
@@ -59,11 +48,11 @@ export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ cont
     return new Response(null, { status: 404 });
   }
 
-  return { convention: data.convention, staffPosition } satisfies LoaderResult;
+  return { convention: data.convention, staffPosition };
 };
 
 function EditStaffPositionPermissions() {
-  const { convention, staffPosition } = useLoaderData() as LoaderResult;
+  const { convention, staffPosition } = useLoaderData<typeof clientLoader>();
   const [conventionChangeSet, conventionAdd, conventionRemove, conventionReset] = useChangeSet<PermissionWithId>();
   const [eventCategoriesChangeSet, eventCategoriesAdd, eventCategoriesRemove] = useChangeSet<PermissionWithId>();
   const [contentGroupsChangeSet, contentGroupsAdd, contentGroupsRemove] = useChangeSet<PermissionWithId>();

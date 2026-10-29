@@ -1,12 +1,5 @@
 import { useState, useMemo } from 'react';
-import {
-  ActionFunction,
-  LoaderFunction,
-  redirect,
-  useFetcher,
-  useLoaderData,
-  RouterContextProvider,
-} from 'react-router';
+import { redirect, useFetcher, useLoaderData } from 'react-router';
 
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -22,13 +15,9 @@ import {
 import { CreateUserActivityAlertDocument, CreateUserActivityAlertMutationVariables } from './mutations.generated';
 import { apolloClientContext } from 'AppContexts';
 import { Convention, NotificationEventKey } from 'graphqlTypes.generated';
+import type { Route } from './+types/NewUserActivityAlert';
 
-type LoaderResult = {
-  convention: UserActivityAlertsAdminQueryData['convention'];
-  userActivityAlertEvent: UserActivityAlertsAdminQueryData['notificationEvents'][number];
-};
-
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query({ query: UserActivityAlertsAdminQueryDocument });
 
@@ -43,10 +32,10 @@ export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ cont
     return new Response(null, { status: 404 });
   }
 
-  return { userActivityAlertEvent, convention: data.convention } satisfies LoaderResult;
+  return { userActivityAlertEvent, convention: data.convention };
 };
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
+export const clientAction = async ({ context, request }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     if (request.method === 'POST') {
@@ -82,7 +71,7 @@ export const clientAction: ActionFunction<RouterContextProvider> = async ({ cont
 };
 
 function NewUserActivityAlert() {
-  const { userActivityAlertEvent, convention } = useLoaderData() as LoaderResult;
+  const { userActivityAlertEvent, convention } = useLoaderData<typeof clientLoader>();
   // const data = useRouteLoaderData(NamedRoute.UserActivityAlerts) as UserActivityAlertsAdminQueryData;
   usePageTitle('New user activity alert');
 

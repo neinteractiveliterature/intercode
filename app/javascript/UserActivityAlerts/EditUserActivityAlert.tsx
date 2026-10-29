@@ -1,13 +1,5 @@
 import { useState, useMemo } from 'react';
-import {
-  ActionFunction,
-  LoaderFunction,
-  redirect,
-  replace,
-  useFetcher,
-  useLoaderData,
-  RouterContextProvider,
-} from 'react-router';
+import { redirect, replace, useFetcher, useLoaderData } from 'react-router';
 
 import { useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -15,7 +7,7 @@ import buildUserActivityAlertInput from './buildUserActivityAlertInput';
 import { useChangeSet } from '../ChangeSet';
 import UserActivityAlertForm from './UserActivityAlertForm';
 import usePageTitle from '../usePageTitle';
-import { UserActivityAlertsAdminQueryData, UserActivityAlertsAdminQueryDocument } from './queries.generated';
+import { UserActivityAlertsAdminQueryDocument } from './queries.generated';
 import {
   DeleteUserActivityAlertDocument,
   UpdateUserActivityAlertDocument,
@@ -24,8 +16,9 @@ import {
 import { apolloClientContext } from 'AppContexts';
 import invariant from 'tiny-invariant';
 import { NotificationEventKey, UserActivityAlert } from 'graphqlTypes.generated';
+import type { Route } from './+types/EditUserActivityAlert';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {
+export const clientAction = async ({ context, request, params: { id } }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   invariant(id != null);
   try {
@@ -56,13 +49,7 @@ export const clientAction: ActionFunction<RouterContextProvider> = async ({ cont
   }
 };
 
-type LoaderResult = {
-  convention: UserActivityAlertsAdminQueryData['convention'];
-  initialUserActivityAlert: UserActivityAlertsAdminQueryData['convention']['user_activity_alerts'][number];
-  userActivityAlertEvent: UserActivityAlertsAdminQueryData['notificationEvents'][number];
-};
-
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context, params: { id } }) => {
+export const clientLoader = async ({ context, params: { id } }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query({ query: UserActivityAlertsAdminQueryDocument });
 
@@ -82,11 +69,11 @@ export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ cont
     return new Response(null, { status: 404 });
   }
 
-  return { convention: data.convention, initialUserActivityAlert, userActivityAlertEvent } satisfies LoaderResult;
+  return { convention: data.convention, initialUserActivityAlert, userActivityAlertEvent };
 };
 
 function EditUserActivityAlertForm() {
-  const { initialUserActivityAlert, convention, userActivityAlertEvent } = useLoaderData() as LoaderResult;
+  const { initialUserActivityAlert, convention, userActivityAlertEvent } = useLoaderData<typeof clientLoader>();
 
   usePageTitle('Editing user activity alert');
   const [userActivityAlert, setUserActivityAlert] = useState(initialUserActivityAlert);

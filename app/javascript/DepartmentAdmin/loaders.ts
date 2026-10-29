@@ -1,6 +1,7 @@
-import { LoaderFunctionArgs, useRouteLoaderData } from 'react-router';
+import { LoaderFunctionArgs } from 'react-router';
+import useRequiredRouteLoaderData from '../useRequiredRouteLoaderData';
 import { apolloClientContext } from 'AppContexts';
-import { DepartmentAdminQueryData, DepartmentAdminQueryDocument } from './queries.generated';
+import { DepartmentAdminQueryDocument } from './queries.generated';
 import { NamedRoute } from '../NamedRoute';
 
 export const departmentAdminLoader = async ({ context }: LoaderFunctionArgs) => {
@@ -10,7 +11,7 @@ export const departmentAdminLoader = async ({ context }: LoaderFunctionArgs) => 
 };
 
 export function useDepartmentAdminLoader() {
-  return useRouteLoaderData<typeof departmentAdminLoader>(NamedRoute.DepartmentAdmin) as DepartmentAdminQueryData;
+  return useRequiredRouteLoaderData<typeof departmentAdminLoader>(NamedRoute.DepartmentAdmin);
 }
 
 export const singleDepartmentAdminLoader = async ({ params: { id }, ...args }: LoaderFunctionArgs) => {

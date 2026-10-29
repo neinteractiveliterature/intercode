@@ -1,30 +1,26 @@
-import { LoaderFunction, useRouteLoaderData } from 'react-router';
+import { LoaderFunctionArgs } from 'react-router';
 import { apolloClientContext } from 'AppContexts';
-import { EventCategoryAdminQueryData, EventCategoryAdminQueryDocument } from './queries.generated';
+import { EventCategoryAdminQueryDocument } from './queries.generated';
 import { NamedRoute } from '../NamedRoute';
+import useRequiredRouteLoaderData from '../useRequiredRouteLoaderData';
 
-export const eventCategoryAdminLoader: LoaderFunction = async ({ context }) => {
+export const eventCategoryAdminLoader = async ({ context }: LoaderFunctionArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<EventCategoryAdminQueryData>({ query: EventCategoryAdminQueryDocument });
+  const { data } = await client.query({ query: EventCategoryAdminQueryDocument, errorPolicy: 'none' });
   return data;
 };
 
 export function useEventCategoryAdminLoader() {
-  return useRouteLoaderData(NamedRoute.EventCategoryAdmin) as EventCategoryAdminQueryData;
+  return useRequiredRouteLoaderData<typeof eventCategoryAdminLoader>(NamedRoute.EventCategoryAdmin);
 }
 
-export type SingleEventCategoryAdminLoaderResult = {
-  data: EventCategoryAdminQueryData;
-  eventCategory: EventCategoryAdminQueryData['convention']['event_categories'][number];
-};
-
-export const singleEventCategoryAdminLoader: LoaderFunction = async ({ params: { id }, ...args }) => {
-  const data = (await eventCategoryAdminLoader({ params: {}, ...args })) as EventCategoryAdminQueryData;
+export const singleEventCategoryAdminLoader = async ({ params: { id }, ...args }: LoaderFunctionArgs) => {
+  const data = await eventCategoryAdminLoader({ params: {}, ...args });
   const eventCategory = data.convention.event_categories.find((eventCategory) => eventCategory.id === id);
 
   if (!eventCategory) {
     throw new Response(null, { status: 404 });
   }
 
-  return { eventCategory, data } satisfies SingleEventCategoryAdminLoaderResult;
+  return { eventCategory, data };
 };

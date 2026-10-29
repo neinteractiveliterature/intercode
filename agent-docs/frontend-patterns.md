@@ -58,6 +58,8 @@ function EditDepartment() {
 - Don't use the `loaderData`/`actionData` props of `Route.ComponentProps` yet: only framework mode passes them, and the data-mode build that production still uses renders route components without props. They can be used once the cutover has happened.
 - Typegen only covers route files under the app directory (`app/javascript`), which is why `react-router.config.ts` points there and `root.tsx`, `routes.ts` and `entry.client.tsx` are in `app/javascript` (the data-mode root route module is `AppRootProviders.tsx`).
 - With `apollo.query`, pass `errorPolicy: 'none'` so that `data` is typed as present (the runtime default).
+- A component that reads its parent route's data (`useXLoader()` hooks next to a shared `loaders.ts`) uses `useRequiredRouteLoaderData<typeof theLoader>(NamedRoute.X)`, which throws if the route isn't matched instead of casting. Use `useRouteLoaderData<typeof theLoader>(...)` where the route may legitimately not be there.
+- A loader that can't find its record `throw`s the 404 `Response` (a returned `Response` is data, not an error), which also keeps the type of the loader's result free of `Response`.
 
 ### Loader Data Access
 
