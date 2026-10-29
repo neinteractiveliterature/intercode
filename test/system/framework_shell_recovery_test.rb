@@ -50,7 +50,9 @@ class FrameworkShellRecoveryTest < ApplicationSystemTestCase
   end
 
   def document_requests
-    page.driver.network_traffic.count { |request| URI.parse(request.url).path == "/framework-check" }
+    # The traffic log can include entries without a URL (this showed up on CI), so skip those
+    urls = page.driver.network_traffic.filter_map(&:url)
+    urls.count { |url| URI.parse(url).path == "/framework-check" }
   end
 
   it "reloads once when the entry file is missing, then shows a message" do
