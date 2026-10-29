@@ -16,12 +16,23 @@ on:
         description: Commit whose intercode-assets-framework image to upload
         required: true
         type: string
+      phase:
+        description: hashed (the hashed files), publish (the entry files, then marking obsolete files) or all
+        required: false
+        type: string
+        default: all
   workflow_dispatch:
     inputs:
       sha:
         description: Commit whose intercode-assets-framework image to upload (full SHA; defaults to the commit this runs from)
         required: false
         type: string
+      phase:
+        description: Which part to upload
+        required: false
+        type: choice
+        options: [all, hashed, publish]
+        default: all
 
 jobs:
   upload:
@@ -32,6 +43,7 @@ jobs:
       packages: read
     env:
       ASSETS_SHA: ${{ inputs.sha || github.sha }}
+      PHASE: ${{ inputs.phase || 'all' }}
     steps:
       - name: Check that the bucket is configured
         run: |
@@ -69,5 +81,5 @@ jobs:
         with:
           role-to-assume: ${{ vars.FRAMEWORK_SHELL_UPLOAD_ROLE_ARN }}
           aws-region: ${{ vars.AWS_REGION || 'us-east-1' }}
-      - name: Upload the build and mark the files this release dropped as obsolete
-        run: script/uploadFrameworkAssets.sh "${{ vars.FRAMEWORK_SHELL_BUCKET }}" build
+      - name: Upload the assets (all of them, or the phase asked for)
+        run: script/uploadFrameworkAssets.sh "${{ vars.FRAMEWORK_SHELL_BUCKET }}" build "$PHASE"

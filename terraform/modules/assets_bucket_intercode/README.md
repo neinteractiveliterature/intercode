@@ -50,10 +50,12 @@ for `/` returns a listing of every key.
 
 ## How releases upload
 
-The release workflow (`.github/workflows/release.yml`) has an `assets-bucket-release` job that runs
-`.github/workflows/upload-assets-to-bucket.yml`. That workflow copies the release's `public/packs` out of the
-`intercode-assets` image and uploads it, but the release job only runs when the repository variable `ASSETS_BUCKET` is
-set. Set these repository variables from the module's outputs:
+The release workflow (`.github/workflows/release.yml`) has two jobs, `assets-bucket-release-hashed` and
+`assets-bucket-release-publish`, that run `.github/workflows/upload-assets-to-bucket.yml` in two phases. The hashed
+files go up alongside the Fly deploy, since nothing refers to them until the entry files do; the entry files (which make
+the new frontend live) and the obsolete marking wait for `fly-release`, so the new frontend never goes live before the
+new backend. The workflow copies the release's `public/packs` out of the `intercode-assets` image and uploads it, but
+the release jobs only run when the repository variable `ASSETS_BUCKET` is set. Set these repository variables from the module's outputs:
 
 | Variable                 | Value                          |
 | ------------------------ | ------------------------------ |
