@@ -18,8 +18,10 @@ locals {
   static_shell_origin_id = "static-shell"
 
   # With a static shell bucket, the default behavior's origin is the bucket and the router function switches to Rails
-  # where needed. Without one, everything below the specific behaviors is Rails, as it always was.
-  static_shell_enabled = var.static_shell_bucket_domain_name != null
+  # where needed. Without one, everything below the specific behaviors is Rails, as it always was. This is its own
+  # variable, rather than being derived from the bucket's domain name, because the bucket is usually created in the same
+  # apply and its domain name is then unknown at plan time, which count and for_each can't use.
+  static_shell_enabled = var.static_shell_enabled
   default_origin_id    = local.static_shell_enabled ? local.static_shell_origin_id : local.rails_origin_id
 
   # Every path that is routed by something other than the SPA fallback. See the README for what to edit.
@@ -202,8 +204,8 @@ resource "aws_cloudfront_distribution" "this" {
 
   lifecycle {
     precondition {
-      condition     = (var.static_shell_bucket_domain_name == null) == (var.static_shell_origin_access_control_id == null)
-      error_message = "static_shell_bucket_domain_name and static_shell_origin_access_control_id must be set together."
+      condition     = var.static_shell_enabled == (var.static_shell_bucket_domain_name != null && var.static_shell_origin_access_control_id != null) && (var.static_shell_enabled || (var.static_shell_bucket_domain_name == null && var.static_shell_origin_access_control_id == null))
+      error_message = "static_shell_enabled needs static_shell_bucket_domain_name and static_shell_origin_access_control_id, and they are only used when it is true."
     }
   }
 

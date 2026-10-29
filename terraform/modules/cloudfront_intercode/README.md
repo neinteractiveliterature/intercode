@@ -94,7 +94,8 @@ After editing it, run `yarn routing:codegen` and commit the result. That rewrite
 ## Serving the shell from S3 (framework-mode build)
 
 By default the default behavior is a Rails origin, and Rails renders the shell. The framework-mode build is a static
-`index.html` plus hashed files in `assets/`, which can be served from an S3 bucket instead. Set both of:
+`index.html` plus hashed files in `assets/`, which can be served from an S3 bucket instead. Set `static_shell_enabled = true`
+and both of:
 
 - `static_shell_bucket_domain_name`: the bucket's `bucket_regional_domain_name`
 - `static_shell_origin_access_control_id`: the bucket's `origin_access_control_id`
@@ -122,12 +123,12 @@ Set the repository variables `FRAMEWORK_SHELL_BUCKET` and `FRAMEWORK_SHELL_UPLOA
 `bucket_name` and `release_upload_role_arn`) to turn it on. The image it uploads from is only built when the repository
 variable `BUILD_FRAMEWORK` is set.
 
-**Trying it out:** create the bucket and a distribution with the two variables set and no aliases, run the "Upload
+**Trying it out:** create the bucket and a distribution with the static shell variables set and no aliases, run the "Upload
 framework-mode build to bucket" workflow for a commit, and fetch the distribution's `cloudfront.net` domain with a
 `Host` header for a convention, once as a browser and once as a crawler. The shell should come from the bucket, the
 crawler's response from Rails, and a missing `/assets/...` file should be a 404.
 
-**Rolling back** is removing the two variables. The next apply puts the Rails origin and the Rails-rendered shell back.
+**Rolling back** is removing `static_shell_enabled` (and the two variables). The next apply puts the Rails origin and the Rails-rendered shell back.
 
 ## Other web servers
 
@@ -168,18 +169,22 @@ to the Rails origin, so multi-tenant routing works correctly behind CloudFront.
 
 ## Inputs
 
-| Name                                  | Description                                                                                                                                               | Default          |
-| ------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
-| `name`                                | Resource name prefix                                                                                                                                      | —                |
-| `rails_origin_domain`                 | Rails app domain                                                                                                                                          | —                |
-| `assets_origin_domain`                | Assets server domain                                                                                                                                      | —                |
-| `aliases`                             | CloudFront CNAMEs                                                                                                                                         | `[]`             |
-| `acm_certificate_arn`                 | ACM certificate ARN (us-east-1)                                                                                                                           | `null`           |
-| `price_class`                         | CloudFront price class                                                                                                                                    | `PriceClass_100` |
-| `og_shell_ttl`                        | TTL for `/og-shell` responses (seconds)                                                                                                                   | `3600`           |
-| `cdn_spa_shell_ttl`                   | TTL for `/cdn-spa-shell` responses (seconds)                                                                                                              | `86400`          |
-| `access_logs_enabled`                 | Deliver access logs to the destination below                                                                                                              | `false`          |
-| `access_log_delivery_destination_arn` | CloudWatch Logs delivery destination for access logs (from [`cloudfront_intercode_logging`](../cloudfront_intercode_logging)); no access logs when `null` | `null`           |
+| Name                                    | Description                                                                                                                                               | Default          |
+| --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| `name`                                  | Resource name prefix                                                                                                                                      | —                |
+| `rails_origin_domain`                   | Rails app domain                                                                                                                                          | —                |
+| `assets_origin_domain`                  | Assets server domain                                                                                                                                      | —                |
+| `aliases`                               | CloudFront CNAMEs                                                                                                                                         | `[]`             |
+| `acm_certificate_arn`                   | ACM certificate ARN (us-east-1)                                                                                                                           | `null`           |
+| `price_class`                           | CloudFront price class                                                                                                                                    | `PriceClass_100` |
+| `static_shell_enabled`                  | Serve the framework-mode shell from the S3 bucket below instead of Rails                                                                                  | `false`          |
+| `static_shell_bucket_domain_name`       | Regional domain name of the shell bucket; required with `static_shell_enabled`                                                                            | `null`           |
+| `static_shell_origin_access_control_id` | Origin access control ID of the shell bucket; required with `static_shell_enabled`                                                                        | `null`           |
+| `static_shell_ttl`                      | Edge TTL for the static shell (seconds)                                                                                                                   | `60`             |
+| `og_shell_ttl`                          | TTL for `/og-shell` responses (seconds)                                                                                                                   | `3600`           |
+| `cdn_spa_shell_ttl`                     | TTL for `/cdn-spa-shell` responses (seconds)                                                                                                              | `86400`          |
+| `access_logs_enabled`                   | Deliver access logs to the destination below                                                                                                              | `false`          |
+| `access_log_delivery_destination_arn`   | CloudWatch Logs delivery destination for access logs (from [`cloudfront_intercode_logging`](../cloudfront_intercode_logging)); no access logs when `null` | `null`           |
 
 ## Outputs
 
