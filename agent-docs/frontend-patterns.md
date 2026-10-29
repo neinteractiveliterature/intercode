@@ -179,6 +179,17 @@ function MyComponent() {
 **Common error**: "Property 'instance' does not exist on type 'typeof AuthenticityTokensManager'"
 Solution: Use `AuthenticityTokensContext` with `useContext` hook instead.
 
+### How the browser gets a session
+
+Both entries (the data-mode `packs/application.tsx` and the framework-mode `entry.client.tsx`) call `startAppBootstrap()` in `appBootstrap.ts` and hand the result to the router through `buildRouterContext`, so authentication works the same way in both:
+
+- The refresh token is an HttpOnly `__Host-` cookie set by `/oauth_session/*`. `AuthenticationManager` redeems it for an in-memory access token on boot (`bootstrapFromCookie`) and again when the token is about to expire (`ensureFreshAccessToken`). A 401 means "no session" and is remembered, not retried.
+- Signing in is a PKCE redirect: `SignInButton` or `useLoginRequired` calls `initiateAuthentication`, the visitor signs in on the **root site's** `/users/sign_in` page, and `/oauth/callback` (`OAuthCallback`) exchanges the code through `/oauth_session/exchange`. The sign-in page exists only on the root site, so a convention site sends visitors there and back.
+- The root route's loader (`AppRootProviders`) puts the `AuthenticityTokensManager` and Apollo client in React context; the Devise pages read their CSRF tokens from there.
+- Assuming an identity (`/user_con_profiles/:id/become`) swaps the Rails session and the refresh cookie on the server, then does a full page load.
+
+`test/system/authentication_test.rb` and `test/system/assumed_identity_test.rb` cover these against both builds. The sign-in test runs the real redirect on `http://localhost` (see the comments in that file for the issuer and redirect URI overrides it needs), which is why `buildOpenidConfig` accepts an `http` issuer on `localhost` and nowhere else.
+
 ## Common Utilities
 
 ### Date/Time Handling
