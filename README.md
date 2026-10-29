@@ -307,6 +307,11 @@ User.create!(email: 'your email address here', first_name: 'your first name here
 
 This will create an account for you in your local database with the `site_admin` flag turned on. You should now be able to log into your local copy of Intercode and access all the admin functionality.
 
+## Deploying
+
+To run Intercode from the published Docker images, see [deploy/README.md](deploy/README.md), which has the image and
+configuration reference, a reference nginx configuration and a docker-compose example.
+
 ## Testing production builds
 
 If you want to test how the app runs in production, but using your local development installation, you can do so as follows:

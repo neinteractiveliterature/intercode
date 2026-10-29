@@ -1,0 +1,67 @@
+# The reference nginx configuration for serving Intercode without a CDN: the framework-mode build from disk, the Rails
+# routes proxied to Rails, and crawlers sent to Rails' /og-shell for per-page Open Graph tags. It does what the
+# CloudFront distribution in terraform/modules/cloudfront_intercode does, from the same route list (routing.json).
+#
+# 40-substitute-assets-host.sh renders this into conf.d/default.conf when RAILS_UPSTREAM is set; ${RAILS_UPSTREAM} is
+# the only variable it fills in. See deploy/README.md.
+
+# $is_crawler is 1 for the user agents in routing.json (generated)
+include /etc/nginx/intercode/crawler-map.conf;
+
+# The request path without its query string, still percent-encoded, as Rails' /og-shell expects in its path parameter
+map $request_uri $request_path {
+    ~^(?<path>[^?]*) $path;
+    default $request_uri;
+}
+
+# Rails needs to know the original scheme, host and client, for building URLs and for choosing the convention. Behind a
+# TLS-terminating load balancer that sends X-Forwarded-Proto, keep what it said.
+map $http_x_forwarded_proto $forwarded_proto {
+    default $http_x_forwarded_proto;
+    "" $scheme;
+}
+
+upstream rails {
+    server ${RAILS_UPSTREAM};
+}
+
+server {
+    listen 80;
+    server_name _;
+
+    root /usr/share/nginx/html;
+
+    # File uploads go through Rails (/uploads/*)
+    client_max_body_size 100m;
+
+    # Convention domains load module scripts cross-origin from the assets host
+    add_header Access-Control-Allow-Origin "*" always;
+
+    # The Rails routes: /graphql, /oauth_session/*, /client_configuration, uploads and so on (generated)
+    include /etc/nginx/intercode/rails-locations.conf;
+
+    # The hashed build output never changes. Old releases' files stay in the image, so stale tabs can still load them.
+    location /assets/ {
+        expires 180d;
+        try_files $uri =404;
+    }
+
+    # Everything else is a route of the single-page app. Crawlers don't run it, so they get the Open Graph document that
+    # Rails builds for the path; everyone else gets the static shell, the one file whose name doesn't change.
+    location / {
+        error_page 418 = @og_shell;
+        if ($is_crawler) {
+            return 418;
+        }
+
+        # add_header in a location replaces the ones inherited from the server
+        add_header Cache-Control "no-cache" always;
+        add_header Access-Control-Allow-Origin "*" always;
+        try_files /index.html =404;
+    }
+
+    location @og_shell {
+        proxy_pass http://rails/og-shell?path=$request_path;
+        include /etc/nginx/proxy_params.conf;
+    }
+}

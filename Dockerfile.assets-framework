@@ -4,7 +4,7 @@
 #
 # The build is made against a placeholder asset host. When the container starts it takes a fresh copy of the build and
 # swaps in $ASSETS_HOST (or nothing, for same-origin assets), so one image serves any deployment. The app container
-# needs the same ASSETS_HOST.
+# needs the same ASSETS_HOST. With RAILS_UPSTREAM set, the container also proxies the Rails routes and crawlers to Rails.
 ARG NODE_VERSION=24.11.1
 # Optional: an earlier intercode-assets-framework image whose hashed files are carried over, as in Dockerfile.assets.
 ARG PREVIOUS_ASSETS_IMAGE=scratch
@@ -37,3 +37,8 @@ RUN --mount=type=bind,from=previous,target=/previous \
 COPY script/substituteAssetsHost.sh /usr/local/bin/substituteAssetsHost.sh
 COPY docker-assets-framework/40-substitute-assets-host.sh /docker-entrypoint.d/40-substitute-assets-host.sh
 COPY docker-assets-framework/nginx.conf /etc/nginx/conf.d/default.conf
+# The reference front server configuration, used when RAILS_UPSTREAM is set (see deploy/README.md). The crawler map and
+# the Rails locations are generated from the same route list as the CloudFront module.
+COPY docker-assets-framework/front-proxy.conf.template /etc/nginx/intercode/front-proxy.conf.template
+COPY docker-assets-framework/proxy_params.conf /etc/nginx/proxy_params.conf
+COPY terraform/modules/cloudfront_intercode/nginx/crawler-map.conf terraform/modules/cloudfront_intercode/nginx/rails-locations.conf /etc/nginx/intercode/
