@@ -1,16 +1,5 @@
 import { useMemo } from 'react';
-import {
-  ActionFunction,
-  data,
-  Link,
-  LoaderFunction,
-  Navigate,
-  Outlet,
-  useFetcher,
-  useLoaderData,
-  useParams,
-  RouterContextProvider,
-} from 'react-router';
+import { data, Link, Navigate, Outlet, useFetcher, useLoaderData, useParams } from 'react-router';
 import sortBy from 'lodash/sortBy';
 import flatMap from 'lodash/flatMap';
 import { notEmpty } from '@neinteractiveliterature/litform';
@@ -20,22 +9,24 @@ import FormTypes from '../../../config/form_types.json';
 import InPlaceEditor from '../BuiltInFormControls/InPlaceEditor';
 import { parseTypedFormItemObject } from './FormItemUtils';
 import usePageTitle from '../usePageTitle';
-import { FormEditorQueryData, FormEditorQueryDocument, FormEditorQueryVariables } from './queries.generated';
+import { FormEditorQueryDocument } from './queries.generated';
 import { useTranslation } from 'react-i18next';
 import { apolloClientContext } from 'AppContexts';
 import { UpdateFormDocument } from './mutations.generated';
 import styles from 'styles/form_editor.module.scss';
+import type { Route } from './+types/FormEditor';
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ params: { id }, context }) => {
+export const clientLoader = async ({ params: { id }, context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<FormEditorQueryData, FormEditorQueryVariables>({
+  const { data } = await client.query({
     query: FormEditorQueryDocument,
     variables: { id: id ?? '' },
+    errorPolicy: 'none',
   });
   return data;
 };
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ params: { id }, request, context }) => {
+export const clientAction = async ({ params: { id }, request, context }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     const formData = await request.formData();
@@ -55,7 +46,7 @@ function FormEditor(): React.JSX.Element {
     throw new Error('id not found in URL params');
   }
   const { t } = useTranslation();
-  const data = useLoaderData() as FormEditorQueryData;
+  const data = useLoaderData<typeof clientLoader>();
   const fetcher = useFetcher();
 
   const form: FormEditorForm = useMemo(() => {

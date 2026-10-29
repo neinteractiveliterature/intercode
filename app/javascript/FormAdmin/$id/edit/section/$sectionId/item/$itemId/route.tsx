@@ -2,7 +2,7 @@ import * as React from 'react';
 import { useContext, useMemo, useState, useCallback } from 'react';
 
 import { useApolloClient } from '@apollo/client/react';
-import { ActionFunction, RouterContextProvider, redirect, useFetcher, useParams } from 'react-router';
+import { redirect, useFetcher, useParams } from 'react-router';
 // TODO: uncomment this when re-adding Prompt support below
 // import isEqual from 'lodash/isEqual';
 import { useDebouncedState, ErrorDisplay } from '@neinteractiveliterature/litform';
@@ -25,12 +25,9 @@ import { DeleteFormItemDocument, UpdateFormItemDocument } from 'FormAdmin/mutati
 import { FormItem } from 'graphqlTypes.generated';
 import FormItemEditorContent from './FormItemEditorContent';
 import styles from 'styles/form_editor.module.scss';
+import type { Route } from './+types/route';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({
-  context,
-  request,
-  params: { id, sectionId, itemId },
-}) => {
+export const clientAction = async ({ context, request, params: { id, sectionId, itemId } }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     if (request.method === 'PATCH') {

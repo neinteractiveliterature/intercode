@@ -1,5 +1,5 @@
 import { useContext, useRef, useMemo } from 'react';
-import { ActionFunction, redirect, RouterContextProvider } from 'react-router';
+import { redirect } from 'react-router';
 import { apolloClientContext } from 'AppContexts';
 import invariant from 'tiny-invariant';
 import { FormSection } from 'graphqlTypes.generated';
@@ -9,12 +9,9 @@ import FormSectionNav from './FormSectionNav';
 import FormSectionEditorContent from './FormSectionEditorContent';
 import FormSectionEditorAddItemBar from './FormSectionEditorAddItemBar';
 import styles from 'styles/form_editor.module.scss';
+import type { Route } from './+types/route';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({
-  request,
-  params: { sectionId },
-  context,
-}) => {
+export const clientAction = async ({ request, params: { sectionId }, context }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     invariant(sectionId != null);
