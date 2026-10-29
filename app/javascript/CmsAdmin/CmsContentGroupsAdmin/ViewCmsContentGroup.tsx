@@ -1,12 +1,12 @@
 import usePageTitle from '../../usePageTitle';
 import CmsContentGroupFormFields from './CmsContentGroupFormFields';
 import { useLoaderData } from 'react-router';
-import { singleCmsContentGroupAdminLoader, SingleCmsContentGroupAdminLoaderResult } from './loaders';
+import { singleCmsContentGroupAdminLoader } from './loaders';
 
 export const clientLoader = singleCmsContentGroupAdminLoader;
 
 function ViewCmsContentGroup(): React.JSX.Element {
-  const { data, contentGroup } = useLoaderData() as SingleCmsContentGroupAdminLoaderResult;
+  const { data, contentGroup } = useLoaderData<typeof clientLoader>();
   usePageTitle(contentGroup.name);
 
   return (

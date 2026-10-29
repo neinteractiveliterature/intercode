@@ -1,8 +1,8 @@
-import { ActionFunction, RouterContextProvider } from 'react-router';
 import { apolloClientContext } from '../../AppContexts';
 import { DeleteCmsVariableMutationDocument, SetCmsVariableMutationDocument } from './mutations.generated';
+import type { Route } from './+types/SingleVariableRoute';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, params: { key }, request }) => {
+export const clientAction = async ({ context, params: { key }, request }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   const formData = await request.formData();
 

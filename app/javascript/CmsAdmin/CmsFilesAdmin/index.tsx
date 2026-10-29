@@ -5,16 +5,17 @@ import { useTranslation } from 'react-i18next';
 import FilePreview from './FilePreview';
 import usePageTitle from '../../usePageTitle';
 import InPlaceEditor from '../../BuiltInFormControls/InPlaceEditor';
-import { CmsFilesAdminQueryData, CmsFilesAdminQueryDocument } from './queries.generated';
+import { CmsFilesAdminQueryDocument } from './queries.generated';
 import { useCallback } from 'react';
 import FileUploadForm from '../../BuiltInForms/FileUploadForm';
 import { Blob } from '@rails/activestorage';
-import { ActionFunction, LoaderFunction, redirect, useLoaderData, RouterContextProvider } from 'react-router';
+import { redirect, useLoaderData } from 'react-router';
 import { apolloClientContext } from 'AppContexts';
 import { CreateCmsFileDocument, DeleteCmsFileDocument, RenameCmsFileDocument } from './mutations.generated';
 import { useSubmit } from 'react-router';
+import type { Route } from './+types/index';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ request, context }) => {
+export const clientAction = async ({ request, context }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   const formData = await request.formData();
 
@@ -54,14 +55,14 @@ export const clientAction: ActionFunction<RouterContextProvider> = async ({ requ
   return redirect('/cms_files');
 };
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<CmsFilesAdminQueryData>({ query: CmsFilesAdminQueryDocument });
+  const { data } = await client.query({ query: CmsFilesAdminQueryDocument, errorPolicy: 'none' });
   return data;
 };
 
 function CmsFilesAdmin(): React.JSX.Element {
-  const data = useLoaderData() as CmsFilesAdminQueryData;
+  const data = useLoaderData<typeof clientLoader>();
   const confirm = useConfirm();
   const { t } = useTranslation();
   const submit = useSubmit();

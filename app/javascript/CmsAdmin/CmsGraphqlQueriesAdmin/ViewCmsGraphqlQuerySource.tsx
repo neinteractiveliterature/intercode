@@ -2,12 +2,12 @@ import CmsGraphqlQueryForm from './CmsGraphqlQueryForm';
 import usePageTitle from '../../usePageTitle';
 
 import { useLoaderData } from 'react-router';
-import { singleCmsGraphqlQueryAdminLoader, SingleCmsGraphqlQueryAdminLoaderResult } from './loaders';
+import { singleCmsGraphqlQueryAdminLoader } from './loaders';
 
 export const clientLoader = singleCmsGraphqlQueryAdminLoader;
 
 function ViewCmsGraphqlQuerySource() {
-  const { graphqlQuery: query } = useLoaderData() as SingleCmsGraphqlQueryAdminLoaderResult;
+  const { graphqlQuery: query } = useLoaderData<typeof clientLoader>();
   usePageTitle(`View “${query.identifier}” Source`);
 
   return (

@@ -4,18 +4,19 @@ import { sortByLocaleString } from '@neinteractiveliterature/litform';
 import AddVariableRow, { AddingVariable } from './AddVariableRow';
 import ExistingVariableRow from './ExistingVariableRow';
 import usePageTitle from '../../usePageTitle';
-import { CmsVariablesQueryData, CmsVariablesQueryDocument } from './queries.generated';
-import { LoaderFunction, useLoaderData, RouterContextProvider } from 'react-router';
+import { CmsVariablesQueryDocument } from './queries.generated';
+import { useLoaderData } from 'react-router';
 import { apolloClientContext } from 'AppContexts';
+import type { Route } from './+types/index';
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query({ query: CmsVariablesQueryDocument });
+  const { data } = await client.query({ query: CmsVariablesQueryDocument, errorPolicy: 'none' });
   return data;
 };
 
 function CmsVariablesAdmin(): React.JSX.Element {
-  const data = useLoaderData() as CmsVariablesQueryData;
+  const data = useLoaderData<typeof clientLoader>();
   const [addingVariables, setAddingVariables] = useState<AddingVariable[]>([]);
 
   const addVariable = useCallback(

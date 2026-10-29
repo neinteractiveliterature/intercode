@@ -1,25 +1,21 @@
-import { LoaderFunction, useRouteLoaderData } from 'react-router';
+import { LoaderFunctionArgs } from 'react-router';
 import { apolloClientContext } from 'AppContexts';
-import { CmsPagesAdminQueryData, CmsPagesAdminQueryDocument } from './queries.generated';
+import { CmsPagesAdminQueryDocument } from './queries.generated';
 import { NamedRoute } from '../../NamedRoute';
+import useRequiredRouteLoaderData from '../../useRequiredRouteLoaderData';
 
-export const cmsPagesAdminLoader: LoaderFunction = async ({ context }) => {
+export const cmsPagesAdminLoader = async ({ context }: LoaderFunctionArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<CmsPagesAdminQueryData>({ query: CmsPagesAdminQueryDocument });
+  const { data } = await client.query({ query: CmsPagesAdminQueryDocument, errorPolicy: 'none' });
   return data;
 };
 
 export function useCmsPagesAdminLoader() {
-  return useRouteLoaderData(NamedRoute.CmsPagesAdmin) as CmsPagesAdminQueryData;
+  return useRequiredRouteLoaderData<typeof cmsPagesAdminLoader>(NamedRoute.CmsPagesAdmin);
 }
 
-export type SingleCmsPageAdminLoaderResult = {
-  data: CmsPagesAdminQueryData;
-  page: CmsPagesAdminQueryData['cmsParent']['cmsPages'][number];
-};
-
-export const singleCmsPageAdminLoader: LoaderFunction = async ({ params: { id }, ...args }) => {
-  const data = (await cmsPagesAdminLoader({ params: {}, ...args })) as CmsPagesAdminQueryData;
+export const singleCmsPageAdminLoader = async ({ params: { id }, ...args }: LoaderFunctionArgs) => {
+  const data = await cmsPagesAdminLoader({ params: {}, ...args });
   const page = data.cmsParent.cmsPages.find((page) => page.id === id);
 
   if (!page) {

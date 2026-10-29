@@ -2,24 +2,16 @@ import { useState } from 'react';
 
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
-import {
-  ActionFunction,
-  Form,
-  redirect,
-  useActionData,
-  useLoaderData,
-  useNavigation,
-  useSearchParams,
-  RouterContextProvider,
-} from 'react-router';
+import { Form, redirect, useActionData, useLoaderData, useNavigation, useSearchParams } from 'react-router';
 import { buildPageInputFromFormData } from './buildPageInput';
 import CmsPageForm from './CmsPageForm';
 import usePageTitle from '../../usePageTitle';
-import { singleCmsPageAdminLoader, SingleCmsPageAdminLoaderResult } from './loaders';
+import { singleCmsPageAdminLoader } from './loaders';
 import { UpdatePageDocument } from './mutations.generated';
 import { apolloClientContext } from '../../AppContexts';
+import type { Route } from './+types/EditCmsPage';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ params: { id }, request, context }) => {
+export const clientAction = async ({ params: { id }, request, context }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   const formData = await request.formData();
 
@@ -42,12 +34,12 @@ export const clientAction: ActionFunction<RouterContextProvider> = async ({ para
 export const clientLoader = singleCmsPageAdminLoader;
 
 function EditCmsPageForm() {
-  const { data, page: initialPage } = useLoaderData() as SingleCmsPageAdminLoaderResult;
+  const { data, page: initialPage } = useLoaderData<typeof clientLoader>();
   const { cmsParent } = data;
   const [page, setPage] = useState(initialPage);
   const [searchParams] = useSearchParams();
   const navigation = useNavigation();
-  const updateError = useActionData();
+  const updateError = useActionData<typeof clientAction>();
 
   usePageTitle(`Edit “${initialPage.name}”`);
 

@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { ActionFunction, Form, redirect, useActionData, useNavigation, RouterContextProvider } from 'react-router';
+import { Form, redirect, useActionData, useNavigation } from 'react-router';
 
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -9,8 +9,9 @@ import usePageTitle from '../../usePageTitle';
 import { CmsLayout } from '../../graphqlTypes.generated';
 import { CreateLayoutDocument } from './mutations.generated';
 import { apolloClientContext } from 'AppContexts';
+import type { Route } from './+types/NewCmsLayout';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
+export const clientAction = async ({ context, request }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   const formData = await request.formData();
 
@@ -31,7 +32,7 @@ export const clientAction: ActionFunction<RouterContextProvider> = async ({ cont
 
 function NewCmsLayout(): React.JSX.Element {
   const [layout, setLayout] = useState<Pick<CmsLayout, 'name' | 'admin_notes' | 'navbar_classes' | 'content'>>({});
-  const createError = useActionData();
+  const createError = useActionData<typeof clientAction>();
   const navigation = useNavigation();
 
   usePageTitle('New Layout');

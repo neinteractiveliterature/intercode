@@ -1,24 +1,17 @@
 import { useState } from 'react';
 
-import {
-  ActionFunction,
-  Form,
-  redirect,
-  useActionData,
-  useLoaderData,
-  useNavigation,
-  RouterContextProvider,
-} from 'react-router';
+import { Form, redirect, useActionData, useLoaderData, useNavigation } from 'react-router';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { buildLayoutInputFromFormData } from './buildLayoutInput';
 import CmsLayoutForm from './CmsLayoutForm';
 import usePageTitle from '../../usePageTitle';
-import { singleCmsLayoutAdminLoader, SingleCmsLayoutAdminLoaderResult } from './loaders';
+import { singleCmsLayoutAdminLoader } from './loaders';
 import { apolloClientContext } from '../../AppContexts';
 import { UpdateLayoutDocument } from './mutations.generated';
+import type { Route } from './+types/EditCmsLayout';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ params: { id }, request, context }) => {
+export const clientAction = async ({ params: { id }, request, context }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   const formData = await request.formData();
 
@@ -41,9 +34,9 @@ export const clientAction: ActionFunction<RouterContextProvider> = async ({ para
 export const clientLoader = singleCmsLayoutAdminLoader;
 
 function EditCmsLayout() {
-  const { layout: initialLayout } = useLoaderData() as SingleCmsLayoutAdminLoaderResult;
+  const { layout: initialLayout } = useLoaderData<typeof clientLoader>();
   const [layout, setLayout] = useState(initialLayout);
-  const updateError = useActionData();
+  const updateError = useActionData<typeof clientAction>();
   const navigation = useNavigation();
 
   usePageTitle(`Editing “${initialLayout.name}”`);

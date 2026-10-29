@@ -1,24 +1,17 @@
 import { useState } from 'react';
 
-import {
-  ActionFunction,
-  Form,
-  redirect,
-  useActionData,
-  useLoaderData,
-  useNavigation,
-  RouterContextProvider,
-} from 'react-router';
+import { Form, redirect, useActionData, useLoaderData, useNavigation } from 'react-router';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import { buildPartialInputFromFormData } from './buildPartialInput';
 import CmsPartialForm from './CmsPartialForm';
 import usePageTitle from '../../usePageTitle';
-import { singleCmsPartialAdminLoader, SingleCmsPartialAdminLoaderResult } from './loaders';
+import { singleCmsPartialAdminLoader } from './loaders';
 import { UpdatePartialDocument } from './mutations.generated';
 import { apolloClientContext } from '../../AppContexts';
+import type { Route } from './+types/EditCmsPartial';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ params: { id }, request, context }) => {
+export const clientAction = async ({ params: { id }, request, context }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   const formData = await request.formData();
 
@@ -41,10 +34,10 @@ export const clientAction: ActionFunction<RouterContextProvider> = async ({ para
 export const clientLoader = singleCmsPartialAdminLoader;
 
 function EditCmsPartialForm() {
-  const { partial: initialPartial } = useLoaderData() as SingleCmsPartialAdminLoaderResult;
+  const { partial: initialPartial } = useLoaderData<typeof clientLoader>();
   const [partial, setPartial] = useState(initialPartial);
   const navigation = useNavigation();
-  const updateError = useActionData();
+  const updateError = useActionData<typeof clientAction>();
 
   usePageTitle(`Editing “${initialPartial.name}”`);
 
