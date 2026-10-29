@@ -5,12 +5,12 @@ import { vi } from 'vitest';
 import { renderRoute, userEvent, waitFor } from '../testUtils';
 import runAction from '../runAction';
 import {
-  action as editAction,
+  clientAction as editAction,
   Component as EditCouponModal,
-  loader as editLoader,
+  clientLoader as editLoader,
 } from '../../../app/javascript/Store/CouponAdmin/EditCouponModal';
 import {
-  action as newAction,
+  clientAction as newAction,
   Component as NewCouponModal,
 } from '../../../app/javascript/Store/CouponAdmin/NewCouponModal';
 import {

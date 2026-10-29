@@ -2,7 +2,7 @@ import { MockLink } from '@apollo/client/testing';
 import { vi } from 'vitest';
 
 import { renderRoute, userEvent, waitFor, within } from '../testUtils';
-import { Component as OrderHistory, loader } from '../../../app/javascript/Store/OrderHistory';
+import { Component as OrderHistory, clientLoader as loader } from '../../../app/javascript/Store/OrderHistory';
 import { OrderHistoryQueryData, OrderHistoryQueryDocument } from '../../../app/javascript/Store/queries.generated';
 import { OrderStatus } from '../../../app/javascript/graphqlTypes.generated';
 import { buildMoney } from '../fixtures/store';

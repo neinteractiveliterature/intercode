@@ -2,10 +2,10 @@ import { MockLink } from '@apollo/client/testing';
 import { vi } from 'vitest';
 
 import { renderRoute, userEvent, waitFor, within } from '../testUtils';
-import { Component as Cart, loader } from '../../../app/javascript/Store/Cart';
-import { action as orderEntryAction } from '../../../app/javascript/Store/Cart/order_entries/$id';
-import { action as couponApplicationsAction } from '../../../app/javascript/Store/Cart/coupon_applications/route';
-import { action as couponApplicationAction } from '../../../app/javascript/Store/Cart/coupon_applications/$id';
+import { Component as Cart, clientLoader as loader } from '../../../app/javascript/Store/Cart';
+import { clientAction as orderEntryAction } from '../../../app/javascript/Store/Cart/order_entries/$id';
+import { clientAction as couponApplicationsAction } from '../../../app/javascript/Store/Cart/coupon_applications/route';
+import { clientAction as couponApplicationAction } from '../../../app/javascript/Store/Cart/coupon_applications/$id';
 import { CartQueryData, CartQueryDocument } from '../../../app/javascript/Store/Cart/queries.generated';
 import {
   CreateCouponApplicationDocument,

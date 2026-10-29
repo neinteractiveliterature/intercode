@@ -3,7 +3,7 @@ import { apolloClientContext } from '../../AppContexts';
 import { MarkOrderPaidDocument } from './mutations.generated';
 import invariant from 'tiny-invariant';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ context, params: { id }, request }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, params: { id }, request }) => {
   const client = context.get(apolloClientContext);
   invariant(id != null);
 

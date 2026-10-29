@@ -3,8 +3,8 @@ import { parse } from 'graphql';
 import { MockLink } from '@apollo/client/testing';
 
 import runAction from '../runAction';
-import { action as createProductAction } from '../../../app/javascript/Store/ProductAdmin/index';
-import { action as productAction } from '../../../app/javascript/Store/ProductAdmin/$id';
+import { clientAction as createProductAction } from '../../../app/javascript/Store/ProductAdmin/index';
+import { clientAction as productAction } from '../../../app/javascript/Store/ProductAdmin/$id';
 import {
   CreateProductDocument,
   DeleteProductDocument,

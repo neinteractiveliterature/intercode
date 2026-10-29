@@ -5,7 +5,7 @@ import EditOrderModal from './EditOrderModal';
 import { AdminUpdateOrderDocument } from './mutations.generated';
 import { AdminOrderQueryData, AdminOrderQueryDocument } from './queries.generated';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ params: { id }, request, context }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ params: { id }, request, context }) => {
   const client = context.get(apolloClientContext);
   try {
     if (request.method === 'PATCH') {
@@ -23,7 +23,7 @@ export const action: ActionFunction<RouterContextProvider> = async ({ params: { 
   }
 };
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ params: { id }, context }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ params: { id }, context }) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query({
     query: AdminOrderQueryDocument,

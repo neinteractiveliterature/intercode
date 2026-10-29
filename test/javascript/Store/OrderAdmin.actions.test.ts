@@ -2,14 +2,14 @@ import { MockLink } from '@apollo/client/testing';
 import { data } from 'react-router';
 
 import runAction from '../runAction';
-import { action as markPaidAction } from '../../../app/javascript/Store/OrderAdmin/mark_paid';
-import { action as cancelAction } from '../../../app/javascript/Store/OrderAdmin/cancel';
-import { action as updateOrderAction } from '../../../app/javascript/Store/OrderAdmin/$id';
-import { action as createOrderAction } from '../../../app/javascript/Store/OrderAdmin/index';
-import { action as createOrderEntryAction } from '../../../app/javascript/Store/OrderAdmin/order_entries/route';
-import { action as orderEntryAction } from '../../../app/javascript/Store/OrderAdmin/order_entries/$orderEntryId';
-import { action as createCouponApplicationAction } from '../../../app/javascript/Store/OrderAdmin/coupon_applications/route';
-import { action as couponApplicationAction } from '../../../app/javascript/Store/OrderAdmin/coupon_applications/$couponApplicationId';
+import { clientAction as markPaidAction } from '../../../app/javascript/Store/OrderAdmin/mark_paid';
+import { clientAction as cancelAction } from '../../../app/javascript/Store/OrderAdmin/cancel';
+import { clientAction as updateOrderAction } from '../../../app/javascript/Store/OrderAdmin/$id';
+import { clientAction as createOrderAction } from '../../../app/javascript/Store/OrderAdmin/index';
+import { clientAction as createOrderEntryAction } from '../../../app/javascript/Store/OrderAdmin/order_entries/route';
+import { clientAction as orderEntryAction } from '../../../app/javascript/Store/OrderAdmin/order_entries/$orderEntryId';
+import { clientAction as createCouponApplicationAction } from '../../../app/javascript/Store/OrderAdmin/coupon_applications/route';
+import { clientAction as couponApplicationAction } from '../../../app/javascript/Store/OrderAdmin/coupon_applications/$couponApplicationId';
 import {
   AdminCreateOrderEntryDocument,
   AdminDeleteOrderEntryDocument,
