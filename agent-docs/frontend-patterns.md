@@ -24,11 +24,21 @@ Routes follow a file-based convention similar to Remix/React Router v7:
 - `$id.ts`: Dynamic route segment
 - `loaders.ts`: Loader functions for the route
 
+### Route module exports
+
+The app is moving from data-mode React Router (`AppRouter.tsx`) to framework mode (#12219), so route modules use the names framework mode expects. `AppRouter.tsx` loads them through `lazyRoute`, which maps the names back for data mode:
+
+- the component is the **default export** (`export default MyPage;`), not `Component`
+- the loader and action are **`clientLoader`** and **`clientAction`**, not `loader` and `action` (framework SPA builds reject those)
+- a route module may also export `ErrorBoundary`, `HydrateFallback`, `handle` and `shouldRevalidate`
+
+Middleware, route-level loaders and `element`s that `AppRouter.tsx` attaches to a route are not in the module yet; they are generated into small wrapper modules for the framework build.
+
 ### Loader Data Access
 
 ```typescript
 import { useLoaderData, useRouteLoaderData } from 'react-router';
-import { NamedRoute } from './AppRouter';
+import { NamedRoute } from './NamedRoute';
 
 function MyComponent() {
   // For current route's loader data

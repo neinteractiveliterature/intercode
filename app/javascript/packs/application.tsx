@@ -9,6 +9,7 @@ import { AuthenticationManagerContext } from '../Authentication/authenticationMa
 import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
 import { checkAppEntrypointHeadersOnError } from '../checkAppEntrypointHeadersMatch';
 import BootErrorBoundary from '../BootErrorBoundary';
+import { lazyRoute } from '../lazyRoute';
 
 const bootstrapPromise = startAppBootstrap();
 
@@ -48,7 +49,7 @@ function DataModeApplicationEntry() {
         withEntrypointReloadOnLazy([
           {
             id: 'root',
-            lazy: () => import('root'),
+            lazy: lazyRoute(() => import('root')),
             children: appRootRoutes,
           },
         ]),
