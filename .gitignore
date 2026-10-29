@@ -115,3 +115,4 @@ cookbooks
 **/.terraform.lock.hcl
 /build/framework
 /.react-router
+/public/assets
