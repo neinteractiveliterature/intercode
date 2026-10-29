@@ -69,6 +69,73 @@ class Tables::EventsTableResultsPresenterTest < ActiveSupport::TestCase
     assert_equal [other_event.id], filtered_ids(:text_search, "Zebra")
   end
 
+  it "includes events with a title word starting with the text search" do
+    PgSearch::Multisearch.rebuild(Event)
+
+    assert_equal [other_event.id], filtered_ids(:text_search, "zeb")
+    assert_equal [event.id], filtered_ids(:text_search, "adv")
+  end
+
+  describe "sorting by relevance" do
+    let(:description_match) do
+      create(:event, convention:, event_category:, title: "Garden Party", description: "zebra zebra zebra")
+    end
+
+    def relevance_ids(text_search, extra_sort: [])
+      build_presenter(
+        filters: {
+          "text_search" => text_search
+        },
+        sort: [{ field: "relevance", desc: false }, *extra_sort]
+      ).scoped.map(&:id)
+    end
+
+    before do
+      other_event.update!(description: "filler " * 200)
+      description_match
+      PgSearch::Multisearch.rebuild(Event)
+    end
+
+    it "puts title prefix matches before other matches, even better full text matches" do
+      full_text_order =
+        PgSearch.multisearch("zebra").where(searchable_type: "Event").with_pg_search_rank.map(&:searchable_id)
+
+      assert_equal description_match.id, full_text_order.first, "full text search alone should prefer the other event"
+      assert_equal [other_event.id, description_match.id], relevance_ids("zebra")
+    end
+
+    it "orders the other matches by how well they match the full text search" do
+      create(:event, convention:, event_category:, title: "Tea Time", description: "A zebra appears")
+      PgSearch::Multisearch.rebuild(Event)
+      full_text_order =
+        PgSearch.multisearch("zebra").where(searchable_type: "Event").with_pg_search_rank.map(&:searchable_id)
+
+      assert_equal 3, full_text_order.size
+      assert_equal [other_event.id, *(full_text_order - [other_event.id])], relevance_ids("zebra")
+    end
+
+    it "does not drop events that only match the title prefix" do
+      assert_equal [other_event.id], relevance_ids("zeb")
+    end
+
+    it "does nothing without a text search" do
+      sort = [{ field: "relevance", desc: false }, { field: "title", desc: false }]
+      ids = build_presenter(sort:).scoped.map(&:id)
+
+      assert_equal [event.id, description_match.id, other_event.id], ids
+    end
+
+    it "breaks ties with the next sort" do
+      bravo = create(:event, convention:, event_category:, title: "Zebra Bravo")
+      alpha = create(:event, convention:, event_category:, title: "Zebra Alpha")
+      PgSearch::Multisearch.rebuild(Event)
+
+      ids = relevance_ids("zebra", extra_sort: [{ field: "title", desc: false }])
+
+      assert_equal [alpha.id, bravo.id, other_event.id], ids.first(3)
+    end
+  end
+
   it "filters and sorts by the viewer's rating" do
     create(:event_rating, event:, user_con_profile: viewer_profile, rating: 1)
     create(:event_rating, event: other_event, user_con_profile: viewer_profile, rating: -1)

@@ -163,6 +163,57 @@ describe('EventList (the event catalog)', () => {
     });
   });
 
+  describe('sorting while searching', () => {
+    it('sorts by relevance by default, then title', async () => {
+      const r = await renderPage({ path: '/events?filters.text_search=pr' });
+      await r.findByRole('link', { name: 'Alpha' });
+
+      expect(lastVariables().sort).toEqual([
+        { field: 'relevance', desc: false },
+        { field: 'title', desc: false },
+      ]);
+      expect(r.getByRole('button', { name: 'Sort by relevance' })).toBeTruthy();
+    });
+
+    it('puts relevance ahead of favorites for someone with a profile', async () => {
+      const r = await renderPage({ myProfile: true, path: '/events?filters.text_search=pr' });
+      await r.findByRole('link', { name: 'Alpha' });
+
+      expect(lastVariables().sort).toEqual([
+        { field: 'relevance', desc: false },
+        { field: 'title', desc: false },
+      ]);
+    });
+
+    it('offers relevance only while there is a text search', async () => {
+      const searching = await renderPage({ path: '/events?filters.text_search=pr' });
+      await searching.findByRole('link', { name: 'Alpha' });
+      await user.click(searching.getByRole('button', { name: /Sort by/ }));
+      expect(await searching.findByRole('button', { name: 'Relevance' })).toBeTruthy();
+      searching.unmount();
+
+      const browsing = await renderPage();
+      await browsing.findByRole('link', { name: 'Alpha' });
+      await user.click(browsing.getByRole('button', { name: /Sort by/ }));
+      expect(await browsing.findByRole('button', { name: 'Order added (newest first)' })).toBeTruthy();
+      expect(browsing.queryByRole('button', { name: 'Relevance' })).toBeNull();
+    });
+
+    it('keeps a sort that was chosen over relevance', async () => {
+      const r = await renderPage({ path: '/events?filters.text_search=pr&sort.created_at=desc' });
+      await r.findByRole('link', { name: 'Alpha' });
+
+      expect(lastVariables().sort).toEqual([{ field: 'created_at', desc: true }]);
+    });
+
+    it('ignores relevance from a link when there is no text search', async () => {
+      const r = await renderPage({ path: '/events?sort.relevance=asc' });
+      await r.findByRole('link', { name: 'Alpha' });
+
+      expect(lastVariables().sort).toEqual([{ field: 'title', desc: false }]);
+    });
+  });
+
   describe('sorting', () => {
     it('offers convention order only to people who can read the schedule', async () => {
       const allowed = await renderPage();

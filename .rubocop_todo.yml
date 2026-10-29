@@ -163,6 +163,7 @@ Rails/HasAndBelongsToMany:
   Exclude:
     - 'app/models/page.rb'
     - 'app/models/run.rb'
+    - 'app/models/user_con_profile.rb'
 
 Rails/HasManyOrHasOneDependent:
   Exclude:
@@ -177,6 +178,7 @@ Rails/SkipsModelValidations:
   Exclude:
     - 'app/controllers/application_controller.rb'
     - 'app/models/page.rb'
+    - 'app/models/user_con_profile.rb'
     - 'app/services/event_change_registration_policy_service.rb'
     - 'app/services/event_freeze_bucket_assignments_service.rb'
     - 'app/services/execute_ranked_choice_signup_round_service.rb'
@@ -258,6 +260,7 @@ Rails/InverseOf:
   Exclude:
     - 'app/models/run.rb'
     - 'app/models/signup.rb'
+    - 'app/models/user_con_profile.rb'
 
 Naming/MemoizedInstanceVariableName:
   Exclude:

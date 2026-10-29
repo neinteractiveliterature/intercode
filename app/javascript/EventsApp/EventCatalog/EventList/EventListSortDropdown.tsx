@@ -15,12 +15,14 @@ const SORT_ORDERS = [
 
 export type EventListSortDropdownProps = {
   showConventionOrder: boolean;
+  showRelevance?: boolean;
   value?: SortingState;
   onChange: React.Dispatch<SortingState>;
 };
 
 function EventListSortDropdown({
   showConventionOrder,
+  showRelevance,
   value,
   onChange,
 }: EventListSortDropdownProps): React.JSX.Element {
@@ -41,6 +43,16 @@ function EventListSortDropdown({
         { id: 'title', desc: false },
       ],
       caption: 'my favorites',
+    });
+  }
+
+  if (showRelevance) {
+    mySortOrders.splice(0, 0, {
+      sorted: [
+        { id: 'relevance', desc: false },
+        { id: 'title', desc: false },
+      ],
+      caption: 'relevance',
     });
   }
 

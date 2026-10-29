@@ -60,12 +60,18 @@ function EventList(): React.JSX.Element {
   });
   const { myProfile } = useContext(AppRootContext);
   const { t } = useTranslation();
-  const defaultSort = myProfile
+  const hasTextSearch = filters?.some(({ id, value }) => id === 'text_search' && !!value) ?? false;
+  const defaultSort = hasTextSearch
     ? [
-        { id: 'my_rating', desc: true },
+        { id: 'relevance', desc: false },
         { id: 'title', desc: false },
       ]
-    : [{ id: 'title', desc: false }];
+    : myProfile
+      ? [
+          { id: 'my_rating', desc: true },
+          { id: 'title', desc: false },
+        ]
+      : [{ id: 'title', desc: false }];
   const [cachedPageCount, setCachedPageCount] = useState<number>();
   const defaultFiltered = myProfile
     ? [
@@ -73,7 +79,9 @@ function EventList(): React.JSX.Element {
         { id: 'category', value: [] },
       ]
     : [{ id: 'category', value: [] }];
-  const effectiveSortBy = sortBy && sortBy.length > 0 ? sortBy : defaultSort;
+  // relevance only means something while there's a text search, so ignore it (e.g. from an old link) otherwise
+  const requestedSortBy = sortBy?.filter(({ id }) => hasTextSearch || id !== 'relevance');
+  const effectiveSortBy = requestedSortBy && requestedSortBy.length > 0 ? requestedSortBy : defaultSort;
   const effectiveFilters: ColumnFiltersState = filters && filters.length > 0 ? filters : defaultFiltered;
   const filterableFormItemIdentifiers = useMemo(
     () => filterableFormItems.map((item) => item.identifier).filter(notEmpty),
@@ -185,7 +193,8 @@ function EventList(): React.JSX.Element {
             <div>
               <EventListSortDropdown
                 showConventionOrder={(!loading && data?.currentAbility.can_read_schedule) ?? false}
-                value={sortBy}
+                showRelevance={hasTextSearch}
+                value={effectiveSortBy}
                 onChange={(newSortBy) => {
                   updateSearch({ sortBy: newSortBy });
                 }}

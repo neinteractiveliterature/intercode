@@ -37,13 +37,49 @@ class Tables::EventsTableResultsPresenter < Tables::TableResultsPresenter
     end
   end
 
+  # Full text search only matches whole words, so this also matches events with a title word starting
+  # with the search text
   field :text_search, "Text search" do
     def apply_filter(scope, value)
-      scope.where(id: PgSearch.multisearch(value).where(searchable_type: "Event").select(:searchable_id))
+      full_text_matches = PgSearch.multisearch(value).where(searchable_type: "Event").select(:searchable_id)
+      scope.where(id: full_text_matches).or(scope.where(id: Event.title_prefix(value).reorder(nil).select(:id)))
     end
 
     def sql_order(_direction)
       nil
+    end
+  end
+
+  # Sorts the text search results best first: title prefix matches, then by how well they match the
+  # full text search. Does nothing when there's no text search.
+  field :relevance, "Relevance" do
+    delegate :filters, to: :presenter
+
+    def search_text
+      filters.with_indifferent_access[:text_search]
+    end
+
+    # Weird hax: like title and my_rating, we do the actual sorting here so that it stays in order with them
+    def expand_scope_for_sort(scope, _direction)
+      return scope if search_text.blank?
+
+      ranks = PgSearch.multisearch(search_text).where(searchable_type: "Event").with_pg_search_rank.reorder(nil)
+      title_prefix_ids = Event.title_prefix(search_text).reorder(nil).select(:id)
+
+      scope.joins(
+        "LEFT JOIN (#{ranks.to_sql}) event_search_ranks ON event_search_ranks.searchable_id = events.id"
+      ).order(Arel.sql(<<~SQL.squish))
+          (events.id IN (#{title_prefix_ids.to_sql})) DESC,
+          event_search_ranks.pg_search_rank DESC NULLS LAST
+        SQL
+    end
+
+    def sql_order(_direction)
+      nil
+    end
+
+    def filter_only?
+      true
     end
   end
 
