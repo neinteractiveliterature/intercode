@@ -1,11 +1,13 @@
-import { Link, useFetcher, useRouteLoaderData } from 'react-router';
+import { Link, useFetcher } from 'react-router';
 
 import AdminNotes from '../BuiltInFormControls/AdminNotes';
 import EventProposalDisplay from './EventProposalDisplay';
 import EventProposalStatusUpdater from './EventProposalStatusUpdater';
 import usePageTitle from '../usePageTitle';
-import { EventProposalAdminNotesQueryDocument, EventProposalQueryWithOwnerQueryData } from './queries.generated';
+import { EventProposalAdminNotesQueryDocument } from './queries.generated';
 import humanize from '../humanize';
+import useRequiredRouteLoaderData from '../useRequiredRouteLoaderData';
+import { eventProposalWithOwnerLoader } from './loaders';
 import { NamedRoute } from '../NamedRoute';
 
 import { useSuspenseQuery } from '@apollo/client/react';
@@ -36,7 +38,7 @@ function EventProposalAdminNotes({ eventProposalId }: EventProposalAdminNotesPro
 }
 
 function EventProposalAdminDisplay() {
-  const data = useRouteLoaderData(NamedRoute.AdminEventProposal) as EventProposalQueryWithOwnerQueryData;
+  const data = useRequiredRouteLoaderData<typeof eventProposalWithOwnerLoader>(NamedRoute.AdminEventProposal);
   usePageTitle(data.convention.event_proposal.title);
 
   const eventProposalId = data.convention.event_proposal.id;

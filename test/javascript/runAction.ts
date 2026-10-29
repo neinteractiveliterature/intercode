@@ -1,6 +1,6 @@
 import { ApolloClient, InMemoryCache } from '@apollo/client';
 import { MockLink } from '@apollo/client/testing';
-import { ActionFunction, RouterContextProvider } from 'react-router';
+import { RouterContextProvider } from 'react-router';
 
 import { apolloClientContext } from '../../app/javascript/AppContexts';
 
@@ -19,8 +19,10 @@ export type RunActionOptions = {
 // Runs a React Router action on its own, against a real Apollo client on a MockLink, and returns what it returned.
 // For routes whose action is the interesting part (what mutation it sends, what it does with the result), this is
 // quicker and more direct than rendering a page that submits to it.  See agent-docs/frontend-testing.md.
-export default async function runAction(
-  action: ActionFunction<RouterContextProvider>,
+export default async function runAction<Args, Result>(
+  // Whatever the route module's action takes (the generated Route.ClientActionArgs, with its params typed from the
+  // route's path, or the plain ActionFunctionArgs): the arguments are built here from the options.
+  action: (args: Args) => Result,
   { method, params = {}, json, form, formData, apolloMocks = [], seedCache }: RunActionOptions,
 ) {
   const cache = new InMemoryCache();
@@ -40,7 +42,7 @@ export default async function runAction(
   }
 
   const request = new Request('http://localhost/action', { method, body });
-  const result = await action({ context, params, request } as Parameters<typeof action>[0]);
+  const result = await action({ context, params, request } as Args);
 
   return { result, client, cache, resetStore };
 }

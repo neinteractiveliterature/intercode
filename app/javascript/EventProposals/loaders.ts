@@ -1,16 +1,13 @@
-import { LoaderFunction, RouterContextProvider } from 'react-router';
+import { LoaderFunctionArgs } from 'react-router';
 import { apolloClientContext } from 'AppContexts';
-import {
-  EventProposalQueryWithOwnerDocument,
-  EventProposalQueryWithOwnerQueryData,
-  EventProposalQueryWithOwnerQueryVariables,
-} from './queries.generated';
+import { EventProposalQueryWithOwnerDocument } from './queries.generated';
 
-export const eventProposalWithOwnerLoader: LoaderFunction<RouterContextProvider> = async ({ context, params: { id } }) => {
+export const eventProposalWithOwnerLoader = async ({ context, params: { id } }: LoaderFunctionArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<EventProposalQueryWithOwnerQueryData, EventProposalQueryWithOwnerQueryVariables>({
+  const { data } = await client.query({
     query: EventProposalQueryWithOwnerDocument,
     variables: { eventProposalId: id ?? '' },
+    errorPolicy: 'none',
   });
   return data;
 };

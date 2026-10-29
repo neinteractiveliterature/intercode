@@ -1,31 +1,25 @@
-import {
-  Navigate,
-  useNavigate,
-  Link,
-  LoaderFunction,
-  useLoaderData,
-  useSubmit,
-  RouterContextProvider,
-} from 'react-router';
+import { Navigate, useNavigate, Link, useLoaderData, useSubmit } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { ErrorDisplay, useConfirm } from '@neinteractiveliterature/litform';
 
 import EventProposalForm from './EventProposalForm';
 import usePageTitle from '../usePageTitle';
-import { EventProposalQueryData, EventProposalQueryDocument, EventProposalQueryVariables } from './queries.generated';
+import { EventProposalQueryDocument } from './queries.generated';
 import { apolloClientContext } from 'AppContexts';
+import type { Route } from './+types/EditEventProposal';
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ params: { id }, context }) => {
+export const clientLoader = async ({ params: { id }, context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<EventProposalQueryData, EventProposalQueryVariables>({
+  const { data } = await client.query({
     query: EventProposalQueryDocument,
     variables: { eventProposalId: id ?? '' },
+    errorPolicy: 'none',
   });
   return data;
 };
 
 function EditEventProposal() {
-  const data = useLoaderData() as EventProposalQueryData;
+  const data = useLoaderData<typeof clientLoader>();
   const { t } = useTranslation();
   const navigate = useNavigate();
   const confirm = useConfirm();

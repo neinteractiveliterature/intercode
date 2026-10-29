@@ -1,14 +1,11 @@
 import { useMemo } from 'react';
-import { LoaderFunction, useLoaderData, RouterContextProvider } from 'react-router';
+import { useLoaderData } from 'react-router';
 
 import FormResponseChangeHistory from '../FormPresenter/ItemChangeDisplays/FormResponseChangeHistory';
-import {
-  EventProposalHistoryQueryData,
-  EventProposalHistoryQueryDocument,
-  EventProposalHistoryQueryVariables,
-} from './queries.generated';
+import { EventProposalHistoryQueryDocument } from './queries.generated';
 import { FormType } from '../graphqlTypes.generated';
 import { apolloClientContext } from 'AppContexts';
+import type { Route } from './+types/EventProposalHistory';
 
 const EXCLUDE_FIELDS = new Set([
   'minimum_age',
@@ -18,17 +15,18 @@ const EXCLUDE_FIELDS = new Set([
   'team_mailing_list_name',
 ]);
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ params: { id }, context }) => {
+export const clientLoader = async ({ params: { id }, context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<EventProposalHistoryQueryData, EventProposalHistoryQueryVariables>({
+  const { data } = await client.query({
     query: EventProposalHistoryQueryDocument,
     variables: { id: id ?? '' },
+    errorPolicy: 'none',
   });
   return data;
 };
 
 function EventProposalHistory() {
-  const data = useLoaderData() as EventProposalHistoryQueryData;
+  const data = useLoaderData<typeof clientLoader>();
   const changes = useMemo(
     () =>
       data.convention.event_proposal.form_response_changes.filter(
