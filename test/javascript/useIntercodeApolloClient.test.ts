@@ -135,7 +135,37 @@ describe('buildIntercodeApolloCache', () => {
       expect(result?.convention.events_paginated.total_pages).toBe(2);
     });
 
-    it('all events_paginated queries share the same cache slot (keyArgs: false)', () => {
+    it('keeps results for different filters separate, without leaking stale entries between them', () => {
+      const cache = buildIntercodeApolloCache();
+      const filteredVars = (title: string): EventListEventsQueryVariables => ({
+        page: 1,
+        pageSize: 50,
+        filters: { title },
+      });
+
+      cache.writeQuery({
+        query: EventListEventsQueryDocument,
+        variables: filteredVars('m'),
+        data: makeQueryData(1, 50, ['event-1', 'event-2', 'event-3'], 3),
+      });
+      cache.writeQuery({
+        query: EventListEventsQueryDocument,
+        variables: filteredVars('mur'),
+        data: makeQueryData(1, 50, ['event-2'], 1),
+      });
+
+      const narrowed = cache.readQuery({ query: EventListEventsQueryDocument, variables: filteredVars('mur') });
+      expect(narrowed?.convention.events_paginated.entries.map((entry) => entry.id)).toEqual(['event-2']);
+
+      const broader = cache.readQuery({ query: EventListEventsQueryDocument, variables: filteredVars('m') });
+      expect(broader?.convention.events_paginated.entries.map((entry) => entry.id)).toEqual([
+        'event-1',
+        'event-2',
+        'event-3',
+      ]);
+    });
+
+    it('pages of the same filters share one cache slot (page and per_page are not key args)', () => {
       const cache = buildIntercodeApolloCache();
 
       cache.writeQuery({
@@ -195,7 +225,7 @@ describe('buildIntercodeApolloCache', () => {
       expect(updated?.convention.events_paginated.entries[0].my_rating).toBe(1);
     });
 
-    it('updates my_rating even when keyArgs: false causes all pages to share one cache slot', () => {
+    it('updates my_rating even when all pages share one cache slot', () => {
       const cache = buildIntercodeApolloCache();
 
       // Write two pages of events
@@ -223,7 +253,7 @@ describe('buildIntercodeApolloCache', () => {
         },
       });
 
-      // All queries share the same slot, so any variables should show the updated rating
+      // Both pages share the same slot, so any page variables should show the updated rating
       const result = cache.readQuery({
         query: EventListEventsQueryDocument,
         variables: { page: 1, pageSize: 2 },
