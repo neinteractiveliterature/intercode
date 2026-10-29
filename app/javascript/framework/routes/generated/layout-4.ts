@@ -2,9 +2,9 @@
 // `yarn routes:generate`. The cutover to framework mode deletes the generator and this notice.
 
 import { SiteMode } from '../../../graphqlTypes.generated';
-import { makeAppRootContextMiddleware } from '../../../routeMiddleware';
-export const clientMiddleware = [
-  makeAppRootContextMiddleware(
+import { guarded, makeAppRootContextGuard } from '../../../routeGuards';
+export const clientLoader = guarded([
+  makeAppRootContextGuard(
     ({ convention }) => convention?.name != null && convention?.site_mode !== SiteMode.SingleEvent,
   ),
-];
+]);

@@ -28,17 +28,12 @@ import RouteErrorBoundary from 'RouteErrorBoundary';
 import { lazyRoute } from './lazyRoute';
 import { NamedRoute } from './NamedRoute';
 import NonCMSPageWrapper from './NonCMSPageWrapper';
-import {
-  editEventMiddleware,
-  eventPageMiddleware,
-  loginRequiredMiddleware,
-  makeAppRootContextMiddleware,
-  makeAuthorizationMiddleware,
-} from './routeMiddleware';
+import { guarded, loginRequiredGuard, makeAppRootContextGuard, makeAuthorizationGuard } from './routeGuards';
+import { editEventMiddleware, eventPageMiddleware } from './routeMiddleware';
 
 const eventsRoutes: RouteObject[] = [
   {
-    middleware: [makeAppRootContextMiddleware(({ convention }) => convention?.site_mode !== SiteMode.SingleEvent)],
+    loader: guarded([makeAppRootContextGuard(({ convention }) => convention?.site_mode !== SiteMode.SingleEvent)]),
     children: [
       {
         path: 'schedule',
@@ -54,11 +49,11 @@ const eventsRoutes: RouteObject[] = [
     ],
   },
   {
-    middleware: [
-      makeAppRootContextMiddleware(
+    loader: guarded([
+      makeAppRootContextGuard(
         ({ convention }) => convention?.signup_automation_mode === SignupAutomationMode.RankedChoice,
       ),
-    ],
+    ]),
     children: [{ path: 'my-signup-queue', lazy: lazyRoute(() => import('./EventsApp/MySignupQueue')) }],
   },
   {
@@ -67,9 +62,9 @@ const eventsRoutes: RouteObject[] = [
     children: [
       { path: 'attach_image', lazy: lazyRoute(() => import('./EventsApp/attach_image')) },
       {
-        middleware: [
-          makeAppRootContextMiddleware(({ convention }) => convention?.ticket_mode === TicketMode.TicketPerEvent),
-        ],
+        loader: guarded([
+          makeAppRootContextGuard(({ convention }) => convention?.ticket_mode === TicketMode.TicketPerEvent),
+        ]),
         children: [
           {
             path: 'ticket_types',
@@ -97,7 +92,8 @@ const eventsRoutes: RouteObject[] = [
       },
       {
         path: 'edit',
-        middleware: [editEventMiddleware, loginRequiredMiddleware],
+        middleware: [editEventMiddleware],
+        loader: guarded([loginRequiredGuard]),
         children: [
           {
             index: true,
@@ -316,7 +312,7 @@ const commonRoutes: RouteObject[] = [
         ],
       },
       {
-        middleware: [makeAppRootContextMiddleware(({ convention }) => convention?.name == null)],
+        loader: guarded([makeAppRootContextGuard(({ convention }) => convention?.name == null)]),
         children: [{ path: '/root_site', lazy: lazyRoute(() => import('./RootSiteAdmin/EditRootSite')) }],
       },
     ],
@@ -352,9 +348,8 @@ const commonRoutes: RouteObject[] = [
 const commonInConventionRoutes: RouteObject[] = [
   {
     path: '/admin_departments',
-    middleware: [makeAuthorizationMiddleware('can_update_departments')],
     id: NamedRoute.DepartmentAdmin,
-    loader: departmentAdminLoader,
+    loader: guarded([makeAuthorizationGuard('can_update_departments')], departmentAdminLoader),
     children: [
       {
         path: ':id',
@@ -375,11 +370,11 @@ const commonInConventionRoutes: RouteObject[] = [
     id: NamedRoute.EventAdmin,
     children: [
       {
-        middleware: [makeAppRootContextMiddleware(({ convention }) => convention?.site_mode === SiteMode.SingleEvent)],
+        loader: guarded([makeAppRootContextGuard(({ convention }) => convention?.site_mode === SiteMode.SingleEvent)]),
         children: [{ path: ':eventId/edit', lazy: lazyRoute(() => import('./EventAdmin/EventAdminEditEvent')) }],
       },
       {
-        middleware: [makeAppRootContextMiddleware(({ convention }) => convention?.site_mode !== SiteMode.SingleEvent)],
+        loader: guarded([makeAppRootContextGuard(({ convention }) => convention?.site_mode !== SiteMode.SingleEvent)]),
         children: [
           { path: 'dropped_events', lazy: lazyRoute(() => import('./EventAdmin/DroppedEventAdmin')) },
           {
@@ -447,7 +442,7 @@ const commonInConventionRoutes: RouteObject[] = [
   },
   {
     path: '/admin_notifications',
-    middleware: [makeAuthorizationMiddleware('can_update_notification_templates')],
+    loader: guarded([makeAuthorizationGuard('can_update_notification_templates')]),
     children: [
       {
         path: ':eventKey',
@@ -533,7 +528,7 @@ const commonInConventionRoutes: RouteObject[] = [
   { path: '/events', children: eventsRoutes },
   {
     path: '/mailing_lists',
-    middleware: [makeAuthorizationMiddleware('can_read_any_mailing_list')],
+    loader: guarded([makeAuthorizationGuard('can_read_any_mailing_list')]),
     children: [
       { path: 'ticketed_attendees', lazy: lazyRoute(() => import('./MailingLists/TicketedAttendees')) },
       { path: 'event_proposers', lazy: lazyRoute(() => import('./MailingLists/EventProposers')) },
@@ -546,7 +541,7 @@ const commonInConventionRoutes: RouteObject[] = [
   },
   {
     path: '/my_profile',
-    middleware: [loginRequiredMiddleware],
+    loader: guarded([loginRequiredGuard]),
     children: [
       { path: 'edit_bio', loader: () => replace('./edit') },
       { path: 'edit', lazy: lazyRoute(() => import('./MyProfile/MyProfileForm')) },
@@ -558,7 +553,7 @@ const commonInConventionRoutes: RouteObject[] = [
   { path: '/products/:id', lazy: lazyRoute(() => import('./Store/ProductPage')) },
   {
     path: '/reports',
-    middleware: [makeAuthorizationMiddleware('can_read_reports')],
+    loader: guarded([makeAuthorizationGuard('can_read_reports')]),
     children: [
       { path: 'new_and_returning_attendees', lazy: lazyRoute(() => import('./Reports/NewAndReturningAttendees')) },
       { path: 'attendance_by_payment_amount', lazy: lazyRoute(() => import('./Reports/AttendanceByPaymentAmount')) },
@@ -574,18 +569,18 @@ const commonInConventionRoutes: RouteObject[] = [
     children: [{ path: ':id', lazy: lazyRoute(() => import('./RoomsAdmin/$id/route')) }],
   },
   {
-    middleware: [makeAppRootContextMiddleware(({ convention }) => convention?.signup_mode === SignupMode.Moderated)],
+    loader: guarded([makeAppRootContextGuard(({ convention }) => convention?.signup_mode === SignupMode.Moderated)]),
     children: [
       {
         path: '/signup_moderation',
         lazy: lazyRoute(() => import('./SignupModeration')),
         children: [
           {
-            middleware: [
-              makeAppRootContextMiddleware(
+            loader: guarded([
+              makeAppRootContextGuard(
                 ({ convention }) => convention?.signup_automation_mode === SignupAutomationMode.RankedChoice,
               ),
-            ],
+            ]),
             children: [
               {
                 path: 'ranked_choice_queue',
@@ -675,13 +670,13 @@ const commonInConventionRoutes: RouteObject[] = [
     ],
   },
   {
-    middleware: [
-      makeAppRootContextMiddleware(({ convention }) => convention?.ticket_mode === TicketMode.RequiredForSignup),
-    ],
+    loader: guarded([
+      makeAppRootContextGuard(({ convention }) => convention?.ticket_mode === TicketMode.RequiredForSignup),
+    ]),
     children: [
       {
         path: '/ticket_types',
-        middleware: [makeAuthorizationMiddleware('can_manage_ticket_types')],
+        loader: guarded([makeAuthorizationGuard('can_manage_ticket_types')]),
         children: [
           {
             path: 'new',
@@ -724,7 +719,7 @@ const commonInConventionRoutes: RouteObject[] = [
   },
   {
     path: '/user_con_profiles',
-    middleware: [makeAuthorizationMiddleware('can_read_user_con_profiles')],
+    loader: guarded([makeAuthorizationGuard('can_read_user_con_profiles')]),
     children: [
       {
         path: ':id',
@@ -789,7 +784,7 @@ const conventionModeRoutes: RouteObject[] = [
     ],
   },
   {
-    middleware: [makeAuthorizationMiddleware('can_update_event_categories')],
+    loader: guarded([makeAuthorizationGuard('can_update_event_categories')]),
     children: [
       {
         path: '/event_categories',
@@ -921,7 +916,7 @@ const rootSiteRoutes: RouteObject[] = [
     ],
   },
   {
-    middleware: [makeAuthorizationMiddleware('can_read_users')],
+    loader: guarded([makeAuthorizationGuard('can_read_users')]),
     children: [
       {
         path: '/users',
@@ -947,27 +942,27 @@ export const appLayoutRoutes: RouteObject[] = [
     element: <NonCMSPageWrapper />,
     children: [
       {
-        middleware: [
-          makeAppRootContextMiddleware(
+        loader: guarded([
+          makeAppRootContextGuard(
             ({ convention }) => convention?.name != null && convention?.site_mode !== SiteMode.SingleEvent,
           ),
-        ],
+        ]),
         children: conventionModeRoutes,
       },
       {
-        middleware: [
-          makeAppRootContextMiddleware(
+        loader: guarded([
+          makeAppRootContextGuard(
             ({ convention }) => convention?.name != null && convention?.site_mode === SiteMode.SingleEvent,
           ),
-        ],
+        ]),
         children: singleEventModeRoutes,
       },
       {
-        middleware: [makeAppRootContextMiddleware(({ convention }) => convention?.name != null)],
+        loader: guarded([makeAppRootContextGuard(({ convention }) => convention?.name != null)]),
         children: commonInConventionRoutes,
       },
       {
-        middleware: [makeAppRootContextMiddleware(({ convention }) => convention?.name == null)],
+        loader: guarded([makeAppRootContextGuard(({ convention }) => convention?.name == null)]),
         children: rootSiteRoutes,
       },
       ...commonRoutes,

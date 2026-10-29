@@ -1,40 +1,9 @@
 import { MiddlewareFunction, redirect } from 'react-router';
 import { appRootDataContext } from 'AppContexts';
 import { SiteMode } from './graphqlTypes.generated';
-import { AbilityName } from './Authentication/useAuthorizationRequired';
-import { AppRootQueryData } from './appRootQueries.generated';
 
-// Middleware that guards routes using the app root data, which appRootMiddleware has put in the router context.
-
-export function makeAppRootContextMiddleware(guard: (data: AppRootQueryData) => boolean): MiddlewareFunction {
-  return ({ context }) => {
-    const appRootData = context.get(appRootDataContext);
-    if (appRootData != null && !guard(appRootData)) {
-      return new Response(null, { status: 404 });
-    }
-  };
-}
-
-export const loginRequiredMiddleware: MiddlewareFunction = ({ context }) => {
-  const appRootData = context.get(appRootDataContext);
-  if (appRootData == null) return;
-  if (!appRootData.currentUser) {
-    return new Response(null, { status: 401 });
-  }
-};
-
-export function makeAuthorizationMiddleware(...abilities: AbilityName[]): MiddlewareFunction {
-  return ({ context }) => {
-    const appRootData = context.get(appRootDataContext);
-    if (appRootData == null) return;
-    if (!appRootData.currentUser) {
-      return new Response(null, { status: 401 });
-    }
-    if (!abilities.every((ability) => appRootData.currentAbility[ability])) {
-      return new Response(null, { status: 403 });
-    }
-  };
-}
+// Middleware that redirects using the app root data, which appRootMiddleware has put in the router context. (Guards that
+// reject a request are in routeGuards.ts: they can't be middleware.)
 
 export const eventPageMiddleware: MiddlewareFunction = ({ context }) => {
   const appRootData = context.get(appRootDataContext);
