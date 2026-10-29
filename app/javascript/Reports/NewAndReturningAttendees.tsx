@@ -14,7 +14,7 @@ import classNames from 'classnames';
 import { DateTime } from 'luxon';
 import { useAppDateTimeFormat } from 'TimeUtils';
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query({ query: NewAndReturningAttendeesQueryDocument });
   return data;

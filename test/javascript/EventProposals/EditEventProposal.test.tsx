@@ -3,7 +3,10 @@ import { MockLink } from '@apollo/client/testing';
 import { vi } from 'vitest';
 
 import { renderRoute, userEvent, waitFor } from '../testUtils';
-import { Component as EditEventProposal, loader } from '../../../app/javascript/EventProposals/EditEventProposal';
+import {
+  Component as EditEventProposal,
+  clientLoader as loader,
+} from '../../../app/javascript/EventProposals/EditEventProposal';
 import {
   EventProposalQueryData,
   EventProposalQueryDocument,
