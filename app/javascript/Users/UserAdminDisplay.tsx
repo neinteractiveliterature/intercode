@@ -21,7 +21,7 @@ function buildProfileUrl(profile: UserAdminQueryData['user']['user_con_profiles'
   return profileUrl.toString();
 }
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ params: { id }, context }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ params: { id }, context }) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query<UserAdminQueryData>({ query: UserAdminQueryDocument, variables: { id } });
   return data;

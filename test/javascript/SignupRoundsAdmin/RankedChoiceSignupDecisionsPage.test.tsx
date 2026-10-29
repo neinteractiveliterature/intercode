@@ -6,7 +6,7 @@ import {
   Component as RankedChoiceSignupDecisionsPage,
   describeDecision,
   describeReason,
-  loader,
+  clientLoader as loader,
 } from '../../../app/javascript/SignupRoundsAdmin/RankedChoiceSignupDecisionsPage';
 import {
   SignupRoundRankedChoiceDecisionsTableQueryData,

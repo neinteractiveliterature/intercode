@@ -10,7 +10,7 @@ import { apolloClientContext } from '../AppContexts';
 
 const EVENT_CATEGORY_PARAM = 'event_category';
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ context, request }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context, request }) => {
   const client = context.get(apolloClientContext);
   const eventCategoryIds = new URL(request.url).searchParams.getAll(EVENT_CATEGORY_PARAM);
   const { data } = await client.query<TeamMembersMailingListQueryData>({

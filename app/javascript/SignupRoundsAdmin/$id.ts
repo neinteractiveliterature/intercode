@@ -4,7 +4,7 @@ import { DeleteSignupRoundDocument, UpdateSignupRoundDocument } from './mutation
 import { SignupRound } from '../graphqlTypes.generated';
 import { buildSignupRoundInputFromFormData } from './buildSignupRoundInput';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {
   const client = context.get(apolloClientContext);
   try {
     if (request.method === 'DELETE') {

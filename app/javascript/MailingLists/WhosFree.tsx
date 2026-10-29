@@ -12,7 +12,7 @@ type LoaderResult = {
   data?: WhosFreeQueryData;
 };
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ context, request }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context, request }) => {
   const client = context.get(apolloClientContext);
   const url = new URL(request.url);
   const start = url.searchParams.get('start');

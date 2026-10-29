@@ -35,7 +35,7 @@ type ActionArgs = {
   winningProfileIds: Record<string, string>;
 };
 
-export const action: ActionFunction<RouterContextProvider> = async ({ request, context }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ request, context }) => {
   const client = context.get(apolloClientContext);
   const { userIds, winningUserId, winningProfileIds } = (await request.json()) as ActionArgs;
   if (!userIds) {
@@ -66,7 +66,7 @@ export const action: ActionFunction<RouterContextProvider> = async ({ request, c
   return redirect('..');
 };
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ params: { ids }, context }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ params: { ids }, context }) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query({
     query: MergeUsersModalQueryDocument,

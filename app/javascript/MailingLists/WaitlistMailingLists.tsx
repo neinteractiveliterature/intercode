@@ -9,7 +9,7 @@ import { useAppDateTimeFormat } from '../TimeUtils';
 import { apolloClientContext } from '../AppContexts';
 import { LoaderFunction, RouterContextProvider, useLoaderData } from 'react-router';
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query<WaitlistMailingListsQueryData>({ query: WaitlistMailingListsQueryDocument });
   return data;

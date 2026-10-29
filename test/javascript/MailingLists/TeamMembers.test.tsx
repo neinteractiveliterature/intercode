@@ -2,7 +2,7 @@ import { MockLink } from '@apollo/client/testing';
 import { vi } from 'vitest';
 
 import { renderRoute, userEvent, waitFor, within } from '../testUtils';
-import { Component as TeamMembers, loader } from '../../../app/javascript/MailingLists/TeamMembers';
+import { Component as TeamMembers, clientLoader as loader } from '../../../app/javascript/MailingLists/TeamMembers';
 import {
   TeamMembersMailingListQueryData,
   TeamMembersMailingListQueryDocument,

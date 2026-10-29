@@ -26,7 +26,7 @@ import RouteErrorBoundary from 'RouteErrorBoundary';
 
 export const ErrorBoundary = RouteErrorBoundary;
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ context, request }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context, request }) => {
   const client = context.get(apolloClientContext);
   const data = context.get(appRootDataContext);
   if (!data) return data;

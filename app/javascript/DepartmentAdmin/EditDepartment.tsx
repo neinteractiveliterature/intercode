@@ -9,7 +9,7 @@ import { UpdateDepartmentDocument } from './mutations.generated';
 import { DepartmentAdminQueryDocument } from './queries.generated';
 import { useTranslation } from 'react-i18next';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ context, params: { id }, request }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, params: { id }, request }) => {
   const client = context.get(apolloClientContext);
   try {
     const formData = await request.formData();
@@ -28,7 +28,7 @@ export const action: ActionFunction<RouterContextProvider> = async ({ context, p
   }
 };
 
-export const loader = singleDepartmentAdminLoader;
+export const clientLoader = singleDepartmentAdminLoader;
 
 function EditDepartment() {
   const { department: initialDepartment } = useLoaderData() as SingleDepartmentAdminLoaderResult;
