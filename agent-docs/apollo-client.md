@@ -10,7 +10,7 @@ React Router loaders and actions run during navigation and need to access the cl
 import { LoaderFunction, RouterContextProvider } from 'react-router';
 import { apolloClientContext } from 'AppContexts';
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ context, params }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context, params }) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query({
     query: MyQueryDocument,
@@ -19,7 +19,7 @@ export const loader: LoaderFunction<RouterContextProvider> = async ({ context, p
   return data;
 };
 
-export const action: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
   const client = context.get(apolloClientContext);
   await client.mutate({
     mutation: MyMutationDocument,
@@ -73,7 +73,7 @@ import { client } from 'useIntercodeApolloClient'; // This no longer exists
 ❌ **Don't**: Use `useApolloClient()` in loaders/actions
 
 ```typescript
-export const loader: LoaderFunction = async () => {
+export const clientLoader: LoaderFunction = async () => {
   const client = useApolloClient(); // Error: hooks can't be used here
 };
 ```
@@ -81,7 +81,7 @@ export const loader: LoaderFunction = async () => {
 ❌ **Don't**: Access `client` directly in loaders without getting it from context
 
 ```typescript
-export const loader: LoaderFunction = async () => {
+export const clientLoader: LoaderFunction = async () => {
   const { data } = await client.query(...); // Error: client is not defined
 };
 ```

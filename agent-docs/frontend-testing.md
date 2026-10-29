@@ -25,7 +25,7 @@ Import `render`, `renderRoute`, `userEvent`, `waitFor` and the rest of Testing L
 
 - **`render(ui, options)`** is async (`await` it). It wraps the component in i18n, an Apollo `MockedProvider`, a router, `AppRootContext`, Stripe and a Suspense boundary. Options: `apolloMocks`, `apolloCache`, `appRootContextValue`, `stripePublishableKey`.
 - **`renderRoute(routes, options)`** is for components that get their data from a React Router loader (`context.get(apolloClientContext)` in a `clientLoader`/`clientAction`). It builds one real `ApolloClient` on a `MockLink`, used by loaders, actions and (through `ApolloProvider`) hooks, so they share a cache like in production: a component updates after an action changes the cache. Each mock is used once, so list a query twice if the page will make it twice (e.g. a refetch after a mutation).
-- **`routeFromModule(path, module)`** builds a route for `renderRoute` from a route module (`import * as thePage from '...'`) the way the app does: its `clientLoader` and `clientAction` become the route's loader and action, and its `Component` (or default export) renders.
+- **`routeFromModule(path, module)`** builds a route for `renderRoute` from a route module (`import * as thePage from '...'`) the way the app does: its `clientLoader` and `clientAction` become the route's loader and action, and its default export (or `Component`) renders.
 - **Apollo mocks** are `MockLink.MockedResponse` objects built from the generated documents and data types (`FooQueryDocument`, `FooQueryData`), so a query change breaks the type check instead of silently drifting.
 - **Time**: use `vi.useFakeTimers({ toFake: ['Date'] })` with `vi.setSystemTime(...)`. Faking only `Date` leaves the timers Testing Library relies on alone.
 
@@ -52,7 +52,7 @@ describe('MyComponent', () => {
 
 ## Testing a route with a loader and an action
 
-`test/javascript/UserConProfiles/EditUserConProfile.test.tsx` is the worked example: a route whose loader fetches data, whose form submits to an action, which calls a mutation and redirects. Use `renderRoute` with the route module itself, through `routeFromModule` (it turns the module's `clientLoader` and `clientAction` into the route's loader and action, and renders its `Component`), plus a stand-in route for wherever the action redirects to:
+`test/javascript/UserConProfiles/EditUserConProfile.test.tsx` is the worked example: a route whose loader fetches data, whose form submits to an action, which calls a mutation and redirects. Use `renderRoute` with the route module itself, through `routeFromModule` (it turns the module's `clientLoader` and `clientAction` into the route's loader and action, and renders its default export), plus a stand-in route for wherever the action redirects to:
 
 ```tsx
 renderRoute(
