@@ -1,6 +1,6 @@
 import { useCallback, useContext } from 'react';
 import classNames from 'classnames';
-import { ActionFunction, data, Link, Outlet, useParams, useSubmit, RouterContextProvider } from 'react-router';
+import { ActionFunctionArgs, data, Link, Outlet, useParams, useSubmit } from 'react-router';
 import { Trans, useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
 import { DateTime } from 'luxon';
@@ -90,7 +90,9 @@ function getToggleCountedConfirmPrompt(signup: SignupFieldsFragment) {
   return getMakeCountedConfirmPrompt(signup);
 }
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {
+// A wrapper route (see script/genRoutes.mts) is what gets generated route types, not this module, so it takes the plain
+// args until the cutover removes the wrappers
+export const clientAction = async ({ context, request, params: { id } }: ActionFunctionArgs) => {
   const client = context.get(apolloClientContext);
   const formData = await request.formData();
   const result = await client.mutate({

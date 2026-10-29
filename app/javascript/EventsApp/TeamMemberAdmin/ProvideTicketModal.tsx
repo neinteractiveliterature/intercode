@@ -6,29 +6,17 @@ import capitalize from 'lodash/capitalize';
 import { getProvidableTicketTypes } from './ProvideTicketUtils';
 import ProvidableTicketTypeSelection from './ProvidableTicketTypeSelection';
 import TicketingStatusDescription from './TicketingStatusDescription';
-import {
-  ActionFunction,
-  redirect,
-  useFetcher,
-  useLoaderData,
-  useNavigate,
-  useNavigation,
-  useParams,
-  RouterContextProvider,
-} from 'react-router';
-import { singleTeamMemberLoader, SingleTeamMemberLoaderResult } from './loader';
+import { redirect, useFetcher, useLoaderData, useNavigate, useNavigation, useParams } from 'react-router';
+import { singleTeamMemberLoader } from './loader';
 import { apolloClientContext } from '../../AppContexts';
 import { ProvideEventTicketDocument } from './mutations.generated';
 import { TeamMembersQueryDocument } from './queries.generated';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
+import type { Route } from './+types/ProvideTicketModal';
 
 export const clientLoader = singleTeamMemberLoader;
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({
-  params: { eventId },
-  request,
-  context,
-}) => {
+export const clientAction = async ({ params: { eventId }, request, context }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     const formData = await request.formData();
@@ -49,7 +37,7 @@ export const clientAction: ActionFunction<RouterContextProvider> = async ({
 };
 
 function ProvideTicketModal(): React.JSX.Element {
-  const { data, teamMember } = useLoaderData() as SingleTeamMemberLoaderResult;
+  const { data, teamMember } = useLoaderData<typeof clientLoader>();
   const { t } = useTranslation();
   const [ticketTypeId, setTicketTypeId] = useState<string>();
   const navigation = useNavigation();

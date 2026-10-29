@@ -1,6 +1,6 @@
 import { useContext, useMemo } from 'react';
 import { CellContext, Column, ColumnDef, createColumnHelper } from '@tanstack/react-table';
-import { useNavigate, useParams, useRouteLoaderData, useRevalidator } from 'react-router';
+import { useNavigate, useParams, useRevalidator } from 'react-router';
 import { Trans, useTranslation } from 'react-i18next';
 import { DateTime } from 'luxon';
 
@@ -20,12 +20,13 @@ import {
   RunSignupsTableSignupsQueryData,
   RunSignupsTableSignupsQueryDocument,
   RunSignupsTableSignupsQueryVariables,
-  SignupAdminEventQueryData,
 } from './queries.generated';
 import buildEventUrl from '../buildEventUrl';
 import { SignupState } from '../../graphqlTypes.generated';
 import EnumTypes from '../../enumTypes.json';
 import AppRootContext from '../../AppRootContext';
+import useRequiredRouteLoaderData from '../../useRequiredRouteLoaderData';
+import { signupAdminEventLoader } from './loaders';
 import { NamedRoute } from '../../NamedRoute';
 import { useGraphQLConfirm } from '@neinteractiveliterature/litform';
 import { useApolloClient } from '@apollo/client/react';
@@ -101,7 +102,7 @@ function BucketFilter<TData extends SignupType, TValue>({ column }: { column: Co
 const defaultVisibleColumns = ['id', 'state', 'name', 'bucket', 'age_restrictions_check', 'email'];
 
 function RunSignupsTable(): React.JSX.Element {
-  const data = useRouteLoaderData(NamedRoute.SignupAdmin) as SignupAdminEventQueryData;
+  const data = useRequiredRouteLoaderData<typeof signupAdminEventLoader>(NamedRoute.SignupAdmin);
   const { runId } = useParams();
   const { t } = useTranslation();
   const navigate = useNavigate();

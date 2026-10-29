@@ -1,7 +1,7 @@
 import { Trans, useTranslation } from 'react-i18next';
-import { MySignupQueueQueryData, MySignupQueueQueryDocument } from './queries.generated';
+import { MySignupQueueQueryDocument } from './queries.generated';
 import { useContext } from 'react';
-import { Link, LoaderFunction, useLoaderData, RouterContextProvider } from 'react-router';
+import { Link, useLoaderData } from 'react-router';
 import RankedChoiceUserSettings from './RankedChoiceUserSettings';
 import UserConProfileSignupsCard from '../SignupAdmin/UserConProfileSignupsCard';
 import AppRootContext from '../../AppRootContext';
@@ -12,15 +12,16 @@ import { apolloClientContext } from '../../AppContexts';
 import useLoginRequired from 'Authentication/useLoginRequired';
 import BlockPartial from 'UIComponents/BlockPartial';
 import { CmsPartialBlockName } from 'graphqlTypes.generated';
+import type { Route } from './+types/index';
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query({ query: MySignupQueueQueryDocument });
+  const { data } = await client.query({ query: MySignupQueueQueryDocument, errorPolicy: 'none' });
   return data;
 };
 
 function MySignupQueue() {
-  const data = useLoaderData() as MySignupQueueQueryData;
+  const data = useLoaderData<typeof clientLoader>();
   const { t } = useTranslation();
   const { myProfile } = useContext(AppRootContext);
   const pendingChoices = usePendingChoices(data.convention.my_profile);
