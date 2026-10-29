@@ -1,0 +1,100 @@
+# An example of running Intercode from the published images, with nginx (the framework-mode assets image) in front.
+# See README.md in this directory for what each piece is, and for what a real deployment needs on top of this.
+#
+#   cp example.env .env      # then edit it; see the comments there
+#   docker compose -f docker-compose.example.yml up
+#
+# Everything is served on port 8080 over plain HTTP. Intercode only works over HTTPS (it forces SSL, and its session
+# cookie is __Host- prefixed), so put a TLS-terminating proxy in front of port 8080 that sends X-Forwarded-Proto: https.
+name: intercode
+
+x-intercode: &intercode
+  image: ghcr.io/neinteractiveliterature/intercode:${INTERCODE_VERSION:-latest}
+  environment:
+    DATABASE_URL: postgresql://postgres:${POSTGRES_PASSWORD}@postgres/intercode_production
+    INTERCODE_HOST: ${INTERCODE_HOST}
+    SECRET_KEY_BASE: ${SECRET_KEY_BASE}
+    DEVISE_SECRET_KEY: ${DEVISE_SECRET_KEY}
+    OPENID_CONNECT_SIGNING_KEY: ${OPENID_CONNECT_SIGNING_KEY}
+    # Where the browser loads the build from. Leave it empty to serve assets from the same domain as the app (nginx does
+    # that); set it to a separate asset host's name, and give that host the same value (see web below).
+    ASSETS_HOST: ${ASSETS_HOST:-}
+    RAILS_LOG_TO_STDOUT: 'true'
+    AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-}
+    AWS_SECRET_ACCESS_KEY: ${AWS_SECRET_ACCESS_KEY:-}
+    AWS_S3_REGION: ${AWS_S3_REGION:-us-east-1}
+    AWS_S3_BUCKET: ${AWS_S3_BUCKET:-}
+
+services:
+  postgres:
+    image: postgres:18
+    environment:
+      POSTGRES_PASSWORD: ${POSTGRES_PASSWORD}
+      POSTGRES_DB: intercode_production
+    volumes:
+      - pgdata:/var/lib/postgresql
+    healthcheck:
+      test: ['CMD', 'pg_isready', '-U', 'postgres']
+      interval: 5s
+      retries: 20
+
+  # The Rails image can run migrations but has no psql, so it can't set up an empty database from db/structure.sql.
+  # These two steps do that, using the structure.sql from the same release as the image, and do nothing once the database
+  # has its tables. (A database that already exists, such as a restored backup, never needs them.)
+  schema:
+    image: ghcr.io/neinteractiveliterature/intercode:${INTERCODE_VERSION:-latest}
+    user: root
+    entrypoint: ['cp', 'db/structure.sql', '/schema/structure.sql']
+    volumes:
+      - schema:/schema
+    restart: 'no'
+
+  init-db:
+    image: postgres:18
+    environment:
+      PGPASSWORD: ${POSTGRES_PASSWORD}
+    entrypoint:
+      - sh
+      - -c
+      - >
+        psql -h postgres -U postgres intercode_production -tAc "select to_regclass('public.schema_migrations')" | grep -q schema_migrations
+        || psql -h postgres -U postgres intercode_production -v ON_ERROR_STOP=1 -q -f /schema/structure.sql
+    volumes:
+      - schema:/schema:ro
+    depends_on:
+      postgres:
+        condition: service_healthy
+      schema:
+        condition: service_completed_successfully
+    restart: 'no'
+
+  # Runs once per start, before Rails does
+  migrate:
+    <<: *intercode
+    command: bundle exec rails db:migrate
+    depends_on:
+      init-db:
+        condition: service_completed_successfully
+    restart: 'no'
+
+  rails:
+    <<: *intercode
+    depends_on:
+      migrate:
+        condition: service_completed_successfully
+
+  # The framework-mode build, served by nginx, which also proxies the Rails routes to Rails and sends crawlers to
+  # Rails' /og-shell. Pin INTERCODE_VERSION to the same release for both images.
+  web:
+    image: ghcr.io/neinteractiveliterature/intercode-assets-framework:${INTERCODE_VERSION:-latest}
+    environment:
+      ASSETS_HOST: ${ASSETS_HOST:-}
+      RAILS_UPSTREAM: rails:3000
+    ports:
+      - '8080:80'
+    depends_on:
+      - rails
+
+volumes:
+  pgdata:
+  schema:
