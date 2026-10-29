@@ -15,7 +15,7 @@ export type CmsPageProps = {
   rootPage?: boolean;
 };
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ context, request }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context, request }) => {
   const client = context.get(apolloClientContext);
   const slug = new URL(request.url).pathname.replace(/^\/pages\//, '').replace(/\/$/, '');
   let variables: CmsPageQueryVariables;

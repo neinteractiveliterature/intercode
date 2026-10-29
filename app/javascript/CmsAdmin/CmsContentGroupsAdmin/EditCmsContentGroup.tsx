@@ -20,7 +20,7 @@ import { singleCmsContentGroupAdminLoader, SingleCmsContentGroupAdminLoaderResul
 import { apolloClientContext } from '../../AppContexts';
 import { UpdateContentGroupDocument, UpdateContentGroupMutationVariables } from './mutations.generated';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ params: { id }, request, context }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ params: { id }, request, context }) => {
   const client = context.get(apolloClientContext);
   const variables = (await request.json()) as Omit<UpdateContentGroupMutationVariables, 'id'>;
 
@@ -40,7 +40,7 @@ export const action: ActionFunction<RouterContextProvider> = async ({ params: { 
   return redirect('/cms_content_groups');
 };
 
-export const loader = singleCmsContentGroupAdminLoader;
+export const clientLoader = singleCmsContentGroupAdminLoader;
 
 function EditCmsContentGroupForm() {
   const {

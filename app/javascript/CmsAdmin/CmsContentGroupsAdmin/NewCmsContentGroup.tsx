@@ -13,7 +13,7 @@ import { useCmsContentGroupsAdminLoader } from './loaders';
 import { CreateContentGroupDocument } from './mutations.generated';
 import { apolloClientContext } from '../../AppContexts';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ request, context }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ request, context }) => {
   const client = context.get(apolloClientContext);
   const variables = (await request.json()) as CreateCmsContentGroupInput;
   try {

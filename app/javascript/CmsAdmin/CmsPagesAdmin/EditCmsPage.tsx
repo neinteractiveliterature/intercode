@@ -19,7 +19,7 @@ import { singleCmsPageAdminLoader, SingleCmsPageAdminLoaderResult } from './load
 import { UpdatePageDocument } from './mutations.generated';
 import { apolloClientContext } from '../../AppContexts';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ params: { id }, request, context }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ params: { id }, request, context }) => {
   const client = context.get(apolloClientContext);
   const formData = await request.formData();
 
@@ -39,7 +39,7 @@ export const action: ActionFunction<RouterContextProvider> = async ({ params: { 
   return redirect(formData.get('destination')?.toString() ?? '/cms_pages');
 };
 
-export const loader = singleCmsPageAdminLoader;
+export const clientLoader = singleCmsPageAdminLoader;
 
 function EditCmsPageForm() {
   const { data, page: initialPage } = useLoaderData() as SingleCmsPageAdminLoaderResult;

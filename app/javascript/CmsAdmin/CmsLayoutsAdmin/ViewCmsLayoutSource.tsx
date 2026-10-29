@@ -3,7 +3,7 @@ import usePageTitle from '../../usePageTitle';
 import { singleCmsLayoutAdminLoader, SingleCmsLayoutAdminLoaderResult } from './loaders';
 import { useLoaderData } from 'react-router';
 
-export const loader = singleCmsLayoutAdminLoader;
+export const clientLoader = singleCmsLayoutAdminLoader;
 
 function ViewCmsLayoutSource() {
   const { layout: value } = useLoaderData() as SingleCmsLayoutAdminLoaderResult;
