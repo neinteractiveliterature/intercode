@@ -1,11 +1,11 @@
-import '../styles/application.scss';
+import './styles/application.scss';
 import 'bootstrap';
 import { StrictMode, startTransition } from 'react';
 import { createRoot, hydrateRoot } from 'react-dom/client';
 import { HydratedRouter } from 'react-router/dom';
 import { startAppBootstrap, buildRouterContext } from 'appBootstrap';
-import { AuthenticationManagerContext } from '../Authentication/authenticationManager';
-import BootErrorBoundary from '../BootErrorBoundary';
+import { AuthenticationManagerContext } from './Authentication/authenticationManager';
+import BootErrorBoundary from './BootErrorBoundary';
 
 function ThrowBootError({ error }: { error: unknown }): never {
   throw error;

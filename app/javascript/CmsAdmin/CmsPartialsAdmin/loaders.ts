@@ -1,9 +1,9 @@
-import { LoaderFunction, RouterContextProvider, useRouteLoaderData } from 'react-router';
+import { LoaderFunction, useRouteLoaderData } from 'react-router';
 import { apolloClientContext } from 'AppContexts';
 import { CmsPartialsAdminQueryData, CmsPartialsAdminQueryDocument } from './queries.generated';
 import { NamedRoute } from '../../NamedRoute';
 
-export const cmsPartialsAdminLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const cmsPartialsAdminLoader: LoaderFunction = async ({ context }) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query<CmsPartialsAdminQueryData>({ query: CmsPartialsAdminQueryDocument });
   return data;

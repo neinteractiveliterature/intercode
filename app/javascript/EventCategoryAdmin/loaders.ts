@@ -1,9 +1,9 @@
-import { LoaderFunction, RouterContextProvider, useRouteLoaderData } from 'react-router';
+import { LoaderFunction, useRouteLoaderData } from 'react-router';
 import { apolloClientContext } from 'AppContexts';
 import { EventCategoryAdminQueryData, EventCategoryAdminQueryDocument } from './queries.generated';
 import { NamedRoute } from '../NamedRoute';
 
-export const eventCategoryAdminLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const eventCategoryAdminLoader: LoaderFunction = async ({ context }) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query<EventCategoryAdminQueryData>({ query: EventCategoryAdminQueryDocument });
   return data;

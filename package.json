@@ -29,7 +29,8 @@
     "routes:check": "node script/genRoutes.mts --check",
     "preview": "vite preview --outDir ./public",
     "start": "vite",
-    "ts:check": "node node_modules/@typescript/native/bin/tsc --noEmit",
+    "typegen": "INTERCODE_BACKEND=http://localhost react-router typegen --config vite.framework.config.mts",
+    "ts:check": "yarn run typegen && node node_modules/@typescript/native/bin/tsc --noEmit",
     "test": "vitest run",
     "test:ui": "vitest --ui",
     "test:watch": "vitest watch"

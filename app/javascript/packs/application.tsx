@@ -49,7 +49,7 @@ function DataModeApplicationEntry() {
         withEntrypointReloadOnLazy([
           {
             id: 'root',
-            lazy: lazyRoute(() => import('root')),
+            lazy: lazyRoute(() => import('AppRootProviders')),
             children: appRootRoutes,
           },
         ]),
