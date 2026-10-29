@@ -31,6 +31,7 @@ export default typescriptEslint.config(
     ignores: [
       '**/*{.,-}min.js',
       'coverage/*',
+      '.react-router/*',
       'config/*',
       'node_modules/*',
       'public/*',

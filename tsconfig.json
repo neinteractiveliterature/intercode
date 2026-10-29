@@ -17,10 +17,13 @@
     "types": ["vitest/globals", "vite/client"],
     "paths": {
       "*": ["./app/javascript/*"]
-    }
+    },
+    // react-router typegen writes each route module's types (imported as ./+types/<name>) under .react-router/types
+    "rootDirs": [".", "./.react-router/types"]
   },
   "include": [
     "./app/javascript/",
+    "./.react-router/types/**/*",
     "./script",
     "./test/javascript/",
     "script/buildTimezoneData.js",
