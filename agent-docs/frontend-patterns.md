@@ -34,6 +34,8 @@ The app is moving from data-mode React Router (`AppRouter.tsx`) to framework mod
 
 Middleware, route-level loaders and `element`s that `AppRouter.tsx` attaches to a route are not in the module yet; they are generated into small wrapper modules for the framework build.
 
+Guards that reject a request (login required, an ability required, only on a convention's site or only on the root site) are in `routeGuards.ts` and attached with `loader: guarded([...])`, not as `middleware`. React Router renders an error from middleware at the shallowest route that still has data to load, which on a page load is the root route, and that has no `ErrorBoundary`, so the visitor would get React Router's "Application Error" screen instead of `RouteErrorBoundary`'s login prompt, not-authorized or not-found page. Middleware is fine for redirects (`routeMiddleware.ts`).
+
 ### Loader Data Access
 
 ```typescript

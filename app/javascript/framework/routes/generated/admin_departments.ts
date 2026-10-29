@@ -2,6 +2,5 @@
 // `yarn routes:generate`. The cutover to framework mode deletes the generator and this notice.
 
 import { departmentAdminLoader } from '../../../DepartmentAdmin/loaders';
-import { makeAuthorizationMiddleware } from '../../../routeMiddleware';
-export const clientLoader = departmentAdminLoader;
-export const clientMiddleware = [makeAuthorizationMiddleware('can_update_departments')];
+import { guarded, makeAuthorizationGuard } from '../../../routeGuards';
+export const clientLoader = guarded([makeAuthorizationGuard('can_update_departments')], departmentAdminLoader);
