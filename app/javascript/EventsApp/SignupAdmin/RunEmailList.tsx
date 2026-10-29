@@ -48,7 +48,7 @@ function getEmails({ data, includes }: { data: RunSignupsTableSignupsQueryData; 
   }));
 }
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ params: { runId, eventId }, context }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ params: { runId, eventId }, context }) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query<RunSignupsTableSignupsQueryData, RunSignupsTableSignupsQueryVariables>({
     query: RunSignupsTableSignupsQueryDocument,

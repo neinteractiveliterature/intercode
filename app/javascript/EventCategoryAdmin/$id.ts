@@ -4,7 +4,7 @@ import { DeleteEventCategoryDocument, UpdateEventCategoryDocument } from './muta
 import { buildEventCategoryFromFormData } from './buildEventCategoryInput';
 import { EventCategory } from '../graphqlTypes.generated';
 
-export const action: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {
+export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {
   const client = context.get(apolloClientContext);
   try {
     if (request.method === 'DELETE') {

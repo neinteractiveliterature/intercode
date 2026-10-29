@@ -5,7 +5,7 @@ import { MockLink } from '@apollo/client/testing';
 import { DateTime } from 'luxon';
 
 import { renderRoute, userEvent, waitFor } from '../testUtils';
-import { Component as ScheduleApp, loader } from '../../../app/javascript/EventsApp/ScheduleApp';
+import { Component as ScheduleApp, clientLoader as loader } from '../../../app/javascript/EventsApp/ScheduleApp';
 import { redirectToFirstDayMiddleware } from '../../../app/javascript/EventsApp/conventionDayUrls';
 import { AppRootQueryDocument } from '../../../app/javascript/appRootQueries.generated';
 import {

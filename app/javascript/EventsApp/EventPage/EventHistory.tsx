@@ -21,7 +21,7 @@ const EXCLUDE_FIELDS = new Set([
   'team_mailing_list_name',
 ]);
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ params: { eventId }, context }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ params: { eventId }, context }) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query<EventHistoryQueryData, EventHistoryQueryVariables>({
     query: EventHistoryQueryDocument,

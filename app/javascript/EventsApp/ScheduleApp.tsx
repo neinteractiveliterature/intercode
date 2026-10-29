@@ -96,7 +96,7 @@ export type ScheduleLoaderResult = ConventionDayLoaderResult & {
   fetchFormItemIdentifiers: string[];
 };
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ params, request, context }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ params, request, context }) => {
   const client = context.get(apolloClientContext);
   const [conventionDayLoaderResult, { data }, { data: appRootData }] = await Promise.all([
     conventionDayLoader(client, { params, request }),

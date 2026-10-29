@@ -56,7 +56,7 @@ export type RunSignupSummaryProps = {
   eventPath: string;
 };
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ params: { eventId, runId }, context }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ params: { eventId, runId }, context }) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query<RunSignupSummaryQueryData, RunSignupSummaryQueryVariables>({
     query: RunSignupSummaryQueryDocument,

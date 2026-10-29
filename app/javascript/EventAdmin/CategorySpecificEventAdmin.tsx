@@ -11,7 +11,7 @@ export const adminComponentsBySchedulingUi = {
   single_run: SingleRunEventAdminList,
 };
 
-export const loader: LoaderFunction<RouterContextProvider> = async ({ params: { eventCategoryId }, context }) => {
+export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ params: { eventCategoryId }, context }) => {
   const client = context.get(apolloClientContext);
   const { data } = await client.query<EventAdminEventsQueryData>({ query: EventAdminEventsQueryDocument });
 

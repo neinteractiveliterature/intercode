@@ -3,7 +3,10 @@ import { MockLink } from '@apollo/client/testing';
 import { vi } from 'vitest';
 
 import { renderRoute, userEvent, waitFor } from '../testUtils';
-import { Component as EventAdminEditEvent, loader } from '../../../app/javascript/EventAdmin/EventAdminEditEvent';
+import {
+  Component as EventAdminEditEvent,
+  clientLoader as loader,
+} from '../../../app/javascript/EventAdmin/EventAdminEditEvent';
 import { UpdateEventDocument } from '../../../app/javascript/EventAdmin/mutations.generated';
 import { EventAdminSingleEventQueryDocument } from '../../../app/javascript/EventAdmin/queries.generated';
 import { SiteMode } from '../../../app/javascript/graphqlTypes.generated';
