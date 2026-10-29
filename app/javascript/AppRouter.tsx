@@ -1,20 +1,8 @@
-import {
-  RouteObject,
-  replace,
-  Outlet,
-  LoaderFunction,
-  redirect,
-  RouterContextProvider,
-  MiddlewareFunction,
-} from 'react-router';
+import { RouteObject, replace, redirect } from 'react-router';
 
 import FourOhFourPage from './FourOhFourPage';
 import { SignupAutomationMode, SignupMode, SiteMode, TicketMode } from './graphqlTypes.generated';
-import { AbilityName } from './Authentication/useAuthorizationRequired';
-import { EventAdminEventsQueryDocument } from './EventAdmin/queries.generated';
-import { AppRootQueryData } from './appRootQueries.generated';
 import { appRootMiddleware } from './appRootMiddleware';
-import buildEventCategoryUrl from './EventAdmin/buildEventCategoryUrl';
 import {
   adminSingleTicketTypeLoader,
   adminTicketTypesLoader,
@@ -35,134 +23,18 @@ import { cmsGraphqlQueriesAdminLoader } from './CmsAdmin/CmsGraphqlQueriesAdmin/
 import { cmsContentGroupsAdminLoader } from './CmsAdmin/CmsContentGroupsAdmin/loaders';
 import { departmentAdminLoader } from './DepartmentAdmin/loaders';
 import { eventCategoryAdminLoader } from './EventCategoryAdmin/loaders';
-import { eventAdminEventsLoader } from './EventAdmin/loaders';
-import { apolloClientContext, appRootDataContext } from 'AppContexts';
+import { eventAdminEventsLoader, eventAdminRootRedirect } from './EventAdmin/loaders';
 import RouteErrorBoundary from 'RouteErrorBoundary';
 import { lazyRoute } from './lazyRoute';
-
-export enum NamedRoute {
-  AdminEditEventProposal = 'AdminEditEventProposal',
-  AdminEventProposal = 'AdminEventProposal',
-  AdminForms = 'AdminForms',
-  AdminUserConProfile = 'AdminUserConProfile',
-  CmsAdmin = 'CmsAdmin',
-  CmsContentGroupsAdmin = 'CmsContentGroupsAdmin',
-  CmsGraphqlQueriesAdmin = 'CmsGraphqlQueriesAdmin',
-  CmsLayoutsAdmin = 'CmsLayoutsAdmin',
-  CmsPagesAdmin = 'CmsPagesAdmin',
-  CmsPartialsAdmin = 'CmsPartialsAdmin',
-  DepartmentAdmin = 'DepartmentAdmin',
-  EditOAuthApplication = 'EditOAuthApplication',
-  EditEventCategory = 'EditEventCategory',
-  EditOrganizationRole = 'EditOrganizationRole',
-  EditSignup = 'EditSignup',
-  EditStaffPosition = 'EditStaffPosition',
-  EditStaffPositionPermissions = 'EditStaffPositionPermissions',
-  EditTeamMember = 'EditTeamMember',
-  EditUserActivityAlert = 'EditUserActivityAlert',
-  Event = 'Event',
-  EventCategoryAdmin = 'EventCategoryAdmin',
-  EventCategoryIndex = 'EventCategoryIndex',
-  EventPage = 'EventPage',
-  EventProposalAdminDisplay = 'EventProposalAdminDisplay',
-  EventProposalHistory = 'EventProposalHistory',
-  EventProposalHistoryChangeGroup = 'EventProposalHistoryChangeGroup',
-  FormAdminIndex = 'FormAdminIndex',
-  FormJSONEditor = 'FormJSONEditor',
-  LiquidDocs = 'LiquidDocs',
-  NewEventCategory = 'NewEventCategory',
-  NewOrganizationRole = 'NewOrganizationRole',
-  NewTeamMember = 'NewTeamMember',
-  Organization = 'Organization',
-  OrganizationAdmin = 'OrganizationAdmin',
-  OrganizationDisplay = 'OrganizationDisplay',
-  RootSiteConventionDisplay = 'RootSiteConventionDisplay',
-  RunEmailList = 'RunEmailList',
-  RunSignupChangesTable = 'RunSignupChangesTable',
-  RunSignupsTable = 'RunSignupsTable',
-  RunSignupSummary = 'RunSignupSummary',
-  SignupAdmin = 'SignupAdmin',
-  TeamMembers = 'TeamMembers',
-  TeamMembersIndex = 'TeamMembersIndex',
-  UserActivityAlerts = 'UserActivityAlerts',
-  CmsFiles = 'CmsFiles',
-  UserAdminDisplay = 'UserAdminDisplay',
-  UserAdmin = 'UserAdmin',
-  UsersTable = 'UsersTable',
-  EventAdmin = 'EventAdmin',
-  RootSiteConventionsAdmin = 'RootSiteConventionAdmin',
-  RootSiteConventionsAdminTable = 'RootSiteConventionsAdminTable',
-}
-
-export type RouteName = keyof typeof NamedRoute & string;
-
-function makeAppRootContextMiddleware(guard: (data: AppRootQueryData) => boolean): MiddlewareFunction {
-  return ({ context }) => {
-    const appRootData = context.get(appRootDataContext);
-    if (appRootData != null && !guard(appRootData)) {
-      return new Response(null, { status: 404 });
-    }
-  };
-}
-
-const loginRequiredMiddleware: MiddlewareFunction = ({ context }) => {
-  const appRootData = context.get(appRootDataContext);
-  if (appRootData == null) return;
-  if (!appRootData.currentUser) {
-    return new Response(null, { status: 401 });
-  }
-};
-
-function makeAuthorizationMiddleware(...abilities: AbilityName[]): MiddlewareFunction {
-  return ({ context }) => {
-    const appRootData = context.get(appRootDataContext);
-    if (appRootData == null) return;
-    if (!appRootData.currentUser) {
-      return new Response(null, { status: 401 });
-    }
-    if (!abilities.every((ability) => appRootData.currentAbility[ability])) {
-      return new Response(null, { status: 403 });
-    }
-  };
-}
-
-const eventAdminRootRedirect: LoaderFunction<RouterContextProvider> = async ({ context }) => {
-  const client = context.get(apolloClientContext);
-  const { data } = await client.query({ query: EventAdminEventsQueryDocument });
-  const convention = data?.convention;
-  if (!convention) {
-    return new Response(null, { status: 404 });
-  }
-
-  if (convention.site_mode === SiteMode.SingleEvent) {
-    if (convention.events.length === 0) {
-      return redirect('./new');
-    } else {
-      return redirect(`./${convention.events[0].id}/edit`);
-    }
-  }
-
-  const firstEventCategory = convention.event_categories[0];
-  if (!firstEventCategory) {
-    return new Response(null, { status: 404 });
-  }
-
-  return redirect(buildEventCategoryUrl(firstEventCategory));
-};
-
-const eventPageMiddleware: MiddlewareFunction = ({ context }) => {
-  const appRootData = context.get(appRootDataContext);
-  if (appRootData?.convention?.site_mode === SiteMode.SingleEvent) {
-    return redirect('/');
-  }
-};
-
-const editEventMiddleware: MiddlewareFunction = ({ context }) => {
-  const appRootData = context.get(appRootDataContext);
-  if (appRootData?.convention?.site_mode === SiteMode.SingleEvent) {
-    return redirect('/admin_events');
-  }
-};
+import { NamedRoute } from './NamedRoute';
+import NonCMSPageWrapper from './NonCMSPageWrapper';
+import {
+  editEventMiddleware,
+  eventPageMiddleware,
+  loginRequiredMiddleware,
+  makeAppRootContextMiddleware,
+  makeAuthorizationMiddleware,
+} from './routeMiddleware';
 
 const eventsRoutes: RouteObject[] = [
   {
@@ -330,14 +202,6 @@ const eventsRoutes: RouteObject[] = [
     ],
   },
 ];
-
-function NonCMSPageWrapper() {
-  return (
-    <div className="non-cms-page">
-      <Outlet />
-    </div>
-  );
-}
 
 const cmsPageRoutes: RouteObject[] = [
   { path: '/pages/*', lazy: lazyRoute(() => import('./CmsPage')) },

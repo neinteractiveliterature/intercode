@@ -11,7 +11,7 @@ import {
 } from './queries.generated';
 import { apolloClientContext } from 'AppContexts';
 import { loadDocData, YardClass, YardDocs, YardMethod } from './DocData';
-import { NamedRoute } from '../AppRouter';
+import { NamedRoute } from '../NamedRoute';
 import findLiquidTagName from './findLiquidTagName';
 import { NotificationEventKey } from 'graphqlTypes.generated';
 

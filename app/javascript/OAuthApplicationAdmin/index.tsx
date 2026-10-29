@@ -5,7 +5,7 @@ import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrum
 import LeafBreadcrumbItem from '../Breadcrumbs/LeafBreadcrumbItem';
 import NamedRouteBreadcrumbItem from '../Breadcrumbs/NamedRouteBreadcrumbItem';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
-import { NamedRoute } from '../AppRouter';
+import { NamedRoute } from '../NamedRoute';
 
 function OAuthApplicationAdmin(): React.JSX.Element {
   const { t } = useTranslation();

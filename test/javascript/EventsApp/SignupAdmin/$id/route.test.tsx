@@ -15,7 +15,7 @@ import {
   TicketMode,
   TimezoneMode,
 } from '../../../../../app/javascript/graphqlTypes.generated';
-import { NamedRoute } from '../../../../../app/javascript/AppRouter';
+import { NamedRoute } from '../../../../../app/javascript/NamedRoute';
 
 describe('EditSignup', () => {
   type Signup = AdminSignupQueryData['convention']['signup'];

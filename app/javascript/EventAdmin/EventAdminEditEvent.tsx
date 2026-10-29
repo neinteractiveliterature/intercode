@@ -14,7 +14,7 @@ import {
   EventAdminSingleEventQueryDocument,
 } from './queries.generated';
 import { useImageAttachmentConfig } from '../BuiltInFormControls/MarkdownInput';
-import { NamedRoute } from '../AppRouter';
+import { NamedRoute } from '../NamedRoute';
 import { apolloClientContext } from 'AppContexts';
 import { updateEvent as updateEventMutation, UpdateEventOptions } from './$id';
 import { ActiveStorageAttachment, BucketKeyMappingInput } from 'graphqlTypes.generated';

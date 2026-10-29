@@ -26,7 +26,7 @@ import buildEventUrl from '../buildEventUrl';
 import { SignupState } from '../../graphqlTypes.generated';
 import EnumTypes from '../../enumTypes.json';
 import AppRootContext from '../../AppRootContext';
-import { NamedRoute } from '../../AppRouter';
+import { NamedRoute } from '../../NamedRoute';
 import { useGraphQLConfirm } from '@neinteractiveliterature/litform';
 import { useApolloClient } from '@apollo/client/react';
 import { FreezeBucketAssignmentsDocument } from './mutations.generated';

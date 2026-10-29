@@ -1,7 +1,7 @@
 import { useState, useMemo, useCallback, Suspense } from 'react';
 import * as React from 'react';
 import classNames from 'classnames';
-import { useApolloClient, useSuspenseQuery } from "@apollo/client/react";
+import { useApolloClient, useSuspenseQuery } from '@apollo/client/react';
 import { useTranslation } from 'react-i18next';
 import { html } from '@codemirror/lang-html';
 import {
@@ -23,7 +23,7 @@ import { ActiveStorageAttachment, NotificationEventKey } from '../graphqlTypes.g
 import { CmsFilesAdminQueryDocument } from '../CmsAdmin/CmsFilesAdmin/queries.generated';
 import { Blob } from '@rails/activestorage';
 import { useFetcher } from 'react-router';
-import { NamedRoute } from '../AppRouter';
+import { NamedRoute } from '../NamedRoute';
 
 export type CreateCmsFileModalProps = {
   visible: boolean;
@@ -136,7 +136,7 @@ function LiquidInput(props: LiquidInputProps): React.JSX.Element {
             <div className="flex-grow-1 pt-1">
               <ul className="nav nav-tabs ps-2 justify-content-center">
                 <li className="nav-item">
-                  {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                  { }
                   <a
                     href="#"
                     className={classNames('nav-link', { active: currentDocTab === 'convention' })}
@@ -146,7 +146,7 @@ function LiquidInput(props: LiquidInputProps): React.JSX.Element {
                   </a>
                 </li>
                 <li className="nav-item">
-                  {/* eslint-disable-next-line jsx-a11y/anchor-is-valid */}
+                  { }
                   <a
                     href="#"
                     className={classNames('nav-link', { active: currentDocTab === 'core' })}

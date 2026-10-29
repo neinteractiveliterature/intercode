@@ -1,7 +1,7 @@
 import { LoaderFunction, RouterContextProvider, useRouteLoaderData } from 'react-router';
 import { apolloClientContext } from 'AppContexts';
 import { CmsGraphqlQueriesQueryData, CmsGraphqlQueriesQueryDocument } from './queries.generated';
-import { NamedRoute } from '../../AppRouter';
+import { NamedRoute } from '../../NamedRoute';
 
 export const cmsGraphqlQueriesAdminLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
   const client = context.get(apolloClientContext);
