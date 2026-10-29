@@ -1,5 +1,5 @@
 import { Fragment } from 'react';
-import { Link, LoaderFunction, useLoaderData, RouterContextProvider } from 'react-router';
+import { Link, useLoaderData } from 'react-router';
 import { useTranslation, Trans } from 'react-i18next';
 
 import UserConProfileSignupsCard from '../EventsApp/SignupAdmin/UserConProfileSignupsCard';
@@ -7,23 +7,16 @@ import AdminCaption from '../FormPresenter/ItemDisplays/AdminCaption';
 import FormItemDisplay from '../FormPresenter/ItemDisplays/FormItemDisplay';
 import usePageTitle from '../usePageTitle';
 import Gravatar from '../Gravatar';
-import { MyProfileQueryData, MyProfileQueryDocument } from './queries.generated';
+import { MyProfileQueryDocument } from './queries.generated';
 import { getSortedParsedFormItems } from '../Models/Form';
 import AdminWarning from '../UIComponents/AdminWarning';
 import { ConventionForTimespanUtils } from '../TimespanUtils';
 import { apolloClientContext } from '../AppContexts';
-import { TypedFormItem } from '../FormAdmin/FormItemUtils';
+import type { Route } from './+types/MyProfileDisplay';
 
-type LoaderResult = {
-  formResponse: Record<string, unknown>;
-  formItems: TypedFormItem[];
-  convention: MyProfileQueryData['convention'];
-  myProfile: NonNullable<MyProfileQueryData['convention']['my_profile']>;
-};
-
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<MyProfileQueryData>({ query: MyProfileQueryDocument });
+  const { data } = await client.query({ query: MyProfileQueryDocument, errorPolicy: 'none' });
   if (!data) {
     return new Response(null, { status: 404 });
   }
@@ -38,12 +31,12 @@ export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ cont
     formItems,
     myProfile: data.convention.my_profile,
     convention: data.convention,
-  } satisfies LoaderResult;
+  };
 };
 
 function MyProfileDisplay(): React.JSX.Element {
   const { t } = useTranslation();
-  const { formResponse, formItems, myProfile, convention } = useLoaderData() as LoaderResult;
+  const { formResponse, formItems, myProfile, convention } = useLoaderData<typeof clientLoader>();
 
   usePageTitle(t('myProfile.display.pageTitle'));
 

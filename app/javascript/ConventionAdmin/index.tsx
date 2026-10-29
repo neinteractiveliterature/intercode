@@ -1,14 +1,6 @@
 import { useMemo } from 'react';
 
-import {
-  ActionFunction,
-  LoaderFunction,
-  RouterContextProvider,
-  redirect,
-  useActionData,
-  useLoaderData,
-  useSubmit,
-} from 'react-router';
+import { redirect, useActionData, useLoaderData, useSubmit } from 'react-router';
 import pick from 'lodash/pick';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
@@ -16,12 +8,13 @@ import ConventionForm, { ConventionFormConvention } from './ConventionForm';
 import ConventionFormHeader from './ConventionFormHeader';
 import usePageTitle from '../usePageTitle';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
-import { ConventionAdminConventionQueryData, ConventionAdminConventionQueryDocument } from './queries.generated';
+import { ConventionAdminConventionQueryDocument } from './queries.generated';
 import { ConventionInput } from '../graphqlTypes.generated';
 import { apolloClientContext } from 'AppContexts';
 import { UpdateConventionDocument } from './mutations.generated';
+import type { Route } from './+types/index';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
+export const clientAction = async ({ context, request }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     const formData = await request.formData();
@@ -80,19 +73,20 @@ export const clientAction: ActionFunction<RouterContextProvider> = async ({ cont
   return redirect('/');
 };
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<ConventionAdminConventionQueryData>({
+  const { data } = await client.query({
     query: ConventionAdminConventionQueryDocument,
+    errorPolicy: 'none',
   });
   return data;
 };
 
 function ConventionAdmin() {
-  const data = useLoaderData() as ConventionAdminConventionQueryData;
+  const data = useLoaderData<typeof clientLoader>();
   const authorizationWarning = useAuthorizationRequired('can_update_convention');
   const submit = useSubmit();
-  const mutationError = useActionData();
+  const mutationError = useActionData<typeof clientAction>();
 
   const initialConvention: ConventionFormConvention = useMemo(() => {
     return {

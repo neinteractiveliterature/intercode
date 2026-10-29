@@ -1,26 +1,28 @@
 import { useEffect, useMemo, useRef } from 'react';
-import { LoaderFunction, RouterContextProvider, useLoaderData } from 'react-router';
+import { useLoaderData } from 'react-router';
 import parseCmsContent, { CMS_COMPONENT_MAP } from './parseCmsContent';
 import OutletWithLoading from './OutletWithLoading';
 import NavigationBar from './NavigationBar';
 import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
-import { AppRootLayoutQueryData, AppRootLayoutQueryDocument } from './appRootQueries.generated';
+import { AppRootLayoutQueryDocument } from './appRootQueries.generated';
 import { apolloClientContext } from 'AppContexts';
 import { normalizePathForLayout } from './normalizePathForLayout';
+import type { Route } from './+types/AppRootLayout';
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context, request }) => {
+export const clientLoader = async ({ context, request }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
   const url = new URL(request.url);
   const { data } = await client.query({
     query: AppRootLayoutQueryDocument,
     variables: { path: normalizePathForLayout(url.pathname) },
+    errorPolicy: 'none',
   });
   return data;
 };
 
 function AppRootLayout() {
   const cachedCmsLayoutId = useRef<string>(undefined);
-  const data = useLoaderData() as AppRootLayoutQueryData;
+  const data = useLoaderData<typeof clientLoader>();
 
   const parsedCmsContent = useMemo(() => {
     return parseCmsContent(data.cmsParentByRequestHost.effectiveCmsLayout.content_html ?? '', {

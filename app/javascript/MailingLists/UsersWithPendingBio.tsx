@@ -1,17 +1,18 @@
 import TabbedMailingList from './TabbedMailingList';
 import usePageTitle from '../usePageTitle';
-import { UsersWithPendingBioQueryData, UsersWithPendingBioQueryDocument } from './queries.generated';
+import { UsersWithPendingBioQueryDocument } from './queries.generated';
 import { apolloClientContext } from '../AppContexts';
-import { LoaderFunction, RouterContextProvider, useLoaderData } from 'react-router';
+import { useLoaderData } from 'react-router';
+import type { Route } from './+types/UsersWithPendingBio';
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<UsersWithPendingBioQueryData>({ query: UsersWithPendingBioQueryDocument });
+  const { data } = await client.query({ query: UsersWithPendingBioQueryDocument, errorPolicy: 'none' });
   return data;
 };
 
 function UsersWithPendingBio() {
-  const data = useLoaderData() as UsersWithPendingBioQueryData;
+  const data = useLoaderData<typeof clientLoader>();
   usePageTitle('Users with pending bio');
 
   return (

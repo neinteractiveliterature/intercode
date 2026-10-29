@@ -1,24 +1,15 @@
-import {
-  LoaderFunction,
-  useLoaderData,
-  replace,
-  ActionFunction,
-  redirect,
-  useSubmit,
-  useNavigation,
-  useActionData,
-  RouterContextProvider,
-} from 'react-router';
+import { useLoaderData, replace, redirect, useSubmit, useNavigation, useActionData } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import parseCmsContent from '../parseCmsContent';
 import useLoginRequired from '../Authentication/useLoginRequired';
-import { ClickwrapAgreementQueryData, ClickwrapAgreementQueryDocument } from './queries.generated';
+import { ClickwrapAgreementQueryDocument } from './queries.generated';
 import { apolloClientContext, authenticityTokensManagerContext } from '../AppContexts';
 import { AcceptClickwrapAgreementDocument } from './mutations.generated';
+import type { Route } from './+types/index';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context }) => {
+export const clientAction = async ({ context }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   const manager = context.get(authenticityTokensManagerContext);
   try {
@@ -31,9 +22,9 @@ export const clientAction: ActionFunction<RouterContextProvider> = async ({ cont
   }
 };
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<ClickwrapAgreementQueryData>({ query: ClickwrapAgreementQueryDocument });
+  const { data } = await client.query({ query: ClickwrapAgreementQueryDocument, errorPolicy: 'none' });
   if (data?.convention.my_profile?.accepted_clickwrap_agreement) {
     return replace('/');
   }
@@ -42,13 +33,13 @@ export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ cont
 };
 
 function ClickwrapAgreement() {
-  const data = useLoaderData() as ClickwrapAgreementQueryData;
+  const data = useLoaderData<typeof clientLoader>();
   const { t } = useTranslation();
   const loginRequired = useLoginRequired();
   const submit = useSubmit();
   const navigation = useNavigation();
   const acceptInProgress = navigation.state !== 'idle';
-  const acceptError = useActionData() as Error | undefined;
+  const acceptError = useActionData<typeof clientAction>() as Error | undefined;
 
   if (loginRequired) {
     return loginRequired;

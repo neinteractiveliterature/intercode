@@ -6,21 +6,14 @@ import { BootstrapFormInput, ErrorDisplay } from '@neinteractiveliterature/litfo
 
 import SelectWithLabel from '../BuiltInFormControls/SelectWithLabel';
 import usePageTitle from '../usePageTitle';
-import { RootSiteAdminQueryData, RootSiteAdminQueryDocument } from './queries.generated';
-import {
-  ActionFunction,
-  data,
-  LoaderFunction,
-  RouterContextProvider,
-  useActionData,
-  useLoaderData,
-  useNavigation,
-} from 'react-router';
+import { RootSiteAdminQueryDocument } from './queries.generated';
+import { data, useActionData, useLoaderData, useNavigation } from 'react-router';
 import { apolloClientContext } from 'AppContexts';
 import { Form } from 'react-router';
 import { UpdateRootSiteDocument } from './mutations.generated';
+import type { Route } from './+types/EditRootSite';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
+export const clientAction = async ({ context, request }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     const formData = await request.formData();
@@ -50,15 +43,15 @@ function useDirtyState<T>(initialState: T, setDirty: () => void) {
   ] as const;
 }
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<RootSiteAdminQueryData>({ query: RootSiteAdminQueryDocument });
+  const { data } = await client.query({ query: RootSiteAdminQueryDocument, errorPolicy: 'none' });
   return data;
 };
 
 function EditRootSite() {
-  const data = useLoaderData() as RootSiteAdminQueryData;
-  const actionData = useActionData();
+  const data = useLoaderData<typeof clientLoader>();
+  const actionData = useActionData<typeof clientAction>();
   const error = actionData instanceof Error ? actionData : undefined;
   const navigation = useNavigation();
   const updateInProgress = navigation.state !== 'idle';

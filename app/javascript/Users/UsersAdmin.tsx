@@ -1,13 +1,14 @@
-import { Outlet, useRouteLoaderData } from 'react-router';
+import { Outlet } from 'react-router';
 
 import { useTranslation } from 'react-i18next';
 import { NamedRoute } from '../NamedRoute';
-import { UserAdminQueryData } from './queries.generated';
+import useRequiredRouteLoaderData from '../useRequiredRouteLoaderData';
+import type { clientLoader } from './UserAdminDisplay';
 import NamedRouteBreadcrumbItem from '../Breadcrumbs/NamedRouteBreadcrumbItem';
 
 function UsersAdmin(): React.JSX.Element {
   const { t } = useTranslation();
-  const singleUserData = useRouteLoaderData(NamedRoute.UserAdminDisplay) as UserAdminQueryData;
+  const singleUserData = useRequiredRouteLoaderData<typeof clientLoader>(NamedRoute.UserAdminDisplay);
 
   return (
     <>

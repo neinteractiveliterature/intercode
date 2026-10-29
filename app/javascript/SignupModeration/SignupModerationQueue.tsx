@@ -19,7 +19,7 @@ import useReactTableWithTheWorks from '../Tables/useReactTableWithTheWorks';
 import UserConProfileWithGravatarCell from '../Tables/UserConProfileWithGravatarCell';
 import TimestampCell from '../Tables/TimestampCell';
 import { useFormatRunTimespan } from '../EventsApp/runTimeFormatting';
-import { Link, LoaderFunction, useFetcher, useLoaderData, RouterContextProvider } from 'react-router';
+import { Link, useFetcher, useLoaderData } from 'react-router';
 import { Trans, useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
 import { ParsedSignupRound, parseSignupRounds } from '../SignupRoundUtils';
@@ -27,6 +27,7 @@ import { describeSignupRound } from '../SignupRoundsAdmin/describeSignupRound';
 import { describeDecision } from '../SignupRoundsAdmin/RankedChoiceSignupDecisionsPage';
 import sortBy from 'lodash/sortBy';
 import { apolloClientContext } from 'AppContexts';
+import type { Route } from './+types/SignupModerationQueue';
 
 type SignupModerationContextValue = {
   acceptClicked: (signupRequest: SignupModerationSignupRequestFieldsFragment) => void;
@@ -271,15 +272,15 @@ function SignupRankedChoiceCell<TData, TValue extends SignupModerationSignupRequ
   );
 }
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query({ query: SignupModerationQueuePageQueryDocument });
+  const { data } = await client.query({ query: SignupModerationQueuePageQueryDocument, errorPolicy: 'none' });
   return data;
 };
 
 function SignupModerationQueue(): React.JSX.Element {
   const { t } = useTranslation();
-  const pageData = useLoaderData() as SignupModerationQueuePageQueryData;
+  const pageData = useLoaderData<typeof clientLoader>();
   const confirm = useConfirm();
   const fetcher = useFetcher();
   const error = fetcher.data instanceof Error ? fetcher.data : undefined;

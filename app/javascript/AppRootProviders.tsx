@@ -1,4 +1,3 @@
-import { ApolloClient } from '@apollo/client';
 import { ApolloProvider } from '@apollo/client/react';
 import {
   apolloClientContext,
@@ -7,21 +6,15 @@ import {
   ClientConfiguration,
 } from 'AppContexts';
 import { ProviderStack } from 'AppWrapper';
-import AuthenticityTokensManager, { AuthenticityTokensContext } from 'AuthenticityTokensContext';
+import { AuthenticityTokensContext } from 'AuthenticityTokensContext';
 import { StrictMode } from 'react';
-import { LoaderFunction, useLoaderData } from 'react-router';
+import { LoaderFunctionArgs, useLoaderData } from 'react-router';
 
-export type RootLoaderData = {
-  clientConfiguration: ClientConfiguration;
-  authenticityTokensManager: AuthenticityTokensManager;
-  client: ApolloClient;
-};
-
-export const loader: LoaderFunction = ({ context }) => {
+export const loader = ({ context }: LoaderFunctionArgs) => {
   const clientConfiguration = context.get(clientConfigurationContext);
   const authenticityTokensManager = context.get(authenticityTokensManagerContext);
   const client = context.get(apolloClientContext);
-  return { clientConfiguration, client, authenticityTokensManager } satisfies RootLoaderData;
+  return { clientConfiguration, client, authenticityTokensManager };
 };
 
 function RootProviderStack({ clientConfiguration }: { clientConfiguration: ClientConfiguration }) {
@@ -34,7 +27,7 @@ function RootProviderStack({ clientConfiguration }: { clientConfiguration: Clien
 }
 
 export default function Root() {
-  const loaderData = useLoaderData() as RootLoaderData;
+  const loaderData = useLoaderData<typeof loader>();
 
   return (
     <StrictMode>

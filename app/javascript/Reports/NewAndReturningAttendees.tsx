@@ -1,4 +1,4 @@
-import { LoaderFunction, useLoaderData, RouterContextProvider, Link } from 'react-router';
+import { useLoaderData, Link } from 'react-router';
 import { useTranslation } from 'react-i18next';
 import { stringify as csvStringify } from 'csv-stringify/browser/esm/sync';
 import { saveAs } from 'file-saver';
@@ -13,10 +13,11 @@ import { Convention } from 'graphqlTypes.generated';
 import classNames from 'classnames';
 import { DateTime } from 'luxon';
 import { useAppDateTimeFormat } from 'TimeUtils';
+import type { Route } from './+types/NewAndReturningAttendees';
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query({ query: NewAndReturningAttendeesQueryDocument });
+  const { data } = await client.query({ query: NewAndReturningAttendeesQueryDocument, errorPolicy: 'none' });
   return data;
 };
 
@@ -275,7 +276,7 @@ function AttendeeTable({
 
 function NewAndReturningAttendees() {
   const { t } = useTranslation();
-  const data = useLoaderData() as NewAndReturningAttendeesQueryData;
+  const data = useLoaderData<typeof clientLoader>();
   usePageTitle(t('admin.reports.newAndReturningAttendees.title'));
 
   const { organization_attendance_counts } = data.convention.reports.new_and_returning_attendees;

@@ -1,17 +1,18 @@
 import TabbedMailingList from './TabbedMailingList';
 import usePageTitle from '../usePageTitle';
-import { EventProposersQueryData, EventProposersQueryDocument } from './queries.generated';
+import { EventProposersQueryDocument } from './queries.generated';
 import { apolloClientContext } from '../AppContexts';
-import { LoaderFunction, RouterContextProvider, useLoaderData } from 'react-router';
+import { useLoaderData } from 'react-router';
+import type { Route } from './+types/EventProposers';
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<EventProposersQueryData>({ query: EventProposersQueryDocument });
+  const { data } = await client.query({ query: EventProposersQueryDocument, errorPolicy: 'none' });
   return data;
 };
 
 function EventProposers() {
-  const data = useLoaderData() as EventProposersQueryData;
+  const data = useLoaderData<typeof clientLoader>();
   usePageTitle('Event proposers');
 
   return (

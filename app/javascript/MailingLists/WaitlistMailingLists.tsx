@@ -4,19 +4,20 @@ import { DateTime } from 'luxon';
 import TabbedMailingList from './TabbedMailingList';
 import usePageTitle from '../usePageTitle';
 import AppRootContext from '../AppRootContext';
-import { WaitlistMailingListsQueryData, WaitlistMailingListsQueryDocument } from './queries.generated';
+import { WaitlistMailingListsQueryDocument } from './queries.generated';
 import { useAppDateTimeFormat } from '../TimeUtils';
 import { apolloClientContext } from '../AppContexts';
-import { LoaderFunction, RouterContextProvider, useLoaderData } from 'react-router';
+import { useLoaderData } from 'react-router';
+import type { Route } from './+types/WaitlistMailingLists';
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<WaitlistMailingListsQueryData>({ query: WaitlistMailingListsQueryDocument });
+  const { data } = await client.query({ query: WaitlistMailingListsQueryDocument, errorPolicy: 'none' });
   return data;
 };
 
 function WaitlistMailingLists() {
-  const data = useLoaderData() as WaitlistMailingListsQueryData;
+  const data = useLoaderData<typeof clientLoader>();
   const format = useAppDateTimeFormat();
   const { timezoneName } = useContext(AppRootContext);
 

@@ -1,14 +1,5 @@
 import useStateResetOnChange from '../useStateResetOnChange';
-import {
-  ActionFunction,
-  Form,
-  LoaderFunction,
-  redirect,
-  useActionData,
-  useLoaderData,
-  useNavigation,
-  RouterContextProvider,
-} from 'react-router';
+import { Form, redirect, useActionData, useLoaderData, useNavigation } from 'react-router';
 import { ErrorDisplay, usePropertySetters } from '@neinteractiveliterature/litform';
 
 import LiquidInput from '../BuiltInFormControls/LiquidInput';
@@ -20,12 +11,9 @@ import NotificationDestinationsConfig from './NotificationDestinationsConfig';
 import { useTranslation } from 'react-i18next';
 import { useChangeSet } from 'ChangeSet';
 import { NotificationDestinationInput, NotificationEventKey } from 'graphqlTypes.generated';
+import type { Route } from './+types/NotificationConfiguration';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({
-  context,
-  params: { eventKey },
-  request,
-}) => {
+export const clientAction = async ({ context, params: { eventKey }, request }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     const formData = await request.formData();
@@ -65,17 +53,10 @@ export const clientAction: ActionFunction<RouterContextProvider> = async ({
   }
 };
 
-type LoaderResult = {
-  event: NotificationAdminQueryData['notificationEvents'][number];
-  initialNotificationTemplate: NotificationAdminQueryData['convention']['notification_templates'][number];
-  staffPositions: NotificationAdminQueryData['convention']['staff_positions'];
-  eventCategories: NotificationAdminQueryData['convention']['event_categories'];
-};
-
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context, params }) => {
+export const clientLoader = async ({ context, params }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
   const { eventKey } = params;
-  const { data } = await client.query({ query: NotificationAdminQueryDocument });
+  const { data } = await client.query({ query: NotificationAdminQueryDocument, errorPolicy: 'none' });
   if (!data) {
     return new Response(null, { status: 404 });
   }
@@ -94,14 +75,14 @@ export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ cont
     initialNotificationTemplate,
     staffPositions: data.convention.staff_positions,
     eventCategories: data.convention.event_categories,
-  } satisfies LoaderResult;
+  };
 };
 
 function NotificationConfigurationForm() {
   const { t } = useTranslation();
-  const { event, initialNotificationTemplate, staffPositions, eventCategories } = useLoaderData() as LoaderResult;
+  const { event, initialNotificationTemplate, staffPositions, eventCategories } = useLoaderData<typeof clientLoader>();
   const navigation = useNavigation();
-  const data = useActionData();
+  const data = useActionData<typeof clientAction>();
   const updateError = data instanceof Error ? data : undefined;
   const updateInProgress = navigation.state !== 'idle';
 

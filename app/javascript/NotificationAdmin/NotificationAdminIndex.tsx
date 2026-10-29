@@ -2,7 +2,7 @@ import { BootstrapFormCheckbox, ErrorDisplay } from '@neinteractiveliterature/li
 import { useModal } from '@neinteractiveliterature/litform';
 import { useContext, useEffect, useMemo, useState } from 'react';
 import Modal from 'react-bootstrap4-modal';
-import { Link, LoaderFunction, useFetcher, useLoaderData, RouterContextProvider } from 'react-router';
+import { Link, useFetcher, useLoaderData } from 'react-router';
 
 import AppRootContext from '../AppRootContext';
 
@@ -11,6 +11,7 @@ import { apolloClientContext } from 'AppContexts';
 import { NotificationsConfigQueryData, NotificationsConfigQueryDocument } from './queries.generated';
 import sortBy from 'lodash/sortBy';
 import useStateResetOnChange from '../useStateResetOnChange';
+import type { Route } from './+types/NotificationAdminIndex';
 
 type NotificationPreviewModalProps = {
   visible: boolean;
@@ -72,15 +73,15 @@ function NotificationPreviewModal({ visible, close, eventConfig }: NotificationP
   );
 }
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query({ query: NotificationsConfigQueryDocument });
+  const { data } = await client.query({ query: NotificationsConfigQueryDocument, errorPolicy: 'none' });
   return data as NotificationsConfigQueryData;
 };
 
 function NotificationAdminIndex(): React.JSX.Element {
   const previewModal = useModal<{ eventConfig: NotificationsConfigQueryData['notificationEvents'][number] }>();
-  const data = useLoaderData() as NotificationsConfigQueryData;
+  const data = useLoaderData<typeof clientLoader>();
   const { t } = useTranslation();
 
   const sortedEvents = useMemo(() => {

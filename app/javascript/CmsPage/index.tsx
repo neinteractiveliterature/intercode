@@ -1,12 +1,13 @@
 import { useMemo, useEffect, Suspense, useRef } from 'react';
-import { useNavigate, useLocation, LoaderFunction, RouterContextProvider, useLoaderData } from 'react-router';
+import { useNavigate, useLocation, useLoaderData } from 'react-router';
 
 import usePageTitle from '../usePageTitle';
 import { lazyWithAppEntrypointHeadersCheck } from '../checkAppEntrypointHeadersMatch';
 import parseCmsContent from '../parseCmsContent';
-import { CmsPageQueryData, CmsPageQueryDocument, CmsPageQueryVariables } from './queries.generated';
+import { CmsPageQueryDocument, CmsPageQueryVariables } from './queries.generated';
 import { apolloClientContext } from 'AppContexts';
 import pageAdminDropdownStyles from '../styles/page_admin_dropdown.module.scss';
+import type { Route } from './+types/index';
 
 const PageAdminDropdown = lazyWithAppEntrypointHeadersCheck(() => import('./PageAdminDropdown'));
 
@@ -15,7 +16,7 @@ export type CmsPageProps = {
   rootPage?: boolean;
 };
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context, request }) => {
+export const clientLoader = async ({ context, request }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
   const slug = new URL(request.url).pathname.replace(/^\/pages\//, '').replace(/\/$/, '');
   let variables: CmsPageQueryVariables;
@@ -24,15 +25,16 @@ export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ cont
   } else {
     variables = { rootPage: true };
   }
-  const { data } = await client.query<CmsPageQueryData, CmsPageQueryVariables>({
+  const { data } = await client.query({
     query: CmsPageQueryDocument,
     variables,
+    errorPolicy: 'none',
   });
   return data;
 };
 
 function CmsPage(): React.JSX.Element {
-  const data = useLoaderData() as CmsPageQueryData;
+  const data = useLoaderData<typeof clientLoader>();
   const navigate = useNavigate();
   const location = useLocation();
   const lastHash = useRef('');

@@ -1,4 +1,4 @@
-import { SignupRoundsAdminQueryData, SignupRoundsAdminQueryDocument } from './queries.generated';
+import { SignupRoundsAdminQueryDocument } from './queries.generated';
 import React, { useContext } from 'react';
 import AppRootContext from '../AppRootContext';
 import { parseSignupRounds } from '../SignupRoundUtils';
@@ -8,17 +8,18 @@ import usePageTitle from '../usePageTitle';
 import MaximumEventSignupsPreview from './MaximumEventSignupsPreview';
 import SignupRoundScheduleTable from './SignupRoundScheduleTable';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
-import { LoaderFunction, useLoaderData, RouterContextProvider } from 'react-router';
+import { useLoaderData } from 'react-router';
 import { apolloClientContext } from 'AppContexts';
+import type { Route } from './+types/SignupRoundsAdminPage';
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query({ query: SignupRoundsAdminQueryDocument });
+  const { data } = await client.query({ query: SignupRoundsAdminQueryDocument, errorPolicy: 'none' });
   return data;
 };
 
 function SignupRoundsAdminPage() {
-  const data = useLoaderData() as SignupRoundsAdminQueryData;
+  const data = useLoaderData<typeof clientLoader>();
   const { t } = useTranslation();
   const { timezoneName } = useContext(AppRootContext);
   const { convention } = data;

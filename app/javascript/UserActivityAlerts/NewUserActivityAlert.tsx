@@ -19,7 +19,7 @@ import type { Route } from './+types/NewUserActivityAlert';
 
 export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query({ query: UserActivityAlertsAdminQueryDocument });
+  const { data } = await client.query({ query: UserActivityAlertsAdminQueryDocument, errorPolicy: 'none' });
 
   if (!data) {
     return new Response(null, { status: 404 });
@@ -72,7 +72,6 @@ export const clientAction = async ({ context, request }: Route.ClientActionArgs)
 
 function NewUserActivityAlert() {
   const { userActivityAlertEvent, convention } = useLoaderData<typeof clientLoader>();
-  // const data = useRouteLoaderData(NamedRoute.UserActivityAlerts) as UserActivityAlertsAdminQueryData;
   usePageTitle('New user activity alert');
 
   const [userActivityAlert, setUserActivityAlert] = useState<

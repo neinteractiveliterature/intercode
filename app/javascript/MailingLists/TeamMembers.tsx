@@ -1,27 +1,29 @@
 import { useMemo } from 'react';
 import { FormGroupWithLabel } from '@neinteractiveliterature/litform';
 import Select from 'react-select';
-import { LoaderFunction, RouterContextProvider, useLoaderData, useSearchParams } from 'react-router';
+import { useLoaderData, useSearchParams } from 'react-router';
 
 import TabbedMailingList from './TabbedMailingList';
 import usePageTitle from '../usePageTitle';
-import { TeamMembersMailingListQueryData, TeamMembersMailingListQueryDocument } from './queries.generated';
+import { TeamMembersMailingListQueryDocument } from './queries.generated';
 import { apolloClientContext } from '../AppContexts';
+import type { Route } from './+types/TeamMembers';
 
 const EVENT_CATEGORY_PARAM = 'event_category';
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context, request }) => {
+export const clientLoader = async ({ context, request }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
   const eventCategoryIds = new URL(request.url).searchParams.getAll(EVENT_CATEGORY_PARAM);
-  const { data } = await client.query<TeamMembersMailingListQueryData>({
+  const { data } = await client.query({
     query: TeamMembersMailingListQueryDocument,
     variables: { eventCategoryIds: eventCategoryIds.length > 0 ? eventCategoryIds : undefined },
+    errorPolicy: 'none',
   });
   return data;
 };
 
 function TeamMembers() {
-  const data = useLoaderData() as TeamMembersMailingListQueryData;
+  const data = useLoaderData<typeof clientLoader>();
   const [searchParams, setSearchParams] = useSearchParams();
   usePageTitle('Event team members');
 

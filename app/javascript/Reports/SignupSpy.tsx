@@ -1,18 +1,19 @@
 import SignupSpyTable from './SignupSpyTable';
 import usePageTitle from '../usePageTitle';
-import { SignupCountsByStateQueryData, SignupCountsByStateQueryDocument } from './queries.generated';
+import { SignupCountsByStateQueryDocument } from './queries.generated';
 import { SignupState } from '../graphqlTypes.generated';
-import { LoaderFunction, useLoaderData, RouterContextProvider } from 'react-router';
+import { useLoaderData } from 'react-router';
 import { apolloClientContext } from 'AppContexts';
+import type { Route } from './+types/SignupSpy';
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<SignupCountsByStateQueryData>({ query: SignupCountsByStateQueryDocument });
+  const { data } = await client.query({ query: SignupCountsByStateQueryDocument, errorPolicy: 'none' });
   return data;
 };
 
 function SignupSpy() {
-  const data = useLoaderData() as SignupCountsByStateQueryData;
+  const data = useLoaderData<typeof clientLoader>();
   const getSignupCount = (state: SignupState) =>
     (
       data.convention.signup_counts_by_state.find((record) => record.state === state) || {

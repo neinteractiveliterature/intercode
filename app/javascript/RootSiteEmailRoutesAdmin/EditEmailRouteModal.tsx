@@ -5,14 +5,15 @@ import { useConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import EmailRouteForm from './EmailRouteForm';
 import buildEmailRouteInput from './buildEmailRouteInput';
-import { RootSiteSingleEmailRouteQueryData, RootSiteSingleEmailRouteQueryDocument } from './queries.generated';
-import { ActionFunction, LoaderFunction, redirect, useLoaderData, RouterContextProvider } from 'react-router';
+import { RootSiteSingleEmailRouteQueryDocument } from './queries.generated';
+import { redirect, useLoaderData } from 'react-router';
 import { apolloClientContext } from 'AppContexts';
 import { DeleteEmailRouteDocument, UpdateEmailRouteDocument } from './mutations.generated';
 import { EmailRouteInput } from 'graphqlTypes.generated';
 import { Link, useFetcher } from 'react-router';
+import type { Route } from './+types/EditEmailRouteModal';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ params: { id }, request, context }) => {
+export const clientAction = async ({ params: { id }, request, context }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     if (request.method === 'DELETE') {
@@ -37,14 +38,18 @@ export const clientAction: ActionFunction<RouterContextProvider> = async ({ para
   }
 };
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ params: { id }, context }) => {
+export const clientLoader = async ({ params: { id }, context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query({ query: RootSiteSingleEmailRouteQueryDocument, variables: { id: id ?? '' } });
+  const { data } = await client.query({
+    query: RootSiteSingleEmailRouteQueryDocument,
+    variables: { id: id ?? '' },
+    errorPolicy: 'none',
+  });
   return data;
 };
 
 function EditEmailRouteModal(): React.JSX.Element {
-  const data = useLoaderData() as RootSiteSingleEmailRouteQueryData;
+  const data = useLoaderData<typeof clientLoader>();
   const initialEmailRoute = data.email_route;
   const confirm = useConfirm();
   const [emailRoute, setEmailRoute] = useStateResetOnChange(initialEmailRoute);

@@ -1,24 +1,18 @@
 import { useMemo, useState } from 'react';
-import {
-  ActionFunction,
-  LoaderFunction,
-  RouterContextProvider,
-  redirect,
-  useFetcher,
-  useLoaderData,
-} from 'react-router';
+import { redirect, useFetcher, useLoaderData } from 'react-router';
 
 import { ErrorDisplay } from '@neinteractiveliterature/litform';
 
 import buildFormStateFromData from './buildFormStateFromData';
 import UserConProfileForm from './UserConProfileForm';
 import usePageTitle from '../usePageTitle';
-import { UserConProfileQueryData, UserConProfileQueryDocument } from './queries.generated';
+import { UserConProfileQueryDocument } from './queries.generated';
 import { apolloClientContext } from '../AppContexts';
 import { UpdateUserConProfileDocument } from './mutations.generated';
 import { UserConProfileInput } from 'graphqlTypes.generated';
+import type { Route } from './+types/EditUserConProfile';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {
+export const clientAction = async ({ context, request, params: { id } }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     const userConProfile = (await request.json()) as UserConProfileInput;
@@ -32,17 +26,18 @@ export const clientAction: ActionFunction<RouterContextProvider> = async ({ cont
   }
 };
 
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context, params: { id } }) => {
+export const clientLoader = async ({ context, params: { id } }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query<UserConProfileQueryData>({
+  const { data } = await client.query({
     query: UserConProfileQueryDocument,
     variables: { id },
+    errorPolicy: 'none',
   });
   return data;
 };
 
 function EditUserConProfile() {
-  const data = useLoaderData() as UserConProfileQueryData;
+  const data = useLoaderData<typeof clientLoader>();
   const {
     userConProfile: initialUserConProfile,
     convention,

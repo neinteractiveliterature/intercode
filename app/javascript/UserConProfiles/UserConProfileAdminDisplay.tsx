@@ -1,13 +1,5 @@
 import { Suspense, useContext, useMemo, useState } from 'react';
-import {
-  ActionFunction,
-  Link,
-  replace,
-  RouterContextProvider,
-  useFetcher,
-  useParams,
-  useRouteLoaderData,
-} from 'react-router';
+import { Link, replace, useFetcher, useParams } from 'react-router';
 import {
   useConfirm,
   useModal,
@@ -23,21 +15,23 @@ import TicketAdminSection from './TicketAdminSection';
 import UserConProfileSignupsCard from '../EventsApp/SignupAdmin/UserConProfileSignupsCard';
 import usePageTitle from '../usePageTitle';
 import Gravatar from '../Gravatar';
-import { UserConProfileAdminQueryData } from './queries.generated';
 import deserializeFormResponse from '../Models/deserializeFormResponse';
 import { getSortedParsedFormItems } from '../Models/Form';
 import humanize from '../humanize';
 import Modal from 'react-bootstrap4-modal';
 import useAsyncFunction from '../useAsyncFunction';
 import { Trans, useTranslation } from 'react-i18next';
+import useRequiredRouteLoaderData from '../useRequiredRouteLoaderData';
+import type { clientLoader } from './userConProfileLoader';
 import { NamedRoute } from '../NamedRoute';
 import { DeleteUserConProfileDocument } from './mutations.generated';
 import invariant from 'tiny-invariant';
 import { UserConProfile } from 'graphqlTypes.generated';
 import { apolloClientContext } from 'AppContexts';
 import { AuthenticationManagerContext } from '../Authentication/authenticationManager';
+import type { Route } from './+types/UserConProfileAdminDisplay';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request, params: { id } }) => {
+export const clientAction = async ({ context, request, params: { id } }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   invariant(id != null);
   try {
@@ -156,7 +150,7 @@ function UserConProfileAdminDisplay(): React.JSX.Element {
   if (userConProfileId == null) {
     throw new Error('userConProfileId not found in params');
   }
-  const data = useRouteLoaderData(NamedRoute.AdminUserConProfile) as UserConProfileAdminQueryData;
+  const data = useRequiredRouteLoaderData<typeof clientLoader>(NamedRoute.AdminUserConProfile);
   const formItems = useMemo(() => getSortedParsedFormItems(data.convention.user_con_profile_form), [data]);
   const formResponse = useMemo(() => deserializeFormResponse(data.convention.user_con_profile), [data]);
   const confirm = useConfirm();
