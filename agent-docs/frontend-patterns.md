@@ -36,6 +36,29 @@ Middleware, route-level loaders and `element`s that `AppRouter.tsx` attaches to 
 
 Guards that reject a request (login required, an ability required, only on a convention's site or only on the root site) are in `routeGuards.ts` and attached with `loader: guarded([...])`, not as `middleware`. React Router renders an error from middleware at the shallowest route that still has data to load, which on a page load is the root route, and that has no `ErrorBoundary`, so the visitor would get React Router's "Application Error" screen instead of `RouteErrorBoundary`'s login prompt, not-authorized or not-found page. Middleware is fine for redirects (`routeMiddleware.ts`).
 
+### Route types (typegen)
+
+`yarn run typegen` (which `ts:check` runs first) has React Router generate a `Route` namespace for each route module under `.react-router/types`, and tsconfig's `rootDirs` makes it importable next to the module:
+
+```typescript
+import type { Route } from './+types/EditDepartment';
+
+export const clientAction = async ({ context, params: { id }, request }: Route.ClientActionArgs) => {
+  /* params is typed from the route's path */
+};
+
+export const clientLoader = singleDepartmentAdminLoader;
+
+function EditDepartment() {
+  const { department } = useLoaderData<typeof clientLoader>(); // typed from the loader, not cast
+}
+```
+
+- Don't write `LoaderFunction`/`ActionFunction` types for route loaders and actions: type the arguments with `Route.ClientLoaderArgs`/`Route.ClientActionArgs` (or `LoaderFunctionArgs` for a loader shared by several routes) and let the return type be inferred. Read the data with `useLoaderData<typeof clientLoader>()`/`useActionData<typeof clientAction>()`, not `as SomeType`.
+- Don't use the `loaderData`/`actionData` props of `Route.ComponentProps` yet: only framework mode passes them, and the data-mode build that production still uses renders route components without props. They can be used once the cutover has happened.
+- Typegen only covers route files under the app directory (`app/javascript`), which is why `react-router.config.ts` points there and `root.tsx`, `routes.ts` and `entry.client.tsx` are in `app/javascript` (the data-mode root route module is `AppRootProviders.tsx`).
+- With `apollo.query`, pass `errorPolicy: 'none'` so that `data` is typed as present (the runtime default).
+
 ### Loader Data Access
 
 ```typescript

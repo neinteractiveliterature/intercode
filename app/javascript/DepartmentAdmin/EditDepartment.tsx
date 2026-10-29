@@ -1,15 +1,16 @@
-import { ActionFunction, Form, redirect, useLoaderData, useNavigation, RouterContextProvider } from 'react-router';
+import { Form, redirect, useLoaderData, useNavigation } from 'react-router';
 
 import usePageTitle from '../usePageTitle';
 import { buildDepartmentInputFromFormData } from './buildDepartmentInput';
 import DepartmentForm from './DepartmentForm';
-import { singleDepartmentAdminLoader, SingleDepartmentAdminLoaderResult } from './loaders';
+import { singleDepartmentAdminLoader } from './loaders';
 import { apolloClientContext } from 'AppContexts';
 import { UpdateDepartmentDocument } from './mutations.generated';
 import { DepartmentAdminQueryDocument } from './queries.generated';
 import { useTranslation } from 'react-i18next';
+import type { Route } from './+types/EditDepartment';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, params: { id }, request }) => {
+export const clientAction = async ({ context, params: { id }, request }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     const formData = await request.formData();
@@ -31,7 +32,7 @@ export const clientAction: ActionFunction<RouterContextProvider> = async ({ cont
 export const clientLoader = singleDepartmentAdminLoader;
 
 function EditDepartment() {
-  const { department: initialDepartment } = useLoaderData() as SingleDepartmentAdminLoaderResult;
+  const { department: initialDepartment } = useLoaderData<typeof clientLoader>();
   const navigation = useNavigation();
   const { t } = useTranslation();
 
