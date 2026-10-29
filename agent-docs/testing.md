@@ -28,15 +28,15 @@ PARALLEL_WORKERS=4 bin/rails test
 
 ## System tests against the framework-mode build
 
-While the migration to React Router framework mode (#12219) is in progress, `test/system/framework_shell_test.rb` runs the framework-mode build in a real browser (Cuprite, like the other system tests), with Rails serving its prebuilt shell (`StaticSpaShell`). It is skipped unless `STATIC_SHELL_DIR` is set:
+While the migration to React Router framework mode (#12219) is in progress, the system tests also run against the framework-mode build, in a real browser (Cuprite) with Rails serving its prebuilt shell (`StaticSpaShell`) when `STATIC_SHELL_DIR` is set. `test/system/framework_shell_test.rb` only runs in that mode and checks that the build boots (it uses the placeholder `/framework-check` page); the other system tests run in both.
 
 ```sh
 yarn build:framework
 script/prepareStaticShell.sh        # prints STATIC_SHELL_DIR=...; also fills public/assets
-STATIC_SHELL_DIR=$PWD/tmp/static-shell bin/rails test test/system/framework_shell_test.rb
+STATIC_SHELL_DIR=$PWD/tmp/static-shell bin/rails test:system
 ```
 
-Run `script/prepareStaticShell.sh` again after each build. CI does the same in the `Minitest system tests` job when the repository variable `BUILD_FRAMEWORK` is set. The framework build only has a placeholder page (`/framework-check`) until the routes move from `AppRouter.tsx` to `routes.ts` (#12251), so that is all this test covers. After that, the other system tests should run against it as well, and this test's job in CI becomes `rails test:system` with `STATIC_SHELL_DIR` set.
+Run `script/prepareStaticShell.sh` again after each build. CI does the same in the `Minitest system tests` job when the repository variable `BUILD_FRAMEWORK` is set. The framework build's routes are generated from `AppRouter.tsx` by `script/genRoutes.mts` (`yarn routes:generate`; CI runs `yarn routes:check`), so change routes in `AppRouter.tsx` and regenerate until the cutover (#12260) deletes both.
 
 ## End-to-End Testing with Playwright
 
