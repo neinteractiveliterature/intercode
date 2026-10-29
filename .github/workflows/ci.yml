@@ -90,6 +90,8 @@ jobs:
           node-version: ${{ steps.node-version.outputs.node-version }}
       - name: yarn install
         run: yarn install
+      - name: Check that the generated routes are up to date
+        run: yarn run routes:check
       - name: Build
         run: yarn run build:framework
       - name: Check the output
@@ -246,9 +248,8 @@ jobs:
         run: bundle exec rails db:create db:migrate
       - name: Run tests
         run: TERM=xterm-color bundle exec rails test:system
-      # The framework-mode build, with Rails serving its static shell, until it replaces the build above. It only has the
-      # /framework-check page so far, so this runs just that test; once the routes have moved, run all of
-      # rails test:system here too.
+      # The framework-mode build, with Rails serving its static shell, until it replaces the build above. Its routes are
+      # generated from AppRouter.tsx (see script/genRoutes.mts), so all the system tests should pass against it too.
       - name: Build framework mode
         if: vars.BUILD_FRAMEWORK != ''
         run: yarn run build:framework
@@ -257,7 +258,7 @@ jobs:
         run: script/prepareStaticShell.sh | tee -a "$GITHUB_ENV"
       - name: Run system tests against the framework-mode shell
         if: vars.BUILD_FRAMEWORK != ''
-        run: TERM=xterm-color bundle exec rails test test/system/framework_shell_test.rb
+        run: TERM=xterm-color bundle exec rails test:system
       - name: Publish Test Report
         uses: mikepenz/action-junit-report@v6
         if: always() # always run even if the previous step fails

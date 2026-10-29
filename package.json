@@ -25,6 +25,8 @@
     "prepare": "husky install",
     "routing:codegen": "node script/genRouting.mjs",
     "routing:check": "node script/genRouting.mjs --check",
+    "routes:generate": "node script/genRoutes.mts",
+    "routes:check": "node script/genRoutes.mts --check",
     "preview": "vite preview --outDir ./public",
     "start": "vite",
     "ts:check": "node node_modules/@typescript/native/bin/tsc --noEmit",
