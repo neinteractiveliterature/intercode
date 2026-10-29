@@ -1,6 +1,6 @@
 import { renderRoute, userEvent, waitFor, within } from '../testUtils';
 import {
-  Component as CategorySpecificEventAdmin,
+  default as CategorySpecificEventAdmin,
   clientLoader as categoryLoader,
 } from '../../../app/javascript/EventAdmin/CategorySpecificEventAdmin';
 import { EventAdminEventsQueryDocument } from '../../../app/javascript/EventAdmin/queries.generated';

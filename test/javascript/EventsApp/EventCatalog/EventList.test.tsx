@@ -3,7 +3,7 @@ import { vi } from 'vitest';
 
 import { renderRoute, userEvent, waitFor } from '../../testUtils';
 import {
-  Component as EventList,
+  default as EventList,
   clientLoader as loader,
 } from '../../../../app/javascript/EventsApp/EventCatalog/EventList';
 import { EventListEventsQueryDocument } from '../../../../app/javascript/EventsApp/EventCatalog/EventList/queries.generated';

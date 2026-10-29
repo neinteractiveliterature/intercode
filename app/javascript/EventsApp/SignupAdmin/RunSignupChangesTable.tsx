@@ -128,4 +128,4 @@ function RunSignupChangesTable(): React.JSX.Element {
   );
 }
 
-export const Component = RunSignupChangesTable;
+export default RunSignupChangesTable;

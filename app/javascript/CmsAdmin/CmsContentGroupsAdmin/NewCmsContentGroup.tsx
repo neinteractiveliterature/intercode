@@ -96,4 +96,4 @@ function NewCmsContentGroup(): React.JSX.Element {
   );
 }
 
-export const Component = NewCmsContentGroup;
+export default NewCmsContentGroup;

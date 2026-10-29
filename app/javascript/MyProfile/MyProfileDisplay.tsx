@@ -139,4 +139,4 @@ function MyProfileDisplay(): React.JSX.Element {
   );
 }
 
-export const Component = MyProfileDisplay;
+export default MyProfileDisplay;

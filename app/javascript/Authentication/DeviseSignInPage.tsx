@@ -140,4 +140,4 @@ function DeviseSignInPage() {
   );
 }
 
-export const Component = DeviseSignInPage;
+export default DeviseSignInPage;

@@ -130,4 +130,4 @@ function NotificationAdminIndex(): React.JSX.Element {
   );
 }
 
-export const Component = NotificationAdminIndex;
+export default NotificationAdminIndex;

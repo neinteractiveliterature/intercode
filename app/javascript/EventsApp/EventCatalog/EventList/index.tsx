@@ -256,4 +256,4 @@ function EventList(): React.JSX.Element {
   );
 }
 
-export const Component = EventList;
+export default EventList;

@@ -2,7 +2,7 @@ import { MockLink } from '@apollo/client/testing';
 
 import { renderRoute, waitFor } from '../testUtils';
 import {
-  Component as SignupModerationQueue,
+  default as SignupModerationQueue,
   clientLoader as loader,
 } from '../../../app/javascript/SignupModeration/SignupModerationQueue';
 import {

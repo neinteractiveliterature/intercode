@@ -4,7 +4,7 @@ import { vi } from 'vitest';
 
 import { renderRoute, userEvent, waitFor } from '../testUtils';
 import {
-  Component as EditEventProposal,
+  default as EditEventProposal,
   clientLoader as loader,
 } from '../../../app/javascript/EventProposals/EditEventProposal';
 import {

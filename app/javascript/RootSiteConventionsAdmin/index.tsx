@@ -28,4 +28,4 @@ function RootSiteConventionsAdmin(): React.JSX.Element {
   );
 }
 
-export const Component = RootSiteConventionsAdmin;
+export default RootSiteConventionsAdmin;

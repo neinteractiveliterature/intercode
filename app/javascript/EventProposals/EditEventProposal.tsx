@@ -90,4 +90,4 @@ function EditEventProposal() {
   );
 }
 
-export const Component = EditEventProposal;
+export default EditEventProposal;

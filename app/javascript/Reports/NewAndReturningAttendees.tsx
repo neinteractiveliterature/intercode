@@ -314,4 +314,4 @@ function NewAndReturningAttendees() {
   );
 }
 
-export const Component = NewAndReturningAttendees;
+export default NewAndReturningAttendees;

@@ -411,4 +411,4 @@ function SignupModerationQueue(): React.JSX.Element {
   );
 }
 
-export const Component = SignupModerationQueue;
+export default SignupModerationQueue;

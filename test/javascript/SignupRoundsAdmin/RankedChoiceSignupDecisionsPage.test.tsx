@@ -3,7 +3,7 @@ import { vi } from 'vitest';
 
 import { renderRoute, waitFor } from '../testUtils';
 import {
-  Component as RankedChoiceSignupDecisionsPage,
+  default as RankedChoiceSignupDecisionsPage,
   describeDecision,
   describeReason,
   clientLoader as loader,

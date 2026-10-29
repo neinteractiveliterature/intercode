@@ -1,6 +1,6 @@
 import { renderRoute, userEvent, waitFor } from '../testUtils';
 import {
-  Component as DroppedEventAdmin,
+  default as DroppedEventAdmin,
   clientLoader as loader,
 } from '../../../app/javascript/EventAdmin/DroppedEventAdmin';
 import { EventAdminEventsQueryDocument } from '../../../app/javascript/EventAdmin/queries.generated';

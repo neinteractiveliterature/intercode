@@ -32,4 +32,4 @@ function EventCategoryIndex() {
   );
 }
 
-export const Component = EventCategoryIndex;
+export default EventCategoryIndex;

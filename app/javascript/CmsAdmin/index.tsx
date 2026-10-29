@@ -59,4 +59,4 @@ function CmsAdmin(): React.JSX.Element {
   );
 }
 
-export const Component = CmsAdmin;
+export default CmsAdmin;

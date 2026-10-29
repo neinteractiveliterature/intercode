@@ -88,4 +88,4 @@ function MyTicketDisplay() {
   );
 }
 
-export const Component = MyTicketDisplay;
+export default MyTicketDisplay;

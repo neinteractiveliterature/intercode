@@ -230,4 +230,4 @@ function OrderHistory() {
   );
 }
 
-export const Component = OrderHistory;
+export default OrderHistory;

@@ -27,4 +27,4 @@ function TicketedAttendees() {
   );
 }
 
-export const Component = TicketedAttendees;
+export default TicketedAttendees;

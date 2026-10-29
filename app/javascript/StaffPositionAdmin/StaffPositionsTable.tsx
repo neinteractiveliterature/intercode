@@ -257,4 +257,4 @@ function StaffPositionsTable() {
   );
 }
 
-export const Component = StaffPositionsTable;
+export default StaffPositionsTable;

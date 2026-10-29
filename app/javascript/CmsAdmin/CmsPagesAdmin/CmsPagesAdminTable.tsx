@@ -81,4 +81,4 @@ function CmsPagesAdminTable() {
   );
 }
 
-export const Component = CmsPagesAdminTable;
+export default CmsPagesAdminTable;

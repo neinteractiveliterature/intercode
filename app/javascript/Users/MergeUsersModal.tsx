@@ -249,4 +249,4 @@ function MergeUsersModal(): React.JSX.Element {
   );
 }
 
-export const Component = MergeUsersModal;
+export default MergeUsersModal;

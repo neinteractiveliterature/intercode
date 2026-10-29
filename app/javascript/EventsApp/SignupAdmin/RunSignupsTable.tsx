@@ -257,4 +257,4 @@ function RunSignupsTable(): React.JSX.Element {
   );
 }
 
-export const Component = RunSignupsTable;
+export default RunSignupsTable;

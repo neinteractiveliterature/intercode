@@ -151,4 +151,4 @@ function EditUserForm() {
   );
 }
 
-export const Component = EditUserForm;
+export default EditUserForm;

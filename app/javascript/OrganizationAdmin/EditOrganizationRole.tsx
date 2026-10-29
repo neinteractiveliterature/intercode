@@ -78,4 +78,4 @@ function EditOrganizationRoleForm() {
   );
 }
 
-export const Component = EditOrganizationRoleForm;
+export default EditOrganizationRoleForm;

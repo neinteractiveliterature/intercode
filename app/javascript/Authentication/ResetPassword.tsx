@@ -106,4 +106,4 @@ function ResetPassword(): React.JSX.Element {
   );
 }
 
-export const Component = ResetPassword;
+export default ResetPassword;

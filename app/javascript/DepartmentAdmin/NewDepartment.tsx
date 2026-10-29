@@ -58,4 +58,4 @@ function NewDepartment(): React.JSX.Element {
   );
 }
 
-export const Component = NewDepartment;
+export default NewDepartment;

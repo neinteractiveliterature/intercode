@@ -2,7 +2,7 @@ import { Outlet } from 'react-router';
 import { MockLink } from '@apollo/client/testing';
 
 import { renderRoute, waitFor } from '../../testUtils';
-import { Component as RunSignupsTable } from '../../../../app/javascript/EventsApp/SignupAdmin/RunSignupsTable';
+import { default as RunSignupsTable } from '../../../../app/javascript/EventsApp/SignupAdmin/RunSignupsTable';
 import { signupAdminEventLoader } from '../../../../app/javascript/EventsApp/SignupAdmin/loaders';
 import {
   SignupAdminEventQueryData,

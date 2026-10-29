@@ -139,4 +139,4 @@ function EventAdminEditEvent() {
   );
 }
 
-export const Component = EventAdminEditEvent;
+export default EventAdminEditEvent;

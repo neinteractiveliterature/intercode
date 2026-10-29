@@ -127,4 +127,4 @@ function ProvideTicketModal(): React.JSX.Element {
   );
 }
 
-export const Component = ProvideTicketModal;
+export default ProvideTicketModal;

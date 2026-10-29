@@ -53,4 +53,4 @@ function NewCmsLayout(): React.JSX.Element {
   );
 }
 
-export const Component = NewCmsLayout;
+export default NewCmsLayout;

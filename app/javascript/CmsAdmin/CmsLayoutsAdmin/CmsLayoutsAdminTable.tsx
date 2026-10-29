@@ -71,4 +71,4 @@ function CmsLayoutsAdminTable() {
   );
 }
 
-export const Component = CmsLayoutsAdminTable;
+export default CmsLayoutsAdminTable;

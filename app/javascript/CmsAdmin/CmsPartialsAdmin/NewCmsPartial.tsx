@@ -55,4 +55,4 @@ function NewCmsPartial(): React.JSX.Element {
   );
 }
 
-export const Component = NewCmsPartial;
+export default NewCmsPartial;

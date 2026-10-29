@@ -50,4 +50,4 @@ function SignupSpy() {
   );
 }
 
-export const Component = SignupSpy;
+export default SignupSpy;

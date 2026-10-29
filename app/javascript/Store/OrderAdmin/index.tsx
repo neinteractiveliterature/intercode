@@ -190,4 +190,4 @@ function OrderAdmin(): React.JSX.Element {
   );
 }
 
-export const Component = OrderAdmin;
+export default OrderAdmin;

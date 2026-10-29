@@ -4,7 +4,7 @@ import { vi } from 'vitest';
 
 import { renderRoute, userEvent, waitFor } from '../testUtils';
 import {
-  Component as EventAdminEditEvent,
+  default as EventAdminEditEvent,
   clientLoader as loader,
 } from '../../../app/javascript/EventAdmin/EventAdminEditEvent';
 import { UpdateEventDocument } from '../../../app/javascript/EventAdmin/mutations.generated';

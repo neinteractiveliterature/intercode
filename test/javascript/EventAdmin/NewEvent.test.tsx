@@ -1,7 +1,7 @@
 import { redirect } from 'react-router';
 
 import { renderRoute, userEvent, waitFor } from '../testUtils';
-import { Component as NewEvent } from '../../../app/javascript/EventAdmin/NewEvent';
+import { default as NewEvent } from '../../../app/javascript/EventAdmin/NewEvent';
 import { SchedulingUi, SiteMode } from '../../../app/javascript/graphqlTypes.generated';
 import { buildAdminEventCategory, buildEventAdminEventsData } from '../fixtures/eventAdmin';
 

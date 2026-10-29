@@ -56,4 +56,4 @@ function WaitlistMailingLists() {
   );
 }
 
-export const Component = WaitlistMailingLists;
+export default WaitlistMailingLists;

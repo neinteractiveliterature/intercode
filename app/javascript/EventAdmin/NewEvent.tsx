@@ -166,4 +166,4 @@ function NewEvent() {
   );
 }
 
-export const Component = NewEvent;
+export default NewEvent;

@@ -46,5 +46,3 @@ export default function Root() {
     </StrictMode>
   );
 }
-
-export const Component = Root;

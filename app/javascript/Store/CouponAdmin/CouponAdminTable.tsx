@@ -112,4 +112,4 @@ function CouponAdminTable(): React.JSX.Element {
   );
 }
 
-export const Component = CouponAdminTable;
+export default CouponAdminTable;

@@ -5,7 +5,7 @@ import {
   AuthenticationManager,
   AuthenticationManagerContext,
 } from '../../../app/javascript/Authentication/authenticationManager';
-import { Component as OAuthCallback } from '../../../app/javascript/Authentication/OAuthCallback';
+import { default as OAuthCallback } from '../../../app/javascript/Authentication/OAuthCallback';
 
 const reportError = vi.fn();
 

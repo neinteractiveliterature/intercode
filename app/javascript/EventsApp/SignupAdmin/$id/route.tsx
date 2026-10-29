@@ -330,4 +330,4 @@ function EditSignup(): React.JSX.Element {
   );
 }
 
-export const Component = EditSignup;
+export default EditSignup;

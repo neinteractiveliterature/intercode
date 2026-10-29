@@ -56,4 +56,4 @@ function EventProposalHistory() {
   );
 }
 
-export const Component = EventProposalHistory;
+export default EventProposalHistory;

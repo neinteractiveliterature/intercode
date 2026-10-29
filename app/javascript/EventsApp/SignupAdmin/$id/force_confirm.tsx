@@ -90,4 +90,4 @@ function ForceConfirmSignupModal(): React.JSX.Element {
   );
 }
 
-export const Component = ForceConfirmSignupModal;
+export default ForceConfirmSignupModal;

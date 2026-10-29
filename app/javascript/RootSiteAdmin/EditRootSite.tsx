@@ -142,4 +142,4 @@ function EditRootSite() {
   );
 }
 
-export const Component = EditRootSite;
+export default EditRootSite;

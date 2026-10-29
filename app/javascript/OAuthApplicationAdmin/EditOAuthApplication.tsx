@@ -157,4 +157,4 @@ function EditOAuthApplication() {
   );
 }
 
-export const Component = EditOAuthApplication;
+export default EditOAuthApplication;

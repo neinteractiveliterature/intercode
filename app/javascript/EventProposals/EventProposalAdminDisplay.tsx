@@ -87,4 +87,4 @@ function EventProposalAdminDisplay() {
   );
 }
 
-export const Component = EventProposalAdminDisplay;
+export default EventProposalAdminDisplay;

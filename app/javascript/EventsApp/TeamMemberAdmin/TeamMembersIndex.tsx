@@ -184,4 +184,4 @@ function TeamMembersIndex(): React.JSX.Element {
   );
 }
 
-export const Component = TeamMembersIndex;
+export default TeamMembersIndex;

@@ -294,4 +294,4 @@ function RankedChoiceSignupDecisionsPage() {
   );
 }
 
-export const Component = RankedChoiceSignupDecisionsPage;
+export default RankedChoiceSignupDecisionsPage;

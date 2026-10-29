@@ -168,4 +168,4 @@ function FormJSONEditor() {
   );
 }
 
-export const Component = FormJSONEditor;
+export default FormJSONEditor;

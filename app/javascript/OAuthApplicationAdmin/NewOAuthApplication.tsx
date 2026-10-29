@@ -124,4 +124,4 @@ function NewOAuthApplication() {
   );
 }
 
-export const Component = NewOAuthApplication;
+export default NewOAuthApplication;
