@@ -1,4 +1,4 @@
-import { useState, useEffect } from 'react';
+import useStateResetOnChange from '../../useStateResetOnChange';
 import { Modal } from 'react-bootstrap4-modal';
 
 import { useGraphQLConfirm, ErrorDisplay } from '@neinteractiveliterature/litform';
@@ -53,14 +53,10 @@ function EditCouponModal(): React.JSX.Element {
   const initialCoupon = useLoaderData() as AdminSingleCouponQueryData['convention']['coupon'];
   const { t } = useTranslation();
   const confirm = useGraphQLConfirm();
-  const [coupon, setCoupon] = useState(initialCoupon);
+  const [coupon, setCoupon] = useStateResetOnChange(initialCoupon);
   const fetcher = useFetcher();
   const error = fetcher.data instanceof Error ? fetcher.data : undefined;
   const inProgress = fetcher.state !== 'idle';
-
-  useEffect(() => {
-    setCoupon(initialCoupon);
-  }, [initialCoupon]);
 
   const saveClicked = () => {
     fetcher.submit(buildCouponInput(coupon), { method: 'PATCH', encType: 'application/json' });
