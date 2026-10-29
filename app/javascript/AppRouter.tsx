@@ -38,6 +38,7 @@ import { eventCategoryAdminLoader } from './EventCategoryAdmin/loaders';
 import { eventAdminEventsLoader } from './EventAdmin/loaders';
 import { apolloClientContext, appRootDataContext } from 'AppContexts';
 import RouteErrorBoundary from 'RouteErrorBoundary';
+import { lazyRoute } from './lazyRoute';
 
 export enum NamedRoute {
   AdminEditEventProposal = 'AdminEditEventProposal',
@@ -170,14 +171,14 @@ const eventsRoutes: RouteObject[] = [
       {
         path: 'schedule',
         children: [
-          { path: ':day', lazy: () => import('./EventsApp/ScheduleApp') },
+          { path: ':day', lazy: lazyRoute(() => import('./EventsApp/ScheduleApp')) },
           { index: true, middleware: [redirectToFirstDayMiddleware] },
         ],
       },
       { path: 'schedule_by_room/*', loader: () => replace('../schedule') },
       { path: 'schedule_with_counts/*', loader: () => replace('../schedule') },
-      { path: 'table', lazy: () => import('./EventsApp/EventCatalog/EventTable') },
-      { index: true, lazy: () => import('./EventsApp/EventCatalog/EventList') },
+      { path: 'table', lazy: lazyRoute(() => import('./EventsApp/EventCatalog/EventTable')) },
+      { index: true, lazy: lazyRoute(() => import('./EventsApp/EventCatalog/EventList')) },
     ],
   },
   {
@@ -186,13 +187,13 @@ const eventsRoutes: RouteObject[] = [
         ({ convention }) => convention?.signup_automation_mode === SignupAutomationMode.RankedChoice,
       ),
     ],
-    children: [{ path: 'my-signup-queue', lazy: () => import('./EventsApp/MySignupQueue') }],
+    children: [{ path: 'my-signup-queue', lazy: lazyRoute(() => import('./EventsApp/MySignupQueue')) }],
   },
   {
     path: ':eventId',
     id: NamedRoute.Event,
     children: [
-      { path: 'attach_image', lazy: () => import('./EventsApp/attach_image') },
+      { path: 'attach_image', lazy: lazyRoute(() => import('./EventsApp/attach_image')) },
       {
         middleware: [
           makeAppRootContextMiddleware(({ convention }) => convention?.ticket_mode === TicketMode.TicketPerEvent),
@@ -201,15 +202,23 @@ const eventsRoutes: RouteObject[] = [
           {
             path: 'ticket_types',
             loader: eventTicketTypesLoader,
-            lazy: () => import('./EventsApp/EventTicketTypesWrapper'),
+            lazy: lazyRoute(() => import('./EventsApp/EventTicketTypesWrapper')),
             children: [
-              { path: 'new', loader: eventTicketTypesLoader, lazy: () => import('./TicketTypeAdmin/NewTicketType') },
+              {
+                path: 'new',
+                loader: eventTicketTypesLoader,
+                lazy: lazyRoute(() => import('./TicketTypeAdmin/NewTicketType')),
+              },
               {
                 path: ':id/edit',
                 loader: eventSingleTicketTypeLoader,
-                lazy: () => import('./TicketTypeAdmin/EditTicketType'),
+                lazy: lazyRoute(() => import('./TicketTypeAdmin/EditTicketType')),
               },
-              { index: true, loader: eventTicketTypesLoader, lazy: () => import('./TicketTypeAdmin/TicketTypesList') },
+              {
+                index: true,
+                loader: eventTicketTypesLoader,
+                lazy: lazyRoute(() => import('./TicketTypeAdmin/TicketTypesList')),
+              },
             ],
           },
         ],
@@ -220,39 +229,41 @@ const eventsRoutes: RouteObject[] = [
         children: [
           {
             index: true,
-            lazy: () => import('./EventsApp/StandaloneEditEvent'),
+            lazy: lazyRoute(() => import('./EventsApp/StandaloneEditEvent')),
           },
         ],
       },
       {
         path: 'maximum_event_provided_ticket_overrides',
-        lazy: () => import('./EventsApp/MaximumEventProvidedTicketsOverrides/route'),
-        children: [{ path: ':id', lazy: () => import('./EventsApp/MaximumEventProvidedTicketsOverrides/$id') }],
+        lazy: lazyRoute(() => import('./EventsApp/MaximumEventProvidedTicketsOverrides/route')),
+        children: [
+          { path: ':id', lazy: lazyRoute(() => import('./EventsApp/MaximumEventProvidedTicketsOverrides/$id')) },
+        ],
       },
       {
         path: 'team_members',
         id: NamedRoute.TeamMembers,
         loader: teamMembersLoader,
-        lazy: () => import('./EventsApp/TeamMemberAdmin'),
+        lazy: lazyRoute(() => import('./EventsApp/TeamMemberAdmin')),
         children: [
           {
             path: 'new',
             id: NamedRoute.NewTeamMember,
-            lazy: () => import('./EventsApp/TeamMemberAdmin/NewTeamMember'),
+            lazy: lazyRoute(() => import('./EventsApp/TeamMemberAdmin/NewTeamMember')),
           },
           {
             path: ':teamMemberId',
             id: NamedRoute.EditTeamMember,
-            lazy: () => import('./EventsApp/TeamMemberAdmin/EditTeamMember'),
+            lazy: lazyRoute(() => import('./EventsApp/TeamMemberAdmin/EditTeamMember')),
           },
           {
             path: '',
             id: NamedRoute.TeamMembersIndex,
-            lazy: () => import('./EventsApp/TeamMemberAdmin/TeamMembersIndex'),
+            lazy: lazyRoute(() => import('./EventsApp/TeamMemberAdmin/TeamMembersIndex')),
             children: [
               {
                 path: ':teamMemberId/provide_ticket',
-                lazy: () => import('./EventsApp/TeamMemberAdmin/ProvideTicketModal'),
+                lazy: lazyRoute(() => import('./EventsApp/TeamMemberAdmin/ProvideTicketModal')),
               },
             ],
           },
@@ -260,12 +271,12 @@ const eventsRoutes: RouteObject[] = [
       },
       {
         path: 'history',
-        lazy: () => import('./EventsApp/EventPage/EventHistory'),
-        children: [{ path: ':changeGroupId', lazy: () => import('./EventsApp/EventPage/EventHistory') }],
+        lazy: lazyRoute(() => import('./EventsApp/EventPage/EventHistory')),
+        children: [{ path: ':changeGroupId', lazy: lazyRoute(() => import('./EventsApp/EventPage/EventHistory')) }],
       },
       {
         path: 'runs/:runId',
-        lazy: () => import('./EventsApp/SignupAdmin/RunHeader'),
+        lazy: lazyRoute(() => import('./EventsApp/SignupAdmin/RunHeader')),
         children: [
           {
             path: 'admin_signups',
@@ -276,29 +287,29 @@ const eventsRoutes: RouteObject[] = [
                 path: ':id',
                 loader: singleSignupLoader,
                 id: NamedRoute.EditSignup,
-                lazy: () => import('./EventsApp/SignupAdmin/$id/route'),
+                lazy: lazyRoute(() => import('./EventsApp/SignupAdmin/$id/route')),
                 children: [
-                  { path: 'change_bucket', lazy: () => import('./EventsApp/SignupAdmin/$id/change_bucket') },
-                  { path: 'force_confirm', lazy: () => import('./EventsApp/SignupAdmin/$id/force_confirm') },
+                  { path: 'change_bucket', lazy: lazyRoute(() => import('./EventsApp/SignupAdmin/$id/change_bucket')) },
+                  { path: 'force_confirm', lazy: lazyRoute(() => import('./EventsApp/SignupAdmin/$id/force_confirm')) },
                 ],
               },
               {
-                lazy: () => import('./EventsApp/SignupAdmin/SignupsIndex'),
+                lazy: lazyRoute(() => import('./EventsApp/SignupAdmin/SignupsIndex')),
                 children: [
                   {
                     path: 'emails/:separator',
                     id: NamedRoute.RunEmailList,
-                    lazy: () => import('./EventsApp/SignupAdmin/RunEmailList'),
+                    lazy: lazyRoute(() => import('./EventsApp/SignupAdmin/RunEmailList')),
                   },
                   {
                     path: 'signup_changes',
                     id: NamedRoute.RunSignupChangesTable,
-                    lazy: () => import('./EventsApp/SignupAdmin/RunSignupChangesTable'),
+                    lazy: lazyRoute(() => import('./EventsApp/SignupAdmin/RunSignupChangesTable')),
                   },
                   {
                     index: true,
                     id: NamedRoute.RunSignupsTable,
-                    lazy: () => import('./EventsApp/SignupAdmin/RunSignupsTable'),
+                    lazy: lazyRoute(() => import('./EventsApp/SignupAdmin/RunSignupsTable')),
                   },
                 ],
               },
@@ -307,14 +318,14 @@ const eventsRoutes: RouteObject[] = [
           {
             path: 'signup_summary',
             id: NamedRoute.RunSignupSummary,
-            lazy: () => import('./EventsApp/SignupAdmin/RunSignupSummary'),
+            lazy: lazyRoute(() => import('./EventsApp/SignupAdmin/RunSignupSummary')),
           },
         ],
       },
       {
         path: '',
         middleware: [eventPageMiddleware],
-        children: [{ index: true, id: NamedRoute.EventPage, lazy: () => import('./EventsApp/EventPage') }],
+        children: [{ index: true, id: NamedRoute.EventPage, lazy: lazyRoute(() => import('./EventsApp/EventPage')) }],
       },
     ],
   },
@@ -329,13 +340,13 @@ function NonCMSPageWrapper() {
 }
 
 const cmsPageRoutes: RouteObject[] = [
-  { path: '/pages/*', lazy: () => import('./CmsPage') },
-  { index: true, lazy: () => import('./CmsPage') },
+  { path: '/pages/*', lazy: lazyRoute(() => import('./CmsPage')) },
+  { index: true, lazy: lazyRoute(() => import('./CmsPage')) },
 ];
 
 const commonRoutes: RouteObject[] = [
   {
-    lazy: () => import('./CmsAdmin'),
+    lazy: lazyRoute(() => import('./CmsAdmin')),
     loader: cmsAdminBaseQueryLoader,
     id: NamedRoute.CmsAdmin,
     children: [
@@ -346,14 +357,14 @@ const commonRoutes: RouteObject[] = [
         children: [
           {
             path: ':id',
-            lazy: () => import('./CmsAdmin/CmsPagesAdmin/SinglePageRoute'),
+            lazy: lazyRoute(() => import('./CmsAdmin/CmsPagesAdmin/SinglePageRoute')),
             children: [
-              { path: 'edit', lazy: () => import('./CmsAdmin/CmsPagesAdmin/EditCmsPage') },
-              { path: 'view_source', lazy: () => import('./CmsAdmin/CmsPagesAdmin/ViewCmsPageSource') },
+              { path: 'edit', lazy: lazyRoute(() => import('./CmsAdmin/CmsPagesAdmin/EditCmsPage')) },
+              { path: 'view_source', lazy: lazyRoute(() => import('./CmsAdmin/CmsPagesAdmin/ViewCmsPageSource')) },
             ],
           },
-          { path: 'new', lazy: () => import('./CmsAdmin/CmsPagesAdmin/NewCmsPage') },
-          { index: true, lazy: () => import('./CmsAdmin/CmsPagesAdmin/CmsPagesAdminTable') },
+          { path: 'new', lazy: lazyRoute(() => import('./CmsAdmin/CmsPagesAdmin/NewCmsPage')) },
+          { index: true, lazy: lazyRoute(() => import('./CmsAdmin/CmsPagesAdmin/CmsPagesAdminTable')) },
         ],
       },
       {
@@ -363,18 +374,21 @@ const commonRoutes: RouteObject[] = [
         children: [
           {
             path: ':id',
-            lazy: () => import('./CmsAdmin/CmsPartialsAdmin/SinglePartialRoute'),
+            lazy: lazyRoute(() => import('./CmsAdmin/CmsPartialsAdmin/SinglePartialRoute')),
             children: [
-              { path: 'edit', lazy: () => import('./CmsAdmin/CmsPartialsAdmin/EditCmsPartial') },
-              { path: 'view_source', lazy: () => import('./CmsAdmin/CmsPartialsAdmin/ViewCmsPartialSource') },
+              { path: 'edit', lazy: lazyRoute(() => import('./CmsAdmin/CmsPartialsAdmin/EditCmsPartial')) },
+              {
+                path: 'view_source',
+                lazy: lazyRoute(() => import('./CmsAdmin/CmsPartialsAdmin/ViewCmsPartialSource')),
+              },
             ],
           },
-          { path: 'new', lazy: () => import('./CmsAdmin/CmsPartialsAdmin/NewCmsPartial') },
-          { index: true, lazy: () => import('./CmsAdmin/CmsPartialsAdmin/CmsPartialsAdminTable') },
+          { path: 'new', lazy: lazyRoute(() => import('./CmsAdmin/CmsPartialsAdmin/NewCmsPartial')) },
+          { index: true, lazy: lazyRoute(() => import('./CmsAdmin/CmsPartialsAdmin/CmsPartialsAdminTable')) },
         ],
       },
-      { path: '/cms_files', id: NamedRoute.CmsFiles, lazy: () => import('./CmsAdmin/CmsFilesAdmin') },
-      { path: '/cms_navigation_items', lazy: () => import('./CmsAdmin/NavigationItemsAdmin') },
+      { path: '/cms_files', id: NamedRoute.CmsFiles, lazy: lazyRoute(() => import('./CmsAdmin/CmsFilesAdmin')) },
+      { path: '/cms_navigation_items', lazy: lazyRoute(() => import('./CmsAdmin/NavigationItemsAdmin')) },
       {
         path: '/cms_layouts',
         loader: cmsLayoutsAdminLoader,
@@ -382,20 +396,20 @@ const commonRoutes: RouteObject[] = [
         children: [
           {
             path: ':id',
-            lazy: () => import('./CmsAdmin/CmsLayoutsAdmin/SingleLayoutRoute'),
+            lazy: lazyRoute(() => import('./CmsAdmin/CmsLayoutsAdmin/SingleLayoutRoute')),
             children: [
-              { path: 'edit', lazy: () => import('./CmsAdmin/CmsLayoutsAdmin/EditCmsLayout') },
-              { path: 'view_source', lazy: () => import('./CmsAdmin/CmsLayoutsAdmin/ViewCmsLayoutSource') },
+              { path: 'edit', lazy: lazyRoute(() => import('./CmsAdmin/CmsLayoutsAdmin/EditCmsLayout')) },
+              { path: 'view_source', lazy: lazyRoute(() => import('./CmsAdmin/CmsLayoutsAdmin/ViewCmsLayoutSource')) },
             ],
           },
-          { path: 'new', lazy: () => import('./CmsAdmin/CmsLayoutsAdmin/NewCmsLayout') },
-          { index: true, lazy: () => import('./CmsAdmin/CmsLayoutsAdmin/CmsLayoutsAdminTable') },
+          { path: 'new', lazy: lazyRoute(() => import('./CmsAdmin/CmsLayoutsAdmin/NewCmsLayout')) },
+          { index: true, lazy: lazyRoute(() => import('./CmsAdmin/CmsLayoutsAdmin/CmsLayoutsAdminTable')) },
         ],
       },
       {
         path: '/cms_variables',
-        lazy: () => import('./CmsAdmin/CmsVariablesAdmin'),
-        children: [{ path: ':key', lazy: () => import('./CmsAdmin/CmsVariablesAdmin/SingleVariableRoute') }],
+        lazy: lazyRoute(() => import('./CmsAdmin/CmsVariablesAdmin')),
+        children: [{ path: ':key', lazy: lazyRoute(() => import('./CmsAdmin/CmsVariablesAdmin/SingleVariableRoute')) }],
       },
       {
         path: '/cms_graphql_queries',
@@ -404,17 +418,20 @@ const commonRoutes: RouteObject[] = [
         children: [
           {
             path: ':id',
-            lazy: () => import('./CmsAdmin/CmsGraphqlQueriesAdmin/SingleGraphqlQueryRoute'),
+            lazy: lazyRoute(() => import('./CmsAdmin/CmsGraphqlQueriesAdmin/SingleGraphqlQueryRoute')),
             children: [
-              { path: 'edit', lazy: () => import('./CmsAdmin/CmsGraphqlQueriesAdmin/EditCmsGraphqlQuery') },
+              { path: 'edit', lazy: lazyRoute(() => import('./CmsAdmin/CmsGraphqlQueriesAdmin/EditCmsGraphqlQuery')) },
               {
                 path: 'view_source',
-                lazy: () => import('./CmsAdmin/CmsGraphqlQueriesAdmin/ViewCmsGraphqlQuerySource'),
+                lazy: lazyRoute(() => import('./CmsAdmin/CmsGraphqlQueriesAdmin/ViewCmsGraphqlQuerySource')),
               },
             ],
           },
-          { path: 'new', lazy: () => import('./CmsAdmin/CmsGraphqlQueriesAdmin/NewCmsGraphqlQuery') },
-          { index: true, lazy: () => import('./CmsAdmin/CmsGraphqlQueriesAdmin/CmsGraphqlQueriesAdminTable') },
+          { path: 'new', lazy: lazyRoute(() => import('./CmsAdmin/CmsGraphqlQueriesAdmin/NewCmsGraphqlQuery')) },
+          {
+            index: true,
+            lazy: lazyRoute(() => import('./CmsAdmin/CmsGraphqlQueriesAdmin/CmsGraphqlQueriesAdminTable')),
+          },
         ],
       },
       {
@@ -424,47 +441,47 @@ const commonRoutes: RouteObject[] = [
         children: [
           {
             path: ':id',
-            lazy: () => import('./CmsAdmin/CmsContentGroupsAdmin/SingleCmsContentGroupRoute'),
+            lazy: lazyRoute(() => import('./CmsAdmin/CmsContentGroupsAdmin/SingleCmsContentGroupRoute')),
             children: [
-              { path: 'edit', lazy: () => import('./CmsAdmin/CmsContentGroupsAdmin/EditCmsContentGroup') },
-              { index: true, lazy: () => import('./CmsAdmin/CmsContentGroupsAdmin/ViewCmsContentGroup') },
+              { path: 'edit', lazy: lazyRoute(() => import('./CmsAdmin/CmsContentGroupsAdmin/EditCmsContentGroup')) },
+              { index: true, lazy: lazyRoute(() => import('./CmsAdmin/CmsContentGroupsAdmin/ViewCmsContentGroup')) },
             ],
           },
-          { path: 'new', lazy: () => import('./CmsAdmin/CmsContentGroupsAdmin/NewCmsContentGroup') },
-          { index: true, lazy: () => import('./CmsAdmin/CmsContentGroupsAdmin/CmsContentGroupsAdminTable') },
+          { path: 'new', lazy: lazyRoute(() => import('./CmsAdmin/CmsContentGroupsAdmin/NewCmsContentGroup')) },
+          { index: true, lazy: lazyRoute(() => import('./CmsAdmin/CmsContentGroupsAdmin/CmsContentGroupsAdminTable')) },
         ],
       },
       {
         middleware: [makeAppRootContextMiddleware(({ convention }) => convention?.name == null)],
-        children: [{ path: '/root_site', lazy: () => import('./RootSiteAdmin/EditRootSite') }],
+        children: [{ path: '/root_site', lazy: lazyRoute(() => import('./RootSiteAdmin/EditRootSite')) }],
       },
     ],
   },
   {
     path: '/admin_oauth_applications',
-    lazy: () => import('./OAuthApplicationAdmin'),
+    lazy: lazyRoute(() => import('./OAuthApplicationAdmin')),
     children: [
-      { path: 'new', lazy: () => import('./OAuthApplicationAdmin/NewOAuthApplication') },
+      { path: 'new', lazy: lazyRoute(() => import('./OAuthApplicationAdmin/NewOAuthApplication')) },
       {
         path: ':id',
-        lazy: () => import('./OAuthApplicationAdmin/$id/route'),
+        lazy: lazyRoute(() => import('./OAuthApplicationAdmin/$id/route')),
         children: [
           {
             path: 'edit',
             id: NamedRoute.EditOAuthApplication,
-            lazy: () => import('./OAuthApplicationAdmin/EditOAuthApplication'),
+            lazy: lazyRoute(() => import('./OAuthApplicationAdmin/EditOAuthApplication')),
           },
         ],
       },
-      { index: true, lazy: () => import('./OAuthApplicationAdmin/OAuthApplicationsTable') },
+      { index: true, lazy: lazyRoute(() => import('./OAuthApplicationAdmin/OAuthApplicationsTable')) },
     ],
   },
-  { path: '/oauth/authorize', lazy: () => import('./OAuth/AuthorizationPrompt') },
-  { path: '/oauth/callback', lazy: () => import('./Authentication/OAuthCallback') },
+  { path: '/oauth/authorize', lazy: lazyRoute(() => import('./OAuth/AuthorizationPrompt')) },
+  { path: '/oauth/callback', lazy: lazyRoute(() => import('./Authentication/OAuthCallback')) },
   {
     path: '/oauth/authorized_applications',
-    lazy: () => import('./OAuth/AuthorizedApplications'),
-    children: [{ path: ':uid', lazy: () => import('./OAuth/$uid') }],
+    lazy: lazyRoute(() => import('./OAuth/AuthorizedApplications')),
+    children: [{ path: ':uid', lazy: lazyRoute(() => import('./OAuth/$uid')) }],
   },
 ];
 
@@ -477,61 +494,64 @@ const commonInConventionRoutes: RouteObject[] = [
     children: [
       {
         path: ':id',
-        lazy: () => import('./DepartmentAdmin/SingleDepartmentRoute'),
+        lazy: lazyRoute(() => import('./DepartmentAdmin/SingleDepartmentRoute')),
         children: [
-          { path: 'edit', lazy: () => import('./DepartmentAdmin/EditDepartment') },
+          { path: 'edit', lazy: lazyRoute(() => import('./DepartmentAdmin/EditDepartment')) },
           { index: true, loader: () => redirect('..') },
         ],
       },
-      { path: 'new', lazy: () => import('./DepartmentAdmin/NewDepartment') },
-      { index: true, lazy: () => import('./DepartmentAdmin/DepartmentAdminIndex') },
+      { path: 'new', lazy: lazyRoute(() => import('./DepartmentAdmin/NewDepartment')) },
+      { index: true, lazy: lazyRoute(() => import('./DepartmentAdmin/DepartmentAdminIndex')) },
     ],
   },
   {
     path: '/admin_events',
-    lazy: () => import('./EventAdmin'),
+    lazy: lazyRoute(() => import('./EventAdmin')),
     loader: eventAdminEventsLoader,
     id: NamedRoute.EventAdmin,
     children: [
       {
         middleware: [makeAppRootContextMiddleware(({ convention }) => convention?.site_mode === SiteMode.SingleEvent)],
-        children: [{ path: ':eventId/edit', lazy: () => import('./EventAdmin/EventAdminEditEvent') }],
+        children: [{ path: ':eventId/edit', lazy: lazyRoute(() => import('./EventAdmin/EventAdminEditEvent')) }],
       },
       {
         middleware: [makeAppRootContextMiddleware(({ convention }) => convention?.site_mode !== SiteMode.SingleEvent)],
         children: [
-          { path: 'dropped_events', lazy: () => import('./EventAdmin/DroppedEventAdmin') },
+          { path: 'dropped_events', lazy: lazyRoute(() => import('./EventAdmin/DroppedEventAdmin')) },
           {
             path: ':eventCategoryId',
             children: [
-              { path: 'events/new', lazy: () => import('./EventAdmin/NewEvent') },
-              { path: 'events/:eventId/edit', lazy: () => import('./EventAdmin/EventAdminEditEvent') },
+              { path: 'events/new', lazy: lazyRoute(() => import('./EventAdmin/NewEvent')) },
+              { path: 'events/:eventId/edit', lazy: lazyRoute(() => import('./EventAdmin/EventAdminEditEvent')) },
               {
                 path: '',
-                lazy: () => import('./EventAdmin/CategorySpecificEventAdmin'),
+                lazy: lazyRoute(() => import('./EventAdmin/CategorySpecificEventAdmin')),
                 children: [
                   {
                     path: 'events',
-                    lazy: () => import('./EventAdmin/create'),
+                    lazy: lazyRoute(() => import('./EventAdmin/create')),
                     children: [
                       { index: true, loader: () => redirect('..') },
                       {
                         path: ':eventId',
-                        lazy: () => import('./EventAdmin/$id'),
+                        lazy: lazyRoute(() => import('./EventAdmin/$id')),
                         children: [
-                          { path: 'admin_notes', lazy: () => import('./EventAdmin/AdminNotesRoute') },
-                          { path: 'drop', lazy: () => import('./EventAdmin/drop') },
-                          { path: 'restore', lazy: () => import('./EventAdmin/RestoreEventRoute') },
+                          { path: 'admin_notes', lazy: lazyRoute(() => import('./EventAdmin/AdminNotesRoute')) },
+                          { path: 'drop', lazy: lazyRoute(() => import('./EventAdmin/drop')) },
+                          { path: 'restore', lazy: lazyRoute(() => import('./EventAdmin/RestoreEventRoute')) },
                           {
                             path: 'runs',
                             children: [
                               {
                                 path: ':runId',
-                                lazy: () => import('./EventAdmin/SingleRunRoute'),
-                                children: [{ path: 'edit', lazy: () => import('./EventAdmin/EditRun') }],
+                                lazy: lazyRoute(() => import('./EventAdmin/SingleRunRoute')),
+                                children: [{ path: 'edit', lazy: lazyRoute(() => import('./EventAdmin/EditRun')) }],
                               },
-                              { path: 'create_multiple', lazy: () => import('./EventAdmin/CreateMultipleRunsRoute') },
-                              { path: 'new', lazy: () => import('./EventAdmin/NewRun') },
+                              {
+                                path: 'create_multiple',
+                                lazy: lazyRoute(() => import('./EventAdmin/CreateMultipleRunsRoute')),
+                              },
+                              { path: 'new', lazy: lazyRoute(() => import('./EventAdmin/NewRun')) },
                             ],
                           },
                         ],
@@ -550,11 +570,15 @@ const commonInConventionRoutes: RouteObject[] = [
   {
     path: '/admin_forms',
     id: NamedRoute.AdminForms,
-    lazy: () => import('./FormAdmin'),
+    lazy: lazyRoute(() => import('./FormAdmin')),
     children: [
-      { path: ':id/edit_advanced', id: NamedRoute.FormJSONEditor, lazy: () => import('./FormAdmin/FormJSONEditor') },
-      { path: ':id', lazy: () => import('./FormAdmin/$id/route') },
-      { index: true, id: NamedRoute.FormAdminIndex, lazy: () => import('./FormAdmin/FormAdminIndex') },
+      {
+        path: ':id/edit_advanced',
+        id: NamedRoute.FormJSONEditor,
+        lazy: lazyRoute(() => import('./FormAdmin/FormJSONEditor')),
+      },
+      { path: ':id', lazy: lazyRoute(() => import('./FormAdmin/$id/route')) },
+      { index: true, id: NamedRoute.FormAdminIndex, lazy: lazyRoute(() => import('./FormAdmin/FormAdminIndex')) },
     ],
   },
   {
@@ -563,94 +587,97 @@ const commonInConventionRoutes: RouteObject[] = [
     children: [
       {
         path: ':eventKey',
-        lazy: () => import('./NotificationAdmin/NotificationConfiguration'),
+        lazy: lazyRoute(() => import('./NotificationAdmin/NotificationConfiguration')),
       },
       {
         path: ':eventKey/preview',
-        lazy: () => import('./NotificationAdmin/preview'),
+        lazy: lazyRoute(() => import('./NotificationAdmin/preview')),
       },
-      { index: true, lazy: () => import('./NotificationAdmin/NotificationAdminIndex') },
+      { index: true, lazy: lazyRoute(() => import('./NotificationAdmin/NotificationAdminIndex')) },
     ],
   },
   {
     path: '/admin_store',
-    lazy: () => import('./Store/StoreAdmin'),
+    lazy: lazyRoute(() => import('./Store/StoreAdmin')),
     children: [
       {
         path: 'products',
-        lazy: () => import('./Store/ProductAdmin'),
-        children: [{ path: ':id', lazy: () => import('./Store/ProductAdmin/$id') }],
+        lazy: lazyRoute(() => import('./Store/ProductAdmin')),
+        children: [{ path: ':id', lazy: lazyRoute(() => import('./Store/ProductAdmin/$id')) }],
       },
       {
         path: 'coupons',
-        lazy: () => import('./Store/CouponAdmin/CouponAdminTable'),
+        lazy: lazyRoute(() => import('./Store/CouponAdmin/CouponAdminTable')),
         children: [
-          { path: ':id', lazy: () => import('./Store/CouponAdmin/EditCouponModal') },
-          { path: 'new', lazy: () => import('./Store/CouponAdmin/NewCouponModal') },
+          { path: ':id', lazy: lazyRoute(() => import('./Store/CouponAdmin/EditCouponModal')) },
+          { path: 'new', lazy: lazyRoute(() => import('./Store/CouponAdmin/NewCouponModal')) },
         ],
       },
       {
         path: 'orders',
-        lazy: () => import('./Store/OrderAdmin'),
+        lazy: lazyRoute(() => import('./Store/OrderAdmin')),
         children: [
           {
             path: ':id',
-            lazy: () => import('./Store/OrderAdmin/$id'),
+            lazy: lazyRoute(() => import('./Store/OrderAdmin/$id')),
             children: [
-              { path: 'cancel', lazy: () => import('./Store/OrderAdmin/cancel') },
-              { path: 'mark_paid', lazy: () => import('./Store/OrderAdmin/mark_paid') },
+              { path: 'cancel', lazy: lazyRoute(() => import('./Store/OrderAdmin/cancel')) },
+              { path: 'mark_paid', lazy: lazyRoute(() => import('./Store/OrderAdmin/mark_paid')) },
               {
                 path: 'order_entries',
-                lazy: () => import('./Store/OrderAdmin/order_entries/route'),
+                lazy: lazyRoute(() => import('./Store/OrderAdmin/order_entries/route')),
                 children: [
-                  { path: ':orderEntryId', lazy: () => import('./Store/OrderAdmin/order_entries/$orderEntryId') },
+                  {
+                    path: ':orderEntryId',
+                    lazy: lazyRoute(() => import('./Store/OrderAdmin/order_entries/$orderEntryId')),
+                  },
                 ],
               },
               {
                 path: 'coupon_applications',
-                lazy: () => import('./Store/OrderAdmin/coupon_applications/route'),
+                lazy: lazyRoute(() => import('./Store/OrderAdmin/coupon_applications/route')),
                 children: [
                   {
                     path: ':couponApplicationId',
-                    lazy: () => import('./Store/OrderAdmin/coupon_applications/$couponApplicationId'),
+                    lazy: lazyRoute(() => import('./Store/OrderAdmin/coupon_applications/$couponApplicationId')),
                   },
                 ],
               },
             ],
           },
-          { path: 'new', lazy: () => import('./Store/OrderAdmin/new') },
+          { path: 'new', lazy: lazyRoute(() => import('./Store/OrderAdmin/new')) },
         ],
       },
-      { path: 'order_summary', lazy: () => import('./Store/OrderSummary') },
+      { path: 'order_summary', lazy: lazyRoute(() => import('./Store/OrderSummary')) },
       { index: true, loader: () => redirect('./products') },
     ],
   },
   {
     path: '/cart',
-    lazy: () => import('./Store/Cart'),
+    lazy: lazyRoute(() => import('./Store/Cart')),
     children: [
-      { path: 'order_entries/:id', lazy: () => import('./Store/Cart/order_entries/$id') },
+      { path: 'order_entries/:id', lazy: lazyRoute(() => import('./Store/Cart/order_entries/$id')) },
       {
         path: 'coupon_applications',
-        lazy: () => import('./Store/Cart/coupon_applications/route'),
-        children: [{ path: ':id', lazy: () => import('./Store/Cart/coupon_applications/$id') }],
+        lazy: lazyRoute(() => import('./Store/Cart/coupon_applications/route')),
+        children: [{ path: ':id', lazy: lazyRoute(() => import('./Store/Cart/coupon_applications/$id')) }],
       },
     ],
   },
-  { path: '/clickwrap_agreement', lazy: () => import('./ClickwrapAgreement') },
-  { path: '/convention/edit', lazy: () => import('./ConventionAdmin') },
+  { path: '/clickwrap_agreement', lazy: lazyRoute(() => import('./ClickwrapAgreement')) },
+  { path: '/convention/edit', lazy: lazyRoute(() => import('./ConventionAdmin')) },
   { path: '/events', children: eventsRoutes },
   {
     path: '/mailing_lists',
     middleware: [makeAuthorizationMiddleware('can_read_any_mailing_list')],
     children: [
-      { path: 'ticketed_attendees', lazy: () => import('./MailingLists/TicketedAttendees') },
-      { path: 'event_proposers', lazy: () => import('./MailingLists/EventProposers') },
-      { path: 'team_members', lazy: () => import('./MailingLists/TeamMembers') },
-      { path: 'users_with_pending_bio', lazy: () => import('./MailingLists/UsersWithPendingBio') },
-      { path: 'waitlists', lazy: () => import('./MailingLists/WaitlistMailingLists') },
-      { path: 'whos_free', lazy: () => import('./MailingLists/WhosFree') },
-      { index: true, lazy: () => import('./MailingLists') },
+      { path: 'ticketed_attendees', lazy: lazyRoute(() => import('./MailingLists/TicketedAttendees')) },
+      { path: 'event_proposers', lazy: lazyRoute(() => import('./MailingLists/EventProposers')) },
+      { path: 'team_members', lazy: lazyRoute(() => import('./MailingLists/TeamMembers')) },
+      { path: 'users_with_pending_bio', lazy: lazyRoute(() => import('./MailingLists/UsersWithPendingBio')) },
+      { path: 'waitlists', lazy: lazyRoute(() => import('./MailingLists/WaitlistMailingLists')) },
+      { path: 'whos_free', lazy: lazyRoute(() => import('./MailingLists/WhosFree')) },
+      { index: true, lazy: lazyRoute(() => import('./MailingLists')) },
     ],
   },
   {
@@ -658,36 +685,36 @@ const commonInConventionRoutes: RouteObject[] = [
     middleware: [loginRequiredMiddleware],
     children: [
       { path: 'edit_bio', loader: () => replace('./edit') },
-      { path: 'edit', lazy: () => import('./MyProfile/MyProfileForm') },
-      { path: 'setup', lazy: () => import('./MyProfile/MyProfileForm') },
-      { index: true, lazy: () => import('./MyProfile/MyProfileDisplay') },
+      { path: 'edit', lazy: lazyRoute(() => import('./MyProfile/MyProfileForm')) },
+      { path: 'setup', lazy: lazyRoute(() => import('./MyProfile/MyProfileForm')) },
+      { index: true, lazy: lazyRoute(() => import('./MyProfile/MyProfileDisplay')) },
     ],
   },
-  { path: '/order_history', lazy: () => import('./Store/OrderHistory') },
-  { path: '/products/:id', lazy: () => import('./Store/ProductPage') },
+  { path: '/order_history', lazy: lazyRoute(() => import('./Store/OrderHistory')) },
+  { path: '/products/:id', lazy: lazyRoute(() => import('./Store/ProductPage')) },
   {
     path: '/reports',
     middleware: [makeAuthorizationMiddleware('can_read_reports')],
     children: [
-      { path: 'new_and_returning_attendees', lazy: () => import('./Reports/NewAndReturningAttendees') },
-      { path: 'attendance_by_payment_amount', lazy: () => import('./Reports/AttendanceByPaymentAmount') },
-      { path: 'event_provided_tickets', lazy: () => import('./Reports/EventProvidedTickets') },
-      { path: 'events_by_choice', lazy: () => import('./Reports/EventsByChoice') },
-      { path: 'signup_spy', lazy: () => import('./Reports/SignupSpy') },
-      { index: true, lazy: () => import('./Reports') },
+      { path: 'new_and_returning_attendees', lazy: lazyRoute(() => import('./Reports/NewAndReturningAttendees')) },
+      { path: 'attendance_by_payment_amount', lazy: lazyRoute(() => import('./Reports/AttendanceByPaymentAmount')) },
+      { path: 'event_provided_tickets', lazy: lazyRoute(() => import('./Reports/EventProvidedTickets')) },
+      { path: 'events_by_choice', lazy: lazyRoute(() => import('./Reports/EventsByChoice')) },
+      { path: 'signup_spy', lazy: lazyRoute(() => import('./Reports/SignupSpy')) },
+      { index: true, lazy: lazyRoute(() => import('./Reports')) },
     ],
   },
   {
     path: '/rooms',
-    lazy: () => import('./RoomsAdmin'),
-    children: [{ path: ':id', lazy: () => import('./RoomsAdmin/$id/route') }],
+    lazy: lazyRoute(() => import('./RoomsAdmin')),
+    children: [{ path: ':id', lazy: lazyRoute(() => import('./RoomsAdmin/$id/route')) }],
   },
   {
     middleware: [makeAppRootContextMiddleware(({ convention }) => convention?.signup_mode === SignupMode.Moderated)],
     children: [
       {
         path: '/signup_moderation',
-        lazy: () => import('./SignupModeration'),
+        lazy: lazyRoute(() => import('./SignupModeration')),
         children: [
           {
             middleware: [
@@ -698,9 +725,12 @@ const commonInConventionRoutes: RouteObject[] = [
             children: [
               {
                 path: 'ranked_choice_queue',
-                lazy: () => import('./SignupModeration/RankedChoiceQueue'),
+                lazy: lazyRoute(() => import('./SignupModeration/RankedChoiceQueue')),
                 children: [
-                  { path: ':userConProfileId', lazy: () => import('./SignupModeration/UserRankedChoiceQueue') },
+                  {
+                    path: ':userConProfileId',
+                    lazy: lazyRoute(() => import('./SignupModeration/UserRankedChoiceQueue')),
+                  },
                 ],
               },
             ],
@@ -711,8 +741,8 @@ const commonInConventionRoutes: RouteObject[] = [
               {
                 path: ':id',
                 children: [
-                  { path: 'accept', lazy: () => import('./SignupModeration/signup_requests/$id/accept') },
-                  { path: 'reject', lazy: () => import('./SignupModeration/signup_requests/$id/reject') },
+                  { path: 'accept', lazy: lazyRoute(() => import('./SignupModeration/signup_requests/$id/accept')) },
+                  { path: 'reject', lazy: lazyRoute(() => import('./SignupModeration/signup_requests/$id/reject')) },
                 ],
               },
             ],
@@ -722,12 +752,14 @@ const commonInConventionRoutes: RouteObject[] = [
             children: [
               {
                 path: ':id',
-                children: [{ path: 'rerun', lazy: () => import('./SignupModeration/signup_rounds/$id/rerun') }],
+                children: [
+                  { path: 'rerun', lazy: lazyRoute(() => import('./SignupModeration/signup_rounds/$id/rerun')) },
+                ],
               },
             ],
           },
-          { path: 'queue', lazy: () => import('./SignupModeration/SignupModerationQueue') },
-          { path: 'create_signups', lazy: () => import('./SignupModeration/CreateSignup') },
+          { path: 'queue', lazy: lazyRoute(() => import('./SignupModeration/SignupModerationQueue')) },
+          { path: 'create_signups', lazy: lazyRoute(() => import('./SignupModeration/CreateSignup')) },
           { index: true, loader: () => redirect('./queue') },
         ],
       },
@@ -735,45 +767,47 @@ const commonInConventionRoutes: RouteObject[] = [
   },
   {
     path: '/signup_rounds',
-    lazy: () => import('./SignupRoundsAdmin'),
+    lazy: lazyRoute(() => import('./SignupRoundsAdmin')),
     children: [
       {
         path: ':id',
-        lazy: () => import('./SignupRoundsAdmin/$id'),
-        children: [{ path: 'results', lazy: () => import('./SignupRoundsAdmin/RankedChoiceSignupDecisionsPage') }],
+        lazy: lazyRoute(() => import('./SignupRoundsAdmin/$id')),
+        children: [
+          { path: 'results', lazy: lazyRoute(() => import('./SignupRoundsAdmin/RankedChoiceSignupDecisionsPage')) },
+        ],
       },
-      { index: true, lazy: () => import('./SignupRoundsAdmin/SignupRoundsAdminPage') },
+      { index: true, lazy: lazyRoute(() => import('./SignupRoundsAdmin/SignupRoundsAdminPage')) },
     ],
   },
   {
     path: '/staff_positions',
-    lazy: () => import('./StaffPositionAdmin'),
+    lazy: lazyRoute(() => import('./StaffPositionAdmin')),
     children: [
-      { path: 'new', lazy: () => import('./StaffPositionAdmin/NewStaffPosition') },
+      { path: 'new', lazy: lazyRoute(() => import('./StaffPositionAdmin/NewStaffPosition')) },
       {
         path: ':id',
-        lazy: () => import('./StaffPositionAdmin/$id/route'),
+        lazy: lazyRoute(() => import('./StaffPositionAdmin/$id/route')),
         children: [
           {
             path: 'edit',
             id: NamedRoute.EditStaffPosition,
-            lazy: () => import('./StaffPositionAdmin/EditStaffPosition'),
+            lazy: lazyRoute(() => import('./StaffPositionAdmin/EditStaffPosition')),
           },
           {
             path: 'edit_permissions',
             id: NamedRoute.EditStaffPositionPermissions,
-            lazy: () => import('./StaffPositionAdmin/EditStaffPositionPermissions'),
+            lazy: lazyRoute(() => import('./StaffPositionAdmin/EditStaffPositionPermissions')),
           },
         ],
       },
-      { index: true, lazy: () => import('./StaffPositionAdmin/StaffPositionsTable') },
+      { index: true, lazy: lazyRoute(() => import('./StaffPositionAdmin/StaffPositionsTable')) },
     ],
   },
   {
     path: '/ticket',
     children: [
-      { path: 'new', lazy: () => import('./MyTicket/TicketPurchasePage') },
-      { index: true, lazy: () => import('./MyTicket/MyTicketDisplay') },
+      { path: 'new', lazy: lazyRoute(() => import('./MyTicket/TicketPurchasePage')) },
+      { index: true, lazy: lazyRoute(() => import('./MyTicket/MyTicketDisplay')) },
     ],
   },
   {
@@ -785,19 +819,27 @@ const commonInConventionRoutes: RouteObject[] = [
         path: '/ticket_types',
         middleware: [makeAuthorizationMiddleware('can_manage_ticket_types')],
         children: [
-          { path: 'new', loader: adminTicketTypesLoader, lazy: () => import('./TicketTypeAdmin/NewTicketType') },
+          {
+            path: 'new',
+            loader: adminTicketTypesLoader,
+            lazy: lazyRoute(() => import('./TicketTypeAdmin/NewTicketType')),
+          },
           {
             path: ':id',
-            lazy: () => import('./TicketTypeAdmin/$id'),
+            lazy: lazyRoute(() => import('./TicketTypeAdmin/$id')),
             children: [
               {
                 path: 'edit',
                 loader: adminSingleTicketTypeLoader,
-                lazy: () => import('./TicketTypeAdmin/EditTicketType'),
+                lazy: lazyRoute(() => import('./TicketTypeAdmin/EditTicketType')),
               },
             ],
           },
-          { index: true, loader: adminTicketTypesLoader, lazy: () => import('./TicketTypeAdmin/TicketTypesList') },
+          {
+            index: true,
+            loader: adminTicketTypesLoader,
+            lazy: lazyRoute(() => import('./TicketTypeAdmin/TicketTypesList')),
+          },
         ],
       },
     ],
@@ -805,15 +847,15 @@ const commonInConventionRoutes: RouteObject[] = [
   {
     path: '/user_activity_alerts',
     id: NamedRoute.UserActivityAlerts,
-    lazy: () => import('./UserActivityAlerts/UserActivityAlertsAdmin'),
+    lazy: lazyRoute(() => import('./UserActivityAlerts/UserActivityAlertsAdmin')),
     children: [
-      { path: 'new', lazy: () => import('./UserActivityAlerts/NewUserActivityAlert') },
+      { path: 'new', lazy: lazyRoute(() => import('./UserActivityAlerts/NewUserActivityAlert')) },
       {
         path: ':id/edit',
         id: NamedRoute.EditUserActivityAlert,
-        lazy: () => import('./UserActivityAlerts/EditUserActivityAlert'),
+        lazy: lazyRoute(() => import('./UserActivityAlerts/EditUserActivityAlert')),
       },
-      { index: true, lazy: () => import('./UserActivityAlerts/UserActivityAlertsList') },
+      { index: true, lazy: lazyRoute(() => import('./UserActivityAlerts/UserActivityAlertsList')) },
     ],
   },
   {
@@ -823,23 +865,23 @@ const commonInConventionRoutes: RouteObject[] = [
       {
         path: ':id',
         id: NamedRoute.AdminUserConProfile,
-        lazy: () => import('./UserConProfiles/userConProfileLoader'),
+        lazy: lazyRoute(() => import('./UserConProfiles/userConProfileLoader')),
         children: [
           {
             path: 'admin_ticket',
             children: [
-              { path: 'new', lazy: () => import('./UserConProfiles/NewTicket') },
-              { path: 'edit', lazy: () => import('./UserConProfiles/EditTicket') },
+              { path: 'new', lazy: lazyRoute(() => import('./UserConProfiles/NewTicket')) },
+              { path: 'edit', lazy: lazyRoute(() => import('./UserConProfiles/EditTicket')) },
             ],
           },
-          { path: 'edit', lazy: () => import('./UserConProfiles/EditUserConProfile') },
-          { index: true, lazy: () => import('./UserConProfiles/UserConProfileAdminDisplay') },
+          { path: 'edit', lazy: lazyRoute(() => import('./UserConProfiles/EditUserConProfile')) },
+          { index: true, lazy: lazyRoute(() => import('./UserConProfiles/UserConProfileAdminDisplay')) },
         ],
       },
       {
         path: '',
-        lazy: () => import('./UserConProfiles/AttendeesPage'),
-        children: [{ path: 'new', lazy: () => import('./UserConProfiles/AddAttendeeModal') }],
+        lazy: lazyRoute(() => import('./UserConProfiles/AttendeesPage')),
+        children: [{ path: 'new', lazy: lazyRoute(() => import('./UserConProfiles/AddAttendeeModal')) }],
       },
     ],
   },
@@ -848,7 +890,7 @@ const commonInConventionRoutes: RouteObject[] = [
 const conventionModeRoutes: RouteObject[] = [
   {
     path: '/admin_event_proposals',
-    lazy: () => import('./EventProposals/EventProposalsAdmin'),
+    lazy: lazyRoute(() => import('./EventProposals/EventProposalsAdmin')),
     children: [
       {
         path: ':id',
@@ -858,28 +900,28 @@ const conventionModeRoutes: RouteObject[] = [
           {
             path: 'history',
             id: NamedRoute.EventProposalHistory,
-            lazy: () => import('./EventProposals/EventProposalHistory'),
+            lazy: lazyRoute(() => import('./EventProposals/EventProposalHistory')),
             children: [
               {
                 path: ':changeGroupId',
                 id: NamedRoute.EventProposalHistoryChangeGroup,
-                lazy: () => import('./EventProposals/EventProposalHistory'),
+                lazy: lazyRoute(() => import('./EventProposals/EventProposalHistory')),
               },
             ],
           },
           {
             path: 'edit',
             id: NamedRoute.AdminEditEventProposal,
-            lazy: () => import('./EventProposals/AdminEditEventProposal'),
+            lazy: lazyRoute(() => import('./EventProposals/AdminEditEventProposal')),
           },
           {
             index: true,
             id: NamedRoute.EventProposalAdminDisplay,
-            lazy: () => import('./EventProposals/EventProposalAdminDisplay'),
+            lazy: lazyRoute(() => import('./EventProposals/EventProposalAdminDisplay')),
           },
         ],
       },
-      { index: true, lazy: () => import('./EventProposals/EventProposalsAdminTable') },
+      { index: true, lazy: lazyRoute(() => import('./EventProposals/EventProposalsAdminTable')) },
     ],
   },
   {
@@ -887,26 +929,30 @@ const conventionModeRoutes: RouteObject[] = [
     children: [
       {
         path: '/event_categories',
-        lazy: () => import('./EventCategoryAdmin'),
+        lazy: lazyRoute(() => import('./EventCategoryAdmin')),
         id: NamedRoute.EventCategoryAdmin,
         loader: eventCategoryAdminLoader,
         children: [
-          { path: 'new', id: NamedRoute.NewEventCategory, lazy: () => import('./EventCategoryAdmin/NewEventCategory') },
+          {
+            path: 'new',
+            id: NamedRoute.NewEventCategory,
+            lazy: lazyRoute(() => import('./EventCategoryAdmin/NewEventCategory')),
+          },
           {
             path: ':id',
-            lazy: () => import('./EventCategoryAdmin/$id'),
+            lazy: lazyRoute(() => import('./EventCategoryAdmin/$id')),
             children: [
               {
                 path: 'edit',
                 id: NamedRoute.EditEventCategory,
-                lazy: () => import('./EventCategoryAdmin/EditEventCategory'),
+                lazy: lazyRoute(() => import('./EventCategoryAdmin/EditEventCategory')),
               },
             ],
           },
           {
             index: true,
             id: NamedRoute.EventCategoryIndex,
-            lazy: () => import('./EventCategoryAdmin/EventCategoryIndex'),
+            lazy: lazyRoute(() => import('./EventCategoryAdmin/EventCategoryIndex')),
           },
         ],
       },
@@ -917,14 +963,18 @@ const conventionModeRoutes: RouteObject[] = [
     children: [
       {
         path: ':id',
-        lazy: () => import('./EventProposals/$id/route'),
+        lazy: lazyRoute(() => import('./EventProposals/$id/route')),
         children: [
-          { path: 'admin_notes', lazy: () => import('./EventProposals/$id/admin_notes') },
-          { path: 'edit', lazy: () => import('./EventProposals/EditEventProposal') },
-          { path: 'transition', lazy: () => import('./EventProposals/$id/transition') },
+          { path: 'admin_notes', lazy: lazyRoute(() => import('./EventProposals/$id/admin_notes')) },
+          { path: 'edit', lazy: lazyRoute(() => import('./EventProposals/EditEventProposal')) },
+          { path: 'transition', lazy: lazyRoute(() => import('./EventProposals/$id/transition')) },
         ],
       },
-      { index: true, loader: () => replace('/pages/new-proposal'), lazy: () => import('./EventProposals/route') },
+      {
+        index: true,
+        loader: () => replace('/pages/new-proposal'),
+        lazy: lazyRoute(() => import('./EventProposals/route')),
+      },
     ],
   },
 ];
@@ -932,43 +982,43 @@ const conventionModeRoutes: RouteObject[] = [
 const singleEventModeRoutes: RouteObject[] = [];
 
 const rootSiteRoutes: RouteObject[] = [
-  { path: '/users/sign_in', lazy: () => import('./Authentication/DeviseSignInPage') },
-  { path: '/users/sign_up', lazy: () => import('./Authentication/DeviseSignUpPage') },
-  { path: '/users/password/new', lazy: () => import('./Authentication/DeviseForgotPasswordPage') },
-  { path: '/users/edit', lazy: () => import('./Authentication/EditUser') },
-  { path: '/users/password/edit', lazy: () => import('./Authentication/ResetPassword') },
+  { path: '/users/sign_in', lazy: lazyRoute(() => import('./Authentication/DeviseSignInPage')) },
+  { path: '/users/sign_up', lazy: lazyRoute(() => import('./Authentication/DeviseSignUpPage')) },
+  { path: '/users/password/new', lazy: lazyRoute(() => import('./Authentication/DeviseForgotPasswordPage')) },
+  { path: '/users/edit', lazy: lazyRoute(() => import('./Authentication/EditUser')) },
+  { path: '/users/password/edit', lazy: lazyRoute(() => import('./Authentication/ResetPassword')) },
   {
     path: '/conventions',
     id: NamedRoute.RootSiteConventionsAdmin,
-    lazy: () => import('./RootSiteConventionsAdmin'),
+    lazy: lazyRoute(() => import('./RootSiteConventionsAdmin')),
     children: [
       {
         path: ':id',
         id: NamedRoute.RootSiteConventionDisplay,
-        lazy: () => import('./RootSiteConventionsAdmin/ConventionDisplay'),
-        children: [{ path: 'clone', lazy: () => import('./RootSiteConventionsAdmin/clone') }],
+        lazy: lazyRoute(() => import('./RootSiteConventionsAdmin/ConventionDisplay')),
+        children: [{ path: 'clone', lazy: lazyRoute(() => import('./RootSiteConventionsAdmin/clone')) }],
       },
       {
         path: '',
         id: NamedRoute.RootSiteConventionsAdminTable,
-        lazy: () => import('./RootSiteConventionsAdmin/RootSiteConventionsAdminTable'),
-        children: [{ path: 'new', lazy: () => import('./RootSiteConventionsAdmin/new') }],
+        lazy: lazyRoute(() => import('./RootSiteConventionsAdmin/RootSiteConventionsAdminTable')),
+        children: [{ path: 'new', lazy: lazyRoute(() => import('./RootSiteConventionsAdmin/new')) }],
       },
     ],
   },
   {
     path: '/email_routes',
-    lazy: () => import('./RootSiteEmailRoutesAdmin'),
+    lazy: lazyRoute(() => import('./RootSiteEmailRoutesAdmin')),
     children: [
-      { path: ':id', lazy: () => import('./RootSiteEmailRoutesAdmin/EditEmailRouteModal') },
-      { path: 'new', lazy: () => import('./RootSiteEmailRoutesAdmin/NewEmailRouteModal') },
+      { path: ':id', lazy: lazyRoute(() => import('./RootSiteEmailRoutesAdmin/EditEmailRouteModal')) },
+      { path: 'new', lazy: lazyRoute(() => import('./RootSiteEmailRoutesAdmin/NewEmailRouteModal')) },
     ],
   },
   {
     path: '/organizations',
     id: NamedRoute.OrganizationAdmin,
     loader: organizationsLoader,
-    lazy: () => import('./OrganizationAdmin'),
+    lazy: lazyRoute(() => import('./OrganizationAdmin')),
     children: [
       {
         path: ':id',
@@ -981,16 +1031,16 @@ const rootSiteRoutes: RouteObject[] = [
               {
                 path: 'new',
                 id: NamedRoute.NewOrganizationRole,
-                lazy: () => import('./OrganizationAdmin/NewOrganizationRole'),
+                lazy: lazyRoute(() => import('./OrganizationAdmin/NewOrganizationRole')),
               },
               {
                 path: ':organizationRoleId',
-                lazy: () => import('./OrganizationAdmin/$id/roles/$organizationRoleId/route'),
+                lazy: lazyRoute(() => import('./OrganizationAdmin/$id/roles/$organizationRoleId/route')),
                 children: [
                   {
                     path: 'edit',
                     id: NamedRoute.EditOrganizationRole,
-                    lazy: () => import('./OrganizationAdmin/EditOrganizationRole'),
+                    lazy: lazyRoute(() => import('./OrganizationAdmin/EditOrganizationRole')),
                   },
                 ],
               },
@@ -999,11 +1049,11 @@ const rootSiteRoutes: RouteObject[] = [
           {
             index: true,
             id: NamedRoute.OrganizationDisplay,
-            lazy: () => import('./OrganizationAdmin/OrganizationDisplay'),
+            lazy: lazyRoute(() => import('./OrganizationAdmin/OrganizationDisplay')),
           },
         ],
       },
-      { index: true, lazy: () => import('./OrganizationAdmin/OrganizationIndex') },
+      { index: true, lazy: lazyRoute(() => import('./OrganizationAdmin/OrganizationIndex')) },
     ],
   },
   {
@@ -1011,14 +1061,14 @@ const rootSiteRoutes: RouteObject[] = [
     children: [
       {
         path: '/users',
-        lazy: () => import('./Users/UsersAdmin'),
+        lazy: lazyRoute(() => import('./Users/UsersAdmin')),
         id: NamedRoute.UserAdmin,
         children: [
-          { path: ':id', id: NamedRoute.UserAdminDisplay, lazy: () => import('./Users/UserAdminDisplay') },
+          { path: ':id', id: NamedRoute.UserAdminDisplay, lazy: lazyRoute(() => import('./Users/UserAdminDisplay')) },
           {
-            lazy: () => import('./Users/UsersTable'),
+            lazy: lazyRoute(() => import('./Users/UsersTable')),
             children: [
-              { path: 'merge/:ids', lazy: () => import('./Users/MergeUsersModal') },
+              { path: 'merge/:ids', lazy: lazyRoute(() => import('./Users/MergeUsersModal')) },
               { index: true, id: NamedRoute.UsersTable },
             ],
           },
@@ -1065,44 +1115,44 @@ export const appLayoutRoutes: RouteObject[] = [
 
 export const appRootRoutes: RouteObject[] = [
   {
-    lazy: () => import('./AppRoot'),
+    lazy: lazyRoute(() => import('./AppRoot')),
     middleware: [appRootMiddleware],
     children: [
       {
         path: '/admin_forms/:id/edit',
-        lazy: () => import('./FormAdmin/FormEditor'),
+        lazy: lazyRoute(() => import('./FormAdmin/FormEditor')),
         children: [
           {
             path: 'section',
-            lazy: () => import('./FormAdmin/$id/edit/section/route'),
+            lazy: lazyRoute(() => import('./FormAdmin/$id/edit/section/route')),
             children: [
               {
                 path: ':sectionId',
                 children: [
                   {
                     path: 'move',
-                    lazy: () => import('./FormAdmin/$id/edit/section/$sectionId/move'),
+                    lazy: lazyRoute(() => import('./FormAdmin/$id/edit/section/$sectionId/move')),
                   },
                   {
                     path: 'item',
-                    lazy: () => import('./FormAdmin/$id/edit/section/$sectionId/item/route'),
+                    lazy: lazyRoute(() => import('./FormAdmin/$id/edit/section/$sectionId/item/route')),
                     children: [
                       {
                         path: ':itemId',
                         children: [
                           {
                             path: 'move',
-                            lazy: () => import('./FormAdmin/$id/edit/section/$sectionId/item/$itemId/move'),
+                            lazy: lazyRoute(() => import('./FormAdmin/$id/edit/section/$sectionId/item/$itemId/move')),
                           },
                           {
                             index: true,
-                            lazy: () => import('./FormAdmin/$id/edit/section/$sectionId/item/$itemId/route'),
+                            lazy: lazyRoute(() => import('./FormAdmin/$id/edit/section/$sectionId/item/$itemId/route')),
                           },
                         ],
                       },
                     ],
                   },
-                  { index: true, lazy: () => import('./FormAdmin/$id/edit/section/$sectionId/route') },
+                  { index: true, lazy: lazyRoute(() => import('./FormAdmin/$id/edit/section/$sectionId/route')) },
                 ],
               },
             ],
@@ -1114,14 +1164,14 @@ export const appRootRoutes: RouteObject[] = [
         id: NamedRoute.LiquidDocs,
         loader: liquidDocsLoader,
         children: [
-          { path: 'assigns/:name', lazy: () => import('./LiquidDocs/AssignDoc') },
-          { path: 'filters/:name', lazy: () => import('./LiquidDocs/FilterDoc') },
-          { path: 'tags/:name', lazy: () => import('./LiquidDocs/LiquidTagDoc') },
-          { index: true, lazy: () => import('./LiquidDocs') },
+          { path: 'assigns/:name', lazy: lazyRoute(() => import('./LiquidDocs/AssignDoc')) },
+          { path: 'filters/:name', lazy: lazyRoute(() => import('./LiquidDocs/FilterDoc')) },
+          { path: 'tags/:name', lazy: lazyRoute(() => import('./LiquidDocs/LiquidTagDoc')) },
+          { index: true, lazy: lazyRoute(() => import('./LiquidDocs')) },
         ],
       },
       {
-        lazy: () => import('./AppRootLayout'),
+        lazy: lazyRoute(() => import('./AppRootLayout')),
         children: [{ ErrorBoundary: RouteErrorBoundary, children: appLayoutRoutes }],
       },
     ],
