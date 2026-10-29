@@ -1,8 +1,10 @@
-import { ActionFunction, RouterContextProvider, redirect } from 'react-router';
+import { ActionFunctionArgs, redirect } from 'react-router';
 import { apolloClientContext } from '../AppContexts';
 import { CreateEventProposalDocument } from './mutations.generated';
 
-export const clientAction: ActionFunction<RouterContextProvider> = async ({ context, request }) => {
+// A wrapper route (see script/genRoutes.mts) is what gets generated route types, not this module, so it takes the plain
+// args until the cutover removes the wrappers
+export const clientAction = async ({ context, request }: ActionFunctionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     if (request.method === 'POST') {

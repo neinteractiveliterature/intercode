@@ -3,14 +3,14 @@ import { useTranslation } from 'react-i18next';
 
 import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
-import { EventProposalQueryWithOwnerQueryData } from './queries.generated';
+import { eventProposalWithOwnerLoader } from './loaders';
 import { NamedRoute } from '../NamedRoute';
 import NamedRouteBreadcrumbItem from '../Breadcrumbs/NamedRouteBreadcrumbItem';
 
 function SingleProposalBreadcrumbs() {
   const { t } = useTranslation();
 
-  const data = useRouteLoaderData(NamedRoute.AdminEventProposal) as EventProposalQueryWithOwnerQueryData | undefined;
+  const data = useRouteLoaderData<typeof eventProposalWithOwnerLoader>(NamedRoute.AdminEventProposal);
   if (!data) {
     return <></>;
   }

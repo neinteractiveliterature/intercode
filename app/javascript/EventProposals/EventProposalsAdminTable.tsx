@@ -1,4 +1,4 @@
-import { Link, LoaderFunction, RouterContextProvider, useLoaderData, useNavigate } from 'react-router';
+import { Link, useLoaderData, useNavigate } from 'react-router';
 import { CellContext, Column, ColumnDef, createColumnHelper } from '@tanstack/react-table';
 
 import ChoiceSetFilter from '../Tables/ChoiceSetFilter';
@@ -24,6 +24,7 @@ import { formItemColumns, jsonFormDataGetter } from 'Tables/formItemColumns';
 import { apolloClientContext } from 'AppContexts';
 import { notEmpty } from '@neinteractiveliterature/litform';
 import { mergeFormItemsAcrossForms } from 'EventsApp/useFilterableFormItems';
+import type { Route } from './+types/EventProposalsAdminTable';
 
 type EventProposalType = EventProposalsAdminQueryData['convention']['event_proposals_paginated']['entries'][0];
 
@@ -80,13 +81,9 @@ const defaultVisibleColumns = [
 ];
 const alwaysVisibleColumns = ['_extra'];
 
-type LoaderResult = {
-  formItems: ReturnType<typeof mergeFormItemsAcrossForms>;
-};
-
-export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ context }) => {
+export const clientLoader = async ({ context }: Route.ClientLoaderArgs) => {
   const client = context.get(apolloClientContext);
-  const { data } = await client.query({ query: EventProposalFormsQueryDocument });
+  const { data } = await client.query({ query: EventProposalFormsQueryDocument, errorPolicy: 'none' });
   if (!data) {
     return new Response(null, { status: 404 });
   }
@@ -94,11 +91,11 @@ export const clientLoader: LoaderFunction<RouterContextProvider> = async ({ cont
   const formItems = mergeFormItemsAcrossForms(
     data.convention.event_categories.map((category) => category.event_proposal_form).filter(notEmpty),
   );
-  return { formItems } satisfies LoaderResult;
+  return { formItems };
 };
 
 function EventProposalsAdminTable(): React.JSX.Element {
-  const { formItems } = useLoaderData() as LoaderResult;
+  const { formItems } = useLoaderData<typeof clientLoader>();
 
   const navigate = useNavigate();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
