@@ -1,5 +1,6 @@
 import { useState, useCallback, useContext, useMemo } from 'react';
 import { useApolloClient, useQuery } from '@apollo/client/react';
+import isEqual from 'lodash/isEqual';
 import { ColumnFiltersState } from '@tanstack/react-table';
 import { useTranslation } from 'react-i18next';
 import {
@@ -127,6 +128,15 @@ function EventList(): React.JSX.Element {
 
   const changeFilterValue = useCallback(
     (fieldId: string, value: unknown) => {
+      // SearchInput reports its value once when it mounts and again whenever this callback changes, and a change that
+      // changes nothing would still rewrite the URL from these (possibly stale) search params, putting back the sort the
+      // person has just chosen, and refetch for nothing.
+      const isEmpty = (v: unknown) => v == null || v === '' || (Array.isArray(v) && v.length === 0);
+      const currentValue = filters.find(({ id }) => id === fieldId)?.value;
+      if (isEqual(currentValue, value) || (isEmpty(currentValue) && isEmpty(value))) {
+        return;
+      }
+
       updateSearch({
         filters: [...filters.filter(({ id }) => id !== fieldId), { id: fieldId, value }],
       });
