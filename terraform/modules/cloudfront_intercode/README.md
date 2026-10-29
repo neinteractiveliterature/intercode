@@ -116,9 +116,11 @@ The default behavior's function is `static_shell_router.js` instead of `crawler_
 `Host` header (an S3 origin can't take one, so the default behavior has no origin request policy), and crawlers get
 `/og-shell?path=...`. It is generated from `routing.json` like the other one, and `/assets/*` is in `asset_paths`.
 
-Releases upload the build with the `framework-shell-release` job in `.github/workflows/release.yml`, which runs
-`script/uploadFrameworkAssets.sh`: the hashed files with a long `Cache-Control`, then `index.html` with
-`max-age=60` (keep that in step with `static_shell_ttl`), then it marks the files that release dropped as obsolete.
+Releases upload the build with the `framework-shell-release-hashed` and `framework-shell-release-publish` jobs in
+`.github/workflows/release.yml`, which run `script/uploadFrameworkAssets.sh` in two phases: the hashed files with a long
+`Cache-Control` alongside the Fly deploy, then, once `fly-release` has finished, `index.html` with
+`max-age=60` (keep that in step with `static_shell_ttl`), and finally the files that release dropped are marked
+obsolete.
 Set the repository variables `FRAMEWORK_SHELL_BUCKET` and `FRAMEWORK_SHELL_UPLOAD_ROLE_ARN` (from the bucket module's
 `bucket_name` and `release_upload_role_arn`) to turn it on. The image it uploads from is only built when the repository
 variable `BUILD_FRAMEWORK` is set.

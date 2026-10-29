@@ -31,7 +31,7 @@ jobs:
   # Keeps each release's built assets in an S3 bucket, without deleting earlier releases' files, so that stale
   # tabs and cached pages can still load their chunks. Skipped unless ASSETS_BUCKET is set; see
   # terraform/modules/assets_bucket_intercode and upload-assets-to-bucket.yml.
-  assets-bucket-release:
+  assets-bucket-release-hashed:
     if: vars.ASSETS_BUCKET != ''
     needs:
       - docker-release
@@ -42,9 +42,25 @@ jobs:
     uses: ./.github/workflows/upload-assets-to-bucket.yml
     with:
       sha: ${{ github.sha }}
+      phase: hashed
+  # Nothing refers to the hashed files until the entry files do, so they are uploaded alongside the Fly deploy. The entry
+  # files, which make the new frontend live, wait until the new backend is serving.
+  assets-bucket-release-publish:
+    if: vars.ASSETS_BUCKET != ''
+    needs:
+      - assets-bucket-release-hashed
+      - fly-release
+    permissions:
+      id-token: write
+      contents: read
+      packages: read
+    uses: ./.github/workflows/upload-assets-to-bucket.yml
+    with:
+      sha: ${{ github.sha }}
+      phase: publish
   # The same for the framework-mode build and its static shell bucket (terraform/modules/cloudfront_intercode, static
   # shell mode). Skipped unless FRAMEWORK_SHELL_BUCKET is set; see upload-framework-assets-to-bucket.yml.
-  framework-shell-release:
+  framework-shell-release-hashed:
     if: vars.FRAMEWORK_SHELL_BUCKET != ''
     needs:
       - docker-release
@@ -55,6 +71,20 @@ jobs:
     uses: ./.github/workflows/upload-framework-assets-to-bucket.yml
     with:
       sha: ${{ github.sha }}
+      phase: hashed
+  framework-shell-release-publish:
+    if: vars.FRAMEWORK_SHELL_BUCKET != ''
+    needs:
+      - framework-shell-release-hashed
+      - fly-release
+    permissions:
+      id-token: write
+      contents: read
+      packages: read
+    uses: ./.github/workflows/upload-framework-assets-to-bucket.yml
+    with:
+      sha: ${{ github.sha }}
+      phase: publish
   fly-release:
     runs-on: ubuntu-latest
     needs:

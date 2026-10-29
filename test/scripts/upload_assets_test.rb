@@ -90,6 +90,34 @@ describe "the assets bucket upload scripts" do
 
       assert_includes listing, "--prefix assets/"
     end
+
+    describe "in phases" do
+      def phase_calls(phase)
+        run_script(
+          "script/uploadFrameworkAssets.sh",
+          "the-bucket",
+          method(:framework_build),
+          phase,
+          bucket_keys: %w[assets/shared-SAME.js assets/old-OLD.js]
+        )
+      end
+
+      it "uploads only the hashed files in the hashed phase, and marks nothing" do
+        calls = phase_calls("hashed")
+
+        assert_equal 1, calls.size
+        assert_includes calls.first, "s3://the-bucket/assets --recursive"
+      end
+
+      it "uploads only index.html in the publish phase, then marks the dropped files" do
+        calls = phase_calls("publish")
+
+        uploads = calls.select { |call| call.start_with?("s3 cp") }
+        assert_equal 1, uploads.size
+        assert_includes uploads.first, "s3://the-bucket/index.html"
+        assert(calls.any? { |call| call.start_with?("s3api copy-object") && call.include?("--key assets/old-OLD.js") })
+      end
+    end
   end
 
   describe "script/uploadReleaseAssets.sh" do
@@ -111,6 +139,41 @@ describe "the assets bucket upload scripts" do
 
       assert_equal 1, copies.size
       assert_includes copies.first, "--key packs/gone-BBB.js"
+    end
+
+    describe "in phases" do
+      def phase_calls(phase)
+        run_script(
+          "script/uploadReleaseAssets.sh",
+          "the-bucket",
+          lambda do |dir|
+            packs = File.join(dir, "packs")
+            FileUtils.mkdir_p(packs)
+            %w[application.js application-styles.js current-AAA.js].each do |name|
+              File.write(File.join(packs, name), "x")
+            end
+            packs
+          end,
+          phase,
+          bucket_keys: %w[packs/current-AAA.js packs/gone-BBB.js]
+        )
+      end
+
+      it "uploads only the hashed files in the hashed phase, and marks nothing" do
+        calls = phase_calls("hashed")
+
+        assert_equal 1, calls.size
+        assert_includes calls.first, "s3://the-bucket/packs --recursive --exclude application.js"
+      end
+
+      it "uploads only the entry files in the publish phase, then marks the dropped files" do
+        calls = phase_calls("publish")
+
+        uploads = calls.select { |call| call.start_with?("s3 cp") }
+        assert_equal 2, uploads.size
+        assert(uploads.all? { |call| call.include?("--cache-control no-cache") })
+        assert(calls.any? { |call| call.start_with?("s3api copy-object") && call.include?("--key packs/gone-BBB.js") })
+      end
     end
   end
 end
