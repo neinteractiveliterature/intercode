@@ -8,7 +8,8 @@ container.
 - **Private S3 bucket** with a lifecycle rule that expires files `retention_days` after the release that dropped them
 - **CORS configuration** allowing `GET`/`HEAD` from any origin, matching the headers Rails and the assets nginx send
   today (convention domains load module scripts cross-origin from the assets host)
-- **CloudFront origin access control**, and a bucket policy that lets the distributions you list read the bucket
+- **CloudFront origin access control**, and a bucket policy that lets the distributions you list (or, with
+  `allow_account_cloudfront_distributions`, every distribution in the account) read the bucket
 - **Optional GitHub Actions OIDC role** that the release workflow assumes to upload, with only `s3:PutObject` and
   `s3:ListBucket` on this bucket
 
@@ -94,15 +95,16 @@ Uploading before switching means there is no window where assets are missing.
 
 ## Inputs
 
-| Name                           | Description                                                                          | Default |
-| ------------------------------ | ------------------------------------------------------------------------------------ | ------- |
-| `bucket_name`                  | Name of the S3 bucket                                                                | —       |
-| `retention_days`               | Days to keep a file after the release that dropped it                                | `30`    |
-| `cloudfront_distribution_arns` | CloudFront distributions allowed to read the bucket; no bucket policy while empty    | `[]`    |
-| `github_repository`            | `owner/name` of the repository that uploads; no upload role when `null`              | `null`  |
-| `github_oidc_subjects`         | Allowed OIDC `sub` claims; defaults to any tag in `github_repository`                | `null`  |
-| `create_github_oidc_provider`  | Create the account's GitHub OIDC provider (only one can exist per account)           | `false` |
-| `github_oidc_provider_arn`     | Existing GitHub OIDC provider ARN; required with `github_repository` unless creating | `null`  |
+| Name                                     | Description                                                                          | Default |
+| ---------------------------------------- | ------------------------------------------------------------------------------------ | ------- |
+| `bucket_name`                            | Name of the S3 bucket                                                                | —       |
+| `retention_days`                         | Days to keep a file after the release that dropped it                                | `30`    |
+| `cloudfront_distribution_arns`           | CloudFront distributions allowed to read the bucket; no bucket policy while empty    | `[]`    |
+| `allow_account_cloudfront_distributions` | Let every CloudFront distribution in the account read the bucket; overrides the list | `false` |
+| `github_repository`                      | `owner/name` of the repository that uploads; no upload role when `null`              | `null`  |
+| `github_oidc_subjects`                   | Allowed OIDC `sub` claims; defaults to any tag in `github_repository`                | `null`  |
+| `create_github_oidc_provider`            | Create the account's GitHub OIDC provider (only one can exist per account)           | `false` |
+| `github_oidc_provider_arn`               | Existing GitHub OIDC provider ARN; required with `github_repository` unless creating | `null`  |
 
 ## Outputs
 
