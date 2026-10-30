@@ -1,10 +1,14 @@
+---
+sidebar_position: 1
+---
+
 # Deploying Intercode
 
 This is for people running their own Intercode, with the published Docker images. It covers the framework-mode build
 (the React Router single-page app that `yarn build:framework` makes) and the nginx configuration that serves it.
-[`docker-compose.example.yml`](docker-compose.example.yml) is a complete working example.
+[`docker-compose.example.yml`](pathname:///deploying/docker-compose.example.yml) (with its [`example.env`](pathname:///deploying/example.env)) is a complete working example.
 
-For CloudFront and S3 instead of nginx, see [terraform/modules/cloudfront_intercode](../terraform/modules/cloudfront_intercode/README.md).
+For CloudFront and S3 instead of nginx, see [terraform/modules/cloudfront_intercode](https://github.com/neinteractiveliterature/intercode/blob/main/terraform/modules/cloudfront_intercode/README.md).
 Both are built from the same route list (`terraform/modules/cloudfront_intercode/routing.json`), so they send the same
 requests to the same places.
 
@@ -93,7 +97,7 @@ shows how they fit together.
 
 ## Moving a CloudFront deployment over
 
-[staged-rollout.md](staged-rollout.md) describes switching convention domains from the Rails-rendered shell to the
+[the staged rollout guide](staged-rollout.md) describes switching convention domains from the Rails-rendered shell to the
 static shell one at a time: the order, what to check, what to watch and how to roll back.
 
 ## Releases and stale pages
@@ -114,8 +118,9 @@ framework build; `index.html` is the only such file.
 
 ## The example
 
+Download [`docker-compose.example.yml`](pathname:///deploying/docker-compose.example.yml) and [`example.env`](pathname:///deploying/example.env) into an empty directory, then:
+
 ```sh
-cd deploy
 cp example.env .env          # fill it in: see the comments in the file
 docker compose -f docker-compose.example.yml up
 ```
@@ -139,4 +144,4 @@ loads `db/structure.sql`, which Rails does by running `psql`. The image leaves `
 starts. You can drop them if your database already has its tables, such as a restored backup.
 
 Creating the first convention and site admin is not covered here; use the Rails console in the Rails container, as in
-the main [README](../README.md#getting-started).
+the main [README](https://github.com/neinteractiveliterature/intercode/blob/main/README.md#getting-started).

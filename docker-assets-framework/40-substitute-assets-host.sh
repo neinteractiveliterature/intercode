@@ -11,7 +11,7 @@ cp -a "$dist/." "$html/"
 /usr/local/bin/substituteAssetsHost.sh "$html" "${ASSETS_HOST:-}"
 
 # With RAILS_UPSTREAM (host:port of the Rails container) this container is also the front server: it proxies the Rails
-# routes and sends crawlers to Rails, as in deploy/README.md. Without it, it only serves the build.
+# routes and sends crawlers to Rails, as in https://intercode.interactiveliterature.org/docs/deploying. Without it, it only serves the build.
 if [ -n "${RAILS_UPSTREAM:-}" ]; then
   case "$RAILS_UPSTREAM" in
     *[!A-Za-z0-9.:_-]*)
