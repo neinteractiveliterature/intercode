@@ -3,7 +3,7 @@
 # CloudFront distribution in terraform/modules/cloudfront_intercode does, from the same route list (routing.json).
 #
 # 40-substitute-assets-host.sh renders this into conf.d/default.conf when RAILS_UPSTREAM is set; ${RAILS_UPSTREAM} is
-# the only variable it fills in. See deploy/README.md.
+# the only variable it fills in. See https://intercode.interactiveliterature.org/docs/deploying.
 
 # $is_crawler is 1 for the user agents in routing.json (generated)
 include /etc/nginx/intercode/crawler-map.conf;

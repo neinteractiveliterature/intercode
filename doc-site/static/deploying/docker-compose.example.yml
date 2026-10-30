@@ -1,5 +1,5 @@
 # An example of running Intercode from the published images, with nginx (the framework-mode assets image) in front.
-# See README.md in this directory for what each piece is, and for what a real deployment needs on top of this.
+# See https://intercode.interactiveliterature.org/docs/deploying for what each piece is, and for what a real deployment needs on top of this.
 #
 #   cp example.env .env      # then edit it; see the comments there
 #   docker compose -f docker-compose.example.yml up

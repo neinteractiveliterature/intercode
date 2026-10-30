@@ -309,7 +309,7 @@ This will create an account for you in your local database with the `site_admin`
 
 ## Deploying
 
-To run Intercode from the published Docker images, see [deploy/README.md](deploy/README.md), which has the image and
+To run Intercode from the published Docker images, see [the deployment guide](https://intercode.interactiveliterature.org/docs/deploying), which has the image and
 configuration reference, a reference nginx configuration and a docker-compose example.
 
 ## Testing production builds

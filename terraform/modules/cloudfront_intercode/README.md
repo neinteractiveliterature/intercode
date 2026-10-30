@@ -140,7 +140,7 @@ Rails, and a missing `/assets/...` file should be a 404. Don't send a `Host` hea
 instead: CloudFront answers 403 for a host that isn't one of the distribution's aliases, and without an alias Rails is
 asked for a host it doesn't serve.
 
-**Rolling back** is removing `static_shell_enabled` (and the two variables). The next apply puts the Rails origin and the Rails-rendered shell back. See [deploy/staged-rollout.md](../../../deploy/staged-rollout.md) for the order to move domains in, what to check and what to watch.
+**Rolling back** is removing `static_shell_enabled` (and the two variables). The next apply puts the Rails origin and the Rails-rendered shell back. See [the staged rollout guide](https://intercode.interactiveliterature.org/docs/deploying/staged-rollout) for the order to move domains in, what to check and what to watch.
 
 ## Other web servers
 
@@ -150,7 +150,7 @@ second expects an upstream named `rails` and `/etc/nginx/proxy_params.conf`. Sen
 `/og-shell?path=<original path>` from `location /` when `$is_crawler` is set.
 
 The `intercode-assets-framework` image ships a complete nginx configuration built from these files, with a docker-compose
-example and notes for deployers: see [deploy/README.md](../../../deploy/README.md).
+example and notes for deployers: see [the deployment guide](https://intercode.interactiveliterature.org/docs/deploying).
 
 ## Upgrading from the Lambda@Edge router
 

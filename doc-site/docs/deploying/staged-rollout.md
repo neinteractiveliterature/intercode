@@ -1,6 +1,10 @@
+---
+sidebar_position: 2
+---
+
 # Staged rollout of the framework-mode build
 
-This is the plan for moving a deployment that uses the [`cloudfront_intercode`](../terraform/modules/cloudfront_intercode)
+This is the plan for moving a deployment that uses the [`cloudfront_intercode`](https://github.com/neinteractiveliterature/intercode/blob/main/terraform/modules/cloudfront_intercode)
 module from the Rails-rendered shell (the data-mode build) to the static framework-mode shell served from S3, one
 convention domain at a time. It is part of the migration tracked in
 [#12219](https://github.com/neinteractiveliterature/intercode/issues/12219) and
@@ -16,13 +20,13 @@ CloudFront in front, move with that release.
 - The repository variables `BUILD_FRAMEWORK`, `FRAMEWORK_SHELL_BUCKET` and `FRAMEWORK_SHELL_UPLOAD_ROLE_ARN` are set, so
   every release builds the framework image and uploads it to the shell bucket. Leave them set for the whole rollout:
   unsetting `BUILD_FRAMEWORK` while the bucket is in use means the bucket stops getting new releases.
-- The shell bucket comes from [`assets_bucket_intercode`](../terraform/modules/assets_bucket_intercode) (a separate
+- The shell bucket comes from [`assets_bucket_intercode`](https://github.com/neinteractiveliterature/intercode/blob/main/terraform/modules/assets_bucket_intercode) (a separate
   bucket from the one for `/packs/*`), and its bucket policy lets the distribution you are about to change read it (set
   `allow_account_cloudfront_distributions`, or list the distribution in `cloudfront_distribution_arns`; without one of
   them S3 answers that distribution with a 403).
 - At least one release has uploaded to it. Check the bucket has `index.html` and an `assets/` directory.
 - The distribution has access logs on (`access_logs_enabled`, from
-  [`cloudfront_intercode_logging`](../terraform/modules/cloudfront_intercode_logging)), and the logging module's 5xx
+  [`cloudfront_intercode_logging`](https://github.com/neinteractiveliterature/intercode/blob/main/terraform/modules/cloudfront_intercode_logging)), and the logging module's 5xx
   alarm has an `alarm_actions` topic someone reads. Both are what you will be watching.
 
 ## The order
