@@ -38,9 +38,10 @@ services:
       interval: 5s
       retries: 20
 
-  # The Rails image can run migrations but has no psql, so it can't set up an empty database from db/structure.sql.
-  # These two steps do that, using the structure.sql from the same release as the image, and do nothing once the database
-  # has its tables. (A database that already exists, such as a restored backup, never needs them.)
+  # One-time setup of an empty database. On an empty database, db:migrate loads db/structure.sql by running psql, which
+  # the Rails image deliberately leaves out. These two steps load it with the postgres image instead, using the
+  # structure.sql from the same release as the image, and do nothing once the database has its tables. (A database that
+  # already exists, such as a restored backup, never needs them.)
   schema:
     image: ghcr.io/neinteractiveliterature/intercode:${INTERCODE_VERSION:-latest}
     user: root

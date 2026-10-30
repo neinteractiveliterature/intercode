@@ -127,9 +127,11 @@ curl -A 'Twitterbot/1.0' -H 'X-Forwarded-Proto: https' -H 'Host: intercode.examp
 The first is proxied to Rails and the second is the Open Graph document for a crawler; a browser's user agent on
 the second gets the static shell.
 
-The Rails image has no `psql`, so it can run migrations but can't load `db/structure.sql` into an empty database. The
-`schema` and `init-db` steps in the example do that with the `postgres` image and then do nothing on later starts. You
-don't need them with a database that already has its tables, such as a restored backup.
+Setting up a brand-new database is the one time the Rails image needs `psql`: on an empty database, `db:migrate` first
+loads `db/structure.sql`, which Rails does by running `psql`. The image leaves `psql` out on purpose (it would add about
+60 MB, mostly Perl), and upgrades don't need it because `db:migrate` then only applies pending migrations. So the
+`schema` and `init-db` steps in the example do the one-time load with the `postgres` image, and do nothing on later
+starts. You can drop them if your database already has its tables, such as a restored backup.
 
 Creating the first convention and site admin is not covered here; use the Rails console in the Rails container, as in
 the main [README](../README.md#getting-started).
