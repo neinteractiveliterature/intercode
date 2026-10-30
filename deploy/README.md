@@ -91,6 +91,11 @@ shows how they fit together.
 - **No compression** is configured. Compress at the TLS proxy or CDN in front of web.
 - **nginx looks up `RAILS_UPSTREAM` once, when it starts.** If Rails comes back at a different address, restart web.
 
+## Moving a CloudFront deployment over
+
+[staged-rollout.md](staged-rollout.md) describes switching convention domains from the Rails-rendered shell to the
+static shell one at a time: the order, what to check, what to watch and how to roll back.
+
 ## Releases and stale pages
 
 Everything in `assets/` is named by a hash of its contents and cached for 180 days. `index.html` is the one file whose
