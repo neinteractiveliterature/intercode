@@ -10,9 +10,15 @@ variable "retention_days" {
 }
 
 variable "cloudfront_distribution_arns" {
-  description = "ARNs of the CloudFront distributions allowed to read the bucket through the origin access control. No bucket policy is created while this is empty."
+  description = "ARNs of the CloudFront distributions allowed to read the bucket through the origin access control. Ignored when allow_account_cloudfront_distributions is true. No bucket policy is created while this is empty and that is false."
   type        = list(string)
   default     = []
+}
+
+variable "allow_account_cloudfront_distributions" {
+  description = "Let every CloudFront distribution in this AWS account read the bucket through the origin access control, instead of only the ones in cloudfront_distribution_arns. Use it for a bucket of public files, so that a new distribution doesn't need to be added to the policy before it works."
+  type        = bool
+  default     = false
 }
 
 variable "github_repository" {

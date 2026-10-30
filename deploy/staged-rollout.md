@@ -17,8 +17,9 @@ CloudFront in front, move with that release.
   every release builds the framework image and uploads it to the shell bucket. Leave them set for the whole rollout:
   unsetting `BUILD_FRAMEWORK` while the bucket is in use means the bucket stops getting new releases.
 - The shell bucket comes from [`assets_bucket_intercode`](../terraform/modules/assets_bucket_intercode) (a separate
-  bucket from the one for `/packs/*`), and its `cloudfront_distribution_arns` includes the distribution you are about to
-  change.
+  bucket from the one for `/packs/*`), and its bucket policy lets the distribution you are about to change read it (set
+  `allow_account_cloudfront_distributions`, or list the distribution in `cloudfront_distribution_arns`; without one of
+  them S3 answers that distribution with a 403).
 - At least one release has uploaded to it. Check the bucket has `index.html` and an `assets/` directory.
 - The distribution has access logs on (`access_logs_enabled`, from
   [`cloudfront_intercode_logging`](../terraform/modules/cloudfront_intercode_logging)), and the logging module's 5xx

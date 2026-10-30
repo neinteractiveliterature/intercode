@@ -7,7 +7,18 @@ terraform {
   }
 }
 
+data "aws_caller_identity" "current" {}
+
 locals {
+  # Either every CloudFront distribution in this account (so that a new distribution can't be left out of the policy and
+  # get a 403 from S3), or just the ones listed.
+  cloudfront_read_enabled = var.allow_account_cloudfront_distributions || length(var.cloudfront_distribution_arns) > 0
+  cloudfront_source_arns = (
+    var.allow_account_cloudfront_distributions
+    ? ["arn:aws:cloudfront::${data.aws_caller_identity.current.account_id}:distribution/*"]
+    : var.cloudfront_distribution_arns
+  )
+
   github_role_enabled = var.github_repository != null
   github_oidc_provider_arn = (
     var.create_github_oidc_provider
@@ -94,7 +105,7 @@ resource "aws_cloudfront_origin_access_control" "assets" {
 }
 
 data "aws_iam_policy_document" "cloudfront_read" {
-  count = length(var.cloudfront_distribution_arns) > 0 ? 1 : 0
+  count = local.cloudfront_read_enabled ? 1 : 0
 
   statement {
     sid       = "CloudFrontRead"
@@ -109,7 +120,7 @@ data "aws_iam_policy_document" "cloudfront_read" {
     condition {
       test     = "ArnLike"
       variable = "AWS:SourceArn"
-      values   = var.cloudfront_distribution_arns
+      values   = local.cloudfront_source_arns
     }
   }
 
@@ -127,13 +138,13 @@ data "aws_iam_policy_document" "cloudfront_read" {
     condition {
       test     = "ArnLike"
       variable = "AWS:SourceArn"
-      values   = var.cloudfront_distribution_arns
+      values   = local.cloudfront_source_arns
     }
   }
 }
 
 resource "aws_s3_bucket_policy" "assets" {
-  count = length(var.cloudfront_distribution_arns) > 0 ? 1 : 0
+  count = local.cloudfront_read_enabled ? 1 : 0
 
   bucket = aws_s3_bucket.assets.id
   policy = data.aws_iam_policy_document.cloudfront_read[0].json

@@ -102,8 +102,9 @@ and both of:
 
 Both come from an `assets_bucket_intercode` instance. Use **a separate bucket** for this, not the one that serves
 `/packs/*`: the release upload marks every file under its prefix that the new release lacks as obsolete, and the two
-builds would otherwise mark each other's files. The bucket's `cloudfront_distribution_arns` must include this
-distribution's ARN. Then:
+builds would otherwise mark each other's files. The bucket's policy must let this distribution read it: set
+`allow_account_cloudfront_distributions` on the bucket, or put this distribution's ARN in `cloudfront_distribution_arns`.
+Otherwise S3 answers with a 403. Then:
 
 | Path pattern  | Origin              | Function            | Cache TTL                                                      |
 | ------------- | ------------------- | ------------------- | -------------------------------------------------------------- |
