@@ -139,7 +139,7 @@ Rails, and a missing `/assets/...` file should be a 404. Don't send a `Host` hea
 instead: CloudFront answers 403 for a host that isn't one of the distribution's aliases, and without an alias Rails is
 asked for a host it doesn't serve.
 
-**Rolling back** is removing `static_shell_enabled` (and the two variables). The next apply puts the Rails origin and the Rails-rendered shell back.
+**Rolling back** is removing `static_shell_enabled` (and the two variables). The next apply puts the Rails origin and the Rails-rendered shell back. See [deploy/staged-rollout.md](../../../deploy/staged-rollout.md) for the order to move domains in, what to check and what to watch.
 
 ## Other web servers
 
