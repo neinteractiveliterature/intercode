@@ -70,7 +70,7 @@ jobs:
       # node_modules/.bin), the bare form can't resolve eslint locally and npx
       # falls back to fetching eslint's latest release from the registry, which
       # --no-install then refuses to do. See reviewdog/action-eslint#258.
-      - uses: reviewdog/action-eslint@v1.34.0
+      - uses: reviewdog/action-eslint@v1.36.1
         with:
           github_token: ${{ secrets.GITHUB_TOKEN }}
           eslint_flags: 'app/javascript test/javascript schema.graphql'
