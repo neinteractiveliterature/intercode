@@ -281,9 +281,10 @@ jobs:
           docker run -d --name rails-serving -p 3000:3000 -e RAILS_SERVE_STATIC_FILES=enabled -e INTERCODE_HOST=localhost \
             -e DATABASE_URL=postgresql://fakehost/not_a_real_database -e AWS_S3_BUCKET=fakebucket \
             ghcr.io/neinteractiveliterature/intercode:${{ github.sha }}
-          file=$(docker exec rails-serving sh -c 'cd public/assets && ls entry-*.css | head -1')
+          # The container makes public/assets when it starts, so wait for the file as well as the server
           for i in $(seq 1 30); do
-            curl -sf -o /dev/null -H 'X-Forwarded-Proto: https' http://localhost:3000/assets/$file && break
+            file=$(docker exec rails-serving sh -c 'cd public/assets && ls entry-*.css | head -1' 2>/dev/null || true)
+            [ -n "$file" ] && curl -sf -o /dev/null -H 'X-Forwarded-Proto: https' http://localhost:3000/assets/$file && break
             sleep 2
           done
           curl -sfD - -o /dev/null -H 'X-Forwarded-Proto: https' http://localhost:3000/assets/$file | grep -i 'access-control-allow-origin: \*'
