@@ -1,4 +1,4 @@
-# An example of running Intercode from the published images, with nginx (the framework-mode assets image) in front.
+# An example of running Intercode from the published images, with nginx (the assets image) in front.
 # See https://intercode.interactiveliterature.org/docs/deploying for what each piece is, and for what a real deployment needs on top of this.
 #
 #   cp example.env .env      # then edit it; see the comments there
@@ -16,8 +16,8 @@ x-intercode: &intercode
     SECRET_KEY_BASE: ${SECRET_KEY_BASE}
     DEVISE_SECRET_KEY: ${DEVISE_SECRET_KEY}
     OPENID_CONNECT_SIGNING_KEY: ${OPENID_CONNECT_SIGNING_KEY}
-    # Where the browser loads the build from. Leave it empty to serve assets from the same domain as the app (nginx does
-    # that); set it to a separate asset host's name, and give that host the same value (see web below).
+    # Where the browser loads the build from. Leave it empty to serve assets from the same domain as the app (nginx and
+    # Rails both do that); set it to a separate asset host's name, and give that host the same value (see web below).
     ASSETS_HOST: ${ASSETS_HOST:-}
     RAILS_LOG_TO_STDOUT: 'true'
     AWS_ACCESS_KEY_ID: ${AWS_ACCESS_KEY_ID:-}
@@ -87,7 +87,7 @@ services:
   # The framework-mode build, served by nginx, which also proxies the Rails routes to Rails and sends crawlers to
   # Rails' /og-shell. Pin INTERCODE_VERSION to the same release for both images.
   web:
-    image: ghcr.io/neinteractiveliterature/intercode-assets-framework:${INTERCODE_VERSION:-latest}
+    image: ghcr.io/neinteractiveliterature/intercode-assets:${INTERCODE_VERSION:-latest}
     environment:
       ASSETS_HOST: ${ASSETS_HOST:-}
       RAILS_UPSTREAM: rails:3000

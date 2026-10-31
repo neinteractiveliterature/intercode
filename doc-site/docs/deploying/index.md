@@ -4,8 +4,9 @@ sidebar_position: 1
 
 # Deploying Intercode
 
-This is for people running their own Intercode, with the published Docker images. It covers the framework-mode build
-(the React Router single-page app that `yarn build:framework` makes) and the nginx configuration that serves it.
+This is for people running their own Intercode, with the published Docker images. It covers the frontend (the React
+Router single-page app that `yarn build:framework` makes), which the Rails image carries and serves itself, and the
+nginx image that can serve it instead.
 [`docker-compose.example.yml`](pathname:///deploying/docker-compose.example.yml) (with its [`example.env`](pathname:///deploying/example.env)) is a complete working example.
 
 For CloudFront and S3 instead of nginx, see [terraform/modules/cloudfront_intercode](https://github.com/neinteractiveliterature/intercode/blob/main/terraform/modules/cloudfront_intercode/README.md).
@@ -14,57 +15,65 @@ requests to the same places.
 
 ## What runs
 
-| Piece      | Image                                                        | What it does                                                                                                                                   |
-| ---------- | ------------------------------------------------------------ | ---------------------------------------------------------------------------------------------------------------------------------------------- |
-| **Rails**  | `ghcr.io/neinteractiveliterature/intercode`                  | The API (`/graphql`), sign-in, uploads, and the pages that need per-page metadata for link previews (`/og-shell`). It needs PostgreSQL and S3. |
-| **web**    | `ghcr.io/neinteractiveliterature/intercode-assets-framework` | nginx. Serves the static build (`index.html` and the hashed files in `assets/`), proxies Rails' routes to Rails, and sends crawlers to Rails.  |
-| PostgreSQL | `postgres`                                                   | The database.                                                                                                                                  |
+| Piece      | Image                                              | What it does                                                                                                                                                                                                                        |
+| ---------- | -------------------------------------------------- | ----------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| **Rails**  | `ghcr.io/neinteractiveliterature/intercode`        | The API (`/graphql`), sign-in, uploads, and the pages that need per-page metadata for link previews (`/og-shell`). It also serves the frontend (`index.html` and the hashed files in `assets/`) itself. It needs PostgreSQL and S3. |
+| **web**    | `ghcr.io/neinteractiveliterature/intercode-assets` | Optional. nginx. Serves the same build, proxies Rails' routes to Rails, and sends crawlers to Rails.                                                                                                                                |
+| PostgreSQL | `postgres`                                         | The database.                                                                                                                                                                                                                       |
 
-Visitors talk to **web**, never to Rails directly. Intercode only works over HTTPS (Rails forces SSL, and the refresh-token
-cookie has a `__Host-` prefix), so put a TLS-terminating proxy or load balancer in front of web that sends
-`X-Forwarded-Proto: https`. web passes that header on, and passes the original `Host` header on too, which is how Rails
-picks the convention for a request.
+**Rails alone is enough**: put a TLS-terminating proxy or load balancer in front of it. Intercode only works over HTTPS
+(Rails forces SSL, and the refresh-token cookie has a `__Host-` prefix), so the proxy has to send `X-Forwarded-Proto:
+https`, and has to pass the original `Host` header on, which is how Rails picks the convention for a request.
+
+Run **web** as well when you want nginx to serve the frontend's files, or to run the front server described below. The
+example in this guide does. Visitors then talk to web, never to Rails directly, and web passes those headers on.
 
 ## Images and tags
 
 Every commit on `main` is built as a `:<commit sha>` tag. A GitHub release adds `:<release name>` (for example `:8.7.0`)
 and `:latest`.
 
-| Image                        | Tags                              | Notes                                                                                                                                                                                       |
-| ---------------------------- | --------------------------------- | ------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `intercode`                  | `:<sha>`, `:<release>`, `:latest` | The Rails app.                                                                                                                                                                              |
-| `intercode-assets-framework` | `:<sha>`, `:<release>`, `:latest` | The framework-mode build and nginx. Only built when the repository variable `BUILD_FRAMEWORK` is set. **This image is renamed `intercode-assets` when framework mode becomes the default.** |
-| `intercode-assets`           | `:<sha>`, `:<release>`, `:latest` | The previous, non-framework build's assets, until that cutover.                                                                                                                             |
+| Image              | Tags                              | Notes                                                                               |
+| ------------------ | --------------------------------- | ----------------------------------------------------------------------------------- |
+| `intercode`        | `:<sha>`, `:<release>`, `:latest` | The Rails app, with the frontend.                                                   |
+| `intercode-assets` | `:<sha>`, `:<release>`, `:latest` | The frontend and nginx. It has the same build as the `intercode` image at that tag. |
 
-Run both images at the **same tag**. The shell and the Rails API are released together, and mixing versions is not
+Run both images at the **same tag**. The frontend and the Rails API are released together, and mixing versions is not
 supported.
+
+**Upgrading from 8.x.** `intercode-assets` before 9.0.0 was a different image: nginx serving the previous build from
+`packs/`, with no `ASSETS_HOST` substitution. From 9.0.0 it is what `intercode-assets-framework` was in the 8.x
+releases (which published it as a preview); that name is no longer updated. The Rails containers now need nothing new
+but `ASSETS_HOST`, which they use to build the page they serve (see below).
 
 ## Configuration
 
-| Variable                                                                       | Container                         | Meaning                                                                                                                                                                                                                                      |
-| ------------------------------------------------------------------------------ | --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
-| `ASSETS_HOST`                                                                  | **Rails and web, the same value** | Where browsers load the build's files from: a bare host name, optionally with a port (`assets.example.org`), no scheme. **Empty or unset serves the files from the same domain as the app**, which is what nginx does on its own. See below. |
-| `RAILS_UPSTREAM`                                                               | web                               | `host:port` of Rails (for example `rails:3000`). Turns the container into the front server described below. Without it, the container only serves the build.                                                                                 |
-| `INTERCODE_HOST`                                                               | Rails                             | The domain the root site is served from.                                                                                                                                                                                                     |
-| `DATABASE_URL`                                                                 | Rails                             | The PostgreSQL connection URL.                                                                                                                                                                                                               |
-| `SECRET_KEY_BASE`, `DEVISE_SECRET_KEY`                                         | Rails                             | Random secrets (`openssl rand -hex 64`). Changing them signs everyone out.                                                                                                                                                                   |
-| `OPENID_CONNECT_SIGNING_KEY`                                                   | Rails                             | An RSA private key for signing OpenID Connect tokens, on one line with `\n` for line breaks.                                                                                                                                                 |
-| `AWS_S3_BUCKET`, `AWS_S3_REGION`, `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` | Rails                             | Where uploaded files are stored. Rails won't boot without a bucket name.                                                                                                                                                                     |
+| Variable                                                                       | Container                         | Meaning                                                                                                                                                                                                                                |
+| ------------------------------------------------------------------------------ | --------------------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------------- |
+| `ASSETS_HOST`                                                                  | **Rails and web, the same value** | Where browsers load the build's files from: a bare host name, optionally with a port (`assets.example.org`), no scheme. **Empty or unset serves the files from the same domain as the app**, which Rails and nginx both do. See below. |
+| `RAILS_UPSTREAM`                                                               | web                               | `host:port` of Rails (for example `rails:3000`). Turns the container into the front server described below. Without it, the container only serves the build.                                                                           |
+| `INTERCODE_HOST`                                                               | Rails                             | The domain the root site is served from.                                                                                                                                                                                               |
+| `DATABASE_URL`                                                                 | Rails                             | The PostgreSQL connection URL.                                                                                                                                                                                                         |
+| `SECRET_KEY_BASE`, `DEVISE_SECRET_KEY`                                         | Rails                             | Random secrets (`openssl rand -hex 64`). Changing them signs everyone out.                                                                                                                                                             |
+| `OPENID_CONNECT_SIGNING_KEY`                                                   | Rails                             | An RSA private key for signing OpenID Connect tokens, on one line with `\n` for line breaks.                                                                                                                                           |
+| `AWS_S3_BUCKET`, `AWS_S3_REGION`, `AWS_ACCESS_KEY_ID`, `AWS_SECRET_ACCESS_KEY` | Rails                             | Where uploaded files are stored. Rails won't boot without a bucket name.                                                                                                                                                               |
 
 `example.env` lists these with comments. Rails reads more variables (error reporting, email, Stripe and so on); see the
 configuration files for them.
 
 ### `ASSETS_HOST` has to match on both
 
-The build is made against a placeholder host, because the real one is only known when the container starts. When the web
-container starts it takes a fresh copy of the build and replaces the placeholder in every file that mentions it
-(`index.html`, the route manifest, the CSS) with `https://$ASSETS_HOST/`, or with `/` if `ASSETS_HOST` is empty. So:
+The build is made against a placeholder host, because the real one is only known when the container starts. When a
+Rails or web container starts it takes a fresh copy of the build and replaces the placeholder in every file that
+mentions it (`index.html`, the route manifest, the CSS) with `https://$ASSETS_HOST/`, or with `/` if `ASSETS_HOST` is
+empty. So:
 
 - **One server, same-origin assets (the example).** Leave `ASSETS_HOST` empty everywhere.
-- **A separate asset host.** Run the image a second time on that host, without `RAILS_UPSTREAM`, and give **both**
-  containers the same `ASSETS_HOST`. If the asset host's container starts without it, its manifest points at the wrong
-  place and the app won't boot. The asset host also answers with `Access-Control-Allow-Origin: *`, which convention
-  domains need to load module scripts from it.
+- **A separate asset host.** Put the build's `assets/` directory on that host, either by running the
+  `intercode-assets` image there (without `RAILS_UPSTREAM`) or by uploading the files to a bucket behind a CDN. Give
+  **every** container, Rails and web, the same `ASSETS_HOST`. An asset host that was given the files without the
+  substitution has a manifest that points at the wrong place, and the app won't boot. The asset host also answers with
+  `Access-Control-Allow-Origin: *`, which convention domains need to load module scripts from it.
 
 Forgetting `ASSETS_HOST` doesn't fail loudly: the files are just requested from the app's own domain.
 
@@ -105,16 +114,17 @@ static shell one at a time: the order, what to check, what to watch and how to r
 Everything in `assets/` is named by a hash of its contents and cached for 180 days. `index.html` is the one file whose
 name doesn't change, so it isn't cached: browsers revalidate it, and a new release is picked up on the next page load.
 
-A browser tab opened before a release may still ask for files that the new image doesn't have. The app recovers: when a
-file the shell names fails to load it reloads once to get the current shell, and then shows a message with a reload
-button if that doesn't help. The image can carry earlier releases' files forward to avoid even that (build it with
-`--build-arg PREVIOUS_ASSETS_IMAGE=<an earlier image>`; `PREVIOUS_ASSETS_RETENTION_DAYS`, default 30, sets how long
-they're kept), but the published images are not built that way, so **they contain only their own release's files**.
-Deployers who care can build the image themselves with that argument, or keep the files in a bucket as the
-CloudFront setup does.
+A browser tab opened before a release may still ask for files that the new release doesn't have. The app recovers: when
+a file the shell names fails to load it reloads once to get the current shell, and then shows a message with a reload
+button if that doesn't help. Two things can avoid even that:
 
-The old non-framework build had a `nocache-files.json` list of files to serve uncached. That doesn't apply to the
-framework build; `index.html` is the only such file.
+- The published **`intercode-assets` image** is built on the previous release's image, so it carries earlier releases'
+  files forward and prunes them 30 days after the release that dropped them. To do the same in an image you build
+  yourself, use `docker build --target assets --build-arg PREVIOUS_ASSETS_IMAGE=<an earlier image>`;
+  `PREVIOUS_ASSETS_RETENTION_DAYS` sets the number of days.
+- **Rails serves only its own release's files**, so a deployment that serves the frontend from Rails has the reload
+  and nothing more. Put the files in a bucket (as the CloudFront setup does) or run the `intercode-assets` image as the
+  asset host to keep the earlier ones.
 
 ## The example
 
