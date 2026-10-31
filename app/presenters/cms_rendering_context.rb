@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-# rubocop:disable Metrics/ClassLength
 class CmsRenderingContext
   include Cadmus::RenderingHelper
   include Cadmus::Renderable
@@ -120,9 +119,9 @@ class CmsRenderingContext
   end
 
   def liquid_assigns_for_placeholder_template
-    styles_url = url_with_possible_host("/packs/application-styles.js", ENV.fetch("ASSETS_HOST", nil))
+    stylesheet_links = StaticSpaShell.stylesheet_hrefs.map { |href| tag.link(rel: "stylesheet", href: href) }
     liquid_assigns.merge(
-      "content_for_head" => "#{javascript_include_tag styles_url, type: "module"}{{ content_for_head }}",
+      "content_for_head" => "#{stylesheet_links.join}{{ content_for_head }}",
       "content_for_navbar" => "{{ content_for_navbar }}",
       "content_for_layout" => "{{ content_for_layout }}"
     )
