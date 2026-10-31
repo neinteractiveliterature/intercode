@@ -1,0 +1,18 @@
+#!/bin/sh
+# Runs the command it is given with STATIC_SHELL_DIR set, so Rails serves the framework-mode build the image carries
+# (see StaticSpaShell). The build is made against a placeholder asset host; this makes the copy with ASSETS_HOST
+# substituted in (or same-origin assets when it is empty), and puts the hashed files where Rails serves them. It runs
+# after chamber has set ASSETS_HOST, which is why bin/entrypoint.sh calls it from inside `chamber exec`.
+#
+# Does nothing when STATIC_SHELL_DIR is already set (a deployment that supplies its own shell), or when the image has no
+# build, as in development.
+set -eu
+
+root="$(cd "$(dirname "$0")/.." && pwd)"
+
+if [ -z "${STATIC_SHELL_DIR:-}" ] && [ -f "$root/build/framework/client/index.html" ]; then
+  STATIC_SHELL_DIR="$("$root/script/prepareStaticShell.sh" "$root/build/framework/client" "$root/tmp/static-shell" "${ASSETS_HOST:-}" | sed -n 's/^STATIC_SHELL_DIR=//p')"
+  export STATIC_SHELL_DIR
+fi
+
+exec "$@"
