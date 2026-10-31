@@ -1,6 +1,13 @@
 ARG RUBY_VERSION=4
 ARG NODE_VERSION=24.11.1
 ARG CHAMBER_VERSION=3.1.5
+# Optional, for the assets target: an earlier intercode-assets image (for example the last release's) whose hashed files
+# are carried over, so that tabs and cached pages from the previous release can still load their chunks. The default,
+# an empty image, carries nothing over.
+ARG PREVIOUS_ASSETS_IMAGE=scratch
+# Carried-over files are pruned this many days after the release that dropped them. Files that are part of this
+# release are never pruned, however old.
+ARG PREVIOUS_ASSETS_RETENTION_DAYS=30
 
 ### dev
 
@@ -30,6 +37,48 @@ RUN bundle config set without 'development test' \
 
 COPY --chown=www:www . /usr/src/intercode
 
+### frontend (the framework-mode build, which the Rails app serves as its shell and the assets image serves from nginx)
+
+FROM node:${NODE_VERSION}-slim AS frontend
+ARG REVISION
+ENV REVISION=${REVISION}
+# husky, which wants a git repository
+ENV HUSKY=0
+WORKDIR /usr/src/intercode
+RUN apt-get update && apt-get install -y --no-install-recommends python3 build-essential && rm -rf /var/lib/apt/lists/*
+COPY package.json yarn.lock .yarnrc.yml ./
+COPY .yarn .yarn
+COPY doc-site/package.json doc-site/package.json
+RUN yarn install --immutable
+COPY . .
+RUN yarn run build:framework
+
+### assets (docker build --target assets): the frontend served by nginx, as the intercode-assets image
+#
+# The build is made against a placeholder asset host. When the container starts it takes a fresh copy of the build and
+# swaps in $ASSETS_HOST (or nothing, for same-origin assets), so one image serves any deployment. The app container
+# needs the same ASSETS_HOST. With RAILS_UPSTREAM set, the container also proxies the Rails routes and crawlers to Rails.
+# See https://intercode.interactiveliterature.org/docs/deploying
+
+FROM ${PREVIOUS_ASSETS_IMAGE} AS previous
+
+FROM nginx AS assets
+ARG PREVIOUS_ASSETS_RETENTION_DAYS
+# The pristine build. The entrypoint copies it into the web root on every start, before substituting ASSETS_HOST.
+COPY --from=frontend /usr/src/intercode/build/framework/client /usr/share/intercode-assets
+RUN rm /usr/share/nginx/html/index.*
+RUN --mount=type=bind,from=previous,target=/previous \
+    --mount=type=bind,source=script/mergePreviousAssets.sh,target=/mergePreviousAssets.sh \
+    /mergePreviousAssets.sh /previous ${PREVIOUS_ASSETS_RETENTION_DAYS} /usr/share/intercode-assets assets
+COPY script/substituteAssetsHost.sh /usr/local/bin/substituteAssetsHost.sh
+COPY docker-assets/40-substitute-assets-host.sh /docker-entrypoint.d/40-substitute-assets-host.sh
+COPY docker-assets/nginx.conf /etc/nginx/conf.d/default.conf
+# The reference front server configuration, used when RAILS_UPSTREAM is set. The crawler map and the Rails locations are
+# generated from the same route list as the CloudFront module.
+COPY docker-assets/front-proxy.conf.template /etc/nginx/intercode/front-proxy.conf.template
+COPY docker-assets/proxy_params.conf /etc/nginx/proxy_params.conf
+COPY terraform/modules/cloudfront_intercode/nginx/crawler-map.conf terraform/modules/cloudfront_intercode/nginx/rails-locations.conf /etc/nginx/intercode/
+
 ### build
 
 FROM dev AS build
@@ -40,6 +89,10 @@ ENV NODE_ENV=production
 RUN bundle exec bootsnap precompile --gemfile app/ lib/
 RUN DATABASE_URL=postgresql://fakehost/not_a_real_database AWS_S3_BUCKET=fakebucket AWS_ACCESS_KEY_ID=dummy AWS_SECRET_ACCESS_KEY=dummy bundle exec rails assets:precompile
 RUN rm -r doc-site
+
+# The pristine framework-mode build. It is made against a placeholder asset host, because ASSETS_HOST is only known when
+# the container starts; bin/with_static_shell makes the copy that Rails serves, with the real host substituted in.
+COPY --from=frontend --chown=www:www /usr/src/intercode/build/framework/client /usr/src/intercode/build/framework/client
 
 ### ld_preload trickery
 
