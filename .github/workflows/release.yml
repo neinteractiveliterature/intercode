@@ -114,7 +114,7 @@ jobs:
         id: node-version
         run: echo "node-version=$(cat .node-version)" >> $GITHUB_OUTPUT
       - name: install node
-        uses: actions/setup-node@v6
+        uses: actions/setup-node@v7
         with:
           cache: yarn
           node-version: ${{ steps.node-version.outputs.node-version }}
