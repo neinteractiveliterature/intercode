@@ -12,6 +12,9 @@
 #   publish  uploads index.html, which makes the new frontend live, then marks the dropped files obsolete
 # The default, all, runs both in that order.
 #
+# The assets bucket, which only serves the hashed files to pages that Rails serves, has no use for index.html: set
+# UPLOAD_INDEX=false and the publish phase only marks the obsolete files.
+#
 # INDEX_MAX_AGE (seconds, default 60) is the Cache-Control of index.html; keep it in step with the distribution's
 # static_shell_ttl. The hashed files in assets/ never change, so they are cached for a long time.
 set -euo pipefail
@@ -19,6 +22,7 @@ set -euo pipefail
 bucket="$1"
 build_dir="${2%/}"
 index_max_age="${INDEX_MAX_AGE:-60}"
+upload_index="${UPLOAD_INDEX:-true}"
 phase="${3:-all}"
 
 case "$phase" in
@@ -36,9 +40,11 @@ if [ "$phase" != publish ]; then
 fi
 
 if [ "$phase" != hashed ]; then
-  # index.html goes last, so that it never names a file that isn't in the bucket yet
-  aws s3 cp "$build_dir/index.html" "s3://$bucket/index.html" \
-    --cache-control "public, max-age=$index_max_age" --content-type "text/html"
+  if [ "$upload_index" = true ]; then
+    # index.html goes last, so that it never names a file that isn't in the bucket yet
+    aws s3 cp "$build_dir/index.html" "s3://$bucket/index.html" \
+      --cache-control "public, max-age=$index_max_age" --content-type "text/html"
+  fi
 
   (cd "$build_dir" && find assets -type f) | "$(dirname "$0")/mark_obsolete_assets.py" "$bucket" assets/
 fi
