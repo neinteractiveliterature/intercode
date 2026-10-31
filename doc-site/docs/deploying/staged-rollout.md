@@ -23,7 +23,8 @@ CloudFront in front, move with that release.
 - The shell bucket comes from [`assets_bucket_intercode`](https://github.com/neinteractiveliterature/intercode/blob/main/terraform/modules/assets_bucket_intercode) (a separate
   bucket from the one for `/packs/*`), and its bucket policy lets the distribution you are about to change read it (set
   `allow_account_cloudfront_distributions`, or list the distribution in `cloudfront_distribution_arns`; without one of
-  them S3 answers that distribution with a 403).
+  them S3 answers that distribution with a 403). Apply the bucket policy first, and only then change the distribution:
+  visitors get that 403 from the moment the distribution points at the bucket until the policy catches up.
 - At least one release has uploaded to it. Check the bucket has `index.html` and an `assets/` directory.
 - The distribution has access logs on (`access_logs_enabled`, from
   [`cloudfront_intercode_logging`](https://github.com/neinteractiveliterature/intercode/blob/main/terraform/modules/cloudfront_intercode_logging)), and the logging module's 5xx
