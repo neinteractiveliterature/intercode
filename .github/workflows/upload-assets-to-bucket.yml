@@ -1,7 +1,7 @@
 name: Upload assets to bucket
 
-# Uploads a commit's built assets (from its intercode-assets image) to the assets bucket, and marks the files that
-# commit's release dropped as obsolete. See terraform/modules/assets_bucket_intercode. Called by the release workflow,
+# Uploads a commit's built frontend (from its intercode-assets image) to the assets bucket, which is what ASSETS_HOST
+# serves to the pages that Rails serves, and marks the files that commit's release dropped as obsolete. See terraform/modules/assets_bucket_intercode. Called by the release workflow,
 # and can be run by hand to upload an already-built commit.
 #
 # The role it assumes only trusts the refs listed in the module's github_oidc_subjects (release tags by default), so a
@@ -45,8 +45,8 @@ jobs:
     steps:
       - name: Check that the bucket is configured
         run: |
-          if [ -z "${{ vars.ASSETS_BUCKET }}" ] || [ -z "${{ vars.ASSETS_UPLOAD_ROLE_ARN }}" ]; then
-            echo "ASSETS_BUCKET and ASSETS_UPLOAD_ROLE_ARN must be set as repository variables" >&2
+          if [ -z "${{ vars.ASSETS_BUCKET }}" ] || [ -z "${{ vars.ASSETS_UPLOAD_ROLE_ARN }}" ] || [ -z "${{ vars.ASSETS_HOST }}" ]; then
+            echo "ASSETS_BUCKET, ASSETS_UPLOAD_ROLE_ARN and ASSETS_HOST must be set as repository variables" >&2
             exit 1
           fi
       - name: Check the commit
@@ -58,16 +58,20 @@ jobs:
       - uses: actions/checkout@v7
       - name: Log in to registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-      - name: Extract assets from image
+      - name: Extract the build from the image
         run: |
           docker pull ghcr.io/neinteractiveliterature/intercode-assets:$ASSETS_SHA
           container=$(docker create ghcr.io/neinteractiveliterature/intercode-assets:$ASSETS_SHA)
-          docker cp "$container:/usr/share/nginx/html/packs" packs
+          docker cp "$container:/usr/share/intercode-assets" build
           docker cp "$container:/etc/intercode-assets/current-files.txt" current-files.txt
           docker rm "$container"
-          # The image also carries over earlier releases' files (see Dockerfile.assets). Only this release's own
-          # files count as current, so the rest can be marked obsolete in the bucket.
-          (cd packs && find . -type f | sort) | comm -23 - current-files.txt | (cd packs && xargs -r rm)
+          # The image also carries over earlier releases' files (see the assets stage of the Dockerfile). Only this
+          # release's own files count as current, so the rest can be marked obsolete in the bucket.
+          (cd build/assets && find . -type f | sort) | comm -23 - current-files.txt | (cd build/assets && xargs -r rm)
+      - name: Point the build at the assets host
+        # The build is made against a placeholder asset host. Pages that Rails serves load these files from
+        # ASSETS_HOST, which is the value the app containers have, so the URLs have to name it.
+        run: script/substituteAssetsHost.sh build "${{ vars.ASSETS_HOST }}"
       - name: Install boto3 (used to mark obsolete files)
         run: python3 -m pip install --user 'boto3>=1.35,<2'
       - uses: aws-actions/configure-aws-credentials@v6
@@ -75,4 +79,10 @@ jobs:
           role-to-assume: ${{ vars.ASSETS_UPLOAD_ROLE_ARN }}
           aws-region: ${{ vars.AWS_REGION || 'us-east-1' }}
       - name: Upload the assets (all of them, or the phase asked for)
-        run: script/uploadReleaseAssets.sh "${{ vars.ASSETS_BUCKET }}" packs "$PHASE"
+        run: UPLOAD_INDEX=false script/uploadFrameworkAssets.sh "${{ vars.ASSETS_BUCKET }}" build "$PHASE"
+      # The bucket still holds the files of the releases before v9.0.0, under packs/. The frontend no longer has any, so
+      # all of them are obsolete: this starts their countdown to expiry (the bucket's retention period), and tabs open
+      # on an old release can load their files until then. It does nothing once they are all marked.
+      - name: Mark the files of earlier releases' packs/ obsolete
+        if: env.PHASE != 'hashed'
+        run: python3 script/mark_obsolete_assets.py "${{ vars.ASSETS_BUCKET }}" packs/ < /dev/null

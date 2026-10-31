@@ -30,6 +30,9 @@ jobs:
         run: yarn run graphql:codegen
       - name: tsc on resulting generated files
         run: yarn run ts:check
+      # The framework build's routes are generated from AppRouter.tsx (see script/genRoutes.mts) until that is deleted
+      - name: Check that the generated routes are up to date
+        run: yarn run routes:check
   vitest:
     name: Vitest
     runs-on: ubuntu-latest
@@ -53,8 +56,8 @@ jobs:
         uses: mikepenz/action-junit-report@v6
         if: always() # always run even if the previous step fails
         with:
-          check_name: "Vitest Report"
-          report_paths: "test/reports/TEST-*.xml"
+          check_name: 'Vitest Report'
+          report_paths: 'test/reports/TEST-*.xml'
           detailed_summary: true
           skip_success_summary: true
       - name: Archive HTML test reports
@@ -69,84 +72,6 @@ jobs:
         with:
           name: vitest-coverage
           path: coverage/*
-  # The framework-mode build (react-router.config.ts) while the migration is in progress. Off unless the repository
-  # variable BUILD_FRAMEWORK is set, and not required by anything else.
-  build-framework:
-    name: Framework mode build
-    if: vars.BUILD_FRAMEWORK != ''
-    runs-on: ubuntu-latest
-    permissions:
-      contents: read
-      packages: write
-    steps:
-      - uses: actions/checkout@v7
-      - name: Read .node-version
-        id: node-version
-        run: echo "node-version=$(cat .node-version)" >> $GITHUB_OUTPUT
-      - name: install node
-        uses: actions/setup-node@v6
-        with:
-          cache: yarn
-          node-version: ${{ steps.node-version.outputs.node-version }}
-      - name: yarn install
-        run: yarn install
-      - name: Check that the generated routes are up to date
-        run: yarn run routes:check
-      - name: Build
-        run: yarn run build:framework
-      - name: Check the output
-        run: |
-          test -f build/framework/client/index.html
-          ls build/framework/client/assets/*.js > /dev/null
-      - name: Build the assets image
-        run: >
-          docker build -f Dockerfile.assets-framework -t intercode-assets-framework:ci
-          --build-arg REVISION=${{ github.sha }} .
-      - name: Push the assets image (on main), for the release upload to the static shell bucket
-        if: github.event_name == 'push' && github.event.ref == 'refs/heads/main'
-        run: |
-          echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-          docker tag intercode-assets-framework:ci ghcr.io/neinteractiveliterature/intercode-assets-framework:${{ github.sha }}
-          docker push ghcr.io/neinteractiveliterature/intercode-assets-framework:${{ github.sha }}
-      - name: Check the assets image with and without ASSETS_HOST
-        run: |
-          docker run -d --name with-host -e ASSETS_HOST=assets.example.com:3135 -p 8081:80 intercode-assets-framework:ci
-          docker run -d --name without-host -p 8082:80 intercode-assets-framework:ci
-          sleep 5
-          curl -sf http://localhost:8081/index.html | grep -q 'href="https://assets.example.com:3135/assets/'
-          curl -sf http://localhost:8082/index.html | grep -q 'href="/assets/'
-          for port in 8081 8082; do
-            if curl -sf http://localhost:$port/index.html | grep -q ASSETHOSTPLACEHOLDER; then
-              echo "placeholder left in index.html on port $port"
-              exit 1
-            fi
-            manifest=$(curl -sf http://localhost:$port/index.html | grep -o '/assets/manifest-[a-z0-9]*\.js' | head -1)
-            curl -sf http://localhost:$port$manifest | grep -q __reactRouterManifest
-          done
-      - name: Check the assets image as a front server (RAILS_UPSTREAM)
-        run: |
-          cat > stub-rails.conf <<'EOF'
-          server {
-              listen 80;
-              location / {
-                  default_type text/plain;
-                  return 200 "RAILS uri=$request_uri host=$http_host proto=$http_x_forwarded_proto\n";
-              }
-          }
-          EOF
-          docker network create front
-          docker run -d --name stub-rails --network front -v "$PWD/stub-rails.conf:/etc/nginx/conf.d/default.conf:ro" nginx
-          docker run -d --name front --network front -e RAILS_UPSTREAM=stub-rails:80 -p 8083:80 intercode-assets-framework:ci
-          sleep 5
-          # Browsers get the static shell, for any path that isn't a Rails route
-          curl -sf http://localhost:8083/events/4130 -A 'Mozilla/5.0' | grep -q 'rel="modulepreload"'
-          # Crawlers get Rails' Open Graph document for the path, with the original Host
-          curl -sf "http://localhost:8083/events/a%20b/c?x=1" -A 'facebookexternalhit/1.1' -H 'Host: con.example.org' | grep -q 'uri=/og-shell?path=/events/a%20b/c host=con.example.org'
-          # The Rails routes are proxied
-          curl -sf -X POST http://localhost:8083/graphql | grep -q 'uri=/graphql'
-          curl -sf http://localhost:8083/oauth_session/refresh -X POST | grep -q 'uri=/oauth_session/refresh'
-          # A missing asset is a 404, not the shell
-          test "$(curl -s -o /dev/null -w '%{http_code}' http://localhost:8083/assets/nope.js)" = 404
   bundle-size:
     name: Bundle size check
     runs-on: ubuntu-latest
@@ -163,7 +88,7 @@ jobs:
       - name: yarn install
         run: yarn install
       - name: Build frontend
-        run: yarn run build:web
+        run: yarn run build:framework
       - name: Check bundle size
         run: yarn run check:bundle-size
   minitest:
@@ -208,8 +133,8 @@ jobs:
         uses: mikepenz/action-junit-report@v6
         if: always() # always run even if the previous step fails
         with:
-          check_name: "Minitest Report"
-          report_paths: "test/reports/TEST-*.xml"
+          check_name: 'Minitest Report'
+          report_paths: 'test/reports/TEST-*.xml'
           detailed_summary: true
           skip_success_summary: true
       - name: Archive HTML test reports
@@ -267,28 +192,20 @@ jobs:
       - name: yarn install
         run: yarn install
       - name: build
-        run: yarn run build
+        run: yarn run build:framework && yarn run build:cli
+      # Rails serves the framework-mode build as its static shell, as it does in production
+      - name: Prepare the static shell
+        run: script/prepareStaticShell.sh | tee -a "$GITHUB_ENV"
       - name: Database setup
         run: bundle exec rails db:create db:migrate
       - name: Run tests
-        run: TERM=xterm-color bundle exec rails test:system
-      # The framework-mode build, with Rails serving its static shell, until it replaces the build above. Its routes are
-      # generated from AppRouter.tsx (see script/genRoutes.mts), so all the system tests should pass against it too.
-      - name: Build framework mode
-        if: vars.BUILD_FRAMEWORK != ''
-        run: yarn run build:framework
-      - name: Prepare the static shell
-        if: vars.BUILD_FRAMEWORK != ''
-        run: script/prepareStaticShell.sh | tee -a "$GITHUB_ENV"
-      - name: Run system tests against the framework-mode shell
-        if: vars.BUILD_FRAMEWORK != ''
         run: TERM=xterm-color bundle exec rails test:system
       - name: Publish Test Report
         uses: mikepenz/action-junit-report@v6
         if: always() # always run even if the previous step fails
         with:
-          check_name: "Minitest System Test Report"
-          report_paths: "test/reports/TEST-*.xml"
+          check_name: 'Minitest System Test Report'
+          report_paths: 'test/reports/TEST-*.xml'
           detailed_summary: true
           skip_success_summary: true
       - name: Archive HTML test reports
@@ -318,23 +235,15 @@ jobs:
       - name: Read .node-version
         id: node-version
         run: echo "node-version=$(cat .node-version)" >> $GITHUB_OUTPUT
-      - name: install node
-        uses: actions/setup-node@v6
-        with:
-          cache: yarn
-          node-version: ${{ steps.node-version.outputs.node-version }}
-      - name: yarn install
-        run: yarn install
       - name: Log in to registry
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
-      - name: Build frontend bundle
-        run: yarn run build
       - name: Set up Docker Buildx
         id: buildx
         uses: docker/setup-buildx-action@master
       - name: Read .ruby-version
         id: ruby-version
         run: echo "ruby-version=$(cat .ruby-version)" >> $GITHUB_OUTPUT
+      # The frontend (yarn build:framework) is built inside the image, in a stage that both images below share
       - name: Build (and push to registry, if on main)
         uses: docker/build-push-action@v7
         with:
@@ -356,22 +265,82 @@ jobs:
           -e AWS_S3_BUCKET=fakebucket
           ghcr.io/neinteractiveliterature/intercode:${{ github.sha }}
           bin/rails runner 'puts "Hello, world!"'
-      - name: Build assets only (and push to registry, if on main)
-        uses: docker/build-push-action@v7
+      - name: Check that the app image carries the frontend, with and without ASSETS_HOST
+        run: |
+          app=ghcr.io/neinteractiveliterature/intercode:${{ github.sha }}
+          docker run --rm -e DATABASE_URL=postgresql://fakehost/not_a_real_database -e AWS_S3_BUCKET=fakebucket \
+            -e ASSETS_HOST=assets.example.com:3135 $app sh -c '
+              grep -q "href=\"https://assets.example.com:3135/assets/" "$STATIC_SHELL_DIR/index.html" &&
+              ! grep -rq ASSETHOSTPLACEHOLDER "$STATIC_SHELL_DIR" public/assets'
+          docker run --rm -e DATABASE_URL=postgresql://fakehost/not_a_real_database -e AWS_S3_BUCKET=fakebucket $app sh -c '
+              grep -q "href=\"/assets/" "$STATIC_SHELL_DIR/index.html" &&
+              ! grep -rq ASSETHOSTPLACEHOLDER "$STATIC_SHELL_DIR" public/assets &&
+              ls public/assets/*.js > /dev/null'
+      - name: Check that Rails serves the frontend's files
+        run: |
+          docker run -d --name rails-serving -p 3000:3000 -e RAILS_SERVE_STATIC_FILES=enabled -e INTERCODE_HOST=localhost \
+            -e DATABASE_URL=postgresql://fakehost/not_a_real_database -e AWS_S3_BUCKET=fakebucket \
+            ghcr.io/neinteractiveliterature/intercode:${{ github.sha }}
+          file=$(docker exec rails-serving sh -c 'cd public/assets && ls entry-*.css | head -1')
+          for i in $(seq 1 30); do
+            curl -sf -o /dev/null -H 'X-Forwarded-Proto: https' http://localhost:3000/assets/$file && break
+            sleep 2
+          done
+          curl -sfD - -o /dev/null -H 'X-Forwarded-Proto: https' http://localhost:3000/assets/$file | grep -i 'access-control-allow-origin: \*'
+      # The nginx image with the same build. On main it layers on the last released image, so that the previous
+      # release's files stay available for tabs that are still open (see the assets stage of the Dockerfile); latest is
+      # only retagged when a release is published.
+      - name: Build the assets image
+        run: >
+          docker buildx build --load --target assets -t intercode-assets:ci
+          --build-arg NODE_VERSION=${{ steps.node-version.outputs.node-version }}
+          --build-arg REVISION=${{ github.sha }}
+          ${{ github.event_name == 'push' && github.event.ref == 'refs/heads/main' && '--build-arg PREVIOUS_ASSETS_IMAGE=ghcr.io/neinteractiveliterature/intercode-assets:latest' || '' }}
+          .
+      - name: Check the assets image with and without ASSETS_HOST
+        run: |
+          docker run -d --name with-host -e ASSETS_HOST=assets.example.com:3135 -p 8081:80 intercode-assets:ci
+          docker run -d --name without-host -p 8082:80 intercode-assets:ci
+          sleep 5
+          curl -sf http://localhost:8081/index.html | grep -q 'href="https://assets.example.com:3135/assets/'
+          curl -sf http://localhost:8082/index.html | grep -q 'href="/assets/'
+          for port in 8081 8082; do
+            if curl -sf http://localhost:$port/index.html | grep -q ASSETHOSTPLACEHOLDER; then
+              echo "placeholder left in index.html on port $port"
+              exit 1
+            fi
+            manifest=$(curl -sf http://localhost:$port/index.html | grep -o '/assets/manifest-[a-z0-9]*\.js' | head -1)
+            curl -sf http://localhost:$port$manifest | grep -q __reactRouterManifest
+          done
+      - name: Check the assets image as a front server (RAILS_UPSTREAM)
+        run: |
+          cat > stub-rails.conf <<'EOF'
+          server {
+              listen 80;
+              location / {
+                  default_type text/plain;
+                  return 200 "RAILS uri=$request_uri host=$http_host proto=$http_x_forwarded_proto\n";
+              }
+          }
+          EOF
+          docker network create front
+          docker run -d --name stub-rails --network front -v "$PWD/stub-rails.conf:/etc/nginx/conf.d/default.conf:ro" nginx
+          docker run -d --name front --network front -e RAILS_UPSTREAM=stub-rails:80 -p 8083:80 intercode-assets:ci
+          sleep 5
+          # Browsers get the static shell, for any path that isn't a Rails route
+          curl -sf http://localhost:8083/events/4130 -A 'Mozilla/5.0' | grep -q 'rel="modulepreload"'
+          # Crawlers get Rails' Open Graph document for the path, with the original Host
+          curl -sf "http://localhost:8083/events/a%20b/c?x=1" -A 'facebookexternalhit/1.1' -H 'Host: con.example.org' | grep -q 'uri=/og-shell?path=/events/a%20b/c host=con.example.org'
+          # The Rails routes are proxied
+          curl -sf -X POST http://localhost:8083/graphql | grep -q 'uri=/graphql'
+          curl -sf http://localhost:8083/oauth_session/refresh -X POST | grep -q 'uri=/oauth_session/refresh'
+          # A missing asset is a 404, not the shell
+          test "$(curl -s -o /dev/null -w '%{http_code}' http://localhost:8083/assets/nope.js)" = 404
+      - name: Push the assets image (on main)
         if: github.event_name == 'push' && github.event.ref == 'refs/heads/main'
-        with:
-          context: .
-          file: Dockerfile.assets
-          push: ${{ github.event_name == 'push' && github.event.ref == 'refs/heads/main' }}
-          platforms: linux/amd64
-          tags: |
-            ghcr.io/neinteractiveliterature/intercode-assets:${{ github.sha }}
-          # Layer on the last released assets image, so the previous release's files stay available (see
-          # Dockerfile.assets). latest is only retagged when a release is published.
-          build-args: |
-            BASEIMAGE=ghcr.io/neinteractiveliterature/intercode:${{ github.sha }}
-            PREVIOUS_ASSETS_IMAGE=ghcr.io/neinteractiveliterature/intercode-assets:latest
-            PREVIOUS_ASSETS_RETENTION_DAYS=30
+        run: |
+          docker tag intercode-assets:ci ghcr.io/neinteractiveliterature/intercode-assets:${{ github.sha }}
+          docker push ghcr.io/neinteractiveliterature/intercode-assets:${{ github.sha }}
   doc-site:
     name: Build doc site
     runs-on: ubuntu-latest
@@ -453,9 +422,9 @@ jobs:
         id: code_coverage_report_action
         if: ${{ github.actor != 'dependabot[bot]'}}
         with:
-          filename: "merged-coverage.xml"
+          filename: 'merged-coverage.xml'
           fail_on_negative_difference: false
-          artifact_download_workflow_names: "Continuous integration"
+          artifact_download_workflow_names: 'Continuous integration'
           only_list_changed_files: true
       - name: Add Coverage PR Comment
         if: steps.code_coverage_report_action.outputs.file != '' && github.event_name == 'pull_request' && (success() || failure())

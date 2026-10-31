@@ -28,16 +28,6 @@ jobs:
         run: docker tag ghcr.io/neinteractiveliterature/intercode-assets:${{ github.sha }} ghcr.io/neinteractiveliterature/intercode-assets:latest
       - name: Push to registry
         run: docker push ghcr.io/neinteractiveliterature/intercode-assets:latest && docker push ghcr.io/neinteractiveliterature/intercode-assets:${{ github.event.release.name }}
-      # And for the framework-mode assets image, which is only built when BUILD_FRAMEWORK is set (see ci.yml)
-      - name: Tag and push the framework-mode assets image
-        if: vars.BUILD_FRAMEWORK != ''
-        run: |
-          image=ghcr.io/neinteractiveliterature/intercode-assets-framework
-          docker pull $image:${{ github.sha }}
-          docker tag $image:${{ github.sha }} $image:${{ github.event.release.name }}
-          docker tag $image:${{ github.sha }} $image:latest
-          docker push $image:latest
-          docker push $image:${{ github.event.release.name }}
   # Keeps each release's built assets in an S3 bucket, without deleting earlier releases' files, so that stale
   # tabs and cached pages can still load their chunks. Skipped unless ASSETS_BUCKET is set; see
   # terraform/modules/assets_bucket_intercode and upload-assets-to-bucket.yml.
