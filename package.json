@@ -198,9 +198,9 @@
     "@types/qs": "^6",
     "@types/rails__activestorage": "8.0.2",
     "@types/react-dom": "19.2.3",
-    "@typescript-eslint/eslint-plugin": "8.62.1",
-    "@typescript-eslint/parser": "8.62.1",
-    "@typescript-eslint/utils": "8.62.1",
+    "@typescript-eslint/eslint-plugin": "8.72.1",
+    "@typescript-eslint/parser": "8.72.1",
+    "@typescript-eslint/utils": "8.72.1",
     "@typescript/native": "npm:typescript@7.0.2",
     "@vitejs/plugin-react-swc": "^4.2.0",
     "@vitest/coverage-v8": "^4.0.0",
@@ -243,7 +243,7 @@
     "vitest": "^4.0.0"
   },
   "resolutions": {
-    "@typescript-eslint/parser": "8.62.1",
+    "@typescript-eslint/parser": "8.72.1",
     "react-bootstrap4-modal": "3.0.11",
     "rollup": "4.66.0"
   },
