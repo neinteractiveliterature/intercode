@@ -10,8 +10,8 @@
 
 
 <link rel="search" type="application/opensearchdescription+xml" title="Intercode" href="/opensearch.xml"><link rel="stylesheet" href="/assets/css/styles.336cedaf.css">
-<script src="/assets/js/runtime~main.246ce5cb.js" defer="defer"></script>
-<script src="/assets/js/main.84a69994.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.72b081fd.js" defer="defer"></script>
+<script src="/assets/js/main.435dffca.js" defer="defer"></script>
 </head>
 <body>
 <svg style="display: none;"><defs>
@@ -35,7 +35,8 @@ unsetting <code>BUILD_FRAMEWORK</code> while the bucket is in use means the buck
 <li class="">The shell bucket comes from <a href="https://github.com/neinteractiveliterature/intercode/blob/main/terraform/modules/assets_bucket_intercode" target="_blank" rel="noopener noreferrer" class=""><code>assets_bucket_intercode</code></a> (a separate
 bucket from the one for <code>/packs/*</code>), and its bucket policy lets the distribution you are about to change read it (set
 <code>allow_account_cloudfront_distributions</code>, or list the distribution in <code>cloudfront_distribution_arns</code>; without one of
-them S3 answers that distribution with a 403).</li>
+them S3 answers that distribution with a 403). Apply the bucket policy first, and only then change the distribution:
+visitors get that 403 from the moment the distribution points at the bucket until the policy catches up.</li>
 <li class="">At least one release has uploaded to it. Check the bucket has <code>index.html</code> and an <code>assets/</code> directory.</li>
 <li class="">The distribution has access logs on (<code>access_logs_enabled</code>, from
 <a href="https://github.com/neinteractiveliterature/intercode/blob/main/terraform/modules/cloudfront_intercode_logging" target="_blank" rel="noopener noreferrer" class=""><code>cloudfront_intercode_logging</code></a>), and the logging module&#x27;s 5xx
