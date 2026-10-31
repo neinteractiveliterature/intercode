@@ -31,6 +31,25 @@ class ReportsControllerTest < ActionDispatch::IntegrationTest
     sign_in con_admin
   end
 
+  describe "styles" do
+    after { ENV.delete("STATIC_SHELL_DIR") }
+
+    it "links the stylesheets of the static shell" do
+      Dir.mktmpdir do |dir|
+        File.write(
+          File.join(dir, "index.html"),
+          '<link rel="stylesheet" href="https://assets.example.com/assets/entry-abc.css"/>'
+        )
+        ENV["STATIC_SHELL_DIR"] = dir
+
+        get reports_per_event_path
+
+        assert_response :ok
+        assert_select 'link[rel="stylesheet"][href="https://assets.example.com/assets/entry-abc.css"]'
+      end
+    end
+  end
+
   describe "GET per_event" do
     it "renders without error for an event with a waitlisted signup requesting a bucket" do
       dogs_bucket = bucket_with_key(event.registration_policy, "dogs")
