@@ -101,4 +101,27 @@ class StaticSpaShellControllerTest < ActionDispatch::IntegrationTest
       assert_not StaticSpaShell.crawler?(nil)
     end
   end
+
+  describe "the Devise pages" do
+    after { ENV.delete("STATIC_SHELL_DIR") }
+
+    %w[/users/sign_in /users/sign_up /users/password/new /users/password/edit?reset_password_token=abc].each do |path|
+      it "serves #{path} from the static shell when there is one" do
+        ENV["STATIC_SHELL_DIR"] = @shell_dir
+
+        get path, headers: { "User-Agent" => browser }
+
+        assert_response :ok
+        assert_equal index_html, response.body
+        assert_equal "no-cache", response.headers["Cache-Control"]
+      end
+
+      it "renders #{path} itself without one" do
+        get path, headers: { "User-Agent" => browser }
+
+        assert_response :ok
+        assert_not_includes response.body, "static-shell-marker"
+      end
+    end
+  end
 end
