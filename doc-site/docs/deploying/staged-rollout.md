@@ -10,6 +10,14 @@ convention domain at a time. It is part of the migration tracked in
 [#12219](https://github.com/neinteractiveliterature/intercode/issues/12219) and
 [#12260](https://github.com/neinteractiveliterature/intercode/issues/12260).
 
+:::note
+This guide was written for the 8.8 releases, which could still build the old (data-mode) frontend. From 9.0.0 the Rails
+image carries the framework build and serves it itself, so a Rails origin already serves the same frontend as the static
+shell, and there is no data-mode build to move away from. Static shell mode is still an option for a CloudFront
+distribution, and the checks and monitoring below still apply when you turn it on, but rolling back from 9.0.0 to the
+old frontend means deploying an 8.x image.
+:::
+
 Nothing here removes the data-mode build. Every release still builds and publishes both, so each step can be undone by
 changing one Terraform variable. The code cutover (v9.0.0), which makes the framework build the only one and gives the
 Rails image its own copy of the shell, comes after this rollout is finished. Domains that Rails serves directly, with no
