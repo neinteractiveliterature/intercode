@@ -45,7 +45,8 @@ process.stdin.on('end', () => {
     export AWS_ROLE_SESSION_NAME="chamber"
     unset CHAMBER_AWS_ROLE_ARN
   fi
-  drop_to_www chamber exec "$CHAMBER_SERVICE" -- "$@"
+  # with_static_shell goes inside chamber, because it needs ASSETS_HOST, which chamber sets
+  drop_to_www chamber exec "$CHAMBER_SERVICE" -- /usr/src/intercode/bin/with_static_shell "$@"
 else
-  drop_to_www "$@"
+  drop_to_www /usr/src/intercode/bin/with_static_shell "$@"
 fi

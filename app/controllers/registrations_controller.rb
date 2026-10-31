@@ -6,11 +6,11 @@ class RegistrationsController < Devise::RegistrationsController
   prepend_before_action :disable_destroy, only: [:destroy] # rubocop:disable Rails/LexicallyScopedActionFilter
 
   def new
-    render html: "", layout: "application"
+    render_spa_shell
   end
 
   def edit
-    render html: "", layout: "application"
+    render_spa_shell
   end
 
   private
