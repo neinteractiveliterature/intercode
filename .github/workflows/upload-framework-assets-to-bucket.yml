@@ -1,10 +1,9 @@
 name: Upload framework-mode build to bucket
 
-# Uploads a commit's framework-mode build (from its intercode-assets-framework image) to the static shell bucket, and
+# Uploads a commit's framework-mode build (from its intercode-assets image) to the static shell bucket, and
 # marks the files that commit's release dropped as obsolete. See terraform/modules/assets_bucket_intercode and the static
 # shell mode of terraform/modules/cloudfront_intercode. Called by the release workflow, and can be run by hand to upload
-# an already-built commit. The image is only built (and pushed, on main) when the repository variable BUILD_FRAMEWORK
-# is set; see the build-framework job in ci.yml.
+# an already-built commit.
 #
 # The role it assumes only trusts the refs listed in the module's github_oidc_subjects (release tags by default), so a
 # manual run has to be started from a ref that role trusts.
@@ -13,7 +12,7 @@ on:
   workflow_call:
     inputs:
       sha:
-        description: Commit whose intercode-assets-framework image to upload
+        description: Commit whose intercode-assets image to upload
         required: true
         type: string
       phase:
@@ -24,7 +23,7 @@ on:
   workflow_dispatch:
     inputs:
       sha:
-        description: Commit whose intercode-assets-framework image to upload (full SHA; defaults to the commit this runs from)
+        description: Commit whose intercode-assets image to upload (full SHA; defaults to the commit this runs from)
         required: false
         type: string
       phase:
@@ -62,15 +61,12 @@ jobs:
         run: echo "${{ secrets.GITHUB_TOKEN }}" | docker login ghcr.io -u ${{ github.actor }} --password-stdin
       - name: Extract the build from the image
         run: |
-          if ! docker pull ghcr.io/neinteractiveliterature/intercode-assets-framework:$ASSETS_SHA; then
-            echo "No intercode-assets-framework image for $ASSETS_SHA. It is only built when BUILD_FRAMEWORK is set." >&2
-            exit 1
-          fi
-          container=$(docker create ghcr.io/neinteractiveliterature/intercode-assets-framework:$ASSETS_SHA)
+          docker pull ghcr.io/neinteractiveliterature/intercode-assets:$ASSETS_SHA
+          container=$(docker create ghcr.io/neinteractiveliterature/intercode-assets:$ASSETS_SHA)
           docker cp "$container:/usr/share/intercode-assets" build
           docker cp "$container:/etc/intercode-assets/current-files.txt" current-files.txt
           docker rm "$container"
-          # The image also carries over earlier releases' files (see Dockerfile.assets-framework). Only this release's
+          # The image also carries over earlier releases' files (see the assets stage of the Dockerfile). Only this release's
           # own files count as current, so the rest can be marked obsolete in the bucket.
           (cd build/assets && find . -type f | sort) | comm -23 - current-files.txt | (cd build/assets && xargs -r rm)
       - name: Point the build at the same origin

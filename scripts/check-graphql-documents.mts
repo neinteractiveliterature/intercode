@@ -1,6 +1,6 @@
 /**
  * Verifies that GraphQL document constants from *.generated.ts files are present
- * in the production build output. Run after `yarn build:web`.
+ * in the production build output. Run after `yarn build:framework`.
  *
  * GraphQL operation names (e.g. "AppRootQuery") are embedded as string literals
  * in the serialized document AST and survive minification, making them a reliable
@@ -18,9 +18,7 @@ const KNOWN_ABSENT: ReadonlySet<string> = new Set<string>();
 
 async function findFiles(dir: string, suffix: string): Promise<string[]> {
   const entries = await readdir(dir, { withFileTypes: true, recursive: true });
-  return entries
-    .filter((e) => e.isFile() && e.name.endsWith(suffix))
-    .map((e) => join(e.parentPath ?? e.path, e.name));
+  return entries.filter((e) => e.isFile() && e.name.endsWith(suffix)).map((e) => join(e.parentPath ?? e.path, e.name));
 }
 
 async function main() {
@@ -37,10 +35,10 @@ async function main() {
   }
 
   // Combine all built JS chunks into one searchable string.
-  const assetsDir = join(root, 'public/packs/assets');
+  const assetsDir = join(root, 'build/framework/client/assets');
   const builtFiles = await findFiles(assetsDir, '.js');
   if (builtFiles.length === 0) {
-    console.error('No built files found in public/packs/assets/. Run yarn build:web first.');
+    console.error('No built files found in build/framework/client/assets/. Run yarn build:framework first.');
     process.exit(1);
   }
   const builtContent = (await Promise.all(builtFiles.map((f) => readFile(f, 'utf-8')))).join('');
