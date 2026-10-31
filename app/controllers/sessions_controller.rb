@@ -4,7 +4,7 @@ class SessionsController < Devise::SessionsController
   prepend_before_action :set_return_to, only: [:new]
 
   def new
-    render html: "", layout: "application"
+    render_spa_shell
   end
 
   # Override to allow cross-host redirect back to the convention subdomain after sign-in.
