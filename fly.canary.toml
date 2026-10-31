@@ -1,0 +1,59 @@
+# A canary for the 9.0.0 cutover (#12260): the Rails image of the 12260-cutover branch, serving one real domain, so the
+# new way Rails serves the frontend (bin/with_static_shell, public/assets) sees real traffic before a release. Delete
+# this file before merging the branch. The steps are in the pull request.
+#
+# It shares everything with production (the database, the SQS queues, the secrets from chamber) except the app, so:
+#   - only the web process runs: no shoryuken, or the canary would take jobs off the queues
+#   - there is no release_command: no migrations, and no release notifications
+#   - deploy it only from a branch that is rebased on the released main, so it never runs ahead of the schema
+app = "intercode-canary"
+primary_region = "iad"
+swap_size_mb = 512
+console_command = "/usr/src/intercode/bin/entrypoint.sh /bin/bash"
+
+[build]
+dockerfile = "Dockerfile"
+build-target = "production"
+
+[build.args]
+# What CI passes (.ruby-version and .node-version), because the Dockerfile's defaults float
+RUBY_VERSION = "4.0.6"
+NODE_VERSION = "24.22.2"
+REVISION = "canary"
+
+[env]
+AWS_REGION = "us-east-1"
+CHAMBER_SERVICE = "intercode_production"
+CHAMBER_AWS_ROLE_ARN = "arn:aws:iam::689053117832:role/intercode-chamber"
+JSON_LOGGING = "1"
+MALLOC_ARENA_MAX = "2"
+RACK_ENV = "production"
+RAILS_ENV = "production"
+RAILS_LOG_TO_STDOUT = "enabled"
+RAILS_MAX_THREADS = "3"
+RAILS_SERVE_STATIC_FILES = "enabled"
+RUBY_YJIT_ENABLE = "1"
+WEB_CONCURRENCY = "0"
+
+[processes]
+web = "bundle exec bin/rails server -p 3000 -b 0.0.0.0"
+
+[http_service]
+force_https = true
+internal_port = 3000
+min_machines_running = 1
+processes = ["web"]
+
+[[http_service.checks]]
+grace_period = "15s"
+interval = "30s"
+method = "GET"
+path = "/healthz"
+protocol = "http"
+timeout = "5s"
+
+[[vm]]
+cpu_kind = "shared"
+cpus = 1
+memory_mb = 1024
+processes = ["web"]
