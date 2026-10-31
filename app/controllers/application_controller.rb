@@ -71,6 +71,17 @@ class ApplicationController < ActionController::Base
 
   protected
 
+  # The page for a route that the SPA renders but that Rails serves the URL of (the Devise pages). With a static shell
+  # (see StaticSpaShell) that is the prebuilt framework-mode shell; otherwise the Rails-rendered one.
+  def render_spa_shell
+    if StaticSpaShell.enabled?
+      response.headers["Cache-Control"] = "no-cache"
+      send_file StaticSpaShell.index_path, type: "text/html", disposition: "inline"
+    else
+      render html: "", layout: "application"
+    end
+  end
+
   # Lograge's custom_options (see config/initializers/json_logging.rb) reads these keys
   # straight off the process_action.action_controller event payload, so they need to be
   # added here rather than via config.lograge.custom_payload (which nests them instead).
