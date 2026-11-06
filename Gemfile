@@ -44,14 +44,14 @@ gem "scheduled_value", "1.4.0"
 gem "civil_service", github: "neinteractiveliterature/civil_service", branch: "no-double-validate"
 
 # File uploading
-gem "aws-sdk-s3", "1.237.0"
+gem "aws-sdk-s3", "1.238.0"
 gem "image_processing", "2.2.0"
 gem "ruby-vips", "2.3.0"
 
 # Filthy lucre
 gem "business_time", "0.13.0"
 gem "eu_central_bank", "2.0.0"
-gem "holidays", "11.7.0"
+gem "holidays", "11.8.0"
 gem "money-rails", "3.0.0"
 gem "stripe", "19.6.3"
 
@@ -67,8 +67,8 @@ gem "graphql-rails_logger", "1.2.5", groups: %i[development test]
 # Email stuff
 gem "aws-actionmailer-ses", "1.2.0"
 gem "aws-sdk-rails", "5.2.0"
-gem "aws-sdk-ses", "1.109.0"
-gem "aws-sdk-sns", "1.126.0"
+gem "aws-sdk-ses", "1.110.0"
+gem "aws-sdk-sns", "1.127.0"
 
 # Markdown
 gem "redcarpet", "3.6.1"
@@ -78,7 +78,7 @@ gem "phonelib", "0.10.28"
 gem "twilio-ruby", "7.12.0"
 
 # Background workers and scheduling
-gem "aws-sdk-sqs", "1.124.0"
+gem "aws-sdk-sqs", "1.125.0"
 gem "cloudwatch_scheduler", github: "neinteractiveliterature/cloudwatch_scheduler"
 gem "shoryuken", "7.0.4"
 
