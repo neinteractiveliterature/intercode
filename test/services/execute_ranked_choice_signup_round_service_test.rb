@@ -437,6 +437,43 @@ describe ExecuteRankedChoiceSignupRoundService do
         assert_equal 0, ActionMailer::Base.deliveries.size
       end
     end
+
+    # SignupRound#execute! runs the service inside a row lock (and therefore a transaction).  If the notification jobs
+    # were enqueued while that transaction was still open, a fast worker could pick them up before the signups were
+    # visible and fail with ActiveJob::DeserializationError, silently dropping the notification.
+    it "does not enqueue notification jobs until the round's transaction has committed" do
+      convention.update!(signup_automation_mode: "ranked_choice")
+      signup_round =
+        create(
+          :signup_round,
+          convention:,
+          ranked_choice_order: "asc",
+          automation_action: "execute_ranked_choice",
+          start: 1.day.ago
+        )
+      user_con_profile = create(:user_con_profile, convention:, lottery_number: 1)
+      create(:signup_ranked_choice, user_con_profile:, target_run: the_run)
+      create(:team_member, event:, receive_signup_email: "all_signups")
+
+      baseline_depth = ActiveRecord::Base.connection.open_transactions
+      depths_at_enqueue = []
+      subscriber =
+        ActiveSupport::Notifications.subscribe("enqueue.active_job") do |*, payload|
+          if payload[:job].is_a?(SendNotificationJob)
+            depths_at_enqueue << ActiveRecord::Base.connection.open_transactions
+          end
+        end
+
+      begin
+        signup_round.execute!
+      ensure
+        ActiveSupport::Notifications.unsubscribe(subscriber)
+      end
+
+      event_keys = enqueued_jobs.select { |job| job["job_class"] == "SendNotificationJob" }
+      assert_equal 2, event_keys.size, "expected a confirmation and a team member notification to be enqueued"
+      assert_equal [baseline_depth, baseline_depth], depths_at_enqueue
+    end
   end
 
   describe "rerandomize_lottery_numbers" do
