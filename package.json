@@ -167,7 +167,7 @@
   "devDependencies": {
     "@eslint/compat": "^2.0.0",
     "@eslint/eslintrc": "^3.2.0",
-    "@eslint/js": "^9.18.0",
+    "@eslint/js": "^10.0.0",
     "@graphql-codegen/add": "7.1.1",
     "@graphql-codegen/cli": "7.4.6",
     "@graphql-codegen/fragment-matcher": "7.1.0",
@@ -207,7 +207,7 @@
     "@vitest/eslint-plugin": "^1.1.24",
     "@vitest/ui": "^4.0.0",
     "core-js-compat": "3.51.0",
-    "eslint": "9.39.5",
+    "eslint": "10.14.0",
     "eslint-config-airbnb": "19.0.4",
     "eslint-config-airbnb-base": "15.0.0",
     "eslint-config-airbnb-typescript": "18.0.0",
