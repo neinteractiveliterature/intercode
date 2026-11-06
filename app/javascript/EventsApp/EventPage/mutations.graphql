@@ -1,6 +1,3 @@
-#import "./queries.graphql"
-#import "../queries.graphql"
-
 mutation CreateMySignup($runId: ID!, $requestedBucketId: ID, $noRequestedBucket: Boolean) {
   createMySignup(
     input: { runId: $runId, requestedBucketId: $requestedBucketId, no_requested_bucket: $noRequestedBucket }

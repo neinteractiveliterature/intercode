@@ -1,5 +1,3 @@
-#import "./queries.graphql"
-
 mutation CreateStaffPosition($input: CreateStaffPositionInput!) {
   createStaffPosition(input: $input) {
     staff_position {

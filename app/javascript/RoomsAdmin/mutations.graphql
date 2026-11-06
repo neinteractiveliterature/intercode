@@ -1,5 +1,3 @@
-#import "./queries.graphql"
-
 mutation CreateRoom($input: CreateRoomInput!) {
   createRoom(input: $input) {
     room {

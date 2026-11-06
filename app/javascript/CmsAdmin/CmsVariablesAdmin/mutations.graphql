@@ -1,5 +1,3 @@
-#import "./queries.graphql"
-
 mutation SetCmsVariableMutation($key: String!, $value_json: String!) {
   setCmsVariable(input: { cms_variable: { key: $key, value_json: $value_json } }) {
     cms_variable {

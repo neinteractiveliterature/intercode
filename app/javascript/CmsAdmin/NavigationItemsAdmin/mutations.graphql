@@ -1,5 +1,3 @@
-#import "./queries.graphql"
-
 mutation CreateNavigationItem($navigationItem: CmsNavigationItemInput!) {
   createCmsNavigationItem(input: { cms_navigation_item: $navigationItem }) {
     cms_navigation_item {

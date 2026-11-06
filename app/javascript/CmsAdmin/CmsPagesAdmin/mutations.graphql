@@ -1,5 +1,3 @@
-#import "./queries.graphql"
-
 mutation CreatePage($page: PageInput!) {
   createPage(input: { page: $page }) {
     page {

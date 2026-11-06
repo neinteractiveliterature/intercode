@@ -1,5 +1,3 @@
-#import "../queries.graphql"
-
 fragment TeamMemberTicketFields on Ticket {
   id
 

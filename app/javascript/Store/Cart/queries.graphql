@@ -1,5 +1,3 @@
-#import "../orderFields.graphql"
-
 query CartQuery {
   convention: conventionByRequestHost {
     id

@@ -1,5 +1,3 @@
-#import "./queries.graphql"
-
 mutation CreateCoupon($coupon: CouponInput!) {
   createCoupon(input: { coupon: $coupon }) {
     coupon {

@@ -1,5 +1,3 @@
-#import "./queries.graphql"
-
 mutation CreatePartial($cmsPartial: CmsPartialInput!, $partialBlockName: CmsPartialBlockName) {
   createCmsPartial(input: { cms_partial: $cmsPartial, partial_block_name: $partialBlockName }) {
     cms_partial {

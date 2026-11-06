@@ -1,5 +1,3 @@
-#import "../Permissions/fragments.graphql"
-
 fragment StaffPositionFields on StaffPosition {
   id
   name

@@ -1,5 +1,3 @@
-#import "../adminProductFields.graphql"
-
 mutation CreateProduct($product: ProductInput!) {
   createProduct(input: { product: $product }) {
     product {

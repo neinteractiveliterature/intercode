@@ -1,5 +1,3 @@
-#import "./queries.graphql"
-
 mutation UpdateRootSite($siteName: String, $authLayoutId: ID, $defaultLayoutId: ID, $rootPageId: ID) {
   updateRootSite(
     input: {

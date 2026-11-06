@@ -1,5 +1,3 @@
-#import "../orderFields.graphql"
-
 query AdminOrdersQuery($page: Int, $perPage: Int, $filters: OrderFiltersInput, $sort: [SortInput!]) {
   currentAbility {
     can_create_orders

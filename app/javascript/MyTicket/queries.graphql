@@ -1,5 +1,3 @@
-#import "../Store/pricingStructureFields.graphql"
-
 query TicketPurchaseFormQuery {
   convention: conventionByRequestHost {
     id

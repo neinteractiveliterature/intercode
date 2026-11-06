@@ -1,5 +1,3 @@
-#import "./queries.graphql"
-
 mutation CreateUserSignup(
   $runId: ID!
   $userConProfileId: ID!

@@ -1,5 +1,3 @@
-#import "../Models/commonFormFragments.graphql"
-
 fragment EventProposalFields on EventProposal {
   id
   title

@@ -1,5 +1,3 @@
-#import "./queries.graphql"
-
 mutation CreateEventProposal($cloneEventProposalId: ID, $eventCategoryId: ID!) {
   createEventProposal(input: { cloneEventProposalId: $cloneEventProposalId, eventCategoryId: $eventCategoryId }) {
     event_proposal {

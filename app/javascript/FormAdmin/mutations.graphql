@@ -1,5 +1,3 @@
-#import "./queries.graphql"
-
 mutation CreateFormWithJSON($formJSON: String!, $formType: FormType!) {
   createFormWithJSON(input: { form_json: $formJSON, form_type: $formType }) {
     form {

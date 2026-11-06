@@ -1,5 +1,3 @@
-#import "../adminProductFields.graphql"
-
 query AdminProductsQuery {
   convention: conventionByRequestHost {
     id

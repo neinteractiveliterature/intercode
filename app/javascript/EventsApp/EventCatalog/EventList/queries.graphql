@@ -1,6 +1,3 @@
-#import "../queries.graphql"
-#import "../../Models/commonFormFragments.graphql"
-
 query EventListEventsQuery(
   $page: Int
   $pageSize: Int

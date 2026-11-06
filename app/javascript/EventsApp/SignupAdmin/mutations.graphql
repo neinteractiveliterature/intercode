@@ -1,7 +1,3 @@
-#import "./queries.graphql"
-#import "../EventPage/queries.graphql"
-#import "../queries.graphql"
-
 mutation ChangeSignupBucket($signupId: ID!, $bucketKey: String!) {
   updateSignupBucket(input: { id: $signupId, bucket_key: $bucketKey }) {
     signup {

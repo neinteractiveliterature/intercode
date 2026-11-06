@@ -1,5 +1,3 @@
-#import "./queries.graphql"
-
 mutation CreateSignupRound($conventionId: ID!, $signupRound: SignupRoundInput!) {
   createSignupRound(input: { conventionId: $conventionId, signupRound: $signupRound }) {
     signup_round {

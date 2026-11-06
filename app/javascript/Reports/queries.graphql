@@ -1,5 +1,3 @@
-#import "../Store/pricingStructureFields.graphql"
-
 query ReportsMenuQuery {
   convention: conventionByRequestHost {
     id
