@@ -172,7 +172,7 @@
     "@graphql-codegen/cli": "7.4.6",
     "@graphql-codegen/fragment-matcher": "7.1.0",
     "@graphql-codegen/introspection": "6.1.0",
-    "@graphql-codegen/near-operation-file-preset": "5.2.3",
+    "@graphql-codegen/near-operation-file-preset": "5.2.4",
     "@graphql-codegen/typed-document-node": "^7.0.0",
     "@graphql-codegen/typescript": "6.1.2",
     "@graphql-codegen/typescript-operations": "6.2.0",
