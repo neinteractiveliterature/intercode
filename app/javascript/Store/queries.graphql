@@ -1,6 +1,3 @@
-#import "./orderFields.graphql"
-#import "./pricingStructureFields.graphql"
-
 query OrderHistoryQuery {
   convention: conventionByRequestHost {
     id

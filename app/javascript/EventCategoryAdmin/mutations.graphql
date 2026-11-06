@@ -1,5 +1,3 @@
-#import "./queries.graphql"
-
 mutation CreateEventCategory($eventCategory: EventCategoryInput!) {
   createEventCategory(input: { event_category: $eventCategory }) {
     event_category {

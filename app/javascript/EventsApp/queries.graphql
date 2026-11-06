@@ -1,5 +1,3 @@
-#import "../Models/commonFormFragments.graphql"
-
 fragment CommonConventionData on Convention {
   id
   name

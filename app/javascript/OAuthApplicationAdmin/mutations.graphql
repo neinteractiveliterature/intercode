@@ -1,5 +1,3 @@
-#import "./queries.graphql"
-
 mutation CreateOAuthApplication($input: CreateOAuthApplicationInput!) {
   createOAuthApplication(input: $input) {
     oauth_application {

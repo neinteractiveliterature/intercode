@@ -1,5 +1,3 @@
-#import "./couponFields.graphql"
-
 fragment CouponApplicationFields on CouponApplication {
   id
 

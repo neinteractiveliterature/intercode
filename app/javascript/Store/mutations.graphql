@@ -1,6 +1,3 @@
-#import "./orderFields.graphql"
-#import "./adminProductFields.graphql"
-
 mutation CreateCouponApplication($orderId: ID!, $couponCode: String!) {
   createCouponApplication(input: { orderId: $orderId, coupon_code: $couponCode }) {
     coupon_application {

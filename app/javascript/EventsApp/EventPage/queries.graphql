@@ -1,6 +1,3 @@
-#import "../queries.graphql"
-#import "../../Models/commonFormFragments.graphql"
-
 fragment MySignupFields on Signup {
   id
   state

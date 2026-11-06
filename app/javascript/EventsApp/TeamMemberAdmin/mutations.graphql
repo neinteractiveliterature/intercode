@@ -1,5 +1,3 @@
-#import "./queries.graphql"
-
 mutation CreateTeamMember($input: CreateTeamMemberInput!) {
   createTeamMember(input: $input) {
     team_member {

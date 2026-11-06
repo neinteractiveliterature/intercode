@@ -1,5 +1,3 @@
-#import "../orderFields.graphql"
-
 mutation MarkOrderPaid($orderId: ID!) {
   markOrderPaid(input: { id: $orderId }) {
     order {

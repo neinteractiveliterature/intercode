@@ -1,5 +1,3 @@
-#import "./queries.graphql"
-
 mutation CreateEvent($input: CreateEventInput!) {
   createEvent(input: $input) {
     event {

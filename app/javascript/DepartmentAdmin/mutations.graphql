@@ -1,5 +1,3 @@
-#import "./queries.graphql"
-
 mutation CreateDepartment($department: DepartmentInput!) {
   createDepartment(input: { department: $department }) {
     department {

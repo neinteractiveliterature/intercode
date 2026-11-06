@@ -1,5 +1,3 @@
-#import "./queries.graphql"
-
 mutation CreateEmailRoute($emailRoute: EmailRouteInput!) {
   createEmailRoute(input: { email_route: $emailRoute }) {
     email_route {

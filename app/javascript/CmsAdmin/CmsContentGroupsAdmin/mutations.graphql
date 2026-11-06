@@ -1,5 +1,3 @@
-#import "./queries.graphql"
-
 mutation CreateContentGroup($cmsContentGroup: CmsContentGroupInput!, $permissions: [PermissionInput!]) {
   createCmsContentGroup(input: { cms_content_group: $cmsContentGroup, permissions: $permissions }) {
     cms_content_group {

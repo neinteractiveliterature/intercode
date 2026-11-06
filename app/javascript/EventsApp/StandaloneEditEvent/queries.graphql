@@ -1,6 +1,3 @@
-#import "../queries.graphql"
-#import "../../Models/commonFormFragments.graphql"
-
 fragment StandaloneEditEvent_TicketTypeFields on TicketType {
   id
   description

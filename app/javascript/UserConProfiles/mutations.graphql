@@ -1,5 +1,3 @@
-#import "./queries.graphql"
-
 mutation CreateUserConProfile($user_id: ID!, $user_con_profile: UserConProfileInput!) {
   createUserConProfile(input: { userId: $user_id, user_con_profile: $user_con_profile }) {
     user_con_profile {
