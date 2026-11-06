@@ -16,8 +16,9 @@ GIT
       activemodel (>= 3.0.0)
 
 GIT
-  remote: https://github.com/paul/cloudwatch_scheduler.git
-  revision: 7d7033717932c9c959f5c99f5e8e49d01c7ee57a
+  remote: https://github.com/neinteractiveliterature/cloudwatch_scheduler.git
+  revision: 1c239f5f2cd46a55f6547d16f4740a7ecdce44e7
+  branch: support-shoryuken-7
   specs:
     cloudwatch_scheduler (1.1.1)
       aws-sdk-cloudwatchevents (~> 1.13)
