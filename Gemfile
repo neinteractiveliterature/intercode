@@ -74,7 +74,7 @@ gem "aws-sdk-sns", "1.127.0"
 gem "redcarpet", "3.6.1"
 
 # SMS and phone support
-gem "phonelib", "0.10.28"
+gem "phonelib", "0.11.0"
 gem "twilio-ruby", "7.12.0"
 
 # Background workers and scheduling
