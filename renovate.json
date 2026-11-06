@@ -25,12 +25,7 @@
       "enabled": false
     },
     {
-      "description": "Yarn quarantines npm releases newer than npmMinimalAgeGate (24h, see 'yarn config get npmMinimalAgeGate'), so don't open PRs for them until yarn will install them",
-      "matchDatasources": ["npm"],
-      "minimumReleaseAge": "1 day"
-    },
-    {
-      "description": "Our own packages are listed in npmPreapprovedPackages in .yarnrc.yml, which exempts them from the age gate",
+      "description": "Our own npm packages are listed in npmPreapprovedPackages in .yarnrc.yml, which exempts them from yarn's age gate, so don't make Renovate wait for them either",
       "matchDatasources": ["npm"],
       "matchPackageNames": ["@neinteractiveliterature/**"],
       "minimumReleaseAge": null
@@ -40,5 +35,6 @@
   "toolSettings": {
     "nodeMaxMemory": 2048
   },
-  "internalChecksFilter": "strict"
+  "internalChecksFilter": "strict",
+  "minimumReleaseAge": "1 day"
 }
