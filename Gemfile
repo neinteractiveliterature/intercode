@@ -79,7 +79,7 @@ gem "twilio-ruby", "~> 7.10.0"
 
 # Background workers and scheduling
 gem "aws-sdk-sqs"
-gem "cloudwatch_scheduler", github: "neinteractiveliterature/cloudwatch_scheduler", branch: "support-shoryuken-7"
+gem "cloudwatch_scheduler", github: "neinteractiveliterature/cloudwatch_scheduler"
 gem "shoryuken"
 
 # Privacy-respecting metrics
