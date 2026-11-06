@@ -1,4 +1,4 @@
-import { useRef, useContext, useEffect } from 'react';
+import { useCallback, useRef, useContext, useEffect } from 'react';
 import { LoadingIndicator } from '@neinteractiveliterature/litform';
 
 import FormHeader, { FormHeaderProps } from './FormHeader';
@@ -47,6 +47,9 @@ function FormPresenter({
 
   const headerRef = useRef<HTMLDivElement>(null);
   const sectionRef = useRef<FormBodyImperativeHandle>(null);
+  const scrollToItem = useCallback<FormBodyImperativeHandle['scrollToItem']>((item) => {
+    sectionRef.current?.scrollToItem(item);
+  }, []);
 
   useEffect(() => {
     if (headerRef.current) {
@@ -89,7 +92,7 @@ function FormPresenter({
         submitButton={submitButton}
         submitForm={submitForm}
         isSubmittingResponse={isSubmittingResponse}
-        scrollToItem={sectionRef.current ? sectionRef.current.scrollToItem : () => {}}
+        scrollToItem={scrollToItem}
       >
         {footerContent}
       </FormFooter>

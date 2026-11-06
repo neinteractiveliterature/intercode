@@ -8,7 +8,7 @@ import SelectWithLabel from './SelectWithLabel';
 import FileUploadForm from '../BuiltInForms/FileUploadForm';
 import { ActiveStorageAttachment } from '../graphqlTypes.generated';
 import { Blob } from '@rails/activestorage';
-import { useLazyQuery } from "@apollo/client/react";
+import { useLazyQuery } from '@apollo/client/react';
 
 export type AddFileModalProps = {
   visible: boolean;
@@ -20,7 +20,7 @@ export type AddFileModalProps = {
 
 export default function AddFileModal({ visible, existingFiles, addBlob, fileChosen, close }: AddFileModalProps) {
   const { t } = useTranslation();
-  const [loadData, { called, data, loading, error }] = useLazyQuery(CmsFilesAdminQueryDocument);
+  const [loadData, { called, loading, error }] = useLazyQuery(CmsFilesAdminQueryDocument);
   const [file, setFile] = useState<ActiveStorageAttachment | null>(null);
 
   const uploadedFile = async (blob: Blob, newFile: File) => {

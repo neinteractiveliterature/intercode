@@ -12,7 +12,8 @@ export type FileInputWithPreviewProps = {
 
 export default function FileInputWithPreview({ existingFileUrl, file, onChange, disabled }: FileInputWithPreviewProps) {
   const fileInputId = useId();
-  const [imageUrl, setImageUrl] = useState<string | null>(null);
+  const [preview, setPreview] = useState<{ file: File; url: string }>();
+  const imageUrl = file && preview?.file === file ? preview.url : undefined;
   const { t } = useTranslation();
 
   const uploadFileChanged = useCallback(
@@ -34,13 +35,12 @@ export default function FileInputWithPreview({ existingFileUrl, file, onChange, 
 
   useEffect(() => {
     if (file == null) {
-      setImageUrl(null);
       return;
     }
 
     const reader = new FileReader();
     reader.addEventListener('load', () => {
-      setImageUrl(reader.result as string);
+      setPreview({ file, url: reader.result as string });
     });
     reader.readAsDataURL(file);
   }, [file]);
@@ -53,7 +53,7 @@ export default function FileInputWithPreview({ existingFileUrl, file, onChange, 
     <>
       {file ? (
         <div className="d-flex align-items-start">
-          <FilePreview filename={file?.name} contentType={file?.type} url={imageUrl ?? undefined} />
+          <FilePreview filename={file?.name} contentType={file?.type} url={imageUrl} />
           <button className="btn btn-secondary ms-4" type="button" onClick={clearFile}>
             {t('cms.fileUploadForm.clearFileButton')}
           </button>

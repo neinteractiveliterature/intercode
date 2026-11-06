@@ -101,7 +101,7 @@ describe('SHELL_RECOVERY_SCRIPT', () => {
     expect(alert?.textContent).toContain('We couldn’t finish loading this page');
     expect((document.querySelector('.custom-loading-indicator') as HTMLElement).style.display).toBe('none');
 
-    (alert?.querySelector('button') as HTMLButtonElement).click();
+    (alert?.querySelector('button') as HTMLButtonElement | null)?.click();
     expect(reload).toHaveBeenCalledTimes(1);
   });
 

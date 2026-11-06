@@ -1,4 +1,4 @@
-import { useMemo, useContext, useState, useEffect } from 'react';
+import { useMemo, useContext, useState } from 'react';
 import * as React from 'react';
 import { DateTime } from 'luxon';
 
@@ -111,12 +111,15 @@ function DateTimeInput({
   const showZone =
     alwaysShowTimezone || effectiveTimezoneName !== appTimezoneName || effectiveTimezoneName !== userTimezoneName;
 
-  useEffect(() => {
+  // Sync the inputs when the incoming value changes (adjusting state during render rather than in an effect)
+  const [prevDateTime, setPrevDateTime] = useState(dateTime);
+  if (dateTime !== prevDateTime) {
+    setPrevDateTime(dateTime);
     if (dateTime.isValid) {
       setDate(dateTime.toISODate());
       setTime(dateTime.toISOTime({ suppressMilliseconds: true, includeOffset: false }));
     }
-  }, [dateTime]);
+  }
 
   const dateChanged = (newDate: string) => {
     setDate(newDate);

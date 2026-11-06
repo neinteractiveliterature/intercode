@@ -53,7 +53,9 @@ function MaximumEventSignupsInput({ value, onChange, id, name, ...selectProps }:
   );
   const limitedCountId = React.useId();
   const onChangeRef = useRef(onChange);
-  onChangeRef.current = onChange;
+  React.useEffect(() => {
+    onChangeRef.current = onChange;
+  });
 
   const valueTypeChanged = (event: React.ChangeEvent<HTMLSelectElement>) => {
     const newValueType = event.target.value;
@@ -77,20 +79,17 @@ function MaximumEventSignupsInput({ value, onChange, id, name, ...selectProps }:
     }
   }, [inputState]);
 
-  React.useEffect(() => {
-    if (value == null) {
-      return;
-    }
-
-    const valueAsInputState = maximumEventSignupsValueToInputState(value);
-    setInputState((prevInputState) => {
-      if (!isEqual(valueAsInputState, prevInputState)) {
-        return valueAsInputState;
-      } else {
-        return prevInputState;
+  // Sync the input state when the incoming value changes (adjusting state during render rather than in an effect)
+  const [prevValue, setPrevValue] = React.useState(value);
+  if (value !== prevValue) {
+    setPrevValue(value);
+    if (value != null) {
+      const valueAsInputState = maximumEventSignupsValueToInputState(value);
+      if (!isEqual(valueAsInputState, inputState)) {
+        setInputState(valueAsInputState);
       }
-    });
-  }, [value]);
+    }
+  }
 
   return (
     <div className="input-group">

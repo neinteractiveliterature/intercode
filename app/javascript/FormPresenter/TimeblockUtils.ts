@@ -82,7 +82,7 @@ function getAllPossibleTimeblocks(convention: ConventionForTimespanUtils, formIt
           };
 
           return concreteTimeblock;
-        } catch (error) {
+        } catch {
           return null;
         }
       })

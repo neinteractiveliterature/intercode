@@ -1,4 +1,4 @@
-import { RefObject, useRef } from 'react';
+import { RefObject, useCallback, useRef } from 'react';
 import { ItemInteractionTrackerContextValue, useItemInteractionTracking } from './ItemInteractionTracker';
 import useFormValidation from './useFormValidation';
 import { FormBodyImperativeHandle } from './Layouts/FormBody';
@@ -13,10 +13,11 @@ export default function useValidatableForm(): {
   const formRef = useRef<FormBodyImperativeHandle>(undefined);
   const itemInteractionTrackingProps = useItemInteractionTracking();
 
-  const validate = useFormValidation(
-    formRef.current ? formRef.current.scrollToItem : () => {},
-    itemInteractionTrackingProps.interactWithItem,
-  );
+  const scrollToItem = useCallback<FormBodyImperativeHandle['scrollToItem']>((item) => {
+    formRef.current?.scrollToItem(item);
+  }, []);
+
+  const validate = useFormValidation(scrollToItem, itemInteractionTrackingProps.interactWithItem);
 
   return {
     formRef,
