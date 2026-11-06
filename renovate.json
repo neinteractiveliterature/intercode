@@ -7,9 +7,10 @@
       "automerge": true
     },
     {
-      "description": "Batch routine npm updates into one PR instead of one PR per package. Major updates stay separate so they can be reviewed on their own.",
+      "description": "Batch routine npm updates into one PR instead of one PR per package. Major updates stay separate so they can be reviewed on their own, and so do packages at 0.x, where semver treats any update as potentially breaking.",
       "matchManagers": ["npm"],
       "matchUpdateTypes": ["minor", "patch"],
+      "matchCurrentVersion": "!/^0\\./",
       "groupName": "npm non-major dependencies"
     },
     {
@@ -17,6 +18,7 @@
       "matchManagers": ["bundler"],
       "matchUpdateTypes": ["minor", "patch"],
       "matchPackageNames": ["!rails"],
+      "matchCurrentVersion": "!/^0\\./",
       "groupName": "bundler non-major dependencies"
     },
     {
