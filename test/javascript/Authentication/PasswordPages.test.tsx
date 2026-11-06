@@ -49,7 +49,7 @@ describe('the password pages', () => {
       expect(fetchMock).toHaveBeenCalledTimes(1);
       const [url, init] = fetchMock.mock.calls[0];
       expect(url).toBe('/users/password');
-      expect((init?.body as FormData).get('user[email]')).toBe('alice@example.com');
+      expect((init?.body as FormData | undefined)?.get('user[email]')).toBe('alice@example.com');
     });
 
     it('shows the server error, and not the success message, if the request fails', async () => {

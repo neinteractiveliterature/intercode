@@ -128,7 +128,7 @@ describe('DeviseSignUpPage', () => {
       const [url, init] = fetchMock.mock.calls[0];
       expect(url).toBe('/users');
       expect(init?.method).toBe('POST');
-      expect((init?.headers as Record<string, string>)['X-CSRF-Token']).toBe('sign-up-token');
+      expect((init?.headers as Record<string, string> | undefined)?.['X-CSRF-Token']).toBe('sign-up-token');
       const body = init?.body as FormData;
       expect(body.get('user[first_name]')).toBe('Alice');
       expect(body.get('user[last_name]')).toBe('Attendee');
@@ -255,7 +255,9 @@ describe('DeviseSignUpPage', () => {
       await submit(r);
 
       await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));
-      expect((fetchMock.mock.calls[0][1]?.body as FormData).get('cf-turnstile-response')).toBe('captcha-token');
+      expect((fetchMock.mock.calls[0][1]?.body as FormData | undefined)?.get('cf-turnstile-response')).toBe(
+        'captcha-token',
+      );
     });
 
     it('sends nothing for the captcha once it has expired', async () => {
@@ -268,7 +270,7 @@ describe('DeviseSignUpPage', () => {
       await submit(r);
 
       await waitFor(() => expect(fetchMock).toHaveBeenCalledTimes(1));
-      expect((fetchMock.mock.calls[0][1]?.body as FormData).get('cf-turnstile-response')).toBe('');
+      expect((fetchMock.mock.calls[0][1]?.body as FormData | undefined)?.get('cf-turnstile-response')).toBe('');
     });
   });
 

@@ -131,8 +131,6 @@ export function useScheduleGridProvider(
 
   const toggleRunDetailsVisibility = useCallback(
     (visibilitySpec: RunDetailsVisibilitySpec) => {
-      let newVisibility = false;
-
       setVisibleRunDetailsIds((prevVisibleRunDetails) => {
         const newVisibleRunDetails = new Map<string, RunDetailsVisibilitySpec[]>();
         prevVisibleRunDetails.forEach((visibleSpecs, visibleRunId) => {
@@ -147,7 +145,6 @@ export function useScheduleGridProvider(
               (visibleSpec) => !runDetailsVisibilitySpecsMatch(visibleSpec, visibilitySpec),
             ),
           );
-          newVisibility = false;
           return newVisibleRunDetails;
         }
 
@@ -159,12 +156,9 @@ export function useScheduleGridProvider(
         });
         // throw out the old visibility specs for this run because by definition they overlap
         newVisibleRunDetails.set(visibilitySpec.runId, [visibilitySpec]);
-        newVisibility = true;
 
         return newVisibleRunDetails;
       });
-
-      return newVisibility;
     },
     [schedule],
   );

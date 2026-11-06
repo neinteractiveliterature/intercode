@@ -5,10 +5,10 @@ import { FreeTextFormItem, FormItemValueType } from '../../FormAdmin/FormItemUti
 function parseURL(value: string) {
   try {
     return new URL(value);
-  } catch (error) {
+  } catch {
     try {
       return new URL(`http://${value}`);
-    } catch (error2) {
+    } catch {
       return null;
     }
   }
@@ -25,13 +25,14 @@ function FreeTextItemDisplay({ formItem, value }: FreeTextItemDisplayProps): Rea
   }
 
   if (formItem.rendered_properties.free_text_type === 'url') {
+    let url: URL | null = null;
     try {
-      const url = parseURL(value);
-      if (url) {
-        return <a href={url.toString()}>{url.toString()}</a>;
-      }
+      url = parseURL(value);
     } catch {
       // fall through to displaying as plain text
+    }
+    if (url) {
+      return <a href={url.toString()}>{url.toString()}</a>;
     }
   }
 

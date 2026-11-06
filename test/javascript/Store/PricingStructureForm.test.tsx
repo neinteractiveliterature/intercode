@@ -138,7 +138,7 @@ describe('PricingStructureForm', () => {
 
       await user.clear(getByLabelText('Minimum amount'));
 
-      expect((lastValue()?.value as PayWhatYouWantValue).minimum_amount).toBeUndefined();
+      expect((lastValue()?.value as PayWhatYouWantValue | undefined)?.minimum_amount).toBeUndefined();
     });
 
     it('shows the amounts already set', async () => {
@@ -179,7 +179,7 @@ describe('PricingStructureForm', () => {
 
       await user.click(getByRole('button', { name: /add/i }));
 
-      expect((lastValue()?.value as ScheduledMoneyValue).timespans).toHaveLength(1);
+      expect((lastValue()?.value as ScheduledMoneyValue | undefined)?.timespans).toHaveLength(1);
     });
   });
 
@@ -194,7 +194,7 @@ describe('PricingStructureForm', () => {
       await user.click(getByRole('radio', { name: 'Fixed price' }));
 
       expect(lastValue()?.pricing_strategy).toBe(PricingStrategy.Fixed);
-      expect((lastValue()?.value as Money).fractional).toBe(2500);
+      expect((lastValue()?.value as Money | undefined)?.fractional).toBe(2500);
       expect(getByLabelText('Price')).toHaveValue('25');
     });
   });

@@ -74,8 +74,8 @@ describe('BecomeUserModal', () => {
     const [url, init] = fetchMock.mock.calls[0];
     expect(url).toBe('/user_con_profiles/7/become');
     expect(init?.method).toBe('POST');
-    expect((init?.headers as Record<string, string>).Authorization).toBe('Bearer access-token');
-    expect((init?.body as FormData).get('justification')).toBe('User asked for signup help');
+    expect((init?.headers as Record<string, string> | undefined)?.Authorization).toBe('Bearer access-token');
+    expect((init?.body as FormData | undefined)?.get('justification')).toBe('User asked for signup help');
     expect(close).toHaveBeenCalledTimes(1);
   });
 

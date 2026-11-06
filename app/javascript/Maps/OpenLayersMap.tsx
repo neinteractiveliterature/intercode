@@ -15,19 +15,12 @@ export type OpenLayersMapProps = Omit<HTMLProps<HTMLDivElement>, 'ref'> & {
 
 function OpenLayersMap({ viewOptions, overlayLayers, ...divProps }: OpenLayersMapProps) {
   const [container, setContainer] = useState<HTMLDivElement | null>(null);
-  const [view, setView] = useState<View>();
+  const [view] = useState(() => new View(viewOptions));
 
   useEffect(() => {
-    setView((prevView) => {
-      if (prevView) {
-        // eslint-disable-next-line no-underscore-dangle
-        prevView.applyOptions_(viewOptions);
-        return prevView;
-      } else {
-        return new View(viewOptions);
-      }
-    });
-  }, [viewOptions]);
+    // eslint-disable-next-line no-underscore-dangle
+    view.applyOptions_(viewOptions);
+  }, [view, viewOptions]);
 
   useEffect(() => {
     if (container != null) {

@@ -1,4 +1,4 @@
-import { useState, useEffect, useContext } from 'react';
+import { useState, useContext } from 'react';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
 import capitalize from 'lodash/capitalize';
@@ -20,14 +20,10 @@ export type TicketPurchaseFormProps = {
 export default function TicketPurchaseForm({ availableProducts, onAddedToCart, run }: TicketPurchaseFormProps) {
   const { t } = useTranslation();
   const { ticketName } = useContext(AppRootContext);
-  const [product, setProduct] = useState<TicketPurchaseFormProps['availableProducts'][number]>();
+  const [selectedProduct, setProduct] = useState<TicketPurchaseFormProps['availableProducts'][number]>();
+  // if there's only one product available, it's selected automatically
+  const product = selectedProduct ?? (availableProducts.length === 1 ? availableProducts[0] : undefined);
   const [focusedProduct, setFocusedProduct] = useState<TicketPurchaseFormProps['availableProducts'][number]>();
-
-  useEffect(() => {
-    if (availableProducts.length === 1) {
-      setProduct(availableProducts[0]);
-    }
-  }, [availableProducts]);
 
   const renderProductSelect = () => (
     <div
