@@ -247,9 +247,9 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@apollo/client@npm:4.3.6":
-  version: 4.3.6
-  resolution: "@apollo/client@npm:4.3.6"
+"@apollo/client@npm:4.3.7":
+  version: 4.3.7
+  resolution: "@apollo/client@npm:4.3.7"
   dependencies:
     "@graphql-typed-document-node/core": "npm:^3.1.1"
     "@wry/caches": "npm:^1.0.0"
@@ -274,7 +274,7 @@ __metadata:
       optional: true
     subscriptions-transport-ws:
       optional: true
-  checksum: 10c0/2f9397ef7f8e2c7c39f4c0166967ba4d847009ea7ced7a4675443696bac6350daccde44cffb941b25fb0e27b72f23bee419d8844bdf03c43db119041631c6bd0
+  checksum: 10c0/d2451c46c6243fb762d3cce987b7485dfac3f3271324242378b43d0d57f77afc69861fed7a2227a81ef52940291774ebfdef48a70db4ddb3f1e10b9ac387e1cf
   languageName: node
   linkType: hard
 
@@ -6189,13 +6189,13 @@ __metadata:
   linkType: hard
 
 "@playwright/test@npm:^1.58.1":
-  version: 1.64.1
-  resolution: "@playwright/test@npm:1.64.1"
+  version: 1.65.0
+  resolution: "@playwright/test@npm:1.65.0"
   dependencies:
-    playwright: "npm:1.64.1"
+    playwright: "npm:1.65.0"
   bin:
     playwright: cli.js
-  checksum: 10c0/0a1a853d76d6c532cafaf0366a5448584b766737ebd39bbd23dc0580f3d3b6ef4c833082af47a792e7fc2501f444debdfaad37a87a76cc5b195f3803fc80ea3c
+  checksum: 10c0/137a641e1be8035686a165e69d86d242ee7ed5cbe71e5230f9195cb6e65be37a66ba697f16919b508d04c4d682fd4e167d1a755b64ceb545afac780de72b594b
   languageName: node
   linkType: hard
 
@@ -7754,12 +7754,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react-dom@npm:19.2.3":
-  version: 19.2.3
-  resolution: "@types/react-dom@npm:19.2.3"
+"@types/react-dom@npm:19.3.0":
+  version: 19.3.0
+  resolution: "@types/react-dom@npm:19.3.0"
   peerDependencies:
-    "@types/react": ^19.2.0
-  checksum: 10c0/b486ebe0f4e2fb35e2e108df1d8fc0927ca5d6002d5771e8a739de11239fe62d0e207c50886185253c99eb9dedfeeb956ea7429e5ba17f6693c7acb4c02f8cd1
+    "@types/react": ^19.3.0
+  checksum: 10c0/ce0066d28b62bc6afdd17ca84756b8fbe0f6ffc0c8b1e60739abc30e81510da2edbc1007e6ab3d974d30f5a8c25bb0f7de8d7ce09736c909fe84c0f9aed0b946
   languageName: node
   linkType: hard
 
@@ -7813,12 +7813,12 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@types/react@npm:*, @types/react@npm:19.2.17":
-  version: 19.2.17
-  resolution: "@types/react@npm:19.2.17"
+"@types/react@npm:*, @types/react@npm:19.3.0":
+  version: 19.3.0
+  resolution: "@types/react@npm:19.3.0"
   dependencies:
     csstype: "npm:^3.2.2"
-  checksum: 10c0/bc2c4af96b3e480604424de70d5ebda90c5f4b485df471858c0bc2d7d70364b606ec3c4d8579f94f01aa0c6c0591f56bcf14cba5689f5eea4b74250ccdc3a232
+  checksum: 10c0/fbcabf303f935ca9f36ed2dcf81751cf84744098c5a683c8a62a0fa7edd31714b48d5c46b12fd0014f7f2dfe4d9ec6de428a850748eec719a70294e51029551b
   languageName: node
   linkType: hard
 
@@ -11430,8 +11430,8 @@ __metadata:
     graphql-config: "npm:^5.1.3"
     lodash: "npm:4.18.1"
     prism-react-renderer: "npm:2.4.1"
-    react: "npm:19.2.7"
-    react-dom: "npm:19.2.7"
+    react: "npm:19.3.1"
+    react-dom: "npm:19.3.1"
     ts-node: "npm:10.9.2"
     url: "npm:0.11.4"
     url-loader: "npm:4.1.1"
@@ -13639,15 +13639,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next@npm:26.5.12":
-  version: 26.5.12
-  resolution: "i18next@npm:26.5.12"
+"i18next@npm:26.7.2":
+  version: 26.7.2
+  resolution: "i18next@npm:26.7.2"
   peerDependencies:
     typescript: ^5 || ^6 || ^7
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10c0/9723eeb9c938a35fa66c555841172de32a51a4216fa2ca3432747bba4bd1644d77301601a16f6f857b842c2b3354128f80dc3608b9059d1be7479b94193ae9b3
+  checksum: 10c0/671576c1a225e10994cff250dfc44585fcccc4486cda4162caadbefe5287052e56998fe80aa15e36e1c441215b601770702a820fd1dc5511255bc4ad514aa2cf
   languageName: node
   linkType: hard
 
@@ -17219,23 +17219,23 @@ __metadata:
   languageName: node
   linkType: hard
 
-"playwright-core@npm:1.64.1":
-  version: 1.64.1
-  resolution: "playwright-core@npm:1.64.1"
+"playwright-core@npm:1.65.0":
+  version: 1.65.0
+  resolution: "playwright-core@npm:1.65.0"
   bin:
     playwright-core: cli.js
-  checksum: 10c0/91c4f5ed1cff4b0e18b6ac62f66770f5f1b6c204d4aebd6a321c07466dca18a70822ac692597c6059705a703f9768097ac551df179fb49294d639509148e04f3
+  checksum: 10c0/ed905c6fc2457a725c3fdb3ad4500f43c7a1bb2c6e4e8c708e1e314930c7dce446a5756ad073425bf3c6e3ca975e5a35fb0221118e2d51ef7b4b6c6d13d0644c
   languageName: node
   linkType: hard
 
-"playwright@npm:1.64.1":
-  version: 1.64.1
-  resolution: "playwright@npm:1.64.1"
+"playwright@npm:1.65.0":
+  version: 1.65.0
+  resolution: "playwright@npm:1.65.0"
   dependencies:
-    playwright-core: "npm:1.64.1"
+    playwright-core: "npm:1.65.0"
   bin:
     playwright: cli.js
-  checksum: 10c0/edf52d0a79feca37bf383e841a467aa68750684128218eac560063991c9e4b615a94901f580cd8a088bb05fd53008ab4a0e5e8d976067698b60ae5d1de2459f3
+  checksum: 10c0/a7d71f3ca5bcad0531b5f3c39ae1a9be0da8e74be6fee8510d99b9f5fc07fd5b3d889aa4ca487c70ca29aba8625f74e3c2c7473b4c8a784dc14fefff80474ac3
   languageName: node
   linkType: hard
 
@@ -18808,14 +18808,14 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-dom@npm:19.2.7":
-  version: 19.2.7
-  resolution: "react-dom@npm:19.2.7"
+"react-dom@npm:19.3.1":
+  version: 19.3.1
+  resolution: "react-dom@npm:19.3.1"
   dependencies:
-    scheduler: "npm:^0.27.0"
+    scheduler: "npm:^0.28.0"
   peerDependencies:
-    react: ^19.2.7
-  checksum: 10c0/970ff600f6e80d47d39e2f226f12f226173b3cba3382efc97c5f0cd663de9af38c7a4c11c213fb936094faeac83060d660247accaa96b752180d5b951b9cfecb
+    react: ^19.3.1
+  checksum: 10c0/382700916313b2ebc46acee80642f300bb8601eac6a9e7fefade5b8b30e66b05bf3aaa56a3c964589fcd578d27b486e847470c2697d879264e766661ff49fac7
   languageName: node
   linkType: hard
 
@@ -18892,10 +18892,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-is@npm:^19.2.7":
-  version: 19.2.7
-  resolution: "react-is@npm:19.2.7"
-  checksum: 10c0/419fe54d5bd7fdf5414a5bb7bd9a1e0e36f9fae28ffb4cb73290fbe342bde15d8584a90d1db62547f6aa03018dce517b178a041abb522136cd4b4b51b4e94c83
+"react-is@npm:^19.3.1":
+  version: 19.3.1
+  resolution: "react-is@npm:19.3.1"
+  checksum: 10c0/428e02d986d56f1859c57756084489f6d2900fd686905003c405b32f1168738b78772bfa4bb6c706f5ac821199171522c28bf6434281f524f901459390a19606
   languageName: node
   linkType: hard
 
@@ -19046,15 +19046,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react-test-renderer@npm:19.2.7":
-  version: 19.2.7
-  resolution: "react-test-renderer@npm:19.2.7"
+"react-test-renderer@npm:19.3.1":
+  version: 19.3.1
+  resolution: "react-test-renderer@npm:19.3.1"
   dependencies:
-    react-is: "npm:^19.2.7"
-    scheduler: "npm:^0.27.0"
+    react-is: "npm:^19.3.1"
+    scheduler: "npm:^0.28.0"
   peerDependencies:
-    react: ^19.2.7
-  checksum: 10c0/81a065f09a3400453baf6a518b0f2536312041d7e216f361bfea6d54e800ba6e125b1eced2322f349a96ec0227c5a277b56aaa6a7c31562fcb169130151d804d
+    react: ^19.3.1
+  checksum: 10c0/5c777dfad9c35011f0618ff854a3bc755e2f4ff168573cc91fea784b3c156258fca57e900f13ed9bdbb7fb144e4a2d82efe05c6abba2359675f0f6a91523b511
   languageName: node
   linkType: hard
 
@@ -19097,10 +19097,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"react@npm:19.2.7":
-  version: 19.2.7
-  resolution: "react@npm:19.2.7"
-  checksum: 10c0/0bd0e2f1bbd4ba97561c6597bf8a5fec05e6476fe61e165c1065598d16668efc6715205599c94d3ddd49d36cb0f21cbf1b9bcc18ee840b805ce222c3e8d558ac
+"react@npm:19.3.1":
+  version: 19.3.1
+  resolution: "react@npm:19.3.1"
+  checksum: 10c0/f0ed036d1223562c09c8347858ca712733ea6e27a30db709ee9c3f3f176d3e9e767afce735d59956addf3d030102e256bba82dea635fc1bdb0e01107e98fef10
   languageName: node
   linkType: hard
 
@@ -19805,7 +19805,7 @@ __metadata:
   version: 0.0.0-use.local
   resolution: "root-workspace-0b6124@workspace:."
   dependencies:
-    "@apollo/client": "npm:4.3.6"
+    "@apollo/client": "npm:4.3.7"
     "@breezehr/currency-codes": "npm:^2.2.1"
     "@codemirror/autocomplete": "npm:^6.20.3"
     "@codemirror/commands": "npm:^6.7.1"
@@ -19874,10 +19874,10 @@ __metadata:
     "@types/punycode": "npm:2.1.4"
     "@types/qs": "npm:^6"
     "@types/rails__activestorage": "npm:8.0.2"
-    "@types/react": "npm:19.2.17"
+    "@types/react": "npm:19.3.0"
     "@types/react-click-outside-hook": "npm:1.0.3"
     "@types/react-color": "npm:3.0.13"
-    "@types/react-dom": "npm:19.2.3"
+    "@types/react-dom": "npm:19.3.0"
     "@types/react-onclickoutside": "npm:6.7.10"
     "@types/source-map-support": "npm:0.5.10"
     "@types/tinycolor2": "npm:1.4.6"
@@ -19921,7 +19921,7 @@ __metadata:
     history: "npm:5.3.0"
     html-to-react: "npm:1.7.0"
     husky: "npm:9.1.7"
-    i18next: "npm:26.5.12"
+    i18next: "npm:26.7.2"
     i18next-chained-backend: "npm:^5.0.0"
     i18next-intervalplural-postprocessor: "npm:3.0.0"
     i18next-localstorage-backend: "npm:^4.2.0"
@@ -19949,18 +19949,18 @@ __metadata:
     prop-types: "npm:15.8.1"
     punycode: "npm:2.3.1"
     qs: "npm:^6.17.0"
-    react: "npm:19.2.7"
+    react: "npm:19.3.1"
     react-bootstrap4-modal: "npm:3.0.11"
     react-color: "npm:2.19.3"
     react-cookie-consent: "npm:10.0.2"
-    react-dom: "npm:19.2.7"
+    react-dom: "npm:19.3.1"
     react-html-id: "npm:0.1.5"
     react-i18next: "npm:16.6.6"
     react-onclickoutside: "npm:6.13.2"
     react-popper: "npm:2.3.0"
     react-router: "npm:7.18.5"
     react-select: "npm:5.10.2"
-    react-test-renderer: "npm:19.2.7"
+    react-test-renderer: "npm:19.3.1"
     react-transition-state: "npm:^2.3.1"
     react-waypoint: "npm:10.3.0"
     regenerator-runtime: "npm:0.14.1"
@@ -20096,10 +20096,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"scheduler@npm:^0.27.0":
-  version: 0.27.0
-  resolution: "scheduler@npm:0.27.0"
-  checksum: 10c0/4f03048cb05a3c8fddc45813052251eca00688f413a3cee236d984a161da28db28ba71bd11e7a3dd02f7af84ab28d39fb311431d3b3772fed557945beb00c452
+"scheduler@npm:^0.28.0":
+  version: 0.28.0
+  resolution: "scheduler@npm:0.28.0"
+  checksum: 10c0/783c8e5ce89d41273a02ed6dc0e3d24bd60e05c9e8f7e3adfc6c82e7c69935500d90e343f1ee26d592fc7504e8a2532573c6368def3e93bfe812391fa53efaf4
   languageName: node
   linkType: hard
 
