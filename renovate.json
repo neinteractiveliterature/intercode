@@ -7,6 +7,19 @@
       "automerge": true
     },
     {
+      "description": "Batch routine npm updates into one PR instead of one PR per package. Major updates stay separate so they can be reviewed on their own.",
+      "matchManagers": ["npm"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "groupName": "npm non-major dependencies"
+    },
+    {
+      "description": "Same for gems, except Rails, whose minor updates need individual attention",
+      "matchManagers": ["bundler"],
+      "matchUpdateTypes": ["minor", "patch"],
+      "matchPackageNames": ["!rails"],
+      "groupName": "bundler non-major dependencies"
+    },
+    {
       "matchPackageNames": ["rails"],
       "matchUpdateTypes": ["minor"],
       "automerge": false
