@@ -18,7 +18,6 @@ GIT
 GIT
   remote: https://github.com/neinteractiveliterature/cloudwatch_scheduler.git
   revision: 1c239f5f2cd46a55f6547d16f4740a7ecdce44e7
-  branch: support-shoryuken-7
   specs:
     cloudwatch_scheduler (1.1.1)
       aws-sdk-cloudwatchevents (~> 1.13)
