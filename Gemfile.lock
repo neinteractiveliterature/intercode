@@ -674,108 +674,108 @@ PLATFORMS
   x86_64-linux
 
 DEPENDENCIES
-  activerecord-session_store
-  ahoy_matey
-  annotaterb
+  activerecord-session_store (= 2.3.0)
+  ahoy_matey (= 5.5.0)
+  annotaterb (= 4.26.0)
   apollo_upload_server (= 2.1.8)
-  aws-actionmailer-ses
-  aws-sdk-rails
-  aws-sdk-s3
-  aws-sdk-ses
-  aws-sdk-sns
-  aws-sdk-sqs
-  benchmark
-  bootsnap (>= 1.1.0)
-  browser
-  business_time
+  aws-actionmailer-ses (= 1.2.0)
+  aws-sdk-rails (= 5.2.0)
+  aws-sdk-s3 (= 1.237.0)
+  aws-sdk-ses (= 1.109.0)
+  aws-sdk-sns (= 1.126.0)
+  aws-sdk-sqs (= 1.124.0)
+  benchmark (= 0.5.0)
+  bootsnap (= 1.26.1)
+  browser (= 6.2.0)
+  business_time (= 0.13.0)
   cadmus!
-  cadmus_navbar (~> 0.1.0)
-  capybara
+  cadmus_navbar (= 0.1.0)
+  capybara (= 3.40.0)
   civil_service!
   cloudwatch_scheduler!
-  csv
-  cuprite
-  database_cleaner-active_record
-  dead_end
-  debug
-  derailed_benchmarks
-  devise
-  devise-doorkeeper
-  devise-encryptable
-  domain_prefix
+  csv (= 3.3.7)
+  cuprite (= 0.20)
+  database_cleaner-active_record (= 2.2.2)
+  dead_end (= 4.0.0)
+  debug (= 1.11.1)
+  derailed_benchmarks (= 2.2.1)
+  devise (= 5.0.4)
+  devise-doorkeeper (= 1.2.0)
+  devise-encryptable (= 0.3.0)
+  domain_prefix (= 1.0.20241203)
   doorkeeper (= 5.9.9)
-  doorkeeper-jwt
-  doorkeeper-openid_connect
-  dotenv-rails
-  eu_central_bank
-  factory_bot
-  factory_bot_rails
-  faker
-  faraday
-  flamegraph
-  fly.io-rails
-  graphql
-  graphql-rails_logger
-  holidays
-  icalendar
-  image_processing (~> 2.0)
-  liquid
-  listen
-  lograge
-  memory_profiler
-  minitest-focus
-  minitest-mock
-  minitest-reporters
-  minitest-spec-rails
-  money-rails
-  oj (~> 3.17.0)
-  openssl (~> 4.0)
-  pg
-  pg-aws_rds_iam (~> 0.8.0)
-  pg_search
-  phonelib
-  positioning
+  doorkeeper-jwt (= 0.4.5)
+  doorkeeper-openid_connect (= 1.10.5)
+  dotenv-rails (= 3.2.0)
+  eu_central_bank (= 2.0.0)
+  factory_bot (= 6.6.0)
+  factory_bot_rails (= 6.5.1)
+  faker (= 3.8.0)
+  faraday (= 2.15.1)
+  flamegraph (= 0.9.5)
+  fly.io-rails (= 0.3.5)
+  graphql (= 2.2.17)
+  graphql-rails_logger (= 1.2.5)
+  holidays (= 11.7.0)
+  icalendar (= 2.13.0)
+  image_processing (= 2.2.0)
+  liquid (= 5.14.0)
+  listen (= 3.10.1)
+  lograge (= 0.15.1)
+  memory_profiler (= 1.1.0)
+  minitest-focus (= 1.4.1)
+  minitest-mock (= 5.27.0)
+  minitest-reporters (= 1.8.0)
+  minitest-spec-rails (= 7.4.1)
+  money-rails (= 3.0.0)
+  oj (= 3.17.8)
+  openssl (= 4.0.2)
+  pg (= 1.7.0)
+  pg-aws_rds_iam (= 0.8.0)
+  pg_search (= 2.4.0)
+  phonelib (= 0.10.28)
+  positioning (= 0.4.8)
   prettier (= 4.0.4)
-  prettier_print
+  prettier_print (= 1.2.1)
   prettyprint!
-  prism
-  pry-rails
-  pry-remote
-  puma
-  pundit
-  rack-cors
-  rack-mini-profiler
+  prism (= 1.9.0)
+  pry-rails (= 0.3.11)
+  pry-remote (= 0.1.8)
+  puma (= 8.0.2)
+  pundit (= 2.5.2)
+  rack-cors (= 2.0.2)
+  rack-mini-profiler (= 4.0.1)
   rails (= 8.1.4.1)
-  rails-controller-testing
-  readline (~> 0.0.4)
-  redcarpet
-  rollbar
-  rubocop (>= 1.82)
-  rubocop-capybara
-  rubocop-factory_bot
-  rubocop-graphql
-  rubocop-performance
-  rubocop-rails
-  rubocop-rspec
-  ruby-vips
-  scheduled_value (~> 1.4.0)
-  sentry-rails (~> 6.0)
-  sentry-ruby (~> 6.0)
-  shoryuken
-  simplecov
-  simplecov-cobertura
-  sprockets-rails
-  stackprof
-  stripe
-  syntax_tree
-  syntax_tree-haml
-  syntax_tree-rbs
-  twilio-ruby (~> 7.12.0)
-  typeprof
-  tzinfo-data
-  will_paginate
-  with_advisory_lock
-  yard
+  rails-controller-testing (= 1.0.5)
+  readline (= 0.0.4)
+  redcarpet (= 3.6.1)
+  rollbar (= 3.8.0)
+  rubocop (= 1.92.2)
+  rubocop-capybara (= 3.1.0)
+  rubocop-factory_bot (= 2.28.0)
+  rubocop-graphql (= 1.8.0)
+  rubocop-performance (= 1.27.0)
+  rubocop-rails (= 2.38.0)
+  rubocop-rspec (= 3.10.2)
+  ruby-vips (= 2.3.0)
+  scheduled_value (= 1.4.0)
+  sentry-rails (= 6.7.0)
+  sentry-ruby (= 6.7.0)
+  shoryuken (= 7.0.4)
+  simplecov (= 0.22.0)
+  simplecov-cobertura (= 3.2.0)
+  sprockets-rails (= 3.5.2)
+  stackprof (= 0.2.28)
+  stripe (= 19.6.3)
+  syntax_tree (= 6.3.0)
+  syntax_tree-haml (= 4.0.3)
+  syntax_tree-rbs (= 1.0.0)
+  twilio-ruby (= 7.12.0)
+  typeprof (= 0.33.2)
+  tzinfo-data (= 1.2026.6)
+  will_paginate (= 4.0.1)
+  with_advisory_lock (= 7.6.0)
+  yard (= 0.9.45)
 
 RUBY VERSION
   ruby 4.0.9

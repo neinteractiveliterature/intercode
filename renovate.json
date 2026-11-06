@@ -44,6 +44,11 @@
       "matchDatasources": ["npm"],
       "matchPackageNames": ["@neinteractiveliterature/**"],
       "minimumReleaseAge": null
+    },
+    {
+      "description": "Gemfile pins exact versions, like package.json does. bundle update can't be told to stop at a specific version, so with loose constraints it can land on a release newer than the one Renovate chose that's still inside minimumReleaseAge, and Renovate then gives up on the lockfile.",
+      "matchManagers": ["bundler"],
+      "rangeStrategy": "pin"
     }
   ],
   "postUpdateOptions": ["yarnDedupeHighest"],
