@@ -209,10 +209,15 @@ class ExecuteRankedChoiceSignupRoundService < CivilService::Service
   def send_notifications(executed_choices)
     return if suppress_notifications
 
-    executed_choices.each do |choice|
-      if choice.result_signup
-        choice.result_signup.send_signup_confirmation_notification(triggering_user: nil)
-        choice.result_signup.send_team_member_notifications(triggering_user: nil)
+    # SignupRound#execute! calls this service inside a row lock (and therefore a transaction).  Enqueueing the jobs
+    # before that transaction commits lets a fast worker pick them up before the signups are visible, which fails
+    # with ActiveJob::DeserializationError and silently drops the notification.
+    ActiveRecord.after_all_transactions_commit do
+      executed_choices.each do |choice|
+        if choice.result_signup
+          choice.result_signup.send_signup_confirmation_notification(triggering_user: nil)
+          choice.result_signup.send_team_member_notifications(triggering_user: nil)
+        end
       end
     end
   end
