@@ -23,10 +23,22 @@
       "matchPackageNames": ["postgres"],
       "matchManagers": ["dockerfile"],
       "enabled": false
+    },
+    {
+      "description": "Yarn quarantines npm releases newer than npmMinimalAgeGate (24h, see 'yarn config get npmMinimalAgeGate'), so don't open PRs for them until yarn will install them",
+      "matchDatasources": ["npm"],
+      "minimumReleaseAge": "1 day"
+    },
+    {
+      "description": "Our own packages are listed in npmPreapprovedPackages in .yarnrc.yml, which exempts them from the age gate",
+      "matchDatasources": ["npm"],
+      "matchPackageNames": ["@neinteractiveliterature/**"],
+      "minimumReleaseAge": null
     }
   ],
   "postUpdateOptions": ["yarnDedupeHighest"],
   "toolSettings": {
     "nodeMaxMemory": 2048
-  }
+  },
+  "internalChecksFilter": "strict"
 }
