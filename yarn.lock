@@ -14433,11 +14433,11 @@ __metadata:
   linkType: hard
 
 "i18next-localstorage-backend@npm:^4.2.0":
-  version: 4.3.2
-  resolution: "i18next-localstorage-backend@npm:4.3.2"
+  version: 4.3.3
+  resolution: "i18next-localstorage-backend@npm:4.3.3"
   dependencies:
     "@babel/runtime": "npm:^7.28.4"
-  checksum: 10c0/f869aee90a4314ed217b94a7ca9445a6ec8364ff7f227d6193b742877b25a6b40b216b14009c05d958c08d829b8b89d850a004189f5becf27b23b3ac6cc93589
+  checksum: 10c0/fe38719203366db2e0f96ffe02d1d7d5a561f2052ca1e5afa19a401bb1204e36e42a7e3c452cb71de99e96725cdfea8c26ad558e0a2990b101e8bad79863d089
   languageName: node
   linkType: hard
 
