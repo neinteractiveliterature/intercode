@@ -46,6 +46,9 @@ ENV REVISION=${REVISION}
 ENV HUSKY=0
 WORKDIR /usr/src/intercode
 RUN apt-get update && apt-get install -y --no-install-recommends python3 build-essential && rm -rf /var/lib/apt/lists/*
+# Node stopped bundling corepack in 25 and its images no longer ship yarn, so install corepack to get the yarn that
+# package.json's packageManager field asks for
+RUN npm install -g corepack && corepack enable
 COPY package.json yarn.lock .yarnrc.yml ./
 COPY .yarn .yarn
 COPY doc-site/package.json doc-site/package.json
