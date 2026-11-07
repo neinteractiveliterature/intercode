@@ -1,8 +1,7 @@
 import { useContext, useMemo } from 'react';
 import * as React from 'react';
 import { Link } from 'react-router';
-import { Placement } from '@popperjs/core';
-import { usePopper } from 'react-popper';
+import type { LitformFloatingResult, Placement } from '@neinteractiveliterature/litform';
 import { useTranslation } from 'react-i18next';
 
 import { describeAvailability, calculateAvailability, describeWaitlist } from './AvailabilityUtils';
@@ -23,8 +22,8 @@ import scheduleGridStyles from 'styles/schedule_grid.module.scss';
 
 export type RunDetailsProps = {
   placement?: Placement;
-  styles: ReturnType<typeof usePopper>['styles'];
-  attributes: ReturnType<typeof usePopper>['attributes'];
+  styles: LitformFloatingResult['styles'];
+  attributes: LitformFloatingResult['attributes'];
   toggle: () => void;
   event: ScheduleEvent;
   run: ScheduleRun;
@@ -92,9 +91,9 @@ const RunDetails = React.forwardRef<HTMLDivElement, RunDetailsProps>(function Ru
     <div
       className={`popover schedule-grid-run-details-popover ${scheduleGridStyles.scheduleGridRunDetailsPopover} bs-popover-${placement}`}
       ref={ref}
-      style={styles.popper}
+      style={styles.floating}
       role="tooltip"
-      {...attributes.popper}
+      {...attributes.floating}
     >
       <span ref={arrowRef} style={styles.arrow} className="popover-arrow" />
       <div className={`schedule-grid-run-details-content ${scheduleGridStyles.scheduleGridRunDetailsContent}`}>

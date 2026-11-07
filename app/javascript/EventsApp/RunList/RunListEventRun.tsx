@@ -1,4 +1,4 @@
-import { useLitformPopperWithAutoClosing } from '@neinteractiveliterature/litform';
+import { useLitformFloatingWithAutoClosing } from '@neinteractiveliterature/litform';
 import { useCallback, useMemo, useState } from 'react';
 
 import { FiniteTimespan } from '../../Timespan';
@@ -31,7 +31,7 @@ export default function RunListEventRun({
   const [runDetailsElement, setRunDetailsElement] = useState<HTMLDivElement | null>(null);
   const [arrow, setArrow] = useState<HTMLSpanElement | null>(null);
 
-  const { styles, attributes, state } = useLitformPopperWithAutoClosing(
+  const { styles, attributes, state } = useLitformFloatingWithAutoClosing(
     runDetailsElement,
     runDisplayElement,
     arrow,

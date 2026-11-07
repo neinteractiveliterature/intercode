@@ -1,6 +1,6 @@
 import classNames from 'classnames';
 import { ReactNode, useState } from 'react';
-import { useLitformPopperWithAutoClosing, useToggleOpen } from '@neinteractiveliterature/litform';
+import { useLitformFloatingWithAutoClosing, useToggleOpen } from '@neinteractiveliterature/litform';
 
 import useAutoCloseOnNavigate from './useAutoCloseOnNavigate';
 
@@ -14,13 +14,13 @@ function NavigationSection({ children, label }: NavigationSectionProps): React.J
   const [dropdownMenu, setDropdownMenu] = useState<HTMLDivElement | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
 
-  const { styles, attributes, update } = useLitformPopperWithAutoClosing(
+  const { styles, attributes, update } = useLitformFloatingWithAutoClosing(
     dropdownMenu,
     dropdownLi,
     undefined,
     setDropdownOpen,
     {
-      modifiers: [{ name: 'offset', options: { offset: [0, 2] } }],
+      offset: 2,
       placement: 'bottom-start',
     },
   );
@@ -40,9 +40,9 @@ function NavigationSection({ children, label }: NavigationSectionProps): React.J
         ref={setDropdownMenu}
         style={{
           zIndex: 1100,
-          ...styles.popper,
+          ...styles.floating,
         }}
-        {...attributes.popper}
+        {...attributes.floating}
       >
         {children}
       </div>

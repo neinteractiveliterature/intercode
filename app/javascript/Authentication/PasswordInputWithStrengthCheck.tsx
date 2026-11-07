@@ -3,7 +3,7 @@ import * as React from 'react';
 import zxcvbn, { ZXCVBNResult } from 'zxcvbn';
 import classNames from 'classnames';
 import { useTranslation } from 'react-i18next';
-import { useLitformPopperWithAutoClosing, useToggleOpen } from '@neinteractiveliterature/litform';
+import { useLitformFloatingWithAutoClosing, useToggleOpen } from '@neinteractiveliterature/litform';
 
 type PasswordFeedbackProps = {
   result?: ZXCVBNResult | null;
@@ -101,7 +101,7 @@ function PasswordInputWithStrengthCheck({
   const [arrow, setArrow] = useState<HTMLSpanElement | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState(false);
 
-  const { styles, attributes, state, update } = useLitformPopperWithAutoClosing(
+  const { styles, attributes, state, update } = useLitformFloatingWithAutoClosing(
     dropdownMenu,
     dropdownButton,
     arrow,
@@ -157,8 +157,8 @@ function PasswordInputWithStrengthCheck({
               'd-none': !dropdownOpen || !hasFeedback,
             })}
             ref={setDropdownMenu}
-            style={styles.popper}
-            {...attributes.popper}
+            style={styles.floating}
+            {...attributes.floating}
           >
             <div className="card-body">
               <PasswordFeedback result={passwordStrengthResult} />

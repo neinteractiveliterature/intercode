@@ -1,9 +1,8 @@
 import { useMemo, useState, ReactNode } from 'react';
 import classNames from 'classnames';
-import { Modifier } from 'react-popper';
+import { size, type SizeOptions } from '@floating-ui/react-dom';
 import { useTranslation } from 'react-i18next';
-import max from 'lodash/max';
-import { ChoiceSet, useLitformPopperWithAutoClosing, useToggleOpen } from '@neinteractiveliterature/litform';
+import { ChoiceSet, useLitformFloatingWithAutoClosing, useToggleOpen } from '@neinteractiveliterature/litform';
 
 import { FilterCodec } from './FilterUtils';
 import { Column } from '@tanstack/react-table';
@@ -55,8 +54,7 @@ export type ChoiceSetFilterMultipleProps<TData extends Record<string, unknown>, 
 };
 
 export type ChoiceSetFilterProps<TData extends Record<string, unknown>, TValue> =
-  | ChoiceSetFilterSingleProps<TData, TValue>
-  | ChoiceSetFilterMultipleProps<TData, TValue>;
+  ChoiceSetFilterSingleProps<TData, TValue> | ChoiceSetFilterMultipleProps<TData, TValue>;
 
 function ChoiceSetFilter<TData extends Record<string, unknown>, TValue>(
   props: ChoiceSetFilterProps<TData, TValue>,
@@ -72,40 +70,24 @@ function ChoiceSetFilter<TData extends Record<string, unknown>, TValue>(
   const [dropdownMenu, setDropdownMenu] = useState<HTMLDivElement | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
 
-  const modifiers: Modifier<unknown>[] = useMemo(
-    () => [
-      {
-        name: 'sameWidth',
-        enabled: true,
-        fn: ({ state }) => ({
-          ...state,
-          styles: {
-            ...state.styles,
-            popper: {
-              ...state.styles.popper,
-              width: `${max([state.rects.reference.width, state.rects.popper.width])}px`,
-            },
-          },
-        }),
-        phase: 'beforeWrite',
-        requires: ['computeStyles'],
+  const middleware = useMemo(() => {
+    const sizeOptions: SizeOptions = {
+      apply({ rects, elements }) {
+        Object.assign(elements.floating.style, { minWidth: `${rects.reference.width}px` });
       },
-      {
-        name: 'offset',
-        options: { offset: [0, -3] },
-      },
-    ],
-    [],
-  );
+    };
+    return [size(sizeOptions)];
+  }, []);
 
-  const { styles, attributes, update } = useLitformPopperWithAutoClosing(
+  const { styles, attributes, update } = useLitformFloatingWithAutoClosing(
     dropdownMenu,
     dropdownButton,
     undefined,
     setDropdownOpen,
     {
       placement: 'bottom-start',
-      modifiers,
+      offset: -3,
+      middleware,
     },
   );
 
@@ -222,11 +204,11 @@ function ChoiceSetFilter<TData extends Record<string, unknown>, TValue>(
         className={classNames('card align-items-stretch', { invisible: !dropdownOpen })}
         ref={setDropdownMenu}
         style={{
-          ...styles.popper,
+          ...styles.floating,
           borderTop: 'none',
           zIndex: 1100,
         }}
-        {...attributes.popper}
+        {...attributes.floating}
       >
         <div className="card-body p-2">
           {props.multiple ? (

@@ -1,6 +1,6 @@
 import React, { CSSProperties, forwardRef, ReactNode, useImperativeHandle, useState } from 'react';
 import classNames from 'classnames';
-import { useLitformPopperWithAutoClosing, useToggleOpen } from '@neinteractiveliterature/litform';
+import { useLitformFloatingWithAutoClosing, useToggleOpen } from '@neinteractiveliterature/litform';
 
 import useAutoCloseOnNavigate from '../NavigationBar/useAutoCloseOnNavigate';
 import { createPortal } from 'react-dom';
@@ -17,7 +17,7 @@ export type DropdownMenuProps = {
   children: ReactNode;
   dropdownClassName?: string;
   dropdownStyle?: CSSProperties;
-  popperOptions?: Parameters<typeof useLitformPopperWithAutoClosing>[4];
+  popperOptions?: Parameters<typeof useLitformFloatingWithAutoClosing>[4];
   shouldAutoCloseOnNavigate?: Parameters<typeof useAutoCloseOnNavigate>[1];
 };
 
@@ -40,14 +40,14 @@ export const DropdownMenu = forwardRef(function DropdownMenuInner(
 
   useImperativeHandle(ref, () => ({ dropdownOpen, setDropdownOpen }) satisfies DropdownMenuRef);
 
-  const { styles, attributes, update } = useLitformPopperWithAutoClosing(
+  const { styles, attributes, update } = useLitformFloatingWithAutoClosing(
     dropdownMenu,
     dropdownButton,
     undefined,
     setDropdownOpen,
     {
       placement: 'bottom-start',
-      modifiers: [{ name: 'offset', options: { offset: [0, 2] } }, ...(popperOptions?.modifiers ?? [])],
+      offset: 2,
       ...popperOptions,
     },
   );
@@ -59,8 +59,8 @@ export const DropdownMenu = forwardRef(function DropdownMenuInner(
     <div
       className={classNames('dropdown-menu m-0', dropdownClassName, { show: dropdownOpen })}
       ref={setDropdownMenu}
-      style={{ ...styles.popper, ...dropdownStyle }}
-      {...attributes.popper}
+      style={{ ...styles.floating, ...dropdownStyle }}
+      {...attributes.floating}
     >
       {children}
     </div>
