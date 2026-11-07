@@ -1,4 +1,5 @@
 # frozen_string_literal: true
+# rubocop:disable Style/OneClassPerFile
 ENV["RAILS_ENV"] = "test"
 require "simplecov"
 require "simplecov-cobertura"
@@ -69,7 +70,8 @@ class ActiveSupport::TestCase
     parallelize_setup do |worker|
       SimpleCov.command_name "#{SimpleCov.command_name}-#{worker}"
       SimpleCov.use_merging false
-      SimpleCov.coverage_dir "coverage/worker-#{worker}"
+      # Assigning coverage_path (unlike coverage_dir) creates the directory; simplecov 1.x no longer does it for us
+      SimpleCov.coverage_path = File.expand_path("coverage/worker-#{worker}", SimpleCov.root)
     end
     parallelize_teardown { |_worker| SimpleCov.result.format! }
   end
@@ -202,3 +204,4 @@ class ActionDispatch::IntegrationTest
     self.default_url_options = { host: convention.domain }
   end
 end
+# rubocop:enable Style/OneClassPerFile
