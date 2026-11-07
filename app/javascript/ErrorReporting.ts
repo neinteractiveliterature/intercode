@@ -6,8 +6,8 @@ class ErrorReporting {
   rollbar: ReturnType<(typeof import('rollbar'))['init']> | undefined;
   sentry:
     | {
-        instance: import('@sentry/types').Client;
-        newScope: () => import('@sentry/types').Scope;
+        instance: import('@sentry/core').Client;
+        newScope: () => import('@sentry/browser').Scope;
       }
     | undefined;
 

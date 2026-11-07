@@ -6657,13 +6657,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/conventions@npm:^0.16.0":
-  version: 0.16.0
-  resolution: "@sentry/conventions@npm:0.16.0"
-  checksum: 10c0/415aaa94cade2b8e0dd00ad9aa06d998d7fe95658a8f43b6e4ef382e3b4c115c8f199ca0fe9b74a98500e8270dc68d5333fd943f7dad6ed78f60d9372231fbe8
-  languageName: node
-  linkType: hard
-
 "@sentry/conventions@npm:^0.30.0":
   version: 0.30.0
   resolution: "@sentry/conventions@npm:0.30.0"
@@ -6671,16 +6664,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/core@npm:10.78.0":
-  version: 10.78.0
-  resolution: "@sentry/core@npm:10.78.0"
-  dependencies:
-    "@sentry/conventions": "npm:^0.16.0"
-  checksum: 10c0/3e6bb2fa8e6860c0e07606bd586eeadf95674c4b610fbcd99efbba437da8a99a1d0c06b0fe4197479eced97a4159ff8e11e6f38db5cdba1b33052695477b8065
-  languageName: node
-  linkType: hard
-
-"@sentry/core@npm:11.11.0":
+"@sentry/core@npm:11.11.0, @sentry/core@npm:^11.11.0":
   version: 11.11.0
   resolution: "@sentry/core@npm:11.11.0"
   dependencies:
@@ -6715,15 +6699,6 @@ __metadata:
     "@sentry/browser-utils": "npm:11.11.0"
     "@sentry/core": "npm:11.11.0"
   checksum: 10c0/cbb076808493eb51161031b78fe5654269c79c8ac199eb5cb80d11429f78e24435c8eb573e40eea13d2715181be95809461f30126537791e8962083b2ae9c6f0
-  languageName: node
-  linkType: hard
-
-"@sentry/types@npm:^10.0.0":
-  version: 10.78.0
-  resolution: "@sentry/types@npm:10.78.0"
-  dependencies:
-    "@sentry/core": "npm:10.78.0"
-  checksum: 10c0/f96c0cba71b740f5edeabc2d6e3c9a1bcc83c9a18ac965482970ad4d6744b83bc4b355d9f2511bb2743d0ebcfb563503e6341d077bba509896b9eb68545d92a9
   languageName: node
   linkType: hard
 
@@ -19310,7 +19285,7 @@ __metadata:
     "@rollup/plugin-replace": "npm:^6.0.1"
     "@rollup/plugin-swc": "npm:^0.4.0"
     "@sentry/browser": "npm:^11.0.0"
-    "@sentry/types": "npm:^10.0.0"
+    "@sentry/core": "npm:^11.11.0"
     "@stripe/react-stripe-js": "npm:7.0.1"
     "@stripe/stripe-js": "npm:10.2.1"
     "@swc/core": "npm:^1.14.0"
@@ -21094,10 +21069,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"undici@npm:^8.12.3, undici@npm:^8.4.1":
+"undici@npm:^8.12.3":
   version: 8.12.4
   resolution: "undici@npm:8.12.4"
   checksum: 10c0/2a83590ce3347ca4e8fb83917bd7ad1d0bcb72ecb6d1a5066f01a89b4941becac569412aa27d7318119ea1a20d217018cce535f8eeed3c1b307d87426f96cfe3
+  languageName: node
+  linkType: hard
+
+"undici@npm:^8.4.1":
+  version: 8.6.0
+  resolution: "undici@npm:8.6.0"
+  checksum: 10c0/1d3c72ab9712fe242e30dadcf539aa990b3848308af360f3a09336d1d27f8c8e896db3c5483ac002494f609f17976bc83bb4eaf5bbb5eb7878d801219ec1ae15
   languageName: node
   linkType: hard
 
