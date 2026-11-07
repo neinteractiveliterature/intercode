@@ -175,8 +175,8 @@ group :test do
   gem "rails-controller-testing", "1.0.5"
 end
 
-gem "sentry-rails", "6.7.0"
-gem "sentry-ruby", "6.7.0"
+gem "sentry-rails", "7.2.0"
+gem "sentry-ruby", "7.2.0"
 
 gem "openssl", "4.0.2"
 
