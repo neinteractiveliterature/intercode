@@ -3,7 +3,7 @@ import assertNever from 'assert-never';
 export type ErrorReportingLevel = 'fatal' | 'error' | 'warning' | 'log' | 'info' | 'debug';
 
 class ErrorReporting {
-  rollbar: ReturnType<(typeof import('rollbar'))['init']> | undefined;
+  rollbar: import('rollbar').default | undefined;
   sentry:
     | {
         instance: import('@sentry/core').Client;
