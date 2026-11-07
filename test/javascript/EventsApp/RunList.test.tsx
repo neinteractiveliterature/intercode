@@ -1,6 +1,8 @@
 import { MockLink } from '@apollo/client/testing';
 import { Suspense } from 'react';
 import { createRef } from 'react';
+import { useParams } from 'react-router';
+import { mockAllIsIntersecting } from 'react-intersection-observer/test-utils';
 import { vi } from 'vitest';
 
 import { renderRoute, waitFor } from '../testUtils';
@@ -51,6 +53,12 @@ const event = (
   ...overrides,
 });
 
+// Where RunList sends the browser when a day's runs scroll into view
+function ScheduleDayPage() {
+  const { day } = useParams();
+  return <div>Entered {day}</div>;
+}
+
 describe('RunList', () => {
   const queried = vi.fn();
   const convention = { ...buildCatalogConvention([buildCatalogCategory({ id: '4' })]), blockPartial: null };
@@ -92,6 +100,7 @@ describe('RunList', () => {
             </Suspense>
           ),
         },
+        { path: '/events/schedule/:day', Component: ScheduleDayPage },
       ],
       {
         apolloMocks,
@@ -140,6 +149,29 @@ describe('RunList', () => {
     const text = container.textContent ?? '';
     expect(text.indexOf('alpha')).toBeLessThan(text.indexOf('Zulu'));
     expect(text.indexOf('Zulu')).toBeLessThan(text.indexOf('Later'));
+  });
+
+  describe('keeping the URL on the day being looked at', () => {
+    const friday = () => event('1', 'Alpha', [run('r1', '2026-06-05T14:00:00Z')]);
+
+    it('goes to a day’s URL when its runs scroll into view', async () => {
+      const { findByText } = await renderList([friday()]);
+      await findByText(/Alpha/);
+
+      mockAllIsIntersecting(true);
+
+      expect(await findByText(/^Entered \S+/)).toBeTruthy();
+    });
+
+    it('stays where it is while no day’s runs are in view', async () => {
+      const { findByText, queryByText } = await renderList([friday()]);
+      await findByText(/Alpha/);
+
+      mockAllIsIntersecting(false);
+
+      expect(queryByText(/^Entered/)).toBeNull();
+      expect(await findByText(/Alpha/)).toBeTruthy();
+    });
   });
 
   it('shows each run’s title with when it ends', async () => {

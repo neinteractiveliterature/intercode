@@ -1,4 +1,5 @@
 import { MockLink } from '@apollo/client/testing';
+import { mockAllIsIntersecting } from 'react-intersection-observer/test-utils';
 import { vi } from 'vitest';
 
 import { act, renderRoute, userEvent, waitFor } from '../../testUtils';
@@ -88,6 +89,49 @@ describe('EventList (the event catalog)', () => {
   // test below that the search box doesn't change anything.)
   const REQUERY_TIMEOUT = 5000;
   const waitForVariables = (assertion: () => void) => waitFor(assertion, { timeout: REQUERY_TIMEOUT });
+
+  describe('loading more events', () => {
+    const sixEvents = () =>
+      ['1', '2', '3', '4', '5', '6'].map((id) => buildCatalogEvent({ id, title: `Event number ${id}` }));
+    const pageTwoRequested = () => queried.mock.calls.some(([variables]) => variables.page === 2);
+
+    it('asks for the next page when the fifth event from the end scrolls into view', async () => {
+      const entries = sixEvents();
+      const r = await renderPage({
+        entries,
+        listResult: { data: buildEventListData(entries, { totalPages: 2 }) },
+      });
+      await r.findByRole('link', { name: 'Event number 1' });
+      expect(pageTwoRequested()).toBe(false);
+
+      mockAllIsIntersecting(true);
+
+      await waitForVariables(() => expect(pageTwoRequested()).toBe(true));
+    });
+
+    it('does not ask for more before then', async () => {
+      const entries = sixEvents();
+      const r = await renderPage({
+        entries,
+        listResult: { data: buildEventListData(entries, { totalPages: 2 }) },
+      });
+      await r.findByRole('link', { name: 'Event number 1' });
+
+      mockAllIsIntersecting(false);
+
+      expect(pageTwoRequested()).toBe(false);
+    });
+
+    it('does not ask for more when there are no more pages', async () => {
+      const entries = sixEvents();
+      const r = await renderPage({ entries });
+      await r.findByRole('link', { name: 'Event number 1' });
+
+      mockAllIsIntersecting(true);
+
+      expect(pageTwoRequested()).toBe(false);
+    });
+  });
 
   it('lists the events with a heading and tabs for the list and table views', async () => {
     const r = await renderPage({
