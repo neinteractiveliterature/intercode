@@ -101,6 +101,7 @@ jobs:
       - name: Build the assets image
         run: >
           docker build -f Dockerfile.assets-framework -t intercode-assets-framework:ci
+          --build-arg NODE_VERSION=${{ steps.node-version.outputs.node-version }}
           --build-arg REVISION=${{ github.sha }} .
       - name: Push the assets image (on main), for the release upload to the static shell bucket
         if: github.event_name == 'push' && github.event.ref == 'refs/heads/main'

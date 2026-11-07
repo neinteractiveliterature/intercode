@@ -5,7 +5,7 @@
 # The build is made against a placeholder asset host. When the container starts it takes a fresh copy of the build and
 # swaps in $ASSETS_HOST (or nothing, for same-origin assets), so one image serves any deployment. The app container
 # needs the same ASSETS_HOST. With RAILS_UPSTREAM set, the container also proxies the Rails routes and crawlers to Rails.
-ARG NODE_VERSION=24.11.1
+ARG NODE_VERSION=26.13.0
 # Optional: an earlier intercode-assets-framework image whose hashed files are carried over, as in Dockerfile.assets.
 ARG PREVIOUS_ASSETS_IMAGE=scratch
 ARG PREVIOUS_ASSETS_RETENTION_DAYS=30
