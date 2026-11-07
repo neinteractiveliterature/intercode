@@ -54,9 +54,6 @@ function DataModeApplicationEntry() {
           },
         ]),
         {
-          future: {
-            v8_middleware: true,
-          },
           getContext: () => buildRouterContext(bootstrap),
         },
       ),
