@@ -1,7 +1,7 @@
 import { useMemo, useState } from 'react';
 import { NavLink, useLocation, Outlet } from 'react-router';
 import classNames from 'classnames';
-import { useLitformPopperWithAutoClosing } from '@neinteractiveliterature/litform';
+import { useLitformFloatingWithAutoClosing } from '@neinteractiveliterature/litform';
 
 import sortEventCategories from './sortEventCategories';
 import buildEventCategoryUrl from './buildEventCategoryUrl';
@@ -22,9 +22,9 @@ function EventAdmin() {
   const [menu, setMenu] = useState<HTMLDivElement | null>(null);
   const [menuDropdown, setMenuDropdown] = useState<HTMLLIElement | null>(null);
 
-  const { styles, attributes } = useLitformPopperWithAutoClosing(menu, menuDropdown, undefined, setMenuOpen, {
+  const { styles, attributes } = useLitformFloatingWithAutoClosing(menu, menuDropdown, undefined, setMenuOpen, {
     placement: 'bottom-start',
-    modifiers: [{ name: 'offset', options: { offset: [0, 2] } }],
+    offset: 2,
   });
 
   if (authorizationWarning) return authorizationWarning;
@@ -45,9 +45,9 @@ function EventAdmin() {
           </button>
           <div
             className={classNames('dropdown-menu m-0', { show: menuOpen })}
-            style={styles.popper}
+            style={styles.floating}
             ref={setMenu}
-            {...attributes.popper}
+            {...attributes.floating}
           >
             {eventCategories.map((eventCategory) => (
               <NavLink

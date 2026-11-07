@@ -2,7 +2,7 @@ import { memo, ReactNode, RefObject, useCallback, useMemo, useRef, useState } fr
 import minBy from 'lodash/minBy';
 import maxBy from 'lodash/maxBy';
 import { DateTime, WeekdayNumbers } from 'luxon';
-import { notEmpty, Tooltip, useLitformPopper } from '@neinteractiveliterature/litform';
+import { notEmpty, Tooltip, useLitformFloating } from '@neinteractiveliterature/litform';
 
 import { EditingScheduledValue } from '../BuiltInFormControls/ScheduledValueEditor';
 import { findTimespanAt, findValueAt } from '../ScheduledValueUtils';
@@ -267,7 +267,7 @@ function ScheduledValuePreview<ValueType>({
   // eslint-disable-next-line react-hooks/refs
   const focusedDateElement = focusedDate ? (dateElementMapRef.current.get(focusedDate.valueOf()) ?? null) : null;
 
-  const { styles, attributes, state } = useLitformPopper(tooltip, focusedDateElement, arrow);
+  const { styles, attributes, state } = useLitformFloating(tooltip, focusedDateElement, arrow);
 
   const focusDate = useCallback((value: DateTime) => setFocusedDate(value), []);
 
@@ -297,7 +297,7 @@ function ScheduledValuePreview<ValueType>({
         dateElementMapRef={dateElementMapRef}
       />
       <Tooltip
-        popperRef={setTooltip}
+        floatingRef={setTooltip}
         arrowRef={setArrow}
         attributes={attributes}
         state={state}

@@ -200,7 +200,6 @@ export default function UserSignupQueueItem({
                 }
                 popperOptions={{
                   placement: 'bottom-end',
-                  modifiers: [],
                 }}
               >
                 <div className="px-2 py-1">

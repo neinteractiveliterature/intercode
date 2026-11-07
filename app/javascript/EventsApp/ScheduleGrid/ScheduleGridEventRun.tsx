@@ -1,5 +1,5 @@
 import { useContext, useMemo, useCallback, Ref, useState } from 'react';
-import { useLitformPopper } from '@neinteractiveliterature/litform';
+import { useLitformFloating } from '@neinteractiveliterature/litform';
 
 import { ScheduleGridContext } from './ScheduleGridContext';
 import SignupCountData from '../SignupCountData';
@@ -29,7 +29,7 @@ function ScheduleGridEventRun({
   const [runDetailsElement, setRunDetailsElement] = useState<HTMLDivElement | null>(null);
   const [arrow, setArrow] = useState<HTMLSpanElement | null>(null);
 
-  const { styles, attributes, state, update } = useLitformPopper(runDetailsElement, runDisplayElement, arrow);
+  const { styles, attributes, state, update } = useLitformFloating(runDetailsElement, runDisplayElement, arrow);
 
   const run = useMemo(() => schedule.getRun(runDimensions.runId), [schedule, runDimensions.runId]);
   const event = useMemo(() => schedule.getEventForRun(runDimensions.runId), [schedule, runDimensions.runId]);

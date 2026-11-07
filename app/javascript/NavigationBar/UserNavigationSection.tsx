@@ -3,7 +3,7 @@ import * as React from 'react';
 import { Link } from 'react-router';
 import { useTranslation, Trans } from 'react-i18next';
 import classNames from 'classnames';
-import { useLitformPopperWithAutoClosing, useToggleOpen } from '@neinteractiveliterature/litform';
+import { useLitformFloatingWithAutoClosing, useToggleOpen } from '@neinteractiveliterature/litform';
 
 import htmlFetch from './htmlFetch';
 import SignInButton from '../Authentication/SignInButton';
@@ -154,13 +154,13 @@ function UserNavigationSection(): React.JSX.Element {
   const [dropdownMenu, setDropdownMenu] = useState<HTMLDivElement | null>(null);
   const [dropdownOpen, setDropdownOpen] = useState<boolean>(false);
 
-  const { styles, attributes, update } = useLitformPopperWithAutoClosing(
+  const { styles, attributes, update } = useLitformFloatingWithAutoClosing(
     dropdownMenu,
     referenceElement,
     undefined,
     setDropdownOpen,
     {
-      modifiers: [{ name: 'offset', options: { offset: [0, 2] } }],
+      offset: 2,
       placement: 'bottom-end',
     },
   );
@@ -180,9 +180,9 @@ function UserNavigationSection(): React.JSX.Element {
               ref={setDropdownMenu}
               style={{
                 zIndex: 1100,
-                ...styles.popper,
+                ...styles.floating,
               }}
-              {...attributes.popper}
+              {...attributes.floating}
             >
               {currentUser && (
                 <a href={editAccountUrl} className="dropdown-item" target="_blank" rel="noreferrer">
@@ -245,9 +245,9 @@ function UserNavigationSection(): React.JSX.Element {
         ref={setDropdownMenu}
         style={{
           zIndex: 1100,
-          ...styles.popper,
+          ...styles.floating,
         }}
-        {...attributes.popper}
+        {...attributes.floating}
       >
         <li className="nav-item login my-auto">
           <SignInButton

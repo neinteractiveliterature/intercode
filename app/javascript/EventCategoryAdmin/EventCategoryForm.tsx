@@ -8,7 +8,7 @@ import {
   BooleanInput,
   BootstrapFormTextarea,
   useToggleOpen,
-  useLitformPopperWithAutoClosing,
+  useLitformFloatingWithAutoClosing,
   usePropertySetters,
 } from '@neinteractiveliterature/litform';
 
@@ -69,7 +69,7 @@ function EventColorPicker({ variant, eventRunProps, eventCategory, color, setCol
   const [arrow, setArrow] = useState<HTMLSpanElement | null>(null);
   const [visible, setVisible] = useState(false);
 
-  const { styles, attributes, state, update } = useLitformPopperWithAutoClosing(
+  const { styles, attributes, state, update } = useLitformFloatingWithAutoClosing(
     tooltip,
     dropdownButton,
     arrow,
@@ -96,8 +96,8 @@ function EventColorPicker({ variant, eventRunProps, eventCategory, color, setCol
           'd-none': !visible,
         })}
         ref={setTooltip}
-        style={styles.popper}
-        {...attributes.popper}
+        style={styles.floating}
+        {...attributes.floating}
       >
         <div className="card-body">
           <ColorPicker value={color} onChange={setColor} />
