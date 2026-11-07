@@ -1,7 +1,7 @@
 import 'regenerator-runtime/runtime';
 
 import mountReactComponents from '../mountReactComponents';
-import { StrictMode, Suspense, use, useLayoutEffect, useMemo, useState } from 'react';
+import { StrictMode, Suspense, use, useMemo, useSyncExternalStore } from 'react';
 import { createBrowserRouter, RouterProvider, RouteObject } from 'react-router';
 import { startAppBootstrap, buildRouterContext } from 'appBootstrap';
 import { appRootRoutes } from 'AppRouter';
@@ -61,16 +61,13 @@ function DataModeApplicationEntry() {
   );
 
   // Gate on router initialization so RouterProvider always mounts with
-  // initialized=true. router.subscribe replays the buffered initial state
-  // synchronously via the callback if the router finished before our effect
-  // ran (react-router stores the update in bufferedInitialStateUpdate and
-  // replays it to new subscribers immediately on subscribe()).
-  const [routerReady, setRouterReady] = useState(() => router.state.initialized);
-  useLayoutEffect(() => {
-    return router.subscribe((state) => {
-      if (state.initialized) setRouterReady(true);
-    });
-  }, [router]);
+  // initialized=true.  This has to read the router's current state when it subscribes (which useSyncExternalStore
+  // does): React Router 8's subscribe() doesn't replay past state to new subscribers like 7.x did, so a router that
+  // finished initializing before we subscribed would otherwise leave us on the loading indicator forever.
+  const routerReady = useSyncExternalStore(
+    (onStoreChange) => router.subscribe(onStoreChange),
+    () => router.state.initialized,
+  );
 
   if (!routerReady) {
     return <PageLoadingIndicator visible />;
