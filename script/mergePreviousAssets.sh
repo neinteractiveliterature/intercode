@@ -1,12 +1,12 @@
 #!/bin/sh
-# Run by Dockerfile.assets: carries the previous assets image's files over into this one, and prunes the ones that have
+# Run by the assets stage of the Dockerfile: carries the previous assets image's files over into this one, and prunes the ones that have
 # been obsolete for longer than the retention period. A file becomes obsolete when a release stops containing it, so
 # its age is counted from the build that dropped it, not from when it was first built.
 #
 # Usage: mergePreviousAssets.sh <previous-image-root> <retention-days> [web-root] [subdirectory]
 #
-# The web root and subdirectory default to the ones Dockerfile.assets uses (/usr/share/nginx/html and packs).
-# Dockerfile.assets-framework passes its own, since its hashed files live in assets/ in a different directory.
+# The web root and subdirectory default to /usr/share/nginx/html and packs, which the pre-9.0.0 assets image used.
+# The assets stage of the Dockerfile passes its own, since its hashed files live in assets/ in a different directory.
 set -eu
 
 previous_root="$1"
