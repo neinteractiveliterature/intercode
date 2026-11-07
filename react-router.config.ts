@@ -6,7 +6,4 @@ export default {
   appDirectory: 'app/javascript',
   buildDirectory: 'build/framework',
   ssr: false,
-  future: {
-    v8_middleware: true,
-  },
 } satisfies Config;
