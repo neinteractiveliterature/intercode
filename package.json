@@ -203,7 +203,7 @@
     "core-js-compat": "3.51.0",
     "eslint-plugin-i18next": "^6.1.1",
     "husky": "9.1.7",
-    "jsdom": "^29.0.0",
+    "jsdom": "^31.0.0",
     "lint-staged": "17.6.0",
     "node-addon-api": "^8.5.0",
     "node-gyp": "^13.0.0",
