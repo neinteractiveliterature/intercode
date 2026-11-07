@@ -108,7 +108,7 @@ gem "rollbar", "3.8.0"
 gem "bootsnap", "1.26.1", require: false
 
 group :development do
-  gem "rack-mini-profiler", "4.0.1", require: false
+  gem "rack-mini-profiler", "5.0.0", require: false
 
   # For memory profiling (requires Ruby MRI 2.1+)
   gem "memory_profiler", "1.1.0"
