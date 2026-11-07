@@ -22,6 +22,12 @@
       "groupName": "bundler non-major dependencies"
     },
     {
+      "description": "simplecov-cobertura pins simplecov to a matching major version, so they have to be upgraded together",
+      "matchManagers": ["bundler"],
+      "matchPackageNames": ["simplecov", "simplecov-cobertura"],
+      "groupName": "simplecov"
+    },
+    {
       "matchPackageNames": ["rails"],
       "matchUpdateTypes": ["minor"],
       "automerge": false
