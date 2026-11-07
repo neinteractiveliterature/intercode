@@ -95,7 +95,7 @@
     "buffer": "6.0.3",
     "bytes": "3.1.2",
     "cadmus-navbar-admin": "6.0.0",
-    "caniuse-lite": "1.0.30001822",
+    "caniuse-lite": "1.0.30001823",
     "classnames": "2.5.1",
     "cm6-graphql": "^1.0.0",
     "codemirror": "^6.0.1",
@@ -168,7 +168,7 @@
   "devDependencies": {
     "@graphql-codegen/add": "7.1.1",
     "@graphql-codegen/cli": "7.4.6",
-    "@graphql-codegen/fragment-matcher": "7.1.0",
+    "@graphql-codegen/fragment-matcher": "7.1.1",
     "@graphql-codegen/introspection": "6.1.0",
     "@graphql-codegen/near-operation-file-preset": "5.2.4",
     "@graphql-codegen/typed-document-node": "^7.0.0",
