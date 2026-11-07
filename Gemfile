@@ -134,7 +134,7 @@ group :development do
   # Linting
   gem "prettier", "4.0.4"
   gem "prettier_print", "1.2.1"
-  gem "prism", "1.9.0"
+  gem "prism", "2.1.0"
   gem "rubocop", "1.92.2"
   gem "rubocop-capybara", "3.1.0", require: false
   gem "rubocop-factory_bot", "2.28.0", require: false
