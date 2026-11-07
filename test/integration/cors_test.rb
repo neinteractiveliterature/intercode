@@ -71,6 +71,15 @@ class CorsTest < ActionDispatch::IntegrationTest
       end
     end
 
+    it "doesn't allow an origin with no host just because INTERCODE_HOST is unset" do
+      with_intercode_host(nil) do
+        get "/authenticity_tokens", headers: { "Origin" => "ht!tp://not a uri" }
+
+        assert_response :success
+        assert_nil allow_origin
+      end
+    end
+
     it "ignores a malformed Origin instead of raising" do
       # Production always sets INTERCODE_HOST; with it unset, an origin with no host would compare nil == nil
       with_intercode_host("intercode.test") do

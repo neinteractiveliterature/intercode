@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-# rubocop:disable Metrics/BlockLength
 # FindVirtualHost is inserted after ActionDispatch::Executor in application.rb, so
 # env["intercode.convention"] is set before Rack::Cors runs its origin check.
 Rails.application.config.middleware.insert_after Intercode::FindVirtualHost, Rack::Cors do
@@ -18,7 +17,7 @@ Rails.application.config.middleware.insert_after Intercode::FindVirtualHost, Rac
         host = source_uri&.host
         intercode_host = ENV.fetch("INTERCODE_HOST", nil)
         # Allow INTERCODE_HOST itself and convention subdomains (e.g. for OIDC discovery from a convention page)
-        if host == intercode_host || (intercode_host && host&.end_with?(".#{intercode_host}"))
+        if intercode_host && (host == intercode_host || host&.end_with?(".#{intercode_host}"))
           true
         else
           # this might be a request to a backend-only domain where the browser is on a frontend page
@@ -39,4 +38,3 @@ Rails.application.config.middleware.insert_after Intercode::FindVirtualHost, Rac
   #   resource "*", headers: :any, methods: %i[get]
   # end
 end
-# rubocop:enable Metrics/BlockLength
