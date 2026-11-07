@@ -10294,13 +10294,6 @@ __metadata:
   languageName: node
   linkType: hard
 
-"consolidated-events@npm:^1.1.0 || ^2.0.0":
-  version: 2.0.2
-  resolution: "consolidated-events@npm:2.0.2"
-  checksum: 10c0/d82df47cfd4d43289cdbc5c6d9a924f1445b1c753d36ee1250efa2ee008bca0bc72702ab2e9bda58e1deb8083dc45efdbe3deb363e094fcba7ec6b7b3589df53
-  languageName: node
-  linkType: hard
-
 "constant-case@npm:^3.0.4":
   version: 3.0.4
   resolution: "constant-case@npm:3.0.4"
@@ -17977,7 +17970,7 @@ __metadata:
   languageName: node
   linkType: hard
 
-"prop-types@npm:15.8.1, prop-types@npm:^15.0.0, prop-types@npm:^15.5.10, prop-types@npm:^15.6.0, prop-types@npm:^15.6.2, prop-types@npm:^15.7.2":
+"prop-types@npm:15.8.1, prop-types@npm:^15.5.10, prop-types@npm:^15.6.0, prop-types@npm:^15.6.2, prop-types@npm:^15.7.2":
   version: 15.8.1
   resolution: "prop-types@npm:15.8.1"
   dependencies:
@@ -18328,6 +18321,19 @@ __metadata:
   languageName: node
   linkType: hard
 
+"react-intersection-observer@npm:11.0.1":
+  version: 11.0.1
+  resolution: "react-intersection-observer@npm:11.0.1"
+  peerDependencies:
+    react: ^17.0.0 || ^18.0.0 || ^19.0.0
+    react-dom: ^17.0.0 || ^18.0.0 || ^19.0.0
+  peerDependenciesMeta:
+    react-dom:
+      optional: true
+  checksum: 10c0/06abc4291457d0535834ef6f25164817a9196ad6b1fb90f033fca4905c1424c497254f11d84ded5dde83811cd45c33ec7f2fbb11f2ccd2463c6f267041105327
+  languageName: node
+  linkType: hard
+
 "react-is@npm:^16.13.1, react-is@npm:^16.6.0, react-is@npm:^16.7.0":
   version: 16.13.1
   resolution: "react-is@npm:16.13.1"
@@ -18339,13 +18345,6 @@ __metadata:
   version: 17.0.2
   resolution: "react-is@npm:17.0.2"
   checksum: 10c0/2bdb6b93fbb1820b024b496042cce405c57e2f85e777c9aabd55f9b26d145408f9f74f5934676ffdc46f3dcff656d78413a6e43968e7b3f92eea35b3052e9053
-  languageName: node
-  linkType: hard
-
-"react-is@npm:^17.0.1 || ^18.0.0":
-  version: 18.3.1
-  resolution: "react-is@npm:18.3.1"
-  checksum: 10c0/f2f1e60010c683479e74c63f96b09fb41603527cd131a9959e2aee1e5a8b0caf270b365e5ca77d4a6b18aae659b60a86150bb3979073528877029b35aecd2072
   languageName: node
   linkType: hard
 
@@ -18529,20 +18528,6 @@ __metadata:
     react: ">=16.8.0"
     react-dom: ">=16.8.0"
   checksum: 10c0/39ff11ba8ec859db7a91487f30325eca9b9919cb057afdf19843de402bf5201f256019319a14097fa8f7081f14290782551af5eddb7370b5503e99347c120bca
-  languageName: node
-  linkType: hard
-
-"react-waypoint@npm:10.3.0":
-  version: 10.3.0
-  resolution: "react-waypoint@npm:10.3.0"
-  dependencies:
-    "@babel/runtime": "npm:^7.12.5"
-    consolidated-events: "npm:^1.1.0 || ^2.0.0"
-    prop-types: "npm:^15.0.0"
-    react-is: "npm:^17.0.1 || ^18.0.0"
-  peerDependencies:
-    react: ^15.3.0 || ^16.0.0 || ^17.0.0 || ^18.0.0
-  checksum: 10c0/872e8a04a0dca12d6405169ebdafe13f59f473c93f9d179ce833533e6126d4b7e25336a0bc00e044cb033d413aad7a87961a1d887639f27b26f662a774491ec1
   languageName: node
   linkType: hard
 
@@ -19388,12 +19373,12 @@ __metadata:
     react-dom: "npm:19.3.1"
     react-html-id: "npm:0.1.5"
     react-i18next: "npm:17.1.13"
+    react-intersection-observer: "npm:11.0.1"
     react-onclickoutside: "npm:6.13.2"
     react-router: "npm:8.5.1"
     react-select: "npm:5.10.2"
     react-test-renderer: "npm:19.3.1"
     react-transition-state: "npm:^2.3.1"
-    react-waypoint: "npm:10.3.0"
     regenerator-runtime: "npm:0.14.1"
     require-from-string: "npm:2.0.2"
     rollbar: "npm:^4.0.0"

@@ -1,6 +1,7 @@
 import './tempPolyfills';
 import '@testing-library/jest-dom/vitest';
 import { afterEach, beforeEach, MockInstance, vi } from 'vitest';
+import { resetIntersectionMocking, setupIntersectionMocking } from 'react-intersection-observer/test-utils';
 
 // Fail any test that makes React log "not wrapped in act(...)".  Those warnings mean a state update landed outside
 // the test's control, so the test can be asserting on (or finishing before) an intermediate state -- and a suite that
@@ -28,6 +29,21 @@ afterEach(() => {
       `React logged ${actWarnings.length} "not wrapped in act(...)" warning(s) during this test, e.g. "${actWarnings[0]}". ` +
         'Await the interaction or the content being waited on (see agent-docs/frontend-testing.md).',
     );
+  }
+});
+
+// jsdom has no IntersectionObserver, which InView and useInView need.  Nothing intersects until a test says so (see
+// mockAllIsIntersecting in react-intersection-observer/test-utils).  Tests that run in the node environment have no
+// window to mock it on.
+beforeEach(() => {
+  if (typeof window !== 'undefined') {
+    setupIntersectionMocking(vi.fn);
+  }
+});
+
+afterEach(() => {
+  if (typeof window !== 'undefined') {
+    resetIntersectionMocking();
   }
 });
 

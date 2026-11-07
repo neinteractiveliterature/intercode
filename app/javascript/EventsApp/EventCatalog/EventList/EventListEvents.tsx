@@ -1,5 +1,5 @@
 import { Fragment, ReactNode, useContext, useMemo } from 'react';
-import { Waypoint } from 'react-waypoint';
+import { InView } from 'react-intersection-observer';
 import { SortingState } from '@tanstack/react-table';
 import { DateTime } from 'luxon';
 
@@ -81,9 +81,17 @@ function EventListEvents({
 
         if (index === eventsPaginated.entries.length - 5) {
           return (
-            <Waypoint fireOnRapidScroll onEnter={fetchMoreIfNeeded} key={`waypoint-${event.id}`}>
-              <div>{eventContent}</div>
-            </Waypoint>
+            <InView
+              as="div"
+              key={`waypoint-${event.id}`}
+              onChange={(inView) => {
+                if (inView) {
+                  fetchMoreIfNeeded();
+                }
+              }}
+            >
+              {eventContent}
+            </InView>
           );
         }
 

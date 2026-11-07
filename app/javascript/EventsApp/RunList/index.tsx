@@ -4,7 +4,7 @@ import { DateTime } from 'luxon';
 import React, { RefObject, useCallback, useContext, useLayoutEffect, useMemo, useRef, useState } from 'react';
 import { useTranslation } from 'react-i18next';
 import { useLocation, useNavigate, useParams } from 'react-router';
-import { Waypoint } from 'react-waypoint';
+import { InView } from 'react-intersection-observer';
 
 import AppRootContext from '../../AppRootContext';
 import { FiniteTimespan } from '../../Timespan';
@@ -219,73 +219,80 @@ export default function RunList({
           >
             <h3 className="pb-1">{format(dayStart, 'longWeekdayDate')}</h3>
           </div>
-          <Waypoint topOffset="50%" onEnter={() => enteredRunGroup({ dayStart, timeGroups })}>
-            <div>
-              {timeGroups.map(({ startTime, runs }) => {
-                const filteredRuns = runs.filter((run) => {
-                  const event = eventsByRunId.get(run.id);
-                  const timespan = timespanByRunId.get(run.id);
+          {/* The day counts as entered once part of it is in the lower half of the screen */}
+          <InView
+            as="div"
+            rootMargin="-50% 0px 0px 0px"
+            onChange={(inView) => {
+              if (inView) {
+                enteredRunGroup({ dayStart, timeGroups });
+              }
+            }}
+          >
+            {timeGroups.map(({ startTime, runs }) => {
+              const filteredRuns = runs.filter((run) => {
+                const event = eventsByRunId.get(run.id);
+                const timespan = timespanByRunId.get(run.id);
 
-                  if (!event || !timespan) {
-                    return false;
-                  }
+                if (!event || !timespan) {
+                  return false;
+                }
 
-                  if (
-                    hideConflicts &&
-                    conflictingRuns.some(
-                      (conflictingRun) =>
-                        conflictingRun.id !== run.id &&
-                        timespanByRunId.get(conflictingRun.id)?.overlapsTimespan(timespan),
-                    )
-                  ) {
-                    return false;
-                  }
+                if (
+                  hideConflicts &&
+                  conflictingRuns.some(
+                    (conflictingRun) =>
+                      conflictingRun.id !== run.id &&
+                      timespanByRunId.get(conflictingRun.id)?.overlapsTimespan(timespan),
+                  )
+                ) {
+                  return false;
+                }
 
-                  if (myProfile && !ratingFilter.includes(event.my_rating ?? 0)) {
-                    return false;
-                  }
-                  return true;
-                });
+                if (myProfile && !ratingFilter.includes(event.my_rating ?? 0)) {
+                  return false;
+                }
+                return true;
+              });
 
-                return (
-                  <React.Fragment key={startTime.valueOf()}>
-                    <div className="mt-2">{format(startTime, 'shortTimeWithZone')}</div>
-                    {filteredRuns.map((run) => {
-                      const event = eventsByRunId.get(run.id);
-                      const timespan = timespanByRunId.get(run.id);
-                      const signupCountData = signupCountDataByRunId.get(run.id);
+              return (
+                <React.Fragment key={startTime.valueOf()}>
+                  <div className="mt-2">{format(startTime, 'shortTimeWithZone')}</div>
+                  {filteredRuns.map((run) => {
+                    const event = eventsByRunId.get(run.id);
+                    const timespan = timespanByRunId.get(run.id);
+                    const signupCountData = signupCountDataByRunId.get(run.id);
 
-                      if (!event || !timespan || !signupCountData) {
-                        return <React.Fragment key={run.id}></React.Fragment>;
-                      }
+                    if (!event || !timespan || !signupCountData) {
+                      return <React.Fragment key={run.id}></React.Fragment>;
+                    }
 
-                      return (
-                        <div className="ps-4" key={run.id}>
-                          <div
-                            style={{
-                              position: 'relative',
-                              width: '100%',
-                              height: `${PIXELS_PER_LANE}px`,
-                            }}
-                          >
-                            <RunListEventRun
-                              event={event}
-                              run={run}
-                              timespan={timespan}
-                              signupCountData={signupCountData}
-                            />
-                          </div>
+                    return (
+                      <div className="ps-4" key={run.id}>
+                        <div
+                          style={{
+                            position: 'relative',
+                            width: '100%',
+                            height: `${PIXELS_PER_LANE}px`,
+                          }}
+                        >
+                          <RunListEventRun
+                            event={event}
+                            run={run}
+                            timespan={timespan}
+                            signupCountData={signupCountData}
+                          />
                         </div>
-                      );
-                    })}
-                    {filteredRuns.length < runs.length && (
-                      <div className="ps-4 text-muted">+{runs.length - filteredRuns.length} hidden</div>
-                    )}
-                  </React.Fragment>
-                );
-              })}
-            </div>
-          </Waypoint>
+                      </div>
+                    );
+                  })}
+                  {filteredRuns.length < runs.length && (
+                    <div className="ps-4 text-muted">+{runs.length - filteredRuns.length} hidden</div>
+                  )}
+                </React.Fragment>
+              );
+            })}
+          </InView>
         </React.Fragment>
       ))}
     </>
