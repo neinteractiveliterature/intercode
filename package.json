@@ -135,7 +135,7 @@
     "payment": "2.4.7",
     "porter-stemmer": "0.9.1",
     "postcss": "8.5.32",
-    "postcss-import": "16.2.0",
+    "postcss-import": "17.0.1",
     "prop-types": "15.8.1",
     "punycode": "2.3.1",
     "qs": "^6.17.0",
