@@ -169,7 +169,7 @@ group :test do
   gem "minitest-mock", "5.27.0"
   gem "minitest-reporters", "1.8.0"
   gem "minitest-spec-rails", "7.4.1"
-  gem "simplecov", "0.22.0"
+  gem "simplecov", "1.3.2"
   gem "simplecov-cobertura", "3.2.0"
 
   # Not sure if we actually need it or not, but adding this for now to unbreak controller tests
