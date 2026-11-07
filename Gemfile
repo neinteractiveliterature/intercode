@@ -26,7 +26,7 @@ gem "devise-doorkeeper", "1.2.0"
 gem "devise-encryptable", "0.3.0"
 gem "doorkeeper", "5.9.9"
 gem "doorkeeper-jwt", "0.4.5"
-gem "doorkeeper-openid_connect", "1.10.5"
+gem "doorkeeper-openid_connect", "2.1.0"
 gem "pundit", "2.5.2"
 
 # Let's store sessions in the database, shall we?
