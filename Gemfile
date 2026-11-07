@@ -95,7 +95,7 @@ gem "domain_prefix", "1.0.20241203"
 gem "faraday", "2.15.1"
 gem "icalendar", "2.13.0"
 gem "positioning", "0.4.8"
-gem "rack-cors", "2.0.2"
+gem "rack-cors", "3.0.0"
 gem "stackprof", "0.2.28"
 gem "tzinfo-data", "1.2026.6"
 
