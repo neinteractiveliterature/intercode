@@ -10032,11 +10032,11 @@ __metadata:
   languageName: node
   linkType: hard
 
-"cm6-graphql@npm:^0.2.1":
-  version: 0.2.2
-  resolution: "cm6-graphql@npm:0.2.2"
+"cm6-graphql@npm:^1.0.0":
+  version: 1.0.0
+  resolution: "cm6-graphql@npm:1.0.0"
   dependencies:
-    graphql-language-service: "npm:^5.7.0"
+    graphql-language-service: "npm:^6.0.0"
   peerDependencies:
     "@codemirror/autocomplete": ^6.0.0
     "@codemirror/language": ^6.0.0
@@ -10044,8 +10044,8 @@ __metadata:
     "@codemirror/state": ^6.0.0
     "@codemirror/view": ^6.0.0
     "@lezer/highlight": ^1.0.0
-    graphql: ^15.5.0 || ^16.0.0 || ^17.0.0
-  checksum: 10c0/687efdc11e50d1d361ea0ea38b0d1244e6d991fbbf017cd485821bebfaafce014706b2a6919012dcf414a6021ecff0a7dd09d64978747c36478a6cc42f6767e7
+    graphql: ^16.11.0 || ^17.0.0
+  checksum: 10c0/35e056a063b1d092d935aa93afaaf0f0cc044be367e69f4887620c25e9381f7121a699468722a45e68fff1f5e9370127a57d3cae2ff6af47842f5e034ca9e496
   languageName: node
   linkType: hard
 
@@ -12853,18 +12853,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"graphql-language-service@npm:^5.7.0":
-  version: 5.7.0
-  resolution: "graphql-language-service@npm:5.7.0"
+"graphql-language-service@npm:^6.0.0":
+  version: 6.0.1
+  resolution: "graphql-language-service@npm:6.0.1"
   dependencies:
     debounce-promise: "npm:^3.1.2"
-    nullthrows: "npm:^1.0.0"
-    vscode-languageserver-types: "npm:^3.17.1"
+    vscode-languageserver-types: "npm:^3.18.5"
   peerDependencies:
-    graphql: ^15.5.0 || ^16.0.0 || ^17.0.0
-  bin:
-    graphql: dist/temp-bin.js
-  checksum: 10c0/0a6d22be6ac75a028cc8455df29aeda2b41dbfc0500ef2f891258886d856433433bd6e5d87689e7d4d65a111c19b302b1af35ac5eb3b12efbb2c3ba0f858d547
+    graphql: ^16.11.0 || ^17.0.0
+  checksum: 10c0/cf78fcf4ac1c89f6d05667e60f16aa8fdda3a6cec55498f341315ecda91bac5439c1daa1892d0df288ffd7f838bf24bada6f71370df9fab504fcb79c836b02f1
   languageName: node
   linkType: hard
 
@@ -16283,13 +16280,6 @@ __metadata:
   peerDependencies:
     webpack: ^4.0.0 || ^5.0.0
   checksum: 10c0/fe9a74a928c9ddc1eab7be0e4322516439562d6efd6feeb0f7c61777d4b79a6a8e5a6bc8133deb59408f3f423bdf84c154a88168154a583154e9e33d544b4d42
-  languageName: node
-  linkType: hard
-
-"nullthrows@npm:^1.0.0":
-  version: 1.1.1
-  resolution: "nullthrows@npm:1.1.1"
-  checksum: 10c0/56f34bd7c3dcb3bd23481a277fa22918120459d3e9d95ca72976c72e9cac33a97483f0b95fc420e2eb546b9fe6db398273aba9a938650cdb8c98ee8f159dcb30
   languageName: node
   linkType: hard
 
@@ -19740,7 +19730,7 @@ __metadata:
     cadmus-navbar-admin: "npm:6.0.0"
     caniuse-lite: "npm:1.0.30001822"
     classnames: "npm:2.5.1"
-    cm6-graphql: "npm:^0.2.1"
+    cm6-graphql: "npm:^1.0.0"
     codemirror: "npm:^6.0.1"
     core-js: "npm:3.51.0"
     core-js-compat: "npm:3.51.0"
@@ -22140,10 +22130,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"vscode-languageserver-types@npm:^3.17.1":
-  version: 3.17.2
-  resolution: "vscode-languageserver-types@npm:3.17.2"
-  checksum: 10c0/3d9424311070dc4a5e3a06dd454a1971988d3b76a7eca80660ee20e26c20fb7cc03359a117b11a887e8c1b7a65c13fd81120bc85b618c7c571eb200dbd7ed45c
+"vscode-languageserver-types@npm:^3.18.5":
+  version: 3.18.5
+  resolution: "vscode-languageserver-types@npm:3.18.5"
+  checksum: 10c0/de783b4c3d22908e5e4b0434548aa7935771d2a2514f65706f7746b859fdd755ee8aedae020f81e8416c4a87f2b131d2b43124b9010baed957c4b4a661726cfa
   languageName: node
   linkType: hard
 
