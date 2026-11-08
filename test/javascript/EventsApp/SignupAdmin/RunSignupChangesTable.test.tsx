@@ -180,6 +180,16 @@ describe('RunSignupChangesTable', () => {
     expect(within(filterCell(r, 'Change')).queryByRole('checkbox')).toBeNull();
   });
 
+  it('remembers its page size separately from the signup spy report', async () => {
+    const r = await renderTable();
+
+    await events.selectOptions(r.getByRole('combobox'), '50');
+
+    await waitFor(() => expect(lastVariables().perPage).toBe(50));
+    expect(window.localStorage.getItem('tables:runSignupChanges:pageSize')).toBe('50');
+    expect(window.localStorage.getItem('tables:signupSpy:pageSize')).toBeNull();
+  });
+
   it('takes a filter on the kind of change from the URL', async () => {
     await renderTable('?filters.action=withdraw');
 
