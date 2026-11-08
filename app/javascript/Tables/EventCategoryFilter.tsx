@@ -1,12 +1,12 @@
 import { useContext, useMemo } from 'react';
 import { QueryDataContext } from './useReactTableWithTheWorks';
 import ChoiceSetFilter from './ChoiceSetFilter';
-import { Column } from '@tanstack/react-table';
+import { type AppColumn } from './tableFeatures';
 
 export default function EventCategoryFilter<TData extends Record<string, unknown>, TValue>({
   column,
 }: {
-  column: Column<TData, TValue>;
+  column: AppColumn<TData, TValue>;
 }) {
   const data = useContext(QueryDataContext) as { convention?: { event_categories: { id: string; name: string }[] } };
   const choices = useMemo(

@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { CellContext, ColumnDef, createColumnHelper } from '@tanstack/react-table';
+import { createAppColumnHelper, type AppCellContext, type AppColumnDef } from '../Tables/tableFeatures';
 import { Link, Outlet, useNavigate } from 'react-router';
 import { DateTime } from 'luxon';
 import { useTranslation } from 'react-i18next';
@@ -21,7 +21,7 @@ type ConventionType = RootSiteConventionsAdminTableQueryData['conventions_pagina
 
 const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({});
 
-function ConventionDatesCell({ row }: CellContext<ConventionType, unknown>) {
+function ConventionDatesCell({ row }: AppCellContext<ConventionType, unknown>) {
   const value = row.original;
   const { t } = useTranslation();
   const timespan = useMemo(() => timespanFromConvention(value), [value]);
@@ -75,8 +75,8 @@ function RootSiteConventionsAdminTable(): React.JSX.Element {
   const navigate = useNavigate();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const columns = useMemo((): ColumnDef<ConventionType, any>[] => {
-    const columnHelper = createColumnHelper<ConventionType>();
+  const columns = useMemo((): AppColumnDef<ConventionType, any>[] => {
+    const columnHelper = createAppColumnHelper<ConventionType>();
     return [
       columnHelper.accessor('name', {
         header: 'Name',

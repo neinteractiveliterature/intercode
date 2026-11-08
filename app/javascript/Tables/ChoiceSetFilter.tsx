@@ -5,7 +5,7 @@ import { useTranslation } from 'react-i18next';
 import { ChoiceSet, useLitformFloatingWithAutoClosing, useToggleOpen } from '@neinteractiveliterature/litform';
 
 import { FilterCodec } from './FilterUtils';
-import { Column } from '@tanstack/react-table';
+import { type AppColumn } from './tableFeatures';
 
 export type ChoiceSetFilterChoice = {
   label: string;
@@ -28,7 +28,7 @@ function sortChoices(choices: readonly ChoiceSetFilterChoice[]) {
 type ChoiceSetFilterValue = ChoiceSetFilterChoice['value'];
 
 type LenientFilterProps<TData extends Record<string, unknown>, TValue> = {
-  column: Pick<Column<TData, TValue>, 'getFilterValue' | 'setFilterValue'>;
+  column: Pick<AppColumn<TData, TValue>, 'getFilterValue' | 'setFilterValue'>;
 };
 
 type ChoiceSetFilterCommonProps<TData extends Record<string, unknown>, TValue> = LenientFilterProps<TData, TValue> & {
@@ -59,12 +59,11 @@ export type ChoiceSetFilterProps<TData extends Record<string, unknown>, TValue> 
 function ChoiceSetFilter<TData extends Record<string, unknown>, TValue>(
   props: ChoiceSetFilterProps<TData, TValue>,
 ): React.JSX.Element {
-  const {
-    choices: rawChoices,
-    column: { getFilterValue, setFilterValue },
-    multiple,
-    ...otherProps
-  } = props;
+  const { choices: rawChoices, column, multiple, ...otherProps } = props;
+  // (call the column's methods on the column, rather than taking them out of it: they need to know which column they
+  // belong to.  And it's the filter value itself, not the method that reads it, that the memo below depends on.)
+  const currentFilterValue = column.getFilterValue();
+  const setFilterValue = (value: unknown) => column.setFilterValue(value);
   const { t } = useTranslation();
   const [dropdownButton, setDropdownButton] = useState<HTMLDivElement | null>(null);
   const [dropdownMenu, setDropdownMenu] = useState<HTMLDivElement | null>(null);
@@ -96,21 +95,21 @@ function ChoiceSetFilter<TData extends Record<string, unknown>, TValue>(
   const filterValue = useMemo(() => {
     const filterCodec = props.filterCodec;
     if (props.multiple) {
-      const rawFilterValue = (getFilterValue() ?? []) as (string | undefined)[];
+      const rawFilterValue = (currentFilterValue ?? []) as (string | undefined)[];
       if (filterCodec) {
         return rawFilterValue.map((singleValue) => filterCodec.encode(singleValue)?.toString());
       } else {
         return rawFilterValue.map((singleValue) => singleValue?.toString());
       }
     } else {
-      const rawFilterValue = (getFilterValue() ?? undefined) as string | undefined;
+      const rawFilterValue = (currentFilterValue ?? undefined) as string | undefined;
       if (filterCodec) {
         return filterCodec.encode(rawFilterValue)?.toString();
       } else {
         return rawFilterValue?.toString();
       }
     }
-  }, [getFilterValue, props.filterCodec, props.multiple]);
+  }, [currentFilterValue, props.filterCodec, props.multiple]);
 
   const choices = useMemo(() => {
     const filterCodec = props.filterCodec;
@@ -148,8 +147,8 @@ function ChoiceSetFilter<TData extends Record<string, unknown>, TValue>(
       return (
         <span className="me-2">
           {props.multiple
-            ? props.renderHeaderCaption(getFilterValue() as string[])
-            : props.renderHeaderCaption(getFilterValue() as string)}
+            ? props.renderHeaderCaption(currentFilterValue as string[])
+            : props.renderHeaderCaption(currentFilterValue as string)}
         </span>
       );
     }
@@ -214,13 +213,13 @@ function ChoiceSetFilter<TData extends Record<string, unknown>, TValue>(
           {props.multiple ? (
             <ChoiceSet
               multiple
-              value={getFilterValue() as string[]}
+              value={currentFilterValue as string[]}
               choices={choices}
               onChange={valueChanged}
               {...otherProps}
             />
           ) : (
-            <ChoiceSet value={getFilterValue() as string} choices={choices} onChange={valueChanged} {...otherProps} />
+            <ChoiceSet value={currentFilterValue as string} choices={choices} onChange={valueChanged} {...otherProps} />
           )}
         </div>
 

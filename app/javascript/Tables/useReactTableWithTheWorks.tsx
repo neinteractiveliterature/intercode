@@ -1,15 +1,5 @@
 import React, { createContext, useMemo, useEffect } from 'react';
-import {
-  TableState,
-  useReactTable,
-  getCoreRowModel,
-  getFilteredRowModel,
-  getSortedRowModel,
-  getPaginationRowModel,
-  Table,
-  ColumnDef,
-  TableOptions,
-} from '@tanstack/react-table';
+import { useTable, type TableOptions } from '@tanstack/react-table';
 
 import useColumnSelection, { UseColumnSelectionOptions, UseColumnSelectionResult } from './useColumnSelection';
 import useGraphQLReactTable, {
@@ -20,6 +10,7 @@ import useGraphQLReactTable, {
 import useLocalStorageReactTable, { UseLocalStorageReactTableOptions } from './useLocalStorageReactTable';
 import useReactRouterReactTable, { UseReactRouterReactTableOptions } from './useReactRouterReactTable';
 import type { TableHeaderProps } from './TableHeader';
+import { appTableFeatures, type AnyAppColumnDef, type AppTable, type AppTableFeatures } from './tableFeatures';
 
 export function createQueryDataContext<DataType>(): React.Context<DataType | null | undefined> {
   return createContext<DataType | null | undefined>(undefined);
@@ -34,12 +25,11 @@ export type UseReactTableWithTheWorksOptions<
   UseGraphQLReactTableOptions<RowType, QueryData, Variables> &
   UseLocalStorageReactTableOptions &
   UseReactRouterReactTableOptions & {
-    defaultState?: Partial<TableState>;
-    columns: ColumnDef<RowType>[];
+    columns: AnyAppColumnDef<RowType>[];
     storageKeyPrefix: string;
     rowSelect?: boolean;
   } & {
-    getRowId?: TableOptions<RowType>['getRowId'];
+    getRowId?: TableOptions<AppTableFeatures, RowType>['getRowId'];
   };
 
 export type UseReactTableWithTheWorksResult<
@@ -47,7 +37,7 @@ export type UseReactTableWithTheWorksResult<
   RowType extends Record<string, unknown>,
   Variables extends GraphQLReactTableVariables = GraphQLReactTableVariables,
 > = Pick<UseGraphQLReactTableResult<RowType, QueryData, Variables>, 'refetch' | 'queryData' | 'loading' | 'error'> & {
-  table: Table<RowType>;
+  table: AppTable<RowType>;
   columnSelectionProps: UseColumnSelectionResult;
   tableHeaderProps: TableHeaderProps<RowType>;
 };
@@ -103,7 +93,8 @@ export default function useReactTableWithTheWorks<
     [columns, columnSelectionProps, filters, sortBy],
   );
 
-  const table = useReactTable<RowType>({
+  const table = useTable({
+    features: appTableFeatures,
     columns,
     data,
     defaultColumn: {
@@ -127,13 +118,9 @@ export default function useReactTableWithTheWorks<
     pageCount: pages,
     enableRowSelection: rowSelect,
     getRowId,
-    getCoreRowModel: getCoreRowModel(),
-    getFilteredRowModel: getFilteredRowModel(),
-    getSortedRowModel: getSortedRowModel(),
-    getPaginationRowModel: getPaginationRowModel(),
   });
 
-  const { columnFilters, sorting, pagination } = table.getState();
+  const { columnFilters, sorting, pagination } = table.state;
 
   useEffect(() => {
     updateSearch({

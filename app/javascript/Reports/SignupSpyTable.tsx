@@ -1,4 +1,4 @@
-import { CellContext, ColumnDef, createColumnHelper } from '@tanstack/react-table';
+import { createAppColumnHelper, type AppCellContext, type AppColumnDef } from '../Tables/tableFeatures';
 
 import useReactTableWithTheWorks, { QueryDataContext } from '../Tables/useReactTableWithTheWorks';
 import RefreshButton from '../EventsApp/ScheduleGrid/RefreshButton';
@@ -31,8 +31,8 @@ const defaultState = {
 
 function SignupSpyTable(): React.JSX.Element {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const columns = useMemo((): ColumnDef<SignupChangeType, any>[] => {
-    const columnHelper = createColumnHelper<SignupChangeType>();
+  const columns = useMemo((): AppColumnDef<SignupChangeType, any>[] => {
+    const columnHelper = createAppColumnHelper<SignupChangeType>();
     return [
       columnHelper.accessor('user_con_profile', {
         header: 'Name',
@@ -49,7 +49,7 @@ function SignupSpyTable(): React.JSX.Element {
         header: 'Change',
         id: 'action',
         cell: SignupChangeCell as unknown as (
-          props: CellContext<SignupChangeType, SignupChangeType>,
+          props: AppCellContext<SignupChangeType, SignupChangeType>,
         ) => React.JSX.Element,
         enableColumnFilter: true,
       }),

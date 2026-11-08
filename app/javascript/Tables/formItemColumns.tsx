@@ -1,4 +1,5 @@
-import { CellContext, ColumnHelper } from '@tanstack/react-table';
+import { type RowData } from '@tanstack/react-table';
+import { type AppCellContext, type AppColumnHelper } from './tableFeatures';
 import { QueryDataContext } from './useReactTableWithTheWorks';
 import { useContext } from 'react';
 import FormItemDisplay, { ConventionForFormItemDisplay } from 'FormPresenter/ItemDisplays/FormItemDisplay';
@@ -43,12 +44,12 @@ function defaultGetHeader(formItem: TypedFormItem & { identifier: string }) {
   return formItem.public_description ?? formItem.identifier;
 }
 
-export function formItemColumn<RowType>(
+export function formItemColumn<RowType extends RowData>(
   formItem: TypedFormItem & { identifier: string },
-  columnHelper: ColumnHelper<RowType>,
+  columnHelper: AppColumnHelper<RowType>,
   { getFormData, convention, displayMode = 'public', getHeader = defaultGetHeader }: FormItemColumnOptions<RowType>,
 ) {
-  function FormItemCell<TData, TValue>({ getValue }: CellContext<TData, TValue>) {
+  function FormItemCell<TData extends RowData, TValue>({ getValue }: AppCellContext<TData, TValue>) {
     const data = useContext(QueryDataContext) as { convention: ConventionForFormItemDisplay };
     return (
       <FormItemDisplay
@@ -67,9 +68,9 @@ export function formItemColumn<RowType>(
   });
 }
 
-export function formItemColumns<RowType>(
+export function formItemColumns<RowType extends RowData>(
   formItems: TypedFormItem[],
-  columnHelper: ColumnHelper<RowType>,
+  columnHelper: AppColumnHelper<RowType>,
   options: FormItemColumnOptions<RowType>,
 ) {
   return formItems

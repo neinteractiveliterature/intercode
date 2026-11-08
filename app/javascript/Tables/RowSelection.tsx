@@ -1,8 +1,9 @@
-import { CellContext, ColumnHelper, HeaderContext } from '@tanstack/react-table';
+import { type RowData } from '@tanstack/react-table';
+import { type AppCellContext, type AppColumnHelper, type AppHeaderContext } from './tableFeatures';
 import IndeterminateCheckbox from './IndeterminateCheckbox';
 import { useTranslation } from 'react-i18next';
 
-export function RowSelectHeader<TData, TValue>({ table }: HeaderContext<TData, TValue>) {
+export function RowSelectHeader<TData extends RowData, TValue>({ table }: AppHeaderContext<TData, TValue>) {
   const { t } = useTranslation();
 
   const toggleAllSelected = (event: React.SyntheticEvent) => {
@@ -26,7 +27,7 @@ export function RowSelectHeader<TData, TValue>({ table }: HeaderContext<TData, T
   );
 }
 
-export function RowSelectCell<TData, TValue>({ row }: CellContext<TData, TValue>) {
+export function RowSelectCell<TData extends RowData, TValue>({ row }: AppCellContext<TData, TValue>) {
   const { t } = useTranslation();
 
   const toggleSelected = (event: React.SyntheticEvent) => {
@@ -52,7 +53,7 @@ export function RowSelectCell<TData, TValue>({ row }: CellContext<TData, TValue>
   );
 }
 
-export function buildRowSelectColumn<TData>(columnHelper: ColumnHelper<TData>) {
+export function buildRowSelectColumn<TData extends RowData>(columnHelper: AppColumnHelper<TData>) {
   return columnHelper.display({
     id: '_rowSelect',
     size: 20,

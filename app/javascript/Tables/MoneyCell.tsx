@@ -1,10 +1,11 @@
-import { CellContext } from '@tanstack/react-table';
+import { type RowData } from '@tanstack/react-table';
+import { type AppCellContext } from './tableFeatures';
 import formatMoney from '../formatMoney';
 import { Money } from '../graphqlTypes.generated';
 
-function MoneyCell<TData, TValue extends Money | undefined | null>({
+function MoneyCell<TData extends RowData, TValue extends Money | undefined | null>({
   getValue,
-}: CellContext<TData, TValue>): React.JSX.Element {
+}: AppCellContext<TData, TValue>): React.JSX.Element {
   return <>{formatMoney(getValue())}</>;
 }
 

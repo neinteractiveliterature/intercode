@@ -1,5 +1,5 @@
 import { useMemo } from 'react';
-import { ColumnDef, createColumnHelper } from '@tanstack/react-table';
+import { createAppColumnHelper, type AppColumnDef } from '../../Tables/tableFeatures';
 import { useTranslation } from 'react-i18next';
 
 import useReactTableWithTheWorks, { QueryDataContext } from '../../Tables/useReactTableWithTheWorks';
@@ -38,8 +38,8 @@ function RunSignupChangesTable(): React.JSX.Element {
   const pageData = useSuspenseQuery(RunSignupChangesPageQueryDocument, { variables: { runId: runId ?? '' } });
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const columns = useMemo((): ColumnDef<SignupChangeType, any>[] => {
-    const columnHelper = createColumnHelper<SignupChangeType>();
+  const columns = useMemo((): AppColumnDef<SignupChangeType, any>[] => {
+    const columnHelper = createAppColumnHelper<SignupChangeType>();
     return [
       columnHelper.accessor('user_con_profile', {
         header: t('events.signupAdmin.history.nameHeader'),

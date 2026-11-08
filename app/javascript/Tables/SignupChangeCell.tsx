@@ -4,7 +4,7 @@ import { assertNever } from 'assert-never';
 
 import { SignupStateDisplay } from './SignupStateCell';
 import { SignupChangeAction } from '../graphqlTypes.generated';
-import { CellContext } from '@tanstack/react-table';
+import { type AppCellContext } from './tableFeatures';
 import { SignupChangeType } from 'EventsApp/SignupAdmin/RunSignupChangesTable';
 
 export function describeAction(action: SignupChangeAction, t: TFunction): string {
@@ -58,7 +58,7 @@ export function describeAction(action: SignupChangeAction, t: TFunction): string
 
 function SignupChangeCell<TData extends SignupChangeType, TValue>({
   cell,
-}: CellContext<TData, TValue>): React.JSX.Element {
+}: AppCellContext<TData, TValue>): React.JSX.Element {
   const value = cell.row.original;
   const { t } = useTranslation();
 

@@ -1,6 +1,7 @@
 import { createContext, useContext, useMemo } from 'react';
 import { assertNever } from 'assert-never';
-import { CellContext, ColumnDef, createColumnHelper } from '@tanstack/react-table';
+import { type RowData } from '@tanstack/react-table';
+import { createAppColumnHelper, type AppCellContext, type AppColumnDef } from '../Tables/tableFeatures';
 import { useConfirm, ErrorDisplay, useGraphQLConfirm } from '@neinteractiveliterature/litform';
 
 import AppRootContext from '../AppRootContext';
@@ -117,9 +118,9 @@ function SignupModerationRunDetails({ run, showRequestedBucket, requestedBucketK
 }
 
 function SignupRequestUserConProfileCell<
-  TData,
+  TData extends RowData,
   TValue extends SignupModerationSignupRequestFieldsFragment['user_con_profile'],
->(props: CellContext<TData, TValue>) {
+>(props: AppCellContext<TData, TValue>) {
   const { signupAutomationMode } = useContext(AppRootContext);
   const { t } = useTranslation();
 
@@ -138,9 +139,10 @@ function SignupRequestUserConProfileCell<
   );
 }
 
-function SignupRequestCell<TData, TValue extends SignupModerationSignupRequestFieldsFragment | null | undefined>({
-  getValue,
-}: CellContext<TData, TValue>) {
+function SignupRequestCell<
+  TData extends RowData,
+  TValue extends SignupModerationSignupRequestFieldsFragment | null | undefined,
+>({ getValue }: AppCellContext<TData, TValue>) {
   const { t } = useTranslation();
   const value = getValue();
 
@@ -170,15 +172,17 @@ function SignupRequestCell<TData, TValue extends SignupModerationSignupRequestFi
   );
 }
 
-function SignupRequestStateCell<TData, TValue extends SignupRequestState>({ getValue }: CellContext<TData, TValue>) {
+function SignupRequestStateCell<TData extends RowData, TValue extends SignupRequestState>({
+  getValue,
+}: AppCellContext<TData, TValue>) {
   const value = getValue();
   return <div className={`badge ${signupRequestStateBadgeClass(value)}`}>{value}</div>;
 }
 
 function SignupRequestActionsCell<
-  TData,
+  TData extends RowData,
   TValue extends SignupModerationSignupRequestFieldsFragment | null | undefined,
->({ getValue }: CellContext<TData, TValue>) {
+>({ getValue }: AppCellContext<TData, TValue>) {
   const { t } = useTranslation();
   const { acceptClicked, rejectClicked } = useContext(SignupModerationContext);
   const value = getValue();
@@ -209,9 +213,10 @@ function SignupRequestActionsCell<
   );
 }
 
-function SignupRankedChoiceCell<TData, TValue extends SignupModerationSignupRequestFieldsFragment | null | undefined>({
-  getValue,
-}: CellContext<TData, TValue>) {
+function SignupRankedChoiceCell<
+  TData extends RowData,
+  TValue extends SignupModerationSignupRequestFieldsFragment | null | undefined,
+>({ getValue }: AppCellContext<TData, TValue>) {
   const { t } = useTranslation();
   const { parsedSignupRounds, rerunSignupRound } = useContext(SignupModerationContext);
   const confirm = useGraphQLConfirm();
@@ -292,8 +297,8 @@ function SignupModerationQueue(): React.JSX.Element {
 
   type SignupRequestType = SignupModerationQueueQueryData['convention']['signup_requests_paginated']['entries'][number];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const columns = useMemo((): ColumnDef<SignupRequestType, any>[] => {
-    const columnHelper = createColumnHelper<SignupRequestType>();
+  const columns = useMemo((): AppColumnDef<SignupRequestType, any>[] => {
+    const columnHelper = createAppColumnHelper<SignupRequestType>();
 
     return [
       columnHelper.accessor('user_con_profile', {

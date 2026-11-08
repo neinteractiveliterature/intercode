@@ -1,5 +1,11 @@
 import { useContext, useMemo } from 'react';
-import { CellContext, Column, ColumnDef, createColumnHelper } from '@tanstack/react-table';
+import { type RowData } from '@tanstack/react-table';
+import {
+  createAppColumnHelper,
+  type AppCellContext,
+  type AppColumn,
+  type AppColumnDef,
+} from '../../Tables/tableFeatures';
 import { DateTime } from 'luxon';
 
 import ArrayToSentenceCell from 'Tables/ArrayToSentenceCell';
@@ -67,7 +73,7 @@ const fieldFilterCodecs = buildFieldFilterCodecs({
   status: FilterCodecs.stringArray,
 });
 
-function StatusFilter({ column }: { column: Column<OrderType, unknown> }) {
+function StatusFilter({ column }: { column: AppColumn<OrderType, unknown> }) {
   return (
     <ChoiceSetFilter
       column={column}
@@ -81,7 +87,9 @@ function StatusFilter({ column }: { column: Column<OrderType, unknown> }) {
   );
 }
 
-function SubmittedAtCell<TData, TValue extends string | undefined | null>({ getValue }: CellContext<TData, TValue>) {
+function SubmittedAtCell<TData extends RowData, TValue extends string | undefined | null>({
+  getValue,
+}: AppCellContext<TData, TValue>) {
   const { timezoneName } = useContext(AppRootContext);
   const format = useAppDateTimeFormat();
   const value = getValue();
@@ -99,8 +107,8 @@ function OrderAdmin(): React.JSX.Element {
   const navigate = useNavigate();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const columns = useMemo((): ColumnDef<OrderType, any>[] => {
-    const columnHelper = createColumnHelper<OrderType>();
+  const columns = useMemo((): AppColumnDef<OrderType, any>[] => {
+    const columnHelper = createAppColumnHelper<OrderType>();
     return [
       columnHelper.accessor('id', {
         header: t('admin.store.orders.headers.id'),

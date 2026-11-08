@@ -1,12 +1,13 @@
 import { ReactNode, useMemo } from 'react';
-import { ColumnDef, ColumnFiltersState, SortingState } from '@tanstack/react-table';
+import { ColumnFiltersState, SortingState, type RowData } from '@tanstack/react-table';
+import { type AppColumnDef } from './tableFeatures';
 
 import ColumnSelector from './ColumnSelector';
 import ExportButton from './ExportButton';
 import { UseColumnSelectionResult } from './useColumnSelection';
 
-export type TableHeaderProps<TData> = {
-  columns: ColumnDef<TData>[];
+export type TableHeaderProps<TData extends RowData> = {
+  columns: AppColumnDef<TData>[];
   columnSelectionProps: UseColumnSelectionResult;
   exportButton?: ReactNode;
   exportUrl?: string;
@@ -16,7 +17,7 @@ export type TableHeaderProps<TData> = {
   sortBy: SortingState;
 };
 
-function TableHeader<TData>({
+function TableHeader<TData extends RowData>({
   columns,
   columnSelectionProps,
   exportButton,

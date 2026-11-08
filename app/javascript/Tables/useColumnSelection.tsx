@@ -1,9 +1,10 @@
 import React, { useMemo, useCallback } from 'react';
-import { ColumnDef, TableState } from '@tanstack/react-table';
+import { type RowData, type ColumnVisibilityState } from '@tanstack/react-table';
+import { type AppColumnDef } from './tableFeatures';
 import { useLocation, useSearchParams } from 'react-router';
 import { notEmpty } from '@neinteractiveliterature/litform';
 
-export function columnVisibilityToVisibleColumnIds(columnVisibility: TableState['columnVisibility']): Set<string> {
+export function columnVisibilityToVisibleColumnIds(columnVisibility: ColumnVisibilityState): Set<string> {
   const visibleColumnIds = new Set<string>();
 
   for (const [id, visible] of Object.entries(columnVisibility)) {
@@ -15,10 +16,10 @@ export function columnVisibilityToVisibleColumnIds(columnVisibility: TableState[
   return visibleColumnIds;
 }
 
-export function visibleColumnIdsToColumnVisibility<TData>(
+export function visibleColumnIdsToColumnVisibility<TData extends RowData>(
   visibleColumnIds: Set<string>,
-  columns: ColumnDef<TData>[],
-): TableState['columnVisibility'] {
+  columns: AppColumnDef<TData>[],
+): ColumnVisibilityState {
   return columns.reduce((acc, column) => {
     if (column.id) {
       return { ...acc, [column.id]: visibleColumnIds.has(column.id) };
@@ -31,13 +32,13 @@ export function visibleColumnIdsToColumnVisibility<TData>(
 export type UseColumnSelectionOptions<RowType extends Record<string, unknown>> = {
   alwaysVisibleColumns?: string[];
   defaultVisibleColumns?: string[];
-  columns: ColumnDef<RowType>[];
+  columns: AppColumnDef<RowType>[];
 };
 
 export type UseColumnSelectionResult = {
   alwaysVisibleColumns: string[];
-  columnVisibility: TableState['columnVisibility'];
-  setColumnVisibility: React.Dispatch<React.SetStateAction<TableState['columnVisibility']>>;
+  columnVisibility: ColumnVisibilityState;
+  setColumnVisibility: React.Dispatch<React.SetStateAction<ColumnVisibilityState>>;
 };
 
 export default function useColumnSelection<RowType extends Record<string, unknown>>({
@@ -62,7 +63,7 @@ export default function useColumnSelection<RowType extends Record<string, unknow
     return new Set(columns.map((column) => column.id).filter(notEmpty));
   }, [defaultVisibleColumns, alwaysVisibleColumns, location.search, columns]);
 
-  const columnVisibility: TableState['columnVisibility'] = useMemo(() => {
+  const columnVisibility: ColumnVisibilityState = useMemo(() => {
     return visibleColumnIdsToColumnVisibility(visibleColumnIds, columns);
   }, [columns, visibleColumnIds]);
 
@@ -76,8 +77,8 @@ export default function useColumnSelection<RowType extends Record<string, unknow
   );
 
   const setColumnVisibility = useCallback(
-    (setStateAction: React.SetStateAction<TableState['columnVisibility']>) => {
-      let newColumnVisibility: TableState['columnVisibility'];
+    (setStateAction: React.SetStateAction<ColumnVisibilityState>) => {
+      let newColumnVisibility: ColumnVisibilityState;
       if (typeof setStateAction === 'function') {
         newColumnVisibility = setStateAction(columnVisibility);
       } else {

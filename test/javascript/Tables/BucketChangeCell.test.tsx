@@ -1,5 +1,3 @@
-import { CellContext } from '@tanstack/react-table';
-
 import { render } from '../testUtils';
 import BucketChangeCell, { BucketChangeType } from '../../../app/javascript/Tables/BucketChangeCell';
 import { SignupChangeType } from '../../../app/javascript/EventsApp/SignupAdmin/RunSignupChangesTable';
@@ -38,12 +36,8 @@ describe('BucketChangeCell', () => {
     ...overrides,
   });
 
-  // BucketChangeCell only reads getValue() out of the full CellContext it's normally given by
-  // react-table -- this builds just enough of a fake context to exercise it directly.
-  const renderCell = async (value: BucketChangeType) => {
-    const cellContext = { getValue: () => value } as unknown as CellContext<unknown, BucketChangeType>;
-    return render(<BucketChangeCell {...cellContext} />);
-  };
+  // BucketChangeCell only reads getValue() out of the full cell context it's normally given by the table
+  const renderCell = async (value: BucketChangeType) => render(<BucketChangeCell getValue={() => value} />);
 
   it('shows just the new bucket name when there is no previous change', async () => {
     const value: BucketChangeType = { signupChange: buildSignupChange(), event };

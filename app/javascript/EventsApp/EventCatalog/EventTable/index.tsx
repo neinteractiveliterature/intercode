@@ -6,7 +6,8 @@ import { FilterCodecs, buildFieldFilterCodecs } from '../../../Tables/FilterUtil
 import TableHeader from '../../../Tables/TableHeader';
 import ReactTableWithTheWorks from '../../../Tables/ReactTableWithTheWorks';
 import { useLoaderData, useNavigate } from 'react-router';
-import { CellContext, ColumnDef, createColumnHelper } from '@tanstack/react-table';
+import { type RowData } from '@tanstack/react-table';
+import { createAppColumnHelper, type AppCellContext, type AppColumnDef } from '../../../Tables/tableFeatures';
 import EventCategoryCell from '../../../Tables/EventCategoryCell';
 import EventCategoryFilter from '../../../Tables/EventCategoryFilter';
 import { useMemo } from 'react';
@@ -29,9 +30,9 @@ const FILTER_CODECS = buildFieldFilterCodecs({
 
 type RunType = EventCatalogRunsQueryData['convention']['runs_paginated']['entries'][number];
 
-function TeamMembersCell<TData, TValue extends RunType['event']['team_members']>({
+function TeamMembersCell<TData extends RowData, TValue extends RunType['event']['team_members']>({
   getValue,
-}: CellContext<TData, TValue>) {
+}: AppCellContext<TData, TValue>) {
   return (
     <div>
       {getValue()
@@ -42,7 +43,9 @@ function TeamMembersCell<TData, TValue extends RunType['event']['team_members']>
   );
 }
 
-function RoomNamesCell<TData, TValue extends RunType['rooms']>({ getValue }: CellContext<TData, TValue>) {
+function RoomNamesCell<TData extends RowData, TValue extends RunType['rooms']>({
+  getValue,
+}: AppCellContext<TData, TValue>) {
   return (
     <div>
       {getValue()
@@ -70,8 +73,8 @@ function EventTable() {
   usePageTitle('Table View - Event Catalog');
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const columns = useMemo((): ColumnDef<RunType, any>[] => {
-    const columnHelper = createColumnHelper<RunType>();
+  const columns = useMemo((): AppColumnDef<RunType, any>[] => {
+    const columnHelper = createAppColumnHelper<RunType>();
     return [
       columnHelper.accessor('event.event_category', {
         header: 'Category',

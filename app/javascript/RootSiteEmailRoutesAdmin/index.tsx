@@ -1,4 +1,4 @@
-import { CellContext, ColumnDef, createColumnHelper } from '@tanstack/react-table';
+import { createAppColumnHelper, type AppCellContext, type AppColumnDef } from '../Tables/tableFeatures';
 
 import useReactTableWithTheWorks from '../Tables/useReactTableWithTheWorks';
 import { buildFieldFilterCodecs } from '../Tables/FilterUtils';
@@ -19,7 +19,7 @@ type EmailRouteType = RootSiteEmailRoutesAdminTableQueryData['email_routes_pagin
 
 const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({});
 
-function ForwardAddressesCell({ getValue }: CellContext<EmailRouteType, EmailRouteType['forward_addresses']>) {
+function ForwardAddressesCell({ getValue }: AppCellContext<EmailRouteType, EmailRouteType['forward_addresses']>) {
   return <>{getValue()?.join(', ')}</>;
 }
 
@@ -36,8 +36,8 @@ function RootSiteEmailRoutesAdminTable(): React.JSX.Element {
 
 function EmailRoutesTable(): React.JSX.Element {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const columns = useMemo((): ColumnDef<EmailRouteType, any>[] => {
-    const columnHelper = createColumnHelper<EmailRouteType>();
+  const columns = useMemo((): AppColumnDef<EmailRouteType, any>[] => {
+    const columnHelper = createAppColumnHelper<EmailRouteType>();
     return [
       columnHelper.accessor('receiver_address', {
         header: 'Receiver address',
