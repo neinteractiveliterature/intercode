@@ -28,6 +28,13 @@ const defaultVisibleColumns = ['receiver_address', 'forward_addresses'];
 function RootSiteEmailRoutesAdminTable(): React.JSX.Element {
   const authorizationWarning = useAuthorizationRequired('can_manage_email_routes');
 
+  // the table is a separate component so that its query isn't made for people who aren't allowed to see it
+  if (authorizationWarning) return authorizationWarning;
+
+  return <EmailRoutesTable />;
+}
+
+function EmailRoutesTable(): React.JSX.Element {
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
   const columns = useMemo((): ColumnDef<EmailRouteType, any>[] => {
     const columnHelper = createColumnHelper<EmailRouteType>();
@@ -64,8 +71,6 @@ function RootSiteEmailRoutesAdminTable(): React.JSX.Element {
   });
   usePageTitle('Email routes');
   const navigate = useNavigate();
-
-  if (authorizationWarning) return authorizationWarning;
 
   return (
     <div className="mb-4">

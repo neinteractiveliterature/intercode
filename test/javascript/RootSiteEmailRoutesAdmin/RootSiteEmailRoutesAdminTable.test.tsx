@@ -109,6 +109,8 @@ describe('RootSiteEmailRoutesAdminTable', () => {
 
     expect(await r.findByText(/not authorized|unauthorized|permission/i)).toBeTruthy();
     expect(r.queryByText('info@example.com')).toBeNull();
+    // and the query for the routes is not even made
+    expect(queried).not.toHaveBeenCalled();
   });
 
   it('puts a text filter on both columns', async () => {
