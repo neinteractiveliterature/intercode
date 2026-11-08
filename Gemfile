@@ -138,7 +138,7 @@ group :development do
   gem "rubocop", "1.92.2"
   gem "rubocop-capybara", "3.1.0", require: false
   gem "rubocop-factory_bot", "2.28.0", require: false
-  gem "rubocop-graphql", "1.8.0", require: false
+  gem "rubocop-graphql", "1.9.0", require: false
   gem "rubocop-performance", "1.27.0"
   gem "rubocop-rails", "2.38.0"
   gem "rubocop-rspec", "3.10.2", require: false
