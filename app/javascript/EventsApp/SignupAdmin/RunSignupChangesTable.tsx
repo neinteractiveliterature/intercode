@@ -84,7 +84,7 @@ function RunSignupChangesTable(): React.JSX.Element {
     getPages: ({ data }) => data.convention?.run?.signup_changes_paginated?.total_pages ?? 0,
     columns,
     query: RunSignupChangesQueryDocument,
-    storageKeyPrefix: 'signupSpy',
+    storageKeyPrefix: 'runSignupChanges',
     variables: { runId: runId ?? '' },
   });
 
