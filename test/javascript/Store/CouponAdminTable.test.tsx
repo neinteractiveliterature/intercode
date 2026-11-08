@@ -8,6 +8,7 @@ import {
   AdminCouponsQueryDocument,
 } from '../../../app/javascript/Store/CouponAdmin/queries.generated';
 import { cellTexts, columnHeaders, rowFor, sortButton } from '../Tables/tableTestHelpers';
+import { AuthenticationManagerContext, buildSignedInManager, stubCsvDownload } from '../Tables/csvExportTestHelpers';
 
 type Entry = AdminCouponsQueryData['convention']['coupons_paginated']['entries'][number];
 
@@ -64,7 +65,14 @@ describe('CouponAdminTable', () => {
 
     const r = await renderRoute(
       [
-        { path: '/coupons', Component: CouponAdminTable },
+        {
+          path: '/coupons',
+          Component: () => (
+            <AuthenticationManagerContext.Provider value={buildSignedInManager()}>
+              <CouponAdminTable />
+            </AuthenticationManagerContext.Provider>
+          ),
+        },
         { path: '/coupons/:id', Component: () => <h1>Viewing a coupon</h1> },
       ],
       { apolloMocks, initialEntries: ['/coupons'] },
@@ -113,5 +121,36 @@ describe('CouponAdminTable', () => {
     await events.click(r.getByText('FIVEBUCKS'));
 
     expect(await r.findByRole('heading', { name: 'Viewing a coupon' })).toBeTruthy();
+  });
+
+  describe('exporting', () => {
+    let csv: ReturnType<typeof stubCsvDownload>;
+
+    beforeEach(() => {
+      csv = stubCsvDownload({ filename: 'coupons.csv' });
+    });
+
+    afterEach(() => {
+      csv.restore();
+    });
+
+    it('asks for the visible columns, with effect split into what it is made of', async () => {
+      const r = await renderTable();
+
+      await events.click(r.getByRole('button', { name: /Export CSV/ }));
+
+      await waitFor(() => expect(csv.requestCount()).toBe(1));
+      const { url } = csv.lastRequest();
+      expect(url.pathname).toBe('/csv_exports/coupons');
+      expect(url.searchParams.getAll('columns[]')).toEqual([
+        'code',
+        'fixed_amount',
+        'percent_discount',
+        'provides_product',
+        'usage_limit',
+        'expires_at',
+      ]);
+      await waitFor(() => expect(csv.downloads).toEqual(['coupons.csv']));
+    });
   });
 });

@@ -3,6 +3,7 @@ import { useLocation } from 'react-router';
 import { vi } from 'vitest';
 
 import { renderRoute, userEvent, waitFor, within } from '../testUtils';
+import { AuthenticationManagerContext, buildSignedInManager, stubCsvDownload } from '../Tables/csvExportTestHelpers';
 import UsersTable from '../../../app/javascript/Users/UsersTable';
 import {
   UsersTableUsersQueryData,
@@ -33,10 +34,10 @@ function LocationProbe() {
 
 function UsersTableWithProbe() {
   return (
-    <>
+    <AuthenticationManagerContext.Provider value={buildSignedInManager()}>
       <UsersTable />
       <LocationProbe />
-    </>
+    </AuthenticationManagerContext.Provider>
   );
 }
 
@@ -416,6 +417,60 @@ describe('UsersTable', () => {
 
       await events.click(merge());
       expect(await r.findByRole('heading', { name: 'Merging users' })).toBeTruthy();
+    });
+  });
+
+  describe('exporting', () => {
+    let csv: ReturnType<typeof stubCsvDownload>;
+
+    beforeEach(() => {
+      csv = stubCsvDownload({ filename: 'users.csv' });
+    });
+
+    afterEach(() => {
+      csv.restore();
+    });
+
+    it('asks for the visible columns, in the order they are shown, and saves the file', async () => {
+      const r = await renderPage();
+
+      await events.click(r.getByRole('button', { name: /Export CSV/ }));
+
+      await waitFor(() => expect(csv.requestCount()).toBe(1));
+      const { url, headers } = csv.lastRequest();
+      expect(url.pathname).toBe('/csv_exports/users');
+      expect(url.searchParams.getAll('columns[]')).toEqual(
+        expect.arrayContaining(['id', 'first_name', 'last_name', 'email']),
+      );
+      expect(url.searchParams.getAll('columns[]')).not.toContain('name');
+      expect(headers.Authorization).toBe('Bearer test-token');
+      await waitFor(() => expect(csv.downloads).toEqual(['users.csv']));
+    });
+
+    it('asks for the columns, filters and order that are showing', async () => {
+      const r = await renderPage('/users?columns=email,name&filters.email=bob&sort.last_name=desc');
+
+      await events.click(r.getByRole('button', { name: /Export CSV/ }));
+
+      await waitFor(() => expect(csv.requestCount()).toBe(1));
+      const { url } = csv.lastRequest();
+      expect(url.searchParams.getAll('columns[]')).toEqual(expect.arrayContaining(['email', 'name']));
+      expect(url.searchParams.getAll('columns[]')).not.toContain('first_name');
+      expect(url.searchParams.get('filters[email]')).toBe('bob');
+      expect(url.searchParams.getAll('sort[][field]')).toEqual(['last_name']);
+      expect(url.searchParams.getAll('sort[][desc]')).toEqual(['true']);
+      await waitFor(() => expect(csv.downloads).toHaveLength(1));
+    });
+
+    it('says so when the export fails', async () => {
+      csv.restore();
+      csv = stubCsvDownload({ ok: false, status: 500 });
+      const r = await renderPage();
+
+      await events.click(r.getByRole('button', { name: /Export CSV/ }));
+
+      expect(await r.findByText(/Export failed: HTTP 500/)).toBeTruthy();
+      expect(csv.downloads).toEqual([]);
     });
   });
 });
