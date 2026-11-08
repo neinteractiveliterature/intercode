@@ -47,7 +47,8 @@ function RunSignupChangesTable(): React.JSX.Element {
         enableColumnFilter: true,
         cell: UserConProfileWithGravatarCell,
       }),
-      columnHelper.display({
+      // (an accessor column, rather than a display column, because the table library does not filter display columns)
+      columnHelper.accessor((signupChange) => signupChange, {
         header: t('events.signupAdmin.history.changeHeader'),
         id: 'action',
         enableColumnFilter: true,

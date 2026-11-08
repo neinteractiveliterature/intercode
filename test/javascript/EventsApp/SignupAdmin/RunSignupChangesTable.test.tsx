@@ -171,13 +171,15 @@ describe('RunSignupChangesTable', () => {
     expect(search(r)).toContain('filters.name=Two');
   });
 
-  // The table has code to render a filter for the Change column, but that column has no accessor and the table library
-  // does not filter such columns, so it has never shown one.  (A filter can still be applied through the URL.)
-  it('does not offer a filter on the change column', async () => {
+  it('offers a choice of the kinds of change, and filters by those chosen', async () => {
     const r = await renderTable();
+    await events.click(within(filterCell(r, 'Change')).getByRole('button', { name: 'Open' }));
 
-    expect(within(filterCell(r, 'Change')).queryByRole('button', { name: 'Open' })).toBeNull();
-    expect(within(filterCell(r, 'Change')).queryByRole('checkbox')).toBeNull();
+    await events.click(within(filterCell(r, 'Change')).getByRole('checkbox', { name: 'withdraw' }));
+    await events.click(within(filterCell(r, 'Change')).getByRole('checkbox', { name: 'hold expired' }));
+
+    await waitFor(() => expect(lastVariables().filters).toEqual({ action: ['withdraw', 'hold_expired'] }));
+    expect(search(r)).toContain('filters.action=withdraw,hold_expired');
   });
 
   it('remembers its page size separately from the signup spy report', async () => {
