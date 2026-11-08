@@ -204,6 +204,18 @@ describe('EventTable (the event catalog, as a table)', () => {
       expect(lastVariables()).toMatchObject({ page: 1, filters: {}, sort: [] });
     });
 
+    // The table sends its page size as perPage; a query that does not declare that variable never receives it (and
+    // the mock cannot tell, since it sees every variable that was passed), so check the query itself.
+    it('has a query that takes the page size the table sends', () => {
+      const declared = EventCatalogRunsQueryDocument.definitions.flatMap((definition) =>
+        definition.kind === 'OperationDefinition'
+          ? (definition.variableDefinitions ?? []).map((variable) => variable.variable.name.value)
+          : [],
+      );
+
+      expect(declared).toContain('perPage');
+    });
+
     it('goes to the event when a row is clicked', async () => {
       const r = await renderTable();
 
