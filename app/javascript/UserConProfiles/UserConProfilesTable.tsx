@@ -1,6 +1,7 @@
 import { useContext, useMemo } from 'react';
 import { Link, useNavigate } from 'react-router';
-import { CellContext, Column, ColumnDef, createColumnHelper } from '@tanstack/react-table';
+import { type RowData } from '@tanstack/react-table';
+import { createAppColumnHelper, type AppCellContext, type AppColumn, type AppColumnDef } from '../Tables/tableFeatures';
 import { useTranslation } from 'react-i18next';
 import { DateTime } from 'luxon';
 
@@ -43,9 +44,9 @@ const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({
   payment_amount: FilterCodecs.float,
 });
 
-function TicketStatusCell<TData, TValue extends UserConProfilesTableRow['ticket']>({
+function TicketStatusCell<TData extends RowData, TValue extends UserConProfilesTableRow['ticket']>({
   getValue,
-}: CellContext<TData, TValue>): React.JSX.Element {
+}: AppCellContext<TData, TValue>): React.JSX.Element {
   const { t } = useTranslation();
   const value = getValue();
 
@@ -56,14 +57,14 @@ function TicketStatusCell<TData, TValue extends UserConProfilesTableRow['ticket'
   return <>{humanize(value.ticket_type.name)}</>;
 }
 
-function TicketPaymentAmountCell<TData, TValue extends UserConProfilesTableRow['ticket']>({
+function TicketPaymentAmountCell<TData extends RowData, TValue extends UserConProfilesTableRow['ticket']>({
   getValue,
-}: CellContext<TData, TValue>): React.JSX.Element {
+}: AppCellContext<TData, TValue>): React.JSX.Element {
   return <>{formatMoney(getValue()?.order_entry?.price_per_item)}</>;
 }
 
-function TicketStatusWithPaymentAmountCell<TData, TValue extends UserConProfilesTableRow['ticket']>(
-  props: CellContext<TData, TValue>,
+function TicketStatusWithPaymentAmountCell<TData extends RowData, TValue extends UserConProfilesTableRow['ticket']>(
+  props: AppCellContext<TData, TValue>,
 ): React.JSX.Element {
   return (
     <>
@@ -72,9 +73,9 @@ function TicketStatusWithPaymentAmountCell<TData, TValue extends UserConProfiles
   );
 }
 
-function TicketStatusChangeCell<TData, TValue extends DateTime | null | undefined>({
+function TicketStatusChangeCell<TData extends RowData, TValue extends DateTime | null | undefined>({
   getValue,
-}: CellContext<TData, TValue>): React.JSX.Element {
+}: AppCellContext<TData, TValue>): React.JSX.Element {
   const { t } = useTranslation();
   const value = getValue();
 
@@ -85,7 +86,7 @@ function TicketTypeFilter<TData extends UserConProfilesTableRow, TValue>({
   column,
   ticketTypes,
 }: {
-  column: Column<TData, TValue>;
+  column: AppColumn<TData, TValue>;
   ticketTypes: AttendeesPageQueryData['convention']['ticket_types'];
 }): React.JSX.Element {
   const { t } = useTranslation();
@@ -105,7 +106,7 @@ function TicketTypeFilter<TData extends UserConProfilesTableRow, TValue>({
 
 function PrivilegesCell<TData extends UserConProfilesTableRow, TValue>({
   row: { original },
-}: CellContext<TData, TValue>) {
+}: AppCellContext<TData, TValue>) {
   const { t } = useTranslation();
   if (original.site_admin) {
     return <>{t('tables.privileges.siteAdmin')}</>;
@@ -117,7 +118,7 @@ function PrivilegesCell<TData extends UserConProfilesTableRow, TValue>({
 function PrivilegesFilter<TData extends UserConProfilesTableRow, TValue>({
   column,
 }: {
-  column: Column<TData, TValue>;
+  column: AppColumn<TData, TValue>;
 }) {
   const { t } = useTranslation();
   return (
@@ -146,45 +147,45 @@ function UserConProfilesTable({
 
   const columns = useMemo(() => {
     const formItems = getSortedParsedFormItems(attendeesPageQueryData.convention.user_con_profile_form);
-    const columnHelper = createColumnHelper<UserConProfilesTableRow>();
+    const columnHelper = createAppColumnHelper<UserConProfilesTableRow>();
 
-    const columns: ColumnDef<UserConProfilesTableRow>[] = [
+    const columns: AppColumnDef<UserConProfilesTableRow>[] = [
       columnHelper.accessor('id', {
         header: t('admin.userConProfiles.id'),
         id: 'id',
         size: 70,
-      }) as ColumnDef<UserConProfilesTableRow>,
+      }) as AppColumnDef<UserConProfilesTableRow>,
       columnHelper.accessor('user_id', {
         header: t('admin.userConProfiles.userId'),
         id: 'user_id',
         size: 70,
-      }) as ColumnDef<UserConProfilesTableRow>,
+      }) as AppColumnDef<UserConProfilesTableRow>,
       columnHelper.accessor((userConProfile) => userConProfile, {
         header: t('admin.userConProfiles.name'),
         id: 'name',
         enableColumnFilter: true,
         enableSorting: true,
         cell: UserConProfileWithGravatarCell,
-      }) as ColumnDef<UserConProfilesTableRow>,
+      }) as AppColumnDef<UserConProfilesTableRow>,
       columnHelper.accessor('first_name', {
         header: t('admin.userConProfiles.firstName'),
         id: 'first_name',
         enableColumnFilter: true,
         enableSorting: true,
-      }) as ColumnDef<UserConProfilesTableRow>,
+      }) as AppColumnDef<UserConProfilesTableRow>,
       columnHelper.accessor('last_name', {
         header: t('admin.userConProfiles.lastName'),
         id: 'last_name',
         enableColumnFilter: true,
         enableSorting: true,
-      }) as ColumnDef<UserConProfilesTableRow>,
+      }) as AppColumnDef<UserConProfilesTableRow>,
       columnHelper.accessor('email', {
         header: t('admin.userConProfiles.email'),
         id: 'email',
         enableColumnFilter: true,
         enableSorting: true,
         cell: EmailCell,
-      }) as ColumnDef<UserConProfilesTableRow>,
+      }) as AppColumnDef<UserConProfilesTableRow>,
     ];
 
     if (attendeesPageQueryData.convention.ticket_mode !== TicketMode.Disabled && canReadTickets) {
@@ -196,7 +197,7 @@ function UserConProfilesTable({
           enableColumnFilter: true,
           enableSorting: true,
           cell: TicketStatusWithPaymentAmountCell,
-        }) as ColumnDef<UserConProfilesTableRow>,
+        }) as AppColumnDef<UserConProfilesTableRow>,
         columnHelper.accessor('ticket', {
           header: t('admin.userConProfiles.ticketType', {
             ticketName: humanize(attendeesPageQueryData.convention.ticket_name || 'ticket'),
@@ -206,7 +207,7 @@ function UserConProfilesTable({
           enableColumnFilter: true,
           enableSorting: true,
           cell: TicketStatusCell,
-        }) as ColumnDef<UserConProfilesTableRow>,
+        }) as AppColumnDef<UserConProfilesTableRow>,
         columnHelper.accessor('ticket', {
           header: t('admin.userConProfiles.paymentAmount'),
           id: 'payment_amount',
@@ -214,7 +215,7 @@ function UserConProfilesTable({
           enableColumnFilter: true,
           enableSorting: true,
           cell: TicketPaymentAmountCell,
-        }) as ColumnDef<UserConProfilesTableRow>,
+        }) as AppColumnDef<UserConProfilesTableRow>,
       );
     }
 
@@ -225,7 +226,7 @@ function UserConProfilesTable({
         size: 150,
         enableColumnFilter: true,
         cell: BooleanCell,
-      }) as ColumnDef<UserConProfilesTableRow>,
+      }) as AppColumnDef<UserConProfilesTableRow>,
     );
 
     if (canReadTickets) {
@@ -236,7 +237,7 @@ function UserConProfilesTable({
           size: 150,
           enableColumnFilter: true,
           cell: BooleanCell,
-        }) as ColumnDef<UserConProfilesTableRow>,
+        }) as AppColumnDef<UserConProfilesTableRow>,
       );
     }
 
@@ -253,7 +254,7 @@ function UserConProfilesTable({
             enableSorting: true,
             cell: TicketStatusChangeCell,
           },
-        ) as ColumnDef<UserConProfilesTableRow>,
+        ) as AppColumnDef<UserConProfilesTableRow>,
       );
     }
 
@@ -264,11 +265,11 @@ function UserConProfilesTable({
         enableColumnFilter: true,
         enableSorting: true,
         cell: PrivilegesCell,
-      }) as ColumnDef<UserConProfilesTableRow>,
+      }) as AppColumnDef<UserConProfilesTableRow>,
       columnHelper.accessor('order_summary', {
         header: t('admin.userConProfiles.orderSummary'),
         id: 'order_summary',
-      }) as ColumnDef<UserConProfilesTableRow>,
+      }) as AppColumnDef<UserConProfilesTableRow>,
     );
 
     columns.push(
@@ -280,7 +281,7 @@ function UserConProfilesTable({
         displayMode: 'admin',
         getHeader: adminFormItemHeader,
         excludeIdentifiers: new Set(columns.map((column) => column.id)),
-      }) as ColumnDef<UserConProfilesTableRow>[]),
+      }) as AppColumnDef<UserConProfilesTableRow>[]),
     );
 
     return columns;

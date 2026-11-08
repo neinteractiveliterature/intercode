@@ -1,7 +1,8 @@
-import { CellContext } from '@tanstack/react-table';
+import { type RowData } from '@tanstack/react-table';
+import { type AppCellContext } from './tableFeatures';
 
-export default function HtmlCell<TData, TValue extends string | undefined | null>({
+export default function HtmlCell<TData extends RowData, TValue extends string | undefined | null>({
   getValue,
-}: CellContext<TData, TValue>) {
+}: AppCellContext<TData, TValue>) {
   return <div dangerouslySetInnerHTML={{ __html: getValue() ?? '' }} />;
 }

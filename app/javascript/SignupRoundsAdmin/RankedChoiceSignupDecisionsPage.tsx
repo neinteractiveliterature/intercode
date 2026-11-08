@@ -15,7 +15,8 @@ import { useAppDateTimeFormat } from '../TimeUtils';
 import useReactTableWithTheWorks, { QueryDataContext } from '../Tables/useReactTableWithTheWorks';
 import TableHeader from '../Tables/TableHeader';
 import ReactTableWithTheWorks from '../Tables/ReactTableWithTheWorks';
-import { CellContext, Column, ColumnDef, createColumnHelper } from '@tanstack/react-table';
+import { type RowData } from '@tanstack/react-table';
+import { createAppColumnHelper, type AppCellContext, type AppColumn, type AppColumnDef } from '../Tables/tableFeatures';
 import usePageTitle from '../usePageTitle';
 import { SingleLineTimestampCell } from '../Tables/TimestampCell';
 import FreeTextFilter from '../Tables/FreeTextFilter';
@@ -53,7 +54,11 @@ const DECISIONS = EnumTypes.RankedChoiceDecisionValue.enumValues.map(
   (value) => value.name as RankedChoiceDecisionValue,
 );
 
-function RankedChoiceDecisionFilter<TData, TValue>({ column }: { column: Column<TData, TValue> }): React.JSX.Element {
+function RankedChoiceDecisionFilter<TData extends RowData, TValue>({
+  column,
+}: {
+  column: AppColumn<TData, TValue>;
+}): React.JSX.Element {
   const { t } = useTranslation();
   const choices = useMemo(
     () => DECISIONS.map((decision) => ({ value: decision, label: describeDecision(decision, t) })),
@@ -66,9 +71,9 @@ export type RankedChoiceDecisionCellProps = {
   value: RankedChoiceDecisionValue;
 };
 
-export function RankedChoiceDecisionCell<TData, TValue extends RankedChoiceDecisionValue>({
+export function RankedChoiceDecisionCell<TData extends RowData, TValue extends RankedChoiceDecisionValue>({
   getValue,
-}: CellContext<TData, TValue>): React.JSX.Element {
+}: AppCellContext<TData, TValue>): React.JSX.Element {
   const { t } = useTranslation();
   return <>{describeDecision(getValue(), t)}</>;
 }
@@ -114,10 +119,10 @@ const REASONS = EnumTypes.RankedChoiceDecisionReason.enumValues.map(
   (value) => value.name as RankedChoiceDecisionReason,
 );
 
-function RankedChoiceDecisionReasonFilter<TData, TValue>({
+function RankedChoiceDecisionReasonFilter<TData extends RowData, TValue>({
   column,
 }: {
-  column: Column<TData, TValue>;
+  column: AppColumn<TData, TValue>;
 }): React.JSX.Element {
   const { t } = useTranslation();
   const { ticketName } = useContext(AppRootContext);
@@ -132,9 +137,9 @@ export type RankedChoiceReasonCellProps = {
   value: RankedChoiceDecisionReason | null | undefined;
 };
 
-export function RankedChoiceReasonCell<TData, TValue extends RankedChoiceDecisionReason>({
+export function RankedChoiceReasonCell<TData extends RowData, TValue extends RankedChoiceDecisionReason>({
   getValue,
-}: CellContext<TData, TValue>): React.JSX.Element {
+}: AppCellContext<TData, TValue>): React.JSX.Element {
   const { t } = useTranslation();
   const { ticketName } = useContext(AppRootContext);
   const value = getValue();
@@ -165,8 +170,8 @@ function RankedChoiceSignupDecisionsTable({ signupRoundId }: RankedChoiceSignupD
   type RankedChoiceDecisionType =
     SignupRoundRankedChoiceDecisionsTableQueryData['convention']['signup_round']['ranked_choice_decisions_paginated']['entries'][number];
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const columns = useMemo((): ColumnDef<RankedChoiceDecisionType, any>[] => {
-    const columnHelper = createColumnHelper<RankedChoiceDecisionType>();
+  const columns = useMemo((): AppColumnDef<RankedChoiceDecisionType, any>[] => {
+    const columnHelper = createAppColumnHelper<RankedChoiceDecisionType>();
 
     return [
       columnHelper.accessor('user_con_profile.name_without_nickname', {

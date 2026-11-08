@@ -1,7 +1,8 @@
 import { TFunction } from 'i18next';
 import { RegistrationPolicy } from '../graphqlTypes.generated';
 import { useTranslation } from 'react-i18next';
-import { CellContext } from '@tanstack/react-table';
+import { type RowData } from '@tanstack/react-table';
+import { type AppCellContext } from './tableFeatures';
 
 function formatCapacity(
   registrationPolicy: Pick<RegistrationPolicy, 'slots_limited' | 'total_slots' | 'minimum_slots'>,
@@ -19,9 +20,9 @@ function formatCapacity(
 }
 
 export default function CapacityCell<
-  TData,
+  TData extends RowData,
   TValue extends Pick<RegistrationPolicy, 'slots_limited' | 'total_slots' | 'minimum_slots'> | null | undefined,
->({ getValue }: CellContext<TData, TValue>) {
+>({ getValue }: AppCellContext<TData, TValue>) {
   const { t } = useTranslation();
   const value = getValue();
 

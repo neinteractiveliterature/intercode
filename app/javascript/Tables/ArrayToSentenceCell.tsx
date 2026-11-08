@@ -1,9 +1,10 @@
-import { CellContext } from '@tanstack/react-table';
+import { type RowData } from '@tanstack/react-table';
+import { type AppCellContext } from './tableFeatures';
 import arrayToSentence from 'array-to-sentence';
 
-function ArrayToSentenceCell<TData, TValue extends string[] | null | undefined>({
+function ArrayToSentenceCell<TData extends RowData, TValue extends string[] | null | undefined>({
   getValue,
-}: CellContext<TData, TValue>): React.JSX.Element {
+}: AppCellContext<TData, TValue>): React.JSX.Element {
   const sentence: string = arrayToSentence(getValue() ?? []);
   return <>{sentence}</>;
 }

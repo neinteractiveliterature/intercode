@@ -1,7 +1,6 @@
 import { useTranslation } from 'react-i18next';
 
 import { EventForFormatBucket, formatBucket } from '../EventsApp/SignupAdmin/SignupUtils';
-import { CellContext } from '@tanstack/react-table';
 import { SignupChangeType } from 'EventsApp/SignupAdmin/RunSignupChangesTable';
 
 export type BucketChangeType = {
@@ -9,9 +8,8 @@ export type BucketChangeType = {
   event: EventForFormatBucket;
 };
 
-function BucketChangeCell<TData, TValue extends BucketChangeType>({
-  getValue,
-}: CellContext<TData, TValue>): React.JSX.Element {
+// (only needs getValue out of the cell context the table gives a cell, which makes it easy to render on its own)
+function BucketChangeCell({ getValue }: { getValue: () => BucketChangeType }): React.JSX.Element {
   const value = getValue();
   const { t } = useTranslation();
 

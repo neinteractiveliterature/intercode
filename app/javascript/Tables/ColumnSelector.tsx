@@ -1,19 +1,20 @@
 import * as React from 'react';
 import { useTranslation } from 'react-i18next';
-import { ColumnDef, TableState } from '@tanstack/react-table';
+import { type RowData, type ColumnVisibilityState } from '@tanstack/react-table';
+import { type AppColumnDef } from './tableFeatures';
 import { ChoiceSet, notEmpty } from '@neinteractiveliterature/litform';
 
 import { DropdownMenu } from '../UIComponents/DropdownMenu';
 import { useMemo } from 'react';
 
-export type ColumnSelectorProps<TData> = {
+export type ColumnSelectorProps<TData extends RowData> = {
   alwaysVisibleColumns: string[];
-  possibleColumns: ColumnDef<TData>[];
-  columnVisibility: TableState['columnVisibility'];
-  setColumnVisibility: React.Dispatch<React.SetStateAction<TableState['columnVisibility']>>;
+  possibleColumns: AppColumnDef<TData>[];
+  columnVisibility: ColumnVisibilityState;
+  setColumnVisibility: React.Dispatch<React.SetStateAction<ColumnVisibilityState>>;
 };
 
-function ColumnSelector<TData>({
+function ColumnSelector<TData extends RowData>({
   alwaysVisibleColumns,
   possibleColumns,
   columnVisibility,

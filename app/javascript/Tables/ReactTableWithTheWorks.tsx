@@ -1,6 +1,6 @@
 import React, { useState, useCallback, useId } from 'react';
 import classNames from 'classnames';
-import { Column, Row, Table, flexRender } from '@tanstack/react-table';
+import { flexRender } from '@tanstack/react-table';
 import { parseIntOrNull } from '@neinteractiveliterature/litform';
 
 import { UseReactTableWithTheWorksResult } from './useReactTableWithTheWorks';
@@ -8,14 +8,15 @@ import { GraphQLReactTableVariables } from './useGraphQLReactTable';
 import { Trans, useTranslation } from 'react-i18next';
 import max from 'lodash/max';
 import styles from './tables.module.css';
+import type { AppColumn, AppRow, AppTable } from './tableFeatures';
 
-function Resizer<TData, TValue>({
+function Resizer<TData extends Record<string, unknown>, TValue>({
   table,
   column,
   resizeHandler,
 }: {
-  table: Table<TData>;
-  column: Column<TData, TValue>;
+  table: AppTable<TData>;
+  column: AppColumn<TData, TValue>;
   resizeHandler?: (e: React.SyntheticEvent) => void;
 }) {
   const resizeHandlerWithStopPropagation = (e: React.SyntheticEvent) => {
@@ -38,7 +39,7 @@ function Resizer<TData, TValue>({
           table.options.columnResizeMode === 'onEnd' && column.getIsResizing()
             ? `translateX(${
                 (table.options.columnResizeDirection === 'rtl' ? -1 : 1) *
-                (table.getState().columnSizingInfo.deltaOffset ?? 0)
+                (table.store.state.columnResizing.deltaOffset ?? 0)
               }px)`
             : '',
       }}
@@ -46,7 +47,9 @@ function Resizer<TData, TValue>({
   );
 }
 
-export type FilterRenderer<TData> = <TValue>(props: { column: Column<TData, TValue> }) => React.ReactNode;
+export type FilterRenderer<TData extends Record<string, unknown>> = <TValue>(props: {
+  column: AppColumn<TData, TValue>;
+}) => React.ReactNode;
 
 export type ReactTableWithTheWorksProps<
   QueryData,
@@ -54,7 +57,7 @@ export type ReactTableWithTheWorksProps<
   Variables extends GraphQLReactTableVariables = GraphQLReactTableVariables,
 > = Pick<UseReactTableWithTheWorksResult<QueryData, RowType, Variables>, 'table' | 'loading'> & {
   renderFilter?: FilterRenderer<RowType>;
-  onClickRow?: React.Dispatch<Row<RowType>>;
+  onClickRow?: React.Dispatch<AppRow<RowType>>;
 };
 
 function ReactTableWithTheWorks<
@@ -68,7 +71,7 @@ function ReactTableWithTheWorks<
   renderFilter,
 }: ReactTableWithTheWorksProps<QueryData, RowType, Variables>): React.JSX.Element {
   const { previousPage, nextPage, setPageSize, setPageIndex } = table;
-  const { pagination } = table.getState();
+  const { pagination } = table.store.state;
 
   const { t } = useTranslation();
   const [pageInputValue, setPageInputValue] = useState<string>(() => (pagination.pageIndex + 1).toString());
@@ -155,7 +158,7 @@ function ReactTableWithTheWorks<
                   <td>&nbsp;</td>
                 </tr>
               ))
-            : rowModel.rows.map((row: Row<RowType>) => {
+            : rowModel.rows.map((row: AppRow<RowType>) => {
                 return (
                   <tr
                     key={row.id}

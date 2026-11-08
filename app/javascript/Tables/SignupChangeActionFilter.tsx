@@ -1,6 +1,6 @@
 import { useMemo } from 'react';
 import { useTranslation } from 'react-i18next';
-import { Column } from '@tanstack/react-table';
+import { type AppColumn } from './tableFeatures';
 
 import ChoiceSetFilter from './ChoiceSetFilter';
 import EnumTypes from '../enumTypes.json';
@@ -12,7 +12,7 @@ const ACTIONS = EnumTypes.SignupChangeAction.enumValues.map((value) => value.nam
 function SignupChangeActionFilter<TData extends Record<string, unknown>, TValue>({
   column,
 }: {
-  column: Column<TData, TValue>;
+  column: AppColumn<TData, TValue>;
 }): React.JSX.Element {
   const { t } = useTranslation();
   const choices = useMemo(() => ACTIONS.map((action) => ({ value: action, label: describeAction(action, t) })), [t]);

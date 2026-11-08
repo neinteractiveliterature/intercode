@@ -1,4 +1,4 @@
-import { CellContext, ColumnDef, createColumnHelper } from '@tanstack/react-table';
+import { createAppColumnHelper, type AppCellContext, type AppColumnDef } from '../../Tables/tableFeatures';
 
 import describeCoupon from '../describeCoupon';
 import useReactTableWithTheWorks from '../../Tables/useReactTableWithTheWorks';
@@ -23,13 +23,13 @@ const transformColumnIdForExport = (columnId: string) => {
   return columnId;
 };
 
-function CouponUsageLimitCell({ getValue }: CellContext<CouponType, CouponType['usage_limit']>) {
+function CouponUsageLimitCell({ getValue }: AppCellContext<CouponType, CouponType['usage_limit']>) {
   const { t } = useTranslation();
   const value = getValue();
   return value ? t('store.coupons.usageLimitCount', { count: value }) : <em>{t('store.coupons.unlimitedUses')}</em>;
 }
 
-function CouponEffectCell({ getValue }: CellContext<CouponType, CouponType>) {
+function CouponEffectCell({ getValue }: AppCellContext<CouponType, CouponType>) {
   return describeCoupon(getValue());
 }
 
@@ -38,8 +38,8 @@ function CouponAdminTable(): React.JSX.Element {
   const navigate = useNavigate();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const columns = useMemo((): ColumnDef<CouponType, any>[] => {
-    const columnHelper = createColumnHelper<CouponType>();
+  const columns = useMemo((): AppColumnDef<CouponType, any>[] => {
+    const columnHelper = createAppColumnHelper<CouponType>();
     return [
       columnHelper.accessor('code', {
         header: t('admin.store.coupons.table.headers.code'),

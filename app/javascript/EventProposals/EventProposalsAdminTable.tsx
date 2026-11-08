@@ -1,5 +1,6 @@
 import { Link, useLoaderData, useNavigate } from 'react-router';
-import { CellContext, Column, ColumnDef, createColumnHelper } from '@tanstack/react-table';
+import { type RowData } from '@tanstack/react-table';
+import { createAppColumnHelper, type AppCellContext, type AppColumn, type AppColumnDef } from '../Tables/tableFeatures';
 
 import ChoiceSetFilter from '../Tables/ChoiceSetFilter';
 import { buildFieldFilterCodecs, FilterCodecs } from '../Tables/FilterUtils';
@@ -42,17 +43,19 @@ const STATUS_OPTIONS = [
   { value: 'withdrawn', label: 'Withdrawn', badgeClass: 'bg-warning' },
 ] as const;
 
-function StatusFilter<TData extends Record<string, unknown>, TValue>({ column }: { column: Column<TData, TValue> }) {
+function StatusFilter<TData extends Record<string, unknown>, TValue>({ column }: { column: AppColumn<TData, TValue> }) {
   return <ChoiceSetFilter column={column} choices={STATUS_OPTIONS} multiple />;
 }
 
-function StatusCell<TData, TValue extends EventProposalType['status']>({ getValue }: CellContext<TData, TValue>) {
+function StatusCell<TData extends RowData, TValue extends EventProposalType['status']>({
+  getValue,
+}: AppCellContext<TData, TValue>) {
   const value = getValue();
   const statusOption = STATUS_OPTIONS.find((option) => option.value === value);
   return <div className={`badge ${statusOption?.badgeClass}`}>{statusOption?.label || value}</div>;
 }
 
-function ExtraCell({ row: { original } }: CellContext<EventProposalType, unknown>) {
+function ExtraCell({ row: { original } }: AppCellContext<EventProposalType, unknown>) {
   return (
     <Link
       to={`/admin_event_proposals/${original.id}`}
@@ -99,8 +102,8 @@ function EventProposalsAdminTable(): React.JSX.Element {
 
   const navigate = useNavigate();
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const columns = useMemo((): ColumnDef<EventProposalType, any>[] => {
-    const columnHelper = createColumnHelper<EventProposalType>();
+  const columns = useMemo((): AppColumnDef<EventProposalType, any>[] => {
+    const columnHelper = createAppColumnHelper<EventProposalType>();
 
     return [
       columnHelper.accessor('event_category', {

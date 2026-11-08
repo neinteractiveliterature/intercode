@@ -67,7 +67,7 @@
     "@sentry/core": "^11.11.0",
     "@stripe/react-stripe-js": "7.0.1",
     "@stripe/stripe-js": "10.2.1",
-    "@tanstack/react-table": "^8.20.6",
+    "@tanstack/react-table": "^9.3.1",
     "@testing-library/react": "16.3.3",
     "@types/bytes": "3.1.6",
     "@types/debounce-promise": "3.1.9",

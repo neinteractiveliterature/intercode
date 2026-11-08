@@ -2,11 +2,11 @@ import { useMemo } from 'react';
 import flatMap from 'lodash/flatMap';
 
 import ReactTableExportButton, { ReactTableExportButtonProps } from './ExportButton';
-import { VisibilityState } from '@tanstack/react-table';
+import { ColumnVisibilityState } from '@tanstack/react-table';
 import { columnVisibilityToVisibleColumnIds } from './useColumnSelection';
 
 export type ReactTableExportButtonWithColumnTransformProps = Omit<ReactTableExportButtonProps, 'columns'> & {
-  columnVisibility: VisibilityState;
+  columnVisibility: ColumnVisibilityState;
   columnTransform: (columnId: string) => string | string[];
 };
 

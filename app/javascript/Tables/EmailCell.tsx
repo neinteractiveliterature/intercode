@@ -1,6 +1,9 @@
-import { CellContext } from '@tanstack/react-table';
+import { type RowData } from '@tanstack/react-table';
+import { type AppCellContext } from './tableFeatures';
 
-function EmailCell<TData, TValue extends string>({ cell }: CellContext<TData, TValue>): React.JSX.Element {
+function EmailCell<TData extends RowData, TValue extends string>({
+  cell,
+}: AppCellContext<TData, TValue>): React.JSX.Element {
   return (
     <a
       href={`mailto:${cell.getValue()}`}

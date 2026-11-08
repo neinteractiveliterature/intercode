@@ -1,9 +1,10 @@
-import { CellContext } from '@tanstack/react-table';
+import { type RowData } from '@tanstack/react-table';
+import { type AppCellContext } from './tableFeatures';
 import { breakValueIntoUnitQuantities } from '../FormPresenter/TimespanItemUtils';
 
-export default function DurationCell<TData, TValue extends number | null | undefined>({
+export default function DurationCell<TData extends RowData, TValue extends number | null | undefined>({
   getValue,
-}: CellContext<TData, TValue>) {
+}: AppCellContext<TData, TValue>) {
   const value = getValue();
   if (value == null) {
     return <></>;

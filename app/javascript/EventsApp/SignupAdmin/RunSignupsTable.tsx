@@ -1,5 +1,10 @@
 import { useContext, useMemo } from 'react';
-import { CellContext, Column, ColumnDef, createColumnHelper } from '@tanstack/react-table';
+import {
+  createAppColumnHelper,
+  type AppCellContext,
+  type AppColumn,
+  type AppColumnDef,
+} from '../../Tables/tableFeatures';
 import { useNavigate, useParams, useRevalidator } from 'react-router';
 import { Trans, useTranslation } from 'react-i18next';
 import { DateTime } from 'luxon';
@@ -40,7 +45,7 @@ const { encodeFilterValue, decodeFilterValue } = buildFieldFilterCodecs({
 
 type SignupType = RunSignupsTableSignupsQueryData['convention']['event']['run']['signups_paginated']['entries'][0];
 
-function SignupStateFilter<TData extends SignupType, TValue>({ column }: { column: Column<TData, TValue> }) {
+function SignupStateFilter<TData extends SignupType, TValue>({ column }: { column: AppColumn<TData, TValue> }) {
   const { t } = useTranslation();
   const { ticketName } = useContext(AppRootContext);
   const choices = useMemo(
@@ -55,7 +60,7 @@ function SignupStateFilter<TData extends SignupType, TValue>({ column }: { colum
   return <ChoiceSetFilter column={column} multiple choices={choices} />;
 }
 
-function AgeRestrictionsCheckCell({ getValue }: CellContext<SignupType, string>) {
+function AgeRestrictionsCheckCell({ getValue }: AppCellContext<SignupType, string>) {
   const value = getValue();
   const { t } = useTranslation();
   // eslint-disable-next-line i18next/no-literal-string
@@ -78,13 +83,13 @@ function AgeRestrictionsCheckCell({ getValue }: CellContext<SignupType, string>)
   return <span className={`badge ${badgeClass}`}>{text}</span>;
 }
 
-function BucketCell<TData extends SignupType, TValue>({ row: { original } }: CellContext<TData, TValue>) {
+function BucketCell<TData extends SignupType, TValue>({ row: { original } }: AppCellContext<TData, TValue>) {
   const { t } = useTranslation();
   const data = useContext(QueryDataContext) as Partial<RunSignupsTableSignupsQueryData>;
   return <>{data.convention && formatBucket(original, data.convention.event, t)}</>;
 }
 
-function BucketFilter<TData extends SignupType, TValue>({ column }: { column: Column<TData, TValue> }) {
+function BucketFilter<TData extends SignupType, TValue>({ column }: { column: AppColumn<TData, TValue> }) {
   const data = useContext(QueryDataContext) as Partial<RunSignupsTableSignupsQueryData>;
   const choices = useMemo(
     () =>
@@ -111,8 +116,8 @@ function RunSignupsTable(): React.JSX.Element {
   const revalidator = useRevalidator();
 
   // eslint-disable-next-line @typescript-eslint/no-explicit-any
-  const columns = useMemo((): ColumnDef<SignupType, any>[] => {
-    const columnHelper = createColumnHelper<SignupType>();
+  const columns = useMemo((): AppColumnDef<SignupType, any>[] => {
+    const columnHelper = createAppColumnHelper<SignupType>();
     return [
       columnHelper.accessor('id', {
         header: t('events.signupAdmin.sequenceHeader'),

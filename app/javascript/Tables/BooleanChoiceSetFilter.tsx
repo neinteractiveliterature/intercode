@@ -30,7 +30,6 @@ function BooleanChoiceSetFilter<TData extends Record<string, unknown>, TValue>(
       ]}
       multiple={false}
       column={{
-        ...props.column,
         getFilterValue: () => getBooleanFilterValue(props.column.getFilterValue()),
         setFilterValue: (value: string) => {
           props.column.setFilterValue(value === 'any' ? null : value === 'true');

@@ -1,12 +1,13 @@
 import { useContext, useMemo } from 'react';
 import { GetEventCategoryStylesOptions, getEventCategoryStyles } from '../EventsApp/ScheduleGrid/StylingUtils';
 import { QueryDataContext } from './useReactTableWithTheWorks';
-import { CellContext } from '@tanstack/react-table';
+import { type RowData } from '@tanstack/react-table';
+import { type AppCellContext } from './tableFeatures';
 import { EventCategory } from 'graphqlTypes.generated';
 
-export default function EventCategoryCell<TData, TValue extends Pick<EventCategory, 'id'>>({
+export default function EventCategoryCell<TData extends RowData, TValue extends Pick<EventCategory, 'id'>>({
   getValue,
-}: CellContext<TData, TValue>) {
+}: AppCellContext<TData, TValue>) {
   const data = useContext(QueryDataContext) as {
     convention: { event_categories: (GetEventCategoryStylesOptions['eventCategory'] & { id: string; name: string })[] };
   };

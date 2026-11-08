@@ -1,11 +1,12 @@
 import { DateTime } from 'luxon';
 
 import { useAppDateTimeFormat, useISODateTimeInAppZone } from '../TimeUtils';
-import { CellContext } from '@tanstack/react-table';
+import { type RowData } from '@tanstack/react-table';
+import { type AppCellContext } from './tableFeatures';
 
-export function SingleLineTimestampCell<TData, TValue extends string | null | undefined>({
+export function SingleLineTimestampCell<TData extends RowData, TValue extends string | null | undefined>({
   getValue,
-}: CellContext<TData, TValue>): React.JSX.Element {
+}: AppCellContext<TData, TValue>): React.JSX.Element {
   const value = getValue();
   const timestamp = useISODateTimeInAppZone(value ?? '');
   const format = useAppDateTimeFormat();
@@ -17,7 +18,9 @@ export function SingleLineTimestampCell<TData, TValue extends string | null | un
   return <>{format(timestamp, 'compactDateTime')}</>;
 }
 
-function TimestampCell<TData, TValue extends string>({ getValue }: CellContext<TData, TValue>): React.JSX.Element {
+function TimestampCell<TData extends RowData, TValue extends string>({
+  getValue,
+}: AppCellContext<TData, TValue>): React.JSX.Element {
   const value = getValue();
   const timestamp = useISODateTimeInAppZone(value);
   const format = useAppDateTimeFormat();
