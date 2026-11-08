@@ -1,7 +1,8 @@
-import { Outlet } from 'react-router';
+import { Outlet, useLocation } from 'react-router';
 import { MockLink } from '@apollo/client/testing';
+import { vi } from 'vitest';
 
-import { renderRoute, waitFor } from '../../testUtils';
+import { renderRoute, userEvent, waitFor, within } from '../../testUtils';
 import { default as RunSignupsTable } from '../../../../app/javascript/EventsApp/SignupAdmin/RunSignupsTable';
 import { signupAdminEventLoader } from '../../../../app/javascript/EventsApp/SignupAdmin/loaders';
 import {
@@ -134,5 +135,178 @@ describe('RunSignupsTable', () => {
 
     await waitFor(() => expect(result.getByText('One, Player')).toBeTruthy());
     expect(result.getByRole('row', { name: /One, Player.*Player/ })).toBeTruthy();
+  });
+
+  describe('filtering and sorting', () => {
+    type Entry = RunSignupsTableSignupsQueryData['convention']['event']['run']['signups_paginated']['entries'][number];
+
+    const buildEntry = (id: string, name: string, state: SignupState): Entry => ({
+      __typename: 'Signup',
+      id,
+      state,
+      counted: true,
+      age_restrictions_check: 'OK',
+      bucket: { __typename: 'RegistrationPolicyBucket', id: '1' },
+      requested_bucket: null,
+      run: { __typename: 'Run', id: '1', starts_at: '2025-01-01T19:00:00Z' },
+      user_con_profile: {
+        __typename: 'UserConProfile',
+        id,
+        name_inverted: name,
+        name_without_nickname: name,
+        gravatar_enabled: false,
+        gravatar_url: '',
+        email: `player-${id}@example.com`,
+        birth_date: '2000-01-01',
+      },
+    });
+
+    const queried = vi.fn();
+    let events: ReturnType<typeof userEvent.setup>;
+
+    beforeEach(() => {
+      queried.mockReset();
+      events = userEvent.setup();
+    });
+
+    const renderTable = async (search = '') => {
+      const eventMock: MockLink.MockedResponse<SignupAdminEventQueryData> = {
+        request: { query: SignupAdminEventQueryDocument, variables: { eventId: '1' } },
+        result: { data: buildEventLoaderData() },
+        maxUsageCount: 10,
+      };
+      const signupsMock: MockLink.MockedResponse<RunSignupsTableSignupsQueryData> = {
+        request: {
+          query: RunSignupsTableSignupsQueryDocument,
+          variables: (variables: unknown) => {
+            queried(variables);
+            return true;
+          },
+        },
+        result: () => ({
+          data: buildSignupsQueryData([
+            buildEntry('1', 'One, Player', SignupState.Confirmed),
+            buildEntry('2', 'Two, Player', SignupState.Waitlisted),
+          ]),
+        }),
+        maxUsageCount: 50,
+      };
+
+      const r = await renderRoute(
+        [
+          {
+            path: '/events/:eventId/runs/:runId/admin_signups',
+            id: NamedRoute.SignupAdmin,
+            loader: signupAdminEventLoader,
+            Component: () => (
+              <>
+                <Outlet />
+                <output data-testid="search">{decodeURIComponent(useLocation().search)}</output>
+              </>
+            ),
+            children: [{ index: true, Component: RunSignupsTable }],
+          },
+        ],
+        { apolloMocks: [eventMock, signupsMock], initialEntries: [`/events/1/runs/1/admin_signups${search}`] },
+      );
+      await waitFor(() => expect(r.getByText('One, Player')).toBeTruthy());
+      return r;
+    };
+
+    type Rendered = Awaited<ReturnType<typeof renderTable>>;
+    const lastVariables = () => queried.mock.calls[queried.mock.calls.length - 1][0];
+    const search = (r: Rendered) => r.getByTestId('search').textContent;
+    // the filter row follows the header row; the visible columns are id, state, name, bucket, age check, email
+    const filterCell = (r: Rendered, index: number) =>
+      within(r.getAllByRole('row')[1]).getAllByRole('columnheader')[index];
+    const stateFilter = (r: Rendered) => filterCell(r, 1);
+    const nameFilter = (r: Rendered) => filterCell(r, 2);
+    const bucketFilter = (r: Rendered) => filterCell(r, 3);
+
+    it('offers a choice of every state in the state filter, saying any by default', async () => {
+      const r = await renderTable();
+      expect(within(stateFilter(r)).getByText('Any')).toBeTruthy();
+
+      await events.click(within(stateFilter(r)).getByRole('button', { name: 'Open' }));
+
+      expect(
+        within(stateFilter(r))
+          .getAllByRole('checkbox')
+          .map((c) => c.closest('label')?.textContent?.trim()),
+      ).toEqual(['Confirmed', 'Held pending ticket purchase', 'Waitlisted', 'Withdrawn']);
+    });
+
+    it('filters by the states that are chosen', async () => {
+      const r = await renderTable();
+      await events.click(within(stateFilter(r)).getByRole('button', { name: 'Open' }));
+
+      await events.click(within(stateFilter(r)).getByRole('checkbox', { name: 'Waitlisted' }));
+      await waitFor(() => expect(lastVariables().filters).toEqual({ state: ['waitlisted'] }));
+      expect(search(r)).toContain('filters.state=waitlisted');
+
+      await events.click(within(stateFilter(r)).getByRole('checkbox', { name: 'Confirmed' }));
+      await waitFor(() => expect(lastVariables().filters).toEqual({ state: ['waitlisted', 'confirmed'] }));
+
+      await events.click(within(stateFilter(r)).getByRole('checkbox', { name: 'Waitlisted' }));
+      await waitFor(() => expect(lastVariables().filters).toEqual({ state: ['confirmed'] }));
+    });
+
+    it('selects every state, or none, with the buttons under the choices', async () => {
+      const r = await renderTable();
+      await events.click(within(stateFilter(r)).getByRole('button', { name: 'Open' }));
+
+      await events.click(within(stateFilter(r)).getByRole('button', { name: 'Select all' }));
+      await waitFor(() =>
+        expect(lastVariables().filters.state).toEqual(['confirmed', 'ticket_purchase_hold', 'waitlisted', 'withdrawn']),
+      );
+
+      await events.click(within(stateFilter(r)).getByRole('button', { name: 'Select none' }));
+      await waitFor(() => expect(lastVariables().filters).toEqual({}));
+      expect(search(r)).not.toContain('filters.state');
+    });
+
+    it('takes the chosen states from the URL, and says what they are', async () => {
+      const r = await renderTable('?filters.state=confirmed,waitlisted');
+
+      expect(lastVariables().filters).toEqual({ state: ['confirmed', 'waitlisted'] });
+      const checked = (name: string) =>
+        (within(stateFilter(r)).getByRole('checkbox', { name }) as HTMLInputElement).checked;
+      expect(checked('Confirmed')).toBe(true);
+      expect(checked('Waitlisted')).toBe(true);
+      expect(checked('Withdrawn')).toBe(false);
+      // the caption above the choices, which is all that shows while the choices are closed
+      const caption = stateFilter(r).querySelector('.card-header') as HTMLElement;
+      expect(caption.textContent).toContain('Confirmed');
+      expect(caption.textContent).toContain('Waitlisted');
+      expect(caption.textContent).not.toContain('Any');
+    });
+
+    it('offers the buckets of the event in the bucket filter, and filters by the id of the one chosen', async () => {
+      const r = await renderTable();
+      await events.click(within(bucketFilter(r)).getByRole('button', { name: 'Open' }));
+
+      await events.click(within(bucketFilter(r)).getByRole('checkbox', { name: 'Player' }));
+
+      await waitFor(() => expect(lastVariables().filters).toEqual({ bucket: ['1'] }));
+      expect(search(r)).toContain('filters.bucket=1');
+    });
+
+    it('combines a chosen state with a text filter', async () => {
+      const r = await renderTable('?filters.state=confirmed');
+      const nameInput = within(nameFilter(r)).getByRole('textbox');
+
+      await events.click(nameInput);
+      await events.type(nameInput, 'One{Enter}');
+
+      await waitFor(() => expect(lastVariables().filters).toEqual({ state: ['confirmed'], name: 'One' }));
+    });
+
+    it('sorts by a column that is clicked', async () => {
+      const r = await renderTable();
+
+      await events.click(within(r.getAllByRole('row')[0]).getByRole('button', { name: /^State/ }));
+
+      await waitFor(() => expect(lastVariables().sort).toEqual([{ field: 'state', desc: false }]));
+    });
   });
 });
