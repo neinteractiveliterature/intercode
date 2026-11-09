@@ -1,4 +1,5 @@
 import 'react-i18next';
+import 'react-i18next/augment-react';
 import en from '../../../locales/en.json';
 
 declare module 'i18next' {
