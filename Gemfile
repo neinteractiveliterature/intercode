@@ -160,7 +160,7 @@ end
 
 group :test do
   gem "capybara", "3.40.0"
-  gem "cuprite", "0.20"
+  gem "cuprite", "0.20.1"
   gem "database_cleaner-active_record", "2.2.2"
   gem "factory_bot", "6.6.0"
   gem "factory_bot_rails", "6.5.1"

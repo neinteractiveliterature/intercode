@@ -117,7 +117,7 @@ GEM
       uri (>= 0.13.1)
     acts_as_list (0.9.16)
       activerecord (>= 3.0)
-    addressable (2.9.1)
+    addressable (2.9.2)
       public_suffix (>= 2.0.2, < 8.0)
     ahoy_matey (5.5.0)
       activesupport (>= 7.2)
@@ -208,7 +208,7 @@ GEM
     connection_pool (3.0.2)
     crass (1.0.8)
     csv (3.3.7)
-    cuprite (0.20)
+    cuprite (0.20.1)
       capybara (~> 3.0)
       ferrum (~> 0.20.1)
     database_cleaner-active_record (2.2.2)
@@ -676,7 +676,7 @@ DEPENDENCIES
   civil_service!
   cloudwatch_scheduler!
   csv (= 3.3.7)
-  cuprite (= 0.20)
+  cuprite (= 0.20.1)
   database_cleaner-active_record (= 2.2.2)
   dead_end (= 4.0.0)
   debug (= 1.11.1)
