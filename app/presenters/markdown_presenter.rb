@@ -11,7 +11,7 @@ class MarkdownPresenter
       @controller = controller
     end
 
-    def image(link, title, alt_text)
+    def image(link, title, alt_text) # rubocop:disable Metrics/CyclomaticComplexity, Metrics/PerceivedComplexity
       uri =
         begin
           URI.parse(link)
@@ -19,13 +19,13 @@ class MarkdownPresenter
           nil
         end
 
-      is_absolute = uri&.host || uri&.path&.start_with?('/')
+      is_absolute = uri&.host || uri&.path&.start_with?("/")
       local_image = is_absolute ? nil : @local_images[link.downcase.strip]
 
       if local_image && @controller
-        image_tag(@controller.cdn_upload_url(local_image), title: title, alt_text: alt_text, class: 'img-fluid')
+        image_tag(@controller.cdn_upload_url(local_image), title: title, alt_text: alt_text, class: "img-fluid")
       else
-        image_tag(link, title: title, alt_text: alt_text, class: 'img-fluid')
+        image_tag(link, title: title, alt_text: alt_text, class: "img-fluid")
       end
     rescue StandardError => e
       "#{e.class.name}: #{e.message}"
@@ -42,8 +42,8 @@ class MarkdownPresenter
     fragment = Nokogiri::HTML::DocumentFragment.parse(html)
     non_blank_children = fragment.children.reject { |child| child.text? && child.content.blank? }
 
-    if non_blank_children.size == 1 && non_blank_children.first.name == 'p'
-      non_blank_children.first.inner_html.html_safe
+    if non_blank_children.size == 1 && non_blank_children.first.name == "p"
+      non_blank_children.first.inner_html.html_safe # rubocop:disable Rails/OutputSafety
     else
       html
     end
@@ -69,29 +69,30 @@ class MarkdownPresenter
     pipeline.inject(markdown) { |acc, elem| elem.call(acc) }
   end
 
+  # Not memoized: the renderer bakes in local_images, and a single presenter is reused across many objects
+  # (see Sources::Markdown), each with its own attachments
   def markdown_processor(local_images: {})
-    @markdown_processor ||=
-      Redcarpet::Markdown.new(
-        MarkdownRenderer.new(
-          controller: controller,
-          link_attributes: {
-            target: '_blank',
-            rel: 'noreferrer'
-          },
-          local_images: local_images
-        ),
-        no_intra_emphasis: true,
-        autolink: true,
-        footnotes: true
-      )
+    Redcarpet::Markdown.new(
+      MarkdownRenderer.new(
+        controller: controller,
+        link_attributes: {
+          target: "_blank",
+          rel: "noreferrer"
+        },
+        local_images: local_images
+      ),
+      no_intra_emphasis: true,
+      autolink: true,
+      footnotes: true
+    )
   end
 
   private
 
   def build_pipeline_core(sanitize_content:, filter_liquid_tags:, local_images:)
-    markdown_renderer = (->(content) { markdown_processor(local_images: local_images).render(content || '') })
-    sanitizer = (->(content) { sanitize_html(content, sanitize_content: sanitize_content) })
-    liquid_renderer = (->(content) { render_liquid(content, filter_liquid_tags: filter_liquid_tags) })
+    markdown_renderer = ->(content) { markdown_processor(local_images: local_images).render(content || "") }
+    sanitizer = ->(content) { sanitize_html(content, sanitize_content: sanitize_content) }
+    liquid_renderer = ->(content) { render_liquid(content, filter_liquid_tags: filter_liquid_tags) }
 
     sanitize_content ? [markdown_renderer, sanitizer, liquid_renderer] : [liquid_renderer, markdown_renderer, sanitizer]
   end
@@ -103,7 +104,7 @@ class MarkdownPresenter
         filter_liquid_tags: filter_liquid_tags,
         local_images: local_images
       ),
-      ->(content) { content.presence || (default_content.present? ? "<p><em>#{default_content}</em></p>" : '') },
+      ->(content) { content.presence || (default_content.present? ? "<p><em>#{default_content}</em></p>" : "") },
       strip_single_p ? ->(content) { MarkdownPresenter.strip_single_p(content) } : nil
     ].compact
   end
@@ -126,18 +127,18 @@ class MarkdownPresenter
       liquid
         .gsub(/\{%\s*youtube\s+([^ %]+)\s*%\}/) do |match|
           # this can't have inner content, so it's fine to run it through a liquid parser
-          Liquid::Template.parse(match).render.html_safe
+          Liquid::Template.parse(match).render.html_safe # rubocop:disable Rails/OutputSafety
         end
         .gsub(/\{%\s*spoiler\s*%\}(.*)\{%\s*endspoiler\s*%\}/) do |_match|
           # Not going to attempt to replicate what AppComponentRenderer actually does here
-          tag.div(nil, 'data-react-class' => 'Spoiler', 'data-react-props' => { content: Regexp.last_match(1) }.to_json)
+          tag.div(nil, "data-react-class" => "Spoiler", "data-react-props" => { content: Regexp.last_match(1) }.to_json)
         end
-        .html_safe
+        .html_safe # rubocop:disable Rails/OutputSafety
     else
       template = Liquid::Template.parse(liquid)
-      cadmus_renderer ? cadmus_renderer.render(template, :html) : template.render.html_safe
+      cadmus_renderer ? cadmus_renderer.render(template, :html) : template.render.html_safe # rubocop:disable Rails/OutputSafety
     end
   rescue StandardError => e
-    %(<div class="alert alert-danger">#{e.message}</div>\n#{liquid}).html_safe
+    %(<div class="alert alert-danger">#{e.message}</div>\n#{liquid}).html_safe # rubocop:disable Rails/OutputSafety
   end
 end
