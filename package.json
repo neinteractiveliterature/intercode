@@ -223,7 +223,7 @@
   },
   "resolutions": {
     "react-bootstrap4-modal": "3.0.11",
-    "rollup": "4.68.0"
+    "rollup": "4.68.2"
   },
   "dependenciesMeta": {
     "sharp": {
