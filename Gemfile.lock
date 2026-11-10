@@ -422,7 +422,7 @@ GEM
       activerecord (>= 8.0)
       activesupport (>= 8.0)
     phonelib (0.11.0)
-    positioning (0.4.8)
+    positioning (0.4.10)
       activerecord (>= 6.1)
       activesupport (>= 6.1)
     pp (0.6.4)
@@ -716,7 +716,7 @@ DEPENDENCIES
   pg-aws_rds_iam (= 0.8.0)
   pg_search (= 2.4.0)
   phonelib (= 0.11.0)
-  positioning (= 0.4.8)
+  positioning (= 0.4.10)
   prettier (= 4.0.4)
   prettier_print (= 1.2.1)
   prettyprint!
