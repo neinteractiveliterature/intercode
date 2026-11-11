@@ -44,7 +44,7 @@ gem "scheduled_value", "1.4.0"
 gem "civil_service", github: "neinteractiveliterature/civil_service", branch: "no-double-validate"
 
 # File uploading
-gem "aws-sdk-s3", "1.240.0"
+gem "aws-sdk-s3", "1.241.0"
 gem "image_processing", "2.2.0"
 gem "ruby-vips", "2.3.0"
 
@@ -67,8 +67,8 @@ gem "graphql-rails_logger", "1.2.5", groups: %i[development test]
 # Email stuff
 gem "aws-actionmailer-ses", "1.2.0"
 gem "aws-sdk-rails", "5.2.0"
-gem "aws-sdk-ses", "1.112.0"
-gem "aws-sdk-sns", "1.129.0"
+gem "aws-sdk-ses", "1.113.0"
+gem "aws-sdk-sns", "1.130.0"
 
 # Markdown
 gem "redcarpet", "3.6.1"
