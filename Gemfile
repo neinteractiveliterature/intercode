@@ -53,7 +53,7 @@ gem "business_time", "0.13.0"
 gem "eu_central_bank", "2.0.0"
 gem "holidays", "11.8.0"
 gem "money-rails", "3.0.0"
-gem "stripe", "20.1.0"
+gem "stripe", "21.0.0"
 
 # Pagination and search
 gem "pg_search", "2.4.0"
