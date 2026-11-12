@@ -244,7 +244,7 @@ describe('EventTable (the event catalog, as a table)', () => {
       await events.click(within(filterCell(r, 'Category')).getByRole('checkbox', { name: 'Panel' }));
 
       await waitFor(() => expect(lastVariables().filters).toEqual({ category: [5] }));
-      expect(search(r)).toContain('filters.category=5');
+      await waitFor(() => expect(search(r)).toContain('filters.category=5'));
     });
 
     it('filters by title', async () => {
@@ -255,7 +255,7 @@ describe('EventTable (the event catalog, as a table)', () => {
       await events.type(title, 'Big{Enter}');
 
       await waitFor(() => expect(lastVariables().filters).toEqual({ title: 'Big' }));
-      expect(search(r)).toContain('filters.title=Big');
+      await waitFor(() => expect(search(r)).toContain('filters.title=Big'));
     });
 
     it('offers filters only on the columns that have them', async () => {

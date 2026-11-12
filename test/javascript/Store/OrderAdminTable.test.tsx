@@ -158,7 +158,7 @@ describe('OrderAdmin (the orders table)', () => {
       await events.click(within(filterCell(r, 'Status')).getByRole('checkbox', { name: 'Unpaid' }));
 
       await waitFor(() => expect(lastVariables().filters).toEqual({ status: ['paid', 'unpaid'] }));
-      expect(search(r)).toContain('filters.status=paid,unpaid');
+      await waitFor(() => expect(search(r)).toContain('filters.status=paid,unpaid'));
     });
 
     it('takes the statuses from the URL, and shows them as chosen', async () => {

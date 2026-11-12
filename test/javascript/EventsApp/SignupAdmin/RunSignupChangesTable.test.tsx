@@ -168,7 +168,7 @@ describe('RunSignupChangesTable', () => {
     await events.type(name, 'Two{Enter}');
 
     await waitFor(() => expect(lastVariables().filters).toEqual({ name: 'Two' }));
-    expect(search(r)).toContain('filters.name=Two');
+    await waitFor(() => expect(search(r)).toContain('filters.name=Two'));
   });
 
   it('offers a choice of the kinds of change, and filters by those chosen', async () => {
@@ -179,7 +179,7 @@ describe('RunSignupChangesTable', () => {
     await events.click(within(filterCell(r, 'Change')).getByRole('checkbox', { name: 'hold expired' }));
 
     await waitFor(() => expect(lastVariables().filters).toEqual({ action: ['withdraw', 'hold_expired'] }));
-    expect(search(r)).toContain('filters.action=withdraw,hold_expired');
+    await waitFor(() => expect(search(r)).toContain('filters.action=withdraw,hold_expired'));
   });
 
   it('remembers its page size separately from the signup spy report', async () => {

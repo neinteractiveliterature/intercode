@@ -198,7 +198,7 @@ describe('SignupSpyTable', () => {
       await events.click(within(filterCell(r, 'Change')).getByRole('checkbox', { name: 'hold expired' }));
 
       await waitFor(() => expect(lastVariables().filters).toEqual({ action: ['withdraw', 'hold_expired'] }));
-      expect(search(r)).toContain('filters.action=withdraw,hold_expired');
+      await waitFor(() => expect(search(r)).toContain('filters.action=withdraw,hold_expired'));
     });
   });
 

@@ -154,17 +154,17 @@ describe('UsersTable', () => {
 
       await events.click(lastNameHeader());
       await waitFor(() => expect(lastVariables().sort).toEqual([{ field: 'last_name', desc: false }]));
-      expect(search(r)).toContain('sort.last_name=asc');
+      await waitFor(() => expect(search(r)).toContain('sort.last_name=asc'));
       expect(lastNameHeader().textContent).toContain('▴');
 
       await events.click(lastNameHeader());
       await waitFor(() => expect(lastVariables().sort).toEqual([{ field: 'last_name', desc: true }]));
-      expect(search(r)).toContain('sort.last_name=desc');
+      await waitFor(() => expect(search(r)).toContain('sort.last_name=desc'));
       expect(lastNameHeader().textContent).toContain('▾');
 
       await events.click(lastNameHeader());
       await waitFor(() => expect(lastVariables().sort).toEqual([]));
-      expect(search(r)).not.toContain('sort.');
+      await waitFor(() => expect(search(r)).not.toContain('sort.'));
       expect(lastNameHeader().textContent).not.toMatch(/[▴▾]/);
     });
 
@@ -199,7 +199,7 @@ describe('UsersTable', () => {
       await events.keyboard('{Enter}');
 
       await waitFor(() => expect(lastVariables().filters).toEqual({ first_name: 'Al' }));
-      expect(search(r)).toContain('filters.first_name=Al');
+      await waitFor(() => expect(search(r)).toContain('filters.first_name=Al'));
     });
 
     it('combines filters on different columns', async () => {
@@ -228,7 +228,7 @@ describe('UsersTable', () => {
       await events.click(within(r.getAllByRole('row')[1]).getByRole('button', { name: 'Clear' }));
 
       await waitFor(() => expect(lastVariables().filters).toEqual({}));
-      expect(search(r)).not.toContain('filters.');
+      await waitFor(() => expect(search(r)).not.toContain('filters.'));
     });
   });
 
@@ -256,7 +256,7 @@ describe('UsersTable', () => {
 
       await events.click(r.getByRole('button', { name: /Next/ }));
       await waitFor(() => expect(lastVariables().page).toBe(2));
-      expect(search(r)).toContain('page=2');
+      await waitFor(() => expect(search(r)).toContain('page=2'));
       expect((r.getByRole('spinbutton', { name: 'Page' }) as HTMLInputElement).value).toBe('2');
 
       await events.click(r.getByRole('button', { name: /Previous/ }));
@@ -272,7 +272,7 @@ describe('UsersTable', () => {
       await events.type(pageInput, '3');
 
       await waitFor(() => expect(lastVariables().page).toBe(3));
-      expect(search(r)).toContain('page=3');
+      await waitFor(() => expect(search(r)).toContain('page=3'));
     });
 
     it('starts on the page in the URL', async () => {
@@ -320,7 +320,7 @@ describe('UsersTable', () => {
       await events.click(r.getByRole('checkbox', { name: 'Name' }));
 
       await waitFor(() => expect(columnHeaders(r)).toContain('Name'));
-      expect(search(r)).toMatch(/columns=.*name/);
+      await waitFor(() => expect(search(r)).toMatch(/columns=.*name/));
       expect(cellTexts(bodyRows(r)[0])).toContain('Anders, Alice');
     });
 

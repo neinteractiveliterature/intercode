@@ -244,11 +244,11 @@ describe('EventProposalsAdminTable', () => {
 
       await events.click(within(filterCell(r, 'Category')).getByRole('checkbox', { name: 'Tabletop RPG' }));
       await waitFor(() => expect(lastVariables().filters).toEqual({ event_category: [1] }));
-      expect(search(r)).toContain('filters.event_category=1');
+      await waitFor(() => expect(search(r)).toContain('filters.event_category=1'));
 
       await events.click(within(filterCell(r, 'Category')).getByRole('checkbox', { name: 'Panel' }));
       await waitFor(() => expect(lastVariables().filters).toEqual({ event_category: [1, 2] }));
-      expect(search(r)).toContain('filters.event_category=1,2');
+      await waitFor(() => expect(search(r)).toContain('filters.event_category=1,2'));
     });
 
     it('takes the categories from the URL', async () => {
@@ -281,7 +281,7 @@ describe('EventProposalsAdminTable', () => {
       await events.click(within(filterCell(r, 'Status')).getByRole('checkbox', { name: 'Tentative accept' }));
 
       await waitFor(() => expect(lastVariables().filters).toEqual({ status: ['accepted', 'tentative_accept'] }));
-      expect(search(r)).toContain('filters.status=accepted,tentative_accept');
+      await waitFor(() => expect(search(r)).toContain('filters.status=accepted,tentative_accept'));
     });
 
     it('takes the statuses from the URL, and shows them as chosen', async () => {
