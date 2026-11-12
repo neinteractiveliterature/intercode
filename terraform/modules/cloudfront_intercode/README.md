@@ -149,7 +149,7 @@ block) and `nginx/rails-locations.conf` (include in the `server` block) are gene
 second expects an upstream named `rails` and `/etc/nginx/proxy_params.conf`. Send crawlers to
 `/og-shell?path=<original path>` from `location /` when `$is_crawler` is set.
 
-The `intercode-assets-framework` image ships a complete nginx configuration built from these files, with a docker-compose
+The `intercode-assets` image ships a complete nginx configuration built from these files, with a docker-compose
 example and notes for deployers: see [the deployment guide](https://intercode.interactiveliterature.org/docs/deploying).
 
 ## Upgrading from the Lambda@Edge router

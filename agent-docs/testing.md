@@ -28,7 +28,7 @@ PARALLEL_WORKERS=4 bin/rails test
 
 ## System tests against the framework-mode build
 
-While the migration to React Router framework mode (#12219) is in progress, the system tests also run against the framework-mode build, in a real browser (Cuprite) with Rails serving its prebuilt shell (`StaticSpaShell`) when `STATIC_SHELL_DIR` is set. `test/system/framework_shell_test.rb` only runs in that mode and checks that the build boots (it uses the placeholder `/framework-check` page); the other system tests run in both.
+The system tests run in a real browser (Cuprite), and CI runs them against the framework-mode build with Rails serving its prebuilt shell (`StaticSpaShell`) when `STATIC_SHELL_DIR` is set, which is how production runs. Locally they use the data-mode build unless you set that up (below). `test/system/framework_shell_test.rb` only runs in the framework mode and checks that the build boots (it uses the placeholder `/framework-check` page); the other system tests run in both.
 
 ```sh
 yarn build:framework
@@ -36,7 +36,7 @@ script/prepareStaticShell.sh        # prints STATIC_SHELL_DIR=...; also fills pu
 STATIC_SHELL_DIR=$PWD/tmp/static-shell bin/rails test:system
 ```
 
-Run `script/prepareStaticShell.sh` again after each build. CI does the same in the `Minitest system tests` job when the repository variable `BUILD_FRAMEWORK` is set. The framework build's routes are generated from `AppRouter.tsx` by `script/genRoutes.mts` (`yarn routes:generate`; CI runs `yarn routes:check`), so change routes in `AppRouter.tsx` and regenerate until the cutover (#12260) deletes both.
+Run `script/prepareStaticShell.sh` again after each build. CI does the same in the `Minitest system tests` job. The framework build's routes are generated from `AppRouter.tsx` by `script/genRoutes.mts` (`yarn routes:generate`; CI runs `yarn routes:check`), so change routes in `AppRouter.tsx` and regenerate until the cutover (#12260) deletes both.
 
 ## End-to-End Testing with Playwright
 

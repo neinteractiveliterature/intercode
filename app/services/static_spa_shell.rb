@@ -24,6 +24,23 @@ module StaticSpaShell
       File.join(directory, "index.html")
     end
 
+    # The stylesheets the shell links, for the pages Rails renders itself (the printable reports, the CMS layout
+    # preview) that need the app's styles. Empty without a shell, as in development, where the pages go unstyled.
+    def stylesheet_hrefs
+      return [] unless enabled?
+
+      @stylesheet_hrefs ||= {}
+      @stylesheet_hrefs[directory] ||= File
+        .read(index_path)
+        .scan(/<link\b[^>]*>/)
+        .filter_map do |link|
+          next unless link.match?(/\brel="stylesheet"/)
+
+          link[/\bhref="([^"]+)"/, 1]
+        end
+        .freeze
+    end
+
     def crawler?(user_agent)
       CRAWLER_USER_AGENT_REGEX.match?(user_agent.to_s)
     end
