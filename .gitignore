@@ -70,6 +70,9 @@ cookbooks
 # Ignore SimpleCov test coverage results
 /coverage
 
+# Ignore Vitest UI/HTML reporter output
+/.vitest
+
 # Don't check in secrets
 /.env.*.local
 
