@@ -240,7 +240,7 @@ describe('UserConProfilesTable', () => {
       await events.type(input, 'bob{Enter}');
 
       await waitFor(() => expect(lastVariables().filters).toEqual({ email: 'bob' }));
-      expect(search(r)).toContain('filters.email=bob');
+      await waitFor(() => expect(search(r)).toContain('filters.email=bob'));
     });
   });
 
@@ -260,15 +260,15 @@ describe('UserConProfilesTable', () => {
 
       await events.click(within(filterCell(r, 'Attending?')).getByRole('radio', { name: 'yes' }));
       await waitFor(() => expect(lastVariables().filters).toEqual({ attending: true }));
-      expect(search(r)).toContain('filters.attending=true');
+      await waitFor(() => expect(search(r)).toContain('filters.attending=true'));
 
       await events.click(within(filterCell(r, 'Attending?')).getByRole('radio', { name: 'no' }));
       await waitFor(() => expect(lastVariables().filters).toEqual({ attending: false }));
-      expect(search(r)).toContain('filters.attending=false');
+      await waitFor(() => expect(search(r)).toContain('filters.attending=false'));
 
       await events.click(within(filterCell(r, 'Attending?')).getByRole('radio', { name: 'any' }));
       await waitFor(() => expect(lastVariables().filters).toEqual({}));
-      expect(search(r)).not.toContain('filters.attending');
+      await waitFor(() => expect(search(r)).not.toContain('filters.attending'));
     });
 
     it('take their value from the URL, and show it', async () => {
@@ -316,7 +316,7 @@ describe('UserConProfilesTable', () => {
       await events.click(within(filterCell(r, 'Badge type')).getByRole('checkbox', { name: 'Unpaid' }));
 
       await waitFor(() => expect(lastVariables().filters).toEqual({ ticket_type: ['11', 'none'] }));
-      expect(search(r)).toContain('filters.ticket_type=11,none');
+      await waitFor(() => expect(search(r)).toContain('filters.ticket_type=11,none'));
     });
   });
 

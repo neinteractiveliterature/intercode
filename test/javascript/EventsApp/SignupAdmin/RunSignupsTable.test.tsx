@@ -242,7 +242,7 @@ describe('RunSignupsTable', () => {
 
       await events.click(within(stateFilter(r)).getByRole('checkbox', { name: 'Waitlisted' }));
       await waitFor(() => expect(lastVariables().filters).toEqual({ state: ['waitlisted'] }));
-      expect(search(r)).toContain('filters.state=waitlisted');
+      await waitFor(() => expect(search(r)).toContain('filters.state=waitlisted'));
 
       await events.click(within(stateFilter(r)).getByRole('checkbox', { name: 'Confirmed' }));
       await waitFor(() => expect(lastVariables().filters).toEqual({ state: ['waitlisted', 'confirmed'] }));
@@ -262,7 +262,7 @@ describe('RunSignupsTable', () => {
 
       await events.click(within(stateFilter(r)).getByRole('button', { name: 'Select none' }));
       await waitFor(() => expect(lastVariables().filters).toEqual({}));
-      expect(search(r)).not.toContain('filters.state');
+      await waitFor(() => expect(search(r)).not.toContain('filters.state'));
     });
 
     it('takes the chosen states from the URL, and says what they are', async () => {
@@ -288,7 +288,7 @@ describe('RunSignupsTable', () => {
       await events.click(within(bucketFilter(r)).getByRole('checkbox', { name: 'Player' }));
 
       await waitFor(() => expect(lastVariables().filters).toEqual({ bucket: ['1'] }));
-      expect(search(r)).toContain('filters.bucket=1');
+      await waitFor(() => expect(search(r)).toContain('filters.bucket=1'));
     });
 
     it('combines a chosen state with a text filter', async () => {
