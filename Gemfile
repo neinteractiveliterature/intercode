@@ -78,7 +78,7 @@ gem "phonelib", "0.11.0"
 gem "twilio-ruby", "7.13.0"
 
 # Background workers and scheduling
-gem "aws-sdk-sqs", "1.127.0"
+gem "aws-sdk-sqs", "1.128.0"
 gem "cloudwatch_scheduler", github: "neinteractiveliterature/cloudwatch_scheduler"
 gem "shoryuken", "7.0.4"
 
