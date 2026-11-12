@@ -26,6 +26,8 @@ class ConventionDrop < Liquid::Drop
   #   @return [OrganizationDrop] The organization running this convention
   # @!method canceled
   #   @return [Boolean] Whether or not the convention is canceled
+  # @!method maximum_tickets
+  #   @return [Integer] The maximum number of tickets this convention will sell
   delegate :id,
            :name,
            :started?,
@@ -38,6 +40,7 @@ class ConventionDrop < Liquid::Drop
            :organization,
            :ticket_mode,
            :canceled,
+           :maximum_tickets,
            to: :convention
 
   # @return [Boolean] Whether or not the convention has already started
