@@ -12,7 +12,7 @@ gem "benchmark", "0.5.0"
 gem "prettyprint", github: "ruby/prettyprint", tag: "v0.2.1"
 
 gem "pg", "1.7.0"
-gem "puma", "8.0.2"
+gem "puma", "8.0.3"
 
 gem "sprockets-rails", "3.5.2"
 
