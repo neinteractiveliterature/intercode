@@ -111,6 +111,10 @@ await client.mutate({
 });
 ```
 
+## Tables
+
+Tables use `@tanstack/react-table` v9 with an explicit feature set in `app/javascript/Tables/tableFeatures.ts`. In v9, row, cell and column methods live on the prototype, so they lose `this` when detached from their object. Call them as methods (`column.setFilterValue(value)`); don't destructure them (`const { setFilterValue } = column`), pass them as bare callbacks (`onChange={column.setFilterValue}`), or spread the object (`{...column}`).
+
 ## Form Handling
 
 The codebase uses `react-router`'s form handling with fetchers:
