@@ -66,13 +66,20 @@ function EditDepartment() {
 ```typescript
 import { useLoaderData, useRouteLoaderData } from 'react-router';
 import { NamedRoute } from './NamedRoute';
+import useRequiredRouteLoaderData from './useRequiredRouteLoaderData';
+import type { clientLoader } from './MyRoute';
+import type { parentLoader } from './loaders';
+import type { childLoader } from './MyChildRoute';
 
 function MyComponent() {
-  // For current route's loader data
-  const data = useLoaderData() as MyQueryData;
+  // Current route's loader data
+  const data = useLoaderData<typeof clientLoader>();
 
-  // For parent route's loader data (use NamedRoute enum)
-  const parentData = useRouteLoaderData(NamedRoute.AdminUserConProfile) as ParentQueryData;
+  // Parent route's data: it's always matched when we render, so throw if it isn't
+  const parentData = useRequiredRouteLoaderData<typeof parentLoader>(NamedRoute.AdminUserConProfile);
+
+  // A route that may legitimately not be matched (e.g. a layout reading a child route): undefined when absent
+  const maybeChildData = useRouteLoaderData<typeof childLoader>(NamedRoute.UserAdminDisplay);
 }
 ```
 
