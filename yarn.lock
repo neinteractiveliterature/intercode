@@ -6836,28 +6836,28 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rrweb/record@npm:^2.0.0-alpha.18":
-  version: 2.2.1
-  resolution: "@rrweb/record@npm:2.2.1"
+"@rrweb/record@npm:^2.2.2":
+  version: 2.2.2
+  resolution: "@rrweb/record@npm:2.2.2"
   dependencies:
-    "@rrweb/types": "npm:^2.2.1"
-    "@rrweb/utils": "npm:^2.2.1"
-    rrweb: "npm:^2.2.1"
-  checksum: 10c0/6f3ce03b1218549cb111bacde447eede1dae4e82703498a4baeffe1b05062fb7ac327530287e3bacb26d47d178c7bc98c55cc19b08bc0b5a26dd13577870e556
+    "@rrweb/types": "npm:^2.2.2"
+    "@rrweb/utils": "npm:^2.2.2"
+    rrweb: "npm:^2.2.2"
+  checksum: 10c0/0077005bccf5d28576b91deedca6e238678ef0ffd65fd279e41b2f3dca9846266bf76dae8db4bb2da527896f11bae376f76efb3695b5cbc0c5572151e6717c01
   languageName: node
   linkType: hard
 
-"@rrweb/types@npm:^2.2.1":
-  version: 2.2.1
-  resolution: "@rrweb/types@npm:2.2.1"
-  checksum: 10c0/d4b0886d5f8cccb078800ad36d4902d02d367bbb5139f1dd4d9fce1e69047ef6168eadae265a14baf2abac8f34e1b07a10ec15d60114627d36fe1943b1a51f61
+"@rrweb/types@npm:^2.2.2":
+  version: 2.2.2
+  resolution: "@rrweb/types@npm:2.2.2"
+  checksum: 10c0/f08827ed4949e0cd6e6c53f1f863c26f2b63d16885c709462ce2240b4fc2500b3afc85104c4dd68da1e05f38635b9f015c715ece3222dbd481a7655882832bcb
   languageName: node
   linkType: hard
 
-"@rrweb/utils@npm:^2.2.1":
-  version: 2.2.1
-  resolution: "@rrweb/utils@npm:2.2.1"
-  checksum: 10c0/0ed788f87b00453e766c5cf3380e8ae47f0569eea8b347d73794dc9e0e316e211574b3a51c19ed9f4b36719711b9f4b4f6e9dfaa654ab8fcec13467167b2d310
+"@rrweb/utils@npm:^2.2.2":
+  version: 2.2.2
+  resolution: "@rrweb/utils@npm:2.2.2"
+  checksum: 10c0/4aaf9f104d0452134ee7d56eb1de2ca0f8f2b2003197d514d6ed55956645b11bfdbb1b1163ee811e9d75e0aaf883a044d3cda09393b096990b306e5b20a76f2b
   languageName: node
   linkType: hard
 
@@ -19240,17 +19240,17 @@ __metadata:
   linkType: hard
 
 "rollbar@npm:^4.0.0":
-  version: 4.2.0
-  resolution: "rollbar@npm:4.2.0"
+  version: 4.2.1
+  resolution: "rollbar@npm:4.2.1"
   dependencies:
-    "@rrweb/record": "npm:^2.0.0-alpha.18"
+    "@rrweb/record": "npm:^2.2.2"
     async: "npm:~3.2.3"
     error-stack-parser-es: "npm:^1.0.5"
     json-stringify-safe: "npm:~5.0.0"
     lru-cache: "npm:~2.2.1"
     request-ip: "npm:~3.3.0"
     source-map: "npm:^0.5.7"
-  checksum: 10c0/270482116c3e22d10674f63ce8c8bd72aa63bfd34bf6e542530dede740ac96dfaa5de37e656e23ff05699db5a8c3859f2c0d5f6bb16ed7122e903a9a5928ba9b
+  checksum: 10c0/c1e0fe0ab5cf9d48445f94c8400d5a46ee999f7b76bcc538a5fd303c7d28b741b3f65fde5dccb8eb128407fe3f1cf8a210a6fb077665eea6ad20008973bb96eb
   languageName: node
   linkType: hard
 
@@ -19634,37 +19634,37 @@ __metadata:
   languageName: unknown
   linkType: soft
 
-"rrdom@npm:^2.2.1":
-  version: 2.2.1
-  resolution: "rrdom@npm:2.2.1"
+"rrdom@npm:^2.2.2":
+  version: 2.2.2
+  resolution: "rrdom@npm:2.2.2"
   dependencies:
-    rrweb-snapshot: "npm:^2.2.1"
-  checksum: 10c0/9914a4116ab263556122f9fb7304ac1b837382ee972744b38e45d0a8d4d25f9437441cab9314c3368d176a20bedbf27027d400643c1f251292d8489229adc82c
+    rrweb-snapshot: "npm:^2.2.2"
+  checksum: 10c0/d8706ba8d55009157dc2af533cff52625492368270ff18cc742ea183f1905367dfe3c2408e3ce9798585901069fe190b47d4dee6b3f7eb0926dc37b1cef5fee8
   languageName: node
   linkType: hard
 
-"rrweb-snapshot@npm:^2.2.1":
-  version: 2.2.1
-  resolution: "rrweb-snapshot@npm:2.2.1"
+"rrweb-snapshot@npm:^2.2.2":
+  version: 2.2.2
+  resolution: "rrweb-snapshot@npm:2.2.2"
   dependencies:
     postcss: "npm:^8.5.32"
-  checksum: 10c0/c05d5afbd7e780fe1e5dc12be991c761f3b6ee902f2614911989c975cecb0f58f951549824b3ea6c3688c9515370e1bdba340bc62dc887916930006feec72c83
+  checksum: 10c0/90afc9e55b7681b4c35baa1f5f1c15700054eb2a13c867086e2cf3c8ca3bf8e215350feb4195981dd19633e5d98d5b1c2a1a259a9ad993284eb233fcf1b557f6
   languageName: node
   linkType: hard
 
-"rrweb@npm:^2.2.1":
-  version: 2.2.1
-  resolution: "rrweb@npm:2.2.1"
+"rrweb@npm:^2.2.2":
+  version: 2.2.2
+  resolution: "rrweb@npm:2.2.2"
   dependencies:
-    "@rrweb/types": "npm:^2.2.1"
-    "@rrweb/utils": "npm:^2.2.1"
+    "@rrweb/types": "npm:^2.2.2"
+    "@rrweb/utils": "npm:^2.2.2"
     "@types/css-font-loading-module": "npm:0.0.7"
     "@xstate/fsm": "npm:^1.4.0"
     base64-arraybuffer: "npm:^1.0.1"
     mitt: "npm:^3.0.0"
-    rrdom: "npm:^2.2.1"
-    rrweb-snapshot: "npm:^2.2.1"
-  checksum: 10c0/f472a02b87e578fc900876cf9137affd381b8b1d329d2ef635b41fb9553ce8bc9d83d62864484e173c2fd496d71c5f8a5e365700fc851edaa151f5295cfba90f
+    rrdom: "npm:^2.2.2"
+    rrweb-snapshot: "npm:^2.2.2"
+  checksum: 10c0/7a1822c1e7369f9769f92171b30653a49a377fae4898bb1df55d5309e88f0f4715d65c5c52494f0f9b1d09ee7088935db4b23f68756b917cde28764953c41c4c
   languageName: node
   linkType: hard
 
