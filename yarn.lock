@@ -1834,13 +1834,13 @@ __metadata:
   linkType: hard
 
 "@codemirror/lint@npm:^6.0.0, @codemirror/lint@npm:^6.9.6":
-  version: 6.9.7
-  resolution: "@codemirror/lint@npm:6.9.7"
+  version: 6.9.8
+  resolution: "@codemirror/lint@npm:6.9.8"
   dependencies:
     "@codemirror/state": "npm:^6.0.0"
     "@codemirror/view": "npm:^6.42.0"
     crelt: "npm:^1.0.5"
-  checksum: 10c0/5c2985e1118c96d76ccc2295e86476b6a56d4cb764e228b0d42ad08f9e2bb2f4862a2609196099d0242b639e924cd93acc1cca8ae55b4910c4f4e66856981fe0
+  checksum: 10c0/d2c3504ec8049e87c747a4e10c89f6841755b6876bebd8b5f6a9f23155e5ccca6d3c268bc043492628fd2415d832d469cdefba4bab6de79fc1596ee41e65925b
   languageName: node
   linkType: hard
 
@@ -4024,51 +4024,51 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-inspector/audit-command@npm:^6.0.2":
-  version: 6.0.2
-  resolution: "@graphql-inspector/audit-command@npm:6.0.2"
+"@graphql-inspector/audit-command@npm:^6.0.3":
+  version: 6.0.3
+  resolution: "@graphql-inspector/audit-command@npm:6.0.3"
   dependencies:
     "@graphql-inspector/commands": "npm:^7.0.1"
-    "@graphql-inspector/core": "npm:^8.0.1"
+    "@graphql-inspector/core": "npm:^8.0.2"
     "@graphql-inspector/logger": "npm:^6.0.0"
     "@graphql-tools/utils": "npm:^12.0.0"
     cli-table3: "npm:^0.6.3"
     tslib: "npm:~2.6.2"
   peerDependencies:
     graphql: ^16.0.0 || ^17.0.0
-  checksum: 10c0/28a62f2dc0642b32a5435b71393ccf670da229914a51fae4473b650780503802a2691b29af6f7419a84341a95b63c9400cd529ea349f8bdd4f2e73cb7c11863e
+  checksum: 10c0/c9597173daa488263bb67edb9b03b3da2b655218e58d85aaf17655a2331505796cca3272d1d32543b880137557fc033695203de9c078bb0e1749a0b1d8cd7d54
   languageName: node
   linkType: hard
 
 "@graphql-inspector/cli@npm:^7.0.2":
-  version: 7.0.2
-  resolution: "@graphql-inspector/cli@npm:7.0.2"
+  version: 7.0.3
+  resolution: "@graphql-inspector/cli@npm:7.0.3"
   dependencies:
     "@babel/core": "npm:^7.26.10"
-    "@graphql-inspector/audit-command": "npm:^6.0.2"
+    "@graphql-inspector/audit-command": "npm:^6.0.3"
     "@graphql-inspector/code-loader": "npm:^6.0.0"
     "@graphql-inspector/commands": "npm:^7.0.1"
     "@graphql-inspector/config": "npm:^5.0.0"
-    "@graphql-inspector/coverage-command": "npm:^7.0.2"
-    "@graphql-inspector/diff-command": "npm:^7.0.2"
+    "@graphql-inspector/coverage-command": "npm:^7.0.3"
+    "@graphql-inspector/diff-command": "npm:^7.0.3"
     "@graphql-inspector/docs-command": "npm:^6.0.1"
     "@graphql-inspector/git-loader": "npm:^6.0.0"
     "@graphql-inspector/github-loader": "npm:^6.0.0"
     "@graphql-inspector/graphql-loader": "npm:^6.0.0"
-    "@graphql-inspector/introspect-command": "npm:^6.0.2"
+    "@graphql-inspector/introspect-command": "npm:^6.0.3"
     "@graphql-inspector/json-loader": "npm:^6.0.0"
     "@graphql-inspector/loaders": "npm:^5.0.0"
     "@graphql-inspector/serve-command": "npm:^6.0.1"
-    "@graphql-inspector/similar-command": "npm:^6.0.2"
+    "@graphql-inspector/similar-command": "npm:^6.0.3"
     "@graphql-inspector/url-loader": "npm:^6.0.0"
-    "@graphql-inspector/validate-command": "npm:^6.0.2"
+    "@graphql-inspector/validate-command": "npm:^6.0.3"
     tslib: "npm:~2.6.2"
     yargs: "npm:^17.7.2"
   peerDependencies:
     graphql: ^16.0.0 || ^17.0.0
   bin:
     graphql-inspector: cjs/index.js
-  checksum: 10c0/3718904ef04dd92e5cae1e77419c7b2951eb02fbda6a203f8c877ca3cdc016cf9b089f5bc7c3d0dad109358a34dc8f88795f02b52435802b1107e9f1f7afe473
+  checksum: 10c0/e3e6be918f8233f4337e0bc845cc56c7afb58c2f165748f58c0cb9cd125fcf9b223d2ebe44234d31eed2dc58488c0a8278ff10ad46f1698db64bfd8b2630014b
   languageName: node
   linkType: hard
 
@@ -4122,45 +4122,45 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-inspector/core@npm:^8.0.1":
-  version: 8.0.1
-  resolution: "@graphql-inspector/core@npm:8.0.1"
+"@graphql-inspector/core@npm:^8.0.2":
+  version: 8.0.2
+  resolution: "@graphql-inspector/core@npm:8.0.2"
   dependencies:
     dependency-graph: "npm:^1.0.0"
     object-inspect: "npm:^1.13.2"
     tslib: "npm:~2.6.2"
   peerDependencies:
     graphql: ^16.0.0 || ^17.0.0
-  checksum: 10c0/27f69d8fcc2e7faab1cd09798721cb4b700abca0349d80935c9d97341218f298c488c3bceff46818b443071b1fc1e70a5360bbb100262568460f27587c591a41
+  checksum: 10c0/7082b754d8b20ac574b9594c8c251917cff5eff97d84638717e8a3633eaf76d16824da09afe53da5f2f2f75fc9e0be5cb772ec775c52f3e80e0db18c01df606b
   languageName: node
   linkType: hard
 
-"@graphql-inspector/coverage-command@npm:^7.0.2":
-  version: 7.0.2
-  resolution: "@graphql-inspector/coverage-command@npm:7.0.2"
+"@graphql-inspector/coverage-command@npm:^7.0.3":
+  version: 7.0.3
+  resolution: "@graphql-inspector/coverage-command@npm:7.0.3"
   dependencies:
     "@graphql-inspector/commands": "npm:^7.0.1"
-    "@graphql-inspector/core": "npm:^8.0.1"
+    "@graphql-inspector/core": "npm:^8.0.2"
     "@graphql-inspector/logger": "npm:^6.0.0"
     "@graphql-tools/utils": "npm:^12.0.0"
     tslib: "npm:~2.6.2"
   peerDependencies:
     graphql: ^16.0.0 || ^17.0.0
-  checksum: 10c0/b2abc356386fe523811675060c68ad24a4122ad29c3eadea17f27b3746e43454272c646dcb53ddf166df4ccb625b3e1ff917aa240fbca9faea429f2a5d9807fa
+  checksum: 10c0/1c2b81c214a08cb0d0a0b7f9181e10610a11b3c76d87a94b49ce95609bc06de7be53d323a9ebe143fa1e1a3d7069f0419728e5d854c02a79a643a1e7f6c7b112
   languageName: node
   linkType: hard
 
-"@graphql-inspector/diff-command@npm:^7.0.2":
-  version: 7.0.2
-  resolution: "@graphql-inspector/diff-command@npm:7.0.2"
+"@graphql-inspector/diff-command@npm:^7.0.3":
+  version: 7.0.3
+  resolution: "@graphql-inspector/diff-command@npm:7.0.3"
   dependencies:
     "@graphql-inspector/commands": "npm:^7.0.1"
-    "@graphql-inspector/core": "npm:^8.0.1"
+    "@graphql-inspector/core": "npm:^8.0.2"
     "@graphql-inspector/logger": "npm:^6.0.0"
     tslib: "npm:~2.6.2"
   peerDependencies:
     graphql: ^16.0.0 || ^17.0.0
-  checksum: 10c0/848c482718f78cd90ef107c7a46d1bc182385784107b1520ddbf73533e7b36cc32355e36a4221924ce8fd50b2d6a0f2bfaab76d81212d51c8028f976e2c287cf
+  checksum: 10c0/78624cb7f1cbba8490da275df82c5ddb63f74fee24695b4840714039cddfb4cc285134591b47d8c68fb80be07b31c8b52649343093adcfae28fb712a9eba94b2
   languageName: node
   linkType: hard
 
@@ -4213,17 +4213,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-inspector/introspect-command@npm:^6.0.2":
-  version: 6.0.2
-  resolution: "@graphql-inspector/introspect-command@npm:6.0.2"
+"@graphql-inspector/introspect-command@npm:^6.0.3":
+  version: 6.0.3
+  resolution: "@graphql-inspector/introspect-command@npm:6.0.3"
   dependencies:
     "@graphql-inspector/commands": "npm:^7.0.1"
-    "@graphql-inspector/core": "npm:^8.0.1"
+    "@graphql-inspector/core": "npm:^8.0.2"
     "@graphql-inspector/logger": "npm:^6.0.0"
     tslib: "npm:~2.6.2"
   peerDependencies:
     graphql: ^16.0.0 || ^17.0.0
-  checksum: 10c0/38f8bf6d716a51cfc940e508d77a64ffc18f79b15648d81ee7991fb5555f1b800df60cc0de40a0b3769daffbaec1ef7a851afd5dd6806ad4a82b189f97821521
+  checksum: 10c0/eb1d09165801a0ef538021f8c015150d589eaac541c0ab2d1207aa89651b135fedaa3e8f4ddfd20d05f0f65bfebd6d492e42631d76b1f5902387b5ae76518505
   languageName: node
   linkType: hard
 
@@ -4282,17 +4282,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-inspector/similar-command@npm:^6.0.2":
-  version: 6.0.2
-  resolution: "@graphql-inspector/similar-command@npm:6.0.2"
+"@graphql-inspector/similar-command@npm:^6.0.3":
+  version: 6.0.3
+  resolution: "@graphql-inspector/similar-command@npm:6.0.3"
   dependencies:
     "@graphql-inspector/commands": "npm:^7.0.1"
-    "@graphql-inspector/core": "npm:^8.0.1"
+    "@graphql-inspector/core": "npm:^8.0.2"
     "@graphql-inspector/logger": "npm:^6.0.0"
     tslib: "npm:~2.6.2"
   peerDependencies:
     graphql: ^16.0.0 || ^17.0.0
-  checksum: 10c0/39e7eea81debe81423634ffa64b5b54e9bd330c76e5065b8426b38fce0ea6fa590edc35070bb6af6d68c718d63d98b533ca5d3780daae3267b4ddb33fc21239c
+  checksum: 10c0/1c7375521f4187f1c2fdcb94eec75dfd99d24c84cac391ea7ebe837df99b0c2fbe3f9f863bf7c67cf88c757183520712cafd7a7f6c339a61614081419f2b65be
   languageName: node
   linkType: hard
 
@@ -4308,18 +4308,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-inspector/validate-command@npm:^6.0.2":
-  version: 6.0.2
-  resolution: "@graphql-inspector/validate-command@npm:6.0.2"
+"@graphql-inspector/validate-command@npm:^6.0.3":
+  version: 6.0.3
+  resolution: "@graphql-inspector/validate-command@npm:6.0.3"
   dependencies:
     "@graphql-inspector/commands": "npm:^7.0.1"
-    "@graphql-inspector/core": "npm:^8.0.1"
+    "@graphql-inspector/core": "npm:^8.0.2"
     "@graphql-inspector/logger": "npm:^6.0.0"
     "@graphql-tools/utils": "npm:^12.0.0"
     tslib: "npm:~2.6.2"
   peerDependencies:
     graphql: ^16.0.0 || ^17.0.0
-  checksum: 10c0/992432c99e29388f3f1d7ceb907c274fe7a1d83029dfa469af00438ee7c358fcebd5b446c2ae3f76f8d49776d18b14be31905d54cfc1013c85f498e860609114
+  checksum: 10c0/c7c10fc79bd5a539041f55616ad967f41a41f9fb0722202593e52ffbad3d2df12b06813e422eb58fb8ea32d57fcd1ff33680ad97956f22770c1606b7041a7a8c
   languageName: node
   linkType: hard
 
@@ -6654,184 +6654,184 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@rollup/rollup-android-arm-eabi@npm:4.68.2":
-  version: 4.68.2
-  resolution: "@rollup/rollup-android-arm-eabi@npm:4.68.2"
+"@rollup/rollup-android-arm-eabi@npm:4.68.3":
+  version: 4.68.3
+  resolution: "@rollup/rollup-android-arm-eabi@npm:4.68.3"
   conditions: os=android & cpu=arm
   languageName: node
   linkType: hard
 
-"@rollup/rollup-android-arm64@npm:4.68.2":
-  version: 4.68.2
-  resolution: "@rollup/rollup-android-arm64@npm:4.68.2"
+"@rollup/rollup-android-arm64@npm:4.68.3":
+  version: 4.68.3
+  resolution: "@rollup/rollup-android-arm64@npm:4.68.3"
   conditions: os=android & cpu=arm64
   languageName: node
   linkType: hard
 
-"@rollup/rollup-android-x64@npm:4.68.2":
-  version: 4.68.2
-  resolution: "@rollup/rollup-android-x64@npm:4.68.2"
+"@rollup/rollup-android-x64@npm:4.68.3":
+  version: 4.68.3
+  resolution: "@rollup/rollup-android-x64@npm:4.68.3"
   conditions: os=android & cpu=x64
   languageName: node
   linkType: hard
 
-"@rollup/rollup-darwin-arm64@npm:4.68.2":
-  version: 4.68.2
-  resolution: "@rollup/rollup-darwin-arm64@npm:4.68.2"
+"@rollup/rollup-darwin-arm64@npm:4.68.3":
+  version: 4.68.3
+  resolution: "@rollup/rollup-darwin-arm64@npm:4.68.3"
   conditions: os=darwin & cpu=arm64
   languageName: node
   linkType: hard
 
-"@rollup/rollup-darwin-x64@npm:4.68.2":
-  version: 4.68.2
-  resolution: "@rollup/rollup-darwin-x64@npm:4.68.2"
+"@rollup/rollup-darwin-x64@npm:4.68.3":
+  version: 4.68.3
+  resolution: "@rollup/rollup-darwin-x64@npm:4.68.3"
   conditions: os=darwin & cpu=x64
   languageName: node
   linkType: hard
 
-"@rollup/rollup-freebsd-arm64@npm:4.68.2":
-  version: 4.68.2
-  resolution: "@rollup/rollup-freebsd-arm64@npm:4.68.2"
+"@rollup/rollup-freebsd-arm64@npm:4.68.3":
+  version: 4.68.3
+  resolution: "@rollup/rollup-freebsd-arm64@npm:4.68.3"
   conditions: os=freebsd & cpu=arm64
   languageName: node
   linkType: hard
 
-"@rollup/rollup-freebsd-x64@npm:4.68.2":
-  version: 4.68.2
-  resolution: "@rollup/rollup-freebsd-x64@npm:4.68.2"
+"@rollup/rollup-freebsd-x64@npm:4.68.3":
+  version: 4.68.3
+  resolution: "@rollup/rollup-freebsd-x64@npm:4.68.3"
   conditions: os=freebsd & cpu=x64
   languageName: node
   linkType: hard
 
-"@rollup/rollup-linux-arm-gnueabihf@npm:4.68.2":
-  version: 4.68.2
-  resolution: "@rollup/rollup-linux-arm-gnueabihf@npm:4.68.2"
+"@rollup/rollup-linux-arm-gnueabihf@npm:4.68.3":
+  version: 4.68.3
+  resolution: "@rollup/rollup-linux-arm-gnueabihf@npm:4.68.3"
   conditions: os=linux & cpu=arm & libc=glibc
   languageName: node
   linkType: hard
 
-"@rollup/rollup-linux-arm-musleabihf@npm:4.68.2":
-  version: 4.68.2
-  resolution: "@rollup/rollup-linux-arm-musleabihf@npm:4.68.2"
+"@rollup/rollup-linux-arm-musleabihf@npm:4.68.3":
+  version: 4.68.3
+  resolution: "@rollup/rollup-linux-arm-musleabihf@npm:4.68.3"
   conditions: os=linux & cpu=arm & libc=musl
   languageName: node
   linkType: hard
 
-"@rollup/rollup-linux-arm64-gnu@npm:4.68.2":
-  version: 4.68.2
-  resolution: "@rollup/rollup-linux-arm64-gnu@npm:4.68.2"
+"@rollup/rollup-linux-arm64-gnu@npm:4.68.3":
+  version: 4.68.3
+  resolution: "@rollup/rollup-linux-arm64-gnu@npm:4.68.3"
   conditions: os=linux & cpu=arm64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@rollup/rollup-linux-arm64-musl@npm:4.68.2":
-  version: 4.68.2
-  resolution: "@rollup/rollup-linux-arm64-musl@npm:4.68.2"
+"@rollup/rollup-linux-arm64-musl@npm:4.68.3":
+  version: 4.68.3
+  resolution: "@rollup/rollup-linux-arm64-musl@npm:4.68.3"
   conditions: os=linux & cpu=arm64 & libc=musl
   languageName: node
   linkType: hard
 
-"@rollup/rollup-linux-loong64-gnu@npm:4.68.2":
-  version: 4.68.2
-  resolution: "@rollup/rollup-linux-loong64-gnu@npm:4.68.2"
+"@rollup/rollup-linux-loong64-gnu@npm:4.68.3":
+  version: 4.68.3
+  resolution: "@rollup/rollup-linux-loong64-gnu@npm:4.68.3"
   conditions: os=linux & cpu=loong64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@rollup/rollup-linux-loong64-musl@npm:4.68.2":
-  version: 4.68.2
-  resolution: "@rollup/rollup-linux-loong64-musl@npm:4.68.2"
+"@rollup/rollup-linux-loong64-musl@npm:4.68.3":
+  version: 4.68.3
+  resolution: "@rollup/rollup-linux-loong64-musl@npm:4.68.3"
   conditions: os=linux & cpu=loong64 & libc=musl
   languageName: node
   linkType: hard
 
-"@rollup/rollup-linux-ppc64-gnu@npm:4.68.2":
-  version: 4.68.2
-  resolution: "@rollup/rollup-linux-ppc64-gnu@npm:4.68.2"
+"@rollup/rollup-linux-ppc64-gnu@npm:4.68.3":
+  version: 4.68.3
+  resolution: "@rollup/rollup-linux-ppc64-gnu@npm:4.68.3"
   conditions: os=linux & cpu=ppc64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@rollup/rollup-linux-ppc64-musl@npm:4.68.2":
-  version: 4.68.2
-  resolution: "@rollup/rollup-linux-ppc64-musl@npm:4.68.2"
+"@rollup/rollup-linux-ppc64-musl@npm:4.68.3":
+  version: 4.68.3
+  resolution: "@rollup/rollup-linux-ppc64-musl@npm:4.68.3"
   conditions: os=linux & cpu=ppc64 & libc=musl
   languageName: node
   linkType: hard
 
-"@rollup/rollup-linux-riscv64-gnu@npm:4.68.2":
-  version: 4.68.2
-  resolution: "@rollup/rollup-linux-riscv64-gnu@npm:4.68.2"
+"@rollup/rollup-linux-riscv64-gnu@npm:4.68.3":
+  version: 4.68.3
+  resolution: "@rollup/rollup-linux-riscv64-gnu@npm:4.68.3"
   conditions: os=linux & cpu=riscv64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@rollup/rollup-linux-riscv64-musl@npm:4.68.2":
-  version: 4.68.2
-  resolution: "@rollup/rollup-linux-riscv64-musl@npm:4.68.2"
+"@rollup/rollup-linux-riscv64-musl@npm:4.68.3":
+  version: 4.68.3
+  resolution: "@rollup/rollup-linux-riscv64-musl@npm:4.68.3"
   conditions: os=linux & cpu=riscv64 & libc=musl
   languageName: node
   linkType: hard
 
-"@rollup/rollup-linux-s390x-gnu@npm:4.68.2":
-  version: 4.68.2
-  resolution: "@rollup/rollup-linux-s390x-gnu@npm:4.68.2"
+"@rollup/rollup-linux-s390x-gnu@npm:4.68.3":
+  version: 4.68.3
+  resolution: "@rollup/rollup-linux-s390x-gnu@npm:4.68.3"
   conditions: os=linux & cpu=s390x & libc=glibc
   languageName: node
   linkType: hard
 
-"@rollup/rollup-linux-x64-gnu@npm:4.68.2":
-  version: 4.68.2
-  resolution: "@rollup/rollup-linux-x64-gnu@npm:4.68.2"
+"@rollup/rollup-linux-x64-gnu@npm:4.68.3":
+  version: 4.68.3
+  resolution: "@rollup/rollup-linux-x64-gnu@npm:4.68.3"
   conditions: os=linux & cpu=x64 & libc=glibc
   languageName: node
   linkType: hard
 
-"@rollup/rollup-linux-x64-musl@npm:4.68.2":
-  version: 4.68.2
-  resolution: "@rollup/rollup-linux-x64-musl@npm:4.68.2"
+"@rollup/rollup-linux-x64-musl@npm:4.68.3":
+  version: 4.68.3
+  resolution: "@rollup/rollup-linux-x64-musl@npm:4.68.3"
   conditions: os=linux & cpu=x64 & libc=musl
   languageName: node
   linkType: hard
 
-"@rollup/rollup-openbsd-x64@npm:4.68.2":
-  version: 4.68.2
-  resolution: "@rollup/rollup-openbsd-x64@npm:4.68.2"
+"@rollup/rollup-openbsd-x64@npm:4.68.3":
+  version: 4.68.3
+  resolution: "@rollup/rollup-openbsd-x64@npm:4.68.3"
   conditions: os=openbsd & cpu=x64
   languageName: node
   linkType: hard
 
-"@rollup/rollup-openharmony-arm64@npm:4.68.2":
-  version: 4.68.2
-  resolution: "@rollup/rollup-openharmony-arm64@npm:4.68.2"
+"@rollup/rollup-openharmony-arm64@npm:4.68.3":
+  version: 4.68.3
+  resolution: "@rollup/rollup-openharmony-arm64@npm:4.68.3"
   conditions: os=openharmony & cpu=arm64
   languageName: node
   linkType: hard
 
-"@rollup/rollup-win32-arm64-msvc@npm:4.68.2":
-  version: 4.68.2
-  resolution: "@rollup/rollup-win32-arm64-msvc@npm:4.68.2"
+"@rollup/rollup-win32-arm64-msvc@npm:4.68.3":
+  version: 4.68.3
+  resolution: "@rollup/rollup-win32-arm64-msvc@npm:4.68.3"
   conditions: os=win32 & cpu=arm64
   languageName: node
   linkType: hard
 
-"@rollup/rollup-win32-ia32-msvc@npm:4.68.2":
-  version: 4.68.2
-  resolution: "@rollup/rollup-win32-ia32-msvc@npm:4.68.2"
+"@rollup/rollup-win32-ia32-msvc@npm:4.68.3":
+  version: 4.68.3
+  resolution: "@rollup/rollup-win32-ia32-msvc@npm:4.68.3"
   conditions: os=win32 & cpu=ia32
   languageName: node
   linkType: hard
 
-"@rollup/rollup-win32-x64-gnu@npm:4.68.2":
-  version: 4.68.2
-  resolution: "@rollup/rollup-win32-x64-gnu@npm:4.68.2"
+"@rollup/rollup-win32-x64-gnu@npm:4.68.3":
+  version: 4.68.3
+  resolution: "@rollup/rollup-win32-x64-gnu@npm:4.68.3"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
 
-"@rollup/rollup-win32-x64-msvc@npm:4.68.2":
-  version: 4.68.2
-  resolution: "@rollup/rollup-win32-x64-msvc@npm:4.68.2"
+"@rollup/rollup-win32-x64-msvc@npm:4.68.3":
+  version: 4.68.3
+  resolution: "@rollup/rollup-win32-x64-msvc@npm:4.68.3"
   conditions: os=win32 & cpu=x64
   languageName: node
   linkType: hard
@@ -14457,8 +14457,8 @@ __metadata:
   linkType: hard
 
 "jsdom@npm:^31.0.0":
-  version: 31.0.0
-  resolution: "jsdom@npm:31.0.0"
+  version: 31.0.1
+  resolution: "jsdom@npm:31.0.1"
   dependencies:
     "@exodus/bytes": "npm:^1.16.0"
     bcp-47: "npm:^2.1.2"
@@ -14483,7 +14483,7 @@ __metadata:
   peerDependenciesMeta:
     "@napi-rs/canvas":
       optional: true
-  checksum: 10c0/e7240d72bfd6aab3e06ef2bcbd9656e39011707958d57b30c25caf840503a433ba56ba384f43e07938125f49e835f679856db58a9f762496a1811ec6ab580740
+  checksum: 10c0/e0f5567543401f2897984682a4139e42b8190fe8ed3f5d53f7e391333cb98b553870018685dbea5eb98549649ac8d5980800a774729a19aabca6fa0fd2b5f83d
   languageName: node
   linkType: hard
 
@@ -19350,36 +19350,36 @@ __metadata:
   languageName: node
   linkType: hard
 
-"rollup@npm:4.68.2":
-  version: 4.68.2
-  resolution: "rollup@npm:4.68.2"
+"rollup@npm:4.68.3":
+  version: 4.68.3
+  resolution: "rollup@npm:4.68.3"
   dependencies:
-    "@rollup/rollup-android-arm-eabi": "npm:4.68.2"
-    "@rollup/rollup-android-arm64": "npm:4.68.2"
-    "@rollup/rollup-android-x64": "npm:4.68.2"
-    "@rollup/rollup-darwin-arm64": "npm:4.68.2"
-    "@rollup/rollup-darwin-x64": "npm:4.68.2"
-    "@rollup/rollup-freebsd-arm64": "npm:4.68.2"
-    "@rollup/rollup-freebsd-x64": "npm:4.68.2"
-    "@rollup/rollup-linux-arm-gnueabihf": "npm:4.68.2"
-    "@rollup/rollup-linux-arm-musleabihf": "npm:4.68.2"
-    "@rollup/rollup-linux-arm64-gnu": "npm:4.68.2"
-    "@rollup/rollup-linux-arm64-musl": "npm:4.68.2"
-    "@rollup/rollup-linux-loong64-gnu": "npm:4.68.2"
-    "@rollup/rollup-linux-loong64-musl": "npm:4.68.2"
-    "@rollup/rollup-linux-ppc64-gnu": "npm:4.68.2"
-    "@rollup/rollup-linux-ppc64-musl": "npm:4.68.2"
-    "@rollup/rollup-linux-riscv64-gnu": "npm:4.68.2"
-    "@rollup/rollup-linux-riscv64-musl": "npm:4.68.2"
-    "@rollup/rollup-linux-s390x-gnu": "npm:4.68.2"
-    "@rollup/rollup-linux-x64-gnu": "npm:4.68.2"
-    "@rollup/rollup-linux-x64-musl": "npm:4.68.2"
-    "@rollup/rollup-openbsd-x64": "npm:4.68.2"
-    "@rollup/rollup-openharmony-arm64": "npm:4.68.2"
-    "@rollup/rollup-win32-arm64-msvc": "npm:4.68.2"
-    "@rollup/rollup-win32-ia32-msvc": "npm:4.68.2"
-    "@rollup/rollup-win32-x64-gnu": "npm:4.68.2"
-    "@rollup/rollup-win32-x64-msvc": "npm:4.68.2"
+    "@rollup/rollup-android-arm-eabi": "npm:4.68.3"
+    "@rollup/rollup-android-arm64": "npm:4.68.3"
+    "@rollup/rollup-android-x64": "npm:4.68.3"
+    "@rollup/rollup-darwin-arm64": "npm:4.68.3"
+    "@rollup/rollup-darwin-x64": "npm:4.68.3"
+    "@rollup/rollup-freebsd-arm64": "npm:4.68.3"
+    "@rollup/rollup-freebsd-x64": "npm:4.68.3"
+    "@rollup/rollup-linux-arm-gnueabihf": "npm:4.68.3"
+    "@rollup/rollup-linux-arm-musleabihf": "npm:4.68.3"
+    "@rollup/rollup-linux-arm64-gnu": "npm:4.68.3"
+    "@rollup/rollup-linux-arm64-musl": "npm:4.68.3"
+    "@rollup/rollup-linux-loong64-gnu": "npm:4.68.3"
+    "@rollup/rollup-linux-loong64-musl": "npm:4.68.3"
+    "@rollup/rollup-linux-ppc64-gnu": "npm:4.68.3"
+    "@rollup/rollup-linux-ppc64-musl": "npm:4.68.3"
+    "@rollup/rollup-linux-riscv64-gnu": "npm:4.68.3"
+    "@rollup/rollup-linux-riscv64-musl": "npm:4.68.3"
+    "@rollup/rollup-linux-s390x-gnu": "npm:4.68.3"
+    "@rollup/rollup-linux-x64-gnu": "npm:4.68.3"
+    "@rollup/rollup-linux-x64-musl": "npm:4.68.3"
+    "@rollup/rollup-openbsd-x64": "npm:4.68.3"
+    "@rollup/rollup-openharmony-arm64": "npm:4.68.3"
+    "@rollup/rollup-win32-arm64-msvc": "npm:4.68.3"
+    "@rollup/rollup-win32-ia32-msvc": "npm:4.68.3"
+    "@rollup/rollup-win32-x64-gnu": "npm:4.68.3"
+    "@rollup/rollup-win32-x64-msvc": "npm:4.68.3"
     "@types/estree": "npm:^1.0.10"
     fsevents: "npm:~2.3.2"
   dependenciesMeta:
@@ -19439,7 +19439,7 @@ __metadata:
       optional: true
   bin:
     rollup: dist/bin/rollup
-  checksum: 10c0/cec81cb6680ec2884fbbd37a1624db9bd92fa60d69c012557d631a2c837f13ecc3cca1302038f7e44e48d40b5637994335a3a70f50538dd84a8dc6a34c4bd552
+  checksum: 10c0/054bac3f8f4ae1a41fd87c1223bb15b97d2d497d9bd5e2d2a5b7d9909c024d4f6c34705a72345ea61de16477085c8e55e2e1f13ce2f4ceeb7dc769783eea6990
   languageName: node
   linkType: hard
 
