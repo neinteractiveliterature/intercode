@@ -340,7 +340,7 @@ GEM
       rb-fsevent (~> 0.10, >= 0.10.3)
       rb-inotify (~> 0.9, >= 0.9.10)
     logger (1.7.0)
-    lograge (0.15.1)
+    lograge (0.16.0)
       actionpack (>= 4)
       activesupport (>= 4)
       logger
@@ -703,7 +703,7 @@ DEPENDENCIES
   image_processing (= 2.2.0)
   liquid (= 5.14.0)
   listen (= 3.10.1)
-  lograge (= 0.15.1)
+  lograge (= 0.16.0)
   memory_profiler (= 1.1.0)
   minitest-focus (= 1.4.1)
   minitest-mock (= 5.27.0)
