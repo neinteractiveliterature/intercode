@@ -86,7 +86,7 @@ gem "shoryuken", "7.0.4"
 gem "ahoy_matey", "5.5.0"
 
 # Logging
-gem "lograge", "0.15.1"
+gem "lograge", "0.16.0"
 
 # Miscellany
 gem "browser", "6.2.0"
