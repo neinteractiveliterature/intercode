@@ -1,4 +1,5 @@
 import { MockLink } from '@apollo/client/testing';
+import { useState } from 'react';
 import { vi } from 'vitest';
 
 import { render, userEvent, waitFor, within } from '../../testUtils';
@@ -123,6 +124,51 @@ describe('the signup queue', () => {
       await user.click(getByRole('switch'));
 
       expect(queryAllByText('Drag to reorder')).toHaveLength(3);
+    });
+
+    it('keeps each choice’s waitlist setting with that choice when the queue is reordered', async () => {
+      const original = buildQueueProfile({
+        signup_ranked_choices: [
+          choiceFor('1', 1, 'Empty Epsilon', { prioritize_waitlist: true }),
+          choiceFor('2', 2, 'Good Morning'),
+        ],
+      });
+      const reordered = buildQueueProfile({
+        signup_ranked_choices: [
+          choiceFor('1', 2, 'Empty Epsilon', { prioritize_waitlist: true }),
+          choiceFor('2', 1, 'Good Morning'),
+        ],
+      });
+
+      const Wrapper = () => {
+        const [profile, setProfile] = useState(original);
+        return (
+          <>
+            <button type="button" onClick={() => setProfile(reordered)}>
+              Reorder
+            </button>
+            <UserSignupQueue userConProfile={profile} refetchQueries={[]} readOnly={false} />
+          </>
+        );
+      };
+
+      const { getByRole, getAllByText } = await render(<Wrapper />, {
+        appRootContextValue: { timezoneName: 'America/New_York' },
+      });
+      // The advanced menus are portaled out of their rows, so tell them apart by choice: the waitlist position cap
+      // select (which has a per-choice id) is only shown while that choice's waitlist checkbox is on.
+      const waitlistEnabledFor = (id: string) => document.getElementById(`waitlist-position-cap-${id}`) != null;
+      const titles = () => getAllByText(/Empty Epsilon|Good Morning/).map((el) => el.textContent);
+
+      expect(titles()).toEqual(['Empty Epsilon', 'Good Morning']);
+      expect(waitlistEnabledFor('1')).toBe(true);
+      expect(waitlistEnabledFor('2')).toBe(false);
+
+      await user.click(getByRole('button', { name: 'Reorder' }));
+
+      expect(titles()).toEqual(['Good Morning', 'Empty Epsilon']);
+      expect(waitlistEnabledFor('1')).toBe(true);
+      expect(waitlistEnabledFor('2')).toBe(false);
     });
 
     it('shows no queue controls when read-only', async () => {

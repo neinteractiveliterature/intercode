@@ -1,6 +1,6 @@
 import { UserConProfileRankedChoiceQueueFieldsFragment } from './queries.generated';
 import { InternalRefetchQueriesInclude } from '@apollo/client';
-import { useMutation } from "@apollo/client/react";
+import { useMutation } from '@apollo/client/react';
 import { usePendingChoices } from './usePendingChoices';
 import UserSignupQueueItem from './UserSignupQueueItem';
 import { useSortableDndSensors } from 'SortableUtils';
@@ -65,9 +65,9 @@ function UserSignupQueue({ userConProfile, refetchQueries, readOnly }: UserSignu
       <DndContext sensors={sensors} {...sortableHandlers} collisionDetection={closestCorners}>
         <SortableContext items={pendingChoices.map((choice) => choice.id)} strategy={verticalListSortingStrategy}>
           <ul className="list-group list-group-flush">
-            {pendingChoices.map((_, index) => (
+            {pendingChoices.map((choice, index) => (
               <UserSignupQueueItem
-                key={index}
+                key={choice.id}
                 index={index}
                 readOnly={readOnly}
                 refetchQueries={refetchQueries}
