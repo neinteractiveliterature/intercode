@@ -593,6 +593,40 @@ class EventSignupServiceTest < ActiveSupport::TestCase
         assert_equal "npc", result.signup.requested_bucket&.key
       end
 
+      describe "when the user is already at their signup limit" do
+        before do
+          convention.signup_rounds.first.update!(maximum_event_signups: "1")
+
+          another_event = create(:event, convention:)
+          another_run = create(:run, event: another_event, starts_at: the_run.ends_at)
+          create(:signup, user_con_profile:, run: another_run)
+        end
+
+        it "lets the user join the waitlist for the not-counted bucket, since it doesn't count towards the limit" do
+          create_other_signup("npc")
+
+          result = subject.call
+
+          assert result.success?, result.errors.full_messages.join(", ")
+          assert result.signup.waitlisted?
+          assert_equal "npc", result.signup.requested_bucket&.key
+        end
+
+        describe "waitlisting for a counted bucket" do
+          let(:requested_bucket_key) { :pc }
+
+          it "is still refused" do
+            create_other_signup("pc")
+            4.times { create_other_signup("anything") }
+
+            result = subject.call
+
+            assert result.failure?
+            assert_match(/\AYou are already signed up for 1 event/, result.errors.full_messages.join('\n'))
+          end
+        end
+      end
+
       describe "no-preference signups" do
         let(:requested_bucket_key) { nil }
         it "will not put no-preference signups into the not-counted bucket" do
