@@ -23,8 +23,17 @@ module SignupCountLimits
     return false if team_member?
     return false if Signup::SLOT_OCCUPYING_STATES.include?(signup_state) && !counts_towards_total?
     return false if action == "accept_signup_request"
+    return false if waitlisting_for_not_counted_bucket?
 
     true
+  end
+
+  # Waitlist signups for a not-counted bucket (e.g. NPCs) don't count towards the signup limit, matching
+  # UserSignupConstraints#current_signups, so they shouldn't be blocked by it either
+  def waitlisting_for_not_counted_bucket?
+    return false unless signup_state == "waitlisted" && requested_bucket_id
+
+    event.registration_policy.bucket_with_id(requested_bucket_id)&.not_counted? || false
   end
 
   def team_member?
