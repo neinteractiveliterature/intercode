@@ -55,6 +55,9 @@ cookbooks
 /node_modules
 # /public/packs
 /public/packs-test
+# The frontend is built inside the image, never taken from a build on the host
+/build
+/public/assets
 /node_modules
 
 # Stuff that's sometimes lying around in dev machines

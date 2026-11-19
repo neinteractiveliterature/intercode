@@ -74,9 +74,11 @@ describe "the assets bucket upload scripts" do
     }
   end
 
+  # A Hash as the last argument is added to the script's environment
   def run_script(script, *args, bucket_keys:, tagged: [], fail_key: nil)
+    env = args.last.is_a?(Hash) ? args.pop : {}
     Dir.mktmpdir do |dir|
-      full_env = stub_env(dir, bucket_keys, tagged)
+      full_env = stub_env(dir, bucket_keys, tagged).merge(env)
       full_env["AWS_STUB_FAIL_KEY"] = fail_key if fail_key
       resolved_args = args.map { |arg| arg.respond_to?(:call) ? arg.call(dir) : arg }
       _out, err, status = Open3.capture3(full_env, Rails.root.join(script).to_s, *resolved_args)
@@ -160,75 +162,57 @@ describe "the assets bucket upload scripts" do
     end
   end
 
-  describe "script/uploadReleaseAssets.sh" do
-    it "still marks files dropped from packs/ as obsolete and leaves other prefixes alone" do
-      calls =
-        run_script(
-          "script/uploadReleaseAssets.sh",
-          "the-bucket",
-          lambda do |dir|
-            packs = File.join(dir, "packs")
-            FileUtils.mkdir_p(packs)
-            File.write(File.join(packs, "current-AAA.js"), "x")
-            packs
-          end,
-          bucket_keys: %w[packs/current-AAA.js packs/gone-BBB.js assets/other.js]
-        )
+  describe "script/uploadFrameworkAssets.sh without index.html (the assets bucket)" do
+    def calls_without_index(phase)
+      run_script(
+        "script/uploadFrameworkAssets.sh",
+        "the-bucket",
+        method(:framework_build),
+        phase,
+        { "UPLOAD_INDEX" => "false" },
+        bucket_keys: %w[assets/shared-SAME.js assets/old-OLD.js]
+      )
+    end
 
-      copies = calls.select { |call| call.start_with?("s3api copy-object") }
+    it "uploads no index.html in the publish phase, but still marks the dropped files" do
+      calls = calls_without_index("publish")
 
-      assert_equal 1, copies.size
-      assert_includes copies.first, "--key packs/gone-BBB.js"
+      assert(calls.none? { |call| call.start_with?("s3 cp") })
+      assert(calls.any? { |call| call.start_with?("s3api copy-object") && call.include?("--key assets/old-OLD.js") })
+    end
+
+    it "still uploads the hashed files in the hashed phase" do
+      calls = calls_without_index("hashed")
+
+      assert_equal 1, calls.size
+      assert_includes calls.first, "s3://the-bucket/assets --recursive"
     end
 
     it "fails when marking a file fails" do
       run_script(
-        "script/uploadReleaseAssets.sh",
+        "script/uploadFrameworkAssets.sh",
         "the-bucket",
-        lambda do |dir|
-          packs = File.join(dir, "packs")
-          FileUtils.mkdir_p(packs)
-          File.write(File.join(packs, "current-AAA.js"), "x")
-          packs
-        end,
-        bucket_keys: %w[packs/current-AAA.js packs/gone-BBB.js],
-        fail_key: "packs/gone-BBB.js"
+        method(:framework_build),
+        "publish",
+        bucket_keys: %w[assets/old-OLD.js],
+        fail_key: "assets/old-OLD.js"
       )
     end
+  end
 
-    describe "in phases" do
-      def phase_calls(phase)
+  describe "script/mark_obsolete_assets.py with no current files (what the cutover does to packs/)" do
+    it "marks every untagged file under the prefix and nothing else" do
+      calls =
         run_script(
-          "script/uploadReleaseAssets.sh",
+          "script/mark_obsolete_assets.py",
           "the-bucket",
-          lambda do |dir|
-            packs = File.join(dir, "packs")
-            FileUtils.mkdir_p(packs)
-            %w[application.js application-styles.js current-AAA.js].each do |name|
-              File.write(File.join(packs, name), "x")
-            end
-            packs
-          end,
-          phase,
-          bucket_keys: %w[packs/current-AAA.js packs/gone-BBB.js]
+          "packs/",
+          bucket_keys: %w[packs/a-AAA.js packs/b-BBB.js packs/c-TAGGED.js assets/current-CCC.js],
+          tagged: ["packs/c-TAGGED.js"]
         )
-      end
 
-      it "uploads only the hashed files in the hashed phase, and marks nothing" do
-        calls = phase_calls("hashed")
-
-        assert_equal 1, calls.size
-        assert_includes calls.first, "s3://the-bucket/packs --recursive --exclude application.js"
-      end
-
-      it "uploads only the entry files in the publish phase, then marks the dropped files" do
-        calls = phase_calls("publish")
-
-        uploads = calls.select { |call| call.start_with?("s3 cp") }
-        assert_equal 2, uploads.size
-        assert(uploads.all? { |call| call.include?("--cache-control no-cache") })
-        assert(calls.any? { |call| call.start_with?("s3api copy-object") && call.include?("--key packs/gone-BBB.js") })
-      end
+      marked = calls.select { |call| call.start_with?("s3api copy-object") }.map { |call| call[/--key (\S+)/, 1] }
+      assert_equal %w[packs/a-AAA.js packs/b-BBB.js], marked.sort
     end
   end
 end

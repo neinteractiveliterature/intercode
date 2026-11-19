@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-require File.expand_path("lib/intercode/disable_caching_for_specific_assets", Rails.root)
 
 Rails.application.configure do
   # Settings specified here will take precedence over those in config/application.rb.
@@ -75,12 +74,6 @@ Rails.application.configure do
     "Cache-Control" => "public, max-age=15552000",
     "Expires" => 1.year.from_now.to_fs(:rfc822)
   }
-
-  if ENV["RAILS_SERVE_STATIC_FILES"].present?
-    config.middleware.insert_before ActionDispatch::Static,
-                                    Intercode::DisableCachingForSpecificAssets,
-                                    JSON.parse(File.read(File.expand_path("config/nocache-files.json", Rails.root)))
-  end
 
   # Enable locale fallbacks for I18n (makes lookups for any locale fall back to
   # the I18n.default_locale when a translation cannot be found).
