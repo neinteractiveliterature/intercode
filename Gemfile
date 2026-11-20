@@ -44,7 +44,7 @@ gem "scheduled_value", "1.4.0"
 gem "civil_service", github: "neinteractiveliterature/civil_service", branch: "no-double-validate"
 
 # File uploading
-gem "aws-sdk-s3", "1.243.0"
+gem "aws-sdk-s3", "1.245.0"
 gem "image_processing", "2.2.0"
 gem "ruby-vips", "2.3.0"
 
@@ -53,7 +53,7 @@ gem "business_time", "0.13.0"
 gem "eu_central_bank", "2.0.0"
 gem "holidays", "11.8.0"
 gem "money-rails", "3.0.0"
-gem "stripe", "21.0.0"
+gem "stripe", "21.1.0"
 
 # Pagination and search
 gem "pg_search", "2.4.0"
@@ -67,18 +67,18 @@ gem "graphql-rails_logger", "1.2.5", groups: %i[development test]
 # Email stuff
 gem "aws-actionmailer-ses", "1.2.0"
 gem "aws-sdk-rails", "5.2.0"
-gem "aws-sdk-ses", "1.115.0"
-gem "aws-sdk-sns", "1.132.0"
+gem "aws-sdk-ses", "1.116.0"
+gem "aws-sdk-sns", "1.133.0"
 
 # Markdown
 gem "redcarpet", "3.6.1"
 
 # SMS and phone support
 gem "phonelib", "0.11.0"
-gem "twilio-ruby", "7.13.0"
+gem "twilio-ruby", "7.13.1"
 
 # Background workers and scheduling
-gem "aws-sdk-sqs", "1.130.0"
+gem "aws-sdk-sqs", "1.131.0"
 gem "cloudwatch_scheduler", github: "neinteractiveliterature/cloudwatch_scheduler"
 gem "shoryuken", "7.0.4"
 
@@ -175,8 +175,8 @@ group :test do
   gem "rails-controller-testing", "1.0.5"
 end
 
-gem "sentry-rails", "7.2.0"
-gem "sentry-ruby", "7.2.0"
+gem "sentry-rails", "7.3.0"
+gem "sentry-ruby", "7.3.0"
 
 gem "openssl", "4.0.2"
 
