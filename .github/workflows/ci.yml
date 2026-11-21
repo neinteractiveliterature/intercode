@@ -178,7 +178,7 @@ jobs:
       PARALLEL_WORKERS: 4
     services:
       postgres:
-        image: postgres:18
+        image: postgres:19
         env:
           POSTGRES_PASSWORD: postgres
         options: >-
@@ -234,7 +234,7 @@ jobs:
       RAILS_ENV: test
     services:
       postgres:
-        image: postgres:18
+        image: postgres:19
         env:
           POSTGRES_PASSWORD: postgres
         options: >-
