@@ -62,7 +62,7 @@
     "@neinteractiveliterature/litform": "0.36.2",
     "@popperjs/core": "^2.11.8",
     "@rails/activestorage": "8.1.401",
-    "@react-router/node": "8.5.1",
+    "@react-router/node": "8.5.2",
     "@sentry/browser": "^11.0.0",
     "@sentry/core": "^11.11.0",
     "@stripe/react-stripe-js": "7.1.0",
@@ -87,7 +87,7 @@
     "apollo-upload-client": "20.0.0",
     "array-to-sentence": "2.0.0",
     "assert-never": "1.4.0",
-    "autoprefixer": "10.6.2",
+    "autoprefixer": "10.7.0",
     "bootstrap": "5.3.9",
     "bootstrap-icons": "1.13.2",
     "buffer": "6.0.3",
@@ -115,7 +115,7 @@
     "graphql-ws": "6.4.3",
     "history": "5.3.0",
     "html-to-react": "1.7.0",
-    "i18next": "27.1.5",
+    "i18next": "27.2.2",
     "i18next-chained-backend": "^5.0.0",
     "i18next-intervalplural-postprocessor": "3.0.0",
     "i18next-localstorage-backend": "^4.2.0",
@@ -143,10 +143,10 @@
     "react-cookie-consent": "10.0.2",
     "react-dom": "19.3.1",
     "react-html-id": "0.1.5",
-    "react-i18next": "18.0.2",
+    "react-i18next": "18.0.3",
     "react-intersection-observer": "11.0.1",
     "react-onclickoutside": "6.13.2",
-    "react-router": "8.5.1",
+    "react-router": "8.5.2",
     "react-select": "5.10.2",
     "react-transition-state": "^2.3.1",
     "regenerator-runtime": "0.14.1",
@@ -176,7 +176,7 @@
     "@graphql-inspector/cli": "^7.0.2",
     "@playwright/test": "^1.58.1",
     "@prettier/plugin-ruby": "4.0.4",
-    "@react-router/dev": "8.5.1",
+    "@react-router/dev": "8.5.2",
     "@rollup/plugin-commonjs": "^29.0.0",
     "@rollup/plugin-node-resolve": "^16.0.0",
     "@rollup/plugin-replace": "^6.0.1",
@@ -223,7 +223,7 @@
   },
   "resolutions": {
     "react-bootstrap4-modal": "3.0.11",
-    "rollup": "4.68.5"
+    "rollup": "4.68.7"
   },
   "dependenciesMeta": {
     "sharp": {
