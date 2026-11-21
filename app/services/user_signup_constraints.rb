@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 class UserSignupConstraints
   attr_reader :user_con_profile
   delegate :convention, :ranked_choice_user_constraints, to: :user_con_profile
@@ -38,17 +40,26 @@ class UserSignupConstraints
     !signup_count_allowed?(current_signup_count + 1)
   end
 
+  # An event that allows concurrent signups never conflicts with other events' time slots, so
+  # only the same-run duplicate check applies to it.
+  def conflicting_run?(run, other_run)
+    return true if other_run == run
+    return false if run.event.can_play_concurrently? || other_run.event.can_play_concurrently?
+
+    run.overlaps?(other_run)
+  end
+
   def concurrent_signups_for_run(run)
     current_signups_including_not_counted.select do |signup|
       other_run = signup.run
-      other_run == run || (!other_run.event.can_play_concurrently? && run.overlaps?(other_run))
+      conflicting_run?(run, other_run)
     end
   end
 
   def concurrent_signup_requests_for_run(run)
     pending_signup_requests_including_not_counted.select do |signup_request|
       other_run = signup_request.target_run
-      other_run == run || (!other_run.event.can_play_concurrently? && run.overlaps?(other_run))
+      conflicting_run?(run, other_run)
     end
   end
 
