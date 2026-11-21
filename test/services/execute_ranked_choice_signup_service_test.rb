@@ -216,6 +216,31 @@ describe ExecuteRankedChoiceSignupService do
     assert_equal "pending", signup_ranked_choice.state
   end
 
+  it "does not skip the choice for an overlapping signup if the target event can be played concurrently" do
+    other_event = create(:event, convention:)
+    concurrent_event = create(:event, convention:, can_play_concurrently: true)
+    the_other_run = create(:run, event: other_event)
+    the_run = create(:run, event: concurrent_event, starts_at: the_other_run.starts_at)
+    signup_ranked_choice = create(:signup_ranked_choice, target_run: the_run)
+    create(:signup, user_con_profile: signup_ranked_choice.user_con_profile, run: the_other_run)
+
+    result = ExecuteRankedChoiceSignupService.new(signup_round:, signup_ranked_choice:, whodunit: nil).call!
+
+    assert_equal "signup", result.decision.decision
+  end
+
+  it "still skips the choice if the user is already signed up for the same run of a concurrent event" do
+    concurrent_event = create(:event, convention:, can_play_concurrently: true)
+    the_run = create(:run, event: concurrent_event)
+    signup_ranked_choice = create(:signup_ranked_choice, target_run: the_run)
+    create(:signup, user_con_profile: signup_ranked_choice.user_con_profile, run: the_run)
+
+    result = ExecuteRankedChoiceSignupService.new(signup_round:, signup_ranked_choice:, whodunit: nil).call!
+
+    assert_equal "skip_choice", result.decision.decision
+    assert_equal "conflict", result.decision.reason
+  end
+
   describe "in a moderated signup convention" do
     let(:convention) { create(:convention, :with_notification_templates, signup_mode: "moderated") }
 
