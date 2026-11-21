@@ -105,7 +105,7 @@ gem "oj", "3.17.8"
 gem "rollbar", "3.8.0"
 
 # Reduces boot times through caching; required in config/boot.rb
-gem "bootsnap", "1.26.1", require: false
+gem "bootsnap", "1.26.2", require: false
 
 group :development do
   gem "rack-mini-profiler", "5.0.0", require: false
