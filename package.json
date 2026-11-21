@@ -55,7 +55,7 @@
     "@floating-ui/react-dom": "2.1.9",
     "@graphql-typed-document-node/core": "^3.2.0",
     "@juggle/resize-observer": "3.4.0",
-    "@lezer/common": "1.5.5",
+    "@lezer/common": "1.5.6",
     "@lezer/highlight": "^1.2.1",
     "@lezer/lr": "^1.4.2",
     "@marsidev/react-turnstile": "^1.6.1",
