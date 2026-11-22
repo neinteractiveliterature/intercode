@@ -168,7 +168,7 @@
     "@graphql-codegen/cli": "8.0.0",
     "@graphql-codegen/fragment-matcher": "8.0.0",
     "@graphql-codegen/introspection": "7.0.0",
-    "@graphql-codegen/near-operation-file-preset": "6.0.1",
+    "@graphql-codegen/near-operation-file-preset": "6.0.2",
     "@graphql-codegen/typed-document-node": "^8.0.0",
     "@graphql-codegen/typescript": "7.0.1",
     "@graphql-codegen/typescript-operations": "7.0.1",
@@ -223,7 +223,7 @@
   },
   "resolutions": {
     "react-bootstrap4-modal": "3.0.11",
-    "rollup": "4.68.7"
+    "rollup": "4.68.8"
   },
   "dependenciesMeta": {
     "sharp": {
