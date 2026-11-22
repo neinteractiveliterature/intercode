@@ -4024,51 +4024,51 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-inspector/audit-command@npm:^6.0.7":
-  version: 6.0.7
-  resolution: "@graphql-inspector/audit-command@npm:6.0.7"
+"@graphql-inspector/audit-command@npm:^6.0.8":
+  version: 6.0.8
+  resolution: "@graphql-inspector/audit-command@npm:6.0.8"
   dependencies:
     "@graphql-inspector/commands": "npm:^7.0.1"
-    "@graphql-inspector/core": "npm:^8.1.2"
+    "@graphql-inspector/core": "npm:^8.1.3"
     "@graphql-inspector/logger": "npm:^6.0.0"
     "@graphql-tools/utils": "npm:^12.0.0"
     cli-table3: "npm:^0.6.3"
     tslib: "npm:~2.6.2"
   peerDependencies:
     graphql: ^16.0.0 || ^17.0.0
-  checksum: 10c0/50e0b37d4aa47c61aafa0317803257cf260b9b6f9ca36337495755ceea22fe4a7842bc48d56f2a4d085b6110b15c91561652f54b901ebb64615ffc83b70e3051
+  checksum: 10c0/d0362496d1db1993fde484290da6e6fdd258ad30b09d8c97109caf15d52b5f5476506ba0187b4ba95920242e3fb1fc07cb3a65ce1e28e86119cb833d78d54c82
   languageName: node
   linkType: hard
 
 "@graphql-inspector/cli@npm:^7.0.2":
-  version: 7.0.7
-  resolution: "@graphql-inspector/cli@npm:7.0.7"
+  version: 7.0.8
+  resolution: "@graphql-inspector/cli@npm:7.0.8"
   dependencies:
     "@babel/core": "npm:^7.26.10"
-    "@graphql-inspector/audit-command": "npm:^6.0.7"
+    "@graphql-inspector/audit-command": "npm:^6.0.8"
     "@graphql-inspector/code-loader": "npm:^6.0.0"
     "@graphql-inspector/commands": "npm:^7.0.1"
     "@graphql-inspector/config": "npm:^5.0.0"
-    "@graphql-inspector/coverage-command": "npm:^7.0.7"
-    "@graphql-inspector/diff-command": "npm:^7.0.7"
+    "@graphql-inspector/coverage-command": "npm:^7.0.8"
+    "@graphql-inspector/diff-command": "npm:^7.0.8"
     "@graphql-inspector/docs-command": "npm:^6.0.1"
     "@graphql-inspector/git-loader": "npm:^6.0.0"
     "@graphql-inspector/github-loader": "npm:^6.0.0"
     "@graphql-inspector/graphql-loader": "npm:^6.0.0"
-    "@graphql-inspector/introspect-command": "npm:^6.0.7"
+    "@graphql-inspector/introspect-command": "npm:^6.0.8"
     "@graphql-inspector/json-loader": "npm:^6.0.0"
     "@graphql-inspector/loaders": "npm:^5.0.0"
     "@graphql-inspector/serve-command": "npm:^6.0.1"
-    "@graphql-inspector/similar-command": "npm:^6.0.7"
+    "@graphql-inspector/similar-command": "npm:^6.0.8"
     "@graphql-inspector/url-loader": "npm:^6.0.0"
-    "@graphql-inspector/validate-command": "npm:^6.0.7"
+    "@graphql-inspector/validate-command": "npm:^6.0.8"
     tslib: "npm:~2.6.2"
     yargs: "npm:^17.7.2"
   peerDependencies:
     graphql: ^16.0.0 || ^17.0.0
   bin:
     graphql-inspector: cjs/index.js
-  checksum: 10c0/dc23e290b62ce99df40672c939b1cedf12a1392dbc93eba2942de085b44f58937720cfa4eb4e219a266aa94ab2c9382e532747fac784b4ca087d3478b018d1ad
+  checksum: 10c0/05a60c610618fc56c671cac8ee0587fdf5f7a64499b7b9a12787527acf8dd1c4a3a5550b454862de809d24e8767296e94bc526799e4ea5c40b432bae9aa79ba0
   languageName: node
   linkType: hard
 
@@ -4122,45 +4122,45 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-inspector/core@npm:^8.1.2":
-  version: 8.1.2
-  resolution: "@graphql-inspector/core@npm:8.1.2"
+"@graphql-inspector/core@npm:^8.1.3":
+  version: 8.1.3
+  resolution: "@graphql-inspector/core@npm:8.1.3"
   dependencies:
     dependency-graph: "npm:^1.0.0"
     object-inspect: "npm:^1.13.2"
     tslib: "npm:~2.6.2"
   peerDependencies:
     graphql: ^16.0.0 || ^17.0.0
-  checksum: 10c0/59d8b27abef12104333c02da2b8b890500b8f2219c3c4e70a61e79a1a572e42eb45cdf95c06c80c420ad640edad3eab9196ac6edf764aeeb57e7c540b2399565
+  checksum: 10c0/0b4ce8dbe2f8f61d1b02a342f92ead8d75a051d687058ff365b73cbeef6659bb82a4d15eacd8b0f1226157dc09355e0dd1d6f127e9786ae5aa2e487d9ec0025d
   languageName: node
   linkType: hard
 
-"@graphql-inspector/coverage-command@npm:^7.0.7":
-  version: 7.0.7
-  resolution: "@graphql-inspector/coverage-command@npm:7.0.7"
+"@graphql-inspector/coverage-command@npm:^7.0.8":
+  version: 7.0.8
+  resolution: "@graphql-inspector/coverage-command@npm:7.0.8"
   dependencies:
     "@graphql-inspector/commands": "npm:^7.0.1"
-    "@graphql-inspector/core": "npm:^8.1.2"
+    "@graphql-inspector/core": "npm:^8.1.3"
     "@graphql-inspector/logger": "npm:^6.0.0"
     "@graphql-tools/utils": "npm:^12.0.0"
     tslib: "npm:~2.6.2"
   peerDependencies:
     graphql: ^16.0.0 || ^17.0.0
-  checksum: 10c0/2a8167127222d2cb56518a6d5e47e7af74d978c20a495d46d5dfa26cf0598a38a779d6f985c05a23dfe082aeb4fc770f08817b08c71066bce513d0cf083e2d71
+  checksum: 10c0/fe7051503ce6c7dd11383fada17345c405c6d7765a8f629adfedc4fb75990fc28507f2451d6425704ab8a43700c71b40b8af40061de4ee387c46fc7151c854fb
   languageName: node
   linkType: hard
 
-"@graphql-inspector/diff-command@npm:^7.0.7":
-  version: 7.0.7
-  resolution: "@graphql-inspector/diff-command@npm:7.0.7"
+"@graphql-inspector/diff-command@npm:^7.0.8":
+  version: 7.0.8
+  resolution: "@graphql-inspector/diff-command@npm:7.0.8"
   dependencies:
     "@graphql-inspector/commands": "npm:^7.0.1"
-    "@graphql-inspector/core": "npm:^8.1.2"
+    "@graphql-inspector/core": "npm:^8.1.3"
     "@graphql-inspector/logger": "npm:^6.0.0"
     tslib: "npm:~2.6.2"
   peerDependencies:
     graphql: ^16.0.0 || ^17.0.0
-  checksum: 10c0/897ec2400f302346ecbec6d480127957cfe516abe9445c72f157c5ed98b6f53ce6b9f87abd6556ad0d14a7f8cffd036398c2ce7ca1286326ab223a362a4b5d05
+  checksum: 10c0/09ef5574d3d41939ba2f36df12f73bbcf0e04278f23f485c2be5d385fbc2577482fad3e296ea44fc28ae7e91fc8ae90861b0f098f00eed951ed6073d542f2d06
   languageName: node
   linkType: hard
 
@@ -4213,17 +4213,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-inspector/introspect-command@npm:^6.0.7":
-  version: 6.0.7
-  resolution: "@graphql-inspector/introspect-command@npm:6.0.7"
+"@graphql-inspector/introspect-command@npm:^6.0.8":
+  version: 6.0.8
+  resolution: "@graphql-inspector/introspect-command@npm:6.0.8"
   dependencies:
     "@graphql-inspector/commands": "npm:^7.0.1"
-    "@graphql-inspector/core": "npm:^8.1.2"
+    "@graphql-inspector/core": "npm:^8.1.3"
     "@graphql-inspector/logger": "npm:^6.0.0"
     tslib: "npm:~2.6.2"
   peerDependencies:
     graphql: ^16.0.0 || ^17.0.0
-  checksum: 10c0/b6544d283c61dd187e398a85b0ae1f9b4dcf8af527cf910f4caca5050c126fe9d50fec996305b985de589d10dac6912fb994f0069a348feec883142e527a8c19
+  checksum: 10c0/4c4432ed5ee6f8781851f17d00333fe19e4cb85733ac3beb7101593d30878426907b143d00d46b41be37aea780888cc79d505babae910cd2841371774bcd0454
   languageName: node
   linkType: hard
 
@@ -4282,17 +4282,17 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-inspector/similar-command@npm:^6.0.7":
-  version: 6.0.7
-  resolution: "@graphql-inspector/similar-command@npm:6.0.7"
+"@graphql-inspector/similar-command@npm:^6.0.8":
+  version: 6.0.8
+  resolution: "@graphql-inspector/similar-command@npm:6.0.8"
   dependencies:
     "@graphql-inspector/commands": "npm:^7.0.1"
-    "@graphql-inspector/core": "npm:^8.1.2"
+    "@graphql-inspector/core": "npm:^8.1.3"
     "@graphql-inspector/logger": "npm:^6.0.0"
     tslib: "npm:~2.6.2"
   peerDependencies:
     graphql: ^16.0.0 || ^17.0.0
-  checksum: 10c0/25904eb1887763f8fceefed7506151a04c20899c86d0564ebd6707cac59a19b285f7f2efd7659abd5b48ea42be76987f348f5e4381a78e08f374e6739e4f0847
+  checksum: 10c0/a18fca7ffc33cfab7814e6c51ba1073de4f619c1e33e8973fc08c4b1d1838418ed2ba98d34c21b5ac853d340518c2c610101dc709a330f2fb14e820c90a48c59
   languageName: node
   linkType: hard
 
@@ -4308,18 +4308,18 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@graphql-inspector/validate-command@npm:^6.0.7":
-  version: 6.0.7
-  resolution: "@graphql-inspector/validate-command@npm:6.0.7"
+"@graphql-inspector/validate-command@npm:^6.0.8":
+  version: 6.0.8
+  resolution: "@graphql-inspector/validate-command@npm:6.0.8"
   dependencies:
     "@graphql-inspector/commands": "npm:^7.0.1"
-    "@graphql-inspector/core": "npm:^8.1.2"
+    "@graphql-inspector/core": "npm:^8.1.3"
     "@graphql-inspector/logger": "npm:^6.0.0"
     "@graphql-tools/utils": "npm:^12.0.0"
     tslib: "npm:~2.6.2"
   peerDependencies:
     graphql: ^16.0.0 || ^17.0.0
-  checksum: 10c0/2cf296de52af52c63f439249176a754947e2da0a76dea89bfa9dca10a38b6c91b4988cd35d58fe17c381423a580729d8ec8dc44e1a9c1f1a88ced9aee2888a12
+  checksum: 10c0/a6d10d91834a079ef25d076221cf13da35cbb42bc9bb3213556afea5aed5103836bf55dc55eaed2ac3fc11e1ef3539b07dfc3563ef334bbe0daa16629f645e12
   languageName: node
   linkType: hard
 
@@ -6862,73 +6862,73 @@ __metadata:
   languageName: node
   linkType: hard
 
-"@sentry/browser-utils@npm:11.15.0":
-  version: 11.15.0
-  resolution: "@sentry/browser-utils@npm:11.15.0"
+"@sentry/browser-utils@npm:11.16.0":
+  version: 11.16.0
+  resolution: "@sentry/browser-utils@npm:11.16.0"
   dependencies:
-    "@sentry/conventions": "npm:^0.33.0"
-    "@sentry/core": "npm:11.15.0"
+    "@sentry/conventions": "npm:^0.34.0"
+    "@sentry/core": "npm:11.16.0"
     web-vitals: "npm:^6.2.3"
-  checksum: 10c0/5ee6c64aef72ba896e73a71e159f34caed28964a71d42458ececaad6626184ffa3ff4d33d36bf899043e47c2c8673944f7da3725ed4e7faff1097fad10220310
+  checksum: 10c0/f937806fe26683e76723f65876b083e1955fcb07b5a68c2fa1f95cf21f28da34613c554236bddf764707ff15af4634f4b88535364f285f1a5072852708af7238
   languageName: node
   linkType: hard
 
 "@sentry/browser@npm:^11.0.0":
-  version: 11.15.0
-  resolution: "@sentry/browser@npm:11.15.0"
+  version: 11.16.0
+  resolution: "@sentry/browser@npm:11.16.0"
   dependencies:
-    "@sentry/browser-utils": "npm:11.15.0"
-    "@sentry/conventions": "npm:^0.33.0"
-    "@sentry/core": "npm:11.15.0"
-    "@sentry/feedback": "npm:11.15.0"
-    "@sentry/replay": "npm:11.15.0"
-    "@sentry/replay-canvas": "npm:11.15.0"
-  checksum: 10c0/20722fef3e05da126ed25fc7f00c0af38caa502aae1524a794d089c56b58e64c333ff45cf30b86a2edbab24b09c6f9942a75e9a244e25eb7255811c1a2504538
+    "@sentry/browser-utils": "npm:11.16.0"
+    "@sentry/conventions": "npm:^0.34.0"
+    "@sentry/core": "npm:11.16.0"
+    "@sentry/feedback": "npm:11.16.0"
+    "@sentry/replay": "npm:11.16.0"
+    "@sentry/replay-canvas": "npm:11.16.0"
+  checksum: 10c0/db98a1572e638180ecaa935f2eed1b5328adb565609b46b38790a8e342f0d98c334620f8cf5e0054386ef693095ecf8b3ede504a2680201ade05faf3f9f76915
   languageName: node
   linkType: hard
 
-"@sentry/conventions@npm:^0.33.0":
-  version: 0.33.0
-  resolution: "@sentry/conventions@npm:0.33.0"
-  checksum: 10c0/605137d08e82dbc811119506593c805328c4ddcb0a3687617eab364881515b947958ff138e16e1601bd1423e8c207c5a4af97cc9351e07a0ad9ccccb56312587
+"@sentry/conventions@npm:^0.34.0":
+  version: 0.34.0
+  resolution: "@sentry/conventions@npm:0.34.0"
+  checksum: 10c0/6502016846cc756ba1d3afb70030867e1bd1610a5802c3fe10e5fa838fb9f3daebcab8f7aaa72a5b6e925240dcddb7b5cec776b45e0050d9b2be9fc74849760c
   languageName: node
   linkType: hard
 
-"@sentry/core@npm:11.15.0, @sentry/core@npm:^11.11.0":
-  version: 11.15.0
-  resolution: "@sentry/core@npm:11.15.0"
+"@sentry/core@npm:11.16.0, @sentry/core@npm:^11.11.0":
+  version: 11.16.0
+  resolution: "@sentry/core@npm:11.16.0"
   dependencies:
-    "@sentry/conventions": "npm:^0.33.0"
-  checksum: 10c0/85f9abd34f22c52fb434498383dd596af251ace8c623297f105a2676a415f1f9206322e48e9346e0bb5ebf8e5c219a94db11b92834658410695c0aad7dbdd77c
+    "@sentry/conventions": "npm:^0.34.0"
+  checksum: 10c0/7f1e4b847173717ca8d829e065e06e0b80dc87029b882f8cb95c90541ba9e38dd72fe58636bbe43c01e98c4b3f54247bbbd9323cb74119eb373a79c98065dedb
   languageName: node
   linkType: hard
 
-"@sentry/feedback@npm:11.15.0":
-  version: 11.15.0
-  resolution: "@sentry/feedback@npm:11.15.0"
+"@sentry/feedback@npm:11.16.0":
+  version: 11.16.0
+  resolution: "@sentry/feedback@npm:11.16.0"
   dependencies:
-    "@sentry/core": "npm:11.15.0"
-  checksum: 10c0/4b4cf6c87870744e5636f6f209173ddd737c7952811adb6a44b8cb8aa3cb2102a10ae911e6577a0ebd56420084c9ca372e32624aafaea8754df21df2bf98b290
+    "@sentry/core": "npm:11.16.0"
+  checksum: 10c0/66e85f60b6c8e8a666da0b65602d5a8f6e4101209a0bf9fe879fed425893b2b902a692514e0f6bd1752b38286cbd895c512adccde83aa4d4b94d9cc7623904c1
   languageName: node
   linkType: hard
 
-"@sentry/replay-canvas@npm:11.15.0":
-  version: 11.15.0
-  resolution: "@sentry/replay-canvas@npm:11.15.0"
+"@sentry/replay-canvas@npm:11.16.0":
+  version: 11.16.0
+  resolution: "@sentry/replay-canvas@npm:11.16.0"
   dependencies:
-    "@sentry/core": "npm:11.15.0"
-    "@sentry/replay": "npm:11.15.0"
-  checksum: 10c0/39e3fea2de74c3f88a195ab4debe23ebe922490654231bf24027b571be99ef89b2b2077a1d3d6a0350650cce2930cf6684ddca09af637d4b7e40854dc7f7bc44
+    "@sentry/core": "npm:11.16.0"
+    "@sentry/replay": "npm:11.16.0"
+  checksum: 10c0/e5b70ac1b67ad262cc38a587ab6a99fe9565fed4d3658b59b51e1df270909aa03def04568a83dde3b1c17cc4ee7e89a7a892b3b624faaa1cf61758622cd19ee9
   languageName: node
   linkType: hard
 
-"@sentry/replay@npm:11.15.0":
-  version: 11.15.0
-  resolution: "@sentry/replay@npm:11.15.0"
+"@sentry/replay@npm:11.16.0":
+  version: 11.16.0
+  resolution: "@sentry/replay@npm:11.16.0"
   dependencies:
-    "@sentry/browser-utils": "npm:11.15.0"
-    "@sentry/core": "npm:11.15.0"
-  checksum: 10c0/de4ce0188e5a34352ba0c11b16f44006194f4519f5f97178c8e818bef395d07d8b5588a8ca297c3f0b89f888b44fad6580162744584fe0ba4578aee45ff79679
+    "@sentry/browser-utils": "npm:11.16.0"
+    "@sentry/core": "npm:11.16.0"
+  checksum: 10c0/ff3da51fdb1e8541d2892dbebf530c4b6a3afb6e5d1d1ce1771d27fa875be224310d27b8377a49e0ce322ea5aa93e1e43cc149b19b347674be5aa6c91ba69163
   languageName: node
   linkType: hard
 
@@ -14404,10 +14404,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"jose@npm:^6.2.15":
-  version: 6.2.15
-  resolution: "jose@npm:6.2.15"
-  checksum: 10c0/0e72e53ead0e01adc4598438f889e753622043806a7ba0c802f7cd7da17466e5a6167a63b4b4e67490944c9f88eb0dd5c81c05aca2c38a72718443632a7b37b5
+"jose@npm:^6.2.18":
+  version: 6.2.18
+  resolution: "jose@npm:6.2.18"
+  checksum: 10c0/95144c43dfa0c8206f13f8133ed74ba9106785df81c864d6399af06616ad8fdbdc18937109aac099f560f6159aaf2fe2fca3984a6629c899af396a1e9986008d
   languageName: node
   linkType: hard
 
@@ -16430,10 +16430,10 @@ __metadata:
   languageName: node
   linkType: hard
 
-"oauth4webapi@npm:^3.8.8":
-  version: 3.8.8
-  resolution: "oauth4webapi@npm:3.8.8"
-  checksum: 10c0/1f7d35ba8d7d5aa9ce9ec5959a4611ed2b5dd7830172b1546749b91dda8c53f7934e669c6f81e912c64e3ae4fc681d4d6ce149b42cc9d17db97162bf8765e028
+"oauth4webapi@npm:^3.8.9":
+  version: 3.8.9
+  resolution: "oauth4webapi@npm:3.8.9"
+  checksum: 10c0/04567cc375142acfc25fafbbf78b4cb1e5145185cb603d5694c5085f9fabb18474438fedd93531b04d5561ab1153a7a582b3f2767329724a09c5f10fc9c846a1
   languageName: node
   linkType: hard
 
@@ -16593,12 +16593,12 @@ __metadata:
   linkType: hard
 
 "openid-client@npm:^6.8.4":
-  version: 6.9.0
-  resolution: "openid-client@npm:6.9.0"
+  version: 6.9.1
+  resolution: "openid-client@npm:6.9.1"
   dependencies:
-    jose: "npm:^6.2.15"
-    oauth4webapi: "npm:^3.8.8"
-  checksum: 10c0/546f9404f869f8168ed6760ab764f4c7105d8a712879caa801c7a65da0d5c57166536700578df56638bbd701b73696439bdbff91c150ea3550d25e32c8ef5e9d
+    jose: "npm:^6.2.18"
+    oauth4webapi: "npm:^3.8.9"
+  checksum: 10c0/9a3c90e9368420b345b06572432090267decae11b8253b07c4e4364b57f1165f49ea97040e5e498e0a1f90ab3b1173ea924b51e8d67fbc4083039f049ae7a3f0
   languageName: node
   linkType: hard
 
