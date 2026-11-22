@@ -44,7 +44,7 @@ gem "scheduled_value", "1.4.0"
 gem "civil_service", github: "neinteractiveliterature/civil_service", branch: "no-double-validate"
 
 # File uploading
-gem "aws-sdk-s3", "1.245.0"
+gem "aws-sdk-s3", "1.245.1"
 gem "image_processing", "2.2.0"
 gem "ruby-vips", "2.3.0"
 
@@ -105,7 +105,7 @@ gem "oj", "3.17.8"
 gem "rollbar", "3.8.0"
 
 # Reduces boot times through caching; required in config/boot.rb
-gem "bootsnap", "1.26.1", require: false
+gem "bootsnap", "1.26.2", require: false
 
 group :development do
   gem "rack-mini-profiler", "5.0.0", require: false
