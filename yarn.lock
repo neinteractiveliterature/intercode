@@ -13649,15 +13649,15 @@ __metadata:
   languageName: node
   linkType: hard
 
-"i18next@npm:27.2.2":
-  version: 27.2.2
-  resolution: "i18next@npm:27.2.2"
+"i18next@npm:27.2.3":
+  version: 27.2.3
+  resolution: "i18next@npm:27.2.3"
   peerDependencies:
     typescript: ^5 || ^6 || ^7
   peerDependenciesMeta:
     typescript:
       optional: true
-  checksum: 10c0/97cb1992b8cba47b428f7065c5bdde71a7bcf63667b648ff147ccac175b10a6860d4a3f2d3e605040e7c18432e9cf6867aaa649671c42526b6e7e2761acc6e75
+  checksum: 10c0/11d73c284c8902a5bee8d9f015a2b5f35e59e9f2bfa4880432642c7652bedcbf8b475182a8dbb1b2379d060e651c08eb31e1ce9bd0f425c926844b32fc39058d
   languageName: node
   linkType: hard
 
@@ -19563,7 +19563,7 @@ __metadata:
     history: "npm:5.3.0"
     html-to-react: "npm:1.7.0"
     husky: "npm:9.1.7"
-    i18next: "npm:27.2.2"
+    i18next: "npm:27.2.3"
     i18next-chained-backend: "npm:^5.0.0"
     i18next-intervalplural-postprocessor: "npm:3.0.0"
     i18next-localstorage-backend: "npm:^4.2.0"
