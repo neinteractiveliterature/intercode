@@ -45,7 +45,7 @@ gem "civil_service", github: "neinteractiveliterature/civil_service", branch: "n
 
 # File uploading
 gem "aws-sdk-s3", "1.245.1"
-gem "image_processing", "2.2.0"
+gem "image_processing", "2.2.1"
 gem "ruby-vips", "2.3.0"
 
 # Filthy lucre
@@ -93,7 +93,7 @@ gem "browser", "6.2.0"
 gem "csv", "3.3.7"
 gem "domain_prefix", "1.0.20241203"
 gem "faraday", "2.15.1"
-gem "icalendar", "2.13.0"
+gem "icalendar", "2.14.0"
 gem "positioning", "0.5.0"
 gem "rack-cors", "3.0.0"
 gem "stackprof", "0.2.28"
