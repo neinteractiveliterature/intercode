@@ -440,6 +440,7 @@ jobs:
       matrix:
         module:
           - cloudfront_intercode
+          - cloudfront_intercode_policies
           - forwardemail_receiving
           - ses_email_receiving
           - intercode_aws_resources
