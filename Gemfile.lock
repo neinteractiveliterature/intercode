@@ -254,7 +254,7 @@ GEM
     domain_prefix (1.0.20241203)
       json
       simpleidn (>= 0.0.5)
-    doorkeeper (5.9.9)
+    doorkeeper (5.9.10)
       railties (>= 5)
     doorkeeper-jwt (0.4.5)
       doorkeeper (>= 5.4)
@@ -451,7 +451,7 @@ GEM
     pundit (2.5.2)
       activesupport (>= 3.0.0)
     racc (1.8.1)
-    rack (3.2.8)
+    rack (3.2.9)
     rack-cors (3.0.0)
       logger
       rack (>= 3.0.14)
@@ -686,7 +686,7 @@ DEPENDENCIES
   devise-doorkeeper (= 1.2.0)
   devise-encryptable (= 0.3.0)
   domain_prefix (= 1.0.20241203)
-  doorkeeper (= 5.9.9)
+  doorkeeper (= 5.9.10)
   doorkeeper-jwt (= 0.4.5)
   doorkeeper-openid_connect (= 2.1.0)
   dotenv-rails (= 3.2.0)
