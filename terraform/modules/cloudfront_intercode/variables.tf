@@ -78,3 +78,21 @@ variable "access_log_delivery_destination_arn" {
   type        = string
   default     = null
 }
+
+variable "shared_policies" {
+  description = "Cache and origin request policies to use, from the cloudfront_intercode_policies module's cache_policy_ids and origin_request_policy_ids outputs. An account can only hold a limited number of these, so give every distribution the same set. Without it, this distribution creates a set of its own. static_shell is only needed with static_shell_enabled."
+  type = object({
+    cache_policy_ids = object({
+      no_cache       = string
+      cdn_spa_shell  = string
+      og_shell       = string
+      default_router = string
+      static_shell   = optional(string)
+    })
+    origin_request_policy_ids = object({
+      forward_all = string
+      og_shell    = string
+    })
+  })
+  default = null
+}

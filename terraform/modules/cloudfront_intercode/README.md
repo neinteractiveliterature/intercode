@@ -182,24 +182,54 @@ Intercode uses the `Host` header to resolve the convention for each request.
 The origin-request policies in this module forward the viewer's `Host` header
 to the Rails origin, so multi-tenant routing works correctly behind CloudFront.
 
+## Sharing cache policies between distributions
+
+An AWS account can only hold 20 cache policies (and a limited number of origin request policies), and each distribution
+needs 5 cache policies and 2 origin request policies of its own. They don't depend on the distribution, so with more than
+a few distributions, create one set with the [`cloudfront_intercode_policies`](../cloudfront_intercode_policies) module and
+give every distribution the same `shared_policies`:
+
+```hcl
+module "intercode_cloudfront_policies" {
+  source = "github.com/neinteractiveliterature/intercode//terraform/modules/cloudfront_intercode_policies"
+  name   = "intercode-shared"
+}
+
+module "convention_cloudfront" {
+  source          = "github.com/neinteractiveliterature/intercode//terraform/modules/cloudfront_intercode"
+  # ...
+  shared_policies = {
+    cache_policy_ids          = module.intercode_cloudfront_policies.cache_policy_ids
+    origin_request_policy_ids = module.intercode_cloudfront_policies.origin_request_policy_ids
+  }
+}
+```
+
+Without `shared_policies`, the distribution creates its own set, so existing users of the module don't have to change
+anything. To move a distribution that already has its own set to a shared one, use `moved` blocks to make one
+distribution's policies (at `module.<instance>.module.policies[0].<resource>`) the shared ones, and the others' are
+destroyed once their distributions point at the shared set. A plan shows the policies renamed in place and the other
+distributions updated in place; none is replaced.
+
 ## Inputs
 
-| Name                                    | Description                                                                                                                                               | Default          |
-| --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
-| `name`                                  | Resource name prefix                                                                                                                                      | —                |
-| `rails_origin_domain`                   | Rails app domain                                                                                                                                          | —                |
-| `assets_origin_domain`                  | Assets server domain                                                                                                                                      | —                |
-| `aliases`                               | CloudFront CNAMEs                                                                                                                                         | `[]`             |
-| `acm_certificate_arn`                   | ACM certificate ARN (us-east-1)                                                                                                                           | `null`           |
-| `price_class`                           | CloudFront price class                                                                                                                                    | `PriceClass_100` |
-| `static_shell_enabled`                  | Serve the framework-mode shell from the S3 bucket below instead of Rails                                                                                  | `false`          |
-| `static_shell_bucket_domain_name`       | Regional domain name of the shell bucket; required with `static_shell_enabled`                                                                            | `null`           |
-| `static_shell_origin_access_control_id` | Origin access control ID of the shell bucket; required with `static_shell_enabled`                                                                        | `null`           |
-| `static_shell_ttl`                      | Edge TTL for the static shell (seconds)                                                                                                                   | `60`             |
-| `og_shell_ttl`                          | TTL for `/og-shell` responses (seconds)                                                                                                                   | `3600`           |
-| `cdn_spa_shell_ttl`                     | TTL for `/cdn-spa-shell` responses (seconds)                                                                                                              | `86400`          |
-| `access_logs_enabled`                   | Deliver access logs to the destination below                                                                                                              | `false`          |
-| `access_log_delivery_destination_arn`   | CloudWatch Logs delivery destination for access logs (from [`cloudfront_intercode_logging`](../cloudfront_intercode_logging)); no access logs when `null` | `null`           |
+| Name                                    | Description                                                                                                                                                                 | Default          |
+| --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
+| `name`                                  | Resource name prefix                                                                                                                                                        | —                |
+| `rails_origin_domain`                   | Rails app domain                                                                                                                                                            | —                |
+| `assets_origin_domain`                  | Assets server domain                                                                                                                                                        | —                |
+| `aliases`                               | CloudFront CNAMEs                                                                                                                                                           | `[]`             |
+| `acm_certificate_arn`                   | ACM certificate ARN (us-east-1)                                                                                                                                             | `null`           |
+| `price_class`                           | CloudFront price class                                                                                                                                                      | `PriceClass_100` |
+| `static_shell_enabled`                  | Serve the framework-mode shell from the S3 bucket below instead of Rails                                                                                                    | `false`          |
+| `static_shell_bucket_domain_name`       | Regional domain name of the shell bucket; required with `static_shell_enabled`                                                                                              | `null`           |
+| `static_shell_origin_access_control_id` | Origin access control ID of the shell bucket; required with `static_shell_enabled`                                                                                          | `null`           |
+| `static_shell_ttl`                      | Edge TTL for the static shell (seconds)                                                                                                                                     | `60`             |
+| `og_shell_ttl`                          | TTL for `/og-shell` responses (seconds)                                                                                                                                     | `3600`           |
+| `cdn_spa_shell_ttl`                     | TTL for `/cdn-spa-shell` responses (seconds)                                                                                                                                | `86400`          |
+| `shared_policies`                       | Cache and origin request policies to use, from [`cloudfront_intercode_policies`](../cloudfront_intercode_policies); this module creates its own set when `null` (see below) | `null`           |
+| `access_logs_enabled`                   | Deliver access logs to the destination below                                                                                                                                | `false`          |
+| `access_log_delivery_destination_arn`   | CloudWatch Logs delivery destination for access logs (from [`cloudfront_intercode_logging`](../cloudfront_intercode_logging)); no access logs when `null`                   | `null`           |
 
 ## Outputs
 

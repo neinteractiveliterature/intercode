@@ -32,152 +32,59 @@ locals {
 # Cache / origin-request policies
 # ---------------------------------------------------------------------------
 
-# Forward all viewer headers, cookies, and query strings to the Rails origin.
-resource "aws_cloudfront_origin_request_policy" "forward_all" {
-  name = "${var.name}-forward-all"
+# An account can only hold a limited number of cache policies and origin request policies, and these don't depend on the
+# distribution, so a set can be created once (see the cloudfront_intercode_policies module) and shared by passing
+# shared_policies. Without it, this distribution gets a set of its own.
+module "policies" {
+  count  = var.shared_policies == null ? 1 : 0
+  source = "../cloudfront_intercode_policies"
 
-  cookies_config { cookie_behavior = "all" }
-  query_strings_config { query_string_behavior = "all" }
-  headers_config { header_behavior = "allViewer" }
+  name                 = var.name
+  cdn_spa_shell_ttl    = var.cdn_spa_shell_ttl
+  og_shell_ttl         = var.og_shell_ttl
+  static_shell_enabled = local.static_shell_enabled
+  static_shell_ttl     = var.static_shell_ttl
 }
 
-# /og-shell: forward Host + the `path` query param so each path caches
-# separately per convention domain.
-resource "aws_cloudfront_origin_request_policy" "og_shell" {
-  name = "${var.name}-og-shell"
-
-  cookies_config { cookie_behavior = "none" }
-
-  headers_config {
-    header_behavior = "whitelist"
-    headers {
-      items = ["Host"]
-    }
-  }
-
-  query_strings_config {
-    query_string_behavior = "whitelist"
-    query_strings {
-      items = ["path"]
-    }
-  }
+locals {
+  cache_policy_ids          = var.shared_policies == null ? one(module.policies[*].cache_policy_ids) : var.shared_policies.cache_policy_ids
+  origin_request_policy_ids = var.shared_policies == null ? one(module.policies[*].origin_request_policy_ids) : var.shared_policies.origin_request_policy_ids
 }
 
-resource "aws_cloudfront_cache_policy" "no_cache" {
-  name        = "${var.name}-no-cache"
-  default_ttl = 0
-  max_ttl     = 0
-  min_ttl     = 0
-
-  parameters_in_cache_key_and_forwarded_to_origin {
-    cookies_config { cookie_behavior = "none" }
-    headers_config { header_behavior = "none" }
-    query_strings_config { query_string_behavior = "none" }
-    enable_accept_encoding_gzip   = false
-    enable_accept_encoding_brotli = false
-  }
+# The policies used to be resources of this module itself.
+moved {
+  from = aws_cloudfront_origin_request_policy.forward_all
+  to   = module.policies[0].aws_cloudfront_origin_request_policy.forward_all
 }
 
-# /cdn-spa-shell: cache keyed on Host so each convention gets its own entry.
-resource "aws_cloudfront_cache_policy" "cdn_spa_shell" {
-  name        = "${var.name}-cdn-spa-shell"
-  default_ttl = var.cdn_spa_shell_ttl
-  max_ttl     = var.cdn_spa_shell_ttl
-  min_ttl     = 0
-
-  parameters_in_cache_key_and_forwarded_to_origin {
-    cookies_config { cookie_behavior = "none" }
-    headers_config {
-      header_behavior = "whitelist"
-      headers {
-        items = ["Host"]
-      }
-    }
-    query_strings_config { query_string_behavior = "none" }
-    enable_accept_encoding_gzip   = true
-    enable_accept_encoding_brotli = true
-  }
+moved {
+  from = aws_cloudfront_origin_request_policy.og_shell
+  to   = module.policies[0].aws_cloudfront_origin_request_policy.og_shell
 }
 
-# /og-shell: cache keyed on Host + path query param.
-resource "aws_cloudfront_cache_policy" "og_shell" {
-  name        = "${var.name}-og-shell"
-  default_ttl = var.og_shell_ttl
-  max_ttl     = var.og_shell_ttl
-  min_ttl     = 0
-
-  parameters_in_cache_key_and_forwarded_to_origin {
-    cookies_config { cookie_behavior = "none" }
-    headers_config {
-      header_behavior = "whitelist"
-      headers {
-        items = ["Host"]
-      }
-    }
-    query_strings_config {
-      query_string_behavior = "whitelist"
-      query_strings {
-        items = ["path"]
-      }
-    }
-    enable_accept_encoding_gzip   = true
-    enable_accept_encoding_brotli = true
-  }
+moved {
+  from = aws_cloudfront_cache_policy.no_cache
+  to   = module.policies[0].aws_cloudfront_cache_policy.no_cache
 }
 
-# Default behavior: the router function rewrites SPA routes to /cdn-spa-shell (browsers) or /og-shell?path=...
-# (crawlers) before the cache lookup, so the cache is keyed on Host plus the `path` query parameter. Without `path`
-# in the key every crawled page would share one /og-shell entry. TTLs follow what Rails sends, which is a day for
-# /cdn-spa-shell and nothing for /og-shell.
-resource "aws_cloudfront_cache_policy" "default_router" {
-  name        = "${var.name}-default-router"
-  default_ttl = var.cdn_spa_shell_ttl
-  max_ttl     = var.cdn_spa_shell_ttl
-  min_ttl     = 0
-
-  parameters_in_cache_key_and_forwarded_to_origin {
-    cookies_config { cookie_behavior = "none" }
-    headers_config {
-      header_behavior = "whitelist"
-      headers {
-        items = ["Host"]
-      }
-    }
-    query_strings_config {
-      query_string_behavior = "whitelist"
-      query_strings {
-        items = ["path"]
-      }
-    }
-    enable_accept_encoding_gzip   = true
-    enable_accept_encoding_brotli = true
-  }
+moved {
+  from = aws_cloudfront_cache_policy.cdn_spa_shell
+  to   = module.policies[0].aws_cloudfront_cache_policy.cdn_spa_shell
 }
 
-# Default behavior when the shell comes from the bucket. The key is the rewritten URI plus the `path` query parameter
-# (set for crawlers only), and nothing else: S3 can't be sent the viewer's Host header, and the shell is identical for
-# every domain. A short TTL keeps a new release's index.html from lingering; the hashed files it names stay in the
-# bucket for much longer (see assets_bucket_intercode).
-resource "aws_cloudfront_cache_policy" "static_shell" {
-  count = local.static_shell_enabled ? 1 : 0
+moved {
+  from = aws_cloudfront_cache_policy.og_shell
+  to   = module.policies[0].aws_cloudfront_cache_policy.og_shell
+}
 
-  name        = "${var.name}-static-shell"
-  default_ttl = var.static_shell_ttl
-  max_ttl     = var.static_shell_ttl
-  min_ttl     = 0
+moved {
+  from = aws_cloudfront_cache_policy.default_router
+  to   = module.policies[0].aws_cloudfront_cache_policy.default_router
+}
 
-  parameters_in_cache_key_and_forwarded_to_origin {
-    cookies_config { cookie_behavior = "none" }
-    headers_config { header_behavior = "none" }
-    query_strings_config {
-      query_string_behavior = "whitelist"
-      query_strings {
-        items = ["path"]
-      }
-    }
-    enable_accept_encoding_gzip   = true
-    enable_accept_encoding_brotli = true
-  }
+moved {
+  from = aws_cloudfront_cache_policy.static_shell
+  to   = module.policies[0].aws_cloudfront_cache_policy.static_shell
 }
 
 # Sends crawlers to /og-shell and everyone else to /cdn-spa-shell. This is a viewer-request function, which runs
@@ -279,14 +186,14 @@ resource "aws_cloudfront_distribution" "this" {
   dynamic "ordered_cache_behavior" {
     for_each = local.routing.rails_paths
     content {
-      path_pattern           = ordered_cache_behavior.value
-      target_origin_id       = local.rails_origin_id
-      allowed_methods        = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
-      cached_methods         = ["GET", "HEAD"]
-      compress               = true
-      cache_policy_id        = aws_cloudfront_cache_policy.no_cache.id
-      origin_request_policy_id = aws_cloudfront_origin_request_policy.forward_all.id
-      viewer_protocol_policy = "redirect-to-https"
+      path_pattern             = ordered_cache_behavior.value
+      target_origin_id         = local.rails_origin_id
+      allowed_methods          = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
+      cached_methods           = ["GET", "HEAD"]
+      compress                 = true
+      cache_policy_id          = local.cache_policy_ids.no_cache
+      origin_request_policy_id = local.origin_request_policy_ids.forward_all
+      viewer_protocol_policy   = "redirect-to-https"
     }
   }
 
@@ -297,8 +204,8 @@ resource "aws_cloudfront_distribution" "this" {
     allowed_methods          = ["GET", "HEAD"]
     cached_methods           = ["GET", "HEAD"]
     compress                 = true
-    cache_policy_id          = aws_cloudfront_cache_policy.cdn_spa_shell.id
-    origin_request_policy_id = aws_cloudfront_origin_request_policy.forward_all.id
+    cache_policy_id          = local.cache_policy_ids.cdn_spa_shell
+    origin_request_policy_id = local.origin_request_policy_ids.forward_all
     viewer_protocol_policy   = "redirect-to-https"
   }
 
@@ -309,8 +216,8 @@ resource "aws_cloudfront_distribution" "this" {
     allowed_methods          = ["GET", "HEAD"]
     cached_methods           = ["GET", "HEAD"]
     compress                 = true
-    cache_policy_id          = aws_cloudfront_cache_policy.og_shell.id
-    origin_request_policy_id = aws_cloudfront_origin_request_policy.og_shell.id
+    cache_policy_id          = local.cache_policy_ids.og_shell
+    origin_request_policy_id = local.origin_request_policy_ids.og_shell
     viewer_protocol_policy   = "redirect-to-https"
   }
 
@@ -321,9 +228,9 @@ resource "aws_cloudfront_distribution" "this" {
     allowed_methods  = ["GET", "HEAD"]
     cached_methods   = ["GET", "HEAD"]
     compress         = true
-    cache_policy_id  = local.static_shell_enabled ? aws_cloudfront_cache_policy.static_shell[0].id : aws_cloudfront_cache_policy.default_router.id
+    cache_policy_id  = local.static_shell_enabled ? local.cache_policy_ids.static_shell : local.cache_policy_ids.default_router
     # The bucket can't be sent the viewer's headers; the router passes Host to Rails itself
-    origin_request_policy_id = local.static_shell_enabled ? null : aws_cloudfront_origin_request_policy.forward_all.id
+    origin_request_policy_id = local.static_shell_enabled ? null : local.origin_request_policy_ids.forward_all
     viewer_protocol_policy   = "redirect-to-https"
 
     function_association {
