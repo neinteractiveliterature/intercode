@@ -43,7 +43,8 @@ export const clientLoader = (args: LoaderFunctionArgs) => loader(args);
 clientLoader.hydrate = true as const;
 
 export function HydrateFallback() {
-  return <PageLoadingIndicator visible />;
+  // No delay, so that the prerendered shell shows it while the app's scripts are still downloading
+  return <PageLoadingIndicator visible delay={0} />;
 }
 
 export default Root;

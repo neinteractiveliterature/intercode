@@ -66,6 +66,16 @@ class FrameworkShellTest < ApplicationSystemTestCase
     ENV["UPLOADS_HOST"] = original_uploads_host
   end
 
+  # With scripts off, the page is the shell as it looks while the app is still downloading
+  it "shows a loading spinner before the app's scripts have run" do
+    page.driver.browser.page.command("Emulation.setScriptExecutionDisabled", value: true)
+
+    visit "/framework-check"
+
+    assert page.has_css?(".custom-loading-indicator .spinner-border", visible: :visible)
+    assert page.has_no_content?("Framework mode")
+  end
+
   def requests_for(path)
     page.driver.network_traffic.filter_map(&:url).count { |url| URI.parse(url).path == path }
   end
