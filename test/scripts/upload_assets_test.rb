@@ -113,7 +113,22 @@ describe "the assets bucket upload scripts" do
       assert_equal 2, uploads.size
       assert_includes uploads[0], "/assets s3://the-bucket/assets --recursive --cache-control public, max-age=15552000"
       assert_includes uploads[1],
-                      "s3://the-bucket/index.html --cache-control public, max-age=60 --content-type text/html"
+                      "s3://the-bucket/index.html --cache-control public, max-age=60, stale-while-revalidate=300 " \
+                        "--content-type text/html"
+    end
+
+    it "leaves stale-while-revalidate off index.html when its window is zero" do
+      calls =
+        run_script(
+          "script/uploadFrameworkAssets.sh",
+          "the-bucket",
+          method(:framework_build),
+          "publish",
+          { "INDEX_STALE_WHILE_REVALIDATE" => "0" },
+          bucket_keys: []
+        )
+
+      assert(calls.any? { |call| call.include?("--cache-control public, max-age=60 --content-type text/html") })
     end
 
     it "marks only the dropped, untagged files under assets/ as obsolete" do
