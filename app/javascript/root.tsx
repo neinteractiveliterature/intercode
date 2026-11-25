@@ -43,7 +43,13 @@ export const clientLoader = (args: LoaderFunctionArgs) => loader(args);
 clientLoader.hydrate = true as const;
 
 export function HydrateFallback() {
-  return <PageLoadingIndicator visible />;
+  // The indicator only shows itself from an effect, which can't run until the app's scripts have loaded and it has
+  // hydrated. The wrapper's class lets the stylesheet show it before then (see application.scss).
+  return (
+    <div className="boot-loading-indicator">
+      <PageLoadingIndicator visible />
+    </div>
+  );
 }
 
 export default Root;
