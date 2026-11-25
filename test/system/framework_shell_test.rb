@@ -76,6 +76,37 @@ class FrameworkShellTest < ApplicationSystemTestCase
     assert page.has_no_content?("Framework mode")
   end
 
+  # Nothing on screen depends on these, so they shouldn't compete with the files that it does (see
+  # app/javascript/contentShown.ts)
+  it "loads the search box and Bootstrap's JavaScript only once the page's content is there" do
+    page.driver.browser.evaluate_on_new_document(<<~JS)
+      new MutationObserver((_, observer) => {
+        if (document.querySelector('.site-search-navigation-button')) {
+          window.contentRenderedAt = performance.now();
+          observer.disconnect();
+        }
+      }).observe(document, { childList: true, subtree: true });
+    JS
+
+    visit "/"
+
+    assert page.has_css?(".site-search", visible: :all)
+    started_after_content = <<~'JS'
+      performance.getEntriesByType('resource')
+        .filter((entry) => /\/assets\/(SiteSearch|Select|bootstrap\.esm)[^\/]*\.js$/.test(entry.name))
+        .map((entry) => [
+          entry.name.split('/assets/')[1].split(/[-.]/)[0],
+          entry.startTime > window.contentRenderedAt,
+        ])
+        .sort()
+    JS
+    assert_equal [["Select", true], ["SiteSearch", true], ["bootstrap", true]],
+                 page.evaluate_script(started_after_content)
+
+    find(".site-search-navigation-button").click
+    assert page.has_css?(".site-search input:focus", visible: :all)
+  end
+
   def requests_for(path)
     page.driver.network_traffic.filter_map(&:url).count { |url| URI.parse(url).path == path }
   end
