@@ -24,7 +24,7 @@ export type Bootstrap = {
   client: ApolloClient;
 };
 
-// The shell fetches /client_configuration itself to set the title and favicon (see layouts/_boot_preloads.html.erb).
+// The shell fetches /client_configuration itself to set the title and favicon (see bootPreloads.js).
 // Use that if it worked, and otherwise make the request here so a failure is reported through the boot error path.
 async function loadClientConfiguration(): Promise<ClientConfiguration> {
   const early = window.intercodeEarlyClientConfiguration;

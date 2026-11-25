@@ -32,6 +32,9 @@ module ApplicationHelper
     "try{var k='intercode.entryScriptReloadAt',l=Number(sessionStorage.getItem(k));" \
       "if(!(l>0&&Date.now()-l<15000)){sessionStorage.setItem(k,Date.now());location.reload()}}catch(e){}"
 
+  # The requests the shell starts before the app's scripts have loaded, shared with the framework-mode shell (root.tsx)
+  BOOT_PRELOADS_SCRIPT = Rails.root.join("app/javascript/bootPreloads.js").read.freeze
+
   def application_entry_script_tag
     javascript_include_tag(
       url_with_possible_host(application_entry_path, ENV.fetch("ASSETS_HOST", nil)),

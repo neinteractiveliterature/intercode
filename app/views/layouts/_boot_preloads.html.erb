@@ -1,35 +1,5 @@
-<%# The SPA fetches both of these as soon as its entry script has loaded. Preloading them starts the requests while the entry script is still downloading; the later fetch() calls reuse the responses. %>
+<%# The SPA fetches both of these as soon as its entry script has loaded. Preloading them starts the requests while the entry script is still downloading; the later fetch() calls reuse the responses. The framework-mode shell does the same in app/javascript/root.tsx. %>
 <link rel="preload" href="/client_configuration" as="fetch" crossorigin="anonymous"/>
 <link rel="preload" href="/authenticity_tokens" as="fetch" crossorigin="anonymous"/>
-<%# Starts redeeming the refresh cookie now, while the entry script is still downloading. AuthenticationManager's bootstrapFromCookie takes this request over, once, instead of making its own, so this must stay the same request it would make. %>
-<%= javascript_tag do %>
-  window.intercodeEarlyRefresh = fetch('/oauth_session/refresh', {
-    method: 'POST',
-    credentials: 'same-origin',
-    headers: { 'Content-Type': 'application/json', Accept: 'application/json' },
-    body: '{}'
-  });
-  window.intercodeEarlyRefresh.catch(function () {});
-<% end %>
-<%# Fetches /client_configuration now and uses it to set the title and favicon, which a shell without server-rendered tags (the framework-mode shell) lacks. The app takes the same promise over instead of fetching again. A failed fetch is left for the app to retry and report. %>
-<%= javascript_tag do %>
-  window.intercodeEarlyClientConfiguration = fetch('/client_configuration', { credentials: 'same-origin' }).then(function (response) {
-    if (!response.ok) { throw new Error('HTTP ' + response.status); }
-    return response.json();
-  });
-  window.intercodeEarlyClientConfiguration.then(function (config) {
-    var convention = config.convention;
-    if (!convention) { return; }
-    document.title = convention.name;
-    if (convention.favicon_url) {
-      var icon = document.querySelector('link[rel="icon"]');
-      if (!icon) {
-        icon = document.createElement('link');
-        icon.rel = 'icon';
-        document.head.appendChild(icon);
-      }
-      if (convention.favicon_content_type) { icon.type = convention.favicon_content_type; }
-      icon.href = convention.favicon_url;
-    }
-  }).catch(function () {});
-<% end %>
+<%# The early cookie refresh and client configuration fetch, which the two shells share %>
+<%= javascript_tag ApplicationHelper::BOOT_PRELOADS_SCRIPT %>

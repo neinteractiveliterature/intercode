@@ -56,8 +56,8 @@ class TokenEndpointError extends Error {
   }
 }
 
-// The server-rendered shell starts the refresh request itself (see layouts/_boot_preloads.html.erb), so that it is
-// already in flight while this script is still downloading. It can be used once: a second refresh would race the
+// The shell starts the refresh request itself (see bootPreloads.js), so that it is already
+// in flight while this script is still downloading. It can be used once: a second refresh would race the
 // first over the rotating refresh token.
 function takeEarlyRefreshResponse(): Promise<Response> | undefined {
   const early = window.intercodeEarlyRefresh;
