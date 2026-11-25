@@ -18,6 +18,9 @@
 # Ignore build artifacts
 /bin/manifest.json
 /bin/assets-manifest.json
+/bin/*.cjs
+/bin/*.cjs.map
+/bin/chunks
 
 # Ignore bundler config
 /.bundle
