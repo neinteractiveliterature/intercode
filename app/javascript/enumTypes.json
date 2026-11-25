@@ -3,10 +3,9 @@
     "kind": "ENUM",
     "name": "CmsContentTypeIndicator",
     "description": null,
-    "interfaces": null,
-    "possibleTypes": null,
     "fields": null,
     "inputFields": null,
+    "interfaces": null,
     "enumValues": [
       {
         "name": "Page",
@@ -26,16 +25,16 @@
         "isDeprecated": false,
         "deprecationReason": null
       }
-    ]
+    ],
+    "possibleTypes": null
   },
   "CmsPartialBlockName": {
     "kind": "ENUM",
     "name": "CmsPartialBlockName",
     "description": "Reserved names for partials that will automatically be shown on certain pages if present",
-    "interfaces": null,
-    "possibleTypes": null,
     "fields": null,
     "inputFields": null,
+    "interfaces": null,
     "enumValues": [
       {
         "name": "ACCOUNT_FORM_TEXT",
@@ -55,16 +54,16 @@
         "isDeprecated": false,
         "deprecationReason": null
       }
-    ]
+    ],
+    "possibleTypes": null
   },
   "EmailMode": {
     "kind": "ENUM",
     "name": "EmailMode",
     "description": null,
-    "interfaces": null,
-    "possibleTypes": null,
     "fields": null,
     "inputFields": null,
+    "interfaces": null,
     "enumValues": [
       {
         "name": "forward",
@@ -78,16 +77,16 @@
         "isDeprecated": false,
         "deprecationReason": null
       }
-    ]
+    ],
+    "possibleTypes": null
   },
   "FormItemExposeIn": {
     "kind": "ENUM",
     "name": "FormItemExposeIn",
     "description": null,
-    "interfaces": null,
-    "possibleTypes": null,
     "fields": null,
     "inputFields": null,
+    "interfaces": null,
     "enumValues": [
       {
         "name": "schedule_popup",
@@ -101,16 +100,16 @@
         "isDeprecated": false,
         "deprecationReason": null
       }
-    ]
+    ],
+    "possibleTypes": null
   },
   "FormItemRole": {
     "kind": "ENUM",
     "name": "FormItemRole",
     "description": null,
-    "interfaces": null,
-    "possibleTypes": null,
     "fields": null,
     "inputFields": null,
+    "interfaces": null,
     "enumValues": [
       {
         "name": "normal",
@@ -142,16 +141,16 @@
         "isDeprecated": false,
         "deprecationReason": null
       }
-    ]
+    ],
+    "possibleTypes": null
   },
   "FormType": {
     "kind": "ENUM",
     "name": "FormType",
     "description": null,
-    "interfaces": null,
-    "possibleTypes": null,
     "fields": null,
     "inputFields": null,
+    "interfaces": null,
     "enumValues": [
       {
         "name": "event",
@@ -171,16 +170,16 @@
         "isDeprecated": false,
         "deprecationReason": null
       }
-    ]
+    ],
+    "possibleTypes": null
   },
   "NotificationConditionType": {
     "kind": "ENUM",
     "name": "NotificationConditionType",
     "description": "The type of a notification condition. This is used to determine what kind of condition it is and how to evaluate it.\n",
-    "interfaces": null,
-    "possibleTypes": null,
     "fields": null,
     "inputFields": null,
+    "interfaces": null,
     "enumValues": [
       {
         "name": "EVENT_CATEGORY",
@@ -188,16 +187,16 @@
         "isDeprecated": false,
         "deprecationReason": null
       }
-    ]
+    ],
+    "possibleTypes": null
   },
   "NotificationDynamicDestination": {
     "kind": "ENUM",
     "name": "NotificationDynamicDestination",
     "description": "A dynamic destination for notifications.  Dynamic destinations are evaluated at runtime to determine\nthe actual destination for a notification.\n",
-    "interfaces": null,
-    "possibleTypes": null,
     "fields": null,
     "inputFields": null,
+    "interfaces": null,
     "enumValues": [
       {
         "name": "EVENT_PROPOSAL_OWNER",
@@ -253,16 +252,16 @@
         "isDeprecated": false,
         "deprecationReason": null
       }
-    ]
+    ],
+    "possibleTypes": null
   },
   "NotificationEventKey": {
     "kind": "ENUM",
     "name": "NotificationEventKey",
     "description": "An event that can trigger a notification.\n",
-    "interfaces": null,
-    "possibleTypes": null,
     "fields": null,
     "inputFields": null,
+    "interfaces": null,
     "enumValues": [
       {
         "name": "EVENT_PROPOSALS_NEW_PROPOSAL",
@@ -378,16 +377,16 @@
         "isDeprecated": false,
         "deprecationReason": null
       }
-    ]
+    ],
+    "possibleTypes": null
   },
   "OrderStatus": {
     "kind": "ENUM",
     "name": "OrderStatus",
     "description": null,
-    "interfaces": null,
-    "possibleTypes": null,
     "fields": null,
     "inputFields": null,
+    "interfaces": null,
     "enumValues": [
       {
         "name": "pending",
@@ -413,16 +412,16 @@
         "isDeprecated": false,
         "deprecationReason": null
       }
-    ]
+    ],
+    "possibleTypes": null
   },
   "PaymentMode": {
     "kind": "ENUM",
     "name": "PaymentMode",
     "description": "How should an order be paid for?",
-    "interfaces": null,
-    "possibleTypes": null,
     "fields": null,
     "inputFields": null,
+    "interfaces": null,
     "enumValues": [
       {
         "name": "now",
@@ -448,16 +447,16 @@
         "isDeprecated": false,
         "deprecationReason": null
       }
-    ]
+    ],
+    "possibleTypes": null
   },
   "PermissionedModelTypeIndicator": {
     "kind": "ENUM",
     "name": "PermissionedModelTypeIndicator",
     "description": null,
-    "interfaces": null,
-    "possibleTypes": null,
     "fields": null,
     "inputFields": null,
+    "interfaces": null,
     "enumValues": [
       {
         "name": "CmsContentGroup",
@@ -477,16 +476,16 @@
         "isDeprecated": false,
         "deprecationReason": null
       }
-    ]
+    ],
+    "possibleTypes": null
   },
   "PermissionedRoleTypeIndicator": {
     "kind": "ENUM",
     "name": "PermissionedRoleTypeIndicator",
     "description": null,
-    "interfaces": null,
-    "possibleTypes": null,
     "fields": null,
     "inputFields": null,
+    "interfaces": null,
     "enumValues": [
       {
         "name": "StaffPosition",
@@ -500,16 +499,16 @@
         "isDeprecated": false,
         "deprecationReason": null
       }
-    ]
+    ],
+    "possibleTypes": null
   },
   "PricingStrategy": {
     "kind": "ENUM",
     "name": "PricingStrategy",
     "description": null,
-    "interfaces": null,
-    "possibleTypes": null,
     "fields": null,
     "inputFields": null,
+    "interfaces": null,
     "enumValues": [
       {
         "name": "fixed",
@@ -529,16 +528,16 @@
         "isDeprecated": false,
         "deprecationReason": null
       }
-    ]
+    ],
+    "possibleTypes": null
   },
   "RankedChoiceDecisionReason": {
     "kind": "ENUM",
     "name": "RankedChoiceDecisionReason",
     "description": "The reason the ranked choice automation algorithm made the decision it did when evaluating a particular choice.\n",
-    "interfaces": null,
-    "possibleTypes": null,
     "fields": null,
     "inputFields": null,
+    "interfaces": null,
     "enumValues": [
       {
         "name": "MISSING_TICKET",
@@ -588,16 +587,16 @@
         "isDeprecated": false,
         "deprecationReason": null
       }
-    ]
+    ],
+    "possibleTypes": null
   },
   "RankedChoiceDecisionValue": {
     "kind": "ENUM",
     "name": "RankedChoiceDecisionValue",
     "description": "The decision the ranked choice automation algorithm made when evaluating a particular choice.",
-    "interfaces": null,
-    "possibleTypes": null,
     "fields": null,
     "inputFields": null,
+    "interfaces": null,
     "enumValues": [
       {
         "name": "SIGNUP",
@@ -623,16 +622,16 @@
         "isDeprecated": false,
         "deprecationReason": null
       }
-    ]
+    ],
+    "possibleTypes": null
   },
   "RankedChoiceFallbackAction": {
     "kind": "ENUM",
     "name": "RankedChoiceFallbackAction",
     "description": "An action to take if a user can't be signed up for any of their ranked choices during a signup round",
-    "interfaces": null,
-    "possibleTypes": null,
     "fields": null,
     "inputFields": null,
+    "interfaces": null,
     "enumValues": [
       {
         "name": "NONE",
@@ -652,16 +651,16 @@
         "isDeprecated": false,
         "deprecationReason": null
       }
-    ]
+    ],
+    "possibleTypes": null
   },
   "RankedChoiceOrder": {
     "kind": "ENUM",
     "name": "RankedChoiceOrder",
     "description": "An order to execute ranked-choice signup rounds in.",
-    "interfaces": null,
-    "possibleTypes": null,
     "fields": null,
     "inputFields": null,
+    "interfaces": null,
     "enumValues": [
       {
         "name": "ASC",
@@ -687,16 +686,16 @@
         "isDeprecated": false,
         "deprecationReason": null
       }
-    ]
+    ],
+    "possibleTypes": null
   },
   "ReceiveSignupEmail": {
     "kind": "ENUM",
     "name": "ReceiveSignupEmail",
     "description": null,
-    "interfaces": null,
-    "possibleTypes": null,
     "fields": null,
     "inputFields": null,
+    "interfaces": null,
     "enumValues": [
       {
         "name": "ALL_SIGNUPS",
@@ -716,16 +715,16 @@
         "isDeprecated": false,
         "deprecationReason": null
       }
-    ]
+    ],
+    "possibleTypes": null
   },
   "RefundStatus": {
     "kind": "ENUM",
     "name": "RefundStatus",
     "description": null,
-    "interfaces": null,
-    "possibleTypes": null,
     "fields": null,
     "inputFields": null,
+    "interfaces": null,
     "enumValues": [
       {
         "name": "NOT_REFUNDED",
@@ -745,16 +744,16 @@
         "isDeprecated": false,
         "deprecationReason": null
       }
-    ]
+    ],
+    "possibleTypes": null
   },
   "SchedulingUi": {
     "kind": "ENUM",
     "name": "SchedulingUi",
     "description": null,
-    "interfaces": null,
-    "possibleTypes": null,
     "fields": null,
     "inputFields": null,
+    "interfaces": null,
     "enumValues": [
       {
         "name": "regular",
@@ -774,16 +773,16 @@
         "isDeprecated": false,
         "deprecationReason": null
       }
-    ]
+    ],
+    "possibleTypes": null
   },
   "ShowSchedule": {
     "kind": "ENUM",
     "name": "ShowSchedule",
     "description": null,
-    "interfaces": null,
-    "possibleTypes": null,
     "fields": null,
     "inputFields": null,
+    "interfaces": null,
     "enumValues": [
       {
         "name": "no",
@@ -809,16 +808,16 @@
         "isDeprecated": false,
         "deprecationReason": null
       }
-    ]
+    ],
+    "possibleTypes": null
   },
   "SignupAutomationMode": {
     "kind": "ENUM",
     "name": "SignupAutomationMode",
     "description": "The automation behavior to use for event signups in a Convention.  Currently, we only support one type of\nautomated signups, the \"ranked choice\" behavior.  Conventions can also disable automation entirely using the\n\"none\" value.\n",
-    "interfaces": null,
-    "possibleTypes": null,
     "fields": null,
     "inputFields": null,
+    "interfaces": null,
     "enumValues": [
       {
         "name": "none",
@@ -832,16 +831,16 @@
         "isDeprecated": false,
         "deprecationReason": null
       }
-    ]
+    ],
+    "possibleTypes": null
   },
   "SignupChangeAction": {
     "kind": "ENUM",
     "name": "SignupChangeAction",
     "description": "The action taken that caused a signup to change.",
-    "interfaces": null,
-    "possibleTypes": null,
     "fields": null,
     "inputFields": null,
+    "interfaces": null,
     "enumValues": [
       {
         "name": "self_service_signup",
@@ -909,16 +908,16 @@
         "isDeprecated": false,
         "deprecationReason": null
       }
-    ]
+    ],
+    "possibleTypes": null
   },
   "SignupMode": {
     "kind": "ENUM",
     "name": "SignupMode",
     "description": null,
-    "interfaces": null,
-    "possibleTypes": null,
     "fields": null,
     "inputFields": null,
+    "interfaces": null,
     "enumValues": [
       {
         "name": "self_service",
@@ -932,16 +931,16 @@
         "isDeprecated": false,
         "deprecationReason": null
       }
-    ]
+    ],
+    "possibleTypes": null
   },
   "SignupRankedChoiceState": {
     "kind": "ENUM",
     "name": "SignupRankedChoiceState",
     "description": "The processing state of a SignupRankedChoice",
-    "interfaces": null,
-    "possibleTypes": null,
     "fields": null,
     "inputFields": null,
+    "interfaces": null,
     "enumValues": [
       {
         "name": "pending",
@@ -967,16 +966,16 @@
         "isDeprecated": false,
         "deprecationReason": null
       }
-    ]
+    ],
+    "possibleTypes": null
   },
   "SignupRequestState": {
     "kind": "ENUM",
     "name": "SignupRequestState",
     "description": "The processing state of a SignupRequest",
-    "interfaces": null,
-    "possibleTypes": null,
     "fields": null,
     "inputFields": null,
+    "interfaces": null,
     "enumValues": [
       {
         "name": "pending",
@@ -1002,16 +1001,16 @@
         "isDeprecated": false,
         "deprecationReason": null
       }
-    ]
+    ],
+    "possibleTypes": null
   },
   "SignupRoundAutomationAction": {
     "kind": "ENUM",
     "name": "SignupRoundAutomationAction",
     "description": "An action to take when a signup round opens.",
-    "interfaces": null,
-    "possibleTypes": null,
     "fields": null,
     "inputFields": null,
+    "interfaces": null,
     "enumValues": [
       {
         "name": "EXECUTE_RANKED_CHOICE",
@@ -1019,16 +1018,16 @@
         "isDeprecated": false,
         "deprecationReason": null
       }
-    ]
+    ],
+    "possibleTypes": null
   },
   "SignupState": {
     "kind": "ENUM",
     "name": "SignupState",
     "description": null,
-    "interfaces": null,
-    "possibleTypes": null,
     "fields": null,
     "inputFields": null,
+    "interfaces": null,
     "enumValues": [
       {
         "name": "ticket_purchase_hold",
@@ -1054,16 +1053,16 @@
         "isDeprecated": false,
         "deprecationReason": null
       }
-    ]
+    ],
+    "possibleTypes": null
   },
   "SiteMode": {
     "kind": "ENUM",
     "name": "SiteMode",
     "description": null,
-    "interfaces": null,
-    "possibleTypes": null,
     "fields": null,
     "inputFields": null,
+    "interfaces": null,
     "enumValues": [
       {
         "name": "convention",
@@ -1083,16 +1082,16 @@
         "isDeprecated": false,
         "deprecationReason": null
       }
-    ]
+    ],
+    "possibleTypes": null
   },
   "TicketMode": {
     "kind": "ENUM",
     "name": "TicketMode",
     "description": null,
-    "interfaces": null,
-    "possibleTypes": null,
     "fields": null,
     "inputFields": null,
+    "interfaces": null,
     "enumValues": [
       {
         "name": "disabled",
@@ -1112,16 +1111,16 @@
         "isDeprecated": false,
         "deprecationReason": null
       }
-    ]
+    ],
+    "possibleTypes": null
   },
   "TimezoneMode": {
     "kind": "ENUM",
     "name": "TimezoneMode",
     "description": null,
-    "interfaces": null,
-    "possibleTypes": null,
     "fields": null,
     "inputFields": null,
+    "interfaces": null,
     "enumValues": [
       {
         "name": "convention_local",
@@ -1135,6 +1134,7 @@
         "isDeprecated": false,
         "deprecationReason": null
       }
-    ]
+    ],
+    "possibleTypes": null
   }
 }

@@ -1,11 +1,11 @@
 /* eslint-disable */
+import * as Types from '../../graphqlTypes.generated';
+
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 /** Internal type. DO NOT USE DIRECTLY. */
 type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 /** Internal type. DO NOT USE DIRECTLY. */
 export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
-import * as Types from '../../graphqlTypes.generated';
-
-import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type AdminNavigationItemFieldsFragment = { __typename: 'CmsNavigationItem', id: string, position: number | null, title: string | null, page: { __typename: 'Page', id: string } | null, navigation_section: { __typename: 'CmsNavigationItem', id: string } | null };
 
 export type NavigationItemsAdminQueryVariables = Exact<{ [key: string]: never; }>;

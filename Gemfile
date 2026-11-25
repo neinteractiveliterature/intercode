@@ -61,7 +61,7 @@ gem "will_paginate", "4.0.1"
 
 # GraphQL server
 gem "apollo_upload_server", "2.1.8"
-gem "graphql", "2.2.17"
+gem "graphql", "2.6.16"
 gem "graphql-rails_logger", "1.2.5", groups: %i[development test]
 
 # Email stuff

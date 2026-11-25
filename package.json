@@ -234,7 +234,7 @@
     "logo": "<h1 style=\"font-family: Helvetica, Arial; letter-spacing: -4px; font-size: 60px; font-weight: bold;\">Intercode</h1>"
   },
   "lint-staged": {
-    "*.{js,jsx,ts,tsx}": "oxlint --fix",
+    "*.{js,jsx,ts,tsx}": "oxlint --fix --no-error-on-unmatched-pattern",
     "*.{js,jsx,ts,tsx,css,scss,md}": "prettier --write",
     "*.{rb,rake}": [
       "bundle exec stree write --print-width=120",
