@@ -186,14 +186,15 @@ resource "aws_cloudfront_distribution" "this" {
   dynamic "ordered_cache_behavior" {
     for_each = local.routing.rails_paths
     content {
-      path_pattern             = ordered_cache_behavior.value
-      target_origin_id         = local.rails_origin_id
-      allowed_methods          = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
-      cached_methods           = ["GET", "HEAD"]
-      compress                 = true
-      cache_policy_id          = local.cache_policy_ids.no_cache
-      origin_request_policy_id = local.origin_request_policy_ids.forward_all
-      viewer_protocol_policy   = "redirect-to-https"
+      path_pattern               = ordered_cache_behavior.value
+      target_origin_id           = local.rails_origin_id
+      allowed_methods            = ["DELETE", "GET", "HEAD", "OPTIONS", "PATCH", "POST", "PUT"]
+      cached_methods             = ["GET", "HEAD"]
+      compress                   = true
+      cache_policy_id            = local.cache_policy_ids.no_cache
+      origin_request_policy_id   = local.origin_request_policy_ids.forward_all
+      response_headers_policy_id = var.rails_response_headers_policy_id
+      viewer_protocol_policy     = "redirect-to-https"
     }
   }
 

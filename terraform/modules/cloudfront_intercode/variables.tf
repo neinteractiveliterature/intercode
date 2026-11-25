@@ -79,6 +79,12 @@ variable "access_log_delivery_destination_arn" {
   default     = null
 }
 
+variable "rails_response_headers_policy_id" {
+  description = "ID of a response headers policy for the Rails pass-through behaviors (the rails_paths in routing.json), such as one that adds Server-Timing headers to see how long CloudFront takes to reach the origin."
+  type        = string
+  default     = null
+}
+
 variable "shared_policies" {
   description = "Cache and origin request policies to use, from the cloudfront_intercode_policies module's cache_policy_ids and origin_request_policy_ids outputs. An account can only hold a limited number of these, so give every distribution the same set. Without it, this distribution creates a set of its own. static_shell is only needed with static_shell_enabled."
   type = object({
