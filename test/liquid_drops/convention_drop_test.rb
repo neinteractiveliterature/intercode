@@ -8,6 +8,13 @@ describe ConventionDrop do
     assert_equal convention.name, convention_drop.name
   end
 
+  it "only builds run availabilities once, however many filtered lists a template asks for" do
+    create(:run, event: create(:event, convention: convention))
+
+    # Identity rather than a query count: the query cache would hide the repeat queries, but not the repeat work
+    assert_same convention_drop.run_availabilities, convention_drop.run_availabilities
+  end
+
   describe "with runs that have openings" do
     # Deliberately not `let` (memoized) -- each event needs its own independent RegistrationPolicy
     # row, and this file creates multiple events that would otherwise collide on the new unique

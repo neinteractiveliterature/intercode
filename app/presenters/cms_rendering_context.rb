@@ -5,7 +5,7 @@ class CmsRenderingContext
   include ApplicationHelper
   include ActionView::Helpers::TagHelper
   include ActionView::Helpers::AssetTagHelper
-  attr_reader :cms_parent, :controller, :assigns, :cached_partials, :cached_files, :timezone
+  attr_reader :cms_parent, :controller, :assigns, :cached_partials, :preloaded_partial_sources, :cached_files, :timezone
 
   NOSCRIPT_WARNING = <<~HTML.html_safe
   <noscript id="no-javascript-warning">
@@ -39,7 +39,8 @@ class CmsRenderingContext
     @controller = controller
     @assigns = assigns
     @timezone = timezone
-    @cached_partials = {}
+    @cached_partials = {} # Liquid's cache of parsed partials
+    @preloaded_partial_sources = {}
     @cached_files = {}
   end
 
@@ -75,9 +76,7 @@ class CmsRenderingContext
 
   def preload_page_content(*pages)
     page_ids = pages.map(&:id)
-    cached_partials.update(
-      CmsPartial.joins(:pages).where(pages: { id: page_ids }).index_by(&:name).transform_values(&:liquid_template)
-    )
+    preload_partial_sources(CmsPartial.joins(:pages).where(pages: { id: page_ids }))
     cached_files.update(
       CmsFile
         .joins(:pages)
@@ -91,7 +90,7 @@ class CmsRenderingContext
     cms_layout ||= cms_parent&.default_layout
     return unless cms_layout
 
-    cached_partials.update(cms_layout.cms_partials.index_by(&:name).transform_values(&:liquid_template))
+    preload_partial_sources(cms_layout.cms_partials)
 
     cached_files.update(
       cms_layout.cms_files.includes(file_attachment: :blob).index_by { |cms_file| cms_file.file.filename }
@@ -145,7 +144,7 @@ class CmsRenderingContext
       "parent" => cms_parent,
       :cached_partials => cached_partials,
       :cached_files => cached_files,
-      :file_system => Cadmus::PartialFileSystem.new(convention),
+      :file_system => PreloadedPartialFileSystem.new(convention, preloaded_partial_sources),
       :timezone => timezone
     )
   end
@@ -153,6 +152,12 @@ class CmsRenderingContext
   def cms_variables
     @cms_variables ||=
       cms_parent.cms_variables.pluck(:key, :value).each_with_object({}) { |(key, value), hash| hash[key] = value }
+  end
+
+  private
+
+  def preload_partial_sources(partials)
+    preloaded_partial_sources.update(partials.to_h { |partial| [partial.name, partial.content.to_s] })
   end
 end
 # rubocop:enable Metrics/ClassLength
