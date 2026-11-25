@@ -58,6 +58,14 @@ class StaticSpaShellControllerTest < ActionDispatch::IntegrationTest
       assert_equal "max-age=0, private", response.headers["Cache-Control"]
     end
 
+    it "serves the Open Graph document to a crawler asking for a path with a file extension" do
+      get "/.well-known/assetlinks.json", headers: { "User-Agent" => "Googlebot/2.1" }
+
+      assert_response :ok
+      assert_equal "text/html", response.media_type
+      assert_includes response.body, 'property="og:url"'
+    end
+
     it "uses the convention's name for a crawler on a convention domain" do
       convention = create(:convention)
       host! convention.domain
