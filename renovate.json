@@ -37,10 +37,6 @@
       "automerge": true
     },
     {
-      "matchPackageNames": ["graphql", "graphql-batch"],
-      "enabled": false
-    },
-    {
       "matchPackageNames": ["postgres"],
       "matchManagers": ["dockerfile"],
       "enabled": false

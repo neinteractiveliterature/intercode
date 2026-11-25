@@ -1,11 +1,11 @@
 /* eslint-disable */
+import * as Types from '../../graphqlTypes.generated';
+
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 /** Internal type. DO NOT USE DIRECTLY. */
 type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 /** Internal type. DO NOT USE DIRECTLY. */
 export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
-import * as Types from '../../graphqlTypes.generated';
-
-import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type CmsFileFieldsFragment = { __typename: 'CmsFile', id: string, current_ability_can_delete: boolean, file: { __typename: 'ActiveStorageAttachment', id: string, filename: string, url: string, content_type: string, byte_size: number, thumbnailUrl: string | null } };
 
 export type CmsFilesAdminQueryVariables = Exact<{ [key: string]: never; }>;

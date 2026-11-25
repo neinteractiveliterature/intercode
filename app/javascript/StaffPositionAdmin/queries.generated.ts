@@ -1,11 +1,11 @@
 /* eslint-disable */
+import * as Types from '../graphqlTypes.generated';
+
+import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 /** Internal type. DO NOT USE DIRECTLY. */
 type Exact<T extends { [key: string]: unknown }> = { [K in keyof T]: T[K] };
 /** Internal type. DO NOT USE DIRECTLY. */
 export type Incremental<T> = T | { [P in keyof T]?: P extends ' $fragmentName' | '__typename' ? T[P] : never };
-import * as Types from '../graphqlTypes.generated';
-
-import { TypedDocumentNode as DocumentNode } from '@graphql-typed-document-node/core';
 export type StaffPositionFieldsFragment = { __typename: 'StaffPosition', id: string, name: string, email: string | null, visible: boolean | null, email_aliases: Array<string>, cc_addresses: Array<string>, user_con_profiles: Array<{ __typename: 'UserConProfile', id: string, name_without_nickname: string, email: string | null, gravatar_url: string, gravatar_enabled: boolean }>, permissions: Array<{ __typename: 'Permission', id: string, permission: string, model:
       | { __typename: 'CmsContentGroup', id: string, name: string }
       | { __typename: 'Convention', id: string, name: string }
