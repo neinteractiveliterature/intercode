@@ -8,6 +8,12 @@ variable "rails_origin_domain" {
   type        = string
 }
 
+variable "rails_origin_keepalive_timeout" {
+  description = "How many seconds CloudFront keeps an idle connection to the Rails origin open. Opening a new one adds a TCP and TLS handshake to a request."
+  type        = number
+  default     = 5
+}
+
 variable "assets_origin_domain" {
   description = "Domain name of the assets server (e.g. assets.neilhosting.net)."
   type        = string
