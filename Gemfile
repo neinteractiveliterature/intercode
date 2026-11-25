@@ -44,7 +44,7 @@ gem "scheduled_value", "1.4.0"
 gem "civil_service", github: "neinteractiveliterature/civil_service", branch: "no-double-validate"
 
 # File uploading
-gem "aws-sdk-s3", "1.245.1"
+gem "aws-sdk-s3", "1.245.2"
 gem "image_processing", "2.2.2"
 gem "ruby-vips", "2.3.0"
 
