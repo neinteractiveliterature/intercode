@@ -1,7 +1,7 @@
 # frozen_string_literal: true
-# rubocop:disable GraphQL/FieldName, GraphQL/FieldDescription, GraphQL/ExtractType
+# rubocop:disable GraphQL/FieldName, GraphQL/ExtractType
 class Types::MutationType < Types::BaseObject # rubocop:disable GraphQL/ObjectDescription
-  class MutationRootField < Types::BaseField # rubocop:disable GraphQL/ObjectDescription
+  class MutationRootField < Types::BaseField
     def initialize(*, resolver_class:, **, &)
       super(*, resolver_class:, description: resolver_class.description, **, &)
     end
@@ -9,13 +9,10 @@ class Types::MutationType < Types::BaseObject # rubocop:disable GraphQL/ObjectDe
 
   field_class MutationRootField
 
-  # CSRF verification, but only for mutations
+  # CSRF verification, but only for mutations. IntercodeSchema.unauthorized_object turns a false result into an error.
+  # Don't raise here: graphql-ruby crashes handling an exception raised while authorizing a root type.
   def self.authorized?(_value, context)
-    unless context[:verified_request] || context[:pundit_user]&.doorkeeper_token
-      raise ActionController::InvalidAuthenticityToken
-    end
-
-    true
+    !!(context[:verified_request] || context[:pundit_user]&.doorkeeper_token)
   end
 
   ### AuthorizedApplication

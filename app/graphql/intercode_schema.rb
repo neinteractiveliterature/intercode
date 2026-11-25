@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class IntercodeSchema < GraphQL::Schema
+class IntercodeSchema < GraphQL::Schema # rubocop:disable GraphQL/MaxComplexitySchema, GraphQL/MaxDepthSchema
   class NotAuthorizedError < GraphQL::ExecutionError
     attr_reader :current_user
 
@@ -161,6 +161,12 @@ class IntercodeSchema < GraphQL::Schema
   end
 
   def self.unauthorized_object(error)
+    # The mutation root type is only unauthorized when CSRF verification fails (see Types::MutationType.authorized?)
+    if error.type == Types::MutationType
+      Rails.logger.warn("Can't verify CSRF token authenticity for a GraphQL mutation")
+      raise GraphQL::ExecutionError, "ActionController::InvalidAuthenticityToken"
+    end
+
     # Add a top-level error to the response instead of returning nil:
     raise NotAuthorizedError.from_error(
             error,
