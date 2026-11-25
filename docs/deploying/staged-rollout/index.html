@@ -10,7 +10,7 @@
 
 
 <link rel="search" type="application/opensearchdescription+xml" title="Intercode" href="/opensearch.xml"><link rel="stylesheet" href="/assets/css/styles.c326889c.css">
-<script src="/assets/js/runtime~main.1dafc70e.js" defer="defer"></script>
+<script src="/assets/js/runtime~main.06bc4080.js" defer="defer"></script>
 <script src="/assets/js/main.95d881a9.js" defer="defer"></script>
 </head>
 <body>
@@ -61,9 +61,10 @@ alarm has an <code>alarm_actions</code> topic someone reads. Both are what you w
 <p>Do this right after the apply, and again after the first release that lands while the domain is on the static shell.</p>
 <ul>
 <li class="">
-<p><strong>The shell comes from the bucket.</strong> <code>curl -sI https://&lt;host&gt;/</code> returns the shell with <code>Cache-Control: max-age=60</code>
-(the same value as <code>static_shell_ttl</code>), and a deep link such as <code>/events</code> returns the same document. A request for a
-file under <code>/assets/</code> that doesn&#x27;t exist is a 404, not the shell.</p>
+<p><strong>The shell comes from the bucket.</strong> <code>curl -sI https://&lt;host&gt;/</code> returns the shell with
+<code>Cache-Control: public, max-age=60, stale-while-revalidate=300</code> (<code>max-age</code> is the same value as <code>static_shell_ttl</code>),
+and a deep link such as <code>/events</code> returns the same document. A request for a file under <code>/assets/</code> that doesn&#x27;t exist
+is a 404, not the shell.</p>
 </li>
 <li class="">
 <p><strong>Crawler previews.</strong> A link-preview user agent gets per-resource metadata from Rails, not the shell:</p>
