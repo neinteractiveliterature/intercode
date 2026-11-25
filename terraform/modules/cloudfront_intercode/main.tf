@@ -122,10 +122,11 @@ resource "aws_cloudfront_distribution" "this" {
     domain_name = var.rails_origin_domain
 
     custom_origin_config {
-      http_port              = 80
-      https_port             = 443
-      origin_protocol_policy = "https-only"
-      origin_ssl_protocols   = ["TLSv1.2"]
+      http_port                = 80
+      https_port               = 443
+      origin_protocol_policy   = "https-only"
+      origin_ssl_protocols     = ["TLSv1.2"]
+      origin_keepalive_timeout = var.rails_origin_keepalive_timeout
     }
   }
 
