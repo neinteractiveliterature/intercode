@@ -97,19 +97,6 @@ table.no-top-border thead th {
   }
 }
 
-// The static shell's spinner, shown by CSS alone so that it appears while the app is still downloading. The delay keeps it
-// from flashing on quick loads. An animation overrides the indicator's inline opacity and visibility.
-.boot-loading-indicator .custom-loading-indicator {
-  animation: reveal-boot-loading-indicator 0s linear 250ms forwards;
-}
-
-@keyframes reveal-boot-loading-indicator {
-  to {
-    opacity: 1;
-    visibility: visible;
-  }
-}
-
 .run-card {
   min-width: 250px;
   max-width: 340px;

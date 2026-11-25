@@ -59,7 +59,7 @@
     "@lezer/highlight": "^1.2.1",
     "@lezer/lr": "^1.4.2",
     "@marsidev/react-turnstile": "^1.6.1",
-    "@neinteractiveliterature/litform": "0.36.2",
+    "@neinteractiveliterature/litform": "0.37.0",
     "@popperjs/core": "^2.11.8",
     "@rails/activestorage": "8.1.401",
     "@react-router/node": "8.5.2",
