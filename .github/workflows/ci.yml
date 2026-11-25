@@ -292,6 +292,8 @@ jobs:
           echo "$html"
           # The changed word is marked up on its own
           echo "$html" | grep -q ">New</ins>"
+          # A garbled date here means the translations, which hold the date formats, didn't load
+          echo "$html" | grep -q "Jan 1, 2026 12:00am"
       - name: Check that Rails serves the frontend's files
         run: |
           docker run -d --name rails-serving -p 3000:3000 -e RAILS_SERVE_STATIC_FILES=enabled -e INTERCODE_HOST=localhost \
