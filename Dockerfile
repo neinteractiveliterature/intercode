@@ -37,7 +37,8 @@ RUN bundle config set without 'development test' \
 
 COPY --chown=www:www . /usr/src/intercode
 
-### frontend (the framework-mode build, which the Rails app serves as its shell and the assets image serves from nginx)
+### frontend (the framework-mode build, which the Rails app serves as its shell and the assets image serves from nginx,
+### and the command-line scripts that the Rails app runs with Node)
 
 FROM node:${NODE_VERSION}-slim AS frontend
 ARG REVISION
@@ -54,7 +55,7 @@ COPY .yarn .yarn
 COPY doc-site/package.json doc-site/package.json
 RUN yarn install --immutable
 COPY . .
-RUN yarn run build:framework
+RUN yarn run build:framework && yarn run build:cli
 
 ### assets (docker build --target assets): the frontend served by nginx, as the intercode-assets image
 #
@@ -96,6 +97,9 @@ RUN rm -r doc-site
 # The pristine framework-mode build. It is made against a placeholder asset host, because ASSETS_HOST is only known when
 # the container starts; bin/with_static_shell makes the copy that Rails serves, with the real host substituted in.
 COPY --from=frontend --chown=www:www /usr/src/intercode/build/framework/client /usr/src/intercode/build/framework/client
+# FormResponseChangeGroupPresenter runs one of these to render the changes in notification emails
+COPY --from=frontend --chown=www:www /usr/src/intercode/bin/*.cjs /usr/src/intercode/bin/
+COPY --from=frontend --chown=www:www /usr/src/intercode/bin/chunks /usr/src/intercode/bin/chunks
 
 ### ld_preload trickery
 

@@ -276,6 +276,22 @@ jobs:
               grep -q "href=\"/assets/" "$STATIC_SHELL_DIR/index.html" &&
               ! grep -rq ASSETHOSTPLACEHOLDER "$STATIC_SHELL_DIR" public/assets &&
               ls public/assets/*.js > /dev/null'
+      # Notification emails run this script. Running it, rather than looking for the file, also catches a dependency that
+      # the bundle leaves out, since the image has no node_modules.
+      - name: Check that the app image can render form response changes
+        run: |
+          props='{"changeGroup":{"id":"ci","changes":[{"id":"1","field_identifier":"title","previous_value":"Old title",
+            "new_value":"New title","created_at":"2026-01-01T00:00:00Z","updated_at":"2026-01-01T00:00:00Z",
+            "user_con_profile":{"id":"1","name_without_nickname":"Test User"},
+            "formItem":{"id":"1","form_section_id":"1","item_type":"free_text","identifier":"title","position":1,
+            "admin_description":null,"rendered_properties":{"identifier":"title","caption":"Title","lines":1}}}]},
+            "convention":{"id":"1","starts_at":"2026-01-01T00:00:00Z","ends_at":"2026-01-03T00:00:00Z",
+            "language":"en","timezone_name":"Etc/UTC","timezone_mode":"convention_local"}}'
+          html=$(docker run --rm -e DATABASE_URL=postgresql://fakehost/not_a_real_database -e AWS_S3_BUCKET=fakebucket \
+            ghcr.io/neinteractiveliterature/intercode:${{ github.sha }} bin/renderFormResponseChangeGroup.cjs "$props")
+          echo "$html"
+          # The changed word is marked up on its own
+          echo "$html" | grep -q ">New</ins>"
       - name: Check that Rails serves the frontend's files
         run: |
           docker run -d --name rails-serving -p 3000:3000 -e RAILS_SERVE_STATIC_FILES=enabled -e INTERCODE_HOST=localhost \
