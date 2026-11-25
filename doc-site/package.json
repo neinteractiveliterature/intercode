@@ -25,7 +25,7 @@
     "@svgr/webpack": "8.1.0",
     "clsx": "2.1.1",
     "file-loader": "6.2.0",
-    "graphql": "^16.9.0",
+    "graphql": "^17.0.0",
     "graphql-config": "^6.0.0",
     "prism-react-renderer": "2.4.1",
     "react": "19.3.1",
