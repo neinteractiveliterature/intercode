@@ -82,6 +82,22 @@
         '';
       in
       rec {
+        # Experimental container image, alongside the Dockerfile (see nix/image.nix)
+        packages = pkgs.lib.optionalAttrs pkgs.stdenv.hostPlatform.isLinux (
+          import ./nix/image.nix {
+            inherit pkgs;
+            gems =
+              (rubyNix {
+                inherit gemset ruby;
+                name = "intercode-production";
+                gemConfig = pkgs.defaultGemConfig // gemConfig;
+                groups = [ "default" ];
+                extraRubySetup = "rm $out/bin/bundle $out/bin/bundler";
+              }).env;
+            revision = self.rev or self.dirtyRev or "unknown";
+          }
+        );
+
         inherit
           (rubyNix {
             inherit gemset ruby;
