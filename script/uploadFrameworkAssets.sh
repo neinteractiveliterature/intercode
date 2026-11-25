@@ -15,13 +15,17 @@
 # The assets bucket, which only serves the hashed files to pages that Rails serves, has no use for index.html: set
 # UPLOAD_INDEX=false and the publish phase only marks the obsolete files.
 #
-# INDEX_MAX_AGE (seconds, default 60) is the Cache-Control of index.html; keep it in step with the distribution's
-# static_shell_ttl. The hashed files in assets/ never change, so they are cached for a long time.
+# INDEX_MAX_AGE (seconds, default 60) is how long index.html stays fresh; keep it in step with the distribution's
+# static_shell_ttl. INDEX_STALE_WHILE_REVALIDATE (seconds, default 300, 0 to leave it out) is how much longer an
+# expired copy may be served while it is refetched in the background, so that a quiet site's visitors don't wait for
+# that. CloudFront cuts the window off at the cache policy's maximum TTL (static_shell_max_ttl). The hashed files in
+# assets/ never change, so they are cached for a long time.
 set -euo pipefail
 
 bucket="$1"
 build_dir="${2%/}"
 index_max_age="${INDEX_MAX_AGE:-60}"
+index_stale_while_revalidate="${INDEX_STALE_WHILE_REVALIDATE:-300}"
 upload_index="${UPLOAD_INDEX:-true}"
 phase="${3:-all}"
 
@@ -41,9 +45,14 @@ fi
 
 if [ "$phase" != hashed ]; then
   if [ "$upload_index" = true ]; then
+    index_cache_control="public, max-age=$index_max_age"
+    if [ "$index_stale_while_revalidate" != 0 ]; then
+      index_cache_control+=", stale-while-revalidate=$index_stale_while_revalidate"
+    fi
+
     # index.html goes last, so that it never names a file that isn't in the bucket yet
     aws s3 cp "$build_dir/index.html" "s3://$bucket/index.html" \
-      --cache-control "public, max-age=$index_max_age" --content-type "text/html"
+      --cache-control "$index_cache_control" --content-type "text/html"
   fi
 
   (cd "$build_dir" && find assets -type f) | "$(dirname "$0")/mark_obsolete_assets.py" "$bucket" assets/

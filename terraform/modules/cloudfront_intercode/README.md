@@ -120,8 +120,13 @@ The default behavior's function is `static_shell_router.js` instead of `crawler_
 Releases upload the build with the `framework-shell-release-hashed` and `framework-shell-release-publish` jobs in
 `.github/workflows/release.yml`, which run `script/uploadFrameworkAssets.sh` in two phases: the hashed files with a long
 `Cache-Control` alongside the Fly deploy, then, once `fly-release` has finished, `index.html` with
-`max-age=60` (keep that in step with `static_shell_ttl`), and finally the files that release dropped are marked
-obsolete.
+`max-age=60` (keep that in step with `static_shell_ttl`) and `stale-while-revalidate=300`, and finally the files that
+release dropped are marked obsolete.
+
+CloudFront cuts the stale-while-revalidate window off at the cache policy's maximum TTL, so the full window needs
+policies from `cloudfront_intercode_policies` with `static_shell_max_ttl` of at least 300, passed in as
+`shared_policies`.
+
 Set the repository variables `FRAMEWORK_SHELL_BUCKET` and `FRAMEWORK_SHELL_UPLOAD_ROLE_ARN` (from the bucket module's
 `bucket_name` and `release_upload_role_arn`) to turn it on. The image it uploads from is only built when the repository
 variable `BUILD_FRAMEWORK` is set.

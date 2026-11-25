@@ -59,9 +59,10 @@ After the apply, the distribution takes a few minutes to deploy. Let it finish b
 
 Do this right after the apply, and again after the first release that lands while the domain is on the static shell.
 
-- **The shell comes from the bucket.** `curl -sI https://<host>/` returns the shell with `Cache-Control: max-age=60`
-  (the same value as `static_shell_ttl`), and a deep link such as `/events` returns the same document. A request for a
-  file under `/assets/` that doesn't exist is a 404, not the shell.
+- **The shell comes from the bucket.** `curl -sI https://<host>/` returns the shell with
+  `Cache-Control: public, max-age=60, stale-while-revalidate=300` (`max-age` is the same value as `static_shell_ttl`),
+  and a deep link such as `/events` returns the same document. A request for a file under `/assets/` that doesn't exist
+  is a 404, not the shell.
 - **Crawler previews.** A link-preview user agent gets per-resource metadata from Rails, not the shell:
 
   ```sh
