@@ -7,6 +7,7 @@ import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
 import { AppRootLayoutQueryDocument } from './appRootQueries.generated';
 import { apolloClientContext } from 'AppContexts';
 import { normalizePathForLayout } from './normalizePathForLayout';
+import { markContentShown } from './contentShown';
 import type { Route } from './+types/AppRootLayout';
 
 export const clientLoader = async ({ context, request }: Route.ClientLoaderArgs) => {
@@ -41,6 +42,13 @@ function AppRootLayout() {
       cachedCmsLayoutId.current = currentId;
     }
   }, [cachedCmsLayoutId, data]);
+
+  const hasContent = !!parsedCmsContent?.bodyComponents;
+  useEffect(() => {
+    if (hasContent) {
+      markContentShown();
+    }
+  }, [hasContent]);
 
   if (!parsedCmsContent?.bodyComponents) {
     return <PageLoadingIndicator visible iconSet="bootstrap-icons" />;

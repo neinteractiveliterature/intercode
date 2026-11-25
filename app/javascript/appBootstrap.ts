@@ -71,6 +71,8 @@ export function startAppBootstrap(): Promise<Bootstrap> {
     // effect could call this, so the SDKs were never set up and nothing was
     // reported. The current user id isn't known yet; AppRoot fills it in via
     // setCurrentUser once the AppRootQuery resolves.
+    // The SDKs themselves load later (see ErrorReporting), holding on to anything
+    // that goes wrong meanwhile.
     initErrorReporting(
       undefined,
       clientConfiguration.sentry_frontend_dsn,
