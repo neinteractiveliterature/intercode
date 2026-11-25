@@ -18,7 +18,8 @@ class StaticSpaShellController < ApplicationController
       @og_url = "#{request.scheme}://#{request.host_with_port}#{request.path}"
       @event = event_for_path(request.path)
       @page = current_cms_page(request.path)
-      render template: "og_shell/show", layout: false
+      # The path may end in an extension (e.g. /.well-known/assetlinks.json), but the document is always HTML
+      render template: "og_shell/show", formats: [:html], layout: false
     else
       response.headers["Cache-Control"] = "no-cache"
       send_file StaticSpaShell.index_path, type: "text/html", disposition: "inline"
