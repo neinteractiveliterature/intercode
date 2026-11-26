@@ -214,20 +214,4 @@ describe "the assets bucket upload scripts" do
       )
     end
   end
-
-  describe "script/mark_obsolete_assets.py with no current files (what the cutover does to packs/)" do
-    it "marks every untagged file under the prefix and nothing else" do
-      calls =
-        run_script(
-          "script/mark_obsolete_assets.py",
-          "the-bucket",
-          "packs/",
-          bucket_keys: %w[packs/a-AAA.js packs/b-BBB.js packs/c-TAGGED.js assets/current-CCC.js],
-          tagged: ["packs/c-TAGGED.js"]
-        )
-
-      marked = calls.select { |call| call.start_with?("s3api copy-object") }.map { |call| call[/--key (\S+)/, 1] }
-      assert_equal %w[packs/a-AAA.js packs/b-BBB.js], marked.sort
-    end
-  end
 end

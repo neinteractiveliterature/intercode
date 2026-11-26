@@ -5,7 +5,7 @@ to their expiry.
 
 Usage: script/mark_obsolete_assets.py <bucket> <prefix> < current-keys
 
-<prefix> limits it to one part of the bucket (for example packs/ or assets/), and the bucket keys of this release's
+<prefix> limits it to one part of the bucket (for example assets/), and the bucket keys of this release's
 files come in on standard input, one per line. Files outside the prefix are never touched.
 """
 import os
