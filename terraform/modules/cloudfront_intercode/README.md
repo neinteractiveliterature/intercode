@@ -1,12 +1,12 @@
 # cloudfront_intercode Terraform module
 
-Creates a CloudFront distribution in front of an Intercode Rails origin with:
+Creates a CloudFront distribution for an Intercode deployment, with:
 
-- Long-TTL caching of `/packs/*` from the assets server
-- No-cache pass-through for API/auth endpoints
-- Crawler detection via a viewer-request CloudFront Function (`crawler_router.js`):
-  - Crawlers → `/og-shell?path=<original-path>` (per-resource OG metadata)
-  - Regular users → `/cdn-spa-shell` (lightweight shell, convention-level OG only)
+- The frontend (`index.html` and `assets/`) served from an S3 bucket
+- No-cache pass-through to Rails for API/auth endpoints
+- Crawler detection via a viewer-request CloudFront Function (`static_shell_router.js`):
+  - Crawlers → `/og-shell?path=<original-path>` on Rails (per-resource OG metadata)
+  - Regular users → `/index.html` from the bucket
 
 ## Usage
 
@@ -26,7 +26,10 @@ module "cloudfront" {
 
   name                 = "intercode-production"
   rails_origin_domain  = "www.neilhosting.net"
-  assets_origin_domain = "assets.neilhosting.net"
+
+  static_shell_bucket_domain_name       = module.shell_bucket.bucket_regional_domain_name
+  static_shell_origin_access_control_id = module.shell_bucket.origin_access_control_id
+
   aliases              = ["interconx.com", "www.interconx.com"]
   acm_certificate_arn  = "arn:aws:acm:us-east-1:123456789:certificate/abc-123"
 }
@@ -55,25 +58,22 @@ Standard logging v2 resources must live in `us-east-1`, so this module requires 
 The function attaches to the **viewer request** event of the **default cache behavior**, the catch-all for SPA
 routes. More specific behaviors take precedence:
 
-| Path pattern            | Origin        | Function | Cache TTL                          |
-| ----------------------- | ------------- | -------- | ---------------------------------- |
-| `/packs/*`              | Assets server | None     | Long (immutable)                   |
-| `/client_configuration` | Rails         | None     | No cache                           |
-| `/authenticity_tokens`  | Rails         | None     | No cache                           |
-| `/oauth_session/*`      | Rails         | None     | No cache                           |
-| `/og-shell`             | Rails         | None     | Keyed on `path` query param + Host |
-| `/cdn-spa-shell`        | Rails         | None     | Keyed on Host; long                |
-| `*` (default)           | Rails         | Router   | Keyed on Host + `path` query param |
+| Path pattern  | Origin | Function | Cache TTL                                                      |
+| ------------- | ------ | -------- | -------------------------------------------------------------- |
+| `/assets/*`   | Bucket | None     | Long (immutable)                                               |
+| Rails paths   | Rails  | None     | No cache                                                       |
+| `/og-shell`   | Rails  | None     | Keyed on `path` query param + Host                             |
+| `*` (default) | Bucket | Router   | `static_shell_ttl` (60 s), keyed on the `path` query parameter |
 
 The function runs before the cache lookup on every request, so the rewritten URI and query string are what key the
-cache. A crawler's response can therefore never be served to a browser, or the reverse. (The router used to be a
-Lambda@Edge origin-request function, which only ran on a cache miss, so a crawler could be served a browser's cached
-generic shell.) The default behavior's cache policy includes `path` in the key; without it every crawled page would
-share one `/og-shell` entry.
+cache, and a crawler's response is never served to a browser, or the reverse.
 
-- `/cdn-spa-shell`: the content varies per convention domain, hence `Host` in the key. Rails sends a one-day TTL.
+- Browsers get `/index.html` from the bucket. Their query strings are dropped, so tracking parameters can't fragment
+  the cache.
+- Crawlers, and any Rails path that reaches the default behavior, get the Rails origin with the viewer's `Host` header
+  (an S3 origin can't take one, so the default behavior has no origin request policy). Crawlers get
+  `/og-shell?path=...`.
 - `/og-shell`: keyed on `Host` and `path`. Rails marks these responses `max-age=0, private`, so they aren't cached.
-- Browsers' query strings are dropped, so tracking parameters can't fragment the cache.
 
 ### Adding a route or crawler
 
@@ -82,40 +82,26 @@ share one `/og-shell` entry.
 - `rails_paths`: routes that Rails owns. Each becomes a no-cache pass-through behavior (Terraform reads the file
   directly), is exempt from the router function, and is proxied by the reference nginx config. `/foo/*` is a prefix
   (it doesn't match `/foo` itself); anything else is an exact path.
-- `shell_paths` and `asset_paths`: the shell and `/packs/*` behaviors, which `main.tf` still spells out. A test
+- `shell_paths` and `asset_paths`: the `/og-shell` and `/assets/*` behaviors, which `main.tf` still spells out. A test
   fails if `main.tf` and `routing.json` disagree.
 - `crawler_user_agents`: the user agents that get `/og-shell`.
 
 After editing it, run `yarn routing:codegen` and commit the result. That rewrites the generated section of
-`crawler_router.js` (a CloudFront Function can't read files) and the two files in `nginx/`; CI runs
+`static_shell_router.js` (a CloudFront Function can't read files) and the two files in `nginx/`; CI runs
 `yarn routing:check` and fails if they are stale. Tests for the function run with Vitest
 (`yarn vitest run terraform/modules/cloudfront_intercode`).
 
-## Serving the shell from S3 (framework-mode build)
+## The frontend bucket
 
-By default the default behavior is a Rails origin, and Rails renders the shell. The framework-mode build is a static
-`index.html` plus hashed files in `assets/`, which can be served from an S3 bucket instead. Set `static_shell_enabled = true`
-and both of:
+Both of these are required, and come from an `assets_bucket_intercode` instance:
 
 - `static_shell_bucket_domain_name`: the bucket's `bucket_regional_domain_name`
 - `static_shell_origin_access_control_id`: the bucket's `origin_access_control_id`
 
-Both come from an `assets_bucket_intercode` instance. Use **a separate bucket** for this, not the one that serves
-`/packs/*`: the release upload marks every file under its prefix that the new release lacks as obsolete, and the two
-builds would otherwise mark each other's files. The bucket's policy must let this distribution read it: set
-`allow_account_cloudfront_distributions` on the bucket, or put this distribution's ARN in `cloudfront_distribution_arns`.
-Otherwise S3 answers with a 403. Then:
-
-| Path pattern  | Origin              | Function            | Cache TTL                                                      |
-| ------------- | ------------------- | ------------------- | -------------------------------------------------------------- |
-| `/assets/*`   | Static shell bucket | None                | Long (immutable)                                               |
-| Rails paths   | Rails               | None                | As above                                                       |
-| `*` (default) | Static shell bucket | Static shell router | `static_shell_ttl` (60 s), keyed on the `path` query parameter |
-
-The default behavior's function is `static_shell_router.js` instead of `crawler_router.js`. Browsers get
-`/index.html` from the bucket. Crawlers, and any Rails path that reaches it, get the Rails origin with the viewer's
-`Host` header (an S3 origin can't take one, so the default behavior has no origin request policy), and crawlers get
-`/og-shell?path=...`. It is generated from `routing.json` like the other one, and `/assets/*` is in `asset_paths`.
+Use **a separate bucket** for this, not one that serves another host's assets: the release upload marks every file under
+its prefix that the new release lacks as obsolete, and two builds would otherwise mark each other's files. The bucket's
+policy must let this distribution read it: set `allow_account_cloudfront_distributions` on the bucket, or put this
+distribution's ARN in `cloudfront_distribution_arns`. Otherwise S3 answers with a 403.
 
 Releases upload the build with the `framework-shell-release-hashed` and `framework-shell-release-publish` jobs in
 `.github/workflows/release.yml`, which run `script/uploadFrameworkAssets.sh` in two phases: the hashed files with a long
@@ -128,24 +114,13 @@ policies from `cloudfront_intercode_policies` with `static_shell_max_ttl` of at 
 `shared_policies`.
 
 Set the repository variables `FRAMEWORK_SHELL_BUCKET` and `FRAMEWORK_SHELL_UPLOAD_ROLE_ARN` (from the bucket module's
-`bucket_name` and `release_upload_role_arn`) to turn it on. The image it uploads from is only built when the repository
-variable `BUILD_FRAMEWORK` is set.
+`bucket_name` and `release_upload_role_arn`) to turn the upload on. The image it uploads from is only built when the
+repository variable `BUILD_FRAMEWORK` is set.
 
-**Trying it out:** create the bucket and a distribution with the static shell variables set, and give it an alias (and
-certificate) for a hostname that Rails serves, such as a past convention's, without changing that hostname's DNS. Run
-the "Upload framework-mode build to bucket" workflow for a commit, then send the real hostname to the distribution's
-address:
+## Upgrading from the Rails-rendered shell
 
-```sh
-curl --resolve h.example.org:443:$(dig +short <id>.cloudfront.net | head -1) https://h.example.org/
-```
-
-Add `-A 'Slackbot-LinkExpanding 1.0'` for a crawler. The shell should come from the bucket, the crawler's response from
-Rails, and a missing `/assets/...` file should be a 404. Don't send a `Host` header to the bare `cloudfront.net` name
-instead: CloudFront answers 403 for a host that isn't one of the distribution's aliases, and without an alias Rails is
-asked for a host it doesn't serve.
-
-**Rolling back** is removing `static_shell_enabled` (and the two variables). The next apply puts the Rails origin and the Rails-rendered shell back. See [the staged rollout guide](https://intercode.interactiveliterature.org/docs/deploying/staged-rollout) for the order to move domains in, what to check and what to watch.
+This module no longer has a mode where Rails renders the shell, or a `/packs/*` behavior. Remove the
+`assets_origin_domain`, `static_shell_enabled` and `cdn_spa_shell_ttl` arguments, and pass the two bucket variables.
 
 ## Other web servers
 
@@ -190,7 +165,7 @@ to the Rails origin, so multi-tenant routing works correctly behind CloudFront.
 ## Sharing cache policies between distributions
 
 An AWS account can only hold 20 cache policies (and a limited number of origin request policies), and each distribution
-needs 5 cache policies and 2 origin request policies of its own. They don't depend on the distribution, so with more than
+needs 3 cache policies and 2 origin request policies of its own. They don't depend on the distribution, so with more than
 a few distributions, create one set with the [`cloudfront_intercode_policies`](../cloudfront_intercode_policies) module and
 give every distribution the same `shared_policies`:
 
@@ -222,16 +197,13 @@ distributions updated in place; none is replaced.
 | --------------------------------------- | --------------------------------------------------------------------------------------------------------------------------------------------------------------------------- | ---------------- |
 | `name`                                  | Resource name prefix                                                                                                                                                        | —                |
 | `rails_origin_domain`                   | Rails app domain                                                                                                                                                            | —                |
-| `assets_origin_domain`                  | Assets server domain                                                                                                                                                        | —                |
 | `aliases`                               | CloudFront CNAMEs                                                                                                                                                           | `[]`             |
 | `acm_certificate_arn`                   | ACM certificate ARN (us-east-1)                                                                                                                                             | `null`           |
 | `price_class`                           | CloudFront price class                                                                                                                                                      | `PriceClass_100` |
-| `static_shell_enabled`                  | Serve the framework-mode shell from the S3 bucket below instead of Rails                                                                                                    | `false`          |
-| `static_shell_bucket_domain_name`       | Regional domain name of the shell bucket; required with `static_shell_enabled`                                                                                              | `null`           |
-| `static_shell_origin_access_control_id` | Origin access control ID of the shell bucket; required with `static_shell_enabled`                                                                                          | `null`           |
+| `static_shell_bucket_domain_name`       | Regional domain name of the shell bucket; required                                                                                                                          | —                |
+| `static_shell_origin_access_control_id` | Origin access control ID of the shell bucket; required                                                                                                                      | —                |
 | `static_shell_ttl`                      | Edge TTL for the static shell (seconds)                                                                                                                                     | `60`             |
 | `og_shell_ttl`                          | TTL for `/og-shell` responses (seconds)                                                                                                                                     | `3600`           |
-| `cdn_spa_shell_ttl`                     | TTL for `/cdn-spa-shell` responses (seconds)                                                                                                                                | `86400`          |
 | `shared_policies`                       | Cache and origin request policies to use, from [`cloudfront_intercode_policies`](../cloudfront_intercode_policies); this module creates its own set when `null` (see below) | `null`           |
 | `access_logs_enabled`                   | Deliver access logs to the destination below                                                                                                                                | `false`          |
 | `access_log_delivery_destination_arn`   | CloudWatch Logs delivery destination for access logs (from [`cloudfront_intercode_logging`](../cloudfront_intercode_logging)); no access logs when `null`                   | `null`           |

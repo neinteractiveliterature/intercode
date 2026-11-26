@@ -3,6 +3,7 @@ import { beforeEach, expect, test } from 'vitest';
 // with a stand-in for the 'cloudfront' module
 import source from './static_shell_router.js?raw';
 import routing from './routing.json';
+import mainTf from './main.tf?raw';
 
 const BROWSER = 'Mozilla/5.0 (Macintosh; Intel Mac OS X 10_15_7) AppleWebKit/537.36 Chrome/120.0 Safari/537.36';
 
@@ -80,4 +81,10 @@ for (const pattern of routing.asset_paths) {
 test('does not treat a prefix path as matching its bare name', () => {
   expect(route('/users', BROWSER).uri).toBe('/index.html');
   expect(route('/assets', BROWSER).uri).toBe('/index.html');
+});
+
+// The shell and asset behaviors are written out in main.tf, so make sure they stay in step with routing.json
+test('main.tf has a behavior for each shell and asset path', () => {
+  const patterns = [...mainTf.matchAll(/path_pattern\s*=\s*"([^"]+)"/g)].map((m) => m[1]);
+  expect(patterns.sort()).toEqual([...routing.shell_paths, ...routing.asset_paths].sort());
 });

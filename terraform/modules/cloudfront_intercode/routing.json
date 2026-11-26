@@ -20,8 +20,8 @@
     "/rails/active_storage/*",
     "/uploads/*"
   ],
-  "shell_paths": ["/cdn-spa-shell", "/og-shell"],
-  "asset_paths": ["/packs/*", "/assets/*"],
+  "shell_paths": ["/og-shell"],
+  "asset_paths": ["/assets/*"],
   "crawler_user_agents": [
     "Googlebot",
     "bingbot",

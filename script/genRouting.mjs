@@ -64,8 +64,7 @@ map $http_user_agent $is_crawler {
     [
       path.join(dir, 'rails-locations.conf'),
       `${header}
-# Include in the server block. Expects an upstream named "rails" and /etc/nginx/proxy_params.conf. /packs/ is served
-# from the assets host, so it isn't listed.
+# Include in the server block. Expects an upstream named "rails" and /etc/nginx/proxy_params.conf.
 location ~ ^(?:${exact.join('|')})$|^(?:${prefix.join('|')}) {
     proxy_pass http://rails;
     include /etc/nginx/proxy_params.conf;
@@ -76,12 +75,6 @@ location ~ ^(?:${exact.join('|')})$|^(?:${prefix.join('|')}) {
 }
 
 const outputs = [
-  await generateRouter('crawler_router.js', [
-    crawlerRegexLine,
-    '',
-    '// Paths that belong to Rails, the assets origin or the shells, and must never be rewritten',
-    `var BYPASS_PATH_RE = /${pathRegexSource([...railsAndShellPaths, ...routing.asset_paths])}/;`,
-  ]),
   await generateRouter('static_shell_router.js', [
     crawlerRegexLine,
     '',

@@ -14,15 +14,7 @@ terraform {
 
 locals {
   rails_origin_id        = "rails"
-  assets_origin_id       = "assets"
   static_shell_origin_id = "static-shell"
-
-  # With a static shell bucket, the default behavior's origin is the bucket and the router function switches to Rails
-  # where needed. Without one, everything below the specific behaviors is Rails, as it always was. This is its own
-  # variable, rather than being derived from the bucket's domain name, because the bucket is usually created in the same
-  # apply and its domain name is then unknown at plan time, which count and for_each can't use.
-  static_shell_enabled = var.static_shell_enabled
-  default_origin_id    = local.static_shell_enabled ? local.static_shell_origin_id : local.rails_origin_id
 
   # Every path that is routed by something other than the SPA fallback. See the README for what to edit.
   routing = jsondecode(file("${path.module}/routing.json"))
@@ -39,11 +31,9 @@ module "policies" {
   count  = var.shared_policies == null ? 1 : 0
   source = "../cloudfront_intercode_policies"
 
-  name                 = var.name
-  cdn_spa_shell_ttl    = var.cdn_spa_shell_ttl
-  og_shell_ttl         = var.og_shell_ttl
-  static_shell_enabled = local.static_shell_enabled
-  static_shell_ttl     = var.static_shell_ttl
+  name             = var.name
+  og_shell_ttl     = var.og_shell_ttl
+  static_shell_ttl = var.static_shell_ttl
 }
 
 locals {
@@ -68,18 +58,8 @@ moved {
 }
 
 moved {
-  from = aws_cloudfront_cache_policy.cdn_spa_shell
-  to   = module.policies[0].aws_cloudfront_cache_policy.cdn_spa_shell
-}
-
-moved {
   from = aws_cloudfront_cache_policy.og_shell
   to   = module.policies[0].aws_cloudfront_cache_policy.og_shell
-}
-
-moved {
-  from = aws_cloudfront_cache_policy.default_router
-  to   = module.policies[0].aws_cloudfront_cache_policy.default_router
 }
 
 moved {
@@ -87,15 +67,15 @@ moved {
   to   = module.policies[0].aws_cloudfront_cache_policy.static_shell
 }
 
-# Sends crawlers to /og-shell and everyone else to /cdn-spa-shell. This is a viewer-request function, which runs
+# Sends crawlers and Rails paths to Rails and everyone else to the static shell. This is a viewer-request function, which runs
 # before the cache lookup on every request; the previous Lambda@Edge origin-request router only ran on a cache miss,
 # so a crawler could be served a browser's cached generic shell.
 resource "aws_cloudfront_function" "crawler_router" {
   name    = "${var.name}-og-router"
-  comment = local.static_shell_enabled ? "Routes crawlers and Rails paths to Rails and everyone else to the static shell" : "Routes crawlers to /og-shell and everyone else to /cdn-spa-shell"
+  comment = "Routes crawlers and Rails paths to Rails and everyone else to the static shell"
   runtime = "cloudfront-js-2.0"
   publish = true
-  code    = file("${path.module}/${local.static_shell_enabled ? "static_shell_router.js" : "crawler_router.js"}")
+  code    = file("${path.module}/static_shell_router.js")
 }
 
 # ---------------------------------------------------------------------------
@@ -108,13 +88,6 @@ resource "aws_cloudfront_distribution" "this" {
   price_class     = var.price_class
   aliases         = var.aliases
   comment         = var.name
-
-  lifecycle {
-    precondition {
-      condition     = var.static_shell_enabled == (var.static_shell_bucket_domain_name != null && var.static_shell_origin_access_control_id != null) && (var.static_shell_enabled || (var.static_shell_bucket_domain_name == null && var.static_shell_origin_access_control_id == null))
-      error_message = "static_shell_enabled needs static_shell_bucket_domain_name and static_shell_origin_access_control_id, and they are only used when it is true."
-    }
-  }
 
   # Rails origin
   origin {
@@ -130,55 +103,22 @@ resource "aws_cloudfront_distribution" "this" {
     }
   }
 
-  # Assets origin (nginx serving /packs)
+  # Static shell bucket (the frontend build). Access is by origin access control, so no custom origin config and no
+  # Host header.
   origin {
-    origin_id   = local.assets_origin_id
-    domain_name = var.assets_origin_domain
-
-    custom_origin_config {
-      http_port              = 80
-      https_port             = 443
-      origin_protocol_policy = "https-only"
-      origin_ssl_protocols   = ["TLSv1.2"]
-    }
+    origin_id                = local.static_shell_origin_id
+    domain_name              = var.static_shell_bucket_domain_name
+    origin_access_control_id = var.static_shell_origin_access_control_id
   }
 
-  # Static shell bucket (framework-mode build), when there is one. Access is by origin access control, so no custom
-  # origin config and no Host header.
-  dynamic "origin" {
-    for_each = local.static_shell_enabled ? [1] : []
-    content {
-      origin_id                = local.static_shell_origin_id
-      domain_name              = var.static_shell_bucket_domain_name
-      origin_access_control_id = var.static_shell_origin_access_control_id
-    }
-  }
-
-  # /assets/* — the framework-mode build's hashed files, from the bucket. Same domain as the app, so no CORS needed.
-  dynamic "ordered_cache_behavior" {
-    for_each = local.static_shell_enabled ? [1] : []
-    content {
-      path_pattern           = "/assets/*"
-      target_origin_id       = local.static_shell_origin_id
-      allowed_methods        = ["GET", "HEAD"]
-      cached_methods         = ["GET", "HEAD"]
-      compress               = true
-      cache_policy_id        = "658327ea-f89d-4fab-a63d-7e88639e58f6" # CachingOptimized managed policy
-      viewer_protocol_policy = "redirect-to-https"
-    }
-  }
-
-  # /packs/* — immutable assets, long cache, served from assets origin.
+  # /assets/* — the build's hashed files, from the bucket. Same domain as the app, so no CORS needed.
   ordered_cache_behavior {
-    path_pattern     = "/packs/*"
-    target_origin_id = local.assets_origin_id
-    allowed_methods  = ["GET", "HEAD"]
-    cached_methods   = ["GET", "HEAD"]
-    compress         = true
-
-    # CachingOptimized managed policy
-    cache_policy_id = "658327ea-f89d-4fab-a63d-7e88639e58f6"
-
+    path_pattern           = "/assets/*"
+    target_origin_id       = local.static_shell_origin_id
+    allowed_methods        = ["GET", "HEAD"]
+    cached_methods         = ["GET", "HEAD"]
+    compress               = true
+    cache_policy_id        = "658327ea-f89d-4fab-a63d-7e88639e58f6" # CachingOptimized managed policy
     viewer_protocol_policy = "redirect-to-https"
   }
 
@@ -199,18 +139,6 @@ resource "aws_cloudfront_distribution" "this" {
     }
   }
 
-  # /cdn-spa-shell — lightweight SPA shell for regular CloudFront users.
-  ordered_cache_behavior {
-    path_pattern             = "/cdn-spa-shell"
-    target_origin_id         = local.rails_origin_id
-    allowed_methods          = ["GET", "HEAD"]
-    cached_methods           = ["GET", "HEAD"]
-    compress                 = true
-    cache_policy_id          = local.cache_policy_ids.cdn_spa_shell
-    origin_request_policy_id = local.origin_request_policy_ids.forward_all
-    viewer_protocol_policy   = "redirect-to-https"
-  }
-
   # /og-shell — per-resource OG shell for crawlers.
   ordered_cache_behavior {
     path_pattern             = "/og-shell"
@@ -223,17 +151,16 @@ resource "aws_cloudfront_distribution" "this" {
     viewer_protocol_policy   = "redirect-to-https"
   }
 
-  # Default — all SPA routes. The router function rewrites to /cdn-spa-shell or /og-shell, or, with a static shell
-  # bucket, to /index.html in the bucket or /og-shell on Rails.
+  # Default — all SPA routes, served as /index.html from the bucket. The router function sends crawlers to /og-shell on
+  # Rails instead.
   default_cache_behavior {
-    target_origin_id = local.default_origin_id
+    target_origin_id = local.static_shell_origin_id
     allowed_methods  = ["GET", "HEAD"]
     cached_methods   = ["GET", "HEAD"]
     compress         = true
-    cache_policy_id  = local.static_shell_enabled ? local.cache_policy_ids.static_shell : local.cache_policy_ids.default_router
-    # The bucket can't be sent the viewer's headers; the router passes Host to Rails itself
-    origin_request_policy_id = local.static_shell_enabled ? null : local.origin_request_policy_ids.forward_all
-    viewer_protocol_policy   = "redirect-to-https"
+    # The bucket can't be sent the viewer's headers, so there is no origin request policy; the router passes Host to Rails
+    cache_policy_id        = local.cache_policy_ids.static_shell
+    viewer_protocol_policy = "redirect-to-https"
 
     function_association {
       event_type   = "viewer-request"
