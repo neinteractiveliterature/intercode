@@ -10,7 +10,7 @@ class UserSignupConstraints
 
   def current_signups_including_not_counted
     @current_signups_including_not_counted ||=
-      user_con_profile.signups.includes(run: :event).where.not(state: "withdrawn").to_a
+      user_con_profile.signups.includes(:requested_bucket, run: :event).where.not(state: "withdrawn").to_a
   end
 
   def current_signups
@@ -22,7 +22,7 @@ class UserSignupConstraints
 
   def pending_signup_requests_including_not_counted
     @pending_signup_requests_including_not_counted ||=
-      user_con_profile.signup_requests.includes(target_run: :event).where(state: "pending").to_a
+      user_con_profile.signup_requests.includes(:requested_bucket, target_run: :event).where(state: "pending").to_a
   end
 
   def pending_signup_requests

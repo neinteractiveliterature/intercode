@@ -22,7 +22,8 @@ class ExecuteRankedChoiceSignupService < CivilService::Service
               :suppress_notifications,
               :decisions,
               :allow_waitlist,
-              :simulate_waitlist_cap
+              :simulate_waitlist_cap,
+              :existing_signups
   delegate :user_con_profile, to: :signup_ranked_choice
   delegate :convention, to: :user_con_profile
 
@@ -34,7 +35,8 @@ class ExecuteRankedChoiceSignupService < CivilService::Service
     simulate_waitlist_cap: false,
     constraints: nil,
     skip_locking: false,
-    suppress_notifications: false
+    suppress_notifications: false,
+    existing_signups: nil
   )
     @signup_round = signup_round
     @whodunit = whodunit
@@ -44,6 +46,8 @@ class ExecuteRankedChoiceSignupService < CivilService::Service
     @constraints = constraints || UserSignupConstraints.new(user_con_profile)
     @skip_locking = skip_locking
     @suppress_notifications = suppress_notifications
+    # Only for simulations: the target run's counted, slot-occupying signups, if the caller has already loaded them
+    @existing_signups = existing_signups
   end
 
   def inner_call
@@ -67,14 +71,7 @@ class ExecuteRankedChoiceSignupService < CivilService::Service
   end
 
   def skip_reason # rubocop:disable Metrics/AbcSize,Metrics/MethodLength
-    if signup_ranked_choice
-         .target_run
-         .event
-         .team_members
-         .where(user_con_profile_id: signup_ranked_choice.user_con_profile_id)
-         .any?
-      return SkipReason.new(:team_member)
-    end
+    return SkipReason.new(:team_member) if team_member_of_target_event?
 
     conflicts = constraints.conflicting_signups_for_run(signup_ranked_choice.target_run)
     return SkipReason.new(:conflict, conflicting_signup_ids: conflicts.map(&:id)) if conflicts.any?
@@ -113,14 +110,22 @@ class ExecuteRankedChoiceSignupService < CivilService::Service
 
   private
 
+  def team_member_of_target_event?
+    team_members = signup_ranked_choice.target_run.event.team_members
+    user_con_profile_id = signup_ranked_choice.user_con_profile_id
+    return team_members.any? { |member| member.user_con_profile_id == user_con_profile_id } if team_members.loaded?
+
+    team_members.where(user_con_profile_id:).any?
+  end
+
   def actual_bucket
     @actual_bucket ||=
       begin
         run = signup_ranked_choice.target_run
-        existing_signups =
-          run.signups.counted.occupying_slot.includes(:user_con_profile, :bucket, :requested_bucket).to_a
-        bucket_finder =
-          SignupBucketFinder.new(run.registration_policy, signup_ranked_choice.requested_bucket, existing_signups)
+        signups =
+          existing_signups ||
+            run.signups.counted.occupying_slot.includes(:user_con_profile, :bucket, :requested_bucket).to_a
+        bucket_finder = SignupBucketFinder.new(run.registration_policy, signup_ranked_choice.requested_bucket, signups)
         if convention.signup_mode == "moderated"
           run
             .signup_requests
