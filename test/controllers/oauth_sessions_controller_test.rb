@@ -272,5 +272,48 @@ class OAuthSessionsControllerTest < ActionDispatch::IntegrationTest
 
       assert_response :no_content
     end
+
+    describe "with a cookie session on the host, as 'become user' leaves behind" do
+      let(:admin_profile) do
+        profile = create(:user_con_profile, convention: convention)
+        create(:admin_staff_position, convention: convention).user_con_profiles << profile
+        profile
+      end
+      let(:subject_profile) { create(:user_con_profile, convention: convention) }
+
+      before do
+        host! convention.domain
+        sign_in admin_profile.user
+        post "/user_con_profiles/#{subject_profile.id}/become", params: { justification: "testing sign out" }
+        assert_equal subject_profile.user.id, signed_in_user_id
+      end
+
+      # who a request with only the browser's cookies, and no bearer token, is signed in as
+      def signed_in_user_id
+        post "/graphql", params: { query: "query { currentUser { id } }" }
+        response.parsed_body.dig("data", "currentUser", "id")&.to_i
+      end
+
+      it "signs out of it after becoming a user" do
+        assumed_identity_session = AssumedIdentitySession.last
+
+        post "/oauth_session/sign_out"
+
+        assert_response :no_content
+        assert_nil signed_in_user_id
+        assert_nil session[:assumed_identity_from_profile_id]
+        assert assumed_identity_session.reload.finished_at.present?
+      end
+
+      it "signs out of it after reverting to the original user" do
+        post "/user_con_profiles/revert_become"
+        assert_equal admin_profile.user.id, signed_in_user_id
+
+        post "/oauth_session/sign_out"
+
+        assert_response :no_content
+        assert_nil signed_in_user_id
+      end
+    end
   end
 end
