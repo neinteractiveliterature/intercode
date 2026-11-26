@@ -20,10 +20,10 @@ If any check fails, stop and report the failure to the user. Do not proceed.
 
 ## Step 2: Merge the PR
 
-Merge the PR using a merge commit:
+Merge the PR using a rebase merge:
 
 ```bash
-gh pr merge $ARGUMENTS --merge --delete-branch
+gh pr merge $ARGUMENTS --rebase --delete-branch
 ```
 
 ## Step 3: Wait for main branch CI to complete
