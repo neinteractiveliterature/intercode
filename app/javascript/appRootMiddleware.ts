@@ -3,13 +3,15 @@ import { apolloClientContext, appRootDataContext } from 'AppContexts';
 import { AppRootLayoutQueryDocument, AppRootQueryDocument } from './appRootQueries.generated';
 import { normalizePathForLayout } from './normalizePathForLayout';
 
-// Loads the data every page needs and puts it in the router context for the other middleware and loaders.
+// Starts loading the data every page needs and puts the promise in the router context, for the guards and loaders that
+// need it to await. It doesn't wait for the data itself: the router starts no loader until all middleware has returned,
+// so waiting here would put every page's own queries a round trip behind this one.
 export const appRootMiddleware: MiddlewareFunction = async ({ context, request }) => {
   const client = context.get(apolloClientContext);
 
-  // AppRootLayout's loader needs only the URL path, not the app root data, but the router runs all middleware before it
-  // starts any loader. Start its query now so it overlaps with AppRootQuery instead of waiting for it. The loader's own
-  // request for the same query joins this one (or reads the cache), and any failure here is left for the loader to report.
+  // Some routes have middleware of their own that waits for data (such as redirectToFirstDayMiddleware), which holds
+  // back every loader, so start the layout query here rather than leaving it to AppRootLayout's loader. That loader's
+  // request for the same query joins this one (or reads the cache), and any failure here is left for it to report.
   client
     .query({
       query: AppRootLayoutQueryDocument,
@@ -17,8 +19,8 @@ export const appRootMiddleware: MiddlewareFunction = async ({ context, request }
     })
     .catch(() => {});
 
-  const { data } = await client.query({ query: AppRootQueryDocument });
-  if (data) {
-    context.set(appRootDataContext, data);
-  }
+  const appRootData = client.query({ query: AppRootQueryDocument }).then(({ data }) => data);
+  // AppRoot's loader reports a failure; this is for when no guard or loader has awaited the promise yet
+  appRootData.catch(() => {});
+  context.set(appRootDataContext, appRootData);
 };

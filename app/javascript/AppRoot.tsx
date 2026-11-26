@@ -22,7 +22,7 @@ export const ErrorBoundary = RouteErrorBoundary;
 // module, so it takes the plain args until the cutover removes the wrappers
 export const clientLoader = async ({ context, request }: LoaderFunctionArgs) => {
   const client = context.get(apolloClientContext);
-  const data = context.get(appRootDataContext);
+  const data = await context.get(appRootDataContext);
   if (!data) return data;
 
   const { pathname } = new URL(request.url);

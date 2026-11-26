@@ -14,6 +14,7 @@ import { getConventionDayTimespans } from '../TimespanUtils';
 import { MiddlewareFunction, replace } from 'react-router';
 import type { ApolloClient } from '@apollo/client';
 import { apolloClientContext } from '../AppContexts';
+import { ScheduleGridConventionDataQueryDocument } from './ScheduleGrid/queries.generated';
 
 function conventionDayUrlPortionFormat(
   siteMode: SiteMode | undefined,
@@ -127,6 +128,9 @@ export async function conventionDayLoader(
 // page's other loaders (the layout's, for example) to finish first, and only then does the next navigation start.
 export const redirectToFirstDayMiddleware: MiddlewareFunction = async ({ context, params, request }) => {
   const client = context.get(apolloClientContext);
+  // The schedule's loader needs this whichever day it is, and can't start until after the redirect, so start it now.
+  // Its own request joins this one (or reads the cache), and any failure here is left for it to report.
+  client.query({ query: ScheduleGridConventionDataQueryDocument }).catch(() => {});
   const result = await conventionDayLoader(client, { params, request });
   if (result instanceof Response) {
     return result;
