@@ -58,6 +58,11 @@ class UserConProfileDrop < Liquid::Drop
   # @return [Array<EventDrop>] All the active events at this convention for which this user is a
   #                            team member
   def team_member_events
+    # Filter in memory when a collection (e.g. bio_eligible_user_con_profiles) has already preloaded these
+    if user_con_profile.team_members.loaded?
+      return user_con_profile.team_members.map(&:event).select { |event| event.status == "active" }
+    end
+
     user_con_profile.team_members.includes(event: :event_category).where(events: { status: "active" }).map(&:event)
   end
 

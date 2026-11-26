@@ -15,6 +15,29 @@ describe ConventionDrop do
     assert_same convention_drop.run_availabilities, convention_drop.run_availabilities
   end
 
+  it "returns bio-eligible profiles without querying again for what bio pages show about each one" do
+    active_event = create(:event, convention:)
+    dropped_event = create(:event, convention:, status: "dropped")
+    profile = create(:team_member, event: active_event).user_con_profile
+    create(:team_member, event: dropped_event, user_con_profile: profile)
+    create(:team_member, event: active_event)
+
+    drops = convention_drop.bio_eligible_user_con_profiles.map { |attendee| UserConProfileDrop.new(attendee) }
+
+    queries =
+      count_queries(/SELECT/) do
+        drops.each do |drop|
+          drop.email
+          drop.gravatar_url
+          drop.staff_positions
+          drop.team_member_events.each { |event| event.event_category.name }
+        end
+      end
+
+    assert_equal 0, queries
+    assert_equal [active_event], drops.find { |drop| drop.id == profile.id }.team_member_events
+  end
+
   describe "with runs that have openings" do
     # Deliberately not `let` (memoized) -- each event needs its own independent RegistrationPolicy
     # row, and this file creates multiple events that would otherwise collide on the new unique

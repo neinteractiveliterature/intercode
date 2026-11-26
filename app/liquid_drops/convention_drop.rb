@@ -149,7 +149,12 @@ class ConventionDrop < Liquid::Drop
 
   # @return [Array<UserConProfileDrop>] UserConProfiles in this convention that can have a bio
   def bio_eligible_user_con_profiles
-    convention.user_con_profiles.can_have_bio.to_a
+    # Bio pages ask each of these for their email or avatar, staff positions, and team member events
+    convention
+      .user_con_profiles
+      .can_have_bio
+      .includes(:user, :staff_positions, team_members: { event: :event_category })
+      .to_a
   end
 
   # @return [Array<ProductDrop>] All products in this convention
