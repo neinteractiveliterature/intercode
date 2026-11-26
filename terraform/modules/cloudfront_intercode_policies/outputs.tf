@@ -1,11 +1,9 @@
 output "cache_policy_ids" {
-  description = "IDs of the cache policies, in the shape cloudfront_intercode's shared_policies variable takes. static_shell is null when static_shell_enabled is false."
+  description = "IDs of the cache policies, in the shape cloudfront_intercode's shared_policies variable takes."
   value = {
-    no_cache       = aws_cloudfront_cache_policy.no_cache.id
-    cdn_spa_shell  = aws_cloudfront_cache_policy.cdn_spa_shell.id
-    og_shell       = aws_cloudfront_cache_policy.og_shell.id
-    default_router = aws_cloudfront_cache_policy.default_router.id
-    static_shell   = one(aws_cloudfront_cache_policy.static_shell[*].id)
+    no_cache     = aws_cloudfront_cache_policy.no_cache.id
+    og_shell     = aws_cloudfront_cache_policy.og_shell.id
+    static_shell = aws_cloudfront_cache_policy.static_shell.id
   }
 }
 

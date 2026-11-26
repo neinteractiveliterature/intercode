@@ -3,22 +3,10 @@ variable "name" {
   type        = string
 }
 
-variable "cdn_spa_shell_ttl" {
-  description = "Cache TTL in seconds for /cdn-spa-shell responses and the default router behavior."
-  type        = number
-  default     = 86400
-}
-
 variable "og_shell_ttl" {
   description = "Cache TTL in seconds for /og-shell responses."
   type        = number
   default     = 3600
-}
-
-variable "static_shell_enabled" {
-  description = "Whether to create the static shell policy (for distributions that serve index.html from a bucket)."
-  type        = bool
-  default     = true
 }
 
 variable "static_shell_ttl" {

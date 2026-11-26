@@ -14,11 +14,6 @@ variable "rails_origin_keepalive_timeout" {
   default     = 5
 }
 
-variable "assets_origin_domain" {
-  description = "Domain name of the assets server (e.g. assets.neilhosting.net)."
-  type        = string
-}
-
 variable "aliases" {
   description = "Additional CNAMEs for the CloudFront distribution (convention domains)."
   type        = list(string)
@@ -37,22 +32,14 @@ variable "price_class" {
   default     = "PriceClass_100"
 }
 
-variable "static_shell_enabled" {
-  description = "Serve the framework-mode shell from an S3 bucket instead of Rails. Needs static_shell_bucket_domain_name and static_shell_origin_access_control_id. A separate variable because those usually come from a bucket created in the same apply, and are then unknown at plan time."
-  type        = bool
-  default     = false
-}
-
 variable "static_shell_bucket_domain_name" {
-  description = "Regional domain name of the S3 bucket holding the framework-mode build (index.html and assets/), from the assets_bucket_intercode module's bucket_regional_domain_name output. With static_shell_enabled, the default behavior serves index.html from the bucket, /assets/* comes from the bucket, and the router sends crawlers and Rails paths to the Rails origin. Needs static_shell_origin_access_control_id, and the distribution's ARN in the bucket's cloudfront_distribution_arns."
+  description = "Regional domain name of the S3 bucket holding the frontend build (index.html and assets/), from the assets_bucket_intercode module's bucket_regional_domain_name output. The distribution's ARN must be in the bucket's cloudfront_distribution_arns."
   type        = string
-  default     = null
 }
 
 variable "static_shell_origin_access_control_id" {
-  description = "ID of the origin access control for the static shell bucket (the assets_bucket_intercode module's origin_access_control_id output). Required with static_shell_enabled."
+  description = "ID of the origin access control for the static shell bucket (the assets_bucket_intercode module's origin_access_control_id output)."
   type        = string
-  default     = null
 }
 
 variable "static_shell_ttl" {
@@ -65,12 +52,6 @@ variable "og_shell_ttl" {
   description = "Cache TTL in seconds for /og-shell responses."
   type        = number
   default     = 3600
-}
-
-variable "cdn_spa_shell_ttl" {
-  description = "Cache TTL in seconds for /cdn-spa-shell responses."
-  type        = number
-  default     = 86400
 }
 
 variable "access_logs_enabled" {
@@ -92,14 +73,12 @@ variable "rails_response_headers_policy_id" {
 }
 
 variable "shared_policies" {
-  description = "Cache and origin request policies to use, from the cloudfront_intercode_policies module's cache_policy_ids and origin_request_policy_ids outputs. An account can only hold a limited number of these, so give every distribution the same set. Without it, this distribution creates a set of its own. static_shell is only needed with static_shell_enabled."
+  description = "Cache and origin request policies to use, from the cloudfront_intercode_policies module's cache_policy_ids and origin_request_policy_ids outputs. An account can only hold a limited number of these, so give every distribution the same set. Without it, this distribution creates a set of its own."
   type = object({
     cache_policy_ids = object({
-      no_cache       = string
-      cdn_spa_shell  = string
-      og_shell       = string
-      default_router = string
-      static_shell   = optional(string)
+      no_cache     = string
+      og_shell     = string
+      static_shell = string
     })
     origin_request_policy_ids = object({
       forward_all = string

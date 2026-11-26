@@ -57,27 +57,6 @@ resource "aws_cloudfront_cache_policy" "no_cache" {
   }
 }
 
-# /cdn-spa-shell: cache keyed on Host so each convention gets its own entry.
-resource "aws_cloudfront_cache_policy" "cdn_spa_shell" {
-  name        = "${var.name}-cdn-spa-shell"
-  default_ttl = var.cdn_spa_shell_ttl
-  max_ttl     = var.cdn_spa_shell_ttl
-  min_ttl     = 0
-
-  parameters_in_cache_key_and_forwarded_to_origin {
-    cookies_config { cookie_behavior = "none" }
-    headers_config {
-      header_behavior = "whitelist"
-      headers {
-        items = ["Host"]
-      }
-    }
-    query_strings_config { query_string_behavior = "none" }
-    enable_accept_encoding_gzip   = true
-    enable_accept_encoding_brotli = true
-  }
-}
-
 # /og-shell: cache keyed on Host + path query param.
 resource "aws_cloudfront_cache_policy" "og_shell" {
   name        = "${var.name}-og-shell"
@@ -104,42 +83,11 @@ resource "aws_cloudfront_cache_policy" "og_shell" {
   }
 }
 
-# Default behavior: the router function rewrites SPA routes to /cdn-spa-shell (browsers) or /og-shell?path=...
-# (crawlers) before the cache lookup, so the cache is keyed on Host plus the `path` query parameter. Without `path`
-# in the key every crawled page would share one /og-shell entry. TTLs follow what Rails sends, which is a day for
-# /cdn-spa-shell and nothing for /og-shell.
-resource "aws_cloudfront_cache_policy" "default_router" {
-  name        = "${var.name}-default-router"
-  default_ttl = var.cdn_spa_shell_ttl
-  max_ttl     = var.cdn_spa_shell_ttl
-  min_ttl     = 0
-
-  parameters_in_cache_key_and_forwarded_to_origin {
-    cookies_config { cookie_behavior = "none" }
-    headers_config {
-      header_behavior = "whitelist"
-      headers {
-        items = ["Host"]
-      }
-    }
-    query_strings_config {
-      query_string_behavior = "whitelist"
-      query_strings {
-        items = ["path"]
-      }
-    }
-    enable_accept_encoding_gzip   = true
-    enable_accept_encoding_brotli = true
-  }
-}
-
-# Default behavior when the shell comes from the bucket. The key is the rewritten URI plus the `path` query parameter
+# Default behavior, which serves the shell from the bucket. The key is the rewritten URI plus the `path` query parameter
 # (set for crawlers only), and nothing else: S3 can't be sent the viewer's Host header, and the shell is identical for
 # every domain. A short TTL keeps a new release's index.html from lingering; the hashed files it names stay in the
 # bucket for much longer (see assets_bucket_intercode).
 resource "aws_cloudfront_cache_policy" "static_shell" {
-  count = var.static_shell_enabled ? 1 : 0
-
   name        = "${var.name}-static-shell"
   default_ttl = var.static_shell_ttl
   # CloudFront caps both the cache time and the stale-while-revalidate window at the maximum TTL, so this has to be
@@ -160,4 +108,10 @@ resource "aws_cloudfront_cache_policy" "static_shell" {
     enable_accept_encoding_gzip   = true
     enable_accept_encoding_brotli = true
   }
+}
+
+# This policy used to be optional
+moved {
+  from = aws_cloudfront_cache_policy.static_shell[0]
+  to   = aws_cloudfront_cache_policy.static_shell
 }
