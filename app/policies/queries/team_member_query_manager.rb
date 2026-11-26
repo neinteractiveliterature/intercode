@@ -3,7 +3,7 @@ class Queries::TeamMemberQueryManager < Queries::QueryManager
   def initialize(user:, authorization_info:)
     super(user: user)
     @authorization_info = authorization_info
-    @team_member_for_user_con_profile = Queries::NilSafeCache.new
+    @user_con_profile_ids_for_team_member_in_convention_id = Queries::NilSafeCache.new
     @team_member_event_ids_in_convention_id = Queries::NilSafeCache.new
   end
 
@@ -34,16 +34,7 @@ class Queries::TeamMemberQueryManager < Queries::QueryManager
       return false
     end
 
-    @team_member_for_user_con_profile.get(user_con_profile.id) do
-      signed_up_for_team_member_event =
-        Signup
-          .where(run: Run.where(event: events_where_team_member), user_con_profile_id: user_con_profile.id)
-          .where.not(state: 'withdrawn')
-          .any?
-
-      signed_up_for_team_member_event ||
-        TeamMember.where(event: events_where_team_member, user_con_profile: user_con_profile.id).any?
-    end
+    user_con_profile_ids_for_team_member_in_convention_id(user_con_profile.convention_id).include?(user_con_profile.id)
   end
 
   def team_member_event_ids_in_convention_id(convention_id)
@@ -86,5 +77,18 @@ class Queries::TeamMemberQueryManager < Queries::QueryManager
     end
 
     scope
+  end
+
+  private
+
+  # Every profile in the convention that is signed up for, or on the team of, one of my events.  Loaded all at
+  # once because callers check this for each profile in a list.
+  def user_con_profile_ids_for_team_member_in_convention_id(convention_id)
+    @user_con_profile_ids_for_team_member_in_convention_id.get(convention_id) do
+      my_events = events_where_team_member.where(convention_id:)
+      signups = Signup.where(run: Run.where(event: my_events)).where.not(state: "withdrawn")
+
+      Set.new(signups.pluck(:user_con_profile_id)).merge(TeamMember.where(event: my_events).pluck(:user_con_profile_id))
+    end
   end
 end

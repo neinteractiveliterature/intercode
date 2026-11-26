@@ -77,13 +77,7 @@ class CmsRenderingContext
   def preload_page_content(*pages)
     page_ids = pages.map(&:id)
     preload_partial_sources(CmsPartial.joins(:pages).where(pages: { id: page_ids }))
-    cached_files.update(
-      CmsFile
-        .joins(:pages)
-        .where(pages: { id: page_ids })
-        .includes(file_attachment: :blob)
-        .index_by { |cms_file| cms_file.file.filename }
-    )
+    preload_files(CmsFile.joins(:pages).where(pages: { id: page_ids }))
   end
 
   def preload_cms_layout_content(cms_layout = nil)
@@ -92,9 +86,7 @@ class CmsRenderingContext
 
     preload_partial_sources(cms_layout.cms_partials)
 
-    cached_files.update(
-      cms_layout.cms_files.includes(file_attachment: :blob).index_by { |cms_file| cms_file.file.filename }
-    )
+    preload_files(cms_layout.cms_files)
   end
 
   def liquid_assigns_for_single_page_app(cms_layout)
@@ -155,6 +147,11 @@ class CmsRenderingContext
   end
 
   private
+
+  # The {% file_url %} tag looks files up by name as a String, so don't key these by ActiveStorage::Filename
+  def preload_files(cms_files)
+    cached_files.update(cms_files.includes(file_attachment: :blob).index_by { |cms_file| cms_file.file.filename.to_s })
+  end
 
   def preload_partial_sources(partials)
     preloaded_partial_sources.update(partials.to_h { |partial| [partial.name, partial.content.to_s] })

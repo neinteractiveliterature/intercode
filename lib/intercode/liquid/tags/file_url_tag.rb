@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 module Intercode
   module Liquid
     module Tags
@@ -13,14 +14,14 @@ module Intercode
         end
 
         def render(context)
-          return unless context.registers['controller']
+          return unless context.registers["controller"]
 
           cache = context.registers[:cached_files] || {}
           cms_file = cache[filename]
           if cms_file
-            attachment = cms_file.file
+            attachment = cms_file.file.attachment
           else
-            parent = context.registers['parent']
+            parent = context.registers["parent"]
             parent = nil if parent.is_a?(RootSite)
             attachment =
               ActiveStorage::Attachment
@@ -30,11 +31,11 @@ module Intercode
             return "Error: file #{filename} not found" unless attachment
           end
 
-          context.registers['controller'].cdn_upload_url(attachment)
+          context.registers["controller"].cdn_upload_url(attachment)
         end
       end
     end
   end
 end
 
-Liquid::Template.register_tag('file_url', Intercode::Liquid::Tags::FileUrlTag)
+Liquid::Template.register_tag("file_url", Intercode::Liquid::Tags::FileUrlTag)

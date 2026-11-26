@@ -81,7 +81,10 @@ class Types::SignupType < Types::BaseObject
   end
 
   def user_con_profile
-    dataloader.with(Sources::ModelById, UserConProfile, includes: [:convention]).load(object.user_con_profile_id)
+    # team_members and staff_positions are needed by UserConProfilePolicy to authorize each profile
+    dataloader.with(Sources::ModelById, UserConProfile, includes: %i[convention team_members staff_positions]).load(
+      object.user_con_profile_id
+    )
   end
 
   def choice
@@ -94,7 +97,10 @@ class Types::SignupType < Types::BaseObject
   end
 
   def age_restrictions_check
-    run.event # just to preload the association
+    # preload everything the check reads, so that it doesn't query once per signup
+    %i[run event user_con_profile].each do |association|
+      dataloader.with(Sources::ActiveRecordAssociation, Signup, association).load(object)
+    end
     object.age_restrictions_check
   end
 

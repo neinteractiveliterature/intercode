@@ -56,6 +56,39 @@ describe ExecuteRankedChoiceSignupService do
     assert_equal "pending", signup_ranked_choice.state
   end
 
+  it "finds a team member among preloaded team members" do
+    event = create(:event, convention:)
+    signup_ranked_choice = create(:signup_ranked_choice, target_run: create(:run, event:))
+    create(:team_member, user_con_profile: signup_ranked_choice.user_con_profile, event:)
+    signup_ranked_choice.target_run.event.team_members.load
+
+    service = ExecuteRankedChoiceSignupService.new(signup_round:, signup_ranked_choice:, whodunit: nil)
+
+    assert_equal :team_member, service.skip_reason.reason
+  end
+
+  it "uses the existing signups it's given instead of loading them" do
+    registration_policy =
+      RegistrationPolicy.new(
+        buckets: [RegistrationPolicyBucket.new(key: "limited", name: "Limited", slots_limited: true, total_slots: 1)]
+      )
+    the_run = create(:run, event: create(:event, convention:, registration_policy:))
+    signup_ranked_choice = create(:signup_ranked_choice, target_run: the_run)
+    existing_signup = create(:signup, run: the_run, bucket_id: signup_ranked_choice.requested_bucket_id)
+    skip_reason_with =
+      lambda do |existing_signups|
+        ExecuteRankedChoiceSignupService.new(
+          signup_round:,
+          signup_ranked_choice:,
+          whodunit: nil,
+          existing_signups:
+        ).skip_reason
+      end
+
+    assert_nil skip_reason_with.call([])
+    assert_equal :full, skip_reason_with.call([existing_signup]).reason
+  end
+
   it "waitlists if there's no room in the run and this choice prioritizes waitlisting" do
     event =
       create(
