@@ -33,4 +33,5 @@ export const apolloClientContext = createContext<ApolloClient>();
 export const clientConfigurationContext = createContext<ClientConfiguration>();
 export const fetchContext = createContext<typeof fetch>();
 export const sessionContext = createContext<Session<SessionData, SessionFlashData> | undefined>();
-export const appRootDataContext = createContext<AppRootQueryData | undefined>();
+// A promise, so that only what reads the data waits for it (see appRootMiddleware)
+export const appRootDataContext = createContext<Promise<AppRootQueryData | undefined> | undefined>();

@@ -28,8 +28,14 @@ import RouteErrorBoundary from 'RouteErrorBoundary';
 import { lazyRoute } from './lazyRoute';
 import { NamedRoute } from './NamedRoute';
 import NonCMSPageWrapper from './NonCMSPageWrapper';
-import { guarded, loginRequiredGuard, makeAppRootContextGuard, makeAuthorizationGuard } from './routeGuards';
-import { editEventMiddleware, eventPageMiddleware } from './routeMiddleware';
+import {
+  editEventGuard,
+  eventPageGuard,
+  guarded,
+  loginRequiredGuard,
+  makeAppRootContextGuard,
+  makeAuthorizationGuard,
+} from './routeGuards';
 
 const eventsRoutes: RouteObject[] = [
   {
@@ -92,8 +98,7 @@ const eventsRoutes: RouteObject[] = [
       },
       {
         path: 'edit',
-        middleware: [editEventMiddleware],
-        loader: guarded([loginRequiredGuard]),
+        loader: guarded([editEventGuard, loginRequiredGuard]),
         children: [
           {
             index: true,
@@ -192,7 +197,7 @@ const eventsRoutes: RouteObject[] = [
       },
       {
         path: '',
-        middleware: [eventPageMiddleware],
+        loader: guarded([eventPageGuard]),
         children: [{ index: true, id: NamedRoute.EventPage, lazy: lazyRoute(() => import('./EventsApp/EventPage')) }],
       },
     ],
