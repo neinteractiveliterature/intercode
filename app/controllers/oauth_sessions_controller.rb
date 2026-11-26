@@ -5,7 +5,7 @@
 #
 #   POST /oauth_session/exchange  — finalize the PKCE auth_code grant
 #   POST /oauth_session/refresh   — rotate the cookie, mint a new access token
-#   POST /oauth_session/sign_out  — revoke the row, clear the cookie
+#   POST /oauth_session/sign_out  — revoke the row, clear the cookie, end any cookie session on this host
 #
 # CSRF: `refresh` and `sign_out` both read the SameSite=Strict HttpOnly cookie,
 # so SameSite=Strict alone stops cross-site requests from doing anything useful
@@ -13,6 +13,10 @@
 # is not sufficient — a cross-origin form POST would still be processed and the
 # response Set-Cookie header would be accepted by the browser. We therefore
 # validate the Origin header on `exchange` against known trusted hosts.
+#
+# `sign_out` also ends the host's Rails session, whose cookie is SameSite=Lax. That
+# is not sent on a cross-site POST either, and `sign_out` leaves the session alone
+# when no one is signed in to it.
 class OAuthSessionsController < ApplicationController
   COOKIE_NAME = "__Host-intercode_refresh"
 
@@ -79,10 +83,22 @@ class OAuthSessionsController < ApplicationController
       access_token&.revoke
     end
     clear_refresh_cookie
+    end_cookie_session
     head :no_content
   end
 
   private
+
+  # "Become user" signs in with a cookie session on the convention's host, which the /users/sign_out on the root site
+  # that follows this request can't reach. (Warden directly, since this controller's `sign_out` action hides Devise's
+  # helper of the same name.)
+  def end_cookie_session
+    return unless user_signed_in?
+
+    assumed_identity_session&.update!(finished_at: Time.current)
+    warden.logout(:user)
+    reset_session
+  end
 
   # Records *why* a cookie-backed refresh failed, so we can diagnose the
   # convention-site "logged out overnight" reports from real data instead of
@@ -132,11 +148,10 @@ class OAuthSessionsController < ApplicationController
            }
   end
 
-  # rubocop:disable Naming/AccessorMethodName -- not a setter on the controller; writes to the cookie jar
+  # rubocop:disable-next Naming/AccessorMethodName -- not a setter on the controller; writes to the cookie jar
   def set_refresh_cookie(value)
     cookies[COOKIE_NAME] = { value: value, **cookie_attributes }
   end
-  # rubocop:enable Naming/AccessorMethodName
 
   def clear_refresh_cookie
     cookies.delete(COOKIE_NAME, **cookie_attributes.except(:max_age))
