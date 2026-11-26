@@ -29,6 +29,19 @@ describe CmsRenderingContext do
     end
   end
 
+  it "renders file URLs for a page's files without looking each one up by name" do
+    cms_file = create(:cms_file, parent: convention)
+    controller = Object.new
+    def controller.cdn_upload_url(attachment) = "/uploads/#{attachment.filename}"
+    context = CmsRenderingContext.new(cms_parent: convention, controller:, timezone: ActiveSupport::TimeZone["UTC"])
+    page = create(:page, parent: convention, content: "{% file_url war_bond.png %}")
+    assert_equal [cms_file], page.cms_files.to_a
+
+    assert_no_queries_match(/"active_storage_blobs"."filename" = /) do
+      assert_equal "/uploads/war_bond.png", context.render_page_content(page)
+    end
+  end
+
   it "still looks up a partial that wasn't preloaded" do
     file_system = PreloadedPartialFileSystem.new(convention, { "outer" => "preloaded" })
 
