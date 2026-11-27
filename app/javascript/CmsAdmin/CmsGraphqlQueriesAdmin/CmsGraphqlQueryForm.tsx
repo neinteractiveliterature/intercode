@@ -1,4 +1,4 @@
-import { Suspense } from 'react';
+import { Suspense, lazy } from 'react';
 import * as React from 'react';
 import {
   BootstrapFormInput,
@@ -7,9 +7,7 @@ import {
   LoadingIndicator,
 } from '@neinteractiveliterature/litform';
 
-import { lazyWithAppEntrypointHeadersCheck } from '../../checkAppEntrypointHeadersMatch';
-
-const GraphQLQueryEditor = lazyWithAppEntrypointHeadersCheck(() => import('./GraphQLQueryEditor'));
+const GraphQLQueryEditor = lazy(() => import('./GraphQLQueryEditor'));
 
 type CmsGraphqlQueryFormFields = {
   identifier: string;

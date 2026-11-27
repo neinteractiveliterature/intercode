@@ -24,17 +24,17 @@ Routes follow a file-based convention similar to Remix/React Router v7:
 - `$id.ts`: Dynamic route segment
 - `loaders.ts`: Loader functions for the route
 
-### Route module exports
+### Route modules
 
-The app is moving from data-mode React Router (`AppRouter.tsx`) to framework mode (#12219), so route modules use the names framework mode expects. `AppRouter.tsx` loads them through `lazyRoute`, which maps the names back for data mode:
+The app is a framework-mode React Router app (`ssr: false`). The route tree is in `app/javascript/routes.ts`; add or change routes there. A route module's exports use the framework mode names:
 
 - the component is the **default export** (`export default MyPage;`), not `Component`
 - the loader and action are **`clientLoader`** and **`clientAction`**, not `loader` and `action` (framework SPA builds reject those)
-- a route module may also export `ErrorBoundary`, `HydrateFallback`, `handle` and `shouldRevalidate`
+- a route module may also export `clientMiddleware`, `ErrorBoundary`, `HydrateFallback`, `handle` and `shouldRevalidate`
 
-Middleware, route-level loaders and `element`s that `AppRouter.tsx` attaches to a route are not in the module yet; they are generated into small wrapper modules for the framework build.
+Some routes point at a small wrapper under `framework/routes/wrappers/`, which adds a guard, loader, element or error boundary to the module it mounts (or stands in for a route with no module). These are ordinary source files, left over from the migration (#12251); when you touch one, prefer moving its contents into the route module.
 
-Guards that reject a request (login required, an ability required, only on a convention's site or only on the root site) are in `routeGuards.ts` and attached with `loader: guarded([...])`, not as `middleware`. React Router renders an error from middleware at the shallowest route that still has data to load, which on a page load is the root route, and that has no `ErrorBoundary`, so the visitor would get React Router's "Application Error" screen instead of `RouteErrorBoundary`'s login prompt, not-authorized or not-found page. Redirects that depend on the app root data are guards too: `appRootMiddleware` puts a promise of that data in `appRootDataContext` rather than waiting for it, so that page loaders start right away, and middleware that awaited it would hold every loader back again. Anything that reads the context must `await` it.
+Guards that reject a request (login required, an ability required, only on a convention's site or only on the root site) are in `routeGuards.ts` and attached with `export const clientLoader = guarded([...])`, not as `middleware`. React Router renders an error from middleware at the shallowest route that still has data to load, which on a page load is the root route, and that has no `ErrorBoundary`, so the visitor would get React Router's "Application Error" screen instead of `RouteErrorBoundary`'s login prompt, not-authorized or not-found page. Redirects that depend on the app root data are guards too: `appRootMiddleware` puts a promise of that data in `appRootDataContext` rather than waiting for it, so that page loaders start right away, and middleware that awaited it would hold every loader back again. Anything that reads the context must `await` it.
 
 ### Route types (typegen)
 
@@ -55,8 +55,8 @@ function EditDepartment() {
 ```
 
 - Don't write `LoaderFunction`/`ActionFunction` types for route loaders and actions: type the arguments with `Route.ClientLoaderArgs`/`Route.ClientActionArgs` (or `LoaderFunctionArgs` for a loader shared by several routes) and let the return type be inferred. Read the data with `useLoaderData<typeof clientLoader>()`/`useActionData<typeof clientAction>()`, not `as SomeType`.
-- Don't use the `loaderData`/`actionData` props of `Route.ComponentProps` yet: only framework mode passes them, and the data-mode build that production still uses renders route components without props. They can be used once the cutover has happened.
-- Typegen only covers route files under the app directory (`app/javascript`), which is why `react-router.config.ts` points there and `root.tsx`, `routes.ts` and `entry.client.tsx` are in `app/javascript` (the data-mode root route module is `AppRootProviders.tsx`).
+- Component tests render route modules through `routeFromModule`, which doesn't pass the `loaderData`/`actionData` props of `Route.ComponentProps`, so keep using the hooks.
+- Typegen only covers route files under the app directory (`app/javascript`), which is why `react-router.config.ts` points there and `root.tsx`, `routes.ts` and `entry.client.tsx` are in `app/javascript` (the root route's component and loader are in `AppRootProviders.tsx`).
 - With `apollo.query`, pass `errorPolicy: 'none'` so that `data` is typed as present (the runtime default).
 - A component that reads its parent route's data (`useXLoader()` hooks next to a shared `loaders.ts`) uses `useRequiredRouteLoaderData<typeof theLoader>(NamedRoute.X)`, which throws if the route isn't matched instead of casting. Use `useRouteLoaderData<typeof theLoader>(...)` where the route may legitimately not be there.
 - A loader that can't find its record `throw`s the 404 `Response` (a returned `Response` is data, not an error), which also keeps the type of the loader's result free of `Response`.
@@ -192,11 +192,11 @@ Solution: Use `AuthenticityTokensContext` with `useContext` hook instead.
 
 ### When the framework-mode shell can't load its files
 
-The generated `index.html` names hashed files (manifest, root module, entry), and a copy cached from before a release can name files that are gone. The app never boots then, so `BootErrorBoundary` can't help. `shellRecovery.ts` holds a small inline script that `root.tsx`'s `Layout` puts in the shell's `<head>`: when a script or module-preload link fails, or the entry's dynamic import is rejected, it reloads once (at most once per 15 seconds, using the same `sessionStorage` key as the Rails-rendered shell's `ENTRY_SCRIPT_ONERROR`), and if that doesn't help it shows a plain message with a reload button. `entry.client.tsx` sets `window.intercodeShellBooted` so that the script stops watching once the app has started. The script is a string, so it can't import anything; `test/javascript/shellRecovery.test.ts` runs it against a stand-in window, and `test/system/framework_shell_recovery_test.rb` breaks the shell in a real browser.
+The generated `index.html` names hashed files (manifest, root module, entry), and a copy cached from before a release can name files that are gone. The app never boots then, so `BootErrorBoundary` can't help. `shellRecovery.ts` holds a small inline script that `root.tsx`'s `Layout` puts in the shell's `<head>`: when a script or module-preload link fails, or the entry's dynamic import is rejected, it reloads once (at most once per 15 seconds, tracked in `sessionStorage`), and if that doesn't help it shows a plain message with a reload button. `entry.client.tsx` sets `window.intercodeShellBooted` so that the script stops watching once the app has started. The script is a string, so it can't import anything; `test/javascript/shellRecovery.test.ts` runs it against a stand-in window, and `test/system/framework_shell_recovery_test.rb` breaks the shell in a real browser.
 
 ### How the browser gets a session
 
-Both entries (the data-mode `packs/application.tsx` and the framework-mode `entry.client.tsx`) call `startAppBootstrap()` in `appBootstrap.ts` and hand the result to the router through `buildRouterContext`, so authentication works the same way in both:
+`entry.client.tsx` calls `startAppBootstrap()` in `appBootstrap.ts` and hands the result to the router through `buildRouterContext`:
 
 - The refresh token is an HttpOnly `__Host-` cookie set by `/oauth_session/*`. `AuthenticationManager` redeems it for an in-memory access token on boot (`bootstrapFromCookie`) and again when the token is about to expire (`ensureFreshAccessToken`). A 401 means "no session" and is remembered, not retried.
 - Signing in is a PKCE redirect: `SignInButton` or `useLoginRequired` calls `initiateAuthentication`, the visitor signs in on the **root site's** `/users/sign_in` page, and `/oauth/callback` (`OAuthCallback`) exchanges the code through `/oauth_session/exchange`. The sign-in page exists only on the root site, so a convention site sends visitors there and back.

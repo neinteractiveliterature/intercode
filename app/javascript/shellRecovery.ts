@@ -8,9 +8,7 @@
 // with a reload button, which is BootErrorBoundary's message for when the failure is this early.
 //
 // It is a string, not a function, because it has to be inlined as written: it can't import anything, and the bundler
-// must not touch it. Keep the reload guard in step with the Rails-rendered shell (ENTRY_SCRIPT_ONERROR in
-// application_helper.rb) and BootErrorBoundary: the same key and 15 second window, so switching between the shells
-// can't make a reload loop.
+// must not touch it.
 export const SHELL_RECOVERY_SCRIPT = `(function () {
   var KEY = 'intercode.entryScriptReloadAt';
   var WINDOW_MS = 15000;

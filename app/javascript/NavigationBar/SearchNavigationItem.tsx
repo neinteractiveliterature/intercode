@@ -1,7 +1,6 @@
 import { useState, useCallback, useContext, useEffect, lazy, Suspense, ComponentType } from 'react';
 import { useTranslation } from 'react-i18next';
 
-import { checkAppEntrypointHeadersOnError } from '../checkAppEntrypointHeadersMatch';
 import { afterContentShown } from '../contentShown';
 import NavigationBarContext from './NavigationBarContext';
 import type { SiteSearchProps } from './SiteSearch';
@@ -11,9 +10,7 @@ import { useTransitionState } from 'react-transition-state';
 // The search box brings react-select with it, so it loads once the page is showing. If it can't be loaded, the page is
 // still worth keeping without it.
 const SiteSearch = lazy<ComponentType<SiteSearchProps>>(() =>
-  checkAppEntrypointHeadersOnError<{ default: ComponentType<SiteSearchProps> }>(() => import('./SiteSearch')).catch(
-    () => ({ default: () => null }),
-  ),
+  import('./SiteSearch').catch(() => ({ default: () => null })),
 );
 
 function SearchNavigationItem(): React.JSX.Element {

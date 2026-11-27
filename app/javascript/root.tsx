@@ -22,7 +22,7 @@ export function Layout({ children }: { children: ReactNode }) {
         <script dangerouslySetInnerHTML={{ __html: SHELL_RECOVERY_SCRIPT }} />
         <title>{title}</title>
         {/* The requests the app makes at boot, started while its scripts are still downloading; its later fetch() calls
-            reuse the responses. Rails-rendered shells do the same in layouts/_boot_preloads.html.erb. */}
+            reuse the responses. */}
         <link rel="preload" href="/client_configuration" as="fetch" crossOrigin="anonymous" />
         <link rel="preload" href="/authenticity_tokens" as="fetch" crossOrigin="anonymous" />
         <script dangerouslySetInnerHTML={{ __html: BOOT_PRELOADS_SCRIPT }} />

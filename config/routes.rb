@@ -11,7 +11,6 @@ Intercode::Application.routes.draw do
   devise_for :users, controllers: { passwords: "passwords", registrations: "registrations", sessions: "sessions" }
   get "/authenticity_tokens", to: "authenticity_tokens#show"
   get "/client_configuration", to: "client_configuration#show"
-  get "/cdn-spa-shell", to: "cdn_spa_shell#show"
   get "/og-shell", to: "og_shell#show"
   post "/oauth_session/exchange", to: "oauth_sessions#exchange"
   post "/oauth_session/refresh", to: "oauth_sessions#refresh"
@@ -86,17 +85,6 @@ Intercode::Application.routes.draw do
 
   spa_path_constraint = { extra: %r{(?!(rails/active_storage|uploads|packs|assets)/).*} }
 
-  # With STATIC_SHELL_DIR set (see StaticSpaShell), the prebuilt framework-mode shell answers instead of the
-  # Rails-rendered one below. It's checked per request so the route doesn't depend on the environment at boot.
-  constraints(->(_request) { StaticSpaShell.enabled? }) do
-    get "/(*extra)" => "static_spa_shell#show", :constraints => spa_path_constraint
-  end
-
-  # Likewise with the framework dev server in development (see FrontendDevServer)
-  constraints(->(_request) { FrontendDevServer.enabled? }) do
-    get "/(*extra)" => "frontend_dev_server_shell#show", :constraints => spa_path_constraint
-  end
-
-  get "/(*extra)" => "single_page_app#root", :as => :root, :constraints => spa_path_constraint
+  get "/(*extra)" => "spa_shell#show", :as => :root, :constraints => spa_path_constraint
 end
 # rubocop:enable Metrics/BlockLength

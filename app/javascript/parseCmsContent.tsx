@@ -1,28 +1,22 @@
+import { lazy } from 'react';
 import { useSuspenseQuery } from '@apollo/client/react';
-import { lazyWithAppEntrypointHeadersCheck } from './checkAppEntrypointHeadersMatch';
 import parsePageContent, { DEFAULT_COMPONENT_MAP, ComponentMap } from './parsePageContent';
 import CookieConsent from './UIComponents/CookieConsent';
 import { EventPageQueryDocument } from 'EventsApp/EventPage/queries.generated';
 
-const AddToCalendarDropdown = lazyWithAppEntrypointHeadersCheck(
-  () => import('./EventsApp/SignupAdmin/AddToCalendarDropdown'),
-);
-const ConventionLocationMap = lazyWithAppEntrypointHeadersCheck(() => import('./Maps/ConventionLocationMap'));
-const EventAdminMenu = lazyWithAppEntrypointHeadersCheck(() => import('./EventsApp/EventPage/EventAdminMenu'));
-const LongFormEventDetails = lazyWithAppEntrypointHeadersCheck(
-  () => import('./EventsApp/EventPage/LongFormEventDetails'),
-);
-const MaximumEventSignupsPreview = lazyWithAppEntrypointHeadersCheck(
+const AddToCalendarDropdown = lazy(() => import('./EventsApp/SignupAdmin/AddToCalendarDropdown'));
+const ConventionLocationMap = lazy(() => import('./Maps/ConventionLocationMap'));
+const EventAdminMenu = lazy(() => import('./EventsApp/EventPage/EventAdminMenu'));
+const LongFormEventDetails = lazy(() => import('./EventsApp/EventPage/LongFormEventDetails'));
+const MaximumEventSignupsPreview = lazy(
   () => import(/* webpackChunkName: 'scheduled-value-preview' */ './SignupRoundsAdmin/MaximumEventSignupsPreview'),
 );
-const ProposeEventButton = lazyWithAppEntrypointHeadersCheck(
+const ProposeEventButton = lazy(
   () => import(/* webpackChunkName: 'propose-event-button' */ './EventProposals/ProposeEventButton'),
 );
-const RunsSection = lazyWithAppEntrypointHeadersCheck(() => import('./EventsApp/EventPage/RunsSection'));
-const ShortFormEventDetails = lazyWithAppEntrypointHeadersCheck(
-  () => import('./EventsApp/EventPage/ShortFormEventDetails'),
-);
-const WithdrawMySignupButton = lazyWithAppEntrypointHeadersCheck(
+const RunsSection = lazy(() => import('./EventsApp/EventPage/RunsSection'));
+const ShortFormEventDetails = lazy(() => import('./EventsApp/EventPage/ShortFormEventDetails'));
+const WithdrawMySignupButton = lazy(
   () => import(/* webpackChunkName: 'withdraw-my-signup-button' */ './EventsApp/EventPage/WithdrawMySignupButton'),
 );
 
