@@ -3,6 +3,7 @@ import { NamedRoute } from './NamedRoute';
 import cmsAdminRoutes from './CmsAdmin/routes';
 import eventsRoutes from './EventsApp/routes';
 import liquidDocsRoutes from './LiquidDocs/routes';
+import signupModerationRoutes from './SignupModeration/routes';
 
 // The app's route tree. Files under framework/routes/wrappers add a loader, middleware, element or error boundary to the
 // module they mount, or stand in for a route that has no module of its own.
@@ -184,29 +185,7 @@ export default [
               index('Reports/index.tsx'),
             ]),
             route('/rooms', 'RoomsAdmin/index.tsx', [route(':id', 'RoomsAdmin/$id/route.ts')]),
-            layout('framework/routes/wrappers/layout-8.ts', [
-              route('/signup_moderation', 'SignupModeration/index.tsx', [
-                layout('framework/routes/wrappers/signup_moderation__layout.ts', [
-                  route('ranked_choice_queue', 'SignupModeration/RankedChoiceQueue.tsx', [
-                    route(':userConProfileId', 'SignupModeration/UserRankedChoiceQueue.tsx'),
-                  ]),
-                ]),
-                route('signup_requests', 'framework/routes/wrappers/signup_moderation__signup_requests.ts', [
-                  route(':id', 'framework/routes/wrappers/signup_moderation__signup_requests___id.ts', [
-                    route('accept', 'SignupModeration/signup_requests/$id/accept.ts'),
-                    route('reject', 'SignupModeration/signup_requests/$id/reject.ts'),
-                  ]),
-                ]),
-                route('signup_rounds', 'framework/routes/wrappers/signup_moderation__signup_rounds.ts', [
-                  route(':id', 'framework/routes/wrappers/signup_moderation__signup_rounds___id.ts', [
-                    route('rerun', 'SignupModeration/signup_rounds/$id/rerun.ts'),
-                  ]),
-                ]),
-                route('queue', 'SignupModeration/SignupModerationQueue.tsx'),
-                route('create_signups', 'SignupModeration/CreateSignup.tsx'),
-                index('framework/routes/wrappers/signup_moderation__index.ts'),
-              ]),
-            ]),
+            signupModerationRoutes,
             route('/signup_rounds', 'SignupRoundsAdmin/index.tsx', [
               route(':id', 'SignupRoundsAdmin/$id.ts', [
                 route('results', 'SignupRoundsAdmin/RankedChoiceSignupDecisionsPage.tsx'),
