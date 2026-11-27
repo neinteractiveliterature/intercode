@@ -1,6 +1,10 @@
 import { index, layout, route, type RouteConfig } from '@react-router/dev/routes';
 import { NamedRoute } from './NamedRoute';
 import cmsAdminRoutes from './CmsAdmin/routes';
+import ticketTypeAdminRoutes from './TicketTypeAdmin/routes';
+import myTicketRoutes from './MyTicket/routes';
+import myProfileRoutes from './MyProfile/routes';
+import userConProfilesRoutes from './UserConProfiles/routes';
 import eventsRoutes from './EventsApp/routes';
 import eventAdminRoutes from './EventAdmin/routes';
 import liquidDocsRoutes from './LiquidDocs/routes';
@@ -136,12 +140,7 @@ export default [
               route('whos_free', 'MailingLists/WhosFree.tsx'),
               index('MailingLists/index.tsx'),
             ]),
-            route('/my_profile', 'framework/routes/wrappers/my_profile.ts', [
-              route('edit_bio', 'framework/routes/wrappers/my_profile__edit_bio.ts'),
-              route('edit', 'MyProfile/MyProfileForm.tsx'),
-              route('setup', 'MyProfile/MyProfileForm.tsx', { id: 'MyProfile/MyProfileForm#2' }),
-              index('MyProfile/MyProfileDisplay.tsx'),
-            ]),
+            myProfileRoutes,
             route('/order_history', 'Store/OrderHistory.tsx'),
             route('/products/:id', 'Store/ProductPage.tsx'),
             route('/reports', 'framework/routes/wrappers/reports.ts', [
@@ -170,19 +169,8 @@ export default [
               ]),
               index('StaffPositionAdmin/StaffPositionsTable.tsx'),
             ]),
-            route('/ticket', 'framework/routes/wrappers/ticket.ts', [
-              route('new', 'MyTicket/TicketPurchasePage.tsx'),
-              index('MyTicket/MyTicketDisplay.tsx'),
-            ]),
-            layout('framework/routes/wrappers/layout-9.ts', [
-              route('/ticket_types', 'framework/routes/wrappers/ticket_types.ts', [
-                route('new', 'framework/routes/wrappers/ticket_types__new.ts'),
-                route(':id', 'TicketTypeAdmin/$id.ts', [
-                  route('edit', 'framework/routes/wrappers/ticket_types___id__edit.ts'),
-                ]),
-                index('framework/routes/wrappers/ticket_types__index.ts'),
-              ]),
-            ]),
+            myTicketRoutes,
+            ticketTypeAdminRoutes,
             route(
               '/user_activity_alerts',
               'UserActivityAlerts/UserActivityAlertsAdmin.tsx',
@@ -195,17 +183,7 @@ export default [
                 index('UserActivityAlerts/UserActivityAlertsList.tsx'),
               ],
             ),
-            route('/user_con_profiles', 'framework/routes/wrappers/user_con_profiles.ts', [
-              route(':id', 'UserConProfiles/userConProfileLoader.ts', { id: NamedRoute.AdminUserConProfile }, [
-                route('admin_ticket', 'framework/routes/wrappers/user_con_profiles___id__admin_ticket.ts', [
-                  route('new', 'UserConProfiles/NewTicket.tsx'),
-                  route('edit', 'UserConProfiles/EditTicket.tsx'),
-                ]),
-                route('edit', 'UserConProfiles/EditUserConProfile.tsx'),
-                index('UserConProfiles/UserConProfileAdminDisplay.tsx'),
-              ]),
-              route('', 'UserConProfiles/AttendeesPage.tsx', [route('new', 'UserConProfiles/AddAttendeeModal.tsx')]),
-            ]),
+            userConProfilesRoutes,
           ]),
           layout('framework/routes/wrappers/layout-10.ts', [
             route('/users/sign_in', 'Authentication/DeviseSignInPage.tsx'),
