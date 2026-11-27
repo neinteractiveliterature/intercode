@@ -1,10 +1,9 @@
 import { useMemo } from 'react';
-import { OperationVariables, TypedDocumentNode } from '@apollo/client';
+import { TypedDocumentNode } from '@apollo/client';
 
 import { useQuery } from '@apollo/client/react';
 
 import { reactTableFiltersToTableResultsFilters, reactTableSortToTableResultsSort } from './TableUtils';
-import useCachedLoadableValue from '../useCachedLoadableValue';
 import { SortInput } from '../graphqlTypes.generated';
 import { ColumnFiltersState, SortingState } from '@tanstack/react-table';
 
@@ -15,19 +14,13 @@ export type GraphQLReactTableVariables = {
   sort?: SortInput | SortInput[] | null;
 };
 
-function queryResultHasData<QueryData, Variables extends OperationVariables>(
-  queryResult: useQuery.Result<QueryData, Variables>,
-): queryResult is useQuery.Result<QueryData, Variables, 'complete'> {
-  return queryResult.data != null;
-}
-
 export type UseGraphQLReactTableOptions<
   RowType extends Record<string, unknown>,
   QueryData,
   Variables extends GraphQLReactTableVariables = GraphQLReactTableVariables,
 > = {
-  getData: (queryData: useQuery.Result<QueryData, Variables, 'complete'>) => RowType[];
-  getPages: (queryData: useQuery.Result<QueryData, Variables, 'complete'>) => number;
+  getData: (result: { data: QueryData }) => RowType[];
+  getPages: (result: { data: QueryData }) => number;
   query: TypedDocumentNode<QueryData, Variables>;
   variables?: Variables;
   filters?: ColumnFiltersState;
@@ -82,29 +75,28 @@ export default function useGraphQLReactTable<
     fetchPolicy: 'network-only',
   });
   const { error, loading, refetch } = queryResult;
-  const pages = useCachedLoadableValue(
-    loading,
-    error,
-    () => (queryResultHasData(queryResult) ? getPages(queryResult) : null),
-    [queryResult.data],
-  );
-  const queryData = useCachedLoadableValue(loading, error, () => queryResult.data, [queryResult.data]);
-  const tableData = useCachedLoadableValue(
-    loading,
-    error,
-    () => (queryResultHasData(queryResult) ? getData(queryResult) : null),
-    [queryResult],
+
+  // Keep showing the previous page of results while the next one loads
+  const queryData = queryResult.data ?? queryResult.previousData;
+  const { pages, tableData } = useMemo(
+    () =>
+      queryData != null
+        ? { pages: getPages({ data: queryData }), tableData: getData({ data: queryData }) }
+        : { pages: 0, tableData: [] },
+    // Recompute only when the data changes, so that the row array keeps a stable identity
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+    [queryData],
   );
 
   const result = useMemo(
     () =>
       ({
-        data: tableData ?? [],
-        pages: pages ?? 0,
+        data: tableData,
+        pages,
         refetch,
         loading,
         error,
-        queryData: queryData ?? undefined,
+        queryData,
       }) satisfies UseGraphQLReactTableResult<RowType, QueryData, Variables>,
     [tableData, pages, refetch, loading, error, queryData],
   );

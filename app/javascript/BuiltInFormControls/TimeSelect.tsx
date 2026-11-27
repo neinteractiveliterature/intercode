@@ -19,6 +19,7 @@ export type TimeSelectProps = {
 
 function TimeSelect({ value, timespan, onChange, children }: TimeSelectProps): React.JSX.Element {
   const format = useAppDateTimeFormat();
+  const timespanKey = getMemoizationKeyForTimespan(timespan);
   const hourValues = useMemo(
     () => {
       let hourOffset = 0;
@@ -42,7 +43,7 @@ function TimeSelect({ value, timespan, onChange, children }: TimeSelectProps): R
       return options;
     },
     // eslint-disable-next-line react-hooks/exhaustive-deps
-    [getMemoizationKeyForTimespan(timespan)],
+    [timespanKey],
   );
 
   const inputChanged = (event: React.FocusEvent<HTMLSelectElement>) => {
