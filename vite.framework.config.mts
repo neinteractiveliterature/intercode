@@ -1,8 +1,9 @@
 import { defineConfig } from 'vite';
 import { reactRouter } from '@react-router/dev/vite';
+import { readFileSync, existsSync } from 'fs';
 import { nodePolyfills } from 'vite-plugin-node-polyfills';
 import { globalDefines } from './globalDefines.mts';
-import { css, manualChunks } from './vite.config.mts';
+import { absolutePath, css, manualChunks } from './vite.config.mts';
 import routing from './terraform/modules/cloudfront_intercode/routing.json' with { type: 'json' };
 
 // The framework build can't know the assets host: ASSETS_HOST is only set when the container starts. Every asset URL
@@ -15,13 +16,22 @@ export const ASSETS_HOST_PLACEHOLDER = 'https://ASSETHOSTPLACEHOLDER.invalid/';
 const railsUrl = process.env.RAILS_URL ?? 'https://localhost:5050';
 const railsPathPatterns = [...routing.rails_paths, ...routing.shell_paths].map((pattern) => {
   const escaped = pattern.replace(/[.*+?^${}()|[\]\\]/g, (char) => (char === '*' ? char : `\\${char}`));
-  return pattern.endsWith('/*') ? `^${escaped.slice(0, -1)}` : `^${escaped}$`;
+  // The proxy matches against the whole request URL, so an exact path has to allow for a query string
+  return pattern.endsWith('/*') ? `^${escaped.slice(0, -1)}` : `^${escaped}(\\?.*)?$`;
 });
 
+// Rails serves HTTPS in development with this self-signed certificate, and the dev server uses it too, so that the OAuth
+// redirect URIs and secure cookies work. Without the files (as in CI builds) it falls back to HTTP.
+function devHttps() {
+  const key = absolutePath('./dev_certificate.key');
+  const cert = absolutePath('./dev_certificate.crt');
+  if (!existsSync(key) || !existsSync(cert)) return undefined;
+  return { key: readFileSync(key), cert: readFileSync(cert) };
+}
+
 // Framework-mode (react-router.config.ts) build, run with `yarn build:framework` (or `yarn start:framework` for a
-// development server that proxies Rails' paths to RAILS_URL, https://localhost:5050 by default). Kept apart from vite.config.mts so
-// the production build is unaffected until the migration is ready to cut over.
-export default defineConfig(({ command }) => ({
+// development server, run with `yarn start`, that proxies Rails' paths to RAILS_URL, https://localhost:5050 by default).
+export default defineConfig(({ command, isPreview }) => ({
   base: command === 'build' ? ASSETS_HOST_PLACEHOLDER : '/',
   plugins: [
     reactRouter(),
@@ -41,16 +51,24 @@ export default defineConfig(({ command }) => ({
   },
   css,
   server: {
-    port: 3136,
+    // FRONTEND_DEV_SERVER_PORT in .env.development tells Rails to look for the dev server here
+    port: Number(process.env.FRONTEND_DEV_SERVER_PORT ?? 3135),
+    strictPort: true,
+    host: '0.0.0.0',
+    allowedHosts: ['.intercode.test'],
+    // Not for the preview server, which the build uses to prerender index.html over plain HTTP
+    https: command === 'serve' && !isPreview ? devHttps() : undefined,
+    // Other checkouts and build output inside the project directory would otherwise reload the page when they change
+    watch: { ignored: ['**/.claude/**', `${absolutePath('./tmp')}/**`, `${absolutePath('./build')}/**`] },
     proxy: Object.fromEntries(
       railsPathPatterns.map((pattern) => [
         pattern,
         {
           target: railsUrl,
-          // The development server uses the self-signed certificates from dev_certificate.crt
+          // The Rails development server uses the same self-signed certificate
           secure: false,
-          // Rails picks the convention from the Host header and redirects to HTTPS in development
-          headers: { host: process.env.INTERCODE_HOST ?? 'intercode.test', 'x-forwarded-proto': 'https' },
+          // The Host header is passed through unchanged, since Rails picks the convention from it
+          headers: { 'x-forwarded-proto': 'https' },
         },
       ]),
     ),

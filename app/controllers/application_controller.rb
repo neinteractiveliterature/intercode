@@ -72,13 +72,25 @@ class ApplicationController < ActionController::Base
   protected
 
   # The page for a route that the SPA renders but that Rails serves the URL of (the Devise pages). With a static shell
-  # (see StaticSpaShell) that is the prebuilt framework-mode shell; otherwise the Rails-rendered one.
+  # (see StaticSpaShell) that is the prebuilt framework-mode shell, and in development the framework dev server's (see
+  # FrontendDevServer); otherwise the Rails-rendered one.
   def render_spa_shell
     if StaticSpaShell.enabled?
       response.headers["Cache-Control"] = "no-cache"
       send_file StaticSpaShell.index_path, type: "text/html", disposition: "inline"
+    elsif FrontendDevServer.enabled?
+      render_frontend_dev_server_shell
     else
       render html: "", layout: "application"
+    end
+  end
+
+  def render_frontend_dev_server_shell
+    if FrontendDevServer.proxied?(request)
+      response.headers["Cache-Control"] = "no-cache"
+      render body: FrontendDevServer.shell, content_type: "text/html"
+    else
+      redirect_to FrontendDevServer.url_for(request), allow_other_host: true
     end
   end
 

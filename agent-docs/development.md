@@ -7,7 +7,7 @@
 yarn install
 
 # Start development server
-yarn dev
+yarn start
 
 # Type check
 yarn run ts:check
@@ -21,7 +21,7 @@ yarn test
 
 ## Running the App Locally
 
-- The dev app is at `https://intercode.test:5050` (the root site) and `https://<convention>.intercode.test:5050` (conventions, e.g. `intercony`). `http://localhost:3000` doesn't work: `force_ssl` redirects it to `https://localhost:3000`, but Puma there only speaks plain HTTP.
+- The dev app is at `https://intercode.test:3135` (the root site) and `https://<convention>.intercode.test:3135` (conventions, e.g. `intercony`). That is the frontend dev server (`yarn start`), which proxies Rails' paths to `bin/rails server` on port 5050; Rails redirects pages requested on 5050 to 3135, except that signing in goes through the root site on 5050 (the OIDC issuer). `http://localhost:3000` doesn't work: `force_ssl` redirects it to `https://localhost:3000`, but Puma there only speaks plain HTTP.
 - Sign-in, sign-up and password reset routes (`/users/...`) only exist on the root site. On a convention host they 404 by design.
 - If you're already logged in on the root site, `/users/password/new` bounces to `/oauth/callback` and shows "No current login flow found". Log out first.
 - Dev mail goes over SMTP to [Mailpit](https://mailpit.axllent.org/) on `localhost:1025`. Read it at `http://localhost:8025` (API: `/api/v1/messages`).

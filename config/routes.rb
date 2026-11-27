@@ -92,6 +92,11 @@ Intercode::Application.routes.draw do
     get "/(*extra)" => "static_spa_shell#show", :constraints => spa_path_constraint
   end
 
+  # Likewise with the framework dev server in development (see FrontendDevServer)
+  constraints(->(_request) { FrontendDevServer.enabled? }) do
+    get "/(*extra)" => "frontend_dev_server_shell#show", :constraints => spa_path_constraint
+  end
+
   get "/(*extra)" => "single_page_app#root", :as => :root, :constraints => spa_path_constraint
 end
 # rubocop:enable Metrics/BlockLength
