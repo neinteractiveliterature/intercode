@@ -7,8 +7,10 @@ import sortEventCategories from './sortEventCategories';
 import buildEventCategoryUrl from './buildEventCategoryUrl';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 import humanize from '../humanize';
-import { useEventAdminEventsLoader } from './loaders';
+import { eventAdminEventsLoader, useEventAdminEventsLoader } from './loaders';
 import useStateResetOnChange from '../useStateResetOnChange';
+
+export const clientLoader = eventAdminEventsLoader;
 
 function EventAdmin() {
   const data = useEventAdminEventsLoader();
