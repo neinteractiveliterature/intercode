@@ -30,9 +30,6 @@ jobs:
         run: yarn run graphql:codegen
       - name: tsc on resulting generated files
         run: yarn run ts:check
-      # The framework build's routes are generated from AppRouter.tsx (see script/genRoutes.mts) until that is deleted
-      - name: Check that the generated routes are up to date
-        run: yarn run routes:check
   vitest:
     name: Vitest
     runs-on: ubuntu-latest

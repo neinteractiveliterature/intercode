@@ -1,10 +1,9 @@
-import { Suspense } from 'react';
+import { Suspense, lazy } from 'react';
 import { LoadingIndicator } from '@neinteractiveliterature/litform';
 
-import { lazyWithAppEntrypointHeadersCheck } from '../checkAppEntrypointHeadersMatch';
 import type { SyncColorPickerProps } from './SyncColorPicker';
 
-const SyncColorPicker = lazyWithAppEntrypointHeadersCheck(() => import('./SyncColorPicker'));
+const SyncColorPicker = lazy(() => import('./SyncColorPicker'));
 
 function ColorPicker(props: SyncColorPickerProps): React.JSX.Element {
   return (

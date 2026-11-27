@@ -7,33 +7,6 @@ class CmsRenderingContext
   include ActionView::Helpers::AssetTagHelper
   attr_reader :cms_parent, :controller, :assigns, :cached_partials, :preloaded_partial_sources, :cached_files, :timezone
 
-  NOSCRIPT_WARNING = <<~HTML.html_safe
-  <noscript id="no-javascript-warning">
-    <div class="container">
-      <div class="alert alert-danger">
-        <h2 class="mb-4">JavaScript disabled</h2>
-
-        <div class="d-flex align-items-center">
-          <h1 class="m-0 me-4">
-            <i class="bi-exclamation-triangle-fill"></i>
-          </h1>
-          <div class="flex-grow-1">
-            <p>
-              Your web browser has JavaScript disabled.  This site is written mostly in JavaScript,
-              and will not work without it.  Please enable JavaScript in your browser's settings (or
-              disable your JavaScript-blocking browser extension for this site).
-            </p>
-          </div>
-        </div>
-
-        <div class="text-end">
-          <a class="btn btn-primary" href=".">Reload page</a>
-        </div>
-      </div>
-    </div>
-  </noscript>
-  HTML
-
   def initialize(cms_parent:, controller:, timezone:, assigns: {})
     @cms_parent = cms_parent
     @controller = controller
@@ -57,21 +30,6 @@ class CmsRenderingContext
   def render_layout_content(cms_layout, assigns)
     preload_cms_layout_content(cms_layout)
     cadmus_renderer.render(cms_layout.liquid_template, :html, assigns: assigns)
-  end
-
-  # We do this so that the doc that gets rendered will end up with the right stuff in <head>, but
-  # not have its body content duplicated
-  def render_app_root_content(cms_layout, assigns)
-    doc = Nokogiri::HTML.parse("<!DOCTYPE html><html><head>#{assigns["content_for_head"]}</head><body></body></html>")
-    doc.xpath("//body/*").remove
-    doc.xpath("//body").first.inner_html =
-      (assigns["browser_warning"] || "") + NOSCRIPT_WARNING +
-        tag.div(app_root_loading_content, "data-react-class" => "AppRoot")
-    doc.to_s.html_safe # rubocop:disable Rails/OutputSafety
-  rescue StandardError => e
-    ErrorReporting.warn(e)
-    Rails.logger.warn e
-    render_layout_content(cms_layout, liquid_assigns_for_single_page_app(cms_layout).merge(assigns))
   end
 
   def preload_page_content(*pages)

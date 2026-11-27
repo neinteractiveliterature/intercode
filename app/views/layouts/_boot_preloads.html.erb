@@ -1,5 +1,0 @@
-<%# The SPA fetches both of these as soon as its entry script has loaded. Preloading them starts the requests while the entry script is still downloading; the later fetch() calls reuse the responses. The framework-mode shell does the same in app/javascript/root.tsx. %>
-<link rel="preload" href="/client_configuration" as="fetch" crossorigin="anonymous"/>
-<link rel="preload" href="/authenticity_tokens" as="fetch" crossorigin="anonymous"/>
-<%# The early cookie refresh and client configuration fetch, which the two shells share %>
-<%= javascript_tag ApplicationHelper::BOOT_PRELOADS_SCRIPT %>

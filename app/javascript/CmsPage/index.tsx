@@ -1,15 +1,14 @@
-import { useMemo, useEffect, Suspense, useRef } from 'react';
+import { useMemo, useEffect, Suspense, useRef, lazy } from 'react';
 import { useNavigate, useLocation, useLoaderData } from 'react-router';
 
 import usePageTitle from '../usePageTitle';
-import { lazyWithAppEntrypointHeadersCheck } from '../checkAppEntrypointHeadersMatch';
 import parseCmsContent from '../parseCmsContent';
 import { CmsPageQueryDocument, CmsPageQueryVariables } from './queries.generated';
 import { apolloClientContext } from 'AppContexts';
 import pageAdminDropdownStyles from '../styles/page_admin_dropdown.module.scss';
 import type { Route } from './+types/index';
 
-const PageAdminDropdown = lazyWithAppEntrypointHeadersCheck(() => import('./PageAdminDropdown'));
+const PageAdminDropdown = lazy(() => import('./PageAdminDropdown'));
 
 export type CmsPageProps = {
   slug?: string;

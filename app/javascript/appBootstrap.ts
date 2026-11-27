@@ -14,8 +14,7 @@ import { AuthenticationManager } from './Authentication/authenticationManager';
 import { ApolloClient } from '@apollo/client';
 import { initErrorReporting } from 'ErrorReporting';
 
-// What both browser entries (the data-mode router in packs/application.tsx and the framework-mode client entry) need
-// before they can render: the client configuration, auth and Apollo client.
+// What the client entry (entry.client.tsx) needs before it can render: the client configuration, auth and Apollo client.
 
 export type Bootstrap = {
   clientConfiguration: ClientConfiguration;
@@ -98,11 +97,6 @@ export function startAppBootstrap(): Promise<Bootstrap> {
       const { redirectUrl } = await authManager.initiateAuthentication(window.location.href);
       window.location.href = redirectUrl.toString();
     });
-
-    // Make the CDN host available for lazy chunk loading (renderBuiltUrl reads this at call time).
-    if (clientConfiguration.assets_host) {
-      window.intercodeAssetsHost = clientConfiguration.assets_host;
-    }
 
     return { clientConfiguration, authenticityTokensManager, authManager, client };
   })();
