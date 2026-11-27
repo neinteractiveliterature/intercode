@@ -1,6 +1,7 @@
 import { index, layout, route, type RouteConfig } from '@react-router/dev/routes';
 import { NamedRoute } from './NamedRoute';
 import cmsAdminRoutes from './CmsAdmin/routes';
+import eventsRoutes from './EventsApp/routes';
 import liquidDocsRoutes from './LiquidDocs/routes';
 
 // The app's route tree. Files under framework/routes/wrappers add a loader, middleware, element or error boundary to the
@@ -156,89 +157,7 @@ export default [
             ]),
             route('/clickwrap_agreement', 'ClickwrapAgreement/index.tsx'),
             route('/convention/edit', 'ConventionAdmin/index.tsx'),
-            route('/events', 'framework/routes/wrappers/events.ts', [
-              layout('framework/routes/wrappers/events__layout.ts', [
-                route('schedule', 'framework/routes/wrappers/events__schedule.ts', [
-                  route(':day', 'EventsApp/ScheduleApp.tsx'),
-                  index('framework/routes/wrappers/events__schedule__index.ts'),
-                ]),
-                route('schedule_by_room/*', 'framework/routes/wrappers/events__schedule_by_room.ts'),
-                route('schedule_with_counts/*', 'framework/routes/wrappers/events__schedule_with_counts.ts'),
-                route('table', 'EventsApp/EventCatalog/EventTable/index.tsx'),
-                index('EventsApp/EventCatalog/EventList/index.tsx'),
-              ]),
-              layout('framework/routes/wrappers/events__layout-2.ts', [
-                route('my-signup-queue', 'EventsApp/MySignupQueue/index.tsx'),
-              ]),
-              route(':eventId', 'framework/routes/wrappers/events___eventId.ts', { id: NamedRoute.Event }, [
-                route('attach_image', 'EventsApp/attach_image.ts'),
-                layout('framework/routes/wrappers/events___eventId__layout.ts', [
-                  route('ticket_types', 'framework/routes/wrappers/events___eventId__ticket_types.ts', [
-                    route('new', 'framework/routes/wrappers/events___eventId__ticket_types__new.ts'),
-                    route(':id/edit', 'framework/routes/wrappers/events___eventId__ticket_types___id_edit.ts'),
-                    index('framework/routes/wrappers/events___eventId__ticket_types__index.ts'),
-                  ]),
-                ]),
-                route('edit', 'framework/routes/wrappers/events___eventId__edit.ts', [
-                  index('EventsApp/StandaloneEditEvent/index.tsx'),
-                ]),
-                route(
-                  'maximum_event_provided_ticket_overrides',
-                  'EventsApp/MaximumEventProvidedTicketsOverrides/route.ts',
-                  [route(':id', 'EventsApp/MaximumEventProvidedTicketsOverrides/$id.ts')],
-                ),
-                route(
-                  'team_members',
-                  'framework/routes/wrappers/events___eventId__team_members.ts',
-                  { id: NamedRoute.TeamMembers },
-                  [
-                    route('new', 'EventsApp/TeamMemberAdmin/NewTeamMember.tsx', { id: NamedRoute.NewTeamMember }),
-                    route(':teamMemberId', 'EventsApp/TeamMemberAdmin/EditTeamMember.tsx', {
-                      id: NamedRoute.EditTeamMember,
-                    }),
-                    route('', 'EventsApp/TeamMemberAdmin/TeamMembersIndex.tsx', { id: NamedRoute.TeamMembersIndex }, [
-                      route(':teamMemberId/provide_ticket', 'EventsApp/TeamMemberAdmin/ProvideTicketModal.tsx'),
-                    ]),
-                  ],
-                ),
-                route('history', 'EventsApp/EventPage/EventHistory.tsx', { id: 'EventsApp/EventPage/EventHistory#2' }, [
-                  route(':changeGroupId', 'EventsApp/EventPage/EventHistory.tsx'),
-                ]),
-                route('runs/:runId', 'EventsApp/SignupAdmin/RunHeader.tsx', [
-                  route(
-                    'admin_signups',
-                    'framework/routes/wrappers/events___eventId__runs_runId__admin_signups.ts',
-                    { id: NamedRoute.SignupAdmin },
-                    [
-                      route(
-                        ':id',
-                        'framework/routes/wrappers/events___eventId__runs_runId__admin_signups___id.ts',
-                        { id: NamedRoute.EditSignup },
-                        [
-                          route('change_bucket', 'EventsApp/SignupAdmin/$id/change_bucket.tsx'),
-                          route('force_confirm', 'EventsApp/SignupAdmin/$id/force_confirm.tsx'),
-                        ],
-                      ),
-                      layout('EventsApp/SignupAdmin/SignupsIndex.tsx', [
-                        route('emails/:separator', 'EventsApp/SignupAdmin/RunEmailList.tsx', {
-                          id: NamedRoute.RunEmailList,
-                        }),
-                        route('signup_changes', 'EventsApp/SignupAdmin/RunSignupChangesTable.tsx', {
-                          id: NamedRoute.RunSignupChangesTable,
-                        }),
-                        index('EventsApp/SignupAdmin/RunSignupsTable.tsx', { id: NamedRoute.RunSignupsTable }),
-                      ]),
-                    ],
-                  ),
-                  route('signup_summary', 'EventsApp/SignupAdmin/RunSignupSummary.tsx', {
-                    id: NamedRoute.RunSignupSummary,
-                  }),
-                ]),
-                route('', 'framework/routes/wrappers/events___eventId-2.ts', [
-                  index('EventsApp/EventPage/index.tsx', { id: NamedRoute.EventPage }),
-                ]),
-              ]),
-            ]),
+            eventsRoutes,
             route('/mailing_lists', 'framework/routes/wrappers/mailing_lists.ts', [
               route('ticketed_attendees', 'MailingLists/TicketedAttendees.tsx'),
               route('event_proposers', 'MailingLists/EventProposers.tsx'),
