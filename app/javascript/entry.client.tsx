@@ -21,7 +21,7 @@ function ThrowBootError({ error }: { error: unknown }): never {
   throw error;
 }
 
-// Same startup as packs/application.tsx: refresh the session cookie and load /client_configuration first, then hand
+// Refresh the session cookie and load /client_configuration first, then hand
 // the results to the router through its context.
 startAppBootstrap().then(
   (bootstrap) => {

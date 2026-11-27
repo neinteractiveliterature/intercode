@@ -1,5 +1,5 @@
 import { Suspense, useMemo, useState, useEffect, useRef } from 'react';
-import { LoaderFunctionArgs, useLocation, useLoaderData, Outlet, useNavigation, redirect } from 'react-router';
+import { LoaderFunctionArgs, useLoaderData, Outlet, useNavigation, redirect } from 'react-router';
 import { Settings } from 'luxon';
 import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
@@ -10,7 +10,6 @@ import getI18n from './setupI18Next';
 import { timespanFromConvention } from './TimespanUtils';
 import { LazyStripeContext } from './LazyStripe';
 import { Stripe } from '@stripe/stripe-js';
-import { reloadOnAppEntrypointHeadersMismatch } from './checkAppEntrypointHeadersMatch';
 import errorReporting from 'ErrorReporting';
 import { apolloClientContext, appRootDataContext } from 'AppContexts';
 import { SetupMyProfileDocument } from 'Authentication/mutations.generated';
@@ -18,8 +17,8 @@ import RouteErrorBoundary from 'RouteErrorBoundary';
 
 export const ErrorBoundary = RouteErrorBoundary;
 
-// This module is mounted by a wrapper route (see script/genRoutes.mts), and typegen makes types for that, not for the
-// module, so it takes the plain args until the cutover removes the wrappers
+// This module is mounted by a wrapper route (see routes.ts), and typegen makes types for that, not for the module, so it
+// takes the plain args
 export const clientLoader = async ({ context, request }: LoaderFunctionArgs) => {
   const client = context.get(apolloClientContext);
   const data = await context.get(appRootDataContext);
@@ -143,7 +142,6 @@ export function buildAppRootContextValue(
 }
 
 function AppRoot(): React.JSX.Element {
-  const location = useLocation();
   const data = useLoaderData<typeof clientLoader>();
   const navigation = useNavigation();
   const navigationBarRef = useRef<HTMLElement>(null);
@@ -151,14 +149,10 @@ function AppRoot(): React.JSX.Element {
   const [stripePromise, setStripePromise] = useState<Promise<Stripe | null> | null>(null);
 
   useEffect(() => {
-    // Error reporting is initialized in the boot sequence (see packs/application.tsx);
+    // Error reporting is initialized in the boot sequence (see entry.client.tsx and appBootstrap.ts);
     // here we just associate subsequent reports with the signed-in user.
     errorReporting().setCurrentUser(data?.currentUser?.id);
   }, [data?.currentUser?.id]);
-
-  useEffect(() => {
-    reloadOnAppEntrypointHeadersMismatch();
-  }, [location.pathname]);
 
   const appRootContextValue = useMemo(
     () => ({ ...buildAppRootContextValue(data), navigationBarRef }),

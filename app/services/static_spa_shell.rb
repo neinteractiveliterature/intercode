@@ -3,7 +3,8 @@
 # Serving the prebuilt framework-mode shell (build/framework/client/index.html) from Rails, for deployments without a
 # CDN or reverse proxy that does it. Set STATIC_SHELL_DIR to a copy of the build in which the assets host has already
 # been substituted (see script/substituteAssetsHost.sh); the assets themselves are served from public/assets as usual.
-# Without it, Rails keeps rendering the shell itself.
+# The Docker image sets it at start-up (bin/with_static_shell). Without it there is no frontend to serve, except in
+# development (see FrontendDevServer).
 module StaticSpaShell
   ROUTING = JSON.parse(Rails.root.join("terraform/modules/cloudfront_intercode/routing.json").read).freeze
 

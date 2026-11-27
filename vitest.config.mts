@@ -1,18 +1,12 @@
 import { defineConfig } from 'vitest/config';
 import viteConfig, { absolutePath } from './vite.config.mts';
 
-const viteConfigWithoutHttps = defineConfig({
+export default defineConfig({
   ...viteConfig,
-  server: {
-    ...viteConfig.server,
-    https: undefined,
-    proxy: undefined,
-  },
   test: {
     coverage: {
       enabled: process.env['COVERAGE'] ? true : false,
       include: ['app/javascript/**/*.{js,jsx,ts,tsx}'],
-      exclude: ['app/javascript/AppRouter.tsx'],
       reportsDirectory: absolutePath('./coverage'),
       reporter: ['text', 'cobertura'],
       reportOnFailure: true,
@@ -41,5 +35,3 @@ const viteConfigWithoutHttps = defineConfig({
     },
   },
 });
-
-export default viteConfigWithoutHttps;

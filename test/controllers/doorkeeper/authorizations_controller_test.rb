@@ -2,6 +2,10 @@
 require "test_helper"
 
 class DoorkeeperAuthorizationsControllerTest < ActionDispatch::IntegrationTest
+  include StaticShellTestHelper
+
+  use_static_shell
+
   describe "GET /oauth/authorize" do
     let(:user) { create(:user) }
     let(:application) { create(:oauth_application) }

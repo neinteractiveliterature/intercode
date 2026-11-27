@@ -2,13 +2,17 @@
 require "test_helper"
 
 class PasswordsControllerTest < ActionDispatch::IntegrationTest
+  include StaticShellTestHelper
+
+  use_static_shell
+
   it "serves the app shell for the forgot password page" do
     create(:root_site)
 
     get new_user_password_path
 
     assert_response :success
-    assert_select "form", false
+    assert_equal StaticShellTestHelper::INDEX_HTML, response.body
   end
 
   it "serves the app shell for the reset password page instead of Devise's default form" do
@@ -17,6 +21,6 @@ class PasswordsControllerTest < ActionDispatch::IntegrationTest
     get edit_user_password_path(reset_password_token: "sometoken")
 
     assert_response :success
-    assert_select "form", false
+    assert_equal StaticShellTestHelper::INDEX_HTML, response.body
   end
 end
