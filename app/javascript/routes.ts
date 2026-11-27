@@ -2,6 +2,7 @@ import { index, layout, route, type RouteConfig } from '@react-router/dev/routes
 import { NamedRoute } from './NamedRoute';
 import cmsAdminRoutes from './CmsAdmin/routes';
 import eventsRoutes from './EventsApp/routes';
+import eventAdminRoutes from './EventAdmin/routes';
 import liquidDocsRoutes from './LiquidDocs/routes';
 import signupModerationRoutes from './SignupModeration/routes';
 
@@ -84,40 +85,7 @@ export default [
                 index('DepartmentAdmin/DepartmentAdminIndex.tsx'),
               ],
             ),
-            route('/admin_events', 'framework/routes/wrappers/admin_events.ts', { id: NamedRoute.EventAdmin }, [
-              layout('framework/routes/wrappers/admin_events__layout.ts', [
-                route(':eventId/edit', 'EventAdmin/EventAdminEditEvent.tsx'),
-              ]),
-              layout('framework/routes/wrappers/admin_events__layout-2.ts', [
-                route('dropped_events', 'EventAdmin/DroppedEventAdmin.tsx'),
-                route(':eventCategoryId', 'framework/routes/wrappers/admin_events___eventCategoryId.ts', [
-                  route('events/new', 'EventAdmin/NewEvent.tsx'),
-                  route('events/:eventId/edit', 'EventAdmin/EventAdminEditEvent.tsx', {
-                    id: 'EventAdmin/EventAdminEditEvent#2',
-                  }),
-                  route('', 'EventAdmin/CategorySpecificEventAdmin.tsx', [
-                    route('events', 'EventAdmin/create.ts', [
-                      index('framework/routes/wrappers/admin_events___eventCategoryId____events__index.ts'),
-                      route(':eventId', 'EventAdmin/$id.ts', [
-                        route('admin_notes', 'EventAdmin/AdminNotesRoute.ts'),
-                        route('drop', 'EventAdmin/drop.ts'),
-                        route('restore', 'EventAdmin/RestoreEventRoute.ts'),
-                        route(
-                          'runs',
-                          'framework/routes/wrappers/admin_events___eventCategoryId____events___eventId__runs.ts',
-                          [
-                            route(':runId', 'EventAdmin/SingleRunRoute.ts', [route('edit', 'EventAdmin/EditRun.tsx')]),
-                            route('create_multiple', 'EventAdmin/CreateMultipleRunsRoute.ts'),
-                            route('new', 'EventAdmin/NewRun.tsx'),
-                          ],
-                        ),
-                      ]),
-                    ]),
-                  ]),
-                ]),
-              ]),
-              index('framework/routes/wrappers/admin_events__index.ts'),
-            ]),
+            eventAdminRoutes,
             route('/admin_forms', 'FormAdmin/index.tsx', { id: NamedRoute.AdminForms }, [
               route(':id/edit_advanced', 'FormAdmin/FormJSONEditor.tsx', { id: NamedRoute.FormJSONEditor }),
               route(':id', 'FormAdmin/$id/route.ts'),
