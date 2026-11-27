@@ -3,8 +3,10 @@ import { Outlet, useRouteLoaderData } from 'react-router';
 import RouteActivatedBreadcrumbItem from '../Breadcrumbs/RouteActivatedBreadcrumbItem';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 import { NamedRoute } from '../NamedRoute';
-import { singleOrganizationLoader } from './loaders';
+import { organizationsLoader, singleOrganizationLoader } from './loaders';
 import NamedRouteBreadcrumbItem from '../Breadcrumbs/NamedRouteBreadcrumbItem';
+
+export const clientLoader = organizationsLoader;
 
 function OrganizationAdmin(): React.JSX.Element {
   const organization = useRouteLoaderData<typeof singleOrganizationLoader>(NamedRoute.Organization);

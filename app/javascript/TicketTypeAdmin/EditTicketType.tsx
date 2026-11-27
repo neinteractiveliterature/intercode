@@ -13,7 +13,7 @@ import { apolloClientContext } from 'AppContexts';
 import { UpdateTicketTypeDocument } from './mutations.generated';
 import invariant from 'tiny-invariant';
 
-// A wrapper route (see routes.ts) is what gets generated route types, not this module, so it takes the plain args
+// Two route modules re-export this (see routes.ts), and typegen makes types for those, so it takes the plain args
 export const clientAction = async ({ context, request, params: { id } }: ActionFunctionArgs) => {
   const client = context.get(apolloClientContext);
   invariant(id != null);

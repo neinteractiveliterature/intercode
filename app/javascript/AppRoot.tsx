@@ -14,11 +14,12 @@ import errorReporting from 'ErrorReporting';
 import { apolloClientContext, appRootDataContext } from 'AppContexts';
 import { SetupMyProfileDocument } from 'Authentication/mutations.generated';
 import RouteErrorBoundary from 'RouteErrorBoundary';
+import { appRootMiddleware } from './appRootMiddleware';
 
 export const ErrorBoundary = RouteErrorBoundary;
 
-// This module is mounted by a wrapper route (see routes.ts), and typegen makes types for that, not for the module, so it
-// takes the plain args
+export const clientMiddleware = [appRootMiddleware];
+
 export const clientLoader = async ({ context, request }: LoaderFunctionArgs) => {
   const client = context.get(apolloClientContext);
   const data = await context.get(appRootDataContext);

@@ -1,2 +1,3 @@
-import { guarded, makeAuthorizationGuard } from '../../../routeGuards';
+import { guarded, makeAuthorizationGuard } from '../routeGuards';
+
 export const clientLoader = guarded([makeAuthorizationGuard('can_update_event_categories')]);

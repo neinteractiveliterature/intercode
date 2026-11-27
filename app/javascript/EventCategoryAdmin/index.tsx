@@ -1,5 +1,8 @@
 import OutletWithLoading from '../OutletWithLoading';
+import { eventCategoryAdminLoader } from './loaders';
 import NamedRouteBreadcrumbItem from '../Breadcrumbs/NamedRouteBreadcrumbItem';
+
+export const clientLoader = eventCategoryAdminLoader;
 
 function EventCategoryAdmin(): React.JSX.Element {
   return (

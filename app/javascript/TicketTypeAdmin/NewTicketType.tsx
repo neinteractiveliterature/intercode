@@ -20,7 +20,7 @@ type ActionInput = {
   eventId: string | null;
 };
 
-// A wrapper route (see routes.ts) is what gets generated route types, not this module, so it takes the plain args
+// Two route modules re-export this (see routes.ts), and typegen makes types for those, so it takes the plain args
 export const clientAction = async ({ context, request }: ActionFunctionArgs) => {
   const client = context.get(apolloClientContext);
   try {

@@ -10,17 +10,16 @@ import eventAdminRoutes from './EventAdmin/routes';
 import liquidDocsRoutes from './LiquidDocs/routes';
 import signupModerationRoutes from './SignupModeration/routes';
 
-// The app's route tree. Files under framework/routes/wrappers add a loader, middleware, element or error boundary to the
-// module they mount, or stand in for a route that has no module of its own.
+// The app's route tree. Areas with their own routes.ts are spliced in below.
 export default [
   route('framework-check', 'framework/routes/framework-check.tsx'),
-  layout('framework/routes/wrappers/layout.ts', [
+  layout('AppRoot.tsx', [
     route('/admin_forms/:id/edit', 'FormAdmin/FormEditor.tsx', [
       route('section', 'FormAdmin/$id/edit/section/route.ts', [
-        route(':sectionId', 'framework/routes/wrappers/admin_forms_id_edit__section___sectionId.ts', [
+        route(':sectionId', 'FormAdmin/$id/edit/section/$sectionId/groupRoute.ts', [
           route('move', 'FormAdmin/$id/edit/section/$sectionId/move.ts'),
           route('item', 'FormAdmin/$id/edit/section/$sectionId/item/route.ts', [
-            route(':itemId', 'framework/routes/wrappers/admin_forms_id_edit__section___sectionId__item___itemId.ts', [
+            route(':itemId', 'FormAdmin/$id/edit/section/$sectionId/item/$itemId/groupRoute.ts', [
               route('move', 'FormAdmin/$id/edit/section/$sectionId/item/$itemId/move.ts'),
               index('FormAdmin/$id/edit/section/$sectionId/item/$itemId/route.tsx'),
             ]),
@@ -31,71 +30,55 @@ export default [
     ]),
     liquidDocsRoutes,
     layout('AppRootLayout.tsx', [
-      layout('framework/routes/wrappers/layout-2.ts', [
-        layout('framework/routes/wrappers/layout-3.ts', [
-          layout('framework/routes/wrappers/layout-4.ts', [
+      layout('routeModules/errorBoundaryLayout.ts', [
+        layout('NonCMSPageWrapper.tsx', [
+          layout('routeModules/multiEventConventionGuard.ts', [
             route('/admin_event_proposals', 'EventProposals/EventProposalsAdmin.tsx', [
-              route(
-                ':id',
-                'framework/routes/wrappers/admin_event_proposals___id.ts',
-                { id: NamedRoute.AdminEventProposal },
-                [
-                  route('history', 'EventProposals/EventProposalHistory.tsx', { id: NamedRoute.EventProposalHistory }, [
-                    route(':changeGroupId', 'EventProposals/EventProposalHistory.tsx', {
-                      id: NamedRoute.EventProposalHistoryChangeGroup,
-                    }),
-                  ]),
-                  route('edit', 'EventProposals/AdminEditEventProposal.tsx', { id: NamedRoute.AdminEditEventProposal }),
-                  index('EventProposals/EventProposalAdminDisplay.tsx', { id: NamedRoute.EventProposalAdminDisplay }),
-                ],
-              ),
+              route(':id', 'EventProposals/adminProposalRoute.ts', { id: NamedRoute.AdminEventProposal }, [
+                route('history', 'EventProposals/EventProposalHistory.tsx', { id: NamedRoute.EventProposalHistory }, [
+                  route(':changeGroupId', 'EventProposals/EventProposalHistory.tsx', {
+                    id: NamedRoute.EventProposalHistoryChangeGroup,
+                  }),
+                ]),
+                route('edit', 'EventProposals/AdminEditEventProposal.tsx', { id: NamedRoute.AdminEditEventProposal }),
+                index('EventProposals/EventProposalAdminDisplay.tsx', { id: NamedRoute.EventProposalAdminDisplay }),
+              ]),
               index('EventProposals/EventProposalsAdminTable.tsx'),
             ]),
-            layout('framework/routes/wrappers/layout-5.ts', [
-              route(
-                '/event_categories',
-                'framework/routes/wrappers/event_categories.ts',
-                { id: NamedRoute.EventCategoryAdmin },
-                [
-                  route('new', 'EventCategoryAdmin/NewEventCategory.tsx', { id: NamedRoute.NewEventCategory }),
-                  route(':id', 'EventCategoryAdmin/$id.ts', [
-                    route('edit', 'EventCategoryAdmin/EditEventCategory.tsx', { id: NamedRoute.EditEventCategory }),
-                  ]),
-                  index('EventCategoryAdmin/EventCategoryIndex.tsx', { id: NamedRoute.EventCategoryIndex }),
-                ],
-              ),
+            layout('EventCategoryAdmin/authorizationGuard.ts', [
+              route('/event_categories', 'EventCategoryAdmin/index.tsx', { id: NamedRoute.EventCategoryAdmin }, [
+                route('new', 'EventCategoryAdmin/NewEventCategory.tsx', { id: NamedRoute.NewEventCategory }),
+                route(':id', 'EventCategoryAdmin/$id.ts', [
+                  route('edit', 'EventCategoryAdmin/EditEventCategory.tsx', { id: NamedRoute.EditEventCategory }),
+                ]),
+                index('EventCategoryAdmin/EventCategoryIndex.tsx', { id: NamedRoute.EventCategoryIndex }),
+              ]),
             ]),
-            route('/event_proposals', 'framework/routes/wrappers/event_proposals.ts', [
+            route('/event_proposals', 'EventProposals/groupRoute.ts', [
               route(':id', 'EventProposals/$id/route.ts', [
                 route('admin_notes', 'EventProposals/$id/admin_notes.ts'),
                 route('edit', 'EventProposals/EditEventProposal.tsx'),
                 route('transition', 'EventProposals/$id/transition.ts'),
               ]),
-              index('framework/routes/wrappers/event_proposals__index.ts'),
+              index('EventProposals/route.ts'),
             ]),
           ]),
-          layout('framework/routes/wrappers/layout-6.ts'),
-          layout('framework/routes/wrappers/layout-7.ts', [
-            route(
-              '/admin_departments',
-              'framework/routes/wrappers/admin_departments.ts',
-              { id: NamedRoute.DepartmentAdmin },
-              [
-                route(':id', 'DepartmentAdmin/SingleDepartmentRoute.ts', [
-                  route('edit', 'DepartmentAdmin/EditDepartment.tsx'),
-                  index('framework/routes/wrappers/admin_departments___id__index.ts'),
-                ]),
-                route('new', 'DepartmentAdmin/NewDepartment.tsx'),
-                index('DepartmentAdmin/DepartmentAdminIndex.tsx'),
-              ],
-            ),
+          layout('routeModules/conventionGuard.ts', [
+            route('/admin_departments', 'DepartmentAdmin/route.ts', { id: NamedRoute.DepartmentAdmin }, [
+              route(':id', 'DepartmentAdmin/SingleDepartmentRoute.ts', [
+                route('edit', 'DepartmentAdmin/EditDepartment.tsx'),
+                index('DepartmentAdmin/redirectToDepartment.ts'),
+              ]),
+              route('new', 'DepartmentAdmin/NewDepartment.tsx'),
+              index('DepartmentAdmin/DepartmentAdminIndex.tsx'),
+            ]),
             eventAdminRoutes,
             route('/admin_forms', 'FormAdmin/index.tsx', { id: NamedRoute.AdminForms }, [
               route(':id/edit_advanced', 'FormAdmin/FormJSONEditor.tsx', { id: NamedRoute.FormJSONEditor }),
               route(':id', 'FormAdmin/$id/route.ts'),
               index('FormAdmin/FormAdminIndex.tsx', { id: NamedRoute.FormAdminIndex }),
             ]),
-            route('/admin_notifications', 'framework/routes/wrappers/admin_notifications.ts', [
+            route('/admin_notifications', 'NotificationAdmin/authorizationGuard.ts', [
               route(':eventKey', 'NotificationAdmin/NotificationConfiguration.tsx'),
               route(':eventKey/preview', 'NotificationAdmin/preview.ts'),
               index('NotificationAdmin/NotificationAdminIndex.tsx'),
@@ -120,7 +103,7 @@ export default [
                 route('new', 'Store/OrderAdmin/new.tsx'),
               ]),
               route('order_summary', 'Store/OrderSummary.tsx'),
-              index('framework/routes/wrappers/admin_store__index.ts'),
+              index('Store/redirectToProducts.ts'),
             ]),
             route('/cart', 'Store/Cart/index.tsx', [
               route('order_entries/:id', 'Store/Cart/order_entries/$id.ts'),
@@ -131,7 +114,7 @@ export default [
             route('/clickwrap_agreement', 'ClickwrapAgreement/index.tsx'),
             route('/convention/edit', 'ConventionAdmin/index.tsx'),
             eventsRoutes,
-            route('/mailing_lists', 'framework/routes/wrappers/mailing_lists.ts', [
+            route('/mailing_lists', 'MailingLists/authorizationGuard.ts', [
               route('ticketed_attendees', 'MailingLists/TicketedAttendees.tsx'),
               route('event_proposers', 'MailingLists/EventProposers.tsx'),
               route('team_members', 'MailingLists/TeamMembers.tsx'),
@@ -143,7 +126,7 @@ export default [
             myProfileRoutes,
             route('/order_history', 'Store/OrderHistory.tsx'),
             route('/products/:id', 'Store/ProductPage.tsx'),
-            route('/reports', 'framework/routes/wrappers/reports.ts', [
+            route('/reports', 'Reports/authorizationGuard.ts', [
               route('new_and_returning_attendees', 'Reports/NewAndReturningAttendees.tsx'),
               route('attendance_by_payment_amount', 'Reports/AttendanceByPaymentAmount.tsx'),
               route('event_provided_tickets', 'Reports/EventProvidedTickets.tsx'),
@@ -185,7 +168,7 @@ export default [
             ),
             userConProfilesRoutes,
           ]),
-          layout('framework/routes/wrappers/layout-10.ts', [
+          layout('routeModules/rootSiteGuard.ts', [
             route('/users/sign_in', 'Authentication/DeviseSignInPage.tsx'),
             route('/users/sign_up', 'Authentication/DeviseSignUpPage.tsx'),
             route('/users/password/new', 'Authentication/DeviseForgotPasswordPage.tsx'),
@@ -209,31 +192,26 @@ export default [
               route(':id', 'RootSiteEmailRoutesAdmin/EditEmailRouteModal.tsx'),
               route('new', 'RootSiteEmailRoutesAdmin/NewEmailRouteModal.tsx'),
             ]),
-            route(
-              '/organizations',
-              'framework/routes/wrappers/organizations.ts',
-              { id: NamedRoute.OrganizationAdmin },
-              [
-                route(':id', 'framework/routes/wrappers/organizations___id.ts', { id: NamedRoute.Organization }, [
-                  route('roles', 'framework/routes/wrappers/organizations___id__roles.ts', [
-                    route('new', 'OrganizationAdmin/NewOrganizationRole.tsx', { id: NamedRoute.NewOrganizationRole }),
-                    route(':organizationRoleId', 'OrganizationAdmin/$id/roles/$organizationRoleId/route.ts', [
-                      route('edit', 'OrganizationAdmin/EditOrganizationRole.tsx', {
-                        id: NamedRoute.EditOrganizationRole,
-                      }),
-                    ]),
+            route('/organizations', 'OrganizationAdmin/index.tsx', { id: NamedRoute.OrganizationAdmin }, [
+              route(':id', 'OrganizationAdmin/singleOrganizationRoute.ts', { id: NamedRoute.Organization }, [
+                route('roles', 'OrganizationAdmin/rolesRoute.ts', [
+                  route('new', 'OrganizationAdmin/NewOrganizationRole.tsx', { id: NamedRoute.NewOrganizationRole }),
+                  route(':organizationRoleId', 'OrganizationAdmin/$id/roles/$organizationRoleId/route.ts', [
+                    route('edit', 'OrganizationAdmin/EditOrganizationRole.tsx', {
+                      id: NamedRoute.EditOrganizationRole,
+                    }),
                   ]),
-                  index('OrganizationAdmin/OrganizationDisplay.tsx', { id: NamedRoute.OrganizationDisplay }),
                 ]),
-                index('OrganizationAdmin/OrganizationIndex.tsx'),
-              ],
-            ),
-            layout('framework/routes/wrappers/layout-11.ts', [
+                index('OrganizationAdmin/OrganizationDisplay.tsx', { id: NamedRoute.OrganizationDisplay }),
+              ]),
+              index('OrganizationAdmin/OrganizationIndex.tsx'),
+            ]),
+            layout('Users/authorizationGuard.ts', [
               route('/users', 'Users/UsersAdmin.tsx', { id: NamedRoute.UserAdmin }, [
                 route(':id', 'Users/UserAdminDisplay.tsx', { id: NamedRoute.UserAdminDisplay }),
                 layout('Users/UsersTable.tsx', [
                   route('merge/:ids', 'Users/MergeUsersModal.tsx'),
-                  index('framework/routes/wrappers/users__index.ts', { id: NamedRoute.UsersTable }),
+                  index('Users/usersTableIndex.ts', { id: NamedRoute.UsersTable }),
                 ]),
               ]),
             ]),
@@ -252,7 +230,7 @@ export default [
         ]),
         route('/pages/*', 'CmsPage/index.tsx'),
         index('CmsPage/index.tsx', { id: 'CmsPage/index#2' }),
-        route('*', 'framework/routes/wrappers/route.ts'),
+        route('*', 'FourOhFourPage.tsx'),
       ]),
     ]),
   ]),
