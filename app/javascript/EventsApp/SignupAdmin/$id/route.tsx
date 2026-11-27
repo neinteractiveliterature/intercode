@@ -90,8 +90,7 @@ function getToggleCountedConfirmPrompt(signup: SignupFieldsFragment) {
   return getMakeCountedConfirmPrompt(signup);
 }
 
-// A wrapper route (see script/genRoutes.mts) is what gets generated route types, not this module, so it takes the plain
-// args until the cutover removes the wrappers
+// A wrapper route (see routes.ts) is what gets generated route types, not this module, so it takes the plain args
 export const clientAction = async ({ context, request, params: { id } }: ActionFunctionArgs) => {
   const client = context.get(apolloClientContext);
   const formData = await request.formData();

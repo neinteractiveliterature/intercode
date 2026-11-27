@@ -168,7 +168,7 @@ function withDefaultHydrateFallback(routes: RouteStubArray): RouteStubArray {
 // inside a LoaderFunction/ActionFunction) rather than an Apollo hook -- MockedProvider only intercepts
 // hooks that go through React's ApolloProvider context, so a loader-side client.query() call needs its
 // own real ApolloClient wired to a MockLink instead. Mirrors how the real app wires up its router
-// context (see packs/application.tsx's getContext), so context.get/set behaves the same way in tests as it does in
+// context (see appBootstrap.ts's buildRouterContext), so context.get/set behaves the same way in tests as it does in
 // production.
 //
 // Components rendered by the route use that same client through ApolloProvider, so a hook and a loader

@@ -2,6 +2,8 @@
 require "test_helper"
 
 class DoorkeeperSpaShellTest < ActionDispatch::IntegrationTest
+  include StaticShellTestHelper
+
   let(:user) { create(:user) }
   let(:application) { create(:oauth_application) }
   let(:authorization_params) do
@@ -15,62 +17,39 @@ class DoorkeeperSpaShellTest < ActionDispatch::IntegrationTest
       code_challenge_method: "S256"
     }
   end
-  let(:index_html) { "<!DOCTYPE html><html><body>static-shell-marker</body></html>" }
 
-  before do
-    create(:root_site)
-    @original_shell_dir = ENV.fetch("STATIC_SHELL_DIR", nil)
-    ENV.delete("STATIC_SHELL_DIR")
-  end
+  before { create(:root_site) }
 
-  after { ENV["STATIC_SHELL_DIR"] = @original_shell_dir }
+  describe "with a static shell" do
+    use_static_shell
 
-  def assert_static_shell
-    assert_equal index_html, response.body
-    assert_equal "text/html", response.media_type
-    assert_equal "no-cache", response.headers["Cache-Control"]
-  end
+    before { sign_in user }
 
-  def assert_rails_shell
-    assert_equal "text/html", response.media_type
-    assert_includes response.body, 'data-react-class="AppRoot"'
-  end
+    def assert_static_shell
+      assert_equal StaticShellTestHelper::INDEX_HTML, response.body
+      assert_equal "text/html", response.media_type
+      assert_equal "no-cache", response.headers["Cache-Control"]
+    end
 
-  { "with" => true, "without" => false }.each do |description, static|
-    describe "#{description} STATIC_SHELL_DIR" do
-      before do
-        if static
-          @shell_dir = Dir.mktmpdir
-          File.write(File.join(@shell_dir, "index.html"), index_html)
-          ENV["STATIC_SHELL_DIR"] = @shell_dir
-        end
-        sign_in user
-      end
+    it "serves the SPA shell as the consent page" do
+      get oauth_authorization_path(authorization_params)
 
-      after { FileUtils.remove_entry(@shell_dir) if @shell_dir }
+      assert_response :ok
+      assert_static_shell
+    end
 
-      define_method(:assert_shell) { static ? assert_static_shell : assert_rails_shell }
+    it "serves the SPA shell for an authorization error, keeping the error status" do
+      get oauth_authorization_path(authorization_params.merge(client_id: "nonexistent"))
 
-      it "serves the SPA shell as the consent page" do
-        get oauth_authorization_path(authorization_params)
+      assert_response :unauthorized
+      assert_static_shell
+    end
 
-        assert_response :ok
-        assert_shell
-      end
+    it "serves the SPA shell as the authorized applications page" do
+      get oauth_authorized_applications_path
 
-      it "serves the SPA shell for an authorization error, keeping the error status" do
-        get oauth_authorization_path(authorization_params.merge(client_id: "nonexistent"))
-
-        assert_response :unauthorized
-        assert_shell
-      end
-
-      it "serves the SPA shell as the authorized applications page" do
-        get oauth_authorized_applications_path
-
-        assert_response :ok
-        assert_shell
-      end
+      assert_response :ok
+      assert_static_shell
     end
   end
 

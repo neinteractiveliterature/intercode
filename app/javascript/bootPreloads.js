@@ -1,6 +1,5 @@
-// Inlined as written into the <head> of both shells: root.tsx imports it as a string for the framework-mode shell, and
-// layouts/_boot_preloads.html.erb reads it for the Rails-rendered ones. So it can't import anything, and the bundler
-// and transpiler don't touch it: keep it to what browsers run as is.
+// Inlined as written into the <head> of the shell: root.tsx imports it as a string. So it can't import anything, and the
+// bundler and transpiler don't touch it: keep it to what browsers run as is.
 
 // Starts redeeming the refresh cookie now, while the entry script is still downloading. AuthenticationManager's
 // bootstrapFromCookie takes this request over, once, instead of making its own, so this must stay the same request it
