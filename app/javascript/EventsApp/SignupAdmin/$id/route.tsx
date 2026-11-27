@@ -1,6 +1,6 @@
 import { useCallback, useContext } from 'react';
 import classNames from 'classnames';
-import { ActionFunctionArgs, data, Link, Outlet, useParams, useSubmit } from 'react-router';
+import { data, Link, Outlet, useParams, useSubmit } from 'react-router';
 import { Trans, useTranslation } from 'react-i18next';
 import { TFunction } from 'i18next';
 import { DateTime } from 'luxon';
@@ -9,7 +9,8 @@ import snakeCase from 'lodash/snakeCase';
 import { AdminSignupQueryData, SignupFieldsFragment } from '../queries.generated';
 import { apolloClientContext } from 'AppContexts';
 import { UpdateSignupCountedDocument } from '../mutations.generated';
-import { useSingleSignupLoader } from '../loaders';
+import { singleSignupLoader, useSingleSignupLoader } from '../loaders';
+import type { Route } from './+types/route';
 import AppRootContext from '../../../AppRootContext';
 import { useFormatRunTimespan } from '../../runTimeFormatting';
 import usePageTitle from '../../../usePageTitle';
@@ -90,8 +91,9 @@ function getToggleCountedConfirmPrompt(signup: SignupFieldsFragment) {
   return getMakeCountedConfirmPrompt(signup);
 }
 
-// A wrapper route (see routes.ts) is what gets generated route types, not this module, so it takes the plain args
-export const clientAction = async ({ context, request, params: { id } }: ActionFunctionArgs) => {
+export const clientLoader = singleSignupLoader;
+
+export const clientAction = async ({ context, request, params: { id } }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   const formData = await request.formData();
   const result = await client.mutate({

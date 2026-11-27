@@ -7,7 +7,9 @@ import LeafBreadcrumbItem from '../Breadcrumbs/LeafBreadcrumbItem';
 import AppRootContext from '../AppRootContext';
 import capitalize from 'lodash/capitalize';
 import { EventTicketTypesQueryData } from '../TicketTypeAdmin/queries.generated';
-import type { TicketTypesLoader } from '../TicketTypeAdmin/loaders';
+import { eventTicketTypesLoader, type TicketTypesLoader } from '../TicketTypeAdmin/loaders';
+
+export const clientLoader = eventTicketTypesLoader;
 
 function SpecificTicketTypeBreadcrumbItem({ event }: { event: EventTicketTypesQueryData['convention']['event'] }) {
   const params = useParams<'id'>();
