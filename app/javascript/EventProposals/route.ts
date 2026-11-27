@@ -1,9 +1,12 @@
-import { ActionFunctionArgs, redirect } from 'react-router';
+import { redirect, replace } from 'react-router';
 import { apolloClientContext } from '../AppContexts';
 import { CreateEventProposalDocument } from './mutations.generated';
+import type { Route } from './+types/route';
 
-// A wrapper route (see routes.ts) is what gets generated route types, not this module, so it takes the plain args
-export const clientAction = async ({ context, request }: ActionFunctionArgs) => {
+// There's no list page here: proposing an event starts from this CMS page
+export const clientLoader = () => replace('/pages/new-proposal');
+
+export const clientAction = async ({ context, request }: Route.ClientActionArgs) => {
   const client = context.get(apolloClientContext);
   try {
     if (request.method === 'POST') {
