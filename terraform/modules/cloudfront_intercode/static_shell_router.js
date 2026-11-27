@@ -17,7 +17,7 @@ var CRAWLER_UA_RE =
 
 // Paths that Rails answers: its own routes and the shells
 var RAILS_PATH_RE =
-  /^(?:\/authenticity_tokens|\/client_configuration|\/graphql|\/graphiql|\/sns_notifications|\/healthz|\/sitemap\.xml|\/og-shell)$|^(?:\/users\/|\/oauth\/|\/oauth_session\/|\/email_forwarders\/|\/stripe_webhook\/|\/stripe_account\/|\/reports\/|\/calendars\/|\/csv_exports\/|\/user_con_profiles\/|\/rails\/active_storage\/|\/uploads\/)/;
+  /^(?:\/authenticity_tokens|\/client_configuration|\/graphql|\/graphiql|\/sns_notifications|\/healthz|\/sitemap\.xml|\/robots\.txt|\/favicon\.ico|\/icon\.png|\/icon\.svg|\/og-shell)$|^(?:\/users\/|\/oauth\/|\/oauth_session\/|\/email_forwarders\/|\/stripe_webhook\/|\/stripe_account\/|\/reports\/|\/calendars\/|\/csv_exports\/|\/user_con_profiles\/|\/rails\/active_storage\/|\/uploads\/)/;
 
 // Paths that the default origin (the static shell bucket) answers as they are
 var ASSET_PATH_RE = /^(?:\/assets\/)/;
