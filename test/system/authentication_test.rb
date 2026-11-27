@@ -23,8 +23,12 @@ class AuthenticationTest < ApplicationSystemTestCase
     @original_url_options = Rails.application.config.action_mailer.default_url_options
     Rails.application.config.action_mailer.default_url_options = app_url_options
     callback_uri = "#{origin}/oauth/callback"
-    @original_redirect_uri = OAuthApplication.instance_method(:redirect_uri)
-    OAuthApplication.define_method(:redirect_uri) { callback_uri }
+    original_redirect_uri = OAuthApplication.instance_method(:redirect_uri)
+    @original_redirect_uri = original_redirect_uri
+    # Only the frontend's redirect URIs are derived from the hosts it is served on
+    OAuthApplication.define_method(:redirect_uri) do
+      is_intercode_frontend? ? callback_uri : original_redirect_uri.bind_call(self)
+    end
   end
 
   after do
@@ -70,6 +74,34 @@ class AuthenticationTest < ApplicationSystemTestCase
     visit "#{origin}/"
     assert page.has_button?("Log in/sign up")
     assert page.has_no_css?("button[aria-label='User options']")
+  end
+
+  # Unlike the frontend, a third-party app has to be approved on the consent page, which is also part of the SPA
+  it "asks for consent before authorizing a third-party app" do
+    third_party_app = create(:oauth_application, name: "Third Party", redirect_uri: "#{origin}/third-party-callback")
+    query = {
+      client_id: third_party_app.uid,
+      redirect_uri: third_party_app.redirect_uri,
+      response_type: "code",
+      scope: "public",
+      state: "third-party-state",
+      code_challenge: Base64.urlsafe_encode64(Digest::SHA256.digest("v" * 64), padding: false),
+      code_challenge_method: "S256"
+    }.to_query
+
+    visit "#{origin}/oauth/authorize?#{query}"
+    fill_in "user_email", with: user.email
+    fill_in "user_password", with: "correct horse battery staple"
+    click_button "Log in"
+
+    assert page.has_content?("Authorize Third Party to use your account?")
+    click_button "Authorize"
+
+    assert page.has_current_path?(%r{\A/third-party-callback\?code=[^&]+&state=third-party-state})
+    assert_equal 1, Doorkeeper::AccessGrant.where(application_id: third_party_app.id).count
+
+    visit "#{origin}/oauth/authorized_applications"
+    assert page.has_content?("Authorized applications")
   end
 
   # The Devise pages send the CSRF token the root loader put in AuthenticityTokensContext
