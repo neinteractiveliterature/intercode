@@ -75,11 +75,12 @@ module Intercode
       # Only Applications list
       Doorkeeper::ApplicationsController.layout "doorkeeper/admin"
 
-      # Only Authorization endpoint
-      Doorkeeper::AuthorizationsController.layout "application"
-
-      # Only Authorized Applications
-      Doorkeeper::AuthorizedApplicationsController.layout "application"
+      # The authorization and authorized applications pages are part of the SPA. The only Doorkeeper view still
+      # rendered for them (form_post) is a complete response that needs no layout.
+      [Doorkeeper::AuthorizationsController, Doorkeeper::AuthorizedApplicationsController].each do |controller|
+        controller.layout false
+        controller.include DoorkeeperSpaShell
+      end
 
       DeviseController.respond_to :html, :json
     end
