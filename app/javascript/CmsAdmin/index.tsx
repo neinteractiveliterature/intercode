@@ -4,7 +4,9 @@ import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
 import useAuthorizationRequired from '../Authentication/useAuthorizationRequired';
 import { Suspense } from 'react';
 import { BootstrapRRNavLink } from '../UIComponents/BootstrapNavLink';
-import { useCmsAdminBaseQueryLoader } from './loaders';
+import { cmsAdminBaseQueryLoader, useCmsAdminBaseQueryLoader } from './loaders';
+
+export const clientLoader = cmsAdminBaseQueryLoader;
 
 function CmsAdmin(): React.JSX.Element {
   const data = useCmsAdminBaseQueryLoader();
