@@ -2,8 +2,10 @@ import { Suspense, useMemo } from 'react';
 import { useParams, Outlet } from 'react-router';
 import { PageLoadingIndicator } from '@neinteractiveliterature/litform';
 
-import { useTeamMembersLoader } from './loader';
+import { teamMembersLoader, useTeamMembersLoader } from './loader';
 import NamedRouteBreadcrumbItem from '../../Breadcrumbs/NamedRouteBreadcrumbItem';
+
+export const clientLoader = teamMembersLoader;
 
 function TeamMemberAdmin(): React.JSX.Element {
   const data = useTeamMembersLoader();
