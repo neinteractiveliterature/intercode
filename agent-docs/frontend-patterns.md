@@ -26,7 +26,7 @@ Routes follow a file-based convention similar to Remix/React Router v7:
 
 ### Route modules
 
-The app is a framework-mode React Router app (`ssr: false`). The route tree is in `app/javascript/routes.ts`; add or change routes there. A route module's exports use the framework mode names:
+The app is a framework-mode React Router app (`ssr: false`). The route tree starts in `app/javascript/routes.ts`, which pulls in a `routes.ts` for each area that has one (such as `EventsApp/routes.ts`); add or change routes there. A route module's exports use the framework mode names:
 
 - the component is the **default export** (`export default MyPage;`), not `Component`
 - the loader and action are **`clientLoader`** and **`clientAction`**, not `loader` and `action` (framework SPA builds reject those)
