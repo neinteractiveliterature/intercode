@@ -279,13 +279,15 @@ You'll need two terminals (or two terminal tabs) for this. In the first, start u
 bin/rails server
 ```
 
-In the second, start up the Vite frontend server:
+In the second, start up the frontend development server:
 
 ```sh
 yarn run start
 ```
 
-You should now be able to go to <https://intercode.test:5050> and see the app running!
+You should now be able to go to <https://intercode.test:3135> and see the app running!
+
+The frontend development server (port 3135) is the one to visit. It serves the app with hot reloading and passes the paths that Rails owns through to the Rails server on port 5050, keeping the hostname, so convention subdomains work there too. If you visit a page on port 5050, Rails redirects you to port 3135. (`FRONTEND_DEV_SERVER_PORT` in `.env.development` sets the port.)
 
 If you don't, you probably need to import the self-signed CA to your local keychain. In Chrome and Chromium-based browsers, you'll probably get an error that allows you to go ahead and trust the CA, which you should do.
 

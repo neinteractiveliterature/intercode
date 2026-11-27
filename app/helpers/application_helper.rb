@@ -44,10 +44,6 @@ module ApplicationHelper
     )
   end
 
-  def dev_mode_graphiql_entry_path
-    Rails.env.development? ? "/app/javascript/DevModeGraphiql.tsx" : "/packs/dev-mode-graphiql.js"
-  end
-
   def url_with_possible_host(path, host)
     return path if host.blank?
 

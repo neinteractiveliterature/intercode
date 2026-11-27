@@ -74,6 +74,24 @@ class DoorkeeperSpaShellTest < ActionDispatch::IntegrationTest
     end
   end
 
+  describe "with the frontend development server" do
+    before do
+      ENV["FRONTEND_DEV_SERVER_PORT"] = "3135"
+      sign_in user
+    end
+
+    after { ENV.delete("FRONTEND_DEV_SERVER_PORT") }
+
+    it "redirects an authorization error there, rather than keeping the error status" do
+      path = oauth_authorization_path(authorization_params.merge(client_id: "nonexistent"))
+
+      get path
+
+      assert_response :redirect
+      assert_equal "https://www.example.com:3135#{path}", response.location
+    end
+  end
+
   describe "the responses that are not SPA pages" do
     before { sign_in user }
 

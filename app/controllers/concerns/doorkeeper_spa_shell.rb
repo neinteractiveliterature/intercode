@@ -12,7 +12,8 @@ module DoorkeeperSpaShell
     return super unless SPA_TEMPLATES.include?(args.first) || (args.empty? && options.empty? && !block_given?)
 
     render_spa_shell
-    # Set afterwards because send_file always sets a status of its own
-    self.status = options[:status] if options[:status]
+    # Set afterwards because send_file always sets a status of its own. In development render_spa_shell can redirect to
+    # the frontend dev server instead (see FrontendDevServer), and that has to stay a redirect.
+    self.status = options[:status] if options[:status] && !response.redirect?
   end
 end
