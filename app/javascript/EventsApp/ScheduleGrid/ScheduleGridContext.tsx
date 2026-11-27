@@ -6,7 +6,6 @@ import { ErrorDisplay, PageLoadingIndicator } from '@neinteractiveliterature/lit
 import ConventionDayTabContainer from './ConventionDayTabContainer';
 import Schedule from './Schedule';
 import { timespanFromConvention, getConventionDayTimespans, ConventionForTimespanUtils } from '../../TimespanUtils';
-import useCachedLoadableValue from '../../useCachedLoadableValue';
 import ScheduleGridSkeleton from './ScheduleGridSkeleton';
 import AppRootContext from '../../AppRootContext';
 import { ScheduleGridConfig } from './ScheduleGridConfig';
@@ -217,12 +216,13 @@ function ScheduleGridProviderTabContent({
   fetchFormItemIdentifiers,
 }: ScheduleGridProviderTabContentProps) {
   const { myRatingFilter, hideConflicts } = useContext(ScheduleGridFiltersContext);
-  const { data, loading, error } = useQuery(ScheduleGridEventsQueryDocument, {
+  const { data, previousData, loading, error } = useQuery(ScheduleGridEventsQueryDocument, {
     variables: {
       ...gridEventsQueryVariables(timespan, fetchFormItemIdentifiers, config.showExtendedCounts, filters),
     },
   });
-  const cachedData = useCachedLoadableValue(loading, error, () => data, [data]);
+  // Keep showing the previous events while the next set loads
+  const cachedData = data ?? previousData;
   const providerValue = useScheduleGridProvider(
     config,
     convention,
