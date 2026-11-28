@@ -43,7 +43,7 @@ class Types::RunType < Types::BaseObject
     description "The number of non-counted signups for this run (regardless of confirmation status)"
   end
   field :room_names, [String], null: false, description: "The names of all the rooms this run takes place in"
-  field :rooms, [Types::RoomType], null: false, description: "The rooms this run takes place in"
+  field :rooms, [Types::RoomType], association_model: Run, null: false, description: "The rooms this run takes place in"
   field :schedule_note, String, null: true do
     description <<~MARKDOWN
       An optional, admin-only note to put on this run.  This note is not visible to most users.
@@ -79,8 +79,6 @@ class Types::RunType < Types::BaseObject
     dataloader.with(Sources::ActiveRecordAssociation, Event, :convention).load(event)
     event
   end
-
-  association_loaders Run, :rooms
 
   def room_names
     dataloader.with(Sources::RunRoomNames).load(object)

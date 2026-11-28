@@ -3,6 +3,7 @@ class Types::FormType < Types::BaseObject
   description "A configurable form, such as an event or user profile form"
   field :event_categories,
         [Types::EventCategoryType],
+        association_model: Form,
         null: false,
         camelize: false,
         description: "The event categories that use this as their event form"
@@ -19,23 +20,28 @@ class Types::FormType < Types::BaseObject
     # rubocop:disable-next GraphQL/UnnecessaryArgumentCamelize
     argument :id, ID, required: true, description: "The ID of the form section to find.", camelize: true
   end
-  field :form_sections, [Types::FormSectionType], null: false, camelize: false, description: "The sections of this form"
+  field :form_sections,
+        [Types::FormSectionType],
+        association_model: Form,
+        null: false,
+        camelize: false,
+        description: "The sections of this form"
   # rubocop:disable-next GraphQL/ExtractType
   field :form_type, Types::FormTypeType, null: false, camelize: false, description: "What this form is used for"
   field :id, ID, null: false, description: "The ID of this form"
   field :proposal_event_categories,
         [Types::EventCategoryType],
+        association_model: Form,
         null: false,
         camelize: false,
         description: "The event categories that use this as their proposal form"
   field :title, String, null: false, description: "The title of this form"
   field :user_con_profile_conventions,
         [Types::ConventionType],
+        association_model: Form,
         null: false,
         camelize: false,
         description: "The conventions that use this as their user profile form"
-
-  association_loaders Form, :form_sections, :event_categories, :proposal_event_categories, :user_con_profile_conventions
 
   authorize_record
 

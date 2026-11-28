@@ -7,7 +7,11 @@ class Types::EventCategoryType < Types::BaseObject
         camelize: false,
         method: :can_provide_tickets?,
         description: "Whether events in this category can provide tickets to their team members"
-  field :convention, Types::ConventionType, null: false, description: "The convention this category belongs to"
+  field :convention,
+        Types::ConventionType,
+        association_model: EventCategory,
+        null: false,
+        description: "The convention this category belongs to"
   field :default_color,
         String,
         null: true,
@@ -15,16 +19,19 @@ class Types::EventCategoryType < Types::BaseObject
         description: "The schedule grid color for events in this category"
   field :department,
         Types::DepartmentType,
+        association_model: EventCategory,
         null: true,
         description: "The department that oversees this category, if any"
   field :event_form,
         Types::FormType,
+        association_model: EventCategory,
         null: false,
         camelize: false,
         description: "The form used to edit events in this category"
   # rubocop:disable-next GraphQL/ExtractType
   field :event_proposal_form,
         Types::FormType,
+        association_model: EventCategory,
         null: true,
         camelize: false,
         description: "The form used to propose events in this category, if proposals are allowed"
@@ -62,8 +69,6 @@ class Types::EventCategoryType < Types::BaseObject
   # rubocop:disable-next GraphQL/ExtractType
   field :team_member_name_plural, String, null: false, camelize: true, description: "The plural of the team member name"
   pagination_field :events_paginated, Types::EventsPaginationType, Types::EventFiltersInputType, camelize: false
-
-  association_loaders EventCategory, :convention, :department, :event_form, :event_proposal_form
 
   def events_paginated(sort: nil, page: nil, per_page: nil, filters: nil)
     Tables::EventsTableResultsPresenter.new(

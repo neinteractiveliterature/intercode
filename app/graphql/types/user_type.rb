@@ -15,11 +15,9 @@ class Types::UserType < Types::BaseObject
   field :name, String, null: true, description: "The user's full name"
   field :name_inverted, String, null: true, description: "The user's full name in Last, First format"
   field :privileges, [String], null: true, description: "The global privileges this user has across all conventions"
-  field :user_con_profiles, [Types::UserConProfileType], null: false do
+  field :user_con_profiles, [Types::UserConProfileType], association_model: User, null: false do
     description "All of the UserConProfiles owned by this user"
   end
-
-  association_loaders User, :user_con_profiles
 
   def event_proposals
     event_proposals = dataloader.with(Sources::ActiveRecordAssociation, User, :event_proposals).load(object)

@@ -3,6 +3,7 @@ class Types::DepartmentType < Types::BaseObject
   description "A group of event categories in a convention"
   field :event_categories,
         [Types::EventCategoryType],
+        association_model: Department,
         null: false,
         description: "The event categories in this department"
   field :id, ID, null: false, description: "The ID of this department"
@@ -11,6 +12,4 @@ class Types::DepartmentType < Types::BaseObject
         String,
         null: true,
         description: "The text describing this department to people proposing events"
-
-  association_loaders Department, :event_categories
 end

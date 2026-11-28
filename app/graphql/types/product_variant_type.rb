@@ -29,9 +29,11 @@ class Types::ProductVariantType < Types::BaseObject
         null: false,
         description: "How many of this variant have been ordered, grouped by order status"
 
-  field :product, Types::ProductType, null: false, description: "The product this is a variant of"
-
-  association_loaders ProductVariant, :product
+  field :product,
+        Types::ProductType,
+        association_model: ProductVariant,
+        null: false,
+        description: "The product this is a variant of"
 
   def description_html
     return unless object.description

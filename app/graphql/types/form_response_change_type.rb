@@ -16,7 +16,9 @@ class Types::FormResponseChangeType < Types::BaseObject
         description: "When notifications about this change were sent, if they have been"
   field :previous_value, Types::JSON, null: true, description: "The value before the change"
   field :updated_at, Types::DateType, null: false, description: "When this change record was last updated"
-  field :user_con_profile, Types::UserConProfileType, null: false, description: "The person who made the change"
-
-  association_loaders FormResponseChange, :user_con_profile
+  field :user_con_profile,
+        Types::UserConProfileType,
+        association_model: FormResponseChange,
+        null: false,
+        description: "The person who made the change"
 end

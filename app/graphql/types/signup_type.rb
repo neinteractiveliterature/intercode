@@ -21,7 +21,7 @@ class Types::SignupType < Types::BaseObject
         null: false,
         description: "Whether this signup counts towards the event's and attendee's signup totals"
   field :id, ID, null: false, description: "The ID of this signup"
-  field :requested_bucket, Types::RegistrationPolicyBucketType, null: true do
+  field :requested_bucket, Types::RegistrationPolicyBucketType, association_model: Signup, null: true do
     description "The bucket this signup requested, if any"
     authorize_action :read_requested_bucket_key
   end
@@ -58,7 +58,7 @@ class Types::SignupType < Types::BaseObject
   field :created_at, Types::DateType, null: false, camelize: false, description: "When this signup was created"
   field :updated_at, Types::DateType, null: false, camelize: false, description: "When this signup was last updated"
 
-  association_loaders Signup, :run, :user_con_profile, :requested_bucket
+  association_loaders Signup, :run, :user_con_profile
 
   # Why not just do this as an authorized hook?  We need it to be safe to ask for this data even if
   # you can't actually read it

@@ -7,7 +7,11 @@ class Types::ProductType < Types::BaseObject
   field :clickwrap_agreement, String, null: true, description: "The raw Liquid template for the clickwrap agreement"
   field :clickwrap_agreement_html, String, null: true, description: "The rendered HTML of the clickwrap agreement"
   # rubocop:enable GraphQL/ExtractType
-  field :convention, Types::ConventionType, null: false, description: "The convention this product belongs to"
+  field :convention,
+        Types::ConventionType,
+        association_model: Product,
+        null: false,
+        description: "The convention this product belongs to"
   field :description, String, null: true, description: "A description of the product in Liquid template format"
   field :description_html, String, null: true, description: "The rendered HTML description of the product"
   field :id, ID, null: false, description: "The unique identifier for this product"
@@ -29,14 +33,14 @@ class Types::ProductType < Types::BaseObject
         description: "The pricing structure for this product"
   field :product_variants,
         [Types::ProductVariantType],
+        association_model: Product,
         null: false,
         description: "The variants available for this product"
   field :provides_ticket_type,
         Types::TicketTypeType,
+        association_model: Product,
         null: true,
         description: "The ticket type this product provides, if any"
-
-  association_loaders Product, :product_variants, :provides_ticket_type, :convention
 
   def description_html
     return nil unless object.description_template

@@ -10,7 +10,11 @@ class Types::TeamMemberType < Types::BaseObject
         null: false,
         description: "Whether to list this person publicly as part of the team"
   field :email, String, null: true, description: "This person's email address, if you are signed in"
-  field :event, Types::EventType, null: false, description: "The event this person is on the team of"
+  field :event,
+        Types::EventType,
+        association_model: TeamMember,
+        null: false,
+        description: "The event this person is on the team of"
   field :id, ID, null: false, description: "The ID of this team member"
   field :receive_con_email,
         Boolean,
@@ -30,11 +34,10 @@ class Types::TeamMemberType < Types::BaseObject
         description: "Whether to show this person's email address on the event page"
   field :user_con_profile,
         Types::UserConProfileType,
+        association_model: TeamMember,
         null: false,
         camelize: false,
         description: "The profile of this team member"
-
-  association_loaders TeamMember, :event, :user_con_profile
 
   def receive_signup_email
     object.receive_signup_email.upcase

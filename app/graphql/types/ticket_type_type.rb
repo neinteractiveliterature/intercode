@@ -24,6 +24,7 @@ class Types::TicketTypeType < Types::BaseObject
   field :allows_event_signups, Boolean, null: false, description: "Whether holders can sign up for events"
   field :convention,
         Types::ConventionType,
+        association_model: TicketType,
         null: true,
         description: "The convention this ticket type belongs to, if it isn't specific to an event"
   field :counts_towards_convention_maximum,
@@ -33,15 +34,15 @@ class Types::TicketTypeType < Types::BaseObject
   field :description, String, null: true, description: "A human-readable description of this ticket type"
   field :event,
         Types::EventType,
+        association_model: TicketType,
         null: true,
         description: "The event this ticket type belongs to, if it is specific to one"
   field :name, String, null: false, description: "The identifier-style name of this ticket type"
   field :providing_products,
         [Types::ProductType],
+        association_model: TicketType,
         null: false,
         description: "The products that sell this type of ticket"
-
-  association_loaders TicketType, :convention, :event, :providing_products
 
   def maximum_event_provided_tickets(**args)
     if args[:event_id]
