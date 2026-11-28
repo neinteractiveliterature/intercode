@@ -141,7 +141,7 @@ group :development do
   gem "rubocop-graphql", "1.9.0", require: false
   gem "rubocop-performance", "1.27.0"
   gem "rubocop-rails", "2.38.0"
-  gem "rubocop-rspec", "3.10.2", require: false
+  gem "rubocop-rspec", "3.11.0", require: false
   gem "syntax_tree", "6.3.0"
   gem "syntax_tree-haml", "4.0.3"
   gem "syntax_tree-rbs", "1.0.0"
