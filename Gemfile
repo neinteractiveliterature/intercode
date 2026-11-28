@@ -123,7 +123,7 @@ group :development do
   gem "listen", "3.10.1"
 
   # Doc generation
-  gem "yard", "0.9.45"
+  gem "yard", "0.9.46"
 
   # Automatic annotation for models
   gem "annotaterb", "4.26.0"
