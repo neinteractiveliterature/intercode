@@ -13,11 +13,16 @@ class Types::EventProposalType < Types::BaseObject
   field :admin_notes, String, null: true, description: "Admin-only notes about this event proposal" do
     authorize_action :read_admin_notes
   end
-  field :convention, Types::ConventionType, null: false, description: "The convention this event proposal belongs to"
+  field :convention,
+        Types::ConventionType,
+        association_model: EventProposal,
+        null: false,
+        description: "The convention this event proposal belongs to"
   field :created_at, Types::DateType, null: false, description: "When this event proposal was created"
   field :length_seconds, Integer, null: true, description: "The proposed length of the event in seconds"
   field :registration_policy,
         Types::RegistrationPolicyType,
+        association_model: EventProposal,
         null: true,
         description: "The proposed registration policy for this event"
   field :status, String, null: false, description: "The status of this event proposal (draft, submitted, etc.)"
@@ -25,8 +30,16 @@ class Types::EventProposalType < Types::BaseObject
   field :title, String, null: true, description: "The proposed title of the event"
   field :updated_at, Types::DateType, null: false, description: "When this event proposal was last updated"
 
-  field :event, Types::EventType, null: true, description: "The event created from this proposal, if it was accepted"
-  field :event_category, Types::EventCategoryType, null: false, description: "The category of this event proposal"
+  field :event,
+        Types::EventType,
+        association_model: EventProposal,
+        null: true,
+        description: "The event created from this proposal, if it was accepted"
+  field :event_category,
+        Types::EventCategoryType,
+        association_model: EventProposal,
+        null: false,
+        description: "The category of this event proposal"
   field :form_response_changes,
         [Types::FormResponseChangeType],
         null: false,
@@ -37,10 +50,9 @@ class Types::EventProposalType < Types::BaseObject
         description: "Images attached to this event proposal"
   field :owner,
         Types::UserConProfileType,
+        association_model: EventProposal,
         null: false,
         description: "The convention attendee who submitted this proposal"
-
-  association_loaders EventProposal, :convention, :owner, :event, :event_category, :registration_policy
 
   def form
     event_category = dataloader.with(Sources::ActiveRecordAssociation, EventProposal, :event_category).load(object)

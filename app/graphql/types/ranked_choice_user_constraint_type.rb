@@ -27,8 +27,10 @@ module Types
     field :updated_at, Types::DateType, null: false do
       description "The last time this constraint was modified."
     end
-    field :user_con_profile, Types::UserConProfileType, null: false, description: "The user this constraint applies to."
-
-    association_loaders RankedChoiceUserConstraint, :user_con_profile
+    field :user_con_profile,
+          Types::UserConProfileType,
+          association_model: RankedChoiceUserConstraint,
+          null: false,
+          description: "The user this constraint applies to."
   end
 end

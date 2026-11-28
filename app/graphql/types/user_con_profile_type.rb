@@ -8,12 +8,21 @@ class Types::UserConProfileType < Types::BaseObject
   include FormResponseAttrsFields
 
   # It should be safe to request these fields but they'll return nil if you're not authorized
-  def self.personal_info_field(field_name, ...)
-    field(field_name, ...)
+  def self.context_current_pending_order(context)
+    context[:current_pending_order]
+  end
+
+  def self.personal_info_field(field_name, *, **, &)
+    resolver_name = :"resolve_personal_info_#{field_name}"
+    field(field_name, *, resolve_each: resolver_name, **, &)
+
+    define_singleton_method resolver_name do |object, context|
+      return nil unless Pundit.policy(context[:pundit_user], object).read_personal_info?
+      object.public_send(field_name)
+    end
 
     define_method field_name do
-      return nil unless policy(object).read_personal_info?
-      object.public_send(field_name)
+      self.class.public_send(resolver_name, object, context)
     end
   end
 
@@ -34,8 +43,14 @@ class Types::UserConProfileType < Types::BaseObject
   field :can_override_maximum_event_provided_tickets, Boolean, null: false do # rubocop:disable GraphQL/ExtractType
     description "Does this user have permission to override the event-provided ticket thresholds in this convention?"
   end
-  field :convention, Types::ConventionType, null: false, description: "The convention this profile is attached to."
-  field :current_pending_order, Types::OrderType, null: true do
+  field :convention,
+        Types::ConventionType,
+        association_model: UserConProfile,
+        null: false,
+        description: "The convention this profile is attached to."
+  # This is the pending order of the request, whichever profile is being queried, which is what
+  # ContextAccessors#current_pending_order returns on the original engine
+  field :current_pending_order, Types::OrderType, null: true, resolve_static: :context_current_pending_order do
     description <<~MARKDOWN
       If this profile has a pending order, returns that order. Otherwise, returns null.
     MARKDOWN
@@ -56,7 +71,11 @@ class Types::UserConProfileType < Types::BaseObject
   field :needs_update, Boolean, null: false, description: "Does this profile need to be updated by the user?"
   field :nickname, String, null: true, description: "This user profile's nickname."
   field :order_summary, String, null: false, description: "A human-readable summary of all this profile's orders."
-  field :orders, [Types::OrderType], null: false, description: "All the orders placed by this profile."
+  field :orders,
+        [Types::OrderType],
+        association_model: UserConProfile,
+        null: false,
+        description: "All the orders placed by this profile."
   field :ranked_choice_allow_waitlist,
         Boolean,
         null: false,
@@ -66,7 +85,10 @@ class Types::UserConProfileType < Types::BaseObject
   field :ranked_choice_fallback_action, Types::RankedChoiceFallbackAction, null: false do
     description "If this user can't be signed up for any of their ranked choices, what should the site do?"
   end
-  field :ranked_choice_user_constraints, [Types::RankedChoiceUserConstraintType], null: false do # rubocop:disable GraphQL/ExtractType
+  field :ranked_choice_user_constraints,
+        [Types::RankedChoiceUserConstraintType],
+        association_model: UserConProfile,
+        null: false do # rubocop:disable GraphQL/ExtractType
     description "All the constraints this profile has placed on the number of ranked choice signups they want."
   end
   field :show_nickname_in_bio, Boolean, null: true do
@@ -75,13 +97,13 @@ class Types::UserConProfileType < Types::BaseObject
   field :signup_constraints, Types::UserSignupConstraintsType, null: false do
     description "The current constraints on signups for this user at this convention."
   end
-  field :signup_ranked_choices, [Types::SignupRankedChoiceType], null: false do
+  field :signup_ranked_choices, [Types::SignupRankedChoiceType], association_model: UserConProfile, null: false do
     description "This user's ranked choice list for signups."
   end
-  field :signup_requests, [Types::SignupRequestType], null: false do # rubocop:disable GraphQL/ExtractType
+  field :signup_requests, [Types::SignupRequestType], association_model: UserConProfile, null: false do # rubocop:disable GraphQL/ExtractType
     description "All the signup requests made by this profile."
   end
-  field :signups, [Types::SignupType], null: false do
+  field :signups, [Types::SignupType], association_model: UserConProfile, null: false do
     description "All the event signups attached to this profile."
   end
   field :site_admin, Boolean, null: false, description: "Does this profile belong to a global site admin?"
@@ -127,14 +149,7 @@ class Types::UserConProfileType < Types::BaseObject
     dataloader.with(Sources::ActiveRecordAssociation, UserConProfile, :user).load(object).site_admin?
   end
 
-  association_loaders UserConProfile,
-                      :convention,
-                      :orders,
-                      :ranked_choice_user_constraints,
-                      :signups,
-                      :signup_ranked_choices,
-                      :signup_requests,
-                      :user
+  association_loaders UserConProfile, :user
 
   def bio_html
     dataloader.with(Sources::Markdown, "user_con_profile", "No bio provided", context[:controller]).load(

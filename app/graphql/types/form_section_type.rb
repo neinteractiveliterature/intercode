@@ -4,8 +4,18 @@ class Types::FormSectionType < Types::BaseObject
   authorize_record
 
   # rubocop:disable-next GraphQL/UnnecessaryFieldCamelize
-  field :form, Types::FormType, null: false, camelize: false, description: "The form containing this section"
-  field :form_items, [Types::FormItemType], null: false, camelize: false, description: "The items in this section"
+  field :form,
+        Types::FormType,
+        association_model: FormSection,
+        null: false,
+        camelize: false,
+        description: "The form containing this section"
+  field :form_items,
+        [Types::FormItemType],
+        association_model: FormSection,
+        null: false,
+        camelize: false,
+        description: "The items in this section"
   field :id, ID, null: false, description: "The ID of this form section"
   field :position, Int, null: false, description: "Where this section appears within its form"
   field :title, String, null: true, description: "The title of this section"
@@ -27,6 +37,4 @@ class Types::FormSectionType < Types::BaseObject
   def preview_form_item(form_item:)
     FormItem.new(form_item.to_h.merge(id: 0, form_section: object, position: 1))
   end
-
-  association_loaders FormSection, :form, :form_items
 end

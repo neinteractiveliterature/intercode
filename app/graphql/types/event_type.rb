@@ -61,6 +61,7 @@ class Types::EventType < Types::BaseObject
 
   field :registration_policy,
         Types::RegistrationPolicyType,
+        association_model: Event,
         null: true,
         description: "The registration policy for this event"
 
@@ -103,7 +104,11 @@ class Types::EventType < Types::BaseObject
         null: true,
         description: "Where convention emails about this event should be sent"
   field :content_warnings, String, null: true, description: "Content warnings for this event"
-  field :convention, Types::ConventionType, null: false, description: "The convention this event belongs to"
+  field :convention,
+        Types::ConventionType,
+        association_model: Event,
+        null: false,
+        description: "The convention this event belongs to"
   field :created_at, Types::DateType, null: true, description: "When this event was created"
   field :description, String, null: true, description: "The full description of this event"
   field :email, String, null: true, description: "The contact email for this event"
@@ -117,13 +122,19 @@ class Types::EventType < Types::BaseObject
   field :private_signup_list, Boolean, null: true, description: "Whether the signup list for this event is private"
   field :short_blurb, String, null: true, description: "A short description of this event" # rubocop:disable GraphQL/ExtractType
   field :status, String, null: true, description: "The status of this event (active, dropped, etc.)"
-  field :ticket_types, [Types::TicketTypeType], null: false, description: "The ticket types associated with this event"
+  field :ticket_types,
+        [Types::TicketTypeType],
+        association_model: Event,
+        null: false,
+        description: "The ticket types associated with this event"
   field :title, String, null: true, description: "The title of this event"
   field :url, String, null: true, description: "The URL for more information about this event"
 
-  field :event_category, Types::EventCategoryType, null: false, description: "The category of this event"
-
-  association_loaders Event, :event_category, :team_members, :ticket_types, :convention, :registration_policy
+  field :event_category,
+        Types::EventCategoryType,
+        association_model: Event,
+        null: false,
+        description: "The category of this event"
 
   def form
     event_category = dataloader.with(Sources::ActiveRecordAssociation, Event, :event_category).load(object)

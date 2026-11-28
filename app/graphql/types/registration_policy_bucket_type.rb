@@ -17,22 +17,28 @@ class Types::RegistrationPolicyBucketType < Types::BaseObject
   field :anything,
         Boolean,
         null: false,
+        resolve_each: true,
         description: "Whether or not this is a \"flex\" bucket (\"anything\" is a legacy term for \"flex\")"
-  field :expose_attendees, Boolean, null: false, description: <<~MARKDOWN
+  field :expose_attendees, Boolean, null: false, resolve_each: true, description: <<~MARKDOWN
           Whether or not to allow other attendees to see that a person is in this bucket in the signup summary page
         MARKDOWN
-  field :not_counted, Boolean, null: false, description: <<~MARKDOWN
+  field :not_counted, Boolean, null: false, resolve_each: true, description: <<~MARKDOWN
           If true, attendees in this bucket are not counted towards total attendees for runs of this event, and this
           event will not count towards their maximum event signups allowed
         MARKDOWN
   field :slots_limited,
         Boolean,
         null: false,
+        resolve_each: true,
         description: "Whether or not the number of attendees is limited in this bucket"
 
   %w[slots_limited anything not_counted expose_attendees].each do |field_name|
-    define_method field_name do
+    define_singleton_method field_name do |object, _context|
       !!object.public_send(:"#{field_name}?")
+    end
+
+    define_method field_name do
+      self.class.public_send(field_name, object, context)
     end
   end
 end

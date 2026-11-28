@@ -22,19 +22,23 @@ class Types::SignupChangeType < Types::BaseObject
   field :id, ID, null: false, description: "The ID of this change"
   field :previous_signup_change,
         Types::SignupChangeType,
+        association_model: SignupChange,
         null: true,
         description: "The change that happened before this one, if any"
-  field :run, Types::RunType, null: false, description: "The run this signup change happened on"
+  field :run,
+        Types::RunType,
+        association_model: SignupChange,
+        null: false,
+        description: "The run this signup change happened on"
   field :signup, Types::SignupType, null: false, description: "The signup this change happened to"
   field :state, Types::SignupStateType, null: false, description: "The state of the signup after this change"
   field :updated_at, Types::DateType, null: false, camelize: false, description: "When this change was last updated"
   field :user_con_profile,
         Types::UserConProfileType,
+        association_model: SignupChange,
         null: false,
         camelize: false,
         description: "The profile of the person whose signup changed"
-
-  association_loaders SignupChange, :previous_signup_change, :run, :user_con_profile
 
   # Ugly AF, but it gets us everything the policy wants
   def signup

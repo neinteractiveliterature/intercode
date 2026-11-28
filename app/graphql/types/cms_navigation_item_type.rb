@@ -7,9 +7,12 @@ class Types::CmsNavigationItemType < Types::BaseObject
 
   field :navigation_section,
         Types::CmsNavigationItemType,
+        association_model: CmsNavigationItem,
         null: true,
         description: "The section containing this item, if it is inside one"
-  field :page, Types::PageType, null: true, description: "The page this item links to, if it is a link"
-
-  association_loaders CmsNavigationItem, :navigation_section, :page
+  field :page,
+        Types::PageType,
+        association_model: CmsNavigationItem,
+        null: true,
+        description: "The page this item links to, if it is a link"
 end

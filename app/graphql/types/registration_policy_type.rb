@@ -8,7 +8,7 @@ class Types::RegistrationPolicyType < Types::BaseObject
   For more on registration policies, [see the signups documentation](https://intercode.interactiveliterature.org/docs/concepts/signups).
   MARKDOWN
 
-  field :buckets, [Types::RegistrationPolicyBucketType], null: false do
+  field :buckets, [Types::RegistrationPolicyBucketType], association_model: RegistrationPolicy, null: false do
     description "The buckets in this registration policy."
   end
   field :freeze_no_preference_buckets, Boolean, null: false do
@@ -47,8 +47,6 @@ class Types::RegistrationPolicyType < Types::BaseObject
   field :total_slots_including_not_counted, Integer, null: true do # rubocop:disable GraphQL/ExtractType
     description "The sum of total slots across all buckets, including not-counted buckets."
   end
-
-  association_loaders RegistrationPolicy, :buckets
 
   def minimum_slots
     buckets

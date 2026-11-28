@@ -9,6 +9,7 @@ class Types::FormItemType < Types::BaseObject
         description: "The other places this item's value is made available"
   field :form_section,
         Types::FormSectionType,
+        association_model: FormItem,
         null: false,
         camelize: false,
         description: "The form section containing this item"
@@ -33,8 +34,6 @@ class Types::FormItemType < Types::BaseObject
         Types::FormItemRoleType,
         null: false,
         description: "The role someone needs to change this item's value"
-
-  association_loaders FormItem, :form_section
 
   authorize_record
 

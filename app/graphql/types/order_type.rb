@@ -9,7 +9,11 @@ class Types::OrderType < Types::BaseObject
         null: false,
         description: "The coupons applied to this order"
   field :id, ID, null: false, description: "The ID of this order"
-  field :order_entries, [Types::OrderEntryType], null: false, description: "The lines of this order"
+  field :order_entries,
+        [Types::OrderEntryType],
+        association_model: Order,
+        null: false,
+        description: "The lines of this order"
   field :paid_at, Types::DateType, null: true, description: "When this order was paid for"
   field :payment_amount, Types::MoneyType, null: true, description: "The amount paid"
   field :payment_note, String, null: true, description: "A note about how this order was paid"
@@ -18,7 +22,11 @@ class Types::OrderType < Types::BaseObject
   field :total_price, Types::MoneyType, null: false, description: "The price after discounts"
   # rubocop:disable-next GraphQL/ExtractType
   field :total_price_before_discounts, Types::MoneyType, null: false, description: "The price before discounts"
-  field :user_con_profile, Types::UserConProfileType, null: false, description: "The person who placed this order"
+  field :user_con_profile,
+        Types::UserConProfileType,
+        association_model: Order,
+        null: false,
+        description: "The person who placed this order"
 
   # rubocop:disable-next GraphQL/ExtractType
   field :payment_intent_client_secret, String, null: false do
@@ -49,6 +57,4 @@ class Types::OrderType < Types::BaseObject
 
     intent.client_secret
   end
-
-  association_loaders Order, :user_con_profile, :order_entries
 end

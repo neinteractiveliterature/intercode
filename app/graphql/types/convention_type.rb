@@ -19,7 +19,7 @@ class Types::ConventionType < Types::BaseObject
     description "User profiles in this convention that can have a bio (because they're staff or event team members)."
   end
   field :canceled, Boolean, null: false, description: "Is this convention canceled?"
-  field :catch_all_staff_position, Types::StaffPositionType, null: true do
+  field :catch_all_staff_position, Types::StaffPositionType, association_model: Convention, null: true do
     description <<~MARKDOWN
       If this convention's email_mode is set to staff_emails_to_catch_all, all email sent to staff position email
       addresses at this convention will be forwarded to this staff position.
@@ -42,7 +42,11 @@ class Types::ConventionType < Types::BaseObject
   field :default_currency_code, String, null: true do
     description "The ISO 4217 currency code used by default for products in this convention.  If null, defaults to USD."
   end
-  field :departments, [Types::DepartmentType], null: false, description: "All the departments in this convention."
+  field :departments,
+        [Types::DepartmentType],
+        association_model: Convention,
+        null: false,
+        description: "All the departments in this convention."
   field :domain, String, null: true, description: "The domain name used for serving this convention web site."
   field :email_from, String, null: false, description: "The default address that site emails will be sent from."
   field :email_mode, Types::EmailModeType, null: false do # rubocop:disable GraphQL/ExtractType
@@ -120,7 +124,11 @@ class Types::ConventionType < Types::BaseObject
       errors out.
     MARKDOWN
   end
-  field :forms, [Types::FormType], null: false, description: "All the forms in this convention."
+  field :forms,
+        [Types::FormType],
+        association_model: Convention,
+        null: false,
+        description: "All the forms in this convention."
   field :hidden, Boolean, null: false do
     description "If true, this convention will not be listed in CMS content on the root site."
   end
@@ -162,7 +170,7 @@ class Types::ConventionType < Types::BaseObject
     MARKDOWN
   end
   field :name, String, null: false, description: "The name of this convention."
-  field :notification_templates, [Types::NotificationTemplateType], null: false do
+  field :notification_templates, [Types::NotificationTemplateType], association_model: Convention, null: false do
     description "All the NotificationTemplates in this convention."
   end
   field :notifier_liquid_assigns, [Types::LiquidAssign], null: false do
@@ -188,7 +196,7 @@ class Types::ConventionType < Types::BaseObject
     description "Find an order by ID."
     argument :id, ID, required: true, description: "The ID of the order to find."
   end
-  field :organization, Types::OrganizationType, null: true do
+  field :organization, Types::OrganizationType, association_model: Convention, null: true do
     description "The organization in charge of this convention."
   end
   field :pre_schedule_content_html,
@@ -239,7 +247,11 @@ class Types::ConventionType < Types::BaseObject
     description "A sub-object containing various reports that can be generated for this convention."
     authorize_action :view_reports
   end
-  field :rooms, [Types::RoomType], null: false, description: "All the rooms in this convention."
+  field :rooms,
+        [Types::RoomType],
+        association_model: Convention,
+        null: false,
+        description: "All the rooms in this convention."
   field :run, Types::RunType, null: false do
     argument :id, ID, required: true, description: "The ID of the run to find"
 
@@ -277,7 +289,11 @@ class Types::ConventionType < Types::BaseObject
       errors out.
     MARKDOWN
   end
-  field :signup_rounds, [Types::SignupRoundType], null: false, description: "The signup rounds in this convention." # rubocop:disable GraphQL/ExtractType
+  field :signup_rounds,
+        [Types::SignupRoundType],
+        association_model: Convention,
+        null: false,
+        description: "The signup rounds in this convention." # rubocop:disable GraphQL/ExtractType
   field :site_mode, Types::SiteModeType, null: false, description: "The mode this convention site is operating in."
   field :staff_position, Types::StaffPositionType, null: false do
     argument :id, ID, required: true, description: "The ID of the staff position to find."
@@ -287,7 +303,7 @@ class Types::ConventionType < Types::BaseObject
       in this convention, errors out.
     MARKDOWN
   end
-  field :staff_positions, [Types::StaffPositionType], null: false do # rubocop:disable GraphQL/ExtractType
+  field :staff_positions, [Types::StaffPositionType], association_model: Convention, null: false do # rubocop:disable GraphQL/ExtractType
     description "All the staff positions in this convention."
   end
   field :starts_at, Types::DateType, null: true, description: "When this convention starts."
@@ -311,7 +327,11 @@ class Types::ConventionType < Types::BaseObject
   field :ticket_name_plural, String, null: false, camelize: true do
     description "The word this convention uses for 'tickets'."
   end
-  field :ticket_types, [Types::TicketTypeType], null: false, description: "All the ticket types in this convention." # rubocop:disable GraphQL/ExtractType
+  field :ticket_types,
+        [Types::TicketTypeType],
+        association_model: Convention,
+        null: false,
+        description: "All the ticket types in this convention." # rubocop:disable GraphQL/ExtractType
   field :tickets_available_for_purchase, Boolean, null: false, method: :tickets_available_for_purchase? do
     description "Can users currently buy tickets to this convention?"
   end
@@ -325,7 +345,7 @@ class Types::ConventionType < Types::BaseObject
 
     description "Find a UserActivityAlert by ID."
   end
-  field :user_activity_alerts, [Types::UserActivityAlertType], null: false do # rubocop:disable GraphQL/ExtractType
+  field :user_activity_alerts, [Types::UserActivityAlertType], association_model: Convention, null: false do # rubocop:disable GraphQL/ExtractType
     description "All the UserActivityAlerts in this convention."
   end
   field :user_con_profile, Types::UserConProfileType, null: false do
@@ -633,23 +653,11 @@ class Types::ConventionType < Types::BaseObject
     ).paginate(page: args[:page], per_page: args[:per_page])
   end
 
-  association_loaders(
-    Convention,
-    :catch_all_staff_position,
-    :cms_content_groups,
-    :cms_layouts,
-    :cms_navigation_items,
-    :default_layout,
-    :departments,
-    :forms,
-    :notification_templates,
-    :organization,
-    :pages,
-    :rooms,
-    :root_page,
-    :signup_rounds,
-    :staff_positions,
-    :ticket_types,
-    :user_activity_alerts
-  )
+  association_loaders Convention,
+                      :cms_content_groups,
+                      :cms_layouts,
+                      :cms_navigation_items,
+                      :default_layout,
+                      :pages,
+                      :root_page
 end

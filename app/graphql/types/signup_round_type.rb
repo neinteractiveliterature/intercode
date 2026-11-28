@@ -13,7 +13,11 @@ module Types
     field :automation_action, Types::SignupRoundAutomationAction, null: true do
       description "The action to take when this signup round opens."
     end
-    field :convention, Types::ConventionType, null: false, description: "The convention this SignupRound is in."
+    field :convention,
+          Types::ConventionType,
+          association_model: SignupRound,
+          null: false,
+          description: "The convention this SignupRound is in."
     field :created_at, Types::DateType, null: false, description: "When this SignupRound was first created."
     field :executed_at, Types::DateType do
       description <<~MARKDOWN
@@ -41,8 +45,6 @@ module Types
     end
     field :start, Types::DateType, description: "When this SignupRound starts."
     field :updated_at, Types::DateType, null: false, description: "When this SignupRound was last modified."
-
-    association_loaders SignupRound, :convention
 
     pagination_field :ranked_choice_decisions_paginated,
                      Types::RankedChoiceDecisionsPaginationType,

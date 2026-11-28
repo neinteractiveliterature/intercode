@@ -19,30 +19,28 @@ module Types
     field :reason, Types::RankedChoiceDecisionReasonType do
       description "The reason for this decision, if any."
     end
-    field :signup, Types::SignupType, description: "The signup that resulted from this decision, if any."
-    field :signup_ranked_choice, Types::SignupRankedChoiceType do
+    field :signup,
+          Types::SignupType,
+          association_model: RankedChoiceDecision,
+          description: "The signup that resulted from this decision, if any."
+    field :signup_ranked_choice, Types::SignupRankedChoiceType, association_model: RankedChoiceDecision do
       description "The choice that was being processed when this decision was made, if any."
     end
-    field :signup_request, Types::SignupRequestType do
+    field :signup_request, Types::SignupRequestType, association_model: RankedChoiceDecision do
       description "The signup request that resulted from this decision, if any."
     end
-    field :signup_round, Types::SignupRoundType, null: false do # rubocop:disable GraphQL/ExtractType
+    field :signup_round, Types::SignupRoundType, association_model: RankedChoiceDecision, null: false do # rubocop:disable GraphQL/ExtractType
       description "The signup round in which this decision was made."
     end
-    field :target_run, Types::RunType, description: "The run this ranked choice was attempting to sign up for."
+    field :target_run,
+          Types::RunType,
+          association_model: RankedChoiceDecision,
+          description: "The run this ranked choice was attempting to sign up for."
     field :updated_at, Types::DateType, null: false do
       description "The time this RankedChoiceDecision was last modified."
     end
-    field :user_con_profile, Types::UserConProfileType do
+    field :user_con_profile, Types::UserConProfileType, association_model: RankedChoiceDecision do
       description "The user profile this decision pertains to, if any."
     end
-
-    association_loaders RankedChoiceDecision,
-                        :user_con_profile,
-                        :signup_ranked_choice,
-                        :signup_round,
-                        :signup,
-                        :signup_request,
-                        :target_run
   end
 end
