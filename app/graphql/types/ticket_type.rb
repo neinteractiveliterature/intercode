@@ -1,11 +1,10 @@
 # frozen_string_literal: true
 class Types::TicketType < Types::BaseObject
   description "A person's admission to a convention"
-  # This is the convention of the request, which is what ContextAccessors#convention returns on the original engine
   field :convention,
         Types::ConventionType,
         null: false,
-        resolve_static: :context_convention,
+        resolve_batch: :batch_conventions,
         description: "The convention this ticket is for"
   field :created_at, Types::DateType, null: false, description: "When this ticket was created"
   field :id, ID, null: false, description: "The ID of this ticket"
@@ -38,7 +37,14 @@ class Types::TicketType < Types::BaseObject
 
   authorize_record
 
-  def self.context_convention(context)
-    context[:convention]
+  # A ticket's convention is its profile's convention, so it's loaded in two steps
+  def self.batch_conventions(tickets, context)
+    profiles = context.dataload_all(Sources::ActiveRecordAssociation, Ticket, :user_con_profile, tickets)
+    context.dataload_all(Sources::ActiveRecordAssociation, UserConProfile, :convention, profiles)
+  end
+
+  def convention
+    profile = dataloader.with(Sources::ActiveRecordAssociation, Ticket, :user_con_profile).load(object)
+    dataloader.with(Sources::ActiveRecordAssociation, UserConProfile, :convention).load(profile)
   end
 end

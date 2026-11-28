@@ -4,11 +4,10 @@ class Types::CouponType < Types::BaseObject
   authorize_record
 
   field :code, String, null: false, description: "The code people enter to use this coupon"
-  # This is the convention of the request, which is what ContextAccessors#convention returns on the original engine
   field :convention,
         Types::ConventionType,
         null: false,
-        resolve_static: :context_convention,
+        association_model: Coupon,
         description: "The convention this coupon belongs to"
   field :expires_at, Types::DateType, null: true, description: "When this coupon stops working, if it expires"
   field :fixed_amount,
@@ -25,8 +24,4 @@ class Types::CouponType < Types::BaseObject
         null: true,
         description: "The product this coupon gives away for free, if any"
   field :usage_limit, Int, null: true, description: "The maximum number of times this coupon can be used, if limited"
-
-  def self.context_convention(context)
-    context[:convention]
-  end
 end
