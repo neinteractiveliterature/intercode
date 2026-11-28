@@ -40,11 +40,10 @@ describe('UserSignupQueueItem', () => {
                 {
                   __typename: 'RegistrationPolicyBucket',
                   id: '1',
-                  key: 'player',
                   name: 'Player',
                   description: null,
                 },
-                { __typename: 'RegistrationPolicyBucket', id: '2', key: 'gm', name: 'GM', description: null },
+                { __typename: 'RegistrationPolicyBucket', id: '2', name: 'GM', description: null },
               ],
             },
           },

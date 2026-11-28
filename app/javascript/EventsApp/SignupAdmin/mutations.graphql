@@ -1,5 +1,5 @@
-mutation ChangeSignupBucket($signupId: ID!, $bucketKey: String!) {
-  updateSignupBucket(input: { id: $signupId, bucket_key: $bucketKey }) {
+mutation ChangeSignupBucket($signupId: ID!, $bucketId: ID!) {
+  updateSignupBucket(input: { id: $signupId, bucketId: $bucketId }) {
     signup {
       id
       ...SignupFields
@@ -13,8 +13,8 @@ mutation ChangeSignupBucket($signupId: ID!, $bucketKey: String!) {
   }
 }
 
-mutation ForceConfirmSignup($signupId: ID!, $bucketKey: String!) {
-  forceConfirmSignup(input: { id: $signupId, bucket_key: $bucketKey }) {
+mutation ForceConfirmSignup($signupId: ID!, $bucketId: ID!) {
+  forceConfirmSignup(input: { id: $signupId, bucketId: $bucketId }) {
     signup {
       id
       ...SignupFields

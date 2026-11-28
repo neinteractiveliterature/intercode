@@ -50,7 +50,7 @@ describe('RunEmailList', () => {
         team_members: [],
         registration_policy: {
           __typename: 'RegistrationPolicy',
-          buckets: [{ __typename: 'RegistrationPolicyBucket', id: '1', key: 'player', name: 'Player' }],
+          buckets: [{ __typename: 'RegistrationPolicyBucket', id: '1', name: 'Player' }],
         },
         run: {
           __typename: 'Run',

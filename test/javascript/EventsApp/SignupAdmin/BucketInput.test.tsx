@@ -12,7 +12,7 @@ describe('BucketInput', () => {
     id: '1',
     state: SignupState.Confirmed,
     counted: true,
-    bucket: { __typename: 'RegistrationPolicyBucket', id: '1', key: 'player' },
+    bucket: { __typename: 'RegistrationPolicyBucket', id: '1' },
     requested_bucket: { __typename: 'RegistrationPolicyBucket', id: '1' },
     run: {
       __typename: 'Run',
@@ -56,7 +56,7 @@ describe('BucketInput', () => {
     // bucket.key ("player") intentionally does not match requested_bucket's id (1) by key, to
     // confirm this matches by id and not by any key-based coincidence.
     const signup = buildSignup({
-      bucket: { __typename: 'RegistrationPolicyBucket', id: '1', key: 'player' },
+      bucket: { __typename: 'RegistrationPolicyBucket', id: '1' },
       requested_bucket: { __typename: 'RegistrationPolicyBucket', id: '2' },
     });
     const { getByLabelText } = await render(
@@ -70,7 +70,7 @@ describe('BucketInput', () => {
 
   it('disables the bucket the signup already occupies', async () => {
     const signup = buildSignup({
-      bucket: { __typename: 'RegistrationPolicyBucket', id: '1', key: 'player' },
+      bucket: { __typename: 'RegistrationPolicyBucket', id: '1' },
       requested_bucket: null,
     });
     const { getByLabelText } = await render(
@@ -83,7 +83,7 @@ describe('BucketInput', () => {
 
   it('disables the anything bucket once the signup is already in any bucket', async () => {
     const signup = buildSignup({
-      bucket: { __typename: 'RegistrationPolicyBucket', id: '2', key: 'gm' },
+      bucket: { __typename: 'RegistrationPolicyBucket', id: '2' },
       requested_bucket: null,
     });
     const { getByLabelText } = await render(

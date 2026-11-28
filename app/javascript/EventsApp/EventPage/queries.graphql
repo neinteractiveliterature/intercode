@@ -76,7 +76,6 @@ fragment RunCardRegistrationPolicyFields on RegistrationPolicy {
 
   buckets {
     id
-    key
     name
     description
     not_counted

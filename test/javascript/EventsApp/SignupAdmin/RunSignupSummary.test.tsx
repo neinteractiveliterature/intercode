@@ -45,9 +45,7 @@ describe('RunSignupSummary', () => {
         event_category: { __typename: 'EventCategory', id: '1', team_member_name: 'GM' },
         registration_policy: {
           __typename: 'RegistrationPolicy',
-          buckets: [
-            { __typename: 'RegistrationPolicyBucket', id: '1', key: 'player', name: 'Player', expose_attendees: true },
-          ],
+          buckets: [{ __typename: 'RegistrationPolicyBucket', id: '1', name: 'Player', expose_attendees: true }],
         },
         team_members: [],
         runs: [{ __typename: 'Run', id: '1', starts_at: '2025-01-01T19:00:00Z' }],

@@ -36,7 +36,7 @@ export type BucketInputProps = Omit<
 export default function BucketInput({ signup, ...otherProps }: BucketInputProps): React.JSX.Element {
   const { t } = useTranslation();
   const bucketChoices = (signup.run.event.registration_policy?.buckets ?? []).map((bucket) => ({
-    value: bucket.key,
+    value: bucket.id,
     label: getLabelForBucketChoice(signup, bucket, t),
     disabled: shouldBucketChoiceBeDisabled(signup, bucket),
   }));

@@ -25,7 +25,7 @@ describe('EditSignup', () => {
     id: '1',
     state: SignupState.Confirmed,
     counted: true,
-    bucket: { __typename: 'RegistrationPolicyBucket', id: '1', key: 'player' },
+    bucket: { __typename: 'RegistrationPolicyBucket', id: '1' },
     requested_bucket: { __typename: 'RegistrationPolicyBucket', id: '1' },
     run: {
       __typename: 'Run',
@@ -42,8 +42,8 @@ describe('EditSignup', () => {
         registration_policy: {
           __typename: 'RegistrationPolicy',
           buckets: [
-            { __typename: 'RegistrationPolicyBucket', id: '1', key: 'player', name: 'Player', anything: false },
-            { __typename: 'RegistrationPolicyBucket', id: '2', key: 'gm', name: 'GM', anything: false },
+            { __typename: 'RegistrationPolicyBucket', id: '1', name: 'Player', anything: false },
+            { __typename: 'RegistrationPolicyBucket', id: '2', name: 'GM', anything: false },
           ],
         },
         team_members: [],
@@ -121,7 +121,7 @@ describe('EditSignup', () => {
   it('shows just the bucket name when the current and requested buckets match by id', async () => {
     const { container } = await renderEditSignup(
       buildSignup({
-        bucket: { __typename: 'RegistrationPolicyBucket', id: '1', key: 'player' },
+        bucket: { __typename: 'RegistrationPolicyBucket', id: '1' },
         requested_bucket: { __typename: 'RegistrationPolicyBucket', id: '1' },
       }),
     );
@@ -133,7 +133,7 @@ describe('EditSignup', () => {
   it('shows the requested bucket name when it differs from the current bucket, matched by id', async () => {
     const { container } = await renderEditSignup(
       buildSignup({
-        bucket: { __typename: 'RegistrationPolicyBucket', id: '1', key: 'player' },
+        bucket: { __typename: 'RegistrationPolicyBucket', id: '1' },
         requested_bucket: { __typename: 'RegistrationPolicyBucket', id: '2' },
       }),
     );

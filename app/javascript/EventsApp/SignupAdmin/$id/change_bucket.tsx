@@ -20,7 +20,7 @@ export const clientAction = async ({ context, request, params: { id } }: Route.C
       mutation: ChangeSignupBucketDocument,
       variables: {
         signupId: id ?? '',
-        bucketKey: formData.get('bucket_key')?.toString() ?? '',
+        bucketId: formData.get('bucket_id')?.toString() ?? '',
       },
     });
     return data(result.data);
@@ -31,7 +31,7 @@ export const clientAction = async ({ context, request, params: { id } }: Route.C
 
 function ChangeBucketModal(): React.JSX.Element {
   const data = useSingleSignupLoader();
-  const [bucketKey, setBucketKey] = useState<string | null>();
+  const [bucketId, setBucketId] = useState<string | null>();
   const [prevSignupId, setPrevSignupId] = useState<string>();
   const { t } = useTranslation();
   const fetcher = useFetcher();
@@ -46,15 +46,15 @@ function ChangeBucketModal(): React.JSX.Element {
   }, [error, fetcher.data, fetcher.state, navigate]);
 
   const okClicked = useCallback(async () => {
-    if (!bucketKey || !signup) {
+    if (!bucketId || !signup) {
       return;
     }
 
-    fetcher.submit({ bucket_key: bucketKey }, { action: '.', method: 'PATCH' });
-  }, [fetcher, signup, bucketKey]);
+    fetcher.submit({ bucket_id: bucketId }, { action: '.', method: 'PATCH' });
+  }, [fetcher, signup, bucketId]);
 
   if (prevSignupId !== signup?.id) {
-    setBucketKey(signup?.bucket?.key);
+    setBucketId(signup?.bucket?.id);
     setPrevSignupId(signup?.id);
   }
 
@@ -70,9 +70,9 @@ function ChangeBucketModal(): React.JSX.Element {
           caption={t('events.signupAdmin.changeBucketInputCaption', {
             name: signup.user_con_profile.name_without_nickname,
           })}
-          name="bucketKey"
-          value={bucketKey}
-          onChange={setBucketKey}
+          name="bucketId"
+          value={bucketId}
+          onChange={setBucketId}
         />
         <ErrorDisplay graphQLError={error} />
       </div>
@@ -90,7 +90,7 @@ function ChangeBucketModal(): React.JSX.Element {
         <button
           className="btn btn-primary"
           onClick={okClicked}
-          disabled={bucketKey == null || fetcher.state != 'idle'}
+          disabled={bucketId == null || fetcher.state != 'idle'}
           type="button"
         >
           {t('buttons.ok')}

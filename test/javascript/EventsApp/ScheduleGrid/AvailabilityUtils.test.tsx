@@ -21,7 +21,6 @@ describe('calculateAvailability', () => {
         {
           __typename: 'RegistrationPolicyBucket' as const,
           id: '1',
-          key: 'player',
           not_counted: false,
           total_slots: 6,
           slots_limited: true,
@@ -29,7 +28,6 @@ describe('calculateAvailability', () => {
         {
           __typename: 'RegistrationPolicyBucket' as const,
           id: '2',
-          key: 'gm',
           not_counted: false,
           total_slots: 4,
           slots_limited: true,
@@ -62,7 +60,6 @@ describe('calculateAvailability', () => {
         {
           __typename: 'RegistrationPolicyBucket' as const,
           id: '1',
-          key: 'limited',
           not_counted: true,
           total_slots: 5,
           slots_limited: true,
@@ -70,7 +67,6 @@ describe('calculateAvailability', () => {
         {
           __typename: 'RegistrationPolicyBucket' as const,
           id: '2',
-          key: 'unlimited',
           not_counted: true,
           total_slots: null,
           slots_limited: false,
@@ -111,7 +107,6 @@ describe('calculateAvailability', () => {
         {
           __typename: 'RegistrationPolicyBucket' as const,
           id: '1',
-          key: 'player',
           not_counted: false,
           total_slots: 1,
           slots_limited: true,

@@ -4,7 +4,6 @@ fragment SignupFields on Signup {
   counted
   bucket {
     id
-    key
   }
   requested_bucket {
     id
@@ -34,7 +33,6 @@ fragment SignupFields on Signup {
       registration_policy {
         buckets {
           id
-          key
           name
           anything
         }
@@ -100,7 +98,6 @@ fragment UserConProfileSignupsFragment on UserConProfile {
         registration_policy {
           buckets {
             id
-            key
             name
           }
         }
@@ -185,7 +182,6 @@ query RunSignupsTableSignupsQuery(
       registration_policy {
         buckets {
           id
-          key
           name
         }
       }
@@ -279,7 +275,6 @@ query RunSignupSummaryQuery($eventId: ID!, $runId: ID!) {
       registration_policy {
         buckets {
           id
-          key
           name
           expose_attendees
         }
@@ -377,7 +372,6 @@ query RunSignupChangesPageQuery($runId: ID!) {
         registration_policy {
           buckets {
             id
-            key
             name
             anything
           }

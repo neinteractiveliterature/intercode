@@ -72,7 +72,6 @@ fragment UserConProfileRankedChoiceQueueFields on UserConProfile {
         registration_policy {
           buckets {
             id
-            key
             name
             description
           }

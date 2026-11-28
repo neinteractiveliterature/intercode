@@ -59,7 +59,6 @@ describe('SignupModerationQueue', () => {
             {
               __typename: 'RegistrationPolicyBucket',
               id: '1',
-              key: 'player',
               name: 'Player',
               total_slots: 10,
               slots_limited: true,
@@ -69,7 +68,6 @@ describe('SignupModerationQueue', () => {
             {
               __typename: 'RegistrationPolicyBucket',
               id: '2',
-              key: 'gm',
               name: 'GM',
               total_slots: 2,
               slots_limited: true,
