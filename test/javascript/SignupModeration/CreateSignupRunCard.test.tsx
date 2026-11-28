@@ -43,7 +43,6 @@ describe('CreateSignupRunCard', () => {
             {
               __typename: 'RegistrationPolicyBucket',
               id: '1',
-              key: 'player',
               name: 'Player',
               description: 'Regular player',
               not_counted: false,

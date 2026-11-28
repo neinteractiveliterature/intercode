@@ -143,7 +143,6 @@ fragment EventFields on Event {
   registration_policy {
     buckets {
       id
-      key
       name
       description
       minimum_slots

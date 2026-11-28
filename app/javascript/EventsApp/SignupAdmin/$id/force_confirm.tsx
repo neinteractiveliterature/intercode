@@ -19,7 +19,7 @@ export const clientAction = async ({ context, request, params: { id } }: Route.C
       mutation: ForceConfirmSignupDocument,
       variables: {
         signupId: id ?? '',
-        bucketKey: formData.get('bucket_key')?.toString() ?? '',
+        bucketId: formData.get('bucket_id')?.toString() ?? '',
       },
     });
     return data(result.data);
@@ -30,7 +30,7 @@ export const clientAction = async ({ context, request, params: { id } }: Route.C
 
 function ForceConfirmSignupModal(): React.JSX.Element {
   const data = useSingleSignupLoader();
-  const [bucketKey, setBucketKey] = useState<string | null>();
+  const [bucketId, setBucketId] = useState<string | null>();
   const { t } = useTranslation();
   const fetcher = useFetcher();
   const error = fetcher.data instanceof Error ? fetcher.data : undefined;
@@ -44,11 +44,11 @@ function ForceConfirmSignupModal(): React.JSX.Element {
   }, [error, fetcher.data, fetcher.state, navigate]);
 
   const onClickOK = async () => {
-    if (!signup || !bucketKey) {
+    if (!signup || !bucketId) {
       return;
     }
 
-    fetcher.submit({ bucket_key: bucketKey }, { action: '../force_confirm', method: 'PATCH' });
+    fetcher.submit({ bucket_id: bucketId }, { action: '../force_confirm', method: 'PATCH' });
   };
 
   const renderBody = () => {
@@ -63,9 +63,9 @@ function ForceConfirmSignupModal(): React.JSX.Element {
           caption={t('events.signupAdmin.forceConfirmSignup.bucketInputCaption', {
             name: signup.user_con_profile.name_without_nickname,
           })}
-          name="bucketKey"
-          value={bucketKey}
-          onChange={setBucketKey}
+          name="bucketId"
+          value={bucketId}
+          onChange={setBucketId}
         />
         <p className="text-danger">{t('events.signupAdmin.forceConfirmSignup.overfillWarning')}</p>
         <ErrorDisplay graphQLError={error} />
@@ -73,7 +73,7 @@ function ForceConfirmSignupModal(): React.JSX.Element {
     );
   };
 
-  const disableOK = bucketKey == null || fetcher.state != 'idle';
+  const disableOK = bucketId == null || fetcher.state != 'idle';
 
   return (
     <Modal visible={signup != null}>

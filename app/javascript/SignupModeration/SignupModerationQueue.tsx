@@ -88,12 +88,9 @@ type SignupModerationRunDetailsProps = {
       registration_policy?: SignupModerationRunDetailsRun['event']['registration_policy'];
     };
   };
-  showRequestedBucket?: boolean;
-  requestedBucketKey?: string;
 };
 
-function SignupModerationRunDetails({ run, showRequestedBucket, requestedBucketKey }: SignupModerationRunDetailsProps) {
-  const { t } = useTranslation();
+function SignupModerationRunDetails({ run }: SignupModerationRunDetailsProps) {
   const { timezoneName } = useContext(AppRootContext);
   const runTimespan = timespanFromRun(timezoneName, run.event, run);
   const formatRunTimespan = useFormatRunTimespan();
@@ -103,15 +100,6 @@ function SignupModerationRunDetails({ run, showRequestedBucket, requestedBucketK
       {run.event.title}
       {run.title_suffix && `(${run.title_suffix})`}
       <br />
-      {showRequestedBucket && (
-        <>
-          <small>
-            <strong>{t('admin.signupModeration.bucketHeader')}</strong>{' '}
-            {(run.event.registration_policy?.buckets.find((bucket) => bucket.key === requestedBucketKey) || {}).name ||
-              t('signups.noPreference')}
-          </small>
-        </>
-      )}
       <small>{formatRunTimespan(runTimespan, { formatType: 'short' })}</small>
     </>
   );

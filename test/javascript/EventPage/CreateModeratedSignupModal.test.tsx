@@ -31,7 +31,6 @@ const run = { id: '20', starts_at: '2026-06-05T16:00:00Z' };
 const bucket: NonNullable<SignupOption['bucket']> = {
   __typename: 'RegistrationPolicyBucket',
   id: '1',
-  key: 'unlimited',
   name: 'Unlimited',
   description: null,
   not_counted: false,

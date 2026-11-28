@@ -34,7 +34,7 @@ describe('ChangeBucketModal', () => {
     id: '1',
     state: SignupState.Confirmed,
     counted: true,
-    bucket: { __typename: 'RegistrationPolicyBucket', id: '1', key: 'player' },
+    bucket: { __typename: 'RegistrationPolicyBucket', id: '1' },
     requested_bucket: null,
     run: {
       __typename: 'Run',
@@ -51,8 +51,8 @@ describe('ChangeBucketModal', () => {
         registration_policy: {
           __typename: 'RegistrationPolicy',
           buckets: [
-            { __typename: 'RegistrationPolicyBucket', id: '1', key: 'player', name: 'Player', anything: false },
-            { __typename: 'RegistrationPolicyBucket', id: '2', key: 'gm', name: 'GM', anything: false },
+            { __typename: 'RegistrationPolicyBucket', id: '1', name: 'Player', anything: false },
+            { __typename: 'RegistrationPolicyBucket', id: '2', name: 'GM', anything: false },
           ],
         },
         team_members: [],
@@ -103,10 +103,7 @@ describe('ChangeBucketModal', () => {
     },
   });
 
-  const buildMutationData = (
-    signup: Signup,
-    newBucket: { id: string; key: string },
-  ): ChangeSignupBucketMutationData => ({
+  const buildMutationData = (signup: Signup, newBucket: { id: string }): ChangeSignupBucketMutationData => ({
     __typename: 'Mutation',
     updateSignupBucket: {
       __typename: 'UpdateSignupBucketPayload',
@@ -115,7 +112,7 @@ describe('ChangeBucketModal', () => {
         id: signup.id,
         state: signup.state,
         counted: signup.counted,
-        bucket: { __typename: 'RegistrationPolicyBucket', id: newBucket.id, key: newBucket.key },
+        bucket: { __typename: 'RegistrationPolicyBucket', id: newBucket.id },
         requested_bucket: signup.requested_bucket,
         user_con_profile: signup.user_con_profile,
         run: {
@@ -162,23 +159,23 @@ describe('ChangeBucketModal', () => {
     return result;
   };
 
-  it("pre-selects the signup's current bucket by key, not id", async () => {
+  it("pre-selects the signup's current bucket", async () => {
     const { getByLabelText } = await renderChangeBucketModal(
-      buildSignup({ bucket: { __typename: 'RegistrationPolicyBucket', id: '1', key: 'player' } }),
+      buildSignup({ bucket: { __typename: 'RegistrationPolicyBucket', id: '1' } }),
     );
 
     expect((getByLabelText('Player (current)') as HTMLInputElement).checked).toBe(true);
     expect((getByLabelText('GM') as HTMLInputElement).checked).toBe(false);
   });
 
-  it('submits the newly selected bucket key when confirmed', async () => {
-    const signup = buildSignup({ bucket: { __typename: 'RegistrationPolicyBucket', id: '1', key: 'player' } });
+  it('submits the newly selected bucket ID when confirmed', async () => {
+    const signup = buildSignup({ bucket: { __typename: 'RegistrationPolicyBucket', id: '1' } });
     const mutationMock: MockLink.MockedResponse<ChangeSignupBucketMutationData> = {
       request: {
         query: ChangeSignupBucketDocument,
-        variables: { signupId: '1', bucketKey: 'gm' },
+        variables: { signupId: '1', bucketId: '2' },
       },
-      result: { data: buildMutationData(signup, { id: '2', key: 'gm' }) },
+      result: { data: buildMutationData(signup, { id: '2' }) },
     };
 
     const { getByLabelText, getByRole, queryByRole } = await renderChangeBucketModal(signup, [mutationMock]);
@@ -187,7 +184,7 @@ describe('ChangeBucketModal', () => {
     fireEvent.click(getByRole('button', { name: 'OK' }));
 
     // A successful submit navigates away, unmounting the modal's OK button -- if the fetcher had
-    // instead submitted a mismatched bucketKey (e.g. an id instead of a key), MockLink would have
+    // instead submitted the wrong bucketId, MockLink would have
     // no matching mock, the action would return an error, and the button would stay put.
     await waitFor(() => expect(queryByRole('button', { name: 'OK' })).toBeFalsy());
   });
