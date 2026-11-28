@@ -92,6 +92,9 @@ class IntercodeSchema < GraphQL::Schema # rubocop:disable GraphQL/MaxComplexityS
   query_analyzer DeprecatedUsageAnalyzer
 
   use GraphQL::Dataloader
+  # Makes `execute_next` and `multiplex_next` available.  `execute` still runs the original engine: nothing in the app
+  # calls the new one yet.  See test/graphql/execution_next_coverage_test.rb for what has to be converted first.
+  use GraphQL::Execution::Next
 
   rescue_from ActiveRecord::RecordInvalid do |err, _obj, _args, _ctx, _field|
     raise GraphQL::ExecutionError.new(
