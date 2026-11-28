@@ -8,8 +8,13 @@ class Types::UserConProfileType < Types::BaseObject
   include FormResponseAttrsFields
 
   # It should be safe to request these fields but they'll return nil if you're not authorized
-  def self.context_current_pending_order(context)
-    context[:current_pending_order]
+  def self.resolve_current_pending_order(profile, context)
+    # For your own profile this is the cart of the request, which combines any extra pending orders into one
+    return context[:current_pending_order] if profile == context[:user_con_profile]
+
+    # Don't use UserConProfile#current_pending_order for anyone else: looking at someone's cart shouldn't change it
+    order = profile.orders.pending.order(:id).last
+    order if order && Pundit.policy(context[:pundit_user], order).read?
   end
 
   def self.personal_info_field(field_name, *, **, &)
@@ -48,9 +53,7 @@ class Types::UserConProfileType < Types::BaseObject
         association_model: UserConProfile,
         null: false,
         description: "The convention this profile is attached to."
-  # This is the pending order of the request, whichever profile is being queried, which is what
-  # ContextAccessors#current_pending_order returns on the original engine
-  field :current_pending_order, Types::OrderType, null: true, resolve_static: :context_current_pending_order do
+  field :current_pending_order, Types::OrderType, null: true, resolve_each: :resolve_current_pending_order do
     description <<~MARKDOWN
       If this profile has a pending order, returns that order. Otherwise, returns null.
     MARKDOWN
@@ -177,6 +180,10 @@ class Types::UserConProfileType < Types::BaseObject
   def gravatar_url
     dataloader.with(Sources::ActiveRecordAssociation, UserConProfile, :user).load(object)
     object.gravatar_url
+  end
+
+  def current_pending_order
+    self.class.resolve_current_pending_order(object, context)
   end
 
   def signup_constraints

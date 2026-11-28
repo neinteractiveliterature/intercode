@@ -79,45 +79,78 @@ class ExecutionNextMacroFieldsTest < ActiveSupport::TestCase
     assert_equal [{ "id" => coupon.id.to_s }], data["entries"]
   end
 
-  # These three come from the request rather than from the object being queried
-  describe "fields that ContextAccessors resolves" do
+  # These fields share a name with a method from ContextAccessors, but have to describe the record being queried
+  describe "fields named like a ContextAccessors method" do
     let(:other_convention) { create(:convention) }
+    let(:other_profile) { create(:user_con_profile, convention:) }
 
-    it "returns the request's convention for a coupon or ticket" do
+    it "returns a coupon's or ticket's own convention" do
       coupon = create(:coupon, convention: other_convention)
       ticket = create(:ticket, user_con_profile: create(:user_con_profile, convention: other_convention))
+      site_admin = create(:user_con_profile, convention:, user: create(:site_admin))
 
       { Types::CouponType => coupon, Types::TicketType => ticket }.each do |type, record|
-        data = assert_engines_agree(type, "convention { id }", -> { record.class.find(record.id) }, context_for(admin))
+        data =
+          assert_engines_agree(type, "convention { id }", -> { record.class.find(record.id) }, context_for(site_admin))
 
-        assert_equal convention.id.to_s, data.dig("convention", "id")
+        assert_equal other_convention.id.to_s, data.dig("convention", "id")
       end
     end
 
-    it "returns the request's pending order for any profile" do
-      order = create(:order, user_con_profile: admin)
-
-      data =
-        assert_engines_agree(
-          Types::UserConProfileType,
-          "current_pending_order { id }",
-          -> { create(:user_con_profile, convention:) },
-          context_for(admin, current_pending_order: order)
-        )
-
-      assert_equal order.id.to_s, data.dig("current_pending_order", "id")
-    end
-
-    it "returns the request's profile for signup constraints" do
+    it "returns the profile that signup constraints are for" do
       data =
         assert_engines_agree(
           Types::UserSignupConstraintsType,
           "user_con_profile { id }",
-          -> { UserSignupConstraints.new(create(:user_con_profile, convention:)) },
+          -> { UserSignupConstraints.new(UserConProfile.find(other_profile.id)) },
           context_for(admin)
         )
 
-      assert_equal admin.id.to_s, data.dig("user_con_profile", "id")
+      assert_equal other_profile.id.to_s, data.dig("user_con_profile", "id")
+    end
+
+    describe "current_pending_order" do
+      def pending_order_of(profile, seen_by:, **context_attrs)
+        data =
+          assert_engines_agree(
+            Types::UserConProfileType,
+            "current_pending_order { id }",
+            -> { UserConProfile.find(profile.id) },
+            context_for(seen_by, **context_attrs)
+          )
+        data.dig("current_pending_order", "id")
+      end
+
+      it "returns the request's cart for your own profile" do
+        order = create(:order, user_con_profile: viewer)
+
+        assert_equal order.id.to_s, pending_order_of(viewer, seen_by: viewer, current_pending_order: order)
+      end
+
+      it "returns the queried profile's order, not yours, to someone allowed to see it" do
+        my_order = create(:order, user_con_profile: admin)
+        their_order = create(:order, user_con_profile: other_profile)
+
+        assert_equal their_order.id.to_s,
+                     pending_order_of(other_profile, seen_by: admin, current_pending_order: my_order)
+      end
+
+      it "returns nothing to someone who isn't allowed to see the order" do
+        # Team members can have a bio, which makes their profile readable by everyone
+        create(:team_member, user_con_profile: other_profile, event: create(:event, convention:))
+        create(:order, user_con_profile: other_profile)
+        my_order = create(:order, user_con_profile: viewer)
+
+        assert_nil pending_order_of(other_profile, seen_by: viewer, current_pending_order: my_order)
+      end
+
+      it "doesn't combine or delete someone else's carts when looking at them" do
+        orders = create_list(:order, 2, user_con_profile: other_profile)
+
+        pending_order_of(other_profile, seen_by: admin)
+
+        assert_equal orders.map(&:id).sort, other_profile.orders.pending.pluck(:id).sort
+      end
     end
   end
 end
