@@ -1,5 +1,4 @@
 # frozen_string_literal: true
-# rubocop:disable Metrics/ClassLength
 class Types::UserConProfileType < Types::BaseObject
   description <<~MARKDOWN
     A UserConProfile is a user's profile in a particular convention web site.  Most convention-level objects are

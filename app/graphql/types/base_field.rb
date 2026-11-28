@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Types::BaseField < GraphQL::Schema::Field # rubocop:disable GraphQL/ObjectDescription
+class Types::BaseField < GraphQL::Schema::Field
   def authorize(&block)
     @authorization_block = block
   end

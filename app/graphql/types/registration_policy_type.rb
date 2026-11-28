@@ -18,6 +18,7 @@ class Types::RegistrationPolicyType < Types::BaseObject
   field :minimum_slots_including_not_counted, Integer, null: true do # rubocop:disable GraphQL/ExtractType
     description "The sum of minimum slots across all buckets, including not-counted buckets."
   end
+  # rubocop:disable-next GraphQL/UselessMethodOption
   field :only_uncounted, Boolean, method: :only_uncounted?, null: true do
     description "Does this registration policy include only not-counted buckets?"
   end
@@ -28,6 +29,7 @@ class Types::RegistrationPolicyType < Types::BaseObject
   field :prevent_no_preference_signups, Boolean, null: false do
     description "If true, no-preference signups will not be allowed for this event."
   end
+  # rubocop:disable-next GraphQL/UselessMethodOption
   field :slots_limited, Boolean, method: :slots_limited?, null: true do
     description <<~MARKDOWN
       Does this event have an effectively-limited number of slots?

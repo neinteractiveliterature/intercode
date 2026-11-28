@@ -1,5 +1,5 @@
 # frozen_string_literal: true
-class Types::ConventionType < Types::BaseObject # rubocop:disable Metrics/ClassLength
+class Types::ConventionType < Types::BaseObject
   description <<~MARKDOWN
     A Convention in Intercode is essentially a web site hosted by Intercode.  A Convention can represent an actual,
     real-world convention (and this is probably the most common use case), but it can also represent a single event

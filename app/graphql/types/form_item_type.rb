@@ -1,18 +1,38 @@
 # frozen_string_literal: true
 class Types::FormItemType < Types::BaseObject
-  field :admin_description, String, null: true
-  field :default_value, Types::JSON, null: true
-  field :expose_in, [Types::FormItemExposeInType], null: true
-  field :form_section, Types::FormSectionType, null: false, camelize: false
-  field :id, ID, null: false
-  field :identifier, String, null: true
-  field :item_type, String, null: false
-  field :position, Int, null: false
-  field :properties, Types::JSON, null: false
-  field :public_description, String, null: true
-  field :rendered_properties, Types::JSON, null: false
-  field :visibility, Types::FormItemRoleType, null: false
-  field :writeability, Types::FormItemRoleType, null: false
+  description "A single question or block of content on a form"
+  field :admin_description, String, null: true, description: "An explanation of this item shown to form editors"
+  field :default_value, Types::JSON, null: true, description: "The value this item starts with"
+  field :expose_in,
+        [Types::FormItemExposeInType],
+        null: true,
+        description: "The other places this item's value is made available"
+  field :form_section,
+        Types::FormSectionType,
+        null: false,
+        camelize: false,
+        description: "The form section containing this item"
+  field :id, ID, null: false, description: "The ID of this form item"
+  field :identifier, String, null: true, description: "The name this item's value is stored under in form responses"
+  field :item_type, String, null: false, description: "The kind of input or content this item is"
+  field :position, Int, null: false, description: "Where this item appears within its section"
+  field :properties, Types::JSON, null: false, description: "The settings specific to this item type"
+  field :public_description,
+        String,
+        null: true,
+        description: "An explanation of this item shown to people filling out the form"
+  field :rendered_properties,
+        Types::JSON,
+        null: false,
+        description: "The item's settings, with any Markdown rendered as HTML"
+  field :visibility,
+        Types::FormItemRoleType,
+        null: false,
+        description: "The role someone needs to see this item's value"
+  field :writeability,
+        Types::FormItemRoleType,
+        null: false,
+        description: "The role someone needs to change this item's value"
 
   association_loaders FormItem, :form_section
 

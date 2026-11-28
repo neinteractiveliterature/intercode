@@ -346,11 +346,33 @@ input CmsLayoutInput {
   navbar_classes: String
 }
 
+"""
+A link or section in a CMS navigation bar
+"""
 type CmsNavigationItem {
+  """
+  The ID of this navigation item
+  """
   id: ID!
+
+  """
+  The section containing this item, if it is inside one
+  """
   navigation_section: CmsNavigationItem
+
+  """
+  The page this item links to, if it is a link
+  """
   page: Page
+
+  """
+  Where this item appears relative to its siblings
+  """
   position: Int
+
+  """
+  The text shown in the navigation bar
+  """
   title: String
 }
 
@@ -1713,11 +1735,18 @@ type ConventionReports {
   total_revenue: Money! @deprecated(reason: "This only takes ticket sales into account.  Please use the sum_revenue field instead.")
 }
 
+"""
+One page of a longer list of results
+"""
 type ConventionsPagination implements PaginationInterface {
   """
   The number of the page currently being returned in this query
   """
   current_page: Int!
+
+  """
+  The results on this page
+  """
   entries: [Convention!]!
 
   """
@@ -1770,21 +1799,73 @@ type ConvertTicketToEventProvidedPayload {
   ticket: Ticket!
 }
 
+"""
+A discount code that can be applied to orders
+"""
 type Coupon {
+  """
+  The code people enter to use this coupon
+  """
   code: String!
+
+  """
+  The convention this coupon belongs to
+  """
   convention: Convention!
+
+  """
+  When this coupon stops working, if it expires
+  """
   expires_at: Date
+
+  """
+  The amount this coupon takes off, if it is a fixed-amount discount
+  """
   fixed_amount: Money
+
+  """
+  The ID of this coupon
+  """
   id: ID!
+
+  """
+  The percentage this coupon takes off, if it is a percentage discount
+  """
   percent_discount: BigDecimal
+
+  """
+  The product this coupon gives away for free, if any
+  """
   provides_product: Product
+
+  """
+  The maximum number of times this coupon can be used, if limited
+  """
   usage_limit: Int
 }
 
+"""
+A coupon that has been applied to an order
+"""
 type CouponApplication {
+  """
+  The coupon that was applied
+  """
   coupon: Coupon!
+
+  """
+  How much the coupon takes off the order
+  """
   discount: Money!
+
+  """
+  The ID of this coupon application
+  """
   id: ID!
+
+  """
+  The order the coupon was applied to
+  """
   order: Order!
 }
 
@@ -1801,11 +1882,18 @@ input CouponInput {
   usage_limit: Int
 }
 
+"""
+One page of a longer list of results
+"""
 type CouponsPagination implements PaginationInterface {
   """
   The number of the page currently being returned in this query
   """
   current_page: Int!
+
+  """
+  The results on this page
+  """
   entries: [Coupon!]!
 
   """
@@ -3796,10 +3884,28 @@ type DeleteUserConProfilePayload {
   user_con_profile: UserConProfile!
 }
 
+"""
+A group of event categories in a convention
+"""
 type Department {
+  """
+  The event categories in this department
+  """
   event_categories: [EventCategory!]!
+
+  """
+  The ID of this department
+  """
   id: ID!
+
+  """
+  The name of this department
+  """
   name: String!
+
+  """
+  The text describing this department to people proposing events
+  """
   proposal_description: String
 }
 
@@ -3858,11 +3964,18 @@ input EmailRouteInput {
   receiver_address: String
 }
 
+"""
+One page of a longer list of results
+"""
 type EmailRoutesPagination implements PaginationInterface {
   """
   The number of the page currently being returned in this query
   """
   current_page: Int!
+
+  """
+  The results on this page
+  """
   entries: [EmailRoute!]!
 
   """
@@ -4099,12 +4212,38 @@ type Event {
   url: String
 }
 
+"""
+A kind of event at a convention, which determines its forms, colors and options
+"""
 type EventCategory {
+  """
+  Whether events in this category can provide tickets to their team members
+  """
   can_provide_tickets: Boolean!
+
+  """
+  The convention this category belongs to
+  """
   convention: Convention!
+
+  """
+  The schedule grid color for events in this category
+  """
   default_color: String
+
+  """
+  The department that oversees this category, if any
+  """
   department: Department
+
+  """
+  The form used to edit events in this category
+  """
   event_form: Form!
+
+  """
+  The form used to propose events in this category, if proposals are allowed
+  """
   event_proposal_form: Form
   events_paginated(
     """
@@ -4130,14 +4269,50 @@ type EventCategory {
     """
     sort: [SortInput!]
   ): EventsPagination!
+
+  """
+  The schedule grid color for full runs in this category
+  """
   full_color: String
+
+  """
+  The ID of this event category
+  """
   id: ID!
+
+  """
+  The name of this category
+  """
   name: String!
+
+  """
+  Whether people can propose events in this category
+  """
   proposable: Boolean!
+
+  """
+  The text describing this category to people proposing events
+  """
   proposal_description: String
+
+  """
+  Which scheduling interface to use for events in this category
+  """
   scheduling_ui: SchedulingUi!
+
+  """
+  The schedule grid color for runs the viewer is signed up for
+  """
   signed_up_color: String
+
+  """
+  The plural of the team member name
+  """
   teamMemberNamePlural: String!
+
+  """
+  What team members of these events are called, such as "GM"
+  """
   team_member_name: String!
 }
 
@@ -4296,11 +4471,18 @@ input EventProposalInput {
   removeImageBlobIds: [ID!]
 }
 
+"""
+One page of a longer list of results
+"""
 type EventProposalsPagination implements PaginationInterface {
   """
   The number of the page currently being returned in this query
   """
   current_page: Int!
+
+  """
+  The results on this page
+  """
   entries: [EventProposal!]!
 
   """
@@ -4329,11 +4511,18 @@ type EventWithChoiceCounts {
   event: Event!
 }
 
+"""
+One page of a longer list of results
+"""
 type EventsPagination implements PaginationInterface {
   """
   The number of the page currently being returned in this query
   """
   current_page: Int!
+
+  """
+  The results on this page
+  """
   entries: [Event!]!
 
   """
@@ -4392,20 +4581,58 @@ type ForceConfirmSignupPayload {
   signup: Signup!
 }
 
+"""
+A configurable form, such as an event or user profile form
+"""
 type Form {
+  """
+  The event categories that use this as their event form
+  """
   event_categories: [EventCategory!]!
+
+  """
+  The whole form definition as JSON, for exporting
+  """
   export_json: Json!
+
+  """
+  A single section of this form by ID
+  """
   form_section(
     """
     The ID of the form section to find.
     """
     id: ID!
   ): FormSection!
+
+  """
+  The sections of this form
+  """
   form_sections: [FormSection!]!
+
+  """
+  What this form is used for
+  """
   form_type: FormType!
+
+  """
+  The ID of this form
+  """
   id: ID!
+
+  """
+  The event categories that use this as their proposal form
+  """
   proposal_event_categories: [EventCategory!]!
+
+  """
+  The title of this form
+  """
   title: String!
+
+  """
+  The conventions that use this as their user profile form
+  """
   user_con_profile_conventions: [Convention!]!
 }
 
@@ -4413,19 +4640,73 @@ input FormInput {
   title: String
 }
 
+"""
+A single question or block of content on a form
+"""
 type FormItem {
+  """
+  An explanation of this item shown to form editors
+  """
   admin_description: String
+
+  """
+  The value this item starts with
+  """
   default_value: Json
+
+  """
+  The other places this item's value is made available
+  """
   expose_in: [FormItemExposeIn!]
+
+  """
+  The form section containing this item
+  """
   form_section: FormSection!
+
+  """
+  The ID of this form item
+  """
   id: ID!
+
+  """
+  The name this item's value is stored under in form responses
+  """
   identifier: String
+
+  """
+  The kind of input or content this item is
+  """
   item_type: String!
+
+  """
+  Where this item appears within its section
+  """
   position: Int!
+
+  """
+  The settings specific to this item type
+  """
   properties: Json!
+
+  """
+  An explanation of this item shown to people filling out the form
+  """
   public_description: String
+
+  """
+  The item's settings, with any Markdown rendered as HTML
+  """
   rendered_properties: Json!
+
+  """
+  The role someone needs to see this item's value
+  """
   visibility: FormItemRole!
+
+  """
+  The role someone needs to change this item's value
+  """
   writeability: FormItemRole!
 }
 
@@ -4454,21 +4735,73 @@ enum FormItemRole {
   team_member
 }
 
+"""
+A recorded change to one field of a form response
+"""
 type FormResponseChange {
+  """
+  Whether this change has been through compaction, which merges nearby edits
+  """
   compacted: Boolean!
+
+  """
+  When this change was made
+  """
   created_at: Date!
+
+  """
+  The identifier of the form item that changed
+  """
   field_identifier: String!
+
+  """
+  The value after the change
+  """
   new_value: Json
+
+  """
+  When notifications about this change were sent, if they have been
+  """
   notified_at: Date
+
+  """
+  The value before the change
+  """
   previous_value: Json
+
+  """
+  When this change record was last updated
+  """
   updated_at: Date!
+
+  """
+  The person who made the change
+  """
   user_con_profile: UserConProfile!
 }
 
+"""
+A titled group of items on a form
+"""
 type FormSection {
+  """
+  The form containing this section
+  """
   form: Form!
+
+  """
+  The items in this section
+  """
   form_items: [FormItem!]!
+
+  """
+  The ID of this form section
+  """
   id: ID!
+
+  """
+  Where this section appears within its form
+  """
   position: Int!
 
   """
@@ -4483,6 +4816,10 @@ type FormSection {
     """
     formItem: FormItemInput!
   ): FormItem!
+
+  """
+  The title of this section
+  """
   title: String
 }
 
@@ -6144,12 +6481,38 @@ input OAuthApplicationInput {
   scopes: [String!]
 }
 
+"""
+A purchase, or a shopping cart that has not yet been paid for
+"""
 type Order {
+  """
+  The payment processor's ID for the charge, if one was made
+  """
   charge_id: String
+
+  """
+  The coupons applied to this order
+  """
   coupon_applications: [CouponApplication!]!
+
+  """
+  The ID of this order
+  """
   id: ID!
+
+  """
+  The lines of this order
+  """
   order_entries: [OrderEntry!]!
+
+  """
+  When this order was paid for
+  """
   paid_at: Date
+
+  """
+  The amount paid
+  """
   payment_amount: Money
 
   """
@@ -6158,23 +6521,85 @@ type Order {
   Apple Pay or Google Pay.
   """
   payment_intent_client_secret: String!
+
+  """
+  A note about how this order was paid
+  """
   payment_note: String
+
+  """
+  Where this order is in the purchasing process
+  """
   status: OrderStatus!
+
+  """
+  When this order was submitted
+  """
   submitted_at: Date
+
+  """
+  The price after discounts
+  """
   total_price: Money!
+
+  """
+  The price before discounts
+  """
   total_price_before_discounts: Money!
+
+  """
+  The person who placed this order
+  """
   user_con_profile: UserConProfile!
 }
 
+"""
+One line of an order: a quantity of a product
+"""
 type OrderEntry {
+  """
+  A human-readable summary of what this entry is for
+  """
   describe_products: String!
+
+  """
+  The ID of this order entry
+  """
   id: ID!
+
+  """
+  The order containing this entry
+  """
   order: Order!
+
+  """
+  The total price of this entry
+  """
   price: Money!
+
+  """
+  The price of each item in this entry
+  """
   price_per_item: Money!
+
+  """
+  The product being ordered
+  """
   product: Product!
+
+  """
+  The variant of the product, if it has variants
+  """
   product_variant: ProductVariant
+
+  """
+  The number of items ordered
+  """
   quantity: Int!
+
+  """
+  The run this entry is for, if it is for a particular run
+  """
   run: Run
 }
 
@@ -6225,11 +6650,18 @@ enum OrderStatus {
   unpaid
 }
 
+"""
+One page of a longer list of results
+"""
 type OrdersPagination implements PaginationInterface {
   """
   The number of the page currently being returned in this query
   """
   current_page: Int!
+
+  """
+  The results on this page
+  """
   entries: [Order!]!
 
   """
@@ -6248,11 +6680,33 @@ type OrdersPagination implements PaginationInterface {
   total_pages: Int!
 }
 
+"""
+A group that runs one or more conventions
+"""
 type Organization {
+  """
+  The conventions this organization runs
+  """
   conventions: [Convention!]!
+
+  """
+  Whether you can manage who has access to this organization
+  """
   current_ability_can_manage_access: Boolean!
+
+  """
+  The ID of this organization
+  """
   id: ID!
+
+  """
+  The name of this organization
+  """
   name: String!
+
+  """
+  The roles within this organization
+  """
   organization_roles: [OrganizationRole!]!
 }
 
@@ -6281,11 +6735,33 @@ type OrganizationAttendanceCount {
   user_id: ID!
 }
 
+"""
+A role within an organization that grants permissions to its members
+"""
 type OrganizationRole {
+  """
+  The ID of this organization role
+  """
   id: ID!
+
+  """
+  The name of this role
+  """
   name: String!
+
+  """
+  The organization this role belongs to
+  """
   organization: Organization!
+
+  """
+  The permissions this role grants
+  """
   permissions: [Permission!]!
+
+  """
+  The users who have this role
+  """
   users: [User!]!
 }
 
@@ -6636,16 +7112,58 @@ input ProductInput {
   providesTicketTypeId: ID
 }
 
+"""
+One of the options a product comes in, such as a shirt size
+"""
 type ProductVariant {
+  """
+  A description of this variant
+  """
   description: String
+
+  """
+  The description, rendered as HTML
+  """
   description_html: String
+
+  """
+  The ID of this product variant
+  """
   id: ID!
+
+  """
+  A picture of this variant
+  """
   image: ActiveStorageAttachment
+
+  """
+  The URL of the picture of this variant
+  """
   image_url: String @deprecated(reason: "Please use the image field instead.")
+
+  """
+  The name of this variant
+  """
   name: String!
+
+  """
+  How many of this variant have been ordered, grouped by order status
+  """
   order_quantities_by_status: [OrderQuantityByStatus!]!
+
+  """
+  The pricing for this variant, if it differs from the product's
+  """
   override_pricing_structure: PricingStructure
+
+  """
+  Where this variant appears among the product's variants
+  """
   position: Int
+
+  """
+  The product this is a variant of
+  """
   product: Product!
 }
 
@@ -7117,6 +7635,10 @@ type RankedChoiceDecisionsPagination implements PaginationInterface {
   The number of the page currently being returned in this query
   """
   current_page: Int!
+
+  """
+  The results on this page
+  """
   entries: [RankedChoiceDecision!]!
 
   """
@@ -7578,9 +8100,23 @@ type RevokeAuthorizedApplicationPayload {
   clientMutationId: String
 }
 
+"""
+A place where runs can be scheduled
+"""
 type Room {
+  """
+  The ID of this room
+  """
   id: ID!
+
+  """
+  The name of this room
+  """
   name: String
+
+  """
+  The runs scheduled in this room
+  """
   runs: [Run!]!
 }
 
@@ -7975,11 +8511,18 @@ input RunInput {
   title_suffix: String
 }
 
+"""
+One page of a longer list of results
+"""
 type RunsPagination implements PaginationInterface {
   """
   The number of the page currently being returned in this query
   """
   current_page: Int!
+
+  """
+  The results on this page
+  """
   entries: [Run!]!
 
   """
@@ -8395,11 +8938,18 @@ input SignupChangeFiltersInput {
   name: String
 }
 
+"""
+One page of a longer list of results
+"""
 type SignupChangesPagination implements PaginationInterface {
   """
   The number of the page currently being returned in this query
   """
   current_page: Int!
+
+  """
+  The results on this page
+  """
   entries: [SignupChange!]!
 
   """
@@ -8698,11 +9248,18 @@ enum SignupRequestState {
   withdrawn
 }
 
+"""
+One page of a longer list of results
+"""
 type SignupRequestsPagination implements PaginationInterface {
   """
   The number of the page currently being returned in this query
   """
   current_page: Int!
+
+  """
+  The results on this page
+  """
   entries: [SignupRequest!]!
 
   """
@@ -8869,11 +9426,18 @@ enum SignupState {
   withdrawn
 }
 
+"""
+One page of a longer list of results
+"""
 type SignupsPagination implements PaginationInterface {
   """
   The number of the page currently being returned in this query
   """
   current_page: Int!
+
+  """
+  The results on this page
+  """
   entries: [Signup!]!
 
   """
@@ -8963,14 +9527,48 @@ input SortInput {
   field: String!
 }
 
+"""
+A staff role at a convention, which can grant permissions and receive email
+"""
 type StaffPosition {
+  """
+  Addresses copied on email sent to this position
+  """
   cc_addresses: [String!]!
+
+  """
+  The email address for this position
+  """
   email: String
+
+  """
+  Other addresses that also reach this position
+  """
   email_aliases: [String!]!
+
+  """
+  The ID of this staff position
+  """
   id: ID!
+
+  """
+  The name of this position
+  """
   name: String!
+
+  """
+  The permissions this position grants
+  """
   permissions: [Permission!]!
+
+  """
+  The people who hold this position
+  """
   user_con_profiles: [UserConProfile!]!
+
+  """
+  Whether this position is shown publicly
+  """
   visible: Boolean
 }
 
@@ -9053,14 +9651,48 @@ type SubmitOrderPayload {
   order: Order!
 }
 
+"""
+A person who is part of the team running an event
+"""
 type TeamMember {
+  """
+  Whether to list this person publicly as part of the team
+  """
   display_team_member: Boolean!
+
+  """
+  This person's email address, if you are signed in
+  """
   email: String
+
+  """
+  The event this person is on the team of
+  """
   event: Event!
+
+  """
+  The ID of this team member
+  """
   id: ID!
+
+  """
+  Whether this person gets email from the convention about the event
+  """
   receive_con_email: Boolean!
+
+  """
+  Which signup notifications this person gets by email
+  """
   receive_signup_email: ReceiveSignupEmail!
+
+  """
+  Whether to show this person's email address on the event page
+  """
   show_email: Boolean!
+
+  """
+  The profile of this team member
+  """
   user_con_profile: UserConProfile!
 }
 
@@ -9071,15 +9703,53 @@ input TeamMemberInput {
   show_email: Boolean
 }
 
+"""
+A person's admission to a convention
+"""
 type Ticket {
+  """
+  The convention this ticket is for
+  """
   convention: Convention!
+
+  """
+  When this ticket was created
+  """
   created_at: Date!
+
+  """
+  The ID of this ticket
+  """
   id: ID!
+
+  """
+  The purchase that created this ticket, if it was bought
+  """
   order_entry: OrderEntry
+
+  """
+  The event that provided this ticket, if one did
+  """
   provided_by_event: Event
+
+  """
+  The run this ticket is for, if it is for a particular run
+  """
   run: Run
+
+  """
+  The kind of ticket this is
+  """
   ticket_type: TicketType!
+
+  """
+  When this ticket was last updated
+  """
   updated_at: Date!
+
+  """
+  The person this ticket belongs to
+  """
   user_con_profile: UserConProfile!
 }
 
@@ -9111,16 +9781,63 @@ enum TicketMode {
   ticket_per_event
 }
 
+"""
+A kind of ticket that can be held for a convention or event
+"""
 type TicketType {
+  """
+  Whether holders can sign up for events
+  """
   allows_event_signups: Boolean!
+
+  """
+  The convention this ticket type belongs to, if it isn't specific to an event
+  """
   convention: Convention
+
+  """
+  Whether these tickets count against the convention's attendance limit
+  """
   counts_towards_convention_maximum: Boolean!
+
+  """
+  A human-readable description of this ticket type
+  """
   description: String
+
+  """
+  The event this ticket type belongs to, if it is specific to one
+  """
   event: Event
+
+  """
+  The ID of this ticket type
+  """
   id: ID!
-  maximum_event_provided_tickets(eventId: ID): Int!
+
+  """
+  How many of these tickets an event can provide to its team members
+  """
+  maximum_event_provided_tickets(
+    """
+    An event whose override of this number should be used
+    """
+    eventId: ID
+  ): Int!
+
+  """
+  The identifier-style name of this ticket type
+  """
   name: String!
+
+  """
+  The convention or event this ticket type belongs to
+  """
   parent: TicketTypeParent!
+
+  """
+  The products that sell this type of ticket
+  """
   providing_products: [Product!]!
 }
 
@@ -10327,14 +11044,48 @@ type User {
   user_con_profiles: [UserConProfile!]!
 }
 
+"""
+A rule that notifies people about activity matching certain criteria
+"""
 type UserActivityAlert {
+  """
+  The convention this alert applies to
+  """
   convention: Convention!
+
+  """
+  The email address to watch for
+  """
   email: String
+
+  """
+  The ID of this user activity alert
+  """
   id: ID!
+
+  """
+  Who gets notified
+  """
   notification_destinations: [NotificationDestination!]!
+
+  """
+  Part of a name to watch for
+  """
   partial_name: String
+
+  """
+  Whether to alert when a matching person gets a ticket
+  """
   trigger_on_ticket_create: Boolean!
+
+  """
+  Whether to alert when a matching person creates a profile
+  """
   trigger_on_user_con_profile_create: Boolean!
+
+  """
+  The user to watch for
+  """
   user: User
 }
 
@@ -10694,11 +11445,18 @@ input UserConProfileInput {
   zipcode: String
 }
 
+"""
+One page of a longer list of results
+"""
 type UserConProfilesPagination implements PaginationInterface {
   """
   The number of the page currently being returned in this query
   """
   current_page: Int!
+
+  """
+  The results on this page
+  """
   entries: [UserConProfile!]!
 
   """
@@ -10745,11 +11503,18 @@ type UserSignupConstraints {
   user_con_profile: UserConProfile!
 }
 
+"""
+One page of a longer list of results
+"""
 type UsersPagination implements PaginationInterface {
   """
   The number of the page currently being returned in this query
   """
   current_page: Int!
+
+  """
+  The results on this page
+  """
   entries: [User!]!
 
   """

@@ -1,11 +1,15 @@
 # frozen_string_literal: true
 class Types::CmsNavigationItemType < Types::BaseObject
-  field :id, ID, null: false
-  field :position, Integer, null: true
-  field :title, String, null: true
+  description "A link or section in a CMS navigation bar"
+  field :id, ID, null: false, description: "The ID of this navigation item"
+  field :position, Integer, null: true, description: "Where this item appears relative to its siblings"
+  field :title, String, null: true, description: "The text shown in the navigation bar"
 
-  field :navigation_section, Types::CmsNavigationItemType, null: true
-  field :page, Types::PageType, null: true
+  field :navigation_section,
+        Types::CmsNavigationItemType,
+        null: true,
+        description: "The section containing this item, if it is inside one"
+  field :page, Types::PageType, null: true, description: "The page this item links to, if it is a link"
 
   association_loaders CmsNavigationItem, :navigation_section, :page
 end

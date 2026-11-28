@@ -149,13 +149,12 @@ class Types::EventType < Types::BaseObject
     meptos.select { |mepto| policy(mepto).read? }
   end
 
-  # rubocop:disable Naming/PredicateMethod
+  # rubocop:disable-next Naming/PredicateMethod
   def slots_limited
     policy = registration_policy
     dataloader.with(Sources::ActiveRecordAssociation, RegistrationPolicy, :buckets).load(policy)
     policy.slots_limited?
   end
-  # rubocop:enable Naming/PredicateMethod
 
   def total_slots
     policy = registration_policy
