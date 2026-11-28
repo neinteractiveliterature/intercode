@@ -1,9 +1,10 @@
 # frozen_string_literal: true
 class Types::CouponApplicationType < Types::BaseObject
-  field :coupon, Types::CouponType, null: false
-  field :discount, Types::MoneyType, null: false
-  field :id, ID, null: false
-  field :order, Types::OrderType, null: false
+  description "A coupon that has been applied to an order"
+  field :coupon, Types::CouponType, null: false, description: "The coupon that was applied"
+  field :discount, Types::MoneyType, null: false, description: "How much the coupon takes off the order"
+  field :id, ID, null: false, description: "The ID of this coupon application"
+  field :order, Types::OrderType, null: false, description: "The order the coupon was applied to"
 
   association_loaders CouponApplication, :coupon, :order
 end

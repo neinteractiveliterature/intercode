@@ -2758,11 +2758,11 @@
         {
           "kind": "OBJECT",
           "name": "CmsNavigationItem",
-          "description": null,
+          "description": "A link or section in a CMS navigation bar",
           "fields": [
             {
               "name": "id",
-              "description": null,
+              "description": "The ID of this navigation item",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -2778,7 +2778,7 @@
             },
             {
               "name": "navigation_section",
-              "description": null,
+              "description": "The section containing this item, if it is inside one",
               "args": [],
               "type": {
                 "kind": "OBJECT",
@@ -2790,7 +2790,7 @@
             },
             {
               "name": "page",
-              "description": null,
+              "description": "The page this item links to, if it is a link",
               "args": [],
               "type": {
                 "kind": "OBJECT",
@@ -2802,7 +2802,7 @@
             },
             {
               "name": "position",
-              "description": null,
+              "description": "Where this item appears relative to its siblings",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -2814,7 +2814,7 @@
             },
             {
               "name": "title",
-              "description": null,
+              "description": "The text shown in the navigation bar",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -7295,7 +7295,7 @@
         {
           "kind": "OBJECT",
           "name": "ConventionsPagination",
-          "description": null,
+          "description": "One page of a longer list of results",
           "fields": [
             {
               "name": "current_page",
@@ -7315,7 +7315,7 @@
             },
             {
               "name": "entries",
-              "description": null,
+              "description": "The results on this page",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -7530,11 +7530,11 @@
         {
           "kind": "OBJECT",
           "name": "Coupon",
-          "description": null,
+          "description": "A discount code that can be applied to orders",
           "fields": [
             {
               "name": "code",
-              "description": null,
+              "description": "The code people enter to use this coupon",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -7550,7 +7550,7 @@
             },
             {
               "name": "convention",
-              "description": null,
+              "description": "The convention this coupon belongs to",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -7566,7 +7566,7 @@
             },
             {
               "name": "expires_at",
-              "description": null,
+              "description": "When this coupon stops working, if it expires",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -7578,7 +7578,7 @@
             },
             {
               "name": "fixed_amount",
-              "description": null,
+              "description": "The amount this coupon takes off, if it is a fixed-amount discount",
               "args": [],
               "type": {
                 "kind": "OBJECT",
@@ -7590,7 +7590,7 @@
             },
             {
               "name": "id",
-              "description": null,
+              "description": "The ID of this coupon",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -7606,7 +7606,7 @@
             },
             {
               "name": "percent_discount",
-              "description": null,
+              "description": "The percentage this coupon takes off, if it is a percentage discount",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -7618,7 +7618,7 @@
             },
             {
               "name": "provides_product",
-              "description": null,
+              "description": "The product this coupon gives away for free, if any",
               "args": [],
               "type": {
                 "kind": "OBJECT",
@@ -7630,7 +7630,7 @@
             },
             {
               "name": "usage_limit",
-              "description": null,
+              "description": "The maximum number of times this coupon can be used, if limited",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -7649,11 +7649,11 @@
         {
           "kind": "OBJECT",
           "name": "CouponApplication",
-          "description": null,
+          "description": "A coupon that has been applied to an order",
           "fields": [
             {
               "name": "coupon",
-              "description": null,
+              "description": "The coupon that was applied",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -7669,7 +7669,7 @@
             },
             {
               "name": "discount",
-              "description": null,
+              "description": "How much the coupon takes off the order",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -7685,7 +7685,7 @@
             },
             {
               "name": "id",
-              "description": null,
+              "description": "The ID of this coupon application",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -7701,7 +7701,7 @@
             },
             {
               "name": "order",
-              "description": null,
+              "description": "The order the coupon was applied to",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -7830,7 +7830,7 @@
         {
           "kind": "OBJECT",
           "name": "CouponsPagination",
-          "description": null,
+          "description": "One page of a longer list of results",
           "fields": [
             {
               "name": "current_page",
@@ -7850,7 +7850,7 @@
             },
             {
               "name": "entries",
-              "description": null,
+              "description": "The results on this page",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -14453,11 +14453,11 @@
         {
           "kind": "OBJECT",
           "name": "Department",
-          "description": null,
+          "description": "A group of event categories in a convention",
           "fields": [
             {
               "name": "event_categories",
-              "description": null,
+              "description": "The event categories in this department",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -14481,7 +14481,7 @@
             },
             {
               "name": "id",
-              "description": null,
+              "description": "The ID of this department",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -14497,7 +14497,7 @@
             },
             {
               "name": "name",
-              "description": null,
+              "description": "The name of this department",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -14513,7 +14513,7 @@
             },
             {
               "name": "proposal_description",
-              "description": null,
+              "description": "The text describing this department to people proposing events",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -14805,7 +14805,7 @@
         {
           "kind": "OBJECT",
           "name": "EmailRoutesPagination",
-          "description": null,
+          "description": "One page of a longer list of results",
           "fields": [
             {
               "name": "current_page",
@@ -14825,7 +14825,7 @@
             },
             {
               "name": "entries",
-              "description": null,
+              "description": "The results on this page",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -15645,11 +15645,11 @@
         {
           "kind": "OBJECT",
           "name": "EventCategory",
-          "description": null,
+          "description": "A kind of event at a convention, which determines its forms, colors and options",
           "fields": [
             {
               "name": "can_provide_tickets",
-              "description": null,
+              "description": "Whether events in this category can provide tickets to their team members",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -15665,7 +15665,7 @@
             },
             {
               "name": "convention",
-              "description": null,
+              "description": "The convention this category belongs to",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -15681,7 +15681,7 @@
             },
             {
               "name": "default_color",
-              "description": null,
+              "description": "The schedule grid color for events in this category",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -15693,7 +15693,7 @@
             },
             {
               "name": "department",
-              "description": null,
+              "description": "The department that oversees this category, if any",
               "args": [],
               "type": {
                 "kind": "OBJECT",
@@ -15705,7 +15705,7 @@
             },
             {
               "name": "event_form",
-              "description": null,
+              "description": "The form used to edit events in this category",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -15721,7 +15721,7 @@
             },
             {
               "name": "event_proposal_form",
-              "description": null,
+              "description": "The form used to propose events in this category, if proposals are allowed",
               "args": [],
               "type": {
                 "kind": "OBJECT",
@@ -15806,7 +15806,7 @@
             },
             {
               "name": "full_color",
-              "description": null,
+              "description": "The schedule grid color for full runs in this category",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -15818,7 +15818,7 @@
             },
             {
               "name": "id",
-              "description": null,
+              "description": "The ID of this event category",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -15834,7 +15834,7 @@
             },
             {
               "name": "name",
-              "description": null,
+              "description": "The name of this category",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -15850,7 +15850,7 @@
             },
             {
               "name": "proposable",
-              "description": null,
+              "description": "Whether people can propose events in this category",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -15866,7 +15866,7 @@
             },
             {
               "name": "proposal_description",
-              "description": null,
+              "description": "The text describing this category to people proposing events",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -15878,7 +15878,7 @@
             },
             {
               "name": "scheduling_ui",
-              "description": null,
+              "description": "Which scheduling interface to use for events in this category",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -15894,7 +15894,7 @@
             },
             {
               "name": "signed_up_color",
-              "description": null,
+              "description": "The schedule grid color for runs the viewer is signed up for",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -15906,7 +15906,7 @@
             },
             {
               "name": "teamMemberNamePlural",
-              "description": null,
+              "description": "The plural of the team member name",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -15922,7 +15922,7 @@
             },
             {
               "name": "team_member_name",
-              "description": null,
+              "description": "What team members of these events are called, such as \"GM\"",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -16761,7 +16761,7 @@
         {
           "kind": "OBJECT",
           "name": "EventProposalsPagination",
-          "description": null,
+          "description": "One page of a longer list of results",
           "fields": [
             {
               "name": "current_page",
@@ -16781,7 +16781,7 @@
             },
             {
               "name": "entries",
-              "description": null,
+              "description": "The results on this page",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -16968,7 +16968,7 @@
         {
           "kind": "OBJECT",
           "name": "EventsPagination",
-          "description": null,
+          "description": "One page of a longer list of results",
           "fields": [
             {
               "name": "current_page",
@@ -16988,7 +16988,7 @@
             },
             {
               "name": "entries",
-              "description": null,
+              "description": "The results on this page",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -17181,11 +17181,11 @@
         {
           "kind": "OBJECT",
           "name": "Form",
-          "description": null,
+          "description": "A configurable form, such as an event or user profile form",
           "fields": [
             {
               "name": "event_categories",
-              "description": null,
+              "description": "The event categories that use this as their event form",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -17209,7 +17209,7 @@
             },
             {
               "name": "export_json",
-              "description": null,
+              "description": "The whole form definition as JSON, for exporting",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -17225,7 +17225,7 @@
             },
             {
               "name": "form_section",
-              "description": null,
+              "description": "A single section of this form by ID",
               "args": [
                 {
                   "name": "id",
@@ -17258,7 +17258,7 @@
             },
             {
               "name": "form_sections",
-              "description": null,
+              "description": "The sections of this form",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -17282,7 +17282,7 @@
             },
             {
               "name": "form_type",
-              "description": null,
+              "description": "What this form is used for",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -17298,7 +17298,7 @@
             },
             {
               "name": "id",
-              "description": null,
+              "description": "The ID of this form",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -17314,7 +17314,7 @@
             },
             {
               "name": "proposal_event_categories",
-              "description": null,
+              "description": "The event categories that use this as their proposal form",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -17338,7 +17338,7 @@
             },
             {
               "name": "title",
-              "description": null,
+              "description": "The title of this form",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -17354,7 +17354,7 @@
             },
             {
               "name": "user_con_profile_conventions",
-              "description": null,
+              "description": "The conventions that use this as their user profile form",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -17408,11 +17408,11 @@
         {
           "kind": "OBJECT",
           "name": "FormItem",
-          "description": null,
+          "description": "A single question or block of content on a form",
           "fields": [
             {
               "name": "admin_description",
-              "description": null,
+              "description": "An explanation of this item shown to form editors",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -17424,7 +17424,7 @@
             },
             {
               "name": "default_value",
-              "description": null,
+              "description": "The value this item starts with",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -17436,7 +17436,7 @@
             },
             {
               "name": "expose_in",
-              "description": null,
+              "description": "The other places this item's value is made available",
               "args": [],
               "type": {
                 "kind": "LIST",
@@ -17456,7 +17456,7 @@
             },
             {
               "name": "form_section",
-              "description": null,
+              "description": "The form section containing this item",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -17472,7 +17472,7 @@
             },
             {
               "name": "id",
-              "description": null,
+              "description": "The ID of this form item",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -17488,7 +17488,7 @@
             },
             {
               "name": "identifier",
-              "description": null,
+              "description": "The name this item's value is stored under in form responses",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -17500,7 +17500,7 @@
             },
             {
               "name": "item_type",
-              "description": null,
+              "description": "The kind of input or content this item is",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -17516,7 +17516,7 @@
             },
             {
               "name": "position",
-              "description": null,
+              "description": "Where this item appears within its section",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -17532,7 +17532,7 @@
             },
             {
               "name": "properties",
-              "description": null,
+              "description": "The settings specific to this item type",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -17548,7 +17548,7 @@
             },
             {
               "name": "public_description",
-              "description": null,
+              "description": "An explanation of this item shown to people filling out the form",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -17560,7 +17560,7 @@
             },
             {
               "name": "rendered_properties",
-              "description": null,
+              "description": "The item's settings, with any Markdown rendered as HTML",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -17576,7 +17576,7 @@
             },
             {
               "name": "visibility",
-              "description": null,
+              "description": "The role someone needs to see this item's value",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -17592,7 +17592,7 @@
             },
             {
               "name": "writeability",
-              "description": null,
+              "description": "The role someone needs to change this item's value",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -17806,11 +17806,11 @@
         {
           "kind": "OBJECT",
           "name": "FormResponseChange",
-          "description": null,
+          "description": "A recorded change to one field of a form response",
           "fields": [
             {
               "name": "compacted",
-              "description": null,
+              "description": "Whether this change has been through compaction, which merges nearby edits",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -17826,7 +17826,7 @@
             },
             {
               "name": "created_at",
-              "description": null,
+              "description": "When this change was made",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -17842,7 +17842,7 @@
             },
             {
               "name": "field_identifier",
-              "description": null,
+              "description": "The identifier of the form item that changed",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -17858,7 +17858,7 @@
             },
             {
               "name": "new_value",
-              "description": null,
+              "description": "The value after the change",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -17870,7 +17870,7 @@
             },
             {
               "name": "notified_at",
-              "description": null,
+              "description": "When notifications about this change were sent, if they have been",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -17882,7 +17882,7 @@
             },
             {
               "name": "previous_value",
-              "description": null,
+              "description": "The value before the change",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -17894,7 +17894,7 @@
             },
             {
               "name": "updated_at",
-              "description": null,
+              "description": "When this change record was last updated",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -17910,7 +17910,7 @@
             },
             {
               "name": "user_con_profile",
-              "description": null,
+              "description": "The person who made the change",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -17933,11 +17933,11 @@
         {
           "kind": "OBJECT",
           "name": "FormSection",
-          "description": null,
+          "description": "A titled group of items on a form",
           "fields": [
             {
               "name": "form",
-              "description": null,
+              "description": "The form containing this section",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -17953,7 +17953,7 @@
             },
             {
               "name": "form_items",
-              "description": null,
+              "description": "The items in this section",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -17977,7 +17977,7 @@
             },
             {
               "name": "id",
-              "description": null,
+              "description": "The ID of this form section",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -17993,7 +17993,7 @@
             },
             {
               "name": "position",
-              "description": null,
+              "description": "Where this section appears within its form",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -18042,7 +18042,7 @@
             },
             {
               "name": "title",
-              "description": null,
+              "description": "The title of this section",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -25285,11 +25285,11 @@
         {
           "kind": "OBJECT",
           "name": "Order",
-          "description": null,
+          "description": "A purchase, or a shopping cart that has not yet been paid for",
           "fields": [
             {
               "name": "charge_id",
-              "description": null,
+              "description": "The payment processor's ID for the charge, if one was made",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -25301,7 +25301,7 @@
             },
             {
               "name": "coupon_applications",
-              "description": null,
+              "description": "The coupons applied to this order",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -25325,7 +25325,7 @@
             },
             {
               "name": "id",
-              "description": null,
+              "description": "The ID of this order",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -25341,7 +25341,7 @@
             },
             {
               "name": "order_entries",
-              "description": null,
+              "description": "The lines of this order",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -25365,7 +25365,7 @@
             },
             {
               "name": "paid_at",
-              "description": null,
+              "description": "When this order was paid for",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -25377,7 +25377,7 @@
             },
             {
               "name": "payment_amount",
-              "description": null,
+              "description": "The amount paid",
               "args": [],
               "type": {
                 "kind": "OBJECT",
@@ -25405,7 +25405,7 @@
             },
             {
               "name": "payment_note",
-              "description": null,
+              "description": "A note about how this order was paid",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -25417,7 +25417,7 @@
             },
             {
               "name": "status",
-              "description": null,
+              "description": "Where this order is in the purchasing process",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -25433,7 +25433,7 @@
             },
             {
               "name": "submitted_at",
-              "description": null,
+              "description": "When this order was submitted",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -25445,7 +25445,7 @@
             },
             {
               "name": "total_price",
-              "description": null,
+              "description": "The price after discounts",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -25461,7 +25461,7 @@
             },
             {
               "name": "total_price_before_discounts",
-              "description": null,
+              "description": "The price before discounts",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -25477,7 +25477,7 @@
             },
             {
               "name": "user_con_profile",
-              "description": null,
+              "description": "The person who placed this order",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -25500,11 +25500,11 @@
         {
           "kind": "OBJECT",
           "name": "OrderEntry",
-          "description": null,
+          "description": "One line of an order: a quantity of a product",
           "fields": [
             {
               "name": "describe_products",
-              "description": null,
+              "description": "A human-readable summary of what this entry is for",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -25520,7 +25520,7 @@
             },
             {
               "name": "id",
-              "description": null,
+              "description": "The ID of this order entry",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -25536,7 +25536,7 @@
             },
             {
               "name": "order",
-              "description": null,
+              "description": "The order containing this entry",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -25552,7 +25552,7 @@
             },
             {
               "name": "price",
-              "description": null,
+              "description": "The total price of this entry",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -25568,7 +25568,7 @@
             },
             {
               "name": "price_per_item",
-              "description": null,
+              "description": "The price of each item in this entry",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -25584,7 +25584,7 @@
             },
             {
               "name": "product",
-              "description": null,
+              "description": "The product being ordered",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -25600,7 +25600,7 @@
             },
             {
               "name": "product_variant",
-              "description": null,
+              "description": "The variant of the product, if it has variants",
               "args": [],
               "type": {
                 "kind": "OBJECT",
@@ -25612,7 +25612,7 @@
             },
             {
               "name": "quantity",
-              "description": null,
+              "description": "The number of items ordered",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -25628,7 +25628,7 @@
             },
             {
               "name": "run",
-              "description": null,
+              "description": "The run this entry is for, if it is for a particular run",
               "args": [],
               "type": {
                 "kind": "OBJECT",
@@ -25898,7 +25898,7 @@
         {
           "kind": "OBJECT",
           "name": "OrdersPagination",
-          "description": null,
+          "description": "One page of a longer list of results",
           "fields": [
             {
               "name": "current_page",
@@ -25918,7 +25918,7 @@
             },
             {
               "name": "entries",
-              "description": null,
+              "description": "The results on this page",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -26003,11 +26003,11 @@
         {
           "kind": "OBJECT",
           "name": "Organization",
-          "description": null,
+          "description": "A group that runs one or more conventions",
           "fields": [
             {
               "name": "conventions",
-              "description": null,
+              "description": "The conventions this organization runs",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -26031,7 +26031,7 @@
             },
             {
               "name": "current_ability_can_manage_access",
-              "description": null,
+              "description": "Whether you can manage who has access to this organization",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -26047,7 +26047,7 @@
             },
             {
               "name": "id",
-              "description": null,
+              "description": "The ID of this organization",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -26063,7 +26063,7 @@
             },
             {
               "name": "name",
-              "description": null,
+              "description": "The name of this organization",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -26079,7 +26079,7 @@
             },
             {
               "name": "organization_roles",
-              "description": null,
+              "description": "The roles within this organization",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -26201,11 +26201,11 @@
         {
           "kind": "OBJECT",
           "name": "OrganizationRole",
-          "description": null,
+          "description": "A role within an organization that grants permissions to its members",
           "fields": [
             {
               "name": "id",
-              "description": null,
+              "description": "The ID of this organization role",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -26221,7 +26221,7 @@
             },
             {
               "name": "name",
-              "description": null,
+              "description": "The name of this role",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -26237,7 +26237,7 @@
             },
             {
               "name": "organization",
-              "description": null,
+              "description": "The organization this role belongs to",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -26253,7 +26253,7 @@
             },
             {
               "name": "permissions",
-              "description": null,
+              "description": "The permissions this role grants",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -26277,7 +26277,7 @@
             },
             {
               "name": "users",
-              "description": null,
+              "description": "The users who have this role",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -27784,11 +27784,11 @@
         {
           "kind": "OBJECT",
           "name": "ProductVariant",
-          "description": null,
+          "description": "One of the options a product comes in, such as a shirt size",
           "fields": [
             {
               "name": "description",
-              "description": null,
+              "description": "A description of this variant",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -27800,7 +27800,7 @@
             },
             {
               "name": "description_html",
-              "description": null,
+              "description": "The description, rendered as HTML",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -27812,7 +27812,7 @@
             },
             {
               "name": "id",
-              "description": null,
+              "description": "The ID of this product variant",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -27828,7 +27828,7 @@
             },
             {
               "name": "image",
-              "description": null,
+              "description": "A picture of this variant",
               "args": [],
               "type": {
                 "kind": "OBJECT",
@@ -27840,7 +27840,7 @@
             },
             {
               "name": "image_url",
-              "description": null,
+              "description": "The URL of the picture of this variant",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -27852,7 +27852,7 @@
             },
             {
               "name": "name",
-              "description": null,
+              "description": "The name of this variant",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -27868,7 +27868,7 @@
             },
             {
               "name": "order_quantities_by_status",
-              "description": null,
+              "description": "How many of this variant have been ordered, grouped by order status",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -27892,7 +27892,7 @@
             },
             {
               "name": "override_pricing_structure",
-              "description": null,
+              "description": "The pricing for this variant, if it differs from the product's",
               "args": [],
               "type": {
                 "kind": "OBJECT",
@@ -27904,7 +27904,7 @@
             },
             {
               "name": "position",
-              "description": null,
+              "description": "Where this variant appears among the product's variants",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -27916,7 +27916,7 @@
             },
             {
               "name": "product",
-              "description": null,
+              "description": "The product this is a variant of",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -29225,7 +29225,7 @@
             },
             {
               "name": "entries",
-              "description": null,
+              "description": "The results on this page",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -30486,11 +30486,11 @@
         {
           "kind": "OBJECT",
           "name": "Room",
-          "description": null,
+          "description": "A place where runs can be scheduled",
           "fields": [
             {
               "name": "id",
-              "description": null,
+              "description": "The ID of this room",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -30506,7 +30506,7 @@
             },
             {
               "name": "name",
-              "description": null,
+              "description": "The name of this room",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -30518,7 +30518,7 @@
             },
             {
               "name": "runs",
-              "description": null,
+              "description": "The runs scheduled in this room",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -31931,7 +31931,7 @@
         {
           "kind": "OBJECT",
           "name": "RunsPagination",
-          "description": null,
+          "description": "One page of a longer list of results",
           "fields": [
             {
               "name": "current_page",
@@ -31951,7 +31951,7 @@
             },
             {
               "name": "entries",
-              "description": null,
+              "description": "The results on this page",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -33475,7 +33475,7 @@
         {
           "kind": "OBJECT",
           "name": "SignupChangesPagination",
-          "description": null,
+          "description": "One page of a longer list of results",
           "fields": [
             {
               "name": "current_page",
@@ -33495,7 +33495,7 @@
             },
             {
               "name": "entries",
-              "description": null,
+              "description": "The results on this page",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -34379,7 +34379,7 @@
         {
           "kind": "OBJECT",
           "name": "SignupRequestsPagination",
-          "description": null,
+          "description": "One page of a longer list of results",
           "fields": [
             {
               "name": "current_page",
@@ -34399,7 +34399,7 @@
             },
             {
               "name": "entries",
-              "description": null,
+              "description": "The results on this page",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -34835,7 +34835,7 @@
         {
           "kind": "OBJECT",
           "name": "SignupsPagination",
-          "description": null,
+          "description": "One page of a longer list of results",
           "fields": [
             {
               "name": "current_page",
@@ -34855,7 +34855,7 @@
             },
             {
               "name": "entries",
-              "description": null,
+              "description": "The results on this page",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -35149,11 +35149,11 @@
         {
           "kind": "OBJECT",
           "name": "StaffPosition",
-          "description": null,
+          "description": "A staff role at a convention, which can grant permissions and receive email",
           "fields": [
             {
               "name": "cc_addresses",
-              "description": null,
+              "description": "Addresses copied on email sent to this position",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -35177,7 +35177,7 @@
             },
             {
               "name": "email",
-              "description": null,
+              "description": "The email address for this position",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -35189,7 +35189,7 @@
             },
             {
               "name": "email_aliases",
-              "description": null,
+              "description": "Other addresses that also reach this position",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -35213,7 +35213,7 @@
             },
             {
               "name": "id",
-              "description": null,
+              "description": "The ID of this staff position",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -35229,7 +35229,7 @@
             },
             {
               "name": "name",
-              "description": null,
+              "description": "The name of this position",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -35245,7 +35245,7 @@
             },
             {
               "name": "permissions",
-              "description": null,
+              "description": "The permissions this position grants",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -35269,7 +35269,7 @@
             },
             {
               "name": "user_con_profiles",
-              "description": null,
+              "description": "The people who hold this position",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -35293,7 +35293,7 @@
             },
             {
               "name": "visible",
-              "description": null,
+              "description": "Whether this position is shown publicly",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -35705,11 +35705,11 @@
         {
           "kind": "OBJECT",
           "name": "TeamMember",
-          "description": null,
+          "description": "A person who is part of the team running an event",
           "fields": [
             {
               "name": "display_team_member",
-              "description": null,
+              "description": "Whether to list this person publicly as part of the team",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -35725,7 +35725,7 @@
             },
             {
               "name": "email",
-              "description": null,
+              "description": "This person's email address, if you are signed in",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -35737,7 +35737,7 @@
             },
             {
               "name": "event",
-              "description": null,
+              "description": "The event this person is on the team of",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -35753,7 +35753,7 @@
             },
             {
               "name": "id",
-              "description": null,
+              "description": "The ID of this team member",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -35769,7 +35769,7 @@
             },
             {
               "name": "receive_con_email",
-              "description": null,
+              "description": "Whether this person gets email from the convention about the event",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -35785,7 +35785,7 @@
             },
             {
               "name": "receive_signup_email",
-              "description": null,
+              "description": "Which signup notifications this person gets by email",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -35801,7 +35801,7 @@
             },
             {
               "name": "show_email",
-              "description": null,
+              "description": "Whether to show this person's email address on the event page",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -35817,7 +35817,7 @@
             },
             {
               "name": "user_con_profile",
-              "description": null,
+              "description": "The profile of this team member",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -35899,11 +35899,11 @@
         {
           "kind": "OBJECT",
           "name": "Ticket",
-          "description": null,
+          "description": "A person's admission to a convention",
           "fields": [
             {
               "name": "convention",
-              "description": null,
+              "description": "The convention this ticket is for",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -35919,7 +35919,7 @@
             },
             {
               "name": "created_at",
-              "description": null,
+              "description": "When this ticket was created",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -35935,7 +35935,7 @@
             },
             {
               "name": "id",
-              "description": null,
+              "description": "The ID of this ticket",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -35951,7 +35951,7 @@
             },
             {
               "name": "order_entry",
-              "description": null,
+              "description": "The purchase that created this ticket, if it was bought",
               "args": [],
               "type": {
                 "kind": "OBJECT",
@@ -35963,7 +35963,7 @@
             },
             {
               "name": "provided_by_event",
-              "description": null,
+              "description": "The event that provided this ticket, if one did",
               "args": [],
               "type": {
                 "kind": "OBJECT",
@@ -35975,7 +35975,7 @@
             },
             {
               "name": "run",
-              "description": null,
+              "description": "The run this ticket is for, if it is for a particular run",
               "args": [],
               "type": {
                 "kind": "OBJECT",
@@ -35987,7 +35987,7 @@
             },
             {
               "name": "ticket_type",
-              "description": null,
+              "description": "The kind of ticket this is",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -36003,7 +36003,7 @@
             },
             {
               "name": "updated_at",
-              "description": null,
+              "description": "When this ticket was last updated",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -36019,7 +36019,7 @@
             },
             {
               "name": "user_con_profile",
-              "description": null,
+              "description": "The person this ticket belongs to",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -36165,11 +36165,11 @@
         {
           "kind": "OBJECT",
           "name": "TicketType",
-          "description": null,
+          "description": "A kind of ticket that can be held for a convention or event",
           "fields": [
             {
               "name": "allows_event_signups",
-              "description": null,
+              "description": "Whether holders can sign up for events",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -36185,7 +36185,7 @@
             },
             {
               "name": "convention",
-              "description": null,
+              "description": "The convention this ticket type belongs to, if it isn't specific to an event",
               "args": [],
               "type": {
                 "kind": "OBJECT",
@@ -36197,7 +36197,7 @@
             },
             {
               "name": "counts_towards_convention_maximum",
-              "description": null,
+              "description": "Whether these tickets count against the convention's attendance limit",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -36213,7 +36213,7 @@
             },
             {
               "name": "description",
-              "description": null,
+              "description": "A human-readable description of this ticket type",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -36225,7 +36225,7 @@
             },
             {
               "name": "event",
-              "description": null,
+              "description": "The event this ticket type belongs to, if it is specific to one",
               "args": [],
               "type": {
                 "kind": "OBJECT",
@@ -36237,7 +36237,7 @@
             },
             {
               "name": "id",
-              "description": null,
+              "description": "The ID of this ticket type",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -36253,11 +36253,11 @@
             },
             {
               "name": "maximum_event_provided_tickets",
-              "description": null,
+              "description": "How many of these tickets an event can provide to its team members",
               "args": [
                 {
                   "name": "eventId",
-                  "description": null,
+                  "description": "An event whose override of this number should be used",
                   "type": {
                     "kind": "SCALAR",
                     "name": "ID",
@@ -36282,7 +36282,7 @@
             },
             {
               "name": "name",
-              "description": null,
+              "description": "The identifier-style name of this ticket type",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -36298,7 +36298,7 @@
             },
             {
               "name": "parent",
-              "description": null,
+              "description": "The convention or event this ticket type belongs to",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -36314,7 +36314,7 @@
             },
             {
               "name": "providing_products",
-              "description": null,
+              "description": "The products that sell this type of ticket",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -40885,11 +40885,11 @@
         {
           "kind": "OBJECT",
           "name": "UserActivityAlert",
-          "description": null,
+          "description": "A rule that notifies people about activity matching certain criteria",
           "fields": [
             {
               "name": "convention",
-              "description": null,
+              "description": "The convention this alert applies to",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -40905,7 +40905,7 @@
             },
             {
               "name": "email",
-              "description": null,
+              "description": "The email address to watch for",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -40917,7 +40917,7 @@
             },
             {
               "name": "id",
-              "description": null,
+              "description": "The ID of this user activity alert",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -40933,7 +40933,7 @@
             },
             {
               "name": "notification_destinations",
-              "description": null,
+              "description": "Who gets notified",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -40957,7 +40957,7 @@
             },
             {
               "name": "partial_name",
-              "description": null,
+              "description": "Part of a name to watch for",
               "args": [],
               "type": {
                 "kind": "SCALAR",
@@ -40969,7 +40969,7 @@
             },
             {
               "name": "trigger_on_ticket_create",
-              "description": null,
+              "description": "Whether to alert when a matching person gets a ticket",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -40985,7 +40985,7 @@
             },
             {
               "name": "trigger_on_user_con_profile_create",
-              "description": null,
+              "description": "Whether to alert when a matching person creates a profile",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -41001,7 +41001,7 @@
             },
             {
               "name": "user",
-              "description": null,
+              "description": "The user to watch for",
               "args": [],
               "type": {
                 "kind": "OBJECT",
@@ -42266,7 +42266,7 @@
         {
           "kind": "OBJECT",
           "name": "UserConProfilesPagination",
-          "description": null,
+          "description": "One page of a longer list of results",
           "fields": [
             {
               "name": "current_page",
@@ -42286,7 +42286,7 @@
             },
             {
               "name": "entries",
-              "description": null,
+              "description": "The results on this page",
               "args": [],
               "type": {
                 "kind": "NON_NULL",
@@ -42509,7 +42509,7 @@
         {
           "kind": "OBJECT",
           "name": "UsersPagination",
-          "description": null,
+          "description": "One page of a longer list of results",
           "fields": [
             {
               "name": "current_page",
@@ -42529,7 +42529,7 @@
             },
             {
               "name": "entries",
-              "description": null,
+              "description": "The results on this page",
               "args": [],
               "type": {
                 "kind": "NON_NULL",

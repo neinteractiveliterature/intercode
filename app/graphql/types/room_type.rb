@@ -1,8 +1,9 @@
 # frozen_string_literal: true
 class Types::RoomType < Types::BaseObject
-  field :id, ID, null: false
-  field :name, String, null: true
-  field :runs, [Types::RunType], null: false
+  description "A place where runs can be scheduled"
+  field :id, ID, null: false, description: "The ID of this room"
+  field :name, String, null: true, description: "The name of this room"
+  field :runs, [Types::RunType], null: false, description: "The runs scheduled in this room"
 
   association_loaders Room, :runs
 end

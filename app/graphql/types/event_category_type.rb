@@ -1,20 +1,66 @@
 # frozen_string_literal: true
 class Types::EventCategoryType < Types::BaseObject
-  field :can_provide_tickets, Boolean, null: false, camelize: false, method: :can_provide_tickets?
-  field :convention, Types::ConventionType, null: false
-  field :default_color, String, null: true, camelize: false
-  field :department, Types::DepartmentType, null: true
-  field :event_form, Types::FormType, null: false, camelize: false
-  field :event_proposal_form, Types::FormType, null: true, camelize: false
-  field :full_color, String, null: true, camelize: false
-  field :id, ID, null: false
-  field :name, String, null: false
-  field :proposable, Boolean, null: false, method: :proposable?
-  field :proposal_description, String, null: true
-  field :scheduling_ui, Types::SchedulingUiType, null: false, camelize: false
-  field :signed_up_color, String, null: true, camelize: false
-  field :team_member_name, String, null: false, camelize: false
-  field :team_member_name_plural, String, null: false, camelize: true
+  description "A kind of event at a convention, which determines its forms, colors and options"
+  field :can_provide_tickets,
+        Boolean,
+        null: false,
+        camelize: false,
+        method: :can_provide_tickets?,
+        description: "Whether events in this category can provide tickets to their team members"
+  field :convention, Types::ConventionType, null: false, description: "The convention this category belongs to"
+  field :default_color,
+        String,
+        null: true,
+        camelize: false,
+        description: "The schedule grid color for events in this category"
+  field :department,
+        Types::DepartmentType,
+        null: true,
+        description: "The department that oversees this category, if any"
+  field :event_form,
+        Types::FormType,
+        null: false,
+        camelize: false,
+        description: "The form used to edit events in this category"
+  # rubocop:disable-next GraphQL/ExtractType
+  field :event_proposal_form,
+        Types::FormType,
+        null: true,
+        camelize: false,
+        description: "The form used to propose events in this category, if proposals are allowed"
+  field :full_color,
+        String,
+        null: true,
+        camelize: false,
+        description: "The schedule grid color for full runs in this category"
+  field :id, ID, null: false, description: "The ID of this event category"
+  field :name, String, null: false, description: "The name of this category"
+  field :proposable,
+        Boolean,
+        null: false,
+        method: :proposable?,
+        description: "Whether people can propose events in this category"
+  field :proposal_description,
+        String,
+        null: true,
+        description: "The text describing this category to people proposing events"
+  field :scheduling_ui,
+        Types::SchedulingUiType,
+        null: false,
+        camelize: false,
+        description: "Which scheduling interface to use for events in this category"
+  field :signed_up_color,
+        String,
+        null: true,
+        camelize: false,
+        description: "The schedule grid color for runs the viewer is signed up for"
+  field :team_member_name,
+        String,
+        null: false,
+        camelize: false,
+        description: "What team members of these events are called, such as \"GM\""
+  # rubocop:disable-next GraphQL/ExtractType
+  field :team_member_name_plural, String, null: false, camelize: true, description: "The plural of the team member name"
   pagination_field :events_paginated, Types::EventsPaginationType, Types::EventFiltersInputType, camelize: false
 
   association_loaders EventCategory, :convention, :department, :event_form, :event_proposal_form

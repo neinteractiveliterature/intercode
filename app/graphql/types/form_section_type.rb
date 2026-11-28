@@ -1,12 +1,14 @@
 # frozen_string_literal: true
 class Types::FormSectionType < Types::BaseObject
+  description "A titled group of items on a form"
   authorize_record
 
-  field :form, Types::FormType, null: false, camelize: false
-  field :form_items, [Types::FormItemType], null: false, camelize: false
-  field :id, ID, null: false
-  field :position, Int, null: false
-  field :title, String, null: true
+  # rubocop:disable-next GraphQL/UnnecessaryFieldCamelize
+  field :form, Types::FormType, null: false, camelize: false, description: "The form containing this section"
+  field :form_items, [Types::FormItemType], null: false, camelize: false, description: "The items in this section"
+  field :id, ID, null: false, description: "The ID of this form section"
+  field :position, Int, null: false, description: "Where this section appears within its form"
+  field :title, String, null: true, description: "The title of this section"
 
   field :preview_form_item, Types::FormItemType, null: false do
     argument :form_item,

@@ -1,3 +1,4 @@
+# frozen_string_literal: true
 class Types::UserSignupConstraintsType < Types::BaseObject
   description "The signup constraints on a user for a particular convention."
 

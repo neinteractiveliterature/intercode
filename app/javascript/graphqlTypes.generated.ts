@@ -418,12 +418,18 @@ export type CmsLayoutInput = {
   navbar_classes?: InputMaybe<Scalars['String']['input']>;
 };
 
+/** A link or section in a CMS navigation bar */
 export type CmsNavigationItem = {
   __typename: 'CmsNavigationItem';
+  /** The ID of this navigation item */
   id: Scalars['ID']['output'];
+  /** The section containing this item, if it is inside one */
   navigation_section?: Maybe<CmsNavigationItem>;
+  /** The page this item links to, if it is a link */
   page?: Maybe<Page>;
+  /** Where this item appears relative to its siblings */
   position?: Maybe<Scalars['Int']['output']>;
+  /** The text shown in the navigation bar */
   title?: Maybe<Scalars['String']['output']>;
 };
 
@@ -1573,10 +1579,12 @@ export type ConventionReportsSum_RevenueArgs = {
   productIds?: InputMaybe<Array<Scalars['ID']['input']>>;
 };
 
+/** One page of a longer list of results */
 export type ConventionsPagination = PaginationInterface & {
   __typename: 'ConventionsPagination';
   /** The number of the page currently being returned in this query */
   current_page: Scalars['Int']['output'];
+  /** The results on this page */
   entries: Array<Convention>;
   /** The number of items per page currently being returned in this query */
   per_page: Scalars['Int']['output'];
@@ -1607,23 +1615,37 @@ export type ConvertTicketToEventProvidedPayload = {
   ticket: Ticket;
 };
 
+/** A discount code that can be applied to orders */
 export type Coupon = {
   __typename: 'Coupon';
+  /** The code people enter to use this coupon */
   code: Scalars['String']['output'];
+  /** The convention this coupon belongs to */
   convention: Convention;
+  /** When this coupon stops working, if it expires */
   expires_at?: Maybe<Scalars['Date']['output']>;
+  /** The amount this coupon takes off, if it is a fixed-amount discount */
   fixed_amount?: Maybe<Money>;
+  /** The ID of this coupon */
   id: Scalars['ID']['output'];
+  /** The percentage this coupon takes off, if it is a percentage discount */
   percent_discount?: Maybe<Scalars['BigDecimal']['output']>;
+  /** The product this coupon gives away for free, if any */
   provides_product?: Maybe<Product>;
+  /** The maximum number of times this coupon can be used, if limited */
   usage_limit?: Maybe<Scalars['Int']['output']>;
 };
 
+/** A coupon that has been applied to an order */
 export type CouponApplication = {
   __typename: 'CouponApplication';
+  /** The coupon that was applied */
   coupon: Coupon;
+  /** How much the coupon takes off the order */
   discount: Money;
+  /** The ID of this coupon application */
   id: Scalars['ID']['output'];
+  /** The order the coupon was applied to */
   order: Order;
 };
 
@@ -1640,10 +1662,12 @@ export type CouponInput = {
   usage_limit?: InputMaybe<Scalars['Int']['input']>;
 };
 
+/** One page of a longer list of results */
 export type CouponsPagination = PaginationInterface & {
   __typename: 'CouponsPagination';
   /** The number of the page currently being returned in this query */
   current_page: Scalars['Int']['output'];
+  /** The results on this page */
   entries: Array<Coupon>;
   /** The number of items per page currently being returned in this query */
   per_page: Scalars['Int']['output'];
@@ -2918,11 +2942,16 @@ export type DeleteUserConProfilePayload = {
   user_con_profile: UserConProfile;
 };
 
+/** A group of event categories in a convention */
 export type Department = {
   __typename: 'Department';
+  /** The event categories in this department */
   event_categories: Array<EventCategory>;
+  /** The ID of this department */
   id: Scalars['ID']['output'];
+  /** The name of this department */
   name: Scalars['String']['output'];
+  /** The text describing this department to people proposing events */
   proposal_description?: Maybe<Scalars['String']['output']>;
 };
 
@@ -2970,10 +2999,12 @@ export type EmailRouteInput = {
   receiver_address?: InputMaybe<Scalars['String']['input']>;
 };
 
+/** One page of a longer list of results */
 export type EmailRoutesPagination = PaginationInterface & {
   __typename: 'EmailRoutesPagination';
   /** The number of the page currently being returned in this query */
   current_page: Scalars['Int']['output'];
+  /** The results on this page */
   entries: Array<EmailRoute>;
   /** The number of items per page currently being returned in this query */
   per_page: Scalars['Int']['output'];
@@ -3104,27 +3135,44 @@ export type EventRunsArgs = {
   start?: InputMaybe<Scalars['Date']['input']>;
 };
 
+/** A kind of event at a convention, which determines its forms, colors and options */
 export type EventCategory = {
   __typename: 'EventCategory';
+  /** Whether events in this category can provide tickets to their team members */
   can_provide_tickets: Scalars['Boolean']['output'];
+  /** The convention this category belongs to */
   convention: Convention;
+  /** The schedule grid color for events in this category */
   default_color?: Maybe<Scalars['String']['output']>;
+  /** The department that oversees this category, if any */
   department?: Maybe<Department>;
+  /** The form used to edit events in this category */
   event_form: Form;
+  /** The form used to propose events in this category, if proposals are allowed */
   event_proposal_form?: Maybe<Form>;
   events_paginated: EventsPagination;
+  /** The schedule grid color for full runs in this category */
   full_color?: Maybe<Scalars['String']['output']>;
+  /** The ID of this event category */
   id: Scalars['ID']['output'];
+  /** The name of this category */
   name: Scalars['String']['output'];
+  /** Whether people can propose events in this category */
   proposable: Scalars['Boolean']['output'];
+  /** The text describing this category to people proposing events */
   proposal_description?: Maybe<Scalars['String']['output']>;
+  /** Which scheduling interface to use for events in this category */
   scheduling_ui: SchedulingUi;
+  /** The schedule grid color for runs the viewer is signed up for */
   signed_up_color?: Maybe<Scalars['String']['output']>;
+  /** The plural of the team member name */
   teamMemberNamePlural: Scalars['String']['output'];
+  /** What team members of these events are called, such as "GM" */
   team_member_name: Scalars['String']['output'];
 };
 
 
+/** A kind of event at a convention, which determines its forms, colors and options */
 export type EventCategoryEvents_PaginatedArgs = {
   filters?: InputMaybe<EventFiltersInput>;
   page?: InputMaybe<Scalars['Int']['input']>;
@@ -3235,10 +3283,12 @@ export type EventProposalInput = {
   removeImageBlobIds?: InputMaybe<Array<Scalars['ID']['input']>>;
 };
 
+/** One page of a longer list of results */
 export type EventProposalsPagination = PaginationInterface & {
   __typename: 'EventProposalsPagination';
   /** The number of the page currently being returned in this query */
   current_page: Scalars['Int']['output'];
+  /** The results on this page */
   entries: Array<EventProposal>;
   /** The number of items per page currently being returned in this query */
   per_page: Scalars['Int']['output'];
@@ -3260,10 +3310,12 @@ export type EventWithChoiceCounts = {
   event: Event;
 };
 
+/** One page of a longer list of results */
 export type EventsPagination = PaginationInterface & {
   __typename: 'EventsPagination';
   /** The number of the page currently being returned in this query */
   current_page: Scalars['Int']['output'];
+  /** The results on this page */
   entries: Array<Event>;
   /** The number of items per page currently being returned in this query */
   per_page: Scalars['Int']['output'];
@@ -3297,20 +3349,31 @@ export type ForceConfirmSignupPayload = {
   signup: Signup;
 };
 
+/** A configurable form, such as an event or user profile form */
 export type Form = {
   __typename: 'Form';
+  /** The event categories that use this as their event form */
   event_categories: Array<EventCategory>;
+  /** The whole form definition as JSON, for exporting */
   export_json: Scalars['Json']['output'];
+  /** A single section of this form by ID */
   form_section: FormSection;
+  /** The sections of this form */
   form_sections: Array<FormSection>;
+  /** What this form is used for */
   form_type: FormType;
+  /** The ID of this form */
   id: Scalars['ID']['output'];
+  /** The event categories that use this as their proposal form */
   proposal_event_categories: Array<EventCategory>;
+  /** The title of this form */
   title: Scalars['String']['output'];
+  /** The conventions that use this as their user profile form */
   user_con_profile_conventions: Array<Convention>;
 };
 
 
+/** A configurable form, such as an event or user profile form */
 export type FormForm_SectionArgs = {
   id: Scalars['ID']['input'];
 };
@@ -3319,20 +3382,34 @@ export type FormInput = {
   title?: InputMaybe<Scalars['String']['input']>;
 };
 
+/** A single question or block of content on a form */
 export type FormItem = {
   __typename: 'FormItem';
+  /** An explanation of this item shown to form editors */
   admin_description?: Maybe<Scalars['String']['output']>;
+  /** The value this item starts with */
   default_value?: Maybe<Scalars['Json']['output']>;
+  /** The other places this item's value is made available */
   expose_in?: Maybe<Array<FormItemExposeIn>>;
+  /** The form section containing this item */
   form_section: FormSection;
+  /** The ID of this form item */
   id: Scalars['ID']['output'];
+  /** The name this item's value is stored under in form responses */
   identifier?: Maybe<Scalars['String']['output']>;
+  /** The kind of input or content this item is */
   item_type: Scalars['String']['output'];
+  /** Where this item appears within its section */
   position: Scalars['Int']['output'];
+  /** The settings specific to this item type */
   properties: Scalars['Json']['output'];
+  /** An explanation of this item shown to people filling out the form */
   public_description?: Maybe<Scalars['String']['output']>;
+  /** The item's settings, with any Markdown rendered as HTML */
   rendered_properties: Scalars['Json']['output'];
+  /** The role someone needs to see this item's value */
   visibility: FormItemRole;
+  /** The role someone needs to change this item's value */
   writeability: FormItemRole;
 };
 
@@ -3361,23 +3438,37 @@ export enum FormItemRole {
   TeamMember = 'team_member'
 }
 
+/** A recorded change to one field of a form response */
 export type FormResponseChange = {
   __typename: 'FormResponseChange';
+  /** Whether this change has been through compaction, which merges nearby edits */
   compacted: Scalars['Boolean']['output'];
+  /** When this change was made */
   created_at: Scalars['Date']['output'];
+  /** The identifier of the form item that changed */
   field_identifier: Scalars['String']['output'];
+  /** The value after the change */
   new_value?: Maybe<Scalars['Json']['output']>;
+  /** When notifications about this change were sent, if they have been */
   notified_at?: Maybe<Scalars['Date']['output']>;
+  /** The value before the change */
   previous_value?: Maybe<Scalars['Json']['output']>;
+  /** When this change record was last updated */
   updated_at: Scalars['Date']['output'];
+  /** The person who made the change */
   user_con_profile: UserConProfile;
 };
 
+/** A titled group of items on a form */
 export type FormSection = {
   __typename: 'FormSection';
+  /** The form containing this section */
   form: Form;
+  /** The items in this section */
   form_items: Array<FormItem>;
+  /** The ID of this form section */
   id: Scalars['ID']['output'];
+  /** Where this section appears within its form */
   position: Scalars['Int']['output'];
   /**
    * Given a FormItemInput, returns a preview version of that form item within this section. This
@@ -3386,10 +3477,12 @@ export type FormSection = {
    * a rendered HTML version of the Liquid-enabled properties of the form item.
    */
   preview_form_item: FormItem;
+  /** The title of this section */
   title?: Maybe<Scalars['String']['output']>;
 };
 
 
+/** A titled group of items on a form */
 export type FormSectionPreview_Form_ItemArgs = {
   formItem: FormItemInput;
 };
@@ -4744,13 +4837,20 @@ export type OAuthApplicationInput = {
   scopes?: InputMaybe<Array<Scalars['String']['input']>>;
 };
 
+/** A purchase, or a shopping cart that has not yet been paid for */
 export type Order = {
   __typename: 'Order';
+  /** The payment processor's ID for the charge, if one was made */
   charge_id?: Maybe<Scalars['String']['output']>;
+  /** The coupons applied to this order */
   coupon_applications: Array<CouponApplication>;
+  /** The ID of this order */
   id: Scalars['ID']['output'];
+  /** The lines of this order */
   order_entries: Array<OrderEntry>;
+  /** When this order was paid for */
   paid_at?: Maybe<Scalars['Date']['output']>;
+  /** The amount paid */
   payment_amount?: Maybe<Money>;
   /**
    * Generates a Stripe PaymentIntent for this order and returns the client secret from that
@@ -4758,24 +4858,40 @@ export type Order = {
    * Apple Pay or Google Pay.
    */
   payment_intent_client_secret: Scalars['String']['output'];
+  /** A note about how this order was paid */
   payment_note?: Maybe<Scalars['String']['output']>;
+  /** Where this order is in the purchasing process */
   status: OrderStatus;
+  /** When this order was submitted */
   submitted_at?: Maybe<Scalars['Date']['output']>;
+  /** The price after discounts */
   total_price: Money;
+  /** The price before discounts */
   total_price_before_discounts: Money;
+  /** The person who placed this order */
   user_con_profile: UserConProfile;
 };
 
+/** One line of an order: a quantity of a product */
 export type OrderEntry = {
   __typename: 'OrderEntry';
+  /** A human-readable summary of what this entry is for */
   describe_products: Scalars['String']['output'];
+  /** The ID of this order entry */
   id: Scalars['ID']['output'];
+  /** The order containing this entry */
   order: Order;
+  /** The total price of this entry */
   price: Money;
+  /** The price of each item in this entry */
   price_per_item: Money;
+  /** The product being ordered */
   product: Product;
+  /** The variant of the product, if it has variants */
   product_variant?: Maybe<ProductVariant>;
+  /** The number of items ordered */
   quantity: Scalars['Int']['output'];
+  /** The run this entry is for, if it is for a particular run */
   run?: Maybe<Run>;
 };
 
@@ -4816,10 +4932,12 @@ export enum OrderStatus {
   Unpaid = 'unpaid'
 }
 
+/** One page of a longer list of results */
 export type OrdersPagination = PaginationInterface & {
   __typename: 'OrdersPagination';
   /** The number of the page currently being returned in this query */
   current_page: Scalars['Int']['output'];
+  /** The results on this page */
   entries: Array<Order>;
   /** The number of items per page currently being returned in this query */
   per_page: Scalars['Int']['output'];
@@ -4829,12 +4947,18 @@ export type OrdersPagination = PaginationInterface & {
   total_pages: Scalars['Int']['output'];
 };
 
+/** A group that runs one or more conventions */
 export type Organization = {
   __typename: 'Organization';
+  /** The conventions this organization runs */
   conventions: Array<Convention>;
+  /** Whether you can manage who has access to this organization */
   current_ability_can_manage_access: Scalars['Boolean']['output'];
+  /** The ID of this organization */
   id: Scalars['ID']['output'];
+  /** The name of this organization */
   name: Scalars['String']['output'];
+  /** The roles within this organization */
   organization_roles: Array<OrganizationRole>;
 };
 
@@ -4851,12 +4975,18 @@ export type OrganizationAttendanceCount = {
   user_id: Scalars['ID']['output'];
 };
 
+/** A role within an organization that grants permissions to its members */
 export type OrganizationRole = {
   __typename: 'OrganizationRole';
+  /** The ID of this organization role */
   id: Scalars['ID']['output'];
+  /** The name of this role */
   name: Scalars['String']['output'];
+  /** The organization this role belongs to */
   organization: Organization;
+  /** The permissions this role grants */
   permissions: Array<Permission>;
+  /** The users who have this role */
   users: Array<User>;
 };
 
@@ -5101,18 +5231,31 @@ export type ProductInput = {
   providesTicketTypeId?: InputMaybe<Scalars['ID']['input']>;
 };
 
+/** One of the options a product comes in, such as a shirt size */
 export type ProductVariant = {
   __typename: 'ProductVariant';
+  /** A description of this variant */
   description?: Maybe<Scalars['String']['output']>;
+  /** The description, rendered as HTML */
   description_html?: Maybe<Scalars['String']['output']>;
+  /** The ID of this product variant */
   id: Scalars['ID']['output'];
+  /** A picture of this variant */
   image?: Maybe<ActiveStorageAttachment>;
-  /** @deprecated Please use the image field instead. */
+  /**
+   * The URL of the picture of this variant
+   * @deprecated Please use the image field instead.
+   */
   image_url?: Maybe<Scalars['String']['output']>;
+  /** The name of this variant */
   name: Scalars['String']['output'];
+  /** How many of this variant have been ordered, grouped by order status */
   order_quantities_by_status: Array<OrderQuantityByStatus>;
+  /** The pricing for this variant, if it differs from the product's */
   override_pricing_structure?: Maybe<PricingStructure>;
+  /** Where this variant appears among the product's variants */
   position?: Maybe<Scalars['Int']['output']>;
+  /** The product this is a variant of */
   product: Product;
 };
 
@@ -5411,6 +5554,7 @@ export type RankedChoiceDecisionsPagination = PaginationInterface & {
   __typename: 'RankedChoiceDecisionsPagination';
   /** The number of the page currently being returned in this query */
   current_page: Scalars['Int']['output'];
+  /** The results on this page */
   entries: Array<RankedChoiceDecision>;
   /** The number of items per page currently being returned in this query */
   per_page: Scalars['Int']['output'];
@@ -5692,10 +5836,14 @@ export type RevokeAuthorizedApplicationPayload = {
   clientMutationId?: Maybe<Scalars['String']['output']>;
 };
 
+/** A place where runs can be scheduled */
 export type Room = {
   __typename: 'Room';
+  /** The ID of this room */
   id: Scalars['ID']['output'];
+  /** The name of this room */
   name?: Maybe<Scalars['String']['output']>;
+  /** The runs scheduled in this room */
   runs: Array<Run>;
 };
 
@@ -5937,10 +6085,12 @@ export type RunInput = {
   title_suffix?: InputMaybe<Scalars['String']['input']>;
 };
 
+/** One page of a longer list of results */
 export type RunsPagination = PaginationInterface & {
   __typename: 'RunsPagination';
   /** The number of the page currently being returned in this query */
   current_page: Scalars['Int']['output'];
+  /** The results on this page */
   entries: Array<Run>;
   /** The number of items per page currently being returned in this query */
   per_page: Scalars['Int']['output'];
@@ -6205,10 +6355,12 @@ export type SignupChangeFiltersInput = {
   name?: InputMaybe<Scalars['String']['input']>;
 };
 
+/** One page of a longer list of results */
 export type SignupChangesPagination = PaginationInterface & {
   __typename: 'SignupChangesPagination';
   /** The number of the page currently being returned in this query */
   current_page: Scalars['Int']['output'];
+  /** The results on this page */
   entries: Array<SignupChange>;
   /** The number of items per page currently being returned in this query */
   per_page: Scalars['Int']['output'];
@@ -6384,10 +6536,12 @@ export enum SignupRequestState {
   Withdrawn = 'withdrawn'
 }
 
+/** One page of a longer list of results */
 export type SignupRequestsPagination = PaginationInterface & {
   __typename: 'SignupRequestsPagination';
   /** The number of the page currently being returned in this query */
   current_page: Scalars['Int']['output'];
+  /** The results on this page */
   entries: Array<SignupRequest>;
   /** The number of items per page currently being returned in this query */
   per_page: Scalars['Int']['output'];
@@ -6484,10 +6638,12 @@ export enum SignupState {
   Withdrawn = 'withdrawn'
 }
 
+/** One page of a longer list of results */
 export type SignupsPagination = PaginationInterface & {
   __typename: 'SignupsPagination';
   /** The number of the page currently being returned in this query */
   current_page: Scalars['Int']['output'];
+  /** The results on this page */
   entries: Array<Signup>;
   /** The number of items per page currently being returned in this query */
   per_page: Scalars['Int']['output'];
@@ -6544,15 +6700,24 @@ export type SortInput = {
   field: Scalars['String']['input'];
 };
 
+/** A staff role at a convention, which can grant permissions and receive email */
 export type StaffPosition = {
   __typename: 'StaffPosition';
+  /** Addresses copied on email sent to this position */
   cc_addresses: Array<Scalars['String']['output']>;
+  /** The email address for this position */
   email?: Maybe<Scalars['String']['output']>;
+  /** Other addresses that also reach this position */
   email_aliases: Array<Scalars['String']['output']>;
+  /** The ID of this staff position */
   id: Scalars['ID']['output'];
+  /** The name of this position */
   name: Scalars['String']['output'];
+  /** The permissions this position grants */
   permissions: Array<Permission>;
+  /** The people who hold this position */
   user_con_profiles: Array<UserConProfile>;
+  /** Whether this position is shown publicly */
   visible?: Maybe<Scalars['Boolean']['output']>;
 };
 
@@ -6615,15 +6780,24 @@ export type SubmitOrderPayload = {
   order: Order;
 };
 
+/** A person who is part of the team running an event */
 export type TeamMember = {
   __typename: 'TeamMember';
+  /** Whether to list this person publicly as part of the team */
   display_team_member: Scalars['Boolean']['output'];
+  /** This person's email address, if you are signed in */
   email?: Maybe<Scalars['String']['output']>;
+  /** The event this person is on the team of */
   event: Event;
+  /** The ID of this team member */
   id: Scalars['ID']['output'];
+  /** Whether this person gets email from the convention about the event */
   receive_con_email: Scalars['Boolean']['output'];
+  /** Which signup notifications this person gets by email */
   receive_signup_email: ReceiveSignupEmail;
+  /** Whether to show this person's email address on the event page */
   show_email: Scalars['Boolean']['output'];
+  /** The profile of this team member */
   user_con_profile: UserConProfile;
 };
 
@@ -6634,16 +6808,26 @@ export type TeamMemberInput = {
   show_email?: InputMaybe<Scalars['Boolean']['input']>;
 };
 
+/** A person's admission to a convention */
 export type Ticket = {
   __typename: 'Ticket';
+  /** The convention this ticket is for */
   convention: Convention;
+  /** When this ticket was created */
   created_at: Scalars['Date']['output'];
+  /** The ID of this ticket */
   id: Scalars['ID']['output'];
+  /** The purchase that created this ticket, if it was bought */
   order_entry?: Maybe<OrderEntry>;
+  /** The event that provided this ticket, if one did */
   provided_by_event?: Maybe<Event>;
+  /** The run this ticket is for, if it is for a particular run */
   run?: Maybe<Run>;
+  /** The kind of ticket this is */
   ticket_type: TicketType;
+  /** When this ticket was last updated */
   updated_at: Scalars['Date']['output'];
+  /** The person this ticket belongs to */
   user_con_profile: UserConProfile;
 };
 
@@ -6668,21 +6852,33 @@ export enum TicketMode {
   TicketPerEvent = 'ticket_per_event'
 }
 
+/** A kind of ticket that can be held for a convention or event */
 export type TicketType = {
   __typename: 'TicketType';
+  /** Whether holders can sign up for events */
   allows_event_signups: Scalars['Boolean']['output'];
+  /** The convention this ticket type belongs to, if it isn't specific to an event */
   convention?: Maybe<Convention>;
+  /** Whether these tickets count against the convention's attendance limit */
   counts_towards_convention_maximum: Scalars['Boolean']['output'];
+  /** A human-readable description of this ticket type */
   description?: Maybe<Scalars['String']['output']>;
+  /** The event this ticket type belongs to, if it is specific to one */
   event?: Maybe<Event>;
+  /** The ID of this ticket type */
   id: Scalars['ID']['output'];
+  /** How many of these tickets an event can provide to its team members */
   maximum_event_provided_tickets: Scalars['Int']['output'];
+  /** The identifier-style name of this ticket type */
   name: Scalars['String']['output'];
+  /** The convention or event this ticket type belongs to */
   parent: TicketTypeParent;
+  /** The products that sell this type of ticket */
   providing_products: Array<Product>;
 };
 
 
+/** A kind of ticket that can be held for a convention or event */
 export type TicketTypeMaximum_Event_Provided_TicketsArgs = {
   eventId?: InputMaybe<Scalars['ID']['input']>;
 };
@@ -7475,15 +7671,24 @@ export type User = {
   user_con_profiles: Array<UserConProfile>;
 };
 
+/** A rule that notifies people about activity matching certain criteria */
 export type UserActivityAlert = {
   __typename: 'UserActivityAlert';
+  /** The convention this alert applies to */
   convention: Convention;
+  /** The email address to watch for */
   email?: Maybe<Scalars['String']['output']>;
+  /** The ID of this user activity alert */
   id: Scalars['ID']['output'];
+  /** Who gets notified */
   notification_destinations: Array<NotificationDestination>;
+  /** Part of a name to watch for */
   partial_name?: Maybe<Scalars['String']['output']>;
+  /** Whether to alert when a matching person gets a ticket */
   trigger_on_ticket_create: Scalars['Boolean']['output'];
+  /** Whether to alert when a matching person creates a profile */
   trigger_on_user_con_profile_create: Scalars['Boolean']['output'];
+  /** The user to watch for */
   user?: Maybe<User>;
 };
 
@@ -7682,10 +7887,12 @@ export type UserConProfileInput = {
   zipcode?: InputMaybe<Scalars['String']['input']>;
 };
 
+/** One page of a longer list of results */
 export type UserConProfilesPagination = PaginationInterface & {
   __typename: 'UserConProfilesPagination';
   /** The number of the page currently being returned in this query */
   current_page: Scalars['Int']['output'];
+  /** The results on this page */
   entries: Array<UserConProfile>;
   /** The number of items per page currently being returned in this query */
   per_page: Scalars['Int']['output'];
@@ -7714,10 +7921,12 @@ export type UserSignupConstraints = {
   user_con_profile: UserConProfile;
 };
 
+/** One page of a longer list of results */
 export type UsersPagination = PaginationInterface & {
   __typename: 'UsersPagination';
   /** The number of the page currently being returned in this query */
   current_page: Scalars['Int']['output'];
+  /** The results on this page */
   entries: Array<User>;
   /** The number of items per page currently being returned in this query */
   per_page: Scalars['Int']['output'];
